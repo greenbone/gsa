@@ -140,13 +140,9 @@ exports[`Titlebar tests > should render content if user is logged in 1`] = `
   display: inline-flex;
 }
 
-.c16 {
-  cursor: pointer;
-}
-
 .c8 {
-  height: 24px;
   width: 24px;
+  height: 24px;
   line-height: 24px;
 }
 
@@ -156,12 +152,24 @@ exports[`Titlebar tests > should render content if user is logged in 1`] = `
 }
 
 .c15 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
 .c15 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c16 {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c16 * {
   height: inherit;
   width: inherit;
 }
@@ -462,7 +470,7 @@ background-color:#f3f3f3 .c12:nth-child(2):hover {
                     Session timeout: 
                   </span>
                   <span
-                    class="c16 c15"
+                    class="c16"
                     data-testid="svg-icon"
                     title="Renew session timeout"
                   >

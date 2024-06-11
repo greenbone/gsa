@@ -2,8 +2,8 @@
 
 exports[`Task Trend tests > should render 1`] = `
 .c0 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 

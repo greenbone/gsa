@@ -64,8 +64,8 @@ exports[`TaskPage ToolBarIcons test > should render 1`] = `
 }
 
 .c3 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 

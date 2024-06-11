@@ -26,12 +26,11 @@ export const testIcon = Icon => {
 
     expect(handler).toHaveBeenCalledWith('1');
   });
-
   test('should change appearance when disabled', () => {
     const {element} = render(<Icon disabled={true} />);
 
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: '& svg path',
+      modifier: 'svg path',
     });
   });
 

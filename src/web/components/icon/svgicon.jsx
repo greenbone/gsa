@@ -125,7 +125,7 @@ const SvgIcon = ({
       {...other}
       data-testid="svg-icon"
       title={title}
-      $active={active.toString() && !loading}
+      $active={active && !loading}
       $isLoading={loading}
       $height={height}
       $width={width}

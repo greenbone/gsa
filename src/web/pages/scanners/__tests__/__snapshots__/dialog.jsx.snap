@@ -18,7 +18,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   align-items: center;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -40,7 +40,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   align-items: flex-start;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -58,7 +58,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   align-items: stretch;
 }
 
-.c13 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -76,7 +76,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   align-items: center;
 }
 
-.c23 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -94,7 +94,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   align-items: center;
 }
 
-.c26 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -148,7 +148,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   height: 100%;
 }
 
-.c33 {
+.c31 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -157,7 +157,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c32 {
+.c30 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -205,24 +205,21 @@ exports[`ScannerDialog component tests > should render 1`] = `
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c5 :hover {
   border: 1px solid #074320;
 }
 
-.c6 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c29 {
+.c27 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -242,12 +239,12 @@ exports[`ScannerDialog component tests > should render 1`] = `
   z-index: 1;
 }
 
-.c29:focus,
-.c29:hover {
+.c27:focus,
+.c27:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c29:hover {
+.c27:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -255,26 +252,26 @@ exports[`ScannerDialog component tests > should render 1`] = `
   color: #fff;
 }
 
-.c29[disabled] {
+.c27[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c29 img {
+.c27 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c29:link {
+.c27:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c30 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -292,18 +289,18 @@ exports[`ScannerDialog component tests > should render 1`] = `
   align-items: center;
 }
 
-.c31 {
+.c29 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c31 :hover {
+.c29 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c27 {
+.c25 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -311,7 +308,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   padding: 10px 20px 10px 20px;
 }
 
-.c28 {
+.c26 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -339,7 +336,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   cursor: grab;
 }
 
-.c9 {
+.c8 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -347,12 +344,12 @@ exports[`ScannerDialog component tests > should render 1`] = `
   max-height: 400px;
 }
 
-.c8 {
+.c7 {
   overflow: hidden;
   height: 100%;
 }
 
-.c11 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -368,7 +365,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   padding-bottom: 10px;
 }
 
-.c12 {
+.c11 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -379,13 +376,13 @@ exports[`ScannerDialog component tests > should render 1`] = `
   margin-left: 0;
 }
 
-.c14 {
+.c13 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c24 {
+.c23 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -407,21 +404,18 @@ exports[`ScannerDialog component tests > should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
 }
 
-.c25 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c25 * {
+.c23 * {
   height: inherit;
   width: inherit;
 }
 
-.c20 {
+.c19 {
   border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
@@ -445,7 +439,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   font-weight: normal;
 }
 
-.c19 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -457,7 +451,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   width: 180px;
 }
 
-.c21 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -476,7 +470,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
   cursor: pointer;
 }
 
-.c17 {
+.c16 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -485,18 +479,18 @@ exports[`ScannerDialog component tests > should render 1`] = `
   display: none;
 }
 
-.c22 {
+.c21 {
   cursor: default;
 }
 
-.c18 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c15 {
+.c14 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -510,11 +504,11 @@ exports[`ScannerDialog component tests > should render 1`] = `
   padding: 1px 8px;
 }
 
-.c15:-webkit-autofill {
+.c14:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -562,7 +556,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
                 New Scanner
               </span>
               <div
-                class="c5 c6"
+                class="c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -570,36 +564,36 @@ exports[`ScannerDialog component tests > should render 1`] = `
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6 c7"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c10"
+                  class="c9"
                 >
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Name
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="name"
                         type="text"
                         value="Unnamed"
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -607,26 +601,26 @@ exports[`ScannerDialog component tests > should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Comment
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="comment"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -634,49 +628,49 @@ exports[`ScannerDialog component tests > should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Type
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-0-label"
-                        class="c18"
+                        class="c17"
                         role="combobox"
                       >
                         <div
-                          class="c19"
+                          class="c18"
                           width="180px"
                         >
                           <div
                             aria-haspopup="true"
                             aria-label="open menu"
-                            class="c20"
+                            class="c19"
                             data-toggle="true"
                             role="button"
                             type="button"
                           >
                             <div
-                              class="c21 c22"
+                              class="c20 c21"
                               data-testid="select-selected-value"
                               title="Greenbone Sensor"
                             >
                               Greenbone Sensor
                             </div>
                             <div
-                              class="c23"
+                              class="c22"
                             >
                               <span
-                                class="c24 c25"
+                                class="c23"
                                 data-testid="select-open-button"
                               >
                                 ▼
@@ -685,7 +679,7 @@ exports[`ScannerDialog component tests > should render 1`] = `
                           </div>
                         </div>
                         <div
-                          class="c17"
+                          class="c16"
                           data-testid="error-marker"
                         >
                           ×
@@ -694,26 +688,26 @@ exports[`ScannerDialog component tests > should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Host
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="host"
                         type="text"
                         value="localhost"
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -724,17 +718,17 @@ exports[`ScannerDialog component tests > should render 1`] = `
               </div>
             </div>
             <div
-              class="c26 c27 c28"
+              class="c24 c25 c26"
             >
               <button
-                class="c29 c30 c31"
+                class="c27 c28 c29"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c29 c30 c31"
+                class="c27 c28 c29"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -743,10 +737,10 @@ exports[`ScannerDialog component tests > should render 1`] = `
             </div>
           </div>
           <div
-            class="c32"
+            class="c30"
           >
             <div
-              class="c33"
+              class="c31"
             />
           </div>
         </div>

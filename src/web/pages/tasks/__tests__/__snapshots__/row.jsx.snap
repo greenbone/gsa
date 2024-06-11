@@ -159,21 +159,40 @@ exports[`Task Row tests > should render 1`] = `
   display: inline-flex;
 }
 
+.c14 {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c14 * {
+  height: inherit;
+  width: inherit;
+}
+
 .c18 {
   cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c18 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c19 {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
 }
 
 .c19 svg path {
   fill: #bfbfbf;
 }
 
-.c14 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c14 * {
+.c19 * {
   height: inherit;
   width: inherit;
 }
@@ -437,7 +456,7 @@ exports[`Task Row tests > should render 1`] = `
               class="c17 c5"
             >
               <span
-                class="c18 c14"
+                class="c18"
                 data-testid="svg-icon"
                 title="Start"
               >
@@ -465,7 +484,7 @@ exports[`Task Row tests > should render 1`] = `
               </span>
               <span
                 alt="Resume"
-                class="c19 c14"
+                class="c19"
                 data-testid="svg-icon"
                 title="Task is not stopped"
               >
@@ -492,7 +511,7 @@ exports[`Task Row tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c18 c14"
+                class="c18"
                 data-testid="svg-icon"
                 title="Move Task to trashcan"
               >
@@ -519,7 +538,7 @@ exports[`Task Row tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c18 c14"
+                class="c18"
                 data-testid="svg-icon"
                 title="Edit Task"
               >
@@ -542,7 +561,7 @@ exports[`Task Row tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c18 c14"
+                class="c18"
                 data-testid="svg-icon"
                 title="Clone Task"
               >
@@ -569,7 +588,7 @@ exports[`Task Row tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c18 c14"
+                class="c18"
                 data-testid="svg-icon"
                 title="Export Task"
               >

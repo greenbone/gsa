@@ -18,7 +18,7 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
   align-items: center;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -40,7 +40,7 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
   align-items: flex-start;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -133,24 +133,21 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c5 :hover {
   border: 1px solid #074320;
 }
 
-.c6 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c13 {
+.c12 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -170,12 +167,12 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
   z-index: 1;
 }
 
-.c13:focus,
-.c13:hover {
+.c12:focus,
+.c12:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c13:hover {
+.c12:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -183,26 +180,26 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
   color: #fff;
 }
 
-.c13[disabled] {
+.c12[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c13 img {
+.c12 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c13:link {
+.c12:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c14 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -220,18 +217,18 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
   align-items: center;
 }
 
-.c15 {
+.c14 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c15 :hover {
+.c14 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c11 {
+.c10 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -239,7 +236,7 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
   padding: 10px 20px 10px 20px;
 }
 
-.c12 {
+.c11 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -267,14 +264,14 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
   cursor: grab;
 }
 
-.c9 {
+.c8 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
   height: 100%;
 }
 
-.c8 {
+.c7 {
   overflow: hidden;
   height: 100%;
 }
@@ -305,7 +302,7 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
                 bar
               </span>
               <div
-                class="c5 c6"
+                class="c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -313,27 +310,27 @@ exports[`ConfirmationDialog component tests > should render ConfirmationDialog w
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6 c7"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="confirmationdialog-content"
               >
                 foo
               </div>
             </div>
             <div
-              class="c10 c11 c12"
+              class="c9 c10 c11"
             >
               <button
-                class="c13 c14 c15"
+                class="c12 c13 c14"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c13 c14 c15"
+                class="c12 c13 c14"
                 data-testid="dialog-save-button"
                 title="OK"
               >

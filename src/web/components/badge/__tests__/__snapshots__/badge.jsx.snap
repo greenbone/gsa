@@ -2,8 +2,8 @@
 
 exports[`Badge tests > should render badge 1`] = `
 .c1 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 

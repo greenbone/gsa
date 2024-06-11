@@ -91,16 +91,24 @@ exports[`Task Actions tests > should render 1`] = `
 
 .c5 {
   cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
 }
 
-.c7 svg path {
-  fill: #bfbfbf;
+.c5 * {
+  height: inherit;
+  width: inherit;
 }
 
 .c6 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
+}
+
+.c6 svg path {
+  fill: #bfbfbf;
 }
 
 .c6 * {
@@ -130,7 +138,7 @@ exports[`Task Actions tests > should render 1`] = `
             class="c3 c4"
           >
             <span
-              class="c5 c6"
+              class="c5"
               data-testid="svg-icon"
               title="Start"
             >
@@ -158,7 +166,7 @@ exports[`Task Actions tests > should render 1`] = `
             </span>
             <span
               alt="Resume"
-              class="c7 c6"
+              class="c6"
               data-testid="svg-icon"
               title="Task is not stopped"
             >
@@ -185,7 +193,7 @@ exports[`Task Actions tests > should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c5"
               data-testid="svg-icon"
               title="Move Task to trashcan"
             >
@@ -212,7 +220,7 @@ exports[`Task Actions tests > should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c5"
               data-testid="svg-icon"
               title="Edit Task"
             >
@@ -235,7 +243,7 @@ exports[`Task Actions tests > should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c5"
               data-testid="svg-icon"
               title="Clone Task"
             >
@@ -262,7 +270,7 @@ exports[`Task Actions tests > should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c5"
               data-testid="svg-icon"
               title="Export Task"
             >

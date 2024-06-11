@@ -18,7 +18,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   align-items: center;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -40,7 +40,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   align-items: flex-start;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -58,7 +58,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   align-items: stretch;
 }
 
-.c13 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -76,7 +76,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   align-items: center;
 }
 
-.c23 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -94,7 +94,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   align-items: center;
 }
 
-.c26 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -148,7 +148,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   height: 100%;
 }
 
-.c33 {
+.c31 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -157,7 +157,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   border-top: 20px solid #fff;
 }
 
-.c32 {
+.c30 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -205,24 +205,21 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c5 :hover {
   border: 1px solid #074320;
 }
 
-.c6 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c29 {
+.c27 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -242,12 +239,12 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   z-index: 1;
 }
 
-.c29:focus,
-.c29:hover {
+.c27:focus,
+.c27:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c29:hover {
+.c27:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -255,26 +252,26 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   color: #fff;
 }
 
-.c29[disabled] {
+.c27[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c29 img {
+.c27 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c29:link {
+.c27:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c30 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -292,18 +289,18 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   align-items: center;
 }
 
-.c31 {
+.c29 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c31 :hover {
+.c29 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c27 {
+.c25 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -311,7 +308,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   padding: 10px 20px 10px 20px;
 }
 
-.c28 {
+.c26 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -339,7 +336,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   cursor: grab;
 }
 
-.c9 {
+.c8 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -347,12 +344,12 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   max-height: 400px;
 }
 
-.c8 {
+.c7 {
   overflow: hidden;
   height: 100%;
 }
 
-.c11 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -368,7 +365,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   padding-bottom: 10px;
 }
 
-.c12 {
+.c11 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -379,13 +376,13 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   margin-left: 0;
 }
 
-.c14 {
+.c13 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c24 {
+.c23 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -407,21 +404,18 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
 }
 
-.c25 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c25 * {
+.c23 * {
   height: inherit;
   width: inherit;
 }
 
-.c20 {
+.c19 {
   border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
@@ -445,7 +439,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   font-weight: normal;
 }
 
-.c19 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -457,7 +451,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   width: 180px;
 }
 
-.c21 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -476,7 +470,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   cursor: pointer;
 }
 
-.c17 {
+.c16 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -485,18 +479,18 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   display: none;
 }
 
-.c22 {
+.c21 {
   cursor: default;
 }
 
-.c18 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c15 {
+.c14 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -510,11 +504,11 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   padding: 1px 8px;
 }
 
-.c15:-webkit-autofill {
+.c14:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -562,7 +556,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
                 New Report Config
               </span>
               <div
-                class="c5 c6"
+                class="c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -570,36 +564,36 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6 c7"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c10"
+                  class="c9"
                 >
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Name
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="name"
                         type="text"
                         value="Unnamed"
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -607,26 +601,26 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Comment
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="comment"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -634,46 +628,46 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Report Format
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-1-label"
-                        class="c18"
+                        class="c17"
                         role="combobox"
                       >
                         <div
-                          class="c19"
+                          class="c18"
                           width="180px"
                         >
                           <div
                             aria-haspopup="true"
                             aria-label="open menu"
-                            class="c20"
+                            class="c19"
                             data-toggle="true"
                             role="button"
                             type="button"
                           >
                             <div
-                              class="c21 c22"
+                              class="c20 c21"
                               data-testid="select-selected-value"
                             />
                             <div
-                              class="c23"
+                              class="c22"
                             >
                               <span
-                                class="c24 c25"
+                                class="c23"
                                 data-testid="select-open-button"
                               >
                                 ▼
@@ -682,7 +676,7 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
                           </div>
                         </div>
                         <div
-                          class="c17"
+                          class="c16"
                           data-testid="error-marker"
                         >
                           ×
@@ -694,17 +688,17 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
               </div>
             </div>
             <div
-              class="c26 c27 c28"
+              class="c24 c25 c26"
             >
               <button
-                class="c29 c30 c31"
+                class="c27 c28 c29"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c29 c30 c31"
+                class="c27 c28 c29"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -713,10 +707,10 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
             </div>
           </div>
           <div
-            class="c32"
+            class="c30"
           >
             <div
-              class="c33"
+              class="c31"
             />
           </div>
         </div>
@@ -745,7 +739,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: center;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -767,7 +761,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: flex-start;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -785,7 +779,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: stretch;
 }
 
-.c13 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -803,7 +797,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: center;
 }
 
-.c23 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -821,7 +815,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: center;
 }
 
-.c37 {
+.c35 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -842,22 +836,22 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: center;
 }
 
-.c34 {
+.c32 {
   margin-left: -5px;
 }
 
-.c34>* {
+.c32>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c34>* {
+.c32>* {
   margin-left: 5px;
 }
 
-.c33 {
+.c31 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -897,7 +891,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   height: 100%;
 }
 
-.c44 {
+.c42 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -906,7 +900,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   border-top: 20px solid #fff;
 }
 
-.c43 {
+.c41 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -954,24 +948,21 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c5 :hover {
   border: 1px solid #074320;
 }
 
-.c6 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c40 {
+.c38 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -991,12 +982,12 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   z-index: 1;
 }
 
-.c40:focus,
-.c40:hover {
+.c38:focus,
+.c38:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c40:hover {
+.c38:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -1004,26 +995,26 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   color: #fff;
 }
 
-.c40[disabled] {
+.c38[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c40 img {
+.c38 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c40:link {
+.c38:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c41 {
+.c39 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1041,18 +1032,18 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: center;
 }
 
-.c42 {
+.c40 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c42 :hover {
+.c40 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c38 {
+.c36 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -1060,7 +1051,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   padding: 10px 20px 10px 20px;
 }
 
-.c39 {
+.c37 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -1088,7 +1079,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   cursor: grab;
 }
 
-.c9 {
+.c8 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -1096,12 +1087,12 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   max-height: 400px;
 }
 
-.c8 {
+.c7 {
   overflow: hidden;
   height: 100%;
 }
 
-.c11 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1117,7 +1108,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   padding-bottom: 10px;
 }
 
-.c12 {
+.c11 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -1128,13 +1119,13 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   margin-left: 0;
 }
 
-.c14 {
+.c13 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c24 {
+.c23 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -1156,21 +1147,18 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
 }
 
-.c25 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c25 * {
+.c23 * {
   height: inherit;
   width: inherit;
 }
 
-.c20 {
+.c19 {
   border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
@@ -1195,7 +1183,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   background-color: #f3f3f3;
 }
 
-.c19 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1207,7 +1195,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   width: 180px;
 }
 
-.c21 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1226,7 +1214,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   cursor: default;
 }
 
-.c17 {
+.c16 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -1235,18 +1223,18 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   display: none;
 }
 
-.c22 {
+.c21 {
   cursor: default;
 }
 
-.c18 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c26 {
+.c24 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -1255,19 +1243,19 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   width: 100%;
 }
 
-.c27 a {
+.c25 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c27 a:hover {
+.c25 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c28 {
+.c26 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -1275,7 +1263,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   width: 25%;
 }
 
-.c29 {
+.c27 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -1283,7 +1271,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   width: 70%;
 }
 
-.c30 {
+.c28 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -1291,7 +1279,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   width: 10%;
 }
 
-.c15 {
+.c14 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -1305,11 +1293,11 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   padding: 1px 8px;
 }
 
-.c15:-webkit-autofill {
+.c14:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1331,7 +1319,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: center;
 }
 
-.c31 {
+.c29 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1349,7 +1337,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   align-items: center;
 }
 
-.c32 {
+.c30 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -1365,7 +1353,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   cursor: pointer;
 }
 
-.c35 {
+.c33 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -1376,7 +1364,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   height: auto;
 }
 
-.c36 {
+.c34 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1395,18 +1383,18 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
 }
 
 @media print {
-  .c26 {
+  .c24 {
     border-collapse: collapse;
   }
 }
 
 @media print {
-  .c27 {
+  .c25 {
     border-bottom: 1px solid black;
   }
 
-  .c27 a,
-  .c27 a:hover {
+  .c25 a,
+  .c25 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
@@ -1414,25 +1402,25 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
 }
 
 @media print {
+  .c26 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: transparent;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c27 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: transparent;
+    font-weight: bold;
+  }
+}
+
+@media print {
   .c28 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: transparent;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c29 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: transparent;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c30 {
     color: #000;
     font-size: 1.2em;
     background-color: transparent;
@@ -1466,7 +1454,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
                 Edit Report Config test report config
               </span>
               <div
-                class="c5 c6"
+                class="c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -1474,36 +1462,36 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6 c7"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c10"
+                  class="c9"
                 >
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Name
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="name"
                         type="text"
                         value="test report config"
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -1511,26 +1499,26 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Comment
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="comment"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -1538,40 +1526,40 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Report Format
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-0-label"
-                        class="c18"
+                        class="c17"
                         role="combobox"
                       >
                         <div
-                          class="c19"
+                          class="c18"
                           width="180px"
                         >
                           <div
                             aria-haspopup="true"
                             aria-label="open menu"
-                            class="c20"
+                            class="c19"
                             data-toggle="true"
                             disabled=""
                             role="button"
                             type="button"
                           >
                             <div
-                              class="c21 c22"
+                              class="c20 c21"
                               data-testid="select-selected-value"
                               disabled=""
                               title="test report format"
@@ -1579,10 +1567,10 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
                               test report format
                             </div>
                             <div
-                              class="c23"
+                              class="c22"
                             >
                               <span
-                                class="c24 c25"
+                                class="c23"
                                 data-testid="select-open-button"
                               >
                                 ▼
@@ -1591,7 +1579,7 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
                           </div>
                         </div>
                         <div
-                          class="c17"
+                          class="c16"
                           data-testid="error-marker"
                         >
                           ×
@@ -1603,35 +1591,35 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
                     Parameters
                   </h2>
                   <table
-                    class="c26"
+                    class="c24"
                   >
                     <thead
-                      class="c27"
+                      class="c25"
                     >
                       <tr>
                         <th
-                          class="c28"
+                          class="c26"
                         >
                           <div
-                            class="c13"
+                            class="c12"
                           >
                             Name
                           </div>
                         </th>
                         <th
-                          class="c29"
+                          class="c27"
                         >
                           <div
-                            class="c13"
+                            class="c12"
                           >
                             Value
                           </div>
                         </th>
                         <th
-                          class="c30"
+                          class="c28"
                         >
                           <div
-                            class="c13"
+                            class="c12"
                           >
                             Default
                           </div>
@@ -1644,24 +1632,24 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
                       <tr>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             test param
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <input
-                              class="c15 c31"
+                              class="c14 c29"
                               maxlength="1"
                               name="test param"
                               type="text"
                               value="ABC"
                             />
                             <div
-                              class="c17"
+                              class="c16"
                               data-testid="error-marker"
                             >
                               ×
@@ -1670,19 +1658,19 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <label
-                              class="c32"
+                              class="c30"
                             >
                               <div
-                                class="c13 c33"
+                                class="c12 c31"
                               >
                                 <div
-                                  class="c13 c34"
+                                  class="c12 c32"
                                 >
                                   <input
-                                    class="c35 c36"
+                                    class="c33 c34"
                                     name="test param"
                                     type="checkbox"
                                   />
@@ -1698,17 +1686,17 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
               </div>
             </div>
             <div
-              class="c37 c38 c39"
+              class="c35 c36 c37"
             >
               <button
-                class="c40 c41 c42"
+                class="c38 c39 c40"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c40 c41 c42"
+                class="c38 c39 c40"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1717,10 +1705,10 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
             </div>
           </div>
           <div
-            class="c43"
+            class="c41"
           >
             <div
-              class="c44"
+              class="c42"
             />
           </div>
         </div>

@@ -40,7 +40,7 @@ exports[`Scan Config table tests > should render 1`] = `
   justify-content: space-between;
 }
 
-.c6 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -58,7 +58,7 @@ exports[`Scan Config table tests > should render 1`] = `
   align-items: center;
 }
 
-.c8 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -76,7 +76,7 @@ exports[`Scan Config table tests > should render 1`] = `
   align-items: center;
 }
 
-.c20 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -90,7 +90,7 @@ exports[`Scan Config table tests > should render 1`] = `
   justify-content: center;
 }
 
-.c22 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -108,7 +108,7 @@ exports[`Scan Config table tests > should render 1`] = `
   align-items: stretch;
 }
 
-.c23 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -183,22 +183,22 @@ exports[`Scan Config table tests > should render 1`] = `
   align-items: center;
 }
 
-.c10 {
+.c9 {
   margin-left: -5px;
 }
 
-.c10>* {
+.c9>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c10>* {
+.c9>* {
   margin-left: 5px;
 }
 
-.c9 {
+.c8 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -207,19 +207,38 @@ exports[`Scan Config table tests > should render 1`] = `
 
 .c3 {
   cursor: pointer;
-}
-
-.c11 svg path {
-  fill: #bfbfbf;
-}
-
-.c4 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c3 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c10 {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c10 svg path {
+  fill: #bfbfbf;
+}
+
+.c10 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c24 {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c24 * {
   height: inherit;
   width: inherit;
 }
@@ -246,16 +265,13 @@ exports[`Scan Config table tests > should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
 }
 
-.c34 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c34 * {
+.c33 * {
   height: inherit;
   width: inherit;
 }
@@ -315,7 +331,7 @@ exports[`Scan Config table tests > should render 1`] = `
   cursor: pointer;
 }
 
-.c35 {
+.c34 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -335,7 +351,7 @@ exports[`Scan Config table tests > should render 1`] = `
   display: flex;
 }
 
-.c13 {
+.c12 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -344,33 +360,33 @@ exports[`Scan Config table tests > should render 1`] = `
   width: 100%;
 }
 
-.c14 th,
-.c14 td {
+.c13 th,
+.c13 td {
   padding: 4px 10px;
   border-bottom: 1px solid #e5e5e5;
 }
 
-.c14 tfoot tr {
+.c13 tfoot tr {
   background: #fff;
 }
 
-.c14 tfoot tr td {
+.c13 tfoot tr td {
   border-bottom: 1px solid #e5e5e5;
 }
 
-.c16 a {
+.c15 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c16 a:hover {
+.c15 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c17 {
+.c16 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -378,7 +394,7 @@ exports[`Scan Config table tests > should render 1`] = `
   width: 72%;
 }
 
-.c18 {
+.c17 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -386,7 +402,7 @@ exports[`Scan Config table tests > should render 1`] = `
   width: 10%;
 }
 
-.c19 {
+.c18 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -394,7 +410,7 @@ exports[`Scan Config table tests > should render 1`] = `
   width: 8%;
 }
 
-.c21 {
+.c20 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -402,25 +418,25 @@ exports[`Scan Config table tests > should render 1`] = `
   width: 5%;
 }
 
-.c36 {
+.c35 {
   font-size: 10px;
   color: #7F7F7F;
   text-align: left;
 }
 
-.c12 {
+.c11 {
   margin: 0 3px;
 }
 
-.c7 {
+.c6 {
   margin: 2px 3px;
 }
 
-.c15 {
+.c14 {
   opacity: 1.0;
 }
 
-.c5 {
+.c4 {
   margin-top: 2px;
   margin-left: 2px;
 }
@@ -429,14 +445,14 @@ exports[`Scan Config table tests > should render 1`] = `
   margin-top: 20px;
 }
 
-.c24 {
+.c23 {
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #0a53b8;
 }
 
-.c24 :hover {
+.c23 :hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0a53b8;
@@ -449,33 +465,42 @@ exports[`Scan Config table tests > should render 1`] = `
 }
 
 @media print {
-  .c13 {
+  .c12 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c14>tbody:nth-of-type(even),
-  .c14>tbody:only-of-type>tr:nth-of-type(even) {
+  .c13>tbody:nth-of-type(even),
+  .c13>tbody:only-of-type>tr:nth-of-type(even) {
     background: #f3f3f3;
   }
 
-  .c14>tbody:not(:only-of-type):hover,
-  .c14>tbody:only-of-type>tr:hover {
+  .c13>tbody:not(:only-of-type):hover,
+  .c13>tbody:only-of-type>tr:hover {
     background: #e5e5e5;
   }
 }
 
 @media print {
-  .c16 {
+  .c15 {
     border-bottom: 1px solid black;
   }
 
-  .c16 a,
-  .c16 a:hover {
+  .c15 a,
+  .c15 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
+  }
+}
+
+@media print {
+  .c16 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: transparent;
+    font-weight: bold;
   }
 }
 
@@ -498,7 +523,7 @@ exports[`Scan Config table tests > should render 1`] = `
 }
 
 @media print {
-  .c19 {
+  .c20 {
     color: #000;
     font-size: 1.2em;
     background-color: transparent;
@@ -507,22 +532,13 @@ exports[`Scan Config table tests > should render 1`] = `
 }
 
 @media print {
-  .c21 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: transparent;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c7 svg {
+  .c6 svg {
     display: none;
   }
 }
 
 @media print {
-  .c24 {
+  .c23 {
     color: #000;
   }
 }
@@ -539,7 +555,7 @@ exports[`Scan Config table tests > should render 1`] = `
         class="c2"
       >
         <span
-          class="c3 c4 c5"
+          class="c3 c4"
           data-testid="svg-icon"
           title="Unfold all details"
         >
@@ -565,16 +581,16 @@ exports[`Scan Config table tests > should render 1`] = `
           </svg>
         </span>
         <div
-          class="c6 c7"
+          class="c5 c6"
         >
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="First"
               >
@@ -601,7 +617,7 @@ exports[`Scan Config table tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Previous"
               >
@@ -629,18 +645,18 @@ exports[`Scan Config table tests > should render 1`] = `
             </div>
           </div>
           <span
-            class="c12"
+            class="c11"
           >
             1 - 1 of 1
           </span>
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Next"
               >
@@ -666,7 +682,7 @@ exports[`Scan Config table tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Last"
               >
@@ -697,48 +713,48 @@ exports[`Scan Config table tests > should render 1`] = `
         </div>
       </div>
       <table
-        class="c13 c14 c15"
+        class="c12 c13 c14"
       >
         <thead
-          class="c16"
+          class="c15"
         >
           <tr>
             <th
-              class="c17"
+              class="c16"
               rowspan="2"
             >
               <div
-                class="c8"
+                class="c7"
               >
                 Name
               </div>
             </th>
             <th
-              class="c18"
+              class="c17"
               colspan="2"
             >
               <div
-                class="c8"
+                class="c7"
               >
                 Family
               </div>
             </th>
             <th
-              class="c18"
+              class="c17"
               colspan="2"
             >
               <div
-                class="c8"
+                class="c7"
               >
                 NVTs
               </div>
             </th>
             <th
-              class="c19"
+              class="c18"
               rowspan="2"
             >
               <div
-                class="c20"
+                class="c19"
               >
                 Actions
               </div>
@@ -746,37 +762,37 @@ exports[`Scan Config table tests > should render 1`] = `
           </tr>
           <tr>
             <th
-              class="c21"
+              class="c20"
             >
               <div
-                class="c8"
+                class="c7"
               >
                 Total
               </div>
             </th>
             <th
-              class="c21"
+              class="c20"
             >
               <div
-                class="c8"
+                class="c7"
               >
                 Trend
               </div>
             </th>
             <th
-              class="c21"
+              class="c20"
             >
               <div
-                class="c8"
+                class="c7"
               >
                 Total
               </div>
             </th>
             <th
-              class="c21"
+              class="c20"
             >
               <div
-                class="c8"
+                class="c7"
               >
                 Trend
               </div>
@@ -789,17 +805,17 @@ exports[`Scan Config table tests > should render 1`] = `
           <tr>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <div
-                  class="c23"
+                  class="c22"
                 >
                   <div
-                    class="c22"
+                    class="c21"
                   >
                     <span>
                       <span
-                        class="c24"
+                        class="c23"
                         name="12345"
                       >
                         foo
@@ -818,18 +834,18 @@ exports[`Scan Config table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 2
               </div>
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span
                   alt="Static"
-                  class="c4"
+                  class="c24"
                   data-testid="svg-icon"
                   title="The family selection is STATIC. New families will NOT automatically be added and considered."
                 >
@@ -863,18 +879,18 @@ exports[`Scan Config table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 4
               </div>
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span
                   alt="Dynamic"
-                  class="c4"
+                  class="c24"
                   data-testid="svg-icon"
                   title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
                 >
@@ -911,13 +927,13 @@ exports[`Scan Config table tests > should render 1`] = `
                 class="c0"
               >
                 <div
-                  class="c25 c9"
+                  class="c25 c8"
                 >
                   <div
-                    class="c26 c10"
+                    class="c26 c9"
                   >
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Move Scan Config to trashcan"
                     >
@@ -944,7 +960,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Edit Scan Config"
                     >
@@ -967,7 +983,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Clone Scan Config"
                     >
@@ -994,7 +1010,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Export Scan Config"
                     >
@@ -1024,17 +1040,17 @@ exports[`Scan Config table tests > should render 1`] = `
           <tr>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <div
-                  class="c23"
+                  class="c22"
                 >
                   <div
-                    class="c22"
+                    class="c21"
                   >
                     <span>
                       <span
-                        class="c24"
+                        class="c23"
                         name="123456"
                       >
                         lorem
@@ -1053,18 +1069,18 @@ exports[`Scan Config table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 3
               </div>
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span
                   alt="Static"
-                  class="c4"
+                  class="c24"
                   data-testid="svg-icon"
                   title="The family selection is STATIC. New families will NOT automatically be added and considered."
                 >
@@ -1098,18 +1114,18 @@ exports[`Scan Config table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 5
               </div>
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span
                   alt="Dynamic"
-                  class="c4"
+                  class="c24"
                   data-testid="svg-icon"
                   title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
                 >
@@ -1146,13 +1162,13 @@ exports[`Scan Config table tests > should render 1`] = `
                 class="c0"
               >
                 <div
-                  class="c25 c9"
+                  class="c25 c8"
                 >
                   <div
-                    class="c26 c10"
+                    class="c26 c9"
                   >
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Move Scan Config to trashcan"
                     >
@@ -1179,7 +1195,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Edit Scan Config"
                     >
@@ -1202,7 +1218,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Clone Scan Config"
                     >
@@ -1229,7 +1245,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Export Scan Config"
                     >
@@ -1259,17 +1275,17 @@ exports[`Scan Config table tests > should render 1`] = `
           <tr>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <div
-                  class="c23"
+                  class="c22"
                 >
                   <div
-                    class="c22"
+                    class="c21"
                   >
                     <span>
                       <span
-                        class="c24"
+                        class="c23"
                         name="1234567"
                       >
                         hello
@@ -1288,18 +1304,18 @@ exports[`Scan Config table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 1
               </div>
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span
                   alt="Static"
-                  class="c4"
+                  class="c24"
                   data-testid="svg-icon"
                   title="The family selection is STATIC. New families will NOT automatically be added and considered."
                 >
@@ -1333,18 +1349,18 @@ exports[`Scan Config table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 1
               </div>
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span
                   alt="Dynamic"
-                  class="c4"
+                  class="c24"
                   data-testid="svg-icon"
                   title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
                 >
@@ -1381,13 +1397,13 @@ exports[`Scan Config table tests > should render 1`] = `
                 class="c0"
               >
                 <div
-                  class="c25 c9"
+                  class="c25 c8"
                 >
                   <div
-                    class="c26 c10"
+                    class="c26 c9"
                   >
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Move Scan Config to trashcan"
                     >
@@ -1414,7 +1430,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Edit Scan Config"
                     >
@@ -1437,7 +1453,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Clone Scan Config"
                     >
@@ -1464,7 +1480,7 @@ exports[`Scan Config table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Export Scan Config"
                     >
@@ -1498,13 +1514,13 @@ exports[`Scan Config table tests > should render 1`] = `
               colspan="6"
             >
               <div
-                class="c6"
+                class="c5"
               >
                 <div
-                  class="c8 c9"
+                  class="c7 c8"
                 >
                   <div
-                    class="c8 c10"
+                    class="c7 c9"
                   >
                     <div
                       aria-expanded="false"
@@ -1533,7 +1549,7 @@ exports[`Scan Config table tests > should render 1`] = `
                             class="c32"
                           >
                             <span
-                              class="c33 c34"
+                              class="c33"
                               data-testid="select-open-button"
                             >
                               ▼
@@ -1542,20 +1558,20 @@ exports[`Scan Config table tests > should render 1`] = `
                         </div>
                       </div>
                       <div
-                        class="c35"
+                        class="c34"
                         data-testid="error-marker"
                       >
                         ×
                       </div>
                     </div>
                     <div
-                      class="c8 c9"
+                      class="c7 c8"
                     >
                       <div
-                        class="c8 c10"
+                        class="c7 c9"
                       >
                         <span
-                          class="c4"
+                          class="c24"
                           data-testid="svg-icon"
                         >
                           <svg
@@ -1572,7 +1588,7 @@ exports[`Scan Config table tests > should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c4"
+                          class="c24"
                           data-testid="svg-icon"
                         >
                           <svg
@@ -1597,7 +1613,7 @@ exports[`Scan Config table tests > should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c4"
+                          class="c24"
                           data-testid="svg-icon"
                         >
                           <svg
@@ -1627,24 +1643,24 @@ exports[`Scan Config table tests > should render 1`] = `
         </tfoot>
       </table>
       <div
-        class="c23"
+        class="c22"
       >
         <div
-          class="c8 c36"
+          class="c7 c35"
         >
           (Applied filter: rows=2)
         </div>
         <div
-          class="c6 c7"
+          class="c5 c6"
         >
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="First"
               >
@@ -1671,7 +1687,7 @@ exports[`Scan Config table tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Previous"
               >
@@ -1699,18 +1715,18 @@ exports[`Scan Config table tests > should render 1`] = `
             </div>
           </div>
           <span
-            class="c12"
+            class="c11"
           >
             1 - 1 of 1
           </span>
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Next"
               >
@@ -1736,7 +1752,7 @@ exports[`Scan Config table tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Last"
               >

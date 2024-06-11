@@ -41,16 +41,13 @@ exports[`TimezoneSelect tests > should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
 }
 
-.c7 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c7 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
@@ -110,7 +107,7 @@ exports[`TimezoneSelect tests > should render 1`] = `
   cursor: pointer;
 }
 
-.c8 {
+.c7 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -160,7 +157,7 @@ exports[`TimezoneSelect tests > should render 1`] = `
         class="c5"
       >
         <span
-          class="c6 c7"
+          class="c6"
           data-testid="select-open-button"
         >
           ▼
@@ -169,7 +166,7 @@ exports[`TimezoneSelect tests > should render 1`] = `
     </div>
   </div>
   <div
-    class="c8"
+    class="c7"
     data-testid="error-marker"
   >
     ×

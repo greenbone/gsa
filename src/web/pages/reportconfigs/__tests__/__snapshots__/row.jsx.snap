@@ -127,17 +127,25 @@ exports[`Report Config row tests > should render 1`] = `
   display: inline-flex;
 }
 
-.c10 {
-  cursor: pointer;
-}
-
 .c3 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
 .c3 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c10 {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c10 * {
   height: inherit;
   width: inherit;
 }
@@ -256,7 +264,7 @@ exports[`Report Config row tests > should render 1`] = `
               class="c8 c9"
             >
               <span
-                class="c10 c3"
+                class="c10"
                 data-testid="svg-icon"
                 title="Move Report Config to trashcan"
               >
@@ -283,7 +291,7 @@ exports[`Report Config row tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c10 c3"
+                class="c10"
                 data-testid="svg-icon"
                 title="Edit Report Config"
               >
@@ -306,7 +314,7 @@ exports[`Report Config row tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c10 c3"
+                class="c10"
                 data-testid="svg-icon"
                 title="Clone Report Config"
               >
@@ -333,7 +341,7 @@ exports[`Report Config row tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c10 c3"
+                class="c10"
                 data-testid="svg-icon"
                 title="Export Report Config"
               >
@@ -484,17 +492,25 @@ exports[`Report Config row tests > should render orphan 1`] = `
   display: inline-flex;
 }
 
-.c9 {
-  cursor: pointer;
-}
-
 .c3 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
 .c3 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c9 {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c9 * {
   height: inherit;
   width: inherit;
 }
@@ -610,7 +626,7 @@ exports[`Report Config row tests > should render orphan 1`] = `
               class="c7 c8"
             >
               <span
-                class="c9 c3"
+                class="c9"
                 data-testid="svg-icon"
                 title="Move Report Config to trashcan"
               >
@@ -637,7 +653,7 @@ exports[`Report Config row tests > should render orphan 1`] = `
                 </svg>
               </span>
               <span
-                class="c9 c3"
+                class="c9"
                 data-testid="svg-icon"
                 title="Edit Report Config"
               >
@@ -660,7 +676,7 @@ exports[`Report Config row tests > should render orphan 1`] = `
                 </svg>
               </span>
               <span
-                class="c9 c3"
+                class="c9"
                 data-testid="svg-icon"
                 title="Clone Report Config"
               >
@@ -687,7 +703,7 @@ exports[`Report Config row tests > should render orphan 1`] = `
                 </svg>
               </span>
               <span
-                class="c9 c3"
+                class="c9"
                 data-testid="svg-icon"
                 title="Export Report Config"
               >

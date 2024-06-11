@@ -18,7 +18,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   align-items: center;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -40,7 +40,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   align-items: flex-start;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -58,7 +58,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   align-items: stretch;
 }
 
-.c13 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -76,7 +76,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   align-items: center;
 }
 
-.c18 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -130,7 +130,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   height: 100%;
 }
 
-.c25 {
+.c24 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -139,7 +139,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c24 {
+.c23 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -187,24 +187,21 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c5 :hover {
   border: 1px solid #074320;
 }
 
-.c6 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c21 {
+.c20 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -224,12 +221,12 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   z-index: 1;
 }
 
-.c21:focus,
-.c21:hover {
+.c20:focus,
+.c20:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c21:hover {
+.c20:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -237,26 +234,26 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   color: #fff;
 }
 
-.c21[disabled] {
+.c20[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c21 img {
+.c20 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c21:link {
+.c20:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c22 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -274,18 +271,18 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   align-items: center;
 }
 
-.c23 {
+.c22 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c23 :hover {
+.c22 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c19 {
+.c18 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -293,7 +290,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   padding: 10px 20px 10px 20px;
 }
 
-.c20 {
+.c19 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -321,7 +318,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   cursor: grab;
 }
 
-.c9 {
+.c8 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -329,12 +326,12 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   max-height: 400px;
 }
 
-.c8 {
+.c7 {
   overflow: hidden;
   height: 100%;
 }
 
-.c11 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -350,7 +347,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   padding-bottom: 10px;
 }
 
-.c12 {
+.c11 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -361,13 +358,13 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   margin-left: 0;
 }
 
-.c14 {
+.c13 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c17 {
+.c16 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -376,7 +373,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   display: none;
 }
 
-.c15 {
+.c14 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -390,11 +387,11 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c15:-webkit-autofill {
+.c14:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -442,7 +439,7 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
                 New Policy
               </span>
               <div
-                class="c5 c6"
+                class="c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -450,37 +447,37 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6 c7"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c10"
+                  class="c9"
                 >
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Name
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="name"
                         size="30"
                         type="text"
                         value="Unnamed"
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -488,27 +485,27 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Comment
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="comment"
                         size="30"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -519,17 +516,17 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c18 c19 c20"
+              class="c17 c18 c19"
             >
               <button
-                class="c21 c22 c23"
+                class="c20 c21 c22"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c21 c22 c23"
+                class="c20 c21 c22"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -538,10 +535,10 @@ exports[`CreatePolicyDialog component tests > should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c24"
+            class="c23"
           >
             <div
-              class="c25"
+              class="c24"
             />
           </div>
         </div>

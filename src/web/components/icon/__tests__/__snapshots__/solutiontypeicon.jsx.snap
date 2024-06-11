@@ -2,8 +2,8 @@
 
 exports[`SolutionTypeIcon component tests > should render correct image 1`] = `
 .c0 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
@@ -54,8 +54,8 @@ exports[`SolutionTypeIcon component tests > should render correct image 2`] = `<
 
 exports[`SolutionTypeIcon component tests > should render correct image 3`] = `
 .c0 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
@@ -96,8 +96,8 @@ exports[`SolutionTypeIcon component tests > should render correct image 3`] = `
 
 exports[`SolutionTypeIcon component tests > should render correct image 4`] = `
 .c0 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
@@ -138,8 +138,8 @@ exports[`SolutionTypeIcon component tests > should render correct image 4`] = `
 
 exports[`SolutionTypeIcon component tests > should render correct image 5`] = `
 .c0 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
@@ -180,8 +180,8 @@ exports[`SolutionTypeIcon component tests > should render correct image 5`] = `
 
 exports[`SolutionTypeIcon component tests > should render correct image 6`] = `
 .c0 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
@@ -230,8 +230,8 @@ exports[`SolutionTypeIcon component tests > should render correct image 6`] = `
 
 exports[`SolutionTypeIcon component tests > should render correct image 7`] = `
 .c0 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 

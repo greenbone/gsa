@@ -18,7 +18,7 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
   align-items: center;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -40,7 +40,7 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
   align-items: flex-start;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -133,24 +133,21 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c5 :hover {
   border: 1px solid #074320;
 }
 
-.c6 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c12 {
+.c11 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -170,12 +167,12 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
   z-index: 1;
 }
 
-.c12:focus,
-.c12:hover {
+.c11:focus,
+.c11:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c12:hover {
+.c11:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -183,26 +180,26 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
   color: #fff;
 }
 
-.c12[disabled] {
+.c11[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c12 img {
+.c11 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c12:link {
+.c11:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c13 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -220,18 +217,18 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
   align-items: center;
 }
 
-.c14 {
+.c13 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c14 :hover {
+.c13 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c11 {
+.c10 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -261,14 +258,14 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
   cursor: grab;
 }
 
-.c9 {
+.c8 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
   height: 100%;
 }
 
-.c8 {
+.c7 {
   overflow: hidden;
   height: 100%;
 }
@@ -299,7 +296,7 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
                 bar
               </span>
               <div
-                class="c5 c6"
+                class="c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -307,20 +304,20 @@ exports[`ErrorDialog component tests > should render ErrorDialog with text and t
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6 c7"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="errordialog-content"
               >
                 foo
               </div>
             </div>
             <div
-              class="c10 c11"
+              class="c9 c10"
             >
               <button
-                class="c12 c13 c14"
+                class="c11 c12 c13"
                 title="OK"
               >
                 OK

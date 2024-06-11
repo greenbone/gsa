@@ -20,6 +20,7 @@ import {
   queryAllByAttribute,
   getElementError,
   within,
+  renderHook,
 } from '@testing-library/react/pure';
 import userEvent from '@testing-library/user-event';
 
@@ -95,6 +96,7 @@ export const render = ui => {
     queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
     within: () => within(baseElement),
+    renderHook: hook => renderHook(hook, {wrapper: ui}),
     rerender: component =>
       rerender(
         <StyleSheetManager enableVendorPrefixes>{component}</StyleSheetManager>,

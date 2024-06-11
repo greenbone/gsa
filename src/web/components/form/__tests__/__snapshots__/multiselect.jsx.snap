@@ -67,16 +67,13 @@ exports[`MultiSelect component tests > should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: not-allowed;
 }
 
-.c6 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
@@ -118,185 +115,7 @@ exports[`MultiSelect component tests > should render 1`] = `
   width: 250px;
 }
 
-.c7 {
-  color: #c12c30;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
-}
-
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-<div
-  aria-expanded="false"
-  aria-haspopup="listbox"
-  aria-labelledby="downshift-0-label"
-  class="c0"
-  role="combobox"
->
-  <div
-    class="c1"
-    width="250px"
-  >
-    <div
-      class="c2"
-      disabled=""
-    >
-      <div
-        class="c3"
-      />
-      <div
-        class="c4"
-      >
-        <span
-          aria-haspopup="true"
-          aria-label="open menu"
-          class="c5 c6"
-          data-toggle="true"
-          disabled=""
-          role="button"
-          type="button"
-        >
-          ▼
-        </span>
-      </div>
-    </div>
-  </div>
-  <div
-    class="c7"
-    data-testid="error-marker"
-  >
-    ×
-  </div>
-</div>
-`;
-
-exports[`MultiSelect component tests should render 1`] = `
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c4 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c5 {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  outline: none;
-  margin: 1px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  cursor: not-allowed;
-}
-
 .c6 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c6 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c2 {
-  border: 1px solid #bfbfbf;
-  border-radius: 2px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  padding: 1px 5px;
-  background-color: #fff;
-  color: #000;
-  font-weight: normal;
-  background-color: #f3f3f3;
-}
-
-.c1 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  position: relative;
-  width: 250px;
-}
-
-.c7 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -336,7 +155,7 @@ exports[`MultiSelect component tests should render 1`] = `
         <span
           aria-haspopup="true"
           aria-label="open menu"
-          class="c5 c6"
+          class="c5"
           data-toggle="true"
           disabled=""
           role="button"
@@ -348,7 +167,7 @@ exports[`MultiSelect component tests should render 1`] = `
     </div>
   </div>
   <div
-    class="c7"
+    class="c6"
     data-testid="error-marker"
   >
     ×

@@ -40,7 +40,7 @@ exports[`Audits table tests > should render 1`] = `
   justify-content: space-between;
 }
 
-.c6 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -58,7 +58,7 @@ exports[`Audits table tests > should render 1`] = `
   align-items: center;
 }
 
-.c8 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -76,7 +76,7 @@ exports[`Audits table tests > should render 1`] = `
   align-items: center;
 }
 
-.c21 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -90,7 +90,7 @@ exports[`Audits table tests > should render 1`] = `
   justify-content: center;
 }
 
-.c22 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -108,7 +108,7 @@ exports[`Audits table tests > should render 1`] = `
   align-items: stretch;
 }
 
-.c23 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -121,7 +121,7 @@ exports[`Audits table tests > should render 1`] = `
   justify-content: space-between;
 }
 
-.c33 {
+.c32 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -143,7 +143,7 @@ exports[`Audits table tests > should render 1`] = `
   align-items: center;
 }
 
-.c34 {
+.c33 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -183,29 +183,29 @@ exports[`Audits table tests > should render 1`] = `
   align-items: center;
 }
 
-.c25 {
+.c24 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
-}
-
-.c10 {
-  margin-left: -5px;
-}
-
-.c10>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c10>* {
-  margin-left: 5px;
 }
 
 .c9 {
+  margin-left: -5px;
+}
+
+.c9>* {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c9>* {
+  margin-left: 5px;
+}
+
+.c8 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -214,19 +214,38 @@ exports[`Audits table tests > should render 1`] = `
 
 .c3 {
   cursor: pointer;
-}
-
-.c11 svg path {
-  fill: #bfbfbf;
-}
-
-.c4 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c3 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c10 {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c10 svg path {
+  fill: #bfbfbf;
+}
+
+.c10 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c34 {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c34 * {
   height: inherit;
   width: inherit;
 }
@@ -253,16 +272,13 @@ exports[`Audits table tests > should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
 }
 
-.c44 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c44 * {
+.c43 * {
   height: inherit;
   width: inherit;
 }
@@ -322,7 +338,7 @@ exports[`Audits table tests > should render 1`] = `
   cursor: pointer;
 }
 
-.c45 {
+.c44 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -342,7 +358,7 @@ exports[`Audits table tests > should render 1`] = `
   display: flex;
 }
 
-.c13 {
+.c12 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -351,33 +367,33 @@ exports[`Audits table tests > should render 1`] = `
   width: 100%;
 }
 
-.c14 th,
-.c14 td {
+.c13 th,
+.c13 td {
   padding: 4px 10px;
   border-bottom: 1px solid #e5e5e5;
 }
 
-.c14 tfoot tr {
+.c13 tfoot tr {
   background: #fff;
 }
 
-.c14 tfoot tr td {
+.c13 tfoot tr td {
   border-bottom: 1px solid #e5e5e5;
 }
 
-.c16 a {
+.c15 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c16 a:hover {
+.c15 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c17 {
+.c16 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -385,7 +401,7 @@ exports[`Audits table tests > should render 1`] = `
   width: 52%;
 }
 
-.c18 {
+.c17 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -393,7 +409,7 @@ exports[`Audits table tests > should render 1`] = `
   width: 8%;
 }
 
-.c19 {
+.c18 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -401,7 +417,7 @@ exports[`Audits table tests > should render 1`] = `
   width: 24%;
 }
 
-.c20 {
+.c19 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -409,25 +425,25 @@ exports[`Audits table tests > should render 1`] = `
   width: 10em;
 }
 
-.c46 {
+.c45 {
   font-size: 10px;
   color: #7F7F7F;
   text-align: left;
 }
 
-.c12 {
+.c11 {
   margin: 0 3px;
 }
 
-.c7 {
+.c6 {
   margin: 2px 3px;
 }
 
-.c15 {
+.c14 {
   opacity: 1.0;
 }
 
-.c5 {
+.c4 {
   margin-top: 2px;
   margin-left: 2px;
 }
@@ -436,20 +452,20 @@ exports[`Audits table tests > should render 1`] = `
   margin-top: 20px;
 }
 
-.c24 {
+.c23 {
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #0a53b8;
 }
 
-.c24 :hover {
+.c23 :hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0a53b8;
 }
 
-.c27 {
+.c26 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -459,7 +475,7 @@ exports[`Audits table tests > should render 1`] = `
   text-align: center;
 }
 
-.c31 {
+.c30 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -469,7 +485,7 @@ exports[`Audits table tests > should render 1`] = `
   text-align: center;
 }
 
-.c29 {
+.c28 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -480,13 +496,13 @@ exports[`Audits table tests > should render 1`] = `
   padding-top: 1px;
 }
 
-.c28 {
+.c27 {
   height: 13px;
   width: 100%;
   background: #4f91c7;
 }
 
-.c32 {
+.c31 {
   height: 13px;
   width: 50%;
   background: #70c000;
@@ -504,11 +520,11 @@ exports[`Audits table tests > should render 1`] = `
   background: #70c000;
 }
 
-.c30 {
+.c29 {
   white-space: nowrap;
 }
 
-.c26:hover {
+.c25:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -520,33 +536,42 @@ exports[`Audits table tests > should render 1`] = `
 }
 
 @media print {
-  .c13 {
+  .c12 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c14>tbody:nth-of-type(even),
-  .c14>tbody:only-of-type>tr:nth-of-type(even) {
+  .c13>tbody:nth-of-type(even),
+  .c13>tbody:only-of-type>tr:nth-of-type(even) {
     background: #f3f3f3;
   }
 
-  .c14>tbody:not(:only-of-type):hover,
-  .c14>tbody:only-of-type>tr:hover {
+  .c13>tbody:not(:only-of-type):hover,
+  .c13>tbody:only-of-type>tr:hover {
     background: #e5e5e5;
   }
 }
 
 @media print {
-  .c16 {
+  .c15 {
     border-bottom: 1px solid black;
   }
 
-  .c16 a,
-  .c16 a:hover {
+  .c15 a,
+  .c15 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
+  }
+}
+
+@media print {
+  .c16 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: transparent;
+    font-weight: bold;
   }
 }
 
@@ -578,54 +603,45 @@ exports[`Audits table tests > should render 1`] = `
 }
 
 @media print {
-  .c20 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: transparent;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c7 svg {
+  .c6 svg {
     display: none;
   }
 }
 
 @media print {
-  .c24 {
+  .c23 {
     color: #000;
+  }
+}
+
+@media print {
+  .c26 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
+  .c30 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
+  .c28 {
+    color: black;
   }
 }
 
 @media print {
   .c27 {
     background: none;
-    border: 0;
   }
 }
 
 @media print {
   .c31 {
-    background: none;
-    border: 0;
-  }
-}
-
-@media print {
-  .c29 {
-    color: black;
-  }
-}
-
-@media print {
-  .c28 {
-    background: none;
-  }
-}
-
-@media print {
-  .c32 {
     background: none;
   }
 }
@@ -654,7 +670,7 @@ exports[`Audits table tests > should render 1`] = `
         class="c2"
       >
         <span
-          class="c3 c4 c5"
+          class="c3 c4"
           data-testid="svg-icon"
           title="Unfold all details"
         >
@@ -680,16 +696,16 @@ exports[`Audits table tests > should render 1`] = `
           </svg>
         </span>
         <div
-          class="c6 c7"
+          class="c5 c6"
         >
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="First"
               >
@@ -716,7 +732,7 @@ exports[`Audits table tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Previous"
               >
@@ -744,18 +760,18 @@ exports[`Audits table tests > should render 1`] = `
             </div>
           </div>
           <span
-            class="c12"
+            class="c11"
           >
             1 - 1 of 1
           </span>
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Next"
               >
@@ -781,7 +797,7 @@ exports[`Audits table tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Last"
               >
@@ -812,53 +828,53 @@ exports[`Audits table tests > should render 1`] = `
         </div>
       </div>
       <table
-        class="c13 c14 c15"
+        class="c12 c13 c14"
       >
         <thead
-          class="c16"
+          class="c15"
         >
           <tr>
+            <th
+              class="c16"
+            >
+              <div
+                class="c7"
+              >
+                Name
+              </div>
+            </th>
             <th
               class="c17"
             >
               <div
-                class="c8"
+                class="c7"
               >
-                Name
+                Status
               </div>
             </th>
             <th
               class="c18"
             >
               <div
-                class="c8"
+                class="c7"
               >
-                Status
+                Report
+              </div>
+            </th>
+            <th
+              class="c17"
+            >
+              <div
+                class="c7"
+              >
+                Compliance Status
               </div>
             </th>
             <th
               class="c19"
             >
               <div
-                class="c8"
-              >
-                Report
-              </div>
-            </th>
-            <th
-              class="c18"
-            >
-              <div
-                class="c8"
-              >
-                Compliance Status
-              </div>
-            </th>
-            <th
-              class="c20"
-            >
-              <div
-                class="c21"
+                class="c20"
               >
                 Actions
               </div>
@@ -871,22 +887,22 @@ exports[`Audits table tests > should render 1`] = `
           <tr>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <div
-                  class="c23"
+                  class="c22"
                 >
                   <span
-                    class="c24"
+                    class="c23"
                     name="1234"
                   >
                     foo
                   </span>
                   <div
-                    class="c8 c9"
+                    class="c7 c8"
                   >
                     <div
-                      class="c8 c10"
+                      class="c7 c9"
                     />
                   </div>
                 </div>
@@ -901,28 +917,28 @@ exports[`Audits table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <a
-                  class="c25 c26"
+                  class="c24 c25"
                   data-testid="details-link"
                   href="/report/1234"
                 >
                   <div
-                    class="c27"
+                    class="c26"
                     data-testid="progressbar-box"
                     title="Done"
                   >
                     <div
                       background="low"
-                      class="c28"
+                      class="c27"
                       data-testid="progress"
                     />
                     <div
-                      class="c29"
+                      class="c28"
                     >
                       <span
-                        class="c30"
+                        class="c29"
                       >
                         Done
                       </span>
@@ -933,11 +949,11 @@ exports[`Audits table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span>
                   <a
-                    class="c25"
+                    class="c24"
                     data-testid="details-link"
                     href="/report/1234"
                   >
@@ -948,20 +964,20 @@ exports[`Audits table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <div
-                  class="c31"
+                  class="c30"
                   data-testid="progressbar-box"
                   title="50%"
                 >
                   <div
                     background="#70c000"
-                    class="c32"
+                    class="c31"
                     data-testid="progress"
                   />
                   <div
-                    class="c29"
+                    class="c28"
                   >
                     50%
                   </div>
@@ -973,13 +989,13 @@ exports[`Audits table tests > should render 1`] = `
                 class="c0"
               >
                 <div
-                  class="c33 c9"
+                  class="c32 c8"
                 >
                   <div
-                    class="c34 c10"
+                    class="c33 c9"
                   >
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Start"
                     >
@@ -1007,7 +1023,7 @@ exports[`Audits table tests > should render 1`] = `
                     </span>
                     <span
                       alt="Resume"
-                      class="c11 c4"
+                      class="c10"
                       data-testid="svg-icon"
                       title="Audit is not stopped"
                     >
@@ -1034,7 +1050,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Move Audit to trashcan"
                     >
@@ -1061,7 +1077,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Edit Audit"
                     >
@@ -1084,7 +1100,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Clone Audit"
                     >
@@ -1111,7 +1127,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Export Audit"
                     >
@@ -1134,7 +1150,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c11 c4"
+                      class="c10"
                       data-testid="svg-icon"
                       title="Report download not available"
                     >
@@ -1173,26 +1189,26 @@ exports[`Audits table tests > should render 1`] = `
           <tr>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <div
-                  class="c23"
+                  class="c22"
                 >
                   <span
-                    class="c24"
+                    class="c23"
                     name="12345"
                   >
                     lorem
                   </span>
                   <div
-                    class="c8 c9"
+                    class="c7 c8"
                   >
                     <div
-                      class="c8 c10"
+                      class="c7 c9"
                     >
                       <span
                         alt="Audit owned by user"
-                        class="c4"
+                        class="c34"
                         data-testid="svg-icon"
                         title="Audit owned by user"
                       >
@@ -1232,13 +1248,13 @@ exports[`Audits table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span
-                  class="c25 c26"
+                  class="c24 c25"
                 >
                   <div
-                    class="c27"
+                    class="c26"
                     data-testid="progressbar-box"
                     title="New"
                   >
@@ -1248,10 +1264,10 @@ exports[`Audits table tests > should render 1`] = `
                       data-testid="progress"
                     />
                     <div
-                      class="c29"
+                      class="c28"
                     >
                       <span
-                        class="c30"
+                        class="c29"
                       >
                         New
                       </span>
@@ -1262,12 +1278,12 @@ exports[`Audits table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               />
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               />
             </td>
             <td>
@@ -1275,13 +1291,13 @@ exports[`Audits table tests > should render 1`] = `
                 class="c0"
               >
                 <div
-                  class="c33 c9"
+                  class="c32 c8"
                 >
                   <div
-                    class="c34 c10"
+                    class="c33 c9"
                   >
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Start"
                     >
@@ -1309,7 +1325,7 @@ exports[`Audits table tests > should render 1`] = `
                     </span>
                     <span
                       alt="Resume"
-                      class="c11 c4"
+                      class="c10"
                       data-testid="svg-icon"
                       title="Audit is not stopped"
                     >
@@ -1336,7 +1352,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Move Audit to trashcan"
                     >
@@ -1363,7 +1379,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Edit Audit"
                     >
@@ -1386,7 +1402,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Clone Audit"
                     >
@@ -1413,7 +1429,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Export Audit"
                     >
@@ -1436,7 +1452,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c11 c4"
+                      class="c10"
                       data-testid="svg-icon"
                       title="Report download not available"
                     >
@@ -1475,26 +1491,26 @@ exports[`Audits table tests > should render 1`] = `
           <tr>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <div
-                  class="c23"
+                  class="c22"
                 >
                   <span
-                    class="c24"
+                    class="c23"
                     name="123456"
                   >
                     hello
                   </span>
                   <div
-                    class="c8 c9"
+                    class="c7 c8"
                   >
                     <div
-                      class="c8 c10"
+                      class="c7 c9"
                     >
                       <span
                         alt="Audit owned by user"
-                        class="c4"
+                        class="c34"
                         data-testid="svg-icon"
                         title="Audit owned by user"
                       >
@@ -1534,15 +1550,15 @@ exports[`Audits table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <a
-                  class="c25 c26"
+                  class="c24 c25"
                   data-testid="details-link"
                   href="/report/5678"
                 >
                   <div
-                    class="c27"
+                    class="c26"
                     data-testid="progressbar-box"
                     title="Running"
                   >
@@ -1552,10 +1568,10 @@ exports[`Audits table tests > should render 1`] = `
                       data-testid="progress"
                     />
                     <div
-                      class="c29"
+                      class="c28"
                     >
                       <span
-                        class="c30"
+                        class="c29"
                       >
                         0 %
                       </span>
@@ -1566,11 +1582,11 @@ exports[`Audits table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <span>
                   <a
-                    class="c25"
+                    class="c24"
                     data-testid="details-link"
                     href="/report/1234"
                   >
@@ -1581,20 +1597,20 @@ exports[`Audits table tests > should render 1`] = `
             </td>
             <td>
               <div
-                class="c22"
+                class="c21"
               >
                 <div
-                  class="c31"
+                  class="c30"
                   data-testid="progressbar-box"
                   title="50%"
                 >
                   <div
                     background="#70c000"
-                    class="c32"
+                    class="c31"
                     data-testid="progress"
                   />
                   <div
-                    class="c29"
+                    class="c28"
                   >
                     50%
                   </div>
@@ -1606,13 +1622,13 @@ exports[`Audits table tests > should render 1`] = `
                 class="c0"
               >
                 <div
-                  class="c33 c9"
+                  class="c32 c8"
                 >
                   <div
-                    class="c34 c10"
+                    class="c33 c9"
                   >
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Stop"
                     >
@@ -1640,7 +1656,7 @@ exports[`Audits table tests > should render 1`] = `
                     </span>
                     <span
                       alt="Resume"
-                      class="c11 c4"
+                      class="c10"
                       data-testid="svg-icon"
                       title="Audit is not stopped"
                     >
@@ -1667,7 +1683,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Move Audit to trashcan"
                     >
@@ -1694,7 +1710,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Edit Audit"
                     >
@@ -1717,7 +1733,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Clone Audit"
                     >
@@ -1744,7 +1760,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c3 c4"
+                      class="c3"
                       data-testid="svg-icon"
                       title="Export Audit"
                     >
@@ -1767,7 +1783,7 @@ exports[`Audits table tests > should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c11 c4"
+                      class="c10"
                       data-testid="svg-icon"
                       title="Report download not available"
                     >
@@ -1810,13 +1826,13 @@ exports[`Audits table tests > should render 1`] = `
               colspan="5"
             >
               <div
-                class="c6"
+                class="c5"
               >
                 <div
-                  class="c8 c9"
+                  class="c7 c8"
                 >
                   <div
-                    class="c8 c10"
+                    class="c7 c9"
                   >
                     <div
                       aria-expanded="false"
@@ -1845,7 +1861,7 @@ exports[`Audits table tests > should render 1`] = `
                             class="c42"
                           >
                             <span
-                              class="c43 c44"
+                              class="c43"
                               data-testid="select-open-button"
                             >
                               ▼
@@ -1854,20 +1870,20 @@ exports[`Audits table tests > should render 1`] = `
                         </div>
                       </div>
                       <div
-                        class="c45"
+                        class="c44"
                         data-testid="error-marker"
                       >
                         ×
                       </div>
                     </div>
                     <div
-                      class="c8 c9"
+                      class="c7 c8"
                     >
                       <div
-                        class="c8 c10"
+                        class="c7 c9"
                       >
                         <span
-                          class="c4"
+                          class="c34"
                           data-testid="svg-icon"
                         >
                           <svg
@@ -1892,7 +1908,7 @@ exports[`Audits table tests > should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c4"
+                          class="c34"
                           data-testid="svg-icon"
                         >
                           <svg
@@ -1922,24 +1938,24 @@ exports[`Audits table tests > should render 1`] = `
         </tfoot>
       </table>
       <div
-        class="c23"
+        class="c22"
       >
         <div
-          class="c8 c46"
+          class="c7 c45"
         >
           (Applied filter: rows=2)
         </div>
         <div
-          class="c6 c7"
+          class="c5 c6"
         >
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="First"
               >
@@ -1966,7 +1982,7 @@ exports[`Audits table tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Previous"
               >
@@ -1994,18 +2010,18 @@ exports[`Audits table tests > should render 1`] = `
             </div>
           </div>
           <span
-            class="c12"
+            class="c11"
           >
             1 - 1 of 1
           </span>
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Next"
               >
@@ -2031,7 +2047,7 @@ exports[`Audits table tests > should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c11 c4"
+                class="c10"
                 data-testid="svg-icon"
                 title="Last"
               >

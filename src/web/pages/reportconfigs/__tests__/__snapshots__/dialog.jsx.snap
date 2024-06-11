@@ -18,7 +18,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -40,7 +40,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: flex-start;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -58,7 +58,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: stretch;
 }
 
-.c13 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -76,7 +76,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c23 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -94,7 +94,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c54 {
+.c52 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -115,7 +115,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c50 {
+.c48 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -141,22 +141,22 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c34 {
+.c32 {
   margin-left: -5px;
 }
 
-.c34>* {
+.c32>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c34>* {
+.c32>* {
   margin-left: 5px;
 }
 
-.c33 {
+.c31 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -196,7 +196,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   height: 100%;
 }
 
-.c61 {
+.c59 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -205,7 +205,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   border-top: 20px solid #fff;
 }
 
-.c60 {
+.c58 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -253,24 +253,21 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c5 :hover {
   border: 1px solid #074320;
 }
 
-.c6 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c57 {
+.c55 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -290,12 +287,12 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   z-index: 1;
 }
 
-.c57:focus,
-.c57:hover {
+.c55:focus,
+.c55:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c57:hover {
+.c55:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -303,26 +300,26 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   color: #fff;
 }
 
-.c57[disabled] {
+.c55[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c57 img {
+.c55 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c57:link {
+.c55:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c58 {
+.c56 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -340,18 +337,18 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c59 {
+.c57 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c59 :hover {
+.c57 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c55 {
+.c53 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -359,7 +356,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   padding: 10px 20px 10px 20px;
 }
 
-.c56 {
+.c54 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -387,7 +384,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   cursor: grab;
 }
 
-.c9 {
+.c8 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -395,12 +392,12 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   max-height: 400px;
 }
 
-.c8 {
+.c7 {
   overflow: hidden;
   height: 100%;
 }
 
-.c11 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -416,7 +413,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   padding-bottom: 10px;
 }
 
-.c12 {
+.c11 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -427,13 +424,13 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   margin-left: 0;
 }
 
-.c14 {
+.c13 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c24 {
+.c23 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -455,21 +452,18 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
 }
 
-.c25 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c25 * {
+.c23 * {
   height: inherit;
   width: inherit;
 }
 
-.c20 {
+.c19 {
   border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
@@ -494,7 +488,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   background-color: #f3f3f3;
 }
 
-.c46 {
+.c44 {
   border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
@@ -518,7 +512,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   font-weight: normal;
 }
 
-.c19 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -530,7 +524,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   width: 180px;
 }
 
-.c49 {
+.c47 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -542,7 +536,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   width: 250px;
 }
 
-.c21 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -561,7 +555,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   cursor: default;
 }
 
-.c47 {
+.c45 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -580,7 +574,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   cursor: pointer;
 }
 
-.c17 {
+.c16 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -589,18 +583,18 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   display: none;
 }
 
-.c22 {
+.c21 {
   cursor: default;
 }
 
-.c18 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c26 {
+.c24 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -609,19 +603,19 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   width: 100%;
 }
 
-.c27 a {
+.c25 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c27 a:hover {
+.c25 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c28 {
+.c26 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -629,7 +623,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   width: 25%;
 }
 
-.c29 {
+.c27 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -637,7 +631,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   width: 70%;
 }
 
-.c30 {
+.c28 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #e5e5e5;
@@ -645,7 +639,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   width: 10%;
 }
 
-.c15 {
+.c14 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -659,11 +653,11 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   padding: 1px 8px;
 }
 
-.c15:-webkit-autofill {
+.c14:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -685,7 +679,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c31 {
+.c29 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -703,14 +697,14 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c48 {
+.c46 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c51 {
+.c49 {
   display: inline;
   border: 1px solid #bfbfbf;
   border-radius: 2px;
@@ -722,22 +716,22 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   width: 80px;
 }
 
-.c52 {
+.c50 {
   display: inline;
   color: #7F7F7F;
   margin-right: 2px;
 }
 
-.c52:hover {
+.c50:hover {
   color: #000;
 }
 
-.c53 {
+.c51 {
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-.c32 {
+.c30 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -753,7 +747,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   cursor: pointer;
 }
 
-.c35 {
+.c33 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -764,11 +758,11 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   height: auto;
 }
 
-.c45 {
+.c43 {
   opacity: 1;
 }
 
-.c44 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -786,7 +780,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c36 {
+.c34 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -804,7 +798,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   align-items: center;
 }
 
-.c39 {
+.c37 {
   border-radius: 2px;
   border: 1px solid #bfbfbf;
   background-color: #fff;
@@ -816,7 +810,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   vertical-align: middle;
 }
 
-.c40 {
+.c38 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -830,7 +824,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   margin-right: 22px;
 }
 
-.c41 {
+.c39 {
   background-color: #e5e5e5;
   color: #7F7F7F;
   border-left: 1px solid #4C4C4C;
@@ -854,31 +848,31 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   user-select: none;
 }
 
-.c41:hover {
+.c39:hover {
   background-color: #11ab51;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c41:active {
+.c39:active {
   background-color: #fff;
   color: #074320;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c42 {
+.c40 {
   border-top-right-radius: 1px;
   top: 0;
 }
 
-.c43 {
+.c41 {
   border-bottom-right-radius: 1px;
   bottom: 0;
 }
 
-.c37 {
+.c35 {
   display: block;
   height: auto;
   color: #4C4C4C;
@@ -889,7 +883,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
   padding: 4px 8px;
 }
 
-.c38 {
+.c36 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -908,18 +902,18 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
 }
 
 @media print {
-  .c26 {
+  .c24 {
     border-collapse: collapse;
   }
 }
 
 @media print {
-  .c27 {
+  .c25 {
     border-bottom: 1px solid black;
   }
 
-  .c27 a,
-  .c27 a:hover {
+  .c25 a,
+  .c25 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
@@ -927,25 +921,25 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
 }
 
 @media print {
+  .c26 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: transparent;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c27 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: transparent;
+    font-weight: bold;
+  }
+}
+
+@media print {
   .c28 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: transparent;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c29 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: transparent;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c30 {
     color: #000;
     font-size: 1.2em;
     background-color: transparent;
@@ -979,7 +973,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                 Edit Report Config
               </span>
               <div
-                class="c5 c6"
+                class="c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -987,36 +981,36 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6 c7"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c10"
+                  class="c9"
                 >
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Name
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="name"
                         type="text"
                         value="foo"
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -1024,26 +1018,26 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Comment
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="comment"
                         type="text"
                         value="bar"
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -1051,40 +1045,40 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Report Format
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-0-label"
-                        class="c18"
+                        class="c17"
                         role="combobox"
                       >
                         <div
-                          class="c19"
+                          class="c18"
                           width="180px"
                         >
                           <div
                             aria-haspopup="true"
                             aria-label="open menu"
-                            class="c20"
+                            class="c19"
                             data-toggle="true"
                             disabled=""
                             role="button"
                             type="button"
                           >
                             <div
-                              class="c21 c22"
+                              class="c20 c21"
                               data-testid="select-selected-value"
                               disabled=""
                               title="example-configurable-1"
@@ -1092,10 +1086,10 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                               example-configurable-1
                             </div>
                             <div
-                              class="c23"
+                              class="c22"
                             >
                               <span
-                                class="c24 c25"
+                                class="c23"
                                 data-testid="select-open-button"
                               >
                                 ▼
@@ -1104,7 +1098,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                           </div>
                         </div>
                         <div
-                          class="c17"
+                          class="c16"
                           data-testid="error-marker"
                         >
                           ×
@@ -1116,35 +1110,35 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                     Parameters
                   </h2>
                   <table
-                    class="c26"
+                    class="c24"
                   >
                     <thead
-                      class="c27"
+                      class="c25"
                     >
                       <tr>
                         <th
-                          class="c28"
+                          class="c26"
                         >
                           <div
-                            class="c13"
+                            class="c12"
                           >
                             Name
                           </div>
                         </th>
                         <th
-                          class="c29"
+                          class="c27"
                         >
                           <div
-                            class="c13"
+                            class="c12"
                           >
                             Value
                           </div>
                         </th>
                         <th
-                          class="c30"
+                          class="c28"
                         >
                           <div
-                            class="c13"
+                            class="c12"
                           >
                             Default
                           </div>
@@ -1157,24 +1151,24 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                       <tr>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             StringParam
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <input
-                              class="c15 c31"
+                              class="c14 c29"
                               maxlength="100"
                               name="StringParam"
                               type="text"
                               value="StringValue"
                             />
                             <div
-                              class="c17"
+                              class="c16"
                               data-testid="error-marker"
                             >
                               ×
@@ -1183,20 +1177,20 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <label
-                              class="c32"
+                              class="c30"
                             >
                               <div
-                                class="c13 c33"
+                                class="c12 c31"
                               >
                                 <div
-                                  class="c13 c34"
+                                  class="c12 c32"
                                 >
                                   <input
                                     checked=""
-                                    class="c35 c36"
+                                    class="c33 c34"
                                     name="StringParam"
                                     type="checkbox"
                                   />
@@ -1209,17 +1203,17 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                       <tr>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             TextParam
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <textarea
-                              class="c37 c38"
+                              class="c35 c36"
                               cols="80"
                               name="TextParam"
                               rows="5"
@@ -1227,7 +1221,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                               TextValue
                             </textarea>
                             <div
-                              class="c17"
+                              class="c16"
                               data-testid="error-marker"
                             >
                               ×
@@ -1236,19 +1230,19 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <label
-                              class="c32"
+                              class="c30"
                             >
                               <div
-                                class="c13 c33"
+                                class="c12 c31"
                               >
                                 <div
-                                  class="c13 c34"
+                                  class="c12 c32"
                                 >
                                   <input
-                                    class="c35 c36"
+                                    class="c33 c34"
                                     name="TextParam"
                                     type="checkbox"
                                   />
@@ -1261,20 +1255,20 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                       <tr>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             IntegerParam
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <span
-                              class="c39"
+                              class="c37"
                             >
                               <input
-                                class="c40"
+                                class="c38"
                                 data-testid="spinner-input"
                                 max="50"
                                 maxlength="5"
@@ -1284,13 +1278,13 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                                 value="12"
                               />
                               <span
-                                class="c41 c42"
+                                class="c39 c40"
                                 data-testid="spinner-up"
                               >
                                 ▲
                               </span>
                               <span
-                                class="c41 c43"
+                                class="c39 c41"
                                 data-testid="spinner-down"
                               >
                                 ▼
@@ -1300,20 +1294,20 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <label
-                              class="c32"
+                              class="c30"
                             >
                               <div
-                                class="c13 c33"
+                                class="c12 c31"
                               >
                                 <div
-                                  class="c13 c34"
+                                  class="c12 c32"
                                 >
                                   <input
                                     checked=""
-                                    class="c35 c36"
+                                    class="c33 c34"
                                     name="IntegerParam"
                                     type="checkbox"
                                   />
@@ -1326,43 +1320,43 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                       <tr>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             BooleanParam
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <div
-                              class="c13"
+                              class="c12"
                             >
                               <div
-                                class="c13 c33"
+                                class="c12 c31"
                               >
                                 <div
-                                  class="c13 c34"
+                                  class="c12 c32"
                                 >
                                   <label
-                                    class="c32"
+                                    class="c30"
                                   >
                                     <div
-                                      class="c13 c33"
+                                      class="c12 c31"
                                     >
                                       <div
-                                        class="c13 c34"
+                                        class="c12 c32"
                                       >
                                         <input
                                           checked=""
-                                          class="c35 c44"
+                                          class="c33 c42"
                                           data-testid="radio-input"
                                           name="BooleanParam"
                                           type="radio"
                                           value="true"
                                         />
                                         <span
-                                          class="c45"
+                                          class="c43"
                                           data-testid="radio-title"
                                         >
                                           Yes
@@ -1371,23 +1365,23 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                                     </div>
                                   </label>
                                   <label
-                                    class="c32"
+                                    class="c30"
                                   >
                                     <div
-                                      class="c13 c33"
+                                      class="c12 c31"
                                     >
                                       <div
-                                        class="c13 c34"
+                                        class="c12 c32"
                                       >
                                         <input
-                                          class="c35 c44"
+                                          class="c33 c42"
                                           data-testid="radio-input"
                                           name="BooleanParam"
                                           type="radio"
                                           value="false"
                                         />
                                         <span
-                                          class="c45"
+                                          class="c43"
                                           data-testid="radio-title"
                                         >
                                           No
@@ -1402,19 +1396,19 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <label
-                              class="c32"
+                              class="c30"
                             >
                               <div
-                                class="c13 c33"
+                                class="c12 c31"
                               >
                                 <div
-                                  class="c13 c34"
+                                  class="c12 c32"
                                 >
                                   <input
-                                    class="c35 c36"
+                                    class="c33 c34"
                                     name="BooleanParam"
                                     type="checkbox"
                                   />
@@ -1427,46 +1421,46 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                       <tr>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             SelectionParam
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <div
                               aria-expanded="false"
                               aria-haspopup="listbox"
                               aria-labelledby="downshift-1-label"
-                              class="c18"
+                              class="c17"
                               role="combobox"
                             >
                               <div
-                                class="c19"
+                                class="c18"
                                 width="180px"
                               >
                                 <div
                                   aria-haspopup="true"
                                   aria-label="open menu"
-                                  class="c46"
+                                  class="c44"
                                   data-toggle="true"
                                   role="button"
                                   type="button"
                                 >
                                   <div
-                                    class="c47 c22"
+                                    class="c45 c21"
                                     data-testid="select-selected-value"
                                     title="OptionB"
                                   >
                                     OptionB
                                   </div>
                                   <div
-                                    class="c23"
+                                    class="c22"
                                   >
                                     <span
-                                      class="c24 c25"
+                                      class="c23"
                                       data-testid="select-open-button"
                                     >
                                       ▼
@@ -1475,7 +1469,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                                 </div>
                               </div>
                               <div
-                                class="c17"
+                                class="c16"
                                 data-testid="error-marker"
                               >
                                 ×
@@ -1485,19 +1479,19 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <label
-                              class="c32"
+                              class="c30"
                             >
                               <div
-                                class="c13 c33"
+                                class="c12 c31"
                               >
                                 <div
-                                  class="c13 c34"
+                                  class="c12 c32"
                                 >
                                   <input
-                                    class="c35 c36"
+                                    class="c33 c34"
                                     name="SelectionParam"
                                     type="checkbox"
                                   />
@@ -1510,47 +1504,47 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                       <tr>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             ReportFormatListParam
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <div
                               aria-expanded="false"
                               aria-haspopup="listbox"
                               aria-labelledby="downshift-2-label"
-                              class="c48"
+                              class="c46"
                               role="combobox"
                             >
                               <div
-                                class="c49"
+                                class="c47"
                                 width="250px"
                               >
                                 <div
-                                  class="c46"
+                                  class="c44"
                                 >
                                   <div
-                                    class="c50"
+                                    class="c48"
                                   >
                                     <div
-                                      class="c47 c51"
+                                      class="c45 c49"
                                       title="non-configurable-1"
                                     >
                                       <div
-                                        class="c13"
+                                        class="c12"
                                       >
                                         <div
-                                          class="c52"
+                                          class="c50"
                                           data-testid="multiselect-selected-delete"
                                         >
                                           × 
                                         </div>
                                         <span
-                                          class="c53"
+                                          class="c51"
                                           data-testid="multiselect-selected-label"
                                         >
                                           non-configurable-1
@@ -1558,20 +1552,20 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                                       </div>
                                     </div>
                                     <div
-                                      class="c47 c51"
+                                      class="c45 c49"
                                       title="non-configurable-2"
                                     >
                                       <div
-                                        class="c13"
+                                        class="c12"
                                       >
                                         <div
-                                          class="c52"
+                                          class="c50"
                                           data-testid="multiselect-selected-delete"
                                         >
                                           × 
                                         </div>
                                         <span
-                                          class="c53"
+                                          class="c51"
                                           data-testid="multiselect-selected-label"
                                         >
                                           non-configurable-2
@@ -1580,12 +1574,12 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                                     </div>
                                   </div>
                                   <div
-                                    class="c23"
+                                    class="c22"
                                   >
                                     <span
                                       aria-haspopup="true"
                                       aria-label="open menu"
-                                      class="c24 c25"
+                                      class="c23"
                                       data-toggle="true"
                                       role="button"
                                       type="button"
@@ -1596,7 +1590,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                                 </div>
                               </div>
                               <div
-                                class="c17"
+                                class="c16"
                                 data-testid="error-marker"
                               >
                                 ×
@@ -1606,19 +1600,19 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                         </td>
                         <td>
                           <div
-                            class="c10"
+                            class="c9"
                           >
                             <label
-                              class="c32"
+                              class="c30"
                             >
                               <div
-                                class="c13 c33"
+                                class="c12 c31"
                               >
                                 <div
-                                  class="c13 c34"
+                                  class="c12 c32"
                                 >
                                   <input
-                                    class="c35 c36"
+                                    class="c33 c34"
                                     name="ReportFormatListParam"
                                     type="checkbox"
                                   />
@@ -1634,17 +1628,17 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
               </div>
             </div>
             <div
-              class="c54 c55 c56"
+              class="c52 c53 c54"
             >
               <button
-                class="c57 c58 c59"
+                class="c55 c56 c57"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c57 c58 c59"
+                class="c55 c56 c57"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1653,10 +1647,10 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
             </div>
           </div>
           <div
-            class="c60"
+            class="c58"
           >
             <div
-              class="c61"
+              class="c59"
             />
           </div>
         </div>
@@ -1685,7 +1679,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   align-items: center;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1707,7 +1701,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   align-items: flex-start;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1725,7 +1719,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   align-items: stretch;
 }
 
-.c13 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1743,7 +1737,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   align-items: center;
 }
 
-.c23 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1761,7 +1755,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   align-items: center;
 }
 
-.c26 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1815,7 +1809,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   height: 100%;
 }
 
-.c33 {
+.c31 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -1824,7 +1818,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c32 {
+.c30 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -1872,24 +1866,21 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c5 :hover {
   border: 1px solid #074320;
 }
 
-.c6 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c29 {
+.c27 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -1909,12 +1900,12 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   z-index: 1;
 }
 
-.c29:focus,
-.c29:hover {
+.c27:focus,
+.c27:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c29:hover {
+.c27:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -1922,26 +1913,26 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   color: #fff;
 }
 
-.c29[disabled] {
+.c27[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c29 img {
+.c27 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c29:link {
+.c27:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c30 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1959,18 +1950,18 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   align-items: center;
 }
 
-.c31 {
+.c29 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c31 :hover {
+.c29 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c27 {
+.c25 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -1978,7 +1969,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   padding: 10px 20px 10px 20px;
 }
 
-.c28 {
+.c26 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -2006,7 +1997,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   cursor: grab;
 }
 
-.c9 {
+.c8 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -2014,12 +2005,12 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   max-height: 400px;
 }
 
-.c8 {
+.c7 {
   overflow: hidden;
   height: 100%;
 }
 
-.c11 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2035,7 +2026,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   padding-bottom: 10px;
 }
 
-.c12 {
+.c11 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -2046,13 +2037,13 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   margin-left: 0;
 }
 
-.c14 {
+.c13 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c24 {
+.c23 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -2074,21 +2065,18 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
 }
 
-.c25 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c25 * {
+.c23 * {
   height: inherit;
   width: inherit;
 }
 
-.c20 {
+.c19 {
   border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
@@ -2112,7 +2100,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   font-weight: normal;
 }
 
-.c19 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2124,7 +2112,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   width: 180px;
 }
 
-.c21 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2143,7 +2131,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c17 {
+.c16 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -2152,18 +2140,18 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   display: none;
 }
 
-.c22 {
+.c21 {
   cursor: default;
 }
 
-.c18 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c15 {
+.c14 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -2177,11 +2165,11 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c15:-webkit-autofill {
+.c14:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2229,7 +2217,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
                 New Report Config
               </span>
               <div
-                class="c5 c6"
+                class="c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -2237,36 +2225,36 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6 c7"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c10"
+                  class="c9"
                 >
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Name
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="name"
                         type="text"
                         value="Unnamed"
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -2274,26 +2262,26 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Comment
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <input
-                        class="c15 c16"
+                        class="c14 c15"
                         name="comment"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c17"
+                        class="c16"
                         data-testid="error-marker"
                       >
                         ×
@@ -2301,46 +2289,46 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
-                      class="c12"
+                      class="c11"
                       data-testid="formgroup-title"
                     >
                       Report Format
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c12 c13"
                       data-testid="formgroup-content"
                     >
                       <div
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-15-label"
-                        class="c18"
+                        class="c17"
                         role="combobox"
                       >
                         <div
-                          class="c19"
+                          class="c18"
                           width="180px"
                         >
                           <div
                             aria-haspopup="true"
                             aria-label="open menu"
-                            class="c20"
+                            class="c19"
                             data-toggle="true"
                             role="button"
                             type="button"
                           >
                             <div
-                              class="c21 c22"
+                              class="c20 c21"
                               data-testid="select-selected-value"
                             />
                             <div
-                              class="c23"
+                              class="c22"
                             >
                               <span
-                                class="c24 c25"
+                                class="c23"
                                 data-testid="select-open-button"
                               >
                                 ▼
@@ -2349,7 +2337,7 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
                           </div>
                         </div>
                         <div
-                          class="c17"
+                          class="c16"
                           data-testid="error-marker"
                         >
                           ×
@@ -2361,17 +2349,17 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c26 c27 c28"
+              class="c24 c25 c26"
             >
               <button
-                class="c29 c30 c31"
+                class="c27 c28 c29"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c29 c30 c31"
+                class="c27 c28 c29"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -2380,10 +2368,10 @@ exports[`New Report Config Dialog component tests > should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c32"
+            class="c30"
           >
             <div
-              class="c33"
+              class="c31"
             />
           </div>
         </div>
