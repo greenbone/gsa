@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent, act} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
-import {ICON_SIZE_SMALL_PIXELS} from './withIconSize';
+import {ICON_SIZE_SMALL_PIXELS} from 'web/hooks/useIconSize';
 
 export const testIcon = Icon => {
   test('should render with default width and height', () => {

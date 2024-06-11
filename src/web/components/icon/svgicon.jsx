@@ -15,16 +15,17 @@ import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
 
-import withIconSize from 'web/components/icon/withIconSize';
-import {styledExcludeProps} from 'web/utils/styledConfig';
+import useIconSize from 'web/hooks/useIconSize';
 
 const Anchor = styled.a`
   display: flex;
 `;
 
-const Styled = styledExcludeProps(styled.span, ['active', 'isLoading'])`
-  cursor: ${props => (isDefined(props.onClick) ? 'pointer' : undefined)};
-
+const Styled = styled.span`
+  cursor: ${props => (props.onClick ? 'pointer' : undefined)};
+  width: ${props => props.$width};
+  height: ${props => props.$height};
+  line-height: ${props => props.$lineHeight};
   @media print {
     & {
       ${props => (isDefined(props.onClick) ? {display: 'none'} : undefined)};
@@ -33,15 +34,21 @@ const Styled = styledExcludeProps(styled.span, ['active', 'isLoading'])`
 
   & svg {
     background: ${props =>
-      props.isLoading
+      props.$isLoading
         ? 'url(/img/loading.gif) center center no-repeat'
         : undefined};
+    height: ${props => props.height};
+    width: ${props => props.width};
   }
 
   & svg path {
-    display: ${props => (props.isLoading ? 'none' : undefined)};
+    display: ${props => (props.$isLoading ? 'none' : undefined)};
     fill: ${props =>
-      props.active || props.isLoading ? undefined : Theme.inputBorderGray};
+      props.$active || props.$isLoading ? undefined : Theme.inputBorderGray};
+  }
+  & * {
+    height: inherit;
+    width: inherit;
   }
 `;
 
@@ -82,9 +89,11 @@ const SvgIcon = ({
   to,
   value,
   onClick,
+  size,
   ...other
 }) => {
   const [loading, setLoading] = useStateWithMountCheck(false);
+  const {width, height} = useIconSize(size);
 
   const handleClick = event => {
     event.preventDefault();
@@ -115,9 +124,12 @@ const SvgIcon = ({
     <Styled
       {...other}
       data-testid="svg-icon"
-      active={active && !loading}
-      isLoading={loading}
       title={title}
+      $active={active.toString() && !loading}
+      $isLoading={loading}
+      $height={height}
+      $width={width}
+      $lineHeight={height}
       onClick={
         isDefined(onClick) && !disabled && !loading ? handleClick : undefined
       }
@@ -135,8 +147,7 @@ SvgIcon.propTypes = {
   to: PropTypes.string,
   value: PropTypes.any,
   onClick: PropTypes.func,
+  size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
 };
 
-export default withIconSize()(SvgIcon);
-
-// vim: set ts=2 sw=2 tw=80:
+export default SvgIcon;
