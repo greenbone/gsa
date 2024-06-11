@@ -30,7 +30,7 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from "web/utils/useGmp.jsx";
+import useGmp from "web/utils/useGmp";
 import {_} from "gmp/locale/lang.js";
 
 const Row = ({

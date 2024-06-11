@@ -26,7 +26,7 @@ import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
 import {isNumber} from "gmp/utils/identity";
-import useGmp from "web/utils/useGmp.jsx";
+import useGmp from "web/utils/useGmp";
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
