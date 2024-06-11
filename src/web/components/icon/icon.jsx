@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {useState, useEffect, useRef, useCallback} from 'react';
 import 'whatwg-fetch';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
