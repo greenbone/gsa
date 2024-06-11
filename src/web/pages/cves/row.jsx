@@ -36,6 +36,8 @@ const Row = ({
   ...props
 }) => {
   const gmp = useGmp();
+  const epss_score = entity?.epss?.score
+  const epss_percentile = entity?.epss?.percentile
   return (
     <TableRow>
       <TableData>
@@ -62,10 +64,10 @@ const Row = ({
         gmp.settings.enableEPSS &&
         <>
           <TableData>
-            {isNumber(entity?.epss?.score) ? entity.epss?.score.toFixed(5) : _("N/A")}
+            {isNumber(epss_score) ? epss_score.toFixed(5) : _("N/A")}
           </TableData>
           <TableData>
-            {isNumber(entity?.epss?.percentile) ? entity.epss?.percentile.toFixed(5) : _("N/A")}
+            {isNumber(epss_percentile) ? epss_percentile.toFixed(5) : _("N/A")}
           </TableData>
         </>
       }

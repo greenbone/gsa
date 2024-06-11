@@ -125,26 +125,24 @@ const Header = ({
       </TableRow>
       {
         gmp.settings.enableEPSS &&
-        <>
-          <TableRow>
-            <TableHead
-              width="3%"
-              currentSortDir={currentSortDir}
-              currentSortBy={currentSortBy}
-              sortBy={sort ? 'epss_score' : false}
-              onSortChange={onSortChange}
-              title={_('Score')}
-            />
-            <TableHead
-              width="3%"
-              currentSortDir={currentSortDir}
-              currentSortBy={currentSortBy}
-              sortBy={sort ? 'epss_percentile' : false}
-              onSortChange={onSortChange}
-              title={_('Percentile')}
-            />
-          </TableRow>
-        </>
+        <TableRow>
+          <TableHead
+            width="3%"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'epss_score' : false}
+            onSortChange={onSortChange}
+            title={_('Score')}
+          />
+          <TableHead
+            width="3%"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'epss_percentile' : false}
+            onSortChange={onSortChange}
+            title={_('Percentile')}
+          />
+        </TableRow>
       }
 
     </TableHeader>
