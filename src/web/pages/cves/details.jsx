@@ -25,7 +25,7 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from "web/utils/useGmp.jsx";
+import useGmp from "web/utils/useGmp";
 
 const CVSS_PROPS = {
   cvssAccessVector: _l('Access Vector'),

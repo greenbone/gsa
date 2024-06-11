@@ -27,7 +27,7 @@ import TableRow from 'web/components/table/row';
 import NvtDetails from './details';
 import NvtRow from './row';
 
-import useGmp from "web/utils/useGmp.jsx";
+import useGmp from "web/utils/useGmp";
 
 const Header = ({
   actionsColumn,

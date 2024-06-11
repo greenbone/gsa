@@ -21,7 +21,7 @@ import TableRow from 'web/components/table/row';
 import CveDetails from './details';
 import CveRow from './row';
 import {isDefined} from "gmp/utils/identity.js";
-import useGmp from "web/utils/useGmp.jsx";
+import useGmp from "web/utils/useGmp";
 
 const Header = ({
   actionsColumn,

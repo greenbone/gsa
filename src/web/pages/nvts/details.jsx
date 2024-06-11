@@ -12,7 +12,7 @@ import {isDefined, isNumber} from 'gmp/utils/identity';
 import {TAG_NA} from 'gmp/models/nvt';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from "web/utils/useGmp.jsx";
+import useGmp from "web/utils/useGmp";
 
 import {na, getTranslatableSeverityOrigin} from 'web/utils/render';
 
@@ -33,7 +33,7 @@ import TableRow from 'web/components/table/row';
 import References from './references';
 import Solution from './solution';
 import Pre from './preformatted';
-import CveLink from "web/components/link/cvelink.jsx";
+import CveLink from "web/components/link/cvelink";
 
 const NvtDetails = ({entity, links = true}) => {
   const {
