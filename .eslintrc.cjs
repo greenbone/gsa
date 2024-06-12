@@ -31,6 +31,7 @@ module.exports = {
       'warn',
       {ignore: ['children', 'className', 'location']},
     ],
+    camelcase: ['warn', {properties: 'always'}],
     'no-case-declarations': 'off',
     'no-unused-vars': [
       'warn',
