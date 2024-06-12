@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import useTranslation from 'web/hooks/useTranslation';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -25,6 +25,8 @@ const ComplianceLevelsFilterGroup = ({
   onRemove,
   isResult = false,
 }) => {
+  const [_] = useTranslation();
+  
   const handleComplianceChange = (value, level) => {
     const filter_name = isResult
       ? 'compliance_levels'

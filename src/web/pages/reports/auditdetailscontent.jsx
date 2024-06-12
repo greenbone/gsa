@@ -8,7 +8,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
+import useTranslation from 'web/hooks/useTranslation';
 
 import {TASK_STATUS} from 'gmp/models/task';
 
@@ -106,6 +106,7 @@ const PageContent = ({
   const userTags = hasReport ? report.userTags : undefined;
   const userTagsCount = isDefined(userTags) ? userTags.length : 0;
   const gmp = useGmp();
+  const [_] = useTranslation();
 
   const {
     errors = {},

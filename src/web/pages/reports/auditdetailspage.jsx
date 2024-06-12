@@ -10,7 +10,7 @@ import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 
 import {useRouteMatch} from 'react-router-dom';
 
-import _ from 'gmp/locale';
+import useTranslation from 'web/hooks/useTranslation';
 
 import logger from 'gmp/log';
 
@@ -65,7 +65,6 @@ import {create_pem_certificate} from 'web/utils/cert';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 
 import TargetComponent from '../targets/component';
 import PageTitle from 'web/components/layout/pagetitle';
@@ -138,6 +137,7 @@ const ReportDetails = props => {
   // eslint-disable-next-line no-unused-vars
   const [storeAsDefault, setStoreAsDefault] = useState();
 
+  const [_] = useTranslation();
   const gmp = useGmp();
   const dispatch = useDispatch();
   const match = useRouteMatch();
@@ -687,7 +687,6 @@ const ReportDetailsWrapper = props => {
 };
 
 export default compose(
-  withGmp,
   withDialogNotification,
   withDownload,
 )(ReportDetailsWrapper);

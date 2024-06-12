@@ -5,7 +5,7 @@
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
+import useTranslation from 'web/hooks/useTranslation';
 import {styledExcludeProps} from 'web/utils/styledConfig';
 import Theme from 'web/utils/theme';
 
@@ -26,7 +26,10 @@ const Label = styledExcludeProps(styled.div, [
   border-color: ${props => props.borderColor};
 `;
 
-const YesLabel = props => (
+
+const YesLabel = props => {
+  const [_] = useTranslation();
+  return (
   <Label
     {...props}
     backgroundColor={Theme.complianceYes}
@@ -34,9 +37,12 @@ const YesLabel = props => (
   >
     {_('Yes')}
   </Label>
-);
+  )
+};
 
-const NoLabel = props => (
+const NoLabel = props => {
+  const [_] = useTranslation();
+  return (
   <Label
     {...props}
     backgroundColor={Theme.complianceNo}
@@ -44,9 +50,12 @@ const NoLabel = props => (
   >
     {_('No')}
   </Label>
-);
+  )
+};
 
-const IncompleteLabel = props => (
+const IncompleteLabel = props => {
+  const [_] = useTranslation(); 
+  return (
   <Label
     {...props}
     backgroundColor={Theme.complianceIncomplete}
@@ -54,9 +63,12 @@ const IncompleteLabel = props => (
   >
     {_('Incomplete')}
   </Label>
-);
+  )
+};
 
-const UndefinedLabel = props => (
+const UndefinedLabel = props => {
+  const [_] = useTranslation(); 
+  return (
   <Label
     {...props}
     backgroundColor={Theme.complianceUndefined}
@@ -64,7 +76,8 @@ const UndefinedLabel = props => (
   >
     {_('Undefined')}
   </Label>
-);
+  )
+};
 
 export const ComplianceStateLabels = {
   Yes: YesLabel,

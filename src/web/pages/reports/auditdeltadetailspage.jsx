@@ -10,7 +10,7 @@ import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 
 import {useRouteMatch} from 'react-router-dom';
 
-import _ from 'gmp/locale';
+import useTranslation from 'web/hooks/useTranslation';
 
 import logger from 'gmp/log';
 
@@ -105,7 +105,8 @@ const DeltaAuditReportDetails = props => {
       sortReverse: false,
     },
   });
-
+  
+  const [_] = useTranslation();
   const gmp = useGmp();
   const dispatch = useDispatch();
   const match = useRouteMatch();
