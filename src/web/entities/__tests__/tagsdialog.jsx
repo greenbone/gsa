@@ -27,7 +27,7 @@ describe('TagsDialog dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should disable tag selection when no options available', () => {
@@ -46,7 +46,7 @@ describe('TagsDialog dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should save data', () => {

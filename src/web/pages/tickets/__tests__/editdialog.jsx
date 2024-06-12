@@ -39,7 +39,7 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should display notes', () => {

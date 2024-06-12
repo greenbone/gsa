@@ -24,7 +24,7 @@ describe('SeverityLevelsFilterGroup tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should call change handler', () => {

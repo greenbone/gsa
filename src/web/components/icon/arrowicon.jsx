@@ -9,9 +9,7 @@ import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
 
-import withIconSize, {
-  ICON_SIZE_SMALL_PIXELS,
-} from 'web/components/icon/withIconSize';
+import useIconSize, {ICON_SIZE_SMALL_PIXELS} from 'web/hooks/useIconSize';
 
 const Styled = styled.span`
   background-color: transparent;
@@ -23,7 +21,14 @@ const Styled = styled.span`
   outline: none;
   margin: 1px;
   user-select: none;
+  width: ${props => props.$width};
+  height: ${props => props.$height};
+  line-height: ${props => props.$lineHeight};
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  & * {
+    height: inherit;
+    width: inherit;
+  }
 `;
 
 const Loading = styled.span`
@@ -32,15 +37,23 @@ const Loading = styled.span`
   background: url(/img/loading.gif) center center no-repeat;
 `;
 
-const ArrowIcon = ({down = false, isLoading = false, ...props}) => (
-  <Styled {...props}>{isLoading ? <Loading /> : down ? '▼' : '▲'}</Styled>
-);
+const ArrowIcon = ({down = false, isLoading = false, size, ...props}) => {
+  const {width, height} = useIconSize(size);
+  let icon = down ? '▼' : '▲';
+  if (isLoading) {
+    icon = <Loading />;
+  }
+  return (
+    <Styled $height={height} $width={width} $lineHeight={height} {...props}>
+      {icon}
+    </Styled>
+  );
+};
 
 ArrowIcon.propTypes = {
   down: PropTypes.bool,
   isLoading: PropTypes.bool,
+  size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
 };
 
-export default withIconSize()(ArrowIcon);
-
-// vim: set ts=2 sw=2 tw=80:
+export default ArrowIcon;

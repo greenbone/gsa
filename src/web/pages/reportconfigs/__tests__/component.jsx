@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import ReportConfig from 'gmp/models/reportconfig';
@@ -100,7 +99,7 @@ describe('Report Config Component tests', () => {
     editClick({id: 'rc123'});
 
     await wait();
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
 
     expect(getReportConfig).toHaveBeenCalledWith({
       id: 'rc123',

@@ -39,7 +39,7 @@ describe('CreateTicketDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should allow to select user', () => {

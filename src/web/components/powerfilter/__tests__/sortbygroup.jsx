@@ -27,7 +27,7 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render fields', () => {

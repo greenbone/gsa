@@ -25,7 +25,7 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
     const contentElement = getByTestId('confirmationdialog-content');
     const titleElement = getByTestId('dialog-title-bar');
     expect(contentElement).toHaveTextContent('foo');

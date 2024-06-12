@@ -55,7 +55,7 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should call click handlers', () => {

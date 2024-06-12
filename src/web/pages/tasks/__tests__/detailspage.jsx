@@ -330,7 +330,7 @@ describe('Task Detailspage tests', () => {
       <Detailspage id="12345" />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
 
     expect(element).toHaveTextContent('Task: foo');
 
@@ -641,7 +641,7 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
 
     const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');

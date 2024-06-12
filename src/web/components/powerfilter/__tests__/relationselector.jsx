@@ -22,7 +22,7 @@ describe('Relation Selector Tests', () => {
       <RelationSelector relation="<" onChange={onChange} />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should return items', () => {

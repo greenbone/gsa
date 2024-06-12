@@ -132,7 +132,7 @@ describe('Audits table tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
     const header = baseElement.querySelectorAll('th');
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Status');

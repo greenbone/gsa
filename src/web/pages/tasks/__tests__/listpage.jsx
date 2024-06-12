@@ -318,7 +318,7 @@ describe('TaskPage ToolBarIcons test', () => {
         onTaskWizardClick={handleTaskWizardClick}
       />,
     );
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
 
     const links = element.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');

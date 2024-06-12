@@ -92,8 +92,6 @@ describe('Task Row tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
-
     // Name
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('(bar)');

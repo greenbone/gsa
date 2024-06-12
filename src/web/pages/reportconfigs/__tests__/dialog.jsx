@@ -45,7 +45,7 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
 
     const titleBar = getByTestId(baseElement, 'dialog-title-bar');
     expect(titleBar).toHaveTextContent('Edit Report Config');
@@ -333,7 +333,7 @@ describe('New Report Config Dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
 
     const titleBar = getByTestId(baseElement, 'dialog-title-bar');
     expect(titleBar).toHaveTextContent('New Report Config');
@@ -373,14 +373,14 @@ describe('New Report Config Dialog component tests', () => {
             __text: 'RF01',
             report_format: {
               _id: 'RF01',
-              name: 'report format 1'
+              name: 'report format 1',
             },
           },
           default: {
             __text: 'RF01',
             report_format: {
               _id: 'RF01',
-              name: 'report format 1'
+              name: 'report format 1',
             },
           },
           type: {

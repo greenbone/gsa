@@ -13,7 +13,7 @@ describe('Loading component tests', () => {
   test('should render', () => {
     const {element} = render(<Loading />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 });
 

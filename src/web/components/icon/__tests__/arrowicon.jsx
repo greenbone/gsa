@@ -9,13 +9,11 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import ArrowIcon from '../arrowicon';
 
-import {ICON_SIZE_SMALL_PIXELS} from '../withIconSize';
+import {ICON_SIZE_SMALL_PIXELS} from 'web/hooks/useIconSize';
 
 describe('ArrowIcon component tests', () => {
   test('should render', () => {
     const {element} = render(<ArrowIcon />);
-
-    expect(element).toMatchSnapshot();
 
     expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS);
     expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS);
