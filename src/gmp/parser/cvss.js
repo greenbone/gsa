@@ -64,15 +64,15 @@ export const parseCvssV2BaseVector = ({
   let vector = 'AV:';
 
   switch (accessVector) {
-    case 'LOCAL':
+    case 'Local':
       vector += 'L';
       av = 0.395;
       break;
-    case 'ADJACENT_NETWORK':
+    case 'Adjacent':
       vector += 'A';
       av = 0.646;
       break;
-    case 'NETWORK':
+    case 'Network':
       vector += 'N';
       av = 1.0;
       break;
@@ -83,15 +83,15 @@ export const parseCvssV2BaseVector = ({
 
   vector += '/AC:';
   switch (accessComplexity) {
-    case 'LOW':
+    case 'Low':
       vector += 'L';
       ac = 0.71;
       break;
-    case 'MEDIUM':
+    case 'Medium':
       vector += 'M';
       ac = 0.61;
       break;
-    case 'HIGH':
+    case 'High':
       vector += 'H';
       ac = 0.35;
       break;
@@ -102,15 +102,15 @@ export const parseCvssV2BaseVector = ({
 
   vector += '/Au:';
   switch (authentication) {
-    case 'NONE':
+    case 'None':
       vector += 'N';
       au = 0.704;
       break;
-    case 'MULTIPLE_INSTANCES':
+    case 'Multiple':
       vector += 'M';
       au = 0.45;
       break;
-    case 'SINGLE_INSTANCE':
+    case 'Single':
       vector += 'S';
       au = 0.56;
       break;
@@ -121,15 +121,15 @@ export const parseCvssV2BaseVector = ({
 
   vector += '/C:';
   switch (confidentialityImpact) {
-    case 'NONE':
+    case 'None':
       vector += 'N';
       c = 0.0;
       break;
-    case 'PARTIAL':
+    case 'Partial':
       vector += 'P';
       c = 0.275;
       break;
-    case 'COMPLETE':
+    case 'Complete':
       vector += 'C';
       c = 0.66;
       break;
@@ -140,15 +140,15 @@ export const parseCvssV2BaseVector = ({
 
   vector += '/I:';
   switch (integrityImpact) {
-    case 'NONE':
+    case 'None':
       vector += 'N';
       i = 0.0;
       break;
-    case 'PARTIAL':
+    case 'Partial':
       vector += 'P';
       i = 0.275;
       break;
-    case 'COMPLETE':
+    case 'Complete':
       vector += 'C';
       i = 0.66;
       break;
@@ -159,15 +159,15 @@ export const parseCvssV2BaseVector = ({
 
   vector += '/A:';
   switch (availabilityImpact) {
-    case 'NONE':
+    case 'None':
       vector += 'N';
       a = 0.0;
       break;
-    case 'PARTIAL':
+    case 'Partial':
       vector += 'P';
       a = 0.275;
       break;
-    case 'COMPLETE':
+    case 'Complete':
       vector += 'C';
       a = 0.66;
       break;
@@ -218,73 +218,73 @@ export const parseCvssV2BaseFromVector = vector => {
     switch (metric) {
       case 'av':
         if (value === 'l') {
-          accessVector = 'LOCAL';
+          accessVector = 'Local';
           av = 0.395;
         } else if (value === 'a') {
-          accessVector = 'ADJACENT_NETWORK';
+          accessVector = 'Adjacent';
           av = 0.646;
         } else if (value === 'n') {
-          accessVector = 'NETWORK';
+          accessVector = 'Network';
           av = 1.0;
         }
         break;
       case 'ac':
         if (value === 'h') {
-          accessComplexity = 'HIGH';
+          accessComplexity = 'High';
           ac = 0.35;
         } else if (value === 'm') {
-          accessComplexity = 'MEDIUM';
+          accessComplexity = 'Medium';
           ac = 0.61;
         } else if (value === 'l') {
-          accessComplexity = 'LOW';
+          accessComplexity = 'Low';
           ac = 0.71;
         }
         break;
       case 'au':
         if (value === 'm') {
-          authentication = 'MULTIPLE_INSTANCES';
+          authentication = 'Multiple';
           au = 0.45;
         } else if (value === 's') {
-          authentication = 'SINGLE_INSTANCE';
+          authentication = 'Single';
           au = 0.56;
         } else if (value === 'n') {
-          authentication = 'NONE';
+          authentication = 'None';
           au = 0.704;
         }
         break;
       case 'c':
         if (value === 'c') {
-          confidentialityImpact = 'COMPLETE';
+          confidentialityImpact = 'Complete';
           c = 0.66;
         } else if (value === 'p') {
-          confidentialityImpact = 'PARTIAL';
+          confidentialityImpact = 'Partial';
           c = 0.275;
         } else if (value === 'n') {
-          confidentialityImpact = 'NONE';
+          confidentialityImpact = 'None';
           c = 0.0;
         }
         break;
       case 'i':
         if (value === 'c') {
-          integrityImpact = 'COMPLETE';
+          integrityImpact = 'Complete';
           i = 0.66;
         } else if (value === 'p') {
-          integrityImpact = 'PARTIAL';
+          integrityImpact = 'Partial';
           i = 0.275;
         } else if (value === 'n') {
-          integrityImpact = 'NONE';
+          integrityImpact = 'None';
           i = 0.0;
         }
         break;
       case 'a':
         if (value === 'c') {
-          availabilityImpact = 'COMPLETE';
+          availabilityImpact = 'Complete';
           a = 0.66;
         } else if (value === 'p') {
-          availabilityImpact = 'PARTIAL';
+          availabilityImpact = 'Partial';
           a = 0.275;
         } else if (value === 'n') {
-          availabilityImpact = 'NONE';
+          availabilityImpact = 'None';
           a = 0.0;
         }
         break;
@@ -354,19 +354,19 @@ export const parseCvssV3BaseVector = ({
   let vector = 'CVSS:3.1/AV:';
 
   switch (attackVector) {
-    case 'PHYSICAL':
+    case 'Physical':
       vector += 'P';
       av = 0.2;
       break;
-    case 'LOCAL':
+    case 'Local':
       vector += 'L';
       av = 0.55;
       break;
-    case 'ADJACENT_NETWORK':
+    case 'Adjacent':
       vector += 'A';
       av = 0.62;
       break;
-    case 'NETWORK':
+    case 'Network':
       vector += 'N';
       av = 0.85;
       break;
@@ -377,11 +377,11 @@ export const parseCvssV3BaseVector = ({
 
   vector += '/AC:';
   switch (attackComplexity) {
-    case 'HIGH':
+    case 'High':
       vector += 'H';
       ac = 0.44;
       break;
-    case 'LOW':
+    case 'Low':
       vector += 'L';
       ac = 0.77;
       break;
@@ -392,15 +392,15 @@ export const parseCvssV3BaseVector = ({
 
   vector += '/PR:';
   switch (privilegesRequired) {
-    case 'HIGH':
+    case 'High':
       vector += 'H';
       pr = 0.27;
       break;
-    case 'LOW':
+    case 'Low':
       vector += 'L';
       pr = 0.62;
       break;
-    case 'NONE':
+    case 'None':
       vector += 'N';
       pr = 0.85;
       break;
@@ -411,11 +411,11 @@ export const parseCvssV3BaseVector = ({
 
   vector += '/UI:';
   switch (userInteraction) {
-    case 'REQUIRED':
+    case 'Required':
       vector += 'R';
       ui = 0.62;
       break;
-    case 'NONE':
+    case 'None':
       vector += 'N';
       ui = 0.85;
       break;
@@ -426,11 +426,11 @@ export const parseCvssV3BaseVector = ({
 
   vector += '/S:';
   switch (scope) {
-    case 'UNCHANGED':
+    case 'Unchanged':
       vector += 'U';
       s = 6.42;
       break;
-    case 'CHANGED':
+    case 'Changed':
       vector += 'C';
       s = 7.52;
       break;
@@ -441,15 +441,15 @@ export const parseCvssV3BaseVector = ({
 
   vector += '/C:';
   switch (confidentialityImpact) {
-    case 'HIGH':
+    case 'High':
       vector += 'H';
       c = 0.56;
       break;
-    case 'LOW':
+    case 'Low':
       vector += 'L';
       c = 0.22;
       break;
-    case 'NONE':
+    case 'None':
       vector += 'N';
       c = 0.0;
       break;
@@ -460,15 +460,15 @@ export const parseCvssV3BaseVector = ({
 
   vector += '/I:';
   switch (integrityImpact) {
-    case 'HIGH':
+    case 'High':
       vector += 'H';
       i = 0.56;
       break;
-    case 'LOW':
+    case 'Low':
       vector += 'L';
       i = 0.22;
       break;
-    case 'NONE':
+    case 'None':
       vector += 'N';
       i = 0.0;
       break;
@@ -479,15 +479,15 @@ export const parseCvssV3BaseVector = ({
 
   vector += '/A:';
   switch (availabilityImpact) {
-    case 'HIGH':
+    case 'High':
       vector += 'H';
       a = 0.56;
       break;
-    case 'LOW':
+    case 'Low':
       vector += 'L';
       a = 0.22;
       break;
-    case 'NONE':
+    case 'None':
       vector += 'N';
       a = 0.0;
       break;
@@ -544,91 +544,91 @@ export const parseCvssV3BaseFromVector = vector => {
     switch (metric) {
       case 'av':
         if (value === 'l') {
-          attackVector = 'LOCAL';
+          attackVector = 'Local';
           av = 0.55;
         } else if (value === 'a') {
-          attackVector = 'ADJACENT_NETWORK';
+          attackVector = 'Adjacent';
           av = 0.62;
         } else if (value === 'n') {
-          attackVector = 'NETWORK';
+          attackVector = 'Network';
           av = 0.85;
         } else if (value === 'p') {
-          attackVector = 'PHYSICAL';
+          attackVector = 'Physical';
           av = 0.2;
         }
         break;
       case 'ac':
         if (value === 'h') {
-          attackComplexity = 'HIGH';
+          attackComplexity = 'High';
           ac = 0.44;
         } else if (value === 'l') {
-          attackComplexity = 'LOW';
+          attackComplexity = 'Low';
           ac = 0.77;
         }
         break;
       case 'pr':
         if (value === 'h') {
-          privilegesRequired = 'HIGH';
+          privilegesRequired = 'High';
           pr = 0.27;
         } else if (value === 'l') {
-          privilegesRequired = 'LOW';
+          privilegesRequired = 'Low';
           pr = 0.62;
         } else if (value === 'n') {
-          privilegesRequired = 'NONE';
+          privilegesRequired = 'None';
           pr = 0.85;
         }
         break;
       case 'ui':
         if (value === 'r') {
-          userInteraction = 'REQUIRED';
+          userInteraction = 'Required';
           ui = 0.62;
         } else if (value === 'n') {
-          userInteraction = 'NONE';
+          userInteraction = 'None';
           ui = 0.85;
         }
         break;
       case 's':
         if (value === 'u') {
-          scope = 'UNCHANGED';
+          scope = 'Unchanged';
           s = 6.42;
         } else if (value === 'c') {
-          scope = 'CHANGED';
+          scope = 'Changed';
           s = 7.52;
         }
         break;
       case 'c':
         if (value === 'h') {
-          confidentialityImpact = 'HIGH';
+          confidentialityImpact = 'High';
           c = 0.56;
         } else if (value === 'l') {
-          confidentialityImpact = 'LOW';
+          confidentialityImpact = 'Low';
           c = 0.22;
         } else if (value === 'n') {
-          confidentialityImpact = 'NONE';
+          confidentialityImpact = 'None';
           c = 0.0;
         }
         break;
       case 'i':
         if (value === 'h') {
-          integrityImpact = 'HIGH';
+          integrityImpact = 'High';
           i = 0.56;
         } else if (value === 'l') {
-          integrityImpact = 'LOW';
+          integrityImpact = 'Low';
           i = 0.22;
         } else if (value === 'n') {
-          integrityImpact = 'NONE';
+          integrityImpact = 'None';
           i = 0.0;
         }
         break;
       case 'a':
         if (value === 'h') {
-          availabilityImpact = 'HIGH';
+          availabilityImpact = 'High';
           a = 0.56;
         } else if (value === 'l') {
-          availabilityImpact = 'LOW';
+          availabilityImpact = 'Low';
           a = 0.22;
         } else if (value === 'n') {
-          availabilityImpact = 'NONE';
+          availabilityImpact = 'None';
           a = 0.0;
         }
         break;

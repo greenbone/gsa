@@ -7,16 +7,13 @@ import PropTypes from 'prop-types';
 import {useState, useEffect, useMemo} from 'react';
 import _ from 'gmp/locale';
 
+import {cvssConfigData} from 'web/pages/extras/cvssV4/cvssConfig';
 import {
-  cvssConfigData,
   expectedMetricOptionsOrdered,
-} from 'web/pages/extras/cvssV4/cvssConfig';
-
-import {
   processVector,
   calculateScoreSafely,
   removeUnusedMetrics,
-} from './utils';
+} from 'gmp/parser/cvssV4';
 
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import FormGroup from 'web/components/form/formgroup';

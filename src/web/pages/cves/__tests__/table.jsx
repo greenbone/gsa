@@ -124,15 +124,15 @@ describe('Cve table tests', () => {
       />,
     );
 
-    expect(element).not.toHaveTextContent('Availability ImpactCOMPLETE');
-    expect(element).not.toHaveTextContent('Confidentiality ImpactPARTIAL');
-    expect(element).not.toHaveTextContent('Attack VectorLOCAL');
+    expect(element).not.toHaveTextContent('Availability ImpactComplete');
+    expect(element).not.toHaveTextContent('Confidentiality ImpactPartial');
+    expect(element).not.toHaveTextContent('Attack VectorLocal');
 
     const icons = getAllByTestId('svg-icon');
     fireEvent.click(icons[0]);
     expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
-    expect(element).toHaveTextContent('Availability ImpactCOMPLETE');
-    expect(element).toHaveTextContent('Confidentiality ImpactPARTIAL');
-    expect(element).toHaveTextContent('Attack VectorLOCAL');
+    expect(element).toHaveTextContent('Availability ImpactComplete');
+    expect(element).toHaveTextContent('Confidentiality ImpactPartial');
+    expect(element).toHaveTextContent('Attack VectorLocal');
   });
 });
