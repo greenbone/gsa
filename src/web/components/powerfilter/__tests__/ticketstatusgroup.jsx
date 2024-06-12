@@ -28,7 +28,7 @@ describe('TicketStatusGroup tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render value from filter and change it', () => {

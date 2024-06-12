@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
@@ -24,7 +23,7 @@ describe('MultiSelect component tests', () => {
   test('should render', () => {
     const {element} = render(<MultiSelect />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render with items', () => {

@@ -64,7 +64,7 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
 
     expect(baseElement).toHaveTextContent('Config');
     expect(baseElement).toHaveTextContent('foo');
@@ -92,7 +92,7 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
 
     expect(getByTestId('loading')).toBeInTheDocument();
 

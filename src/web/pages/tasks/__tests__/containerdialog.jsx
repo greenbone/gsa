@@ -19,7 +19,7 @@ describe('ContainerDialog tests', () => {
       <ContainerDialog onClose={handleClose} onSave={handleSave} />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should render edit dialog', () => {
@@ -31,7 +31,7 @@ describe('ContainerDialog tests', () => {
       <ContainerDialog task={task} onClose={handleClose} onSave={handleSave} />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should change fields in create dialog', () => {

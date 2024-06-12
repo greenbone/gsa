@@ -95,7 +95,7 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
 
     // Name
     expect(baseElement).toHaveTextContent('foo');

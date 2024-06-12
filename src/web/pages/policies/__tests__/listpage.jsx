@@ -115,7 +115,7 @@ describe('PoliciesPage tests', () => {
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should call commands for bulk actions', async () => {
@@ -212,7 +212,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
 
     const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');

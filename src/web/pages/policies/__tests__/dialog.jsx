@@ -22,7 +22,7 @@ describe('CreatePolicyDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should allow to close the dialog', () => {

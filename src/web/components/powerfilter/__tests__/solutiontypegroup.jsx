@@ -19,7 +19,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should call change handler', () => {

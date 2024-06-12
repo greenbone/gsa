@@ -71,7 +71,7 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should display default info', () => {

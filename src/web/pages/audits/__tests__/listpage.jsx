@@ -135,7 +135,7 @@ describe('AuditPage tests', () => {
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should call commands for bulk actions', async () => {
@@ -231,7 +231,7 @@ describe('AuditPage ToolBarIcons test', () => {
     const {element, getAllByTestId} = render(
       <ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />,
     );
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
 
     const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');

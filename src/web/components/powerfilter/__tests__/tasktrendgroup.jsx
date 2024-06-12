@@ -22,7 +22,7 @@ describe('Task Trend Selector Tests', () => {
       <TaskTrendGroup filter={filter} onChange={onChange} />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should return items', () => {

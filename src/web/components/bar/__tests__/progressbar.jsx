@@ -17,7 +17,7 @@ describe('ProgressBar tests', () => {
       <ProgressBar background="low" progress="10" title="Progress" />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render title', () => {

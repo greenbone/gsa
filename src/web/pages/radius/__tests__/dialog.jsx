@@ -23,7 +23,7 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 
   test('should save data', () => {

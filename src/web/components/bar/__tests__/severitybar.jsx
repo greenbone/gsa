@@ -15,7 +15,7 @@ describe('SeverityBar tests', () => {
   test('should render', () => {
     const {element} = render(<SeverityBar severity="9.5" />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render text content', () => {

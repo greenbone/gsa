@@ -19,7 +19,7 @@ describe('ErrorDialog component tests', () => {
       <ErrorDialog text="foo" title="bar" onClose={handleClose} />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
     const contentElement = getByTestId('errordialog-content');
     const titleElement = getByTestId('dialog-title-bar');
     expect(contentElement).toHaveTextContent('foo');

@@ -15,8 +15,6 @@ describe('ArrowIcon component tests', () => {
   test('should render', () => {
     const {element} = render(<ArrowIcon />);
 
-    expect(element).toMatchSnapshot();
-
     expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS);
     expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS);
   });

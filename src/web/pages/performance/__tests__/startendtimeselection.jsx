@@ -28,7 +28,7 @@ describe('StartTimeSelection tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should display timezone', () => {

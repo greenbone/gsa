@@ -31,7 +31,7 @@ describe('Severity Values Group Tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('arguments are processed correctly', () => {

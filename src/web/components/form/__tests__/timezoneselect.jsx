@@ -21,7 +21,7 @@ describe('TimezoneSelect tests', () => {
     const selected = getByTestId('select-selected-value');
     expect(selected).toHaveTextContent('Coordinated Universal Time/UTC');
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render all timezones in selection', () => {

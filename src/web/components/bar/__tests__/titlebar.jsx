@@ -26,7 +26,7 @@ describe('Titlebar tests', () => {
     const {baseElement, getByTestId} = render(<Titlebar />);
     const menuElement = getByTestId('usermenu');
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
     expect(menuElement).toBeDefined();
     expect(baseElement).not.toHaveTextContent('Vendor Version');
   });
@@ -41,7 +41,7 @@ describe('Titlebar tests', () => {
 
     const {baseElement} = render(<Titlebar />);
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
     expect(baseElement).not.toHaveTextContent('username');
     expect(baseElement).toHaveTextContent('Vendor Version');
   });

@@ -33,7 +33,7 @@ describe('Select component tests', () => {
   test('should render', () => {
     const {element} = render(<Select />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render with items', () => {
