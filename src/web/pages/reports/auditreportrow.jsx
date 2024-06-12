@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import useTranslation from 'web/hooks/useTranslation';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -39,6 +39,7 @@ const Actions = withEntitiesActions(
 
     const scanActive = isActive(report.scan_run_status);
 
+    const [_] = useTranslation();
     const title = scanActive ? _('Scan is active') : _('Delete Report');
 
     return (

@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 
 import {useHistory} from 'react-router-dom';
 
-import _ from 'gmp/locale';
+import useTranslation from 'web/hooks/useTranslation';
 
 import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -47,7 +47,9 @@ import AuditReportsDashboard, {
   AUDIT_REPORTS_DASHBOARD_ID,
 } from './auditdashboard';
 
-const ToolBarIcons = () => (
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
+  return (
   <IconDivider>
     <ManualIcon
       page="reports"
@@ -55,7 +57,8 @@ const ToolBarIcons = () => (
       title={_('Help: Audit Reports')}
     />
   </IconDivider>
-);
+  )
+};
 
 const AuditReportsPage = ({
   filter,
@@ -67,6 +70,7 @@ const AuditReportsPage = ({
   const [selectedDeltaReport, setSelectedDeltaReport] = useState();
   const [beforeSelectFilter, setBeforeSelectFilter] = useState();
   const history = useHistory();
+  const [_] = useTranslation();
 
   useEffect(() => {
     if (
