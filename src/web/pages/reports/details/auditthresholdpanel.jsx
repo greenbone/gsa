@@ -7,7 +7,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
+import useTranslation from 'web/hooks/useTranslation';
 
 import Divider from 'web/components/layout/divider';
 
@@ -36,6 +36,8 @@ const AuditThresholdPanel = ({
   onFilterChanged,
   onFilterEditClick,
 }) => {
+  const [_] = useTranslation();
+  
   const compliance = filter.get('compliance_levels', '');
 
   const handleRemoveComplianceYes = () => {
