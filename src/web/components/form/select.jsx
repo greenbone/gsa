@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useState, useEffect} from 'react';
+import {useCallback} from 'react';
 
-import {TextInput, Loader} from '@mantine/core';
+import {Loader} from '@mantine/core';
 
 import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components';
 
