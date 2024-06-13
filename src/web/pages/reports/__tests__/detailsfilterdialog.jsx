@@ -7,15 +7,12 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 
 import {rendererWith} from 'web/utils/testing';
 
 import FilterDialog from 'web/pages/reports/detailsfilterdialog';
-
-setLocale('en');
 
 const caps = new Capabilities(['everything']);
 

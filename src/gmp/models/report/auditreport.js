@@ -49,8 +49,6 @@ class AuditReportReport extends Model {
 
     copy.reportType = element._type;
 
-    // copy.scanRunStatus = element.scan_run_status;
-
     delete copy.filters;
 
     if (isDefined(compliance)) {
@@ -140,5 +138,3 @@ class AuditReportReport extends Model {
 }
 
 export default AuditReportReport;
-
-// vim: set ts=2 sw=2 tw=80:
