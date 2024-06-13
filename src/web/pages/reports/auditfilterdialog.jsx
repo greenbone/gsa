@@ -5,12 +5,11 @@
 
 import React from 'react';
 
-import {_l, _} from 'gmp/locale/lang';
-
 import Layout from 'web/components/layout/layout';
 
-import compose from 'web/utils/compose';
 import useCapabilities from 'web/utils/useCapabilities';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 /* eslint-disable max-len */
 
@@ -27,37 +26,6 @@ import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
-const SORT_FIELDS = [
-  {
-    name: 'date',
-    displayName: _l('Date'),
-  },
-  {
-    name: 'status',
-    displayName: _l('Status'),
-  },
-  {
-    name: 'task',
-    displayName: _l('Task'),
-  },
-  {
-    name: 'compliant',
-    displayName: _l('Compliant'),
-  },
-  {
-    name: 'compliance_yes',
-    displayName: _l('Compliance: Yes'),
-  },
-  {
-    name: 'compliance_no',
-    displayName: _l('Compliance: No'),
-  },
-  {
-    name: 'compliance_incomplete',
-    displayName: _l('Compliance: Incomplete'),
-  },
-];
-
 const AuditReportFilterDialogComponent = ({
   filter,
   filterName,
@@ -71,11 +39,41 @@ const AuditReportFilterDialogComponent = ({
   onSortOrderChange,
   onValueChange,
 }) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
   const handleRemoveCompliance = () =>
     onFilterChange(filter.delete('report_compliance_levels'));
-
-  const capabilities = useCapabilities();
-
+  const SORT_FIELDS = [
+    {
+      name: 'date',
+      displayName: _('Date'),
+    },
+    {
+      name: 'status',
+      displayName: _('Status'),
+    },
+    {
+      name: 'task',
+      displayName: _('Task'),
+    },
+    {
+      name: 'compliant',
+      displayName: _('Compliant'),
+    },
+    {
+      name: 'compliance_yes',
+      displayName: _('Compliance: Yes'),
+    },
+    {
+      name: 'compliance_no',
+      displayName: _('Compliance: No'),
+    },
+    {
+      name: 'compliance_incomplete',
+      displayName: _('Compliance: Incomplete'),
+    },
+  ];
+  
   if (!filter) {
     return null;
   }
@@ -133,6 +131,4 @@ const AuditReportFilterDialogComponent = ({
 
 AuditReportFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
-export default compose(withFilterDialog())(AuditReportFilterDialogComponent);
-
-// vim: set ts=2 sw=2 tw=80:
+export default withFilterDialog()(AuditReportFilterDialogComponent);

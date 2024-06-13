@@ -28,5 +28,3 @@ export const ReportCompianceLoader = ({children, filter}) => (
 );
 
 ReportCompianceLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

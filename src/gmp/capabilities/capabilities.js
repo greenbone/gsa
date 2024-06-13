@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {pluralizeType} from 'gmp/utils/entitytype';
@@ -54,7 +53,7 @@ const convertType = type => {
   if (isDefined(ctype)) {
     type = ctype;
   }
-  return subtypes[type] ? subtypes[type] : type;
+  return subtypes[type] || type;
 };
 
 class Capabilities {

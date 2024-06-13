@@ -446,5 +446,3 @@ PageContent.propTypes = {
 };
 
 export default PageContent;
-
-// vim: set ts=2 sw=2 tw=80:
