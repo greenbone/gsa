@@ -44,6 +44,10 @@ const LeftDivider = styled(Divider)`
   margin-right: 5px;
 `;
 
+const PowerFilterTextField = styled(TextField)`
+  width: 30vw;
+`;
+
 const getUserFilterString = filter => {
   if (isDefined(filter) && isDefined(filter.toFilterCriteriaString)) {
     return filter.toFilterCriteriaString();
@@ -183,7 +187,7 @@ class PowerFilter extends React.Component {
               <Label>
                 <b>{_('Filter')}</b>
               </Label>
-              <TextField
+              <PowerFilterTextField
                 name="userFilterString"
                 size="53"
                 maxLength="1000"

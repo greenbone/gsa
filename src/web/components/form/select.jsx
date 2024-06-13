@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
+import {useCallback, useState, useEffect} from 'react';
 
 import {TextInput, Loader} from '@mantine/core';
 
@@ -22,7 +22,7 @@ const SelectValueValidator = (props, propName, componentName) => {
   const value = props[propName];
   const {items} = props;
 
-  if (!items || !items.length) {
+  if (!items?.length) {
     return;
   }
 
@@ -86,31 +86,27 @@ const Select = ({
     [name, onChange],
   );
 
-  if (isLoading) {
-    return (
-      <TextInput
-        styles={{root: {flexGrow: grow}}}
-        placeholder={_('Loading...')}
-        readOnly={true}
-        rightSection={<Loader size="xs" />}
-      />
-    );
-  }
+  const selectPlaceholder = isLoading ? _('Loading...') : placeholder;
+  const rightSection = isLoading && <Loader size="xs" />;
+  const selectableItems = isLoading ? [] : items;
+  const selectedValue = isLoading ? undefined : value;
+
   return (
     <OpenSightSelect
       {...props}
       styles={{root: {flexGrow: grow}}}
       dropdownPosition={dropdownPosition}
-      data={items}
+      data={selectableItems}
       disabled={disabled || !items?.length}
       error={isDefined(errorContent) && `${errorContent}`}
       searchable={searchable}
       label={label}
       title={toolTipTitle}
-      placeholder={placeholder}
+      placeholder={selectPlaceholder}
       name={name}
-      value={value}
+      value={selectedValue}
       onChange={handleChange}
+      rightSection={rightSection}
     />
   );
 };
