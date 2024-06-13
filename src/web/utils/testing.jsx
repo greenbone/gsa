@@ -31,6 +31,7 @@ import {
   cleanup,
   queryAllByAttribute,
   getElementError,
+  within,
 } from '@testing-library/react/pure';
 import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 
@@ -118,6 +119,7 @@ export const render = ui => {
     getByName: name => getByName(baseElement, name),
     queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
+    within: () => within(baseElement),
     rerender: component => rerender(<Main>{component}</Main>),
     ...other,
   };

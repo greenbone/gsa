@@ -23,7 +23,7 @@ import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith} from 'web/utils/testing';
+import {getByRole, rendererWith} from 'web/utils/testing';
 
 import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
@@ -110,7 +110,7 @@ describe('Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement, getAllByTestId, within} = render(
       <DetailsContent
         activeTab={0}
         applicationsCounts={{all: 4, filtered: 4}}
@@ -161,10 +161,13 @@ describe('Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
     const powerFilter = getPowerFilter();
     const inputs = getTextInputs(powerFilter);
+    const select = getByRole(powerFilter, 'combobox');
 
-    // Powerfilter
+    // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(inputs[1]).toHaveAttribute('placeholder', 'Loading...');
+
+    const input = within(select).getByTitle('Loaded filter');
+    expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
     expect(baseElement).toHaveTextContent(
@@ -279,7 +282,7 @@ describe('Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement, getAllByTestId, within} = render(
       <DetailsContent
         activeTab={2}
         applicationsCounts={{all: 4, filtered: 4}}
@@ -328,10 +331,13 @@ describe('Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
     const powerFilter = getPowerFilter();
     const inputs = getTextInputs(powerFilter);
+    const select = getByRole(powerFilter, 'combobox');
 
-    // Powerfilter
+    // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(inputs[1]).toHaveAttribute('placeholder', 'Loading...');
+
+    const input = within(select).getByTitle('Loaded filter');
+    expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
     expect(baseElement).toHaveTextContent(

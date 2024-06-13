@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {useCallback, useState, useEffect} from 'react';
+import {useCallback} from 'react';
 
-import {TextInput, Loader} from '@mantine/core';
+import {Loader} from '@mantine/core';
 
 import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components';
 
