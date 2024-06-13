@@ -7,8 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
@@ -21,8 +19,6 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
 import AuditReportsPage from '../auditreportslistpage';
-
-setLocale('en');
 
 window.URL.createObjectURL = testing.fn();
 

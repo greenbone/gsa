@@ -22,7 +22,6 @@ const FilterProvider = ({
     fallbackFilter,
     locationQueryFilterString: locationQuery?.filter,
   });
-
   return (
     <React.Fragment>
       {isLoadingFilter ? <Loading /> : children({filter: returnedFilter})}

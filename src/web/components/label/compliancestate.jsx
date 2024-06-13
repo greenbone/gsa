@@ -4,15 +4,11 @@
  */
 
 import styled from 'styled-components';
-
+import PropTypes from 'web/utils/proptypes';
 import useTranslation from 'web/hooks/useTranslation';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 import Theme from 'web/utils/theme';
 
-const Label = styledExcludeProps(styled.div, [
-  'backgroundColor',
-  'borderColor',
-])`
+const Label = styled.div`
   text-align: center;
   font-weight: normal;
   font-style: normal;
@@ -22,62 +18,32 @@ const Label = styledExcludeProps(styled.div, [
   width: 70px;
   height: 1.5em;
   font-size: 0.8em;
-  background-color: ${props => props.backgroundColor};
-  border-color: ${props => props.borderColor};
+  background-color: ${props => props.$backgroundColor};
+  border-color: ${props => props.$borderColor};
 `;
 
-
-const YesLabel = props => {
+const ComplianceLabel = ({text, color, ...props}) => {
   const [_] = useTranslation();
   return (
   <Label
     {...props}
-    backgroundColor={Theme.complianceYes}
-    borderColor={Theme.complianceYes}
+    $backgroundColor={Theme[color]}
+    $borderColor={Theme[color]}
   >
-    {_('Yes')}
+    {_(text)}
   </Label>
   )
 };
 
-const NoLabel = props => {
-  const [_] = useTranslation();
-  return (
-  <Label
-    {...props}
-    backgroundColor={Theme.complianceNo}
-    borderColor={Theme.complianceNo}
-  >
-    {_('No')}
-  </Label>
-  )
+ComplianceLabel.propTypes = {
+  text: PropTypes.string,
+  color: PropTypes.string,
 };
 
-const IncompleteLabel = props => {
-  const [_] = useTranslation(); 
-  return (
-  <Label
-    {...props}
-    backgroundColor={Theme.complianceIncomplete}
-    borderColor={Theme.complianceIncomplete}
-  >
-    {_('Incomplete')}
-  </Label>
-  )
-};
-
-const UndefinedLabel = props => {
-  const [_] = useTranslation(); 
-  return (
-  <Label
-    {...props}
-    backgroundColor={Theme.complianceUndefined}
-    borderColor={Theme.complianceUndefined}
-  >
-    {_('Undefined')}
-  </Label>
-  )
-};
+const YesLabel = props => <ComplianceLabel {...props} text="Yes" color="complianceYes" />;
+const NoLabel = props => <ComplianceLabel {...props} text='No' color='complianceNo' />;
+const IncompleteLabel = props => <ComplianceLabel {...props} text='Incomplete' color='complianceIncomplete' />;
+const UndefinedLabel = props => <ComplianceLabel {...props} text='Undefined' color='complianceUndefined' />;
 
 export const ComplianceStateLabels = {
   Yes: YesLabel,
@@ -87,5 +53,3 @@ export const ComplianceStateLabels = {
 };
 
 export default ComplianceStateLabels;
-
-// vim: set ts=2 sw=2 tw=80:

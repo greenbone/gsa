@@ -49,7 +49,7 @@ class AuditReport extends Model {
     copy.task = parseModelFromElement(task, 'task');
 
     copy.reportType = type;
-    copy.contentType = content_type; // revert ?
+    copy.contentType = content_type;
 
     copy.scan_start = parseDate(scan_start);
     copy.timestamp = parseDate(timestamp);
@@ -63,5 +63,3 @@ class AuditReport extends Model {
 }
 
 export default AuditReport;
-
-// vim: set ts=2 sw=2 tw=80:

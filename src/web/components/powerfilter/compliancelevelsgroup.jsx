@@ -28,11 +28,11 @@ const ComplianceLevelsFilterGroup = ({
   const [_] = useTranslation();
   
   const handleComplianceChange = (value, level) => {
-    const filter_name = isResult
+    const filterName = isResult
       ? 'compliance_levels'
       : 'report_compliance_levels';
 
-    let compliance = filter.get(filter_name);
+    let compliance = filter.get(filterName);
 
     if (!compliance) {
       compliance = '';
@@ -40,51 +40,51 @@ const ComplianceLevelsFilterGroup = ({
 
     if (value && !compliance.includes(level)) {
       compliance += level;
-      onChange(compliance, filter_name);
+      onChange(compliance, filterName);
     } else if (!value && compliance.includes(level)) {
       compliance = compliance.replace(level, '');
 
       if (compliance.trim().length === 0) {
         onRemove();
       } else {
-        onChange(compliance, filter_name);
+        onChange(compliance, filterName);
       }
     }
   };
 
-  let compliance_levels = filter.get(
+  let complianceLevels = filter.get(
     isResult ? 'compliance_levels' : 'report_compliance_levels',
   );
 
-  if (!isDefined(compliance_levels)) {
-    compliance_levels = '';
+  if (!isDefined(complianceLevels)) {
+    complianceLevels = '';
   }
   return (
     <FormGroup title={_('Compliance')}>
       <IconDivider>
         <Checkbox
-          checked={compliance_levels.includes('y')}
+          checked={complianceLevels.includes('y')}
           name="y"
           onChange={handleComplianceChange}
         >
           <ComplianceStateLabels.Yes />
         </Checkbox>
         <Checkbox
-          checked={compliance_levels.includes('n')}
+          checked={complianceLevels.includes('n')}
           name="n"
           onChange={handleComplianceChange}
         >
           <ComplianceStateLabels.No />
         </Checkbox>
         <Checkbox
-          checked={compliance_levels.includes('i')}
+          checked={complianceLevels.includes('i')}
           name="i"
           onChange={handleComplianceChange}
         >
           <ComplianceStateLabels.Incomplete />
         </Checkbox>
         <Checkbox
-          checked={compliance_levels.includes('u')}
+          checked={complianceLevels.includes('u')}
           name="u"
           onChange={handleComplianceChange}
         >
@@ -103,5 +103,3 @@ ComplianceLevelsFilterGroup.propTypes = {
 };
 
 export default ComplianceLevelsFilterGroup;
-
-// vim: set ts=2 sw=2 tw=80:

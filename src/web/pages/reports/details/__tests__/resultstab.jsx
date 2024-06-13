@@ -5,7 +5,6 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 
@@ -19,8 +18,6 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {entitiesLoadingActions} from 'web/store/entities/results';
 
 import ResultsTab from '../resultstab';
-
-setLocale('en');
 
 const reloadInterval = 1;
 const manualUrl = 'test/';

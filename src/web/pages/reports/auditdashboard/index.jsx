@@ -34,5 +34,3 @@ const AuditReportsDashboard = props => (
 );
 
 export default AuditReportsDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

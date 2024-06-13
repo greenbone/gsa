@@ -54,7 +54,7 @@ const convertType = type => {
   if (isDefined(ctype)) {
     type = ctype;
   }
-  return subtypes[type] ? subtypes[type] : type;
+  return subtypes[type] || type;
 };
 
 class Capabilities {

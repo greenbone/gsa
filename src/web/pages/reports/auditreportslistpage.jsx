@@ -37,7 +37,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/auditreports';
 
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 
 import AuditFilterDialog from './auditfilterdialog';
@@ -162,13 +161,9 @@ const FALLBACK_AUDIT_REPORT_LIST_FILTER = Filter.fromString(
   'report_compliance_levels=yniu sort-reverse=date first=1',
 );
 
-export default compose(
-  withEntitiesContainer('auditreport', {
+export default withEntitiesContainer('auditreport', {
     fallbackFilter: FALLBACK_AUDIT_REPORT_LIST_FILTER,
     entitiesSelector,
     loadEntities,
     reloadInterval: reportsReloadInterval,
-  }),
-)(AuditReportsPage);
-
-// vim: set ts=2 sw=2 tw=80:
+  })(AuditReportsPage);

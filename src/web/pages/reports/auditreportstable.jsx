@@ -5,7 +5,8 @@
 
 import React from 'react';
 
-import {_, _l} from 'gmp/locale/lang';
+import {_l} from 'gmp/locale/lang';
+import useTranslation from 'web/hooks/useTranslation';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -29,6 +30,7 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
+  const [_] = useTranslation();
   return (
     <TableHeader>
       <TableRow>
@@ -126,5 +128,3 @@ export default createEntitiesTable({
   row: AuditReportRow,
   toggleDetailsIcon: false,
 });
-
-// vim: set ts=2 sw=2 tw=80:

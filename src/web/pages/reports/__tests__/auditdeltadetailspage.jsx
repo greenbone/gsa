@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 
@@ -18,8 +17,6 @@ import {rendererWith} from 'web/utils/testing';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/mockauditdeltareport';
 
 import DeltaDetailsContent from 'web/pages/reports/deltadetailscontent';
-
-setLocale('en');
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
