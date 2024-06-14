@@ -1,3 +1,5 @@
+const allowedSnakeCase = require('./allowedSnakeCase.cjs');
+
 module.exports = {
   ignorePatterns: ['build', '.eslintrc.cjs'],
   extends: [
@@ -31,7 +33,13 @@ module.exports = {
       'warn',
       {ignore: ['children', 'className', 'location']},
     ],
-    camelcase: ['warn', {properties: 'always'}],
+    camelcase: [
+      'warn',
+      {
+        allow: allowedSnakeCase,
+        properties: 'always',
+      },
+    ],
     'no-case-declarations': 'off',
     'no-unused-vars': [
       'warn',
