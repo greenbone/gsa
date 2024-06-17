@@ -193,6 +193,7 @@ class TagDialog extends React.Component {
       resource_types = [],
       title = _('New Tag'),
       value = '',
+      gmp,
       onClose,
       onSave,
       ...options
