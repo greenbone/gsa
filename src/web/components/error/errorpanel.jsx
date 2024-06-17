@@ -30,14 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import ErrorMessage from './errormessage';
-
-const ErrorDetailsToggle = styled.span`
-  margin-top: 10px;
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
-`;
+import {Button as OpenSightButton} from '@greenbone/opensight-ui-components';
 
 const ErrorDetails = styled.div`
   margin-top: 10px;
@@ -61,12 +54,15 @@ const ErrorPanel = ({error, message, info}) => {
       flex="column"
     >
       {isDefined(error) && (
-        <ErrorDetailsToggle
+        <OpenSightButton
+          variant="outline"
+          color="red"
+          size="sm"
           data-testid="errorpanel-toggle"
           onClick={handleToggleDetails}
         >
           {showDetails ? _('Hide Error Details') : _('Show Error Details')}
-        </ErrorDetailsToggle>
+        </OpenSightButton>
       )}
       {showDetails && (
         <ErrorDetails>

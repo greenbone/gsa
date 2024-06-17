@@ -22,7 +22,8 @@ import {isDefined} from 'gmp/utils/identity';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
+import {AlertCircle} from 'lucide-react';
+import Theme from 'web/utils/theme';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -36,13 +37,15 @@ const ErrorMessage = ({
   ...props
 }) => (
   <ErrorContainer data-testid={dataTestId}>
-    <Divider margin="15px" align={['start', 'start']}>
-      <StNonAvailableIcon size="medium" />
-      <Layout {...props}>
-        <Divider>
-          <b data-testid="error-message">{message}</b>
+    <Divider margin="20px" flex="column" align={['center', 'center']} grow>
+      <AlertCircle size="24" color={Theme.darkRed} />
+      <Layout flex="column" align={['center', 'center']} {...props}>
+        <b data-testid="error-message">{message}</b>
+        <Divider margin="20px" flex="row" align={['center', 'start']} grow>
           {isDefined(details) && (
-            <span data-testid="error-details">{details}</span>
+            <div>
+              <span data-testid="error-details">{details}</span>
+            </div>
           )}
         </Divider>
         {children}
