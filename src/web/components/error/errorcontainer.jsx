@@ -13,10 +13,7 @@ const ErrorContainer = styled(Layout)`
   padding: 15px;
   margin: 15px 15px 15px 15px;
   border: 1px solid ${Theme.mediumLightRed};
-  color: ${Theme.darkRed};
   background-color: ${Theme.lightRed};
 `;
 
 export default ErrorContainer;
-
-// vim: set ts=2 sw=2 tw=80:

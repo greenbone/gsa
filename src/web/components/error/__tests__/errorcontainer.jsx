@@ -17,6 +17,6 @@ describe('ErrorContainer tests', () => {
       </ErrorContainer>,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 });

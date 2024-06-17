@@ -22,7 +22,7 @@ const Theme = {
   loginButtonGray: '#4c4c4d', // used by: login button
   loginButtonHover: '#212121', // used by: login button at hover
 
-  lightRed: '#fbddde', // used by: dialog errors background
+  lightRed: '#fdf2f2', // used by: dialog errors background
   mediumLightRed: '#f4b1b2', // used by: dialog errors border
   warningRed: '#e5393d', // used for warning font color at login dialog
   darkRed: '#c12c30', // used by: dialog errors font
@@ -61,5 +61,3 @@ const Theme = {
 };
 
 export default Theme;
-
-// vim: set ts=2 sw=2 tw=80:
