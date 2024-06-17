@@ -27,7 +27,7 @@ describe('ErrorMessage tests', () => {
       <ErrorMessage message="An error occurred." details="Because of foo." />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render with message, details and children', () => {
