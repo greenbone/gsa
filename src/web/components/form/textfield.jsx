@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
 
 import Field from './field';
-import {Marker} from './useFormValidation';
+import ErrorMarker from './ErrorMarker';
 
 const TextField = ({hasError = false, errorContent, title, ...props}) => {
   return (
@@ -20,7 +19,7 @@ const TextField = ({hasError = false, errorContent, title, ...props}) => {
         title={hasError ? `${errorContent}` : title}
         type="text"
       />
-      <Marker isVisible={hasError}>×</Marker>
+      <ErrorMarker isVisible={hasError}>×</ErrorMarker>
     </React.Fragment>
   );
 };
