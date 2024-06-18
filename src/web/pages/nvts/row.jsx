@@ -46,8 +46,8 @@ const Row = ({
     const filter = Filter.fromString('family="' + entity.family + '"');
     onFilterChanged(filter);
   };
-  const epss_score = entity?.epss?.max_severity?.score
-  const epss_percentile = entity?.epss?.max_severity?.percentile
+  const epssScore = entity?.epss?.max_severity?.score
+  const epssPercentile = entity?.epss?.max_severity?.percentile
 
   return (
     <TableRow>
@@ -98,10 +98,10 @@ const Row = ({
         gmp.settings.enableEPSS &&
         <>
           <TableData>
-            {isNumber(epss_score) ? epss_score.toFixed(5) : _("N/A")}
+            {isNumber(epssScore) ? epssScore.toFixed(5) : _("N/A")}
           </TableData>
           <TableData>
-            {isNumber(epss_percentile) ? epss_percentile.toFixed(5) : _("N/A")}
+            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _("N/A")}
           </TableData>
         </>
       }
