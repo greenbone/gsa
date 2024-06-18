@@ -7,23 +7,26 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {styledExcludeProps} from 'web/utils/styledConfig';
 import Theme from 'web/utils/theme';
+import PropTypes from 'web/utils/proptypes';
 
-const StyledMarker = styledExcludeProps(styled.div, ['isVisible'])`
+const StyledMarker = styled.div`
   color: ${Theme.darkRed};
-  color: ${props => props.color};
   font-weight: bold;
   font-size: 19px;
   padding-bottom: 1px;
   padding-left: 4px;
-  display: ${props => (props.isVisible ? 'inline' : 'none')};
+  display: ${props => (props.$isVisible ? 'inline' : 'none')};
 `;
 
-const ErrorMarker = props => (
-  <StyledMarker {...props} data-testid="error-marker">
+const ErrorMarker = ({isVisible}) => (
+  <StyledMarker $isVisible={isVisible} data-testid="error-marker">
     ×
   </StyledMarker>
 );
+
+ErrorMarker.propTypes = {
+  isVisible: PropTypes.bool,
+};
 
 export default ErrorMarker;

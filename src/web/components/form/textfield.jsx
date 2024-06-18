@@ -19,7 +19,7 @@ const TextField = ({hasError = false, errorContent, title, ...props}) => {
         title={hasError ? `${errorContent}` : title}
         type="text"
       />
-      <ErrorMarker isVisible={hasError}>×</ErrorMarker>
+      <ErrorMarker isVisible={hasError} />
     </React.Fragment>
   );
 };

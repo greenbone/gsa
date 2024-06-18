@@ -79,7 +79,7 @@ const TextArea = ({
         value={value}
         onChange={handleChange}
       />
-      <ErrorMarker isVisible={hasError}>×</ErrorMarker>
+      <ErrorMarker isVisible={hasError} />
     </React.Fragment>
   );
 };
