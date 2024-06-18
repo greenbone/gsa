@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import Downshift from 'downshift';
@@ -31,7 +30,7 @@ import {
   SelectedValue,
 } from './selectelements';
 
-import {Marker} from './useFormValidation';
+import ErrorMarker from './ErrorMarker';
 import {styledExcludeProps} from 'web/utils/styledConfig';
 
 const SingleSelectedValue = styled(SelectedValue)`
@@ -279,7 +278,7 @@ class Select extends React.Component {
                   </Menu>
                 )}
               </SelectContainer>
-              <Marker isVisible={hasError}>×</Marker>
+              <ErrorMarker isVisible={hasError}>×</ErrorMarker>
             </Div>
           );
         }}

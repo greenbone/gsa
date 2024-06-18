@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
@@ -33,7 +32,7 @@ import {
   SelectedValue,
 } from './selectelements';
 
-import {Marker} from './useFormValidation';
+import ErrorMarker from './ErrorMarker';
 
 const DEFAULT_WIDTH = '250px';
 
@@ -278,7 +277,7 @@ class MultiSelect extends React.Component {
                   </Menu>
                 )}
               </SelectContainer>
-              <Marker isVisible={hasError}>×</Marker>
+              <ErrorMarker isVisible={hasError}>×</ErrorMarker>
             </Div>
           );
         }}

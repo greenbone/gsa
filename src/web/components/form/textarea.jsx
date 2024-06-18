@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useCallback} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
@@ -15,7 +14,7 @@ import Theme from 'web/utils/theme';
 import withLayout from 'web/components/layout/withLayout';
 
 import {DISABLED_OPACITY} from './field';
-import {Marker} from './useFormValidation';
+import ErrorMarker from './ErrorMarker';
 import {styledExcludeProps} from 'web/utils/styledConfig';
 
 const StyledTextArea = styledExcludeProps(styled.textarea, [
@@ -80,7 +79,7 @@ const TextArea = ({
         value={value}
         onChange={handleChange}
       />
-      <Marker isVisible={hasError}>×</Marker>
+      <ErrorMarker isVisible={hasError}>×</ErrorMarker>
     </React.Fragment>
   );
 };
