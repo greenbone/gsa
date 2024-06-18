@@ -277,7 +277,7 @@ class MultiSelect extends React.Component {
                   </Menu>
                 )}
               </SelectContainer>
-              <ErrorMarker isVisible={hasError}>×</ErrorMarker>
+              <ErrorMarker isVisible={hasError} />
             </Div>
           );
         }}

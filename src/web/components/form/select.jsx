@@ -278,7 +278,7 @@ class Select extends React.Component {
                   </Menu>
                 )}
               </SelectContainer>
-              <ErrorMarker isVisible={hasError}>×</ErrorMarker>
+              <ErrorMarker isVisible={hasError} />
             </Div>
           );
         }}
