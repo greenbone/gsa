@@ -29,7 +29,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 import ScannerComponent from './component';
 import ScannersTable, {SORT_FIELDS} from './table';

@@ -22,7 +22,7 @@ import Divider from 'web/components/layout/divider';
 import Link from 'web/components/link/link';
 
 import Theme from 'web/utils/theme';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 import useUserName from 'web/hooks/useUserName';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import useUserTimezone from 'web/hooks/useUserTimezone';

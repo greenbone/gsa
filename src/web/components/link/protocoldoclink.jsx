@@ -7,7 +7,7 @@ import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 import BlankLink from './blanklink';
 

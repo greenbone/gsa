@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
@@ -25,7 +24,7 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from "web/utils/useGmp";
+import useGmp from 'web/hooks/useGmp';
 
 const CVSS_PROPS = {
   cvssAccessVector: _l('Access Vector'),
@@ -45,7 +44,7 @@ const CVSS_PROPS = {
   cvssAvailabilityVS: _l('Vulnerable System Availability Impact'),
   cvssConfidentialitySS: _l('Subsequent System Confidentiality Impact'),
   cvssIntegritySS: _l('Subsequent System Integrity Impact'),
-  cvssAvailabilitySS: _l('Subsequent System Availability Impact'),  
+  cvssAvailabilitySS: _l('Subsequent System Availability Impact'),
 };
 
 const CveDetails = ({entity}) => {

@@ -7,7 +7,7 @@ import {useCallback} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 /**
  * Hook to get the reload interval for entities

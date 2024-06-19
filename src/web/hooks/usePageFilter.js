@@ -26,7 +26,7 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 import useShallowEqualSelector from './useShallowEqualSelector';
 
