@@ -11,7 +11,7 @@ import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import useGmp from 'web/utils/useGmp';

@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import Layout from 'web/components/layout/layout';
 
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import CreateNamedFilterGroup from './createnamedfiltergroup';
 import FilterStringGroup from './filterstringgroup';

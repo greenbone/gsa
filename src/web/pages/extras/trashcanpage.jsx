@@ -42,7 +42,7 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import AlertsTable from '../alerts/table';
 import ScanConfigsTable from '../scanconfigs/table';
