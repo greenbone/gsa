@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -25,7 +24,7 @@ import {isLoggedIn} from 'web/store/usersettings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 const TITLE_BAR_HEIGHT = '42px';
 
@@ -90,7 +89,7 @@ const Titlebar = ({loggedIn}) => {
       </TitlebarLayout>
     </React.Fragment>
   );
-}
+};
 
 Titlebar.propTypes = {
   loggedIn: PropTypes.bool.isRequired,

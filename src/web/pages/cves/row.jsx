@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {_} from 'gmp/locale/lang';
@@ -25,8 +24,8 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
-import {isNumber} from "gmp/utils/identity";
-import useGmp from "web/utils/useGmp";
+import {isNumber} from 'gmp/utils/identity';
+import useGmp from 'web/hooks/useGmp';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -36,8 +35,8 @@ const Row = ({
   ...props
 }) => {
   const gmp = useGmp();
-  const epssScore = entity?.epss?.score
-  const epssPercentile = entity?.epss?.percentile
+  const epssScore = entity?.epss?.score;
+  const epssPercentile = entity?.epss?.percentile;
   return (
     <TableRow>
       <TableData>
@@ -60,20 +59,19 @@ const Row = ({
       <TableData>
         <SeverityBar severity={entity.severity} />
       </TableData>
-      {
-        gmp.settings.enableEPSS &&
+      {gmp.settings.enableEPSS && (
         <>
           <TableData>
-            {isNumber(epssScore) ? epssScore.toFixed(5) : _("N/A")}
+            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
           </TableData>
           <TableData>
-            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _("N/A")}
+            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _('N/A')}
           </TableData>
         </>
-      }
+      )}
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
-  )
+  );
 };
 
 Row.propTypes = {
