@@ -24,7 +24,7 @@ import Link from 'web/components/link/link';
 import Theme from 'web/utils/theme';
 import useGmp from 'web/utils/useGmp';
 import useUserName from 'web/hooks/useUserName';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import useUserTimezone from 'web/utils/useUserTimezone';
 
 const UserMenu = styled.span`

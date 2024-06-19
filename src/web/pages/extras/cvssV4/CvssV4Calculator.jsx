@@ -15,7 +15,7 @@ import {
   removeUnusedMetrics,
 } from 'gmp/parser/cvssV4';
 
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import FormGroup from 'web/components/form/formgroup';
 import Layout from 'web/components/layout/layout';
 import Section from 'web/components/section/section';
