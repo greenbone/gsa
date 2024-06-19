@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from '../testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import useUserName from '../useUserName';
 
