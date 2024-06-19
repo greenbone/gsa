@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -17,7 +16,7 @@ import Link from 'web/components/link/link';
 import InfoPanel from 'web/components/panel/infopanel';
 
 import PropTypes from 'web/utils/proptypes';
-import useLicense from 'web/utils/useLicense';
+import useLicense from 'web/hooks/useLicense';
 
 const LICENSE_EXPIRATION_THRESHOLD = 30;
 
