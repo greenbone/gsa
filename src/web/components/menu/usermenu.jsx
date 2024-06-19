@@ -25,7 +25,7 @@ import Theme from 'web/utils/theme';
 import useGmp from 'web/utils/useGmp';
 import useUserName from 'web/hooks/useUserName';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
-import useUserTimezone from 'web/utils/useUserTimezone';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 
 const UserMenu = styled.span`
   display: inline-flex;
