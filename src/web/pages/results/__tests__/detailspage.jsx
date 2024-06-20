@@ -23,6 +23,7 @@ import Detailspage, {ToolBarIcons} from '../detailspage';
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
+const enableEPSS = true;
 
 // mock entity
 
@@ -40,6 +41,24 @@ export const result = Result.fromElement({
     type: 'nvt',
     name: 'nvt1',
     tags: 'cvss_base_vector=AV:N/AC:M/Au:N/C:P/I:N/A:N|summary=This is a mock result|insight=This is just a test|affected=Affects test cases only|impact=No real impact|solution=Keep writing tests|vuldetect=This is the detection method|solution_type=Mitigation',
+    epss: {
+      max_severity: {
+        score: 0.8765,
+        percentile: 0.8,
+        cve: {
+          _id: 'CVE-2019-1234',
+          severity: 5.0,
+        },
+      },
+      max_epss: {
+        score: 0.9876,
+        percentile: 0.9,
+        cve: {
+          _id: 'CVE-2020-5678',
+          severity: 2.0,
+        },
+      },
+    },
     refs: {
       ref: [
         {_type: 'cve', _id: 'CVE-2019-1234'},
@@ -124,7 +143,7 @@ describe('Result Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS},
       user: {currentSettings, renewSession},
     };
 
@@ -189,7 +208,16 @@ describe('Result Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('QoD80 %');
     expect(baseElement).toHaveTextContent('Host109.876.54.321');
     expect(baseElement).toHaveTextContent('Location80/tcp');
-
+    expect(baseElement).toHaveTextContent('EPSS (CVE with highest severity)');
+    expect(baseElement).toHaveTextContent('EPSS Score0.87650');
+    expect(baseElement).toHaveTextContent('EPSS Percentile0.80000');
+    expect(baseElement).toHaveTextContent('CVECVE-2019-1234');
+    expect(baseElement).toHaveTextContent('CVE Severity5.0 (Medium)');
+    expect(baseElement).toHaveTextContent('EPSS (highest EPSS score)');
+    expect(baseElement).toHaveTextContent('EPSS Score0.98760');
+    expect(baseElement).toHaveTextContent('EPSS Percentile0.90000');
+    expect(baseElement).toHaveTextContent('CVECVE-2020-5678');
+    expect(baseElement).toHaveTextContent('CVE Severity2.0 (Low)');
     expect(heading[2]).toHaveTextContent('Summary');
     expect(baseElement).toHaveTextContent('This is a mock result');
 
@@ -245,7 +273,7 @@ describe('Result Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS},
       user: {currentSettings, renewSession},
     };
 
@@ -294,7 +322,7 @@ describe('Result Detailspage tests', () => {
       users: {
         get: getUsers,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS},
       user: {currentSettings, renewSession},
     };
 
@@ -339,7 +367,7 @@ describe('Result ToolBarIcons tests', () => {
     const handleResultDownloadClick = testing.fn();
     const handleTicketCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl, enableEPSS}};
 
     const {render} = rendererWith({
       gmp,
@@ -390,7 +418,7 @@ describe('Result ToolBarIcons tests', () => {
     const handleResultDownloadClick = testing.fn();
     const handleTicketCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl, enableEPSS}};
 
     const {render} = rendererWith({
       gmp,

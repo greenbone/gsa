@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
@@ -27,6 +26,7 @@ class Cve extends Info {
 
     ret.name = element.name;
     ret.id = element.name;
+    ret.epss = element.epss;
 
     return ret;
   }
