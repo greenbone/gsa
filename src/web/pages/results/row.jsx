@@ -64,7 +64,6 @@ const Row = ({
   const epssScore = entity?.information?.epss?.max_severity?.score
   const epssPercentile = entity?.information?.epss?.max_severity?.percentile
   const gmp = useGmp()
-  console.debug(entity?.information)
   return (
     <TableRow>
       {delta && (
