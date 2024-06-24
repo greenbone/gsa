@@ -178,7 +178,7 @@ class WizardCommand extends HttpCommand {
       event_data_quick_task_fields,
     );
 
-    event_data['event_data:start_day'] = start_date.day();
+    event_data['event_data:start_day'] = start_date.date();
     event_data['event_data:start_month'] = start_date.month() + 1;
     event_data['event_data:start_year'] = start_date.year();
 
