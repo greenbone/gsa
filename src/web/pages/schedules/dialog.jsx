@@ -31,7 +31,8 @@ import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
-import DatePicker from 'web/components/form/datepicker';
+import DatePicker from 'web/components/form/DatePicker';
+
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 import CheckBox from 'web/components/form/checkbox';
 import Radio from 'web/components/form/radio';
@@ -203,48 +204,32 @@ const ScheduleDialog = ({
     ? undefined
     : isDefined(endDate) && createDuration(endDate.diff(startDate));
 
-  const handleStartHoursChange = value => {
-    setStartDate(startDate => startDate.hours(value)); // eslint-disable-line no-shadow
-  };
-
-  const handleStartMinutesChange = value => {
-    setStartDate(startDate => startDate.minutes(value)); // eslint-disable-line no-shadow
-  };
-
   const handleNowButtonClick = () => {
     setStartDate(date().tz(timezone));
   };
 
-  const handleEndHoursChange = value => {
-    setEndDate(endDate => endDate.hours(value)); // eslint-disable-line no-shadow
-  };
-
-  const handleEndMinutesChange = value => {
-    setEndDate(endDate => endDate.minutes(value)); // eslint-disable-line no-shadow
-  };
-
   const handleTimezoneChange = value => {
-    setEndDate(endDate => endDate.tz(value)); // eslint-disable-line no-shadow
-    setStartDate(startDate => startDate.tz(value)); // eslint-disable-line no-shadow
+    setEndDate(endDate => endDate.tz(value));
+    setStartDate(startDate => startDate.tz(value));
     setTimezone(value);
   };
 
   const handleSave = ({
-    comment, // eslint-disable-line no-shadow
-    endDate, // eslint-disable-line no-shadow
-    endOpen = false, // eslint-disable-line no-shadow
-    freq, // eslint-disable-line no-shadow
-    id, // eslint-disable-line no-shadow
-    interval, // eslint-disable-line no-shadow
-    monthdays, // eslint-disable-line no-shadow
-    monthly, // eslint-disable-line no-shadow
-    monthlyDay, // eslint-disable-line no-shadow
-    monthlyNth, // eslint-disable-line no-shadow
-    name, // eslint-disable-line no-shadow
-    recurrenceType, // eslint-disable-line no-shadow
-    startDate, // eslint-disable-line no-shadow
-    timezone, // eslint-disable-line no-shadow
-    weekdays, // eslint-disable-line no-shadow
+    comment,
+    endDate,
+    endOpen = false,
+    freq,
+    id,
+    interval,
+    monthdays,
+    monthly,
+    monthlyDay,
+    monthlyNth,
+    name,
+    recurrenceType,
+    startDate,
+    timezone,
+    weekdays,
   }) => {
     if (!isDefined(onSave)) {
       return Promise.resolve();
@@ -322,6 +307,7 @@ const ScheduleDialog = ({
         // when name is just numbers.
         summary: `${name}`,
         startDate,
+        isUseUTC: false,
       },
       timezone,
     );
@@ -390,36 +376,16 @@ const ScheduleDialog = ({
             />
           </FormGroup>
 
-          <FormGroup title={_('First Run')}>
-            <Row>
-              <DatePicker
-                timezone={timezone}
-                name="startDate"
-                value={startDate}
-                onChange={setStartDate}
-                showYearDropdown
-              />
-              <Spinner
-                name="startHour"
-                type="int"
-                min="0"
-                max="23"
-                value={startDate.hours()}
-                onChange={handleStartHoursChange}
-              />
-              <span>h</span>
-              <Spinner
-                name="startMinute"
-                type="int"
-                min="0"
-                max="59"
-                value={startDate.minutes()}
-                onChange={handleStartMinutesChange}
-              />
-              <span>m</span>
-            </Row>
-            <Button title={_('Now')} onClick={handleNowButtonClick} />
-          </FormGroup>
+          <Row>
+            <DatePicker
+              timezone={timezone}
+              name="startDate"
+              value={startDate}
+              onChange={setStartDate}
+              label={_('First Run')}
+            />
+          </Row>
+          <Button title={_('Now')} onClick={handleNowButtonClick} />
 
           <FormGroup title={_('Run Until')}>
             <CheckBox
@@ -430,32 +396,12 @@ const ScheduleDialog = ({
             />
             <Row>
               <DatePicker
-                timezone={timezone}
                 disabled={state.endOpen}
                 name="endDate"
                 value={state.endDate}
                 onChange={setEndDate}
+                label={_('End Run')}
               />
-              <Spinner
-                disabled={state.endOpen}
-                name="endHour"
-                type="int"
-                min="0"
-                max="23"
-                value={endDate.hour()}
-                onChange={handleEndHoursChange}
-              />
-              <span>h</span>
-              <Spinner
-                disabled={state.endOpen}
-                name="endMinute"
-                type="int"
-                min="0"
-                max="59"
-                value={endDate.minute()}
-                onChange={handleEndMinutesChange}
-              />
-              <span>m</span>
             </Row>
           </FormGroup>
 
@@ -572,5 +518,3 @@ ScheduleDialog.propTypes = {
 };
 
 export default ScheduleDialog;
-
-// vim: set ts=2 sw=2 tw=80:
