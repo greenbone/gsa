@@ -15,151 +15,82 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {useState, useEffect} from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
 import Button from 'web/components/form/button';
-import Datepicker from 'web/components/form/datepicker';
+import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/formgroup';
-import Spinner from 'web/components/form/spinner';
 
 import Column from 'web/components/layout/column';
 import Row from 'web/components/layout/row';
 
-class StartTimeSelection extends React.Component {
-  constructor(...args) {
-    super(...args);
+const StartTimeSelection = props => {
+  const {
+    startDate: initialStartDate,
+    endDate: initialEndDate,
+    timezone,
+    onChanged,
+  } = props;
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endDate, setEndDate] = useState(initialEndDate);
 
-    const {startDate, endDate} = this.props;
+  useEffect(() => {
+    setStartDate(initialStartDate);
+    setEndDate(initialEndDate);
+  }, [initialStartDate, initialEndDate]);
 
-    this.state = {
-      startDate,
-      startHour: startDate.hour(),
-      startMinute: startDate.minute(),
-      endDate,
-      endHour: endDate.hour(),
-      endMinute: endDate.minute(),
-    };
-
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleUpdate = this.handleUpdate.bind(this);
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const {startDate, endDate} = props;
-
-    if (
-      (isDefined(startDate) && startDate !== state.prevStartDate) ||
-      (isDefined(endDate) && props.endDate !== state.prevEndDate)
-    ) {
-      return {
-        startDate,
-        endDate,
-        endHour: endDate.hour(),
-        endMinute: endDate.minute(),
-        prevStartDate: startDate,
-        prevEndDate: endDate,
-        startHour: startDate.hour(),
-        startMinute: startDate.minute(),
-      };
+  const handleValueChange = (value, name) => {
+    if (name === 'startDate') {
+      setStartDate(value);
+    } else if (name === 'endDate') {
+      setEndDate(value);
     }
-    return null;
-  }
+  };
 
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
-  }
-
-  handleUpdate() {
-    const {onChanged} = this.props;
-    const {startDate, endDate, startHour, startMinute, endHour, endMinute} =
-      this.state;
-
+  const handleUpdate = () => {
     onChanged({
-      startDate: startDate.clone().hour(startHour).minute(startMinute),
-      endDate: endDate.clone().hour(endHour).minute(endMinute),
+      startDate: startDate.clone(),
+      endDate: endDate.clone(),
     });
-  }
+  };
 
-  render() {
-    const {timezone} = this.props;
-    const {endDate, startDate, startHour, startMinute, endHour, endMinute} =
-      this.state;
-    return (
-      <Column>
-        <FormGroup data-testid="timezone" title={_('Timezone')}>
-          {timezone}
-        </FormGroup>
-        <FormGroup title={_('Start Time')} direction="row">
-          <Datepicker
-            value={startDate}
-            name="startDate"
-            timezone={timezone}
-            minDate={false}
-            onChange={this.handleValueChange}
-          />
-          <Spinner
-            name="startHour"
-            value={startHour}
-            min="0"
-            max="23"
-            type="int"
-            onChange={this.handleValueChange}
-          />{' '}
-          h
-          <Spinner
-            name="startMinute"
-            value={startMinute}
-            min="0"
-            max="59"
-            type="int"
-            onChange={this.handleValueChange}
-          />{' '}
-          m
-        </FormGroup>
+  return (
+    <Column>
+      <FormGroup data-testid="timezone" title={_('Timezone')}>
+        {timezone}
+      </FormGroup>
+      <FormGroup direction="row">
+        <DatePicker
+          value={startDate}
+          name="startDate"
+          minDate={false}
+          onChange={handleValueChange}
+          label={_('Start Time')}
+        />
+      </FormGroup>
 
-        <FormGroup title={_('End Time')} direction="row">
-          <Datepicker
-            value={endDate}
-            name="endDate"
-            timezone={timezone}
-            minDate={false}
-            onChange={this.handleValueChange}
-          />
-          <Spinner
-            name="endHour"
-            value={endHour}
-            min="0"
-            max="23"
-            type="int"
-            onChange={this.handleValueChange}
-          />{' '}
-          h
-          <Spinner
-            name="endMinute"
-            value={endMinute}
-            min="0"
-            max="59"
-            type="int"
-            onChange={this.handleValueChange}
-          />{' '}
-          m
-        </FormGroup>
+      <FormGroup direction="row">
+        <DatePicker
+          value={endDate}
+          name="endDate"
+          minDate={false}
+          onChange={handleValueChange}
+          label={_('End Time')}
+        />
+      </FormGroup>
 
-        <Row>
-          <Button data-testid="update-button" onClick={this.handleUpdate}>
-            {_('Update')}
-          </Button>
-        </Row>
-      </Column>
-    );
-  }
-}
+      <Row>
+        <Button data-testid="update-button" onClick={handleUpdate}>
+          {_('Update')}
+        </Button>
+      </Row>
+    </Column>
+  );
+};
 
 StartTimeSelection.propTypes = {
   endDate: PropTypes.date.isRequired,
@@ -169,5 +100,3 @@ StartTimeSelection.propTypes = {
 };
 
 export default StartTimeSelection;
-
-// vim: set ts=2 sw=2 tw=80:
