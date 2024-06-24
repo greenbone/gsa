@@ -86,6 +86,14 @@ describe('ModifyTaskWizard component tests', () => {
     const radioInputs = getRadioInputs();
     const radioTitles = getRadioTitles();
 
+    const selectedDate = 'Jan 01, 2020, 01:10:00 PM';
+    const datePickerLabel = screen.getByLabelText('Start Date');
+    const startDateButton = screen.getByRole('button', {name: selectedDate});
+
+    expect(startDateButton).toBeVisible();
+    expect(datePickerLabel).toBeVisible();
+    expect(startDateButton).toHaveTextContent(selectedDate);
+
     expect(baseElement).toHaveTextContent('Setting a start time');
     expect(baseElement).toHaveTextContent('Setting an email Address');
 
@@ -101,6 +109,7 @@ describe('ModifyTaskWizard component tests', () => {
     expect(radioTitles[1]).toHaveTextContent('Create Schedule');
 
     expect(formGroups[2]).toHaveTextContent('Email report to');
+    expect(startDateButton).toBeVisible();
   });
 
   test('should not render schedule without permission', () => {
