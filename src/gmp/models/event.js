@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import ical from 'ical.js';
 
 import {v4 as uuid} from 'uuid';
@@ -305,7 +304,8 @@ class Event {
   }
 
   get duration() {
-    return createDuration({...this.event.duration});
+    const {weeks, ...durationWithoutWeeks} = this.event.duration;
+    return createDuration(durationWithoutWeeks);
   }
 
   get durationInSeconds() {
