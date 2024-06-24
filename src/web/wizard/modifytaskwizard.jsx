@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useState} from 'react';
 
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -12,16 +12,14 @@ import PropTypes from 'web/utils/proptypes';
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Select from 'web/components/form/select';
-import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
-import Datepicker from 'web/components/form/datepicker';
+import DatePicker from 'web/components/form/DatePicker';
 
 import Layout from 'web/components/layout/layout';
 import Column from 'web/components/layout/column';
-import Row from 'web/components/layout/row';
 
 import {renderSelectItems} from 'web/utils/render';
 
@@ -53,6 +51,22 @@ const ModifyTaskWizard = ({
     start_timezone,
     task_id,
     tasks,
+  };
+
+  const [datePickerValue, setDatePickerValue] = useState(start_date);
+
+  const handleDateChange = (selectedDate, onValueChange) => {
+    const properties = [
+      {name: 'start_date', value: selectedDate},
+      {name: 'start_hour', value: selectedDate.hours()},
+      {name: 'start_minute', value: selectedDate.minutes()},
+    ];
+
+    properties.forEach(({name, value}) => {
+      onValueChange(value, name);
+    });
+
+    setDatePickerValue(selectedDate);
   };
 
   return (
@@ -135,33 +149,16 @@ const ModifyTaskWizard = ({
                     name="reschedule"
                     onChange={onValueChange}
                   />
-                  <Datepicker
+                  <DatePicker
                     name="start_date"
                     timezone={state.start_timezone}
-                    value={state.start_date}
-                    onChange={onValueChange}
+                    value={datePickerValue}
+                    onChange={selectedDate =>
+                      handleDateChange(selectedDate, onValueChange)
+                    }
+                    label={_('Start Date')}
                   />
-                  <Row>
-                    <span>{_('at')}</span>
-                    <Spinner
-                      type="int"
-                      min="0"
-                      max="23"
-                      name="start_hour"
-                      value={state.start_hour}
-                      onChange={onValueChange}
-                    />
-                    <span>{_('h')}</span>
-                    <Spinner
-                      type="int"
-                      min="0"
-                      max="59"
-                      name="start_minute"
-                      value={state.start_minute}
-                      onChange={onValueChange}
-                    />
-                    <span>{_('m')}</span>
-                  </Row>
+
                   <TimeZoneSelect
                     name="start_timezone"
                     value={state.start_timezone}
@@ -204,5 +201,3 @@ ModifyTaskWizard.propTypes = {
 };
 
 export default ModifyTaskWizard;
-
-// vim: set ts=2 sw=2 tw=80:
