@@ -44,7 +44,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/utils/useCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
-import date from 'gmp/models/date';
+
 const IMMEDIATELY_START_VALUE = '2';
 const SCHEDULE_START_VALUE = '1';
 const DONT_START_VALUE = '0';
