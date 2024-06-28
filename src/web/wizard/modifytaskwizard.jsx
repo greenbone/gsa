@@ -29,6 +29,7 @@ import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 import DatePicker from 'web/components/form/DatePicker';
+import {TimePicker} from '@greenbone/opensight-ui-components';
 
 import Layout from 'web/components/layout/layout';
 import Column from 'web/components/layout/column';
@@ -39,6 +40,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/utils/useCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
+import {formatSplitTime} from 'web/utils/formatSplitTime';
 
 const ModifyTaskWizard = ({
   alert_email = '',
@@ -65,20 +67,15 @@ const ModifyTaskWizard = ({
     tasks,
   };
 
-  const [datePickerValue, setDatePickerValue] = useState(start_date);
+  const [timePickerValue, setTimePickerValue] = useState(
+    formatSplitTime(start_hour, start_minute),
+  );
 
-  const handleDateChange = (selectedDate, onValueChange) => {
-    const properties = [
-      {name: 'start_date', value: selectedDate},
-      {name: 'start_hour', value: selectedDate.hours()},
-      {name: 'start_minute', value: selectedDate.minutes()},
-    ];
-
-    properties.forEach(({name, value}) => {
-      onValueChange(value, name);
-    });
-
-    setDatePickerValue(selectedDate);
+  const handleTimeChange = (selectedValue, onValueChange) => {
+    const [start_hour, start_minute] = selectedValue.split(':');
+    setTimePickerValue(selectedValue);
+    onValueChange(parseInt(start_hour), 'start_hour');
+    onValueChange(parseInt(start_minute), 'start_minute');
   };
 
   return (
@@ -164,11 +161,16 @@ const ModifyTaskWizard = ({
                   <DatePicker
                     name="start_date"
                     timezone={state.start_timezone}
-                    value={datePickerValue}
-                    onChange={selectedDate =>
-                      handleDateChange(selectedDate, onValueChange)
-                    }
+                    value={state.start_date}
+                    onChange={onValueChange}
                     label={_('Start Date')}
+                  />
+                  <TimePicker
+                    label={_('Start Time')}
+                    value={timePickerValue}
+                    onChange={selectedTime =>
+                      handleTimeChange(selectedTime, onValueChange)
+                    }
                   />
 
                   <TimeZoneSelect
