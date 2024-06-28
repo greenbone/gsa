@@ -17,7 +17,7 @@
  */
 import React, {useCallback} from 'react';
 
-import {DateTimePicker} from '@greenbone/opensight-ui-components';
+import {DatePickerOnly} from '@greenbone/opensight-ui-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -31,7 +31,6 @@ const DatePickerComponent = ({
   disabled,
   minDate = date(),
   name,
-  width = '100%',
   value = date(),
   onChange,
   label = '',
@@ -47,7 +46,7 @@ const DatePickerComponent = ({
   );
 
   return (
-    <DateTimePicker
+    <DatePickerOnly
       disabled={disabled}
       locale={getLocale()}
       value={value.toDate()}
@@ -56,8 +55,6 @@ const DatePickerComponent = ({
         minDate === false || !isDefined(minDate) ? undefined : minDate.toDate()
       }
       maxDate={date().add(3, 'years').toDate()}
-      style={{width}}
-      withSeconds={false}
       label={label}
     />
   );
@@ -66,9 +63,8 @@ const DatePickerComponent = ({
 DatePickerComponent.propTypes = {
   disabled: PropTypes.bool,
   minDate: PropTypes.oneOfType([PropTypes.date, PropTypes.oneOf([false])]),
-  name: PropTypes.arrayOf(PropTypes.string),
+  name: PropTypes.string,
   value: PropTypes.date.isRequired,
-  width: PropTypes.string,
   onChange: PropTypes.func,
   label: PropTypes.string,
 };
