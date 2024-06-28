@@ -35,6 +35,7 @@ import TimeUnitSelect from './timeunitselect';
 import WeekDaySelect, {WeekDaysPropType} from './weekdayselect';
 import DaySelect from './dayselect';
 import MonthDaysSelect from './monthdaysselect';
+import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
 const RECURRENCE_ONCE = 'once';
 const RECURRENCE_HOURLY = ReccurenceFrequency.HOURLY;
@@ -75,7 +76,7 @@ const ScheduleDialog = ({
   const [startDate, setStartDate] = useState(initialStartDate);
 
   const [startTime, setStartTime] = useState(
-    `${startDate.hours().toString().padStart(2, '0')}:${startDate.minutes().toString().padStart(2, '0')}`,
+    formatTimeForTimePicker(startDate),
   );
 
   const [endOpen, setEndOpen] = useState(!isDefined(duration));
@@ -85,9 +86,7 @@ const ScheduleDialog = ({
       : initialStartDate.clone().add(1, 'hour'),
   );
 
-  const [endTime, setEndTime] = useState(
-    `${endDate.hours().toString().padStart(2, '0')}:${endDate.minutes().toString().padStart(2, '0')}`,
-  );
+  const [endTime, setEndTime] = useState(formatTimeForTimePicker(endDate));
 
   const [timezone, setTimezone] = useState(initialTimezone);
 

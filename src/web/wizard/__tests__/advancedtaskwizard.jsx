@@ -104,13 +104,19 @@ describe('AdvancedTaskWizard component tests', () => {
     const radioInputs = getRadioInputs();
     const radioTitles = getRadioTitles();
 
-    const selectedDate = 'Jan 01, 2020, 01:10:00 PM';
+    const selectedDate = '01/01/2020';
     const datePickerLabel = screen.getByLabelText('Start Date');
     const startDateButton = screen.getByRole('button', {name: selectedDate});
+
+    const selectedTime = '12:10';
+    const timePickerLabel = screen.getByLabelText('Start Time');
 
     expect(startDateButton).toBeVisible();
     expect(datePickerLabel).toBeVisible();
     expect(startDateButton).toHaveTextContent(selectedDate);
+
+    expect(timePickerLabel).toBeVisible();
+    expect(timePickerLabel).toHaveValue(selectedTime);
 
     expect(formGroups[0]).toHaveTextContent('Task Name');
 

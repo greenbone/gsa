@@ -74,13 +74,19 @@ describe('ModifyTaskWizard component tests', () => {
     const radioInputs = getRadioInputs();
     const radioTitles = getRadioTitles();
 
-    const selectedDate = 'Jan 01, 2020, 01:10:00 PM';
+    const selectedDate = '01/01/2020';
     const datePickerLabel = screen.getByLabelText('Start Date');
     const startDateButton = screen.getByRole('button', {name: selectedDate});
+
+    const selectedTime = '12:10';
+    const timePickerLabel = screen.getByLabelText('Start Time');
 
     expect(startDateButton).toBeVisible();
     expect(datePickerLabel).toBeVisible();
     expect(startDateButton).toHaveTextContent(selectedDate);
+
+    expect(timePickerLabel).toBeVisible();
+    expect(timePickerLabel).toHaveValue(selectedTime);
 
     expect(baseElement).toHaveTextContent('Setting a start time');
     expect(baseElement).toHaveTextContent('Setting an email Address');

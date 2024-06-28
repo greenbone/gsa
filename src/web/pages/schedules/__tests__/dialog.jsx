@@ -13,13 +13,19 @@ const checkElementVisibilityAndContent = (
   labelText,
   buttonName,
   buttonContent,
+  timePickerLabel,
+  timePickerValue,
 ) => {
   const label = screen.getByLabelText(labelText);
   expect(label).toBeVisible();
 
-  const button = screen.getByRole('button', {name: buttonName});
-  expect(button).toBeVisible();
-  expect(button).toHaveTextContent(buttonContent);
+  const button = screen.getAllByRole('button', {name: buttonName});
+  expect(button[0]).toBeVisible();
+  expect(button[0]).toHaveTextContent(buttonContent);
+
+  const timePicker = screen.getByLabelText(timePickerLabel);
+  expect(timePicker).toBeVisible();
+  expect(timePicker).toHaveValue(timePickerValue);
 };
 
 import {
@@ -108,14 +114,18 @@ describe('ScheduleDialog component tests', () => {
     expect(defaultTimezone).toHaveValue('Coordinated Universal Time/UTC');
 
     checkElementVisibilityAndContent(
-      'First Run',
-      'Feb 08, 2021, 04:00:00 PM',
-      'Feb 08, 2021, 04:00:00 PM',
+      'Start Date',
+      '08/02/2021',
+      '08/02/2021',
+      'Start Time',
+      '15:00',
     );
     checkElementVisibilityAndContent(
-      'End Run',
-      'Feb 08, 2021, 08:45:00 PM',
-      'Feb 08, 2021, 08:45:00 PM',
+      'End Date',
+      '08/02/2021',
+      '08/02/2021',
+      'End Time',
+      '19:45',
     );
 
     expect(baseElement).toHaveTextContent('5 hours');

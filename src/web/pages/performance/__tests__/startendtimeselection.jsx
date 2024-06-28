@@ -12,7 +12,7 @@ import StartTimeSelection from '../startendtimeselection';
 
 const timezone = 'CET';
 const startDate = MomentDate('2019-01-01T12:00Z').tz(timezone);
-const endDate = MomentDate('2019-01-01T13:00Z').tz(timezone);
+const endDate = MomentDate('2019-02-01T13:00Z').tz(timezone);
 
 const handleChange = testing.fn();
 
@@ -33,6 +33,8 @@ describe('StartTimeSelection tests', () => {
       labelText,
       buttonName,
       buttonContent,
+      timePickerLabel,
+      timePickerValue,
     ) => {
       const label = screen.getByLabelText(labelText);
       expect(label).toBeVisible();
@@ -40,17 +42,25 @@ describe('StartTimeSelection tests', () => {
       const button = screen.getByRole('button', {name: buttonName});
       expect(button).toBeVisible();
       expect(button).toHaveTextContent(buttonContent);
+
+      const timePicker = screen.getByLabelText(timePickerLabel);
+      expect(timePicker).toBeVisible();
+      expect(timePicker).toHaveValue(timePickerValue);
     };
 
     checkElementVisibilityAndContent(
+      'Start Date',
+      '01/01/2019',
+      '01/01/2019',
       'Start Time',
-      'Jan 01, 2019, 01:00:00 PM',
-      'Jan 01, 2019, 01:00:00 PM',
+      '13:00',
     );
     checkElementVisibilityAndContent(
+      'End Date',
+      '01/02/2019',
+      '01/02/2019',
       'End Time',
-      'Jan 01, 2019, 02:00:00 PM',
-      'Jan 01, 2019, 02:00:00 PM',
+      '14:00',
     );
   });
 
