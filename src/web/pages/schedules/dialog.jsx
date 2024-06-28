@@ -32,6 +32,7 @@ import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import DatePicker from 'web/components/form/DatePicker';
+import {TimePicker} from '@greenbone/opensight-ui-components';
 
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 import CheckBox from 'web/components/form/checkbox';
@@ -82,14 +83,26 @@ const ScheduleDialog = ({
   onSave,
 }) => {
   const [_] = useTranslation();
-  const [timezone, setTimezone] = useState(initialTimezone);
+
+  const [startDate, setStartDate] = useState(initialStartDate);
+
+  const [startTime, setStartTime] = useState(
+    `${startDate.hours().toString().padStart(2, '0')}:${startDate.minutes().toString().padStart(2, '0')}`,
+  );
+
+  const [endOpen, setEndOpen] = useState(!isDefined(duration));
   const [endDate, setEndDate] = useState(
     isDefined(duration)
       ? initialStartDate.clone().add(duration)
       : initialStartDate.clone().add(1, 'hour'),
   );
-  const [startDate, setStartDate] = useState(initialStartDate);
-  const [endOpen, setEndOpen] = useState(!isDefined(duration));
+
+  const [endTime, setEndTime] = useState(
+    `${endDate.hours().toString().padStart(2, '0')}:${endDate.minutes().toString().padStart(2, '0')}`,
+  );
+
+  const [timezone, setTimezone] = useState(initialTimezone);
+
   const [freq, setFreq] = useState(
     isDefined(initialFrequency) ? initialFrequency : ReccurenceFrequency.WEEKLY,
   );
@@ -214,6 +227,20 @@ const ScheduleDialog = ({
     setTimezone(value);
   };
 
+  const handleTimeChange = (selectedTime, type) => {
+    const [hour, minute] = selectedTime.split(':').map(Number);
+
+    if (type === 'startTime') {
+      const newStartDate = startDate.clone().hours(hour).minutes(minute);
+      setStartDate(newStartDate);
+      setStartTime(selectedTime);
+    } else if (type === 'endTime') {
+      const newEndDate = endDate.clone().hours(hour).minutes(minute);
+      setEndDate(newEndDate);
+      setEndTime(selectedTime);
+    }
+  };
+
   const handleSave = ({
     comment,
     endDate,
@@ -307,7 +334,6 @@ const ScheduleDialog = ({
         // when name is just numbers.
         summary: `${name}`,
         startDate,
-        isUseUTC: false,
       },
       timezone,
     );
@@ -367,6 +393,21 @@ const ScheduleDialog = ({
               onChange={onValueChange}
             />
           </FormGroup>
+          <DatePicker
+            timezone={timezone}
+            name="startDate"
+            value={startDate}
+            onChange={setStartDate}
+            label={_('Start Date')}
+          />
+          <TimePicker
+            label={_('Start Time')}
+            name="startDate"
+            value={startTime}
+            onChange={newStartTime =>
+              handleTimeChange(newStartTime, 'startTime')
+            }
+          />
 
           <FormGroup title={_('Timezone')}>
             <TimeZoneSelect
@@ -376,15 +417,6 @@ const ScheduleDialog = ({
             />
           </FormGroup>
 
-          <Row>
-            <DatePicker
-              timezone={timezone}
-              name="startDate"
-              value={startDate}
-              onChange={setStartDate}
-              label={_('First Run')}
-            />
-          </Row>
           <Button title={_('Now')} onClick={handleNowButtonClick} />
 
           <FormGroup title={_('Run Until')}>
@@ -394,15 +426,22 @@ const ScheduleDialog = ({
               checked={state.endOpen}
               onChange={setEndOpen}
             />
-            <Row>
-              <DatePicker
-                disabled={state.endOpen}
-                name="endDate"
-                value={state.endDate}
-                onChange={setEndDate}
-                label={_('End Run')}
-              />
-            </Row>
+
+            <DatePicker
+              disabled={state.endOpen}
+              name="endDate"
+              value={state.endDate}
+              onChange={setEndDate}
+              label={_('End Date')}
+            />
+
+            <TimePicker
+              disabled={state.endOpen}
+              label={_('End Time')}
+              name="endTime"
+              value={endTime}
+              onChange={newEndTime => handleTimeChange(newEndTime, 'endTime')}
+            />
           </FormGroup>
 
           <FormGroup title={_('Duration')}>
