@@ -12,6 +12,7 @@ import PropTypes from 'web/utils/proptypes';
 import Button from 'web/components/form/button';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/formgroup';
+import {TimePicker} from '@greenbone/opensight-ui-components';
 
 import Column from 'web/components/layout/column';
 import Row from 'web/components/layout/row';
@@ -25,17 +26,30 @@ const StartTimeSelection = props => {
   } = props;
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
+  const [startTime, setStartTime] = useState(
+    `${startDate.hours().toString().padStart(2, '0')}:${startDate.minutes().toString().padStart(2, '0')}`,
+  );
+
+  const [endTime, setEndTime] = useState(
+    `${endDate.hours().toString().padStart(2, '0')}:${endDate.minutes().toString().padStart(2, '0')}`,
+  );
 
   useEffect(() => {
     setStartDate(initialStartDate);
     setEndDate(initialEndDate);
   }, [initialStartDate, initialEndDate]);
 
-  const handleValueChange = (value, name) => {
-    if (name === 'startDate') {
-      setStartDate(value);
-    } else if (name === 'endDate') {
-      setEndDate(value);
+  const handleTimeChange = (selectedTime, type) => {
+    const [hour, minute] = selectedTime.split(':').map(Number);
+
+    if (type === 'startTime') {
+      const newStartDate = startDate.clone().hours(hour).minutes(minute);
+      setStartDate(newStartDate);
+      setStartTime(selectedTime);
+    } else if (type === 'endTime') {
+      const newEndDate = endDate.clone().hours(hour).minutes(minute);
+      setEndDate(newEndDate);
+      setEndTime(selectedTime);
     }
   };
 
@@ -55,9 +69,15 @@ const StartTimeSelection = props => {
         <DatePicker
           value={startDate}
           name="startDate"
-          minDate={false}
-          onChange={handleValueChange}
+          onChange={setStartDate}
+          label={_('Start Date')}
+          maxDate={endDate}
+        />
+        <TimePicker
           label={_('Start Time')}
+          name="startTime"
+          value={startTime}
+          onChange={newStartTime => handleTimeChange(newStartTime, 'startTime')}
         />
       </FormGroup>
 
@@ -65,14 +85,26 @@ const StartTimeSelection = props => {
         <DatePicker
           value={endDate}
           name="endDate"
-          minDate={false}
-          onChange={handleValueChange}
+          minDate={startDate}
+          onChange={setEndDate}
+          label={_('End Date')}
+        />
+        <TimePicker
           label={_('End Time')}
+          name="endTime"
+          value={endTime}
+          onChange={newEndTime => handleTimeChange(newEndTime, 'endTime')}
         />
       </FormGroup>
 
       <Row>
-        <Button data-testid="update-button" onClick={handleUpdate}>
+        <Button
+          disabled={
+            startDate.isSameOrAfter(endDate) || startDate.isSame(endDate)
+          }
+          data-testid="update-button"
+          onClick={handleUpdate}
+        >
           {_('Update')}
         </Button>
       </Row>
