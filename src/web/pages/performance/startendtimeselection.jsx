@@ -28,6 +28,7 @@ import {TimePicker} from '@greenbone/opensight-ui-components';
 
 import Column from 'web/components/layout/column';
 import Row from 'web/components/layout/row';
+import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
 const StartTimeSelection = props => {
   const {
@@ -39,11 +40,10 @@ const StartTimeSelection = props => {
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
   const [startTime, setStartTime] = useState(
-    `${startDate.hours().toString().padStart(2, '0')}:${startDate.minutes().toString().padStart(2, '0')}`,
+    formatTimeForTimePicker(initialStartDate),
   );
-
   const [endTime, setEndTime] = useState(
-    `${endDate.hours().toString().padStart(2, '0')}:${endDate.minutes().toString().padStart(2, '0')}`,
+    formatTimeForTimePicker(initialEndDate),
   );
 
   useEffect(() => {
