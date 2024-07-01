@@ -52,17 +52,17 @@ const convertType = type => {
 
 class Capabilities {
   constructor(cap_names, featuresList) {
-    this._has_caps = isDefined(cap_names);
-    this._has_features = isDefined(featuresList);
+    this._hasCaps = isDefined(cap_names);
+    this._hasFeatures = isDefined(featuresList);
 
     let caps;
     let featuresEnabled = {};
 
-    if (this._has_caps) {
+    if (this._hasCaps) {
       caps = map(cap_names, name => name.toLowerCase());
     }
 
-    if (this._has_features) {
+    if (this._hasFeatures) {
       forEach(featuresList, feature => {
         featuresEnabled[feature.name.toUpperCase()] = parseBoolean(
           feature._enabled,
@@ -79,7 +79,7 @@ class Capabilities {
   }
 
   areDefined() {
-    return this._has_caps;
+    return this._hasCaps;
   }
 
   has(name) {

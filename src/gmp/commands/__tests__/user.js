@@ -164,12 +164,12 @@ describe('UserCommand capabilities tests', () => {
         },
       });
 
-      expect(caps._has_caps).toBe(true);
+      expect(caps._hasCaps).toBe(true);
       expect(caps.mayAccess('report')).toBe(true);
       expect(caps.mayAccess('task')).toBe(true);
       expect(caps.mayAccess('user')).toBe(false);
 
-      expect(caps._has_features).toBe(true);
+      expect(caps._hasFeatures).toBe(true);
       expect(caps.featureEnabled('test_feature_1')).toBe(true);
       expect(caps.featureEnabled('TEST_FEATURE_2')).toBe(true);
       expect(caps.featureEnabled('TEST_FEATURE_3')).toBe(false);
