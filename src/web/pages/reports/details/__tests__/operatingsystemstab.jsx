@@ -13,6 +13,8 @@ import {rendererWith} from 'web/utils/testing';
 
 import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
+import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
+
 import OperatingSystemsTab from '../operatingsystemstab';
 
 const filter = Filter.fromString(
@@ -91,6 +93,87 @@ describe('Report Operating Systems Tab tests', () => {
     // Filter
     expect(baseElement).toHaveTextContent(
       '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
+    );
+  });
+});
+
+const auditfilter = Filter.fromString(
+  'apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant',
+);
+
+describe('Audit Report Operating Systems Tab tests', () => {
+  test('should render Audit Report Operating Systems Tab', () => {
+    const {operatingsystems} = getMockAuditReport();
+
+    const onSortChange = testing.fn();
+    const onInteraction = testing.fn();
+
+    const {render, store} = rendererWith({
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const {baseElement, getAllByTestId} = render(
+      <OperatingSystemsTab
+        audit={true}
+        counts={operatingsystems.counts}
+        operatingsystems={operatingsystems.entities}
+        filter={auditfilter}
+        sortField={'compliant'}
+        sortReverse={true}
+        isUpdating={false}
+        onInteraction={onInteraction}
+        onSortChange={onSortChange}
+      />,
+    );
+
+    const images = baseElement.querySelectorAll('img');
+    const links = baseElement.querySelectorAll('a');
+    const header = baseElement.querySelectorAll('th');
+    const bars = getAllByTestId('progressbar-box');
+
+    // Headings
+    expect(header[0]).toHaveTextContent('Operating System');
+    expect(header[1]).toHaveTextContent('CPE');
+    expect(header[2]).toHaveTextContent('Hosts');
+    expect(header[3]).toHaveTextContent('Compliant');
+
+    // Row 1
+    expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
+    expect(links[4]).toHaveAttribute(
+      'href',
+      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
+    );
+    expect(links[4]).toHaveTextContent('Foo OS');
+    expect(links[5]).toHaveAttribute(
+      'href',
+      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
+    );
+    expect(links[5]).toHaveTextContent('cpe:/foo/bar');
+    expect(bars[0]).toHaveAttribute('title', 'No');
+    expect(bars[0]).toHaveTextContent('No');
+
+    // Row 2
+    expect(images[1]).toHaveAttribute('src', '/img/os_unknown.svg');
+    expect(links[6]).toHaveAttribute(
+      'href',
+      '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
+    );
+    expect(links[6]).toHaveTextContent('Lorem OS');
+    expect(links[7]).toHaveAttribute(
+      'href',
+      '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
+    );
+    expect(links[7]).toHaveTextContent('cpe:/lorem/ipsum');
+    expect(bars[1]).toHaveAttribute('title', 'Incomplete');
+    expect(bars[1]).toHaveTextContent('Incomplete');
+
+    // Filter
+    expect(baseElement).toHaveTextContent(
+      '(Applied filter: apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant)',
     );
   });
 });

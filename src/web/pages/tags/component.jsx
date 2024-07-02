@@ -29,6 +29,8 @@ export const MAX_RESOURCES = 40; // concerns listing in "Assigned Resources" tab
 
 const TYPES = [
   'alert',
+  'audit',
+  'auditreport',
   'host',
   'operatingsystem',
   'cpe',
@@ -42,6 +44,7 @@ const TYPES = [
   'nvt',
   'override',
   'permission',
+  'policy',
   'portlist',
   'report',
   'reportconfig',
