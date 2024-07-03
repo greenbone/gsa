@@ -144,7 +144,7 @@ describe('Delta reports V2 with same severity, qod and hostname', () => {
 });
 
 describe('Audit reports with compliance', () => {
-  const {render} = rendererWith();
+  const {render} = rendererWith({gmp, store: true});
 
   test('should render Audit report with compliance yes', () => {
     const entity = Result.fromElement({
