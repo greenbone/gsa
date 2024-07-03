@@ -38,7 +38,7 @@ import EntitiesActions from 'web/entities/actions';
 import PropTypes from 'web/utils/proptypes';
 
 import ResultDelta from './delta';
-import useGmp from "web/utils/useGmp";
+import useGmp from "web/hooks/useGmp";
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,

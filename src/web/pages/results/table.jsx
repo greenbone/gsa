@@ -26,7 +26,7 @@ import TableRow from 'web/components/table/row';
 
 import ResultsRow from './row';
 import ResultDetails from './details';
-import useGmp from "web/utils/useGmp";
+import useGmp from "web/hooks/useGmp";
 
 const Header = ({
   actionsColumn,
