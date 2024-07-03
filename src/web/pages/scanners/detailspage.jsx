@@ -56,7 +56,7 @@ import PropTypes from 'web/utils/proptypes';
 import ScannerComponent from './component';
 import ScannerDetails from './details';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 const ToolBarIcons = ({
   entity,

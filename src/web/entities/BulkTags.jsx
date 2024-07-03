@@ -13,8 +13,8 @@ import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import PropTypes from 'web/utils/proptypes';
 import SelectionType from 'web/utils/selectiontype';
 
-import useGmp from 'web/utils/useGmp';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useGmp from 'web/hooks/useGmp';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 
 import TagDialog from 'web/pages/tags/dialog';
 

@@ -27,7 +27,7 @@ import TableRow from 'web/components/table/row';
 import NvtDetails from './details';
 import NvtRow from './row';
 
-import useGmp from "web/utils/useGmp";
+import useGmp from 'web/hooks/useGmp';
 
 const Header = ({
   actionsColumn,
@@ -115,16 +115,12 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('QoD')}
         />
-        {
-          gmp.settings.enableEPSS &&
-          <TableHead colSpan="2">
-            {_("EPSS")}
-          </TableHead>
-        }
+        {gmp.settings.enableEPSS && (
+          <TableHead colSpan="2">{_('EPSS')}</TableHead>
+        )}
         {actionsColumn}
       </TableRow>
-      {
-        gmp.settings.enableEPSS &&
+      {gmp.settings.enableEPSS && (
         <TableRow>
           <TableHead
             width="3%"
@@ -143,8 +139,7 @@ const Header = ({
             title={_('Percentile')}
           />
         </TableRow>
-      }
-
+      )}
     </TableHeader>
   );
 };

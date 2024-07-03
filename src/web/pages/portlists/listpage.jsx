@@ -11,10 +11,10 @@ import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import useCapabilities from 'web/utils/useCapabilities';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useReload from 'web/hooks/useReload';

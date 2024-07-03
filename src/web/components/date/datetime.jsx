@@ -8,7 +8,7 @@ import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import useUserTimezone from 'web/utils/useUserTimezone';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 
 const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
   date = ensureDate(date);

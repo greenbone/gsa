@@ -69,8 +69,8 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-import useCapabilities from 'web/utils/useCapabilities';
-import useGmp from "web/utils/useGmp";
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
 
 import NoteComponent from '../notes/component';
 

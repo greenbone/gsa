@@ -34,7 +34,7 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 const Actions = withEntitiesActions(
   ({

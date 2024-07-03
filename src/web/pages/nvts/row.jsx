@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import Filter from 'gmp/models/filter.js';
@@ -30,8 +29,8 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from "web/utils/useGmp";
-import {_} from "gmp/locale/lang.js";
+import useGmp from 'web/hooks/useGmp';
+import {_} from 'gmp/locale/lang.js';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -46,8 +45,8 @@ const Row = ({
     const filter = Filter.fromString('family="' + entity.family + '"');
     onFilterChanged(filter);
   };
-  const epssScore = entity?.epss?.max_severity?.score
-  const epssPercentile = entity?.epss?.max_severity?.percentile
+  const epssScore = entity?.epss?.max_severity?.score;
+  const epssPercentile = entity?.epss?.max_severity?.percentile;
 
   return (
     <TableRow>
@@ -94,17 +93,16 @@ const Row = ({
       <TableData align="end">
         {entity.qod && <Qod value={entity.qod.value} />}
       </TableData>
-      {
-        gmp.settings.enableEPSS &&
+      {gmp.settings.enableEPSS && (
         <>
           <TableData>
-            {isNumber(epssScore) ? epssScore.toFixed(5) : _("N/A")}
+            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
           </TableData>
           <TableData>
-            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _("N/A")}
+            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _('N/A')}
           </TableData>
         </>
-      }
+      )}
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );

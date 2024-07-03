@@ -34,7 +34,7 @@ import Divider from 'web/components/layout/divider';
 
 import Section from 'web/components/section/section';
 
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import CvssV4Calculator from './cvssV4/CvssV4Calculator';
 
 const StyledTextField = styled(TextField)`

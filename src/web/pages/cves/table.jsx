@@ -20,8 +20,8 @@ import TableRow from 'web/components/table/row';
 
 import CveDetails from './details';
 import CveRow from './row';
-import {isDefined} from "gmp/utils/identity.js";
-import useGmp from "web/utils/useGmp";
+import {isDefined} from 'gmp/utils/identity.js';
+import useGmp from 'web/hooks/useGmp';
 
 const Header = ({
   actionsColumn,
@@ -80,11 +80,9 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Severity')}
         />
-        {gmp.settings.enableEPSS &&
-          <TableHead colSpan="2">
-            {_("EPSS")}
-          </TableHead>
-        }
+        {gmp.settings.enableEPSS && (
+          <TableHead colSpan="2">{_('EPSS')}</TableHead>
+        )}
         {isDefined(actionsColumn) ? (
           actionsColumn
         ) : (
@@ -93,8 +91,7 @@ const Header = ({
           </TableHead>
         )}
       </TableRow>
-      {
-        gmp.settings.enableEPSS &&
+      {gmp.settings.enableEPSS && (
         <TableRow>
           <TableHead
             width="5%"
@@ -113,7 +110,7 @@ const Header = ({
             title={_('Percentile')}
           />
         </TableRow>
-      }
+      )}
     </TableHeader>
   );
 };

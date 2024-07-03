@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import {rendererWith} from '../testing';
+import {rendererWith} from 'web/utils/testing';
 
 import useCapabilities from '../useCapabilities';
 
@@ -19,7 +19,7 @@ const TestUseCapabilities = () => {
   return <span>Not allowed to create a task</span>;
 };
 
-describe('useCapabilties tests', () => {
+describe('useCapabilities tests', () => {
   test('should be allowed to create a task', () => {
     const capabilities = new Capabilities(['create_task']);
     const {render} = rendererWith({capabilities});
