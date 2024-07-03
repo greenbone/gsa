@@ -44,7 +44,7 @@ import EntityInfo from 'web/entity/info';
 import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 import ErrorsTab from './details/errorstab';
 import HostsTab from './details/hoststab';

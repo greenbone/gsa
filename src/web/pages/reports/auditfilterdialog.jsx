@@ -7,7 +7,7 @@ import React from 'react';
 
 import Layout from 'web/components/layout/layout';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import useTranslation from 'web/hooks/useTranslation';
 

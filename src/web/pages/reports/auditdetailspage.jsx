@@ -74,7 +74,7 @@ import Page from './auditdetailscontent';
 import FilterDialog from './detailsfilterdialog';
 import {pageFilter as setPageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 const log = logger.getLogger('web.pages.auditreport.detailspage');
 
