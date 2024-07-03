@@ -8,7 +8,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isNumber} from 'gmp/utils/identity';
 
 import {shorten} from 'gmp/utils/string';
 
@@ -38,6 +38,7 @@ import EntitiesActions from 'web/entities/actions';
 import PropTypes from 'web/utils/proptypes';
 
 import ResultDelta from './delta';
+import useGmp from "web/hooks/useGmp";
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -60,6 +61,9 @@ const Row = ({
   const deltaSeverity = entity.delta?.result?.severity;
   const deltaHostname = entity.delta?.result?.host?.hostname;
   const deltaQoD = entity.delta?.result?.qod?.value;
+  const epssScore = entity?.information?.epss?.max_severity?.score
+  const epssPercentile = entity?.information?.epss?.max_severity?.percentile
+  const gmp = useGmp()
   return (
     <TableRow>
       {delta && (
@@ -140,6 +144,17 @@ const Row = ({
         </IconDivider>
       </TableData>
       <TableData>{entity.port}</TableData>
+      {
+        gmp.settings.enableEPSS &&
+        <>
+          <TableData>
+            {isNumber(epssScore) ? epssScore.toFixed(5) : _("N/A")}
+          </TableData>
+          <TableData>
+            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _("N/A")}
+          </TableData>
+        </>
+      }
       <TableData>
         <DateTime date={entity.creationTime} />
       </TableData>
