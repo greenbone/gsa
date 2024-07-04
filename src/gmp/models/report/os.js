@@ -27,13 +27,13 @@ class OperatingSystem {
     if (!(host.ip in this.hosts.complianceByIp)) {
       this.hosts.complianceByIp[host.ip] = compliance;
     }
-    const isNoInCompliance = Object.values(this.hosts.complianceByIp).some(
-      value => value === 'no',
+    const complianceByIpValues = Object.values(this.hosts.complianceByIp);
+
+    const isNoInCompliance = complianceByIpValues.some(value => value === 'no');
+    const isIncompleteInCompliance = complianceByIpValues.some(
+      value => value === 'incomplete',
     );
-    const isIncompleteInCompliance = Object.values(
-      this.hosts.complianceByIp,
-    ).some(value => value === 'incomplete');
-    const isYesInCompliance = Object.values(this.hosts.complianceByIp).some(
+    const isYesInCompliance = complianceByIpValues.some(
       value => value === 'yes',
     );
 
