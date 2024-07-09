@@ -10,7 +10,8 @@ import useCapabilities from 'web/hooks/useCapabilities';
 
 const ConditionalRoute = ({component: Component, feature, ...rest}) => {
   const capabilities = useCapabilities();
-  const isEnabled = capabilities._featuresEnabled[feature];
+  const isEnabled = capabilities.featureEnabled(feature);
+
   return (
     <Route
       render={props =>
