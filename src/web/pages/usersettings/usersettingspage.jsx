@@ -565,11 +565,14 @@ class UserSettings extends React.Component {
                             title={_('Alerts Filter')}
                             type="filter"
                           />
-                          <SettingTableRow
-                            setting={auditReportsFilter}
-                            title={_('Audit Reports Filter')}
-                            type="filter"
-                          />
+                          {capabilities.featureEnabled('COMPLIANCE_REPORTS') && (
+                              <SettingTableRow
+                              setting={auditReportsFilter}
+                              title={_('Audit Reports Filter')}
+                              type="filter"
+                              />
+                            )                         
+                          }
                           <SettingTableRow
                             setting={configsFilter}
                             title={_('Configs Filter')}
@@ -749,7 +752,10 @@ class UserSettings extends React.Component {
               defaultSchedule={defaultSchedule.id}
               defaultTarget={defaultTarget.id}
               alertsFilter={alertsFilter.id}
-              auditReportsFilter={auditReportsFilter.id}
+              auditReportsFilter={
+                capabilities.featureEnabled('COMPLIANCE_REPORTS')
+                ? auditReportsFilter.id 
+                : undefined}
               configsFilter={configsFilter.id}
               credentialsFilter={credentialsFilter.id}
               filtersFilter={filtersFilter.id}
