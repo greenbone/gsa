@@ -25,8 +25,7 @@ import {isLoggedIn} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-import withGmp from 'web/utils/withGmp';
-import withCapabilities from 'web/utils/withCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 const MENU_BAR_HEIGHT = '35px';
 
@@ -54,8 +53,11 @@ const MenuBarPlaceholder = styled.div`
 `;
 
 // eslint-disable-next-line no-shadow
-const MenuBar = ({isLoggedIn, capabilities}) => {
-  if (!isLoggedIn || !isDefined(capabilities)) {
+const MenuBar = ({isLoggedIn}) => {
+  
+  const caps = useCapabilities();
+  
+  if (!isLoggedIn || !isDefined(caps)) {
     return null;
   }
 
@@ -66,7 +68,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     'vulns',
     'overrides',
     'notes',
-  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
+  ].reduce((sum, cur) => sum || caps.mayAccess(cur), false);
 
   const may_op_configuration = [
     'targets',
@@ -80,10 +82,10 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     'scanners',
     'filters',
     'tags',
-  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
+  ].reduce((sum, cur) => sum || caps.mayAccess(cur), false);
 
   const mayOpNotesOverrides = ['notes', 'overrides'].reduce(
-    (sum, cur) => sum || capabilities.mayAccess(cur),
+    (sum, cur) => sum || caps.mayAccess(cur),
     false,
   );
 
@@ -91,20 +93,20 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     'alerts',
     'schedules',
     'report_formats',
-  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
+  ].reduce((sum, cur) => sum || caps.mayAccess(cur), false);
 
   const mayOpScannersFiltersTags = ['scanners', 'filters', 'tags'].reduce(
-    (sum, cur) => sum || capabilities.mayAccess(cur),
+    (sum, cur) => sum || caps.mayAccess(cur),
     false,
   );
 
   const mayOpResilience = ['tickets', 'policies', 'audits'].reduce(
-    (sum, cur) => sum || capabilities.mayAccess(cur),
+    (sum, cur) => sum || caps.mayAccess(cur),
     false,
   );
 
   const mayOpAssets = ['assets', 'tls_certificates'].reduce(
-    (sum, cur) => sum || capabilities.mayAccess(cur),
+    (sum, cur) => sum || caps.mayAccess(cur),
     false,
   );
 
@@ -116,24 +118,24 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
           <Menu to="/" title={_('Dashboards')} />
           {may_op_scans && (
             <Menu title={_('Scans')}>
-              {capabilities.mayAccess('tasks') && (
+              {caps.mayAccess('tasks') && (
                 <MenuEntry title={_('Tasks')} to="tasks" />
               )}
-              {capabilities.mayAccess('reports') && (
+              {caps.mayAccess('reports') && (
                 <MenuEntry title={_('Reports')} to="reports" />
               )}
-              {capabilities.mayAccess('results') && (
+              {caps.mayAccess('results') && (
                 <MenuEntry title={_('Results')} to="results" />
               )}
-              {capabilities.mayAccess('vulns') && (
+              {caps.mayAccess('vulns') && (
                 <MenuEntry title={_('Vulnerabilities')} to="vulnerabilities" />
               )}
               {mayOpNotesOverrides && (
                 <MenuSection>
-                  {capabilities.mayAccess('notes') && (
+                  {caps.mayAccess('notes') && (
                     <MenuEntry title={_('Notes')} to="notes" />
                   )}
-                  {capabilities.mayAccess('overrides') && (
+                  {caps.mayAccess('overrides') && (
                     <MenuEntry title={_('Overrides')} to="overrides" />
                   )}
                 </MenuSection>
@@ -142,33 +144,34 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
           )}
           {mayOpAssets && (
             <Menu title={_('Assets')}>
-              {capabilities.mayAccess('assets') && (
+              {caps.mayAccess('assets') && (
                 <MenuEntry title={_('Hosts')} to="hosts" />
               )}
-              {capabilities.mayAccess('assets') && (
+              {caps.mayAccess('assets') && (
                 <MenuEntry
                   title={_('Operating Systems')}
                   to="operatingsystems"
                 />
               )}
-              {capabilities.mayAccess('tls_certificates') && (
+              {caps.mayAccess('tls_certificates') && (
                 <MenuEntry title={_('TLS Certificates')} to="tlscertificates" />
               )}
             </Menu>
           )}
           {mayOpResilience && (
             <Menu title={_('Resilience')}>
-              {capabilities.mayAccess('tickets') && (
+              {caps.mayAccess('tickets') && (
                 <MenuEntry title={_('Remediation Tickets')} to="tickets" />
               )}
               <MenuSection>
-                {capabilities.mayAccess('policies') && (
+                {caps.mayAccess('policies') && (
                   <MenuEntry title={_('Compliance Policies')} to="policies" />
                 )}
-                {capabilities.mayAccess('audits') && (
+                {caps.mayAccess('audits') && (
                   <MenuEntry title={_('Compliance Audits')} to="audits" />
                 )}
-                {capabilities.mayAccess('audits') && (
+                {caps.featureEnabled('COMPLIANCE_REPORTS') && 
+                 caps.mayAccess('audits') && (
                   <MenuEntry
                     title={_('Compliance Audit Reports')}
                     to="auditreports"
@@ -177,7 +180,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
               </MenuSection>
             </Menu>
           )}
-          {capabilities.mayAccess('info') && (
+          {caps.mayAccess('info') && (
             <Menu title={_('SecInfo')}>
               <MenuEntry title={_('NVTs')} to="nvts" />
               <MenuEntry title={_('CVEs')} to="cves" />
@@ -188,43 +191,43 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
           )}
           {may_op_configuration && (
             <Menu title={_('Configuration')}>
-              {capabilities.mayAccess('targets') && (
+              {caps.mayAccess('targets') && (
                 <MenuEntry title={_('Targets')} to="targets" />
               )}
-              {capabilities.mayAccess('port_lists') && (
+              {caps.mayAccess('port_lists') && (
                 <MenuEntry title={_('Port Lists')} to="portlists" />
               )}
-              {capabilities.mayAccess('credentials') && (
+              {caps.mayAccess('credentials') && (
                 <MenuEntry title={_('Credentials')} to="credentials" />
               )}
-              {capabilities.mayAccess('configs') && (
+              {caps.mayAccess('configs') && (
                 <MenuEntry title={_('Scan Configs')} to="scanconfigs" />
               )}
               {mayOpAlertsSchedulesReportFormats && (
                 <MenuSection>
-                  {capabilities.mayAccess('alerts') && (
+                  {caps.mayAccess('alerts') && (
                     <MenuEntry title={_('Alerts')} to="alerts" />
                   )}
-                  {capabilities.mayAccess('schedules') && (
+                  {caps.mayAccess('schedules') && (
                     <MenuEntry title={_('Schedules')} to="schedules" />
                   )}
-                  {capabilities.mayAccess('report_configs') && (
+                  {caps.mayAccess('report_configs') && (
                     <MenuEntry title={_('Report Configs')} to="reportconfigs" />
                   )}
-                  {capabilities.mayAccess('report_formats') && (
+                  {caps.mayAccess('report_formats') && (
                     <MenuEntry title={_('Report Formats')} to="reportformats" />
                   )}
                 </MenuSection>
               )}
               {mayOpScannersFiltersTags && (
                 <MenuSection>
-                  {capabilities.mayAccess('scanners') && (
+                  {caps.mayAccess('scanners') && (
                     <MenuEntry title={_('Scanners')} to="scanners" />
                   )}
-                  {capabilities.mayAccess('filters') && (
+                  {caps.mayAccess('filters') && (
                     <MenuEntry title={_('Filters')} to="filters" />
                   )}
-                  {capabilities.mayAccess('tags') && (
+                  {caps.mayAccess('tags') && (
                     <MenuEntry title={_('Tags')} to="tags" />
                   )}
                 </MenuSection>
@@ -232,20 +235,20 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
             </Menu>
           )}
           <Menu title={_('Administration')}>
-            {capabilities.mayAccess('users') && (
+            {caps.mayAccess('users') && (
               <MenuEntry title={_('Users')} to="users" />
             )}
-            {capabilities.mayAccess('groups') && (
+            {caps.mayAccess('groups') && (
               <MenuEntry title={_('Groups')} to="groups" />
             )}
-            {capabilities.mayAccess('roles') && (
+            {caps.mayAccess('roles') && (
               <MenuEntry title={_('Roles')} to="roles" />
             )}
-            {capabilities.mayAccess('permissions') && (
+            {caps.mayAccess('permissions') && (
               <MenuEntry title={_('Permissions')} to="permissions" />
             )}
             <MenuSection>
-              {capabilities.mayAccess('system_reports') && (
+              {caps.mayAccess('system_reports') && (
                 <MenuEntry
                   title={_('Performance')}
                   caps="get_system_reports"
@@ -253,7 +256,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                 />
               )}
               <MenuEntry title={_('Trashcan')} to="trashcan" />
-              {capabilities.mayAccess('feeds') && (
+              {caps.mayAccess('feeds') && (
                 <MenuEntry
                   title={_('Feed Status')}
                   to="feedstatus"
@@ -261,12 +264,12 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                 />
               )}
             </MenuSection>
-            {capabilities.mayOp('describe_auth') && (
+            {caps.mayOp('describe_auth') && (
               <MenuSection>
-                {capabilities.mayOp('modify_auth') && (
+                {caps.mayOp('modify_auth') && (
                   <MenuEntry title={_('LDAP')} to="ldap" />
                 )}
-                {capabilities.mayOp('modify_auth') && (
+                {caps.mayOp('modify_auth') && (
                   <MenuEntry title={_('RADIUS')} to="radius" />
                 )}
               </MenuSection>
@@ -284,8 +287,6 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
 };
 
 MenuBar.propTypes = {
-  capabilities: PropTypes.capabilities,
-  gmp: PropTypes.gmp.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
 };
 
@@ -294,8 +295,6 @@ const mapStateToProps = rootState => ({
 });
 
 export default compose(
-  withCapabilities,
-  withGmp,
   connect(mapStateToProps),
 )(MenuBar);
 

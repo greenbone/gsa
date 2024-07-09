@@ -20,7 +20,6 @@ import FilterDialog from 'web/pages/filters/dialog';
 
 const FILTER_OPTIONS = [
   ['alert', _l('Alert')],
-  ['audit_report', _l('Audit Report')],
   ['credential', _l('Credential')],
   ['filter', _l('Filter')],
   ['group', _l('Group')],
@@ -76,8 +75,13 @@ class FilterComponent extends React.Component {
 
   openFilterDialog(filter) {
     const {capabilities} = this.props;
-
-    let types = FILTER_OPTIONS.filter(option =>
+    const filterOptions = [
+      ...(capabilities.featureEnabled('COMPLIANCE_REPORTS') 
+          ? [['audit_report', _l('Audit Report')]] 
+          : []),
+      ...FILTER_OPTIONS
+    ];
+    let types = filterOptions.filter(option =>
       filter_types(capabilities, option[0]),
     );
 
