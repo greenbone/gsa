@@ -14,7 +14,11 @@ import useTranslation from 'web/hooks/useTranslation';
 
 import logger from 'gmp/log';
 
-import Filter, {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {
+  ALL_FILTER,
+  RESET_FILTER,
+  RESULTS_FILTER_FILTER
+} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {first} from 'gmp/utils/array';
@@ -40,6 +44,11 @@ import {
   loadAllEntities as loadReportFormats,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
+
+import {
+  loadAllEntities as loadReportConfigs,
+  selector as reportConfigsSelector,
+} from 'web/store/entities/reportconfigs';
 
 import {loadDeltaAuditReport} from 'web/store/entities/report/actions';
 
@@ -113,7 +122,9 @@ const DeltaAuditReportDetails = props => {
   const {id: reportId, deltaid: deltaReportId} = match.params;
 
   const reportFormatsSel = useSelector(reportFormatsSelector);
+  const reportConfigsSel = useSelector(reportConfigsSelector);
   const reportFormats = reportFormatsSel?.getAllEntities(REPORT_FORMATS_FILTER);
+  const reportConfigs = reportConfigsSel?.getAllEntities(ALL_FILTER);
   const userDefaultFilterSel = useSelector(
     rootState => getUserSettingsDefaultFilter(rootState, 'result'),
     shallowEqual,
@@ -143,6 +154,7 @@ const DeltaAuditReportDetails = props => {
     dispatch(loadUserSettingDefaults(gmp)());
     dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER));
     dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER));
+    dispatch(loadReportConfigs(gmp)(ALL_FILTER));
     dispatch(loadReportComposerDefaults(gmp)());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -440,6 +452,7 @@ const DeltaAuditReportDetails = props => {
           includeNotes={reportComposerDefaults.includeNotes}
           includeOverrides={reportComposerDefaults.includeOverrides}
           reportFormats={reportFormats}
+          reportConfigs={reportConfigs}
           storeAsDefault={storeAsDefault}
           onClose={handleCloseDownloadReportDialog}
           onSave={handleReportDownload}
