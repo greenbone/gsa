@@ -11,6 +11,7 @@ import {createBrowserHistory} from 'history';
 import {stringify, parse} from 'qs';
 import qhistory from 'qhistory';
 
+import ConditionalRoute from 'web/components/conditionalRoute/ConditionalRoute';
 import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
 
@@ -124,15 +125,18 @@ const Routes = () => (
               <Route path="/about" component={AboutPage} />
               <Route path="/alerts" component={AlertsPage} />
               <Route path="/audits" component={AuditsPage} />
-              <Route path="/auditreports" component={AuditReportsPage} />
-              <Route
+              <ConditionalRoute
+                path="/auditreports"
+                component={AuditReportsPage}
+                feature="COMPLIANCE_REPORTS"/>
+              <ConditionalRoute
                 path="/auditreport/delta/:id/:deltaid"
                 component={DeltaAuditReportDetailsPage}
-              />
-              <Route
+                feature="COMPLIANCE_REPORTS"/>
+              <ConditionalRoute
                 path="/auditreport/:id"
                 component={AuditReportDetailsPage}
-              />
+                feature="COMPLIANCE_REPORTS"/>
               <Route path="/certbunds" component={CertBundsPage} />
               <Route path="/cpes" component={CpesPage} />
               <Route path="/credentials" component={CredentialsPage} />
