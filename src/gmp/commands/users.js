@@ -162,8 +162,9 @@ export class UserCommand extends EntityCommand {
     ).then(response => {
       const {data} = response;
       const {command: commands} = data.get_capabilities.help_response.schema;
+      const featuresList = data.get_capabilities.get_features_response.feature;
       const caps = map(commands, command => command.name);
-      return response.setData(new Capabilities(caps));
+      return response.setData(new Capabilities(caps, featuresList));
     });
   }
 
