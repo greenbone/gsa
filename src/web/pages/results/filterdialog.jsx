@@ -67,6 +67,14 @@ const SORT_FIELDS = [
     name: 'modified',
     displayName: _l('Modified'),
   },
+  {
+    name: 'epss_score',
+    displayName: _l('EPSS Score'),
+  },
+  {
+    name: 'epss_percentile',
+    displayName: _l('EPSS Percentile'),
+  },
 ];
 
 const ResultsFilterDialogComponent = ({

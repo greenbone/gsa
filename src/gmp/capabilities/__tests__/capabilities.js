@@ -215,6 +215,19 @@ describe('Capabilities tests', () => {
     }
     expect(i).toEqual(4);
   });
+
+  test('should handle features', () => {
+    const featureList = [
+      {name: 'ENABLED_FEATURE_1', _enabled: 1},
+      {name: 'DISABLED_FEATURE', _enabled: 0},
+      {name: 'ENABLED_FEATURE_2', _enabled: 1},
+    ];
+    const caps = new Capabilities(['everything'], featureList);
+    expect(caps.featureEnabled('ENABLED_FEATURE_1')).toBe(true);
+    expect(caps.featureEnabled('DISABLED_FEATURE')).toBe(false);
+    expect(caps.featureEnabled('enabled_feature_2')).toBe(true);
+    expect(caps.featureEnabled('UNDEFINED_FEATURE')).toBe(false);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
