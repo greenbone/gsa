@@ -1,0 +1,54 @@
+import {useEffect, useState} from 'react';
+
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import date from 'gmp/models/date';
+import {RefreshCcw} from 'lucide-react';
+import Divider from 'web/components/layout/divider';
+import {ActionIcon} from '@mantine/core';
+import useTranslation from 'web/hooks/useTranslation';
+
+const SessionTimer = () => {
+  const [sessionTimeout, renewSession] = useUserSessionTimeout();
+  const [timeLeft, setTimeLeft] = useState('');
+  const [_] = useTranslation();
+
+  useEffect(() => {
+    const updateTimeLeft = () => {
+      if (!sessionTimeout) {
+        return <div>Session timer is currently unavailable.</div>;
+      }
+      const now = date();
+      const duration = date.duration(sessionTimeout.diff(now));
+      if (duration.asSeconds() <= 0) {
+        setTimeLeft('00:00');
+      } else {
+        const formatted =
+          Math.floor(duration.asMinutes()) +
+          ':' +
+          ('0' + duration.seconds()).slice(-2);
+        setTimeLeft(formatted);
+      }
+    };
+
+    updateTimeLeft();
+    const intervalId = setInterval(updateTimeLeft, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [sessionTimeout]);
+
+  return (
+    <Divider>
+      <span>{timeLeft}</span>
+      <ActionIcon
+        onClick={renewSession}
+        variant="transparent"
+        color="neutral.0"
+        title={_('Renew session timeout')}
+      >
+        <RefreshCcw size={16} />
+      </ActionIcon>
+    </Divider>
+  );
+};
+
+export default SessionTimer;
