@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
+import {useCallback} from 'react';
 
 import {useHistory} from 'react-router-dom';
 
@@ -18,6 +18,7 @@ import useGmp from 'web/utils/useGmp';
 import LogoutIcon from 'web/components/icon/logouticon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
 import LanguageSwitch from './languageswitch';
+import SessionTimer from '../sessionTimer/SessionTimer';
 
 const Header = () => {
   const gmp = useGmp();
@@ -61,6 +62,7 @@ const Header = () => {
       languageSwitch={<LanguageSwitch />}
       menuPoints={menuPoints}
       isLoggedIn={loggedIn}
+      sessionTimer={<SessionTimer />}
       username={username}
       logoLink="/"
     />

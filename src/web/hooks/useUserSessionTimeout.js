@@ -7,13 +7,29 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
+import useGmp from 'web/utils/useGmp';
+
+/**
+ * Custom hook to manage user session timeout.
+ *
+ * This hook provides the current session timeout, represented as a moment object, and a function to renew the session timeout through an API call.
+ * The `renewSessionAndUpdateTimeout` function makes an API call to renew the session and updates the session timeout based on the response, also represented as a moment object.
+ * This function does not require any parameters and will update the session timeout to the new value obtained from the API response.
+ *
+ * @returns {Array} An array containing the current `sessionTimeout` as a moment object and the `renewSessionAndUpdateTimeout` function.
+ */
 
 const useUserSessionTimeout = () => {
+  const gmp = useGmp();
   const dispatch = useDispatch();
-  return [
-    useSelector(getSessionTimeout),
-    timeout => dispatch(setSessionTimeout(timeout)),
-  ];
+  const sessionTimeout = useSelector(getSessionTimeout);
+
+  const renewSessionAndUpdateTimeout = async () => {
+    const response = await gmp.user.renewSession();
+    dispatch(setSessionTimeout(response.data));
+  };
+
+  return [sessionTimeout, renewSessionAndUpdateTimeout];
 };
 
 export default useUserSessionTimeout;
