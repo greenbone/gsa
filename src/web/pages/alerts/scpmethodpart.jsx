@@ -31,6 +31,7 @@ import NewIcon from 'web/components/icon/newicon';
 
 const ScpMethodPart = ({
   prefix,
+  capabilities,
   credentials = [],
   reportFormats,
   reportConfigs,
@@ -136,20 +137,26 @@ const ScpMethodPart = ({
           items={renderSelectItems(reportFormats)}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'scp_report_config'}
-          id="report-config-select"
-          value={scpConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {
+          capabilities.mayOp('get_report_configs') &&
+          <>
+            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <Select
+              name={prefix + 'scp_report_config'}
+              id="report-config-select"
+              value={scpConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        }
       </FormGroup>
     </Layout>
   );
 };
 
 ScpMethodPart.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,

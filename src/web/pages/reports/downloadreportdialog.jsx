@@ -95,9 +95,11 @@ const DownloadReportDialog = ({
       onSave={handleSave}
     >
       {({values, onValueChange}) => {
-        const filteredReportConfigs = reportConfigs.filter(
-          config => config.report_format.id === reportFormatIdInState,
-        );
+        const filteredReportConfigs = isDefined(reportConfigs)
+          ? reportConfigs.filter(
+              config => config.report_format.id === reportFormatIdInState,
+            )
+          : [];
 
         return (
           <Layout flex="column">
@@ -118,17 +120,20 @@ const DownloadReportDialog = ({
                 />
               </Divider>
             </FormGroup>
-            <FormGroup title={_('Report Config')} titleSize="3">
-              <Divider flex="column">
-                <Select
-                  name="reportConfigId"
-                  value={reportConfigIdInState}
-                  items={renderSelectItems(filteredReportConfigs, '')}
-                  width="auto"
-                  onChange={handleReportConfigIdChange}
-                />
-              </Divider>
-            </FormGroup>
+            {
+              isDefined(reportConfigs) &&
+              <FormGroup title={_('Report Config')} titleSize="3">
+                <Divider flex="column">
+                  <Select
+                    name="reportConfigId"
+                    value={reportConfigIdInState}
+                    items={renderSelectItems(filteredReportConfigs, '')}
+                    width="auto"
+                    onChange={handleReportConfigIdChange}
+                  />
+                </Divider>
+              </FormGroup>
+            }
             <StyledDiv>
               <CheckBox
                 name="storeAsDefault"

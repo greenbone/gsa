@@ -21,6 +21,7 @@ import TextField from 'web/components/form/textfield';
 
 const SendMethodPart = ({
   prefix,
+  capabilities,
   reportConfigs,
   reportFormats,
   sendHost,
@@ -79,20 +80,26 @@ const SendMethodPart = ({
           items={renderSelectItems(reportFormats)}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'send_report_config'}
-          id="report-config-select"
-          value={sendConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {
+          capabilities.mayOp('get_report_configs') &&
+          <>
+            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <Select
+              name={prefix + 'send_report_config'}
+              id="report-config-select"
+              value={sendConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        }
       </FormGroup>
     </Layout>
   );
 };
 
 SendMethodPart.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,

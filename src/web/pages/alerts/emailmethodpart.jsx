@@ -199,16 +199,20 @@ const EmailMethodPart = ({
                       onChange={handleReportFormatIdChange}
                     />
                   )}
-
-                  <label htmlFor="report-config-select">Report Config</label>
-                  <Select
-                    disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                    name={prefix + 'notice_report_config'}
-                    id="report-config-select"
-                    value={reportConfigIdInState}
-                    items={reportConfigItems}
-                    onChange={handleReportConfigIdChange}
-                  />
+                  {
+                    capabilities.mayOp("get_report_configs") &&
+                    <>
+                      <label htmlFor="report-config-select">Report Config</label>
+                      <Select
+                        disabled={notice !== EMAIL_NOTICE_INCLUDE}
+                        name={prefix + 'notice_report_config'}
+                        id="report-config-select"
+                        value={reportConfigIdInState}
+                        items={reportConfigItems}
+                        onChange={handleReportConfigIdChange}
+                      />
+                    </>
+                  }
                 </Divider>
 
                 <TextArea
@@ -251,15 +255,20 @@ const EmailMethodPart = ({
                         onChange={handleAttachFormatIdChange}
                       />
                     )}
-                    <label htmlFor="attach-config-select">Report Config</label>
-                    <Select
-                      disabled={notice !== EMAIL_NOTICE_ATTACH}
-                      name={prefix + 'notice_attach_config'}
-                      id="attach-config-select"
-                      value={attachConfigIdInState}
-                      items={attachConfigItems}
-                      onChange={handleAttachConfigIdChange}
-                    />
+                    {
+                      capabilities.mayOp('get_report_configs') &&
+                      <>
+                        <label htmlFor="attach-config-select">Report Config</label>
+                        <Select
+                          disabled={notice !== EMAIL_NOTICE_ATTACH}
+                          name={prefix + 'notice_attach_config'}
+                          id="attach-config-select"
+                          value={attachConfigIdInState}
+                          items={attachConfigItems}
+                          onChange={handleAttachConfigIdChange}
+                        />
+                      </>
+                    }
                   </Divider>
                 </Layout>
                 <TextArea

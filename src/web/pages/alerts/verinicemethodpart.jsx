@@ -27,6 +27,7 @@ const VERINICE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
 const VeriniceMethodPart = ({
   prefix,
+  capabilities,
   veriniceServerUrl,
   veriniceServerCredential,
   veriniceServerReportConfig,
@@ -102,20 +103,26 @@ const VeriniceMethodPart = ({
           value={reportFormatIdInState}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'verinice_server_report_config'}
-          id="report-config-select"
-          value={veriniceServerConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {
+          capabilities.mayOp('get_report_configs') &&
+          <>
+            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <Select
+              name={prefix + 'verinice_server_report_config'}
+              id="report-config-select"
+              value={veriniceServerConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        }
       </FormGroup>
     </Layout>
   );
 };
 
 VeriniceMethodPart.propTypes = {
+  capabilities: PropTypes.capabilities,
   credentials: PropTypes.array,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,

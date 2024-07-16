@@ -9,6 +9,7 @@ import {map} from 'gmp/utils/array';
 
 import registerCommand from 'gmp/command';
 import {parseModelFromElement} from 'gmp/model';
+import {isDefined} from 'gmp/utils/identity';
 
 import Alert from 'gmp/models/alert';
 import Credential from 'gmp/models/credential';
@@ -190,10 +191,12 @@ class AlertCommand extends EntityCommand {
         new_alert.get_report_formats_response.report_format,
         format => parseModelFromElement(format, 'reportformat'),
       );
-      new_alert.report_configs = map(
-        new_alert.get_report_configs_response.report_config,
-        config => parseModelFromElement(config, 'reportconfig'),
-      );
+      if (isDefined(new_alert.get_report_configs_response)) {
+        new_alert.report_configs = map(
+          new_alert.get_report_configs_response.report_config,
+          config => parseModelFromElement(config, 'reportconfig'),
+        );
+      }
       new_alert.credentials = map(
         new_alert.get_credentials_response.credential,
         credential => Credential.fromElement(credential),
@@ -226,11 +229,13 @@ class AlertCommand extends EntityCommand {
       );
       delete edit_alert.get_report_formats_response;
 
-      edit_alert.report_configs = map(
-        edit_alert.get_report_configs_response.report_config,
-        config => parseModelFromElement(config, 'reportconfig'),
-      );
-      delete edit_alert.get_report_configs_response;
+      if (isDefined(edit_alert.get_report_configs_response)) {
+        edit_alert.report_configs = map(
+          edit_alert.get_report_configs_response.report_config,
+          config => parseModelFromElement(config, 'reportconfig'),
+        );
+        delete edit_alert.get_report_configs_response;
+      }
 
       edit_alert.credentials = map(
         edit_alert.get_credentials_response.credential,

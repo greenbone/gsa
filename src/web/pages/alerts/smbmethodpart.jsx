@@ -37,6 +37,7 @@ const smbMaxProtocolItems = [
 
 const SmbMethodPart = ({
   prefix,
+  capabilities,
   credentials = [],
   reportConfigs,
   reportFormats,
@@ -129,14 +130,19 @@ const SmbMethodPart = ({
           value={reportFormatIdInState}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'smb_report_config'}
-          id="report-config-select"
-          value={smbConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {
+          capabilities.mayOp('get_report_configs') &&
+          <>
+            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <Select
+              name={prefix + 'smb_report_config'}
+              id="report-config-select"
+              value={smbConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        }
       </FormGroup>
 
       <FormGroup title={_('Max Protocol')}>
@@ -152,6 +158,7 @@ const SmbMethodPart = ({
 };
 
 SmbMethodPart.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
