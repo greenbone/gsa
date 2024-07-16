@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useState} from 'react';
 
 import styled from 'styled-components';
@@ -19,7 +18,7 @@ import {renderSelectItems} from 'web/utils/render';
 
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
-} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
+} from 'web/components/dialog/composercontent';
 import ThresholdMessage from 'web/pages/reports/thresholdmessage';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -43,7 +42,6 @@ const DownloadReportDialog = ({
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
   reportConfigId,
   reportConfigs,
-  reportFormatId,
   reportFormats,
   showThresholdMessage = false,
   storeAsDefault,
@@ -59,10 +57,11 @@ const DownloadReportDialog = ({
     reportConfigId = selectSaveId(reportConfigs, defaultReportConfigId, '');
   }
 
-  const [reportFormatIdInState, setReportFormatId] = useState(
+  const [reportFormatIdInState, setReportFormatIdInState] = useState(
     selectSaveId(reportFormats, defaultReportFormatId),
   );
-  const [reportConfigIdInState, setReportConfigId] = useState(reportConfigId);
+  const [reportConfigIdInState, setReportConfigIdInState] =
+    useState(reportConfigId);
 
   const unControlledValues = {
     includeNotes,
@@ -71,16 +70,16 @@ const DownloadReportDialog = ({
   };
 
   const handleReportFormatIdChange = value => {
-    setReportConfigId('');
-    setReportFormatId(value);
+    setReportConfigIdInState('');
+    setReportFormatIdInState(value);
   };
 
   const handleReportConfigIdChange = value => {
-    setReportConfigId(value);
+    setReportConfigIdInState(value);
   };
 
-  const handleSave = values => {
-    onSave({
+  const handleSave = async values => {
+    await onSave({
       ...values,
       reportConfigId: reportConfigIdInState,
       reportFormatId: reportFormatIdInState,
@@ -159,7 +158,6 @@ DownloadReportDialog.propTypes = {
   includeOverrides: PropTypes.number,
   reportConfigId: PropTypes.id,
   reportConfigs: PropTypes.array,
-  reportFormatId: PropTypes.id,
   reportFormats: PropTypes.array,
   showThresholdMessage: PropTypes.bool,
   storeAsDefault: PropTypes.bool,
@@ -169,5 +167,3 @@ DownloadReportDialog.propTypes = {
 };
 
 export default DownloadReportDialog;
-
-// vim: set ts=2 sw=2 tw=80:
