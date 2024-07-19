@@ -82,7 +82,7 @@ const {
 } = recurrence;
 
 describe('ScheduleDialog component tests', () => {
-  test.only('should render with default values', () => {
+  test('should render with default values', () => {
     const {baseElement} = render(
       <ScheduleDialog
         id={scheduleId}
