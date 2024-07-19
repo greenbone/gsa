@@ -40,7 +40,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/utils/useCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
-import {formatSplitTime} from 'web/utils/formatSplitTime';
+import {formatSplitTime} from 'web/utils/timePickerHelpers';
 
 const ModifyTaskWizard = ({
   alert_email = '',
