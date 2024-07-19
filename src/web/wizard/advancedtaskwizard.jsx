@@ -261,6 +261,7 @@ const AdvancedTaskWizard = ({
                         />
                       </Column>
                       <TimeZoneSelect
+                        name="start_timezone"
                         label={_('Timezone')}
                         value={state.start_timezone}
                         onChange={onValueChange}
