@@ -24,7 +24,7 @@ import Radio from 'web/components/form/radio';
 import DatePicker from 'web/components/form/DatePicker';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 import {TimePicker} from '@greenbone/opensight-ui-components';
-import {formatSplitTime} from 'web/utils/formatSplitTime';
+import {formatSplitTime} from 'web/utils/timePickerHelpers';
 
 import Layout from 'web/components/layout/layout';
 import Column from 'web/components/layout/column';
