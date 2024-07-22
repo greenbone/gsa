@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import {useState} from 'react';
 
 import {
   esxi_credential_filter,
@@ -34,10 +34,11 @@ import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import Radio from 'web/components/form/radio';
-import Datepicker from 'web/components/form/datepicker';
+import DatePicker from 'web/components/form/DatePicker';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
+import {TimePicker} from '@greenbone/opensight-ui-components';
+import {formatSplitTime} from 'web/utils/timePickerHelpers';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 import Column from 'web/components/layout/column';
 
@@ -79,6 +80,10 @@ const AdvancedTaskWizard = ({
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const configItems = renderSelectItems(scan_configs);
+
+  const [timePickerValue, setTimePickerValue] = useState(
+    formatSplitTime(start_hour, start_minute),
+  );
   const sshCredentialItems = renderSelectItems(
     credentials.filter(ssh_credential_filter),
     '',
@@ -111,6 +116,13 @@ const AdvancedTaskWizard = ({
     ...DEFAULTS,
   };
 
+  const handleTimeChange = (selectedValue, onValueChange) => {
+    const [start_hour, start_minute] = selectedValue.split(':');
+    setTimePickerValue(selectedValue);
+    onValueChange(parseInt(start_hour), 'start_hour');
+    onValueChange(parseInt(start_minute), 'start_minute');
+  };
+
   return (
     <SaveDialog
       buttonTitle={_('Create')}
@@ -120,213 +132,203 @@ const AdvancedTaskWizard = ({
       onSave={onSave}
       defaultValues={data}
     >
-      {({values: state, onValueChange}) => (
-        <Layout align={['start', 'start']}>
-          <WizardIcon />
-          <Layout basis="35%">
-            <WizardContent>
-              <p>
-                <b>{_('Quick start: Create a new task')}</b>
-              </p>
-              <p>
-                {_(
-                  'This wizard can help you by creating a new scan task and ' +
-                    'automatically starting it.',
-                )}
-              </p>
-              <p>
-                {_(
-                  'All you need to do is enter a name for the new task and' +
-                    ' the IP address or host name of the target, and select a' +
-                    ' scan configuration.',
-                )}
-              </p>
-              <p>
-                {_(
-                  'You can choose, whether you want to run the scan immediately',
-                )}
-                {capabilities.mayAccess('schedules') &&
-                  capabilities.mayCreate('schedule') &&
-                  _(', schedule the task for a later date and time,')}
-                {_(
-                  ' or just create the task so you can run it manually later.',
-                )}
-              </p>
-              <p>
-                {_(
-                  'In order to run an authenticated scan, you have to ' +
-                    'select SSH and/or SMB credentials, but you can also run ' +
-                    'an unauthenticated scan by not selecting any credentials.',
-                )}
-                {capabilities.mayAccess('alerts') &&
-                  capabilities.mayCreate('alert') && <br />}
-                {capabilities.mayAccess('alerts') &&
-                  capabilities.mayCreate('alert') &&
-                  _(
-                    'If you enter an email address in the "Email report to"' +
-                      ' field, a report of the scan will be sent to this ' +
-                      'address once it is finished.',
+      {({values: state, onValueChange}) => {
+        return (
+          <Layout align={['start', 'start']}>
+            <WizardIcon />
+            <Layout basis="35%">
+              <WizardContent>
+                <p>
+                  <b>{_('Quick start: Create a new task')}</b>
+                </p>
+                <p>
+                  {_(
+                    'This wizard can help you by creating a new scan task and ' +
+                      'automatically starting it.',
                   )}
-                {capabilities.mayAccess('slaves') && <br />}
-                {capabilities.mayAccess('slaves') &&
-                  _(
-                    'Finally, you can select a sensor which will run the ' +
-                      'scan.',
+                </p>
+                <p>
+                  {_(
+                    'All you need to do is enter a name for the new task and' +
+                      ' the IP address or host name of the target, and select a' +
+                      ' scan configuration.',
                   )}
-              </p>
-              <p>
-                {_(
-                  'For any other setting the defaults from ' +
-                    '"My Settings" will be applied.',
-                )}
-              </p>
-            </WizardContent>
-          </Layout>
-          <Column>
-            <FormGroup title={_('Task Name')}>
-              <TextField
-                name="task_name"
-                grow="1"
-                onChange={onValueChange}
-                value={state.task_name}
-                maxLength="80"
-              />
-            </FormGroup>
+                </p>
+                <p>
+                  {_(
+                    'You can choose, whether you want to run the scan immediately',
+                  )}
+                  {capabilities.mayAccess('schedules') &&
+                    capabilities.mayCreate('schedule') &&
+                    _(', schedule the task for a later date and time,')}
+                  {_(
+                    ' or just create the task so you can run it manually later.',
+                  )}
+                </p>
+                <p>
+                  {_(
+                    'In order to run an authenticated scan, you have to ' +
+                      'select SSH and/or SMB credentials, but you can also run ' +
+                      'an unauthenticated scan by not selecting any credentials.',
+                  )}
+                  {capabilities.mayAccess('alerts') &&
+                    capabilities.mayCreate('alert') && <br />}
+                  {capabilities.mayAccess('alerts') &&
+                    capabilities.mayCreate('alert') &&
+                    _(
+                      'If you enter an email address in the "Email report to"' +
+                        ' field, a report of the scan will be sent to this ' +
+                        'address once it is finished.',
+                    )}
+                  {capabilities.mayAccess('slaves') && <br />}
+                  {capabilities.mayAccess('slaves') &&
+                    _(
+                      'Finally, you can select a sensor which will run the ' +
+                        'scan.',
+                    )}
+                </p>
+                <p>
+                  {_(
+                    'For any other setting the defaults from ' +
+                      '"My Settings" will be applied.',
+                  )}
+                </p>
+              </WizardContent>
+            </Layout>
+            <Column>
+              <FormGroup title={_('Task Name')}>
+                <TextField
+                  name="task_name"
+                  grow="1"
+                  onChange={onValueChange}
+                  value={state.task_name}
+                  maxLength="80"
+                />
+              </FormGroup>
 
-            <FormGroup title={_('Scan Config')}>
-              <Select
-                name="config_id"
-                value={state.config_id}
-                items={configItems}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+              <FormGroup title={_('Scan Config')}>
+                <Select
+                  name="config_id"
+                  value={state.config_id}
+                  items={configItems}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
 
-            <FormGroup title={_('Target Host(s)')}>
-              <TextField
-                name="target_hosts"
-                grow="1"
-                onChange={onValueChange}
-                value={state.target_hosts}
-                maxLength="2000"
-              />
-            </FormGroup>
+              <FormGroup title={_('Target Host(s)')}>
+                <TextField
+                  name="target_hosts"
+                  grow="1"
+                  onChange={onValueChange}
+                  value={state.target_hosts}
+                  maxLength="2000"
+                />
+              </FormGroup>
 
-            <FormGroup title={_('Start Time')}>
-              <Radio
-                title={_('Start immediately')}
-                value={IMMEDIATELY_START_VALUE}
-                checked={state.auto_start === IMMEDIATELY_START_VALUE}
-                name="auto_start"
-                onChange={onValueChange}
-              />
+              <FormGroup title={_('Start Time')}>
+                <Radio
+                  title={_('Start immediately')}
+                  value={IMMEDIATELY_START_VALUE}
+                  checked={state.auto_start === IMMEDIATELY_START_VALUE}
+                  name="auto_start"
+                  onChange={onValueChange}
+                />
 
-              {capabilities.mayCreate('schedule') &&
-                capabilities.mayAccess('schedules') && (
-                  <>
-                    <Column>
-                      <Radio
-                        title={_('Create Schedule:')}
-                        value={SCHEDULE_START_VALUE}
-                        checked={state.auto_start === SCHEDULE_START_VALUE}
-                        name="auto_start"
-                        onChange={onValueChange}
-                      />
-                      <Datepicker
-                        name="start_date"
-                        value={state.start_date}
-                        timezone={state.start_timezone}
-                        onChange={onValueChange}
-                      />
-                      <Divider>
-                        <span>{_('at')}</span>
-                        <Spinner
-                          type="int"
-                          min="0"
-                          max="23"
-                          name="start_hour"
-                          value={state.start_hour}
+                {capabilities.mayCreate('schedule') &&
+                  capabilities.mayAccess('schedules') && (
+                    <>
+                      <Column>
+                        <Radio
+                          title={_('Create Schedule:')}
+                          value={SCHEDULE_START_VALUE}
+                          checked={state.auto_start === SCHEDULE_START_VALUE}
+                          name="auto_start"
                           onChange={onValueChange}
                         />
-                        <span>{_('h')}</span>
-                        <Spinner
-                          type="int"
-                          min="0"
-                          max="59"
-                          name="start_minute"
-                          value={state.start_minute}
+                        <DatePicker
+                          name={'start_date'}
+                          value={state.start_date}
                           onChange={onValueChange}
+                          label={_('Start Date')}
                         />
-                        <span>{_('m')}</span>
-                      </Divider>
-                    </Column>
-                    <TimeZoneSelect
-                      name="start_timezone"
-                      value={state.start_timezone}
+                        <TimePicker
+                          name="startTime"
+                          label={_('Start Time')}
+                          value={timePickerValue}
+                          onChange={selectedTime =>
+                            handleTimeChange(selectedTime, onValueChange)
+                          }
+                        />
+                      </Column>
+                      <TimeZoneSelect
+                        name="start_timezone"
+                        label={_('Timezone')}
+                        value={state.start_timezone}
+                        onChange={onValueChange}
+                      />
+                    </>
+                  )}
+
+                <Radio
+                  title={_('Do not start automatically')}
+                  value={DONT_START_VALUE}
+                  checked={state.auto_start === DONT_START_VALUE}
+                  name="auto_start"
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+
+              <FormGroup title={_('SSH Credential')} direction="row">
+                <Select
+                  value={state.ssh_credential}
+                  name="ssh_credential"
+                  items={sshCredentialItems}
+                  onChange={onValueChange}
+                />
+                <span>{_(' on port ')}</span>
+                <Spinner
+                  min="0"
+                  max="65535"
+                  type="int"
+                  value={state.ssh_port}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+
+              <FormGroup title={_('SMB Credential')}>
+                <Select
+                  value={state.smb_credential}
+                  name="smb_credential"
+                  items={smbCredentialItems}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+
+              <FormGroup title={_('ESXi Credential')}>
+                <Select
+                  value={state.esxi_credential}
+                  name="esxi_credential"
+                  items={esxiCredentialItems}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+
+              {capabilities.mayCreate('alert') &&
+                capabilities.mayAccess('alerts') && (
+                  <FormGroup title={_('Email report to')}>
+                    <TextField
+                      name="alert_email"
+                      grow="1"
+                      value={state.alert_email}
+                      maxLength="80"
                       onChange={onValueChange}
                     />
-                  </>
+                  </FormGroup>
                 )}
-
-              <Radio
-                title={_('Do not start automatically')}
-                value={DONT_START_VALUE}
-                checked={state.auto_start === DONT_START_VALUE}
-                name="auto_start"
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('SSH Credential')} direction="row">
-              <Select
-                value={state.ssh_credential}
-                name="ssh_credential"
-                items={sshCredentialItems}
-                onChange={onValueChange}
-              />
-              <span>{_(' on port ')}</span>
-              <Spinner
-                min="0"
-                max="65535"
-                type="int"
-                value={state.ssh_port}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('SMB Credential')}>
-              <Select
-                value={state.smb_credential}
-                name="smb_credential"
-                items={smbCredentialItems}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('ESXi Credential')}>
-              <Select
-                value={state.esxi_credential}
-                name="esxi_credential"
-                items={esxiCredentialItems}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            {capabilities.mayCreate('alert') &&
-              capabilities.mayAccess('alerts') && (
-                <FormGroup title={_('Email report to')}>
-                  <TextField
-                    name="alert_email"
-                    grow="1"
-                    value={state.alert_email}
-                    maxLength="80"
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-              )}
-          </Column>
-        </Layout>
-      )}
+            </Column>
+          </Layout>
+        );
+      }}
     </SaveDialog>
   );
 };
@@ -357,5 +359,3 @@ AdvancedTaskWizard.propTypes = {
 };
 
 export default AdvancedTaskWizard;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -317,7 +317,8 @@ class Event {
   }
 
   get duration() {
-    return createDuration({...this.event.duration});
+    const {weeks, ...durationWithoutWeeks} = this.event.duration;
+    return createDuration(durationWithoutWeeks);
   }
 
   get durationInSeconds() {

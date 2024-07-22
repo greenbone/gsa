@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {useState} from 'react';
 
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -24,16 +24,15 @@ import PropTypes from 'web/utils/proptypes';
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Select from 'web/components/form/select';
-import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
-import Datepicker from 'web/components/form/datepicker';
+import DatePicker from 'web/components/form/DatePicker';
+import {TimePicker} from '@greenbone/opensight-ui-components';
 
 import Layout from 'web/components/layout/layout';
 import Column from 'web/components/layout/column';
-import Row from 'web/components/layout/row';
 
 import {renderSelectItems} from 'web/utils/render';
 
@@ -41,6 +40,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/utils/useCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
+import {formatSplitTime} from 'web/utils/timePickerHelpers';
 
 const ModifyTaskWizard = ({
   alert_email = '',
@@ -65,6 +65,17 @@ const ModifyTaskWizard = ({
     start_timezone,
     task_id,
     tasks,
+  };
+
+  const [timePickerValue, setTimePickerValue] = useState(
+    formatSplitTime(start_hour, start_minute),
+  );
+
+  const handleTimeChange = (selectedValue, onValueChange) => {
+    const [start_hour, start_minute] = selectedValue.split(':');
+    setTimePickerValue(selectedValue);
+    onValueChange(parseInt(start_hour), 'start_hour');
+    onValueChange(parseInt(start_minute), 'start_minute');
   };
 
   return (
@@ -147,35 +158,24 @@ const ModifyTaskWizard = ({
                     name="reschedule"
                     onChange={onValueChange}
                   />
-                  <Datepicker
+                  <DatePicker
                     name="start_date"
                     timezone={state.start_timezone}
                     value={state.start_date}
                     onChange={onValueChange}
+                    label={_('Start Date')}
                   />
-                  <Row>
-                    <span>{_('at')}</span>
-                    <Spinner
-                      type="int"
-                      min="0"
-                      max="23"
-                      name="start_hour"
-                      value={state.start_hour}
-                      onChange={onValueChange}
-                    />
-                    <span>{_('h')}</span>
-                    <Spinner
-                      type="int"
-                      min="0"
-                      max="59"
-                      name="start_minute"
-                      value={state.start_minute}
-                      onChange={onValueChange}
-                    />
-                    <span>{_('m')}</span>
-                  </Row>
+                  <TimePicker
+                    label={_('Start Time')}
+                    value={timePickerValue}
+                    onChange={selectedTime =>
+                      handleTimeChange(selectedTime, onValueChange)
+                    }
+                  />
+
                   <TimeZoneSelect
                     name="start_timezone"
+                    label={_('Timezone')}
                     value={state.start_timezone}
                     onChange={onValueChange}
                   />
@@ -216,5 +216,3 @@ ModifyTaskWizard.propTypes = {
 };
 
 export default ModifyTaskWizard;
-
-// vim: set ts=2 sw=2 tw=80:

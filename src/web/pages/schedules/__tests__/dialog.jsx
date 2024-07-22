@@ -19,7 +19,26 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import Schedule from 'gmp/models/schedule';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
+
+const checkElementVisibilityAndContent = (
+  labelText,
+  buttonName,
+  buttonContent,
+  timePickerLabel,
+  timePickerValue,
+) => {
+  const label = screen.getByLabelText(labelText);
+  expect(label).toBeVisible();
+
+  const button = screen.getAllByRole('button', {name: buttonName});
+  expect(button[0]).toBeVisible();
+  expect(button[0]).toHaveTextContent(buttonContent);
+
+  const timePicker = screen.getByLabelText(timePickerLabel);
+  expect(timePicker).toBeVisible();
+  expect(timePicker).toHaveValue(timePickerValue);
+};
 
 import {
   changeInputValue,
@@ -76,7 +95,7 @@ const {
 
 describe('ScheduleDialog component tests', () => {
   test('should render with default values', () => {
-    const {baseElement, getByName} = render(
+    const {baseElement} = render(
       <ScheduleDialog
         id={scheduleId}
         title={`Edit Schedule ${scheduleName}`}
@@ -106,12 +125,20 @@ describe('ScheduleDialog component tests', () => {
     const defaultTimezone = selects[0];
     expect(defaultTimezone).toHaveValue('Coordinated Universal Time/UTC');
 
-    expect(baseElement).toHaveTextContent('02/08/2021');
-    expect(getByName('startHour')).toHaveValue('15');
-    expect(getByName('startMinute')).toHaveValue('0');
-
-    expect(getByName('endHour')).toHaveValue('19');
-    expect(getByName('endMinute')).toHaveValue('45');
+    checkElementVisibilityAndContent(
+      'Start Date',
+      '08/02/2021',
+      '08/02/2021',
+      'Start Time',
+      '15:00',
+    );
+    checkElementVisibilityAndContent(
+      'End Date',
+      '08/02/2021',
+      '08/02/2021',
+      'End Time',
+      '19:45',
+    );
 
     expect(baseElement).toHaveTextContent('5 hours');
 
