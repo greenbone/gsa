@@ -18,6 +18,7 @@ import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
+import useCapabilities from "web/hooks/useCapabilities";
 import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
@@ -45,6 +46,7 @@ const ScpMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const capabilities = useCapabilities();
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, scpReportFormat),
   );
@@ -136,14 +138,19 @@ const ScpMethodPart = ({
           items={renderSelectItems(reportFormats)}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'scp_report_config'}
-          id="report-config-select"
-          value={scpConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {
+          capabilities.mayOp('get_report_configs') &&
+          <>
+            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <Select
+              name={prefix + 'scp_report_config'}
+              id="report-config-select"
+              value={scpConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        }
       </FormGroup>
     </Layout>
   );

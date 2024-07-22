@@ -19,6 +19,7 @@ import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
+import useCapabilities from "web/hooks/useCapabilities";
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
@@ -50,6 +51,7 @@ const SmbMethodPart = ({
   onNewCredentialClick,
   onCredentialChange,
 }) => {
+  const capabilities = useCapabilities();
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, smbReportFormat),
   );
@@ -129,14 +131,19 @@ const SmbMethodPart = ({
           value={reportFormatIdInState}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'smb_report_config'}
-          id="report-config-select"
-          value={smbConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {
+          capabilities.mayOp('get_report_configs') &&
+          <>
+            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <Select
+              name={prefix + 'smb_report_config'}
+              id="report-config-select"
+              value={smbConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        }
       </FormGroup>
 
       <FormGroup title={_('Max Protocol')}>

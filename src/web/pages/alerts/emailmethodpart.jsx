@@ -34,14 +34,13 @@ import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
-import compose from 'web/utils/compose';
+import useCapabilities from "web/hooks/useCapabilities";
+
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
 import withPrefix from 'web/utils/withPrefix';
 
 const EmailMethodPart = ({
-  capabilities,
   credentials = [],
   fromAddress,
   event,
@@ -62,6 +61,7 @@ const EmailMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const capabilities = useCapabilities();
   const taskEvent = isTaskEvent(event);
   const secinfoEvent = isSecinfoEvent(event);
   const textReportFormatItems = renderSelectItems(
@@ -199,16 +199,20 @@ const EmailMethodPart = ({
                       onChange={handleReportFormatIdChange}
                     />
                   )}
-
-                  <label htmlFor="report-config-select">Report Config</label>
-                  <Select
-                    disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                    name={prefix + 'notice_report_config'}
-                    id="report-config-select"
-                    value={reportConfigIdInState}
-                    items={reportConfigItems}
-                    onChange={handleReportConfigIdChange}
-                  />
+                  {
+                    capabilities.mayOp("get_report_configs") &&
+                    <>
+                      <label htmlFor="report-config-select">Report Config</label>
+                      <Select
+                        disabled={notice !== EMAIL_NOTICE_INCLUDE}
+                        name={prefix + 'notice_report_config'}
+                        id="report-config-select"
+                        value={reportConfigIdInState}
+                        items={reportConfigItems}
+                        onChange={handleReportConfigIdChange}
+                      />
+                    </>
+                  }
                 </Divider>
 
                 <TextArea
@@ -251,15 +255,20 @@ const EmailMethodPart = ({
                         onChange={handleAttachFormatIdChange}
                       />
                     )}
-                    <label htmlFor="attach-config-select">Report Config</label>
-                    <Select
-                      disabled={notice !== EMAIL_NOTICE_ATTACH}
-                      name={prefix + 'notice_attach_config'}
-                      id="attach-config-select"
-                      value={attachConfigIdInState}
-                      items={attachConfigItems}
-                      onChange={handleAttachConfigIdChange}
-                    />
+                    {
+                      capabilities.mayOp('get_report_configs') &&
+                      <>
+                        <label htmlFor="attach-config-select">Report Config</label>
+                        <Select
+                          disabled={notice !== EMAIL_NOTICE_ATTACH}
+                          name={prefix + 'notice_attach_config'}
+                          id="attach-config-select"
+                          value={attachConfigIdInState}
+                          items={attachConfigItems}
+                          onChange={handleAttachConfigIdChange}
+                        />
+                      </>
+                    }
                   </Divider>
                 </Layout>
                 <TextArea
@@ -286,7 +295,6 @@ const EmailMethodPart = ({
 
 EmailMethodPart.propTypes = {
   attachConfigItems: PropTypes.array,
-  capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
   event: PropTypes.string.isRequired,
   fromAddress: PropTypes.string.isRequired,
@@ -309,6 +317,6 @@ EmailMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func,
 };
 
-export default compose(withCapabilities, withPrefix)(EmailMethodPart);
+export default withPrefix(EmailMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

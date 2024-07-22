@@ -12,6 +12,7 @@ import _ from 'gmp/locale';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import useCapabilities from "web/hooks/useCapabilities";
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
 
@@ -29,6 +30,7 @@ const SendMethodPart = ({
   sendReportFormat,
   onChange,
 }) => {
+  const capabilities = useCapabilities();
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, sendReportFormat),
   );
@@ -79,14 +81,19 @@ const SendMethodPart = ({
           items={renderSelectItems(reportFormats)}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'send_report_config'}
-          id="report-config-select"
-          value={sendConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {
+          capabilities.mayOp('get_report_configs') &&
+          <>
+            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <Select
+              name={prefix + 'send_report_config'}
+              id="report-config-select"
+              value={sendConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        }
       </FormGroup>
     </Layout>
   );
