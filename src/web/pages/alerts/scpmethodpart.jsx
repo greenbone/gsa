@@ -18,9 +18,8 @@ import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
+import useCapabilities from "web/hooks/useCapabilities";
 import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
-import compose from "web/utils/compose";
-import withCapabilities from "web/utils/withCapabilities";
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -33,7 +32,6 @@ import NewIcon from 'web/components/icon/newicon';
 
 const ScpMethodPart = ({
   prefix,
-  capabilities,
   credentials = [],
   reportFormats,
   reportConfigs,
@@ -48,6 +46,7 @@ const ScpMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const capabilities = useCapabilities();
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, scpReportFormat),
   );
@@ -158,7 +157,6 @@ const ScpMethodPart = ({
 };
 
 ScpMethodPart.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
@@ -175,6 +173,6 @@ ScpMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 
-export default compose(withCapabilities, withPrefix)(ScpMethodPart);
+export default withPrefix(ScpMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -12,9 +12,8 @@ import _ from 'gmp/locale';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import useCapabilities from "web/hooks/useCapabilities";
 import PropTypes from 'web/utils/proptypes';
-import compose from "web/utils/compose";
-import withCapabilities from "web/utils/withCapabilities";
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -23,7 +22,6 @@ import TextField from 'web/components/form/textfield';
 
 const SendMethodPart = ({
   prefix,
-  capabilities,
   reportConfigs,
   reportFormats,
   sendHost,
@@ -32,6 +30,7 @@ const SendMethodPart = ({
   sendReportFormat,
   onChange,
 }) => {
+  const capabilities = useCapabilities();
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, sendReportFormat),
   );
@@ -101,7 +100,6 @@ const SendMethodPart = ({
 };
 
 SendMethodPart.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
@@ -112,6 +110,6 @@ SendMethodPart.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default compose(withCapabilities, withPrefix)(SendMethodPart);
+export default withPrefix(SendMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

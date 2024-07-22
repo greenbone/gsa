@@ -19,9 +19,8 @@ import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
+import useCapabilities from "web/hooks/useCapabilities";
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-import compose from "web/utils/compose";
-import withCapabilities from "web/utils/withCapabilities";
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -39,7 +38,6 @@ const smbMaxProtocolItems = [
 
 const SmbMethodPart = ({
   prefix,
-  capabilities,
   credentials = [],
   reportConfigs,
   reportFormats,
@@ -53,6 +51,7 @@ const SmbMethodPart = ({
   onNewCredentialClick,
   onCredentialChange,
 }) => {
+  const capabilities = useCapabilities();
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, smbReportFormat),
   );
@@ -160,7 +159,6 @@ const SmbMethodPart = ({
 };
 
 SmbMethodPart.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
@@ -176,6 +174,6 @@ SmbMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 
-export default compose(withCapabilities, withPrefix)(SmbMethodPart);
+export default withPrefix(SmbMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

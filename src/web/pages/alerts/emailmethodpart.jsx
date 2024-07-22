@@ -34,14 +34,13 @@ import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
-import compose from 'web/utils/compose';
+import useCapabilities from "web/hooks/useCapabilities";
+
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
 import withPrefix from 'web/utils/withPrefix';
 
 const EmailMethodPart = ({
-  capabilities,
   credentials = [],
   fromAddress,
   event,
@@ -62,6 +61,7 @@ const EmailMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const capabilities = useCapabilities();
   const taskEvent = isTaskEvent(event);
   const secinfoEvent = isSecinfoEvent(event);
   const textReportFormatItems = renderSelectItems(
@@ -295,7 +295,6 @@ const EmailMethodPart = ({
 
 EmailMethodPart.propTypes = {
   attachConfigItems: PropTypes.array,
-  capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
   event: PropTypes.string.isRequired,
   fromAddress: PropTypes.string.isRequired,
@@ -318,6 +317,6 @@ EmailMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func,
 };
 
-export default compose(withCapabilities, withPrefix)(EmailMethodPart);
+export default withPrefix(EmailMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

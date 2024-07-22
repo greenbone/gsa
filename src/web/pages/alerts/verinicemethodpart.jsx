@@ -13,10 +13,9 @@ import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import useCapabilities from "web/hooks/useCapabilities";
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
-import compose from "web/utils/compose";
-import withCapabilities from "web/utils/withCapabilities";
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -29,7 +28,6 @@ const VERINICE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
 const VeriniceMethodPart = ({
   prefix,
-  capabilities,
   veriniceServerUrl,
   veriniceServerCredential,
   veriniceServerReportConfig,
@@ -41,6 +39,7 @@ const VeriniceMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const capabilities = useCapabilities();
   reportFormats = reportFormats.filter(format => format.extension === 'vna');
   credentials = credentials.filter(
     cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -124,7 +123,6 @@ const VeriniceMethodPart = ({
 };
 
 VeriniceMethodPart.propTypes = {
-  capabilities: PropTypes.capabilities,
   credentials: PropTypes.array,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
@@ -138,6 +136,6 @@ VeriniceMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 
-export default compose(withCapabilities, withPrefix)(VeriniceMethodPart);
+export default withPrefix(VeriniceMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:
