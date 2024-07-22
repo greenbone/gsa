@@ -13,6 +13,8 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
+import compose from "web/utils/compose";
+import withCapabilities from "web/utils/withCapabilities";
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -110,6 +112,6 @@ SendMethodPart.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default withPrefix(SendMethodPart);
+export default compose(withCapabilities, withPrefix)(SendMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

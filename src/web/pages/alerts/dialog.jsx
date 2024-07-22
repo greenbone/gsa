@@ -717,7 +717,6 @@ class AlertDialog extends React.Component {
               {values.method === METHOD_TYPE_SCP && (
                 <ScpMethodPart
                   prefix="method_data"
-                  capabilities={capabilities}
                   credentials={credentials}
                   reportConfigs={report_configs}
                   reportFormats={report_formats}
@@ -737,7 +736,6 @@ class AlertDialog extends React.Component {
               {values.method === METHOD_TYPE_SEND && (
                 <SendMethodPart
                   prefix="method_data"
-                  capabilities={capabilities}
                   sendHost={values.method_data_send_host}
                   sendPort={values.method_data_send_port}
                   sendReportConfig={values.method_data_send_report_config}
@@ -760,7 +758,6 @@ class AlertDialog extends React.Component {
               {values.method === METHOD_TYPE_SMB && (
                 <SmbMethodPart
                   prefix="method_data"
-                  capabilities={capabilities}
                   credentials={credentials}
                   reportConfigs={report_configs}
                   reportFormats={report_formats}
@@ -804,7 +801,6 @@ class AlertDialog extends React.Component {
               {values.method === METHOD_TYPE_VERINICE && (
                 <VeriniceMethodPart
                   prefix="method_data"
-                  capabilities={capabilities}
                   credentials={credentials}
                   reportConfigs={report_configs}
                   reportFormats={report_formats}

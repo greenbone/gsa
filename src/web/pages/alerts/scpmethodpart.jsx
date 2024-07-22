@@ -19,6 +19,8 @@ import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 
 import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
+import compose from "web/utils/compose";
+import withCapabilities from "web/utils/withCapabilities";
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -173,6 +175,6 @@ ScpMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 
-export default withPrefix(ScpMethodPart);
+export default compose(withCapabilities, withPrefix)(ScpMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

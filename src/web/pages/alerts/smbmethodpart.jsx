@@ -20,6 +20,8 @@ import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import compose from "web/utils/compose";
+import withCapabilities from "web/utils/withCapabilities";
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -174,6 +176,6 @@ SmbMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func.isRequired,
 };
 
-export default withPrefix(SmbMethodPart);
+export default compose(withCapabilities, withPrefix)(SmbMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:
