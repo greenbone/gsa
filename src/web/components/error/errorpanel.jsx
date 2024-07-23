@@ -41,6 +41,10 @@ const ErrorDetails = styled.div`
   overflow-x: auto;
 `;
 
+const StyledPre = styled.pre`
+  word-break: break-word;
+`;
+
 const ErrorPanel = ({error, message, info}) => {
   const [showDetails, setShowDetails] = useState(false);
 
@@ -71,11 +75,13 @@ const ErrorPanel = ({error, message, info}) => {
               {error.name}: {error.message}
             </h3>
             {isDefined(info) && (
-              <pre data-testid="errorpanel-component-stack">
+              <StyledPre data-testid="errorpanel-component-stack">
                 {info.componentStack}
-              </pre>
+              </StyledPre>
             )}
-            <pre data-testid="errorpanel-error-stack">{error.stack}</pre>
+            <StyledPre data-testid="errorpanel-error-stack">
+              {error.stack}
+            </StyledPre>
           </Divider>
         </ErrorDetails>
       )}
