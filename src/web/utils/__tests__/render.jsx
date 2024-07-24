@@ -27,31 +27,6 @@ describe('render_select_items test', () => {
     expect(items[1]).toEqual({label: 'B Task', value: '2'});
   });
 
-  test('should mark deprecated items', () => {
-    const entities = [
-      {
-        name: 'A Config',
-        id: '1',
-      },
-      {
-        name: 'B Config',
-        deprecated: '1',
-        id: '2',
-      },
-      {
-        name: 'C Config',
-        id: '3',
-      },
-    ];
-
-    const items = renderSelectItems(entities);
-
-    expect(items.length).toBe(3);
-    expect(items[0]).toEqual({label: 'A Config', value: '1'});
-    expect(items[1]).toEqual({label: <s>B Config (Deprecated)</s>, value: '2'});
-    expect(items[2]).toEqual({label: 'C Config', value: '3'});
-  });
-
   test('should add default item', () => {
     const entities = [
       {
@@ -90,6 +65,26 @@ describe('render_select_items test', () => {
     expect(items[0]).toEqual({label: '?', value: '3'});
     expect(items[1]).toEqual({label: 'A Task', value: '1'});
     expect(items[2]).toEqual({label: 'B Task', value: '2'});
+  });
+
+  test.each([
+    {name: 'Item 1', id: 1, deprecated: '1'},
+    {name: 'Item 2', id: 2},
+    {name: 123, id: 3, deprecated: '1'},
+    {name: true, id: 4},
+    {name: null, id: 5},
+    {name: undefined, id: 6},
+  ])('should return labels as strings for item with id %s', item => {
+    const default_item_value = 0;
+    const default_item_label = 'Default Item';
+
+    const result = renderSelectItems(
+      [item],
+      default_item_value,
+      default_item_label,
+    );
+
+    expect(typeof result[1].label).toBe('string');
   });
 });
 

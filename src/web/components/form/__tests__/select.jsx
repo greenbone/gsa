@@ -14,7 +14,7 @@ import {
   clickElement,
 } from 'web/components/testing';
 
-import Select from '../select';
+import Select, {SelectItem} from '../select';
 
 describe('Select component tests', () => {
   test('should render', () => {
@@ -218,6 +218,26 @@ describe('Select component tests', () => {
 
     expect(getSelectItemElements().length).toEqual(1);
   });
+  describe('SelectItemRaw', () => {
+    test.each([
+      {
+        label: 'Test Item',
+        deprecated: '1',
+        expectedText: 'Test Item (Deprecated)',
+      },
+      {
+        label: 'Non-deprecated Item',
+        deprecated: undefined,
+        expectedText: 'Non-deprecated Item',
+      },
+    ])(
+      'renders $label correctly with deprecated status $deprecated',
+      ({label, deprecated, expectedText}) => {
+        const {getByText} = render(
+          <SelectItem label={label} deprecated={deprecated} />,
+        );
+        expect(getByText(expectedText)).toBeInTheDocument();
+      },
+    );
+  });
 });
-
-// vim: set ts=2 sw=2 tw=80:

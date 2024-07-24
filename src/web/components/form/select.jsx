@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback} from 'react';
+import {useCallback, forwardRef} from 'react';
 
 import {Loader} from '@mantine/core';
 
@@ -14,6 +14,8 @@ import {isDefined, isArray} from 'gmp/utils/identity';
 import PropTypes, {mayRequire} from 'web/utils/proptypes';
 
 import useTranslation from 'web/hooks/useTranslation';
+
+import {_} from 'gmp/locale/lang';
 
 const findItem = (items, value) =>
   isDefined(items) ? items.find(i => i.value === value) : undefined;
@@ -58,6 +60,24 @@ const SelectValueValidator = (props, propName, componentName) => {
 };
 
 const selectValue = mayRequire(SelectValueValidator);
+
+const renderLabel = props => {
+  const {label, deprecated} = props;
+
+  if (deprecated) {
+    return <s>{`${label} (${_('Deprecated')})`}</s>;
+  }
+
+  return <span>{label}</span>;
+};
+
+export const SelectItem = forwardRef((props, ref) => {
+  return (
+    <div ref={ref} {...props}>
+      {renderLabel(props)}
+    </div>
+  );
+});
 
 const Select = ({
   disabled,
@@ -107,6 +127,7 @@ const Select = ({
       value={selectedValue}
       onChange={handleChange}
       rightSection={rightSection}
+      itemComponent={SelectItem}
     />
   );
 };
