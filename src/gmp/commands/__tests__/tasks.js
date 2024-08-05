@@ -6,8 +6,13 @@
 import {describe, test, expect} from '@gsa/testing';
 
 import {TaskCommand} from '../tasks';
+import {FeedStatus} from '../feedstatus';
 
-import {createActionResultResponse, createHttp} from '../testing';
+import {
+  createActionResultResponse,
+  createHttp,
+  createResponse,
+} from '../testing';
 import {
   HOSTS_ORDERING_RANDOM,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
@@ -279,5 +284,30 @@ describe('TaskCommand tests', () => {
         const {data} = resp;
         expect(data.id).toEqual('foo');
       });
+  });
+
+  test('should throw an error if feed is currently syncing', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {
+          feed: [
+            {type: 'NVT', currently_syncing: true, sync_not_available: false},
+            {type: 'SCAP', currently_syncing: false, sync_not_available: false},
+          ],
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+
+    const taskCmd = new TaskCommand(fakeHttp);
+
+    const feedCmd = new FeedStatus(fakeHttp);
+
+    const result = await feedCmd.checkFeedSync();
+    expect(result.isSyncing).toBe(true);
+
+    await expect(taskCmd.start({id: 'task1'})).rejects.toThrow(
+      'Feed is currently syncing. Please try again later.',
+    );
   });
 });
