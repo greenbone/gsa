@@ -87,6 +87,11 @@ const renderFeedStatus = feed => {
     return _('Update in progress...');
   }
 
+  if (hasValue(feed.syncNotAvailable)) {
+    const {error} = feed.syncNotAvailable;
+    return _('Synchronization issue: {{error}}', {error});
+  }
+
   const age = parseInt(feed.age.asDays());
 
   if (age >= 30) {
@@ -96,6 +101,7 @@ const renderFeedStatus = feed => {
   if (age >= 2) {
     return _('{{age}} days old', {age});
   }
+
   return _('Current');
 };
 
@@ -121,10 +127,10 @@ const FeedStatus = ({feeds}) => {
             </TableRow>
 
             {feeds.map(feed => (
-              <TableRow key={feed.feed_type}>
-                <TableData>{feed.feed_type}</TableData>
+              <TableRow key={feed.feedType}>
+                <TableData>{feed.feedType}</TableData>
                 <TableData>
-                  {feed.feed_type === NVT_FEED && (
+                  {feed.feedType === NVT_FEED && (
                     <IconDivider>
                       <Link to="nvts">
                         <IconDivider align={['start', 'center']}>
@@ -134,7 +140,7 @@ const FeedStatus = ({feeds}) => {
                       </Link>
                     </IconDivider>
                   )}
-                  {feed.feed_type === SCAP_FEED && (
+                  {feed.feedType === SCAP_FEED && (
                     <IconDivider>
                       <Link to="cves">
                         <IconDivider align={['start', 'center']}>
@@ -150,7 +156,7 @@ const FeedStatus = ({feeds}) => {
                       </Link>
                     </IconDivider>
                   )}
-                  {feed.feed_type === CERT_FEED && (
+                  {feed.feedType === CERT_FEED && (
                     <IconDivider>
                       <Link to="certbunds">
                         <IconDivider align={['start', 'center']}>
@@ -166,7 +172,7 @@ const FeedStatus = ({feeds}) => {
                       </Link>
                     </IconDivider>
                   )}
-                  {feed.feed_type === GVMD_DATA_FEED && (
+                  {feed.feedType === GVMD_DATA_FEED && (
                     <IconDivider>
                       <Link to="policies" filter="predefined=1">
                         <IconDivider align={['start', 'center']}>

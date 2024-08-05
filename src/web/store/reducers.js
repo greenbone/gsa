@@ -24,6 +24,7 @@ import pages from './pages/reducers';
 
 import entities from './entities/reducers';
 import {CLEAR_STORE} from 'web/store/actions';
+import feedStatus from 'web/store/feedStatus/reducers';
 
 const rootReducer = combineReducers({
   dashboardData,
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   entities,
   userSettings,
   pages,
+  feedStatus,
 });
 
 const clearStoreReducer = (state = {}, action) => {
