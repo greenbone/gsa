@@ -12,6 +12,7 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityBar from 'web/components/bar/severitybar';
+import ComplianceBar from 'web/components/bar/compliancebar';
 
 import DateTime from 'web/components/date/datetime';
 
@@ -31,7 +32,13 @@ import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
 
-const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
+const Header = ({
+  audit = false,
+  currentSortBy,
+  currentSortDir,
+  sort = true,
+  onSortChange,
+}) => (
   <TableHeader>
     <TableRow>
       <TableHead
@@ -99,67 +106,127 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         onSortChange={onSortChange}
         title={_('End')}
       />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'high' : false}
-        width="3%"
-        onSortChange={onSortChange}
-        title={_('High')}
-      />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'medium' : false}
-        width="3%"
-        onSortChange={onSortChange}
-        title={_('Medium')}
-      />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'low' : false}
-        width="3%"
-        onSortChange={onSortChange}
-        title={_('Low')}
-      />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'log' : false}
-        width="3%"
-        onSortChange={onSortChange}
-        title={_('Log')}
-      />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'false_positive' : false}
-        width="3%"
-        onSortChange={onSortChange}
-        title={_('False Positive')}
-      />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'total' : false}
-        width="3%"
-        onSortChange={onSortChange}
-        title={_('Total')}
-      />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'severity' : false}
-        width="8%"
-        onSortChange={onSortChange}
-        title={_('Severity')}
-      />
+      {audit ? (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'complianceYes' : false}
+          width="4.5%"
+          onSortChange={onSortChange}
+          title={_('Yes')}
+        />
+      ) : (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'high' : false}
+          width="3%"
+          onSortChange={onSortChange}
+          title={_('High')}
+        />
+      )}
+      {audit ? (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'complianceNo' : false}
+          width="4.5%"
+          onSortChange={onSortChange}
+          title={_('No')}
+        />
+      ) : (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'medium' : false}
+          width="3%"
+          onSortChange={onSortChange}
+          title={_('Medium')}
+        />
+      )}
+      {audit ? (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'complianceIncomplete' : false}
+          width="4.5%"
+          onSortChange={onSortChange}
+          title={_('Incomplete')}
+        />
+      ) : (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'low' : false}
+          width="3%"
+          onSortChange={onSortChange}
+          title={_('Low')}
+        />
+      )}
+      {!audit && (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'log' : false}
+          width="3%"
+          onSortChange={onSortChange}
+          title={_('Log')}
+        />
+      )}
+      {!audit && (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'false_positive' : false}
+          width="3%"
+          onSortChange={onSortChange}
+          title={_('False Positive')}
+        />
+      )}
+      {audit ? (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'complianceTotal' : false}
+          width="4.5%"
+          onSortChange={onSortChange}
+          title={_('Total')}
+        />
+      ) : (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'total' : false}
+          width="3%"
+          onSortChange={onSortChange}
+          title={_('Total')}
+        />
+      )}
+      {audit ? (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'compliant' : false}
+          width="8%"
+          onSortChange={onSortChange}
+          title={_('Compliant')}
+        />
+      ) : (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
+          width="8%"
+          onSortChange={onSortChange}
+          title={_('Severity')}
+        />
+      )}
     </TableRow>
   </TableHeader>
 );
 
 Header.propTypes = {
+  audit: PropTypes.bool,
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
@@ -206,14 +273,16 @@ const renderAuthIcons = authSuccess => {
   );
 };
 
-const Row = ({entity, links = true}) => {
+const Row = ({entity, links = true, audit = false}) => {
   const {
     asset = {},
     authSuccess,
     details = {},
     end,
+    hostCompliance,
     ip,
     result_counts = {},
+    complianceCounts = {},
     severity,
     start,
     portsCount,
@@ -251,20 +320,43 @@ const Row = ({entity, links = true}) => {
       <TableData>
         <DateTime date={end} />
       </TableData>
-      <TableData>{result_counts.high}</TableData>
-      <TableData>{result_counts.warning}</TableData>
-      <TableData>{result_counts.info}</TableData>
-      <TableData>{result_counts.log}</TableData>
-      <TableData>{result_counts.false_positive}</TableData>
-      <TableData>{result_counts.total}</TableData>
-      <TableData>
-        <SeverityBar severity={severity} />
-      </TableData>
+      {audit ? (
+        <TableData>{complianceCounts.yes}</TableData>
+      ) : (
+        <TableData>{result_counts.high}</TableData>
+      )}
+      {audit ? (
+        <TableData>{complianceCounts.no}</TableData>
+      ) : (
+        <TableData>{result_counts.warning}</TableData>
+      )}
+      {audit ? (
+        <TableData>{complianceCounts.incomplete}</TableData>
+      ) : (
+        <TableData>{result_counts.info}</TableData>
+      )}
+      {!audit && <TableData>{result_counts.log}</TableData>}
+      {!audit && <TableData>{result_counts.false_positive}</TableData>}
+      {audit ? (
+        <TableData>{complianceCounts.total}</TableData>
+      ) : (
+        <TableData>{result_counts.total}</TableData>
+      )}
+      {audit ? (
+        <TableData>
+          <ComplianceBar compliance={hostCompliance} />
+        </TableData>
+      ) : (
+        <TableData>
+          <SeverityBar severity={severity} />
+        </TableData>
+      )}
     </TableRow>
   );
 };
 
 Row.propTypes = {
+  audit: PropTypes.bool,
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
 };

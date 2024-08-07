@@ -28,6 +28,11 @@ const Theme = {
   darkRed: '#c12c30', // used by: dialog errors font
   errorRed: '#c83814', // used by: progressbar
 
+  complianceYes: '#4cb045',
+  complianceNo: '#D80000',
+  complianceIncomplete: 'orange',
+  complianceUndefined: 'silver',
+
   lightBlue: '#d6e6fd', // used by InfoPanel and dashboard hovering
   mediumBlue: '#77acf7', // used by active/hovered items in Select
   blue: '#0a53b8', // used by: links

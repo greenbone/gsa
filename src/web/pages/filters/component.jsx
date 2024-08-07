@@ -75,8 +75,13 @@ class FilterComponent extends React.Component {
 
   openFilterDialog(filter) {
     const {capabilities} = this.props;
-
-    let types = FILTER_OPTIONS.filter(option =>
+    const filterOptions = [
+      ...(capabilities.featureEnabled('COMPLIANCE_REPORTS') 
+          ? [['audit_report', _l('Audit Report')]] 
+          : []),
+      ...FILTER_OPTIONS
+    ];
+    let types = filterOptions.filter(option =>
       filter_types(capabilities, option[0]),
     );
 

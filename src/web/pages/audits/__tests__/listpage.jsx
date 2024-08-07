@@ -200,15 +200,15 @@ describe('AuditPage tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     await act(async () => {
-      expect(icons[19]).toHaveAttribute(
+      expect(icons[20]).toHaveAttribute(
         'title',
         'Move page contents to trashcan',
       );
-      fireEvent.click(icons[19]);
+      fireEvent.click(icons[20]);
       expect(deleteByFilter).toHaveBeenCalled();
 
-      expect(icons[20]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[20]);
+      expect(icons[21]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[21]);
       expect(exportByFilter).toHaveBeenCalled();
     });
   });

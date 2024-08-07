@@ -29,6 +29,7 @@ export const MAX_RESOURCES = 40; // concerns listing in "Assigned Resources" tab
 
 const TYPES = [
   'alert',
+  'audit',
   'host',
   'operatingsystem',
   'cpe',
@@ -42,6 +43,7 @@ const TYPES = [
   'nvt',
   'override',
   'permission',
+  'policy',
   'portlist',
   'report',
   'reportconfig',
@@ -106,7 +108,13 @@ class TagComponent extends React.Component {
 
   getResourceTypes() {
     const {capabilities} = this.props;
-    return TYPES.map(type =>
+    const types = [
+      ...TYPES,
+      ...(capabilities.featureEnabled('COMPLIANCE_REPORTS') 
+          ? ['auditreport'] 
+          : [])
+    ].sort();
+    return types.map(type =>
       capabilities.mayAccess(type) ? [type, typeName(type)] : undefined,
     ).filter(isDefined);
   }

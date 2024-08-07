@@ -16,6 +16,7 @@ import Layout from 'web/components/layout/layout';
 /* eslint-disable max-len */
 
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
+import ComplianceLevelsFilterGroup from 'web/components/powerfilter/compliancelevelsgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
@@ -36,6 +37,7 @@ import compose from 'web/utils/compose';
 import withCapabilities from 'web/utils/withCapabilities';
 
 const FilterDialog = ({
+  audit = false,
   delta = false,
   filter,
   filterstring,
@@ -50,6 +52,9 @@ const FilterDialog = ({
 }) => {
   const result_hosts_only = filter.get('result_hosts_only');
   const handleRemoveLevels = () => onFilterChange(filter.delete('levels'));
+  const handleRemoveCompliance = () =>
+    onFilterChange(filter.delete('compliance_levels'));
+
   return (
     <Layout flex="column">
       <FilterStringGroup
@@ -65,12 +70,14 @@ const FilterDialog = ({
         />
       )}
 
-      <BooleanFilterGroup
-        name="apply_overrides"
-        title={_('Apply Overrides')}
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      {!audit && (
+        <BooleanFilterGroup
+          name="apply_overrides"
+          title={_('Apply Overrides')}
+          filter={filter}
+          onChange={onFilterValueChange}
+        />
+      )}
 
       <FormGroup title={_('Only show hosts that have results')}>
         <Checkbox
@@ -88,18 +95,29 @@ const FilterDialog = ({
         onChange={onFilterValueChange}
       />
 
-      <SeverityLevelsGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-        onRemove={handleRemoveLevels}
-      />
+      {audit ? (
+        <ComplianceLevelsFilterGroup
+          isResult={true}
+          filter={filter}
+          onChange={onFilterValueChange}
+          onRemove={handleRemoveCompliance}
+        />
+      ) : (
+        <SeverityLevelsGroup
+          filter={filter}
+          onChange={onFilterValueChange}
+          onRemove={handleRemoveLevels}
+        />
+      )}
 
-      <SeverityValuesGroup
-        name="severity"
-        title={_('Severity')}
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      {!audit && (
+        <SeverityValuesGroup
+          name="severity"
+          title={_('Severity')}
+          filter={filter}
+          onChange={onFilterValueChange}
+        />
+      )}
 
       <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
 

@@ -148,6 +148,7 @@ class ResultsTab extends React.Component {
   render() {
     const {isUpdating, results, resultsCounts} = this.state;
     const {
+      audit = false,
       hasTarget,
       isLoading = true,
       progress,
@@ -225,6 +226,7 @@ class ResultsTab extends React.Component {
     }
     return (
       <ResultsTable
+        audit={audit}
         delta={false}
         entities={results}
         entitiesCounts={resultsCounts}
@@ -246,6 +248,7 @@ class ResultsTab extends React.Component {
 }
 
 ResultsTab.propTypes = {
+  audit: PropTypes.bool,
   hasTarget: PropTypes.bool,
   isLoading: PropTypes.bool,
   progress: PropTypes.number.isRequired,
@@ -258,75 +261,79 @@ ResultsTab.propTypes = {
   resultsError: PropTypes.error,
   resultsFilter: PropTypes.filter,
   status: PropTypes.string.isRequired,
-  onFilterAddLogLevelClick: PropTypes.func.isRequired,
+  onFilterAddLogLevelClick: PropTypes.func,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
-  onFilterRemoveSeverityClick: PropTypes.func.isRequired,
+  onFilterRemoveSeverityClick: PropTypes.func,
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
 const reloadInterval = status =>
   isActive(status) ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE : NO_RELOAD; // report doesn't change anymore. no need to reload
 
-const loadInitial = ({
-  reportFilter,
-  reportId,
-  resultsFilter,
-  // eslint-disable-next-line no-shadow
-  loadResults,
-  updateFilter,
-}) => () => {
-  let newFilter = resultsFilter;
+const loadInitial =
+  ({
+    reportFilter,
+    reportId,
+    resultsFilter,
+    // eslint-disable-next-line no-shadow
+    loadResults,
+    updateFilter,
+  }) =>
+  () => {
+    let newFilter = resultsFilter;
 
-  if (isDefined(resultsFilter) && isDefined(reportFilter)) {
-    const simplifiedResultsFilter = resultsFilter
-      .copy()
-      .delete(resultsFilter.getSortOrder())
-      .delete('first')
-      .delete('_and_report_id');
-    const simplifiedReportFilter = reportFilter
-      .copy()
-      .delete(reportFilter.getSortOrder())
-      .delete('first');
+    if (isDefined(resultsFilter) && isDefined(reportFilter)) {
+      const simplifiedResultsFilter = resultsFilter
+        .copy()
+        .delete(resultsFilter.getSortOrder())
+        .delete('first')
+        .delete('_and_report_id');
+      const simplifiedReportFilter = reportFilter
+        .copy()
+        .delete(reportFilter.getSortOrder())
+        .delete('first');
 
-    if (!simplifiedReportFilter.equals(simplifiedResultsFilter)) {
-      // report filter has changed
+      if (!simplifiedReportFilter.equals(simplifiedResultsFilter)) {
+        // report filter has changed
+        newFilter = reportFilter;
+      }
+    } else if (isDefined(resultsFilter)) {
+      newFilter = resultsFilter;
+    } else {
       newFilter = reportFilter;
     }
-  } else if (isDefined(resultsFilter)) {
-    newFilter = resultsFilter;
-  } else {
-    newFilter = reportFilter;
-  }
 
-  newFilter = filterWithReportId(newFilter, reportId);
-  updateFilter(newFilter);
+    newFilter = filterWithReportId(newFilter, reportId);
+    updateFilter(newFilter);
 
-  return loadResults(newFilter);
-};
+    return loadResults(newFilter);
+  };
 
-const load = ({
-  reportFilter,
-  reportId,
-  resultsFilter,
-  // eslint-disable-next-line no-shadow
-  loadResults,
-  updateFilter,
-}) => newFilter => {
-  if (!hasValue(newFilter)) {
-    newFilter = resultsFilter;
-  }
+const load =
+  ({
+    reportFilter,
+    reportId,
+    resultsFilter,
+    // eslint-disable-next-line no-shadow
+    loadResults,
+    updateFilter,
+  }) =>
+  newFilter => {
+    if (!hasValue(newFilter)) {
+      newFilter = resultsFilter;
+    }
 
-  if (!hasValue(newFilter)) {
-    newFilter = reportFilter;
-  }
+    if (!hasValue(newFilter)) {
+      newFilter = reportFilter;
+    }
 
-  newFilter = filterWithReportId(newFilter, reportId);
-  updateFilter(newFilter);
+    newFilter = filterWithReportId(newFilter, reportId);
+    updateFilter(newFilter);
 
-  return loadResults(newFilter);
-};
+    return loadResults(newFilter);
+  };
 
 const ResultsTabWrapper = props => (
   <Reload
@@ -372,5 +379,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(ResultsTabWrapper);
-
-// vim: set ts=2 sw=2 tw=80:
