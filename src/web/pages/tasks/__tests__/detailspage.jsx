@@ -631,6 +631,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {element, getAllByTestId} = render(
@@ -684,6 +685,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -779,6 +781,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -881,6 +884,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -982,6 +986,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -1085,6 +1090,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -1249,6 +1255,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(

@@ -32,6 +32,7 @@ import {
   queryAllByAttribute,
   getElementError,
   within,
+  renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
 import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 
@@ -166,22 +167,26 @@ export const rendererWith = (
     capabilities = new EverythingCapabilities();
   }
 
+  const Providers = ({children}) => (
+    <TestingGmpProvider gmp={gmp}>
+      <TestingCapabilitiesProvider capabilities={capabilities}>
+        <TestingLicenseProvider license={license}>
+          <TestingStoreProvider store={store}>
+            <TestingRouter history={history}>{children}</TestingRouter>
+          </TestingStoreProvider>
+        </TestingLicenseProvider>
+      </TestingCapabilitiesProvider>
+    </TestingGmpProvider>
+  );
+
+  const wrapper = ({children}) => <Providers>{children}</Providers>;
+
   return {
-    render: ui =>
-      render(
-        <TestingGmpProvider gmp={gmp}>
-          <TestingCapabilitiesProvider capabilities={capabilities}>
-            <TestingLicenseProvider license={license}>
-              <TestingStoreProvider store={store}>
-                <TestingRouter history={history}>{ui}</TestingRouter>
-              </TestingStoreProvider>
-            </TestingLicenseProvider>
-          </TestingCapabilitiesProvider>
-        </TestingGmpProvider>,
-      ),
+    render: ui => render(<Providers>{ui}</Providers>),
     gmp,
     store,
     history,
+    renderHook: hook => rtlRenderHook(hook, {wrapper}),
   };
 };
 

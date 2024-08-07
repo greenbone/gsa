@@ -51,7 +51,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: caps, store: true});
     const {element} = render(
       <Actions
         entity={task}
@@ -88,7 +88,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: caps, store: true});
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -149,7 +149,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps});
+    const {render} = rendererWith({capabilities: wrongCaps, store: true});
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -219,7 +219,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps});
+    const {render} = rendererWith({capabilities: wrongCaps, store: true});
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -292,7 +292,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps});
+    const {render} = rendererWith({capabilities: wrongCaps, store: true});
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -359,7 +359,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: caps, store: true});
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -420,7 +420,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: caps, store: true});
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -535,7 +535,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({capabilities: caps, store: true});
     const {getAllByTestId} = render(
       <Actions
         entity={task}

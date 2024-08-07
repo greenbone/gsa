@@ -84,7 +84,7 @@ const InfoPanel = ({
         <Heading data-testid="infopanel-heading" isWarning={isWarning}>
           {heading}
           {isDefined(onCloseClick) && (
-            <Button onClick={onCloseClick}>
+            <Button data-testid="panel-close-button" onClick={onCloseClick}>
               <DeleteIcon />
             </Button>
           )}
