@@ -50,7 +50,7 @@ import withGmp from 'web/utils/withGmp';
 import {renderSelectItems} from 'web/utils/render';
 import {styledExcludeProps} from 'web/utils/styledConfig';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 import StartEndTimeSelection from './startendtimeselection';

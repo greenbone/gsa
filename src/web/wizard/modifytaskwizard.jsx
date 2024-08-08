@@ -25,7 +25,7 @@ import Column from 'web/components/layout/column';
 import {renderSelectItems} from 'web/utils/render';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';

@@ -25,7 +25,7 @@ import {
 } from 'web/store/entities/targets';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import TargetsFilterDialog from './filterdialog';
 import TargetsTable from './table';

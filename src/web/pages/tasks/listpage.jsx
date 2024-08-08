@@ -34,7 +34,7 @@ import {
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 import NewIconMenu from './icons/newiconmenu';

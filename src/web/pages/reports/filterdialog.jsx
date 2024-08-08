@@ -21,7 +21,7 @@ import FilterDialog from 'web/components/powerfilter/filterdialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 const ReportFilterDialogComponent = ({

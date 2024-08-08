@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import Model from 'gmp/model';
@@ -23,7 +22,7 @@ import TextField from 'web/components/form/textfield';
 
 import Row from 'web/components/layout/row';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 const NEED_RESOURCE_ID = [

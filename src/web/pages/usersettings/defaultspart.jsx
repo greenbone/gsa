@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -12,7 +11,7 @@ import Select from 'web/components/form/select';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 const DefaultsPart = ({

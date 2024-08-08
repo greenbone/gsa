@@ -57,6 +57,7 @@ const TagsDialog = ({
     onClose={onClose}
     onErrorClose={onErrorClose}
     onSave={onSave}
+    data-testid="dialog-title-bar"
   >
     <FormGroup title={_('Choose Tag')} direction="row">
       <Select

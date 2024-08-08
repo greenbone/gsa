@@ -21,7 +21,13 @@ const Dialog = ({children, title, width = DEFAULT_DIALOG_WIDTH, onClose}) => {
   }, [onClose]);
 
   return (
-    <Modal opened={true} size={width} title={title} onClose={handleClose}>
+    <Modal
+      data-testid="dialog-title-bar"
+      opened={true}
+      size={width}
+      title={title}
+      onClose={handleClose}
+    >
       {isFunction(children)
         ? children({
             close: handleClose,

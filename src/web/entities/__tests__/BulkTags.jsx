@@ -12,6 +12,7 @@ import {
   fireEvent,
   getAllByTitle,
   wait,
+  getByRole,
 } from 'web/utils/testing';
 
 import {setSessionTimeout} from 'web/store/usersettings/actions';
@@ -33,7 +34,7 @@ const getDialog = () => {
 
 const getDialogTitle = dialog => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  return getByTestId(dialog, 'dialog-title-bar');
+  return getByRole(dialog, 'heading');
 };
 
 const getDialogSaveButton = dialog => {
@@ -51,7 +52,12 @@ describe('BulkTags', () => {
     const getAllTags = testing
       .fn()
       .mockResolvedValue({data: [Tag.fromElement({id: 1})]});
-    const gmp = {tags: {getAll: getAllTags}};
+    const gmp = {
+      user: {
+        renewSession: testing.fn().mockResolvedValue({data: 123}),
+      },
+      tags: {getAll: getAllTags},
+    };
     const timeout = date('2019-10-10');
 
     const {render, store} = rendererWith({gmp, store: true});
@@ -81,7 +87,12 @@ describe('BulkTags', () => {
     const getAllTags = testing
       .fn()
       .mockResolvedValue({data: [Tag.fromElement({id: 1})]});
-    const gmp = {tags: {getAll: getAllTags}};
+    const gmp = {
+      user: {
+        renewSession: testing.fn().mockResolvedValue({data: 123}),
+      },
+      tags: {getAll: getAllTags},
+    };
     const timeout = date('2019-10-10');
 
     const {render, store} = rendererWith({gmp, store: true});
@@ -125,6 +136,9 @@ describe('BulkTags', () => {
         get: getTag,
         save: saveTag,
       },
+      user: {
+        renewSession: testing.fn().mockResolvedValue({data: 123}),
+      },
     };
     const timeout = date('2019-10-10');
 
@@ -151,8 +165,8 @@ describe('BulkTags', () => {
       resource_type: 'task',
     });
 
-    const dialogs = screen.queryAllByRole('dialog');
-    expect(dialogs.length).toEqual(2);
+    expect(screen.queryAllByRole('dialog', {hidden: true})).toHaveLength(2);
+    const dialogs = screen.getAllByRole('dialog');
 
     const tagsDialog = dialog[0];
     const tagDialog = dialogs[1];

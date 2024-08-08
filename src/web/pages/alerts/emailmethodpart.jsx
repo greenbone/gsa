@@ -34,7 +34,7 @@ import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 const EmailMethodPart = ({
   credentials = [],

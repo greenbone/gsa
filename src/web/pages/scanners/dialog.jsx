@@ -27,7 +27,7 @@ import TextField from 'web/components/form/textfield';
 import NewIcon from 'web/components/icon/newicon';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 const AVAILABLE_SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
 

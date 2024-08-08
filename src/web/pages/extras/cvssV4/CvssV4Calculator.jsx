@@ -79,7 +79,7 @@ const CvssV4Calculator = ({location}) => {
   const cvssScore = calculateScoreSafely(cvssVector);
 
   return (
-    <Layout flex="column" grow>
+    <Layout flex="column" basis={'50%'}>
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv4 Score Calculator')}

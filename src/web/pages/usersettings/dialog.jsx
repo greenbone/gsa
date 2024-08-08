@@ -24,7 +24,7 @@ import useFormValidation from 'web/components/form/useFormValidation';
 import PropTypes from 'web/utils/proptypes';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import DefaultsPart from './defaultspart';
 import FilterPart from './filterpart';

@@ -16,7 +16,7 @@ import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import FilterDialog from 'web/components/powerfilter/filterdialog';
 
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';

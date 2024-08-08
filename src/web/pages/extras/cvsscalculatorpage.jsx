@@ -693,7 +693,7 @@ const CvssCalculator = props => (
       <CvssV2Calculator {...props} />
       <CvssV3Calculator {...props} />
     </Divider>
-    <Divider margin="20px" flex="row" align={['center', 'start']} grow>
+    <Divider margin="20px" flex="row" align={['start', 'start']} grow>
       <CvssV4Calculator location={props.location} />
     </Divider>
   </Layout>

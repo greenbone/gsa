@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
@@ -45,7 +44,7 @@ import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 const Title = styled.div`
   flex-grow: 1;

@@ -31,8 +31,8 @@ import TextField from 'web/components/form/textfield';
 import Row from 'web/components/layout/row';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useUserName from 'web/utils/useUserName';
-import useCapabilities from 'web/utils/useCapabilities';
+import useUserName from 'web/hooks/useUserName';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 const Dialog = ({
   roleIds: initialRoleIds = [],

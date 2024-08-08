@@ -102,54 +102,29 @@ const DownloadReportDialog = ({
               includeOverrides={values.includeOverrides}
               onValueChange={onValueChange}
             />
-            <FormGroup title={_('Report Format')} titleSize="3">
-              <Divider flex="column">
-                <Select
-                  name="reportFormatId"
-                  value={reportFormatIdInState}
-                  items={renderSelectItems(reportFormats)}
-                  width="auto"
-                  onChange={handleReportFormatIdChange}
-                />
-              </Divider>
-            </FormGroup>
-            {
-              isDefined(reportConfigs) &&
-              <FormGroup title={_('Report Config')} titleSize="3">
-                <Divider flex="column">
-                  <Select
-                    name="reportConfigId"
-                    value={reportConfigIdInState}
-                    items={renderSelectItems(filteredReportConfigs, '')}
-                    width="auto"
-                    onChange={handleReportConfigIdChange}
-                  />
-                </Divider>
-              </FormGroup>
-            }
-            <StyledDiv>
-              <CheckBox
-                name="storeAsDefault"
-                checked={storeAsDefault}
-                checkedValue={YES_VALUE}
-                unCheckedValue={NO_VALUE}
-                title={_('Store as default')}
-                toolTipTitle={_(
-                  'Store indicated settings (without filter) as default',
-                )}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Report Config')}>
+
+            <FormGroup title={_('Report Format')}>
               <Select
                 grow="1"
-                name="reportConfigId"
-                value={reportConfigIdInState}
-                items={renderSelectItems(filteredReportConfigs, '')}
+                name="reportFormatId"
+                value={reportFormatIdInState}
+                items={renderSelectItems(reportFormats)}
                 width="auto"
-                onChange={handleReportConfigIdChange}
+                onChange={handleReportFormatIdChange}
               />
             </FormGroup>
+            {isDefined(reportConfigs) && (
+              <FormGroup title={_('Report Config')}>
+                <Select
+                  grow="1"
+                  name="reportConfigId"
+                  value={reportConfigIdInState}
+                  items={renderSelectItems(filteredReportConfigs, '')}
+                  width="auto"
+                  onChange={handleReportConfigIdChange}
+                />
+              </FormGroup>
+            )}
             <CheckBox
               name="storeAsDefault"
               checked={storeAsDefault}

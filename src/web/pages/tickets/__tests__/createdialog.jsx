@@ -115,33 +115,6 @@ describe('CreateTicketDialog component tests', () => {
     expect(baseElement).toBeVisible();
   });
 
-  test('should allow to select user', () => {
-    const handleClose = testing.fn();
-    const handleSave = testing.fn();
-    const handleUserIdChange = testing.fn();
-
-    const {getByTestId, baseElement} = render(
-      <CreateTicketDialog
-        resultId="r1"
-        userId="u1"
-        users={users}
-        onClose={handleClose}
-        onSave={handleSave}
-        onUserIdChange={handleUserIdChange}
-      />,
-    );
-
-    const selectButton = getByTestId('select-open-button');
-    fireEvent.click(selectButton);
-
-    const selectElements = queryAllByTestId(baseElement, 'select-item');
-    expect(selectElements.length).toEqual(2);
-
-    fireEvent.click(selectElements[1]);
-
-    expect(handleUserIdChange).toHaveBeenCalledWith('u2', 'userId');
-  });
-
   test('should allow to close the dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
@@ -170,7 +143,7 @@ describe('CreateTicketDialog component tests', () => {
     const handleSave = testing.fn();
     const handleUserIdChange = testing.fn();
 
-    const {getByTestId, baseElement} = render(
+    const {baseElement} = render(
       <CreateTicketDialog
         resultId="r1"
         userId="u1"

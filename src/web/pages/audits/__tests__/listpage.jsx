@@ -137,7 +137,7 @@ describe('AuditPage tests', () => {
       entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );
 
-    render(<AuditPage />);
+    const {baseElement} = render(<AuditPage />);
 
     await wait();
 

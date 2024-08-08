@@ -11,9 +11,9 @@ import {AppHeader} from '@greenbone/opensight-ui-components';
 
 import _ from 'gmp/locale';
 
-import useUserIsLoggedIn from 'web/utils/useUserIsLoggedIn';
-import useUserName from 'web/utils/useUserName';
-import useGmp from 'web/utils/useGmp';
+import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
+import useUserName from 'web/hooks/useUserName';
+import useGmp from 'web/hooks/useGmp';
 
 import LogoutIcon from 'web/components/icon/logouticon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';

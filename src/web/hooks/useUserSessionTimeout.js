@@ -7,7 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 /**
  * Custom hook to manage user session timeout.
