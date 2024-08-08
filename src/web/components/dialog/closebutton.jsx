@@ -1,20 +1,8 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React from 'react';
 
 import styled from 'styled-components';
@@ -24,7 +12,7 @@ import _ from 'gmp/locale';
 import Theme from 'web/utils/theme';
 
 import PropTypes from 'web/utils/proptypes';
-import withIconSize from 'web/components/icon/withIconSize';
+import useIconSize from 'web/hooks/useIconSize';
 
 const StyledCloseButton = styled.div`
   display: flex;
@@ -38,22 +26,38 @@ const StyledCloseButton = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  width: ${props => props.$width};
+  height: ${props => props.$height};
+  line-height: ${props => props.$lineHeight};
   :hover {
     border: 1px solid ${Theme.darkGreen};
   }
+  & * {
+    height: inherit;
+    width: inherit;
+  }
 `;
 
-const CloseButton = ({title = _('Close'), ...props}) => (
-  <StyledCloseButton {...props} title={title}>
-    ×{/* Javascript unicode: \u00D7 */}
-  </StyledCloseButton>
-);
+const CloseButton = ({title = _('Close'), size = 'medium', ...props}) => {
+  const {width, height} = useIconSize(size);
+
+  return (
+    <StyledCloseButton
+      $width={width}
+      $height={height}
+      $lineHeight={height}
+      title={title}
+      {...props}
+    >
+      ×{/* Javascript unicode: \u00D7 */}
+    </StyledCloseButton>
+  );
+};
 
 CloseButton.propTypes = {
   title: PropTypes.string,
   onClick: PropTypes.func.isRequired,
+  size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
 };
 
-export default withIconSize('medium')(CloseButton);
-
-// vim: set ts=2 sw=2 tw=80:
+export default CloseButton;

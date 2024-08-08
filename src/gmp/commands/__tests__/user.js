@@ -1,20 +1,8 @@
-/* Copyright (C) 2019-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import {describe, test, expect} from '@gsa/testing';
 
 import {UserCommand, transformSettingName} from '../users';
@@ -131,5 +119,60 @@ describe('UserCommand transformSettingName() function tests', () => {
     expect(transformSettingName(str2)).toEqual('foobar');
     expect(transformSettingName(str3)).toEqual('foobar');
     expect(transformSettingName(str4)).toEqual('foobar');
+  });
+});
+
+describe('UserCommand capabilities tests', () => {
+  test('should get capabilities', () => {
+    const response = createResponse({
+      get_capabilities: {
+        help_response: {
+          schema: {
+            command: [
+              {
+                name: 'get_reports',
+              },
+              {
+                name: 'get_tasks',
+              },
+            ],
+          },
+        },
+        get_features_response: {
+          feature: [
+            {
+              _enabled: 1,
+              name: 'TEST_FEATURE_1',
+            },
+            {
+              _enabled: 1,
+              name: 'TEST_FEATURE_2',
+            },
+          ],
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new UserCommand(fakeHttp);
+
+    cmd.currentCapabilities().then(resp => {
+      const {data: caps} = resp;
+
+      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_capabilities',
+        },
+      });
+
+      expect(caps._hasCaps).toBe(true);
+      expect(caps.mayAccess('report')).toBe(true);
+      expect(caps.mayAccess('task')).toBe(true);
+      expect(caps.mayAccess('user')).toBe(false);
+
+      expect(caps._hasFeatures).toBe(true);
+      expect(caps.featureEnabled('test_feature_1')).toBe(true);
+      expect(caps.featureEnabled('TEST_FEATURE_2')).toBe(true);
+      expect(caps.featureEnabled('TEST_FEATURE_3')).toBe(false);
+    });
   });
 });

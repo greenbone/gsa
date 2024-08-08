@@ -1,20 +1,8 @@
-/* Copyright (C) 2019-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React from 'react';
 
 import {useHistory} from 'react-router-dom';
@@ -34,10 +22,10 @@ import Divider from 'web/components/layout/divider';
 import Link from 'web/components/link/link';
 
 import Theme from 'web/utils/theme';
-import useGmp from 'web/utils/useGmp';
-import useUserName from 'web/utils/useUserName';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import useUserTimezone from 'web/utils/useUserTimezone';
+import useGmp from 'web/hooks/useGmp';
+import useUserName from 'web/hooks/useUserName';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+import useUserTimezone from 'web/hooks/useUserTimezone';
 
 const UserMenu = styled.span`
   display: inline-flex;

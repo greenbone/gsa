@@ -1,20 +1,8 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React, {useCallback, useEffect, useState} from 'react';
 
 import styled from 'styled-components';
@@ -45,7 +33,7 @@ import TableHeader from 'web/components/table/header';
 
 import PropTypes from 'web/utils/proptypes';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 import AlertsTable from '../alerts/table';
@@ -69,8 +57,8 @@ import TasksTable from '../tasks/table';
 import TicketsTable from '../tickets/table';
 
 import TrashActions from './trashactions';
-import useGmp from 'web/utils/useGmp';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useGmp from 'web/hooks/useGmp';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import DialogNotification from 'web/components/notification/dialognotification';
 

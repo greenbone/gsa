@@ -8,7 +8,7 @@ import {useEffect, useState} from 'react';
 import logger from 'gmp/log';
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import useGmp from '../utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 const log = logger.getLogger('web.useLoadCapabilities');
 

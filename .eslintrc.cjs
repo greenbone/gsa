@@ -1,3 +1,5 @@
+const allowedSnakeCase = require('./allowedSnakeCase.cjs');
+
 module.exports = {
   ignorePatterns: ['build', '.eslintrc.cjs'],
   extends: [
@@ -6,7 +8,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:vitest-globals/recommended',
   ],
-  plugins: ['react', 'react-hooks'],
+  plugins: ['react', 'react-hooks', 'header'],
   settings: {
     react: {
       version: 'detect',
@@ -31,6 +33,13 @@ module.exports = {
       'warn',
       {ignore: ['children', 'className', 'location']},
     ],
+    camelcase: [
+      'warn',
+      {
+        allow: allowedSnakeCase,
+        properties: 'always',
+      },
+    ],
     'no-case-declarations': 'off',
     'no-unused-vars': [
       'warn',
@@ -41,5 +50,27 @@ module.exports = {
     ],
     'no-class-assign': 'off',
     'no-prototype-builtins': 'off',
+    'header/header': [
+      2,
+      'block',
+      [
+        {
+          pattern: ' SPDX-FileCopyrightText: \\d{4} Greenbone AG',
+          template: ' SPDX-FileCopyrightText: 2024 Greenbone AG',
+        },
+        ' *',
+        ' * SPDX-License-Identifier: AGPL-3.0-or-later',
+        ' ',
+      ],
+      2,
+    ],
   },
+  overrides: [
+    {
+      files: ['vite-env.d.ts'],
+      rules: {
+        'header/header': 'off',
+      },
+    },
+  ],
 };

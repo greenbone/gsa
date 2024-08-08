@@ -1,20 +1,8 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -24,6 +12,7 @@ import {isDefined, isNumber} from 'gmp/utils/identity';
 import {TAG_NA} from 'gmp/models/nvt';
 
 import PropTypes from 'web/utils/proptypes';
+import useGmp from 'web/hooks/useGmp';
 
 import {na, getTranslatableSeverityOrigin} from 'web/utils/render';
 
@@ -44,7 +33,7 @@ import TableRow from 'web/components/table/row';
 import References from './references';
 import Solution from './solution';
 import Pre from './preformatted';
-import CveLink from "web/components/link/cvelink.jsx";
+import CveLink from 'web/components/link/cvelink';
 
 const NvtDetails = ({entity, links = true}) => {
   const {
@@ -57,6 +46,7 @@ const NvtDetails = ({entity, links = true}) => {
     severityOrigin,
     severityDate,
   } = entity;
+  const gmp = useGmp();
   return (
     <Layout flex="column" grow="1">
       {entity.isDeprecated() && <div>{_('This NVT is deprecated.')}</div>}
@@ -109,7 +99,7 @@ const NvtDetails = ({entity, links = true}) => {
                 )}
               </TableData>
             </TableRow>
-            { isDefined(epss?.max_severity) &&
+            {gmp.settings.enableEPSS && isDefined(epss?.max_severity) && (
               <>
                 <TableData colSpan="2">
                   <b>{_('EPSS (CVE with highest severity)')}</b>
@@ -118,14 +108,16 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>{_('EPSS Score')}</TableData>
                   <TableData>
                     {isNumber(epss?.max_severity?.score)
-                      ? epss?.max_severity?.score.toFixed(5) : _("N/A")}
+                      ? epss?.max_severity?.score.toFixed(5)
+                      : _('N/A')}
                   </TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
                     {isNumber(epss?.max_severity?.percentile)
-                      ? epss?.max_severity?.percentile.toFixed(5) : _("N/A")}
+                      ? epss?.max_severity?.percentile.toFixed(5)
+                      : _('N/A')}
                   </TableData>
                 </TableRow>
                 <TableRow>
@@ -139,13 +131,16 @@ const NvtDetails = ({entity, links = true}) => {
                 <TableRow>
                   <TableData>{_('CVE Severity')}</TableData>
                   <Severitybar
-                    severity={isDefined(epss?.max_severity?.cve?.severity)
-                      ? epss?.max_severity?.cve?.severity : _("N/A")}
+                    severity={
+                      isDefined(epss?.max_severity?.cve?.severity)
+                        ? epss?.max_severity?.cve?.severity
+                        : _('N/A')
+                    }
                   />
                 </TableRow>
               </>
-            }
-            { isDefined(epss?.max_epss) &&
+            )}
+            {gmp.settings.enableEPSS && isDefined(epss?.max_epss) && (
               <>
                 <TableData colSpan="2">
                   <b>{_('EPSS (highest EPSS score)')}</b>
@@ -154,14 +149,16 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>{_('EPSS Score')}</TableData>
                   <TableData>
                     {isNumber(epss?.max_epss?.score)
-                      ? epss?.max_epss?.score.toFixed(5) : _("N/A")}
+                      ? epss?.max_epss?.score.toFixed(5)
+                      : _('N/A')}
                   </TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
                     {isNumber(epss?.max_epss?.percentile)
-                      ? epss?.max_epss?.percentile.toFixed(5) : _("N/A")}
+                      ? epss?.max_epss?.percentile.toFixed(5)
+                      : _('N/A')}
                   </TableData>
                 </TableRow>
                 <TableRow>
@@ -176,13 +173,16 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>{_('CVE Severity')}</TableData>
                   <TableData>
                     <Severitybar
-                      severity={isDefined(epss?.max_epss?.cve?.severity)
-                                  ? epss?.max_epss?.cve?.severity : _("N/A")}
+                      severity={
+                        isDefined(epss?.max_epss?.cve?.severity)
+                          ? epss?.max_epss?.cve?.severity
+                          : _('N/A')
+                      }
                     />
                   </TableData>
                 </TableRow>
               </>
-            }
+            )}
           </TableBody>
         </InfoTable>
       </DetailsBlock>

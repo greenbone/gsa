@@ -11,7 +11,7 @@ import {apiType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 const useFilterDialogSave = (
   createFilterType,

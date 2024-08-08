@@ -8,8 +8,8 @@ import React from 'react';
 import {AppNavigation} from '@greenbone/opensight-ui-components';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
-import useGmp from 'web/utils/useGmp';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
 
 import TaskIcon from 'web/components/icon/taskicon';
 import Link from 'web/components/link/link';

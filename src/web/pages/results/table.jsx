@@ -1,20 +1,8 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
@@ -38,6 +26,7 @@ import TableRow from 'web/components/table/row';
 
 import ResultsRow from './row';
 import ResultDetails from './details';
+import useGmp from "web/hooks/useGmp";
 
 const Header = ({
   actionsColumn,
@@ -48,6 +37,7 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
+  const gmp = useGmp();
   return (
     <TableHeader>
       <TableRow>
@@ -112,6 +102,12 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Location')}
         />
+        {
+          gmp.settings.enableEPSS &&
+          <TableHead colSpan="2">
+            {_("EPSS")}
+          </TableHead>
+        }
         <TableHead
           width="15%"
           rowSpan="2"
@@ -138,6 +134,27 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Name')}
         />
+        {
+          gmp.settings.enableEPSS &&
+          <>
+            <TableHead
+              width="3%"
+              currentSortDir={currentSortDir}
+              currentSortBy={currentSortBy}
+              sortBy={sort ? 'epss_score' : false}
+              onSortChange={onSortChange}
+              title={_('Score')}
+            />
+            <TableHead
+              width="3%"
+              currentSortDir={currentSortDir}
+              currentSortBy={currentSortBy}
+              sortBy={sort ? 'epss_percentile' : false}
+              onSortChange={onSortChange}
+              title={_('Percentile')}
+            />
+          </>
+        }
       </TableRow>
     </TableHeader>
   );
@@ -156,7 +173,7 @@ Header.propTypes = {
 export default createEntitiesTable({
   emptyTitle: _l('No results available'),
   footer: createEntitiesFooter({
-    span: 8,
+    span: 10,
     download: 'results.xml',
   }),
   header: withEntitiesHeader(true)(Header),

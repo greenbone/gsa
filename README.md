@@ -24,6 +24,7 @@ written in [React](https://reactjs.org/).
     - [vendorLabel](#vendorlabel)
     - [guestUsername and guestPassword](#guestusername-and-guestpassword)
     - [disableLoginForm](#disableloginform)
+    - [enableEPSS](#enableepss)
     - [enableStoreDebugLog](#enablestoredebuglog)
     - [logLevel](#loglevel)
     - [timeout](#timeout)
@@ -235,11 +236,12 @@ instantiated once for the [GSA application](./src/web/app.js#L53)
 
 ### Config Variables
 | Name                                              | Type                       | Default                                                                          | Changeable during runtime | Persistent after reload |
-| ------------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
+|---------------------------------------------------|----------------------------|----------------------------------------------------------------------------------|---------------------------|-------------------------|
 | [apiProtocol](#apiprotocol)                       | String ('http' or 'https') | `global.location.protocol`                                                       | -                         | x                       |
 | [apiServer](#apiserver)                           | String                     | `global.location.host`                                                           | -                         | x                       |
 | enableGreenboneSensor                             | Boolean                    | false                                                                            | -                         | x                       |
 | [disableLoginForm](#disableloginform)             | Boolean                    | false                                                                            | -                         | x                       |
+| [enableEPSS](#enableepss)                         | Boolean                    | false                                                                            | x                         | x                       |
 | [enableStoreDebugLog](#enablestoredebuglog)       | Boolean                    | false                                                                            | x                         | x                       |
 | [guestUsername](#guestusername-and-guestpassword) | String                     | undefined                                                                        | -                         | x                       |
 | [guestPassword](#guestusername-and-guestpassword) | String                     | undefined                                                                        | -                         | x                       |
@@ -278,6 +280,12 @@ will be shown.
 
 This setting allows to deactivate the username password form at the Login page.
 It can be used to deactivate login for *normal* users.
+
+#### enableEPSS
+
+Enables the display of EPSS scores and percentiles in CVEs and NVTs.
+
+The data required for this is not available in the feed yet, so this is disabled by default.
 
 #### enableStoreDebugLog
 

@@ -1,20 +1,8 @@
-/* Copyright (C) 2019-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import {describe, test, expect} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
@@ -136,15 +124,15 @@ describe('Cve table tests', () => {
       />,
     );
 
-    expect(element).not.toHaveTextContent('Availability ImpactCOMPLETE');
-    expect(element).not.toHaveTextContent('Confidentiality ImpactPARTIAL');
-    expect(element).not.toHaveTextContent('Attack VectorLOCAL');
+    expect(element).not.toHaveTextContent('Availability ImpactComplete');
+    expect(element).not.toHaveTextContent('Confidentiality ImpactPartial');
+    expect(element).not.toHaveTextContent('Attack VectorLocal');
 
     const icons = getAllByTestId('svg-icon');
     fireEvent.click(icons[0]);
     expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
-    expect(element).toHaveTextContent('Availability ImpactCOMPLETE');
-    expect(element).toHaveTextContent('Confidentiality ImpactPARTIAL');
-    expect(element).toHaveTextContent('Attack VectorLOCAL');
+    expect(element).toHaveTextContent('Availability ImpactComplete');
+    expect(element).toHaveTextContent('Confidentiality ImpactPartial');
+    expect(element).toHaveTextContent('Attack VectorLocal');
   });
 });

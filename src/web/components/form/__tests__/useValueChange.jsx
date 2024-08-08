@@ -2,6 +2,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, screen, fireEvent} from 'web/utils/testing';

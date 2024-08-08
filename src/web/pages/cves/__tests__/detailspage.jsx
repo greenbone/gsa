@@ -1,20 +1,8 @@
-/* Copyright (C) 2019-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
@@ -151,7 +139,10 @@ describe('CVE Detailspage tests', () => {
         get: getCve,
       },
       reloadInterval,
-      settings: {manualUrl},
+      settings: {
+        manualUrl,
+        enableEPSS: true,
+      },
       user: {
         currentSettings,
         renewSession,
@@ -204,14 +195,14 @@ describe('CVE Detailspage tests', () => {
       'Last updated:Mon, Oct 26, 2020 8:27 PM UTC',
     );
 
-    expect(element).toHaveTextContent('Attack VectorLOCAL');
-    expect(element).toHaveTextContent('Attack ComplexityLOW');
-    expect(element).toHaveTextContent('Privileges RequiredNONE');
-    expect(element).toHaveTextContent('User InteractionREQUIRED');
-    expect(element).toHaveTextContent('ScopeUNCHANGED');
-    expect(element).toHaveTextContent('Confidentiality ImpactHIGH');
-    expect(element).toHaveTextContent('Integrity ImpactNONE');
-    expect(element).toHaveTextContent('Availability ImpactNONE');
+    expect(element).toHaveTextContent('Attack VectorLocal');
+    expect(element).toHaveTextContent('Attack ComplexityLow');
+    expect(element).toHaveTextContent('Privileges RequiredNone');
+    expect(element).toHaveTextContent('User InteractionRequired');
+    expect(element).toHaveTextContent('ScopeUnchanged');
+    expect(element).toHaveTextContent('Confidentiality ImpactHigh');
+    expect(element).toHaveTextContent('Integrity ImpactNone');
+    expect(element).toHaveTextContent('Availability ImpactNone');
     const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.5 (Medium)');

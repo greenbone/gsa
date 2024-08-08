@@ -52,7 +52,10 @@ export default defineConfig({
     port: 8080,
   },
   build: {
-    outDir: 'build',
+    minify: 'terser',
+    terserOptions: {
+      mangle: false,
+    },
     rollupOptions: {
       output: {
         manualChunks: {

@@ -1,20 +1,8 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -23,7 +11,7 @@ import _ from 'gmp/locale';
 
 import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isNumber} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 
@@ -81,7 +69,8 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
 
 import NoteComponent from '../notes/component';
 
@@ -90,6 +79,8 @@ import OverrideComponent from '../overrides/component';
 import TicketComponent from '../tickets/component';
 
 import ResultDetails from './details';
+import CveLink from "web/components/link/cvelink.jsx";
+import Severitybar from "web/components/bar/severitybar.jsx";
 
 export const ToolBarIcons = ({
   entity,
@@ -189,6 +180,9 @@ const Details = ({entity, ...props}) => {
   const {notes, overrides, qod, host, userTags} = entity;
   const active_notes = notes.filter(active_filter);
   const active_overrides = overrides.filter(active_filter);
+  const epss = entity?.information?.epss
+  const gmp = useGmp()
+
   return (
     <React.Fragment>
       <PageTitle title={_('Result: {{name}}', {name: entity.name})} />
@@ -242,6 +236,80 @@ const Details = ({entity, ...props}) => {
                   <TableData>{_('Location')}</TableData>
                   <TableData>{entity.port}</TableData>
                 </TableRow>
+                { gmp.settings.enableEPSS && isDefined(epss?.max_severity) &&
+                  <>
+                    <TableData colSpan="2">
+                      <b>{_('EPSS (CVE with highest severity)')}</b>
+                    </TableData>
+                    <TableRow>
+                      <TableData>{_('EPSS Score')}</TableData>
+                      <TableData>
+                        {isNumber(epss?.max_severity?.score)
+                          ? epss?.max_severity?.score.toFixed(5) : _("N/A")}
+                      </TableData>
+                    </TableRow>
+                    <TableRow>
+                      <TableData>{_('EPSS Percentile')}</TableData>
+                      <TableData>
+                        {isNumber(epss?.max_severity?.percentile)
+                          ? epss?.max_severity?.percentile.toFixed(5) : _("N/A")}
+                      </TableData>
+                    </TableRow>
+                    <TableRow>
+                      <TableData>{_('CVE')}</TableData>
+                      <TableData>
+                        <CveLink id={epss?.max_severity?.cve?._id}>
+                          {epss?.max_severity?.cve?._id}
+                        </CveLink>
+                      </TableData>
+                    </TableRow>
+                    <TableRow>
+                      <TableData>{_('CVE Severity')}</TableData>
+                      <Severitybar
+                        severity={isDefined(epss?.max_severity?.cve?.severity)
+                          ? epss?.max_severity?.cve?.severity : _("N/A")}
+                      />
+                    </TableRow>
+                  </>
+                }
+                { gmp.settings.enableEPSS && isDefined(epss?.max_epss) &&
+                  <>
+                    <TableData colSpan="2">
+                      <b>{_('EPSS (highest EPSS score)')}</b>
+                    </TableData>
+                    <TableRow>
+                      <TableData>{_('EPSS Score')}</TableData>
+                      <TableData>
+                        {isNumber(epss?.max_epss?.score)
+                          ? epss?.max_epss?.score.toFixed(5) : _("N/A")}
+                      </TableData>
+                    </TableRow>
+                    <TableRow>
+                      <TableData>{_('EPSS Percentile')}</TableData>
+                      <TableData>
+                        {isNumber(epss?.max_epss?.percentile)
+                          ? epss?.max_epss?.percentile.toFixed(5) : _("N/A")}
+                      </TableData>
+                    </TableRow>
+                    <TableRow>
+                      <TableData>{_('CVE')}</TableData>
+                      <TableData>
+                        <CveLink id={epss?.max_epss?.cve?._id}>
+                          {epss?.max_epss?.cve?._id}
+                        </CveLink>
+                      </TableData>
+                    </TableRow>
+                    <TableRow>
+                      <TableData>{_('CVE Severity')}</TableData>
+                      <TableData>
+                        <Severitybar
+                          severity={isDefined(epss?.max_epss?.cve?.severity)
+                            ? epss?.max_epss?.cve?.severity : _("N/A")}
+                        />
+                      </TableData>
+                    </TableRow>
+                  </>
+                }
               </TableBody>
             </InfoTable>
           </Layout>

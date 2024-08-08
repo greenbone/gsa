@@ -1,19 +1,6 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
@@ -37,6 +24,7 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
+import useGmp from 'web/hooks/useGmp';
 
 const CVSS_PROPS = {
   cvssAccessVector: _l('Access Vector'),
@@ -44,17 +32,24 @@ const CVSS_PROPS = {
   cvssAuthentication: _l('Authentication'),
   cvssAttackVector: _l('Attack Vector'),
   cvssAttackComplexity: _l('Attack Complexity'),
+  cvssAttackRequirements: _l('Attack Requirements'),
   cvssPrivilegesRequired: _l('Privileges Required'),
   cvssUserInteraction: _l('User Interaction'),
   cvssScope: _l('Scope'),
   cvssConfidentialityImpact: _l('Confidentiality Impact'),
   cvssIntegrityImpact: _l('Integrity Impact'),
   cvssAvailabilityImpact: _l('Availability Impact'),
+  cvssConfidentialityVS: _l('Vulnerable System Confidentiality Impact'),
+  cvssIntegrityVS: _l('Vulnerable System Integrity Impact'),
+  cvssAvailabilityVS: _l('Vulnerable System Availability Impact'),
+  cvssConfidentialitySS: _l('Subsequent System Confidentiality Impact'),
+  cvssIntegritySS: _l('Subsequent System Integrity Impact'),
+  cvssAvailabilitySS: _l('Subsequent System Availability Impact'),
 };
 
 const CveDetails = ({entity}) => {
   const {cvssBaseVector, description, references = [], severity, epss} = entity;
-
+  const gmp = useGmp();
   return (
     <Layout flex="column" grow="1">
       {isDefined(description) && (
@@ -90,14 +85,14 @@ const CveDetails = ({entity}) => {
               .map(([name, title]) => (
                 <TableRow key={name}>
                   <TableData>{`${title}`}</TableData>
-                  <TableData>{entity[name]}</TableData>
+                  <TableData>{_(entity[name])}</TableData>
                 </TableRow>
               ))}
           </TableBody>
         </InfoTable>
       </DetailsBlock>
 
-      {isDefined(epss) && (
+      {gmp.settings.enableEPSS && isDefined(epss) && (
         <DetailsBlock title={_('EPSS')}>
           <InfoTable>
             <TableBody>
