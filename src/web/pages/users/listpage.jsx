@@ -193,6 +193,7 @@ class UsersPage extends React.Component {
                 table={UsersTable}
                 title={_('Users')}
                 toolBarIcons={ToolBarIcons}
+                isGenericBulkTrashcanDeleteDialog={false}
                 onChanged={onChanged}
                 onDeleteBulk={this.openConfirmDeleteDialog}
                 onDownloaded={onDownloaded}
