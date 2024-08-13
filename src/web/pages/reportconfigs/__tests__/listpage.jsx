@@ -19,7 +19,7 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
-import {clickElement} from 'web/components/testing';
+import {clickElement, testBulkTrashcanDialog} from 'web/components/testing';
 
 import ReportConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -176,7 +176,7 @@ describe('ReportConfigsPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
   describe('ReportConfigsPage ToolBarIcons test', () => {

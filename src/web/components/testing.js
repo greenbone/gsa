@@ -289,3 +289,27 @@ export const getFileInputs = element => {
   element = getElementOrDocument(element);
   return element.querySelectorAll('.mantine-FileInput-input');
 };
+
+export const testBulkTrashcanDialog = (screen, dialogAction) => {
+  const dialog = screen.getByRole('dialog');
+  expect(dialog).toBeVisible();
+
+  const buttons = dialog.querySelectorAll('button');
+  expect(buttons[2]).toHaveTextContent('Move to Trashcan');
+
+  fireEvent.click(buttons[2]);
+
+  expect(dialogAction).toHaveBeenCalled();
+};
+
+export const testBulkDeleteDialog = (screen, dialogAction) => {
+  const dialog = screen.getByRole('dialog');
+  expect(dialog).toBeVisible();
+
+  const buttons = dialog.querySelectorAll('button');
+  expect(buttons[2]).toHaveTextContent('Delete');
+
+  fireEvent.click(buttons[2]);
+
+  expect(dialogAction).toHaveBeenCalled();
+};
