@@ -1,20 +1,8 @@
-/* Copyright (C) 2018-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import getDashboardSettings from './selectors';
 
 export const DASHBOARD_SETTINGS_LOADING_SUCCESS =
@@ -123,23 +111,19 @@ export const loadSettings = gmp => (id, defaults) => (dispatch, getState) => {
 
   dispatch(loadDashboardSettingsRequest(id));
 
-  return gmp.dashboard
-    .getSetting(id)
-    .then(
-      ({data}) => dispatch(loadDashboardSettingsSuccess(id, data, defaults)),
-      error => dispatch(loadDashboardSettingsError(id, error)),
-    );
+  return gmp.dashboard.getSetting(id).then(
+    ({data}) => dispatch(loadDashboardSettingsSuccess(id, data, defaults)),
+    error => dispatch(loadDashboardSettingsError(id, error)),
+  );
 };
 
 export const saveSettings = gmp => (id, settings) => dispatch => {
   dispatch(saveDashboardSettingsRequest(id, settings));
 
-  return gmp.dashboard
-    .saveSetting(id, settings)
-    .then(
-      () => dispatch(saveDashboardSettingsSuccess(id)),
-      error => dispatch(saveDashboardSettingsError(id, error)),
-    );
+  return gmp.dashboard.saveSetting(id, settings).then(
+    () => dispatch(saveDashboardSettingsSuccess(id)),
+    error => dispatch(saveDashboardSettingsError(id, error)),
+  );
 };
 
 export const resetSettings = gmp => id => (dispatch, getState) => {
@@ -149,12 +133,10 @@ export const resetSettings = gmp => id => (dispatch, getState) => {
 
   dispatch(resetDashboardSettingsRequest(id, defaults));
 
-  return gmp.dashboard
-    .saveSetting(id, defaults)
-    .then(
-      () => dispatch(resetDashboardSettingsSuccess(id)),
-      error => dispatch(resetDashboardSettingsError(id, error)),
-    );
+  return gmp.dashboard.saveSetting(id, defaults).then(
+    () => dispatch(resetDashboardSettingsSuccess(id)),
+    error => dispatch(resetDashboardSettingsError(id, error)),
+  );
 };
 
 // vim: set ts=2 sw=2 tw=80:

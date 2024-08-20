@@ -2,6 +2,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 import PropTypes from 'web/utils/proptypes';
 
 import DefaultFilterDialog from 'web/components/powerfilter/dialog';

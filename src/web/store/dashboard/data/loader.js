@@ -1,20 +1,8 @@
-/* Copyright (C) 2018-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -39,28 +27,28 @@ export const loaderPropTypes = {
   filter: PropTypes.filter,
 };
 
-export const loadFunc = (func, id) => ({dataId = id, ...props}) => (
-  dispatch,
-  getState,
-) => {
-  const rootState = getState();
-  const state = getDashboardData(rootState);
+export const loadFunc =
+  (func, id) =>
+  ({dataId = id, ...props}) =>
+  (dispatch, getState) => {
+    const rootState = getState();
+    const state = getDashboardData(rootState);
 
-  const {filter} = props;
+    const {filter} = props;
 
-  if (state.getIsLoading(dataId, filter)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
+    if (state.getIsLoading(dataId, filter)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
 
-  dispatch(requestDashboardData(dataId, filter));
+    dispatch(requestDashboardData(dataId, filter));
 
-  const promise = func(props);
-  return promise.then(
-    data => dispatch(receivedDashboardData(dataId, data, filter)),
-    error => dispatch(receivedDashboardError(dataId, error, filter)),
-  );
-};
+    const promise = func(props);
+    return promise.then(
+      data => dispatch(receivedDashboardData(dataId, data, filter)),
+      error => dispatch(receivedDashboardError(dataId, error, filter)),
+    );
+  };
 
 class Loader extends React.Component {
   constructor(...args) {
@@ -157,10 +145,7 @@ const mapDispatchToProps = (dispatch, {load, ...props}) => ({
 export default compose(
   withGmp,
   withSubscription,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Loader);
 
 // vim: set ts=2 sw=2 tw=80:
