@@ -320,6 +320,19 @@ export class UserCommand extends EntityCommand {
     });
   }
 
+  saveSetting(settingId, settingValue) {
+    log.debug(`Saving setting ${settingId} with value ${settingValue}`);
+    try {
+      return this.httpPost({
+        cmd: 'save_setting',
+        setting_id: settingId,
+        setting_value: settingValue,
+      });
+    } catch (error) {
+      log.warn(`Failed to save setting ${settingId}: ${error}`);
+    }
+  }
+
   getReportComposerDefaults() {
     return this.httpGet({
       cmd: 'get_setting',
