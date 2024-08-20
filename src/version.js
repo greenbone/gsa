@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 const getMajorMinorVersion = () => {
   // eslint-disable-next-line no-unused-vars
   let [major, minor, ...rest] = VERSION.split('.');

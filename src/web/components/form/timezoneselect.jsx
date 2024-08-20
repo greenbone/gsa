@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+
 import React, {useMemo} from 'react';
 
 import {map} from 'gmp/utils/array';

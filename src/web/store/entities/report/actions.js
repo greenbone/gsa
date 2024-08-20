@@ -41,116 +41,112 @@ export const reportActions = {
   }),
 };
 
-export const loadReport = gmp => (
-  id,
-  {filter, details = true, force = false} = {},
-) => (dispatch, getState) => {
-  const rootState = getState();
-  const state = reportSelector(rootState);
+export const loadReport =
+  gmp =>
+  (id, {filter, details = true, force = false} = {}) =>
+  (dispatch, getState) => {
+    const rootState = getState();
+    const state = reportSelector(rootState);
 
-  if (!force && state.isLoadingEntity(id, filter)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
+    if (!force && state.isLoadingEntity(id, filter)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
 
-  dispatch(reportActions.request(id, filter));
+    dispatch(reportActions.request(id, filter));
 
-  return gmp.report
-    .get({id}, {filter, details})
-    .then(
-      response => response.data,
-      error => {
-        dispatch(reportActions.error(id, error, filter));
-        return Promise.reject(error);
-      },
-    )
-    .then(data => {
-      dispatch(reportActions.success(id, data, filter));
-      return data;
-    });
-};
+    return gmp.report
+      .get({id}, {filter, details})
+      .then(
+        response => response.data,
+        error => {
+          dispatch(reportActions.error(id, error, filter));
+          return Promise.reject(error);
+        },
+      )
+      .then(data => {
+        dispatch(reportActions.success(id, data, filter));
+        return data;
+      });
+  };
 
-export const loadReportWithThreshold = gmp => (id, {filter} = {}) => (
-  dispatch,
-  getState,
-) => {
-  const rootState = getState();
-  const state = reportSelector(rootState);
+export const loadReportWithThreshold =
+  gmp =>
+  (id, {filter} = {}) =>
+  (dispatch, getState) => {
+    const rootState = getState();
+    const state = reportSelector(rootState);
 
-  if (state.isLoadingEntity(id, filter)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
+    if (state.isLoadingEntity(id, filter)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
 
-  dispatch(reportActions.request(id, filter));
+    dispatch(reportActions.request(id, filter));
 
-  const {reportResultsThreshold: threshold} = gmp.settings;
-  return gmp.report
-    .get({id}, {filter, details: false})
-    .then(
-      response => response.data,
-      error => {
-        dispatch(reportActions.error(id, error, filter));
-        return Promise.reject(error);
-      },
-    )
-    .then(report => {
-      const fullReport =
-        isDefined(report) &&
-        isDefined(report.report) &&
-        isDefined(report.report.results) &&
-        report.report.results.counts.filtered < threshold;
+    const {reportResultsThreshold: threshold} = gmp.settings;
+    return gmp.report
+      .get({id}, {filter, details: false})
+      .then(
+        response => response.data,
+        error => {
+          dispatch(reportActions.error(id, error, filter));
+          return Promise.reject(error);
+        },
+      )
+      .then(report => {
+        const fullReport =
+          isDefined(report) &&
+          isDefined(report.report) &&
+          isDefined(report.report.results) &&
+          report.report.results.counts.filtered < threshold;
 
-      dispatch(reportActions.success(id, report, filter));
+        dispatch(reportActions.success(id, report, filter));
 
-      if (fullReport) {
-        return loadReport(gmp)(id, {filter, details: true, force: true})(
-          dispatch,
-          getState,
-        );
-      }
-    });
-};
+        if (fullReport) {
+          return loadReport(gmp)(id, {filter, details: true, force: true})(
+            dispatch,
+            getState,
+          );
+        }
+      });
+  };
 
-export const loadReportIfNeeded = gmp => (
-  id,
-  {filter, details = false} = {},
-) => (dispatch, getState) => {
-  // loads the small report (without details) if these information are not
-  // yet in the store. resolve() otherwise
-  const rootState = getState();
-  const state = reportSelector(rootState);
+export const loadReportIfNeeded =
+  gmp =>
+  (id, {filter, details = false} = {}) =>
+  (dispatch, getState) => {
+    // loads the small report (without details) if these information are not
+    // yet in the store. resolve() otherwise
+    const rootState = getState();
+    const state = reportSelector(rootState);
 
-  if (isDefined(state.getEntity(id, filter))) {
-    // we are already loading data or have it in the store
-    return Promise.resolve();
-  }
-  return loadReport(gmp)(id, {filter, details})(dispatch, getState);
-};
+    if (isDefined(state.getEntity(id, filter))) {
+      // we are already loading data or have it in the store
+      return Promise.resolve();
+    }
+    return loadReport(gmp)(id, {filter, details})(dispatch, getState);
+  };
 
 export const deltaReportActions = createEntityLoadingActions('deltaReport');
 
-export const loadDeltaReport = gmp => (id, deltaId, filter) => (
-  dispatch,
-  getState,
-) => {
-  const rootState = getState();
-  const state = deltaReportSelector(rootState);
+export const loadDeltaReport =
+  gmp => (id, deltaId, filter) => (dispatch, getState) => {
+    const rootState = getState();
+    const state = deltaReportSelector(rootState);
 
-  if (state.isLoading(id, deltaId)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
+    if (state.isLoading(id, deltaId)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
 
-  const identifier = deltaReportIdentifier(id, deltaId);
+    const identifier = deltaReportIdentifier(id, deltaId);
 
-  dispatch(deltaReportActions.request(identifier));
+    dispatch(deltaReportActions.request(identifier));
 
-  return gmp.report
-    .getDelta({id}, {id: deltaId}, {filter})
-    .then(
+    return gmp.report.getDelta({id}, {id: deltaId}, {filter}).then(
       response =>
         dispatch(deltaReportActions.success(identifier, response.data)),
       error => dispatch(deltaReportActions.error(identifier, error)),
     );
-};
+  };

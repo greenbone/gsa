@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 /** Return the current stack trace a string */
 export const trace = () => {
   try {

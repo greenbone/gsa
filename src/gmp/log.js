@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined, isString} from 'gmp/utils/identity';
 
 export const DEFAULT_LOG_LEVEL = 'error';

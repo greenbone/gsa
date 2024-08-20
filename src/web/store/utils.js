@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {hasValue} from 'gmp/utils/identity';
 
 /**
@@ -24,19 +23,21 @@ export const filterIdentifier = filter =>
  *
  * @returns {Function} A new combined reducer function
  */
-export const combineReducers = reducers => (state = {}, action) => {
-  let hasChanged = false;
-  const nextState = {};
+export const combineReducers =
+  reducers =>
+  (state = {}, action) => {
+    let hasChanged = false;
+    const nextState = {};
 
-  for (const [name, reducer] of Object.entries(reducers)) {
-    const prevStateForReducer = state[name];
-    const nextStateForReducers = reducer(prevStateForReducer, action);
+    for (const [name, reducer] of Object.entries(reducers)) {
+      const prevStateForReducer = state[name];
+      const nextStateForReducers = reducer(prevStateForReducer, action);
 
-    nextState[name] = nextStateForReducers;
-    hasChanged = hasChanged || prevStateForReducer !== nextStateForReducers;
-  }
+      nextState[name] = nextStateForReducers;
+      hasChanged = hasChanged || prevStateForReducer !== nextStateForReducers;
+    }
 
-  return hasChanged ? nextState : state;
-};
+    return hasChanged ? nextState : state;
+  };
 
 // vim: set ts=2 sw=2 tw=80:

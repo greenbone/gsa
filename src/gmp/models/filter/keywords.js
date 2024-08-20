@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 export const EXTRA_KEYWORDS = [
   'apply_overrides',
   'delta_states',

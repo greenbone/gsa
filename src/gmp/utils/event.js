@@ -36,7 +36,7 @@ export const KeyCode = {
  */
 export const debounce = (func, wait, immediate = false) => {
   let timeout;
-  return function(...args) {
+  return function (...args) {
     const context = this;
     const later = () => {
       timeout = undefined;

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 export const {isArray} = global.Array;
 
 export const isDefined = value => value !== undefined;

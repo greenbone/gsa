@@ -27,28 +27,28 @@ export const loaderPropTypes = {
   filter: PropTypes.filter,
 };
 
-export const loadFunc = (func, id) => ({dataId = id, ...props}) => (
-  dispatch,
-  getState,
-) => {
-  const rootState = getState();
-  const state = getDashboardData(rootState);
+export const loadFunc =
+  (func, id) =>
+  ({dataId = id, ...props}) =>
+  (dispatch, getState) => {
+    const rootState = getState();
+    const state = getDashboardData(rootState);
 
-  const {filter} = props;
+    const {filter} = props;
 
-  if (state.getIsLoading(dataId, filter)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
+    if (state.getIsLoading(dataId, filter)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
 
-  dispatch(requestDashboardData(dataId, filter));
+    dispatch(requestDashboardData(dataId, filter));
 
-  const promise = func(props);
-  return promise.then(
-    data => dispatch(receivedDashboardData(dataId, data, filter)),
-    error => dispatch(receivedDashboardError(dataId, error, filter)),
-  );
-};
+    const promise = func(props);
+    return promise.then(
+      data => dispatch(receivedDashboardData(dataId, data, filter)),
+      error => dispatch(receivedDashboardError(dataId, error, filter)),
+    );
+  };
 
 class Loader extends React.Component {
   constructor(...args) {
@@ -145,10 +145,7 @@ const mapDispatchToProps = (dispatch, {load, ...props}) => ({
 export default compose(
   withGmp,
   withSubscription,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Loader);
 
 // vim: set ts=2 sw=2 tw=80:

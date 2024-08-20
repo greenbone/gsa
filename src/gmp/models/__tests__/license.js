@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {describe, test, expect} from '@gsa/testing';
 
 import {parseDate} from 'gmp/parser';
