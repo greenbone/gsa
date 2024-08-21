@@ -300,6 +300,7 @@ const AdvancedTaskWizard = ({
                   min="0"
                   max="65535"
                   size="5"
+                  name="ssh_port"
                   value={state.ssh_port}
                   onChange={onValueChange}
                 />
