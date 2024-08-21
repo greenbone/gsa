@@ -1,20 +1,8 @@
-/* Copyright (C) 2021-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -44,6 +32,23 @@ const nvt = NVT.fromElement({
   solution: {
     _type: 'VendorFix',
     __text: 'This is a description',
+  },
+  epss: {
+    max_severity: {
+      score: 0.8765,
+      percentile: 0.9,
+      cve: {
+        _id: 'CVE-2020-1234',
+        severity: 10.0,
+      },
+    },
+    max_epss: {
+      score: 0.9876,
+      percentile: 0.8,
+      cve: {
+        _id: 'CVE-2020-5678',
+      },
+    },
   },
   refs: {
     ref: [
@@ -117,7 +122,7 @@ describe('NvtsPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {currentSettings, getSetting},
     };
 
@@ -192,16 +197,21 @@ describe('NvtsPage tests', () => {
     expect(header[4]).toHaveTextContent('CVE');
     expect(header[6]).toHaveTextContent('Severity');
     expect(header[7]).toHaveTextContent('QoD');
+    expect(header[8]).toHaveTextContent('EPSS');
+    expect(header[9]).toHaveTextContent('Score');
+    expect(header[10]).toHaveTextContent('Percentile');
 
     const row = baseElement.querySelectorAll('tr');
 
-    expect(row[1]).toHaveTextContent('foo');
-    expect(row[1]).toHaveTextContent('bar');
-    expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 1:55 PM CEST');
-    expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
-    expect(row[1]).toHaveTextContent('CVE-2020-1234');
-    expect(row[1]).toHaveTextContent('CVE-2020-5678');
-    expect(row[1]).toHaveTextContent('80 %');
+    expect(row[2]).toHaveTextContent('foo');
+    expect(row[2]).toHaveTextContent('bar');
+    expect(row[2]).toHaveTextContent('Mon, Jun 24, 2019 1:55 PM CEST');
+    expect(row[2]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
+    expect(row[2]).toHaveTextContent('CVE-2020-1234');
+    expect(row[2]).toHaveTextContent('CVE-2020-5678');
+    expect(row[2]).toHaveTextContent('80 %');
+    expect(row[2]).toHaveTextContent('0.87650');
+    expect(row[2]).toHaveTextContent('0.90000');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -228,7 +238,7 @@ describe('NvtsPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 

@@ -1,19 +1,6 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import {isArray, isDefined} from 'gmp/utils/identity';
@@ -26,6 +13,9 @@ import {
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
 } from 'gmp/parser/cvss';
+
+import {parseCvssV4MetricsFromVector} from 'gmp/parser/cvssV4';
+
 import Info from './info';
 
 class Cve extends Info {
@@ -36,6 +26,7 @@ class Cve extends Info {
 
     ret.name = element.name;
     ret.id = element.name;
+    ret.epss = element.epss;
 
     return ret;
   }
@@ -75,7 +66,21 @@ class Cve extends Info {
     if (isEmpty(ret.cvss_vector)) {
       ret.cvss_vector = '';
     }
-    if (ret.cvss_vector.includes('CVSS:3')) {
+    if (ret.cvss_vector.includes('CVSS:4')) {
+      const {AV, AC, AT, PR, UI, VC, VI, VA, SC, SI, SA} =
+        parseCvssV4MetricsFromVector(ret.cvss_vector);
+      ret.cvssAttackVector = AV;
+      ret.cvssAttackComplexity = AC;
+      ret.cvssAttackRequirements = AT;
+      ret.cvssPrivilegesRequired = PR;
+      ret.cvssUserInteraction = UI;
+      ret.cvssConfidentialityVS = VC;
+      ret.cvssIntegrityVS = VI;
+      ret.cvssAvailabilityVS = VA;
+      ret.cvssConfidentialitySS = SC;
+      ret.cvssIntegritySS = SI;
+      ret.cvssAvailabilitySS = SA;
+    } else if (ret.cvss_vector.includes('CVSS:3')) {
       const {
         attackVector,
         attackComplexity,

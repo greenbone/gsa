@@ -1,19 +1,6 @@
-/* Copyright (C) 2018-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React, {useState} from 'react';
@@ -31,7 +18,7 @@ import {renderSelectItems} from 'web/utils/render';
 
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
-} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
+} from 'web/components/dialog/composercontent';
 import ThresholdMessage from 'web/pages/reports/thresholdmessage';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -55,7 +42,6 @@ const DownloadReportDialog = ({
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
   reportConfigId,
   reportConfigs,
-  reportFormatId,
   reportFormats,
   showThresholdMessage = false,
   storeAsDefault,
@@ -71,10 +57,11 @@ const DownloadReportDialog = ({
     reportConfigId = selectSaveId(reportConfigs, defaultReportConfigId, '');
   }
 
-  const [reportFormatIdInState, setReportFormatId] = useState(
+  const [reportFormatIdInState, setReportFormatIdInState] = useState(
     selectSaveId(reportFormats, defaultReportFormatId),
   );
-  const [reportConfigIdInState, setReportConfigId] = useState(reportConfigId);
+  const [reportConfigIdInState, setReportConfigIdInState] =
+    useState(reportConfigId);
 
   const unControlledValues = {
     includeNotes,
@@ -83,16 +70,16 @@ const DownloadReportDialog = ({
   };
 
   const handleReportFormatIdChange = value => {
-    setReportConfigId('');
-    setReportFormatId(value);
+    setReportConfigIdInState('');
+    setReportFormatIdInState(value);
   };
 
   const handleReportConfigIdChange = value => {
-    setReportConfigId(value);
+    setReportConfigIdInState(value);
   };
 
-  const handleSave = values => {
-    onSave({
+  const handleSave = async values => {
+    await onSave({
       ...values,
       reportConfigId: reportConfigIdInState,
       reportFormatId: reportFormatIdInState,
@@ -108,9 +95,11 @@ const DownloadReportDialog = ({
       onSave={handleSave}
     >
       {({values, onValueChange}) => {
-        const filteredReportConfigs = reportConfigs.filter(
-          config => config.report_format.id === reportFormatIdInState,
-        );
+        const filteredReportConfigs = isDefined(reportConfigs)
+          ? reportConfigs.filter(
+              config => config.report_format.id === reportFormatIdInState,
+            )
+          : [];
 
         return (
           <Layout flex="column">
@@ -131,17 +120,20 @@ const DownloadReportDialog = ({
                 />
               </Divider>
             </FormGroup>
-            <FormGroup title={_('Report Config')} titleSize="3">
-              <Divider flex="column">
-                <Select
-                  name="reportConfigId"
-                  value={reportConfigIdInState}
-                  items={renderSelectItems(filteredReportConfigs, '')}
-                  width="auto"
-                  onChange={handleReportConfigIdChange}
-                />
-              </Divider>
-            </FormGroup>
+            {
+              isDefined(reportConfigs) &&
+              <FormGroup title={_('Report Config')} titleSize="3">
+                <Divider flex="column">
+                  <Select
+                    name="reportConfigId"
+                    value={reportConfigIdInState}
+                    items={renderSelectItems(filteredReportConfigs, '')}
+                    width="auto"
+                    onChange={handleReportConfigIdChange}
+                  />
+                </Divider>
+              </FormGroup>
+            }
             <StyledDiv>
               <CheckBox
                 name="storeAsDefault"
@@ -171,7 +163,6 @@ DownloadReportDialog.propTypes = {
   includeOverrides: PropTypes.number,
   reportConfigId: PropTypes.id,
   reportConfigs: PropTypes.array,
-  reportFormatId: PropTypes.id,
   reportFormats: PropTypes.array,
   showThresholdMessage: PropTypes.bool,
   storeAsDefault: PropTypes.bool,
@@ -181,5 +172,3 @@ DownloadReportDialog.propTypes = {
 };
 
 export default DownloadReportDialog;
-
-// vim: set ts=2 sw=2 tw=80:

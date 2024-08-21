@@ -1,21 +1,8 @@
-/* Copyright (C) 2019-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 import {describe, test, expect, testing} from '@gsa/testing';
@@ -47,6 +34,23 @@ const entity = NVT.fromElement({
   solution: {
     _type: 'VendorFix',
     __text: 'This is a description',
+  },
+  epss: {
+    max_severity: {
+      score: 0.8765,
+      percentile: 0.9,
+      cve: {
+        _id: 'CVE-2020-1234',
+        severity: 10.0,
+      },
+    },
+    max_epss: {
+      score: 0.9876,
+      percentile: 0.8,
+      cve: {
+        _id: 'CVE-2020-5678',
+      },
+    },
   },
   refs: {
     ref: [

@@ -1,20 +1,8 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React, {useState} from 'react';
 import {selectSaveId} from 'gmp/utils/id';
 
@@ -31,6 +19,7 @@ import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
+import useCapabilities from "web/hooks/useCapabilities";
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
@@ -62,6 +51,7 @@ const SmbMethodPart = ({
   onNewCredentialClick,
   onCredentialChange,
 }) => {
+  const capabilities = useCapabilities();
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, smbReportFormat),
   );
@@ -141,14 +131,19 @@ const SmbMethodPart = ({
           value={reportFormatIdInState}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'smb_report_config'}
-          id="report-config-select"
-          value={smbConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {
+          capabilities.mayOp('get_report_configs') &&
+          <>
+            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <Select
+              name={prefix + 'smb_report_config'}
+              id="report-config-select"
+              value={smbConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        }
       </FormGroup>
 
       <FormGroup title={_('Max Protocol')}>

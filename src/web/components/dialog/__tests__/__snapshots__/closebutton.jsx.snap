@@ -24,25 +24,22 @@ exports[`Dialog CloseButton tests > should render 1`] = `
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .c0 :hover {
   border: 1px solid #074320;
 }
 
-.c1 {
-  height: 24px;
-  width: 24px;
-  line-height: 24px;
-}
-
-.c1 * {
+.c0 * {
   height: inherit;
   width: inherit;
 }
 
 <div
-  class="c0 c1"
+  class="c0"
   title="Close"
 >
   ×

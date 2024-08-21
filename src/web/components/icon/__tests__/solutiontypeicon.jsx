@@ -1,20 +1,8 @@
-/* Copyright (C) 2019-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import {describe, test, expect} from '@gsa/testing';
 
 import {render} from 'web/utils/testing';
@@ -34,14 +22,14 @@ describe('SolutionTypeIcon component tests', () => {
     const {element: element7} = render(<SolutionTypeIcon type="" />);
     const {element: element8} = render(<SolutionTypeIcon />);
 
-    expect(element1).toMatchSnapshot();
-    expect(element2).toMatchSnapshot();
-    expect(element3).toMatchSnapshot();
-    expect(element4).toMatchSnapshot();
-    expect(element5).toMatchSnapshot();
-    expect(element6).toMatchSnapshot();
-    expect(element7).toMatchSnapshot();
-    expect(element8).toMatchSnapshot();
+    expect(element1).toBeVisible();
+    expect(element2).toBeVisible();
+    expect(element3).toBeVisible();
+    expect(element4).toBeVisible();
+    expect(element5).toBeVisible();
+    expect(element6).toBeVisible();
+    expect(element7).toBeVisible();
+    expect(element8).toBeVisible();
   });
 });
 

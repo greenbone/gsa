@@ -1,26 +1,15 @@
-/* Copyright (C) 2016-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import logger from 'gmp/log';
 
 import {map} from 'gmp/utils/array';
 
 import registerCommand from 'gmp/command';
 import {parseModelFromElement} from 'gmp/model';
+import {isDefined} from 'gmp/utils/identity';
 
 import Alert from 'gmp/models/alert';
 import Credential from 'gmp/models/credential';
@@ -202,10 +191,12 @@ class AlertCommand extends EntityCommand {
         new_alert.get_report_formats_response.report_format,
         format => parseModelFromElement(format, 'reportformat'),
       );
-      new_alert.report_configs = map(
-        new_alert.get_report_configs_response.report_config,
-        config => parseModelFromElement(config, 'reportconfig'),
-      );
+      if (isDefined(new_alert.get_report_configs_response)) {
+        new_alert.report_configs = map(
+          new_alert.get_report_configs_response.report_config,
+          config => parseModelFromElement(config, 'reportconfig'),
+        );
+      }
       new_alert.credentials = map(
         new_alert.get_credentials_response.credential,
         credential => Credential.fromElement(credential),
@@ -238,11 +229,13 @@ class AlertCommand extends EntityCommand {
       );
       delete edit_alert.get_report_formats_response;
 
-      edit_alert.report_configs = map(
-        edit_alert.get_report_configs_response.report_config,
-        config => parseModelFromElement(config, 'reportconfig'),
-      );
-      delete edit_alert.get_report_configs_response;
+      if (isDefined(edit_alert.get_report_configs_response)) {
+        edit_alert.report_configs = map(
+          edit_alert.get_report_configs_response.report_config,
+          config => parseModelFromElement(config, 'reportconfig'),
+        );
+        delete edit_alert.get_report_configs_response;
+      }
 
       edit_alert.credentials = map(
         edit_alert.get_credentials_response.credential,

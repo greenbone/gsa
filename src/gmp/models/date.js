@@ -1,29 +1,17 @@
-/* Copyright (C) 2018-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import moment from 'moment-timezone';
 
-import 'moment/locale/ar';
-import 'moment/locale/de';
-import 'moment/locale/fr';
-import 'moment/locale/pt-br.js';
-import 'moment/locale/ru.js';
-import 'moment/locale/tr.js';
-import 'moment/locale/zh-cn.js';
+import 'moment/dist/locale/ar';
+import 'moment/dist/locale/de';
+import 'moment/dist/locale/fr';
+import 'moment/dist/locale/pt-br.js';
+import 'moment/dist/locale/ru.js';
+import 'moment/dist/locale/tr.js';
+import 'moment/dist/locale/zh-cn.js';
 
 export const {
   isDuration,

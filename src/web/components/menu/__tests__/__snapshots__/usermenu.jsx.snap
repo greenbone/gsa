@@ -48,13 +48,9 @@ exports[`UserMenu component tests > should render UserMenu 1`] = `
   display: inline-flex;
 }
 
-.c11 {
-  cursor: pointer;
-}
-
 .c2 {
-  height: 24px;
   width: 24px;
+  height: 24px;
   line-height: 24px;
 }
 
@@ -64,12 +60,24 @@ exports[`UserMenu component tests > should render UserMenu 1`] = `
 }
 
 .c10 {
-  height: 16px;
   width: 16px;
+  height: 16px;
   line-height: 16px;
 }
 
 .c10 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c11 {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+}
+
+.c11 * {
   height: inherit;
   width: inherit;
 }
@@ -297,7 +305,7 @@ background-color:#f3f3f3 .c6:nth-child(2):hover {
               Session timeout: 
             </span>
             <span
-              class="c11 c10"
+              class="c11"
               data-testid="svg-icon"
               title="Renew session timeout"
             >

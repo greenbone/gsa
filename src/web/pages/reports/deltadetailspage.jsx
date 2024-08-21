@@ -1,20 +1,8 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 
 import React from 'react';
 
@@ -24,7 +12,10 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import Filter, {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {
+  ALL_FILTER,
+  RESET_FILTER,
+  RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {first} from 'gmp/utils/array';
@@ -45,6 +36,11 @@ import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
 } from 'web/store/entities/filters';
+
+import {
+  loadAllEntities as loadReportConfigs,
+  selector as reportConfigsSelector,
+} from 'web/store/entities/reportconfigs';
 
 import {
   loadAllEntities as loadReportFormats,
@@ -180,6 +176,7 @@ class DeltaReportDetails extends React.Component {
   componentDidMount() {
     this.props.loadSettings();
     this.props.loadFilters();
+    this.props.loadReportConfigs();
     this.props.loadReportFormats();
     this.props.loadReportComposerDefaults();
   }
@@ -319,8 +316,13 @@ class DeltaReportDetails extends React.Component {
       username,
       onDownload,
     } = this.props;
-    const {includeNotes, includeOverrides, reportFormatId, storeAsDefault} =
-      state;
+    const {
+      includeNotes,
+      includeOverrides,
+      reportConfigId,
+      reportFormatId,
+      storeAsDefault
+    } = state;
 
     const newFilter = reportFilter.copy();
     newFilter.set('notes', includeNotes);
@@ -329,6 +331,7 @@ class DeltaReportDetails extends React.Component {
     if (storeAsDefault) {
       const defaults = {
         ...reportComposerDefaults,
+        defaultReportConfigId: reportConfigId,
         defaultReportFormatId: reportFormatId,
         includeNotes,
         includeOverrides,
@@ -348,6 +351,7 @@ class DeltaReportDetails extends React.Component {
 
     return gmp.report
       .download(entity, {
+        reportConfigId,
         reportFormatId,
         deltaReportId,
         filter: newFilter,
@@ -469,6 +473,7 @@ class DeltaReportDetails extends React.Component {
       isLoading,
       reportFilter,
       reportFormats,
+      reportConfigs,
       reportId,
       onInteraction,
       reportComposerDefaults,
@@ -542,11 +547,13 @@ class DeltaReportDetails extends React.Component {
         )}
         {showDownloadReportDialog && (
           <DownloadReportDialog
+            defaultReportConfigId={reportComposerDefaults.defaultReportConfigId}
             defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
             filter={reportFilter}
             includeNotes={reportComposerDefaults.includeNotes}
             includeOverrides={reportComposerDefaults.includeOverrides}
             reportFormats={reportFormats}
+            reportConfigs={reportConfigs}
             storeAsDefault={storeAsDefault}
             onClose={this.handleCloseDownloadReportDialog}
             onSave={this.handleReportDownload}
@@ -568,6 +575,7 @@ DeltaReportDetails.propTypes = {
   loadFilters: PropTypes.func.isRequired,
   loadReport: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
+  loadReportConfigs: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
   loadReportIfNeeded: PropTypes.func.isRequired,
   loadSettings: PropTypes.func.isRequired,
@@ -579,6 +587,7 @@ DeltaReportDetails.propTypes = {
   reportExportFileName: PropTypes.string,
   reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
+  reportConfigs: PropTypes.array,
   reportId: PropTypes.id,
   resultDefaultFilter: PropTypes.filter,
   saveReportComposerDefaults: PropTypes.func.isRequired,
@@ -597,6 +606,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
     loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
     loadTarget: targetId => gmp.target.get({id: targetId}),
+    loadReportConfigs: () => dispatch(loadReportConfigs(gmp)(ALL_FILTER)),
     loadReportFormats: () =>
       dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
     loadReport: (id, deltaId, filter) =>
@@ -617,6 +627,7 @@ const mapStateToProps = (rootState, {match}) => {
   const filterSel = filterSelector(rootState);
   const deltaSel = deltaReportSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
+  const reportConfigsSel = reportConfigsSelector(rootState);
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const userDefaultFilterSel = getUserSettingsDefaultFilter(
     rootState,
@@ -636,6 +647,7 @@ const mapStateToProps = (rootState, {match}) => {
       'reportexportfilename',
     ),
     reportFilter: getFilter(entity),
+    reportConfigs: reportConfigsSel.getAllEntities(ALL_FILTER),
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     reportComposerDefaults: getReportComposerDefaults(rootState),

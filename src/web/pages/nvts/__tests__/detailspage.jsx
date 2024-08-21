@@ -1,20 +1,8 @@
-/* Copyright (C) 2021-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
@@ -66,6 +54,23 @@ const nvt = NVT.fromElement({
     solution: {
       _type: 'VendorFix',
       __text: 'This is a description',
+    },
+    epss: {
+      max_severity: {
+        score: 0.8765,
+        percentile: 0.9,
+        cve: {
+          _id: 'CVE-2020-1234',
+          severity: 10.0,
+        },
+      },
+      max_epss: {
+        score: 0.9876,
+        percentile: 0.8,
+        cve: {
+          _id: 'CVE-2020-5678',
+        },
+      },
     },
     timeout: '',
     refs: {
@@ -248,7 +253,7 @@ describe('Nvt Detailspage tests', () => {
       nvt: {
         get: getNvt,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {
         currentSettings,
       },
@@ -308,6 +313,14 @@ describe('Nvt Detailspage tests', () => {
     expect(element).toHaveTextContent('CVSS Origin');
     expect(element).toHaveTextContent('N/A');
 
+    expect(element).toHaveTextContent('EPSS (CVE with highest severity)');
+    expect(element).toHaveTextContent('EPSS Score');
+    expect(element).toHaveTextContent('0.87650');
+    expect(element).toHaveTextContent('EPSS Percentile');
+    expect(element).toHaveTextContent('0.90000');
+    expect(element).toHaveTextContent('EPSS (highest EPSS score)');
+    expect(element).toHaveTextContent('0.98760');
+
     expect(element).toHaveTextContent('Insight');
     expect(element).toHaveTextContent('Foo');
 
@@ -362,7 +375,7 @@ describe('Nvt Detailspage tests', () => {
       overrides: {
         get: getEntities,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {
         currentSettings,
         renewSession,
@@ -406,7 +419,7 @@ describe('Nvt Detailspage tests', () => {
       overrides: {
         get: getEntities,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {
         currentSettings,
         renewSession,
@@ -442,7 +455,7 @@ describe('Nvt ToolBarIcons tests', () => {
     const handleOnNoteCreateClick = testing.fn();
     const handleOnOverrideCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl, enableEPSS: true}};
 
     const {render} = rendererWith({
       gmp,
@@ -489,7 +502,7 @@ describe('Nvt ToolBarIcons tests', () => {
     const handleOnNoteCreateClick = testing.fn();
     const handleOnOverrideCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl, enableEPSS: true}};
 
     const {render} = rendererWith({
       gmp,

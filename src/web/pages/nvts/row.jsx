@@ -1,26 +1,13 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
 
 import Filter from 'gmp/models/filter.js';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isNumber} from 'gmp/utils/identity';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -42,6 +29,8 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
+import useGmp from 'web/hooks/useGmp';
+import {_} from 'gmp/locale/lang.js';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -51,10 +40,13 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const gmp = useGmp();
   const handleFilterChanged = () => {
     const filter = Filter.fromString('family="' + entity.family + '"');
     onFilterChanged(filter);
   };
+  const epssScore = entity?.epss?.max_severity?.score;
+  const epssPercentile = entity?.epss?.max_severity?.percentile;
 
   return (
     <TableRow>
@@ -101,6 +93,16 @@ const Row = ({
       <TableData align="end">
         {entity.qod && <Qod value={entity.qod.value} />}
       </TableData>
+      {gmp.settings.enableEPSS && (
+        <>
+          <TableData>
+            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
+          </TableData>
+          <TableData>
+            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _('N/A')}
+          </TableData>
+        </>
+      )}
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );

@@ -1,20 +1,8 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
@@ -39,6 +27,8 @@ import TableRow from 'web/components/table/row';
 import NvtDetails from './details';
 import NvtRow from './row';
 
+import useGmp from 'web/hooks/useGmp';
+
 const Header = ({
   actionsColumn,
   links = true,
@@ -47,11 +37,13 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
+  const gmp = useGmp();
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          width="32%"
+          rowSpan="2"
+          width={gmp.settings.enableEPSS ? '26%' : '32%'}
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -59,6 +51,7 @@ const Header = ({
           title={_('Name')}
         />
         <TableHead
+          rowSpan="2"
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -67,6 +60,7 @@ const Header = ({
           title={_('Family')}
         />
         <TableHead
+          rowSpan="2"
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -75,6 +69,7 @@ const Header = ({
           title={_('Created')}
         />
         <TableHead
+          rowSpan="2"
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -83,6 +78,7 @@ const Header = ({
           title={_('Modified')}
         />
         <TableHead
+          rowSpan="2"
           width="18%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -90,7 +86,7 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('CVE')}
         />
-        <TableHead width="1%">
+        <TableHead rowSpan="2" width="1%">
           <Layout align="center">
             {sort ? (
               <Sort by="solution_type" onClick={onSortChange}>
@@ -102,6 +98,7 @@ const Header = ({
           </Layout>
         </TableHead>
         <TableHead
+          rowSpan="2"
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -110,6 +107,7 @@ const Header = ({
           title={_('Severity')}
         />
         <TableHead
+          rowSpan="2"
           width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -117,8 +115,31 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('QoD')}
         />
+        {gmp.settings.enableEPSS && (
+          <TableHead colSpan="2">{_('EPSS')}</TableHead>
+        )}
         {actionsColumn}
       </TableRow>
+      {gmp.settings.enableEPSS && (
+        <TableRow>
+          <TableHead
+            width="3%"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'epss_score' : false}
+            onSortChange={onSortChange}
+            title={_('Score')}
+          />
+          <TableHead
+            width="3%"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'epss_percentile' : false}
+            onSortChange={onSortChange}
+            title={_('Percentile')}
+          />
+        </TableRow>
+      )}
     </TableHeader>
   );
 };

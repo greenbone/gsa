@@ -1,20 +1,8 @@
-/* Copyright (C) 2018-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 
 import {describe, test, expect} from '@gsa/testing';
 
@@ -141,12 +129,12 @@ describe('CVE model tests', () => {
     const cve = Cve.fromElement(elem);
 
     expect(cve.cvssBaseVector).toEqual('AV:N/AC:L/Au:N/C:C/I:C/A:C');
-    expect(cve.cvssAccessComplexity).toEqual('LOW');
-    expect(cve.cvssAccessVector).toEqual('NETWORK');
-    expect(cve.cvssAuthentication).toEqual('NONE');
-    expect(cve.cvssAvailabilityImpact).toEqual('COMPLETE');
-    expect(cve.cvssConfidentialityImpact).toEqual('COMPLETE');
-    expect(cve.cvssIntegrityImpact).toEqual('COMPLETE');
+    expect(cve.cvssAccessComplexity).toEqual('Low');
+    expect(cve.cvssAccessVector).toEqual('Network');
+    expect(cve.cvssAuthentication).toEqual('None');
+    expect(cve.cvssAvailabilityImpact).toEqual('Complete');
+    expect(cve.cvssConfidentialityImpact).toEqual('Complete');
+    expect(cve.cvssIntegrityImpact).toEqual('Complete');
   });
 
   test('should parse vulnerable products', () => {
@@ -290,5 +278,27 @@ describe('CVE model tests', () => {
 
     expect(cve.name).toBe('CVE-1234');
     expect(cve.id).toBe('CVE-1234');
+  });
+
+  test('should parse CVSS4 metrics', () => {
+    const elem = {
+      cve: {
+        cvss_vector:
+          'CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:A/VC:H/VI:L/VA:N/SC:L/SI:H/SA:N',
+      },
+    };
+    const cve = Cve.fromElement(elem);
+
+    expect(cve.cvssAttackVector).toEqual('Network');
+    expect(cve.cvssAttackComplexity).toEqual('Low');
+    expect(cve.cvssAttackRequirements).toEqual('Present');
+    expect(cve.cvssPrivilegesRequired).toEqual('Low');
+    expect(cve.cvssUserInteraction).toEqual('Active');
+    expect(cve.cvssConfidentialityVS).toEqual('High');
+    expect(cve.cvssIntegrityVS).toEqual('Low');
+    expect(cve.cvssAvailabilityVS).toEqual('None');
+    expect(cve.cvssConfidentialitySS).toEqual('Low');
+    expect(cve.cvssIntegritySS).toEqual('High');
+    expect(cve.cvssAvailabilitySS).toEqual('None');
   });
 });

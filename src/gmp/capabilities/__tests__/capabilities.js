@@ -1,20 +1,8 @@
-/* Copyright (C) 2018-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import {describe, test, expect} from '@gsa/testing';
 
 import Capabilities from '../capabilities';
@@ -226,6 +214,19 @@ describe('Capabilities tests', () => {
       expect(capList).toEqual(expect.arrayContaining([cap]));
     }
     expect(i).toEqual(4);
+  });
+
+  test('should handle features', () => {
+    const featureList = [
+      {name: 'ENABLED_FEATURE_1', _enabled: 1},
+      {name: 'DISABLED_FEATURE', _enabled: 0},
+      {name: 'ENABLED_FEATURE_2', _enabled: 1},
+    ];
+    const caps = new Capabilities(['everything'], featureList);
+    expect(caps.featureEnabled('ENABLED_FEATURE_1')).toBe(true);
+    expect(caps.featureEnabled('DISABLED_FEATURE')).toBe(false);
+    expect(caps.featureEnabled('enabled_feature_2')).toBe(true);
+    expect(caps.featureEnabled('UNDEFINED_FEATURE')).toBe(false);
   });
 });
 
