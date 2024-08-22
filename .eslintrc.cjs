@@ -8,7 +8,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:vitest-globals/recommended',
   ],
-  plugins: ['react', 'react-hooks', 'header'],
+  plugins: ['react', 'react-hooks', 'header', 'vitest'],
   settings: {
     react: {
       version: 'detect',
@@ -66,6 +66,16 @@ module.exports = {
     ],
   },
   overrides: [
+    {
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+      plugins: ['vitest'],
+      rules: {
+        'vitest/expect-expect': 'off',
+        'vitest/no-disabled-tests': 'warn',
+        'vitest/no-focused-tests': 'error',
+        'vitest/no-identical-title': 'error',
+      },
+    },
     {
       files: ['vite-env.d.ts'],
       rules: {
