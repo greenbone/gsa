@@ -147,7 +147,7 @@ describe('AuditPage tests', () => {
     expect(tableBody.querySelectorAll('tr').length).toEqual(1);
   });
 
-  test.only('should call commands for bulk actions', async () => {
+  test('should call commands for bulk actions', async () => {
     const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
