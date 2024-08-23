@@ -23,7 +23,7 @@ const StyledDetailsLink = styled(DetailsLink)`
   }
 `;
 
-const TaskStatus = ({task, links = true}) => {
+const TaskStatus = ({task, links = true, isAudit = false}) => {
   let report_id;
   if (isDefined(task.current_report)) {
     report_id = task.current_report.id;
@@ -35,16 +35,20 @@ const TaskStatus = ({task, links = true}) => {
   }
 
   return (
-    <StyledDetailsLink type="report" id={report_id} textOnly={!links}>
+    <StyledDetailsLink
+      type={isAudit ? 'auditreport' : 'report'}
+      id={report_id}
+      textOnly={!links}
+    >
       <StatusBar
         status={
           task.isContainer()
             ? task.status === TASK_STATUS.interrupted
               ? TASK_STATUS.uploadinginterrupted
               : task.status === TASK_STATUS.running ||
-                task.status === TASK_STATUS.processing
-              ? TASK_STATUS.processing
-              : TASK_STATUS.container
+                  task.status === TASK_STATUS.processing
+                ? TASK_STATUS.processing
+                : TASK_STATUS.container
             : task.status
         }
         progress={task.progress}
@@ -54,6 +58,7 @@ const TaskStatus = ({task, links = true}) => {
 };
 
 TaskStatus.propTypes = {
+  isAudit: PropTypes.bool,
   links: PropTypes.bool,
   task: PropTypes.model.isRequired,
 };

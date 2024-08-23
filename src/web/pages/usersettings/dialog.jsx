@@ -69,6 +69,7 @@ let UserSettingsDialog = ({
   defaultSchedule,
   defaultTarget,
   alertsFilter,
+  auditReportsFilter,
   configsFilter,
   credentialsFilter,
   filtersFilter,
@@ -125,6 +126,7 @@ let UserSettingsDialog = ({
     defaultSchedule,
     defaultTarget,
     alertsFilter,
+    auditReportsFilter,
     configsFilter,
     credentialsFilter,
     filtersFilter,
@@ -157,11 +159,14 @@ let UserSettingsDialog = ({
   const [error, setError] = useState();
   const [formValues, handleValueChange] = useFormValues(settings);
 
-  const handleSave = useCallback(values => {
-    onSave(values).catch(err => {
-      setError(err.message);
-    })
-  }, [onSave]);
+  const handleSave = useCallback(
+    values => {
+      onSave(values).catch(err => {
+        setError(err.message);
+      });
+    },
+    [onSave],
+  );
 
   const {hasError, errors, validate} = useFormValidation(
     userSettingsRules,
@@ -243,6 +248,7 @@ let UserSettingsDialog = ({
               <FormGroupSizer>
                 <FilterPart
                   alertsFilter={values.alertsFilter}
+                  auditReportsFilter={values.auditReportsFilter}
                   configsFilter={values.configsFilter}
                   credentialsFilter={values.credentialsFilter}
                   filtersFilter={values.filtersFilter}
@@ -286,6 +292,7 @@ let UserSettingsDialog = ({
 UserSettingsDialog.propTypes = {
   alerts: PropTypes.array,
   alertsFilter: PropTypes.string,
+  auditReportsFilter: PropTypes.string,
   autoCacheRebuild: PropTypes.number,
   capabilities: PropTypes.capabilities.isRequired,
   certBundFilter: PropTypes.string,

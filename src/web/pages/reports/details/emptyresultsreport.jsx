@@ -56,7 +56,7 @@ const EmptyResultsReport = ({
       </InfoPanel>
 
       <Divider align={['start', 'stretch']} wrap>
-        {!levels.includes('g') && (
+        {!levels.includes('g') && isDefined(onFilterAddLogLevelClick) && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
             title={_('Log messages are currently excluded.')}
@@ -66,7 +66,7 @@ const EmptyResultsReport = ({
           </ReportPanel>
         )}
 
-        {has_severity_filter && (
+        {has_severity_filter && isDefined(onFilterRemoveSeverityClick) && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
             title={_(
@@ -117,11 +117,11 @@ const EmptyResultsReport = ({
 EmptyResultsReport.propTypes = {
   all: PropTypes.number.isRequired,
   filter: PropTypes.filter.isRequired,
-  onFilterAddLogLevelClick: PropTypes.func.isRequired,
+  onFilterAddLogLevelClick: PropTypes.func,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
-  onFilterRemoveSeverityClick: PropTypes.func.isRequired,
+  onFilterRemoveSeverityClick: PropTypes.func,
 };
 
 export default EmptyResultsReport;
