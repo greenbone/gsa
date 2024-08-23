@@ -50,7 +50,7 @@ import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/proptypes';
 
 const ToolBarIcons = () => (

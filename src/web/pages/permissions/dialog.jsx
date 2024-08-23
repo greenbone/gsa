@@ -23,7 +23,7 @@ import TextField from 'web/components/form/textfield';
 
 import Row from 'web/components/layout/row';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 const NEED_RESOURCE_ID = [

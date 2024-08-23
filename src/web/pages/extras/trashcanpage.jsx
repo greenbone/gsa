@@ -33,7 +33,7 @@ import TableHeader from 'web/components/table/header';
 
 import PropTypes from 'web/utils/proptypes';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 import AlertsTable from '../alerts/table';
@@ -57,8 +57,8 @@ import TasksTable from '../tasks/table';
 import TicketsTable from '../tickets/table';
 
 import TrashActions from './trashactions';
-import useGmp from 'web/utils/useGmp';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useGmp from 'web/hooks/useGmp';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import DialogNotification from 'web/components/notification/dialognotification';
 

@@ -25,7 +25,7 @@ import {
 } from 'web/store/entities/reportformats';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import ReportFormatComponent from './component';
 import ReportFormatsTable from './table';

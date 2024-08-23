@@ -306,6 +306,8 @@ describe('Audit Detailspage tests', () => {
       <Detailspage id="12345" />,
     );
 
+    expect(element).toBeVisible();
+
     expect(element).toHaveTextContent('Audit: foo');
 
     const links = baseElement.querySelectorAll('a');
@@ -530,6 +532,8 @@ describe('Audit ToolBarIcons tests', () => {
         onAuditStopClick={handleAuditStopClick}
       />,
     );
+
+    expect(element).toBeVisible();
 
     const icons = getActionItems();
     const links = element.querySelectorAll('a');

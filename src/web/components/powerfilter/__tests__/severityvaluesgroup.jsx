@@ -43,7 +43,7 @@ describe('Severity Values Group Tests', () => {
       />,
     );
 
-    expect(element).toBeInTheDocument();
+    expect(element).toBeVisible();
   });
 
   test('arguments are processed correctly', () => {

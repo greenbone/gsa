@@ -26,7 +26,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    expect(element).toBeInTheDocument();
+    expect(element).toBeVisible();
   });
 
   test('should call change handler', () => {

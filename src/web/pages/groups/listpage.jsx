@@ -24,7 +24,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/groups';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 import GroupComponent from './component';

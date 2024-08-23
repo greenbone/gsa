@@ -22,7 +22,7 @@ import Select from 'web/components/form/select';
 import Divider from 'web/components/layout/divider';
 import Row from 'web/components/layout/row';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 export const CURRENT_RESOURCE_ONLY = '0';

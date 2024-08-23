@@ -35,7 +35,7 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    expect(element).toBeInTheDocument();
+    expect(element).toBeVisible();
   });
 
   test('should render fields', async () => {

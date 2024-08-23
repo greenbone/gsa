@@ -5,7 +5,7 @@
 
 import {useEffect, useState} from 'react';
 
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import date from 'gmp/models/date';
 import {RefreshCcw} from 'lucide-react';
 import Divider from 'web/components/layout/divider';

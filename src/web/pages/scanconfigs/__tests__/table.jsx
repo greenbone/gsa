@@ -108,6 +108,7 @@ describe('Scan Config table tests', () => {
       />,
     );
 
+    expect(baseElement).toBeVisible();
     const header = baseElement.querySelectorAll('th');
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Family');

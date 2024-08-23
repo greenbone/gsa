@@ -245,6 +245,7 @@ describe('Scan Config Detailspage tests', () => {
       <Detailspage id="12345" />,
     );
 
+    expect(element).toBeVisible();
     expect(element).toHaveTextContent('Scan Config: foo');
 
     const links = baseElement.querySelectorAll('a');
@@ -940,6 +941,8 @@ describe('Scan Config ToolBarIcons tests', () => {
         onScanConfigImportClick={handleScanConfigImport}
       />,
     );
+
+    expect(element).toBeVisible();
 
     const links = element.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');

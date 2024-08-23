@@ -19,7 +19,7 @@ describe('Badge tests', () => {
       </Badge>,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render content', () => {

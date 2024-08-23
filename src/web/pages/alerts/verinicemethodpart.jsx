@@ -8,6 +8,7 @@ import {selectSaveId} from 'gmp/utils/id';
 
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 import withPrefix from 'web/utils/withPrefix';
@@ -35,6 +36,7 @@ const VeriniceMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const capabilities = useCapabilities();
   const [_] = useTranslation();
   reportFormats = reportFormats.filter(format => format.extension === 'vna');
   credentials = credentials.filter(
@@ -96,14 +98,20 @@ const VeriniceMethodPart = ({
           value={reportFormatIdInState}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
-        <Select
-          name={prefix + 'verinice_server_report_config'}
-          id="report-config-select"
-          value={veriniceServerConfigIdInState}
-          items={reportConfigItems}
-          onChange={handleReportConfigIdChange}
-        />
+        {capabilities.mayOp('get_report_configs') && (
+          <>
+            <label htmlFor="report-config-select">
+              &nbsp; Report Config &nbsp;{' '}
+            </label>
+            <Select
+              name={prefix + 'verinice_server_report_config'}
+              id="report-config-select"
+              value={veriniceServerConfigIdInState}
+              items={reportConfigItems}
+              onChange={handleReportConfigIdChange}
+            />
+          </>
+        )}
       </FormGroup>
     </>
   );

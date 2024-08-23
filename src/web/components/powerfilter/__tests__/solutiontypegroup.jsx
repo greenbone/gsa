@@ -21,7 +21,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    expect(element).toBeInTheDocument();
+    expect(element).toBeVisible();
   });
 
   test('should call change handler', () => {

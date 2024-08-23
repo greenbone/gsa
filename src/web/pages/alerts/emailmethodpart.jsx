@@ -35,7 +35,7 @@ import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 const EmailMethodPart = ({
   credentials = [],
@@ -197,15 +197,19 @@ const EmailMethodPart = ({
                   />
                 )}
 
-                <label htmlFor="report-config-select">Report Config</label>
-                <Select
-                  disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                  name={prefix + 'notice_report_config'}
-                  id="report-config-select"
-                  value={reportConfigIdInState}
-                  items={reportConfigItems}
-                  onChange={handleReportConfigIdChange}
-                />
+                {capabilities.mayOp('get_report_configs') && (
+                  <>
+                    <label htmlFor="report-config-select">Report Config</label>
+                    <Select
+                      disabled={notice !== EMAIL_NOTICE_INCLUDE}
+                      name={prefix + 'notice_report_config'}
+                      id="report-config-select"
+                      value={reportConfigIdInState}
+                      items={reportConfigItems}
+                      onChange={handleReportConfigIdChange}
+                    />
+                  </>
+                )}
               </Row>
               <TextArea
                 disabled={notice !== EMAIL_NOTICE_INCLUDE}
@@ -247,15 +251,19 @@ const EmailMethodPart = ({
                     onChange={handleAttachFormatIdChange}
                   />
                 )}
-                <label htmlFor="attach-config-select">Report Config</label>
-                <Select
-                  disabled={notice !== EMAIL_NOTICE_ATTACH}
-                  name={prefix + 'notice_attach_config'}
-                  id="attach-config-select"
-                  value={attachConfigIdInState}
-                  items={attachConfigItems}
-                  onChange={handleAttachConfigIdChange}
-                />
+                {capabilities.mayOp('get_report_configs') && (
+                  <>
+                    <label htmlFor="attach-config-select">Report Config</label>
+                    <Select
+                      disabled={notice !== EMAIL_NOTICE_ATTACH}
+                      name={prefix + 'notice_attach_config'}
+                      id="attach-config-select"
+                      value={attachConfigIdInState}
+                      items={attachConfigItems}
+                      onChange={handleAttachConfigIdChange}
+                    />
+                  </>
+                )}
               </Row>
               <TextArea
                 disabled={notice !== EMAIL_NOTICE_ATTACH}

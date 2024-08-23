@@ -330,6 +330,8 @@ describe('Task Detailspage tests', () => {
       <Detailspage id="12345" />,
     );
 
+    expect(element).toBeVisible();
+
     expect(element).toHaveTextContent('Task: foo');
 
     const links = baseElement.querySelectorAll('a');
@@ -638,6 +640,8 @@ describe('Task ToolBarIcons tests', () => {
         onTaskStopClick={handleTaskStop}
       />,
     );
+
+    expect(element).toBeVisible();
 
     const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');

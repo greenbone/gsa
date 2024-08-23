@@ -244,6 +244,7 @@ describe('Policy Detailspage tests', () => {
       <Detailspage id="12345" />,
     );
 
+    expect(element).toBeVisible();
     expect(element).toHaveTextContent('Policy: foo');
 
     const links = baseElement.querySelectorAll('a');
@@ -868,6 +869,8 @@ describe('Policy ToolBarIcons tests', () => {
         onPolicyEditClick={handlePolicyEditClick}
       />,
     );
+
+    expect(element).toBeVisible();
 
     const links = element.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');

@@ -24,8 +24,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
 
-import useGmp from 'web/utils/useGmp';
-import useCapabilities from 'web/utils/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 import ScannerComponent from './component';

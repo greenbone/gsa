@@ -19,7 +19,8 @@ import Select, {SelectItem} from '../select';
 describe('Select component tests', () => {
   test('should render', () => {
     const {element} = render(<Select />);
-    expect(element).toBeInTheDocument();
+
+    expect(element).toBeVisible();
   });
 
   test('should render with items', async () => {

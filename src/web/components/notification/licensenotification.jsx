@@ -17,7 +17,7 @@ import Link from 'web/components/link/link';
 import InfoPanel from 'web/components/panel/infopanel';
 
 import PropTypes from 'web/utils/proptypes';
-import useLicense from 'web/utils/useLicense';
+import useLicense from 'web/hooks/useLicense';
 
 const LICENSE_EXPIRATION_THRESHOLD = 30;
 

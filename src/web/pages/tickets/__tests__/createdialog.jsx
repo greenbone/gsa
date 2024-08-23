@@ -112,6 +112,48 @@ describe('CreateTicketDialog component tests', () => {
       />,
     );
 
+    expect(baseElement).toBeVisible();
+  });
+
+  test('should allow to close the dialog', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleUserIdChange = testing.fn();
+
+    const {getByTestId} = render(
+      <CreateTicketDialog
+        resultId="r1"
+        userId="u1"
+        users={users}
+        onClose={handleClose}
+        onSave={handleSave}
+        onUserIdChange={handleUserIdChange}
+      />,
+    );
+
+    const closeButton = getByTestId('dialog-close-button');
+
+    fireEvent.click(closeButton);
+
+    expect(handleClose).toHaveBeenCalled();
+  });
+
+  test('should allow to save the dialog', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleUserIdChange = testing.fn();
+
+    const {baseElement} = render(
+      <CreateTicketDialog
+        resultId="r1"
+        userId="u1"
+        users={users}
+        onClose={handleClose}
+        onSave={handleSave}
+        onUserIdChange={handleUserIdChange}
+      />,
+    );
+
     const noteInput = baseElement.querySelector('textarea');
     changeInputValue(noteInput, 'foobar');
 

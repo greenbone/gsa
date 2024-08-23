@@ -13,6 +13,9 @@ import {
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
 } from 'gmp/parser/cvss';
+
+import {parseCvssV4MetricsFromVector} from 'gmp/parser/cvssV4';
+
 import Info from './info';
 
 class Cve extends Info {
@@ -23,6 +26,7 @@ class Cve extends Info {
 
     ret.name = element.name;
     ret.id = element.name;
+    ret.epss = element.epss;
 
     return ret;
   }
@@ -62,7 +66,21 @@ class Cve extends Info {
     if (isEmpty(ret.cvss_vector)) {
       ret.cvss_vector = '';
     }
-    if (ret.cvss_vector.includes('CVSS:3')) {
+    if (ret.cvss_vector.includes('CVSS:4')) {
+      const {AV, AC, AT, PR, UI, VC, VI, VA, SC, SI, SA} =
+        parseCvssV4MetricsFromVector(ret.cvss_vector);
+      ret.cvssAttackVector = AV;
+      ret.cvssAttackComplexity = AC;
+      ret.cvssAttackRequirements = AT;
+      ret.cvssPrivilegesRequired = PR;
+      ret.cvssUserInteraction = UI;
+      ret.cvssConfidentialityVS = VC;
+      ret.cvssIntegrityVS = VI;
+      ret.cvssAvailabilityVS = VA;
+      ret.cvssConfidentialitySS = SC;
+      ret.cvssIntegritySS = SI;
+      ret.cvssAvailabilitySS = SA;
+    } else if (ret.cvss_vector.includes('CVSS:3')) {
       const {
         attackVector,
         attackComplexity,

@@ -43,7 +43,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
-    const {baseElement} = render(
+    const {container} = render(
       <Actions
         entity={audit}
         gcrFormatDefined={true}
@@ -59,7 +59,7 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    expect(baseElement).toBeInTheDocument();
+    expect(container.firstChild).toBeVisible();
   });
 
   test('should call click handlers', () => {

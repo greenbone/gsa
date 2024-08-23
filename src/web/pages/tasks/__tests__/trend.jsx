@@ -13,7 +13,7 @@ describe('Task Trend tests', () => {
   test('should render', () => {
     const {element} = render(<Trend name="up" />);
 
-    expect(element).toBeInTheDocument();
+    expect(element).toBeVisible();
   });
 
   test('should render trend up icon', () => {

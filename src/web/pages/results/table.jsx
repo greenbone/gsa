@@ -26,6 +26,7 @@ import TableRow from 'web/components/table/row';
 
 import ResultsRow from './row';
 import ResultDetails from './details';
+import useGmp from "web/hooks/useGmp";
 
 const Header = ({
   actionsColumn,
@@ -36,6 +37,7 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
+  const gmp = useGmp();
   return (
     <TableHeader>
       <TableRow>
@@ -100,6 +102,12 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Location')}
         />
+        {
+          gmp.settings.enableEPSS &&
+          <TableHead colSpan="2">
+            {_("EPSS")}
+          </TableHead>
+        }
         <TableHead
           width="15%"
           rowSpan="2"
@@ -126,6 +134,27 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Name')}
         />
+        {
+          gmp.settings.enableEPSS &&
+          <>
+            <TableHead
+              width="3%"
+              currentSortDir={currentSortDir}
+              currentSortBy={currentSortBy}
+              sortBy={sort ? 'epss_score' : false}
+              onSortChange={onSortChange}
+              title={_('Score')}
+            />
+            <TableHead
+              width="3%"
+              currentSortDir={currentSortDir}
+              currentSortBy={currentSortBy}
+              sortBy={sort ? 'epss_percentile' : false}
+              onSortChange={onSortChange}
+              title={_('Percentile')}
+            />
+          </>
+        }
       </TableRow>
     </TableHeader>
   );
@@ -144,7 +173,7 @@ Header.propTypes = {
 export default createEntitiesTable({
   emptyTitle: _l('No results available'),
   footer: createEntitiesFooter({
-    span: 8,
+    span: 10,
     download: 'results.xml',
   }),
   header: withEntitiesHeader(true)(Header),

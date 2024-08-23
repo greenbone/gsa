@@ -1,3 +1,5 @@
+const allowedSnakeCase = require('./allowedSnakeCase.cjs');
+
 module.exports = {
   ignorePatterns: ['build', '.eslintrc.cjs'],
   extends: [
@@ -30,6 +32,13 @@ module.exports = {
     'react/prop-types': [
       'warn',
       {ignore: ['children', 'className', 'location']},
+    ],
+    camelcase: [
+      'warn',
+      {
+        allow: allowedSnakeCase,
+        properties: 'always',
+      },
     ],
     'no-case-declarations': 'off',
     'no-unused-vars': [

@@ -94,6 +94,8 @@ describe('Audit Row tests', () => {
       />,
     );
 
+    expect(element).toBeVisible();
+
     // Name
     expect(element).toHaveTextContent('foo');
     expect(element).toHaveTextContent('(bar)');

@@ -10,7 +10,7 @@ import {render, fireEvent} from 'web/utils/testing';
 import {
   ICON_SIZE_LARGE_PIXELS,
   ICON_SIZE_MEDIUM_PIXELS,
-} from 'web/components/icon/withIconSize';
+} from 'web/hooks/useIconSize';
 
 import CloseButton from '../closebutton';
 
@@ -40,5 +40,3 @@ describe('Dialog CloseButton tests', () => {
     expect(element).toHaveStyleRule('width', ICON_SIZE_LARGE_PIXELS);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

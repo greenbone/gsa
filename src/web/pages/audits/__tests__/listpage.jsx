@@ -137,10 +137,11 @@ describe('AuditPage tests', () => {
       entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );
 
-    render(<AuditPage />);
+    const {baseElement} = render(<AuditPage />);
 
     await wait();
 
+    expect(baseElement).toBeVisible();
     const tableBody = getTableBody();
     expect(tableBody.querySelectorAll('tr').length).toEqual(1);
   });
@@ -235,6 +236,8 @@ describe('AuditPage ToolBarIcons test', () => {
     const {element} = render(
       <ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />,
     );
+    expect(element).toBeVisible();
+
     const icons = getActionItems();
     const links = element.querySelectorAll('a');
 

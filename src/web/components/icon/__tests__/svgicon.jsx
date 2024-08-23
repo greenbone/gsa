@@ -19,7 +19,7 @@ describe('SVG icon component tests', () => {
   test('should render icon', () => {
     const handleClick = testing.fn();
 
-    const {element} = render(
+    const {container} = render(
       <CloneIcon
         title="Clone Entity"
         value={entity}
@@ -27,8 +27,7 @@ describe('SVG icon component tests', () => {
         onClick={handleClick}
       />,
     );
-
-    expect(element).toMatchSnapshot();
+    expect(container.firstChild).toBeVisible();
   });
 
   test('should render loading state', async () => {

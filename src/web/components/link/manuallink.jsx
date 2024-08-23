@@ -11,7 +11,7 @@ import {getLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 import BlankLink from './blanklink';
 

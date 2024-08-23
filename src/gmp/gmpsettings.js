@@ -43,6 +43,7 @@ const warnDeprecatedSetting = (oldName, newName) => {
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
+      enableEPSS = false,
       enableGreenboneSensor = false,
       disableLoginForm = false,
       enableStoreDebugLog,
@@ -109,6 +110,7 @@ class GmpSettings {
     setAndFreeze(this, 'apiProtocol', apiProtocol);
     setAndFreeze(this, 'apiServer', apiServer);
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
+    setAndFreeze(this, 'enableEPSS', enableEPSS);
     setAndFreeze(this, 'enableGreenboneSensor', enableGreenboneSensor);
     setAndFreeze(this, 'guestUsername', guestUsername);
     setAndFreeze(this, 'guestPassword', guestPassword);

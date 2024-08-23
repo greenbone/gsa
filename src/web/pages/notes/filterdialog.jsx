@@ -21,7 +21,7 @@ import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 const NotesFilterDialogComponent = ({
   filter: initialFilter,

@@ -25,7 +25,8 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
-import {isNumber} from "gmp/utils/identity";
+import {isNumber} from 'gmp/utils/identity';
+import useGmp from 'web/hooks/useGmp';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -33,37 +34,46 @@ const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <TableData>
-      <span>
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {entity.name}
-        </RowDetailsToggle>
-      </span>
-      <Comment text={entity.comment} />
-    </TableData>
-    <TableData>{shorten(entity.description, 160)}</TableData>
-    <TableData>
-      <DateTime date={entity.creationTime} />
-    </TableData>
-    <TableData>
-      <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
-        {entity.cvssBaseVector}
-      </Link>
-    </TableData>
-    <TableData>
-      <SeverityBar severity={entity.severity} />
-    </TableData>
-    <TableData>
-      {isNumber(entity?.epss?.score) ? entity.epss?.score.toFixed(5) : _("N/A")}
-    </TableData>
-    <TableData>
-      {isNumber(entity?.epss?.percentile) ? entity.epss?.percentile.toFixed(5) : _("N/A")}
-    </TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+}) => {
+  const gmp = useGmp();
+  const epssScore = entity?.epss?.score;
+  const epssPercentile = entity?.epss?.percentile;
+  return (
+    <TableRow>
+      <TableData>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle>
+        </span>
+        <Comment text={entity.comment} />
+      </TableData>
+      <TableData>{shorten(entity.description, 160)}</TableData>
+      <TableData>
+        <DateTime date={entity.creationTime} />
+      </TableData>
+      <TableData>
+        <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
+          {entity.cvssBaseVector}
+        </Link>
+      </TableData>
+      <TableData>
+        <SeverityBar severity={entity.severity} />
+      </TableData>
+      {gmp.settings.enableEPSS && (
+        <>
+          <TableData>
+            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
+          </TableData>
+          <TableData>
+            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _('N/A')}
+          </TableData>
+        </>
+      )}
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

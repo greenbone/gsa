@@ -36,7 +36,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/users';
 
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 import ConfirmDeleteDialog from './confirmdeletedialog';

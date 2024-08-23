@@ -72,6 +72,8 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
+    expect(baseElement).toBeVisible();
+
     expect(baseElement).toHaveTextContent('Config');
     expect(baseElement).toHaveTextContent('foo');
   });
@@ -97,6 +99,8 @@ describe('EditConfigFamilyDialog component tests', () => {
         onSave={handleSave}
       />,
     );
+
+    expect(baseElement).toBeVisible();
 
     expect(getByTestId('loading')).toBeInTheDocument();
 

@@ -222,6 +222,7 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
         onScanConfigImportClick={handleScanConfigImportClick}
       />,
     );
+    expect(element).toBeVisible();
 
     const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');

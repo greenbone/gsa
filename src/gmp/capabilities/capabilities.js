@@ -4,8 +4,9 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
+import {forEach, map} from 'gmp/utils/array';
 import {pluralizeType} from 'gmp/utils/entitytype';
+import {parseBoolean} from 'gmp/parser';
 
 const types = {
   audit: 'task',
@@ -50,16 +51,27 @@ const convertType = type => {
 };
 
 class Capabilities {
-  constructor(cap_names) {
-    this._has_caps = isDefined(cap_names);
+  constructor(cap_names, featuresList) {
+    this._hasCaps = isDefined(cap_names);
+    this._hasFeatures = isDefined(featuresList);
 
     let caps;
+    let featuresEnabled = {};
 
-    if (this._has_caps) {
+    if (this._hasCaps) {
       caps = map(cap_names, name => name.toLowerCase());
     }
 
+    if (this._hasFeatures) {
+      forEach(featuresList, feature => {
+        featuresEnabled[feature.name.toUpperCase()] = parseBoolean(
+          feature._enabled,
+        );
+      });
+    }
+
     this._capabilities = new Set(caps);
+    this._featuresEnabled = featuresEnabled;
   }
 
   [Symbol.iterator]() {
@@ -67,7 +79,7 @@ class Capabilities {
   }
 
   areDefined() {
-    return this._has_caps;
+    return this._hasCaps;
   }
 
   has(name) {
@@ -100,6 +112,10 @@ class Capabilities {
 
   get length() {
     return this._capabilities.size;
+  }
+
+  featureEnabled(feature) {
+    return this._featuresEnabled[feature.toUpperCase()] == true;
   }
 }
 

@@ -6,7 +6,7 @@
 
 import React, {useEffect, useState} from 'react';
 
-import useGmp from 'web/utils/useGmp';
+import useGmp from 'web/hooks/useGmp';
 
 export const LicenseContext = React.createContext({});
 

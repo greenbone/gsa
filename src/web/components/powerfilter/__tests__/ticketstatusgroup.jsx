@@ -37,7 +37,7 @@ describe('TicketStatusGroup tests', () => {
       />,
     );
 
-    expect(element).toBeInTheDocument();
+    expect(element).toBeVisible();
   });
 
   test('should render value from filter and change it', async () => {

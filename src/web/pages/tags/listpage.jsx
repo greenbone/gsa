@@ -25,7 +25,7 @@ import {
 } from 'web/store/entities/tags';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import TagComponent from './component';
 import TagsTable from './table';

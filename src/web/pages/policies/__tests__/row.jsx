@@ -61,6 +61,7 @@ describe('Row tests', () => {
       />,
     );
 
+    expect(baseElement).toBeVisible();
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('(bar)');
   });

@@ -112,7 +112,7 @@ describe('ReportConfigsPage tests', () => {
 
     await wait();
 
-    expect(baseElement).toBeInTheDocument();
+    expect(baseElement).toBeVisible();
   });
 
   test('should call commands for bulk actions', async () => {
@@ -198,6 +198,7 @@ describe('ReportConfigsPage tests', () => {
           onReportConfigCreateClick={handleReportConfigCreateClick}
         />,
       );
+      expect(element).toBeVisible();
 
       const icons = getAllByTestId('svg-icon');
       const links = element.querySelectorAll('a');

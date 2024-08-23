@@ -3,22 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
+import {useState, useEffect, useRef, useCallback} from 'react';
 import 'whatwg-fetch';
-
 import styled from 'styled-components';
-
 import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from 'web/utils/proptypes';
-
 import Theme from 'web/utils/theme';
-
-import withIconSize from 'web/components/icon/withIconSize';
-
 import {get_img_url} from 'web/utils/urls';
+import useIconSize from 'web/hooks/useIconSize';
 
 const Anchor = styled.a`
   display: flex;
@@ -26,81 +18,94 @@ const Anchor = styled.a`
 
 const StyledIcon = styled.span`
   cursor: ${props => (isDefined(props.onClick) ? 'pointer' : undefined)};
+  width: ${props => props.$width};
+  height: ${props => props.$height};
+  line-height: ${props => props.$lineHeight};
   @media print {
     & {
       ${props => (isDefined(props.onClick) ? {display: 'none'} : undefined)};
     }
   }
+  & * {
+    height: inherit;
+    width: inherit;
+  }
 `;
 
-class IconComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const IconComponent = ({
+  className,
+  to,
+  value,
+  onClick,
+  img,
+  size,
+  ...other
+}) => {
+  const [svgComponent, setSvgComponent] = useState(null);
+  const svgRef = useRef(null);
+  const {width, height} = useIconSize(size);
 
-    this.state = {svgComponent: null};
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  componentDidMount() {
-    this.loadImage();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.img !== this.props.img) {
-      try {
-        if (this.svgRef.removeChild(this.state.svgComponent)) {
-          this.loadImage();
-        }
-      } catch (e) {
-        /* Ignore errors here. If the old child couldn't be removed, a new one
-        should not be appended. Therefore do nothing instead of crashing the GUI */
-      }
-    }
-  }
-
-  loadImage() {
-    const {img} = this.props;
+  const loadImage = useCallback(async () => {
     const iconPath = get_img_url(img);
-    fetch(iconPath).then(response =>
-      response.text().then(resp => {
-        const parser = new window.DOMParser();
-        const doc = parser.parseFromString(resp, 'image/svg+xml');
-        const svg = doc.documentElement;
-        this.setState({svgComponent: svg});
-        if (this.svgRef !== null) {
-          this.svgRef.appendChild(svg);
+    try {
+      const response = await fetch(iconPath);
+      const resp = await response.text();
+      const parser = new window.DOMParser();
+      const doc = parser.parseFromString(resp, 'image/svg+xml');
+      const svg = doc.documentElement;
+      setSvgComponent(svg);
+      if (svgRef.current) {
+        svgRef.current.appendChild(svg);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [img]);
+
+  useEffect(() => {
+    loadImage();
+  }, [loadImage]);
+
+  useEffect(() => {
+    const currentSvgRef = svgRef.current;
+
+    return () => {
+      if (currentSvgRef && svgComponent) {
+        try {
+          currentSvgRef.removeChild(svgComponent);
+        } catch (e) {
+          console.error(e);
         }
-      }),
-    );
-  }
+      }
+    };
+  }, [img, svgComponent]);
 
-  handleClick() {
-    const {value, onClick} = this.props;
+  const handleClick = () => {
+    if (onClick) {
+      onClick(value);
+    }
+  };
 
-    onClick(value);
-  }
+  return (
+    <StyledIcon
+      $height={height}
+      $width={width}
+      $lineHeight={height}
+      onClick={isDefined(onClick) ? handleClick : undefined}
+      {...other}
+    >
+      {isDefined(to) ? (
+        <Anchor href={to}>
+          <div className={className} ref={svgRef} />
+        </Anchor>
+      ) : (
+        <div className={className} ref={svgRef} />
+      )}
+    </StyledIcon>
+  );
+};
 
-  render() {
-    const {className, to, value, onClick, ...other} = this.props;
-
-    return (
-      <StyledIcon
-        {...other}
-        onClick={isDefined(onClick) ? this.handleClick : undefined}
-      >
-        {isDefined(to) ? (
-          <Anchor href={to}>
-            <div className={className} ref={ref => (this.svgRef = ref)} />
-          </Anchor>
-        ) : (
-          <div className={className} ref={ref => (this.svgRef = ref)} />
-        )}
-      </StyledIcon>
-    );
-  }
-}
-
-IconComponent = styled(IconComponent)`
+const StyledIconComponent = styled(IconComponent)`
   & svg path {
     fill: ${props => {
       const {active = true} = props;
@@ -110,13 +115,12 @@ IconComponent = styled(IconComponent)`
 `;
 
 IconComponent.propTypes = {
-  alt: PropTypes.string,
-  img: PropTypes.string.isRequired,
   to: PropTypes.string,
   value: PropTypes.any,
   onClick: PropTypes.func,
+  img: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
 };
 
-export default withIconSize()(IconComponent);
-
-// vim: set ts=2 sw=2 tw=80:
+export default StyledIconComponent;

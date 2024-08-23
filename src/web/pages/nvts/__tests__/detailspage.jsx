@@ -253,7 +253,7 @@ describe('Nvt Detailspage tests', () => {
       nvt: {
         get: getNvt,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {
         currentSettings,
       },
@@ -375,7 +375,7 @@ describe('Nvt Detailspage tests', () => {
       overrides: {
         get: getEntities,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {
         currentSettings,
         renewSession,
@@ -419,7 +419,7 @@ describe('Nvt Detailspage tests', () => {
       overrides: {
         get: getEntities,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {
         currentSettings,
         renewSession,
@@ -455,7 +455,7 @@ describe('Nvt ToolBarIcons tests', () => {
     const handleOnNoteCreateClick = testing.fn();
     const handleOnOverrideCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl, enableEPSS: true}};
 
     const {render} = rendererWith({
       gmp,
@@ -502,7 +502,7 @@ describe('Nvt ToolBarIcons tests', () => {
     const handleOnNoteCreateClick = testing.fn();
     const handleOnOverrideCreateClick = testing.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl, enableEPSS: true}};
 
     const {render} = rendererWith({
       gmp,

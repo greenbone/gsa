@@ -75,6 +75,7 @@ describe('Report Config row tests', () => {
       />,
     );
 
+    expect(baseElement).toBeVisible();
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('(bar)');
     expect(baseElement).toHaveTextContent('baz');
@@ -105,6 +106,7 @@ describe('Report Config row tests', () => {
       />,
     );
 
+    expect(baseElement).toBeVisible();
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('Orphan');
     expect(baseElement).toHaveTextContent('(bar)');

@@ -209,6 +209,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
+    expect(element).toBeVisible();
 
     const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');

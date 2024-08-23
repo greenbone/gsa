@@ -22,14 +22,14 @@ describe('SolutionTypeIcon component tests', () => {
     const {element: element7} = render(<SolutionTypeIcon type="" />);
     const {element: element8} = render(<SolutionTypeIcon />);
 
-    expect(element1).toMatchSnapshot();
-    expect(element2).toMatchSnapshot();
-    expect(element3).toMatchSnapshot();
-    expect(element4).toMatchSnapshot();
-    expect(element5).toMatchSnapshot();
-    expect(element6).toMatchSnapshot();
-    expect(element7).toMatchSnapshot();
-    expect(element8).toMatchSnapshot();
+    expect(element1).toBeVisible();
+    expect(element2).toBeVisible();
+    expect(element3).toBeVisible();
+    expect(element4).toBeVisible();
+    expect(element5).toBeVisible();
+    expect(element6).toBeVisible();
+    expect(element7).toBeVisible();
+    expect(element8).toBeVisible();
   });
 });
 

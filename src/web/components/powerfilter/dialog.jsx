@@ -7,8 +7,7 @@
 import React from 'react';
 
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
-
-import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import CreateNamedFilterGroup from './createnamedfiltergroup';
 import FilterStringGroup from './filterstringgroup';

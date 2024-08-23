@@ -24,7 +24,9 @@ import MultiSelect from '../multiselect';
 
 describe('MultiSelect tests', () => {
   test('should render', () => {
-    render(<MultiSelect />);
+    const {element} = render(<MultiSelect />);
+
+    expect(element).toBeVisible();
   });
 
   test('should render with items', async () => {

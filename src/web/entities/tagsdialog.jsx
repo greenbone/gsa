@@ -31,18 +31,21 @@ const Notification = styled(Layout)`
 const TagsDialog = ({
   comment = '',
   entitiesCount,
+  error,
   tagId: id,
   name,
   tags,
   title = _('Add Tag'),
   value = '',
   onClose,
+  onErrorClose,
   onNewTagClick,
   onTagChanged,
   onSave,
 }) => (
   <SaveDialog
     buttonTitle="Add Tag"
+    error={error}
     title={title}
     width="650px"
     values={{
@@ -52,7 +55,9 @@ const TagsDialog = ({
       value,
     }}
     onClose={onClose}
+    onErrorClose={onErrorClose}
     onSave={onSave}
+    data-testid="dialog-title-bar"
   >
     <FormGroup title={_('Choose Tag')} direction="row">
       <Select
@@ -85,6 +90,7 @@ const TagsDialog = ({
 TagsDialog.propTypes = {
   comment: PropTypes.string,
   entitiesCount: PropTypes.number.isRequired,
+  error: PropTypes.string,
   filter: PropTypes.filter,
   name: PropTypes.string,
   tagId: PropTypes.id,
@@ -92,6 +98,7 @@ TagsDialog.propTypes = {
   title: PropTypes.string,
   value: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  onErrorClose: PropTypes.func,
   onNewTagClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onTagChanged: PropTypes.func.isRequired,

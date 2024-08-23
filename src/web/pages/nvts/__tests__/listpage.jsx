@@ -133,7 +133,7 @@ describe('NvtsPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {currentSettings, getSetting},
     };
 
@@ -250,7 +250,7 @@ describe('NvtsPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 

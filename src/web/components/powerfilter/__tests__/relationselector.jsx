@@ -24,7 +24,7 @@ describe('Relation Selector Tests', () => {
       <RelationSelector relation="<" onChange={onChange} />,
     );
 
-    expect(element).toBeInTheDocument();
+    expect(element).toBeVisible();
   });
 
   test('should return items', async () => {
