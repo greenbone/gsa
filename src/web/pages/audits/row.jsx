@@ -146,7 +146,7 @@ const Row = ({
       </TableData>
       <TableData>
         <AuditStatus 
-          isAudit={caps.featureEnabled('COMPLIANCE_REPORTS') ? true : false}
+          isAudit={caps.featureEnabled('COMPLIANCE_REPORTS')}
           task={entity}
           links={links}/>
       </TableData>
