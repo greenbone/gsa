@@ -6,11 +6,15 @@
 import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
+import {useSelector} from 'react-redux';
 
 import PropTypes from 'web/utils/proptypes';
 import useUserTimezone from 'web/hooks/useUserTimezone';
 
 const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
+  const {timeFormat: userSettingTimeFormat, dateFormat: userSettingDateFormat} =
+    useSelector(state => state.userSettings);
+
   date = ensureDate(date);
 
   const [userTimezone] = useUserTimezone();
@@ -18,7 +22,10 @@ const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
   if (!hasValue(timezone)) {
     timezone = userTimezone;
   }
-  return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
+
+  return !isDefined(date) || !date.isValid()
+    ? null
+    : formatter(date, timezone, userSettingTimeFormat, userSettingDateFormat);
 };
 
 DateTime.propTypes = {

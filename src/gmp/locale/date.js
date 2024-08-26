@@ -34,7 +34,7 @@ export const ensureDate = date => {
   return date;
 };
 
-export const dateFormat = (date, format, tz) => {
+export const getFormattedDate = (date, format, tz) => {
   date = ensureDate(date);
   if (!isDefined(date)) {
     return undefined;
@@ -43,14 +43,30 @@ export const dateFormat = (date, format, tz) => {
   if (isDefined(tz)) {
     date.tz(tz);
   }
+
   return date.format(format);
 };
 
-export const shortDate = (date, tz) => dateFormat(date, 'L', tz);
+export const shortDate = (date, tz) => getFormattedDate(date, 'L', tz);
 
-export const longDate = (date, tz) => dateFormat(date, 'llll', tz);
+export const longDate = (date, tz) => getFormattedDate(date, 'llll', tz);
 
-export const dateTimeWithTimeZone = (date, tz) =>
-  dateFormat(date, 'llll z', tz);
+export const dateTimeWithTimeZone = (date, tz, timeFormat, dateFormat) => {
+  const timeFormats = {
+    12: 'hh:mm A',
+    24: 'HH:mm',
+  };
+
+  const dateFormats = {
+    wmdy: 'ddd, MMM DD, YYYY',
+    wdmy: 'ddd, DD MMM YYYY',
+  };
+
+  const timePart = timeFormats[timeFormat] || 'HH:mm';
+  const datePart = dateFormats[dateFormat] || 'DD MMM YYYY';
+  const formatString = `${datePart} ${timePart} z`;
+
+  return getFormattedDate(date, formatString, tz);
+};
 
 // vim: set ts=2 sw=2 tw=80:

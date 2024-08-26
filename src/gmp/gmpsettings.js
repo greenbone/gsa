@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from './utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -68,6 +67,8 @@ Notification.propTypes = {
 
 const GeneralPart = ({
   timezone,
+  userInterfaceDateFormat,
+  userInterfaceTimeFormat,
   oldPassword,
   newPassword,
   confPassword,
@@ -82,11 +83,35 @@ const GeneralPart = ({
   onChange,
 }) => {
   const [_] = useTranslation();
+
   return (
     <>
       <FormGroup title={_('Timezone')}>
         <TimeZoneSelect name="timezone" value={timezone} onChange={onChange} />
       </FormGroup>
+
+      <Select
+        label={_('Time Format')}
+        name="userInterfaceTimeFormat"
+        value={userInterfaceTimeFormat}
+        items={[
+          {value: 12, label: _('12h')},
+          {value: 24, label: _('24h')},
+        ]}
+        onChange={onChange}
+      />
+
+      <Select
+        label={_('Date Format')}
+        name="userInterfaceDateFormat"
+        value={userInterfaceDateFormat}
+        items={[
+          {value: 'wdmy', label: _('Weekday, Day, Month, Year')},
+          {value: 'wmdy', label: _('Weekday, Month, Day, Year')},
+        ]}
+        onChange={onChange}
+      />
+
       <FormGroup title={_('Change Password')}>
         <PasswordField
           grow="1"
@@ -175,13 +200,14 @@ GeneralPart.propTypes = {
   detailsExportFileName: PropTypes.string,
   errors: PropTypes.object.isRequired,
   listExportFileName: PropTypes.string,
-  maxRowsPerPage: PropTypes.number,
   newPassword: PropTypes.string,
   oldPassword: PropTypes.string,
   reportExportFileName: PropTypes.string,
   rowsPerPage: PropTypes.number,
   shouldWarn: PropTypes.bool.isRequired,
   timezone: PropTypes.string,
+  userInterfaceTimeFormat: PropTypes.oneOf([12, 24]),
+  userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy']),
   userInterfaceLanguage: PropTypes.string,
   onChange: PropTypes.func,
 };

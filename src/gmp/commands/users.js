@@ -69,6 +69,11 @@ export const DEFAULT_FILTER_SETTINGS = {
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
 };
 
+const PARAM_KEYS = {
+  DATE: 'date_format',
+  TIME: 'time_format',
+};
+
 const saveDefaultFilterSettingId = entityType =>
   `settings_filter:${DEFAULT_FILTER_SETTINGS[entityType]}`;
 
@@ -248,11 +253,27 @@ export class UserCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
+  saveSetting(settingId, settingValue) {
+    log.debug(`Saving setting ${settingId} with value ${settingValue}`);
+    try {
+      return this.httpPost({
+        cmd: 'save_setting',
+        setting_id: settingId,
+        setting_value: settingValue,
+      });
+    } catch (error) {
+      log.warn(`Failed to save setting ${settingId}: ${error}`);
+    }
+  }
+
   saveSettings(data) {
     log.debug('Saving settings', data);
+
     return this.httpPost({
       cmd: 'save_my_settings',
       text: data.timezone,
+      [PARAM_KEYS.DATE]: data.dateFormat,
+      [PARAM_KEYS.TIME]: data.timeFormat,
       old_password: data.oldPassword,
       password: data.newPassword,
       lang: data.userInterfaceLanguage,
