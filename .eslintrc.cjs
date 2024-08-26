@@ -67,6 +67,16 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+      plugins: ['vitest'],
+      rules: {
+        'vitest/expect-expect': 'off',
+        'vitest/no-disabled-tests': 'warn',
+        'vitest/no-focused-tests': 'error',
+        'vitest/no-identical-title': 'error',
+      },
+    },
+    {
       files: ['vite-env.d.ts'],
       rules: {
         'header/header': 'off',

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {useState} from 'react';
 
 import {
@@ -278,6 +277,7 @@ const AdvancedTaskWizard = ({
                   min="0"
                   max="65535"
                   type="int"
+                  name="ssh_port"
                   value={state.ssh_port}
                   onChange={onValueChange}
                 />
