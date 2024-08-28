@@ -22,7 +22,11 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
-import {clickElement, getTable} from 'web/components/testing';
+import {
+  clickElement,
+  getTable,
+  testBulkTrashcanDialog,
+} from 'web/components/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -193,7 +197,7 @@ describe('ScanConfigsPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
 
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
     await clickElement(exportIcon);

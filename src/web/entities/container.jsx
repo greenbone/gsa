@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {withRouter} from 'react-router-dom';
@@ -475,6 +474,7 @@ class EntitiesContainer extends React.Component {
     const {
       children,
       isLoading,
+      isGenericBulkTrashcanDeleteDialog = true,
       onDownload,
       showErrorMessage,
       showSuccessMessage,
@@ -519,6 +519,7 @@ class EntitiesContainer extends React.Component {
           filter: loadedFilter,
           isLoading,
           isUpdating,
+          isGenericBulkTrashcanDeleteDialog,
           selectionType: selectionType,
           sortBy,
           sortDir,
@@ -587,6 +588,7 @@ EntitiesContainer.propTypes = {
   gmpname: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  isGenericBulkTrashcanDeleteDialog: PropTypes.bool,
   listExportFileName: PropTypes.string,
   loadSettings: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,
@@ -604,9 +606,8 @@ EntitiesContainer.propTypes = {
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const username = getUsername(rootState);
-  const listExportFileName = userDefaultsSelector.getValueByName(
-    'listexportfilename',
-  );
+  const listExportFileName =
+    userDefaultsSelector.getValueByName('listexportfilename');
   return {
     listExportFileName,
     username,
