@@ -8,7 +8,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:vitest-globals/recommended',
   ],
-  plugins: ['react', 'react-hooks', 'header'],
+  plugins: ['react', 'react-hooks', 'header', 'vitest'],
   settings: {
     react: {
       version: 'detect',

@@ -28,6 +28,7 @@ import {
   getTableBody,
   getTableFooter,
   getTextInputs,
+  testBulkTrashcanDialog,
 } from 'web/components/testing';
 
 import TargetPage, {ToolBarIcons} from '../listpage';
@@ -271,7 +272,7 @@ describe('TargetPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
   test('should allow to bulk action on selected targets', async () => {
@@ -350,7 +351,7 @@ describe('TargetPage tests', () => {
     // move selected target to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
     await clickElement(deleteIcon);
-    expect(deleteByIds).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByIds);
   });
 
   test('should allow to bulk action on filtered targets', async () => {
@@ -424,7 +425,7 @@ describe('TargetPage tests', () => {
     // move all filtered targets to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });
 

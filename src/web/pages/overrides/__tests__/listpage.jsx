@@ -28,6 +28,7 @@ import {
   getTableBody,
   getTableFooter,
   getTextInputs,
+  testBulkTrashcanDialog,
 } from 'web/components/testing';
 
 import OverridesPage, {ToolBarIcons} from '../listpage';
@@ -288,7 +289,7 @@ describe('OverridesPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
   test('should allow to bulk action on selected overrides', async () => {
@@ -372,7 +373,7 @@ describe('OverridesPage tests', () => {
     // move selected override to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
     await clickElement(deleteIcon);
-    expect(deleteByIds).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByIds);
   });
 
   test('should allow to bulk action on filtered overrides', async () => {
@@ -451,7 +452,7 @@ describe('OverridesPage tests', () => {
     // move all filtered overrides to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });
 

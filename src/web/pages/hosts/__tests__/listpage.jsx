@@ -26,6 +26,7 @@ import {
   getSelectItemElementsForSelect,
   getTableFooter,
   getTextInputs,
+  testBulkDeleteDialog,
 } from 'web/components/testing';
 
 import HostPage, {ToolBarIcons} from '../listpage';
@@ -336,7 +337,7 @@ describe('Host listpage tests', () => {
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkDeleteDialog(screen, deleteByFilter);
   });
 
   test('should allow to bulk action on selected hosts', async () => {
@@ -411,7 +412,7 @@ describe('Host listpage tests', () => {
 
     // delete selected host
     await clickElement(screen.getAllByTitle('Delete selection')[0]);
-    expect(deleteByIds).toHaveBeenCalled();
+    testBulkDeleteDialog(screen, deleteByIds);
   });
 
   test('should allow to bulk action on filtered hosts', async () => {
@@ -486,7 +487,7 @@ describe('Host listpage tests', () => {
     expect(exportByFilter).toHaveBeenCalled();
 
     await clickElement(screen.getAllByTitle('Delete all filtered')[0]);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkDeleteDialog(screen, deleteByFilter);
   });
 });
 

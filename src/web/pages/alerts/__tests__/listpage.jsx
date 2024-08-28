@@ -31,6 +31,7 @@ import {
   getTableBody,
   getTableFooter,
   getTextInputs,
+  testBulkTrashcanDialog,
 } from 'web/components/testing';
 
 const caps = new Capabilities(['everything']);
@@ -261,7 +262,7 @@ describe('Alert listpage tests', () => {
     expect(deleteByFilter).not.toHaveBeenCalled();
     expect(icons[1]).toHaveAttribute('title', 'Move page contents to trashcan');
     await clickElement(icons[1]);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
   test('should allow to bulk action on selected alerts', async () => {
@@ -342,7 +343,7 @@ describe('Alert listpage tests', () => {
     expect(deleteByIds).not.toHaveBeenCalled();
     expect(icons[1]).toHaveAttribute('title', 'Move selection to trashcan');
     await clickElement(icons[1]);
-    expect(deleteByIds).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByIds);
   });
 
   test('should allow to bulk action on filtered alerts', async () => {
@@ -418,7 +419,7 @@ describe('Alert listpage tests', () => {
     expect(deleteByFilter).not.toHaveBeenCalled();
     expect(icons[1]).toHaveAttribute('title', 'Move all filtered to trashcan');
     await clickElement(icons[1]);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });
 
