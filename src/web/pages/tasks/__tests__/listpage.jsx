@@ -23,6 +23,7 @@ import {
   getPowerFilter,
   getSelectElement,
   getTextInputs,
+  testBulkTrashcanDialog,
 } from 'web/components/testing';
 
 import TaskPage, {ToolBarIcons} from '../listpage';
@@ -292,7 +293,7 @@ describe('TaskPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });
 

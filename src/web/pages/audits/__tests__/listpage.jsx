@@ -17,7 +17,7 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, fireEvent, wait} from 'web/utils/testing';
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
 import {
@@ -25,6 +25,7 @@ import {
   getActionItems,
   getBulkActionItems,
   getTableBody,
+  testBulkTrashcanDialog,
 } from 'web/components/testing';
 
 const lastReport = {
@@ -210,7 +211,8 @@ describe('AuditPage tests', () => {
     expect(deleteByFilter).not.toHaveBeenCalled();
     expect(icons[0]).toHaveAttribute('title', 'Move page contents to trashcan');
     await clickElement(icons[0]);
-    expect(deleteByFilter).toHaveBeenCalled();
+
+    testBulkTrashcanDialog(screen, deleteByFilter);
 
     expect(exportByFilter).not.toHaveBeenCalled();
     expect(icons[1]).toHaveAttribute('title', 'Export page contents');

@@ -27,6 +27,7 @@ import {
   getTableBody,
   getTableFooter,
   getTextInputs,
+  testBulkTrashcanDialog,
 } from 'web/components/testing';
 
 const credential = Credential.fromElement({
@@ -223,7 +224,7 @@ describe('CredentialPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
   test('should allow to bulk action on selected credentials', async () => {
@@ -289,7 +290,7 @@ describe('CredentialPage tests', () => {
     // move selected credential to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
     await clickElement(deleteIcon);
-    expect(deleteByIds).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByIds);
   });
 
   test('should allow to bulk action on filtered credentials', async () => {
@@ -350,7 +351,7 @@ describe('CredentialPage tests', () => {
     // move all filtered credentials to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });
 

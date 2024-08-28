@@ -28,6 +28,7 @@ import {
   getTableBody,
   getTableFooter,
   getTextInputs,
+  testBulkTrashcanDialog,
 } from 'web/components/testing';
 
 import NotesPage, {ToolBarIcons} from '../listpage';
@@ -282,7 +283,7 @@ describe('NotesPage tests', () => {
       'Move page contents to trashcan',
     )[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
   test('should allow to bulk action on selected notes', async () => {
@@ -366,7 +367,7 @@ describe('NotesPage tests', () => {
     // move selected note to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
     await clickElement(deleteIcon);
-    expect(deleteByIds).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByIds);
   });
 
   test('should allow to bulk action on filtered notes', async () => {
@@ -444,7 +445,7 @@ describe('NotesPage tests', () => {
     // move all filtered notes to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
     await clickElement(deleteIcon);
-    expect(deleteByFilter).toHaveBeenCalled();
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });
 
