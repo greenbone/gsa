@@ -17,7 +17,7 @@ import ScheduleIcon from 'web/components/icon/scheduleicon';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 import {getTimezone} from 'web/store/usersettings/selectors';
 
 const TaskScheduleIcon = ({size, links = true, schedule, timezone}) => {
@@ -47,7 +47,7 @@ const TaskScheduleIcon = ({size, links = true, schedule, timezone}) => {
   } else if (count === 1) {
     title = _('View Details of Schedule {{name}} (Next due: {{time}} Once)', {
       name,
-      time: dateTimeWithTimeZone(nextDate, timezone),
+      time: formattedUserSettingDateTimeWithTimeZone(nextDate, timezone),
     });
   } else if (count > 1) {
     title = _(
@@ -55,14 +55,14 @@ const TaskScheduleIcon = ({size, links = true, schedule, timezone}) => {
         '{{time}}, {{periods}} more times )',
       {
         name,
-        time: dateTimeWithTimeZone(nextDate, timezone),
+        time: formattedUserSettingDateTimeWithTimeZone(nextDate, timezone),
         periods: count,
       },
     );
   } else {
     title = _('View Details of Schedule {{name}} (Next due: {{time}})', {
       name,
-      time: dateTimeWithTimeZone(nextDate, timezone),
+      time: formattedUserSettingDateTimeWithTimeZone(nextDate, timezone),
     });
   }
 
