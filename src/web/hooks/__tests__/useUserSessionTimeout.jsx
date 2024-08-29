@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 
-import {dateFormat} from 'gmp/locale/date';
+import {getFormattedDate} from 'gmp/locale/date';
 import date from 'gmp/models/date';
 
 import {setSessionTimeout as setSessionTimeoutAction} from 'web/store/usersettings/actions';
@@ -21,7 +21,7 @@ const TestUserSessionTimeout = () => {
       onClick={() => setSessionTimeout(date('2020-03-10'))}
       onKeyDown={() => {}}
     >
-      {dateFormat(sessionTimeout, 'DD-MM-YY')}
+      {getFormattedDate(sessionTimeout, 'DD-MM-YY')}
     </button>
   );
 };

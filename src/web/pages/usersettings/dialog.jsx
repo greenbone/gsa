@@ -39,7 +39,7 @@ const FormGroupSizer = styled(Column)`
 
 const fieldsToValidate = ['rowsPerPage'];
 
-let UserSettingsDialog = ({
+const UserSettingsDialogComponent = ({
   alerts,
   credentials,
   filters,
@@ -49,6 +49,8 @@ let UserSettingsDialog = ({
   schedules,
   targets,
   timezone,
+  userInterfaceTimeFormat,
+  userInterfaceDateFormat,
   userInterfaceLanguage,
   rowsPerPage,
   maxRowsPerPage,
@@ -102,6 +104,8 @@ let UserSettingsDialog = ({
 }) => {
   const settings = {
     timezone,
+    userInterfaceTimeFormat,
+    userInterfaceDateFormat,
     oldPassword: '',
     newPassword: '',
     confPassword: '',
@@ -194,6 +198,8 @@ let UserSettingsDialog = ({
             <FormGroupSizer>
               <GeneralPart
                 timezone={values.timezone}
+                userInterfaceTimeFormat={values.userInterfaceTimeFormat}
+                userInterfaceDateFormat={values.userInterfaceDateFormat}
                 oldPassword={values.oldPassword}
                 newPassword={values.newPassword}
                 confPassword={values.confPassword}
@@ -290,7 +296,7 @@ let UserSettingsDialog = ({
   );
 };
 
-UserSettingsDialog.propTypes = {
+UserSettingsDialogComponent.propTypes = {
   alerts: PropTypes.array,
   alertsFilter: PropTypes.string,
   auditReportsFilter: PropTypes.string,
@@ -302,6 +308,7 @@ UserSettingsDialog.propTypes = {
   credentials: PropTypes.array,
   credentialsFilter: PropTypes.string,
   cveFilter: PropTypes.string,
+  userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy']),
   defaultAlert: PropTypes.string,
   defaultEsxiCredential: PropTypes.string,
   defaultOpenvasScanConfig: PropTypes.string,
@@ -346,6 +353,7 @@ UserSettingsDialog.propTypes = {
   tasksFilter: PropTypes.string,
   ticketsFilter: PropTypes.string,
   timezone: PropTypes.string,
+  userInterfaceTimeFormat: PropTypes.oneOf([12, 24]),
   tlsCertificatesFilter: PropTypes.string,
   userInterfaceLanguage: PropTypes.string,
   usersFilter: PropTypes.string,
@@ -354,12 +362,12 @@ UserSettingsDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-UserSettingsDialog = connect(rootState => {
+const UserSettingsDialog = connect(rootState => {
   const entities = isDefined(rootState.entities) ? rootState.entities : [];
   return {
     entities,
   };
-})(UserSettingsDialog);
+})(UserSettingsDialogComponent);
 
 export default UserSettingsDialog;
 
