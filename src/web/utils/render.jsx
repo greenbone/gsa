@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {format} from 'd3-format';
 
 import React from 'react';
 
 import {_} from 'gmp/locale/lang';
-import {dateFormat} from 'gmp/locale/date';
+import {getFormattedDate} from 'gmp/locale/date';
 
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
@@ -525,12 +524,12 @@ export const generateFilename = ({
     mTime = currentTime;
   }
 
-  const percentC = dateFormat(cTime, 'YYYYMMDD');
-  const percentc = dateFormat(cTime, 'HHMMSS');
-  const percentD = dateFormat(currentTime, 'YYYYMMDD');
-  const percentt = dateFormat(currentTime, 'HHMMSS');
-  const percentM = dateFormat(mTime, 'YYYYMMDD');
-  const percentm = dateFormat(mTime, 'HHMMSS');
+  const percentC = getFormattedDate(cTime, 'YYYYMMDD');
+  const percentc = getFormattedDate(cTime, 'HHMMSS');
+  const percentD = getFormattedDate(currentTime, 'YYYYMMDD');
+  const percentt = getFormattedDate(currentTime, 'HHMMSS');
+  const percentM = getFormattedDate(mTime, 'YYYYMMDD');
+  const percentm = getFormattedDate(mTime, 'HHMMSS');
   const percentN = isDefined(resourceName) ? resourceName : resourceType;
 
   const fileNameMap = {

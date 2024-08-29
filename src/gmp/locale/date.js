@@ -34,7 +34,7 @@ export const ensureDate = date => {
   return date;
 };
 
-export const dateFormat = (date, format, tz) => {
+export const getFormattedDate = (date, format, tz) => {
   date = ensureDate(date);
   if (!isDefined(date)) {
     return undefined;
@@ -43,14 +43,49 @@ export const dateFormat = (date, format, tz) => {
   if (isDefined(tz)) {
     date.tz(tz);
   }
+
   return date.format(format);
 };
 
-export const shortDate = (date, tz) => dateFormat(date, 'L', tz);
+export const dateTimeFormatOptions = {
+  time: {12: 'h:mm A', 24: 'H:mm'},
+  date: {wmdy: 'ddd, MMM D, YYYY', wdmy: 'ddd, D MMM YYYY'},
+};
 
-export const longDate = (date, tz) => dateFormat(date, 'llll', tz);
+export const shortDate = (date, tz, userInterfaceDateFormat) => {
+  const formatString = dateTimeFormatOptions.date[userInterfaceDateFormat]
+    ? 'DD/MM/YYYY'
+    : 'L';
 
-export const dateTimeWithTimeZone = (date, tz) =>
-  dateFormat(date, 'llll z', tz);
+  return getFormattedDate(date, formatString, tz);
+};
 
-// vim: set ts=2 sw=2 tw=80:
+export const longDate = (
+  date,
+  tz,
+  userInterfaceTimeFormat,
+  userInterfaceDateFormat,
+) => {
+  const formatString =
+    dateTimeFormatOptions.date[userInterfaceDateFormat] &&
+    dateTimeFormatOptions.time[userInterfaceTimeFormat]
+      ? `${dateTimeFormatOptions.date[userInterfaceDateFormat]} ${dateTimeFormatOptions.time[userInterfaceTimeFormat]} z`
+      : 'llll';
+
+  return getFormattedDate(date, formatString, tz);
+};
+
+export const dateTimeWithTimeZone = (
+  date,
+  tz,
+  userInterfaceTimeFormat,
+  userInterfaceDateFormat,
+) => {
+  const formatString =
+    dateTimeFormatOptions.date[userInterfaceDateFormat] &&
+    dateTimeFormatOptions.time[userInterfaceTimeFormat]
+      ? `${dateTimeFormatOptions.date[userInterfaceDateFormat]} ${dateTimeFormatOptions.time[userInterfaceTimeFormat]} z`
+      : 'llll z';
+
+  return getFormattedDate(date, formatString, tz);
+};
