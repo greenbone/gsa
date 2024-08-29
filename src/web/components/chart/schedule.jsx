@@ -10,7 +10,7 @@ import {LinearGradient} from '@visx/gradient';
 import {scaleBand, scaleUtc} from 'd3-scale';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
 import date from 'gmp/models/date';
 
@@ -63,12 +63,14 @@ const cloneSchedule = (d, start) => {
     duration === 0
       ? _('{{name}} Start: {{date}}', {
           name: d.label,
-          date: dateTimeWithTimeZone(start),
+          date: formattedUserSettingDateTimeWithTimeZone(start),
         })
       : _('{{name}} Start: {{startdate}} End: {{enddate}}', {
           name: d.label,
-          startdate: dateTimeWithTimeZone(start),
-          enddate: dateTimeWithTimeZone(start.clone().add(duration, 'seconds')),
+          startdate: formattedUserSettingDateTimeWithTimeZone(start),
+          enddate: formattedUserSettingDateTimeWithTimeZone(
+            start.clone().add(duration, 'seconds'),
+          ),
         });
   return {
     ...d,
