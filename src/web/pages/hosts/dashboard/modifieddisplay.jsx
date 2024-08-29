@@ -6,7 +6,7 @@
 import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-import {shortDate} from 'gmp/locale/date';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {parseInt, parseDate} from 'gmp/parser';
 
@@ -37,7 +37,7 @@ const transformModified = (data = {}) => {
     const modified = parseDate(value);
     return {
       x: modified,
-      label: shortDate(modified),
+      label: formattedUserSettingShortDate(modified),
       y: parseInt(count),
       y2: parseInt(c_count),
     };
