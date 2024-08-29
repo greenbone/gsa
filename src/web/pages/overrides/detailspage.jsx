@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
+import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -109,9 +108,11 @@ ToolBarIcons.propTypes = {
   onOverrideEditClick: PropTypes.func.isRequired,
 };
 
-const Details = connect(rootState => ({
-  timezone: getTimezone(rootState),
-}))(({entity, timezone, ...props}) => {
+const Details = connect(rootState => {
+  return {
+    timezone: getTimezone(rootState),
+  };
+})(({entity, timezone, ...props}) => {
   const {nvt} = entity;
   return (
     <Layout flex="column">
@@ -149,7 +150,10 @@ const Details = connect(rootState => ({
                 isDefined(entity.endTime) &&
                 ' ' +
                   _('until {{- enddate}}', {
-                    enddate: longDate(entity.endTime, timezone),
+                    enddate: formattedUserSettingLongDate(
+                      entity.endTime,
+                      timezone,
+                    ),
                   })}
             </TableData>
           </TableRow>
