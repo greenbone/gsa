@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -69,6 +68,8 @@ Notification.propTypes = {
 
 const GeneralPart = ({
   timezone,
+  userInterfaceDateFormat,
+  userInterfaceTimeFormat,
   oldPassword,
   newPassword,
   confPassword,
@@ -192,13 +193,14 @@ GeneralPart.propTypes = {
   detailsExportFileName: PropTypes.string,
   errors: PropTypes.object.isRequired,
   listExportFileName: PropTypes.string,
-  maxRowsPerPage: PropTypes.number,
   newPassword: PropTypes.string,
   oldPassword: PropTypes.string,
   reportExportFileName: PropTypes.string,
   rowsPerPage: PropTypes.number,
   shouldWarn: PropTypes.bool.isRequired,
   timezone: PropTypes.string,
+  userInterfaceTimeFormat: PropTypes.oneOf([12, 24]),
+  userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy']),
   userInterfaceLanguage: PropTypes.string,
   onChange: PropTypes.func,
 };

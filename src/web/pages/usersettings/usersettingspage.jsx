@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import {connect} from 'react-redux';
 
@@ -232,23 +231,45 @@ class UserSettings extends React.Component {
     }
   }
 
-  handleSaveSettings(data) {
-    const {gmp} = this.props;
-    const {userInterfaceLanguage = BROWSER_LANGUAGE, timezone} = data;
+  async handleSaveSettings(data) {
+    try {
+      const {gmp} = this.props;
 
-    this.handleInteraction();
+      const {userInterfaceLanguage = BROWSER_LANGUAGE, timezone} = data;
 
-    return gmp.user.saveSettings(data).then(() => {
-      this.closeDialog();
-      this.props.setLocale(
-        userInterfaceLanguage === BROWSER_LANGUAGE
-          ? undefined
-          : userInterfaceLanguage,
+      this.handleInteraction();
+      await gmp.user.saveSetting(
+        'd9857b7c-1159-4193-9bc0-18fae5473a69',
+        data.userInterfaceDateFormat,
       );
-      this.props.setTimezone(timezone);
+      await gmp.user.saveSetting(
+        '11deb7ff-550b-4950-aacf-06faeb7c61b9',
+        data.userInterfaceTimeFormat,
+      );
 
-      this.loadSettings();
-    });
+      await gmp.user.saveSettings(data).then(() => {
+        this.closeDialog();
+        this.props.setLocale(
+          userInterfaceLanguage === BROWSER_LANGUAGE
+            ? undefined
+            : userInterfaceLanguage,
+        );
+        this.props.setTimezone(timezone);
+
+        localStorage.setItem(
+          'userInterfaceTimeFormat',
+          data.userInterfaceTimeFormat,
+        );
+        localStorage.setItem(
+          'userInterfaceDateFormat',
+          data.userInterfaceDateFormat,
+        );
+
+        this.loadSettings();
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   handleValueChange(value, name) {
@@ -269,6 +290,8 @@ class UserSettings extends React.Component {
       targets,
       isLoading = true,
       timezone,
+      userInterfaceDateFormat = {},
+      userInterfaceTimeFormat = {},
       userInterfaceLanguage = {},
       rowsPerPage = {},
       maxRowsPerPage = {},
@@ -359,11 +382,10 @@ class UserSettings extends React.Component {
     nvtFilter = hasValue(nvtFilter) ? nvtFilter : {};
     certBundFilter = hasValue(certBundFilter) ? certBundFilter : {};
     dfnCertFilter = hasValue(dfnCertFilter) ? dfnCertFilter : {};
-
     const openVasScanners = scanners.filter(openVasScannersFilter);
 
     return (
-      <React.Fragment>
+      <>
         <PageTitle title={_('My Settings')} />
         <Layout flex="column">
           <ToolBarIcons
@@ -378,7 +400,7 @@ class UserSettings extends React.Component {
           {isLoading ? (
             <Loading />
           ) : (
-            <React.Fragment>
+            <>
               <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
@@ -404,6 +426,17 @@ class UserSettings extends React.Component {
                           <TableData>{_('Timezone')}</TableData>
                           <TableData>{timezone}</TableData>
                         </TableRow>
+                        <TableRow title={userInterfaceTimeFormat.comment}>
+                          <TableData>{_('Time Format')}</TableData>
+                          <TableData>
+                            {userInterfaceTimeFormat.value}h
+                          </TableData>
+                        </TableRow>
+                        <TableRow title={userInterfaceDateFormat.comment}>
+                          <TableData>{_('Date Format')}</TableData>
+                          <TableData>{userInterfaceDateFormat.value}</TableData>
+                        </TableRow>
+                        <TableRow></TableRow>
                         <TableRow>
                           <TableData>{_('Password')}</TableData>
                           <TableData>********</TableData>
@@ -719,7 +752,7 @@ class UserSettings extends React.Component {
                   )}
                 </TabPanels>
               </Tabs>
-            </React.Fragment>
+            </>
           )}
           {dialogVisible && !isLoading && (
             <SettingsDialog
@@ -732,6 +765,8 @@ class UserSettings extends React.Component {
               schedules={schedules}
               targets={targets}
               timezone={timezone}
+              userInterfaceTimeFormat={userInterfaceTimeFormat.value}
+              userInterfaceDateFormat={userInterfaceDateFormat.value}
               userInterfaceLanguage={userInterfaceLanguage.value}
               rowsPerPage={rowsPerPage.value}
               maxRowsPerPage={maxRowsPerPage.value}
@@ -790,7 +825,7 @@ class UserSettings extends React.Component {
             />
           )}
         </Layout>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -807,6 +842,7 @@ UserSettings.propTypes = {
   credentials: PropTypes.array,
   credentialsFilter: PropTypes.object,
   cveFilter: PropTypes.object,
+  userInterfaceDateFormat: PropTypes.oneOf(['wdmy', 'wmdy']),
   defaultAlert: PropTypes.object,
   defaultEsxiCredential: PropTypes.object,
   defaultOpenvasScanConfig: PropTypes.object,
@@ -866,6 +902,7 @@ UserSettings.propTypes = {
   tasksFilter: PropTypes.object,
   ticketsFilter: PropTypes.object,
   timezone: PropTypes.string,
+  userInterfaceTimeFormat: PropTypes.oneOf([12, 24]),
   tlsCertificatesFilter: PropTypes.object,
   userInterfaceLanguage: PropTypes.object,
   usersFilter: PropTypes.object,
@@ -875,11 +912,21 @@ UserSettings.propTypes = {
 
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
+
   const userDefaultFilterSelector = getUserSettingsDefaultFilter(rootState);
 
   const userInterfaceLanguage = userDefaultsSelector.getByName(
     'userinterfacelanguage',
   );
+
+  const userInterfaceTimeFormat = userDefaultsSelector.getByName(
+    'userinterfacetimeformat',
+  );
+
+  const userInterfaceDateFormat = userDefaultsSelector.getByName(
+    'userinterfacedateformat',
+  );
+
   const rowsPerPage = userDefaultsSelector.getByName('rowsperpage');
   const detailsExportFileName = userDefaultsSelector.getByName(
     'detailsexportfilename',
@@ -1002,6 +1049,8 @@ const mapStateToProps = rootState => {
     schedules: schedulesSel.getEntities(ALL_FILTER),
     targets: targetsSel.getEntities(ALL_FILTER),
     timezone: getTimezone(rootState),
+    userInterfaceTimeFormat,
+    userInterfaceDateFormat,
     userInterfaceLanguage,
     rowsPerPage,
     detailsExportFileName,
