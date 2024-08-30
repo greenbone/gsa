@@ -12,7 +12,9 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
-import {parseFloat, parseYesNo} from 'gmp/parser';
+import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+
+import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -51,6 +53,7 @@ const UserSettingsDialogComponent = ({
   timezone,
   userInterfaceTimeFormat,
   userInterfaceDateFormat,
+  isUserInterfaceTimeDateDefault,
   userInterfaceLanguage,
   rowsPerPage,
   maxRowsPerPage,
@@ -107,6 +110,7 @@ const UserSettingsDialogComponent = ({
     timezone,
     userInterfaceTimeFormat,
     userInterfaceDateFormat,
+    isUserInterfaceTimeDateDefault,
     oldPassword: '',
     newPassword: '',
     confPassword: '',
@@ -199,6 +203,9 @@ const UserSettingsDialogComponent = ({
                 timezone={values.timezone}
                 userInterfaceTimeFormat={values.userInterfaceTimeFormat}
                 userInterfaceDateFormat={values.userInterfaceDateFormat}
+                isUserInterfaceTimeDateDefault={
+                  values.isUserInterfaceTimeDateDefault
+                }
                 oldPassword={values.oldPassword}
                 newPassword={values.newPassword}
                 confPassword={values.confPassword}
@@ -307,7 +314,7 @@ UserSettingsDialogComponent.propTypes = {
   credentials: PropTypes.array,
   credentialsFilter: PropTypes.string,
   cveFilter: PropTypes.string,
-  userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy']),
+  userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy', SYSTEM_DEFAULT]),
   defaultAlert: PropTypes.string,
   defaultEsxiCredential: PropTypes.string,
   defaultOpenvasScanConfig: PropTypes.string,
@@ -326,6 +333,7 @@ UserSettingsDialogComponent.propTypes = {
   filtersFilter: PropTypes.string,
   groupsFilter: PropTypes.string,
   hostsFilter: PropTypes.string,
+  isUserInterfaceTimeDateDefault: PropTypes.oneOfType([YES_VALUE, NO_VALUE]),
   listExportFileName: PropTypes.string,
   maxRowsPerPage: PropTypes.number,
   notesFilter: PropTypes.string,
@@ -352,7 +360,7 @@ UserSettingsDialogComponent.propTypes = {
   tasksFilter: PropTypes.string,
   ticketsFilter: PropTypes.string,
   timezone: PropTypes.string,
-  userInterfaceTimeFormat: PropTypes.oneOf([12, 24]),
+  userInterfaceTimeFormat: PropTypes.oneOf([12, 24, SYSTEM_DEFAULT]),
   tlsCertificatesFilter: PropTypes.string,
   userInterfaceLanguage: PropTypes.string,
   usersFilter: PropTypes.string,
