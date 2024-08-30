@@ -8,6 +8,7 @@ import styled from 'styled-components';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {dateTimeFormatOptions} from 'gmp/locale/date';
 
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
@@ -84,6 +85,14 @@ const GeneralPart = ({
 }) => {
   const [_] = useTranslation();
 
+  const getSelectItems = category => {
+    return Object.entries(dateTimeFormatOptions[category].options).map(
+      ([value, {label}]) => ({
+        value: isNaN(value) ? value : Number(value),
+        label: _(label),
+      }),
+    );
+  };
   return (
     <>
       <FormGroup title={_('Timezone')}>
@@ -94,10 +103,7 @@ const GeneralPart = ({
         label={_('Time Format')}
         name="userInterfaceTimeFormat"
         value={userInterfaceTimeFormat}
-        items={[
-          {value: 12, label: _('12h')},
-          {value: 24, label: _('24h')},
-        ]}
+        items={getSelectItems('time')}
         onChange={onChange}
       />
 
@@ -105,10 +111,7 @@ const GeneralPart = ({
         label={_('Date Format')}
         name="userInterfaceDateFormat"
         value={userInterfaceDateFormat}
-        items={[
-          {value: 'wdmy', label: _('Weekday, Day, Month, Year')},
-          {value: 'wmdy', label: _('Weekday, Month, Day, Year')},
-        ]}
+        items={getSelectItems('longDate')}
         onChange={onChange}
       />
 

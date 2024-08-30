@@ -433,12 +433,18 @@ class UserSettings extends React.Component {
                         <TableRow title={userInterfaceTimeFormat.comment}>
                           <TableData>{_('Time Format')}</TableData>
                           <TableData>
-                            {userInterfaceTimeFormat.value}h
+                            {userInterfaceTimeFormat.value === 'system_default'
+                              ? _('System Default')
+                              : `${Number(userInterfaceTimeFormat.value)}h`}
                           </TableData>
                         </TableRow>
                         <TableRow title={userInterfaceDateFormat.comment}>
                           <TableData>{_('Date Format')}</TableData>
-                          <TableData>{userInterfaceDateFormat.value}</TableData>
+                          <TableData>
+                            {userInterfaceDateFormat.value === 'system_default'
+                              ? _('System Default')
+                              : userInterfaceDateFormat.value}
+                          </TableData>
                         </TableRow>
                         <TableRow></TableRow>
                         <TableRow>
