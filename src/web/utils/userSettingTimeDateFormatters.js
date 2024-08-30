@@ -7,7 +7,7 @@ import {longDate, shortDate, dateTimeWithTimeZone} from 'gmp/locale/date';
 
 export const formattedUserSettingShortDate = (date, tz) => {
   const userInterfaceDateFormat = localStorage.getItem(
-    'userInterfaceTimeFormat',
+    'userInterfaceDateFormat',
   );
 
   return shortDate(date, tz, userInterfaceDateFormat);
