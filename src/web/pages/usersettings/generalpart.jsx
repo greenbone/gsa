@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {dateTimeFormatOptions} from 'gmp/locale/date';
 
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
