@@ -116,13 +116,19 @@ describe('longDate tests', () => {
     });
 
     test.each([
-      ['2018-11-24', 'UTC', undefined, undefined, 'Fri, Nov 23, 2018 11:00 PM'],
+      [
+        '2018-11-24',
+        undefined,
+        undefined,
+        undefined,
+        'Sat, Nov 24, 2018 12:00 AM',
+      ],
       [
         new Date('2018-11-23T00:00:00'),
-        'UTC',
         undefined,
         undefined,
-        'Thu, Nov 22, 2018 11:00 PM',
+        undefined,
+        'Fri, Nov 23, 2018 12:00 AM',
       ],
       ['2018-11-24T15:30:00Z', 'UTC', 12, 'wdmy', 'Sat, 24 Nov 2018 3:30 PM'],
       ['2018-11-24T15:30:00Z', 'UTC', 24, 'wmdy', 'Sat, Nov 24, 2018 15:30'],
@@ -186,10 +192,10 @@ describe('dateTimeWithTimeZone tests', () => {
     test.each([
       [
         new Date('2018-11-23T00:00:00'),
-        'UTC',
         undefined,
         undefined,
-        'Thu, Nov 22, 2018 11:00 PM UTC',
+        undefined,
+        'Fri, Nov 23, 2018 12:00 AM ',
       ],
       [
         '2018-11-24T15:30:00Z',

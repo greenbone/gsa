@@ -1810,6 +1810,7 @@
   "Uploading": "Hochladen",
   "Urgency": "Dringlichkeit",
   "Use LDAPS only": "Ausschließlich LDAPS verwenden",
+  "Use System Default for Time and Date Format": "Systemstandard für Zeit- und Datumsformat verwenden",
   "Use workaround for default certificate": "Problemumgehung für Standard-Zertifikat verwenden",
   "User": "Benutzer",
   "User ID": "Benutzer-ID",

@@ -11,8 +11,9 @@ import _ from 'gmp/locale';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
 import {openVasScannersFilter} from 'gmp/models/scanner';
+import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 
-import {YES_VALUE, parseYesNo} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE, parseYesNo} from 'gmp/parser';
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
@@ -297,6 +298,13 @@ class UserSettings extends React.Component {
       timezone,
       userInterfaceDateFormat = {},
       userInterfaceTimeFormat = {},
+      isUserInterfaceTimeDateDefault = {
+        value:
+          userInterfaceTimeFormat.value === SYSTEM_DEFAULT &&
+          userInterfaceDateFormat.value === SYSTEM_DEFAULT
+            ? YES_VALUE
+            : NO_VALUE,
+      },
       userInterfaceLanguage = {},
       rowsPerPage = {},
       maxRowsPerPage = {},
@@ -433,7 +441,7 @@ class UserSettings extends React.Component {
                         <TableRow title={userInterfaceTimeFormat.comment}>
                           <TableData>{_('Time Format')}</TableData>
                           <TableData>
-                            {userInterfaceTimeFormat.value === 'system_default'
+                            {userInterfaceTimeFormat.value === SYSTEM_DEFAULT
                               ? _('System Default')
                               : `${Number(userInterfaceTimeFormat.value)}h`}
                           </TableData>
@@ -441,7 +449,7 @@ class UserSettings extends React.Component {
                         <TableRow title={userInterfaceDateFormat.comment}>
                           <TableData>{_('Date Format')}</TableData>
                           <TableData>
-                            {userInterfaceDateFormat.value === 'system_default'
+                            {userInterfaceDateFormat.value === SYSTEM_DEFAULT
                               ? _('System Default')
                               : userInterfaceDateFormat.value}
                           </TableData>
@@ -777,6 +785,9 @@ class UserSettings extends React.Component {
               timezone={timezone}
               userInterfaceTimeFormat={userInterfaceTimeFormat.value}
               userInterfaceDateFormat={userInterfaceDateFormat.value}
+              isUserInterfaceTimeDateDefault={
+                isUserInterfaceTimeDateDefault.value
+              }
               userInterfaceLanguage={userInterfaceLanguage.value}
               rowsPerPage={rowsPerPage.value}
               maxRowsPerPage={maxRowsPerPage.value}
@@ -852,7 +863,7 @@ UserSettings.propTypes = {
   credentials: PropTypes.array,
   credentialsFilter: PropTypes.object,
   cveFilter: PropTypes.object,
-  userInterfaceDateFormat: PropTypes.oneOf(['wdmy', 'wmdy']),
+  userInterfaceDateFormat: PropTypes.oneOf(['wdmy', 'wmdy', SYSTEM_DEFAULT]),
   defaultAlert: PropTypes.object,
   defaultEsxiCredential: PropTypes.object,
   defaultOpenvasScanConfig: PropTypes.object,
@@ -870,6 +881,7 @@ UserSettings.propTypes = {
   dynamicSeverity: PropTypes.object,
   filters: PropTypes.array,
   filtersFilter: PropTypes.object,
+  isUserInterfaceTimeDateDefault: PropTypes.oneOfType([YES_VALUE, NO_VALUE]),
   gmp: PropTypes.gmp.isRequired,
   groupsFilter: PropTypes.object,
   hostsFilter: PropTypes.object,
@@ -912,7 +924,7 @@ UserSettings.propTypes = {
   tasksFilter: PropTypes.object,
   ticketsFilter: PropTypes.object,
   timezone: PropTypes.string,
-  userInterfaceTimeFormat: PropTypes.oneOf([12, 24]),
+  userInterfaceTimeFormat: PropTypes.oneOf([12, 24, SYSTEM_DEFAULT]),
   tlsCertificatesFilter: PropTypes.object,
   userInterfaceLanguage: PropTypes.object,
   usersFilter: PropTypes.object,

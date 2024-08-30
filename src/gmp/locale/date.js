@@ -13,7 +13,7 @@ import {setLocale as setMomentLocale, isDate} from 'gmp/models/date';
 
 const log = logger.getLogger('gmp.locale.date');
 
-const SYSTEM_DEFAULT = 'system_default';
+export const SYSTEM_DEFAULT = 'system_default';
 const LONG_DATE = 'longDate';
 const SHORT_DATE = 'shortDate';
 const TIME = 'time';
@@ -23,24 +23,18 @@ export const dateTimeFormatOptions = {
     options: {
       12: {format: 'h:mm A', label: '12h'},
       24: {format: 'H:mm', label: '24h'},
-      [SYSTEM_DEFAULT]: {
-        format: 'LT',
-        label: 'System Default',
-      },
     },
   },
   [SHORT_DATE]: {
     options: {
       wmdy: {format: 'MM/DD/YYYY'},
       wdmy: {format: 'DD/MM/YYYY'},
-      [SYSTEM_DEFAULT]: {format: 'L'},
     },
   },
   [LONG_DATE]: {
     options: {
       wmdy: {format: 'ddd, MMM D, YYYY', label: 'Weekday, Month, Day, Year'},
       wdmy: {format: 'ddd, D MMM YYYY', label: 'Weekday, Day, Month, Year'},
-      [SYSTEM_DEFAULT]: {format: 'llll', label: 'System Default'},
     },
   },
 };
