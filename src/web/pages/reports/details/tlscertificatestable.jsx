@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
 
 import {_, _l} from 'gmp/locale/lang';
-import {shortDate} from 'gmp/locale/date';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -123,10 +122,16 @@ const Row = ({
       </TableData>
       <TableData>{serial}</TableData>
       <TableData>
-        <DateTime format={shortDate} date={activationTime} />
+        <DateTime
+          format={formattedUserSettingShortDate}
+          date={activationTime}
+        />
       </TableData>
       <TableData>
-        <DateTime format={shortDate} date={expirationTime} />
+        <DateTime
+          format={formattedUserSettingShortDate}
+          date={expirationTime}
+        />
       </TableData>
       <TableData>
         <Link

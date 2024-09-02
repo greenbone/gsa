@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {shortDate} from 'gmp/locale/date';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -72,7 +71,7 @@ const ReportFormatDetails = ({entity, links = true}) => {
               <Divider>
                 <span>{renderYesNo(trust.value)}</span>
                 {isDefined(trust.time) && (
-                  <span>({shortDate(trust.time)})</span>
+                  <span>({formattedUserSettingShortDate(trust.time)})</span>
                 )}
               </Divider>
             </TableData>

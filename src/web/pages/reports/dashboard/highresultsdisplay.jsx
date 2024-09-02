@@ -6,7 +6,7 @@
 import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-import {longDate} from 'gmp/locale/date';
+import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {parseInt, parseFloat, parseDate} from 'gmp/parser';
 
@@ -33,7 +33,7 @@ const transformHighResults = (data = {}) => {
   return groups.map(group => {
     const reportDate = parseDate(group.value);
     return {
-      label: longDate(reportDate),
+      label: formattedUserSettingLongDate(reportDate),
       x: reportDate,
       y: parseInt(group.stats.high.max),
       y2: parseFloat(group.stats.high_per_host.max),
