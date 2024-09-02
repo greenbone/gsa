@@ -85,6 +85,10 @@ const GeneralPart = ({
   onChange,
 }) => {
   const [_] = useTranslation();
+  const [prevUserInterfaceTimeFormat, setPrevUserInterfaceTimeFormat] =
+    useState(undefined);
+  const [prevUserInterfaceDateFormat, setPrevUserInterfaceDateFormat] =
+    useState(undefined);
 
   const getSelectItems = category => {
     return Object.entries(dateTimeFormatOptions[category].options).map(
@@ -94,11 +98,6 @@ const GeneralPart = ({
       }),
     );
   };
-
-  const [prevUserInterfaceTimeFormat, setPrevUserInterfaceTimeFormat] =
-    useState(undefined);
-  const [prevUserInterfaceDateFormat, setPrevUserInterfaceDateFormat] =
-    useState(undefined);
 
   const handleSysDefaultChange = event => {
     const isSystemDefault = parseYesNo(event);

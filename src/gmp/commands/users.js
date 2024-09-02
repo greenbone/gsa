@@ -260,8 +260,8 @@ export class UserCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'save_my_settings',
       text: data.timezone,
-      [PARAM_KEYS.DATE]: data.dateFormat,
-      [PARAM_KEYS.TIME]: data.timeFormat,
+      [PARAM_KEYS.DATE]: data.userInterfaceDateFormat,
+      [PARAM_KEYS.TIME]: data.userInterfaceTimeFormat,
       old_password: data.oldPassword,
       password: data.newPassword,
       lang: data.userInterfaceLanguage,
