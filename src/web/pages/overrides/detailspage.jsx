@@ -108,11 +108,9 @@ ToolBarIcons.propTypes = {
   onOverrideEditClick: PropTypes.func.isRequired,
 };
 
-const Details = connect(rootState => {
-  return {
-    timezone: getTimezone(rootState),
-  };
-})(({entity, timezone, ...props}) => {
+const Details = connect(rootState => ({
+  timezone: getTimezone(rootState),
+}))(({entity, timezone, ...props}) => {
   const {nvt} = entity;
   return (
     <Layout flex="column">
