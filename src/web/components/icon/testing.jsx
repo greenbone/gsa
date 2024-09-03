@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent, act} from 'web/utils/testing';
@@ -31,16 +30,18 @@ export const testIcon = Icon => {
     const {element} = render(<Icon disabled={true} />);
 
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path',
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 
   test('should change appearance when inactive', () => {
     const {element} = render(<Icon active={false} />);
 
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: '& svg path',
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 
   test('should not call clickhandler when disabled', () => {

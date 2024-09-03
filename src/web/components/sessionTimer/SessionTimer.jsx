@@ -7,10 +7,11 @@ import {useEffect, useState} from 'react';
 
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import date from 'gmp/models/date';
-import {RefreshCcw} from 'lucide-react';
+import RefreshIcon from 'web/components/icon/refreshicon';
 import Divider from 'web/components/layout/divider';
 import {ActionIcon} from '@mantine/core';
 import useTranslation from 'web/hooks/useTranslation';
+import Theme from 'web/utils/theme';
 
 const SessionTimer = () => {
   const [sessionTimeout, renewSession] = useUserSessionTimeout();
@@ -50,7 +51,7 @@ const SessionTimer = () => {
         color="neutral.0"
         title={_('Renew session timeout')}
       >
-        <RefreshCcw size={16} />
+        <RefreshIcon color={Theme.white} />
       </ActionIcon>
     </Divider>
   );

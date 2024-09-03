@@ -38,7 +38,7 @@ describe('Task ResumeIcon component tests', () => {
     expect(clickHandler).toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Resume');
     expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -66,7 +66,7 @@ describe('Task ResumeIcon component tests', () => {
       'Permission to resume task denied',
     );
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -91,7 +91,7 @@ describe('Task ResumeIcon component tests', () => {
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is not stopped');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -120,8 +120,9 @@ describe('Task ResumeIcon component tests', () => {
       'Permission to resume audit denied',
     );
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 
   test('should render in inactive state if task is scheduled', () => {
@@ -149,8 +150,9 @@ describe('Task ResumeIcon component tests', () => {
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is scheduled');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 
   test('should render in inactive state if task is a container', () => {
@@ -174,8 +176,9 @@ describe('Task ResumeIcon component tests', () => {
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is a container');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 
   test('should not be rendered if task is queued', () => {

@@ -39,7 +39,7 @@ describe('Task StartIcon component tests', () => {
     expect(clickHandler).toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Start');
     expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -64,7 +64,7 @@ describe('Task StartIcon component tests', () => {
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Permission to start task denied');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -93,7 +93,7 @@ describe('Task StartIcon component tests', () => {
       'Permission to start audit denied',
     );
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -137,7 +137,7 @@ END:VCALENDAR
       'Task cannot be started manually because the assigned schedule has a duration limit',
     );
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -162,7 +162,7 @@ END:VCALENDAR
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is already active');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -187,7 +187,7 @@ END:VCALENDAR
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is already active');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 

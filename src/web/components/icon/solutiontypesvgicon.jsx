@@ -5,9 +5,13 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/solution_type.svg';
+import {Puzzle as Icon} from 'lucide-react';
 
-const SolutionTypeSvgIcon = withSvgIcon()(Icon);
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
+
+const SolutionTypeSvgIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default SolutionTypeSvgIcon;
 

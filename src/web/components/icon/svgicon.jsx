@@ -25,7 +25,8 @@ const Styled = styled.span`
   cursor: ${props => (props.onClick ? 'pointer' : undefined)};
   width: ${props => props.$width};
   height: ${props => props.$height};
-  line-height: ${props => props.$lineHeight};
+  color: ${props => (props.$active ? props.color : Theme.inputBorderGray)};
+
   @media print {
     & {
       ${props => (isDefined(props.onClick) ? {display: 'none'} : undefined)};
@@ -43,8 +44,13 @@ const Styled = styled.span`
 
   & svg path {
     display: ${props => (props.$isLoading ? 'none' : undefined)};
+  }
+  // This CSS rule sets the fill color of the SVG path elements with the class 'gui_icon_class'.
+  // Local icons need the class 'gui_icon_class' to be styled correctly, while Lucide icons
+  // do not need this class, as they are styled by the Lucide library with the property 'color'.
+  & svg path.gui_icon_class {
     fill: ${props =>
-      props.$active || props.$isLoading ? undefined : Theme.inputBorderGray};
+      props.$active || props.$isLoading ? 'unset' : Theme.inputBorderGray};
   }
   & * {
     height: inherit;
@@ -71,13 +77,13 @@ export const useIsMountedRef = () => {
 // use useIsMountedRef() to track mounted status across renders
 export const useStateWithMountCheck = (...args) => {
   const isMountedRef = useIsMountedRef();
-  const [state, nativeSetState] = useState(...args);
+  const [nativeState, setNativeState] = useState(...args);
   const setState = (...arg) => {
     if (isMountedRef.current) {
-      nativeSetState(...arg);
+      setNativeState(...arg);
     }
   };
-  return [state, setState];
+  return [nativeState, setState];
 };
 
 const SvgIcon = ({
@@ -90,6 +96,7 @@ const SvgIcon = ({
   value,
   onClick,
   size,
+  color = Theme.black,
   ...other
 }) => {
   const [loading, setLoading] = useStateWithMountCheck(false);
@@ -129,7 +136,7 @@ const SvgIcon = ({
       $isLoading={loading}
       $height={height}
       $width={width}
-      $lineHeight={height}
+      color={color}
       onClick={
         isDefined(onClick) && !disabled && !loading ? handleClick : undefined
       }
@@ -140,6 +147,8 @@ const SvgIcon = ({
 };
 
 SvgIcon.propTypes = {
+  children: PropTypes.func.isRequired,
+  color: PropTypes.string.isRequired,
   active: PropTypes.bool,
   disabled: PropTypes.bool,
   loadingTitle: PropTypes.string,
