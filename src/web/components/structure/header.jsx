@@ -16,6 +16,7 @@ import useUserName from 'web/hooks/useUserName';
 import useGmp from 'web/hooks/useGmp';
 
 import LogoutIcon from 'web/components/icon/logouticon';
+import getLogo from 'web/components/structure/getLogo';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
 import LanguageSwitch from './languageswitch';
 import SessionTimer from '../sessionTimer/SessionTimer';
@@ -25,6 +26,7 @@ const Header = () => {
   const username = useUserName();
   const loggedIn = useUserIsLoggedIn();
   const history = useHistory();
+  const logoComponent = getLogo(gmp.settings.vendorLabel);
 
   const handleSettingsClick = useCallback(
     event => {
@@ -57,8 +59,10 @@ const Header = () => {
       icon: <LogoutIcon />,
     },
   ];
+
   return (
     <AppHeader
+      logo={logoComponent}
       languageSwitch={<LanguageSwitch />}
       menuPoints={menuPoints}
       isLoggedIn={loggedIn}
