@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import Loading from 'web/components/loading/loading';
@@ -18,7 +17,7 @@ const FilterProvider = ({
   pageName = gmpname,
   locationQuery = {},
 }) => {
-  const [returnedFilter, isLoadingFilter] = usePageFilter(pageName, {
+  const [returnedFilter, isLoadingFilter] = usePageFilter(pageName, gmpname, {
     fallbackFilter,
     locationQueryFilterString: locationQuery?.filter,
   });

@@ -47,12 +47,14 @@ const useDefaultFilter = pageName =>
  *
  * @param {String} pageName Name of the page
  * @param {Object} options Options object
+ * @param {String} gmpName Name of the GMP for filtering
  * @returns Array of the applied filter, boolean indicating if the filter is
  *          still loading, function to change the filter, function to remove the
  *          filter and function to reset the filter
  */
 const usePageFilter = (
   pageName,
+  gmpName,
   {
     fallbackFilter,
     locationQueryFilterString: initialLocationQueryFilterString,
@@ -63,7 +65,8 @@ const usePageFilter = (
   const location = useLocation();
   const history = useHistory();
   const [defaultSettingFilter, defaultSettingsFilterError] =
-    useDefaultFilter(pageName);
+    useDefaultFilter(gmpName);
+
   let [rowsPerPage, rowsPerPageError] = useShallowEqualSelector(state => {
     const userSettingDefaultSel = getUserSettingsDefaults(state);
     return [
@@ -78,9 +81,8 @@ const usePageFilter = (
   // use null as value for not set at all
   let returnedFilter;
   // only use location directly if locationQueryFilterString is undefined
-  const locationQueryFilterString = initialLocationQueryFilterString
-    ? initialLocationQueryFilterString
-    : location?.query?.filter;
+  const locationQueryFilterString =
+    initialLocationQueryFilterString || location?.query?.filter;
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
     hasValue(locationQueryFilterString)
@@ -93,14 +95,14 @@ const usePageFilter = (
       !isDefined(defaultSettingFilter) &&
       !isDefined(defaultSettingsFilterError)
     ) {
-      dispatch(loadUserSettingsDefaultFilter(gmp)(pageName));
+      dispatch(loadUserSettingsDefaultFilter(gmp)(gmpName));
     }
   }, [
     defaultSettingFilter,
     defaultSettingsFilterError,
     dispatch,
     gmp,
-    pageName,
+    gmpName,
   ]);
 
   useEffect(() => {
