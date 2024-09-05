@@ -38,12 +38,79 @@ describe('FeedStatusCommand tests', () => {
       });
 
       const {data} = resp;
-      expect(data[0].feed_type).toEqual('NVT');
+      expect(data[0].feedType).toEqual('NVT');
       expect(data[0].name).toEqual('foo');
       expect(data[0].description).toEqual('bar');
       expect(data[0].currentlySyncing).toEqual({timestamp: 'baz'});
       expect(data[0].status).toEqual(undefined);
       expect(data[0].version).toEqual('20190625T1319');
     });
+  });
+
+  test('should return isSyncing true when feeds are currently syncing', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {
+          feed: [
+            {type: 'NVT', currently_syncing: true, sync_not_available: false},
+            {type: 'SCAP', currently_syncing: false, sync_not_available: false},
+          ],
+        },
+      },
+    });
+
+    const fakeHttp = createHttp(response);
+    const cmd = new FeedStatus(fakeHttp);
+
+    const result = await cmd.checkFeedSync();
+    expect(result.isSyncing).toBe(true);
+  });
+
+  test('should return isSyncing true when feeds are not present', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {
+          feed: [
+            {
+              type: 'OTHER',
+              currently_syncing: false,
+              sync_not_available: false,
+            },
+          ],
+        },
+      },
+    });
+
+    const fakeHttp = createHttp(response);
+    const cmd = new FeedStatus(fakeHttp);
+
+    const result = await cmd.checkFeedSync();
+    expect(result.isSyncing).toBe(true);
+  });
+
+  test('should return isSyncing false when feeds are not syncing and are present', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {
+          feed: [
+            {type: 'NVT', currently_syncing: false, sync_not_available: false},
+            {type: 'SCAP', currently_syncing: false, sync_not_available: false},
+          ],
+        },
+      },
+    });
+
+    const fakeHttp = createHttp(response);
+    const cmd = new FeedStatus(fakeHttp);
+
+    const result = await cmd.checkFeedSync();
+    expect(result.isSyncing).toBe(false);
+  });
+
+  test('should throw an error when readFeedInformation fails', async () => {
+    const fakeHttp = createHttp(Promise.reject(new Error('Network error')));
+    const cmd = new FeedStatus(fakeHttp);
+
+    await expect(cmd.checkFeedSync()).rejects.toThrow('Network error');
   });
 });

@@ -89,9 +89,8 @@ import withComponentDefaults from 'web/utils/withComponentDefaults';
 
 import ImportReportIcon from './icons/importreporticon';
 import NewIconMenu from './icons/newiconmenu';
-import ResumeIcon from './icons/resumeicon';
+import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
 import ScheduleIcon from './icons/scheduleicon';
-import StartIcon from './icons/starticon';
 import StopIcon from './icons/stopicon';
 
 import TaskDetails from './details';
@@ -156,14 +155,22 @@ export const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon task={entity} onClick={onTaskStartClick} />
+        <TaskIconWithSync
+          type="start"
+          task={entity}
+          onClick={onTaskStartClick}
+        />
 
         <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
         <StopIcon task={entity} onClick={onTaskStopClick} />
 
         {!entity.isContainer() && (
-          <ResumeIcon task={entity} onClick={onTaskResumeClick} />
+          <TaskIconWithSync
+            type="resume"
+            task={entity}
+            onClick={onTaskResumeClick}
+          />
         )}
       </IconDivider>
 
@@ -182,18 +189,19 @@ export const ToolBarIcons = ({
             </DetailsLink>
           )}
 
-          {!isDefined(entity.current_report) && isDefined(entity.last_report) && (
-            <DetailsLink
-              type="report"
-              id={entity.last_report.id}
-              title={_('Last Report for Task {{- name}} from {{- date}}', {
-                name: entity.name,
-                date: shortDate(entity.last_report.scan_start),
-              })}
-            >
-              <ReportIcon />
-            </DetailsLink>
-          )}
+          {!isDefined(entity.current_report) &&
+            isDefined(entity.last_report) && (
+              <DetailsLink
+                type="report"
+                id={entity.last_report.id}
+                title={_('Last Report for Task {{- name}} from {{- date}}', {
+                  name: entity.name,
+                  date: shortDate(entity.last_report.scan_start),
+                })}
+              >
+                <ReportIcon />
+              </DetailsLink>
+            )}
 
           <Link
             to="reports"
