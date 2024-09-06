@@ -52,7 +52,7 @@
     "fast-xml-parser": "^4.4.1",
     "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.2",
-    "i18next": "^23.12.2",
+    "i18next": "^23.14.0",
     "i18next-http-backend": "^2.5.2",
     "ical.js": "^2.0.0",
     "memoize-one": "^6.0.0",
