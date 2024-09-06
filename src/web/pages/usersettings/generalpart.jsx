@@ -77,7 +77,6 @@ const GeneralPart = ({
   confPassword,
   userInterfaceLanguage,
   rowsPerPage,
-  maxRowsPerPage,
   detailsExportFileName,
   listExportFileName,
   reportExportFileName,
