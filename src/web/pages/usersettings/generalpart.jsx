@@ -86,11 +86,97 @@ const GeneralPart = ({
   errors,
   onChange,
 }) => {
+  const [prevUserInterfaceTimeFormat, setPrevUserInterfaceTimeFormat] =
+    useState(undefined);
+  const [prevUserInterfaceDateFormat, setPrevUserInterfaceDateFormat] =
+    useState(undefined);
+
+  const getSelectItems = category => {
+    return Object.entries(dateTimeFormatOptions[category].options).map(
+      ([value, {label}]) => ({
+        value: isNaN(value) ? value : Number(value),
+        label: _(label),
+      }),
+    );
+  };
+
+  const handleSysDefaultChange = event => {
+    const isSystemDefault = parseYesNo(event);
+
+    const defaultTimeFormat = 24;
+    const defaultDateFormat = 'wdmy';
+
+    const currentUserInterfaceTimeFormat =
+      userInterfaceTimeFormat || defaultTimeFormat;
+    const currentUserInterfaceDateFormat =
+      userInterfaceDateFormat || defaultDateFormat;
+
+    if (!isSystemDefault) {
+      onChange(
+        prevUserInterfaceTimeFormat || defaultTimeFormat,
+        'userInterfaceTimeFormat',
+      );
+      onChange(
+        prevUserInterfaceDateFormat || defaultDateFormat,
+        'userInterfaceDateFormat',
+      );
+    } else {
+      setPrevUserInterfaceTimeFormat(currentUserInterfaceTimeFormat);
+      setPrevUserInterfaceDateFormat(currentUserInterfaceDateFormat);
+
+      onChange(SYSTEM_DEFAULT, 'userInterfaceTimeFormat');
+      onChange(SYSTEM_DEFAULT, 'userInterfaceDateFormat');
+    }
+
+    onChange(isSystemDefault, 'isUserInterfaceTimeDateDefault');
+  };
   return (
-    <React.Fragment>
+    <>
       <FormGroup title={_('Timezone')} titleSize="3">
         <TimeZoneSelect name="timezone" value={timezone} onChange={onChange} />
       </FormGroup>
+      <FormGroup
+        title={_('Use System Default for Time and Date Format')}
+        titleSize="3"
+      >
+        <Checkbox
+          name="isUserInterfaceTimeDateDefault"
+          checked={parseYesNo(isUserInterfaceTimeDateDefault) === YES_VALUE}
+          checkedValue={YES_VALUE}
+          unCheckedValue={NO_VALUE}
+          onChange={handleSysDefaultChange}
+        />
+      </FormGroup>
+
+      <FormGroup title={_('Time Format')} titleSize="3">
+        <Select
+          label={_('Time Format')}
+          name="userInterfaceTimeFormat"
+          value={
+            userInterfaceTimeFormat === 'system_default'
+              ? ''
+              : userInterfaceTimeFormat
+          }
+          items={getSelectItems('time')}
+          onChange={onChange}
+          disabled={isUserInterfaceTimeDateDefault}
+        />
+      </FormGroup>
+      <FormGroup title={_('Date Format')} titleSize="3">
+        <Select
+          label={_('Date Format')}
+          name="userInterfaceDateFormat"
+          value={
+            userInterfaceDateFormat === 'system_default'
+              ? ''
+              : userInterfaceDateFormat
+          }
+          items={getSelectItems('longDate')}
+          onChange={onChange}
+          disabled={isUserInterfaceTimeDateDefault}
+        />
+      </FormGroup>
+
       <FormGroup title={_('Change Password')} titleSize="3">
         <Divider flex="column">
           <FormGroup title={_('Old')}>
@@ -185,7 +271,7 @@ const GeneralPart = ({
           onChange={onChange}
         />
       </FormGroup>
-    </React.Fragment>
+    </>
   );
 };
 

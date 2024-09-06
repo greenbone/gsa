@@ -10,7 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import styled, {keyframes} from 'styled-components';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
 import LogoutIcon from 'web/components/icon/logouticon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
@@ -151,7 +151,10 @@ const UserMenuContainer = () => {
               <ScheduleIcon />
               <span>
                 {_('Session timeout: {{date}}', {
-                  date: dateTimeWithTimeZone(sessionTimeout, userTimezone),
+                  date: formattedUserSettingDateTimeWithTimeZone(
+                    sessionTimeout,
+                    userTimezone,
+                  ),
                 })}
               </span>
               <RefreshIcon
