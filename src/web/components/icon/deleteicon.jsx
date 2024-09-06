@@ -15,9 +15,13 @@ import SelectionType from 'web/utils/selectiontype';
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/delete.svg';
+import {CircleX as Icon} from 'lucide-react';
 
-const DeleteSvgIcon = withSvgIcon()(Icon);
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
+
+const DeleteSvgIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 const DeleteIcon = ({selectionType, title, ...props}) => {
   if (!isDefined(title)) {

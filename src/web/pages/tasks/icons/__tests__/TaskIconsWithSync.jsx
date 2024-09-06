@@ -69,13 +69,9 @@ describe('TaskIconWithSync component tests', () => {
 
       expect(element).toHaveAttribute('title', expectedTitle);
       if (expectedFill) {
-        expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-          modifier: `svg path`,
-        });
+        expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
       } else {
-        expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-          modifier: `svg path`,
-        });
+        expect(element).toHaveStyleRule('color', Theme.black);
       }
     },
   );

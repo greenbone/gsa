@@ -5,9 +5,12 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/resume.svg';
+import {StepForward as Icon} from 'lucide-react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
-const ResumeIcon = withSvgIcon()(Icon);
+const ResumeIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default ResumeIcon;
 

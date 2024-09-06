@@ -7,11 +7,12 @@ import React from 'react';
 
 import SvgIcon from './svgicon';
 
-import Icon from './svg/details.svg';
+import {ZoomIn as Icon} from 'lucide-react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const DetailsIcon = props => (
   <SvgIcon {...props}>
-    <Icon />
+    <IconWithStrokeWidth IconComponent={Icon} {...props} />
   </SvgIcon>
 );
 

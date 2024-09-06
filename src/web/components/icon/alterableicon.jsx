@@ -5,9 +5,12 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/alterable.svg';
+import {FilePenLine as Icon} from 'lucide-react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
-const AlterableIcon = withSvgIcon()(Icon);
+const AlterableIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default AlterableIcon;
 
