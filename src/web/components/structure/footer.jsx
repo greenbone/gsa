@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
@@ -18,17 +17,11 @@ const Link = styled.a`
 `;
 
 const Footer = styled.footer`
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 0;
   padding: 2px;
   font-size: 10px;
-  text-align: right;
+  text-align: center;
   color: ${Theme.mediumGray};
   margin-top: 10px;
-  padding-right: 5px;
-  z-index: ${Theme.Layers.aboveAll};
 `;
 
 const GreenboneFooter = () => {

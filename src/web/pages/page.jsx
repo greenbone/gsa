@@ -32,6 +32,10 @@ const StyledLayout = styled(Layout)`
   height: calc(-48px + 100vh);
 `;
 
+const Container = styled.div`
+  flex: 1;
+`;
+
 const Page = ({children}) => {
   const capabilities = useLoadCapabilities();
   const location = useLocation();
@@ -49,16 +53,18 @@ const Page = ({children}) => {
       <StyledLayout flex="row" align={['start', 'stretch']}>
         <Menu />
         <Main>
-          <FeedSyncNotification />
-          <ErrorBoundary
-            key={location.pathname}
-            message={_('An error occurred on this page.')}
-          >
-            {children}
-          </ErrorBoundary>
+          <Container>
+            <FeedSyncNotification />
+            <ErrorBoundary
+              key={location.pathname}
+              message={_('An error occurred on this page.')}
+            >
+              {children}
+            </ErrorBoundary>
+          </Container>
+          <Footer />
         </Main>
       </StyledLayout>
-      <Footer />
     </CapabilitiesContext.Provider>
   );
 };
