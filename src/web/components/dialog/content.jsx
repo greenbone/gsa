@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+
 import styled from 'styled-components';
 
 const DialogContent = styled.div`

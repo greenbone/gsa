@@ -10,6 +10,7 @@ import logger from 'gmp/log';
 
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
+import 'gmp/commands/auditreports';
 import 'gmp/commands/auth';
 import 'gmp/commands/certbund';
 import 'gmp/commands/credentials';

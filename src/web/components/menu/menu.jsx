@@ -23,6 +23,7 @@ import {
   FileCheck,
   CircleHelp,
 } from 'lucide-react';
+import {isDefined} from 'gmp/utils/identity';
 
 const Menu = () => {
   const [_] = useTranslation();
@@ -144,6 +145,12 @@ const Menu = () => {
         to: '/audits',
         activeCondition: useIsActive('/audits'),
       },
+      {
+        label: 'Compliance Audit Reports',
+        to: '/auditreports',
+        activeCondition: useIsActive('/auditreports'),
+        featureEnabled: 'COMPLIANCE_REPORTS',
+      },
     ],
     secInfo: [
       {
@@ -236,12 +243,15 @@ const Menu = () => {
     key: key,
     icon: icon,
     subNav: config
-      .map(({label, to, activeCondition}) => ({
+      .map(({label, to, activeCondition, featureEnabled}) => ({
         label: _(label),
         to: to,
         active: activeCondition,
+        visible:
+          !isDefined(featureEnabled) ||
+          capabilities.featureEnabled(featureEnabled),
       }))
-      .filter(Boolean),
+      .filter(({visible}) => visible !== false),
   });
 
   const menuPoints = [

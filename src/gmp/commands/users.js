@@ -38,6 +38,7 @@ export const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
 export const DEFAULT_FILTER_SETTINGS = {
   alert: 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092',
   asset: '0f040d06-abf9-43a2-8f94-9de178b0e978',
+  auditreport: '45414da7-55f0-44c1-abbb-6b7d1126fbdf',
   certbund: 'e4cf514a-17e2-4ab9-9c90-336f15e24750',
   cpe: '3414a107-ae46-4dea-872d-5c4479a48e8f',
   credential: '186a5ac8-fe5a-4fb1-aa22-44031fb339f3',
@@ -286,6 +287,7 @@ export class UserCommand extends EntityCommand {
         data.defaultTarget,
       [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
       [saveDefaultFilterSettingId('asset')]: data.assetsFilter,
+      [saveDefaultFilterSettingId('auditreport')]: data.auditReportsFilter,
       [saveDefaultFilterSettingId('scanconfig')]: data.configsFilter,
       [saveDefaultFilterSettingId('credential')]: data.credentialsFilter,
       [saveDefaultFilterSettingId('filter')]: data.filtersFilter,

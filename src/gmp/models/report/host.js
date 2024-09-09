@@ -37,6 +37,12 @@ class Host {
       warning: 0,
       total: 0,
     };
+    this.complianceCounts = {
+      yes: 0,
+      no: 0,
+      incomplete: 0,
+      total: 0,
+    };
   }
 
   static fromElement(element) {
@@ -50,7 +56,19 @@ class Host {
   static parseElement(element = {}) {
     const copy = {...element};
 
-    const {asset = {}, port_count = {}, result_count} = element;
+    const {
+      asset = {},
+      port_count = {},
+      result_count,
+      compliance_count,
+      host_compliance,
+    } = element;
+
+    copy.hostCompliance = isDefined(host_compliance)
+      ? host_compliance
+      : 'undefined';
+
+    delete copy.host_compliance;
 
     if (isEmpty(asset._asset_id)) {
       delete copy.asset;
@@ -81,10 +99,29 @@ class Host {
       };
     }
 
+    if (isDefined(compliance_count)) {
+      copy.complianceCounts = {
+        yes: parse_page_count(compliance_count.yes),
+        no: parse_page_count(compliance_count.no),
+        incomplete: parse_page_count(compliance_count.incomplete),
+        undefined: parse_page_count(compliance_count.undefined),
+        total: parse_page_count(compliance_count),
+      };
+    } else {
+      copy.complianceCounts = {
+        yes: 0,
+        no: 0,
+        incomplete: 0,
+        undefined: 0,
+        total: 0,
+      };
+    }
+
     copy.start = parseDate(element.start);
     copy.end = parseDate(element.end);
 
     delete copy.result_count;
+    delete copy.compliance_count;
 
     copy.authSuccess = {};
     copy.details = {};

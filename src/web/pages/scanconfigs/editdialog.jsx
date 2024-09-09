@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+
 import React, {useReducer, useState, useEffect} from 'react';
 
 import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';

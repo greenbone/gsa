@@ -11,6 +11,7 @@ import {createBrowserHistory} from 'history';
 import {stringify, parse} from 'qs';
 import qhistory from 'qhistory';
 
+import ConditionalRoute from 'web/components/conditionalRoute/ConditionalRoute';
 import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
 
@@ -23,6 +24,8 @@ import AboutPage from './pages/help/about';
 import AlertsPage from './pages/alerts/listpage';
 import AlertDetailsPage from './pages/alerts/detailspage';
 import AuditsPage from './pages/audits/listpage';
+import AuditReportDetailsPage from './pages/reports/auditdetailspage';
+import AuditReportsPage from './pages/reports/auditreportslistpage';
 import AuditsDetailsPage from './pages/audits/detailspage';
 import CertBundsPage from './pages/certbund/listpage';
 import CertBundDetailsPage from './pages/certbund/detailspage';
@@ -66,6 +69,7 @@ import ReportFormatsPage from './pages/reportformats/listpage';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage';
 import ReportsPage from './pages/reports/listpage';
 import ReportDetailsPage from './pages/reports/detailspage';
+import DeltaAuditReportDetailsPage from './pages/reports/auditdeltadetailspage';
 import DeltaReportDetailsPage from './pages/reports/deltadetailspage';
 import ResultsPage from './pages/results/listpage';
 import ResultDetailsPage from './pages/results/detailspage';
@@ -121,6 +125,18 @@ const Routes = () => (
               <Route path="/about" component={AboutPage} />
               <Route path="/alerts" component={AlertsPage} />
               <Route path="/audits" component={AuditsPage} />
+              <ConditionalRoute
+                path="/auditreports"
+                component={AuditReportsPage}
+                feature="COMPLIANCE_REPORTS"/>
+              <ConditionalRoute
+                path="/auditreport/delta/:id/:deltaid"
+                component={DeltaAuditReportDetailsPage}
+                feature="COMPLIANCE_REPORTS"/>
+              <ConditionalRoute
+                path="/auditreport/:id"
+                component={AuditReportDetailsPage}
+                feature="COMPLIANCE_REPORTS"/>
               <Route path="/certbunds" component={CertBundsPage} />
               <Route path="/cpes" component={CpesPage} />
               <Route path="/credentials" component={CredentialsPage} />
