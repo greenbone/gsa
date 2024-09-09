@@ -561,7 +561,7 @@ describe('Audit Actions tests', () => {
     expect(handleReportDownload).not.toHaveBeenCalled();
     expect(icons[6]).toHaveAttribute('title', 'Report download not available');
     expect(icons[6]).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
