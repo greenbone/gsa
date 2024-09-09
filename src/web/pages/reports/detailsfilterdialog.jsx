@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
@@ -12,6 +11,7 @@ import Checkbox from 'web/components/form/checkbox';
 
 import FilterDialog from 'web/components/powerfilter/filterdialog';
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
+import ComplianceLevelsFilterGroup from 'web/components/powerfilter/compliancelevelsgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
@@ -31,6 +31,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import DeltaResultsFilterGroup from './deltaresultsfiltergroup';
 
 const ReportDetailsFilterDialog = ({
+  audit = false,
   delta = false,
   filter: initialFilter,
   onCloseClick,
@@ -64,6 +65,8 @@ const ReportDetailsFilterDialog = ({
   const resultHostsOnly = filter.get('result_hosts_only');
   const handleRemoveLevels = () =>
     onFilterChange(filter.copy().delete('levels'));
+  const handleRemoveCompliance = () =>
+    onFilterChange(filter.delete('compliance_levels'));
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
@@ -79,12 +82,14 @@ const ReportDetailsFilterDialog = ({
         />
       )}
 
-      <BooleanFilterGroup
-        name="apply_overrides"
-        title={_('Apply Overrides')}
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      {!audit && (
+        <BooleanFilterGroup
+          name="apply_overrides"
+          title={_('Apply Overrides')}
+          filter={filter}
+          onChange={onFilterValueChange}
+        />
+      )}
 
       <Checkbox
         title={_('Only show hosts that have results')}
@@ -101,18 +106,29 @@ const ReportDetailsFilterDialog = ({
         onChange={onFilterValueChange}
       />
 
-      <SeverityLevelsGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-        onRemove={handleRemoveLevels}
-      />
+      {audit ? (
+        <ComplianceLevelsFilterGroup
+          isResult={true}
+          filter={filter}
+          onChange={onFilterValueChange}
+          onRemove={handleRemoveCompliance}
+        />
+      ) : (
+        <SeverityLevelsGroup
+          filter={filter}
+          onChange={onFilterValueChange}
+          onRemove={handleRemoveLevels}
+        />
+      )}
 
-      <SeverityValuesGroup
-        name="severity"
-        title={_('Severity')}
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      {!audit && (
+        <SeverityValuesGroup
+          name="severity"
+          title={_('Severity')}
+          filter={filter}
+          onChange={onFilterValueChange}
+        />
+      )}
 
       <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
 
@@ -154,6 +170,7 @@ const ReportDetailsFilterDialog = ({
 };
 
 ReportDetailsFilterDialog.propTypes = {
+  audit: PropTypes.bool,
   delta: PropTypes.bool,
   filter: PropTypes.filter,
   onClose: PropTypes.func,

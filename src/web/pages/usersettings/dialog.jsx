@@ -69,6 +69,7 @@ let UserSettingsDialog = ({
   defaultSchedule,
   defaultTarget,
   alertsFilter,
+  auditReportsFilter,
   configsFilter,
   credentialsFilter,
   filtersFilter,
@@ -124,6 +125,7 @@ let UserSettingsDialog = ({
     defaultSchedule,
     defaultTarget,
     alertsFilter,
+    auditReportsFilter,
     configsFilter,
     credentialsFilter,
     filtersFilter,
@@ -247,6 +249,7 @@ let UserSettingsDialog = ({
               <FormGroupSizer>
                 <FilterPart
                   alertsFilter={values.alertsFilter}
+                  auditReportsFilter={values.auditReportsFilter}
                   configsFilter={values.configsFilter}
                   credentialsFilter={values.credentialsFilter}
                   filtersFilter={values.filtersFilter}
@@ -290,6 +293,7 @@ let UserSettingsDialog = ({
 UserSettingsDialog.propTypes = {
   alerts: PropTypes.array,
   alertsFilter: PropTypes.string,
+  auditReportsFilter: PropTypes.string,
   autoCacheRebuild: PropTypes.number,
   capabilities: PropTypes.capabilities.isRequired,
   certBundFilter: PropTypes.string,

@@ -27,8 +27,9 @@ import {CVES_DISPLAYS} from '../cves/dashboard';
 import {CPES_DISPLAYS} from '../cpes/dashboard';
 import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
 import {TICKETS_DISPLAYS} from '../tickets/dashboard';
-
+import {AUDIT_REPORTS_DISPLAYS} from '../reports/auditdashboard';
 import {DEFAULT_DISPLAYS} from './newdashboarddialog';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 const ALL_DISPLAYS = [
   ...TASKS_DISPLAYS,
@@ -56,14 +57,22 @@ const StartDashboard = ({
   onNewDisplay,
   onResetDashboard,
   ...props
-}) => (
+}) => {
+  const caps = useCapabilities();
+  const displayIds = [
+    ...ALL_DISPLAYS,
+    ...(caps.featureEnabled('COMPLIANCE_REPORTS') 
+        ? AUDIT_REPORTS_DISPLAYS 
+        : [])
+  ];
+  return (
   <Layout flex="column" grow>
     <Layout align="end">
       <DashboardControls
         settings={settings}
         canAdd={canAddDisplay(props)}
         dashboardId={id}
-        displayIds={ALL_DISPLAYS}
+        displayIds={displayIds}
         onInteraction={onInteraction}
         onNewDisplay={onNewDisplay}
         onResetClick={onResetDashboard}
@@ -77,13 +86,13 @@ const StartDashboard = ({
       showFilterSelection
       showFilterString
       defaultDisplays={DEFAULT_DISPLAYS}
-      permittedDisplays={ALL_DISPLAYS}
+      permittedDisplays={displayIds}
       loadSettings={loadSettings}
       saveSettings={saveSettings}
       onInteraction={onInteraction}
     />
   </Layout>
-);
+)};
 
 StartDashboard.propTypes = {
   id: PropTypes.id.isRequired,

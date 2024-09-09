@@ -134,7 +134,7 @@ describe('Audits table tests', () => {
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Status');
     expect(header[2]).toHaveTextContent('Report');
-    expect(header[3]).toHaveTextContent('Compliance Status');
+    expect(header[3]).toHaveTextContent('Compliance Percent');
     expect(header[4]).toHaveTextContent('Actions');
   });
 

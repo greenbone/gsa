@@ -16,13 +16,20 @@ const createDisplay = ({
   displayId,
   displayName,
   filtersFilter,
+  filterTerm,
   loaderComponent: Loader,
   ...other
 }) => {
   const DisplayComponent = ({filter, ...props}) => (
     <Loader filter={filter}>
       {loaderProps => (
-        <Display {...other} {...loaderProps} {...props} filter={filter}>
+        <Display
+          {...other}
+          {...loaderProps}
+          {...props}
+          filter={filter}
+          filterTerm={filterTerm}
+        >
           {isDefined(Chart)
             ? displayProps => <Chart {...displayProps} />
             : undefined}

@@ -767,6 +767,8 @@ class Filter extends Model {
 
 export const ALL_FILTER = new Filter().all();
 export const ALERTS_FILTER_FILTER = Filter.fromString('type=alert');
+export const AUDIT_REPORTS_FILTER_FILTER =
+  Filter.fromString('type=audit_report');
 export const CERTBUND_FILTER_FILTER = Filter.fromString('type=info');
 export const CPES_FILTER_FILTER = Filter.fromString('type=info');
 export const CREDENTIALS_FILTER_FILTER = Filter.fromString('type=credential');
