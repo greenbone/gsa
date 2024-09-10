@@ -3,14 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import DeleteIcon from 'web/components/icon/deleteicon';
+import XIcon from 'web/components/icon/XIcon';
 
 import {styledExcludeProps} from 'web/utils/styledConfig';
 import PropTypes from 'web/utils/proptypes';
@@ -73,7 +72,7 @@ const InfoPanel = ({
           {heading}
           {isDefined(onCloseClick) && (
             <Button data-testid="panel-close-button" onClick={onCloseClick}>
-              <DeleteIcon />
+              <XIcon />
             </Button>
           )}
         </Heading>
@@ -85,6 +84,7 @@ const InfoPanel = ({
 };
 
 InfoPanel.propTypes = {
+  children: PropTypes.element,
   footer: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   heading: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   isWarning: PropTypes.bool,
