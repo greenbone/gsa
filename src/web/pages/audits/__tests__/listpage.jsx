@@ -209,14 +209,18 @@ describe('AuditPage tests', () => {
     const icons = getBulkActionItems();
 
     expect(deleteByFilter).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute('title', 'Move page contents to trashcan');
-    await clickElement(icons[0]);
+    const deleteIcon = icons[1];
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Move page contents to trashcan',
+    );
+    await clickElement(deleteIcon);
 
     testBulkTrashcanDialog(screen, deleteByFilter);
 
     expect(exportByFilter).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Export page contents');
-    await clickElement(icons[1]);
+    expect(icons[2]).toHaveAttribute('title', 'Export page contents');
+    await clickElement(icons[2]);
     expect(exportByFilter).toHaveBeenCalled();
   });
 });
