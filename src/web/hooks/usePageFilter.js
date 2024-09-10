@@ -47,7 +47,7 @@ const useDefaultFilter = pageName =>
  *
  * @param {String} pageName Name of the page
  * @param {Object} options Options object
- * @param {String} gmpName Name of the GMP for filtering
+ * @param {String} gmpName GMP name for filtering
  * @returns Array of the applied filter, boolean indicating if the filter is
  *          still loading, function to change the filter, function to remove the
  *          filter and function to reset the filter
