@@ -29,7 +29,7 @@ const Styled = styled.span`
 
   @media print {
     & {
-      ${props => (isDefined(props.onClick) ? {display: 'none'} : undefined)};
+      ${props => (isDefined(props.onClick) ? 'display: none;' : undefined)};
     }
   }
 
@@ -38,8 +38,8 @@ const Styled = styled.span`
       props.$isLoading
         ? 'url(/img/loading.gif) center center no-repeat'
         : undefined};
-    height: ${props => props.height};
-    width: ${props => props.width};
+    height: ${props => props.$height};
+    width: ${props => props.$width};
   }
 
   & svg path {
@@ -51,10 +51,6 @@ const Styled = styled.span`
   & svg path.gui_icon_class {
     fill: ${props =>
       props.$active || props.$isLoading ? 'unset' : Theme.inputBorderGray};
-  }
-  & * {
-    height: inherit;
-    width: inherit;
   }
 `;
 
