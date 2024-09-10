@@ -37,7 +37,7 @@ describe('Details Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {getAllByTestId} = render(
+    const {baseElement, getByText, getByLabelText} = render(
       <FilterDialog
         audit={true}
         filter={filter}
@@ -48,23 +48,32 @@ describe('Details Filter Dialog for Audit report', () => {
         onFilterCreated={onFilterCreated}
       />,
     );
+    const dialogTitle = getByText('Update Filter');
+    expect(dialogTitle).toBeInTheDocument();
 
-    const formgroups = getAllByTestId('formgroup-title');
-    const content = getAllByTestId('formgroup-content');
+    const formGroups = baseElement.querySelectorAll(
+      '[class*="mantine-Text-root"]',
+    );
 
-    expect(formgroups[0]).toHaveTextContent('Filter');
-    expect(formgroups[1]).toHaveTextContent(
+    expect(formGroups[0]).toHaveTextContent('Filter');
+    expect(formGroups[1]).toHaveTextContent('QoD');
+    expect(formGroups[2]).toHaveTextContent('Compliance');
+    expect(formGroups[3]).toHaveTextContent('Solution Type');
+    expect(formGroups[4]).toHaveTextContent('Vulnerability');
+    expect(formGroups[5]).toHaveTextContent('Host (IP)');
+    expect(formGroups[6]).toHaveTextContent('Location (eg. port/protocol)');
+    expect(formGroups[7]).toHaveTextContent('First result');
+    expect(formGroups[8]).toHaveTextContent('Results per page');
+
+    const onlyShowHostsCheckbox = getByLabelText(
       'Only show hosts that have results',
     );
-    expect(formgroups[2]).toHaveTextContent('QoD');
-    expect(formgroups[3]).toHaveTextContent('Compliance');
-    expect(content[3]).toHaveTextContent('YesNoIncompleteUndefined');
-    expect(formgroups[4]).toHaveTextContent('Solution Type');
-    expect(formgroups[5]).toHaveTextContent('Vulnerability');
-    expect(formgroups[6]).toHaveTextContent('Host (IP)');
-    expect(formgroups[7]).toHaveTextContent('Location (eg. port/protocol)');
-    expect(formgroups[8]).toHaveTextContent('First result');
-    expect(formgroups[9]).toHaveTextContent('Results per page');
+    expect(onlyShowHostsCheckbox).toBeInTheDocument();
+
+    const cancelButton = getByText('Cancel');
+    const updateButton = getByText('Update');
+    expect(cancelButton).toBeInTheDocument();
+    expect(updateButton).toBeInTheDocument();
   });
 
   test('should render severity levels filter group', () => {
@@ -85,7 +94,7 @@ describe('Details Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {getAllByTestId} = render(
+    const {getByText, baseElement, getByLabelText} = render(
       <FilterDialog
         audit={false}
         filter={filter}
@@ -97,23 +106,33 @@ describe('Details Filter Dialog for Audit report', () => {
       />,
     );
 
-    const formgroups = getAllByTestId('formgroup-title');
-    const content = getAllByTestId('formgroup-content');
+    const dialogTitle = getByText('Update Filter');
+    expect(dialogTitle).toBeInTheDocument();
 
-    expect(formgroups[0]).toHaveTextContent('Filter');
-    expect(formgroups[1]).toHaveTextContent('Apply Overrides');
-    expect(formgroups[2]).toHaveTextContent(
+    const formGroups = baseElement.querySelectorAll(
+      '[class*="mantine-Text-root"]',
+    );
+
+    expect(formGroups[0]).toHaveTextContent('Filter');
+    expect(formGroups[1]).toHaveTextContent('Apply Overrides');
+    expect(formGroups[2]).toHaveTextContent('QoD');
+    expect(formGroups[3]).toHaveTextContent('Severity (Class)');
+    expect(formGroups[4]).toHaveTextContent('Severity');
+    expect(formGroups[5]).toHaveTextContent('Solution Type');
+    expect(formGroups[6]).toHaveTextContent('Vulnerability');
+    expect(formGroups[7]).toHaveTextContent('Host (IP)');
+    expect(formGroups[8]).toHaveTextContent('Location (eg. port/protocol)');
+    expect(formGroups[9]).toHaveTextContent('First result');
+    expect(formGroups[10]).toHaveTextContent('Results per page');
+
+    const onlyShowHostsCheckbox = getByLabelText(
       'Only show hosts that have results',
     );
-    expect(formgroups[3]).toHaveTextContent('QoD');
-    expect(formgroups[4]).toHaveTextContent('Severity (Class)');
-    expect(content[4]).toHaveTextContent('HighMediumLowLogFalse Pos.');
-    expect(formgroups[5]).toHaveTextContent('Severity');
-    expect(formgroups[6]).toHaveTextContent('Solution Type');
-    expect(formgroups[7]).toHaveTextContent('Vulnerability');
-    expect(formgroups[8]).toHaveTextContent('Host (IP)');
-    expect(formgroups[9]).toHaveTextContent('Location (eg. port/protocol)');
-    expect(formgroups[10]).toHaveTextContent('First result');
-    expect(formgroups[11]).toHaveTextContent('Results per page');
+    expect(onlyShowHostsCheckbox).toBeInTheDocument();
+
+    const cancelButton = getByText('Cancel');
+    const updateButton = getByText('Update');
+    expect(cancelButton).toBeInTheDocument();
+    expect(updateButton).toBeInTheDocument();
   });
 });

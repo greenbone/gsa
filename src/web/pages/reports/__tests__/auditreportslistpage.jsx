@@ -4,8 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  getPowerFilter,
+  getTextInputs,
+  getSelectElement,
+  testBulkDeleteDialog,
+} from 'web/components/testing';
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -16,7 +21,13 @@ import {entitiesActions} from 'web/store/entities/auditreports';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {
+  rendererWith,
+  waitFor,
+  fireEvent,
+  screen,
+  wait,
+} from 'web/utils/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
 import AuditReportsPage from '../auditreportslistpage';
 
@@ -135,17 +146,17 @@ describe('AuditReportsPage tests', () => {
       entitiesActions.success([entity], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<AuditReportsPage />);
+    const {baseElement, getAllByTestId, within} = render(<AuditReportsPage />);
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
     const display = getAllByTestId('grid-item');
     const icons = getAllByTestId('svg-icon');
-    const inputs = baseElement.querySelectorAll('input');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
-    const selects = getAllByTestId('select-selected-value');
-
+    const powerFilter = getPowerFilter();
+    const select = getSelectElement(powerFilter);
+    const inputs = getTextInputs(powerFilter);
     // Toolbar Icons
     expect(icons[0]).toHaveAttribute('title', 'Help: Audit Reports');
 
@@ -156,8 +167,8 @@ describe('AuditReportsPage tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Reset to Default Filter');
     expect(icons[4]).toHaveAttribute('title', 'Help: Powerfilter');
     expect(icons[5]).toHaveAttribute('title', 'Edit Filter');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    const input = within(select).getByTitle('Loaded filter');
+    expect(input).toHaveValue('--');
 
     // // Dashboard
     expect(icons[7]).toHaveAttribute('title', 'Add new Dashboard Display');
@@ -254,14 +265,14 @@ describe('AuditReportsPage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    await act(async () => {
-      expect(icons[19]).toHaveAttribute('title', 'Add tag to page contents');
-      fireEvent.click(icons[19]);
-      expect(getAll).toHaveBeenCalled();
+    expect(icons[19]).toHaveAttribute('title', 'Add tag to page contents');
+    fireEvent.click(icons[19]);
+    expect(getAll).toHaveBeenCalled();
 
-      expect(icons[20]).toHaveAttribute('title', 'Delete page contents');
-      fireEvent.click(icons[20]);
-      expect(deleteByFilter).toHaveBeenCalled();
-    });
+    fireEvent.click(screen.getAllByTitle('Delete page contents')[0]);
+
+    await wait();
+
+    testBulkDeleteDialog(screen, deleteByFilter);
   });
 });

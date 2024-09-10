@@ -117,7 +117,7 @@ describe('PoliciesPage tests', () => {
 
     await wait();
 
-    expect(baseElement).toBeVisible();
+    expect(element).toBeVisible();
   });
 
   test('should call commands for bulk actions', async () => {
