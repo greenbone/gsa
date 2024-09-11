@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import styled, {keyframes} from 'styled-components';
 
@@ -121,13 +121,13 @@ const UserMenuContainer = () => {
   const [userTimezone] = useUserTimezone();
   const [userName] = useUserName();
   const gmp = useGmp();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleLogout = event => {
     event.preventDefault();
 
     gmp.doLogout().then(() => {
-      history.push('/login?type=logout');
+      navigate('/login?type=logout');
     });
   };
 

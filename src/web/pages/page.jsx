@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import styled from 'styled-components';
 

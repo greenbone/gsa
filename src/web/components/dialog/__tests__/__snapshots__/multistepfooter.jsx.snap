@@ -40,28 +40,6 @@ exports[`MultiStepFooter tests > should render 1`] = `
   align-items: center;
 }
 
-.c8 {
-  margin-left: -5px;
-}
-
-.c8>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c8>* {
-  margin-left: 5px;
-}
-
-.c7 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
 .c3 {
   display: inline-block;
   padding: 0 15px;
@@ -161,6 +139,28 @@ exports[`MultiStepFooter tests > should render 1`] = `
   background: #11ab51;
 }
 
+.c8 {
+  margin-left: -5px;
+}
+
+.c8>* {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c8>* {
+  margin-left: 5px;
+}
+
+.c7 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
 .c2 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
@@ -247,28 +247,6 @@ exports[`MultiStepFooter tests > should render loading and disable cancel button
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c8 {
-  margin-left: -5px;
-}
-
-.c8>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c8>* {
-  margin-left: 5px;
-}
-
-.c7 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
 }
 
 .c3 {
@@ -379,6 +357,28 @@ exports[`MultiStepFooter tests > should render loading and disable cancel button
 .c9 :hover {
   color: #fff;
   background: #11ab51;
+}
+
+.c8 {
+  margin-left: -5px;
+}
+
+.c8>* {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c8>* {
+  margin-left: 5px;
+}
+
+.c7 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .c2 {

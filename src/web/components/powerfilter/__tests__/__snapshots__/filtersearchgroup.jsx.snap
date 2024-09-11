@@ -35,15 +35,6 @@ exports[`FilterSearchGroup tests > should render 1`] = `
   padding-bottom: 10px;
 }
 
-.c4 {
-  color: #c12c30;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
-}
-
 .c2 {
   font-family: inherit;
   font-size: inherit;
@@ -78,6 +69,15 @@ exports[`FilterSearchGroup tests > should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c4 {
+  color: #c12c30;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
 }
 
 <div

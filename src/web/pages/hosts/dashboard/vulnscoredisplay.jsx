@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import styled from 'styled-components';
 
@@ -86,9 +86,9 @@ export class HostsVulnScoreDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {history} = this.props;
+    const {navigate} = this.props;
 
-    history.push(`/host/${data.id}`);
+    navigate(`/host/${data.id}`);
   }
 
   render() {
@@ -125,7 +125,7 @@ export class HostsVulnScoreDisplay extends React.Component {
 
 HostsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
 HostsVulnScoreDisplay = compose(

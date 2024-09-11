@@ -37,7 +37,7 @@ describe('UserMenu component tests', () => {
   });
 
   test('should route to usersettings on click', () => {
-    const {render, history} = rendererWith({
+    const {render} = rendererWith({
       gmp: {},
       store: true,
       router: true,
@@ -48,7 +48,7 @@ describe('UserMenu component tests', () => {
 
     fireEvent.click(userSettingsElement);
 
-    expect(history.location.pathname).toMatch('usersettings');
+    expect(window.location.pathname).toMatch('usersettings');
   });
 
   test('should logout user on click', async () => {

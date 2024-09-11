@@ -12,6 +12,9 @@ import {fireEvent, rendererWith} from 'web/utils/testing';
 import DetailsLink from '../detailslink';
 
 describe('DetailsLink tests', () => {
+  beforeEach(() => {
+    window.history.pushState({}, 'Test page', '/');
+  });
   test('should render DetailsLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(
@@ -25,7 +28,7 @@ describe('DetailsLink tests', () => {
   });
 
   test('should route to url', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
       <DetailsLink title="Foo" type="foo" id="1">
@@ -33,15 +36,15 @@ describe('DetailsLink tests', () => {
       </DetailsLink>,
     );
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/foo/1');
+    expect(window.location.pathname).toEqual('/foo/1');
   });
 
   test('should url encode id', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
       <DetailsLink title="Foo" type="foo" id="cpe:/a:jenkins:jenkins:2.141">
@@ -49,17 +52,17 @@ describe('DetailsLink tests', () => {
       </DetailsLink>,
     );
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual(
+    expect(window.location.pathname).toEqual(
       '/foo/cpe%3A%2Fa%3Ajenkins%3Ajenkins%3A2.141',
     );
   });
 
   test('should not route to url in text mode', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
       <DetailsLink title="Foo" type="foo" id="1" textOnly={true}>
@@ -67,16 +70,16 @@ describe('DetailsLink tests', () => {
       </DetailsLink>,
     );
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
   });
 
   test('should not route to url without capabilities', () => {
     const capabilities = new Capabilities();
-    const {render, history} = rendererWith({capabilities, router: true});
+    const {render} = rendererWith({capabilities, router: true});
 
     const {element} = render(
       <DetailsLink title="Foo" type="foo" id="1">
@@ -84,11 +87,11 @@ describe('DetailsLink tests', () => {
       </DetailsLink>,
     );
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
   });
 });
 

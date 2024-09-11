@@ -81,13 +81,6 @@ exports[`Scan Config Details tests > should render full Details 1`] = `
   align-items: center;
 }
 
-.c10 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
 .c9 {
   margin-left: -5px;
 }
@@ -104,6 +97,13 @@ exports[`Scan Config Details tests > should render full Details 1`] = `
 }
 
 .c7 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c10 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;

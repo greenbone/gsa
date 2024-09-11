@@ -10,6 +10,9 @@ import {fireEvent, rendererWith} from 'web/utils/testing';
 import CveLink from '../cvelink';
 
 describe('CveLink tests', () => {
+  beforeEach(() => {
+    window.history.pushState({}, 'Test page', '/');
+  });
   test('should render CveLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(<CveLink title="Foo" id="foo" />);
@@ -29,25 +32,25 @@ describe('CveLink tests', () => {
   });
 
   test('should route to details', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(<CveLink title="Foo" id="foo" />);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/cve/foo');
+    expect(window.location.pathname).toEqual('/cve/foo');
   });
 
   test('should not route to details in text mode', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(<CveLink title="Foo" id="foo" textOnly={true} />);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
   });
 });
 

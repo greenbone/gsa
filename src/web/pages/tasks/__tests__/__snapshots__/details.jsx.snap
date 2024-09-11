@@ -59,13 +59,6 @@ exports[`Task Details tests > should render full task details 1`] = `
   align-items: center;
 }
 
-.c2 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
 .c5 {
   margin-left: -5px;
 }
@@ -88,6 +81,26 @@ exports[`Task Details tests > should render full task details 1`] = `
   display: inline-flex;
 }
 
+.c6>*:not(:last-child)::after {
+  content: '•';
+  margin-left: 5px;
+}
+
+.c2 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c9 {
+  width: 10%;
+}
+
+.c10 {
+  width: 90%;
+}
+
 .c7 {
   border: 0;
   border-spacing: 0px;
@@ -97,25 +110,12 @@ exports[`Task Details tests > should render full task details 1`] = `
   width: 100%;
 }
 
-.c6>*:not(:last-child)::after {
-  content: '•';
-  margin-left: 5px;
-}
-
 .c8 td {
   padding: 4px 4px 4px 0;
 }
 
 .c8 tr td:first-child {
   padding-right: 5px;
-}
-
-.c9 {
-  width: 10%;
-}
-
-.c10 {
-  width: 90%;
 }
 
 @media print {

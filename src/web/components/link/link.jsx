@@ -3,15 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 import styled from 'styled-components';
-
 import {Link as RLink} from 'react-router-dom';
-
 import {isDefined, isString} from 'gmp/utils/identity';
-
 import PropTypes from 'web/utils/proptypes';
 
 RLink.displayName = 'RouterLink';
@@ -45,7 +40,7 @@ export const withTextOnly = Component => {
   return TextOnly;
 };
 
-let Link = ({anchor, to = '', filter, query, ...other}) => {
+const LinkComponent = ({anchor, to = '', filter, query, ...other}) => {
   let pathname = '';
 
   if (to.startsWith('/')) {
@@ -54,29 +49,32 @@ let Link = ({anchor, to = '', filter, query, ...other}) => {
     pathname += '/' + to;
   }
 
-  const location = {
+  const searchParams = new URLSearchParams(isDefined(query) ? query : {});
+  if (isDefined(filter)) {
+    searchParams.set(
+      'filter',
+      isString(filter) ? filter : filter.toFilterString(),
+    );
+  }
+
+  const fullPath = {
     pathname,
-    query: isDefined(query) ? {...query} : {},
-    hash: isDefined(anchor) ? '#' + anchor : undefined,
+    search: searchParams.toString().replace(/\+/g, '%20'),
+    hash: isDefined(anchor) ? '#' + anchor : '',
   };
 
-  if (isDefined(filter)) {
-    location.query.filter = isString(filter) ? filter : filter.toFilterString();
-  }
-  return <RLink {...other} to={location} />;
+  return <RLink {...other} to={fullPath} />;
 };
 
-Link.propTypes = {
+LinkComponent.propTypes = {
   anchor: PropTypes.string,
   filter: PropTypes.oneOfType([PropTypes.filter, PropTypes.string]),
   query: PropTypes.object,
   to: PropTypes.string.isRequired,
 };
 
-Link = styled(withTextOnly(Link))`
+const Link = styled(withTextOnly(LinkComponent))`
   display: inline-flex;
 `;
 
 export default Link;
-
-// vim: set ts=2 sw=2 tw=80:

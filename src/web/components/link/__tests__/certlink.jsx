@@ -8,8 +8,12 @@ import {describe, test, expect} from '@gsa/testing';
 import {fireEvent, rendererWith} from 'web/utils/testing';
 
 import CertLink from '../certlink';
+import {beforeEach} from 'vitest';
 
 describe('CertLink tests', () => {
+  beforeEach(() => {
+    window.history.pushState({}, 'Test page', '/');
+  });
   test('should render CertLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(<CertLink type="CERT-Bund" id="foo" />);
@@ -30,48 +34,47 @@ describe('CertLink tests', () => {
   });
 
   test('should route to certbund details', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(<CertLink type="CERT-Bund" id="foo" />);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/certbund/foo');
+    expect(window.location.pathname).toEqual('/certbund/foo');
   });
 
   test('should route to dfncert details', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(<CertLink type="DFN-CERT" id="foo" />);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
-
-    expect(history.location.pathname).toEqual('/dfncert/foo');
+    expect(window.location.pathname).toEqual('/dfncert/foo');
   });
 
   test('should not route to unknown type', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(<CertLink type="foo" id="foo" />);
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
   });
 
   test('should not route in text mode', () => {
-    const {render, history} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(
       <CertLink type="DFN-CERT" id="foo" textOnly={true} />,
     );
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
   });
 });
 

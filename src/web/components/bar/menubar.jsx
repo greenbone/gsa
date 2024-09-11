@@ -54,9 +54,8 @@ const MenuBarPlaceholder = styled.div`
 
 // eslint-disable-next-line no-shadow
 const MenuBar = ({isLoggedIn}) => {
-  
   const caps = useCapabilities();
-  
+
   if (!isLoggedIn || !isDefined(caps)) {
     return null;
   }
@@ -115,7 +114,7 @@ const MenuBar = ({isLoggedIn}) => {
       <MenuBarPlaceholder />
       <Wrapper>
         <Ul>
-          <Menu to="/" title={_('Dashboards')} />
+          <Menu to="/dashboard" title={_('Dashboards')} />
           {may_op_scans && (
             <Menu title={_('Scans')}>
               {caps.mayAccess('tasks') && (
@@ -170,13 +169,13 @@ const MenuBar = ({isLoggedIn}) => {
                 {caps.mayAccess('audits') && (
                   <MenuEntry title={_('Compliance Audits')} to="audits" />
                 )}
-                {caps.featureEnabled('COMPLIANCE_REPORTS') && 
-                 caps.mayAccess('audits') && (
-                  <MenuEntry
-                    title={_('Compliance Audit Reports')}
-                    to="auditreports"
-                  />
-                )}
+                {caps.featureEnabled('COMPLIANCE_REPORTS') &&
+                  caps.mayAccess('audits') && (
+                    <MenuEntry
+                      title={_('Compliance Audit Reports')}
+                      to="auditreports"
+                    />
+                  )}
               </MenuSection>
             </Menu>
           )}
@@ -294,8 +293,6 @@ const mapStateToProps = rootState => ({
   isLoggedIn: isLoggedIn(rootState),
 });
 
-export default compose(
-  connect(mapStateToProps),
-)(MenuBar);
+export default compose(connect(mapStateToProps))(MenuBar);
 
 // vim: set ts=2 sw=2 tw=80:

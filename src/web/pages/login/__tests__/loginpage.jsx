@@ -155,10 +155,10 @@ describe('LoginPage tests', () => {
       clearToken,
       settings: {},
     };
-    const {render, history} = rendererWith({gmp, router: true, store: true});
+    const {render} = rendererWith({gmp, router: true, store: true});
 
     render(<LoginPage />);
 
-    expect(history.location.pathname).toMatch(/^\/$/);
+    expect(window.location.pathname).toMatch(/^\/dashboard$/);
   });
 });

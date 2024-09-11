@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -19,11 +18,11 @@ import PropTypes from 'web/utils/proptypes';
  */
 class LegacyOmpPage extends React.Component {
   componentDidMount() {
-    const {location, history} = this.props;
+    const {location, navigate} = this.props;
     const {cmd, info_type, info_id = ''} = location.query;
 
     if (cmd !== 'get_info') {
-      history.replace('/notfound');
+      navigate('/notfound', {replace: true});
       return;
     }
 
@@ -31,22 +30,22 @@ class LegacyOmpPage extends React.Component {
 
     switch (info_type) {
       case 'nvt':
-        history.replace('/nvt/' + id);
+        navigate('/nvt/' + id, {replace: true});
         break;
       case 'cve':
-        history.replace('/cve/' + id);
+        navigate('/cve/' + id, {replace: true});
         break;
       case 'cpe':
-        history.replace('/cpe/' + id);
+        navigate('/cpe/' + id, {replace: true});
         break;
       case 'cert_bund_adv':
-        history.replace('/certbund/' + id);
+        navigate('/certbund/' + id, {replace: true});
         break;
       case 'dfn_cert_adv':
-        history.replace('/dfncert/' + id);
+        navigate('/dfncert/' + id, {replace: true});
         break;
       default:
-        history.replace('/notfound');
+        navigate('/notfound', {replace: true});
         break;
     }
   }
@@ -57,7 +56,7 @@ class LegacyOmpPage extends React.Component {
 }
 
 LegacyOmpPage.propTypes = {
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.object.isRequired,
 };
 
 export default withRouter(LegacyOmpPage);

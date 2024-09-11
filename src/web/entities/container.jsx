@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import {connect} from 'react-redux';
 
@@ -322,13 +321,13 @@ class EntitiesContainer extends React.Component {
   }
 
   handleFilterReset() {
-    const {history, location} = this.props;
+    const {navigate, location} = this.props;
     const query = {...location.query};
 
     // remove filter param from url
     delete query.filter;
 
-    history.push({pathname: location.pathname, query});
+    navigate({pathname: location.pathname, query});
 
     this.changeFilter();
   }
@@ -585,7 +584,7 @@ EntitiesContainer.propTypes = {
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string.isRequired,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   listExportFileName: PropTypes.string,
   loadSettings: PropTypes.func.isRequired,
@@ -604,9 +603,8 @@ EntitiesContainer.propTypes = {
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const username = getUsername(rootState);
-  const listExportFileName = userDefaultsSelector.getValueByName(
-    'listexportfilename',
-  );
+  const listExportFileName =
+    userDefaultsSelector.getValueByName('listexportfilename');
   return {
     listExportFileName,
     username,

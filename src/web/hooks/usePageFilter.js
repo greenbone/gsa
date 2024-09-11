@@ -5,7 +5,7 @@
 
 import {useCallback, useEffect, useState} from 'react';
 
-import {useLocation, useHistory} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 import {useDispatch} from 'react-redux';
 
@@ -63,7 +63,7 @@ const usePageFilter = (
   const gmp = useGmp();
   const dispatch = useDispatch();
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [defaultSettingFilter, defaultSettingsFilterError] =
     useDefaultFilter(gmpName);
 
@@ -168,10 +168,10 @@ const usePageFilter = (
     // remove filter param from url
     delete query.filter;
 
-    history.push({pathname: location.pathname, query});
+    navigate({pathname: location.pathname, query});
 
     changeFilter();
-  }, [changeFilter, history, location]);
+  }, [changeFilter, navigate, location]);
 
   return [
     returnedFilter,

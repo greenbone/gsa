@@ -74,16 +74,16 @@ exports[`Report Config Details tests > should render full Details 1`] = `
   table-layout: auto;
 }
 
-.c7 {
-  vertical-align: top;
-}
-
 .c2 td {
   padding: 4px 4px 4px 0;
 }
 
 .c2 tr td:first-child {
   padding-right: 5px;
+}
+
+.c7 {
+  vertical-align: top;
 }
 
 .c3 {
@@ -402,16 +402,16 @@ exports[`Report Config Details tests > should render orphaned config details 1`]
   table-layout: auto;
 }
 
-.c6 {
-  vertical-align: top;
-}
-
 .c2 td {
   padding: 4px 4px 4px 0;
 }
 
 .c2 tr td:first-child {
   padding-right: 5px;
+}
+
+.c6 {
+  vertical-align: top;
 }
 
 .c3 {

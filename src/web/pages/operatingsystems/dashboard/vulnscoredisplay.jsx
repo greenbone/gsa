@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import styled from 'styled-components';
 
@@ -88,9 +88,9 @@ export class OsVulnScoreDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {history} = this.props;
+    const {navigate} = this.props;
 
-    history.push(`/operatingsystem/${data.id}`);
+    navigate(`/operatingsystem/${data.id}`);
   }
 
   render() {
@@ -127,7 +127,7 @@ export class OsVulnScoreDisplay extends React.Component {
 
 OsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
 OsVulnScoreDisplay.displayId = 'os-by-most-vulnerable';

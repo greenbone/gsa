@@ -19,28 +19,6 @@ exports[`BooleanFilterGroup tests > should render 1`] = `
   align-items: center;
 }
 
-.c5 {
-  margin-left: -5px;
-}
-
-.c5>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c5>* {
-  margin-left: 5px;
-}
-
-.c4 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -72,6 +50,28 @@ exports[`BooleanFilterGroup tests > should render 1`] = `
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.c5 {
+  margin-left: -5px;
+}
+
+.c5>* {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5>* {
+  margin-left: 5px;
+}
+
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .c6 {
