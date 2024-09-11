@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {shortDate} from 'gmp/locale/date';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import EntityNameTableData from 'web/entities/entitynametabledata';
 
@@ -82,7 +81,9 @@ const Row = ({
     <TableData>{entity.content_type}</TableData>
     <TableData flex="column">
       <span>{renderYesNo(entity.trust.value)}</span>
-      {entity.trust.time && <span>({shortDate(entity.trust.time)})</span>}
+      {entity.trust.time && (
+        <span>({formattedUserSettingShortDate(entity.trust.time)})</span>
+      )}
     </TableData>
     <TableData>{renderYesNo(entity.isActive())}</TableData>
     <ActionsComponent {...props} entity={entity} />

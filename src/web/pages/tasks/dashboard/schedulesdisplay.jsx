@@ -4,7 +4,7 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -43,7 +43,7 @@ const transformScheduleData = (data = [], {endDate}) => {
       return {
         label: name,
         duration,
-        nextStart: dateTimeWithTimeZone(event.nextDate),
+        nextStart: formattedUserSettingDateTimeWithTimeZone(event.nextDate),
         starts: event.getNextDates(endDate),
         timezone,
         isInfinite: isDefined(recurrence.isFinite) && !recurrence.isFinite(),

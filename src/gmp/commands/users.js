@@ -70,6 +70,11 @@ export const DEFAULT_FILTER_SETTINGS = {
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
 };
 
+const PARAM_KEYS = {
+  DATE: 'date_format',
+  TIME: 'time_format',
+};
+
 const saveDefaultFilterSettingId = entityType =>
   `settings_filter:${DEFAULT_FILTER_SETTINGS[entityType]}`;
 
@@ -251,9 +256,12 @@ export class UserCommand extends EntityCommand {
 
   saveSettings(data) {
     log.debug('Saving settings', data);
+
     return this.httpPost({
       cmd: 'save_my_settings',
       text: data.timezone,
+      [PARAM_KEYS.DATE]: data.userInterfaceDateFormat,
+      [PARAM_KEYS.TIME]: data.userInterfaceTimeFormat,
       old_password: data.oldPassword,
       password: data.newPassword,
       lang: data.userInterfaceLanguage,
