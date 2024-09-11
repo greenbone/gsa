@@ -17,6 +17,10 @@ const Languages = {
     name: 'English',
     native_name: 'English',
   },
+  zh_CN: { 
+    name: 'Simplified Chinese', 
+    native_name: '简体中文',
+  },
   zh_TW: { 
     name: 'Traditional Chinese', 
     native_name: '繁體中文',
