@@ -3,11 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {withRouter} from 'web/utils/withRouter';
-
-import PropTypes from 'web/utils/proptypes';
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import {useEffect} from 'react';
 
 /**
  * Component to redirect old secinfo urls like
@@ -16,9 +13,12 @@ import PropTypes from 'web/utils/proptypes';
  *
  * to the current replacement pages
  */
-class LegacyOmpPage extends React.Component {
-  componentDidMount() {
-    const {navigate, searchParams} = this.props;
+
+const OmpComponent = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
     const cmd = searchParams.get('cmd');
     const info_type = searchParams.get('info_type');
     const info_id = searchParams.get('info_id') || '';
@@ -50,16 +50,9 @@ class LegacyOmpPage extends React.Component {
         navigate('/notfound', {replace: true});
         break;
     }
-  }
+  }, [navigate, searchParams]);
 
-  render() {
-    return null;
-  }
-}
-
-LegacyOmpPage.propTypes = {
-  navigate: PropTypes.object.isRequired,
-  searchParams: PropTypes.object.isRequired,
+  return null;
 };
 
-export default withRouter(LegacyOmpPage);
+export default OmpComponent;
