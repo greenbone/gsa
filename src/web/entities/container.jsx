@@ -320,17 +320,18 @@ class EntitiesContainer extends React.Component {
     this.changeFilter(RESET_FILTER);
   }
 
-  handleFilterReset() {
-    const {navigate, location} = this.props;
-    const query = {...location.query};
+  handleFilterReset = () => {
+    const {navigate, location, searchParams} = this.props;
 
-    // remove filter param from url
-    delete query.filter;
+    searchParams.delete('filter');
 
-    navigate({pathname: location.pathname, query});
+    navigate({
+      pathname: location.pathname,
+      search: searchParams.toString(),
+    });
 
     this.changeFilter();
-  }
+  };
 
   openTagDialog() {
     this.setState({tagDialogVisible: true});
@@ -582,6 +583,8 @@ EntitiesContainer.propTypes = {
   entitiesCounts: PropTypes.counts,
   entitiesError: PropTypes.error,
   filter: PropTypes.filter,
+  searchParams: PropTypes.object,
+  location: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string.isRequired,
   navigate: PropTypes.object.isRequired,

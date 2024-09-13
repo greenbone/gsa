@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, test, expect, beforeEach} from '@gsa/testing';
 import {fireEvent, rendererWith, wait} from 'web/utils/testing';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 
@@ -12,22 +12,18 @@ const gmp = {};
 const baseCVSSVector =
   'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';
 
-const location = {
-  query: {
-    cvssVector: baseCVSSVector,
-  },
-};
-
 describe('CvssV4Calculator page tests', () => {
+  beforeEach(() => {
+    window.history.pushState({}, 'Test Title', '/');
+  });
   test('Should render with default values', async () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      router: true,
     });
 
-    const {getByText, within} = render(
-      <CvssV4Calculator location={location} />,
-    );
+    const {getByText, within} = render(<CvssV4Calculator />);
 
     const cvssVectorEl = getByText('CVSS Base Vector');
     const spanElement = within(cvssVectorEl.parentElement).getByText(
@@ -38,24 +34,22 @@ describe('CvssV4Calculator page tests', () => {
   });
 
   test('Should render userVector from url', async () => {
-    const locationModified = {
-      query: {
-        cvssVector:
-          'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/CR:M/MSC:H',
-      },
-    };
+    const cvssVector =
+      'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/CR:M/MSC:H';
+
+    window.history.pushState({}, 'Test Title', `?cvssVector=${cvssVector}`);
+
     const {render} = rendererWith({
       gmp,
       store: true,
+      router: true,
     });
 
-    const {getByText, within} = render(
-      <CvssV4Calculator location={locationModified} />,
-    );
+    const {getByText, within} = render(<CvssV4Calculator />);
 
     const cvssVectorEl = getByText('CVSS Base Vector');
     const spanElement = within(cvssVectorEl.parentElement).getByText(
-      locationModified.query.cvssVector,
+      cvssVector,
     );
 
     expect(spanElement).toBeVisible();
@@ -65,10 +59,11 @@ describe('CvssV4Calculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      router: true,
     });
 
     const {getByText, within, element, getAllByTestId} = render(
-      <CvssV4Calculator location={location} />,
+      <CvssV4Calculator />,
     );
 
     await wait();
@@ -102,10 +97,11 @@ describe('CvssV4Calculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      router: true,
     });
 
     const {element, getAllByTestId, getByText, within} = render(
-      <CvssV4Calculator location={location} />,
+      <CvssV4Calculator />,
     );
 
     await wait();

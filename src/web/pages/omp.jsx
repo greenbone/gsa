@@ -18,8 +18,10 @@ import PropTypes from 'web/utils/proptypes';
  */
 class LegacyOmpPage extends React.Component {
   componentDidMount() {
-    const {location, navigate} = this.props;
-    const {cmd, info_type, info_id = ''} = location.query;
+    const {navigate, searchParams} = this.props;
+    const cmd = searchParams.get('cmd');
+    const info_type = searchParams.get('info_type');
+    const info_id = searchParams.get('info_id') || '';
 
     if (cmd !== 'get_info') {
       navigate('/notfound', {replace: true});
@@ -57,6 +59,7 @@ class LegacyOmpPage extends React.Component {
 
 LegacyOmpPage.propTypes = {
   navigate: PropTypes.object.isRequired,
+  searchParams: PropTypes.object.isRequired,
 };
 
 export default withRouter(LegacyOmpPage);
