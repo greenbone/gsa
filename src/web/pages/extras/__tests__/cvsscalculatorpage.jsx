@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 
 import {fireEvent, rendererWith, waitFor, wait} from 'web/utils/testing';
 
@@ -37,10 +36,14 @@ const location = {
 };
 
 describe('CvssCalculator page tests', () => {
+  beforeEach(() => {
+    window.history.pushState({}, 'Test Title', '/');
+  });
   test('Should render with default values', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      router: true,
     });
 
     const {element, getAllByTestId} = render(<CvssCalculator />);
@@ -75,14 +78,19 @@ describe('CvssCalculator page tests', () => {
   });
 
   test('Should render userVector from url', async () => {
+    window.history.pushState(
+      {},
+      'Test Title',
+      `?cvssVector=AV:N/AC:L/Au:N/C:P/I:P/A:P`,
+    );
+
     const {render} = rendererWith({
       gmp,
       store: true,
+      router: true,
     });
 
-    const {element, getAllByTestId} = render(
-      <CvssCalculator location={location} />,
-    );
+    const {element, getAllByTestId} = render(<CvssCalculator />);
 
     await wait();
 
@@ -117,6 +125,7 @@ describe('CvssCalculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      router: true,
     });
 
     const {element, getAllByTestId} = render(
@@ -164,14 +173,19 @@ describe('CvssCalculator page tests', () => {
   });
 
   test('Changing displayed select values should change userVector', async () => {
+    window.history.pushState(
+      {},
+      'Test Title',
+      `?cvssVector=AV:N/AC:L/Au:N/C:P/I:P/A:P`,
+    );
+
     const {render} = rendererWith({
       gmp,
       store: true,
+      router: true,
     });
 
-    const {element, getAllByTestId} = render(
-      <CvssCalculator location={location} />,
-    );
+    const {element, getAllByTestId} = render(<CvssCalculator />);
 
     await wait();
 

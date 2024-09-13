@@ -5,7 +5,7 @@
 
 import {useCallback, useEffect, useState} from 'react';
 
-import {useLocation, useHistory} from 'react-router-dom';
+import {useSearchParams} from 'react-router-dom';
 
 import {useDispatch} from 'react-redux';
 
@@ -52,6 +52,7 @@ const useDefaultFilter = pageName =>
  *          still loading, function to change the filter, function to remove the
  *          filter and function to reset the filter
  */
+
 const usePageFilter = (
   pageName,
   gmpName,
@@ -62,8 +63,7 @@ const usePageFilter = (
 ) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const history = useHistory();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [defaultSettingFilter, defaultSettingsFilterError] =
     useDefaultFilter(gmpName);
 
@@ -80,9 +80,9 @@ const usePageFilter = (
 
   // use null as value for not set at all
   let returnedFilter;
-  // only use location directly if locationQueryFilterString is undefined
+  // only use searchParams directly if locationQueryFilterString is undefined
   const locationQueryFilterString =
-    initialLocationQueryFilterString || location?.query?.filter;
+    initialLocationQueryFilterString || searchParams.get('filter');
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
     hasValue(locationQueryFilterString)
@@ -163,15 +163,13 @@ const usePageFilter = (
   }, [changeFilter]);
 
   const resetFilter = useCallback(() => {
-    const query = {...location.query};
+    const query = new URLSearchParams(searchParams);
+    query.delete('filter');
 
-    // remove filter param from url
-    delete query.filter;
-
-    history.push({pathname: location.pathname, query});
+    setSearchParams(query);
 
     changeFilter();
-  }, [changeFilter, history, location]);
+  }, [changeFilter, setSearchParams, searchParams]);
 
   return [
     returnedFilter,

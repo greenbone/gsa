@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useEffect, useState} from 'react';
 
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 
-import {useRouteMatch} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -17,7 +16,7 @@ import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
-  RESULTS_FILTER_FILTER
+  RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
@@ -149,8 +148,8 @@ const ReportDetails = props => {
   const [_] = useTranslation();
   const gmp = useGmp();
   const dispatch = useDispatch();
-  const match = useRouteMatch();
-  const {id: reportId} = match.params;
+  const params = useParams('/audit/:id');
+  const {id: reportId} = params;
 
   const pSelector = useSelector(getPage, shallowEqual);
   const pageFilter = pSelector?.getFilter(getReportPageName(reportId));
@@ -613,7 +612,7 @@ const load =
     // eslint-disable-next-line no-shadow
     dispatch,
     gmp,
-    match,
+    params,
     pageFilter,
     reportFilter,
   }) =>
@@ -637,16 +636,16 @@ const load =
       // use fallback filter
       filter = DEFAULT_FILTER;
     }
-    dispatch(setPageFilter(getReportPageName(match.params.id), filter));
+    dispatch(setPageFilter(getReportPageName(params.id), filter));
     return dispatch(loadAuditReportWithThreshold(gmp)(reportId, {filter}));
   };
 
 const ReportDetailsWrapper = props => {
   const dispatch = useDispatch();
   const gmp = useGmp();
-  const match = useRouteMatch();
+  const params = useParams();
 
-  const {id: reportId} = match.params;
+  const {id: reportId} = params;
   const reportSel = useSelector(auditReportSelector, shallowEqual);
   const pSelector = useSelector(getPage, shallowEqual);
 
@@ -667,7 +666,7 @@ const ReportDetailsWrapper = props => {
             ...props,
             dispatch,
             gmp,
-            match,
+            params,
             defaultFilter: filter,
             reportFilter,
             reportId,
@@ -677,7 +676,7 @@ const ReportDetailsWrapper = props => {
             ...props,
             dispatch,
             gmp,
-            match,
+            params,
             defaultFilter: filter,
             reportFilter,
             reportId,

@@ -11,6 +11,9 @@ import Link from '../link';
 import Filter from 'gmp/models/filter';
 
 describe('Link tests', () => {
+  beforeEach(() => {
+    window.history.pushState({}, 'Test page', '/');
+  });
   test('render Link', () => {
     const {render} = rendererWith({router: true});
 
@@ -20,32 +23,32 @@ describe('Link tests', () => {
   });
 
   test('should route to url on click', () => {
-    const {render, history} = rendererWith({router: true});
+    const {render} = rendererWith({router: true});
 
     const {element} = render(<Link to="foo">Foo</Link>);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/foo');
+    expect(window.location.pathname).toEqual('/foo');
   });
 
   test('should route to absolute url on click', () => {
-    const {render, history} = rendererWith({router: true});
+    const {render} = rendererWith({router: true});
 
     const {element} = render(<Link to="/foo">Foo</Link>);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/foo');
+    expect(window.location.pathname).toEqual('/foo');
   });
 
   test('should route to url with filter on click', () => {
     const filter = Filter.fromString('foo=bar');
-    const {render, history} = rendererWith({router: true});
+    const {render} = rendererWith({router: true});
 
     const {element} = render(
       <Link to="foo" filter={filter}>
@@ -53,16 +56,18 @@ describe('Link tests', () => {
       </Link>,
     );
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/foo');
-    expect(history.location.query).toEqual({filter: 'foo=bar'});
+    expect(window.location.pathname).toEqual('/foo');
+
+    const searchParams = new URLSearchParams(window.location.search);
+    expect(searchParams.get('filter')).toEqual('foo=bar');
   });
 
   test('should route to url with query on click', () => {
-    const {render, history} = rendererWith({router: true});
+    const {render} = rendererWith({router: true});
     const query = {foo: 'bar'};
 
     const {element} = render(
@@ -71,16 +76,18 @@ describe('Link tests', () => {
       </Link>,
     );
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/foo');
-    expect(history.location.query).toEqual(query);
+    expect(window.location.pathname).toEqual('/foo');
+
+    const searchParams = new URLSearchParams(window.location.search);
+    expect(searchParams.get('foo')).toEqual('bar');
   });
 
   test('should route to url with anchor on click', () => {
-    const {render, history} = rendererWith({router: true});
+    const {render} = rendererWith({router: true});
 
     const {element} = render(
       <Link to="foo" anchor="bar">
@@ -88,16 +95,16 @@ describe('Link tests', () => {
       </Link>,
     );
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/foo');
-    expect(history.location.hash).toEqual('#bar');
+    expect(window.location.pathname).toEqual('/foo');
+    expect(window.location.hash).toEqual('#bar');
   });
 
   test('should not route to url in text mode', () => {
-    const {render, history} = rendererWith({router: true});
+    const {render} = rendererWith({router: true});
 
     const {element} = render(
       <Link to="foo" textOnly={true}>
@@ -107,7 +114,7 @@ describe('Link tests', () => {
 
     fireEvent.click(element);
 
-    expect(history.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/');
   });
 
   test('should render styles', () => {

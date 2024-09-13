@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import {connect} from 'react-redux';
 
@@ -321,17 +320,18 @@ class EntitiesContainer extends React.Component {
     this.changeFilter(RESET_FILTER);
   }
 
-  handleFilterReset() {
-    const {history, location} = this.props;
-    const query = {...location.query};
+  handleFilterReset = () => {
+    const {navigate, location, searchParams} = this.props;
 
-    // remove filter param from url
-    delete query.filter;
+    searchParams.delete('filter');
 
-    history.push({pathname: location.pathname, query});
+    navigate({
+      pathname: location.pathname,
+      search: searchParams.toString(),
+    });
 
     this.changeFilter();
-  }
+  };
 
   openTagDialog() {
     this.setState({tagDialogVisible: true});
@@ -583,9 +583,11 @@ EntitiesContainer.propTypes = {
   entitiesCounts: PropTypes.counts,
   entitiesError: PropTypes.error,
   filter: PropTypes.filter,
+  searchParams: PropTypes.object,
+  location: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string.isRequired,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   listExportFileName: PropTypes.string,
   loadSettings: PropTypes.func.isRequired,
@@ -604,9 +606,8 @@ EntitiesContainer.propTypes = {
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const username = getUsername(rootState);
-  const listExportFileName = userDefaultsSelector.getValueByName(
-    'listexportfilename',
-  );
+  const listExportFileName =
+    userDefaultsSelector.getValueByName('listexportfilename');
   return {
     listExportFileName,
     username,

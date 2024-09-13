@@ -281,59 +281,6 @@ exports[`EditScanConfigDialog component tests > should render dialog 1`] = `
   width: inherit;
 }
 
-.c25 {
-  overflow: hidden;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-}
-
-.c44 {
-  overflow: hidden;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-  display: none;
-  height: 0;
-}
-
-.c18 {
-  margin: 10px 0px;
-  padding-bottom: 1px;
-  border-bottom: 2px solid #e5e5e5;
-  position: relative;
-}
-
-.c19 {
-  margin: 0 0 1px 0;
-}
-
-.c20 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c22 {
-  word-break: break-all;
-  min-width: 100px;
-}
-
-.c23 {
-  margin-left: 3px;
-  margin-top: -2px;
-}
-
 .c1 {
   position: relative;
   display: -webkit-box;
@@ -601,6 +548,64 @@ exports[`EditScanConfigDialog component tests > should render dialog 1`] = `
   padding-right: 10px;
 }
 
+.c14 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #4C4C4C;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c14:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c15 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c45 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .c16 {
   color: #c12c30;
   font-weight: bold;
@@ -608,6 +613,122 @@ exports[`EditScanConfigDialog component tests > should render dialog 1`] = `
   padding-bottom: 1px;
   padding-left: 4px;
   display: none;
+}
+
+.c37 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c38 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c39 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c42 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c25 {
+  overflow: hidden;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.c44 {
+  overflow: hidden;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  display: none;
+  height: 0;
+}
+
+.c18 {
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #e5e5e5;
+  position: relative;
+}
+
+.c19 {
+  margin: 0 0 1px 0;
+}
+
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c22 {
+  word-break: break-all;
+  min-width: 100px;
+}
+
+.c23 {
+  margin-left: 3px;
+  margin-top: -2px;
 }
 
 .c27 {
@@ -683,127 +804,6 @@ exports[`EditScanConfigDialog component tests > should render dialog 1`] = `
   border-top: 1px solid #e5e5e5;
   font-weight: bold;
   width: 10%;
-}
-
-.c14 {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  display: block;
-  height: 22px;
-  color: #4C4C4C;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #bfbfbf;
-  border-radius: 2px;
-  padding: 1px 8px;
-}
-
-.c14:-webkit-autofill {
-  box-shadow: 0 0 0 1000px white inset;
-}
-
-.c15 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c45 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c37 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  font-weight: normal;
-  cursor: pointer;
-}
-
-.c38 {
-  font-family: inherit;
-  font-size: inherit;
-  padding: 0;
-  margin: 0;
-  margin-left: 10px;
-  line-height: normal;
-  width: auto;
-  height: auto;
-}
-
-.c39 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c42 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
 }
 
 .c49 {
@@ -2609,6 +2609,19 @@ exports[`EditScanConfigDialog component tests > should render dialog for config 
   height: 100%;
 }
 
+.c17 {
+  font-size: 14px;
+  margin-bottom: 0px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
 .c10 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -2640,15 +2653,6 @@ exports[`EditScanConfigDialog component tests > should render dialog for config 
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
-}
-
-.c16 {
-  color: #c12c30;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 .c14 {
@@ -2691,17 +2695,13 @@ exports[`EditScanConfigDialog component tests > should render dialog for config 
   align-items: center;
 }
 
-.c17 {
-  font-size: 14px;
-  margin-bottom: 0px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
+.c16 {
+  color: #c12c30;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
 }
 
 <body>
@@ -3177,6 +3177,19 @@ exports[`EditScanConfigDialog component tests > should render dialog inline noti
   height: 100%;
 }
 
+.c17 {
+  font-size: 14px;
+  margin-bottom: 0px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
 .c10 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -3208,15 +3221,6 @@ exports[`EditScanConfigDialog component tests > should render dialog inline noti
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
-}
-
-.c16 {
-  color: #c12c30;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 .c14 {
@@ -3259,17 +3263,13 @@ exports[`EditScanConfigDialog component tests > should render dialog inline noti
   align-items: center;
 }
 
-.c17 {
-  font-size: 14px;
-  margin-bottom: 0px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
+.c16 {
+  color: #c12c30;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
 }
 
 <body>

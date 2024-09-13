@@ -4,7 +4,7 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
+import {useSearchParams} from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -54,6 +54,7 @@ const ToolBarIcons = () => (
 
 const CvssV2Calculator = props => {
   const [, renewSession] = useUserSessionTimeout();
+  const [searchParams] = useSearchParams();
 
   const [state, setState] = useState({
     accessVector: 'Local',
@@ -68,18 +69,15 @@ const CvssV2Calculator = props => {
   });
 
   useEffect(() => {
-    const {location} = props;
+    const cvssVector = searchParams.get('cvssVector');
 
     if (
-      isDefined(location) &&
-      isDefined(location.query) &&
-      isDefined(location.query.cvssVector)
+      cvssVector &&
+      !cvssVector.includes('CVSS:3') &&
+      !cvssVector.includes('CVSS:4')
     ) {
-      const {cvssVector} = location.query;
-      if (!cvssVector.includes('CVSS:3')) {
-        setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
-        handleVectorChange();
-      }
+      setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
+      handleVectorChange();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -351,6 +349,7 @@ const CvssV2Calculator = props => {
 
 const CvssV3Calculator = props => {
   const [, renewSession] = useUserSessionTimeout();
+  const [searchParams] = useSearchParams();
 
   const [state, setState] = useState({
     attackVector: 'Network',
@@ -367,18 +366,11 @@ const CvssV3Calculator = props => {
   });
 
   useEffect(() => {
-    const {location} = props;
+    const cvssVector = searchParams.get('cvssVector');
 
-    if (
-      isDefined(location) &&
-      isDefined(location.query) &&
-      isDefined(location.query.cvssVector)
-    ) {
-      const {cvssVector} = location.query;
-      if (cvssVector.includes('CVSS:3')) {
-        setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
-        handleVectorChange();
-      }
+    if (cvssVector?.includes('CVSS:3')) {
+      setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
+      handleVectorChange();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -706,14 +698,11 @@ const CvssCalculator = props => (
       <CvssV3Calculator {...props} />
     </Divider>
     <Divider margin="20px" flex="row" align={['center', 'start']} grow>
-      <CvssV4Calculator location={props.location} />
+      <CvssV4Calculator />
     </Divider>
   </Layout>
 );
 
-CvssCalculator.propTypes = {
-  location: PropTypes.object.isRequired,
-};
 export default CvssCalculator;
 
 // vim: set ts=2 sw=2 tw=80:

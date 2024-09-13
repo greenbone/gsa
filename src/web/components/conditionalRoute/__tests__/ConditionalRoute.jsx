@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/utils/testing';
-import {Route, MemoryRouter} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import ConditionalRoute from 'web/components/conditionalRoute/ConditionalRoute';
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -36,10 +36,15 @@ describe('ConditionalRoute', () => {
     },
   ])('$description', ({feature, expectedText}) => {
     render(
-      <MemoryRouter>
-        <ConditionalRoute component={MockComponent} feature={feature} />
-        <Route path="/notfound" render={() => <div>Not Found</div>} />
-      </MemoryRouter>,
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ConditionalRoute component={MockComponent} feature={feature} />
+          }
+        />
+        <Route path="/notfound" element={<div>Not Found</div>} />
+      </Routes>,
     );
 
     expect(screen.getByText(expectedText)).toBeVisible();

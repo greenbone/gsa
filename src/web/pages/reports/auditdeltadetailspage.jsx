@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useEffect, useState} from 'react';
 
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 
-import {useRouteMatch} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -17,7 +16,7 @@ import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
-  RESULTS_FILTER_FILTER
+  RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
@@ -114,12 +113,12 @@ const DeltaAuditReportDetails = props => {
       sortReverse: false,
     },
   });
-  
+
   const [_] = useTranslation();
   const gmp = useGmp();
   const dispatch = useDispatch();
-  const match = useRouteMatch();
-  const {id: reportId, deltaid: deltaReportId} = match.params;
+  const params = useParams();
+  const {id: reportId, deltaid: deltaReportId} = params;
 
   const reportFormatsSel = useSelector(reportFormatsSelector);
   const reportConfigsSel = useSelector(reportConfigsSelector);
@@ -513,9 +512,9 @@ const load =
 const DeltaAuditReportDetailsWrapper = ({defaultFilter, ...props}) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
-  const match = useRouteMatch();
+  const params = useParams('/auditreport/delta/:id/:deltaid');
 
-  const {id: reportId, deltaid: deltaReportId} = match.params;
+  const {id: reportId, deltaid: deltaReportId} = params;
   const deltaSel = useSelector(deltaAuditReportSelector, shallowEqual);
   const entity = deltaSel.getEntity(reportId, deltaReportId);
   const reportFilter = entity?.report?.filter;

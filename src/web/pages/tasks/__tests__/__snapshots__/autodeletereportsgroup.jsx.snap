@@ -37,28 +37,6 @@ exports[`AutoDeleteReportsGroup tests > should render dialog group 1`] = `
   align-items: center;
 }
 
-.c7 {
-  margin-left: -5px;
-}
-
-.c7>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c7>* {
-  margin-left: 5px;
-}
-
-.c6 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -90,6 +68,28 @@ exports[`AutoDeleteReportsGroup tests > should render dialog group 1`] = `
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.c7 {
+  margin-left: -5px;
+}
+
+.c7>* {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7>* {
+  margin-left: 5px;
+}
+
+.c6 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .c4 {

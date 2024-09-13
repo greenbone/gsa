@@ -18,14 +18,14 @@ import usePageFilter from '../usePageFilter';
 import {pageFilter} from 'web/store/pages/actions';
 import {vi} from 'vitest';
 
-const mockUseHistory = testing.fn();
+const mockUseNavigate = testing.fn();
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useLocation: () => ({pathname: '/'}),
-    useHistory: () => mockUseHistory(),
+    useNavigate: () => mockUseNavigate(),
   };
 });
 
@@ -42,13 +42,11 @@ describe('usePageFilter tests', () => {
       },
     };
 
-    const {renderHook, store, history} = rendererWith({
+    const {renderHook, store} = rendererWith({
       gmp,
       store: true,
       router: true,
     });
-
-    history.push({query: locationQuery});
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
     store.dispatch(
@@ -76,7 +74,11 @@ describe('usePageFilter tests', () => {
       },
     };
 
-    const {renderHook, store} = rendererWith({store: true, gmp});
+    const {renderHook, store} = rendererWith({
+      store: true,
+      gmp,
+      router: true,
+    });
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
     store.dispatch(
