@@ -74,7 +74,11 @@ describe('usePageFilter tests', () => {
       },
     };
 
-    const {renderHook, store} = rendererWith({store: true, gmp});
+    const {renderHook, store} = rendererWith({
+      store: true,
+      gmp,
+      router: true,
+    });
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
     store.dispatch(
