@@ -5,7 +5,7 @@
 
 import PropTypes from 'prop-types';
 
-import {Route, Redirect} from 'react-router-dom';
+import {Navigate} from 'react-router-dom';
 import useCapabilities from 'web/hooks/useCapabilities';
 
 const ConditionalRoute = ({component: Component, feature, ...rest}) => {
@@ -13,12 +13,7 @@ const ConditionalRoute = ({component: Component, feature, ...rest}) => {
   const isEnabled = capabilities.featureEnabled(feature);
 
   return (
-    <Route
-      render={props =>
-        isEnabled ? <Component {...props} /> : <Redirect to="/notfound" />
-      }
-      {...rest}
-    />
+    <>{isEnabled ? <Component {...rest} /> : <Navigate to="/notfound" />}</>
   );
 };
 

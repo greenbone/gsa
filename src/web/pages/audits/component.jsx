@@ -19,7 +19,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {hasId} from 'gmp/utils/id';
 
 import withDownload from 'web/components/form/withDownload';
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -588,7 +588,7 @@ AuditComponent.propTypes = {
   onStopped: PropTypes.func,
 };
 
-const mapStateToProps = (rootState, {match}) => {
+const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
   const policiesSel = policiesSelector(rootState);

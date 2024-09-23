@@ -120,7 +120,7 @@ const ToolBarIcons = ({
                 end: isDefined(report.scan_end)
                   ? report.scan_end.toISOString()
                   : undefined,
-                scanner: isDefined(report.slave) ? report.slave.id : undefined,
+                ...(isDefined(report.slave) && {scanner: report.slave.id}),
               }}
             >
               <PerformanceIcon />

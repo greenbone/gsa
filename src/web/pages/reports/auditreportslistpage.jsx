@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useEffect, useState} from 'react';
 
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -49,14 +48,14 @@ import AuditReportsDashboard, {
 const ToolBarIcons = () => {
   const [_] = useTranslation();
   return (
-  <IconDivider>
-    <ManualIcon
-      page="reports"
-      anchor="using-and-managing-audit-reports"
-      title={_('Help: Audit Reports')}
-    />
-  </IconDivider>
-  )
+    <IconDivider>
+      <ManualIcon
+        page="reports"
+        anchor="using-and-managing-audit-reports"
+        title={_('Help: Audit Reports')}
+      />
+    </IconDivider>
+  );
 };
 
 const AuditReportsPage = ({
@@ -68,7 +67,7 @@ const AuditReportsPage = ({
 }) => {
   const [selectedDeltaReport, setSelectedDeltaReport] = useState();
   const [beforeSelectFilter, setBeforeSelectFilter] = useState();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [_] = useTranslation();
 
   useEffect(() => {
@@ -88,7 +87,7 @@ const AuditReportsPage = ({
     if (isDefined(selectedDeltaReport)) {
       onFilterChanged(beforeSelectFilter);
 
-      history.push(
+      navigate(
         '/auditreport/delta/' + selectedDeltaReport.id + '/' + report.id,
       );
     } else {
@@ -144,7 +143,7 @@ const AuditReportsPage = ({
 
 AuditReportsPage.propTypes = {
   filter: PropTypes.filter,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
@@ -162,8 +161,8 @@ const FALLBACK_AUDIT_REPORT_LIST_FILTER = Filter.fromString(
 );
 
 export default withEntitiesContainer('auditreport', {
-    fallbackFilter: FALLBACK_AUDIT_REPORT_LIST_FILTER,
-    entitiesSelector,
-    loadEntities,
-    reloadInterval: reportsReloadInterval,
-  })(AuditReportsPage);
+  fallbackFilter: FALLBACK_AUDIT_REPORT_LIST_FILTER,
+  entitiesSelector,
+  loadEntities,
+  reloadInterval: reportsReloadInterval,
+})(AuditReportsPage);

@@ -54,6 +54,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
 import StartEndTimeSelection from './startendtimeselection';
+import {withRouter} from 'web/utils/withRouter';
 
 const DURATION_HOUR = 60 * 60;
 const DURATION_DAY = DURATION_HOUR * 24;
@@ -176,8 +177,10 @@ class PerformancePage extends React.Component {
   }
 
   componentDidMount() {
-    const {start, end, scanner} = this.props.location.query;
-    const {gmp, timezone} = this.props;
+    const {gmp, timezone, searchParams} = this.props;
+    const start = searchParams.get('start');
+    const end = searchParams.get('end');
+    const scanner = searchParams.get('scanner');
 
     gmp.performance.get().then(response => {
       this.setState({reports: response.data});
@@ -355,6 +358,7 @@ PerformancePage.propTypes = {
   scanners: PropTypes.arrayOf(PropTypes.model),
   timezone: PropTypes.string.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  searchParams: PropTypes.object,
 };
 
 const SENSOR_SCANNER_FILTER = Filter.fromString(
@@ -378,6 +382,7 @@ const mapStateToProps = rootState => {
 
 export default compose(
   withGmp,
+  withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(PerformancePage);
 

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PropTypes from 'prop-types';
 import {useState, useEffect, useMemo} from 'react';
 import _ from 'gmp/locale';
 
@@ -24,6 +23,7 @@ import SeverityBar from 'web/components/bar/severitybar';
 import styled from 'styled-components';
 import TextField from 'web/components/form/textfield';
 import MetricsGroups from 'web/pages/extras/cvssV4/MetricsGroups';
+import {useSearchParams} from 'react-router-dom';
 
 const StyledTextField = styled(TextField)`
   width: 180px;
@@ -31,7 +31,9 @@ const StyledTextField = styled(TextField)`
 
 const cvssV4Prefix = 'CVSS:4.0/';
 
-const CvssV4Calculator = ({location}) => {
+const CvssV4Calculator = () => {
+  const [searchParams] = useSearchParams();
+
   const initialState = useMemo(() => {
     return expectedMetricOptionsOrdered.reduce((obj, item) => {
       obj[item[0]] = item[1];
@@ -50,13 +52,14 @@ const CvssV4Calculator = ({location}) => {
   const cvssVector = `${cvssV4Prefix}${removeUnusedMetrics(selectedOptions)}`;
 
   useEffect(() => {
-    if (location?.query?.cvssVector?.includes(cvssV4Prefix)) {
-      const newOptions = processVector(location.query.cvssVector);
+    const cvssVectorParam = searchParams.get('cvssVector');
+    if (cvssVectorParam?.includes(cvssV4Prefix)) {
+      const newOptions = processVector(cvssVectorParam);
       setSelectedOptions({...initialState, ...newOptions});
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, [searchParams]);
 
   const handleInputCVSSVectorChange = value => {
     setInputCVSSVector(value);
@@ -108,10 +111,6 @@ const CvssV4Calculator = ({location}) => {
       </FormGroup>
     </Layout>
   );
-};
-
-CvssV4Calculator.propTypes = {
-  location: PropTypes.object.isRequired,
 };
 
 export default CvssV4Calculator;

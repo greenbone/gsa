@@ -20,9 +20,7 @@ import {getActionItems} from 'web/components/testing';
 import Row from '../row';
 
 const gmp = {settings: {}};
-const featureList = [
-  {name: 'COMPLIANCE_REPORTS', _enabled: 0},
-];
+const featureList = [{name: 'COMPLIANCE_REPORTS', _enabled: 0}];
 const caps = new Capabilities(['everything'], featureList);
 
 const lastReport = {
@@ -767,9 +765,7 @@ describe('Audit Row tests - compliance reports enabled', () => {
   // deactivate console.error for tests
   // to make it possible to test a row without a table
   console.error = () => {};
-  const featureList = [
-    {name: 'COMPLIANCE_REPORTS', _enabled: 1},
-  ];
+  const featureList = [{name: 'COMPLIANCE_REPORTS', _enabled: 1}];
   const caps = new Capabilities(['everything'], featureList);
 
   test('should render', () => {

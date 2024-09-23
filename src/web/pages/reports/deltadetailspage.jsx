@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -15,7 +14,8 @@ import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
-  RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+  RESULTS_FILTER_FILTER,
+} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {first} from 'gmp/utils/array';
@@ -99,7 +99,6 @@ const getFilter = (entity = {}) => {
 class DeltaReportDetails extends React.Component {
   constructor(...args) {
     super(...args);
-
     this.state = {
       activeTab: 0,
       showFilterDialog: false,
@@ -318,7 +317,7 @@ class DeltaReportDetails extends React.Component {
       includeOverrides,
       reportConfigId,
       reportFormatId,
-      storeAsDefault
+      storeAsDefault,
     } = state;
 
     const newFilter = reportFilter.copy();
@@ -564,7 +563,6 @@ DeltaReportDetails.propTypes = {
   loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
   reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
   reportExportFileName: PropTypes.string,
@@ -605,8 +603,9 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   };
 };
 
-const mapStateToProps = (rootState, {match}) => {
-  const {id, deltaid} = match.params;
+const mapStateToProps = (rootState, {params}) => {
+  const {id, deltaid} = params;
+
   const filterSel = filterSelector(rootState);
   const deltaSel = deltaReportSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
@@ -708,6 +707,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
+  withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(DeltaReportDetailsWrapper);
 

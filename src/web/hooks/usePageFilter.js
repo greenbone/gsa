@@ -5,7 +5,7 @@
 
 import {useCallback, useEffect, useState} from 'react';
 
-import {useLocation, useHistory} from 'react-router-dom';
+import {useSearchParams} from 'react-router-dom';
 
 import {useDispatch} from 'react-redux';
 
@@ -47,12 +47,15 @@ const useDefaultFilter = pageName =>
  *
  * @param {String} pageName Name of the page
  * @param {Object} options Options object
+ * @param {String} gmpName GMP name for filtering
  * @returns Array of the applied filter, boolean indicating if the filter is
  *          still loading, function to change the filter, function to remove the
  *          filter and function to reset the filter
  */
+
 const usePageFilter = (
   pageName,
+  gmpName,
   {
     fallbackFilter,
     locationQueryFilterString: initialLocationQueryFilterString,
@@ -60,10 +63,10 @@ const usePageFilter = (
 ) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const history = useHistory();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [defaultSettingFilter, defaultSettingsFilterError] =
-    useDefaultFilter(pageName);
+    useDefaultFilter(gmpName);
+
   let [rowsPerPage, rowsPerPageError] = useShallowEqualSelector(state => {
     const userSettingDefaultSel = getUserSettingsDefaults(state);
     return [
@@ -77,10 +80,9 @@ const usePageFilter = (
 
   // use null as value for not set at all
   let returnedFilter;
-  // only use location directly if locationQueryFilterString is undefined
-  const locationQueryFilterString = initialLocationQueryFilterString
-    ? initialLocationQueryFilterString
-    : location?.query?.filter;
+  // only use searchParams directly if locationQueryFilterString is undefined
+  const locationQueryFilterString =
+    initialLocationQueryFilterString || searchParams.get('filter');
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
     hasValue(locationQueryFilterString)
@@ -93,14 +95,14 @@ const usePageFilter = (
       !isDefined(defaultSettingFilter) &&
       !isDefined(defaultSettingsFilterError)
     ) {
-      dispatch(loadUserSettingsDefaultFilter(gmp)(pageName));
+      dispatch(loadUserSettingsDefaultFilter(gmp)(gmpName));
     }
   }, [
     defaultSettingFilter,
     defaultSettingsFilterError,
     dispatch,
     gmp,
-    pageName,
+    gmpName,
   ]);
 
   useEffect(() => {
@@ -161,15 +163,13 @@ const usePageFilter = (
   }, [changeFilter]);
 
   const resetFilter = useCallback(() => {
-    const query = {...location.query};
+    const query = new URLSearchParams(searchParams);
+    query.delete('filter');
 
-    // remove filter param from url
-    delete query.filter;
-
-    history.push({pathname: location.pathname, query});
+    setSearchParams(query);
 
     changeFilter();
-  }, [changeFilter, history, location]);
+  }, [changeFilter, setSearchParams, searchParams]);
 
   return [
     returnedFilter,

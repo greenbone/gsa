@@ -19,28 +19,6 @@ exports[`MinQodGroup tests > should render 1`] = `
   align-items: center;
 }
 
-.c5 {
-  margin-left: -5px;
-}
-
-.c5>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c5>* {
-  margin-left: 5px;
-}
-
-.c4 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -146,6 +124,28 @@ exports[`MinQodGroup tests > should render 1`] = `
 .c10 {
   border-bottom-right-radius: 1px;
   bottom: 0;
+}
+
+.c5 {
+  margin-left: -5px;
+}
+
+.c5>* {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5>* {
+  margin-left: 5px;
+}
+
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 <div
