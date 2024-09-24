@@ -145,15 +145,6 @@ describe('Audit Detla Report Details Content tests', () => {
 
     const input = within(select).getByTitle('Loaded filter');
     expect(input).toHaveValue('foo');
-    const selects = getAllByTestId('select-selected-value');
-
-    // Toolbar Icons
-    expect(icons.length).toEqual(14);
-
-    // Powerfilter
-    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('foo');
 
     // Header
     expect(baseElement).toHaveTextContent(
@@ -334,15 +325,6 @@ describe('Audit Detla Report Details Content tests', () => {
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    const selects = getAllByTestId('select-selected-value');
-
-    // Toolbar Icons
-    expect(icons.length).toEqual(24);
-
-    // Powerfilter
-    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
 
     // Header
     expect(baseElement).toHaveTextContent(

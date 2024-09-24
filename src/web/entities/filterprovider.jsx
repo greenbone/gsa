@@ -17,7 +17,7 @@ const FilterProvider = ({
   pageName = gmpname,
   locationQuery = {},
 }) => {
-  const [returnedFilter, isLoadingFilter] = usePageFilter(pageName, {
+  const [returnedFilter, isLoadingFilter] = usePageFilter(pageName, gmpname, {
     fallbackFilter,
     locationQueryFilterString: locationQuery?.filter,
   });

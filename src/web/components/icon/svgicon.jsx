@@ -144,7 +144,7 @@ const SvgIcon = ({
 
 SvgIcon.propTypes = {
   children: PropTypes.func.isRequired,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   active: PropTypes.bool,
   disabled: PropTypes.bool,
   loadingTitle: PropTypes.string,
