@@ -93,7 +93,7 @@ import TicketsPage from './pages/tickets/listpage';
 import TicketDetailsPage from './pages/tickets/detailspage';
 import TlsCertificatesPage from './pages/tlscertificates/listpage';
 import TlsCertificateDetailsPage from './pages/tlscertificates/detailspage';
-import TrashcanPage from './pages/extras/trashcanpage';
+import TrashcanPage from './pages/extras/TrashcanPage';
 import UserDetailsPage from './pages/users/detailspage';
 import UserSettingsPage from './pages/usersettings/usersettingspage';
 import UsersPage from './pages/users/listpage';
