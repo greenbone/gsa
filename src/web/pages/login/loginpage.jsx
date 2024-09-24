@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -119,7 +118,7 @@ class LoginPage extends React.Component {
         ) {
           navigate(location.state.next, {replace: true});
         } else {
-          navigate('/dashboard', {replace: true});
+          navigate('/dashboards', {replace: true});
         }
       },
       rej => {
@@ -134,7 +133,7 @@ class LoginPage extends React.Component {
 
     // redirect user to main page if he is already logged in
     if (isLoggedIn) {
-      navigate('/dashboard', {replace: true});
+      navigate('/dashboards', {replace: true});
     }
   }
 

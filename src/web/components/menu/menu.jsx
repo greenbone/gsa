@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {AppNavigation} from '@greenbone/opensight-ui-components';
@@ -11,7 +10,7 @@ import {AppNavigation} from '@greenbone/opensight-ui-components';
 import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
-import {useRouteMatch} from 'react-router-dom';
+import {useMatch} from 'react-router-dom';
 
 import Link from 'web/components/link/link';
 import {
@@ -65,7 +64,7 @@ const Menu = () => {
 
   const mayOpAssets = checkCapabilities(['assets', 'tls_certificates']);
 
-  const useIsActive = path => Boolean(useRouteMatch(path));
+  const useIsActive = path => Boolean(useMatch(path));
 
   const isUserActive = useIsActive('/users');
   const isGroupsActive = useIsActive('/groups');
@@ -259,11 +258,7 @@ const Menu = () => {
     [
       {
         label: _('Dashboards'),
-        to: '/',
-        active: useRouteMatch({
-          path: '/',
-          exact: true,
-        }),
+        to: '/dashboards',
         icon: BarChart3,
       },
     ],

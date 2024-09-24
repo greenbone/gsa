@@ -6,6 +6,7 @@
 import React from 'react';
 
 import {connect} from 'react-redux';
+import {withRouter} from 'web/utils/withRouter';
 
 import _ from 'gmp/locale';
 

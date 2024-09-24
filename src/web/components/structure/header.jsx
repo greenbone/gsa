@@ -5,7 +5,7 @@
 
 import {useCallback} from 'react';
 
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import {AppHeader} from '@greenbone/opensight-ui-components';
 
@@ -24,14 +24,14 @@ const Header = () => {
   const gmp = useGmp();
   const username = useUserName();
   const loggedIn = useUserIsLoggedIn();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSettingsClick = useCallback(
     event => {
       event.preventDefault();
-      history.push('/usersettings');
+      navigate('/usersettings');
     },
-    [history],
+    [navigate],
   );
 
   const handleLogout = useCallback(
@@ -39,10 +39,10 @@ const Header = () => {
       event.preventDefault();
 
       gmp.doLogout().then(() => {
-        history.push('/login?type=logout');
+        navigate('/login?type=logout');
       });
     },
-    [gmp, history],
+    [gmp, navigate],
   );
 
   const menuPoints = [

@@ -117,7 +117,7 @@ const LoggedInRoutes = () => {
       <LocationObserver>
         <Page>
           <Routes>
-            <Route path="/dashboard" element={<StartPage />} />
+            <Route path="/dashboards" element={<StartPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/alerts" element={<AlertsPage />} />
             <Route path="/audits" element={<AuditsPage />} />
