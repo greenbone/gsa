@@ -137,7 +137,7 @@ const ScpMethodPart = ({
         {capabilities.mayOp('get_report_configs') && (
           <>
             <label htmlFor="report-config-select">
-              &nbsp; Report Config &nbsp;{' '}
+              &nbsp; Report Config &nbsp;
             </label>
             <Select
               name={prefix + 'scp_report_config'}
