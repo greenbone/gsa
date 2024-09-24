@@ -10,7 +10,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Filter from 'gmp/models/filter';
 
-import {rendererWith} from 'web/utils/testing';
+import {rendererWith, within} from 'web/utils/testing';
 
 import FilterDialog from 'web/pages/reports/detailsfilterdialog';
 
@@ -37,7 +37,7 @@ describe('Details Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {baseElement, getByText, getByLabelText} = render(
+    const {baseElement, getByText, getByLabelText, getByTestId} = render(
       <FilterDialog
         audit={true}
         filter={filter}
@@ -58,6 +58,22 @@ describe('Details Filter Dialog for Audit report', () => {
     expect(formGroups[0]).toHaveTextContent('Filter');
     expect(formGroups[1]).toHaveTextContent('QoD');
     expect(formGroups[2]).toHaveTextContent('Compliance');
+
+    const filterGroup = getByTestId('compliance-levels-filter-group');
+    const {queryAllByRole} = within(filterGroup);
+
+    const yesCheckbox = getByTestId('compliance-state-Yes');
+    const noCheckbox = getByTestId('compliance-state-No');
+    const incompleteCheckbox = getByTestId('compliance-state-Incomplete');
+    const undefinedCheckbox = getByTestId('compliance-state-Undefined');
+
+    expect(yesCheckbox).toHaveTextContent('Yes');
+    expect(noCheckbox).toHaveTextContent('No');
+    expect(incompleteCheckbox).toHaveTextContent('Incomplete');
+    expect(undefinedCheckbox).toHaveTextContent('Undefined');
+
+    const checkboxes = queryAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(4);
     expect(formGroups[3]).toHaveTextContent('Solution Type');
     expect(formGroups[4]).toHaveTextContent('Vulnerability');
     expect(formGroups[5]).toHaveTextContent('Host (IP)');
@@ -94,7 +110,7 @@ describe('Details Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {getByText, baseElement, getByLabelText} = render(
+    const {getByText, baseElement, getByLabelText, getByTestId} = render(
       <FilterDialog
         audit={false}
         filter={filter}
@@ -117,6 +133,26 @@ describe('Details Filter Dialog for Audit report', () => {
     expect(formGroups[1]).toHaveTextContent('Apply Overrides');
     expect(formGroups[2]).toHaveTextContent('QoD');
     expect(formGroups[3]).toHaveTextContent('Severity (Class)');
+
+    const filterGroup = getByTestId('severity-levels-filter-group');
+
+    const {queryAllByRole} = within(filterGroup);
+
+    const highCheckbox = getByTestId('severity-class-High');
+    const mediumCheckbox = getByTestId('severity-class-Medium');
+    const lowCheckbox = getByTestId('severity-class-Low');
+    const logCheckbox = getByTestId('severity-class-Log');
+    const falsePositiveCheckbox = getByTestId('severity-class-False-Positive');
+
+    expect(highCheckbox).toHaveTextContent('High');
+    expect(mediumCheckbox).toHaveTextContent('Medium');
+    expect(lowCheckbox).toHaveTextContent('Low');
+    expect(logCheckbox).toHaveTextContent('Log');
+    expect(falsePositiveCheckbox).toHaveTextContent('False Pos.');
+
+    const checkboxes = queryAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(5);
+
     expect(formGroups[4]).toHaveTextContent('Severity');
     expect(formGroups[5]).toHaveTextContent('Solution Type');
     expect(formGroups[6]).toHaveTextContent('Vulnerability');

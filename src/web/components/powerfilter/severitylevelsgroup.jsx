@@ -51,7 +51,10 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
     levels = '';
   }
   return (
-    <FormGroup title={_('Severity (Class)')}>
+    <FormGroup
+      title={_('Severity (Class)')}
+      data-testid="severity-levels-filter-group"
+    >
       <IconDivider>
         <Checkbox
           checked={levels.includes('h')}

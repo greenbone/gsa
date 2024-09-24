@@ -49,6 +49,7 @@ TextArea.propTypes = {
   disabled: PropTypes.bool,
   errorContent: PropTypes.toString,
   minRows: PropTypes.numberOrNumberString,
+  maxRows: PropTypes.numberOrNumberString,
   name: PropTypes.string,
   placeholder: PropTypes.string,
   title: PropTypes.string,

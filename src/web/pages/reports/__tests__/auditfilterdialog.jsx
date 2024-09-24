@@ -10,7 +10,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Filter from 'gmp/models/filter';
 
-import {rendererWith} from 'web/utils/testing';
+import {rendererWith, within} from 'web/utils/testing';
 
 import AuditReportFilter from 'web/pages/reports/auditfilterdialog';
 
@@ -37,7 +37,7 @@ describe('Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {baseElement, getByLabelText} = render(
+    const {baseElement, getByLabelText, getByTestId} = render(
       <AuditReportFilter
         filter={filter}
         delta={false}
@@ -54,6 +54,23 @@ describe('Filter Dialog for Audit report', () => {
 
     expect(formGroups[0]).toHaveTextContent('Filter');
     expect(formGroups[1]).toHaveTextContent('Compliance');
+
+    const filterGroup = getByTestId('compliance-levels-filter-group');
+    const {queryByTestId, queryAllByRole} = within(filterGroup);
+
+    const yesCheckbox = queryByTestId('compliance-state-Yes');
+    const noCheckbox = queryByTestId('compliance-state-No');
+    const incompleteCheckbox = queryByTestId('compliance-state-Incomplete');
+    const undefinedCheckbox = queryByTestId('compliance-state-Undefined');
+
+    expect(yesCheckbox).toHaveTextContent('Yes');
+    expect(noCheckbox).toHaveTextContent('No');
+    expect(incompleteCheckbox).toHaveTextContent('Incomplete');
+    expect(undefinedCheckbox).toHaveTextContent('Undefined');
+
+    const checkboxes = queryAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(4);
+
     expect(formGroups[2]).toHaveTextContent('QoD');
     expect(formGroups[3]).toHaveTextContent('From Task (name)');
     expect(formGroups[4]).toHaveTextContent('First result');

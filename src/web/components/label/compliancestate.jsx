@@ -25,14 +25,15 @@ const Label = styled.div`
 const ComplianceLabel = ({text, color, ...props}) => {
   const [_] = useTranslation();
   return (
-  <Label
-    {...props}
-    $backgroundColor={Theme[color]}
-    $borderColor={Theme[color]}
-  >
-    {_(text)}
-  </Label>
-  )
+    <Label
+      {...props}
+      $backgroundColor={Theme[color]}
+      $borderColor={Theme[color]}
+      data-testid={`compliance-state-${text}`}
+    >
+      {_(text)}
+    </Label>
+  );
 };
 
 ComplianceLabel.propTypes = {
@@ -40,10 +41,18 @@ ComplianceLabel.propTypes = {
   color: PropTypes.string,
 };
 
-const YesLabel = props => <ComplianceLabel {...props} text="Yes" color="complianceYes" />;
-const NoLabel = props => <ComplianceLabel {...props} text='No' color='complianceNo' />;
-const IncompleteLabel = props => <ComplianceLabel {...props} text='Incomplete' color='complianceIncomplete' />;
-const UndefinedLabel = props => <ComplianceLabel {...props} text='Undefined' color='complianceUndefined' />;
+const YesLabel = props => (
+  <ComplianceLabel {...props} text="Yes" color="complianceYes" />
+);
+const NoLabel = props => (
+  <ComplianceLabel {...props} text="No" color="complianceNo" />
+);
+const IncompleteLabel = props => (
+  <ComplianceLabel {...props} text="Incomplete" color="complianceIncomplete" />
+);
+const UndefinedLabel = props => (
+  <ComplianceLabel {...props} text="Undefined" color="complianceUndefined" />
+);
 
 export const ComplianceStateLabels = {
   Yes: YesLabel,

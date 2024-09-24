@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import useTranslation from 'web/hooks/useTranslation';
@@ -26,7 +25,6 @@ const ComplianceLevelsFilterGroup = ({
   isResult = false,
 }) => {
   const [_] = useTranslation();
-  
   const handleComplianceChange = (value, level) => {
     const filterName = isResult
       ? 'compliance_levels'
@@ -60,36 +58,35 @@ const ComplianceLevelsFilterGroup = ({
     complianceLevels = '';
   }
   return (
-    <FormGroup title={_('Compliance')}>
+    <FormGroup
+      title={_('Compliance')}
+      data-testid="compliance-levels-filter-group"
+    >
       <IconDivider>
         <Checkbox
           checked={complianceLevels.includes('y')}
           name="y"
           onChange={handleComplianceChange}
-        >
-          <ComplianceStateLabels.Yes />
-        </Checkbox>
+        />
+        <ComplianceStateLabels.Yes />
         <Checkbox
           checked={complianceLevels.includes('n')}
           name="n"
           onChange={handleComplianceChange}
-        >
-          <ComplianceStateLabels.No />
-        </Checkbox>
+        />
+        <ComplianceStateLabels.No />
         <Checkbox
           checked={complianceLevels.includes('i')}
           name="i"
           onChange={handleComplianceChange}
-        >
-          <ComplianceStateLabels.Incomplete />
-        </Checkbox>
+        />
+        <ComplianceStateLabels.Incomplete />
         <Checkbox
           checked={complianceLevels.includes('u')}
           name="u"
           onChange={handleComplianceChange}
-        >
-          <ComplianceStateLabels.Undefined />
-        </Checkbox>
+        />
+        <ComplianceStateLabels.Undefined />
       </IconDivider>
     </FormGroup>
   );
