@@ -36,15 +36,8 @@ class ReportReport extends Model {
   static parseElement(element) {
     const copy = super.parseElement(element);
 
-    const {
-      delta,
-      severity,
-      scan_start,
-      scan_end,
-      task,
-      scan,
-      timestamp,
-    } = element;
+    const {delta, severity, scan_start, scan_end, task, scan, timestamp} =
+      element;
 
     const filter = parseFilter(element);
 

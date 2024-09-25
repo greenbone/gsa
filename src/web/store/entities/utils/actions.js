@@ -69,88 +69,90 @@ export const entityDeleteActions = {
   }),
 };
 
-export const createLoadEntities = ({
-  selector,
-  actions,
-  entityType,
-}) => gmp => filter => (dispatch, getState) => {
-  const rootState = getState();
-  const state = selector(rootState);
+export const createLoadEntities =
+  ({selector, actions, entityType}) =>
+  gmp =>
+  filter =>
+  (dispatch, getState) => {
+    const rootState = getState();
+    const state = selector(rootState);
 
-  if (state.isLoadingEntities(filter)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
+    if (state.isLoadingEntities(filter)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
 
-  dispatch(actions.request(filter));
+    dispatch(actions.request(filter));
 
-  return gmp[pluralizeType(entityType)].get({filter}).then(
-    response => {
-      const {data, meta} = response;
-      const {filter: loadedFilter, counts} = meta;
-      return dispatch(actions.success(data, filter, loadedFilter, counts));
-    },
-    error => dispatch(actions.error(error, filter)),
-  );
-};
+    return gmp[pluralizeType(entityType)].get({filter}).then(
+      response => {
+        const {data, meta} = response;
+        const {filter: loadedFilter, counts} = meta;
+        return dispatch(actions.success(data, filter, loadedFilter, counts));
+      },
+      error => dispatch(actions.error(error, filter)),
+    );
+  };
 
-export const createLoadAllEntities = ({
-  selector,
-  actions,
-  entityType,
-}) => gmp => filter => (dispatch, getState) => {
-  const rootState = getState();
-  const state = selector(rootState);
+export const createLoadAllEntities =
+  ({selector, actions, entityType}) =>
+  gmp =>
+  filter =>
+  (dispatch, getState) => {
+    const rootState = getState();
+    const state = selector(rootState);
 
-  if (isDefined(filter)) {
-    filter = isDefined(filter.toFilterString)
-      ? filter.all()
-      : Filter.fromString(filter).all();
-  } else {
-    filter = ALL_FILTER;
-  }
+    if (isDefined(filter)) {
+      filter = isDefined(filter.toFilterString)
+        ? filter.all()
+        : Filter.fromString(filter).all();
+    } else {
+      filter = ALL_FILTER;
+    }
 
-  if (state.isLoadingEntities(filter)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
-  dispatch(actions.request(filter));
+    if (state.isLoadingEntities(filter)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
+    dispatch(actions.request(filter));
 
-  return gmp[pluralizeType(entityType)].get({filter}).then(
-    response => {
-      const {data, meta} = response;
-      const {filter: loadedFilter, counts} = meta;
-      return dispatch(actions.success(data, filter, loadedFilter, counts));
-    },
-    error => dispatch(actions.error(error, filter)),
-  );
-};
+    return gmp[pluralizeType(entityType)].get({filter}).then(
+      response => {
+        const {data, meta} = response;
+        const {filter: loadedFilter, counts} = meta;
+        return dispatch(actions.success(data, filter, loadedFilter, counts));
+      },
+      error => dispatch(actions.error(error, filter)),
+    );
+  };
 
-export const createLoadEntity = ({
-  selector,
-  actions,
-  entityType,
-}) => gmp => id => (dispatch, getState) => {
-  const rootState = getState();
-  const state = selector(rootState);
+export const createLoadEntity =
+  ({selector, actions, entityType}) =>
+  gmp =>
+  id =>
+  (dispatch, getState) => {
+    const rootState = getState();
+    const state = selector(rootState);
 
-  if (state.isLoadingEntity(id)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
+    if (state.isLoadingEntity(id)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
 
-  dispatch(actions.request(id));
+    dispatch(actions.request(id));
 
-  return gmp[entityType]
-    .get({id})
-    .then(
+    return gmp[entityType].get({id}).then(
       response => dispatch(actions.success(id, response.data)),
       error => dispatch(actions.error(id, error)),
     );
-};
+  };
 
-export const createDeleteEntity = ({entityType}) => gmp => id => dispatch =>
-  gmp[entityType]
-    .delete({id})
-    .then(() => dispatch(entityDeleteActions.success(entityType, id)));
+export const createDeleteEntity =
+  ({entityType}) =>
+  gmp =>
+  id =>
+  dispatch =>
+    gmp[entityType]
+      .delete({id})
+      .then(() => dispatch(entityDeleteActions.success(entityType, id)));
 // vim: set ts=2 sw=2 tw=80:

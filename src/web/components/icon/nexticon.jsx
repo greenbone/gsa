@@ -5,9 +5,13 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/next.svg';
+import {ChevronRight as Icon} from 'lucide-react';
 
-const NextIcon = withSvgIcon()(Icon);
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
+
+const NextIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default NextIcon;
 

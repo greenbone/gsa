@@ -6,12 +6,8 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
-
-import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -22,15 +18,13 @@ import FormGroup from 'web/components/form/formgroup';
 import MultiSelect from 'web/components/form/multiselect';
 import TextField from 'web/components/form/textfield';
 
-const Dialog = ({
-  allUsers,
-  grant_full,
-  group,
-  title = _('New Group'),
-  onClose,
-  onSave,
-}) => {
+import useTranslation from 'web/hooks/useTranslation';
+
+const Dialog = ({allUsers, grant_full, group, title, onClose, onSave}) => {
+  const [_] = useTranslation();
   const is_edit = isDefined(group);
+
+  title = title || _('New Group');
 
   const userOptions = map(allUsers, user => ({
     value: user.name,
@@ -51,13 +45,11 @@ const Dialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
-                grow="1"
                 value={state.name}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -66,7 +58,6 @@ const Dialog = ({
               <TextField
                 name="comment"
                 value={state.comment}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -95,7 +86,7 @@ const Dialog = ({
                 />
               </FormGroup>
             )}
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

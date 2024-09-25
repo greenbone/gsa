@@ -7,23 +7,20 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {screen, rendererWith, fireEvent} from 'web/utils/testing';
+
+import {getActionItems} from 'web/components/testing';
 
 import Row from '../row';
 
-setLocale('en');
-
 const gmp = {settings: {}};
-const featureList = [
-  {name: 'COMPLIANCE_REPORTS', _enabled: 0},
-];
+const featureList = [{name: 'COMPLIANCE_REPORTS', _enabled: 0}];
 const caps = new Capabilities(['everything'], featureList);
 
 const lastReport = {
@@ -81,7 +78,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {element} = render(
       <Row
         entity={audit}
         links={true}
@@ -98,19 +95,19 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    expect(baseElement).toBeVisible();
+    expect(element).toBeVisible();
 
     // Name
-    expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).toHaveTextContent('(bar)');
+    expect(element).toHaveTextContent('foo');
+    expect(element).toHaveTextContent('(bar)');
 
     // Status
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.done);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.done);
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
@@ -124,7 +121,7 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
+    const icons = getActionItems();
 
     expect(icons[0]).toHaveAttribute('title', 'Start');
     expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
@@ -181,7 +178,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {getAllByTestId} = render(
+    render(
       <Row
         entity={audit}
         links={true}
@@ -198,7 +195,7 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    const icons = getActionItems();
 
     expect(icons[0]).toHaveAttribute('title', 'Audit is alterable');
     expect(icons[1]).toHaveAttribute(
@@ -276,7 +273,7 @@ describe('Audit Row tests', () => {
     expect(detailsLinks.length).toBe(0);
     // because there are no reports yet
 
-    // Compliance Satus
+    // Compliance Status
     expect(bars.length).toBe(1);
     // because there is no compliance status bar yet
 
@@ -384,12 +381,12 @@ describe('Audit Row tests', () => {
     expect(detailsLinks.length).toBe(1);
     // because there is no last report yet
 
-    // Compliance Satus
+    // Compliance Status
     expect(bars.length).toBe(1);
     // because there is no compliance status bar yet
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
+    const icons = getActionItems();
 
     fireEvent.click(icons[0]);
     expect(handleAuditStart).not.toHaveBeenCalled();
@@ -497,7 +494,7 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
+    const icons = getActionItems();
 
     fireEvent.click(icons[0]);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
@@ -607,7 +604,7 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
+    const icons = getActionItems();
 
     fireEvent.click(icons[0]);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
@@ -697,7 +694,7 @@ describe('Audit Row tests', () => {
     fireEvent.click(spans[0]);
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
-    const icons = getAllByTestId('svg-icon');
+    const icons = getActionItems();
     expect(icons[0]).toHaveAttribute('title', 'Audit owned by user');
 
     // Status
@@ -768,9 +765,7 @@ describe('Audit Row tests - compliance reports enabled', () => {
   // deactivate console.error for tests
   // to make it possible to test a row without a table
   console.error = () => {};
-  const featureList = [
-    {name: 'COMPLIANCE_REPORTS', _enabled: 1},
-  ];
+  const featureList = [{name: 'COMPLIANCE_REPORTS', _enabled: 1}];
   const caps = new Capabilities(['everything'], featureList);
 
   test('should render', () => {

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PropTypes from 'prop-types';
 import {useState, useEffect, useMemo} from 'react';
 import _ from 'gmp/locale';
 
@@ -83,7 +82,7 @@ const CvssV4Calculator = () => {
   const cvssScore = calculateScoreSafely(cvssVector);
 
   return (
-    <Layout flex="column" grow>
+    <Layout flex="column" basis={'50%'}>
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv4 Score Calculator')}
@@ -112,10 +111,6 @@ const CvssV4Calculator = () => {
       </FormGroup>
     </Layout>
   );
-};
-
-CvssV4Calculator.propTypes = {
-  location: PropTypes.object.isRequired,
 };
 
 export default CvssV4Calculator;

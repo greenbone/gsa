@@ -9,22 +9,24 @@ import {isDefined} from 'gmp/utils/identity';
 
 import Rejection from 'gmp/http//rejection';
 
-export const success = transform => (response, options = {}) => {
-  try {
-    return transform(response);
-  } catch (error) {
-    throw new Rejection(
-      response.xhr,
-      Rejection.REASON_ERROR,
-      _(
-        'An error occurred while converting gmp response to js for ' +
-          'url {{- url}}',
-        {url: options.url},
-      ),
-      error,
-    );
-  }
-};
+export const success =
+  transform =>
+  (response, options = {}) => {
+    try {
+      return transform(response);
+    } catch (error) {
+      throw new Rejection(
+        response.xhr,
+        Rejection.REASON_ERROR,
+        _(
+          'An error occurred while converting gmp response to js for ' +
+            'url {{- url}}',
+          {url: options.url},
+        ),
+        error,
+      );
+    }
+  };
 
 export const rejection = transform => (rej, options) => {
   if (rej.isError && rej.isError()) {

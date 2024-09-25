@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -14,7 +12,11 @@ import PropTypes from 'web/utils/proptypes';
 import FormGroup from 'web/components/form/formgroup';
 import Spinner from 'web/components/form/spinner';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
+  const [_] = useTranslation();
+
   if (isDefined(filter)) {
     first = filter.get('first');
   }
@@ -22,9 +24,9 @@ const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
     <FormGroup title={_('First result')}>
       <Spinner
         type="int"
+        min="0"
         name={name}
         value={first}
-        size="5"
         onChange={onChange}
       />
     </FormGroup>
@@ -39,5 +41,3 @@ FirstResultGroup.propTypes = {
 };
 
 export default FirstResultGroup;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,47 +3,85 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_l} from 'gmp/locale/lang';
+import PropTypes from 'web/utils/proptypes';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import DefaultFilterDialog from 'web/components/powerfilter/dialog';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'hosts',
-    displayName: _l('Hosts'),
-  },
-  {
-    name: 'ips',
-    displayName: _l('IPs'),
-  },
-  {
-    name: 'port_list',
-    displayName: _l('Port List'),
-  },
-  {
-    name: 'ssh_credential',
-    displayName: _l('SSH Credential'),
-  },
-  {
-    name: 'smb_credential',
-    displayName: _l('SMB Credential'),
-  },
-  {
-    name: 'esxi_credential',
-    displayName: _l('ESXi Credential'),
-  },
-  {
-    name: 'snmp_credential',
-    displayName: _l('SNMP Credential'),
-  },
-];
+import useTranslation from 'web/hooks/useTranslation';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+const TargetsFilterDialog = ({
+  filter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
+  ...props
+}) => {
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(filter);
+  const [handleSave] = useFilterDialogSave(
+    'target',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Name'),
+    },
+    {
+      name: 'hosts',
+      displayName: _('Hosts'),
+    },
+    {
+      name: 'ips',
+      displayName: _('IPs'),
+    },
+    {
+      name: 'port_list',
+      displayName: _('Port List'),
+    },
+    {
+      name: 'ssh_credential',
+      displayName: _('SSH Credential'),
+    },
+    {
+      name: 'smb_credential',
+      displayName: _('SMB Credential'),
+    },
+    {
+      name: 'esxi_credential',
+      displayName: _('ESXi Credential'),
+    },
+    {
+      name: 'snmp_credential',
+      displayName: _('SNMP Credential'),
+    },
+  ];
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      <DefaultFilterDialog
+        {...props}
+        {...filterDialogProps}
+        sortFields={SORT_FIELDS}
+      />
+    </FilterDialog>
+  );
+};
 
-// vim: set ts=2 sw=2 tw=80:
+TargetsFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
+
+export default TargetsFilterDialog;

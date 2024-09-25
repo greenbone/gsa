@@ -5,9 +5,13 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/group.svg';
+import {Users as Icon} from 'lucide-react';
 
-const GroupIcon = withSvgIcon()(Icon);
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
+
+const GroupIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default GroupIcon;
 

@@ -38,7 +38,7 @@ describe('Task StopIcon component tests', () => {
     expect(clickHandler).toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Stop');
     expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -63,7 +63,7 @@ describe('Task StopIcon component tests', () => {
     expect(clickHandler).toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Stop');
     expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -87,7 +87,7 @@ describe('Task StopIcon component tests', () => {
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Permission to stop task denied');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -113,7 +113,7 @@ describe('Task StopIcon component tests', () => {
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Permission to stop audit denied');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 

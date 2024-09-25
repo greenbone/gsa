@@ -18,14 +18,7 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import ErrorMessage from './errormessage';
-
-const ErrorDetailsToggle = styled.span`
-  margin-top: 10px;
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
-`;
+import {Button as OpenSightButton} from '@greenbone/opensight-ui-components';
 
 const ErrorDetails = styled.div`
   margin-top: 10px;
@@ -34,6 +27,10 @@ const ErrorDetails = styled.div`
   padding: 5px;
   max-height: 200px;
   overflow-x: auto;
+`;
+
+const StyledPre = styled.pre`
+  word-break: break-word;
 `;
 
 const ErrorPanel = ({error, message, info}) => {
@@ -49,12 +46,15 @@ const ErrorPanel = ({error, message, info}) => {
       flex="column"
     >
       {isDefined(error) && (
-        <ErrorDetailsToggle
+        <OpenSightButton
+          variant="outline"
+          color="red"
+          size="sm"
           data-testid="errorpanel-toggle"
           onClick={handleToggleDetails}
         >
           {showDetails ? _('Hide Error Details') : _('Show Error Details')}
-        </ErrorDetailsToggle>
+        </OpenSightButton>
       )}
       {showDetails && (
         <ErrorDetails>
@@ -63,11 +63,13 @@ const ErrorPanel = ({error, message, info}) => {
               {error.name}: {error.message}
             </h3>
             {isDefined(info) && (
-              <pre data-testid="errorpanel-component-stack">
+              <StyledPre data-testid="errorpanel-component-stack">
                 {info.componentStack}
-              </pre>
+              </StyledPre>
             )}
-            <pre data-testid="errorpanel-error-stack">{error.stack}</pre>
+            <StyledPre data-testid="errorpanel-error-stack">
+              {error.stack}
+            </StyledPre>
           </Divider>
         </ErrorDetails>
       )}

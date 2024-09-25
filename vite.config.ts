@@ -10,7 +10,12 @@ const projectRootDir = path.resolve(__dirname);
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  define: {global: 'window'},
+  define: {
+    global: 'window',
+    // avoid "You are loading @emotion/react when it is already loaded" warnings during tests
+    // https://github.com/emotion-js/emotion/discussions/2795#discussioncomment-7885638
+    vi: {},
+  },
   plugins: [
     react({include: /\.(mdx|js|jsx|ts|tsx)$/}),
     legacy(),
@@ -51,6 +56,13 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       mangle: false,
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'opensight-ui': ['@greenbone/opensight-ui-components'],
+        },
+      },
     },
   },
 });

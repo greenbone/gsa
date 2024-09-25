@@ -5,9 +5,13 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/reset.svg';
+import {RotateCcw as Icon} from 'lucide-react';
 
-const ResetIcon = withSvgIcon()(Icon);
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
+
+const ResetIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default ResetIcon;
 

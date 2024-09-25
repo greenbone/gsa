@@ -5,9 +5,12 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import FoldSvg from './svg/fold.svg';
+import {Folder as Icon} from 'lucide-react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
-const FoldIcon = withSvgIcon()(FoldSvg);
+const FoldIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default FoldIcon;
 

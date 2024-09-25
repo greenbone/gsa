@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {parseInt} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
@@ -17,17 +15,15 @@ import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 
-import Layout from 'web/components/layout/layout';
+import useTranslation from 'web/hooks/useTranslation';
 
 const convertPort = value => (value === '' ? value : parseInt(value));
 
-const PortRangeDialog = ({
-  id,
-  port_type = 'tcp',
-  title = _('New Port Range'),
-  onClose,
-  onSave,
-}) => {
+const PortRangeDialog = ({id, port_type = 'tcp', title, onClose, onSave}) => {
+  const [_] = useTranslation();
+
+  title = title || _('New Port Range');
+
   const data = {
     id,
     port_range_start: '',
@@ -44,13 +40,11 @@ const PortRangeDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Start')}>
               <TextField
                 name="port_range_start"
                 value={state.port_range_start}
-                grow="1"
-                size="30"
                 convert={convertPort}
                 onChange={onValueChange}
               />
@@ -60,14 +54,12 @@ const PortRangeDialog = ({
               <TextField
                 name="port_range_end"
                 value={state.port_range_end}
-                grow="1"
-                size="30"
                 convert={convertPort}
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Protocol')}>
+            <FormGroup title={_('Protocol')} direction="row">
               <Radio
                 title={_('TCP')}
                 name="port_type"
@@ -83,7 +75,7 @@ const PortRangeDialog = ({
                 checked={state.port_type === 'udp'}
               />
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

@@ -19,9 +19,8 @@ export class NvtFamiliesCommand extends GmpCommand {
   get(params, options) {
     return this.httpGet(params, options).then(response => {
       const {data} = response;
-      const {
-        family: families,
-      } = data.get_nvt_families.get_nvt_families_response.families;
+      const {family: families} =
+        data.get_nvt_families.get_nvt_families_response.families;
       return response.set(
         map(families, family => ({
           name: family.name,

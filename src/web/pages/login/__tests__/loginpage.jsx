@@ -159,6 +159,6 @@ describe('LoginPage tests', () => {
 
     render(<LoginPage />);
 
-    expect(window.location.pathname).toMatch(/^\/dashboard$/);
+    expect(window.location.pathname).toMatch(/^\/dashboards$/);
   });
 });

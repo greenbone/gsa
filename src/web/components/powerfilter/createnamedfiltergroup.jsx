@@ -6,28 +6,23 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import Checkbox from 'web/components/form/checkbox';
 import TextField from 'web/components/form/textfield';
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 
-const StyledLayout = styled(Layout)`
-  margin-top: 15px;
-`;
+import Row from 'web/components/layout/row';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const CreateNamedFilterGroup = ({
   filterName = '',
   saveNamedFilter = false,
   onValueChange,
-}) => (
-  <StyledLayout>
-    <Divider>
+}) => {
+  const [_] = useTranslation();
+  return (
+    <Row>
       <Checkbox
         data-testid="createnamedfiltergroup-checkbox"
         name="saveNamedFilter"
@@ -41,15 +36,14 @@ const CreateNamedFilterGroup = ({
         data-testid="createnamedfiltergroup-textfield"
         disabled={!saveNamedFilter}
         name="filterName"
-        size="20"
-        maxLength="80"
-        title={_('Filter Name')}
+        placeholder={_('Filter Name')}
+        grow="1"
         value={filterName}
         onChange={onValueChange}
       />
-    </Divider>
-  </StyledLayout>
-);
+    </Row>
+  );
+};
 
 CreateNamedFilterGroup.propTypes = {
   filterName: PropTypes.string,

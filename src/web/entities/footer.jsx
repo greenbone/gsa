@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import _ from 'gmp/locale';
+import {useState} from 'react';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
 
 import PropTypes from 'web/utils/proptypes';
 import SelectionType from 'web/utils/selectiontype';
@@ -23,6 +22,13 @@ import Select from 'web/components/form/select';
 
 import TableFooter from 'web/components/table/footer';
 import TableRow from 'web/components/table/row';
+
+import useTranslation from 'web/hooks/useTranslation';
+
+const DIALOG_TYPES = {
+  TRASH: 'trash',
+  DELETE: 'delete',
+};
 
 export const EntitiesFooter = ({
   actions = true,
@@ -38,9 +44,46 @@ export const EntitiesFooter = ({
   onSelectionTypeChange,
   onTagsClick,
   onTrashClick,
-  ...props
+  isGenericBulkTrashcanDeleteDialog,
+  delete: deleteEntities,
 }) => {
-  const deleteEntities = props.delete;
+  const [_] = useTranslation();
+  const [configDialog, setConfigDialog] = useState(undefined);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
+
+  const onIconClick = (type, propOnAction) => {
+    if (!isGenericBulkTrashcanDeleteDialog) {
+      propOnAction();
+      return;
+    }
+
+    const configMap = {
+      [DIALOG_TYPES.DELETE]: {
+        dialogText: _(
+          'Are you sure you want to delete all rows in the page of the table? This action cannot be undone.',
+        ),
+        dialogTitle: _('Confirm Deletion'),
+        dialogButtonTitle: _('Delete'),
+        dialogFunction: propOnAction,
+      },
+      [DIALOG_TYPES.TRASH]: {
+        dialogText: _(
+          'Are you sure you want to move all rows in the page of the table to the trashcan?',
+        ),
+        dialogTitle: _('Confirm Move to Trashcan'),
+        dialogButtonTitle: _('Move to Trashcan'),
+        dialogFunction: propOnAction,
+      },
+    };
+    setConfigDialog(configMap[type]);
+    setIsDialogVisible(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogVisible(false);
+    setConfigDialog(undefined);
+  };
+
   const selectItems = [
     {
       value: SelectionType.SELECTION_PAGE_CONTENTS,
@@ -55,6 +98,7 @@ export const EntitiesFooter = ({
       label: _('Apply to all filtered'),
     },
   ];
+
   return (
     <TableFooter>
       <TableRow>
@@ -78,13 +122,17 @@ export const EntitiesFooter = ({
                   )}
                   {trash && (
                     <TrashIcon
-                      onClick={onTrashClick}
+                      onClick={() =>
+                        onIconClick(DIALOG_TYPES.TRASH, onTrashClick)
+                      }
                       selectionType={selectionType}
                     />
                   )}
                   {deleteEntities && (
                     <DeleteIcon
-                      onClick={onDeleteClick}
+                      onClick={() =>
+                        onIconClick(DIALOG_TYPES.DELETE, onDeleteClick)
+                      }
                       selectionType={selectionType}
                     />
                   )}
@@ -104,6 +152,19 @@ export const EntitiesFooter = ({
           )}
         </td>
       </TableRow>
+      {isDialogVisible && (
+        <ConfirmationDialog
+          onClose={closeDialog}
+          onResumeClick={() => {
+            configDialog.dialogFunction();
+            closeDialog();
+          }}
+          content={configDialog.dialogText}
+          title={configDialog.dialogTitle}
+          rightButtonTitle={configDialog.dialogButtonTitle}
+          width="500px"
+        />
+      )}
     </TableFooter>
   );
 };
@@ -122,39 +183,41 @@ EntitiesFooter.propTypes = {
   onSelectionTypeChange: PropTypes.func,
   onTagsClick: PropTypes.func,
   onTrashClick: PropTypes.func,
+  children: PropTypes.node,
+  isGenericBulkTrashcanDeleteDialog: PropTypes.bool,
 };
 
-export const withEntitiesFooter = (options = {}) => Component => {
-  const EntitiesFooterWrapper = ({
-    onDownloadBulk,
-    onDeleteBulk,
-    onTagsBulk,
-    ...props
-  }) => {
-    return (
-      <Component
-        {...options}
-        {...props}
-        onDownloadClick={onDownloadBulk}
-        onDeleteClick={onDeleteBulk}
-        onTagsClick={onTagsBulk}
-        onTrashClick={onDeleteBulk}
-      />
-    );
-  };
+export const withEntitiesFooter =
+  (options = {}) =>
+  Component => {
+    const EntitiesFooterWrapper = ({
+      onDownloadBulk,
+      onDeleteBulk,
+      onTagsBulk,
+      ...props
+    }) => {
+      return (
+        <Component
+          {...options}
+          {...props}
+          onDownloadClick={onDownloadBulk}
+          onDeleteClick={onDeleteBulk}
+          onTagsClick={onTagsBulk}
+          onTrashClick={onDeleteBulk}
+        />
+      );
+    };
 
-  EntitiesFooterWrapper.propTypes = {
-    onDeleteBulk: PropTypes.func,
-    onDownloadBulk: PropTypes.func,
-    onTagsBulk: PropTypes.func,
-  };
+    EntitiesFooterWrapper.propTypes = {
+      onDeleteBulk: PropTypes.func,
+      onDownloadBulk: PropTypes.func,
+      onTagsBulk: PropTypes.func,
+    };
 
-  return EntitiesFooterWrapper;
-};
+    return EntitiesFooterWrapper;
+  };
 
 export const createEntitiesFooter = options =>
   withEntitiesFooter(options)(EntitiesFooter);
 
 export default EntitiesFooter;
-
-// vim: set ts=2 sw=2 tw=80:

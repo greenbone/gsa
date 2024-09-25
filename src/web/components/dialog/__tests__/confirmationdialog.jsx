@@ -7,7 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import {KeyCode} from 'gmp/utils/event';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
+
+import {
+  closeDialog,
+  getDialogContent,
+  getDialogTitle,
+  queryDialog,
+} from 'web/components/testing';
 
 import ConfirmationDialog from '../confirmationdialog';
 
@@ -16,7 +23,7 @@ describe('ConfirmationDialog component tests', () => {
     const handleClose = testing.fn();
     const handleResumeClick = testing.fn();
 
-    const {baseElement, getByTestId} = render(
+    render(
       <ConfirmationDialog
         content="foo"
         title="bar"
@@ -25,18 +32,17 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toBeVisible();
-    const contentElement = getByTestId('confirmationdialog-content');
-    const titleElement = getByTestId('dialog-title-bar');
-    expect(contentElement).toHaveTextContent('foo');
-    expect(titleElement).toHaveTextContent('bar');
+    expect(queryDialog()).toBeInTheDocument();
+
+    expect(getDialogContent()).toHaveTextContent('foo');
+    expect(getDialogTitle()).toHaveTextContent('bar');
   });
 
   test('should render ConfirmationDialog with element content and title', () => {
     const handleClose = testing.fn();
     const handleResumeClick = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <ConfirmationDialog
         content={<div>foo</div>}
         title="bar"
@@ -45,17 +51,17 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    const contentElement = getByTestId('confirmationdialog-content');
-    const titleElement = getByTestId('dialog-title-bar');
-    expect(contentElement).toHaveTextContent('foo');
-    expect(titleElement).toHaveTextContent('bar');
+    expect(queryDialog()).toBeInTheDocument();
+
+    expect(getDialogContent()).toHaveTextContent('foo');
+    expect(getDialogTitle()).toHaveTextContent('bar');
   });
 
   test('should close ConfirmationDialog with close button', () => {
     const handleClose = testing.fn();
     const handleResumeClick = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <ConfirmationDialog
         title="bar"
         onClose={handleClose}
@@ -63,8 +69,8 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
-    fireEvent.click(closeButton);
+    closeDialog();
+
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -72,7 +78,7 @@ describe('ConfirmationDialog component tests', () => {
     const handleClose = testing.fn();
     const handleResumeClick = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <ConfirmationDialog
         title="bar"
         onClose={handleClose}
@@ -80,8 +86,7 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    const buttons = baseElement.querySelectorAll('button');
-    fireEvent.click(buttons[0]);
+    fireEvent.click(screen.getByTestId('dialog-close-button'));
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -89,7 +94,7 @@ describe('ConfirmationDialog component tests', () => {
     const handleClose = testing.fn();
     const handleResumeClick = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <ConfirmationDialog
         title="bar"
         onClose={handleClose}
@@ -97,8 +102,7 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    const buttons = baseElement.querySelectorAll('button');
-    fireEvent.click(buttons[1]);
+    fireEvent.click(screen.getByTestId('dialog-save-button'));
     expect(handleResumeClick).toHaveBeenCalled();
   });
 

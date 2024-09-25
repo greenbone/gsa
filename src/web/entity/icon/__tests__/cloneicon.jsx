@@ -35,8 +35,10 @@ describe('Entity CloneIcon component tests', () => {
 
     expect(clickHandler).toHaveBeenCalled();
     expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+
+    expect(element).not.toHaveStyleRule('color', Theme.inputBorderGray);
   });
 
   test('should deactivate if wrong command level permissions are given', () => {
@@ -57,8 +59,9 @@ describe('Entity CloneIcon component tests', () => {
     fireEvent.click(element);
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 
   test('should deactivate if wrong resource level permissions are given', () => {
@@ -80,7 +83,7 @@ describe('Entity CloneIcon component tests', () => {
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 });

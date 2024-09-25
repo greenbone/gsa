@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
 import {renderSelectItems} from 'web/utils/render';
@@ -22,8 +20,7 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import useTranslation from 'web/hooks/useTranslation';
 
 const TIPPINGPOINT_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
@@ -37,37 +34,34 @@ const TippingPointMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const [_] = useTranslation();
   credentials = credentials.filter(
     cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
   return (
-    <Layout flex="column" grow="1">
+    <>
       <FormGroup title={_('Hostname / IP')}>
         <TextField
           grow="1"
-          size="30"
           name={prefix + 'tp_sms_hostname'}
           value={tpSmsHostname}
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Credential')}>
-        <Divider>
-          <Select
-            items={renderSelectItems(credentials)}
-            name={prefix + 'tp_sms_credential'}
-            value={tpSmsCredential}
-            onChange={onCredentialChange}
-          />
-          <Layout>
-            <NewIcon
-              size="small"
-              title={_('Create a credential')}
-              value={TIPPINGPOINT_CREDENTIAL_TYPES}
-              onClick={onNewCredentialClick}
-            />
-          </Layout>
-        </Divider>
+      <FormGroup title={_('Credential')} direction="row">
+        <Select
+          grow="1"
+          items={renderSelectItems(credentials)}
+          name={prefix + 'tp_sms_credential'}
+          value={tpSmsCredential}
+          onChange={onCredentialChange}
+        />
+        <NewIcon
+          size="small"
+          title={_('Create a credential')}
+          value={TIPPINGPOINT_CREDENTIAL_TYPES}
+          onClick={onNewCredentialClick}
+        />
       </FormGroup>
       <FormGroup title={_('SSL / TLS Certificate')}>
         <FileField
@@ -82,7 +76,7 @@ const TippingPointMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
-    </Layout>
+    </>
   );
 };
 

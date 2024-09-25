@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {hasValue, isDefined, isArray} from './identity';
 
 export const forEach = (array, func) => {

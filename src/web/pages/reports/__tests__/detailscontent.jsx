@@ -11,9 +11,11 @@ import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith} from 'web/utils/testing';
+import {getByRole, rendererWith} from 'web/utils/testing';
 
 import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
+
+import {getPowerFilter, getTextInputs} from 'web/components/testing';
 
 import DetailsContent from '../detailscontent';
 
@@ -42,7 +44,7 @@ const getReportComposerDefaults = testing.fn().mockResolvedValue({
 });
 
 describe('Report Details Content tests', () => {
-  test('should render Report Details Content', () => {
+  test('should render Report Details Content', async () => {
     const onActivateTab = testing.fn();
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
@@ -96,7 +98,7 @@ describe('Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement, getAllByTestId, within} = render(
       <DetailsContent
         activeTab={0}
         applicationsCounts={{all: 4, filtered: 4}}
@@ -142,20 +144,18 @@ describe('Report Details Content tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-    const inputs = baseElement.querySelectorAll('input');
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const selects = getAllByTestId('select-selected-value');
     const bars = getAllByTestId('progressbar-box');
+    const powerFilter = getPowerFilter();
+    const inputs = getTextInputs(powerFilter);
+    const select = getByRole(powerFilter, 'combobox');
 
-    // Toolbar Icons
-    expect(icons.length).toEqual(17);
-
-    // Powerfilter
+    // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('Loading...');
+
+    const input = within(select).getByTitle('Loaded filter');
+    expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
     expect(baseElement).toHaveTextContent(
@@ -270,7 +270,7 @@ describe('Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement, getAllByTestId, within} = render(
       <DetailsContent
         activeTab={2}
         applicationsCounts={{all: 4, filtered: 4}}
@@ -316,17 +316,16 @@ describe('Report Details Content tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = getAllByTestId('select-selected-value');
     const bars = getAllByTestId('progressbar-box');
+    const powerFilter = getPowerFilter();
+    const inputs = getTextInputs(powerFilter);
+    const select = getByRole(powerFilter, 'combobox');
 
-    // Toolbar Icons
-    expect(icons.length).toEqual(20);
-    // Powerfilter
+    // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('Loading...');
+
+    const input = within(select).getByTitle('Loaded filter');
+    expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
     expect(baseElement).toHaveTextContent(

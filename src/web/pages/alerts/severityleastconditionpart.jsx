@@ -5,15 +5,15 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
-import Divider from 'web/components/layout/divider';
+import Row from 'web/components/layout/row';
 
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
 
 import Spinner from 'web/components/form/spinner';
 import Radio from 'web/components/form/radio';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const VALUE = 'Severity at least';
 
@@ -23,8 +23,9 @@ const SeverityLeastConditionPart = ({
   prefix,
   onChange,
 }) => {
+  const [_] = useTranslation();
   return (
-    <Divider>
+    <Row>
       <Radio
         title={_('Severity at least')}
         value={VALUE}
@@ -37,10 +38,9 @@ const SeverityLeastConditionPart = ({
         name={prefix + 'severity'}
         type="float"
         min="0"
-        size="5"
         onChange={onChange}
       />
-    </Divider>
+    </Row>
   );
 };
 

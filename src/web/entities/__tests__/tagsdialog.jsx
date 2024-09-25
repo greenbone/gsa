@@ -7,6 +7,8 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
+import {getDialog, getSelectElement} from 'web/components/testing';
+
 import Dialog from '../tagsdialog';
 
 describe('TagsDialog dialog component tests', () => {
@@ -16,7 +18,7 @@ describe('TagsDialog dialog component tests', () => {
     const handleSave = testing.fn();
     const handleTagChange = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <Dialog
         entitiesCount={3}
         tags={[{name: 'foo', id: '123'}]}
@@ -27,7 +29,7 @@ describe('TagsDialog dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toBeVisible();
+    expect(getDialog()).toBeInTheDocument();
   });
 
   test('should disable tag selection when no options available', () => {
@@ -36,7 +38,7 @@ describe('TagsDialog dialog component tests', () => {
     const handleSave = testing.fn();
     const handleTagChange = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <Dialog
         entitiesCount={3}
         onClose={handleClose}
@@ -46,7 +48,7 @@ describe('TagsDialog dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toBeVisible();
+    expect(getSelectElement()).toBeDisabled();
   });
 
   test('should save data', () => {

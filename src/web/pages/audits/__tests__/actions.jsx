@@ -561,7 +561,7 @@ describe('Audit Actions tests', () => {
     expect(handleReportDownload).not.toHaveBeenCalled();
     expect(icons[6]).toHaveAttribute('title', 'Report download not available');
     expect(icons[6]).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
   });
 
@@ -610,11 +610,11 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(detailslinks[0]);
-    expect(detailslinks[0]).toHaveAttribute(
+    fireEvent.click(detailsLinks[0]);
+    expect(detailsLinks[0]).toHaveAttribute(
       'title',
       'View Details of Schedule schedule1 (Next due: over)',
     );

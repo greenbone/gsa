@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import registerCommand from 'gmp/command';
 
 import {License} from 'gmp/models/license';

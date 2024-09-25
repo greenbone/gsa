@@ -10,7 +10,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Filter from 'gmp/models/filter';
 
-import {rendererWith} from 'web/utils/testing';
+import {rendererWith, within} from 'web/utils/testing';
 
 import AuditReportFilter from 'web/pages/reports/auditfilterdialog';
 
@@ -37,7 +37,7 @@ describe('Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {getAllByTestId} = render(
+    const {baseElement, getByLabelText, getByTestId} = render(
       <AuditReportFilter
         filter={filter}
         delta={false}
@@ -48,19 +48,42 @@ describe('Filter Dialog for Audit report', () => {
       />,
     );
 
-    const formgroups = getAllByTestId('formgroup-title');
-    const content = getAllByTestId('formgroup-content');
-    const radioTitles = getAllByTestId('radio-title');
+    const formGroups = baseElement.querySelectorAll(
+      '[class*="mantine-Text-root"]',
+    );
 
-    expect(formgroups[0]).toHaveTextContent('Filter');
-    expect(formgroups[1]).toHaveTextContent('Compliance');
-    expect(content[1]).toHaveTextContent('YesNoIncompleteUndefined');
-    expect(formgroups[2]).toHaveTextContent('QoD');
-    expect(formgroups[3]).toHaveTextContent('From Task (name)');
-    expect(formgroups[4]).toHaveTextContent('First result');
-    expect(formgroups[5]).toHaveTextContent('Results per page');
-    expect(formgroups[6]).toHaveTextContent('Sort by');
-    expect(radioTitles[0]).toHaveTextContent('Ascending');
-    expect(radioTitles[1]).toHaveTextContent('Descending');
+    expect(formGroups[0]).toHaveTextContent('Filter');
+    expect(formGroups[1]).toHaveTextContent('Compliance');
+
+    const filterGroup = getByTestId('compliance-levels-filter-group');
+    const {queryByTestId, queryAllByRole} = within(filterGroup);
+
+    const yesCheckbox = queryByTestId('compliance-state-Yes');
+    const noCheckbox = queryByTestId('compliance-state-No');
+    const incompleteCheckbox = queryByTestId('compliance-state-Incomplete');
+    const undefinedCheckbox = queryByTestId('compliance-state-Undefined');
+
+    expect(yesCheckbox).toHaveTextContent('Yes');
+    expect(noCheckbox).toHaveTextContent('No');
+    expect(incompleteCheckbox).toHaveTextContent('Incomplete');
+    expect(undefinedCheckbox).toHaveTextContent('Undefined');
+
+    const checkboxes = queryAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(4);
+
+    expect(formGroups[2]).toHaveTextContent('QoD');
+    expect(formGroups[3]).toHaveTextContent('From Task (name)');
+    expect(formGroups[4]).toHaveTextContent('First result');
+    expect(formGroups[5]).toHaveTextContent('Results per page');
+    expect(formGroups[6]).toHaveTextContent('Sort by');
+
+    const ascendingRadio = getByLabelText('Ascending');
+    const descendingRadio = getByLabelText('Descending');
+
+    expect(ascendingRadio).toBeInTheDocument();
+    expect(descendingRadio).toBeInTheDocument();
+
+    expect(ascendingRadio).toBeChecked();
+    expect(descendingRadio).not.toBeChecked();
   });
 });

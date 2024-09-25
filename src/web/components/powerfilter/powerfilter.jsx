@@ -44,6 +44,10 @@ const LeftDivider = styled(Divider)`
   margin-right: 5px;
 `;
 
+const PowerFilterTextField = styled(TextField)`
+  width: 30vw;
+`;
+
 const getUserFilterString = filter => {
   if (isDefined(filter) && isDefined(filter.toFilterCriteriaString)) {
     return filter.toFilterCriteriaString();
@@ -172,14 +176,18 @@ class PowerFilter extends React.Component {
       onResetClick,
     } = this.props;
     return (
-      <Layout flex="column" align={['start', 'stetch']} className="powerfilter">
+      <Layout
+        flex="column"
+        align={['start', 'stretch']}
+        className="powerfilter"
+      >
         <Layout align={['space-between', 'center']}>
           <LeftDivider align={['start', 'center']}>
             <Layout align={['start', 'center']}>
               <Label>
                 <b>{_('Filter')}</b>
               </Label>
-              <TextField
+              <PowerFilterTextField
                 name="userFilterString"
                 size="53"
                 maxLength="1000"
@@ -232,14 +240,12 @@ class PowerFilter extends React.Component {
             <Select
               items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
               isLoading={isLoadingFilters}
-              menuPosition="right"
               toolTipTitle={_('Loaded filter')}
               value={
                 isDefined(filter) && isDefined(filter.id)
                   ? filter.id
                   : DEFAULT_FILTER_ID
               }
-              width="150px"
               onChange={this.handleNamedFilterChange}
             />
           )}
@@ -266,9 +272,6 @@ PowerFilter.propTypes = {
   onUpdate: PropTypes.func,
 };
 
-export default compose(
-  withCapabilities,
-  withGmp,
-)(PowerFilter);
+export default compose(withCapabilities, withGmp)(PowerFilter);
 
 // vim: set ts=2 sw=2 tw=80:

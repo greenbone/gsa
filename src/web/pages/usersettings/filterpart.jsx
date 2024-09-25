@@ -3,16 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
-import _ from 'gmp/locale';
 
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+
+import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/hooks/useCapabilities';
 
 const filterFilters = (filters, type) =>
@@ -52,6 +51,7 @@ const FilterPart = ({
   filters = [],
   onChange,
 }) => {
+  const [_] = useTranslation();
   const caps = useCapabilities();
   return (
     <React.Fragment>
@@ -78,8 +78,7 @@ const FilterPart = ({
             onChange={onChange}
           />
         </FormGroup>
-        )                         
-      }
+      )}
       <FormGroup title={_('Scan Configs Filter')} titleSize="3">
         <Select
           name="configsFilter"

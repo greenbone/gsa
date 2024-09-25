@@ -5,8 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent} from 'web/utils/testing';
-import Theme from 'web/utils/theme';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 import DialogTwoButtonFooter from '../twobuttonfooter';
 
@@ -14,63 +13,51 @@ describe('DialogTwoButtonFooter tests', () => {
   test('should render', () => {
     const {element} = render(<DialogTwoButtonFooter rightButtonTitle="Foo" />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
 
-    const button = element.querySelector('button[title="Foo"]');
+    // ensure button is rendered
+    screen.getByTestId('dialog-close-button');
 
-    expect(button).toHaveStyleRule('background', Theme.green);
+    expect(screen.getByTestId('dialog-save-button')).toHaveTextContent('Foo');
   });
 
   test('should render loading and disable cancel button', () => {
-    const {element} = render(
-      <DialogTwoButtonFooter rightButtonTitle="Foo" loading={true} />,
-    );
+    render(<DialogTwoButtonFooter rightButtonTitle="Foo" loading={true} />);
 
-    expect(element).toMatchSnapshot();
+    // ensure button is rendered
+    screen.getByTestId('dialog-save-button');
 
-    const button = element.querySelector('button[title="Foo"]');
-    const buttonLeft = element.querySelector('button[title="Cancel"]');
-
-    expect(button).toHaveStyleRule(
-      'background',
-      `${Theme.green} url(/img/loading.gif) center center no-repeat`,
-    );
+    const buttonLeft = screen.getByTestId('dialog-close-button');
     expect(buttonLeft).toHaveAttribute('disabled');
   });
 
   test('should render footer with default title', () => {
-    const {element} = render(<DialogTwoButtonFooter rightButtonTitle="Foo" />);
+    render(<DialogTwoButtonFooter rightButtonTitle="Foo" />);
 
-    const buttons = element.querySelectorAll('button');
+    const buttonLeft = screen.getByTestId('dialog-close-button');
+    const buttonRight = screen.getByTestId('dialog-save-button');
 
-    expect(buttons).toHaveLength(2);
-
-    expect(buttons[0]).toHaveAttribute('title', 'Cancel');
-    expect(buttons[0]).toHaveTextContent('Cancel');
-    expect(buttons[1]).toHaveAttribute('title', 'Foo');
-    expect(buttons[1]).toHaveTextContent('Foo');
+    expect(buttonLeft).toHaveTextContent('Cancel');
+    expect(buttonRight).toHaveTextContent('Foo');
   });
 
   test('should render footer with custom titles', () => {
-    const {element} = render(
+    render(
       <DialogTwoButtonFooter rightButtonTitle="Foo" leftButtonTitle="Bar" />,
     );
 
-    const buttons = element.querySelectorAll('button');
+    const buttonLeft = screen.getByTestId('dialog-close-button');
+    const buttonRight = screen.getByTestId('dialog-save-button');
 
-    expect(buttons).toHaveLength(2);
-
-    expect(buttons[0]).toHaveAttribute('title', 'Bar');
-    expect(buttons[0]).toHaveTextContent('Bar');
-    expect(buttons[1]).toHaveAttribute('title', 'Foo');
-    expect(buttons[1]).toHaveTextContent('Foo');
+    expect(buttonLeft).toHaveTextContent('Bar');
+    expect(buttonRight).toHaveTextContent('Foo');
   });
 
   test('should call click handlers', () => {
     const handler1 = testing.fn();
     const handler2 = testing.fn();
 
-    const {element} = render(
+    render(
       <DialogTwoButtonFooter
         rightButtonTitle="Foo"
         leftButtonTitle="Bar"
@@ -79,18 +66,15 @@ describe('DialogTwoButtonFooter tests', () => {
       />,
     );
 
-    const buttons = element.querySelectorAll('button');
+    const buttonLeft = screen.getByTestId('dialog-close-button');
+    const buttonRight = screen.getByTestId('dialog-save-button');
 
-    expect(buttons).toHaveLength(2);
-
-    fireEvent.click(buttons[0]);
+    fireEvent.click(buttonLeft);
 
     expect(handler1).toHaveBeenCalled();
 
-    fireEvent.click(buttons[1]);
+    fireEvent.click(buttonRight);
 
     expect(handler2).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

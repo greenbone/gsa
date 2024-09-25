@@ -625,6 +625,7 @@ module.exports = [
   'start_minute',
   'start_time',
   'start_timezone',
+  'sync_not_available',
   'subgroup_column',
   'subject_dn',
   'subject_type',

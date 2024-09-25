@@ -17,9 +17,16 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
+import {
+  clickElement,
+  getActionItems,
+  getBulkActionItems,
+  getTableBody,
+  testBulkTrashcanDialog,
+} from 'web/components/testing';
 
 const lastReport = {
   report: {
@@ -112,10 +119,10 @@ describe('AuditPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('audit', defaultSettingfilter),
+      defaultFilterLoadingActions.success('audit', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -133,9 +140,11 @@ describe('AuditPage tests', () => {
 
     const {baseElement} = render(<AuditPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
     expect(baseElement).toBeVisible();
+    const tableBody = getTableBody();
+    expect(tableBody.querySelectorAll('tr').length).toEqual(1);
   });
 
   test('should call commands for bulk actions', async () => {
@@ -174,10 +183,10 @@ describe('AuditPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('audit', defaultSettingfilter),
+      defaultFilterLoadingActions.success('audit', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -193,24 +202,26 @@ describe('AuditPage tests', () => {
       entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<AuditPage />);
+    render(<AuditPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    const icons = getAllByTestId('svg-icon');
+    const icons = getBulkActionItems();
 
-    await act(async () => {
-      expect(icons[20]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[20]);
-      expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteByFilter).not.toHaveBeenCalled();
+    const deleteIcon = icons[1];
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Move page contents to trashcan',
+    );
+    await clickElement(deleteIcon);
 
-      expect(icons[21]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[21]);
-      expect(exportByFilter).toHaveBeenCalled();
-    });
+    testBulkTrashcanDialog(screen, deleteByFilter);
+
+    expect(exportByFilter).not.toHaveBeenCalled();
+    expect(icons[2]).toHaveAttribute('title', 'Export page contents');
+    await clickElement(icons[2]);
+    expect(exportByFilter).toHaveBeenCalled();
   });
 });
 
@@ -228,12 +239,12 @@ describe('AuditPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />,
     );
     expect(element).toBeVisible();
 
-    const icons = getAllByTestId('svg-icon');
+    const icons = getActionItems();
     const links = element.querySelectorAll('a');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
@@ -256,11 +267,9 @@ describe('AuditPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
-      <ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />,
-    );
+    render(<ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />);
 
-    const icons = getAllByTestId('svg-icon');
+    const icons = getActionItems();
 
     fireEvent.click(icons[1]);
     expect(handleAuditCreateClick).toHaveBeenCalled();
@@ -280,11 +289,9 @@ describe('AuditPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
-      <ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />,
-    );
+    render(<ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />);
 
-    const icons = queryAllByTestId('svg-icon');
+    const icons = getActionItems();
     expect(icons.length).toBe(1);
     expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
   });

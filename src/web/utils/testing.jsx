@@ -22,8 +22,9 @@ import {
   within,
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
+import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 
-import userEvent from '@testing-library/user-event';
+import {ThemeProvider, theme} from '@greenbone/opensight-ui-components';
 
 import {BrowserRouter} from 'react-router-dom';
 
@@ -81,11 +82,22 @@ export const getByName = (container, name) => {
   return elements[0];
 };
 
+const Main = ({children}) => {
+  return (
+    <ThemeProvider theme={{...theme, colorScheme: 'light'}}>
+      <StyleSheetManager enableVendorPrefixes>{children}</StyleSheetManager>
+    </ThemeProvider>
+  );
+};
+
 export const render = ui => {
   const {container, baseElement, rerender, ...other} = reactTestingRender(
-    <StyleSheetManager enableVendorPrefixes>{ui}</StyleSheetManager>,
+    <Main>{ui}</Main>,
   );
   return {
+    userEvent: userEvent.setup({
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    }),
     baseElement,
     container,
     element: hasValue(container) ? container.firstChild : undefined,
@@ -94,10 +106,7 @@ export const render = ui => {
     queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
     within: () => within(baseElement),
-    rerender: component =>
-      rerender(
-        <StyleSheetManager enableVendorPrefixes>{component}</StyleSheetManager>,
-      ),
+    rerender: component => rerender(<Main>{component}</Main>),
     ...other,
   };
 };

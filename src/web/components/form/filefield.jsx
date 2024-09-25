@@ -3,36 +3,44 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useCallback} from 'react';
 
-import React from 'react';
+import {FileInput} from '@greenbone/opensight-ui-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import withLayout from 'web/components/layout/withLayout';
-
 import PropTypes from 'web/utils/proptypes';
 
-const FileFieldComponent = props => {
-  const handleChange = event => {
-    const {onChange, disabled, name} = props;
+const FileField = ({disabled, grow, name, title, onChange, ...props}) => {
+  const handleChange = useCallback(
+    file => {
+      if (!disabled && isDefined(onChange)) {
+        onChange(file, name);
+      }
+    },
+    [onChange, disabled, name],
+  );
 
-    event.preventDefault();
-
-    if (!disabled && isDefined(onChange)) {
-      onChange(event.target.files[0], name);
-    }
-  };
-
-  const {onChange, ...args} = props;
-  return <input {...args} type="file" onChange={handleChange} />;
+  return (
+    <FileInput
+      {...props}
+      styles={{root: {flexGrow: grow}}}
+      label={title}
+      name={name}
+      disabled={disabled}
+      onChange={handleChange}
+    />
+  );
 };
 
-FileFieldComponent.propTypes = {
+FileField.propTypes = {
   disabled: PropTypes.bool,
+  grow: PropTypes.numberOrNumberString,
   name: PropTypes.string,
+  title: PropTypes.string,
   onChange: PropTypes.func,
 };
 
-export default withLayout()(FileFieldComponent);
+export default FileField;
 
 // vim: set ts=2 sw=2 tw=80:

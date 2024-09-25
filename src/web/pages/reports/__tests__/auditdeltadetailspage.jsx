@@ -12,7 +12,8 @@ import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith} from 'web/utils/testing';
+import {getByRole, rendererWith} from 'web/utils/testing';
+import {getPowerFilter, getTextInputs} from 'web/components/testing';
 
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/mockauditdeltareport';
 
@@ -91,7 +92,7 @@ describe('Audit Detla Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement, getAllByTestId, within} = render(
       <DeltaDetailsContent
         audit={true}
         activeTab={0}
@@ -129,19 +130,21 @@ describe('Audit Detla Report Details Content tests', () => {
     );
 
     const icons = baseElement.querySelectorAll('svg');
-    const inputs = baseElement.querySelectorAll('input');
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const selects = getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const inputs = getTextInputs(powerFilter);
+    const select = getByRole(powerFilter, 'combobox');
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons.length).toEqual(14)
+    expect(icons.length).toEqual(15);
 
-    // Powerfilter
+    // Powerilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('foo');
+
+    const input = within(select).getByTitle('Loaded filter');
+    expect(input).toHaveValue('foo');
 
     // Header
     expect(baseElement).toHaveTextContent(
@@ -266,7 +269,7 @@ describe('Audit Detla Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement, getAllByTestId, within} = render(
       <DeltaDetailsContent
         activeTab={1}
         audit={true}
@@ -303,19 +306,25 @@ describe('Audit Detla Report Details Content tests', () => {
     );
 
     const icons = baseElement.querySelectorAll('svg');
-    const inputs = baseElement.querySelectorAll('input');
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
-    const selects = getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const inputs = getTextInputs(powerFilter);
+    const select = getByRole(powerFilter, 'combobox');
+
+    // PowerFilter
+    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
+
+    const input = within(select).getByTitle('Loaded filter');
+    expect(input).toHaveValue('--');
+
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons.length).toEqual(24)
+    expect(icons.length).toEqual(25);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
 
     // Header
     expect(baseElement).toHaveTextContent(

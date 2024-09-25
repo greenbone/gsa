@@ -14,9 +14,13 @@ import SelectionType from 'web/utils/selectiontype';
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/export.svg';
+import {FileOutput as Icon} from 'lucide-react';
 
-const ExportSvgIcon = withSvgIcon()(Icon);
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
+
+const ExportSvgIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 const ExportIcon = ({selectionType, title, ...other}) => {
   let download_title = title;

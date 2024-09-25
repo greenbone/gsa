@@ -359,18 +359,18 @@ describe('Task Detailspage tests', () => {
     expect(progressBars[0]).toHaveTextContent('Done');
 
     const headings = element.querySelectorAll('h2');
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
 
     expect(headings[1]).toHaveTextContent('Target');
-    expect(detailslinks[2]).toHaveAttribute('href', '/target/5678');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/target/5678');
     expect(element).toHaveTextContent('target1');
 
     expect(headings[2]).toHaveTextContent('Alerts');
-    expect(detailslinks[3]).toHaveAttribute('href', '/alert/91011');
+    expect(detailsLinks[3]).toHaveAttribute('href', '/alert/91011');
     expect(element).toHaveTextContent('alert1');
 
     expect(headings[3]).toHaveTextContent('Scanner');
-    expect(detailslinks[4]).toHaveAttribute('href', '/scanner/1516');
+    expect(detailsLinks[4]).toHaveAttribute('href', '/scanner/1516');
     expect(element).toHaveTextContent('scanner1');
     expect(element).toHaveTextContent('OpenVAS Scanner');
 
@@ -621,6 +621,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {element, getAllByTestId} = render(
@@ -676,6 +677,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -695,17 +697,18 @@ describe('Task ToolBarIcons tests', () => {
     );
 
     const icons = getAllByTestId('svg-icon');
+
     const badgeIcons = getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
     const divs = baseElement.querySelectorAll('div');
 
-    fireEvent.click(divs[9]);
+    fireEvent.click(divs[8]);
     expect(handleTaskCreate).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
+    expect(divs[8]).toHaveTextContent('New Task');
 
-    fireEvent.click(divs[10]);
+    fireEvent.click(divs[9]);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
+    expect(divs[9]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
     expect(handleTaskClone).toHaveBeenCalledWith(task3);
@@ -771,6 +774,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -794,13 +798,13 @@ describe('Task ToolBarIcons tests', () => {
     const links = baseElement.querySelectorAll('a');
     const divs = baseElement.querySelectorAll('div');
 
-    fireEvent.click(divs[9]);
+    fireEvent.click(divs[8]);
     expect(handleTaskCreate).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
+    expect(divs[8]).toHaveTextContent('New Task');
 
-    fireEvent.click(divs[10]);
+    fireEvent.click(divs[9]);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
+    expect(divs[9]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
     expect(handleTaskClone).toHaveBeenCalledWith(task4);
@@ -873,6 +877,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -896,13 +901,13 @@ describe('Task ToolBarIcons tests', () => {
     const links = baseElement.querySelectorAll('a');
     const divs = baseElement.querySelectorAll('div');
 
-    fireEvent.click(divs[9]);
+    fireEvent.click(divs[8]);
     expect(handleTaskCreate).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
+    expect(divs[8]).toHaveTextContent('New Task');
 
-    fireEvent.click(divs[10]);
+    fireEvent.click(divs[9]);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
+    expect(divs[9]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
     expect(handleTaskClone).toHaveBeenCalledWith(task5);
@@ -974,6 +979,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -999,13 +1005,13 @@ describe('Task ToolBarIcons tests', () => {
     const links = baseElement.querySelectorAll('a');
     const divs = baseElement.querySelectorAll('div');
 
-    fireEvent.click(divs[9]);
+    fireEvent.click(divs[8]);
     expect(handleTaskCreate).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
+    expect(divs[8]).toHaveTextContent('New Task');
 
-    fireEvent.click(divs[10]);
+    fireEvent.click(divs[9]);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
+    expect(divs[9]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
     expect(handleTaskClone).toHaveBeenCalledWith(task2);
@@ -1077,6 +1083,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -1100,13 +1107,13 @@ describe('Task ToolBarIcons tests', () => {
     const links = baseElement.querySelectorAll('a');
     const divs = baseElement.querySelectorAll('div');
 
-    fireEvent.click(divs[9]);
+    fireEvent.click(divs[8]);
     expect(handleTaskCreate).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
+    expect(divs[8]).toHaveTextContent('New Task');
 
-    fireEvent.click(divs[10]);
+    fireEvent.click(divs[9]);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
+    expect(divs[9]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
     expect(handleTaskClone).toHaveBeenCalledWith(task6);
@@ -1241,6 +1248,7 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
@@ -1264,13 +1272,13 @@ describe('Task ToolBarIcons tests', () => {
     const links = baseElement.querySelectorAll('a');
     const divs = baseElement.querySelectorAll('div');
 
-    fireEvent.click(divs[9]);
+    fireEvent.click(divs[8]);
     expect(handleTaskCreate).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
+    expect(divs[8]).toHaveTextContent('New Task');
 
-    fireEvent.click(divs[10]);
+    fireEvent.click(divs[9]);
     expect(handleContainerTaskCreate).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
+    expect(divs[9]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
     expect(handleTaskClone).toHaveBeenCalledWith(task8);

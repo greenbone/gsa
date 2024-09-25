@@ -7,6 +7,8 @@ import React from 'react';
 
 import {Provider as StoreProvider} from 'react-redux';
 
+import {ThemeProvider, theme} from '@greenbone/opensight-ui-components';
+
 import Gmp from 'gmp';
 import GmpSettings from 'gmp/gmpsettings';
 
@@ -87,7 +89,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <ThemeProvider theme={{...theme, colorScheme: 'light'}}>
         <GlobalStyles />
         <ErrorBoundary message={_('An error occurred on this page')}>
           <GmpContext.Provider value={gmp}>
@@ -98,7 +100,7 @@ class App extends React.Component {
             </StoreProvider>
           </GmpContext.Provider>
         </ErrorBoundary>
-      </React.Fragment>
+      </ThemeProvider>
     );
   }
 }

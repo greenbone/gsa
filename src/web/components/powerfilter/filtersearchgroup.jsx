@@ -46,4 +46,3 @@ FilterSearchGroup.propTypes = {
 };
 
 export default FilterSearchGroup;
-

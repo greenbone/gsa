@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import Layout from 'web/components/layout/layout';
+import React from 'react';
 
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -19,23 +18,20 @@ import SortByGroup from './sortbygroup';
 import DefaultFilterDialogPropTypes from './dialogproptypes';
 
 export const DefaultFilterDialog = ({
-  createFilterType,
   filter,
   filterName,
   filterstring,
   saveNamedFilter,
   sortFields,
-  onFilterCreated,
   onFilterStringChange,
   onFilterValueChange,
-  onSaveNamedFilterChange,
   onSortByChange,
   onSortOrderChange,
   onValueChange,
 }) => {
   const capabilities = useCapabilities();
   return (
-    <Layout flex="column">
+    <>
       <FilterStringGroup
         filter={filterstring}
         onChange={onFilterStringChange}
@@ -56,7 +52,7 @@ export const DefaultFilterDialog = ({
           onValueChange={onValueChange}
         />
       )}
-    </Layout>
+    </>
   );
 };
 

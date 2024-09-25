@@ -5,11 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
+import Filter from 'gmp/models/filter';
+
 import {render, fireEvent} from 'web/utils/testing';
 
-import SolutionTypesFilterGroup from '../solutiontypegroup';
+import {getRadioInputs} from 'web/components/testing';
 
-import Filter from 'gmp/models/filter';
+import SolutionTypesFilterGroup from '../solutiontypegroup';
 
 describe('SolutionTypesFilterGroup tests', () => {
   test('should render', () => {
@@ -25,11 +27,12 @@ describe('SolutionTypesFilterGroup tests', () => {
   test('should call change handler', () => {
     const filter = Filter.fromString('solution_type=Mitigation');
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
     fireEvent.click(radio[1]);
 
     expect(handleChange).toHaveBeenCalled();
@@ -41,12 +44,12 @@ describe('SolutionTypesFilterGroup tests', () => {
   test('should check radio', () => {
     const filter = Filter.fromString('solution_type=Workaround');
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = getAllByTestId('radio-input');
-
+    const radio = getRadioInputs();
     expect(radio[1].checked).toEqual(true);
   });
 
@@ -54,11 +57,12 @@ describe('SolutionTypesFilterGroup tests', () => {
     const filter1 = Filter.fromString('solution_type=Workaround');
     const filter2 = Filter.fromString('solution_type=Mitigation');
     const handleChange = testing.fn();
-    const {getAllByTestId, rerender} = render(
+
+    const {rerender} = render(
       <SolutionTypesFilterGroup filter={filter1} onChange={handleChange} />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
 
     expect(radio[1].checked).toEqual(true);
     expect(radio[2].checked).toEqual(false);
@@ -74,11 +78,12 @@ describe('SolutionTypesFilterGroup tests', () => {
   test('should check "All" by default', () => {
     const filter = Filter.fromString();
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
     expect(radio[0].checked).toEqual(true);
   });
 });

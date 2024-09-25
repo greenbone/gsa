@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from './utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
@@ -48,6 +47,7 @@ class GmpSettings {
       enableGreenboneSensor = false,
       disableLoginForm = false,
       enableStoreDebugLog,
+      enableAssetManagement = false,
       guestUsername,
       guestPassword,
       loglevel,
@@ -119,6 +119,7 @@ class GmpSettings {
     setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);
     setAndFreeze(this, 'vendorVersion', vendorVersion);
     setAndFreeze(this, 'vendorLabel', vendorLabel);
+    setAndFreeze(this, 'enableAssetManagement', enableAssetManagement);
   }
 
   set token(value) {

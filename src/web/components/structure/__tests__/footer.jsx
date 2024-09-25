@@ -16,7 +16,6 @@ describe('Footer tests', () => {
     const currentYear = date().year();
     const {element} = render(<Footer />);
 
-    expect(element).toMatchSnapshot();
     expect(element).toHaveTextContent(
       'Copyright © 2009-' +
         currentYear +

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import Info from 'gmp/models/info';
 import {testModel} from 'gmp/models/testing';
 

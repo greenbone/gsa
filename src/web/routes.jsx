@@ -71,10 +71,10 @@ import ReportFormatsPage from './pages/reportformats/listpage';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage';
 import ReportsPage from './pages/reports/listpage';
 import ReportDetailsPage from './pages/reports/detailspage';
+import DeltaAuditReportDetailsPage from './pages/reports/auditdeltadetailspage';
 import DeltaReportDetailsPage from './pages/reports/deltadetailspage';
 import ResultsPage from './pages/results/listpage';
 import ResultDetailsPage from './pages/results/detailspage';
-import DeltaAuditReportDetailsPage from './pages/reports/auditdeltadetailspage';
 import RolesPage from './pages/roles/listpage';
 import RoleDetailsPage from './pages/roles/detailspage';
 import ScanConfigsPage from './pages/scanconfigs/listpage';
@@ -117,7 +117,7 @@ const LoggedInRoutes = () => {
       <LocationObserver>
         <Page>
           <Routes>
-            <Route path="/dashboard" element={<StartPage />} />
+            <Route path="/dashboards" element={<StartPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/alerts" element={<AlertsPage />} />
             <Route path="/audits" element={<AuditsPage />} />

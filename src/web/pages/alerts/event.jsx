@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import {secInfoTypeName} from 'gmp/models/secinfo';
@@ -19,7 +17,10 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const Event = ({event = {}}) => {
+  const [_] = useTranslation();
   if (!isDefined(event.type) || !isDefined(event.data)) {
     return null;
   }

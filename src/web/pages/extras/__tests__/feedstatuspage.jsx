@@ -8,7 +8,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, waitFor} from 'web/utils/testing';
 
 import FeedStatus from '../feedstatuspage';
-import {Feed} from 'gmp/commands/feedstatus';
+import {createFeed} from 'gmp/commands/feedstatus';
 
 import Response from 'gmp/http/response';
 
@@ -20,25 +20,25 @@ const _now = global.Date.now;
 // set mockDate so the feed ages don't keep changing
 global.Date.now = testing.fn(() => mockDate);
 
-const nvtFeed = new Feed({
+const nvtFeed = createFeed({
   name: 'Greenbone Community Feed',
   type: 'NVT',
   version: 202007241005,
 });
 
-const scapFeed = new Feed({
+const scapFeed = createFeed({
   name: 'Greenbone Community SCAP Feed',
   type: 'SCAP',
   version: 202007230130,
 });
 
-const certFeed = new Feed({
+const certFeed = createFeed({
   name: 'Greenbone Community CERT Feed',
   type: 'CERT',
   version: 202005231003,
 });
 
-const gvmdDataFeed = new Feed({
+const gvmdDataFeed = createFeed({
   name: 'Greenbone Community gvmd Data Feed',
   type: 'GVMD_DATA',
   version: 202006221009,

@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
-import _ from 'gmp/locale';
 
 import {
   SCANCONFIG_TREND_DYNAMIC,
@@ -35,6 +32,8 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 import Trend from './trend';
 
@@ -71,6 +70,7 @@ const NvtFamily = ({
   onSelectChange,
   onTrendChange,
 }) => {
+  const [_] = useTranslation();
   const isToSelectWhole = WHOLE_SELECTION_FAMILIES.includes(familyName);
   return (
     <TableRow key={familyName}>
@@ -152,6 +152,7 @@ const NvtFamilies = ({
   onEditConfigFamilyClick,
   onValueChange,
 }) => {
+  const [_] = useTranslation();
   const onTrendChange = (value, name) => {
     trend[name] = value;
 

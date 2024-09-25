@@ -5,7 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
 import {parseInt} from 'gmp/parser';
 
 import {FoldState} from 'web/components/folding/folding';
@@ -26,6 +25,8 @@ import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const ScannerPreference = ({
   displayName,
   defaultValue,
@@ -33,7 +34,7 @@ const ScannerPreference = ({
   value,
   onPreferenceChange,
 }) => {
-  const is_radio =
+  const isRadio =
     name === 'ping_hosts' ||
     name === 'reverse_lookup' ||
     name === 'unscanned_closed' ||
@@ -62,7 +63,7 @@ const ScannerPreference = ({
     <TableRow>
       <TableData>{displayName}</TableData>
       <TableData>
-        {is_radio ? (
+        {isRadio ? (
           <Layout>
             <YesNoRadio // booleans are now 1 and 0 and not yes/no.
               yesValue={1}
@@ -95,6 +96,7 @@ const ScannerPreferences = ({
   values = {},
   onValuesChange,
 }) => {
+  const [_] = useTranslation();
   return (
     <Section
       foldable

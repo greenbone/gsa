@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 
-import {rendererWith, screen, fireEvent} from 'web/utils/testing';
+import {render, screen, fireEvent} from 'web/utils/testing';
 
 import DialogNotification from '../dialognotification';
 import useDialogNotification from '../useDialogNotification';
@@ -43,128 +43,142 @@ const TestComponent = () => {
   );
 };
 
+const queryDialog = () => screen.queryByRole('dialog');
+const getDialog = () => screen.getByRole('dialog');
+const getDialogTitleBar = () =>
+  getDialog().querySelector('.mantine-Modal-title');
+const getDialogContent = () => getDialog().querySelector('.mantine-Modal-body');
+const getDialogFooter = () => screen.getByTestId('dialog-notification-footer');
+
+const showMessage = () => {
+  const button = screen.getByTestId('show-message');
+  fireEvent.click(button);
+};
+const showError = () => {
+  const button = screen.getByTestId('show-error');
+  fireEvent.click(button);
+};
+const showMessageWithSubject = () => {
+  const button = screen.getByTestId('show-message-with-subject');
+  fireEvent.click(button);
+};
+const showErrorMessage = () => {
+  const button = screen.getByTestId('show-error-message');
+  fireEvent.click(button);
+};
+const showSuccessMessage = () => {
+  const button = screen.getByTestId('show-success-message');
+
+  fireEvent.click(button);
+};
+
 describe('DialogNotification tests', () => {
   test('should display a message', () => {
-    const {render} = rendererWith();
-
     render(<TestComponent />);
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(queryDialog()).not.toBeInTheDocument();
 
-    const button = screen.getByTestId('show-message');
+    showMessage();
 
-    fireEvent.click(button);
+    expect(queryDialog()).toBeInTheDocument();
 
-    const dialogTitleBar = screen.getByTestId('dialog-title-bar');
+    const dialogTitleBar = getDialogTitleBar();
 
     expect(dialogTitleBar).toHaveTextContent('Message');
 
-    const dialogContent = screen.getByTestId('dialog-notification-message');
+    const dialogContent = getDialogContent();
 
     expect(dialogContent).toHaveTextContent('foo');
   });
 
   test('should display a message with subject', () => {
-    const {render} = rendererWith();
-
     render(<TestComponent />);
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(queryDialog()).not.toBeInTheDocument();
 
-    const button = screen.getByTestId('show-message-with-subject');
+    showMessageWithSubject();
 
-    fireEvent.click(button);
+    expect(queryDialog()).toBeInTheDocument();
 
-    const dialogTitleBar = screen.getByTestId('dialog-title-bar');
+    const dialogTitleBar = getDialogTitleBar();
 
     expect(dialogTitleBar).toHaveTextContent('bar');
 
-    const dialogContent = screen.getByTestId('dialog-notification-message');
+    const dialogContent = getDialogContent();
 
     expect(dialogContent).toHaveTextContent('foo');
   });
 
   test('should allow to close dialog', () => {
-    const {render} = rendererWith();
-
     render(<TestComponent />);
 
-    const button = screen.getByTestId('show-message');
+    showMessage();
 
-    fireEvent.click(button);
+    expect(queryDialog()).toBeInTheDocument();
 
-    const dialogTitleBar = screen.getByTestId('dialog-title-bar');
+    const dialogTitleBar = getDialogTitleBar();
 
     expect(dialogTitleBar).toHaveTextContent('Message');
 
-    const dialogContent = screen.getByTestId('dialog-notification-message');
+    const dialogContent = getDialogContent();
 
     expect(dialogContent).toHaveTextContent('foo');
 
-    const dialogFooter = screen.getByTestId('dialog-notification-footer');
+    const dialogFooter = getDialogFooter();
     const closeButton = dialogFooter.querySelector('button');
-
     fireEvent.click(closeButton);
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(queryDialog()).not.toBeInTheDocument();
   });
 
   test('should display an error message', () => {
-    const {render} = rendererWith();
-
     render(<TestComponent />);
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(queryDialog()).not.toBeInTheDocument();
 
-    const button = screen.getByTestId('show-error-message');
+    showErrorMessage();
 
-    fireEvent.click(button);
+    expect(queryDialog()).toBeInTheDocument();
 
-    const dialogTitleBar = screen.getByTestId('dialog-title-bar');
+    const dialogTitleBar = getDialogTitleBar();
 
     expect(dialogTitleBar).toHaveTextContent('Error');
 
-    const dialogContent = screen.getByTestId('dialog-notification-message');
+    const dialogContent = getDialogContent();
 
     expect(dialogContent).toHaveTextContent('foo');
   });
 
   test('should display a success message', () => {
-    const {render} = rendererWith();
-
     render(<TestComponent />);
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(queryDialog()).not.toBeInTheDocument();
 
-    const button = screen.getByTestId('show-success-message');
+    showSuccessMessage();
 
-    fireEvent.click(button);
+    expect(queryDialog()).toBeInTheDocument();
 
-    const dialogTitleBar = screen.getByTestId('dialog-title-bar');
+    const dialogTitleBar = getDialogTitleBar();
 
     expect(dialogTitleBar).toHaveTextContent('Success');
 
-    const dialogContent = screen.getByTestId('dialog-notification-message');
+    const dialogContent = getDialogContent();
 
     expect(dialogContent).toHaveTextContent('foo');
   });
 
   test('should display an error', () => {
-    const {render} = rendererWith();
-
     render(<TestComponent />);
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(queryDialog()).not.toBeInTheDocument();
 
-    const button = screen.getByTestId('show-error');
+    showError();
 
-    fireEvent.click(button);
-
-    const dialogTitleBar = screen.getByTestId('dialog-title-bar');
+    const dialogTitleBar = getDialogTitleBar();
 
     expect(dialogTitleBar).toHaveTextContent('Error');
 
-    const dialogContent = screen.getByTestId('dialog-notification-message');
+    const dialogContent = getDialogContent();
 
     expect(dialogContent).toHaveTextContent('foo');
   });

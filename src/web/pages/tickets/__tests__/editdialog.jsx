@@ -5,10 +5,19 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import {TICKET_STATUS} from 'gmp/models/ticket';
 import User from 'gmp/models/user';
+
+import {
+  clickElement,
+  getDialog,
+  getDialogCloseButton,
+  getDialogSaveButton,
+  getSelectElements,
+  getSelectItemElementsForSelect,
+} from 'web/components/testing';
 
 import EditTicketDialog from '../editdialog';
 
@@ -28,7 +37,7 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <EditTicketDialog
         status={TICKET_STATUS.open}
         ticketId="t1"
@@ -39,7 +48,7 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toBeVisible();
+    expect(getDialog()).toBeInTheDocument();
   });
 
   test('should display notes', () => {
@@ -75,7 +84,7 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <EditTicketDialog
         openNote="Ticket has been opened"
         fixedNote="Ticket has been fixed"
@@ -89,8 +98,7 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const saveButton = getByTestId('dialog-save-button');
-
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -103,11 +111,11 @@ describe('EditTicketDialog component tests', () => {
     });
   });
 
-  test('should allow to change status', () => {
+  test('should allow to change status', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement, getByTestId} = render(
+    render(
       <EditTicketDialog
         fixedNote="Ticket has been fixed"
         status={TICKET_STATUS.open}
@@ -119,16 +127,12 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const selectButtons = queryAllByTestId(baseElement, 'select-open-button');
-    fireEvent.click(selectButtons[0]);
+    const selects = getSelectElements();
+    const selectItems = await getSelectItemElementsForSelect(selects[0]);
+    expect(selectItems.length).toEqual(3);
+    await clickElement(selectItems[1]);
 
-    const selectElements = queryAllByTestId(baseElement, 'select-item');
-    expect(selectElements.length).toEqual(3);
-
-    fireEvent.click(selectElements[1]);
-
-    const saveButton = getByTestId('dialog-save-button');
-
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -141,11 +145,11 @@ describe('EditTicketDialog component tests', () => {
     });
   });
 
-  test('should allow to change user', () => {
+  test('should allow to change user', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement, getByTestId} = render(
+    render(
       <EditTicketDialog
         openNote="Ticket has been opened"
         status={TICKET_STATUS.open}
@@ -157,16 +161,12 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const selectButtons = queryAllByTestId(baseElement, 'select-open-button');
-    fireEvent.click(selectButtons[1]);
+    const selects = getSelectElements();
+    const selectItems = await getSelectItemElementsForSelect(selects[1]);
+    expect(selectItems.length).toEqual(2);
+    await clickElement(selectItems[1]);
 
-    const selectElements = queryAllByTestId(baseElement, 'select-item');
-    expect(selectElements.length).toEqual(2);
-
-    fireEvent.click(selectElements[1]);
-
-    const saveButton = getByTestId('dialog-save-button');
-
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -183,7 +183,7 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <EditTicketDialog
         openNote="Ticket has been opened."
         status={TICKET_STATUS.closed}
@@ -194,10 +194,9 @@ describe('EditTicketDialog component tests', () => {
         onSave={handleSave}
       />,
     );
-    const saveButton = getByTestId('dialog-save-button');
 
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
-
     expect(handleSave).not.toHaveBeenCalled();
   });
 
@@ -205,8 +204,7 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    // eslint-disable-next-line no-shadow
-    const {getByTestId} = render(
+    render(
       <EditTicketDialog
         status={TICKET_STATUS.open}
         ticketId="t1"
@@ -217,10 +215,8 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
-
+    const closeButton = getDialogCloseButton();
     fireEvent.click(closeButton);
-
     expect(handleClose).toHaveBeenCalled();
   });
 });

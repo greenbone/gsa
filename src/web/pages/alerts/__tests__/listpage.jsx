@@ -20,6 +20,19 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import AlertPage, {ToolBarIcons} from '../listpage';
+import {
+  clickElement,
+  getBulkActionItems,
+  getCheckBoxes,
+  getPowerFilter,
+  getSelectElement,
+  getSelectElements,
+  getSelectItemElementsForSelect,
+  getTableBody,
+  getTableFooter,
+  getTextInputs,
+  testBulkTrashcanDialog,
+} from 'web/components/testing';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
@@ -112,10 +125,10 @@ describe('Alert listpage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('alert', defaultSettingfilter),
+      defaultFilterLoadingActions.success('alert', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -136,8 +149,9 @@ describe('Alert listpage tests', () => {
     await wait();
 
     const icons = screen.getAllByTestId('svg-icon');
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = screen.getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const selects = getSelectElements(powerFilter);
+    const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(icons[0]).toHaveAttribute('title', 'Help: Alerts');
@@ -149,8 +163,9 @@ describe('Alert listpage tests', () => {
     expect(icons[4]).toHaveAttribute('title', 'Reset to Default Filter');
     expect(icons[5]).toHaveAttribute('title', 'Help: Powerfilter');
     expect(icons[6]).toHaveAttribute('title', 'Edit Filter');
+
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(selects[0]).toHaveValue('--');
 
     // Table
     const header = baseElement.querySelectorAll('th');
@@ -212,10 +227,10 @@ describe('Alert listpage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('alert', defaultSettingfilter),
+      defaultFilterLoadingActions.success('alert', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -235,26 +250,19 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    const icons = screen.getAllByTestId('svg-icon');
+    const icons = getBulkActionItems();
 
     // export page contents
-    expect(icons[20]).toHaveAttribute('title', 'Export page contents');
-    fireEvent.click(icons[20]);
-
-    await wait();
-
+    expect(exportByFilter).not.toHaveBeenCalled();
+    expect(icons[2]).toHaveAttribute('title', 'Export page contents');
+    await clickElement(icons[2]);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    expect(icons[19]).toHaveAttribute(
-      'title',
-      'Move page contents to trashcan',
-    );
-    fireEvent.click(icons[19]);
-
-    await wait();
-
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteByFilter).not.toHaveBeenCalled();
+    expect(icons[1]).toHaveAttribute('title', 'Move page contents to trashcan');
+    await clickElement(icons[1]);
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
   test('should allow to bulk action on selected alerts', async () => {
@@ -289,10 +297,10 @@ describe('Alert listpage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('alert', defaultSettingfilter),
+      defaultFilterLoadingActions.success('alert', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -308,42 +316,34 @@ describe('Alert listpage tests', () => {
       entitiesLoadingActions.success([alert], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<AlertPage />);
+    render(<AlertPage />);
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[1]);
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to selection');
-
-    const inputs = element.querySelectorAll('input');
+    // change bulk action to apply to selection
+    const tableFooter = getTableFooter();
+    const selectElement = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(selectElement);
+    await clickElement(selectItems[1]);
+    expect(selectElement).toHaveValue('Apply to selection');
 
     // select an alert
-    fireEvent.click(inputs[1]);
-    await wait();
-
-    const icons = screen.getAllByTestId('svg-icon');
+    const tableBody = getTableBody();
+    const inputs = getCheckBoxes(tableBody);
+    await clickElement(inputs[1]);
 
     // export selected alert
-    expect(icons[15]).toHaveAttribute('title', 'Export selection');
-    fireEvent.click(icons[15]);
-
-    await wait();
-
+    expect(exportByIds).not.toHaveBeenCalled();
+    const icons = getBulkActionItems();
+    expect(icons[2]).toHaveAttribute('title', 'Export selection');
+    await clickElement(icons[2]);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected alert to trashcan
-    expect(icons[14]).toHaveAttribute('title', 'Move selection to trashcan');
-    fireEvent.click(icons[14]);
-
-    await wait();
-
-    expect(deleteByIds).toHaveBeenCalled();
+    expect(deleteByIds).not.toHaveBeenCalled();
+    expect(icons[1]).toHaveAttribute('title', 'Move selection to trashcan');
+    await clickElement(icons[1]);
+    testBulkTrashcanDialog(screen, deleteByIds);
   });
 
   test('should allow to bulk action on filtered alerts', async () => {
@@ -378,10 +378,10 @@ describe('Alert listpage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('alert', defaultSettingfilter),
+      defaultFilterLoadingActions.success('alert', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -401,34 +401,25 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[2]);
-
-    await wait();
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to all filtered');
-
-    const icons = screen.getAllByTestId('svg-icon');
+    // change bulk action to apply to all filtered
+    const tableFooter = getTableFooter();
+    const selectElement = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(selectElement);
+    await clickElement(selectItems[2]);
+    expect(selectElement).toHaveValue('Apply to all filtered');
 
     // export all filtered alerts
-    expect(icons[20]).toHaveAttribute('title', 'Export all filtered');
-    fireEvent.click(icons[20]);
-
-    await wait();
-
+    expect(exportByFilter).not.toHaveBeenCalled();
+    const icons = getBulkActionItems();
+    expect(icons[2]).toHaveAttribute('title', 'Export all filtered');
+    await clickElement(icons[2]);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered alerts to trashcan
-    expect(icons[19]).toHaveAttribute('title', 'Move all filtered to trashcan');
-    fireEvent.click(icons[19]);
-
-    await wait();
-
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteByFilter).not.toHaveBeenCalled();
+    expect(icons[1]).toHaveAttribute('title', 'Move all filtered to trashcan');
+    await clickElement(icons[1]);
+    testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });
 

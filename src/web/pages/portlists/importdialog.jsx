@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -14,9 +12,10 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
 
-import Layout from 'web/components/layout/layout';
+import useTranslation from 'web/hooks/useTranslation';
 
 const ImportDialog = ({onClose, onSave}) => {
+  const [_] = useTranslation();
   return (
     <SaveDialog
       buttonTitle={_('Import')}
@@ -26,11 +25,9 @@ const ImportDialog = ({onClose, onSave}) => {
     >
       {({onValueChange}) => {
         return (
-          <Layout flex="column">
-            <FormGroup title={_('Import XML Port List')} titleSize="3">
-              <FileField name="xml_file" onChange={onValueChange} />
-            </FormGroup>
-          </Layout>
+          <FormGroup title={_('Import XML Port List')}>
+            <FileField name="xml_file" onChange={onValueChange} />
+          </FormGroup>
         );
       }}
     </SaveDialog>
@@ -43,5 +40,3 @@ ImportDialog.propTypes = {
 };
 
 export default ImportDialog;
-
-// vim: set ts=2 sw=2 tw=80:

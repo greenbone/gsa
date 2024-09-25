@@ -30,8 +30,10 @@ describe('Entity VerifyIcon component tests', () => {
     );
 
     expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).not.toHaveStyleRule('color', Theme.inputBorderGray);
+
     expect(entity.userCapabilities.mayOp('verify_report_format')).toEqual(true);
 
     fireEvent.click(element);
@@ -57,8 +59,10 @@ describe('Entity VerifyIcon component tests', () => {
     );
 
     expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).not.toHaveStyleRule('color', Theme.inputBorderGray);
+
     expect(entity.userCapabilities.mayOp('verify_report_format')).toEqual(true);
 
     fireEvent.click(element);
@@ -84,8 +88,9 @@ describe('Entity VerifyIcon component tests', () => {
     fireEvent.click(element);
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 
   test('should deactivate if wrong resource level permissions are given', () => {
@@ -109,7 +114,8 @@ describe('Entity VerifyIcon component tests', () => {
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: `svg path`,
+      modifier: 'svg path.gui_icon_class',
     });
+    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 });

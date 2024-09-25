@@ -6,48 +6,47 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import {DialogFooterLayout} from 'web/components/dialog/footer';
 
-import Button from './button';
+import Button from 'web/components/form/button';
 
-const StyledLayout = styled(DialogFooterLayout)`
-  justify-content: space-between;
-`;
+import useTranslation from 'web/hooks/useTranslation';
 
 const DialogTwoButtonFooter = ({
-  leftButtonTitle = _('Cancel'),
+  leftButtonTitle,
   rightButtonTitle,
   onLeftButtonClick,
   onRightButtonClick,
   loading = false,
-}) => (
-  <StyledLayout align={['end', 'center']} shrink="0">
-    <Button
-      data-testid="dialog-close-button"
-      disabled={loading}
-      onClick={onLeftButtonClick}
-      title={leftButtonTitle}
-    >
-      {leftButtonTitle}
-    </Button>
-    <Button
-      data-testid="dialog-save-button"
-      onClick={onRightButtonClick}
-      title={rightButtonTitle}
-      loading={loading}
-    >
-      {rightButtonTitle}
-    </Button>
-  </StyledLayout>
-);
+  isLoading = loading,
+}) => {
+  const [_] = useTranslation();
+  leftButtonTitle = leftButtonTitle || _('Cancel');
+  return (
+    <DialogFooterLayout align={['end', 'center']} shrink="0">
+      <Button
+        data-testid="dialog-close-button"
+        disabled={isLoading}
+        variant="outline"
+        onClick={onLeftButtonClick}
+      >
+        {leftButtonTitle}
+      </Button>
+      <Button
+        data-testid="dialog-save-button"
+        onClick={onRightButtonClick}
+        isLoading={isLoading}
+      >
+        {rightButtonTitle}
+      </Button>
+    </DialogFooterLayout>
+  );
+};
 
 DialogTwoButtonFooter.propTypes = {
+  isLoading: PropTypes.bool,
   leftButtonTitle: PropTypes.string,
   loading: PropTypes.bool,
   rightButtonTitle: PropTypes.string.isRequired,

@@ -3,177 +3,114 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useState, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import Button from 'web/components/form/button';
-import Datepicker from 'web/components/form/datepicker';
-import FormGroup from 'web/components/form/formgroup';
-import Spinner from 'web/components/form/spinner';
-
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 
-class StartTimeSelection extends React.Component {
-  constructor(...args) {
-    super(...args);
+import Button from 'web/components/form/button';
+import DatePicker from 'web/components/form/DatePicker';
+import FormGroup from 'web/components/form/formgroup';
+import {TimePicker} from '@greenbone/opensight-ui-components';
 
-    const {startDate, endDate} = this.props;
+import Column from 'web/components/layout/column';
+import Row from 'web/components/layout/row';
+import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
-    this.state = {
-      startDate,
-      startHour: startDate.hour(),
-      startMinute: startDate.minute(),
-      endDate,
-      endHour: endDate.hour(),
-      endMinute: endDate.minute(),
-    };
+const StartTimeSelection = props => {
+  const {
+    startDate: initialStartDate,
+    endDate: initialEndDate,
+    timezone,
+    onChanged,
+  } = props;
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endDate, setEndDate] = useState(initialEndDate);
+  const [startTime, setStartTime] = useState(
+    formatTimeForTimePicker(initialStartDate),
+  );
+  const [endTime, setEndTime] = useState(
+    formatTimeForTimePicker(initialEndDate),
+  );
 
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleUpdate = this.handleUpdate.bind(this);
-  }
+  useEffect(() => {
+    setStartDate(initialStartDate);
+    setEndDate(initialEndDate);
+  }, [initialStartDate, initialEndDate]);
 
-  static getDerivedStateFromProps(props, state) {
-    const {startDate, endDate} = props;
+  const handleTimeChange = (selectedTime, type) => {
+    const [hour, minute] = selectedTime.split(':').map(Number);
 
-    if (
-      (isDefined(startDate) && startDate !== state.prevStartDate) ||
-      (isDefined(endDate) && props.endDate !== state.prevEndDate)
-    ) {
-      return {
-        startDate,
-        endDate,
-        endHour: endDate.hour(),
-        endMinute: endDate.minute(),
-        prevStartDate: startDate,
-        prevEndDate: endDate,
-        startHour: startDate.hour(),
-        startMinute: startDate.minute(),
-      };
+    if (type === 'startTime') {
+      const newStartDate = startDate.clone().hours(hour).minutes(minute);
+      setStartDate(newStartDate);
+      setStartTime(selectedTime);
+    } else if (type === 'endTime') {
+      const newEndDate = endDate.clone().hours(hour).minutes(minute);
+      setEndDate(newEndDate);
+      setEndTime(selectedTime);
     }
-    return null;
-  }
+  };
 
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
-  }
-
-  handleUpdate() {
-    const {onChanged} = this.props;
-    const {
-      startDate,
-      endDate,
-      startHour,
-      startMinute,
-      endHour,
-      endMinute,
-    } = this.state;
-
+  const handleUpdate = () => {
     onChanged({
-      startDate: startDate
-        .clone()
-        .hour(startHour)
-        .minute(startMinute),
-      endDate: endDate
-        .clone()
-        .hour(endHour)
-        .minute(endMinute),
+      startDate: startDate.clone(),
+      endDate: endDate.clone(),
     });
-  }
+  };
 
-  render() {
-    const {timezone} = this.props;
-    const {
-      endDate,
-      startDate,
-      startHour,
-      startMinute,
-      endHour,
-      endMinute,
-    } = this.state;
-    return (
-      <Layout flex="column">
-        <FormGroup data-testid="timezone" title={_('Timezone')}>
-          {timezone}
-        </FormGroup>
-        <FormGroup title={_('Start Time')}>
-          <Divider flex="column">
-            <Datepicker
-              value={startDate}
-              name="startDate"
-              timezone={timezone}
-              minDate={false}
-              onChange={this.handleValueChange}
-            />
-            <Divider margin="20px">
-              <Spinner
-                name="startHour"
-                value={startHour}
-                min="0"
-                max="23"
-                type="int"
-                onChange={this.handleValueChange}
-              />{' '}
-              h
-              <Spinner
-                name="startMinute"
-                value={startMinute}
-                min="0"
-                max="59"
-                type="int"
-                onChange={this.handleValueChange}
-              />{' '}
-              m
-            </Divider>
-          </Divider>
-        </FormGroup>
+  return (
+    <Column>
+      <FormGroup data-testid="timezone" title={_('Timezone')}>
+        {timezone}
+      </FormGroup>
+      <FormGroup direction="row">
+        <DatePicker
+          value={startDate}
+          name="startDate"
+          onChange={setStartDate}
+          label={_('Start Date')}
+          maxDate={endDate}
+        />
+        <TimePicker
+          label={_('Start Time')}
+          name="startTime"
+          value={startTime}
+          onChange={newStartTime => handleTimeChange(newStartTime, 'startTime')}
+        />
+      </FormGroup>
 
-        <FormGroup title={_('End Time')}>
-          <Divider flex="column">
-            <Datepicker
-              value={endDate}
-              name="endDate"
-              timezone={timezone}
-              minDate={false}
-              onChange={this.handleValueChange}
-            />
-            <Divider margin="20px">
-              <Spinner
-                name="endHour"
-                value={endHour}
-                min="0"
-                max="23"
-                type="int"
-                onChange={this.handleValueChange}
-              />{' '}
-              h
-              <Spinner
-                name="endMinute"
-                value={endMinute}
-                min="0"
-                max="59"
-                type="int"
-                onChange={this.handleValueChange}
-              />{' '}
-              m
-            </Divider>
-          </Divider>
-        </FormGroup>
+      <FormGroup direction="row">
+        <DatePicker
+          value={endDate}
+          name="endDate"
+          minDate={startDate}
+          onChange={setEndDate}
+          label={_('End Date')}
+        />
+        <TimePicker
+          label={_('End Time')}
+          name="endTime"
+          value={endTime}
+          onChange={newEndTime => handleTimeChange(newEndTime, 'endTime')}
+        />
+      </FormGroup>
 
-        <FormGroup offset="4">
-          <Button data-testid="update-button" onClick={this.handleUpdate}>
-            {_('Update')}
-          </Button>
-        </FormGroup>
-      </Layout>
-    );
-  }
-}
+      <Row>
+        <Button
+          disabled={
+            startDate.isSameOrAfter(endDate) || startDate.isSame(endDate)
+          }
+          data-testid="update-button"
+          onClick={handleUpdate}
+        >
+          {_('Update')}
+        </Button>
+      </Row>
+    </Column>
+  );
+};
 
 StartTimeSelection.propTypes = {
   endDate: PropTypes.date.isRequired,
@@ -183,5 +120,3 @@ StartTimeSelection.propTypes = {
 };
 
 export default StartTimeSelection;
-
-// vim: set ts=2 sw=2 tw=80:

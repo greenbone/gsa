@@ -9,7 +9,6 @@ import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import {parseFloat, parseYesNo} from 'gmp/parser';
@@ -17,14 +16,15 @@ import {parseFloat, parseYesNo} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Section from 'web/components/section/section';
+import Column from 'web/components/layout/column';
 
 import useFormValues from 'web/components/form/useFormValues';
 import useFormValidation from 'web/components/form/useFormValidation';
 
-import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
-import withCapabilities from 'web/utils/withCapabilities';
 import PropTypes from 'web/utils/proptypes';
+
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/hooks/useCapabilities';
 
 import DefaultsPart from './defaultspart';
 import FilterPart from './filterpart';
@@ -33,7 +33,7 @@ import SeverityPart from './severitypart';
 import {userSettingsRules} from './validationrules';
 
 // necessary to stretch FormGroups to full width inside of Section
-const FormGroupSizer = styled.div`
+const FormGroupSizer = styled(Column)`
   width: 100%;
 `;
 
@@ -99,7 +99,6 @@ let UserSettingsDialog = ({
   dfnCertFilter,
   onClose,
   onSave,
-  capabilities,
 }) => {
   const settings = {
     timezone,
@@ -156,6 +155,8 @@ let UserSettingsDialog = ({
     dfnCertFilter,
   };
 
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
   const [error, setError] = useState();
   const [formValues, handleValueChange] = useFormValues(settings);
 
@@ -360,6 +361,6 @@ UserSettingsDialog = connect(rootState => {
   };
 })(UserSettingsDialog);
 
-export default compose(withGmp, withCapabilities)(UserSettingsDialog);
+export default UserSettingsDialog;
 
 // vim: set ts=2 sw=2 tw=80:

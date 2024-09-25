@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from '../../utils/identity';
 
 import {setProperties, parseInt, parseSeverity} from '../../parser';

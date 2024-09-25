@@ -5,9 +5,12 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/alert.svg';
+import {Megaphone as Icon} from 'lucide-react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
-const AlertIcon = withSvgIcon()(Icon);
+const AlertIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default AlertIcon;
 

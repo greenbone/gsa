@@ -3,59 +3,99 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_l} from 'gmp/locale/lang';
+import PropTypes from 'web/utils/proptypes';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import DefaultFilterDialog from 'web/components/powerfilter/dialog';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'vector',
-    displayName: _l('Vector'),
-  },
-  {
-    name: 'complexity',
-    displayName: _l('Complexity'),
-  },
-  {
-    name: 'authentication',
-    displayName: _l('Authentication'),
-  },
-  {
-    name: 'confidentiality_impact',
-    displayName: _l('Confidentiality Impact'),
-  },
-  {
-    name: 'integrity_impact',
-    displayName: _l('Integrity Impact'),
-  },
-  {
-    name: 'availability_impact',
-    displayName: _l('Availability Impact'),
-  },
-  {
-    name: 'published',
-    displayName: _l('Published'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-  {
-    name: 'epss_score',
-    displayName: _l('EPSS Score'),
-  },
-  {
-    name: 'epss_percentile',
-    displayName: _l('EPSS Percentile'),
-  },
-];
+import useTranslation from 'web/hooks/useTranslation';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+const CvesFilterDialog = ({
+  filter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
+  ...props
+}) => {
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(filter);
+  const [handleSave] = useFilterDialogSave(
+    'info',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
 
-// vim: set ts=2 sw=2 tw=80:
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Name'),
+    },
+    {
+      name: 'vector',
+      displayName: _('Vector'),
+    },
+    {
+      name: 'complexity',
+      displayName: _('Complexity'),
+    },
+    {
+      name: 'authentication',
+      displayName: _('Authentication'),
+    },
+    {
+      name: 'confidentiality_impact',
+      displayName: _('Confidentiality Impact'),
+    },
+    {
+      name: 'integrity_impact',
+      displayName: _('Integrity Impact'),
+    },
+    {
+      name: 'availability_impact',
+      displayName: _('Availability Impact'),
+    },
+    {
+      name: 'published',
+      displayName: _('Published'),
+    },
+    {
+      name: 'severity',
+      displayName: _('Severity'),
+    },
+    {
+      name: 'epss_score',
+      displayName: _('EPSS Score'),
+    },
+    {
+      name: 'epss_percentile',
+      displayName: _('EPSS Percentile'),
+    },
+  ];
+
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      <DefaultFilterDialog
+        {...props}
+        {...filterDialogProps}
+        sortFields={SORT_FIELDS}
+      />
+    </FilterDialog>
+  );
+};
+
+CvesFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
+
+export default CvesFilterDialog;

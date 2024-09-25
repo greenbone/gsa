@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 import Button from '../button';
 
@@ -13,7 +13,9 @@ describe('Button tests', () => {
   test('should call click handler', () => {
     const handler = testing.fn();
 
-    const {element} = render(<Button onClick={handler} />);
+    render(<Button onClick={handler} />);
+
+    const element = screen.getByRole('button');
 
     fireEvent.click(element);
 
@@ -23,7 +25,9 @@ describe('Button tests', () => {
   test('should call click handler with value', () => {
     const handler = testing.fn();
 
-    const {element} = render(<Button onClick={handler} value="bar" />);
+    render(<Button onClick={handler} value="bar" />);
+
+    const element = screen.getByRole('button');
 
     fireEvent.click(element);
 
@@ -33,9 +37,9 @@ describe('Button tests', () => {
   test('should call click handler with value and name', () => {
     const handler = testing.fn();
 
-    const {element} = render(
-      <Button name="foo" value="bar" onClick={handler} />,
-    );
+    render(<Button name="foo" value="bar" onClick={handler} />);
+
+    const element = screen.getByRole('button');
 
     fireEvent.click(element);
 
@@ -45,21 +49,44 @@ describe('Button tests', () => {
   test('should render button', () => {
     const {element} = render(<Button />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render title', () => {
     const {element} = render(<Button title="foo" />);
 
-    expect(element).toHaveAttribute('title', 'foo');
     expect(element).toHaveTextContent('foo');
   });
 
-  test('should render title and children', () => {
+  test('should prefer children over title', () => {
     const {element} = render(<Button title="foo">bar</Button>);
 
-    expect(element).toHaveAttribute('title', 'foo');
     expect(element).toHaveTextContent('bar');
+  });
+
+  test('should render disabled', () => {
+    const {element} = render(<Button disabled={true} />);
+
+    expect(element).toBeDisabled();
+  });
+
+  test('should not call click handler when disabled', () => {
+    const handler = testing.fn();
+
+    render(<Button name="foo" value="bar" disabled={true} onClick={handler} />);
+
+    const element = screen.getByRole('button');
+
+    fireEvent.click(element);
+
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  test('should render loading', () => {
+    render(<Button isLoading={true} />);
+
+    const element = screen.getByRole('button');
+    expect(element).toHaveAttribute('data-loading', 'true');
   });
 });
 

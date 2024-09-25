@@ -34,8 +34,8 @@ const diff = `
 
 describe('Diff component tests', () => {
   test('should render', () => {
-    const {container} = render(<Diff>{diff}</Diff>);
+    const {element} = render(<Diff>{diff}</Diff>);
 
-    expect(container).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 });

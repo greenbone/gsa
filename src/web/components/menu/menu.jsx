@@ -3,159 +3,387 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
-import styled, {keyframes} from 'styled-components';
+import {AppNavigation} from '@greenbone/opensight-ui-components';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
+import {useMatch} from 'react-router-dom';
 
 import Link from 'web/components/link/link';
+import {
+  BarChart3,
+  Server,
+  ShieldCheck,
+  View,
+  Wrench,
+  SlidersHorizontal,
+  FileCheck,
+  CircleHelp,
+} from 'lucide-react';
+import {isDefined} from 'gmp/utils/identity';
 
-import MenuSection from 'web/components/menu/menusection';
+const Menu = () => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  const gmp = useGmp();
 
-const StyledMenu = styled.li`
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 0;
-  margin: 1px;
-  height: 35px;
-
-  &:hover {
-    border-bottom: 3px solid ${Theme.green};
+  function checkCapabilities(capabilitiesList) {
+    return capabilitiesList.reduce(
+      (sum, cur) => sum || capabilities.mayAccess(cur),
+      false,
+    );
   }
 
-  & a {
-    display: flex;
-    flex-grow: 1;
-    align-items: center ${'' /* center text vertically*/};
-  }
+  const mayOpScans = checkCapabilities([
+    'tasks',
+    'reports',
+    'results',
+    'vulns',
+    'overrides',
+    'notes',
+  ]);
 
-  & a,
-  & a:hover,
-  & a:focus,
-  & a:link {
-    text-decoration: none;
-    color: ${Theme.black};
-  }
-`;
+  const mayOpConfiguration = checkCapabilities([
+    'targets',
+    'port_lists',
+    'credentials',
+    'scan_configs',
+    'alerts',
+    'schedules',
+    'report_configs',
+    'report_formats',
+    'scanners',
+    'filters',
+    'tags',
+  ]);
 
-const DefaultEntry = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-grow: 1;
+  const mayOpResilience = checkCapabilities(['tickets', 'policies', 'audits']);
 
-  & a,
-  & a:hover,
-  & a:focus,
-  & a:link {
-    color: ${Theme.white};
-    display: block;
-    height: 35px;
-    line-height: 35px;
-    font-size: 10px;
-    font-weight: bold;
-    text-align: center;
-  }
-`;
+  const mayOpAssets = checkCapabilities(['assets', 'tls_certificates']);
 
-export const StyledMenuEntry = styled.li`
-  display: flex;
-  list-style: none;
-  background: ${Theme.white};
-  text-indent: 12px;
-  text-align: left;
-  color: ${Theme.darkGray};
-  min-height: 22px;
-  font-size: 10px;
-  font-weight: bold;
+  const useIsActive = path => Boolean(useMatch(path));
 
-  & a {
-    line-height: 22px;
-    color: ${Theme.darkGray};
-  }
+  const isUserActive = useIsActive('/users');
+  const isGroupsActive = useIsActive('/groups');
+  const isRolesActive = useIsActive('/roles');
+  const isPermissionsActive = useIsActive('/permissions');
+  const isPerformanceActive = useIsActive('/performance');
+  const isTrashcanActive = useIsActive('/trashcan');
+  const isFeedStatusActive = useIsActive('/feedstatus');
+  const isLdapActive = useIsActive('/ldap');
+  const isRadiusActive = useIsActive('/radius');
 
-  & a:hover {
-    color: ${Theme.white};
-    background: ${Theme.green};
-  }
-`;
+  const isCvssCalculatorActive = useIsActive('/cvsscalculator');
+  const isAboutActive = useIsActive('/about');
 
-const MenuList = styled.ul`
-  width: 255px;
-  z-index: ${Theme.Layers.menu};
-  position: absolute;
-  display: none;
-  background: ${Theme.green};
-  border-top: 1px solid ${Theme.mediumGray};
-  border-left: 1px solid ${Theme.mediumGray};
-  border-right: 1px solid ${Theme.mediumGray};
-  border-bottom: 1px solid ${Theme.mediumGray};
-  list-style: none;
-  padding-left: 0px;
-  margin-left: -1px;
-
-  ${StyledMenu}:hover & {
-    display: block;
-  }
-  animation: ${keyframes({
-      '0%': {
-        transform: 'scale(0.9)',
-        transformOrigin: 'top',
-        opacity: 0,
-        translateY: '0px',
+  const subNavConfigs = {
+    scans: [
+      {
+        label: 'Tasks',
+        to: '/tasks',
+        activeCondition: useIsActive('/tasks'),
       },
-      '100%': {
-        transform: 'scale(1.0)',
-        transformOrigin: 'top',
-        opacity: 1,
-        translate: 0,
+      {
+        label: 'Reports',
+        to: '/reports',
+        activeCondition: useIsActive('/reports'),
       },
-    })}
-    0.1s ease-in;
-`;
+      {
+        label: 'Results',
+        to: '/results',
+        activeCondition: useIsActive('/results'),
+      },
+      {
+        label: 'Vulnerabilities',
+        to: '/vulnerabilities',
+        activeCondition: useIsActive('/vulnerabilities'),
+      },
+      {
+        label: 'Notes',
+        to: '/notes',
+        activeCondition: useIsActive('/notes'),
+      },
+      {
+        label: 'Overrides',
+        to: '/overrides',
+        activeCondition: useIsActive('/overrides'),
+      },
+    ],
+    assets: [
+      {
+        label: 'Hosts',
+        to: '/hosts',
+        activeCondition: useIsActive('/hosts'),
+      },
+      {
+        label: 'Operating Systems',
+        to: '/operatingsystems',
+        activeCondition: useIsActive('/operatingsystems'),
+      },
+      {
+        label: 'TLS Certificates',
+        to: '/tlscertificates',
+        activeCondition: useIsActive('/tlscertificates'),
+      },
+    ],
+    resilience: [
+      {
+        label: 'Remediation Tickets',
+        to: '/tickets',
+        activeCondition: useIsActive('/tickets'),
+      },
+      {
+        label: 'Compliance Policies',
+        to: '/policies',
+        activeCondition: useIsActive('/policies'),
+      },
+      {
+        label: 'Compliance Audits',
+        to: '/audits',
+        activeCondition: useIsActive('/audits'),
+      },
+      {
+        label: 'Compliance Audit Reports',
+        to: '/auditreports',
+        activeCondition: useIsActive('/auditreports'),
+        featureEnabled: 'COMPLIANCE_REPORTS',
+      },
+    ],
+    secInfo: [
+      {
+        label: 'NVTs',
+        to: '/nvts',
+        activeCondition: useIsActive('/nvts'),
+      },
+      {
+        label: 'CVEs',
+        to: '/cves',
+        activeCondition: useIsActive('/cves'),
+      },
+      {
+        label: 'CPEs',
+        to: '/cpes',
+        activeCondition: useIsActive('/cpes'),
+      },
+      {
+        label: 'CERT-Bund Advisories',
+        to: '/certbunds',
+        activeCondition: useIsActive('/certbunds'),
+      },
+      {
+        label: 'DFN-CERT Advisories',
+        to: '/dfncerts',
+        activeCondition: useIsActive('/dfncerts'),
+      },
+    ],
+    configuration: [
+      {
+        label: 'Targets',
+        to: '/targets',
+        activeCondition: useIsActive('/targets'),
+      },
+      {
+        label: 'Port Lists',
+        to: '/portlists',
+        activeCondition: useIsActive('/portlists'),
+      },
+      {
+        label: 'Credentials',
+        to: '/credentials',
+        activeCondition: useIsActive('/credentials'),
+      },
+      {
+        label: 'Scan Configs',
+        to: '/scanconfigs',
+        activeCondition: useIsActive('/scanconfigs'),
+      },
+      {
+        label: 'Alerts',
+        to: '/alerts',
+        activeCondition: useIsActive('/alerts'),
+      },
+      {
+        label: 'Schedules',
+        to: '/schedules',
+        activeCondition: useIsActive('/schedules'),
+      },
+      {
+        label: 'Report Configs',
+        to: '/reportconfigs',
+        activeCondition: useIsActive('/reportconfigs'),
+      },
+      {
+        label: 'Report Formats',
+        to: '/reportformats',
+        activeCondition: useIsActive('/reportformats'),
+      },
+      {
+        label: 'Scanners',
+        to: '/scanners',
+        activeCondition: useIsActive('/scanners'),
+      },
+      {
+        label: 'Filters',
+        to: '/filters',
+        activeCondition: useIsActive('/filters'),
+      },
+      {
+        label: 'Tags',
+        to: '/tags',
+        activeCondition: useIsActive('/tags'),
+      },
+    ],
+  };
 
-const getFirstMenuEntry = child => {
-  // return menu entries without the MenuSection
-  if (child.type === MenuSection) {
-    return React.Children.toArray(child.props.children).find(chil => !!chil);
-  }
-  return child;
-};
+  const createMenuItemWithSubNav = (label, key, icon, config) => ({
+    label: _(label),
+    key: key,
+    icon: icon,
+    subNav: config
+      .map(({label, to, activeCondition, featureEnabled}) => ({
+        label: _(label),
+        to: to,
+        active: activeCondition,
+        visible:
+          !isDefined(featureEnabled) ||
+          capabilities.featureEnabled(featureEnabled),
+      }))
+      .filter(({visible}) => visible !== false),
+  });
 
-const Menu = ({children, title, to, ...props}) => {
-  let link;
-  children = React.Children.toArray(children).filter(hasValue);
-
-  if (isDefined(to)) {
-    link = <Link to={to}>{title}</Link>;
-  } else if (isDefined(children) && children.length > 0) {
-    let [child] = children;
-    child = getFirstMenuEntry(child);
-    link = React.cloneElement(child, {title});
-  }
-
-  const menuentries = children.map(child => (
-    <StyledMenuEntry key={child.key}>{child}</StyledMenuEntry>
-  ));
-  return (
-    <StyledMenu>
-      <DefaultEntry>{link}</DefaultEntry>
-      {isDefined(children) && children.length > 0 && (
-        <MenuList>{menuentries}</MenuList>
-      )}
-    </StyledMenu>
-  );
-};
-
-Menu.propTypes = {
-  title: PropTypes.string.isRequired,
-  to: PropTypes.string,
+  const menuPoints = [
+    [
+      {
+        label: _('Dashboards'),
+        to: '/dashboards',
+        icon: BarChart3,
+      },
+    ],
+    [
+      mayOpScans &&
+        createMenuItemWithSubNav(
+          'Scans',
+          'scans',
+          ShieldCheck,
+          subNavConfigs.scans,
+        ),
+      mayOpAssets &&
+        createMenuItemWithSubNav(
+          'Assets',
+          'assets',
+          Server,
+          subNavConfigs.assets,
+        ),
+      mayOpResilience &&
+        createMenuItemWithSubNav(
+          'Resilience',
+          'resilience',
+          FileCheck,
+          subNavConfigs.resilience,
+        ),
+      capabilities.mayAccess('info') &&
+        createMenuItemWithSubNav(
+          'Security Information',
+          'secInfo',
+          View,
+          subNavConfigs.secInfo,
+        ),
+      mayOpConfiguration &&
+        createMenuItemWithSubNav(
+          'Configuration',
+          'configuration',
+          Wrench,
+          subNavConfigs.configuration,
+        ),
+      {
+        label: _('Administration'),
+        key: 'administration',
+        icon: SlidersHorizontal,
+        subNav: [
+          capabilities.mayAccess('users') && {
+            label: _('Users'),
+            to: '/users',
+            active: isUserActive,
+          },
+          capabilities.mayAccess('groups') && {
+            label: _('Groups'),
+            to: '/groups',
+            active: isGroupsActive,
+          },
+          capabilities.mayAccess('roles') && {
+            label: _('Roles'),
+            to: '/roles',
+            active: isRolesActive,
+          },
+          capabilities.mayAccess('permissions') && {
+            label: _('Permissions'),
+            to: '/permissions',
+            active: isPermissionsActive,
+          },
+          capabilities.mayAccess('system_reports') && {
+            label: _('Performance'),
+            to: '/performance',
+            active: isPerformanceActive,
+          },
+          {
+            label: _('Trashcan'),
+            to: '/trashcan',
+            active: isTrashcanActive,
+          },
+          capabilities.mayAccess('feeds') && {
+            label: _('Feed Status'),
+            to: '/feedstatus',
+            active: isFeedStatusActive,
+          },
+          capabilities.mayOp('describe_auth') &&
+            capabilities.mayOp('modify_auth') && {
+              label: _('LDAP'),
+              to: '/ldap',
+              active: isLdapActive,
+            },
+          capabilities.mayOp('describe_auth') &&
+            capabilities.mayOp('modify_auth') && {
+              label: _('RADIUS'),
+              to: '/radius',
+              active: isRadiusActive,
+            },
+        ].filter(Boolean),
+      },
+      {
+        label: _('Help'),
+        key: 'help',
+        icon: CircleHelp,
+        subNav: [
+          {
+            label: _('User Manual'),
+            to: 'https://docs.greenbone.net/GSM-Manual/gos-22.04/en/',
+            isExternal: true,
+          },
+          {
+            label: _('CVSS Calculator'),
+            to: '/cvsscalculator',
+            active: isCvssCalculatorActive,
+          },
+          {
+            label: _('About'),
+            to: '/about',
+            active: isAboutActive,
+          },
+        ],
+      },
+    ].filter(Boolean),
+    [
+      gmp.settings.enableAssetManagement && {
+        label: _('Asset'),
+        to: '/asset-management',
+        isExternal: true,
+      },
+    ].filter(Boolean),
+  ];
+  return <AppNavigation menuPoints={menuPoints} as={Link} />;
 };
 
 export default Menu;
-
-// vim: set ts=2 sw=2 tw=80:

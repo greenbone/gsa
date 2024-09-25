@@ -5,14 +5,9 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {NO_VALUE, YES_VALUE, parseYesNo} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -27,6 +22,10 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Section from 'web/components/section/section';
 
+import Row from 'web/components/layout/row';
+
+import useTranslation from 'web/hooks/useTranslation';
+
 import PortRangesTable from './portrangestable';
 
 const FROM_FILE = YES_VALUE;
@@ -36,19 +35,22 @@ const PortListsDialog = ({
   comment = '',
   from_file = NO_VALUE,
   id,
-  name = _('Unnamed'),
+  name,
   port_list,
   port_range = 'T:1-5,7,9,U:1-3,5,7,9',
   port_ranges = [],
-  title = _('New Port List'),
+  title,
   onClose,
   onNewPortRangeClick,
   onTmpDeletePortRange,
   onSave,
 }) => {
-  const is_edit = isDefined(port_list);
+  const [_] = useTranslation();
+  const isEdit = isDefined(port_list);
+  name = name || _('Unnamed');
+  title = title || _('New Port List');
 
-  const newrangeicon = (
+  const newRangeIcon = (
     <div>
       <NewIcon
         value={port_list}
@@ -76,66 +78,58 @@ const PortListsDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                value={state.name}
-                grow="1"
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
+          <>
+            <TextField
+              name="name"
+              title={_('Name')}
+              value={state.name}
+              onChange={onValueChange}
+            />
 
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                grow="1"
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
+            <TextField
+              name="comment"
+              title={_('Comment')}
+              value={state.comment}
+              onChange={onValueChange}
+            />
 
-            {!is_edit && (
-              <FormGroup title={_('Port Ranges')} flex="column">
-                <Divider flex="column">
-                  <Divider>
-                    <Radio
-                      title={_('Manual')}
-                      name="from_file"
-                      value={NOT_FROM_FILE}
-                      onChange={onValueChange}
-                      checked={parseYesNo(state.from_file) !== FROM_FILE}
-                    />
-                    <TextField
-                      grow="1"
-                      name="port_range"
-                      value={state.port_range}
-                      disabled={parseYesNo(state.from_file) === FROM_FILE}
-                      onChange={onValueChange}
-                      size="30"
-                    />
-                  </Divider>
-                  <Divider>
-                    <Radio
-                      title={_('From file')}
-                      name="from_file"
-                      value={FROM_FILE}
-                      onChange={onValueChange}
-                      checked={parseYesNo(state.from_file) === FROM_FILE}
-                    />
-                    <FileField
-                      name="file"
-                      disabled={parseYesNo(state.from_file) !== FROM_FILE}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                </Divider>
+            {!isEdit && (
+              <FormGroup title={_('Port Ranges')}>
+                <Row>
+                  <Radio
+                    title={_('Manual')}
+                    name="from_file"
+                    value={NOT_FROM_FILE}
+                    onChange={onValueChange}
+                    checked={parseYesNo(state.from_file) !== FROM_FILE}
+                  />
+                  <TextField
+                    grow="1"
+                    name="port_range"
+                    value={state.port_range}
+                    disabled={parseYesNo(state.from_file) === FROM_FILE}
+                    onChange={onValueChange}
+                  />
+                </Row>
+                <Row>
+                  <Radio
+                    title={_('From file')}
+                    name="from_file"
+                    value={FROM_FILE}
+                    onChange={onValueChange}
+                    checked={parseYesNo(state.from_file) === FROM_FILE}
+                  />
+                  <FileField
+                    name="file"
+                    grow="1"
+                    disabled={parseYesNo(state.from_file) !== FROM_FILE}
+                    onChange={onValueChange}
+                  />
+                </Row>
               </FormGroup>
             )}
-            {is_edit && (
-              <Section title={_('Port Ranges')} extra={newrangeicon}>
+            {isEdit && (
+              <Section title={_('Port Ranges')} extra={newRangeIcon}>
                 {isDefined(port_list) && (
                   <PortRangesTable
                     portRanges={state.port_ranges}
@@ -144,7 +138,7 @@ const PortListsDialog = ({
                 )}
               </Section>
             )}
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

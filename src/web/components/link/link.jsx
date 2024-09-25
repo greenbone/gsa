@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+
 import React from 'react';
 import styled from 'styled-components';
 import {Link as RLink} from 'react-router-dom';
@@ -70,7 +71,7 @@ LinkComponent.propTypes = {
   anchor: PropTypes.string,
   filter: PropTypes.oneOfType([PropTypes.filter, PropTypes.string]),
   query: PropTypes.object,
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
 };
 
 const Link = styled(withTextOnly(LinkComponent))`

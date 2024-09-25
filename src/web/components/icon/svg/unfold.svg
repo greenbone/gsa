@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(0 -229.27)">
-  <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
-   <path class="gui_icon_class" transform="matrix(.12673 0 0 .11845 -19.96 253.7)" d="m-3.3837e-6 16v224l224.08-0.09962 31.918-159.9-32 2e-5v-32l-105.89-0.55078-32.01-32.004zm16 16.275 64-0.27539 32.01 32.004 95.99-0.003907v15.443l-192 0.2793zm0 63.725 219.28 0.27735-25.812 127.81-193.46-0.0918z"/>
-  </g>
- </g>
-</svg>

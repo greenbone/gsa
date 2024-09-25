@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -14,20 +12,18 @@ import PropTypes from 'web/utils/proptypes';
 import FormGroup from 'web/components/form/formgroup';
 import Spinner from 'web/components/form/spinner';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
+  const [_] = useTranslation();
+
   if (isDefined(filter)) {
     rows = filter.get('rows');
   }
 
   return (
     <FormGroup title={_('Results per page')}>
-      <Spinner
-        type="int"
-        name={name}
-        value={rows}
-        size="5"
-        onChange={onChange}
-      />
+      <Spinner type="int" name={name} value={rows} onChange={onChange} />
     </FormGroup>
   );
 };

@@ -5,7 +5,54 @@
 
 import React from 'react';
 
+import PropTypes from 'web/utils/proptypes';
+
 import FilterDialog from './filterdialog';
+
+import useFilterDialog from './useFilterDialog';
+import useFilterDialogSave from './useFilterDialogSave';
+
+const FilterDialogWithHandlers = ({
+  children,
+  createFilterType,
+  filter: initialFilter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterCreated,
+  onFilterChanged,
+  ...props
+}) => {
+  const filterDialogProps = useFilterDialog(initialFilter);
+  const [handleSave] = useFilterDialogSave(
+    createFilterType,
+    {
+      onFilterChanged,
+      onFilterCreated,
+      onClose,
+    },
+    filterDialogProps,
+  );
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      {() =>
+        children({
+          ...props,
+          ...filterDialogProps,
+        })
+      }
+    </FilterDialog>
+  );
+};
+
+FilterDialogWithHandlers.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+  createFilterType: PropTypes.string.isRequired,
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func.isRequired,
+  onFilterCreated: PropTypes.func.isRequired,
+};
 
 const withFilterDialog =
   ({createFilterType, ...options} = {}) =>
@@ -13,9 +60,12 @@ const withFilterDialog =
   (
     {createFilterType: createFilterTypeProp = createFilterType, ...props}, // eslint-disable-line react/prop-types
   ) => (
-    <FilterDialog {...props} createFilterType={createFilterTypeProp}>
+    <FilterDialogWithHandlers
+      {...props}
+      createFilterType={createFilterTypeProp}
+    >
       {dialogProps => <FilterDialogComponent {...options} {...dialogProps} />}
-    </FilterDialog>
+    </FilterDialogWithHandlers>
   );
 
 export default withFilterDialog;

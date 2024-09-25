@@ -5,29 +5,16 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
+import {render, fireEvent, screen} from 'web/utils/testing';
+
 import {
-  render,
-  fireEvent,
-  queryAllByTestId,
-  getByTestId,
-} from 'web/utils/testing';
+  getSelectElement,
+  getSelectItemElements,
+  openSelectElement,
+  clickElement,
+} from 'web/components/testing';
 
-import Select from '../select';
-
-export const openSelectElement = element => {
-  const openButton = getByTestId(element, 'select-open-button');
-  fireEvent.click(openButton);
-};
-
-export const getItemElements = baseElement => {
-  const portal = baseElement.querySelector('#portals');
-  return queryAllByTestId(portal, 'select-item');
-};
-
-export const getInputBox = baseElement => {
-  const portal = baseElement.querySelector('#portals');
-  return getByTestId(portal, 'select-search-input');
-};
+import Select, {SelectItem} from '../select';
 
 describe('Select component tests', () => {
   test('should render', () => {
@@ -36,7 +23,7 @@ describe('Select component tests', () => {
     expect(element).toBeVisible();
   });
 
-  test('should render with items', () => {
+  test('should render with items', async () => {
     const items = [
       {
         value: 'bar',
@@ -47,22 +34,23 @@ describe('Select component tests', () => {
         label: 'Foo',
       },
     ];
-    const {element, baseElement} = render(<Select items={items} />);
 
-    let domItems = getItemElements(baseElement);
+    render(<Select items={items} />);
 
-    expect(domItems.length).toEqual(0);
+    const element = getSelectElement();
 
-    openSelectElement(element);
+    expect(getSelectItemElements().length).toEqual(0);
 
-    domItems = getItemElements(baseElement);
+    await openSelectElement(element);
+
+    const domItems = getSelectItemElements();
 
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
     expect(domItems[1]).toHaveTextContent('Foo');
   });
 
-  test('should render loading', () => {
+  test('should render loading', async () => {
     const items = [
       {
         value: '0',
@@ -70,22 +58,20 @@ describe('Select component tests', () => {
       },
     ];
 
-    const {element, baseElement} = render(
-      <Select items={items} isLoading={true} />,
-    );
+    render(<Select items={items} isLoading={true} />);
 
-    expect(element).toHaveTextContent('Loading...');
+    const element = getSelectElement();
 
-    let domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(0);
+    expect(element).toHaveAttribute('placeholder', 'Loading...');
 
-    openSelectElement(element);
+    expect(getSelectItemElements().length).toEqual(0);
 
-    domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(0);
+    await openSelectElement(element);
+
+    expect(getSelectItemElements().length).toEqual(0);
   });
 
-  test('should render invalid state', () => {
+  test('should render error', () => {
     const items = [
       {
         value: '0',
@@ -93,13 +79,14 @@ describe('Select component tests', () => {
       },
     ];
 
-    const {element} = render(<Select hsaError={true} items={items} />);
+    render(<Select errorContent="Some Error" items={items} />);
 
-    expect(element).toHaveTextContent('×');
-    expect(element).toHaveStyleRule('background-color: #f2dede');
+    getSelectElement();
+
+    expect(screen.getByText('Some Error')).toBeVisible();
   });
 
-  test('should call onChange handler', () => {
+  test('should call onChange handler', async () => {
     const items = [
       {
         value: 'bar',
@@ -113,23 +100,20 @@ describe('Select component tests', () => {
 
     const onChange = testing.fn();
 
-    const {element, baseElement} = render(
-      <Select items={items} onChange={onChange} />,
-    );
+    render(<Select items={items} onChange={onChange} />);
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    const domItems = getItemElements(baseElement);
+    const domItems = getSelectItemElements();
 
     expect(domItems.length).toEqual(2);
 
-    fireEvent.click(domItems[0]);
+    await clickElement(domItems[0]);
 
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('bar', undefined);
+    expect(onChange).toHaveBeenCalledWith('bar', undefined);
   });
 
-  test('should call onChange handler with name', () => {
+  test('should call onChange handler with name', async () => {
     const items = [
       {
         value: 'bar',
@@ -143,21 +127,18 @@ describe('Select component tests', () => {
 
     const onChange = testing.fn();
 
-    const {element, baseElement} = render(
-      <Select name="abc" items={items} onChange={onChange} />,
-    );
+    render(<Select name="abc" items={items} onChange={onChange} />);
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    const domItems = getItemElements(baseElement);
+    const domItems = getSelectItemElements();
 
-    fireEvent.click(domItems[0]);
+    await clickElement(domItems[0]);
 
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('bar', 'abc');
+    expect(onChange).toHaveBeenCalledWith('bar', 'abc');
   });
 
-  test('should change value', () => {
+  test('should render value', async () => {
     const items = [
       {
         value: 'bar',
@@ -171,25 +152,41 @@ describe('Select component tests', () => {
 
     const onChange = testing.fn();
 
-    // eslint-disable-next-line no-shadow
-    const {baseElement, element, getByTestId} = render(
-      <Select items={items} value="bar" onChange={onChange} />,
-    );
+    render(<Select items={items} value="bar" onChange={onChange} />);
 
-    const displayedValue = getByTestId('select-selected-value');
-    expect(displayedValue).toHaveTextContent('Bar');
+    const input = getSelectElement();
 
-    openSelectElement(element);
-
-    const domItems = getItemElements(baseElement);
-
-    fireEvent.click(domItems[1]);
-
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('foo', undefined);
+    expect(input).toHaveValue('Bar');
   });
 
-  test('should filter items', () => {
+  test('should call change handler when changing item', async () => {
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
+
+    const onChange = testing.fn();
+
+    render(<Select items={items} value="bar" onChange={onChange} />);
+
+    const input = getSelectElement();
+
+    await openSelectElement(input);
+
+    const domItems = getSelectItemElements();
+
+    await clickElement(domItems[1]);
+
+    expect(onChange).toHaveBeenCalledWith('foo', undefined);
+  });
+
+  test('should filter items', async () => {
     const items = [
       {
         value: 'bar',
@@ -205,25 +202,42 @@ describe('Select component tests', () => {
       },
     ];
 
-    const {element, baseElement} = render(<Select items={items} value="bar" />);
+    render(<Select items={items} value="bar" />);
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    let domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(3);
+    expect(getSelectItemElements().length).toEqual(3);
 
-    const input = getInputBox(baseElement);
+    const input = getSelectElement();
 
     fireEvent.change(input, {target: {value: 'ba'}});
 
-    domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(2);
+    expect(getSelectItemElements().length).toEqual(2);
 
     fireEvent.change(input, {target: {value: 'F'}});
 
-    domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(1);
+    expect(getSelectItemElements().length).toEqual(1);
+  });
+  describe('SelectItemRaw', () => {
+    test.each([
+      {
+        label: 'Test Item',
+        deprecated: '1',
+        expectedText: 'Test Item (Deprecated)',
+      },
+      {
+        label: 'Non-deprecated Item',
+        deprecated: undefined,
+        expectedText: 'Non-deprecated Item',
+      },
+    ])(
+      'renders $label correctly with deprecated status $deprecated',
+      ({label, deprecated, expectedText}) => {
+        const {getByText} = render(
+          <SelectItem label={label} deprecated={deprecated} />,
+        );
+        expect(getByText(expectedText)).toBeInTheDocument();
+      },
+    );
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

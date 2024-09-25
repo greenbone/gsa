@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 /*
  * The CancelToken class is based on the cancelable-promises tc39 proposal
  *

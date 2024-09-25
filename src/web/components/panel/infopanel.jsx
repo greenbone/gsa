@@ -10,7 +10,7 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import DeleteIcon from 'web/components/icon/deleteicon';
+import XIcon from 'web/components/icon/XIcon';
 
 import {styledExcludeProps} from 'web/utils/styledConfig';
 import PropTypes from 'web/utils/proptypes';
@@ -72,8 +72,8 @@ const InfoPanel = ({
         <Heading data-testid="infopanel-heading" isWarning={isWarning}>
           {heading}
           {isDefined(onCloseClick) && (
-            <Button onClick={onCloseClick}>
-              <DeleteIcon />
+            <Button data-testid="panel-close-button" onClick={onCloseClick}>
+              <XIcon />
             </Button>
           )}
         </Heading>
@@ -85,6 +85,7 @@ const InfoPanel = ({
 };
 
 InfoPanel.propTypes = {
+  children: PropTypes.element,
   footer: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   heading: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   isWarning: PropTypes.bool,

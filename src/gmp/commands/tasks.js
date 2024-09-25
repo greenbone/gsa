@@ -13,6 +13,7 @@ import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
 } from 'gmp/models/task';
+import {FeedStatus} from './feedstatus';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -24,21 +25,28 @@ export class TaskCommand extends EntityCommand {
     super(http, 'task', Task);
   }
 
-  start({id}) {
+  async start({id}) {
     log.debug('Starting task...');
 
-    return this.httpPost({
-      cmd: 'start_task',
-      id,
-    })
-      .then(() => {
-        log.debug('Started task');
-        return this.get({id});
-      })
-      .catch(err => {
-        log.error('An error occurred while starting the task', id, err);
-        throw err;
+    try {
+      const feeds = new FeedStatus(this.http);
+
+      const status = await feeds.checkFeedSync();
+
+      if (status.isSyncing) {
+        throw new Error('Feed is currently syncing. Please try again later.');
+      }
+
+      await this.httpPost({
+        cmd: 'start_task',
+        id,
       });
+
+      log.debug('Started task');
+    } catch (error) {
+      log.error('An error occurred while starting the task', id, error);
+      throw error;
+    }
   }
 
   stop({id}) {

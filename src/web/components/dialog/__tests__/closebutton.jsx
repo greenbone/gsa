@@ -18,7 +18,6 @@ describe('Dialog CloseButton tests', () => {
   test('should render', () => {
     const {element} = render(<CloseButton onClick={() => {}} />);
 
-    expect(element).toMatchSnapshot();
     expect(element).toHaveAttribute('title', 'Close');
     expect(element).toHaveStyleRule('height', ICON_SIZE_MEDIUM_PIXELS);
     expect(element).toHaveStyleRule('width', ICON_SIZE_MEDIUM_PIXELS);

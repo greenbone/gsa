@@ -6,19 +6,14 @@
 import React, {useState} from 'react';
 import {selectSaveId} from 'gmp/utils/id';
 
-import _ from 'gmp/locale';
-
 import {
   SSH_CREDENTIAL_TYPES,
   ssh_credential_filter,
 } from 'gmp/models/credential';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 
-import useCapabilities from "web/hooks/useCapabilities";
+import useCapabilities from 'web/hooks/useCapabilities';
 import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
@@ -29,6 +24,8 @@ import TextField from 'web/components/form/textfield';
 import TextArea from 'web/components/form/textarea';
 
 import NewIcon from 'web/components/icon/newicon';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const ScpMethodPart = ({
   prefix,
@@ -47,6 +44,8 @@ const ScpMethodPart = ({
   onNewCredentialClick,
 }) => {
   const capabilities = useCapabilities();
+  const [_] = useTranslation();
+
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, scpReportFormat),
   );
@@ -72,24 +71,21 @@ const ScpMethodPart = ({
 
   credentials = credentials.filter(ssh_credential_filter);
   return (
-    <Layout flex="column" grow="1">
-      <FormGroup title={_('Credential')}>
-        <Divider>
-          <Select
-            name={prefix + 'scp_credential'}
-            value={scpCredential}
-            items={renderSelectItems(credentials)}
-            onChange={onCredentialChange}
-          />
-          <Layout>
-            <NewIcon
-              size="small"
-              value={SSH_CREDENTIAL_TYPES}
-              title={_('Create a credential')}
-              onClick={onNewCredentialClick}
-            />
-          </Layout>
-        </Divider>
+    <>
+      <FormGroup title={_('Credential')} direction="row">
+        <Select
+          grow="1"
+          name={prefix + 'scp_credential'}
+          value={scpCredential}
+          items={renderSelectItems(credentials)}
+          onChange={onCredentialChange}
+        />
+        <NewIcon
+          size="small"
+          value={SSH_CREDENTIAL_TYPES}
+          title={_('Create a credential')}
+          onClick={onNewCredentialClick}
+        />
       </FormGroup>
 
       <FormGroup title={_('Host')}>
@@ -138,10 +134,11 @@ const ScpMethodPart = ({
           items={renderSelectItems(reportFormats)}
           onChange={handleReportFormatIdChange}
         />
-        {
-          capabilities.mayOp('get_report_configs') &&
+        {capabilities.mayOp('get_report_configs') && (
           <>
-            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <label htmlFor="report-config-select">
+              &nbsp; Report Config &nbsp;
+            </label>
             <Select
               name={prefix + 'scp_report_config'}
               id="report-config-select"
@@ -150,9 +147,9 @@ const ScpMethodPart = ({
               onChange={handleReportConfigIdChange}
             />
           </>
-        }
+        )}
       </FormGroup>
-    </Layout>
+    </>
   );
 };
 

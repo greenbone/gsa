@@ -9,6 +9,14 @@ import Nvt from 'gmp/models/nvt';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
+import {
+  clickElement,
+  getDialog,
+  getDialogSaveButton,
+  getTableBody,
+  getTableHeader,
+} from 'web/components/testing';
+
 import EditConfigFamilyDialog from '../editconfigfamilydialog';
 
 const nvt = Nvt.fromElement({
@@ -106,7 +114,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {getByTestId} = render(
+    render(
       <EditConfigFamilyDialog
         configId="c1"
         configName="foo"
@@ -122,7 +130,7 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -230,7 +238,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith(nvt.id);
   });
 
-  test('should sort table', () => {
+  test('should sort table', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
@@ -242,7 +250,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     };
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement} = render(
+    render(
       <EditConfigFamilyDialog
         configId="c1"
         configName="foo"
@@ -257,52 +265,66 @@ describe('EditConfigFamilyDialog component tests', () => {
         onSave={handleSave}
       />,
     );
+    const getOidColumn = row => row.querySelectorAll('td')[1];
 
-    let inputs = baseElement.querySelectorAll('input');
+    const dialog = getDialog();
+    const tableHeader = getTableHeader(dialog);
+    const tableBody = getTableBody(dialog);
+    let rows = tableBody.querySelectorAll('tr');
+    const columns = tableHeader.querySelectorAll('a');
 
-    expect(inputs[0]).toHaveAttribute('name', '1234');
-    expect(inputs[1]).toHaveAttribute('name', '5678');
-    expect(inputs[2]).toHaveAttribute('name', '2345');
+    expect(getOidColumn(rows[0])).toHaveTextContent('1234');
+    expect(getOidColumn(rows[1])).toHaveTextContent('5678');
+    expect(getOidColumn(rows[2])).toHaveTextContent('2345');
 
-    const columns = baseElement.querySelectorAll('a');
-    fireEvent.click(columns[0]);
+    // sort by name column desc
+    expect(columns[0]).toHaveTextContent('Name');
+    await clickElement(columns[0]);
 
-    inputs = baseElement.querySelectorAll('input');
+    rows = tableBody.querySelectorAll('tr');
 
-    expect(inputs[0]).toHaveAttribute('name', '2345');
-    expect(inputs[1]).toHaveAttribute('name', '5678');
-    expect(inputs[2]).toHaveAttribute('name', '1234');
+    expect(getOidColumn(rows[0])).toHaveTextContent('2345');
+    expect(getOidColumn(rows[1])).toHaveTextContent('5678');
+    expect(getOidColumn(rows[2])).toHaveTextContent('1234');
 
-    fireEvent.click(columns[1]);
+    // sort by oid column
+    expect(columns[1]).toHaveTextContent('OID');
+    await clickElement(columns[1]);
 
-    inputs = baseElement.querySelectorAll('input');
+    rows = tableBody.querySelectorAll('tr');
 
-    expect(inputs[0]).toHaveAttribute('name', '1234');
-    expect(inputs[1]).toHaveAttribute('name', '2345');
-    expect(inputs[2]).toHaveAttribute('name', '5678');
+    expect(getOidColumn(rows[0])).toHaveTextContent('1234');
+    expect(getOidColumn(rows[1])).toHaveTextContent('2345');
+    expect(getOidColumn(rows[2])).toHaveTextContent('5678');
 
-    fireEvent.click(columns[2]);
+    // sort by severity column
+    expect(columns[2]).toHaveTextContent('Severity');
+    await clickElement(columns[2]);
 
-    inputs = baseElement.querySelectorAll('input');
+    rows = tableBody.querySelectorAll('tr');
 
-    expect(inputs[0]).toHaveAttribute('name', '2345');
-    expect(inputs[1]).toHaveAttribute('name', '1234');
-    expect(inputs[2]).toHaveAttribute('name', '5678');
+    expect(getOidColumn(rows[0])).toHaveTextContent('2345');
+    expect(getOidColumn(rows[1])).toHaveTextContent('1234');
+    expect(getOidColumn(rows[2])).toHaveTextContent('5678');
 
-    fireEvent.click(columns[3]);
+    // sort by timeout column
+    expect(columns[3]).toHaveTextContent('Timeout');
+    await clickElement(columns[3]);
 
-    inputs = baseElement.querySelectorAll('input');
+    rows = tableBody.querySelectorAll('tr');
 
-    expect(inputs[0]).toHaveAttribute('name', '1234');
-    expect(inputs[1]).toHaveAttribute('name', '5678');
-    expect(inputs[2]).toHaveAttribute('name', '2345');
+    expect(getOidColumn(rows[0])).toHaveTextContent('1234');
+    expect(getOidColumn(rows[1])).toHaveTextContent('5678');
+    expect(getOidColumn(rows[2])).toHaveTextContent('2345');
 
+    // sort by selected column
+    expect(columns[4]).toHaveTextContent('Selected');
     fireEvent.click(columns[4]);
 
-    inputs = baseElement.querySelectorAll('input');
+    rows = tableBody.querySelectorAll('tr');
 
-    expect(inputs[0]).toHaveAttribute('name', '5678');
-    expect(inputs[1]).toHaveAttribute('name', '1234');
-    expect(inputs[2]).toHaveAttribute('name', '2345');
+    expect(getOidColumn(rows[0])).toHaveTextContent('5678');
+    expect(getOidColumn(rows[1])).toHaveTextContent('1234');
+    expect(getOidColumn(rows[2])).toHaveTextContent('2345');
   });
 });

@@ -3,25 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback} from 'react';
+import {useEffect, useCallback} from 'react';
+import {isDefined} from 'gmp/utils/identity';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import {setLocale as setGlobalLocale} from 'gmp/locale/lang';
+import {
+  setLocale as setGlobalLocale,
+  getLocale as getGlobalLocal,
+} from 'gmp/locale/lang';
 
 import {setLocale} from 'web/store/usersettings/actions';
 import {getLocale} from 'web/store/usersettings/selectors';
 
 async function wait(ms = 0) {
-  new Promise(resolve => {
+  return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
 }
 /**
  * Hook to get current locale and allow to change it
  *
- * @returns Array of the current locale and a function to change the locale
+ * @returns {[string, function]} Current locale and a function to change it.
  */
+
 const useLocale = () => {
   const dispatch = useDispatch();
   const currentLocale = useSelector(getLocale);
@@ -39,6 +44,15 @@ const useLocale = () => {
     },
     [currentLocale, dispatch],
   );
+
+  // Effect to initialize the locale if it's not already defined
+  useEffect(() => {
+    if (!isDefined(currentLocale)) {
+      const locale = getGlobalLocal();
+      changeLocale(locale);
+    }
+  }, [currentLocale, changeLocale]);
+
   return [currentLocale, changeLocale];
 };
 

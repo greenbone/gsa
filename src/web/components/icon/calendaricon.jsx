@@ -5,9 +5,12 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/calendar.svg';
+import {Calendar as Icon} from 'lucide-react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
-const CalendarIcon = withSvgIcon()(Icon);
+const CalendarIcon = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+));
 
 export default CalendarIcon;
 

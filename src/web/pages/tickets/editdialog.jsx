@@ -5,14 +5,11 @@
 
 import React, {useState} from 'react';
 
-import _ from 'gmp/locale';
-
 import {TICKET_STATUS, TICKET_STATUS_TRANSLATIONS} from 'gmp/models/ticket';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
-import Layout from 'web/components/layout/layout';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import useFormValidation from 'web/components/form/useFormValidation';
@@ -21,14 +18,11 @@ import useFormValues from 'web/components/form/useFormValues';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 import {editTicketRules as validationRules} from './validationrules';
 
 const STATUS = [TICKET_STATUS.open, TICKET_STATUS.fixed, TICKET_STATUS.closed];
-
-const STATUS_ITEMS = STATUS.map(status => ({
-  value: status,
-  label: TICKET_STATUS_TRANSLATIONS[status],
-}));
 
 const fieldsToValidate = ['openNote', 'closedNote', 'fixedNote'];
 
@@ -37,13 +31,14 @@ const EditTicketDialog = ({
   fixedNote = '',
   openNote = '',
   ticketId,
-  title = _('Edit Ticket'),
+  title,
   status,
   userId,
   users,
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const [error, setError] = useState();
   const [formValues, handleValueChange] = useFormValues({
     ticketId,
@@ -53,15 +48,17 @@ const EditTicketDialog = ({
     status,
     userId,
   });
-  const {errors, hasError, validate} = useFormValidation(
-    validationRules,
-    formValues,
-    {
-      onValidationSuccess: onSave,
-      onValidationError: setError,
-      fieldsToValidate,
-    },
-  );
+  const {errors, validate} = useFormValidation(validationRules, formValues, {
+    onValidationSuccess: onSave,
+    onValidationError: setError,
+    fieldsToValidate,
+  });
+  const STATUS_ITEMS = STATUS.map(ticketStatus => ({
+    value: ticketStatus,
+    label: `${TICKET_STATUS_TRANSLATIONS[ticketStatus]}`,
+  }));
+
+  title = title || _('Edit Ticket');
 
   return (
     <SaveDialog
@@ -73,7 +70,7 @@ const EditTicketDialog = ({
       values={formValues}
     >
       {({values}) => (
-        <Layout flex="column">
+        <>
           <FormGroup title={_('Status')}>
             <Select
               name="status"
@@ -92,38 +89,32 @@ const EditTicketDialog = ({
           </FormGroup>
           <FormGroup title={_('Note for Open')}>
             <TextArea
-              hasError={hasError && !!errors.openNote}
               errorContent={errors.openNote}
               name="openNote"
-              grow="1"
-              rows="5"
+              maxRows="5"
               value={values.openNote}
               onChange={handleValueChange}
             />
           </FormGroup>
           <FormGroup title={_('Note for Fixed')}>
             <TextArea
-              hasError={hasError && !!errors.fixedNote}
               errorContent={errors.fixedNote}
               name="fixedNote"
-              grow="1"
-              rows="5"
+              maxRows="5"
               value={values.fixedNote}
               onChange={handleValueChange}
             />
           </FormGroup>
           <FormGroup title={_('Note for Closed')}>
             <TextArea
-              hasError={hasError && !!errors.closedNote}
               errorContent={errors.closedNote}
               name="closedNote"
-              grow="1"
-              rows="5"
+              maxRows="5"
               value={values.closedNote}
               onChange={handleValueChange}
             />
           </FormGroup>
-        </Layout>
+        </>
       )}
     </SaveDialog>
   );
