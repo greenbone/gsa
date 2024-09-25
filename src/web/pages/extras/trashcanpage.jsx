@@ -233,6 +233,7 @@ class Trashcan extends React.Component {
 
   closeEmptyTrashDialog = () => {
     this.setState({isEmptyTrashDialogVisible: false});
+    this.setState({error: undefined});
   };
 
   createContentsTable(trash) {

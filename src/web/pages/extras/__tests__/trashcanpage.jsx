@@ -7,8 +7,16 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import {userEvent, rendererWith, waitFor} from 'web/utils/testing';
 
-import Trashcanpage from 'web/pages/extras/TrashcanPage';
+import TrashcanPage from 'web/pages/extras/trashcanpage';
 import Capabilities from 'gmp/capabilities/capabilities';
+
+/*
+ * The following is a workaround for userEvent v14 and fake timers https://github.com/testing-library/react-testing-library/issues/1197
+ */
+
+testing.useFakeTimers({
+  shouldAdvanceTime: true,
+});
 
 const gmp = {
   trashcan: {
@@ -41,7 +49,7 @@ describe('Trashcan page tests', () => {
       store: true,
     });
 
-    const {getByText, queryByTestId, getByRole} = render(<Trashcanpage />);
+    const {getByText, queryByTestId, getByRole} = render(<TrashcanPage />);
     expect(queryByTestId('loading')).toBeVisible();
     await waitFor(() => {
       expect(queryByTestId('loading')).not.toBeInTheDocument();
@@ -59,11 +67,13 @@ describe('Trashcan page tests', () => {
 
     const confirmButton = getByRole('button', {name: /Confirm/i});
 
-    userEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     await waitFor(() => {
       expect(gmp.trashcan.empty).toHaveBeenCalled();
     });
+
+    testing.advanceTimersByTime(1000);
 
     await waitFor(() => {
       expect(confirmButton).not.toBeVisible();
@@ -86,7 +96,7 @@ describe('Trashcan page tests', () => {
       store: true,
     });
 
-    const {getByText, queryByTestId, getByRole} = render(<Trashcanpage />);
+    const {getByText, queryByTestId, getByRole} = render(<TrashcanPage />);
     expect(queryByTestId('loading')).toBeVisible();
     await waitFor(() => {
       expect(queryByTestId('loading')).not.toBeInTheDocument();
@@ -104,19 +114,15 @@ describe('Trashcan page tests', () => {
 
     const confirmButton = getByRole('button', {name: /Confirm/i});
 
-    userEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
-    await waitFor(() => {
-      expect(errorGmp.trashcan.empty).toHaveBeenCalled();
-    });
+    expect(errorGmp.trashcan.empty).toHaveBeenCalled();
 
-    await waitFor(() => {
-      expect(
-        getByText(
-          'An error occurred while emptying the trash, please try again.',
-        ),
-      ).toBeVisible();
-    });
+    expect(
+      getByText(
+        'An error occurred while emptying the trash, please try again.',
+      ),
+    ).toBeVisible();
   });
 
   test('Should render open and close dialog', async () => {
@@ -126,7 +132,7 @@ describe('Trashcan page tests', () => {
       store: true,
     });
 
-    const {getByText, queryByTestId, getByRole} = render(<Trashcanpage />);
+    const {getByText, queryByTestId, getByRole} = render(<TrashcanPage />);
     expect(queryByTestId('loading')).toBeVisible();
     await waitFor(() => {
       expect(queryByTestId('loading')).not.toBeInTheDocument();
@@ -135,19 +141,16 @@ describe('Trashcan page tests', () => {
       name: /Empty Trash/i,
     });
 
-    userEvent.click(emptyTrashcanButton);
-    await waitFor(() => {
-      expect(
-        getByText('Are you sure you want to empty the trash?'),
-      ).toBeVisible();
-    });
+    await userEvent.click(emptyTrashcanButton);
+
+    expect(
+      getByText('Are you sure you want to empty the trash?'),
+    ).toBeVisible();
 
     const cancelButton = getByRole('button', {name: /Cancel/i});
 
-    userEvent.click(cancelButton);
+    await userEvent.click(cancelButton);
 
-    await waitFor(() => {
-      expect(cancelButton).not.toBeVisible();
-    });
+    expect(cancelButton).not.toBeVisible();
   });
 });
