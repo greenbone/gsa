@@ -68,7 +68,7 @@ describe('RADIUS dialog component tests', () => {
     expect(handleClose).toHaveBeenCalled();
   });
 
-  test('should allow to change data', () => {
+  test('should allow to change data', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
@@ -85,10 +85,10 @@ describe('RADIUS dialog component tests', () => {
     fireEvent.click(checkBox);
 
     const radiusHostTextField = getByTestId('radiushost-textfield');
-    userEvent.type(radiusHostTextField, 'lorem');
+    await userEvent.type(radiusHostTextField, 'lorem');
 
     const radiusKeyTextField = getByTestId('radiuskey-textfield');
-    userEvent.type(radiusKeyTextField, 'bar');
+    await userEvent.type(radiusKeyTextField, 'bar');
 
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);

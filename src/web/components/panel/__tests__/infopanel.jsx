@@ -84,7 +84,7 @@ describe('InfoPanel tests', () => {
     expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
   });
 
-  test('should call click handler', () => {
+  test('should call click handler', async () => {
     const handleCloseClick = testing.fn();
     const {queryByRole} = render(
       <InfoPanel
@@ -98,7 +98,7 @@ describe('InfoPanel tests', () => {
 
     expect(closeButton).toBeInTheDocument();
 
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
     expect(handleCloseClick).toHaveBeenCalled();
   });
