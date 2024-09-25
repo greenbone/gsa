@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import {format as d3format} from 'd3-format';
 
@@ -66,9 +66,9 @@ export class TasksMostHighResultsDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {history} = this.props;
+    const {navigate} = this.props;
 
-    history.push(`/task/${data.id}`);
+    navigate(`/task/${data.id}`);
   }
 
   render() {
@@ -107,7 +107,7 @@ export class TasksMostHighResultsDisplay extends React.Component {
 
 TasksMostHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
 TasksMostHighResultsDisplay = compose(

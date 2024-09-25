@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -312,9 +311,9 @@ Details.propTypes = {
 class Page extends React.Component {
   componentDidUpdate() {
     // eslint-disable-next-line no-unused-vars
-    const {entity, history, ...props} = this.props;
+    const {entity, navigate, ...props} = this.props;
     if (isDefined(entity) && entity.usageType === 'audit') {
-      return history.replace('/audit/' + entity.id);
+      return navigate('/audit/' + entity.id, {replace: true});
     }
   }
 
@@ -440,7 +439,7 @@ class Page extends React.Component {
 
 Page.propTypes = {
   entity: PropTypes.model,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,

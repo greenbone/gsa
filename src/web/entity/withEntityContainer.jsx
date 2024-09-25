@@ -7,7 +7,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import Filter from 'gmp/models/filter';
 
@@ -45,71 +45,70 @@ export const permissionsSubjectFilter = id =>
       id,
   ).all();
 
-const withEntityContainer = (
-  entityType,
-  {
-    load,
-    entitySelector,
-    mapStateToProps: componentMapStateToProps,
-    reloadInterval = defaultEntityReloadIntervalFunc,
-  },
-) => Component => {
-  const EntityContainerWrapper = props => (
-    <Reload
-      reloadInterval={() => reloadInterval(props)}
-      reload={(id = props.id) => props.load(id)}
-      name={entityType}
-    >
-      {({reload}) => (
-        <EntityContainer {...props} entityType={entityType} reload={reload}>
-          {cprops => <Component {...cprops} />}
-        </EntityContainer>
-      )}
-    </Reload>
-  );
+const withEntityContainer =
+  (
+    entityType,
+    {
+      load,
+      entitySelector,
+      mapStateToProps: componentMapStateToProps,
+      reloadInterval = defaultEntityReloadIntervalFunc,
+    },
+  ) =>
+  Component => {
+    const EntityContainerWrapper = props => (
+      <Reload
+        reloadInterval={() => reloadInterval(props)}
+        reload={(id = props.id) => props.load(id)}
+        name={entityType}
+      >
+        {({reload}) => (
+          <EntityContainer {...props} entityType={entityType} reload={reload}>
+            {cprops => <Component {...cprops} />}
+          </EntityContainer>
+        )}
+      </Reload>
+    );
 
-  EntityContainerWrapper.propTypes = {
-    id: PropTypes.id.isRequired,
-    load: PropTypes.func.isRequired,
-  };
-
-  const mapDispatchToProps = (dispatch, {gmp}) => ({
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-    load: id => dispatch(load(gmp)(id)),
-  });
-
-  const mapStateToProps = (rootState, {gmp, id, match, ...props}) => {
-    if (!isDefined(id)) {
-      id = decodeURIComponent(match.params.id); // decodeURIComponent needs to be done for CPE IDs
-    }
-    const entitySel = entitySelector(rootState);
-    const otherProps = isDefined(componentMapStateToProps)
-      ? componentMapStateToProps(rootState, {
-          gmp,
-          id,
-          ...props,
-        })
-      : undefined;
-    return {
-      isLoading: entitySel.isLoadingEntity(id),
-      ...otherProps,
-      id,
-      entity: entitySel.getEntity(id),
-      entityError: entitySel.getEntityError(id),
+    EntityContainerWrapper.propTypes = {
+      id: PropTypes.id.isRequired,
+      load: PropTypes.func.isRequired,
     };
-  };
 
-  return compose(
-    withGmp,
-    withRouter,
-    withDialogNotification,
-    withDownload,
-    connect(
-      mapStateToProps,
-      mapDispatchToProps,
-    ),
-  )(EntityContainerWrapper);
-};
+    const mapDispatchToProps = (dispatch, {gmp}) => ({
+      onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+      load: id => dispatch(load(gmp)(id)),
+    });
+
+    const mapStateToProps = (rootState, {gmp, id, params, ...props}) => {
+      if (!isDefined(id)) {
+        id = decodeURIComponent(params.id); // decodeURIComponent needs to be done for CPE IDs
+      }
+      const entitySel = entitySelector(rootState);
+      const otherProps = isDefined(componentMapStateToProps)
+        ? componentMapStateToProps(rootState, {
+            gmp,
+            id,
+            ...props,
+          })
+        : undefined;
+      return {
+        isLoading: entitySel.isLoadingEntity(id),
+        ...otherProps,
+        id,
+        entity: entitySel.getEntity(id),
+        entityError: entitySel.getEntityError(id),
+      };
+    };
+
+    return compose(
+      withGmp,
+      withRouter,
+      withDialogNotification,
+      withDownload,
+      connect(mapStateToProps, mapDispatchToProps),
+    )(EntityContainerWrapper);
+  };
 
 export default withEntityContainer;
 

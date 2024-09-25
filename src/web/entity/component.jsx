@@ -23,14 +23,16 @@ import {generateFilename} from 'web/utils/render';
 
 import withGmp from 'web/utils/withGmp';
 
-export const goto_details = (type, props) => ({data}) => {
-  const {history} = props;
-  return history.push('/' + type + '/' + data.id);
-};
+export const goto_details =
+  (type, props) =>
+  ({data}) => {
+    const {navigate} = props;
+    return navigate('/' + type + '/' + data.id);
+  };
 
 export const goto_list = (type, props) => () => {
-  const {history} = props;
-  return history.push('/' + type);
+  const {navigate} = props;
+  return navigate('/' + type);
 };
 
 class EntityComponent extends React.Component {
@@ -173,10 +175,7 @@ const mapDispatchToProps = (dispatch, {name, gmp}) => {
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(EntityComponent);
 
 // vim: set ts=2 sw=2 tw=80:

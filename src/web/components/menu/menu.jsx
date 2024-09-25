@@ -10,7 +10,7 @@ import {AppNavigation} from '@greenbone/opensight-ui-components';
 import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
-import {useRouteMatch} from 'react-router-dom';
+import {useMatch} from 'react-router-dom';
 
 import Link from 'web/components/link/link';
 import {
@@ -23,6 +23,7 @@ import {
   FileCheck,
   CircleHelp,
 } from 'lucide-react';
+import {isDefined} from 'gmp/utils/identity';
 
 const Menu = () => {
   const [_] = useTranslation();
@@ -63,7 +64,7 @@ const Menu = () => {
 
   const mayOpAssets = checkCapabilities(['assets', 'tls_certificates']);
 
-  const useIsActive = path => Boolean(useRouteMatch(path));
+  const useIsActive = path => Boolean(useMatch(path));
 
   const isUserActive = useIsActive('/users');
   const isGroupsActive = useIsActive('/groups');
@@ -143,6 +144,12 @@ const Menu = () => {
         label: 'Compliance Audits',
         to: '/audits',
         activeCondition: useIsActive('/audits'),
+      },
+      {
+        label: 'Compliance Audit Reports',
+        to: '/auditreports',
+        activeCondition: useIsActive('/auditreports'),
+        featureEnabled: 'COMPLIANCE_REPORTS',
       },
     ],
     secInfo: [
@@ -236,23 +243,22 @@ const Menu = () => {
     key: key,
     icon: icon,
     subNav: config
-      .map(({label, to, activeCondition}) => ({
+      .map(({label, to, activeCondition, featureEnabled}) => ({
         label: _(label),
         to: to,
         active: activeCondition,
+        visible:
+          !isDefined(featureEnabled) ||
+          capabilities.featureEnabled(featureEnabled),
       }))
-      .filter(Boolean),
+      .filter(({visible}) => visible !== false),
   });
 
   const menuPoints = [
     [
       {
         label: _('Dashboards'),
-        to: '/',
-        active: useRouteMatch({
-          path: '/',
-          exact: true,
-        }),
+        to: '/dashboards',
         icon: BarChart3,
       },
     ],

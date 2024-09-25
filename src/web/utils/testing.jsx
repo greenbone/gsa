@@ -26,11 +26,9 @@ import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 
 import {ThemeProvider, theme} from '@greenbone/opensight-ui-components';
 
-import {Router} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 
 import {Provider} from 'react-redux';
-
-import {createMemoryHistory} from 'history';
 
 import EverythingCapabilities from 'gmp/capabilities/everything';
 
@@ -40,7 +38,6 @@ import GmpContext from 'web/components/provider/gmpprovider';
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 import LicenseProvider from 'web/components/provider/licenseprovider';
 
-import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
 import {StyleSheetManager} from 'styled-components';
 
@@ -126,7 +123,6 @@ const withProvider =
 
 const TestingGmpProvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
-const TestingRouter = withProvider('history')(Router);
 const TestingCapabilitiesProvider = withProvider(
   'capabilities',
   'value',
@@ -146,11 +142,6 @@ export const rendererWith = (
     store = configureStore({testing: true});
   }
 
-  let history;
-  if (router === true) {
-    history = createQueryHistory(createMemoryHistory({initialEntries: ['/']}));
-  }
-
   if (capabilities === true) {
     capabilities = new EverythingCapabilities();
   }
@@ -160,7 +151,11 @@ export const rendererWith = (
       <TestingCapabilitiesProvider capabilities={capabilities}>
         <TestingLicenseProvider license={license}>
           <TestingStoreProvider store={store}>
-            <TestingRouter history={history}>{children}</TestingRouter>
+            {router ? (
+              <BrowserRouter initialEntries={['/']}>{children}</BrowserRouter>
+            ) : (
+              children
+            )}
           </TestingStoreProvider>
         </TestingLicenseProvider>
       </TestingCapabilitiesProvider>
@@ -173,7 +168,6 @@ export const rendererWith = (
     render: ui => render(<Providers>{ui}</Providers>),
     gmp,
     store,
-    history,
     renderHook: hook => rtlRenderHook(hook, {wrapper}),
   };
 };

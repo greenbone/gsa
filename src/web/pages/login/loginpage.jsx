@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import styled from 'styled-components';
 
@@ -102,7 +101,7 @@ class LoginPage extends React.Component {
       data => {
         const {locale, timezone, sessionTimeout} = data;
 
-        const {location, history} = this.props;
+        const {location, navigate} = this.props;
 
         this.props.setTimezone(timezone);
         this.props.setLocale(locale);
@@ -117,9 +116,9 @@ class LoginPage extends React.Component {
           location.state.next &&
           location.state.next !== location.pathname
         ) {
-          history.replace(location.state.next);
+          navigate(location.state.next, {replace: true});
         } else {
-          history.replace('/');
+          navigate('/dashboards', {replace: true});
         }
       },
       rej => {
@@ -130,11 +129,11 @@ class LoginPage extends React.Component {
   }
 
   componentDidMount() {
-    const {history, isLoggedIn = false} = this.props; // eslint-disable-line no-shadow
+    const {navigate, isLoggedIn = false} = this.props; // eslint-disable-line no-shadow
 
     // redirect user to main page if he is already logged in
     if (isLoggedIn) {
-      history.replace('/');
+      navigate('/dashboards', {replace: true});
     }
   }
 
@@ -182,7 +181,7 @@ class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool,
   location: PropTypes.object.isRequired,
   setIsLoggedIn: PropTypes.func.isRequired,

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {connect} from 'react-redux';
+import {withRouter} from 'web/utils/withRouter';
 
 import _ from 'gmp/locale';
 
@@ -15,7 +15,8 @@ import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
-  RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+  RESULTS_FILTER_FILTER,
+} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {first} from 'gmp/utils/array';
@@ -67,7 +68,6 @@ import {
   getUsername,
 } from 'web/store/usersettings/selectors';
 
-import {create_pem_certificate} from 'web/utils/cert';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
@@ -100,7 +100,6 @@ const getFilter = (entity = {}) => {
 class DeltaReportDetails extends React.Component {
   constructor(...args) {
     super(...args);
-
     this.state = {
       activeTab: 0,
       showFilterDialog: false,
@@ -161,8 +160,6 @@ class DeltaReportDetails extends React.Component {
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleTlsCertificateDownload =
-      this.handleTlsCertificateDownload.bind(this);
     this.handleFilterDialogClose = this.handleFilterDialogClose.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
 
@@ -321,7 +318,7 @@ class DeltaReportDetails extends React.Component {
       includeOverrides,
       reportConfigId,
       reportFormatId,
-      storeAsDefault
+      storeAsDefault,
     } = state;
 
     const newFilter = reportFilter.copy();
@@ -373,19 +370,6 @@ class DeltaReportDetails extends React.Component {
 
         onDownload({filename, data});
       }, this.handleError);
-  }
-
-  handleTlsCertificateDownload(cert) {
-    const {onDownload} = this.props;
-
-    const {data, serial} = cert;
-
-    this.handleInteraction();
-
-    onDownload({
-      filename: 'tls-cert-' + serial + '.pem',
-      data: create_pem_certificate(data),
-    });
   }
 
   handleFilterCreated(filter) {
@@ -528,7 +512,6 @@ class DeltaReportDetails extends React.Component {
               onTargetEditClick={() =>
                 this.loadTarget().then(response => edit(response.data))
               }
-              onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
               showError={showError}
               showErrorMessage={showErrorMessage}
               showSuccessMessage={showSuccessMessage}
@@ -581,7 +564,6 @@ DeltaReportDetails.propTypes = {
   loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
   reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
   reportExportFileName: PropTypes.string,
@@ -622,8 +604,9 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   };
 };
 
-const mapStateToProps = (rootState, {match}) => {
-  const {id, deltaid} = match.params;
+const mapStateToProps = (rootState, {params}) => {
+  const {id, deltaid} = params;
+
   const filterSel = filterSelector(rootState);
   const deltaSel = deltaReportSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
@@ -725,6 +708,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
+  withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(DeltaReportDetailsWrapper);
 

@@ -7,6 +7,7 @@
 import React from 'react';
 
 import {connect} from 'react-redux';
+import {withRouter} from 'web/utils/withRouter';
 
 import _ from 'gmp/locale';
 
@@ -684,7 +685,6 @@ ReportDetails.propTypes = {
   loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
   pageFilter: PropTypes.filter,
   reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
@@ -780,7 +780,7 @@ ReportDetailsWrapper.propTypes = {
 
 const getReportPageName = id => `report-${id}`;
 
-const mapDispatchToProps = (dispatch, {gmp, match}) => ({
+const mapDispatchToProps = (dispatch, {gmp, params}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
@@ -793,12 +793,11 @@ const mapDispatchToProps = (dispatch, {gmp, match}) => ({
   loadReportComposerDefaults: () => dispatch(loadReportComposerDefaults(gmp)()),
   saveReportComposerDefaults: reportComposerDefaults =>
     dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
-  updateFilter: f =>
-    dispatch(setPageFilter(getReportPageName(match.params.id), f)),
+  updateFilter: f => dispatch(setPageFilter(getReportPageName(params.id), f)),
 });
 
-const mapStateToProps = (rootState, {match}) => {
-  const {id} = match.params;
+const mapStateToProps = (rootState, {params}) => {
+  const {id} = params;
   const filterSel = filterSelector(rootState);
   const reportSel = reportSelector(rootState);
   const reportConfigsSel = reportConfigsSelector(rootState);
@@ -846,6 +845,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
+  withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(ReportDetailsWrapper);
 

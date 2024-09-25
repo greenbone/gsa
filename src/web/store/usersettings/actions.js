@@ -52,11 +52,14 @@ export const setIsLoggedIn = isLoggedIn => ({
   isLoggedIn: isLoggedIn === true,
 });
 
-export const renewSessionTimeout = gmp => () => dispatch =>
-  gmp.user
-    .renewSession()
-    .then(response => dispatch(setSessionTimeout(response.data)));
-
+export const renewSessionTimeout = gmp => () => async dispatch => {
+  try {
+    const response = await gmp.user.renewSession();
+    dispatch(setSessionTimeout(response.data));
+  } catch (error) {
+    console.error('Error renewing session:', error);
+  }
+};
 export const updateTimezone = gmp => timezone => dispatch => {
   gmp.setTimezone(timezone);
   return Promise.resolve(dispatch(setTimezone(timezone)));

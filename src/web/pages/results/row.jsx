@@ -13,6 +13,7 @@ import {isDefined, isNumber} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import SeverityBar from 'web/components/bar/severitybar';
+import ComplianceBar from 'web/components/bar/compliancebar';
 
 import DateTime from 'web/components/date/datetime';
 
@@ -42,6 +43,7 @@ import useGmp from "web/hooks/useGmp";
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
+  audit = false,
   delta = false,
   entity,
   links = true,
@@ -59,6 +61,7 @@ const Row = ({
     entity.overrides.filter(override => override.isActive()).length > 0;
   const hasTickets = entity.tickets.length > 0;
   const deltaSeverity = entity.delta?.result?.severity;
+  const deltaCompliance = entity.delta?.result?.compliance;
   const deltaHostname = entity.delta?.result?.host?.hostname;
   const deltaQoD = entity.delta?.result?.qod?.value;
   const epssScore = entity?.information?.epss?.max_severity?.score
@@ -95,16 +98,30 @@ const Row = ({
         )}
       </TableData>
       <TableData>
-        <IconDivider>
-          <SeverityBar severity={entity.severity} />
-          {isDefined(deltaSeverity) && entity.severity !== deltaSeverity && (
-            <DeltaDifferenceIcon
-              title={_('Severity is changed from {{deltaSeverity}}.', {
-                deltaSeverity,
-              })}
-            />
-          )}
-        </IconDivider>
+        {audit ? (
+          <IconDivider>
+            <ComplianceBar compliance={entity.compliance} />
+            {isDefined(deltaCompliance) &&
+              entity.compliance !== deltaCompliance && (
+                <DeltaDifferenceIcon
+                  title={_('Compliance is changed from {{deltaCompliance}}.', {
+                    deltaCompliance,
+                  })}
+                />
+              )}
+          </IconDivider>
+        ) : (
+          <IconDivider>
+            {<SeverityBar severity={entity.severity} />}
+            {isDefined(deltaSeverity) && entity.severity !== deltaSeverity && (
+              <DeltaDifferenceIcon
+                title={_('Severity is changed from {{deltaSeverity}}.', {
+                  deltaSeverity,
+                })}
+              />
+            )}
+          </IconDivider>
+        )}
       </TableData>
       <TableData align="end">
         <IconDivider>
@@ -165,6 +182,7 @@ const Row = ({
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,
+  audit: PropTypes.bool,
   delta: PropTypes.bool,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+
 import withSvgIcon from './withSvgIcon';
 
 import {Download as Icon} from 'lucide-react';

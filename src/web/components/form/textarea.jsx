@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {Textarea as GreenboneTextArea} from '@greenbone/opensight-ui-components';
@@ -49,8 +48,8 @@ TextArea.propTypes = {
   autosize: PropTypes.bool,
   disabled: PropTypes.bool,
   errorContent: PropTypes.toString,
-  maxRows: PropTypes.numberOrNumberString,
   minRows: PropTypes.numberOrNumberString,
+  maxRows: PropTypes.numberOrNumberString,
   name: PropTypes.string,
   placeholder: PropTypes.string,
   title: PropTypes.string,

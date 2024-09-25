@@ -3,12 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import {withRouter} from 'react-router-dom';
-
-import PropTypes from 'web/utils/proptypes';
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import {useEffect} from 'react';
 
 /**
  * Component to redirect old secinfo urls like
@@ -17,13 +13,18 @@ import PropTypes from 'web/utils/proptypes';
  *
  * to the current replacement pages
  */
-class LegacyOmpPage extends React.Component {
-  componentDidMount() {
-    const {location, history} = this.props;
-    const {cmd, info_type, info_id = ''} = location.query;
+
+const OmpComponent = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const cmd = searchParams.get('cmd');
+    const info_type = searchParams.get('info_type');
+    const info_id = searchParams.get('info_id') || '';
 
     if (cmd !== 'get_info') {
-      history.replace('/notfound');
+      navigate('/notfound', {replace: true});
       return;
     }
 
@@ -31,33 +32,27 @@ class LegacyOmpPage extends React.Component {
 
     switch (info_type) {
       case 'nvt':
-        history.replace('/nvt/' + id);
+        navigate('/nvt/' + id, {replace: true});
         break;
       case 'cve':
-        history.replace('/cve/' + id);
+        navigate('/cve/' + id, {replace: true});
         break;
       case 'cpe':
-        history.replace('/cpe/' + id);
+        navigate('/cpe/' + id, {replace: true});
         break;
       case 'cert_bund_adv':
-        history.replace('/certbund/' + id);
+        navigate('/certbund/' + id, {replace: true});
         break;
       case 'dfn_cert_adv':
-        history.replace('/dfncert/' + id);
+        navigate('/dfncert/' + id, {replace: true});
         break;
       default:
-        history.replace('/notfound');
+        navigate('/notfound', {replace: true});
         break;
     }
-  }
+  }, [navigate, searchParams]);
 
-  render() {
-    return null;
-  }
-}
-
-LegacyOmpPage.propTypes = {
-  history: PropTypes.object.isRequired,
+  return null;
 };
 
-export default withRouter(LegacyOmpPage);
+export default OmpComponent;

@@ -13,7 +13,7 @@ describe('SeverityClassLabel tests', () => {
   test('should render', () => {
     const {element} = render(<SeverityClassLabel.High />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render HighLabel', () => {

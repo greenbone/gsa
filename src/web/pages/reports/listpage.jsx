@@ -159,11 +159,13 @@ class Page extends React.Component {
     const {selectedDeltaReport, beforeSelectFilter} = this.state;
 
     if (isDefined(selectedDeltaReport)) {
-      const {history} = this.props;
+      const {navigate} = this.props;
 
       onFilterChanged(beforeSelectFilter);
 
-      history.push('/report/delta/' + selectedDeltaReport.id + '/' + report.id);
+      navigate('/report/delta/' + selectedDeltaReport.id + '/' + report.id, {
+        replace: true,
+      });
     } else {
       const {filter = new Filter()} = this.props;
 
@@ -192,11 +194,8 @@ class Page extends React.Component {
 
   render() {
     const {filter, onFilterChanged, onInteraction, tasks} = this.props;
-    const {
-      containerTaskDialogVisible,
-      importDialogVisible,
-      task_id,
-    } = this.state;
+    const {containerTaskDialogVisible, importDialogVisible, task_id} =
+      this.state;
 
     return (
       <React.Fragment>
@@ -252,7 +251,7 @@ class Page extends React.Component {
 Page.propTypes = {
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
   loadTasks: PropTypes.func.isRequired,
   tasks: PropTypes.arrayOf(PropTypes.model),
   onChanged: PropTypes.func.isRequired,
@@ -284,10 +283,7 @@ const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   withEntitiesContainer('report', {
     fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
     entitiesSelector,

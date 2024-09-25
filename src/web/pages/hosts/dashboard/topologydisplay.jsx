@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'web/utils/withRouter';
 
 import {_, _l} from 'gmp/locale/lang';
 
@@ -115,9 +115,9 @@ export class HostsTopologyDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {history} = this.props;
+    const {navigate} = this.props;
 
-    history.push(`/host/${data.id}`);
+    navigate(`/host/${data.id}`);
   }
 
   render() {
@@ -151,7 +151,7 @@ export class HostsTopologyDisplay extends React.Component {
 
 HostsTopologyDisplay.propTypes = {
   filter: PropTypes.filter,
-  history: PropTypes.object.isRequired,
+  navigate: PropTypes.object.isRequired,
 };
 
 const DISPLAY_ID = 'host-by-topology';
