@@ -26,7 +26,7 @@ const ConfirmationDialogContent = props => {
     }
   };
 
-  const {content, moveprops, title, rightButtonTitle} = props;
+  const {content, moveprops, title, rightButtonTitle, loading} = props;
 
   return (
     <DialogContent>
@@ -38,6 +38,7 @@ const ConfirmationDialogContent = props => {
         rightButtonTitle={rightButtonTitle}
         onLeftButtonClick={props.close}
         onRightButtonClick={handleResume}
+        loading={loading}
       />
     </DialogContent>
   );
@@ -50,6 +51,7 @@ ConfirmationDialogContent.propTypes = {
   rightButtonTitle: PropTypes.string,
   title: PropTypes.string.isRequired,
   onResumeClick: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 const ConfirmationDialog = ({
@@ -59,6 +61,7 @@ const ConfirmationDialog = ({
   rightButtonTitle = _('OK'),
   onClose,
   onResumeClick,
+  loading,
 }) => {
   return (
     <Dialog width={width} onClose={onClose} resizable={false}>
@@ -70,6 +73,7 @@ const ConfirmationDialog = ({
           title={title}
           rightButtonTitle={rightButtonTitle}
           onResumeClick={onResumeClick}
+          loading={loading}
         />
       )}
     </Dialog>
@@ -83,6 +87,7 @@ ConfirmationDialog.propTypes = {
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onResumeClick: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default ConfirmationDialog;

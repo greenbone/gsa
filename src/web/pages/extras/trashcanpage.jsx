@@ -13,9 +13,7 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import ErrorDialog from 'web/components/dialog/errordialog';
-
-import LoadingButton from 'web/components/form/loadingbutton';
+import Button from 'web/components/form/button';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import TrashcanIcon from 'web/components/icon/trashcanicon';
@@ -65,6 +63,7 @@ import TasksTable from '../tasks/table';
 import TicketsTable from '../tickets/table';
 
 import TrashActions from './trashactions';
+import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
 
 const Col = styled.col`
   width: 50%;
@@ -78,7 +77,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const EmptyTrashButton = ({onClick, isLoading}) => {
+const EmptyTrashButton = ({onClick}) => {
   const capabilities = useCapabilities();
 
   if (!capabilities.mayOp('empty_trashcan')) {
@@ -86,15 +85,12 @@ const EmptyTrashButton = ({onClick, isLoading}) => {
   }
   return (
     <Layout align="end">
-      <LoadingButton onClick={onClick} isLoading={isLoading}>
-        {_('Empty Trash')}
-      </LoadingButton>
+      <Button onClick={onClick}>{_('Empty Trash')}</Button>
     </Layout>
   );
 };
 
 EmptyTrashButton.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -119,6 +115,8 @@ class Trashcan extends React.Component {
     this.state = {
       trash: undefined,
       isLoading: false,
+      isEmptyTrashDialogVisible: false,
+      isEmptyingTrash: false,
     };
 
     this.createContentRow = this.createContentRow.bind(this);
@@ -128,6 +126,8 @@ class Trashcan extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleRestore = this.handleRestore.bind(this);
     this.handleErrorClose = this.handleErrorClose.bind(this);
+    this.closeEmptyTrashDialog = this.closeEmptyTrashDialog.bind(this);
+    this.openEmptyTrashDialog = this.openEmptyTrashDialog.bind(this);
   }
 
   componentDidMount() {
@@ -187,19 +187,27 @@ class Trashcan extends React.Component {
       });
   }
 
-  handleEmpty() {
+  async handleEmpty() {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
-    gmp.trashcan
-      .empty()
-      .then(this.getTrash)
-      .catch(error => {
-        this.setState({
-          error,
+    this.setState({isEmptyingTrash: true});
+
+    try {
+      await gmp.trashcan.empty();
+      this.getTrash();
+    } catch (error) {
+      this.setState({error});
+    } finally {
+      setTimeout(() => {
+        this.setState({isEmptyingTrash: false}, () => {
+          if (!this.state.isLoading && !this.state.error) {
+            this.closeEmptyTrashDialog();
+          }
         });
-      });
+      }, 1000);
+    }
   }
 
   handleErrorClose() {
@@ -218,6 +226,15 @@ class Trashcan extends React.Component {
       </TableRow>
     );
   }
+
+  openEmptyTrashDialog = () => {
+    this.setState({isEmptyTrashDialogVisible: true});
+  };
+
+  closeEmptyTrashDialog = () => {
+    this.setState({isEmptyTrashDialogVisible: false});
+    this.setState({error: undefined});
+  };
 
   createContentsTable(trash) {
     const render_alerts = isDefined(trash.alert_list);
@@ -375,15 +392,26 @@ class Trashcan extends React.Component {
             {/* span prevents Toolbar from growing */}
             <ToolBarIcons />
           </span>
-          {error && (
-            <ErrorDialog
-              text={error.message}
-              title={_('Error')}
-              onClose={this.handleErrorClose}
+
+          <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
+          <EmptyTrashButton onClick={this.openEmptyTrashDialog} />
+          {this.state.isEmptyTrashDialogVisible && (
+            <ConfirmationDialog
+              onClose={this.closeEmptyTrashDialog}
+              onResumeClick={this.handleEmpty}
+              content={
+                error
+                  ? _(
+                      'An error occurred while emptying the trash, please try again.',
+                    )
+                  : _('Are you sure you want to empty the trash?')
+              }
+              title={_('Empty Trash')}
+              rightButtonTitle={_('Confirm')}
+              loading={this.state.isEmptyingTrash || isLoading}
+              width="500px"
             />
           )}
-          <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
-          <EmptyTrashButton onClick={this.handleEmpty} isLoading={isLoading} />
           <LinkTarget id="Contents" />
           <h1>{_('Contents')}</h1>
           <Table>
