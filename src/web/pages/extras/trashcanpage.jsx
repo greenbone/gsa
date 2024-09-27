@@ -61,6 +61,7 @@ import useGmp from 'web/hooks/useGmp';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import DialogNotification from 'web/components/notification/dialognotification';
+import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
 
 const Col = styled.col`
   width: 50%;
@@ -77,7 +78,7 @@ const ToolBarIcons = () => {
   );
 };
 
-const EmptyTrashButton = ({onClick, isLoading}) => {
+const EmptyTrashButton = ({onClick}) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (!capabilities.mayOp('empty_trashcan')) {
@@ -91,7 +92,6 @@ const EmptyTrashButton = ({onClick, isLoading}) => {
 };
 
 EmptyTrashButton.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -307,7 +307,11 @@ TrashCanContentsTable.propTypes = {
 
 const TrashCan = () => {
   const gmp = useGmp();
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmptyTrashDialogVisible, setIsEmptyTrashDialogVisible] =
+    useState(false);
+  const [isErrorEmptyingTrash, setIsErrorEmptyingTrash] = useState(false);
+  const [isEmptyingTrash, setIsEmptyingTrash] = useState(false);
   let [trash, setTrash] = useState();
   const [_] = useTranslation();
   const [, renewSession] = useUserSessionTimeout();
@@ -320,16 +324,16 @@ const TrashCan = () => {
   const handleInteraction = renewSession;
 
   const loadTrash = useCallback(() => {
-    setLoading(true);
+    setIsLoading(true);
     gmp.trashcan.get().then(
       response => {
         setTrash(response.data);
-        setLoading(false);
+        setIsLoading(false);
       },
       // eslint-disable-next-line no-shadow
       error => {
         showError(error);
-        setLoading(false);
+        setIsLoading(false);
       },
     );
   }, [gmp, showError]);
@@ -346,15 +350,38 @@ const TrashCan = () => {
     return gmp.trashcan.delete(entity).then(loadTrash).catch(showError);
   };
 
-  const handleEmpty = () => {
+  const handleEmpty = async () => {
     handleInteraction();
 
-    gmp.trashcan
-      .empty()
-      .then(() => {
-        loadTrash();
-      })
-      .catch(showError);
+    setIsEmptyingTrash(true);
+    let localIsErrorEmptyingTrash = false;
+
+    try {
+      await gmp.trashcan.empty();
+      loadTrash();
+    } catch (error) {
+      setIsErrorEmptyingTrash(true);
+      localIsErrorEmptyingTrash = true;
+    } finally {
+      setIsEmptyingTrash(false);
+
+      if (!localIsErrorEmptyingTrash) {
+        setTimeout(() => {
+          if (!isLoading && !isErrorEmptyingTrash) {
+            closeEmptyTrashDialog();
+          }
+        }, 1000);
+      }
+    }
+  };
+
+  const closeEmptyTrashDialog = () => {
+    setIsEmptyTrashDialogVisible(false);
+    setIsErrorEmptyingTrash(false);
+  };
+
+  const openEmptyTrashDialog = () => {
+    setIsEmptyTrashDialogVisible(true);
   };
 
   // load the data on initial render
@@ -385,7 +412,7 @@ const TrashCan = () => {
   );
 
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('Trashcan')} />
       <Layout flex="column">
         <span>
@@ -398,7 +425,24 @@ const TrashCan = () => {
           onCloseClick={closeNotificationDialog}
         />
         <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
-        <EmptyTrashButton onClick={handleEmpty} isLoading={isLoading} />
+        <EmptyTrashButton onClick={openEmptyTrashDialog} />
+        {isEmptyTrashDialogVisible && (
+          <ConfirmationDialog
+            onClose={closeEmptyTrashDialog}
+            onResumeClick={handleEmpty}
+            content={
+              !isErrorEmptyingTrash
+                ? _('Are you sure you want to empty the trash?')
+                : _(
+                    'An error occurred while emptying the trash, please try again.',
+                  )
+            }
+            title={_('Empty Trash')}
+            rightButtonTitle={_('Confirm')}
+            loading={isEmptyingTrash || isLoading}
+            width="500px"
+          />
+        )}
         <LinkTarget id="Contents" />
         <h1>{_('Contents')}</h1>
         <Table>
@@ -568,7 +612,7 @@ const TrashCan = () => {
           </span>
         )}
       </Layout>
-    </React.Fragment>
+    </>
   );
 };
 

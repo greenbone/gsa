@@ -20,6 +20,7 @@ const ConfirmationDialogContent = ({
   close,
   rightButtonTitle,
   onResumeClick,
+  loading,
 }) => {
   const handleResume = useCallback(() => {
     if (onResumeClick) {
@@ -34,6 +35,7 @@ const ConfirmationDialogContent = ({
         rightButtonTitle={rightButtonTitle}
         onLeftButtonClick={close}
         onRightButtonClick={handleResume}
+        loading={loading}
       />
     </DialogContent>
   );
@@ -44,6 +46,7 @@ ConfirmationDialogContent.propTypes = {
   content: PropTypes.elementOrString,
   rightButtonTitle: PropTypes.string,
   onResumeClick: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 const ConfirmationDialog = ({
@@ -53,6 +56,7 @@ const ConfirmationDialog = ({
   rightButtonTitle,
   onClose,
   onResumeClick,
+  loading,
 }) => {
   const [_] = useTranslation();
 
@@ -65,6 +69,7 @@ const ConfirmationDialog = ({
           content={content}
           rightButtonTitle={rightButtonTitle}
           onResumeClick={onResumeClick}
+          loading={loading}
         />
       )}
     </Dialog>
@@ -78,6 +83,7 @@ ConfirmationDialog.propTypes = {
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onResumeClick: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default ConfirmationDialog;

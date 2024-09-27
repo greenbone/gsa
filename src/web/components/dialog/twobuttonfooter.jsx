@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
@@ -25,7 +24,7 @@ const DialogTwoButtonFooter = ({
   const [_] = useTranslation();
   leftButtonTitle = leftButtonTitle || _('Cancel');
   return (
-    <DialogFooterLayout align={['end', 'center']} shrink="0">
+    <DialogFooterLayout align={['space-between', 'center']} shrink="0">
       <Button
         data-testid="dialog-close-button"
         disabled={isLoading}
