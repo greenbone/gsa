@@ -69,6 +69,7 @@ const Header = () => {
       sessionTimer={<SessionTimer />}
       username={username}
       logoLink="/dashboards"
+      isThemeSwitchVisible={false}
     />
   );
 };
