@@ -20,6 +20,11 @@ describe('getLogo', () => {
     ['gsm-650r2_label.svg', 'Enterprise650'],
     ['gsm-5400_label.svg', 'Enterprise5400'],
     ['gsm-6500_label.svg', 'Enterprise6500'],
+    ['gsm-ceno_label.svg', 'EnterpriseCeno'],
+    ['gsm-deca_label.svg', 'EnterpriseDeca'],
+    ['gsm-exa_label.svg', 'EnterpriseExa'],
+    ['gsm-peta_label.svg', 'EnterprisePeta'],
+    ['gsm-tera_label.svg', 'EnterpriseTera'],
   ];
 
   test.each(testCases)('returns %s for %s', (model, expectedTestId) => {

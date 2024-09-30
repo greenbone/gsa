@@ -12,6 +12,11 @@ import {
   Enterprise650,
   Enterprise5400,
   Enterprise6500,
+  EnterpriseCeno,
+  EnterpriseDeca,
+  EnterpriseExa,
+  EnterprisePeta,
+  EnterpriseTera,
 } from 'web/components/icon/GreenboneApplianceLogo';
 
 const APPLIANCE_MODELS = {
@@ -26,6 +31,11 @@ const APPLIANCE_MODELS = {
   'gsm-650r2_label.svg': Enterprise650,
   'gsm-5400_label.svg': Enterprise5400,
   'gsm-6500_label.svg': Enterprise6500,
+  'gsm-ceno_label.svg': EnterpriseCeno,
+  'gsm-deca_label.svg': EnterpriseDeca,
+  'gsm-exa_label.svg': EnterpriseExa,
+  'gsm-peta_label.svg': EnterprisePeta,
+  'gsm-tera_label.svg': EnterpriseTera,
 };
 
 const getLogo = model => {
@@ -46,6 +56,11 @@ getLogo.propTypes = {
     'gsm-650r2_label.svg',
     'gsm-5400_label.svg',
     'gsm-6500_label.svg',
+    'gsm-ceno_label.svg',
+    'gsm-deca_label.svg',
+    'gsm-exa_label.svg',
+    'gsm-peta_label.svg',
+    'gsm-tera_label.svg',
   ]),
 };
 
