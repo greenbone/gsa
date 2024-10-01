@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
-    "@sentry/react": "^8.28.0",
+    "@sentry/react": "^8.32.0",
     "@visx/axis": "^3.10.1",
     "@visx/gradient": "^3.3.0",
     "@visx/shape": "^3.5.0",
