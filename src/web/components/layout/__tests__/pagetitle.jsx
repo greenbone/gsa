@@ -3,20 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {describe, test, expect} from '@gsa/testing';
 
 import PageTitle from 'web/components/layout/pagetitle';
 
-import {render} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/testing';
+
+const gmp = {
+  settings: {
+    vendorLabel: 'someVendorLabel',
+  },
+};
 
 describe('PageTitle tests', () => {
-  test('should render', () => {
-    const {element} = render(<PageTitle />);
-    expect(element).toMatchSnapshot();
-  });
-
   test('Should render default title', () => {
+    const {render} = rendererWith({gmp});
+
     const defaultTitle = 'Greenbone Security Assistant';
     render(<PageTitle />);
 
@@ -24,6 +26,8 @@ describe('PageTitle tests', () => {
   });
 
   test('Should render custom title', () => {
+    const {render} = rendererWith({gmp});
+
     const title = 'foo';
     const defaultTitle = 'Greenbone Security Assistant';
     render(<PageTitle title={title} />);
@@ -32,6 +36,8 @@ describe('PageTitle tests', () => {
   });
 
   test('should update value', () => {
+    const {render} = rendererWith({gmp});
+
     const title1 = 'foo';
     const title2 = 'bar';
     const defaultTitle = 'Greenbone Security Assistant';
@@ -42,5 +48,17 @@ describe('PageTitle tests', () => {
     rerender(<PageTitle title={title2} />);
 
     expect(global.window.document.title).toBe(defaultTitle + ' - ' + title2);
+  });
+  test('should render appliance model title', () => {
+    const {render} = rendererWith({
+      gmp: {
+        settings: {
+          vendorLabel: 'gsm-150_label.svg',
+        },
+      },
+    });
+    render(<PageTitle />);
+
+    expect(global.window.document.title).toBe('Greenbone - 150');
   });
 });
