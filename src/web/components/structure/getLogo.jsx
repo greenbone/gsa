@@ -4,42 +4,11 @@
  */
 
 import PropTypes from 'web/utils/proptypes';
-import {
-  Enterprise150,
-  Enterprise400,
-  Enterprise450,
-  Enterprise600,
-  Enterprise650,
-  Enterprise5400,
-  Enterprise6500,
-  EnterpriseCeno,
-  EnterpriseDeca,
-  EnterpriseExa,
-  EnterprisePeta,
-  EnterpriseTera,
-} from 'web/components/icon/GreenboneApplianceLogo';
 
-const APPLIANCE_MODELS = {
-  'gsm-150_label.svg': Enterprise150,
-  'gsm-400_label.svg': Enterprise400,
-  'gsm-400r2_label.svg': Enterprise400,
-  'gsm-450_label.svg': Enterprise450,
-  'gsm-450r2_label.svg': Enterprise450,
-  'gsm-600_label.svg': Enterprise600,
-  'gsm-600r2_label.svg': Enterprise600,
-  'gsm-650_label.svg': Enterprise650,
-  'gsm-650r2_label.svg': Enterprise650,
-  'gsm-5400_label.svg': Enterprise5400,
-  'gsm-6500_label.svg': Enterprise6500,
-  'gsm-ceno_label.svg': EnterpriseCeno,
-  'gsm-deca_label.svg': EnterpriseDeca,
-  'gsm-exa_label.svg': EnterpriseExa,
-  'gsm-peta_label.svg': EnterprisePeta,
-  'gsm-tera_label.svg': EnterpriseTera,
-};
+import {applianceComponent} from 'web/utils/applianceData';
 
 const getLogo = model => {
-  const Component = APPLIANCE_MODELS[model];
+  const Component = applianceComponent[model];
   return Component ? <Component /> : undefined;
 };
 
