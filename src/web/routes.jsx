@@ -244,7 +244,7 @@ const LoggedInRoutes = () => {
                 />
               }
             />
-            <Route path="/" element={<Navigate to="/dashboard" />} />
+            <Route path="/" element={<Navigate to="/dashboards" />} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>
