@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useState, useEffect} from 'react';
 
 import {
   BrowserRouter as Router,
@@ -16,6 +16,7 @@ import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
 
 import ConditionalRoute from 'web/components/conditionalRoute/ConditionalRoute';
+import Loading from 'web/components/loading/loading';
 
 import LegacyOmpPage from './pages/omp';
 import Page from './pages/page';
@@ -255,7 +256,18 @@ const LoggedInRoutes = () => {
 };
 
 const AppRoutes = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const isLoggedIn = useSelector(selectIsLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn !== undefined) {
+      setIsLoading(false);
+    }
+  }, [isLoggedIn]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Router>{isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}</Router>
