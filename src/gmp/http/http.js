@@ -15,6 +15,7 @@ import Response from './response';
 import DefaultTransform from './transform/default';
 
 import {buildUrlParams} from './utils';
+import {FeedStatus} from 'gmp/commands/feedstatus';
 
 const log = logger.getLogger('gmp.http');
 
@@ -22,6 +23,23 @@ function formdata_append(formdata, key, value) {
   if (hasValue(value)) {
     formdata.append(key, value);
   }
+}
+
+async function checkFeedOwnershipAndAccess(context) {
+  const feedStatus = new FeedStatus(context);
+  const {isFeedOwner, isFeedResourcesAccess} =
+    await feedStatus.checkFeedOwnerAndPermissions();
+  const syncMessage = _(
+    'This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+  );
+
+  if (!isFeedOwner) {
+    return `${_('The feed owner is currently not set.')} ${syncMessage}`;
+  } else if (!isFeedResourcesAccess) {
+    return `${_('Access to the feed resources is currently restricted.')} ${syncMessage}`;
+  }
+
+  return '';
 }
 
 class Http {
@@ -157,26 +175,39 @@ class Http {
     }
   }
 
-  handleResponseError(resolve, reject, xhr, options) {
-    let promise = Promise.reject(xhr);
+  async handleResponseError(_resolve, reject, xhr, options) {
+    try {
+      let request = xhr;
 
-    for (const interceptor of this.errorHandlers) {
-      promise = promise.catch(interceptor);
-    }
+      for (const interceptor of this.errorHandlers) {
+        try {
+          await interceptor(request);
+        } catch (err) {
+          request = err;
+        }
+      }
 
-    promise.catch(request => {
       const {status} = request;
       const rej = new Rejection(
         request,
         status === 401 ? Rejection.REASON_UNAUTHORIZED : Rejection.REASON_ERROR,
       );
-      try {
-        reject(this.transformRejection(rej, options));
-      } catch (error) {
-        log.error('Could not transform rejection', error, rej);
-        reject(rej);
+
+      let rejectedResponse = await this.transformRejection(rej, options);
+
+      if (rej.status === 404) {
+        const additionalMessage = await checkFeedOwnershipAndAccess(this);
+
+        if (additionalMessage) {
+          rejectedResponse.message = `${rejectedResponse.message}\n${additionalMessage}`;
+        }
       }
-    });
+
+      reject(rejectedResponse);
+    } catch (error) {
+      log.error('Could not handle response error', error);
+      reject(error);
+    }
   }
 
   handleRequestError(resolve, reject, xhr, options) {
