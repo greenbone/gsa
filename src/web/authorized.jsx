@@ -29,7 +29,7 @@ const Authorized = ({children}) => {
         logout();
         return Promise.resolve(xhr);
       }
-      return Promise.reject(new Error(xhr));
+      return Promise.reject(xhr);
     },
     [logout],
   );
