@@ -14,8 +14,7 @@ import Response from './response';
 
 import DefaultTransform from './transform/default';
 
-import {buildUrlParams} from './utils';
-import {FeedStatus} from 'gmp/commands/feedstatus';
+import {buildUrlParams, getFeedAccessStatusMessage} from './utils';
 
 const log = logger.getLogger('gmp.http');
 
@@ -23,23 +22,6 @@ function formdata_append(formdata, key, value) {
   if (hasValue(value)) {
     formdata.append(key, value);
   }
-}
-
-async function checkFeedOwnershipAndAccess(context) {
-  const feedStatus = new FeedStatus(context);
-  const {isFeedOwner, isFeedResourcesAccess} =
-    await feedStatus.checkFeedOwnerAndPermissions();
-  const syncMessage = _(
-    'This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
-  );
-
-  if (!isFeedOwner) {
-    return `${_('The feed owner is currently not set.')} ${syncMessage}`;
-  } else if (!isFeedResourcesAccess) {
-    return `${_('Access to the feed resources is currently restricted.')} ${syncMessage}`;
-  }
-
-  return '';
 }
 
 class Http {
@@ -196,13 +178,12 @@ class Http {
       let rejectedResponse = await this.transformRejection(rej, options);
 
       if (rej.status === 404) {
-        const additionalMessage = await checkFeedOwnershipAndAccess(this);
+        const additionalMessage = await getFeedAccessStatusMessage(this);
 
         if (additionalMessage) {
           rejectedResponse.message = `${rejectedResponse.message}\n${additionalMessage}`;
         }
       }
-
       reject(rejectedResponse);
     } catch (error) {
       log.error('Could not handle response error', error);

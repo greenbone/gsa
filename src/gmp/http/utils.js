@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import _ from 'gmp/locale';
+
 import {isDefined} from 'gmp/utils/identity';
+import {FeedStatus} from 'gmp/commands/feedstatus';
 
 export const buildUrlParams = params => {
   let argcount = 0;
@@ -31,4 +34,19 @@ export const buildServerUrl = (server, path = '', protocol) => {
   return protocol + '//' + server + '/' + path;
 };
 
-// vim: set ts=2 sw=2 tw=80:
+export async function getFeedAccessStatusMessage(context) {
+  const feedStatus = new FeedStatus(context);
+  const {isFeedOwner, isFeedResourcesAccess} =
+    await feedStatus.checkFeedOwnerAndPermissions();
+  const syncMessage = _(
+    'This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+  );
+
+  if (!isFeedOwner) {
+    return `${_('The feed owner is currently not set.')} ${syncMessage}`;
+  } else if (!isFeedResourcesAccess) {
+    return `${_('Access to the feed resources is currently restricted.')} ${syncMessage}`;
+  }
+
+  return '';
+}
