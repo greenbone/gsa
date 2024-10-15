@@ -14,7 +14,11 @@ import Response from './response';
 
 import DefaultTransform from './transform/default';
 
-import {buildUrlParams, getFeedAccessStatusMessage} from './utils';
+import {
+  buildUrlParams,
+  getFeedAccessStatusMessage,
+  findActionInXMLString,
+} from './utils';
 
 const log = logger.getLogger('gmp.http');
 
@@ -177,13 +181,25 @@ class Http {
 
       let rejectedResponse = await this.transformRejection(rej, options);
 
-      if (rej.status === 404) {
+      const actionsRequiringFeedAccess = [
+        'Run Wizard',
+        'Create Task',
+        'Save Task',
+        'Create Target',
+        'Save Target',
+      ];
+
+      if (
+        rej.status === 404 &&
+        findActionInXMLString(request.response, actionsRequiringFeedAccess)
+      ) {
         const additionalMessage = await getFeedAccessStatusMessage(this);
 
         if (additionalMessage) {
           rejectedResponse.message = `${rejectedResponse.message}\n${additionalMessage}`;
         }
       }
+
       reject(rejectedResponse);
     } catch (error) {
       log.error('Could not handle response error', error);

@@ -7,7 +7,10 @@ import {describe, test, expect} from '@gsa/testing';
 
 import {createResponse, createHttp} from 'gmp/commands/testing';
 
-import {getFeedAccessStatusMessage} from 'gmp/http/utils';
+import {
+  getFeedAccessStatusMessage,
+  findActionInXMLString,
+} from 'gmp/http/utils';
 import {FeedStatus} from 'gmp/commands/feedstatus';
 
 describe('Http', () => {
@@ -46,5 +49,50 @@ describe('Http', () => {
         expect(message).toBe(expectedMessage);
       },
     );
+  });
+
+  describe('findActionInXMLString', () => {
+    test.each([
+      {
+        description:
+          'should return true if an action is found in the XML string',
+        xmlString: `
+          <response>
+            <action>Run Wizard</action>
+          </response>
+        `,
+        actions: ['Run Wizard', 'Create Task', 'Save Task'],
+        expected: true,
+      },
+      {
+        description:
+          'should return false if no action is found in the XML string',
+        xmlString: `
+          <response>
+            <action>Delete Task</action>
+          </response>
+        `,
+        actions: ['Run Wizard', 'Create Task', 'Save Task'],
+        expected: false,
+      },
+      {
+        description: 'should return false if the XML string is empty',
+        xmlString: '',
+        actions: ['Run Wizard', 'Create Task', 'Save Task'],
+        expected: false,
+      },
+      {
+        description: 'should return false if the actions array is empty',
+        xmlString: `
+          <response>
+            <action>Run Wizard</action>
+          </response>
+        `,
+        actions: [],
+        expected: false,
+      },
+    ])('$description', ({xmlString, actions, expected}) => {
+      expect(findActionInXMLString(xmlString, actions)).toBe(expected);
+    });
   });
 });

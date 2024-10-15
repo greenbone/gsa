@@ -50,3 +50,11 @@ export async function getFeedAccessStatusMessage(context) {
 
   return '';
 }
+
+export const findActionInXMLString = (string, actions) => {
+  const regex = /<action>(.*?)<\/action>/g;
+  const matches = string.match(regex) || [];
+  return matches.some(match =>
+    actions.includes(match.replace(/<\/?action>/g, '')),
+  );
+};
