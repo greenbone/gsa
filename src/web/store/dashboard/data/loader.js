@@ -21,6 +21,7 @@ import {
 } from './actions';
 
 import getDashboardData from './selectors';
+import {useDispatch} from 'react-redux';
 
 export const loaderPropTypes = {
   children: PropTypes.func,
@@ -57,41 +58,43 @@ export const Loader = props => {
     children,
     isLoading,
   } = props;
-  const [data, setData] = useState(initialData);
+
+  const dispatch = useDispatch();
+  const [dataLocal, setDataLocal] = useState(initialData);
   const subscriptionsRef = useRef([]);
   const prevFilterRef = useRef();
 
   useEffect(() => {
     if (!hasValue(initialData)) {
       try {
-        load();
+        dispatch(load(props));
       } catch (error) {
         /* empty */
       }
     }
 
     subscriptionsRef.current = subscriptions.map(subscription =>
-      subscribe(subscription, load),
+      subscribe(subscription, loadFunc),
     );
     return () => {
       subscriptionsRef.current.forEach(unsubscribe => unsubscribe());
     };
-  }, [initialData, subscriptions, subscribe, load]);
+  }, [initialData, subscriptions, subscribe, dispatch, props]);
 
   useEffect(() => {
     if (isDefined(props.data)) {
-      setData(props.data);
+      setDataLocal(props.data);
     }
   }, [props.data]);
 
   useEffect(() => {
     if (filter !== undefined && filter !== prevFilterRef.current) {
-      load();
+      dispatch(load(props));
     }
     prevFilterRef.current = filter;
-  }, [filter, load]);
+  }, [dispatch, filter, props]);
 
-  return isDefined(children) && children({data, isLoading});
+  return isDefined(children) && children({data: dataLocal, isLoading});
 };
 
 Loader.propTypes = {
@@ -113,11 +116,7 @@ const mapStateToProps = (rootState, {dataId, filter}) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, {load, ...props}) => ({
-  load: () => {
-    return dispatch(load(props));
-  },
-});
+const mapDispatchToProps = (dispatch, {load, ...props}) => ({});
 
 export default compose(
   withGmp,
