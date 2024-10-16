@@ -66,14 +66,18 @@ export const Loader = props => {
 
   useEffect(() => {
     if (!hasValue(initialData)) {
-      load();
+      try {
+        load();
+      } catch (error) {
+        /* empty */
+      }
     }
 
     subscriptionsRef.current = subscriptions.map(subscription =>
       subscribe(subscription, load),
     );
     return () => {
-      subscriptionsRef.current.forEach(unsub => unsub());
+      subscriptionsRef.current.forEach(unsubscribe => unsubscribe());
     };
   }, [initialData, subscriptions, subscribe, load]);
 
