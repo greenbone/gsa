@@ -10,7 +10,7 @@ import {withRouter} from 'web/utils/withRouter';
 import styled from 'styled-components';
 
 import {_, _l} from 'gmp/locale/lang';
-import {longDate} from 'gmp/locale/date';
+import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {parseFloat, parseSeverity} from 'gmp/parser';
 
@@ -37,7 +37,7 @@ const ToolTip = styled.div`
   line-height: 1.2em;
 `;
 
-const transformVulnScoreData = (data = {}, {severityClass}) => {
+const transformVulnScoreData = (data = {}) => {
   const {groups = []} = data;
   const tdata = groups
     .filter(group => {
@@ -51,7 +51,7 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
       const {average_severity, average_severity_score} = stats;
       const averageSeverity = parseSeverity(average_severity.mean);
       const riskFactor = resultSeverityRiskFactor(averageSeverity);
-      const modifiedDate = longDate(modified);
+      const modifiedDate = formattedUserSettingLongDate(modified);
       const toolTip = (
         <ToolTip>
           <b>{name}:</b>

@@ -10,7 +10,7 @@ import {withRouter} from 'web/utils/withRouter';
 import styled from 'styled-components';
 
 import {_, _l} from 'gmp/locale/lang';
-import {longDate} from 'gmp/locale/date';
+import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {parseFloat, parseSeverity} from 'gmp/parser';
 
@@ -51,7 +51,7 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
       const {severity} = stats;
       const averageSeverity = parseSeverity(severity.mean);
       const riskFactor = resultSeverityRiskFactor(averageSeverity);
-      const modifiedDate = longDate(modified);
+      const modifiedDate = formattedUserSettingLongDate(modified);
       const toolTip = (
         <ToolTip>
           <b>{name}:</b>
