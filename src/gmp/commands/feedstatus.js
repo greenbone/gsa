@@ -80,6 +80,42 @@ export class FeedStatus extends HttpCommand {
       throw error;
     }
   }
+
+  /**
+   * Checks if the current user is the owner of the feed and if they have access to feed resources.
+   *
+   * @async
+   * @function checkFeedOwnerAndPermissions
+   * @returns {Promise<Object>} An object containing two boolean properties:
+   * - `isFeedOwner`: Indicates if the user is the owner of the feed.
+   * - `isFeedResourcesAccess`: Indicates if the user has access to feed resources.
+   * @throws Will throw an error if the HTTP request fails.
+   */
+  async checkFeedOwnerAndPermissions() {
+    try {
+      const {
+        data: {
+          get_feeds: {
+            get_feeds_response: {
+              feed_owner_set: feedOwner,
+              feed_resources_access: feedResourcesAccess,
+            },
+          },
+        },
+      } = await this.httpGet();
+
+      const feedOwnerBoolean = Boolean(feedOwner);
+      const feedResourcesAccessBoolean = Boolean(feedResourcesAccess);
+
+      return {
+        isFeedOwner: feedOwnerBoolean,
+        isFeedResourcesAccess: feedResourcesAccessBoolean,
+      };
+    } catch (error) {
+      console.error('Error checking feed owner and permissions:', error);
+      throw error;
+    }
+  }
 }
 
 registerCommand('feedstatus', FeedStatus);

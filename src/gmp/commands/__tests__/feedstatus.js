@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {createResponse, createHttp} from '../testing';
 
@@ -112,5 +112,46 @@ describe('FeedStatusCommand tests', () => {
     const cmd = new FeedStatus(fakeHttp);
 
     await expect(cmd.checkFeedSync()).rejects.toThrow('Network error');
+  });
+
+  describe('checkFeedOwnerAndPermissions', () => {
+    test('should return feed owner and permissions', async () => {
+      const response = createResponse({
+        get_feeds: {
+          get_feeds_response: {
+            feed_owner_set: 0,
+            feed_resources_access: 1,
+          },
+        },
+      });
+
+      const fakeHttp = createHttp(response);
+      const cmd = new FeedStatus(fakeHttp);
+
+      const result = await cmd.checkFeedOwnerAndPermissions();
+
+      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_feeds',
+        },
+      });
+
+      expect(result.isFeedOwner).toBe(false);
+      expect(result.isFeedResourcesAccess).toBe(true);
+    });
+
+    test('should log an error when checkFeedSync fails', async () => {
+      const fakeHttp = createHttp(Promise.reject(new Error('Network error')));
+      const cmd = new FeedStatus(fakeHttp);
+
+      console.error = testing.fn();
+
+      await expect(cmd.checkFeedSync()).rejects.toThrow('Network error');
+
+      expect(console.error).toHaveBeenCalledWith(
+        'Error checking if feed is syncing:',
+        expect.any(Error),
+      );
+    });
   });
 });

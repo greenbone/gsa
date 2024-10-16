@@ -176,6 +176,8 @@ module.exports = [
   'family_list',
   'feed_event',
   'feed_type',
+  'feed_owner_set',
+  'feed_resources_access',
   'field_value',
   'filtered_count',
   'filter_func',
