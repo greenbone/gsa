@@ -43,7 +43,7 @@ const warnDeprecatedSetting = (oldName, newName) => {
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
-      enableEPSS = false,
+      enableEPSS = true,
       enableGreenboneSensor = false,
       disableLoginForm = false,
       enableStoreDebugLog,
