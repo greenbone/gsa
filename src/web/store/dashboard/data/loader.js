@@ -27,28 +27,25 @@ export const loaderPropTypes = {
   filter: PropTypes.filter,
 };
 
-export const loadFunc =
-  (func, id) =>
-  ({dataId = id, ...props}) =>
-  (dispatch, getState) => {
-    const rootState = getState();
-    const state = getDashboardData(rootState);
-
-    const {filter} = props;
+export const loadFunc = (func, id) => {
+  return props => async (dispatch, getState) => {
+    const {dataId = id, filter} = props;
+    const state = getDashboardData(getState());
 
     if (state.getIsLoading(dataId, filter)) {
-      // we are already loading data
-      return Promise.resolve();
+      return;
     }
 
     dispatch(requestDashboardData(dataId, filter));
 
-    const promise = func(props);
-    return promise.then(
-      data => dispatch(receivedDashboardData(dataId, data, filter)),
-      error => dispatch(receivedDashboardError(dataId, error, filter)),
-    );
+    try {
+      const data = await func(props);
+      dispatch(receivedDashboardData(dataId, data, filter));
+    } catch (error) {
+      dispatch(receivedDashboardError(dataId, error, filter));
+    }
   };
+};
 
 export const Loader = props => {
   const {
@@ -127,5 +124,3 @@ export default compose(
   withSubscription,
   connect(mapStateToProps, mapDispatchToProps),
 )(Loader);
-
-// vim: set ts=2 sw=2 tw=80:
