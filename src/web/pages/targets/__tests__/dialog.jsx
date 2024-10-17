@@ -54,7 +54,7 @@ const credentials = [cred1, cred2, cred3, cred4];
 const gmp = {settings: {enableGreenboneSensor: true}};
 
 describe('TargetDialog component tests', () => {
-  test('should render with default values', () => {
+  test.only('should render with default values', () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();

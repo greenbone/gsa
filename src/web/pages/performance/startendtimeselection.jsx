@@ -12,7 +12,7 @@ import PropTypes from 'web/utils/proptypes';
 import Button from 'web/components/form/button';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/formgroup';
-import {TimePicker} from '@greenbone/opensight-ui-components';
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 
 import Column from 'web/components/layout/column';
 import Row from 'web/components/layout/row';

@@ -5,7 +5,7 @@
 
 import React, {useCallback} from 'react';
 
-import {Modal} from '@greenbone/opensight-ui-components';
+import {Modal} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {isDefined, isFunction} from 'gmp/utils/identity';
 

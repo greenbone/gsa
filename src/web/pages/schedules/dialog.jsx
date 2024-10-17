@@ -20,7 +20,7 @@ import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import DatePicker from 'web/components/form/DatePicker';
-import {TimePicker} from '@greenbone/opensight-ui-components';
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 import CheckBox from 'web/components/form/checkbox';

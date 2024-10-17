@@ -24,7 +24,10 @@ import {
 } from '@testing-library/react/pure';
 import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 
-import {ThemeProvider, theme} from '@greenbone/opensight-ui-components';
+import {
+  ThemeProvider,
+  theme,
+} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {BrowserRouter} from 'react-router-dom';
 
@@ -100,7 +103,7 @@ export const render = ui => {
     }),
     baseElement,
     container,
-    element: hasValue(container) ? container.firstChild : undefined,
+    element: hasValue(container) ? container : undefined,
     getAllByName: name => getAllByName(baseElement, name),
     getByName: name => getByName(baseElement, name),
     queryByName: name => queryByName(baseElement, name),

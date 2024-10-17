@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import {LabelWithIcon as Label} from '@greenbone/opensight-ui-components';
+import {LabelWithIcon as Label} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {isDefined} from 'gmp/utils/identity';
 

@@ -23,7 +23,7 @@ import TextField from 'web/components/form/textfield';
 import Radio from 'web/components/form/radio';
 import DatePicker from 'web/components/form/DatePicker';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
-import {TimePicker} from '@greenbone/opensight-ui-components';
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
 
 import Layout from 'web/components/layout/layout';

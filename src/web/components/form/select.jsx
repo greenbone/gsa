@@ -7,7 +7,7 @@ import {useCallback, forwardRef} from 'react';
 
 import {Loader} from '@mantine/core';
 
-import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components';
+import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {isDefined, isArray} from 'gmp/utils/identity';
 
@@ -128,6 +128,7 @@ const Select = ({
       onChange={handleChange}
       rightSection={rightSection}
       itemComponent={SelectItem}
+      data-testId={'powerfilter-select'}
     />
   );
 };

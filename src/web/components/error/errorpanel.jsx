@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useState} from 'react';
 
 import styled from 'styled-components';
@@ -18,7 +17,7 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import ErrorMessage from './errormessage';
-import {Button as OpenSightButton} from '@greenbone/opensight-ui-components';
+import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
 
 const ErrorDetails = styled.div`
   margin-top: 10px;
@@ -47,8 +46,7 @@ const ErrorPanel = ({error, message, info}) => {
     >
       {isDefined(error) && (
         <OpenSightButton
-          variant="outline"
-          color="red"
+          variant="danger"
           size="sm"
           data-testid="errorpanel-toggle"
           onClick={handleToggleDetails}

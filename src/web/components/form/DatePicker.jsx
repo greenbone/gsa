@@ -5,7 +5,7 @@
 
 import React, {useCallback} from 'react';
 
-import {DatePickerOnly} from '@greenbone/opensight-ui-components';
+import {DatePickerOnly} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {isDefined} from 'gmp/utils/identity';
 

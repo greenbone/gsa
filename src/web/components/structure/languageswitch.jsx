@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {FlagDeIcon, FlagEnIcon} from '@greenbone/opensight-ui-components';
 import {ActionIcon} from '@mantine/core';
 import useGmp from 'web/hooks/useGmp';
 
@@ -50,7 +49,7 @@ const LanguageSwitch = () => {
       title={titles[nextLanguage]}
       color="neutral.0"
     >
-      {language === LANGUAGES.EN ? <FlagEnIcon /> : <FlagDeIcon />}
+      {language === LANGUAGES.EN ? <div>en</div> : <div>de</div>}
     </ActionIcon>
   );
 };
