@@ -64,11 +64,7 @@ export const Loader = props => {
 
   useEffect(() => {
     if (!hasValue(initialData)) {
-      try {
-        load();
-      } catch (error) {
-        /* empty */
-      }
+      load();
     }
 
     subscriptionsRef.current = subscriptions.map(subscription =>
@@ -116,7 +112,11 @@ const mapStateToProps = (rootState, {dataId, filter}) => {
 
 const mapDispatchToProps = (dispatch, {load, ...props}) => ({
   load: () => {
-    return dispatch(load(props));
+    try {
+      return dispatch(load(props));
+    } catch (error) {
+      /* empty */
+    }
   },
 });
 
