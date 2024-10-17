@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {shortDate} from 'gmp/locale/date';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -171,25 +170,30 @@ export const ToolBarIcons = ({
               id={entity.current_report.id}
               title={_('Current Report for Audit {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.current_report.scan_start),
+                date: formattedUserSettingShortDate(
+                  entity.current_report.scan_start,
+                ),
               })}
             >
               <ReportIcon />
             </DetailsLink>
           )}
 
-          {!isDefined(entity.current_report) && isDefined(entity.last_report) && (
-            <DetailsLink
-              type="report"
-              id={entity.last_report.id}
-              title={_('Last Report for Audit {{- name}} from {{- date}}', {
-                name: entity.name,
-                date: shortDate(entity.last_report.scan_start),
-              })}
-            >
-              <ReportIcon />
-            </DetailsLink>
-          )}
+          {!isDefined(entity.current_report) &&
+            isDefined(entity.last_report) && (
+              <DetailsLink
+                type="report"
+                id={entity.last_report.id}
+                title={_('Last Report for Audit {{- name}} from {{- date}}', {
+                  name: entity.name,
+                  date: formattedUserSettingShortDate(
+                    entity.last_report.scan_start,
+                  ),
+                })}
+              >
+                <ReportIcon />
+              </DetailsLink>
+            )}
 
           <Link
             to="reports"

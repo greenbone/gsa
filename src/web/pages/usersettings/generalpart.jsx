@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
+import {useState} from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {dateTimeFormatOptions, SYSTEM_DEFAULT} from 'gmp/locale/date';
 
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
@@ -69,12 +69,14 @@ Notification.propTypes = {
 
 const GeneralPart = ({
   timezone,
+  userInterfaceDateFormat,
+  userInterfaceTimeFormat,
+  isUserInterfaceTimeDateDefault,
   oldPassword,
   newPassword,
   confPassword,
   userInterfaceLanguage,
   rowsPerPage,
-  maxRowsPerPage,
   detailsExportFileName,
   listExportFileName,
   reportExportFileName,
@@ -83,11 +85,97 @@ const GeneralPart = ({
   errors,
   onChange,
 }) => {
+  const [prevUserInterfaceTimeFormat, setPrevUserInterfaceTimeFormat] =
+    useState(undefined);
+  const [prevUserInterfaceDateFormat, setPrevUserInterfaceDateFormat] =
+    useState(undefined);
+
+  const getSelectItems = category => {
+    return Object.entries(dateTimeFormatOptions[category].options).map(
+      ([value, {label}]) => ({
+        value: isNaN(value) ? value : Number(value),
+        label: _(label),
+      }),
+    );
+  };
+
+  const handleSysDefaultChange = event => {
+    const isSystemDefault = parseYesNo(event);
+
+    const defaultTimeFormat = 24;
+    const defaultDateFormat = 'wdmy';
+
+    const currentUserInterfaceTimeFormat =
+      userInterfaceTimeFormat || defaultTimeFormat;
+    const currentUserInterfaceDateFormat =
+      userInterfaceDateFormat || defaultDateFormat;
+
+    if (!isSystemDefault) {
+      onChange(
+        prevUserInterfaceTimeFormat || defaultTimeFormat,
+        'userInterfaceTimeFormat',
+      );
+      onChange(
+        prevUserInterfaceDateFormat || defaultDateFormat,
+        'userInterfaceDateFormat',
+      );
+    } else {
+      setPrevUserInterfaceTimeFormat(currentUserInterfaceTimeFormat);
+      setPrevUserInterfaceDateFormat(currentUserInterfaceDateFormat);
+
+      onChange(SYSTEM_DEFAULT, 'userInterfaceTimeFormat');
+      onChange(SYSTEM_DEFAULT, 'userInterfaceDateFormat');
+    }
+
+    onChange(isSystemDefault, 'isUserInterfaceTimeDateDefault');
+  };
   return (
-    <React.Fragment>
+    <>
       <FormGroup title={_('Timezone')} titleSize="3">
         <TimeZoneSelect name="timezone" value={timezone} onChange={onChange} />
       </FormGroup>
+      <FormGroup
+        title={_('Use System Default for Time and Date Format')}
+        titleSize="3"
+      >
+        <Checkbox
+          name="isUserInterfaceTimeDateDefault"
+          checked={parseYesNo(isUserInterfaceTimeDateDefault) === YES_VALUE}
+          checkedValue={YES_VALUE}
+          unCheckedValue={NO_VALUE}
+          onChange={handleSysDefaultChange}
+        />
+      </FormGroup>
+
+      <FormGroup title={_('Time Format')} titleSize="3">
+        <Select
+          label={_('Time Format')}
+          name="userInterfaceTimeFormat"
+          value={
+            userInterfaceTimeFormat === 'system_default'
+              ? ''
+              : userInterfaceTimeFormat
+          }
+          items={getSelectItems('time')}
+          onChange={onChange}
+          disabled={isUserInterfaceTimeDateDefault}
+        />
+      </FormGroup>
+      <FormGroup title={_('Date Format')} titleSize="3">
+        <Select
+          label={_('Date Format')}
+          name="userInterfaceDateFormat"
+          value={
+            userInterfaceDateFormat === 'system_default'
+              ? ''
+              : userInterfaceDateFormat
+          }
+          items={getSelectItems('longDate')}
+          onChange={onChange}
+          disabled={isUserInterfaceTimeDateDefault}
+        />
+      </FormGroup>
+
       <FormGroup title={_('Change Password')} titleSize="3">
         <Divider flex="column">
           <FormGroup title={_('Old')}>
@@ -182,7 +270,7 @@ const GeneralPart = ({
           onChange={onChange}
         />
       </FormGroup>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -192,13 +280,15 @@ GeneralPart.propTypes = {
   detailsExportFileName: PropTypes.string,
   errors: PropTypes.object.isRequired,
   listExportFileName: PropTypes.string,
-  maxRowsPerPage: PropTypes.number,
   newPassword: PropTypes.string,
   oldPassword: PropTypes.string,
   reportExportFileName: PropTypes.string,
   rowsPerPage: PropTypes.number,
   shouldWarn: PropTypes.bool.isRequired,
   timezone: PropTypes.string,
+  userInterfaceTimeFormat: PropTypes.oneOf([12, 24, SYSTEM_DEFAULT]),
+  userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy', SYSTEM_DEFAULT]),
+  isUserInterfaceTimeDateDefault: PropTypes.oneOfType([YES_VALUE, NO_VALUE]),
   userInterfaceLanguage: PropTypes.string,
   onChange: PropTypes.func,
 };

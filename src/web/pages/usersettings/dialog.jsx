@@ -12,7 +12,9 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
-import {parseFloat, parseYesNo} from 'gmp/parser';
+import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+
+import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -39,7 +41,7 @@ const FormGroupSizer = styled.div`
 
 const fieldsToValidate = ['rowsPerPage'];
 
-let UserSettingsDialog = ({
+const UserSettingsDialogComponent = ({
   alerts,
   credentials,
   filters,
@@ -49,6 +51,9 @@ let UserSettingsDialog = ({
   schedules,
   targets,
   timezone,
+  userInterfaceTimeFormat,
+  userInterfaceDateFormat,
+  isUserInterfaceTimeDateDefault,
   userInterfaceLanguage,
   rowsPerPage,
   maxRowsPerPage,
@@ -103,6 +108,9 @@ let UserSettingsDialog = ({
 }) => {
   const settings = {
     timezone,
+    userInterfaceTimeFormat,
+    userInterfaceDateFormat,
+    isUserInterfaceTimeDateDefault,
     oldPassword: '',
     newPassword: '',
     confPassword: '',
@@ -193,6 +201,11 @@ let UserSettingsDialog = ({
             <FormGroupSizer>
               <GeneralPart
                 timezone={values.timezone}
+                userInterfaceTimeFormat={values.userInterfaceTimeFormat}
+                userInterfaceDateFormat={values.userInterfaceDateFormat}
+                isUserInterfaceTimeDateDefault={
+                  values.isUserInterfaceTimeDateDefault
+                }
                 oldPassword={values.oldPassword}
                 newPassword={values.newPassword}
                 confPassword={values.confPassword}
@@ -289,7 +302,7 @@ let UserSettingsDialog = ({
   );
 };
 
-UserSettingsDialog.propTypes = {
+UserSettingsDialogComponent.propTypes = {
   alerts: PropTypes.array,
   alertsFilter: PropTypes.string,
   auditReportsFilter: PropTypes.string,
@@ -301,6 +314,7 @@ UserSettingsDialog.propTypes = {
   credentials: PropTypes.array,
   credentialsFilter: PropTypes.string,
   cveFilter: PropTypes.string,
+  userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy', SYSTEM_DEFAULT]),
   defaultAlert: PropTypes.string,
   defaultEsxiCredential: PropTypes.string,
   defaultOpenvasScanConfig: PropTypes.string,
@@ -319,6 +333,7 @@ UserSettingsDialog.propTypes = {
   filtersFilter: PropTypes.string,
   groupsFilter: PropTypes.string,
   hostsFilter: PropTypes.string,
+  isUserInterfaceTimeDateDefault: PropTypes.oneOfType([YES_VALUE, NO_VALUE]),
   listExportFileName: PropTypes.string,
   maxRowsPerPage: PropTypes.number,
   notesFilter: PropTypes.string,
@@ -345,6 +360,7 @@ UserSettingsDialog.propTypes = {
   tasksFilter: PropTypes.string,
   ticketsFilter: PropTypes.string,
   timezone: PropTypes.string,
+  userInterfaceTimeFormat: PropTypes.oneOf([12, 24, SYSTEM_DEFAULT]),
   tlsCertificatesFilter: PropTypes.string,
   userInterfaceLanguage: PropTypes.string,
   usersFilter: PropTypes.string,
@@ -353,12 +369,12 @@ UserSettingsDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-UserSettingsDialog = connect(rootState => {
+const UserSettingsDialog = connect(rootState => {
   const entities = isDefined(rootState.entities) ? rootState.entities : [];
   return {
     entities,
   };
-})(UserSettingsDialog);
+})(UserSettingsDialogComponent);
 
 export default compose(withGmp, withCapabilities)(UserSettingsDialog);
 

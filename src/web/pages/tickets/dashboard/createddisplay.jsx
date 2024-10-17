@@ -4,7 +4,7 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import {shortDate} from 'gmp/locale/date';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import date from 'gmp/models/date';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
@@ -63,7 +63,7 @@ export const TicketsCreatedDisplay = createDisplay({
 });
 
 export const TicketsCreatedTableDisplay = createDisplay({
-  dataRow: row => [row.y, row.y2, shortDate(row.x)],
+  dataRow: row => [row.y, row.y2, formattedUserSettingShortDate(row.x)],
   dataTitles: [_l('Created Tickets'), _l('Total Tickets'), _l('Time')],
   dataTransform: transfromCreated,
   displayComponent: DataTableDisplay,
