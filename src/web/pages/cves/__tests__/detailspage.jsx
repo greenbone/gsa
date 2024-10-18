@@ -161,7 +161,7 @@ describe('CVE Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('CVE-2020-9997', entity_v2));
 
-    const {baseElement, element, getAllByTestId} = render(
+    const {baseElement, getAllByTestId} = render(
       <CvePage id="CVE-2020-9997" />,
     );
 
@@ -182,42 +182,46 @@ describe('CVE Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Export CVE');
 
-    expect(element).toHaveTextContent('CVE: CVE-2020-9997');
+    expect(baseElement).toHaveTextContent('CVE: CVE-2020-9997');
 
-    expect(element).toHaveTextContent('CVE-2020-9997');
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent('CVE-2020-9997');
+    expect(baseElement).toHaveTextContent(
       'Published:Thu, Oct 22, 2020 7:15 PM UTC',
     );
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent(
       'Modified:Fri, Oct 30, 2020 11:44 AM UTC',
     );
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent(
       'Last updated:Mon, Oct 26, 2020 8:27 PM UTC',
     );
 
-    expect(element).toHaveTextContent('Attack VectorLocal');
-    expect(element).toHaveTextContent('Attack ComplexityLow');
-    expect(element).toHaveTextContent('Privileges RequiredNone');
-    expect(element).toHaveTextContent('User InteractionRequired');
-    expect(element).toHaveTextContent('ScopeUnchanged');
-    expect(element).toHaveTextContent('Confidentiality ImpactHigh');
-    expect(element).toHaveTextContent('Integrity ImpactNone');
-    expect(element).toHaveTextContent('Availability ImpactNone');
+    expect(baseElement).toHaveTextContent('Attack VectorLocal');
+    expect(baseElement).toHaveTextContent('Attack ComplexityLow');
+    expect(baseElement).toHaveTextContent('Privileges RequiredNone');
+    expect(baseElement).toHaveTextContent('User InteractionRequired');
+    expect(baseElement).toHaveTextContent('ScopeUnchanged');
+    expect(baseElement).toHaveTextContent('Confidentiality ImpactHigh');
+    expect(baseElement).toHaveTextContent('Integrity ImpactNone');
+    expect(baseElement).toHaveTextContent('Availability ImpactNone');
     const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.5 (Medium)');
-    expect(element).toHaveTextContent('References');
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent('References');
+    expect(baseElement).toHaveTextContent(
       'MISChttps://support.apple.com/kb/HT211289',
     );
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent(
       'MISChttps://support.apple.com/kb/HT211291',
     );
-    expect(element).toHaveTextContent('CERT Advisories referencing this CVE');
-    expect(element).toHaveTextContent('CB-K20/0730');
-    expect(element).toHaveTextContent('Apple macOS: Mehrere Schwachstellen');
-    expect(element).toHaveTextContent('Vulnerable Products');
-    expect(element).toHaveTextContent('cpe:/o:apple:mac_os_x:10.15.5');
-    expect(element).toHaveTextContent('cpe:/o:apple:watchos:6.2.8');
+    expect(baseElement).toHaveTextContent(
+      'CERT Advisories referencing this CVE',
+    );
+    expect(baseElement).toHaveTextContent('CB-K20/0730');
+    expect(baseElement).toHaveTextContent(
+      'Apple macOS: Mehrere Schwachstellen',
+    );
+    expect(baseElement).toHaveTextContent('Vulnerable Products');
+    expect(baseElement).toHaveTextContent('cpe:/o:apple:mac_os_x:10.15.5');
+    expect(baseElement).toHaveTextContent('cpe:/o:apple:watchos:6.2.8');
   });
 });

@@ -115,9 +115,9 @@ describe('Schedule Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement, container} = render(<Detailspage id="12345" />);
 
-    expect(element).toHaveTextContent('Schedule: schedule 1');
+    expect(container).toHaveTextContent('Schedule: schedule 1');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -130,32 +130,36 @@ describe('Schedule Detailspage tests', () => {
     expect(screen.getAllByTitle('Schedules List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/schedules');
 
-    expect(element).toHaveTextContent('ID:1234');
-    expect(element).toHaveTextContent('Created:Wed, Dec 23, 2020 3:14 PM CET');
-    expect(element).toHaveTextContent('Modified:Mon, Jan 4, 2021 12:54 PM CET');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(container).toHaveTextContent('ID:1234');
+    expect(container).toHaveTextContent(
+      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+    );
+    expect(container).toHaveTextContent(
+      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+    );
+    expect(container).toHaveTextContent('Owner:admin');
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[9]).toHaveTextContent('User Tags');
     expect(spans[11]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('Comment');
-    expect(element).toHaveTextContent('hello world');
+    expect(container).toHaveTextContent('Comment');
+    expect(container).toHaveTextContent('hello world');
 
-    expect(element).toHaveTextContent('First Run');
-    expect(element).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
+    expect(container).toHaveTextContent('First Run');
+    expect(container).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
 
-    expect(element).toHaveTextContent('Next Run');
-    expect(element).toHaveTextContent('-');
+    expect(container).toHaveTextContent('Next Run');
+    expect(container).toHaveTextContent('-');
 
-    expect(element).toHaveTextContent('Timezone');
-    expect(element).toHaveTextContent('UTC');
+    expect(container).toHaveTextContent('Timezone');
+    expect(container).toHaveTextContent('UTC');
 
-    expect(element).toHaveTextContent('Recurrence');
-    expect(element).toHaveTextContent('Once');
+    expect(container).toHaveTextContent('Recurrence');
+    expect(container).toHaveTextContent('Once');
 
-    expect(element).toHaveTextContent('Duration');
-    expect(element).toHaveTextContent('Entire Operation');
+    expect(container).toHaveTextContent('Duration');
+    expect(container).toHaveTextContent('Entire Operation');
   });
 
   test('should render user tags tab', () => {
@@ -222,12 +226,12 @@ describe('Schedule Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', schedule));
 
-    const {element, baseElement} = render(<Detailspage id="12345" />);
+    const {container, baseElement} = render(<Detailspage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[11]);
 
-    expect(element).toHaveTextContent('No permissions available');
+    expect(container).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {

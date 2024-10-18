@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 /* eslint-disable no-console */
 
 import {describe, test, expect} from '@gsa/testing';
@@ -17,13 +16,13 @@ const ThrowError = () => {
 
 describe('ErrorBoundary tests', () => {
   test('should render children if no error occurs', () => {
-    const {container, element} = render(
+    const {element} = render(
       <ErrorBoundary message="An error occurred">
         <span>foo</span>
       </ErrorBoundary>,
     );
 
-    expect(container.childNodes.length).toEqual(1);
+    expect(element.childNodes.length).toEqual(1);
     expect(element.nodeName).toEqual('SPAN');
     expect(element).toHaveTextContent('foo');
   });

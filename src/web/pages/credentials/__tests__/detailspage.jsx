@@ -122,7 +122,7 @@ describe('Credential Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('6575', credential));
 
-    const {baseElement, element} = render(<Detailspage id="6575" />);
+    const {baseElement, container} = render(<Detailspage id="6575" />);
 
     const links = baseElement.querySelectorAll('a');
 
@@ -135,25 +135,29 @@ describe('Credential Detailspage tests', () => {
     expect(screen.getAllByTitle('Credential List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/credentials');
 
-    expect(element).toHaveTextContent('ID:6575');
-    expect(element).toHaveTextContent('Created:Wed, Dec 16, 2020 4:23 PM CET');
-    expect(element).toHaveTextContent('Modified:Tue, Mar 2, 2021 11:28 AM CET');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(container).toHaveTextContent('ID:6575');
+    expect(container).toHaveTextContent(
+      'Created:Wed, Dec 16, 2020 4:23 PM CET',
+    );
+    expect(container).toHaveTextContent(
+      'Modified:Tue, Mar 2, 2021 11:28 AM CET',
+    );
+    expect(container).toHaveTextContent('Owner:admin');
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[12]).toHaveTextContent('User Tags');
     expect(spans[14]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('Comment');
-    expect(element).toHaveTextContent('blah');
+    expect(container).toHaveTextContent('Comment');
+    expect(container).toHaveTextContent('blah');
 
-    expect(element).toHaveTextContent('Type');
-    expect(element).toHaveTextContent('Username + SSH Key');
+    expect(container).toHaveTextContent('Type');
+    expect(container).toHaveTextContent('Username + SSH Key');
 
-    expect(element).toHaveTextContent('Allow Insecure Use');
-    expect(element).toHaveTextContent('Yes');
+    expect(container).toHaveTextContent('Allow Insecure Use');
+    expect(container).toHaveTextContent('Yes');
 
-    expect(element).toHaveTextContent('Login');
+    expect(container).toHaveTextContent('Login');
   });
 
   test('should render user tags tab', () => {

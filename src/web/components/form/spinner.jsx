@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
+import {forwardRef} from 'react';
 
 import NumberField from './numberfield';
 
-const Spinner = props => {
-  return <NumberField {...props} hideControls={false} />;
-};
-
+const Spinner = forwardRef((props, ref) => {
+  return <NumberField {...props} ref={ref} hideControls={false} />;
+});
 export default Spinner;

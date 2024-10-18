@@ -198,7 +198,7 @@ describe('Host Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
     // Toolbar Icons
     const links = baseElement.querySelectorAll('a');
@@ -224,11 +224,15 @@ describe('Host Detailspage tests', () => {
     ).toBeInTheDocument();
 
     // Header
-    expect(element).toHaveTextContent('Host: Foo');
-    expect(element).toHaveTextContent('ID:12345');
-    expect(element).toHaveTextContent('Created:Sun, Jun 2, 2019 2:00 PM CEST');
-    expect(element).toHaveTextContent('Modified:Mon, Jun 3, 2019 1:00 PM CEST');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(baseElement).toHaveTextContent('Host: Foo');
+    expect(baseElement).toHaveTextContent('ID:12345');
+    expect(baseElement).toHaveTextContent(
+      'Created:Sun, Jun 2, 2019 2:00 PM CEST',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
 
     // Tabs
     const spans = baseElement.querySelectorAll('span');

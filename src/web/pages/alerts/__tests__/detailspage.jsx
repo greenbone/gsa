@@ -126,9 +126,9 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
-    expect(element).toHaveTextContent('Alert: foo');
+    expect(baseElement).toHaveTextContent('Alert: foo');
 
     const links = baseElement.querySelectorAll('a');
     const icons = screen.getAllByTestId('svg-icon');
@@ -142,25 +142,27 @@ describe('Alert Detailspage tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Alerts List');
     expect(links[1]).toHaveAttribute('href', '/alerts');
 
-    expect(element).toHaveTextContent('ID:1234');
-    expect(element).toHaveTextContent('Created:Tue, Jul 16, 2019 8:31 AM CEST');
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent('ID:1234');
+    expect(baseElement).toHaveTextContent(
+      'Created:Tue, Jul 16, 2019 8:31 AM CEST',
+    );
+    expect(baseElement).toHaveTextContent(
       'Modified:Tue, Jul 16, 2019 8:44 AM CEST',
     );
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(baseElement).toHaveTextContent('Owner:admin');
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[9]).toHaveTextContent('User Tags');
     expect(spans[11]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('foo');
-    expect(element).toHaveTextContent('bar');
+    expect(baseElement).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('bar');
 
-    expect(element).toHaveTextContent('Task run status changed to Done');
-    expect(element).toHaveTextContent('Always');
-    expect(element).toHaveTextContent('SMB');
-    expect(element).toHaveTextContent('report results filter');
-    expect(element).toHaveTextContent('Yes');
+    expect(baseElement).toHaveTextContent('Task run status changed to Done');
+    expect(baseElement).toHaveTextContent('Always');
+    expect(baseElement).toHaveTextContent('SMB');
+    expect(baseElement).toHaveTextContent('report results filter');
+    expect(baseElement).toHaveTextContent('Yes');
   });
 
   test('should render user tags tab', () => {

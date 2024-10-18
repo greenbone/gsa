@@ -302,13 +302,11 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit));
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
 
-    expect(element).toBeVisible();
+    expect(baseElement).toBeVisible();
 
-    expect(element).toHaveTextContent('Audit: foo');
+    expect(baseElement).toHaveTextContent('Audit: foo');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getActionItems();
@@ -322,39 +320,41 @@ describe('Audit Detailspage tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Audit List');
     expect(links[1]).toHaveAttribute('href', '/audits');
 
-    expect(element).toHaveTextContent('12345');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
-    expect(element).toHaveTextContent('admin');
+    expect(baseElement).toHaveTextContent('12345');
+    expect(baseElement).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
+    expect(baseElement).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
+    expect(baseElement).toHaveTextContent('admin');
 
-    expect(element).toHaveTextContent('foo');
-    expect(element).toHaveTextContent('bar');
+    expect(baseElement).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('bar');
 
     const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Done');
     expect(progressBars[0]).toHaveTextContent('Done');
 
-    const headings = element.querySelectorAll('h2');
+    const headings = baseElement.querySelectorAll('h2');
     const detailsLinks = getAllByTestId('details-link');
 
     expect(headings[1]).toHaveTextContent('Target');
     expect(detailsLinks[2]).toHaveAttribute('href', '/target/5678');
-    expect(element).toHaveTextContent('target1');
+    expect(baseElement).toHaveTextContent('target1');
 
     expect(headings[2]).toHaveTextContent('Alerts');
     expect(detailsLinks[3]).toHaveAttribute('href', '/alert/91011');
-    expect(element).toHaveTextContent('alert1');
+    expect(baseElement).toHaveTextContent('alert1');
 
     expect(headings[3]).toHaveTextContent('Scanner');
     expect(detailsLinks[4]).toHaveAttribute('href', '/scanner/1516');
-    expect(element).toHaveTextContent('scanner1');
-    expect(element).toHaveTextContent('OpenVAS Scanner');
+    expect(baseElement).toHaveTextContent('scanner1');
+    expect(baseElement).toHaveTextContent('OpenVAS Scanner');
 
     expect(headings[4]).toHaveTextContent('Assets');
 
     expect(headings[5]).toHaveTextContent('Scan');
-    expect(element).toHaveTextContent('2 minutes');
-    expect(element).toHaveTextContent('Do not automatically delete reports');
+    expect(baseElement).toHaveTextContent('2 minutes');
+    expect(baseElement).toHaveTextContent(
+      'Do not automatically delete reports',
+    );
   });
 
   test('should render permissions tab', () => {
@@ -398,11 +398,11 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit2));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
 
-    expect(element).toHaveTextContent('No permissions available');
+    expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {

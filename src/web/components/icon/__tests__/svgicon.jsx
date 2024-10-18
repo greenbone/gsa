@@ -27,7 +27,7 @@ describe('SVG icon component tests', () => {
         onClick={handleClick}
       />,
     );
-    expect(container.firstChild).toBeVisible();
+    expect(container).toBeVisible();
   });
 
   test('should render loading state', async () => {

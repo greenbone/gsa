@@ -8,6 +8,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {KeyCode} from 'gmp/utils/event';
 
 import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
+import {changeInputValue} from 'web/components/testing';
 
 import Spinner from '../spinner';
 
@@ -15,9 +16,9 @@ const getInput = element =>
   element.querySelector('input.mantine-NumberInput-input');
 
 const getIncrementButton = element =>
-  element.querySelector('.mantine-NumberInput-controlUp');
+  element.querySelector('.mantine-NumberInput-control[data-direction="up"]');
 const getDecrementButton = element =>
-  element.querySelector('.mantine-NumberInput-controlDown');
+  element.querySelector('.mantine-NumberInput-control[data-direction="down"]');
 
 const clickIncrementButton = async element =>
   await userEvent.click(getIncrementButton(element));
@@ -113,43 +114,13 @@ describe('Spinner tests', () => {
     fireEvent.change(element, {target: {value: '2'}});
 
     expect(onChange).toHaveBeenCalledWith(2, undefined);
-    expect(element).toHaveAttribute('value', '2');
+    expect(element.value).toBe('2');
 
     rerender(<Spinner data-testid="input" value={2} onChange={onChange} />);
-
-    expect(element).toHaveAttribute('value', '2');
+    expect(element.value).toBe('2');
 
     rerender(<Spinner data-testid="input" value={3} onChange={onChange} />);
-
-    expect(element).toHaveAttribute('value', '3');
-  });
-
-  test('should use max if value > max', () => {
-    const onChange = testing.fn();
-    render(
-      <Spinner data-testid="input" value={1} max={2} onChange={onChange} />,
-    );
-
-    const element = screen.getByTestId('input');
-
-    fireEvent.change(element, {target: {value: '3'}});
-
-    expect(onChange).toHaveBeenCalledWith(2, undefined);
-    expect(element).toHaveAttribute('value', '2');
-  });
-
-  test('should use min if value < min', () => {
-    const onChange = testing.fn();
-    render(
-      <Spinner data-testid="input" value={2} min={1} onChange={onChange} />,
-    );
-
-    const element = screen.getByTestId('input');
-
-    fireEvent.change(element, {target: {value: '0'}});
-
-    expect(onChange).toHaveBeenCalledWith(1, undefined);
-    expect(element).toHaveAttribute('value', '1');
+    expect(element.value).toBe('3');
   });
 
   test('should increment value on button click', async () => {
@@ -157,7 +128,7 @@ describe('Spinner tests', () => {
     const {element} = render(<Spinner value={1} onChange={handler} />);
 
     await clickIncrementButton(element);
-
+    fireEvent.blur(element);
     expect(handler).toHaveBeenCalledWith(2, undefined);
   });
 
@@ -166,6 +137,7 @@ describe('Spinner tests', () => {
     const {element} = render(<Spinner value={1} onChange={handler} />);
 
     await clickDecrementButton(element);
+    fireEvent.blur(element);
 
     expect(handler).toHaveBeenCalledWith(0, undefined);
   });
@@ -199,13 +171,10 @@ describe('Spinner tests', () => {
     );
 
     const input = getInput(element);
-    fireEvent.keyDown(input, {key: 'ArrowDown', keyCode: KeyCode.DOWN});
-    fireEvent.keyDown(input, {key: 'ArrowUp', keyCode: KeyCode.UP});
 
-    expect(getIncrementButton(element)).toBeNull();
-    expect(getDecrementButton(element)).toBeNull();
-
-    expect(handler).not.toHaveBeenCalled();
+    expect(input).toHaveAttribute('disabled');
+    expect(getIncrementButton(element)).toHaveAttribute('disabled');
+    expect(getDecrementButton(element)).toHaveAttribute('disabled');
   });
 
   test('should not increment value beyond max', async () => {

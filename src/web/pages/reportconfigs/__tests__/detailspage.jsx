@@ -75,15 +75,15 @@ describe('Report Config Details Page tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {element} = render(<DetailsPage id="12345" />);
-    expect(element).toBeVisible();
+    const {container} = render(<DetailsPage id="12345" />);
+    expect(container).toBeVisible();
 
     // Test parameter details
-    const spans = element.querySelectorAll('span');
+    const spans = container.querySelectorAll('span');
     expect(spans[8]).toHaveTextContent('Parameter Details');
     fireEvent.click(spans[8]);
 
-    const paramTableRows = element.querySelectorAll('tr');
+    const paramTableRows = container.querySelectorAll('tr');
     expect(paramTableRows.length).toBe(7);
 
     let columns = paramTableRows[0].querySelectorAll('th');

@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {render} from 'web/utils/testing';
+import {getAllByTestId, render} from 'web/utils/testing';
 import Metrics from 'web/pages/extras/cvssV4/Metrics';
 
 describe('Metrics', () => {
@@ -22,7 +22,7 @@ describe('Metrics', () => {
     const selectedOptions = {metric1: 'option1', metric2: 'option2'};
     const handleOptionChange = testing.fn();
 
-    const {getAllByRole} = render(
+    const {getAllByTestId} = render(
       <Metrics
         metrics={metrics}
         selectedOptions={selectedOptions}
@@ -30,7 +30,7 @@ describe('Metrics', () => {
       />,
     );
 
-    const selects = getAllByRole('combobox');
+    const selects = getAllByTestId('form-select');
     expect(selects).toHaveLength(Object.keys(metrics).length);
   });
 });

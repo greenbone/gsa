@@ -15,7 +15,7 @@ import {
   getDialog,
   getDialogCloseButton,
   getDialogSaveButton,
-  getSelectElements,
+  queryAllSelectElements,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
 
@@ -127,7 +127,7 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
     const selectItems = await getSelectItemElementsForSelect(selects[0]);
     expect(selectItems.length).toEqual(3);
     await clickElement(selectItems[1]);
@@ -161,7 +161,7 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
     const selectItems = await getSelectItemElementsForSelect(selects[1]);
     expect(selectItems.length).toEqual(2);
     await clickElement(selectItems[1]);

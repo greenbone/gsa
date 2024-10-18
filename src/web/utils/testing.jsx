@@ -97,13 +97,14 @@ export const render = ui => {
   const {container, baseElement, rerender, ...other} = reactTestingRender(
     <Main>{ui}</Main>,
   );
+
   return {
     userEvent: userEvent.setup({
       pointerEventsCheck: PointerEventsCheckLevel.Never,
     }),
     baseElement,
     container,
-    element: hasValue(container) ? container : undefined,
+    element: hasValue(container) ? container.lastChild : undefined,
     getAllByName: name => getAllByName(baseElement, name),
     getByName: name => getByName(baseElement, name),
     queryByName: name => queryByName(baseElement, name),

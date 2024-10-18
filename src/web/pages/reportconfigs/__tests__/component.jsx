@@ -15,7 +15,7 @@ import {
   getDialogContent,
   getDialogSaveButton,
   getDialogTitle,
-  getSelectElements,
+  queryAllSelectElements,
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
@@ -115,7 +115,7 @@ describe('Report Config Component tests', () => {
     const inputs = getTextInputs(content);
     expect(inputs[0]).toHaveValue('test report config');
 
-    const select = getSelectElements(content);
+    const select = queryAllSelectElements(content);
     expect(select[0]).toHaveValue('test report format');
 
     const saveButton = getDialogSaveButton();
@@ -196,7 +196,7 @@ describe('Report Config Component tests', () => {
     expect(getDialogTitle()).toHaveTextContent('New Report Config');
     const content = getDialogContent();
 
-    const selects = getSelectElements(content);
+    const selects = queryAllSelectElements(content);
 
     // No report format selected at start
     expect(selects[0]).not.toHaveTextContent('test report format');

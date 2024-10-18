@@ -201,11 +201,11 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StartIcon task={task} />);
+    const {queryByTestId} = render(<StartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
-    expect(element).toEqual(null);
+    expect(queryByTestId('start-icon')).toEqual(null);
   });
 
   test('should not be rendered if task is a container', () => {
@@ -217,11 +217,11 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StartIcon task={task} />);
+    const {queryByTestId} = render(<StartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
-    expect(element).toEqual(null);
+    expect(queryByTestId('start-icon')).toEqual(null);
   });
 });
 

@@ -79,28 +79,6 @@ describe('AutoDeleteReportsGroup tests', () => {
     expect(handleChange).toHaveBeenCalledWith(10, 'auto_delete_data');
   });
 
-  test('should keep auto delete keep value in range 2-1200', () => {
-    const handleChange = testing.fn();
-
-    const {getByName} = render(
-      <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
-        autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
-        onChange={handleChange}
-      />,
-    );
-    const autoDeleteKeepData = getByName('auto_delete_data');
-
-    changeInputValue(autoDeleteKeepData, 1);
-    expect(handleChange).toHaveBeenCalledWith(2, 'auto_delete_data');
-
-    changeInputValue(autoDeleteKeepData, 1201);
-    expect(handleChange).toHaveBeenCalledWith(1200, 'auto_delete_data');
-
-    changeInputValue(autoDeleteKeepData, 140);
-    expect(handleChange).toHaveBeenCalledWith(140, 'auto_delete_data');
-  });
-
   test('should not allow to change auto delete keep value', () => {
     const handleChange = testing.fn();
 

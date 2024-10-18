@@ -20,7 +20,7 @@ import {
   getDialogSaveButton,
   getFileInputs,
   getRadioInputs,
-  getSelectElements,
+  queryAllSelectElements,
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
@@ -54,7 +54,7 @@ const credentials = [cred1, cred2, cred3, cred4];
 const gmp = {settings: {enableGreenboneSensor: true}};
 
 describe('TargetDialog component tests', () => {
-  test.only('should render with default values', () => {
+  test('should render with default values', () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
@@ -121,7 +121,7 @@ describe('TargetDialog component tests', () => {
     expect(radioInputs[5]).toHaveAttribute('value', '0');
     expect(radioInputs[5]).not.toBeChecked();
 
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
 
     expect(baseElement).not.toHaveTextContent('Elevate privileges'); // elevate privileges should not be rendered without valid ssh_credential_id
 
@@ -197,7 +197,7 @@ describe('TargetDialog component tests', () => {
     const inputs = getTextInputs();
     const radioInputs = getRadioInputs();
     const fileInputs = getFileInputs();
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveValue('target'); // name field
@@ -391,7 +391,7 @@ describe('TargetDialog component tests', () => {
 
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects
 
     const createCredentialIcons = screen.getAllByTitle(
@@ -439,7 +439,7 @@ describe('TargetDialog component tests', () => {
 
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects
 
     const selectItems = await getSelectItemElementsForSelect(selects[3]);
@@ -488,7 +488,7 @@ describe('TargetDialog component tests', () => {
 
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects
 
     const selectItems = await getSelectItemElementsForSelect(selects[2]);
@@ -541,7 +541,7 @@ describe('TargetDialog component tests', () => {
     const newIcons = queryAllByTitle('Create a new credential');
     expect(newIcons.length).toBe(0); // no new credential can be created
 
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects
 
     expect(selects[0]).toHaveValue('OpenVAS Default');

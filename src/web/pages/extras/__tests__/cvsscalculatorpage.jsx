@@ -11,7 +11,7 @@ import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
 import {
   changeInputValue,
   clickElement,
-  getSelectElements,
+  queryAllSelectElements,
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
@@ -59,7 +59,7 @@ describe('CvssCalculator page tests', () => {
 
     const sections = element.querySelectorAll('section');
     const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = getSelectElements(cvssV2section);
+    const cvssV2selects = queryAllSelectElements(cvssV2section);
     const cvssV2vector = getTextInputs(cvssV2section)[0];
 
     /* CVSSv2 input */
@@ -73,7 +73,7 @@ describe('CvssCalculator page tests', () => {
 
     /* CVSSv3 input */
     const cvssV3section = sections[1].parentNode;
-    const cvssV3selects = getSelectElements(cvssV3section);
+    const cvssV3selects = queryAllSelectElements(cvssV3section);
     const cvssV3vector = getTextInputs(cvssV3section)[0];
 
     expect(cvssV3selects[0]).toHaveValue('Network');
@@ -108,7 +108,7 @@ describe('CvssCalculator page tests', () => {
 
     const sections = element.querySelectorAll('section');
     const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = getSelectElements(cvssV2section);
+    const cvssV2selects = queryAllSelectElements(cvssV2section);
     const cvssV2vector = getTextInputs(cvssV2section)[0];
 
     /* CVSSv2 input */
@@ -122,7 +122,7 @@ describe('CvssCalculator page tests', () => {
 
     /* CVSSv3 input */
     const cvssV3section = sections[1].parentNode;
-    const cvssV3selects = getSelectElements(cvssV3section);
+    const cvssV3selects = queryAllSelectElements(cvssV3section);
     const cvssV3vector = getTextInputs(cvssV3section)[0];
 
     expect(cvssV3selects[0]).toHaveValue('Network');
@@ -151,11 +151,11 @@ describe('CvssCalculator page tests', () => {
 
     const sections = element.querySelectorAll('section');
     const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = getSelectElements(cvssV2section);
+    const cvssV2selects = queryAllSelectElements(cvssV2section);
     const cvssV2vector = getTextInputs(cvssV2section)[0];
 
     const cvssV3section = sections[1].parentNode;
-    const cvssV3selects = getSelectElements(cvssV3section);
+    const cvssV3selects = queryAllSelectElements(cvssV3section);
     const cvssV3vector = getTextInputs(cvssV3section)[0];
 
     changeInputValue(cvssV2vector, 'AV:N/AC:L/Au:N/C:N/I:P/A:P');
@@ -208,11 +208,11 @@ describe('CvssCalculator page tests', () => {
 
     const sections = element.querySelectorAll('section');
     const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = getSelectElements(cvssV2section);
+    const cvssV2selects = queryAllSelectElements(cvssV2section);
     const cvssV2vector = getTextInputs(cvssV2section)[0];
 
     const cvssV3section = sections[1].parentNode;
-    const cvssV3selects = getSelectElements(cvssV3section);
+    const cvssV3selects = queryAllSelectElements(cvssV3section);
     const cvssV3vector = getTextInputs(cvssV3section)[0];
 
     /* CVSSv2 input */

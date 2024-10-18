@@ -277,10 +277,10 @@ describe('Nvt Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
     await wait();
 
-    expect(element).toHaveTextContent('NVT: foo');
+    expect(baseElement).toHaveTextContent('NVT: foo');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -293,75 +293,77 @@ describe('Nvt Detailspage tests', () => {
     expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/nvts');
 
-    expect(element).toHaveTextContent('ID:12345');
-    expect(element).toHaveTextContent('Mon, Jun 24, 2019 11:55 AM UTC');
-    expect(element).toHaveTextContent('Mon, Jun 24, 2019 10:12 AM UTC');
-    expect(element).toHaveTextContent('Owner:(Global Object)');
+    expect(baseElement).toHaveTextContent('ID:12345');
+    expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 11:55 AM UTC');
+    expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 10:12 AM UTC');
+    expect(baseElement).toHaveTextContent('Owner:(Global Object)');
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[8]).toHaveTextContent('Preferences');
     expect(spans[10]).toHaveTextContent('User Tags');
 
-    expect(element).toHaveTextContent('Summary');
-    expect(element).toHaveTextContent('This is a description');
+    expect(baseElement).toHaveTextContent('Summary');
+    expect(baseElement).toHaveTextContent('This is a description');
 
-    expect(element).toHaveTextContent('Scoring');
-    expect(element).toHaveTextContent('CVSS Base');
-    expect(element).toHaveTextContent('4.9 (Medium)');
-    expect(element).toHaveTextContent('CVSS Base Vector');
-    expect(element).toHaveTextContent('AV:N/AC:M/Au:S/C:P/I:N/A:P');
-    expect(element).toHaveTextContent('CVSS Origin');
-    expect(element).toHaveTextContent('N/A');
+    expect(baseElement).toHaveTextContent('Scoring');
+    expect(baseElement).toHaveTextContent('CVSS Base');
+    expect(baseElement).toHaveTextContent('4.9 (Medium)');
+    expect(baseElement).toHaveTextContent('CVSS Base Vector');
+    expect(baseElement).toHaveTextContent('AV:N/AC:M/Au:S/C:P/I:N/A:P');
+    expect(baseElement).toHaveTextContent('CVSS Origin');
+    expect(baseElement).toHaveTextContent('N/A');
 
-    expect(element).toHaveTextContent('EPSS (CVE with highest severity)');
-    expect(element).toHaveTextContent('EPSS Score');
-    expect(element).toHaveTextContent('0.87650');
-    expect(element).toHaveTextContent('EPSS Percentile');
-    expect(element).toHaveTextContent('0.90000');
-    expect(element).toHaveTextContent('EPSS (highest EPSS score)');
-    expect(element).toHaveTextContent('0.98760');
+    expect(baseElement).toHaveTextContent('EPSS (CVE with highest severity)');
+    expect(baseElement).toHaveTextContent('EPSS Score');
+    expect(baseElement).toHaveTextContent('0.87650');
+    expect(baseElement).toHaveTextContent('EPSS Percentile');
+    expect(baseElement).toHaveTextContent('0.90000');
+    expect(baseElement).toHaveTextContent('EPSS (highest EPSS score)');
+    expect(baseElement).toHaveTextContent('0.98760');
 
-    expect(element).toHaveTextContent('Insight');
-    expect(element).toHaveTextContent('Foo');
+    expect(baseElement).toHaveTextContent('Insight');
+    expect(baseElement).toHaveTextContent('Foo');
 
-    expect(element).toHaveTextContent('Detection Method');
-    expect(element).toHaveTextContent('Baz');
+    expect(baseElement).toHaveTextContent('Detection Method');
+    expect(baseElement).toHaveTextContent('Baz');
 
-    expect(element).toHaveTextContent('Affected Software/OS');
-    expect(element).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('Affected Software/OS');
+    expect(baseElement).toHaveTextContent('foo');
 
-    expect(element).toHaveTextContent('Impact');
-    expect(element).toHaveTextContent('Bar');
+    expect(baseElement).toHaveTextContent('Impact');
+    expect(baseElement).toHaveTextContent('Bar');
 
-    expect(element).toHaveTextContent('Solution');
+    expect(baseElement).toHaveTextContent('Solution');
 
-    expect(element).toHaveTextContent('Family');
-    expect(element).toHaveTextContent('bar');
+    expect(baseElement).toHaveTextContent('Family');
+    expect(baseElement).toHaveTextContent('bar');
 
-    expect(element).toHaveTextContent('References');
-    expect(element).toHaveTextContent('CVECVE-2020-1234');
+    expect(baseElement).toHaveTextContent('References');
+    expect(baseElement).toHaveTextContent('CVECVE-2020-1234');
 
-    expect(element).toHaveTextContent('Overrides');
-    expect(element).toHaveTextContent('Override from Any to False Positive');
-    expect(element).toHaveTextContent('test_override_1');
-    expect(element).toHaveTextContent('Active until');
-    expect(element).toHaveTextContent('Sat, Mar 13, 2021 10:35 AM UTC');
-    expect(element).toHaveTextContent('Modified');
-    expect(element).toHaveTextContent('Thu, Jan 14, 2021 6:20 AM UTC');
+    expect(baseElement).toHaveTextContent('Overrides');
+    expect(baseElement).toHaveTextContent(
+      'Override from Any to False Positive',
+    );
+    expect(baseElement).toHaveTextContent('test_override_1');
+    expect(baseElement).toHaveTextContent('Active until');
+    expect(baseElement).toHaveTextContent('Sat, Mar 13, 2021 10:35 AM UTC');
+    expect(baseElement).toHaveTextContent('Modified');
+    expect(baseElement).toHaveTextContent('Thu, Jan 14, 2021 6:20 AM UTC');
 
-    expect(element).toHaveTextContent('test_override_2');
-    expect(element).toHaveTextContent('Active until');
-    expect(element).toHaveTextContent('Sat, Feb 13, 2021 11:35 AM UTC');
-    expect(element).toHaveTextContent('Modified');
-    expect(element).toHaveTextContent('Fri, Feb 14, 2020 6:35 AM UTC');
+    expect(baseElement).toHaveTextContent('test_override_2');
+    expect(baseElement).toHaveTextContent('Active until');
+    expect(baseElement).toHaveTextContent('Sat, Feb 13, 2021 11:35 AM UTC');
+    expect(baseElement).toHaveTextContent('Modified');
+    expect(baseElement).toHaveTextContent('Fri, Feb 14, 2020 6:35 AM UTC');
 
-    expect(element).toHaveTextContent('Notes');
-    expect(element).toHaveTextContent('Note');
-    expect(element).toHaveTextContent('test_note');
-    expect(element).toHaveTextContent('Active until');
-    expect(element).toHaveTextContent('Sat, Feb 13, 2021 6:35 AM UTC');
-    expect(element).toHaveTextContent('Modified');
-    expect(element).toHaveTextContent('Thu, Jan 14, 2021 6:35 AM UTC');
+    expect(baseElement).toHaveTextContent('Notes');
+    expect(baseElement).toHaveTextContent('Note');
+    expect(baseElement).toHaveTextContent('test_note');
+    expect(baseElement).toHaveTextContent('Active until');
+    expect(baseElement).toHaveTextContent('Sat, Feb 13, 2021 6:35 AM UTC');
+    expect(baseElement).toHaveTextContent('Modified');
+    expect(baseElement).toHaveTextContent('Thu, Jan 14, 2021 6:35 AM UTC');
   });
 
   test('should render preferences tab', () => {

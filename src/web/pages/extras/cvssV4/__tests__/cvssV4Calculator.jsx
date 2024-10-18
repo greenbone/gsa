@@ -4,12 +4,8 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
-import {fireEvent, rendererWith, wait} from 'web/utils/testing';
-import {
-  clickElement,
-  getSelectElements,
-  getSelectItemElementsForSelect,
-} from 'web/components/testing';
+import {fireEvent, rendererWith, wait, userEvent} from 'web/utils/testing';
+
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 
 const gmp = {
@@ -107,13 +103,17 @@ describe('CvssV4Calculator page tests', () => {
       router: true,
     });
 
-    const {element} = render(<CvssV4Calculator location={location} />);
+    const {element, getAllByTestId, getByRole} = render(
+      <CvssV4Calculator location={location} />,
+    );
 
-    const sections = element.querySelectorAll('section');
-    const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = getSelectElements(cvssV2section);
-    const cvssV2items = await getSelectItemElementsForSelect(cvssV2selects[0]);
-    await clickElement(cvssV2items[2]);
+    const allSelectors = getAllByTestId('form-select');
+    const firstSelector = allSelectors[0];
+
+    await userEvent.click(firstSelector);
+
+    const option = getByRole('option', {name: 'Local (L)'});
+    await userEvent.click(option);
 
     const cvssVector =
       'CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';

@@ -26,7 +26,7 @@ import {
   getCheckBoxes,
   getPowerFilter,
   getSelectElement,
-  getSelectElements,
+  queryAllSelectElements,
   getSelectItemElementsForSelect,
   getTableBody,
   getTableFooter,
@@ -150,7 +150,7 @@ describe('Alert listpage tests', () => {
 
     const icons = screen.getAllByTestId('svg-icon');
     const powerFilter = getPowerFilter();
-    const selects = getSelectElements(powerFilter);
+    const selects = queryAllSelectElements(powerFilter);
     const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icons

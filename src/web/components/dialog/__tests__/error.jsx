@@ -20,9 +20,10 @@ describe('Dialog error tests', () => {
   });
 
   test('should not render with undefined error', () => {
-    const {element} = render(<DialogError onCloseClick={() => {}} />);
+    const {container} = render(<DialogError onCloseClick={() => {}} />);
 
-    expect(element).toBe(null);
+    const divElement = container.querySelector('div');
+    expect(divElement).not.toBeInTheDocument();
   });
 
   test('should call close handler', () => {

@@ -18,6 +18,7 @@ import {
   getDialogSaveButton,
   getDialogTitle,
   getRadioInputs,
+  getTextInputs,
 } from 'web/components/testing';
 
 import EditNvtDetailsDialog from '../editnvtdetailsdialog';
@@ -243,9 +244,9 @@ describe('EditNvtDetailsDialog component tests', () => {
     fireEvent.click(radios[2]);
     fireEvent.click(radios[5]);
 
-    const inputs = baseElement.querySelectorAll('input[type="text"]');
-    changeInputValue(inputs[1], 'bar');
+    const inputs = getTextInputs(baseElement);
 
+    changeInputValue(inputs[1], 'bar');
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 

@@ -108,8 +108,13 @@ const Select = ({
 
   const selectPlaceholder = isLoading ? _('Loading...') : placeholder;
   const rightSection = isLoading && <Loader size="xs" />;
-  const selectableItems = isLoading ? [] : items;
-  const selectedValue = isLoading ? undefined : value;
+  const selectableItems = isLoading
+    ? []
+    : items.map(item => ({
+        value: String(item.value),
+        label: item.label,
+      }));
+  const selectedValue = isLoading ? undefined : String(value);
 
   return (
     <OpenSightSelect
@@ -128,7 +133,7 @@ const Select = ({
       onChange={handleChange}
       rightSection={rightSection}
       itemComponent={SelectItem}
-      data-testId={'powerfilter-select'}
+      data-testid={'form-select'}
     />
   );
 };

@@ -11,11 +11,15 @@ import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {getByRole, rendererWith} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/testing';
 
 import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
-import {getPowerFilter, getTextInputs} from 'web/components/testing';
+import {
+  getPowerFilter,
+  getTextInputs,
+  getSelectElement,
+} from 'web/components/testing';
 
 import DetailsContent from '../detailscontent';
 
@@ -149,7 +153,7 @@ describe('Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
     const powerFilter = getPowerFilter();
     const inputs = getTextInputs(powerFilter);
-    const select = getByRole(powerFilter, 'combobox');
+    const select = getSelectElement(powerFilter);
 
     // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -319,7 +323,7 @@ describe('Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
     const powerFilter = getPowerFilter();
     const inputs = getTextInputs(powerFilter);
-    const select = getByRole(powerFilter, 'combobox');
+    const select = getSelectElement(powerFilter);
 
     // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

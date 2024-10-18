@@ -17,12 +17,6 @@ import {
 import Select, {SelectItem} from '../select';
 
 describe('Select component tests', () => {
-  test('should render', () => {
-    const {element} = render(<Select />);
-
-    expect(element).toBeVisible();
-  });
-
   test('should render with items', async () => {
     const items = [
       {
@@ -35,11 +29,11 @@ describe('Select component tests', () => {
       },
     ];
 
-    render(<Select items={items} />);
+    const {queryByRole} = render(<Select items={items} />);
 
     const element = getSelectElement();
 
-    expect(getSelectItemElements().length).toEqual(0);
+    expect(queryByRole('option')).not.toBeInTheDocument();
 
     await openSelectElement(element);
 

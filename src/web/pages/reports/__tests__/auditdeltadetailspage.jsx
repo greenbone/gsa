@@ -12,8 +12,12 @@ import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {getByRole, rendererWith} from 'web/utils/testing';
-import {getPowerFilter, getTextInputs} from 'web/components/testing';
+import {rendererWith} from 'web/utils/testing';
+import {
+  getPowerFilter,
+  getSelectElement,
+  getTextInputs,
+} from 'web/components/testing';
 
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/mockauditdeltareport';
 
@@ -134,7 +138,7 @@ describe('Audit Detla Report Details Content tests', () => {
     const tableData = baseElement.querySelectorAll('td');
     const powerFilter = getPowerFilter();
     const inputs = getTextInputs(powerFilter);
-    const select = getByRole(powerFilter, 'combobox');
+    const select = getSelectElement(powerFilter);
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
@@ -310,7 +314,7 @@ describe('Audit Detla Report Details Content tests', () => {
     const rows = baseElement.querySelectorAll('tr');
     const powerFilter = getPowerFilter();
     const inputs = getTextInputs(powerFilter);
-    const select = getByRole(powerFilter, 'combobox');
+    const select = getSelectElement(powerFilter);
 
     // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

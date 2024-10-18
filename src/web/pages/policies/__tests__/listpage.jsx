@@ -113,11 +113,11 @@ describe('PoliciesPage tests', () => {
       entitiesLoadingActions.success([policy], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<PoliciesPage />);
+    const {container} = render(<PoliciesPage />);
 
     await wait();
 
-    expect(element).toBeVisible();
+    expect(container).toBeVisible();
   });
 
   test('should call commands for bulk actions', async () => {

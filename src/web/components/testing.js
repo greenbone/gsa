@@ -11,11 +11,11 @@ import {
   userEvent,
   act,
   fireEvent,
-  queryAllByRole,
   queryByRole,
   getByRole,
   getAllByTestId,
   getByTestId,
+  queryAllByTestId,
 } from 'web/utils/testing';
 
 export const getElementOrDocument = element =>
@@ -53,7 +53,7 @@ export const getSelectItemElementsForSelect = async element => {
  */
 export const getSelectElement = element => {
   element = getElementOrDocument(element);
-  const select = queryByRole(element, 'searchbox');
+  const select = getByTestId(element, 'form-select');
   if (select) {
     return select;
   }
@@ -63,9 +63,9 @@ export const getSelectElement = element => {
 /**
  * Get all select components
  */
-export const getSelectElements = element => {
+export const queryAllSelectElements = element => {
   element = getElementOrDocument(element);
-  return queryAllByRole(element, 'searchbox');
+  return queryAllByTestId(element, 'form-select');
 };
 
 /**
@@ -94,15 +94,14 @@ export const clickElement = async element => {
  */
 export const getMultiSelectElements = element => {
   element = getElementOrDocument(element);
-  return element.querySelectorAll('.mantine-MultiSelect-root');
+  return element.querySelectorAll('.mantine-MultiSelect-inputField');
 };
 
 /**
  * Get all multi select (root) element
  */
 export const getMultiSelectElement = element => {
-  element = getElementOrDocument(element);
-  return element.querySelector('.mantine-MultiSelect-root');
+  return element.getByRole('textbox');
 };
 
 /**
@@ -117,30 +116,22 @@ export const openMultiSelectElement = async element => {
 /**
  * Get current selected items of a MultiSelect component
  */
-export const getSelectedItems = element => {
-  element = getElementOrDocument(element);
-  return element.querySelectorAll('.mantine-MultiSelect-value');
+export const getSelectedItems = document => {
+  return document.querySelectorAll('.mantine-MultiSelect-pill');
 };
 
 /**
  * Get all the selectable items of a MultiSelect component
  */
-export const getSelectItemElementsForMultiSelect = async element => {
-  element = isDefined(element) ? element : getMultiSelectElement();
-  await openMultiSelectElement(element);
-  const controlElement = element.querySelector('.mantine-MultiSelect-wrapper');
-  const selectItemsId = controlElement.getAttribute('aria-controls');
-  const itemsContainer = document.body.querySelector(
-    '#' + selectItemsId + '-items',
-  );
-  return getSelectItemElements(itemsContainer);
+export const getSelectItemElementsForMultiSelect = screen => {
+  return screen.getAllByRole('option');
 };
-
 /**
  * Change the value of an input element like Select or TestField component
  */
 export const changeInputValue = (element, value) => {
   fireEvent.change(element, {target: {value}});
+  fireEvent.blur(element);
 };
 
 /**

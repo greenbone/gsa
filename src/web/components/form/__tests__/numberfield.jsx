@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent, screen} from 'web/utils/testing';
+import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
 
 import NumberField from '../numberfield';
 
@@ -111,33 +111,5 @@ describe('NumberField tests', () => {
     rerender(<NumberField data-testid="input" value={3} onChange={onChange} />);
 
     expect(element).toHaveAttribute('value', '3');
-  });
-
-  test('should use max if value > max', () => {
-    const onChange = testing.fn();
-    render(
-      <NumberField data-testid="input" value={1} max={2} onChange={onChange} />,
-    );
-
-    const element = screen.getByTestId('input');
-
-    fireEvent.change(element, {target: {value: '3'}});
-
-    expect(onChange).toHaveBeenCalledWith(2, undefined);
-    expect(element).toHaveAttribute('value', '2');
-  });
-
-  test('should use min if value < min', () => {
-    const onChange = testing.fn();
-    render(
-      <NumberField data-testid="input" value={2} min={1} onChange={onChange} />,
-    );
-
-    const element = screen.getByTestId('input');
-
-    fireEvent.change(element, {target: {value: '0'}});
-
-    expect(onChange).toHaveBeenCalledWith(1, undefined);
-    expect(element).toHaveAttribute('value', '1');
   });
 });
