@@ -14,7 +14,11 @@ import Response from './response';
 
 import DefaultTransform from './transform/default';
 
-import {buildUrlParams} from './utils';
+import {
+  buildUrlParams,
+  getFeedAccessStatusMessage,
+  findActionInXMLString,
+} from './utils';
 
 const log = logger.getLogger('gmp.http');
 
@@ -157,26 +161,50 @@ class Http {
     }
   }
 
-  handleResponseError(resolve, reject, xhr, options) {
-    let promise = Promise.reject(xhr);
+  async handleResponseError(_resolve, reject, xhr, options) {
+    try {
+      let request = xhr;
 
-    for (const interceptor of this.errorHandlers) {
-      promise = promise.catch(interceptor);
-    }
+      for (const interceptor of this.errorHandlers) {
+        try {
+          await interceptor(request);
+        } catch (err) {
+          request = err;
+        }
+      }
 
-    promise.catch(request => {
       const {status} = request;
       const rej = new Rejection(
         request,
         status === 401 ? Rejection.REASON_UNAUTHORIZED : Rejection.REASON_ERROR,
       );
-      try {
-        reject(this.transformRejection(rej, options));
-      } catch (error) {
-        log.error('Could not transform rejection', error, rej);
-        reject(rej);
+
+      let rejectedResponse = await this.transformRejection(rej, options);
+
+      const actionsRequiringFeedAccess = [
+        'Run Wizard',
+        'Create Task',
+        'Save Task',
+        'Create Target',
+        'Save Target',
+      ];
+
+      if (
+        rej.status === 404 &&
+        findActionInXMLString(request.response, actionsRequiringFeedAccess)
+      ) {
+        const additionalMessage = await getFeedAccessStatusMessage(this);
+
+        if (additionalMessage) {
+          rejectedResponse.message = `${rejectedResponse.message}\n${additionalMessage}`;
+        }
       }
-    });
+
+      reject(rejectedResponse);
+    } catch (error) {
+      log.error('Could not handle response error', error);
+      reject(error);
+    }
   }
 
   handleRequestError(resolve, reject, xhr, options) {
