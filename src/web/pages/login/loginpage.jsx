@@ -94,38 +94,46 @@ class LoginPage extends React.Component {
     this.login(gmp.settings.guestUsername, gmp.settings.guestPassword);
   }
 
-  login(username, password) {
+  async login(username, password) {
     const {gmp} = this.props;
 
-    gmp.login(username, password).then(
-      data => {
-        const {locale, timezone, sessionTimeout} = data;
+    try {
+      const data = await gmp.login(username, password);
 
-        const {location, navigate} = this.props;
+      const {location, navigate} = this.props;
+      const {locale, timezone, sessionTimeout} = data;
 
-        this.props.setTimezone(timezone);
-        this.props.setLocale(locale);
-        this.props.setSessionTimeout(sessionTimeout);
-        this.props.setUsername(username);
-        // must be set before changing the location
-        this.props.setIsLoggedIn(true);
+      this.props.setTimezone(timezone);
+      this.props.setLocale(locale);
+      this.props.setSessionTimeout(sessionTimeout);
+      this.props.setUsername(username);
+      // must be set before changing the location
+      this.props.setIsLoggedIn(true);
 
-        if (
-          location &&
-          location.state &&
-          location.state.next &&
-          location.state.next !== location.pathname
-        ) {
-          navigate(location.state.next, {replace: true});
-        } else {
-          navigate('/dashboards', {replace: true});
-        }
-      },
-      rej => {
-        log.error(rej);
-        this.setState({error: rej});
-      },
-    );
+      if (location?.state?.next && location.state.next !== location.pathname) {
+        navigate(location.state.next, {replace: true});
+      } else {
+        navigate('/dashboards', {replace: true});
+      }
+    } catch (error) {
+      log.error(error);
+      this.setState({error});
+    }
+
+    try {
+      const userSettings = await gmp.user.currentSettings();
+
+      localStorage.setItem(
+        'userInterfaceTimeFormat',
+        userSettings.data.userinterfacetimeformat.value,
+      );
+      localStorage.setItem(
+        'userInterfaceDateFormat',
+        userSettings.data.userinterfacedateformat.value,
+      );
+    } catch (error) {
+      log.error(error);
+    }
   }
 
   componentDidMount() {
