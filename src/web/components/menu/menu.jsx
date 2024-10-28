@@ -149,7 +149,6 @@ const Menu = () => {
         label: 'Compliance Audit Reports',
         to: '/auditreports',
         activeCondition: useIsActive('/auditreports'),
-        featureEnabled: 'COMPLIANCE_REPORTS',
       },
     ],
     secInfo: [
