@@ -188,7 +188,7 @@ class PowerFilter extends React.Component {
               </Label>
               <PowerFilterTextField
                 name="userFilterString"
-                size="35"
+                size="32"
                 maxLength="1000"
                 value={userFilterString}
                 onKeyDown={this.handleUserFilterKeyPress}

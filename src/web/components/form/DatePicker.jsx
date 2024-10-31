@@ -5,7 +5,7 @@
 
 import React, {useCallback} from 'react';
 
-import {DatePickerOnly} from '@greenbone/opensight-ui-components-mantinev7';
+import {DatePickerInput} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -15,14 +15,10 @@ import {getLocale} from 'gmp/locale/lang';
 
 import PropTypes from 'web/utils/proptypes';
 
-const DatePickerComponent = ({
-  disabled,
-  minDate = date(),
-  name,
-  value = date(),
-  onChange,
-  label = '',
-}) => {
+const DatePickerComponent = (
+  {disabled, minDate = date(), name, value = date(), onChange, label = ''},
+  ref,
+) => {
   const handleChange = useCallback(
     newValue => {
       if (isDefined(onChange)) {
@@ -34,7 +30,7 @@ const DatePickerComponent = ({
   );
 
   return (
-    <DatePickerOnly
+    <DatePickerInput
       disabled={disabled}
       locale={getLocale()}
       value={value.toDate()}
@@ -50,9 +46,9 @@ const DatePickerComponent = ({
 
 DatePickerComponent.propTypes = {
   disabled: PropTypes.bool,
-  minDate: PropTypes.oneOfType([PropTypes.date, PropTypes.oneOf([false])]),
-  name: PropTypes.string,
-  value: PropTypes.date.isRequired,
+  minDate: PropTypes.instanceOf(date),
+  name: PropTypes.string.isRequired,
+  value: PropTypes.instanceOf(date),
   onChange: PropTypes.func,
   label: PropTypes.string,
 };

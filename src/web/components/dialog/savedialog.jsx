@@ -160,7 +160,7 @@ const SaveDialog = ({
   multiStep = 0,
   title,
   values,
-  width = 'lg',
+  width = 'xl',
   onClose,
   onError,
   onErrorClose,

@@ -41,38 +41,37 @@ const defaultactions = (
  *
  * @return A new EntitiesHeader component
  */
-export const withEntitiesHeader = (
-  actions_column = defaultactions,
-  options = {},
-) => Component => {
-  if (actions_column === false) {
-    actions_column = null;
-  }
-
-  const HeaderWrapper = props => {
-    const {selectionType} = props;
-    let column = actions_column;
-
-    if (actions_column === true) {
-      if (selectionType === SelectionType.SELECTION_USER) {
-        column = <TableHead width="6em">{_('Actions')}</TableHead>;
-      } else {
-        column = null;
-      }
+export const withEntitiesHeader =
+  (actions_column = defaultactions, options = {}) =>
+  Component => {
+    if (actions_column === false) {
+      actions_column = null;
     }
-    return <Component {...options} actionsColumn={column} {...props} />;
-  };
 
-  HeaderWrapper.propTypes = {
-    selectionType: PropTypes.oneOf([
-      SelectionType.SELECTION_PAGE_CONTENTS,
-      SelectionType.SELECTION_USER,
-      SelectionType.SELECTION_FILTER,
-    ]),
-  };
+    const HeaderWrapper = props => {
+      const {selectionType} = props;
+      let column = actions_column;
 
-  return HeaderWrapper;
-};
+      if (actions_column == true) {
+        if (selectionType === SelectionType.SELECTION_USER) {
+          column = <TableHead width="6em">{_('Actions')}</TableHead>;
+        } else {
+          column = null;
+        }
+      }
+      return <Component {...options} actionsColumn={column} {...props} />;
+    };
+
+    HeaderWrapper.propTypes = {
+      selectionType: PropTypes.oneOf([
+        SelectionType.SELECTION_PAGE_CONTENTS,
+        SelectionType.SELECTION_USER,
+        SelectionType.SELECTION_FILTER,
+      ]),
+    };
+
+    return HeaderWrapper;
+  };
 
 /**
  * A higher order component to create table headers from a column description

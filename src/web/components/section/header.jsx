@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
@@ -20,8 +19,8 @@ import Layout from 'web/components/layout/layout';
 import withLayout from 'web/components/layout/withLayout';
 
 const HeaderLayout = styled(Layout)`
-  margin: 10px 0px;
-  padding-bottom: 1px;
+  margin: 26px 0px 10px 0px;
+  padding-bottom: 15px;
   border-bottom: 2px solid ${Theme.lightGray};
   position: relative;
 `;

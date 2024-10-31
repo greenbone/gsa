@@ -36,6 +36,14 @@ const Container = styled.div`
   flex: 1;
 `;
 
+const ScrollableMenuContainer = styled.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 48px);
+  width: 100%;
+  max-width: 250px;
+`;
+
 const Page = ({children}) => {
   const capabilities = useLoadCapabilities();
   const location = useLocation();
@@ -51,7 +59,9 @@ const Page = ({children}) => {
     <CapabilitiesContext.Provider value={capabilities}>
       <Header />
       <StyledLayout flex="row" align={['start', 'stretch']}>
-        <Menu />
+        <ScrollableMenuContainer>
+          <Menu />
+        </ScrollableMenuContainer>
         <Main>
           <Container>
             <FeedSyncNotification />
