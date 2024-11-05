@@ -75,7 +75,6 @@ const FilterPart = ({
           onChange={onChange}
         />
         </FormGroup>
-        )                         
       <FormGroup title={_('Scan Configs Filter')} titleSize="3">
         <Select
           name="configsFilter"
