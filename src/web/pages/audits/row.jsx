@@ -36,10 +36,8 @@ import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
 
-import {renderReport} from 'web/pages/tasks/row';
 import DateTime from 'web/components/date/datetime';
 import DetailsLink from 'web/components/link/detailslink';
-import useCapabilities from 'web/hooks/useCapabilities';
 
 const renderAuditReport = (report, links) => {
   if (!isDefined(report)) {
@@ -86,7 +84,6 @@ const Row = ({
 }) => {
   const {scanner, observers} = entity;
   const obs = [];
-  const caps = useCapabilities();
 
   if (isDefined(observers)) {
     if (isDefined(observers.user)) {
@@ -146,15 +143,12 @@ const Row = ({
       </TableData>
       <TableData>
         <AuditStatus 
-          isAudit={caps.featureEnabled('COMPLIANCE_REPORTS')}
+          isAudit={true}
           task={entity}
           links={links}/>
       </TableData>
       <TableData>
-        {caps.featureEnabled('COMPLIANCE_REPORTS') 
-         ? renderAuditReport(entity.last_report, links)
-         : renderReport(entity.last_report, links)
-        }
+        {renderAuditReport(entity.last_report, links)}
       </TableData>
       <TableData>
         {isDefined(entity.last_report) && (

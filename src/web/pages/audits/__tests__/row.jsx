@@ -20,8 +20,7 @@ import {getActionItems} from 'web/components/testing';
 import Row from '../row';
 
 const gmp = {settings: {}};
-const featureList = [{name: 'COMPLIANCE_REPORTS', _enabled: 0}];
-const caps = new Capabilities(['everything'], featureList);
+const caps = new Capabilities(['everything']);
 
 const lastReport = {
   report: {
@@ -110,11 +109,11 @@ describe('Audit Row tests', () => {
     const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
 
     // Report
     expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
 
     // Compliance Status
     expect(bars[1]).toHaveAttribute('title', '50%');
@@ -375,7 +374,7 @@ describe('Audit Row tests', () => {
     const detailsLinks = getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('0 %');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/5678');
 
     // Report
     expect(detailsLinks.length).toBe(1);
@@ -483,11 +482,11 @@ describe('Audit Row tests', () => {
     const detailsLinks = getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Stopped');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/5678');
 
     // Report
     expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
 
     // Compliance Status
     expect(bars[1]).toHaveAttribute('title', '50%');
@@ -593,11 +592,11 @@ describe('Audit Row tests', () => {
     const detailsLinks = getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
 
     // Report
     expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
 
     // Compliance Status
     expect(bars[1]).toHaveAttribute('title', '50%');
@@ -706,11 +705,11 @@ describe('Audit Row tests', () => {
     const detailsLinks = getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
 
     // Report
     expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
 
     // Compliance Status
     expect(bars[1]).toHaveAttribute('title', '50%');
@@ -759,103 +758,4 @@ describe('Audit Row tests', () => {
   });
 
   console.warn = consoleError;
-});
-
-describe('Audit Row tests - compliance reports enabled', () => {
-  // deactivate console.error for tests
-  // to make it possible to test a row without a table
-  console.error = () => {};
-  const featureList = [{name: 'COMPLIANCE_REPORTS', _enabled: 1}];
-  const caps = new Capabilities(['everything'], featureList);
-
-  test('should render', () => {
-    const audit = Audit.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
-      name: 'foo',
-      comment: 'bar',
-      status: AUDIT_STATUS.done,
-      alterable: '0',
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target'},
-      usage_type: 'audit',
-    });
-
-    const handleAuditClone = testing.fn();
-    const handleAuditDelete = testing.fn();
-    const handleAuditDownload = testing.fn();
-    const handleAuditEdit = testing.fn();
-    const handleAuditResume = testing.fn();
-    const handleAuditStart = testing.fn();
-    const handleAuditStop = testing.fn();
-    const handleReportDownload = testing.fn();
-    const handleToggleDetailsClick = testing.fn();
-
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: caps,
-      store: true,
-      router: true,
-    });
-
-    store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
-
-    const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={audit}
-        links={true}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
-    );
-
-    expect(baseElement).toBeVisible();
-
-    // Name
-    expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).toHaveTextContent('(bar)');
-
-    // Status
-    const bars = getAllByTestId('progressbar-box');
-
-    expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.done);
-    expect(bars[0]).toHaveTextContent(AUDIT_STATUS.done);
-
-    const detailsLinks = getAllByTestId('details-link');
-
-    expect(detailsLinks[0]).toHaveTextContent('Done');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
-
-    // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
-    expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
-
-    // Compliance Status
-    expect(bars[1]).toHaveAttribute('title', '50%');
-    expect(bars[1]).toHaveTextContent('50%');
-
-    // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Start');
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
-    expect(icons[6]).toHaveAttribute(
-      'title',
-      'Download Greenbone Compliance Report',
-    );
-  });
 });

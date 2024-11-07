@@ -15,7 +15,6 @@ import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
 
-import ConditionalRoute from 'web/components/conditionalRoute/ConditionalRoute';
 import Loading from 'web/components/loading/loading';
 
 import LegacyOmpPage from './pages/omp';
@@ -217,34 +216,10 @@ const LoggedInRoutes = () => {
             <Route path="/user/:id" element={<UserDetailsPage />} />
 
             <Route path="/notfound" element={<PageNotFound />} />
-            <Route
-              path="/auditreports"
-              element={
-                <ConditionalRoute
-                  component={AuditReportsPage}
-                  feature="COMPLIANCE_REPORTS"
-                />
-              }
-            />
-
-            <Route
-              path="/auditreport/delta/:id/:deltaid"
-              element={
-                <ConditionalRoute
-                  component={DeltaAuditReportDetailsPage}
-                  feature="COMPLIANCE_REPORTS"
-                />
-              }
-            />
-            <Route
-              path="/auditreport/:id"
-              element={
-                <ConditionalRoute
-                  component={AuditReportDetailsPage}
-                  feature="COMPLIANCE_REPORTS"
-                />
-              }
-            />
+            <Route path="/auditreports" element={<AuditReportsPage />} />
+            <Route path="/auditreport/delta/:id/:deltaid"
+                        element={<DeltaAuditReportDetailsPage />} />
+            <Route path="/auditreport/:id" element= {<AuditReportDetailsPage />} />
             <Route path="/" element={<Navigate to="/dashboards" />} />
 
             <Route path="*" element={<PageNotFound />} />

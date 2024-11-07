@@ -12,7 +12,6 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/hooks/useCapabilities';
 
 const filterFilters = (filters, type) =>
   filters.filter(filter => filter.filter_type === type);
@@ -52,7 +51,6 @@ const FilterPart = ({
   onChange,
 }) => {
   const [_] = useTranslation();
-  const caps = useCapabilities();
   return (
     <React.Fragment>
       <FormGroup title={_('Alerts Filter')} titleSize="3">
@@ -66,19 +64,17 @@ const FilterPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      {caps.featureEnabled('COMPLIANCE_REPORTS') && (
-        <FormGroup title={_('Audit Reports Filter')} titleSize="3">
-          <Select
-            name="auditReportsFilter"
-            value={auditReportsFilter}
-            items={renderSelectItems(
-              filterFilters(filters, 'audit_report'),
-              UNSET_VALUE,
-            )}
-            onChange={onChange}
-          />
+      <FormGroup title={_('Audit Reports Filter')} titleSize="3">
+        <Select
+          name="auditReportsFilter"
+          value={auditReportsFilter}
+          items={renderSelectItems(
+            filterFilters(filters, 'audit_report'),
+            UNSET_VALUE,
+          )}
+          onChange={onChange}
+        />
         </FormGroup>
-      )}
       <FormGroup title={_('Scan Configs Filter')} titleSize="3">
         <Select
           name="configsFilter"
