@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
@@ -14,22 +13,26 @@ import Layout from '../layout/layout';
 
 const TableData = ({children, className, colSpan, rowSpan, ...other}) => (
   <td className={className} colSpan={colSpan} rowSpan={rowSpan}>
-    <Layout flex="column" {...other}>
+    <StyledLayout flex="column" {...other}>
       {children}
-    </Layout>
+    </StyledLayout>
   </td>
 );
 
 TableData.propTypes = {
+  children: PropTypes.node,
   className: PropTypes.string,
   colSpan: PropTypes.numberOrNumberString,
   rowSpan: PropTypes.numberOrNumberString,
 };
+
+const StyledLayout = styled(Layout)`
+  padding-top: 8px;
+  padding-bottom: 8px;
+`;
 
 export const TableDataAlignTop = styled(TableData)`
   vertical-align: top;
 `;
 
 export default TableData;
-
-// vim: set ts=2 sw=2 tw=80:
