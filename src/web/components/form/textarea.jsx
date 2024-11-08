@@ -24,9 +24,11 @@ const TextArea = ({
   placeholder,
   title,
   value,
+  classNames,
   ...props
 }) => {
   const handleChange = useValueChange({disabled, name, onChange});
+
   return (
     <GreenboneTextArea
       {...props}
@@ -40,6 +42,10 @@ const TextArea = ({
       value={value}
       placeholder={placeholder}
       onChange={handleChange}
+      classNames={{
+        input: `default-input-class ${classNames?.input || ''}`,
+      }}
+      resize="vertical"
     />
   );
 };
@@ -55,6 +61,7 @@ TextArea.propTypes = {
   title: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  classNames: PropTypes.object,
 };
 
 export default TextArea;
