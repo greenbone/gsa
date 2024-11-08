@@ -681,12 +681,16 @@ const CvssCalculator = props => (
       {/* span prevents Toolbar from growing */}
       <ToolBarIcons />
     </span>
-    <Divider margin="20px" flex="row" align={['center', 'start']} grow>
-      <CvssV2Calculator {...props} />
-      <CvssV3Calculator {...props} />
-    </Divider>
-    <Divider margin="20px" flex="row" align={['center', 'start']} grow>
-      <CvssV4Calculator />
+    <Divider margin="20px" flex="row" align={['flex-start', 'start']} grow wrap>
+      <Layout flex="1" grow>
+        <CvssV2Calculator {...props} />
+      </Layout>
+      <Layout flex="1" grow>
+        <CvssV3Calculator {...props} />
+      </Layout>
+      <Layout flex="1" grow>
+        <CvssV4Calculator />
+      </Layout>
     </Divider>
   </Layout>
 );
