@@ -9,7 +9,9 @@ import PropTypes from 'web/utils/proptypes';
 
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
-import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
+import DialogTwoButtonFooter, {
+  DELETE_ACTION,
+} from 'web/components/dialog/twobuttonfooter';
 
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -21,6 +23,7 @@ const ConfirmationDialogContent = ({
   rightButtonTitle,
   onResumeClick,
   loading,
+  rightButtonAction,
 }) => {
   const handleResume = useCallback(() => {
     if (onResumeClick) {
@@ -36,6 +39,7 @@ const ConfirmationDialogContent = ({
         onLeftButtonClick={close}
         onRightButtonClick={handleResume}
         loading={loading}
+        rightButtonAction={rightButtonAction}
       />
     </DialogContent>
   );
@@ -47,6 +51,7 @@ ConfirmationDialogContent.propTypes = {
   rightButtonTitle: PropTypes.string,
   onResumeClick: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  rightButtonAction: PropTypes.oneOf([undefined, DELETE_ACTION]),
 };
 
 const ConfirmationDialog = ({
@@ -54,6 +59,7 @@ const ConfirmationDialog = ({
   content,
   title,
   rightButtonTitle,
+  rightButtonAction,
   onClose,
   onResumeClick,
   loading,
@@ -70,6 +76,7 @@ const ConfirmationDialog = ({
           rightButtonTitle={rightButtonTitle}
           onResumeClick={onResumeClick}
           loading={loading}
+          rightButtonAction={rightButtonAction}
         />
       )}
     </Dialog>
@@ -84,6 +91,7 @@ ConfirmationDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onResumeClick: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  rightButtonAction: PropTypes.oneOf([undefined, DELETE_ACTION]),
 };
 
 export default ConfirmationDialog;
