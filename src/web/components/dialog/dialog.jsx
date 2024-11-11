@@ -20,6 +20,13 @@ const Dialog = ({children, title, width = DEFAULT_DIALOG_WIDTH, onClose}) => {
     }
   }, [onClose]);
 
+  const customCloseButtonProps = {
+    style: {
+      width: '2rem',
+      height: '2rem',
+    },
+  };
+
   return (
     <Modal
       data-testid="dialog-title-bar"
@@ -27,6 +34,7 @@ const Dialog = ({children, title, width = DEFAULT_DIALOG_WIDTH, onClose}) => {
       size={width}
       title={title}
       onClose={handleClose}
+      closeButtonProps={customCloseButtonProps}
     >
       {isFunction(children)
         ? children({

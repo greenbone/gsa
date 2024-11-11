@@ -253,38 +253,40 @@ const NoteDialog = ({
             </FormGroup>
 
             <FormGroup title={_('Severity')}>
-              <Radio
-                name="severity"
-                title={_('Any')}
-                checked={isEmpty(state.severity)}
-                value=""
-                onChange={onValueChange}
-              />
-              {isDefined(severity) && (
-                <>
-                  {severity > LOG_VALUE ? (
-                    <Radio
-                      name="severity"
-                      title={' > ' + severityFormat(severity - 0.1)}
-                      checked={true}
-                      convert={parseFloat}
-                      value={severity}
-                      onChange={onValueChange}
-                    />
-                  ) : (
-                    <Radio
-                      name="severity"
-                      title={translatedResultSeverityRiskFactor(severity)}
-                      checked={state.severity === severity}
-                      convert={parseFloat}
-                      value={severity}
-                      onChange={onValueChange}
-                    />
-                  )}
-                </>
-              )}
+              <Row>
+                <Radio
+                  name="severity"
+                  title={_('Any')}
+                  checked={isEmpty(state.severity)}
+                  value=""
+                  onChange={onValueChange}
+                />
+                {isDefined(severity) && (
+                  <>
+                    {severity > LOG_VALUE ? (
+                      <Radio
+                        name="severity"
+                        title={' > ' + severityFormat(severity - 0.1)}
+                        checked={true}
+                        convert={parseFloat}
+                        value={severity}
+                        onChange={onValueChange}
+                      />
+                    ) : (
+                      <Radio
+                        name="severity"
+                        title={translatedResultSeverityRiskFactor(severity)}
+                        checked={state.severity === severity}
+                        convert={parseFloat}
+                        value={severity}
+                        onChange={onValueChange}
+                      />
+                    )}
+                  </>
+                )}
+              </Row>
               {!isDefined(severity) && (
-                <Row>
+                <>
                   <Radio
                     name="severity"
                     title={_('> 0.0')}
@@ -301,7 +303,7 @@ const NoteDialog = ({
                     convert={parseFloat}
                     onChange={onValueChange}
                   />
-                </Row>
+                </>
               )}
             </FormGroup>
 
