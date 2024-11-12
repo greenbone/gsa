@@ -28,6 +28,10 @@ const GlobalStyles = createGlobalStyle`
     text-decoration: none;
   }
 
+  a:visited {
+    color: revert;  
+  }
+
   a:hover, a:focus {
     color: blue;
     text-decoration: underline;
