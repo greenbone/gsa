@@ -63,14 +63,20 @@ describe('SeverityBar tests', () => {
     const {getByTestId} = render(<SeverityBar severity="9.5" />);
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.errorRed);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.errorRed} 0%, ${Theme.errorRed} 100%)`,
+    );
   });
 
   test('should render without severity prop', () => {
     const {getByTestId} = render(<SeverityBar />);
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.severityLowBlue);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.severityLowBlue} 0%, ${Theme.severityLowBlue} 100%)`,
+    );
     expect(progress).toHaveStyleRule('width', '0%');
   });
 });

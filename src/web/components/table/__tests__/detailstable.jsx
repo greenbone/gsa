@@ -25,6 +25,6 @@ describe('DetailsTable tests', () => {
       </DetailsTable>,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 });

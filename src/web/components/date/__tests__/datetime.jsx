@@ -41,6 +41,16 @@ describe('DateTime render tests', () => {
   afterAll(() => {
     localStorage.setItem = originalSetItem;
   });
+
+  const removeStyleTags = html => {
+    let previous;
+    do {
+      previous = html;
+      html = html.replace(/<style[^>]*>.*?<\/style>/g, '');
+    } while (html !== previous);
+    return html;
+  };
+
   test('should render nothing if date is undefined', () => {
     const {render, store} = rendererWith({gmp, store: true});
     store.dispatch(
@@ -50,9 +60,10 @@ describe('DateTime render tests', () => {
       }),
     );
 
-    const {element} = render(<DateTime />);
+    const {container} = render(<DateTime />);
 
-    expect(element).toBeNull();
+    const content = removeStyleTags(container.innerHTML).trim();
+    expect(content).toBe('');
   });
 
   test('should render nothing for invalid date', () => {
@@ -72,9 +83,10 @@ describe('DateTime render tests', () => {
 
     expect(date.isValid()).toEqual(false);
 
-    const {element} = render(<DateTime date={date} />);
+    const {container} = render(<DateTime date={date} />);
 
-    expect(element).toBeNull();
+    const content = removeStyleTags(container.innerHTML).trim();
+    expect(content).toBe('');
 
     console.warn = consoleWarn;
   });

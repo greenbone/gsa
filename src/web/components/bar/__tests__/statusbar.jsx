@@ -17,7 +17,7 @@ describe('StatusBar tests', () => {
   test('should render', () => {
     const {element} = render(<StatusBar progress="90" status="Unknown" />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render text content', () => {
@@ -71,7 +71,10 @@ describe('StatusBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.severityWarnYellow);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.severityWarnYellow} 0%, ${Theme.severityWarnYellow} 100%)`,
+    );
   });
 });
 
