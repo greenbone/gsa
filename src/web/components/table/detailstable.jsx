@@ -13,7 +13,7 @@ import PropTypes from 'web/utils/proptypes';
 import InfoTable from './infotable';
 
 const DetailsTable = ({children, size = 'full', ...props}) => (
-  <InfoTable {...props} size={size}>
+  <InfoTable {...props} size={size} data-testid="detailstable">
     <colgroup>
       <Col width="10%" />
       <Col width="90%" />

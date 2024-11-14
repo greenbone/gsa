@@ -27,6 +27,7 @@ const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
         value={filterstring}
         size="30"
         onChange={onChange}
+        data-testid="filter_textfield"
       />
     </FormGroup>
   );

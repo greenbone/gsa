@@ -43,6 +43,7 @@ const CloseButton = ({title = _('Close'), size = 'medium', ...props}) => {
 
   return (
     <StyledCloseButton
+      data-testid="close-button"
       $width={width}
       $height={height}
       $lineHeight={height}

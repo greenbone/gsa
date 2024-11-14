@@ -81,6 +81,7 @@ const DatePickerComponent = ({
   );
   return (
     <DatePicker
+      data-testid="datepicker"
       {...restProps}
       disabled={disabled}
       customInput={<InputField width={width} disabled={disabled} />}

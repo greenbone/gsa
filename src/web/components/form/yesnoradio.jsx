@@ -36,6 +36,7 @@ const YesNoRadio = ({
         convert={convert}
         onChange={onChange}
         disabled={disabled}
+        data-testid="yes_radio"
       />
       <Radio
         title={_('No')}
@@ -45,6 +46,7 @@ const YesNoRadio = ({
         convert={convert}
         onChange={onChange}
         disabled={disabled}
+        data-testid="no_radio"
       />
     </Divider>
   </Layout>

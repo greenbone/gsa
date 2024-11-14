@@ -21,10 +21,10 @@ const FoldStateIcon = ({foldState, ...props}) => {
     foldState === FoldState.FOLDING_START;
 
   if (folded) {
-    return <FoldIcon title={_('Unfold')} {...props} />;
+    return <FoldIcon title={_('Unfold')} {...props} data-testid="fold_icon"/>;
   }
 
-  return <UnfoldIcon title={_('Fold')} {...props} />;
+  return <UnfoldIcon title={_('Fold')} {...props} data-testid="unfold_icon"/>;
 };
 
 FoldStateIcon.propTypes = {

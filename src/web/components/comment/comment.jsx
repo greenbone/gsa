@@ -17,7 +17,7 @@ const Comment = ({text, children}) => {
   if (!isDefined(text)) {
     return null;
   }
-  return <div className="comment">{text}</div>;
+  return <div className="comment" data-testid="comment">{text}</div>;
 };
 
 Comment.propTypes = {

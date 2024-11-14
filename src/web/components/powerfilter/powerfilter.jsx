@@ -192,6 +192,7 @@ class PowerFilter extends React.Component {
               <RefreshIcon
                 title={_('Update Filter')}
                 onClick={this.handleUpdateFilter}
+                data-testid="update_filter_icon"
               />
 
               {onRemoveClick && (
@@ -201,6 +202,7 @@ class PowerFilter extends React.Component {
                   onClick={
                     isDefined(filter) ? this.handleRemoveClick : undefined
                   }
+                  data-testid="remove_filter_icon"
                 />
               )}
               {onResetClick && (
@@ -210,6 +212,7 @@ class PowerFilter extends React.Component {
                   onClick={
                     isDefined(filter) ? this.handleResetClick : undefined
                   }
+                  data-testid="reset_filter_icon"
                 />
               )}
 
@@ -217,6 +220,7 @@ class PowerFilter extends React.Component {
                 title={_('Help: Powerfilter')}
                 page="web-interface"
                 anchor="filtering-the-page-content"
+                data-testid="Manual_filter_icon"
               />
 
               {onEditClick && (
@@ -224,6 +228,7 @@ class PowerFilter extends React.Component {
                   title={_('Edit Filter')}
                   disabled={!isDefined(filter) || isLoading}
                   onClick={isDefined(filter) ? onEditClick : undefined}
+                  data-testid="edit_filter_icon"
                 />
               )}
             </IconDivider>

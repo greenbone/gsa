@@ -27,6 +27,7 @@ const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
         value={rows}
         size="5"
         onChange={onChange}
+        data-testid="results_per_page"
       />
     </FormGroup>
   );

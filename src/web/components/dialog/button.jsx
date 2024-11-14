@@ -11,7 +11,7 @@ import Button from 'web/components/form/button';
 
 import Theme from 'web/utils/theme';
 
-const DialogButton = styled(({loading, ...props}) => <Button {...props} />)`
+const DialogButton = styled(({loading, ...props}) => <Button data-testid="dialog_button" {...props} />)`
   border: 1px solid ${Theme.mediumGray};
   color: ${props => (props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.white)};
   background: ${props =>

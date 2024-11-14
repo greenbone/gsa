@@ -63,6 +63,7 @@ class SolutionTypesFilterGroup extends React.Component {
                     checked={!isDefined(solutionType) || solutionType === 'All'}
                     name="All"
                     onChange={this.handleSolutionTypeChange}
+                    data-testid="filter_all"
                   >
                     <span>{_('All')}</span>
                   </Radio>
@@ -72,6 +73,7 @@ class SolutionTypesFilterGroup extends React.Component {
                     checked={solutionType === 'Workaround'}
                     name="Workaround"
                     onChange={this.handleSolutionTypeChange}
+                    data-testid="filter_workaround"
                   >
                     <SolutionTypeIcon type="Workaround" />
                     <span>{_('Workaround')}</span>
@@ -82,6 +84,7 @@ class SolutionTypesFilterGroup extends React.Component {
                     checked={solutionType === 'Mitigation'}
                     name="Mitigation"
                     onChange={this.handleSolutionTypeChange}
+                    data-testid="filter_mitigation"
                   >
                     <SolutionTypeIcon type="Mitigation" />
                     <span>{_('Mitigation')}</span>
@@ -94,6 +97,7 @@ class SolutionTypesFilterGroup extends React.Component {
                     checked={solutionType === 'VendorFix'}
                     name="VendorFix"
                     onChange={this.handleSolutionTypeChange}
+                    data-testid="filter_vendorfix"
                   >
                     <SolutionTypeIcon type="VendorFix" />
                     <span>{_('Vendor fix')}</span>
@@ -104,6 +108,7 @@ class SolutionTypesFilterGroup extends React.Component {
                     checked={solutionType === 'NoneAvailable'}
                     name="NoneAvailable"
                     onChange={this.handleSolutionTypeChange}
+                    data-testid="filter_none_available"
                   >
                     <SolutionTypeIcon type="NoneAvailable" />
                     <span>{_('None available')}</span>
@@ -114,6 +119,7 @@ class SolutionTypesFilterGroup extends React.Component {
                     checked={solutionType === 'WillNotFix'}
                     name="WillNotFix"
                     onChange={this.handleSolutionTypeChange}
+                    data-testid="filter_will_not_fix"
                   >
                     <SolutionTypeIcon type="WillNotFix" />
                     <span>{_('Will not fix')}</span>

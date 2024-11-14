@@ -45,8 +45,9 @@ const OverrideBox = ({override, detailsLink = true}) => {
         id={override.id}
         type="override"
         title={_('Override Details')}
+        data-testid="override_details"
       >
-        <DetailsIcon />
+        <DetailsIcon data-testid="override_details_icon"/>
       </DetailsLink>
     </IconDivider>
   ) : (

@@ -79,7 +79,7 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
       : getTranslatableTaskStatus(status);
 
   return (
-    <ProgressBar title={title} progress={progress} background={background}>
+    <ProgressBar title={title} progress={progress} background={background} data-testid="statusbar">
       <Span>{text}</Span>
     </ProgressBar>
   );

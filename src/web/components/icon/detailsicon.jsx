@@ -11,7 +11,7 @@ import Icon from './svg/details.svg';
 
 const DetailsIcon = props => (
   <SvgIcon {...props}>
-    <Icon />
+    <Icon data-testid="details_icon"/>
   </SvgIcon>
 );
 

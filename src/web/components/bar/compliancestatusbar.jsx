@@ -30,6 +30,7 @@ const ComplianceStatusBar = ({complianceStatus}) => {
       progress={complianceStatus}
       background={Theme.statusRunGreen}
       boxBackground={boxBackground}
+      data-testid="progress-bar"
     >
       {text}
     </ProgressBar>

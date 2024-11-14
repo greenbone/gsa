@@ -48,7 +48,7 @@ const SectionHeader = ({
   img,
 }) => {
   return (
-    <HeaderLayout flex align={align} className="section-header">
+    <HeaderLayout flex align={align} className="section-header" data-testid="header">
       <HeaderHeading align={['start', 'stretch']}>
         {isDefined(img) && (
           <HeaderIconLayout flex align={['start', 'end']}>

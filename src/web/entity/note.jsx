@@ -20,8 +20,8 @@ import EntityBox from './box';
 const NoteBox = ({note, detailsLink = true}) => {
   const toolbox = detailsLink ? (
     <IconDivider>
-      <DetailsLink id={note.id} type="note" title={_('Note Details')}>
-        <DetailsIcon />
+      <DetailsLink id={note.id} type="note" title={_('Note Details')} data-testid="details_link">
+        <DetailsIcon data-testid="detailsicon"/>
       </DetailsLink>
     </IconDivider>
   ) : (

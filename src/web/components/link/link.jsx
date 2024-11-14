@@ -63,7 +63,7 @@ const LinkComponent = ({anchor, to = '', filter, query, ...other}) => {
     hash: isDefined(anchor) ? '#' + anchor : '',
   };
 
-  return <RLink {...other} to={fullPath} />;
+  return <RLink {...other} to={fullPath} data-testid="link"/>;
 };
 
 LinkComponent.propTypes = {

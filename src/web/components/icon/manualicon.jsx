@@ -15,7 +15,7 @@ import HelpIcon from './helpicon';
 const ManualIcon = ({anchor, page, searchTerm, ...props}) => {
   return (
     <ManualLink anchor={anchor} page={page} searchTerm={searchTerm}>
-      <HelpIcon {...props} />
+      <HelpIcon {...props} data-testid="help_icon"/>
     </ManualLink>
   );
 };

@@ -119,10 +119,12 @@ export class DashboardControls extends React.Component {
                 : _('Dashboard limit reached')
             }
             onClick={canAdd ? this.handleNewClick : undefined}
+            data-testid="add_new_dashboard"
           />
           <ResetIcon
             title={_('Reset to Defaults')}
             onClick={this.handleResetClick}
+            data-testid="reset_icon"
           />
         </IconDivider>
         {showNewDialog && (
@@ -136,6 +138,7 @@ export class DashboardControls extends React.Component {
             }}
             onClose={this.handleNewDialogClose}
             onSave={this.handleNewDisplay}
+            data-testid="save_dialog_add"
           >
             {({values, onValueChange}) => (
               <FormGroup title={_('Choose Display')} titleSize={3}>
@@ -145,6 +148,7 @@ export class DashboardControls extends React.Component {
                   value={values.displayId}
                   width="auto"
                   onChange={onValueChange}
+                  data-testid="display_id"
                 />
               </FormGroup>
             )}

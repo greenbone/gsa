@@ -8,7 +8,7 @@ import React from 'react';
 
 import Field from './field';
 
-const PasswordField = props => <Field {...props} type="password" />;
+const PasswordField = props => <Field {...props} type="password" data-testid="passwordfield"/>;
 
 export default PasswordField;
 

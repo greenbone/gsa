@@ -44,7 +44,7 @@ const ArrowIcon = ({down = false, isLoading = false, size, ...props}) => {
     icon = <Loading />;
   }
   return (
-    <Styled $height={height} $width={width} $lineHeight={height} {...props}>
+    <Styled $height={height} $width={width} $lineHeight={height} {...props} data-testid="arrow_icon">
       {icon}
     </Styled>
   );

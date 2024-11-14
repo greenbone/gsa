@@ -29,7 +29,7 @@ const DeleteIcon = ({selectionType, title, ...props}) => {
       title = _('Delete all filtered');
     }
   }
-  return <DeleteSvgIcon {...props} title={title} />;
+  return <DeleteSvgIcon {...props} title={title} data-testid="delete_icon"/>;
 };
 
 DeleteIcon.propTypes = {

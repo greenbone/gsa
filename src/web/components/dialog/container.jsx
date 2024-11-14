@@ -31,6 +31,7 @@ const DialogContainer = React.forwardRef(
     }
     return (
       <StyledDialogContainer
+        data-testid="dialogcontainer"
         {...other}
         ref={ref}
         width={width}

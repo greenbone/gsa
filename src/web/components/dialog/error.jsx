@@ -42,9 +42,9 @@ const DialogError = ({error, onCloseClick}) => {
     return null;
   }
   return (
-    <StyledLayout align={['space-between', 'center']}>
+    <StyledLayout align={['space-between', 'center']} data-testid="layout_error">
       <span>{error}</span>
-      <DialogCloseButton onClick={onCloseClick} title={_('Close')} />
+      <DialogCloseButton onClick={onCloseClick} title={_('Close')} data-testid="error_close_button"/>
     </StyledLayout>
   );
 };

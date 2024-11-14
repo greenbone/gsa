@@ -29,9 +29,9 @@ const CertInfo = ({info}) => {
         <Col width="90%" />
       </colgroup>
       <TableBody>
-        <TableRow>
-          <TableData>{_('Activation')}</TableData>
-          <TableData>
+        <TableRow data-testid="row_activation">
+          <TableData data-testid="label_activation">{_('Activation')}</TableData>
+          <TableData data-testid="value_activation">
             {isDefined(activationTime) ? (
               <DateTime date={activationTime} />
             ) : (
@@ -40,9 +40,9 @@ const CertInfo = ({info}) => {
           </TableData>
         </TableRow>
 
-        <TableRow>
-          <TableData>{_('Expiration')}</TableData>
-          <TableData>
+        <TableRow data-testid="row_expiration">
+          <TableData data-testid="label_expiration">{_('Expiration')}</TableData>
+          <TableData data-testid="value_expiration">
             {isDefined(expirationTime) ? (
               <DateTime date={expirationTime} />
             ) : (
@@ -51,14 +51,14 @@ const CertInfo = ({info}) => {
           </TableData>
         </TableRow>
 
-        <TableRow>
-          <TableData>{_('MD5 Fingerprint')}</TableData>
-          <TableData>{md5_fingerprint}</TableData>
+        <TableRow data-testid="row_fingerprint">
+          <TableData data-testid="label_expiration">{_('MD5 Fingerprint')}</TableData>
+          <TableData data-testid="value_expiration">{md5_fingerprint}</TableData>
         </TableRow>
 
-        <TableRow>
-          <TableData>{_('Issuer')}</TableData>
-          <TableData>{issuer}</TableData>
+        <TableRow data-testid="row_issuer">
+          <TableData data-testid="label_issuer">{_('Issuer')}</TableData>
+          <TableData data-testid="value_issuer">{issuer}</TableData>
         </TableRow>
       </TableBody>
     </InfoTable>

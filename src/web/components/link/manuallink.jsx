@@ -50,7 +50,7 @@ const ManualLink = ({anchor, page, searchTerm, lang, ...props}) => {
   } else if (isDefined(anchor)) {
     url += '#' + anchor;
   }
-  return <BlankLink {...props} to={url} />;
+  return <BlankLink {...props} to={url} data-testid="manual_link"/>;
 };
 
 ManualLink.propTypes = {

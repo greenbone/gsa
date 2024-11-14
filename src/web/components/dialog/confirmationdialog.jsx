@@ -30,11 +30,12 @@ const ConfirmationDialogContent = props => {
 
   return (
     <DialogContent>
-      <DialogTitle title={title} onCloseClick={props.close} {...moveprops} />
-      <ScrollableContent data-testid="confirmationdialog-content">
+      <DialogTitle title={title} onCloseClick={props.close} {...moveprops} data-testid="confimrationdialog_title"/>
+      <ScrollableContent data-testid="confirmationdialog-content_scrollable">
         {content}
       </ScrollableContent>
       <DialogTwoButtonFooter
+        data-testid="confirmationdialog_buttonfooter"
         rightButtonTitle={rightButtonTitle}
         onLeftButtonClick={props.close}
         onRightButtonClick={handleResume}
@@ -67,6 +68,7 @@ const ConfirmationDialog = ({
     <Dialog width={width} onClose={onClose} resizable={false}>
       {({close, moveProps}) => (
         <ConfirmationDialogContent
+          data-testid="confirmationdialog_content"
           close={close}
           moveprops={moveProps}
           content={content}

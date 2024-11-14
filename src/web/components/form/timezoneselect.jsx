@@ -35,6 +35,7 @@ const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
       menuPosition="adjust"
       value={value}
       width="230px"
+      data-testid="timezoneselect"
     />
   );
 };

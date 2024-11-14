@@ -60,7 +60,7 @@ const SeverityBar = ({severity, toolTip}) => {
   const toolTipText = isDefined(toolTip) ? toolTip : title;
 
   return (
-    <ProgressBar title={toolTipText} progress={fill} background={type}>
+    <ProgressBar title={toolTipText} progress={fill} background={type} data-testid="severitybar">
       {text}
     </ProgressBar>
   );

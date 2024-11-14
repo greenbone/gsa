@@ -10,7 +10,7 @@ import PropTypes from 'web/utils/proptypes';
 
 const InnerLink = ({children, to, ...props}) => {
   return (
-    <a {...props} href={'#' + to}>
+    <a {...props} href={'#' + to} data-testid="innerlink">
       {children}
     </a>
   );

@@ -20,8 +20,8 @@ const DEFAULT_DIALOG_WIDTH = '400px';
 const ErrorDialogContent = ({moveprops, text, title, buttonTitle, close}) => {
   return (
     <DialogContent>
-      <DialogTitle title={title} onCloseClick={close} {...moveprops} />
-      <ScrollableContent data-testid="errordialog-content">
+      <DialogTitle title={title} onCloseClick={close} {...moveprops} data-testid="errordialog_title"/>
+      <ScrollableContent data-testid="errordialog-content_scrollable">
         {text}
       </ScrollableContent>
       <DialogFooter title={buttonTitle} onClick={close} />
@@ -48,6 +48,7 @@ const ErrorDialog = ({
     <Dialog width={width} onClose={onClose} resizable={false}>
       {({close, moveProps}) => (
         <ErrorDialogContent
+          data-testid="errordialog-content"
           close={close}
           moveprops={moveProps}
           text={text}

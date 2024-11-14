@@ -29,7 +29,7 @@ const Label = styledExcludeProps(styled.div, [
 
 const HighLabel = props => {
   return (
-    <Label {...props} backgroundColor="#C83814" borderColor="#C83814">
+    <Label {...props} backgroundColor="#C83814" borderColor="#C83814" data-testid="high_severity_label">
       {_('High')}
     </Label>
   );
@@ -37,7 +37,7 @@ const HighLabel = props => {
 
 const MediumLabel = props => {
   return (
-    <Label {...props} backgroundColor="#F0A519" borderColor="#F0A519">
+    <Label {...props} backgroundColor="#F0A519" borderColor="#F0A519" data-testid="medium_severity_label">
       {_('Medium')}
     </Label>
   );
@@ -45,7 +45,7 @@ const MediumLabel = props => {
 
 const LowLabel = props => {
   return (
-    <Label {...props} backgroundColor="#4F91C7" borderColor="#4F91C7">
+    <Label {...props} backgroundColor="#4F91C7" borderColor="#4F91C7" data-testid="low_severity_label">
       {_('Low')}
     </Label>
   );
@@ -53,7 +53,7 @@ const LowLabel = props => {
 
 const LogLabel = props => {
   return (
-    <Label {...props} backgroundColor="#191919" borderColor="#191919">
+    <Label {...props} backgroundColor="#191919" borderColor="#191919" data-testid="log_severity_label">
       {_('Log')}
     </Label>
   );
@@ -61,7 +61,7 @@ const LogLabel = props => {
 
 const FalsePositiveLabel = props => {
   return (
-    <Label {...props} backgroundColor="#191919" borderColor="#191919">
+    <Label {...props} backgroundColor="#191919" borderColor="#191919" data-testid="false_positive_severity_label">
       {_('False Pos.')}
     </Label>
   );

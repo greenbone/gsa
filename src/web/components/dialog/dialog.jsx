@@ -184,6 +184,7 @@ class Dialog extends React.Component {
             width={width}
             height={height}
             ref={this.dialogRef}
+            data-testid="dialog"
           >
             {children({
               close: this.handleClose,

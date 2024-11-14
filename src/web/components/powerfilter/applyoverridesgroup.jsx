@@ -34,6 +34,7 @@ const ApplyOverridesGroup = ({
         noValue={0}
         convert={parseInt}
         onChange={onChange}
+        data-testid="yes_no_radio"
       />
     </FormGroup>
   );

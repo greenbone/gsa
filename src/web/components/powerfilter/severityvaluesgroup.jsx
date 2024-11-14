@@ -53,6 +53,7 @@ const SeverityValuesGroup = ({filter, name, title, onChange}) => {
           onChange={(value = severity, name = keyword) =>
             onChange(value, name, rel)
           }
+          data-testid="severity_value_filter"
         />
       </Divider>
     </FormGroup>

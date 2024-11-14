@@ -16,7 +16,7 @@ const ProtocolDocLink = ({title}) => {
   const {protocolDocUrl} = gmp.settings;
 
   return (
-    <BlankLink to={protocolDocUrl} title={title}>
+    <BlankLink to={protocolDocUrl} title={title} data-testid="protocol_link">
       {title}
     </BlankLink>
   );

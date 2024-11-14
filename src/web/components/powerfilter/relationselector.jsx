@@ -20,10 +20,10 @@ const RelationSelector = ({relation, onChange}) => {
       value={relation}
       onChange={onChange}
       items={[
-        {label: UNSET_LABEL, value: UNSET_VALUE},
-        {label: _('is equal to'), value: '='},
-        {label: _('is greater than'), value: '>'},
-        {label: _('is less than'), value: '<'},
+        {label: UNSET_LABEL, value: UNSET_VALUE, 'data-testid': 'relation_unset'},
+        {label: _('is equal to'), value: '=', 'data-testid': 'relation_equal'},
+        {label: _('is greater than'), value: '>', 'data-testid': 'relation_greater_than'},
+        {label: _('is less than'), value: '<', 'data-testid': 'relation_less_than'},
       ]}
     />
   );

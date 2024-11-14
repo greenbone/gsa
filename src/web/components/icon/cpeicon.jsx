@@ -18,7 +18,7 @@ const CpeIcon = ({name, ...props}) => {
 
   const icon = isDefined(cpe) ? cpe.icon : 'cpe/other.svg';
 
-  return <Img {...props} width="16px" src={icon} />;
+  return <Img {...props} width="16px" src={icon} data-testid="cpe_icon"/>;
 };
 
 CpeIcon.propTypes = {

@@ -60,7 +60,7 @@ class ExternalLink extends React.Component {
     );
     return (
       <React.Fragment>
-        <a {...props} href={to} onClick={this.handleClick}>
+        <a {...props} href={to} onClick={this.handleClick} data-testid="external_link">
           {children}
         </a>
         {dialogvisible && (
@@ -72,6 +72,7 @@ class ExternalLink extends React.Component {
             rightButtonTitle={_('Follow Link')}
             to={to}
             width="500px"
+            data-testid="external_link_confirmation_dialog"
           />
         )}
       </React.Fragment>

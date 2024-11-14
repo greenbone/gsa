@@ -55,7 +55,7 @@ const ComposerContent = ({
     <FormGroup title={_('Include')} titleSize="3">
       <Divider>
         <CheckBox
-          data-testid="includeNotes"
+          data-testid="includenotes"
           name="includeNotes"
           checked={includeNotes}
           checkedValue={YES_VALUE}
@@ -64,6 +64,7 @@ const ComposerContent = ({
           onChange={onValueChange}
         />
         <CheckBox
+          data-testid="includeoverrides"
           name="includeOverrides"
           checked={includeOverrides}
           checkedValue={YES_VALUE}
@@ -72,6 +73,7 @@ const ComposerContent = ({
           onChange={onValueChange}
         />
         <CheckBox
+          data-testid="includetlscertificates"
           disabled={true}
           name="includeTlsCertificates"
           checked={true}

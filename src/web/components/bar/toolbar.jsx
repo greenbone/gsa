@@ -18,6 +18,7 @@ const Toolbar = props => {
         align={['space-between', 'start']}
         {...props}
         className="toolbar"
+        data-testid="toolbar"
       />
     </IconSizeProvider>
   );

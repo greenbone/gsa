@@ -63,6 +63,7 @@ class SeverityLevelsFilterGroup extends React.Component {
             checked={levels.includes('h')}
             name="h"
             onChange={this.handleLevelChange}
+            data-testid="severity_filter_h"
           >
             <SeverityClassLabel.High />
           </Checkbox>
@@ -70,6 +71,7 @@ class SeverityLevelsFilterGroup extends React.Component {
             checked={levels.includes('m')}
             name="m"
             onChange={this.handleLevelChange}
+            data-testid="severity_filter_m"
           >
             <SeverityClassLabel.Medium />
           </Checkbox>
@@ -77,6 +79,7 @@ class SeverityLevelsFilterGroup extends React.Component {
             checked={levels.includes('l')}
             name="l"
             onChange={this.handleLevelChange}
+            data-testid="severity_filter_l"
           >
             <SeverityClassLabel.Low />
           </Checkbox>
@@ -84,6 +87,7 @@ class SeverityLevelsFilterGroup extends React.Component {
             checked={levels.includes('g')}
             name="g"
             onChange={this.handleLevelChange}
+            data-testid="severity_filter_g"
           >
             <SeverityClassLabel.Log />
           </Checkbox>
@@ -91,6 +95,7 @@ class SeverityLevelsFilterGroup extends React.Component {
             checked={levels.includes('f')}
             name="f"
             onChange={this.handleLevelChange}
+            data-testid="severity_filter_f"
           >
             <SeverityClassLabel.FalsePositive />
           </Checkbox>

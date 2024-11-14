@@ -26,6 +26,7 @@ const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
         value={first}
         size="5"
         onChange={onChange}
+        data-testid="filter_result"
       />
     </FormGroup>
   );

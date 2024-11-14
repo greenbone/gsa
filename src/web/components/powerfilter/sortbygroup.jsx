@@ -39,6 +39,7 @@ class SortByGroup extends React.Component {
           value={by}
           items={this.renderSortFieldItems()}
           onChange={onSortByChange}
+          data-testid="sort_by_select"
         />
         <Radio
           name="sort_order"
@@ -46,6 +47,7 @@ class SortByGroup extends React.Component {
           checked={order === 'sort'}
           title={_('Ascending')}
           onChange={onSortOrderChange}
+          data-testid="select_sort_ascending"
         />
         <Radio
           name="sort_order"
@@ -53,6 +55,7 @@ class SortByGroup extends React.Component {
           checked={order === 'sort-reverse'}
           title={_('Descending')}
           onChange={onSortOrderChange}
+          data-testid="select_sort_decending"
         />
       </FormGroup>
     );

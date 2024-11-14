@@ -27,7 +27,7 @@ const ExportIcon = ({selectionType, title, ...other}) => {
   } else if (selectionType === SelectionType.SELECTION_FILTER) {
     download_title = _('Export all filtered');
   }
-  return <ExportSvgIcon {...other} title={download_title} />;
+  return <ExportSvgIcon {...other} title={download_title} data-testid="export_icon"/>;
 };
 
 ExportIcon.propTypes = {

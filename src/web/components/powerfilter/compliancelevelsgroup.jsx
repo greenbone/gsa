@@ -66,6 +66,7 @@ const ComplianceLevelsFilterGroup = ({
           checked={complianceLevels.includes('y')}
           name="y"
           onChange={handleComplianceChange}
+          data-testid="compliance_checkbox_y"
         >
           <ComplianceStateLabels.Yes />
         </Checkbox>
@@ -73,6 +74,7 @@ const ComplianceLevelsFilterGroup = ({
           checked={complianceLevels.includes('n')}
           name="n"
           onChange={handleComplianceChange}
+          data-testid="compliance_checkbox_n"
         >
           <ComplianceStateLabels.No />
         </Checkbox>
@@ -80,6 +82,7 @@ const ComplianceLevelsFilterGroup = ({
           checked={complianceLevels.includes('i')}
           name="i"
           onChange={handleComplianceChange}
+          data-testid="compliance_checkbox_i"
         >
           <ComplianceStateLabels.Incomplete />
         </Checkbox>
@@ -87,6 +90,7 @@ const ComplianceLevelsFilterGroup = ({
           checked={complianceLevels.includes('u')}
           name="u"
           onChange={handleComplianceChange}
+          data-testid="compliance_checkbox_u"
         >
           <ComplianceStateLabels.Undefined />
         </Checkbox>

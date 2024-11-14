@@ -99,9 +99,9 @@ const SaveDialogContent = ({
         const childValues = {...state, ...values};
         return (
           <DialogContent>
-            <DialogTitle title={title} onCloseClick={close} {...moveProps} />
+            <DialogTitle title={title} onCloseClick={close} {...moveProps} data-testid="savedialog_title"/>
             {stateError && (
-              <DialogError error={stateError} onCloseClick={handleErrorClose} />
+              <DialogError error={stateError} onCloseClick={handleErrorClose} data-testid="savedialog_error"/>
             )}
             <ErrorBoundary message={_('An error occurred in this dialog.')}>
               <ScrollableContent
@@ -137,6 +137,7 @@ const SaveDialogContent = ({
               />
             ) : (
               <DialogFooter
+                data-testid="savedialog_footer"
                 loading={loading}
                 rightButtonTitle={buttonTitle}
                 onLeftButtonClick={close}

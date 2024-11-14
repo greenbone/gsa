@@ -33,6 +33,7 @@ const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
           value={qod}
           size="1"
           onChange={onChange}
+          data-testid="qod_filter"
         />
         <span>%</span>
       </Divider>
