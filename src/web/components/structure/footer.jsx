@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
@@ -12,6 +11,7 @@ import Theme from 'web/utils/theme';
 
 const Link = styled.a`
   color: ${Theme.mediumGray};
+  font-size: 10px;
   &:link {
     color: ${Theme.mediumGray};
   }
