@@ -181,7 +181,7 @@ const LoginForm = ({
               data-testid="guest-login-button"
               onClick={onGuestLoginClick}
             >
-              {_('Sign In as Guest')}
+              {_('Sign in as Guest')}
             </Button>
           </FormGroup>
         )}
