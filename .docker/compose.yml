@@ -1,4 +1,4 @@
-name: gsa-opensight-ui
+name: gsa
 
 services:
   vulnerability-tests:
@@ -88,7 +88,7 @@ services:
         condition: service_completed_successfully
 
   gsa:
-    image: ghcr.io/greenbone/gsa:opensight-ui
+    image: ghcr.io/greenbone/gsa:edge
     restart: on-failure
     ports:
       - 80:80
