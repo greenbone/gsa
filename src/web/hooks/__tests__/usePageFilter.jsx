@@ -59,11 +59,9 @@ describe('usePageFilter tests', () => {
       }),
     );
 
-    const expectedFilter = Filter.fromString('location=query rows=42');
-
-    await waitFor(() => {
-      expect(result.current[0].toString()).toEqual(expectedFilter.toString());
-    });
+    expect(result.current[0]).toEqual(
+      Filter.fromString('location=query rows=42'),
+    );
   });
   test('should prefer pageFilter over defaultSettingFilter', async () => {
     const pFilter = Filter.fromString('page=filter');

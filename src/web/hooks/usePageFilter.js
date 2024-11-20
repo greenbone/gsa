@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useState, useRef} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 import {useSearchParams} from 'react-router-dom';
 
@@ -79,9 +79,7 @@ const usePageFilter = (
   );
 
   // use null as value for not set at all
-  const returnedFilterRef = useRef(null);
-
-  let returnedFilter = returnedFilterRef.current;
+  let returnedFilter;
   // only use searchParams directly if locationQueryFilterString is undefined
   const locationQueryFilterString =
     initialLocationQueryFilterString || searchParams.get('filter');
@@ -91,8 +89,6 @@ const usePageFilter = (
       ? Filter.fromString(locationQueryFilterString)
       : undefined,
   );
-
-  const [initialFilterSet, setInitialFilterSet] = useState(false);
 
   useEffect(() => {
     if (
@@ -124,41 +120,28 @@ const usePageFilter = (
     setLocationQueryFilter(undefined);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (!initialFilterSet && isDefined(rowsPerPage)) {
-      setInitialFilterSet(true);
-      if (!returnedFilterRef.current.has('rows')) {
-        returnedFilterRef.current = returnedFilterRef.current.set(
-          'rows',
-          rowsPerPage,
-        );
-      }
-    }
-  }, [initialFilterSet, rowsPerPage]);
-
   if (hasValue(locationQueryFilter)) {
-    if (!locationQueryFilter.has('rows') && isDefined(rowsPerPage)) {
-      locationQueryFilter.set('rows', rowsPerPage);
-    }
-    returnedFilterRef.current = locationQueryFilter;
+    returnedFilter = locationQueryFilter;
   } else if (isDefined(pageFilter)) {
-    returnedFilterRef.current = pageFilter;
+    returnedFilter = pageFilter;
   } else if (
     isDefined(defaultSettingFilter) &&
     !isDefined(defaultSettingsFilterError) &&
     defaultSettingFilter !== null
   ) {
-    returnedFilterRef.current = defaultSettingFilter;
+    returnedFilter = defaultSettingFilter;
   } else if (isDefined(fallbackFilter)) {
-    returnedFilterRef.current = fallbackFilter;
+    returnedFilter = fallbackFilter;
   } else {
-    returnedFilterRef.current = DEFAULT_FALLBACK_FILTER;
+    returnedFilter = DEFAULT_FALLBACK_FILTER;
   }
-
-  returnedFilter = returnedFilterRef.current;
 
   if (!isDefined(rowsPerPage) && isDefined(rowsPerPageError)) {
     rowsPerPage = DEFAULT_ROWS_PER_PAGE;
+  }
+
+  if (!returnedFilter.has('rows') && isDefined(rowsPerPage)) {
+    returnedFilter = returnedFilter.set('rows', rowsPerPage);
   }
 
   const finishedLoading =
