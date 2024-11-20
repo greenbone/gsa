@@ -72,6 +72,7 @@ const StartTimeSelection = props => {
           onChange={setStartDate}
           label={_('Start Date')}
           maxDate={endDate}
+          minDate={false}
         />
         <TimePicker
           label={_('Start Time')}
@@ -85,7 +86,7 @@ const StartTimeSelection = props => {
         <DatePicker
           value={endDate}
           name="endDate"
-          minDate={startDate}
+          minDate={false}
           onChange={setEndDate}
           label={_('End Date')}
         />
