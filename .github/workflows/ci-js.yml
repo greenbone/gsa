@@ -3,10 +3,10 @@ name: Build and test JavaScript
 on:
   push:
     branches:
-      - main
+      - oldstable
   pull_request:
     branches:
-      - main
+      - oldstable
 
 jobs:
   testing:

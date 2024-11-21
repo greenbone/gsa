@@ -3,11 +3,11 @@ name: Container Image Builds
 on:
   push:
     branches:
-      - main
-    tags: ['v*']
+      - oldstable
+    tags: ['v23*']
   pull_request:
     branches:
-      - main
+      - oldstable
   workflow_dispatch:
     inputs:
       ref-name:
