@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-    tags: ['v*']
+    tags: ['v24.*']
   pull_request:
     branches:
       - main
@@ -12,7 +12,7 @@ on:
     inputs:
       ref-name:
         type: string
-        description: 'The ref to build a container image from. For example a tag v23.0.0.'
+        description: 'The ref to build a container image from. For example a tag v24.0.0.'
         required: true
 
 jobs:

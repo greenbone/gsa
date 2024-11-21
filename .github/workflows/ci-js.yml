@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      - opensight-ui
+      - oldstable
   pull_request:
     branches:
       - main
-      - opensight-ui
+      - oldstable
 
 jobs:
   testing:
