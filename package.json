@@ -55,7 +55,7 @@
     "i18next": "^23.16.4",
     "i18next-http-backend": "^2.6.2",
     "ical.js": "^2.1.0",
-    "lucide-react": "^0.454.0",
+    "lucide-react": "^0.460.0",
     "memoize-one": "^6.0.0",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.46",
