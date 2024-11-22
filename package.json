@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@greenbone/opensight-ui-components": "^0.4.1-alpha6",
-    "@mantine/core": "^6.0.0",
+    "@mantine/core": "^7.14.1",
     "@reduxjs/toolkit": "^2.3.0",
     "@sentry/react": "^8.39.0",
     "@visx/axis": "^3.10.1",
