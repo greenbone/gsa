@@ -206,7 +206,7 @@ export const permissionDescriptionResource = (name, resource) => {
   if (isDefined(resource)) {
     name = name.toLowerCase();
     const resourceType = {
-      type: typeName(getEntityType(resource)),
+      type: typeName(getEntityType(resource))?.toLowerCase(),
       name: resource.name,
     };
 
