@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import Model from 'gmp/model';
@@ -157,6 +156,11 @@ const PermissionDialog = ({
     userId,
   };
 
+  const handleNameValueChange = onValueChange => (name, value) => {
+    onValueChange(name, value);
+    onValueChange(undefined, 'resourceType');
+  };
+
   return (
     <SaveDialog
       title={title}
@@ -168,17 +172,17 @@ const PermissionDialog = ({
         const showResourceId = NEED_RESOURCE_ID.includes(state.name);
 
         const [type] = split(name, '_', 1);
-        const resource = isDefined(state.resourceType)
-          ? Model.fromElement(
-              {
-                name: isDefined(state.resourceName)
-                  ? state.resourceName
-                  : state.resourceId,
-              },
-              isDefined(state.resourceType) ? state.resourceType : type,
-            )
-          : undefined;
 
+        const resourceNameOrId = isDefined(state.resourceName)
+          ? state.resourceName
+          : state.resourceId;
+        const resourceTypeOrType = isDefined(state.resourceType)
+          ? state.resourceType
+          : type;
+
+        const resource = isDefined(state.resourceType)
+          ? Model.fromElement({name: resourceNameOrId}, resourceTypeOrType)
+          : undefined;
         let subject;
         if (state.subjectType === 'user') {
           subject = users.find(user => user.id === state.userId);
@@ -207,7 +211,7 @@ const PermissionDialog = ({
                 name="name"
                 value={state.name}
                 items={permItems}
-                onChange={onValueChange}
+                onChange={handleNameValueChange(onValueChange)}
               />
             </FormGroup>
 
