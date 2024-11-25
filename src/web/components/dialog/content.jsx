@@ -13,6 +13,13 @@ const DialogContent = styled.div`
   gap: 20px;
 `;
 
-export default DialogContent;
+export const StickyFooter = styled.div`
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding: 20px 0;
+  z-index: 201;
+  margin-bottom: 20;
+`;
 
-// vim: set ts=2 sw=2 tw=80:
+export default DialogContent;
