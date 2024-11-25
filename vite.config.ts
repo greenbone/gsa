@@ -60,7 +60,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'opensight-ui': ['@greenbone/opensight-ui-components'],
+          'opensight-ui': ['@greenbone/opensight-ui-components-mantinev7'],
         },
       },
     },

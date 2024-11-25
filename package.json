@@ -32,7 +32,7 @@
     "node": ">=18.0"
   },
   "dependencies": {
-    "@greenbone/opensight-ui-components-mantinev7": "^0.0.6",
+    "@greenbone/opensight-ui-components-mantinev7": "^0.0.7-alpha3",
     "@mantine/core": "^7.12.1",
     "@reduxjs/toolkit": "^2.3.0",
     "@sentry/react": "^8.39.0",
