@@ -58,7 +58,6 @@ import Select from 'web/components/form/select';
 import Row from 'web/components/layout/row';
 
 import useTranslation from 'web/hooks/useTranslation';
-import Layout from 'web/components/layout/layout';
 
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,

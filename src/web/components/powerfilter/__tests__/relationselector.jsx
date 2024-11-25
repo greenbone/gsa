@@ -12,7 +12,6 @@ import {
   getSelectItemElements,
   clickElement,
   getSelectElement,
-  changeSelectInput,
 } from 'web/components/testing';
 
 import RelationSelector from 'web/components/powerfilter/relationselector';

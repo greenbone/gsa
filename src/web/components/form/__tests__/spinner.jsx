@@ -8,7 +8,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {KeyCode} from 'gmp/utils/event';
 
 import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
-import {changeInputValue} from 'web/components/testing';
 
 import Spinner from '../spinner';
 

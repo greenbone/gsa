@@ -6,6 +6,7 @@
 import {PointerEventsCheckLevel} from '@testing-library/user-event';
 
 import {isDefined} from 'gmp/utils/identity';
+import {expect} from 'vitest';
 
 import {
   userEvent,
@@ -285,10 +286,8 @@ export const testBulkTrashcanDialog = (screen, dialogAction) => {
   const dialog = screen.getByRole('dialog');
   expect(dialog).toBeVisible();
 
-  const buttons = dialog.querySelectorAll('button');
-  expect(buttons[2]).toHaveTextContent('Move to Trashcan');
-
-  fireEvent.click(buttons[2]);
+  const moveToTrashcanButton = screen.getByText('Move to Trashcan');
+  fireEvent.click(moveToTrashcanButton);
 
   expect(dialogAction).toHaveBeenCalled();
 };
@@ -297,10 +296,8 @@ export const testBulkDeleteDialog = (screen, dialogAction) => {
   const dialog = screen.getByRole('dialog');
   expect(dialog).toBeVisible();
 
-  const buttons = dialog.querySelectorAll('button');
-  expect(buttons[2]).toHaveTextContent('Delete');
-
-  fireEvent.click(buttons[2]);
+  const deleteButton = screen.getByText('Delete');
+  fireEvent.click(deleteButton);
 
   expect(dialogAction).toHaveBeenCalled();
 };

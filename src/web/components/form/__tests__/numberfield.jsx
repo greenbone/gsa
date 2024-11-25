@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 import NumberField from '../numberfield';
 

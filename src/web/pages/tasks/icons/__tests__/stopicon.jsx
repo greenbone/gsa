@@ -10,7 +10,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
-import {rendererWith, fireEvent, queryByTestId} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Theme from 'web/utils/theme';
 
