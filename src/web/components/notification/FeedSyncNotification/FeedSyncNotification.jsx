@@ -53,7 +53,7 @@ const FeedSyncNotification = () => {
             )}{' '}
             <BlankLink
               to={
-                'https://docs.greenbone.net/GSM-Manual/gos-21.04/en/scanning.html?highlight=scan'
+                'https://docs.greenbone.net/GSM-Manual/gos-22.04/en/scanning.html?highlight=scan'
               }
             >
               {_('Documentation')}.
