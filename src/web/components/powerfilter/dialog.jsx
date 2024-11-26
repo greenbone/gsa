@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
-import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import useCapabilities from 'web/hooks/useCapabilities';
 
 import CreateNamedFilterGroup from './createnamedfiltergroup';
@@ -57,9 +55,6 @@ export const DefaultFilterDialog = ({
 };
 
 DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
-
-export const createFilterDialog = options =>
-  withFilterDialog(options)(DefaultFilterDialog);
 
 export {DefaultFilterDialogPropTypes};
 
