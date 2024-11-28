@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -56,30 +55,29 @@ class DeltaStatesFilterGroup extends React.Component {
             checked={delta_states.includes('s')}
             name="s"
             onChange={this.handleDeltaStatesChange}
-          >
-            {_('Same')}
-          </Checkbox>
+            title={_('Same')}
+          />
+
           <Checkbox
             checked={delta_states.includes('n')}
             name="n"
             onChange={this.handleDeltaStatesChange}
-          >
-            {_('New')}
-          </Checkbox>
+            title={_('New')}
+          />
+
           <Checkbox
             checked={delta_states.includes('g')}
             name="g"
             onChange={this.handleDeltaStatesChange}
-          >
-            {_('Gone')}
-          </Checkbox>
+            title={_('Gone')}
+          />
+
           <Checkbox
             checked={delta_states.includes('c')}
             name="c"
             onChange={this.handleDeltaStatesChange}
-          >
-            {_('Changed')}
-          </Checkbox>
+            title={_('Changed')}
+          />
         </Divider>
       </FormGroup>
     );
