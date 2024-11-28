@@ -31,11 +31,13 @@ describe('Task Trend Selector Tests', () => {
     const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
 
-    render(<TaskTrendGroup filter={filter} onChange={onChange} />);
+    const {queryByRole} = render(
+      <TaskTrendGroup filter={filter} onChange={onChange} />,
+    );
 
     let domItems = getSelectItemElements();
 
-    expect(domItems.length).toEqual(0);
+    expect(queryByRole('option')).not.toBeInTheDocument();
 
     await openSelectElement();
 

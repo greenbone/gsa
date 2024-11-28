@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -71,12 +69,9 @@ const EMPTY_DISPLAYS = [];
 
 const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
   const [_] = useTranslation();
-  const defaultDisplayChoices = [
-    {
-      label: _('Default'),
-      key: 'default',
-      value: DEFAULT_DISPLAYS,
-    },
+
+  const uniqueDisplayChoices = [
+    {label: _('Default'), key: 'default', value: DEFAULT_DISPLAYS},
     {
       label: _('Scan Displays'),
       key: 'scan-displays',
@@ -92,26 +87,34 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
       key: 'secinfo-displays',
       value: SECINFO_DEFAULT_DISPLAYS,
     },
-    {
-      label: _('Empty'),
-      key: 'empty',
-      value: EMPTY_DISPLAYS,
-    },
-    ...additionalDisplayChoices,
-  ];
+    {label: _('Empty'), key: 'empty', value: EMPTY_DISPLAYS},
+    ...additionalDisplayChoices.map(choice => ({
+      label: choice.label,
+      key: `${choice.label}-${JSON.stringify(choice.value)}`,
+      value: choice.value,
+    })),
+  ].filter(
+    (choice, index, self) =>
+      index === self.findIndex(item => item.key === choice.key),
+  );
+
   return (
     <SaveDialog
       buttonTitle={_('Add')}
       title={_('Add new Dashboard')}
-      defaultValues={{
-        title: _('Unnamed'),
-        defaultDisplays: DEFAULT_DISPLAYS,
-      }}
+      defaultValues={{title: _('Unnamed'), defaultDisplays: 'default'}}
       onClose={onClose}
-      onSave={onSave}
+      onSave={values =>
+        onSave({
+          ...values,
+          defaultDisplays: uniqueDisplayChoices.find(
+            choice => choice.key === values.defaultDisplays,
+          )?.value,
+        })
+      }
     >
       {({values, onValueChange}) => (
-        <React.Fragment>
+        <>
           <FormGroup title={_('Dashboard Title')}>
             <TextField
               name="title"
@@ -123,12 +126,15 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
           <FormGroup title={_('Initial Displays')}>
             <Select
               name="defaultDisplays"
-              items={defaultDisplayChoices}
+              items={uniqueDisplayChoices.map(({label, key}) => ({
+                label,
+                value: key,
+              }))}
               value={values.defaultDisplays}
               onChange={onValueChange}
             />
           </FormGroup>
-        </React.Fragment>
+        </>
       )}
     </SaveDialog>
   );
@@ -137,14 +143,12 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
 NewDashboardDialog.propTypes = {
   additionalDisplayChoices: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.toString,
-      value: PropTypes.array,
+      label: PropTypes.string.isRequired,
+      value: PropTypes.array.isRequired,
     }),
-  ),
+  ).isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
 export default NewDashboardDialog;
-
-// vim: set ts=2 sw=2 tw=80:

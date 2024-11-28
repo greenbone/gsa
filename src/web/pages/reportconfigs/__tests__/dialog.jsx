@@ -13,6 +13,8 @@ import {
   fireEvent,
   getByName,
   getAllByName,
+  screen,
+  within,
 } from 'web/utils/testing';
 
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/mockreportconfig';
@@ -27,7 +29,7 @@ import {
   getDialogSaveButton,
   getDialogTitle,
   getMultiSelectElements,
-  getSelectElements,
+  queryAllSelectElements,
   getSelectItemElementsForMultiSelect,
   getSelectItemElementsForSelect,
   getSelectedItems,
@@ -61,7 +63,7 @@ describe('Edit Report Config Dialog component tests', () => {
     expect(getDialogTitle()).toHaveTextContent('Edit Report Config');
 
     const content = getDialogContent();
-    const selects = getSelectElements(content);
+    const selects = queryAllSelectElements(content);
     expect(selects[0]).toHaveValue('example-configurable-1');
     expect(selects[0]).toBeDisabled();
   });
@@ -186,13 +188,15 @@ describe('Edit Report Config Dialog component tests', () => {
     changeInputValue(textParam, 'NewText');
 
     // Choose new SelectionParam
-    const selects = getSelectElements(content);
+    const selects = queryAllSelectElements(content);
     const menuItems = await getSelectItemElementsForSelect(selects[1]);
     await clickElement(menuItems[0]);
 
     // Unselect report format from ReportFormatListParam
-    const multiSelects = getMultiSelectElements(content);
-    const selectedItems = getSelectedItems(multiSelects[0]);
+    const multiSelect = getMultiSelectElements(content)[0];
+    await clickElement(multiSelect);
+
+    let selectedItems = getSelectedItems(document);
     const deleteIcon = selectedItems[1].querySelector('button');
     await clickElement(deleteIcon);
 
@@ -422,7 +426,7 @@ describe('New Report Config Dialog component tests', () => {
     changeInputValue(commentInput, 'ipsum');
 
     // Choose new report format
-    const select = getSelectElements(content);
+    const select = queryAllSelectElements(content);
     const menuItems = await getSelectItemElementsForSelect(select[0]);
     await clickElement(menuItems[1]);
 
@@ -433,8 +437,17 @@ describe('New Report Config Dialog component tests', () => {
     changeInputValue(param2Input, 'XYZ');
 
     const multiSelect = getMultiSelectElements(content)[0];
+    await clickElement(multiSelect);
+
+    let selectedItems = getSelectedItems(document);
+
+    const closeBtnElement = within(selectedItems[0]).getByRole('button', {
+      hidden: true,
+    });
+
+    await clickElement(closeBtnElement);
     const multiSelectMenuItems =
-      await getSelectItemElementsForMultiSelect(multiSelect);
+      await getSelectItemElementsForMultiSelect(screen);
     await clickElement(multiSelectMenuItems[1]);
 
     const saveButton = getDialogSaveButton();

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -25,6 +24,7 @@ import Layout from 'web/components/layout/layout';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+import Column from 'web/components/layout/column';
 
 const noop_convert = value => value;
 
@@ -74,7 +74,7 @@ class NvtPreference extends React.Component {
       );
     } else if (type === 'password') {
       input = (
-        <Divider>
+        <Column>
           <Checkbox
             title={_('Replace existing password with')}
             checked={checked}
@@ -85,7 +85,7 @@ class NvtPreference extends React.Component {
             value={value}
             onChange={this.onPreferenceChange}
           />
-        </Divider>
+        </Column>
       );
     } else if (type === 'file') {
       input = (

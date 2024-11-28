@@ -190,11 +190,11 @@ describe('Task ResumeIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} />);
+    const {queryByTestId} = render(<ResumeIcon task={task} />);
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
 
-    expect(element).toEqual(null);
+    expect(queryByTestId('resume-icon')).toEqual(null);
   });
 });

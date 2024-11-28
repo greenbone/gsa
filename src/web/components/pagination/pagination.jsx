@@ -27,6 +27,7 @@ const PaginationText = styled.span`
 
 const PaginationLayout = styled(Layout)`
   margin: 2px 3px;
+  padding: 15px 0;
 
   @media print {
     svg {

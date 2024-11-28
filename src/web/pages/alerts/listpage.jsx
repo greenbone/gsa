@@ -23,15 +23,16 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import AlertIcon from 'web/components/icon/alerticon';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/alerts';
 
 import AlertComponent from './component';
-import AlertTable, {SORT_FIELDS} from './table';
+import AlertTable from './table';
+
+import {useTranslation} from 'react-i18next';
+import AlertsFilterDialog from 'web/pages/alerts/filterdialog';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
@@ -52,10 +53,6 @@ ToolBarIcons.propTypes = {
   onAlertCreateClick: PropTypes.func.isRequired,
 };
 
-const AlertFilterDialog = createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
-
 const AlertsPage = ({
   showError,
   showSuccess,
@@ -64,48 +61,52 @@ const AlertsPage = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <AlertComponent
-    onCreated={onChanged}
-    onSaved={onChanged}
-    onCloned={onChanged}
-    onCloneError={onError}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onTestSuccess={showSuccess}
-    onTestError={showError}
-  >
-    {({clone, create, delete: delete_func, download, edit, save, test}) => (
-      <React.Fragment>
-        <PageTitle title={_('Alerts')} />
-        <EntitiesPage
-          {...props}
-          filterEditDialog={AlertFilterDialog}
-          filtersFilter={ALERTS_FILTER_FILTER}
-          sectionIcon={<AlertIcon size="large" />}
-          table={AlertTable}
-          title={_('Alerts')}
-          toolBarIcons={ToolBarIcons}
-          onAlertCloneClick={clone}
-          onAlertCreateClick={create}
-          onAlertDeleteClick={delete_func}
-          onAlertDownloadClick={download}
-          onAlertEditClick={edit}
-          onAlertTestClick={test}
-          onAlertSaveClick={save}
-          onError={onError}
-          onInteraction={onInteraction}
-          onPermissionChanged={onChanged}
-          onPermissionDownloaded={onDownloaded}
-          onPermissionDownloadError={onError}
-        />
-      </React.Fragment>
-    )}
-  </AlertComponent>
-);
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <AlertComponent
+      onCreated={onChanged}
+      onSaved={onChanged}
+      onCloned={onChanged}
+      onCloneError={onError}
+      onDeleted={onChanged}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+      onTestSuccess={showSuccess}
+      onTestError={showError}
+    >
+      {({clone, create, delete: delete_func, download, edit, save, test}) => (
+        <>
+          <PageTitle title={_('Alerts')} />
+          <EntitiesPage
+            {...props}
+            filterEditDialog={AlertsFilterDialog}
+            filtersFilter={ALERTS_FILTER_FILTER}
+            sectionIcon={<AlertIcon size="large" />}
+            table={AlertTable}
+            title={_('Alerts')}
+            toolBarIcons={ToolBarIcons}
+            onAlertCloneClick={clone}
+            onAlertCreateClick={create}
+            onAlertDeleteClick={delete_func}
+            onAlertDownloadClick={download}
+            onAlertEditClick={edit}
+            onAlertTestClick={test}
+            onAlertSaveClick={save}
+            onError={onError}
+            onInteraction={onInteraction}
+            onPermissionChanged={onChanged}
+            onPermissionDownloaded={onDownloaded}
+            onPermissionDownloadError={onError}
+          />
+        </>
+      )}
+    </AlertComponent>
+  );
+};
 
 AlertsPage.propTypes = {
   showError: PropTypes.func.isRequired,

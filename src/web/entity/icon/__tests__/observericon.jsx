@@ -23,8 +23,10 @@ describe('Entity ObserverIcon component tests', () => {
   test('should not render if the owner is the current user', () => {
     const entity = Task.fromElement({owner: {name: 'foo'}});
 
-    const {element} = render(<ObserverIcon entity={entity} userName={'foo'} />);
+    const {queryByTestId} = render(
+      <ObserverIcon entity={entity} userName={'foo'} />,
+    );
 
-    expect(element).toEqual(null);
+    expect(queryByTestId('observer-icon')).toEqual(null);
   });
 });

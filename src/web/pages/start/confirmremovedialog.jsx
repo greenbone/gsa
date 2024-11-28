@@ -11,7 +11,9 @@ import PropTypes from 'web/utils/proptypes';
 
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
-import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
+import DialogTwoButtonFooter, {
+  DELETE_ACTION,
+} from 'web/components/dialog/twobuttonfooter';
 
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -43,6 +45,7 @@ const ConfirmRemoveDialog = ({
           rightButtonTitle={_('Remove')}
           onLeftButtonClick={onDeny}
           onRightButtonClick={() => onConfirm(dashboardId)}
+          rightButtonAction={DELETE_ACTION}
         />
       </DialogContent>
     </Dialog>

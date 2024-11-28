@@ -59,7 +59,7 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    expect(container.firstChild).toBeVisible();
+    expect(container.lastChild).toBeVisible();
   });
 
   test('should call click handlers', () => {

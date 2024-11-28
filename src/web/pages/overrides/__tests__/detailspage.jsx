@@ -142,11 +142,11 @@ describe('Override detailspage tests', () => {
       ),
     );
 
-    const {baseElement, element} = render(
+    const {baseElement} = render(
       <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
     );
 
-    expect(element).toHaveTextContent('override text');
+    expect(baseElement).toHaveTextContent('override text');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -159,50 +159,54 @@ describe('Override detailspage tests', () => {
     expect(screen.getAllByTitle('Override List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/overrides');
 
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent(
       'ID:6d00d22f-551b-4fbe-8215-d8615eff73ea',
     );
-    expect(element).toHaveTextContent('Created:Wed, Dec 23, 2020 3:14 PM CET');
-    expect(element).toHaveTextContent('Modified:Mon, Jan 4, 2021 12:54 PM CET');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(baseElement).toHaveTextContent(
+      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[9]).toHaveTextContent('User Tags');
     expect(spans[11]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('NVT Name');
-    expect(element).toHaveTextContent('foo nvt');
+    expect(baseElement).toHaveTextContent('NVT Name');
+    expect(baseElement).toHaveTextContent('foo nvt');
 
-    expect(element).toHaveTextContent('NVT OID');
-    expect(element).toHaveTextContent('123');
+    expect(baseElement).toHaveTextContent('NVT OID');
+    expect(baseElement).toHaveTextContent('123');
 
-    expect(element).toHaveTextContent('Active');
-    expect(element).toHaveTextContent('Yes');
+    expect(baseElement).toHaveTextContent('Active');
+    expect(baseElement).toHaveTextContent('Yes');
 
-    expect(element).toHaveTextContent('Application');
+    expect(baseElement).toHaveTextContent('Application');
 
-    expect(element).toHaveTextContent('Hosts');
-    expect(element).toHaveTextContent('127.0.0.1');
+    expect(baseElement).toHaveTextContent('Hosts');
+    expect(baseElement).toHaveTextContent('127.0.0.1');
 
-    expect(element).toHaveTextContent('Port');
-    expect(element).toHaveTextContent('666');
+    expect(baseElement).toHaveTextContent('Port');
+    expect(baseElement).toHaveTextContent('666');
 
-    expect(element).toHaveTextContent('Severity');
-    expect(element).toHaveTextContent('Any');
+    expect(baseElement).toHaveTextContent('Severity');
+    expect(baseElement).toHaveTextContent('Any');
 
-    expect(element).toHaveTextContent('Task');
-    expect(element).toHaveTextContent('task x');
+    expect(baseElement).toHaveTextContent('Task');
+    expect(baseElement).toHaveTextContent('task x');
 
-    expect(element).toHaveTextContent('Result');
-    expect(element).toHaveTextContent('Any');
+    expect(baseElement).toHaveTextContent('Result');
+    expect(baseElement).toHaveTextContent('Any');
 
-    expect(element).toHaveTextContent('Appearance');
+    expect(baseElement).toHaveTextContent('Appearance');
 
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent(
       'Override from Severity > 0.0 to False Positive',
     );
 
-    expect(element).toHaveTextContent('override text');
+    expect(baseElement).toHaveTextContent('override text');
   });
 
   test('should render user tags tab', () => {

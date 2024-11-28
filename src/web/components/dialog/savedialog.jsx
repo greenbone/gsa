@@ -14,11 +14,11 @@ import ErrorBoundary from 'web/components/error/errorboundary';
 
 import useTranslation from 'web/hooks/useTranslation';
 
-import Dialog from './dialog';
-import DialogContent from './content';
-import DialogError from './error';
-import DialogFooter from './twobuttonfooter';
-import MultiStepFooter from './multistepfooter';
+import Dialog from 'web/components/dialog/dialog';
+import DialogContent, {StickyFooter} from 'web/components/dialog/content';
+import DialogError from 'web/components/dialog/error';
+import DialogFooter from 'web/components/dialog/twobuttonfooter';
+import MultiStepFooter from 'web/components/dialog/multistepfooter';
 
 const SaveDialogContent = ({
   error,
@@ -29,7 +29,7 @@ const SaveDialogContent = ({
   ...props
 }) => {
   const [_] = useTranslation();
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [stateError, setStateError] = useState(undefined);
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -45,11 +45,11 @@ const SaveDialogContent = ({
 
   useEffect(() => {
     setStateError(error);
-    setLoading(false);
+    setIsLoading(false);
   }, [error]);
 
   const setError = err => {
-    setLoading(false);
+    setIsLoading(false);
 
     if (onError) {
       onError(err);
@@ -66,7 +66,7 @@ const SaveDialogContent = ({
     if (onSave && !isLoading) {
       const promise = onSave(state);
       if (isDefined(promise)) {
-        setLoading(true);
+        setIsLoading(true);
         // eslint-disable-next-line no-shadow
         return promise.catch(error => setError(error));
       }
@@ -102,33 +102,35 @@ const SaveDialogContent = ({
                   })
                 : children}
             </ErrorBoundary>
-            {multiStep > 0 ? (
-              <MultiStepFooter
-                loading={isLoading}
-                prevDisabled={prevDisabled}
-                nextDisabled={nextDisabled}
-                rightButtonTitle={buttonTitle}
-                onNextButtonClick={() =>
-                  setCurrentStep(
-                    currentStep < multiStep ? currentStep + 1 : currentStep,
-                  )
-                }
-                onLeftButtonClick={close}
-                onPreviousButtonClick={() =>
-                  setCurrentStep(
-                    currentStep > 0 ? currentStep - 1 : currentStep,
-                  )
-                }
-                onRightButtonClick={() => handleSaveClick(childValues)}
-              />
-            ) : (
-              <DialogFooter
-                isLoading={isLoading}
-                rightButtonTitle={buttonTitle}
-                onLeftButtonClick={close}
-                onRightButtonClick={() => handleSaveClick(childValues)}
-              />
-            )}
+            <StickyFooter>
+              {multiStep > 0 ? (
+                <MultiStepFooter
+                  loading={isLoading}
+                  prevDisabled={prevDisabled}
+                  nextDisabled={nextDisabled}
+                  rightButtonTitle={buttonTitle}
+                  onNextButtonClick={() =>
+                    setCurrentStep(
+                      currentStep < multiStep ? currentStep + 1 : currentStep,
+                    )
+                  }
+                  onLeftButtonClick={close}
+                  onPreviousButtonClick={() =>
+                    setCurrentStep(
+                      currentStep > 0 ? currentStep - 1 : currentStep,
+                    )
+                  }
+                  onRightButtonClick={() => handleSaveClick(childValues)}
+                />
+              ) : (
+                <DialogFooter
+                  isLoading={isLoading}
+                  rightButtonTitle={buttonTitle}
+                  onLeftButtonClick={close}
+                  onRightButtonClick={() => handleSaveClick(childValues)}
+                />
+              )}
+            </StickyFooter>
           </DialogContent>
         );
       }}
@@ -160,7 +162,7 @@ const SaveDialog = ({
   multiStep = 0,
   title,
   values,
-  width = 'lg',
+  width = '40vw',
   onClose,
   onError,
   onErrorClose,

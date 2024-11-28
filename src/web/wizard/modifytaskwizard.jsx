@@ -17,7 +17,7 @@ import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 import DatePicker from 'web/components/form/DatePicker';
-import {TimePicker} from '@greenbone/opensight-ui-components';
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 
 import Layout from 'web/components/layout/layout';
 import Column from 'web/components/layout/column';

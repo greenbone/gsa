@@ -9,14 +9,9 @@ import {fireEvent, render} from 'web/utils/testing';
 import {ICON_SIZE_LARGE_PIXELS} from 'web/hooks/useIconSize';
 
 describe('Icon', () => {
-  test('renders without crashing', () => {
-    const {container} = render(<Icon img="test.svg" />);
-    expect(container.firstChild).toBeVisible();
-  });
-
   test('renders with specified size', () => {
-    const {container} = render(<Icon img="test.svg" size="large" />);
-    const icon = container.firstChild;
+    const {element} = render(<Icon img="test.svg" size="large" />);
+    const icon = element;
     expect(icon).toHaveStyle({
       width: ICON_SIZE_LARGE_PIXELS,
       height: ICON_SIZE_LARGE_PIXELS,
@@ -25,8 +20,8 @@ describe('Icon', () => {
 
   test('calls onClick when clicked', () => {
     const handleClick = testing.fn();
-    const {container} = render(<Icon img="test.svg" onClick={handleClick} />);
-    const icon = container.firstChild;
+    const {element} = render(<Icon img="test.svg" onClick={handleClick} />);
+    const icon = element;
     fireEvent.click(icon);
     expect(handleClick).toHaveBeenCalled();
   });

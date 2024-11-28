@@ -14,7 +14,7 @@ describe('ComplianceStatusBar tests', () => {
   test('should render', () => {
     const {element} = render(<ComplianceStatusBar complianceStatus={75} />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeVisible();
   });
 
   test('should render text content', () => {
@@ -63,7 +63,10 @@ describe('ComplianceStatusBar tests', () => {
     const progress = getByTestId('progress');
     const progressbarBox = getByTestId('progressbar-box');
 
-    expect(progress).toHaveStyleRule('background', Theme.statusRunGreen);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.statusRunGreen} 0%, ${Theme.statusRunGreen} 100%)`,
+    );
     expect(progressbarBox).toHaveStyleRule('background', Theme.errorRed);
   });
 
@@ -72,7 +75,10 @@ describe('ComplianceStatusBar tests', () => {
     const progress = getByTestId('progress');
     const progressbarBox = getByTestId('progressbar-box');
 
-    expect(progress).toHaveStyleRule('background', Theme.statusRunGreen);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.statusRunGreen} 0%, ${Theme.statusRunGreen} 100%)`,
+    );
     expect(progress).toHaveStyleRule('width', '0%');
 
     expect(progressbarBox).toHaveStyleRule('background', Theme.darkGray);

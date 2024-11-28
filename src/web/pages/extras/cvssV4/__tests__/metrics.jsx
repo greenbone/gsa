@@ -22,7 +22,7 @@ describe('Metrics', () => {
     const selectedOptions = {metric1: 'option1', metric2: 'option2'};
     const handleOptionChange = testing.fn();
 
-    const {getAllByRole} = render(
+    const {getAllByTestId} = render(
       <Metrics
         metrics={metrics}
         selectedOptions={selectedOptions}
@@ -30,7 +30,7 @@ describe('Metrics', () => {
       />,
     );
 
-    const selects = getAllByRole('combobox');
+    const selects = getAllByTestId('form-select');
     expect(selects).toHaveLength(Object.keys(metrics).length);
   });
 });

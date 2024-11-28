@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import {RadioButton as GreenboneRadio} from '@greenbone/opensight-ui-components';
+import {RadioButton as GreenboneRadio} from '@greenbone/opensight-ui-components-mantinev7';
 
 import PropTypes from 'web/utils/proptypes';
 

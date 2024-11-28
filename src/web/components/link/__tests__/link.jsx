@@ -22,16 +22,13 @@ describe('Link tests', () => {
     expect(element).toHaveTextContent('Foo');
   });
 
-  test('should route to url on click', () => {
+  test('renders correctly with anchor', () => {
     const {render} = rendererWith({router: true});
 
-    const {element} = render(<Link to="foo">Foo</Link>);
-
-    expect(window.location.pathname).toEqual('/');
-
-    fireEvent.click(element);
-
-    expect(window.location.pathname).toEqual('/foo');
+    const {container} = render(<Link to="/test" anchor="section1" />);
+    expect(container.querySelector('a').getAttribute('href')).toBe(
+      '/test#section1',
+    );
   });
 
   test('should route to absolute url on click', () => {

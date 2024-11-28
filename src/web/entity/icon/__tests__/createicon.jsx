@@ -44,9 +44,9 @@ describe('Entity CreateIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<CreateIcon entity={entity} />);
+    const {queryByTestId} = render(<CreateIcon entity={entity} />);
 
-    expect(element).toEqual(null);
+    expect(queryByTestId('create-icon')).toEqual(null);
     expect(caps.mayCreate('task')).toEqual(false);
   });
 });

@@ -20,7 +20,7 @@ import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import DatePicker from 'web/components/form/DatePicker';
-import {TimePicker} from '@greenbone/opensight-ui-components';
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 import CheckBox from 'web/components/form/checkbox';
@@ -206,11 +206,14 @@ const ScheduleDialog = ({
 
   const handleNowButtonClick = () => {
     setStartDate(date().tz(timezone));
+    setStartTime(formatTimeForTimePicker(date().tz(timezone)));
   };
 
   const handleTimezoneChange = value => {
     setEndDate(endDate => endDate.tz(value));
     setStartDate(startDate => startDate.tz(value));
+    setStartTime(formatTimeForTimePicker(startDate));
+    setEndTime(formatTimeForTimePicker(endDate));
     setTimezone(value);
   };
 
@@ -380,22 +383,25 @@ const ScheduleDialog = ({
               onChange={onValueChange}
             />
           </FormGroup>
-          <DatePicker
-            timezone={timezone}
-            name="startDate"
-            value={startDate}
-            onChange={setStartDate}
-            label={_('Start Date')}
-          />
-          <TimePicker
-            label={_('Start Time')}
-            name="startDate"
-            value={startTime}
-            onChange={newStartTime =>
-              handleTimeChange(newStartTime, 'startTime')
-            }
-          />
 
+          <Row flex="row" align={'end'} gap={'lg'}>
+            <DatePicker
+              timezone={timezone}
+              name="startDate"
+              value={startDate}
+              onChange={setStartDate}
+              label={_('Start Date')}
+            />
+            <TimePicker
+              label={_('Start Time')}
+              name="startDate"
+              value={startTime}
+              onChange={newStartTime =>
+                handleTimeChange(newStartTime, 'startTime')
+              }
+            />
+            <Button title={_('Now')} onClick={handleNowButtonClick} />
+          </Row>
           <FormGroup title={_('Timezone')}>
             <TimeZoneSelect
               name="timezone"
@@ -403,9 +409,6 @@ const ScheduleDialog = ({
               onChange={handleTimezoneChange}
             />
           </FormGroup>
-
-          <Button title={_('Now')} onClick={handleNowButtonClick} />
-
           <FormGroup title={_('Run Until')}>
             <CheckBox
               title={_('Open End')}

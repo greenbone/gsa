@@ -5,14 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render} from 'web/utils/testing';
+import {render, screen, fireEvent} from 'web/utils/testing';
 
 import {
   openSelectElement,
   getSelectItemElements,
   clickElement,
   getSelectElement,
-  changeSelectInput,
 } from 'web/components/testing';
 
 import RelationSelector from 'web/components/powerfilter/relationselector';
@@ -20,19 +19,21 @@ import RelationSelector from 'web/components/powerfilter/relationselector';
 describe('Relation Selector Tests', () => {
   test('should render', () => {
     const onChange = testing.fn();
-    const {element} = render(
+    const {container} = render(
       <RelationSelector relation="<" onChange={onChange} />,
     );
 
-    expect(element).toBeVisible();
+    expect(container).toBeVisible();
   });
 
   test('should return items', async () => {
     const onChange = testing.fn();
-    render(<RelationSelector relation="<" onChange={onChange} />);
+    const {queryByRole} = render(
+      <RelationSelector relation="<" onChange={onChange} />,
+    );
 
     let domItems = getSelectItemElements();
-    expect(domItems.length).toEqual(0);
+    expect(queryByRole('option')).not.toBeInTheDocument();
 
     await openSelectElement();
 
@@ -82,19 +83,17 @@ describe('Relation Selector Tests', () => {
     const onChange = testing.fn();
     render(<RelationSelector relation="=" onChange={onChange} />);
 
-    await openSelectElement();
+    fireEvent.click(screen.getByRole('textbox'));
 
-    let domItems = getSelectItemElements();
+    let domItems = screen.getAllByRole('option');
     expect(domItems.length).toEqual(4);
 
-    changeSelectInput('than');
-
-    domItems = getSelectItemElements();
+    fireEvent.change(screen.getByRole('textbox'), {target: {value: 'than'}});
+    domItems = screen.getAllByRole('option');
     expect(domItems.length).toEqual(2);
 
-    changeSelectInput('to');
-
-    domItems = getSelectItemElements();
+    fireEvent.change(screen.getByRole('textbox'), {target: {value: 'to'}});
+    domItems = screen.getAllByRole('option');
     expect(domItems.length).toEqual(1);
   });
 });

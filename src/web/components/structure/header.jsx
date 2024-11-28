@@ -7,7 +7,7 @@ import {useCallback} from 'react';
 
 import {useNavigate} from 'react-router-dom';
 
-import {AppHeader} from '@greenbone/opensight-ui-components';
+import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
 
 import _ from 'gmp/locale';
 

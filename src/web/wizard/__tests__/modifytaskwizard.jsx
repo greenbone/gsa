@@ -76,14 +76,14 @@ describe('ModifyTaskWizard component tests', () => {
 
     const selectedDate = '01/01/2020';
     const datePickerLabel = screen.getByLabelText('Start Date');
-    const startDateButton = screen.getByRole('button', {name: selectedDate});
+    const startDateButton = screen.getByDisplayValue(selectedDate);
 
     const selectedTime = '12:10';
     const timePickerLabel = screen.getByLabelText('Start Time');
 
     expect(startDateButton).toBeVisible();
     expect(datePickerLabel).toBeVisible();
-    expect(startDateButton).toHaveTextContent(selectedDate);
+    expect(startDateButton).toHaveValue(selectedDate);
 
     expect(timePickerLabel).toBeVisible();
     expect(timePickerLabel).toHaveValue(selectedTime);

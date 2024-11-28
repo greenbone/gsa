@@ -61,7 +61,10 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.severityWarnYellow);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.severityWarnYellow} 0%, ${Theme.severityWarnYellow} 100%)`,
+    );
   });
 
   test('should render background = error', () => {
@@ -70,7 +73,10 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.errorRed);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.errorRed} 0%, ${Theme.errorRed} 100%)`,
+    );
   });
 
   test('should render background = low', () => {
@@ -79,7 +85,10 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.severityLowBlue);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.severityLowBlue} 0%, ${Theme.severityLowBlue} 100%)`,
+    );
   });
 
   test('should render background = new', () => {
@@ -88,7 +97,10 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.statusNewGreen);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.statusNewGreen} 0%, ${Theme.statusNewGreen} 100%)`,
+    );
   });
 
   test('should render background = run', () => {
@@ -97,7 +109,10 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.statusRunGreen);
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.statusRunGreen} 0%, ${Theme.statusRunGreen} 100%)`,
+    );
   });
 
   test('should render background = log', () => {
@@ -106,7 +121,10 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', 'gray');
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, gray 0%, gray 100%)`,
+    );
   });
 
   test('should render box background', () => {

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import Theme from 'web/utils/theme';
 
 import Table from './table';
@@ -21,6 +20,7 @@ const StripedTable = styled(Table)`
   }
   & tfoot tr td {
     border-bottom: 1px solid ${Theme.lightGray};
+    padding: 15px 0;
   }
   @media screen {
     & > tbody:nth-of-type(even),

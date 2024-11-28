@@ -62,6 +62,7 @@ import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import DialogNotification from 'web/components/notification/dialognotification';
 import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
+import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
 
 const Col = styled.col`
   width: 50%;
@@ -441,6 +442,7 @@ const TrashCan = () => {
             rightButtonTitle={_('Confirm')}
             loading={isEmptyingTrash || isLoading}
             width="500px"
+            rightButtonAction={DELETE_ACTION}
           />
         )}
         <LinkTarget id="Contents" />

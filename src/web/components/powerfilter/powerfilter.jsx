@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
@@ -189,7 +188,6 @@ class PowerFilter extends React.Component {
               </Label>
               <PowerFilterTextField
                 name="userFilterString"
-                size="53"
                 maxLength="1000"
                 value={userFilterString}
                 onKeyDown={this.handleUserFilterKeyPress}

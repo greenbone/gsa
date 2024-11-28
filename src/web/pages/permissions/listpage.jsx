@@ -29,7 +29,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 import Table from './table';
 import PermissionComponent from './component';
-import FilterDialog from '../filters/dialog';
+import FilterDialog from 'web/pages/permissions/filterdialog';
 
 const ToolBarIcons = ({onPermissionCreateClick}) => {
   const capabilities = useCapabilities();

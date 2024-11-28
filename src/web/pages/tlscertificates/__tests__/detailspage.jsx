@@ -88,11 +88,11 @@ describe('TLS Certificate Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('1234', tlsCertificate));
 
-    const {baseElement, element, getAllByTestId} = render(
+    const {baseElement, container, getAllByTestId} = render(
       <Detailspage id="1234" />,
     );
 
-    expect(element).toHaveTextContent(
+    expect(container).toHaveTextContent(
       'TLS Certificate: CN=LoremIpsumSubject C=Dolor',
     );
 
@@ -108,19 +108,23 @@ describe('TLS Certificate Detailspage tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'TLS Certificates List');
     expect(links[1]).toHaveAttribute('href', '/tlscertificates');
 
-    expect(element).toHaveTextContent('1234');
-    expect(element).toHaveTextContent('Wed, Jul 10, 2019 12:51 PM UTC');
-    expect(element).toHaveTextContent('Tue, Dec 10, 2019 12:51 PM UTC');
-    expect(element).toHaveTextContent('admin');
+    expect(container).toHaveTextContent('1234');
+    expect(container).toHaveTextContent('Wed, Jul 10, 2019 12:51 PM UTC');
+    expect(container).toHaveTextContent('Tue, Dec 10, 2019 12:51 PM UTC');
+    expect(container).toHaveTextContent('admin');
 
-    expect(element).toHaveTextContent('Subject DNCN=LoremIpsumSubject C=Dolor');
-    expect(element).toHaveTextContent('Issuer DNCN=LoremIpsumIssuer C=Dolor');
-    expect(element).toHaveTextContent('ValidNo');
-    expect(element).toHaveTextContent(
+    expect(container).toHaveTextContent(
+      'Subject DNCN=LoremIpsumSubject C=Dolor',
+    );
+    expect(container).toHaveTextContent('Issuer DNCN=LoremIpsumIssuer C=Dolor');
+    expect(container).toHaveTextContent('ValidNo');
+    expect(container).toHaveTextContent(
       'ActivatesSat, Aug 10, 2019 12:51 PM UTC',
     );
-    expect(element).toHaveTextContent('ExpiresTue, Sep 10, 2019 12:51 PM UTC');
-    expect(element).toHaveTextContent('SHA-256 Fingerprint2142');
-    expect(element).toHaveTextContent('MD5 Fingerprint4221');
+    expect(container).toHaveTextContent(
+      'ExpiresTue, Sep 10, 2019 12:51 PM UTC',
+    );
+    expect(container).toHaveTextContent('SHA-256 Fingerprint2142');
+    expect(container).toHaveTextContent('MD5 Fingerprint4221');
   });
 });

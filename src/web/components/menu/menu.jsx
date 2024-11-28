@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import {AppNavigation} from '@greenbone/opensight-ui-components';
+import {AppNavigation} from '@greenbone/opensight-ui-components-mantinev7';
 
 import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/hooks/useCapabilities';

@@ -5,7 +5,7 @@
 
 import React, {useCallback} from 'react';
 
-import {Checkbox as OpenSightCheckbox} from '@greenbone/opensight-ui-components';
+import {Checkbox as OpenSightCheckbox} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {isDefined} from 'gmp/utils/identity';
 

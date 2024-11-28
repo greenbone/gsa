@@ -52,11 +52,11 @@ const DetailsIcon = styled(FoldIcon)`
 `;
 
 const TableBox = styled(Layout)`
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 const EmptyTitle = styled(Layout)`
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
 `;
 

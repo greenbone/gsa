@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
-import {Button as OpenSightButton} from '@greenbone/opensight-ui-components';
+import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
 
 import PropTypes from 'web/utils/proptypes';
 

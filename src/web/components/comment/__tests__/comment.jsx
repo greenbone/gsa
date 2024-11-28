@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {describe, test, expect} from '@gsa/testing';
 
 import {render} from 'web/utils/testing';
@@ -11,12 +10,6 @@ import {render} from 'web/utils/testing';
 import Comment from '../comment';
 
 describe('Comment tests', () => {
-  test('should render comment', () => {
-    const {element} = render(<Comment />);
-
-    expect(element).toMatchSnapshot();
-  });
-
   test('should render children', () => {
     const {element} = render(<Comment>Hello World</Comment>);
 

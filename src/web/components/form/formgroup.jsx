@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import {LabelWithIcon as Label} from '@greenbone/opensight-ui-components';
+import {LabelWithIcon as Label} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -26,7 +26,7 @@ const FormGroup = ({
     <Column
       align="stretch"
       justify="flex-start"
-      gap="0"
+      gap="8"
       data-testid={dataTestId}
     >
       {isDefined(title) && <Label>{title}</Label>}
@@ -36,6 +36,7 @@ const FormGroup = ({
 };
 
 FormGroup.propTypes = {
+  children: PropTypes.node,
   'data-testid': PropTypes.string,
   direction: PropTypes.oneOf(['row', 'column']),
   gap: PropTypes.string,

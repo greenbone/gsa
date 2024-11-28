@@ -24,6 +24,7 @@ import TableFooter from 'web/components/table/footer';
 import TableRow from 'web/components/table/row';
 
 import useTranslation from 'web/hooks/useTranslation';
+import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
 
 const DIALOG_TYPES = {
   TRASH: 'trash',
@@ -162,6 +163,7 @@ export const EntitiesFooter = ({
           content={configDialog.dialogText}
           title={configDialog.dialogTitle}
           rightButtonTitle={configDialog.dialogButtonTitle}
+          rightButtonAction={DELETE_ACTION}
           width="500px"
         />
       )}

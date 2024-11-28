@@ -11,17 +11,17 @@ import {render, fireEvent, screen} from 'web/utils/testing';
 
 const checkElementVisibilityAndContent = (
   labelText,
-  buttonName,
-  buttonContent,
+  inputValue,
+  inputContent,
   timePickerLabel,
   timePickerValue,
 ) => {
   const label = screen.getByLabelText(labelText);
   expect(label).toBeVisible();
 
-  const button = screen.getAllByRole('button', {name: buttonName});
-  expect(button[0]).toBeVisible();
-  expect(button[0]).toHaveTextContent(buttonContent);
+  const input = screen.getAllByDisplayValue(inputValue);
+  expect(input[0]).toBeVisible();
+  expect(input[0]).toHaveValue(inputContent);
 
   const timePicker = screen.getByLabelText(timePickerLabel);
   expect(timePicker).toBeVisible();
@@ -33,7 +33,7 @@ import {
   clickElement,
   closeDialog,
   getDialogSaveButton,
-  getSelectElements,
+  queryAllSelectElements,
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
@@ -102,7 +102,7 @@ describe('ScheduleDialog component tests', () => {
     );
 
     const inputs = getTextInputs();
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveValue('schedule 1'); // name field
@@ -192,7 +192,7 @@ describe('ScheduleDialog component tests', () => {
     );
 
     let selectItems;
-    const selects = getSelectElements();
+    const selects = queryAllSelectElements();
     expect(selects[0]).toHaveValue('Coordinated Universal Time/UTC');
     expect(selects[1]).toHaveValue('Weekly');
 

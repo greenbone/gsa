@@ -3,23 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 import Theme from 'web/utils/theme';
 
-const ProgressBarBox = styledExcludeProps(styled.div, ['boxBackground'])`
-  height: 13px;
-  box-sizing: content-box; /* height includes border */
+const ProgressBarBox = styled.div`
+  height: 16px;
+  box-sizing: content-box;
   display: inline-block;
-  width: 100px;
-  background: ${props => props.boxBackground};
+  width: 150px;
+  background: ${props => props.$boxBackground};
   vertical-align: middle;
   text-align: center;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   @media print {
     background: none;
@@ -31,10 +32,10 @@ const Content = styled.div`
   z-index: ${Theme.Layers.higher};
   font-weight: bold;
   color: ${Theme.white};
-  font-size: 9px;
+  font-size: 10px;
   margin: 0;
   position: relative;
-  top: -13px;
+  top: -16px;
   padding-top: 1px;
 
   @media print {
@@ -52,34 +53,35 @@ export const adjustProgress = progress => {
   return progress;
 };
 
-const Progress = styledExcludeProps(styled.div, ['progress'])`
-  height: 13px;
+const Progress = styled.div`
+  height: 16px;
+  border-radius: 8px;
 
   @media print {
     background: none;
   }
   ${props => {
-    let {background, progress} = props;
+    let {$background, $progress} = props;
 
-    if (background === 'warn') {
-      background = Theme.severityWarnYellow;
-    } else if (background === 'error') {
-      background = Theme.errorRed;
-    } else if (background === 'low') {
-      background = Theme.severityLowBlue;
-    } else if (background === 'new') {
-      background = Theme.statusNewGreen;
-    } else if (background === 'run') {
-      background = Theme.statusRunGreen;
-    } else if (background === 'log') {
-      background = 'gray';
+    if ($background === 'warn') {
+      $background = Theme.severityWarnYellow;
+    } else if ($background === 'error') {
+      $background = Theme.errorRed;
+    } else if ($background === 'low') {
+      $background = Theme.severityLowBlue;
+    } else if ($background === 'new') {
+      $background = Theme.statusNewGreen;
+    } else if ($background === 'run') {
+      $background = Theme.statusRunGreen;
+    } else if ($background === 'log') {
+      $background = 'gray';
     }
 
-    progress = adjustProgress(progress);
+    $progress = adjustProgress($progress);
 
     return {
-      width: progress + '%',
-      background,
+      width: $progress + '%',
+      background: `linear-gradient(90deg, ${$background} 0%, ${$background} 100%)`,
     };
   }};
 `;
@@ -95,12 +97,12 @@ const ProgressBar = ({
     <ProgressBarBox
       data-testid="progressbar-box"
       title={title}
-      boxBackground={boxBackground}
+      $boxBackground={boxBackground}
     >
       <Progress
         data-testid="progress"
-        progress={progress}
-        background={background}
+        $progress={progress}
+        $background={background}
       />
       <Content>{children}</Content>
     </ProgressBarBox>
@@ -108,6 +110,7 @@ const ProgressBar = ({
 };
 
 ProgressBar.propTypes = {
+  children: PropTypes.node,
   background: PropTypes.string,
   boxBackground: PropTypes.string,
   progress: PropTypes.numberOrNumberString,
@@ -115,5 +118,3 @@ ProgressBar.propTypes = {
 };
 
 export default ProgressBar;
-
-// vim: set ts=2 sw=2 tw=80:

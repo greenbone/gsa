@@ -31,7 +31,7 @@ describe('StartTimeSelection tests', () => {
 
     const checkElementVisibilityAndContent = (
       labelText,
-      buttonName,
+      inputValue,
       buttonContent,
       timePickerLabel,
       timePickerValue,
@@ -39,9 +39,9 @@ describe('StartTimeSelection tests', () => {
       const label = screen.getByLabelText(labelText);
       expect(label).toBeVisible();
 
-      const button = screen.getByRole('button', {name: buttonName});
-      expect(button).toBeVisible();
-      expect(button).toHaveTextContent(buttonContent);
+      const input = screen.getByDisplayValue(inputValue);
+      expect(input).toBeVisible();
+      expect(input).toHaveValue(inputValue);
 
       const timePicker = screen.getByLabelText(timePickerLabel);
       expect(timePicker).toBeVisible();

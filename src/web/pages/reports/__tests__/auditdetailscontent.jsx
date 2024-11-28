@@ -12,10 +12,14 @@ import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {getByRole, rendererWith} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/testing';
 
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
-import {getPowerFilter, getTextInputs} from 'web/components/testing';
+import {
+  getPowerFilter,
+  getTextInputs,
+  getSelectElement,
+} from 'web/components/testing';
 
 import DetailsContent from 'web/pages/reports/auditdetailscontent';
 
@@ -148,11 +152,11 @@ describe('Audit Report Details Content tests', () => {
     const tableData = baseElement.querySelectorAll('td');
     const powerFilter = getPowerFilter();
 
-    const select = getByRole(powerFilter, 'combobox');
+    const select = getSelectElement(powerFilter);
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons.length).toEqual(17);
+    expect(icons.length).toEqual(16);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -313,11 +317,11 @@ describe('Audit Report Details Content tests', () => {
     const icons = baseElement.querySelectorAll('svg');
     const powerFilter = getPowerFilter();
     const inputs = getTextInputs(powerFilter);
-    const select = getByRole(powerFilter, 'combobox');
+    const select = getSelectElement(powerFilter);
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons.length).toEqual(21);
+    expect(icons.length).toEqual(20);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

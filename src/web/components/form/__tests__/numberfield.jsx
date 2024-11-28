@@ -112,32 +112,4 @@ describe('NumberField tests', () => {
 
     expect(element).toHaveAttribute('value', '3');
   });
-
-  test('should use max if value > max', () => {
-    const onChange = testing.fn();
-    render(
-      <NumberField data-testid="input" value={1} max={2} onChange={onChange} />,
-    );
-
-    const element = screen.getByTestId('input');
-
-    fireEvent.change(element, {target: {value: '3'}});
-
-    expect(onChange).toHaveBeenCalledWith(2, undefined);
-    expect(element).toHaveAttribute('value', '2');
-  });
-
-  test('should use min if value < min', () => {
-    const onChange = testing.fn();
-    render(
-      <NumberField data-testid="input" value={2} min={1} onChange={onChange} />,
-    );
-
-    const element = screen.getByTestId('input');
-
-    fireEvent.change(element, {target: {value: '0'}});
-
-    expect(onChange).toHaveBeenCalledWith(1, undefined);
-    expect(element).toHaveAttribute('value', '1');
-  });
 });

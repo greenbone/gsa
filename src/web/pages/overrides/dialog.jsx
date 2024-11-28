@@ -252,7 +252,7 @@ const OverrideDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Hosts')} direction="row">
+            <FormGroup title={_('Hosts')}>
               <Radio
                 name="hosts"
                 title={_('Any')}
@@ -260,22 +260,24 @@ const OverrideDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Radio
-                name="hosts"
-                checked={state.hosts === MANUAL}
-                value={MANUAL}
-                onChange={onValueChange}
-              />
-              <TextField
-                grow="1"
-                name="hosts_manual"
-                value={state.hosts_manual}
-                disabled={state.hosts !== MANUAL}
-                onChange={onValueChange}
-              />
+              <Row>
+                <Radio
+                  name="hosts"
+                  checked={state.hosts === MANUAL}
+                  value={MANUAL}
+                  onChange={onValueChange}
+                />
+                <TextField
+                  grow="1"
+                  name="hosts_manual"
+                  value={state.hosts_manual}
+                  disabled={state.hosts !== MANUAL}
+                  onChange={onValueChange}
+                />
+              </Row>
             </FormGroup>
 
-            <FormGroup title={_('Location')} direction="row">
+            <FormGroup title={_('Location')}>
               <Radio
                 name="port"
                 title={_('Any')}
@@ -283,19 +285,21 @@ const OverrideDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Radio
-                name="port"
-                checked={state.port === MANUAL}
-                value={MANUAL}
-                onChange={onValueChange}
-              />
-              <TextField
-                grow="1"
-                name="port_manual"
-                disabled={state.port !== MANUAL}
-                value={state.port_manual}
-                onChange={onValueChange}
-              />
+              <Row>
+                <Radio
+                  name="port"
+                  checked={state.port === MANUAL}
+                  value={MANUAL}
+                  onChange={onValueChange}
+                />
+                <TextField
+                  grow="1"
+                  name="port_manual"
+                  disabled={state.port !== MANUAL}
+                  value={state.port_manual}
+                  onChange={onValueChange}
+                />
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Severity')}>
@@ -326,7 +330,7 @@ const OverrideDialog = ({
                 />
               )}
               {!isDefined(severity) && (
-                <Row>
+                <>
                   <Radio
                     name="severity"
                     title={_('> 0.0')}
@@ -343,41 +347,45 @@ const OverrideDialog = ({
                     convert={parseFloat}
                     onChange={onValueChange}
                   />
-                </Row>
+                </>
               )}
             </FormGroup>
 
-            <FormGroup title={_('New Severity')} direction="row">
-              <Radio
-                name="custom_severity"
-                checked={state.custom_severity === NO_VALUE}
-                convert={parseYesNo}
-                value={NO_VALUE}
-                onChange={onValueChange}
-              />
-              <Select
-                name="new_severity_from_list"
-                disabled={state.custom_severity === YES_VALUE}
-                convert={parseFloat}
-                items={severity_from_list_items}
-                value={state.new_severity_from_list}
-                onChange={onValueChange}
-              />
-              <Radio
-                name="custom_severity"
-                title={_('Other')}
-                checked={state.custom_severity === YES_VALUE}
-                convert={parseYesNo}
-                value={YES_VALUE}
-                onChange={onValueChange}
-              />
-              <TextField
-                name="newSeverity"
-                disabled={state.custom_severity === NO_VALUE}
-                convert={parseFloat}
-                value={state.newSeverity}
-                onChange={onValueChange}
-              />
+            <FormGroup title={_('New Severity')} direction="column">
+              <Row>
+                <Radio
+                  name="custom_severity"
+                  checked={state.custom_severity === NO_VALUE}
+                  convert={parseYesNo}
+                  value={NO_VALUE}
+                  onChange={onValueChange}
+                />
+                <Select
+                  name="new_severity_from_list"
+                  disabled={state.custom_severity === YES_VALUE}
+                  convert={parseFloat}
+                  items={severity_from_list_items}
+                  value={state.new_severity_from_list}
+                  onChange={onValueChange}
+                />
+              </Row>
+              <Row>
+                <Radio
+                  name="custom_severity"
+                  title={_('Other')}
+                  checked={state.custom_severity === YES_VALUE}
+                  convert={parseYesNo}
+                  value={YES_VALUE}
+                  onChange={onValueChange}
+                />
+                <TextField
+                  name="newSeverity"
+                  disabled={state.custom_severity === NO_VALUE}
+                  convert={parseFloat}
+                  value={state.newSeverity}
+                  onChange={onValueChange}
+                />
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Task')}>

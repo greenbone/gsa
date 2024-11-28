@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {testing, beforeEach, expect} from '@gsa/testing';
 
 import '../setupTests';
@@ -20,6 +19,9 @@ global.expect = expect;
 // It is caused by clicking on <a> elements in tests
 // https://stackoverflow.com/a/68038982/11044073
 HTMLAnchorElement.prototype.click = testing.fn();
+
+// use-combox from @mantine/core uses scrollIntoView and gives vitest error
+Element.prototype.scrollIntoView = testing.fn();
 
 // createObjectURL is not implemented in JSDOM and required for the Download component
 window.URL.createObjectURL = testing.fn();

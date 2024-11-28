@@ -107,10 +107,10 @@ const FeedStatus = ({feeds}) => {
         <Table>
           <TableBody>
             <TableRow>
-              <TableHead width="3rem">{_('Type')}</TableHead>
-              <TableHead width="22rem">{_('Content')}</TableHead>
-              <TableHead width="11rem">{_('Origin')}</TableHead>
-              <TableHead width="7rem">{_('Version')}</TableHead>
+              <TableHead>{_('Type')}</TableHead>
+              <TableHead>{_('Content')}</TableHead>
+              <TableHead>{_('Origin')}</TableHead>
+              <TableHead>{_('Version')}</TableHead>
               <TableHead>{_('Status')}</TableHead>
             </TableRow>
 

@@ -7,7 +7,7 @@ import {useCallback, forwardRef} from 'react';
 
 import {Loader} from '@mantine/core';
 
-import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components';
+import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components-mantinev7';
 
 import {isDefined, isArray} from 'gmp/utils/identity';
 
@@ -108,8 +108,13 @@ const Select = ({
 
   const selectPlaceholder = isLoading ? _('Loading...') : placeholder;
   const rightSection = isLoading && <Loader size="xs" />;
-  const selectableItems = isLoading ? [] : items;
-  const selectedValue = isLoading ? undefined : value;
+  const selectableItems = isLoading
+    ? []
+    : items.map(item => ({
+        value: String(item.value),
+        label: item.label,
+      }));
+  const selectedValue = isLoading ? undefined : String(value);
 
   return (
     <OpenSightSelect
@@ -128,6 +133,7 @@ const Select = ({
       onChange={handleChange}
       rightSection={rightSection}
       itemComponent={SelectItem}
+      data-testid={'form-select'}
     />
   );
 };

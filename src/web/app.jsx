@@ -7,7 +7,10 @@ import React from 'react';
 
 import {Provider as StoreProvider} from 'react-redux';
 
-import {ThemeProvider, theme} from '@greenbone/opensight-ui-components';
+import {
+  ThemeProvider,
+  theme,
+} from '@greenbone/opensight-ui-components-mantinev7';
 
 import Gmp from 'gmp';
 import GmpSettings from 'gmp/gmpsettings';

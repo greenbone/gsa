@@ -33,6 +33,7 @@ import Row from 'web/components/layout/row';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import useCapabilities from 'web/hooks/useCapabilities';
+import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
 
 const Dialog = ({
   roleIds: initialRoleIds = [],
@@ -158,197 +159,197 @@ const Dialog = ({
   const hasRadiusEnabled = settings.get('method:radius_connect').enabled;
 
   return (
-    <React.Fragment>
-      <SaveDialog
-        title={title}
-        values={controlledValues}
-        onClose={onClose}
-        onSave={handleSaveClick}
-        defaultValues={data}
-      >
-        {({values: state, onValueChange}) => (
-          <React.Fragment>
-            <FormGroup title={_('Login Name')}>
-              <TextField
-                name="name"
-                value={state.name}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+    <SaveDialog
+      title={title}
+      values={controlledValues}
+      onClose={onClose}
+      onSave={handleSaveClick}
+      defaultValues={data}
+    >
+      {({values: state, onValueChange}) => (
+        <>
+          <FormGroup title={_('Login Name')}>
+            <TextField
+              name="name"
+              value={state.name}
+              onChange={onValueChange}
+            />
+          </FormGroup>
 
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+          <FormGroup title={_('Comment')}>
+            <TextField
+              name="comment"
+              value={state.comment}
+              onChange={onValueChange}
+            />
+          </FormGroup>
 
-            {!isEdit && (
-              <FormGroup title={_('Authentication')} flex="column">
-                <Row>
-                  <Radio
-                    title={_('Password')}
-                    name="auth_method"
-                    value={AUTH_METHOD_PASSWORD}
-                    checked={state.auth_method === AUTH_METHOD_PASSWORD}
-                    onChange={onValueChange}
-                  />
-                  <PasswordField
-                    grow="1"
-                    name="password"
-                    autoComplete="new-password"
-                    value={state.password}
-                    onChange={onValueChange}
-                  />
-                </Row>
-                {hasLdapEnabled && (
-                  <Radio
-                    title={_('LDAP Authentication Only')}
-                    name="auth_method"
-                    value={AUTH_METHOD_LDAP}
-                    checked={state.auth_method === AUTH_METHOD_LDAP}
-                    onChange={onValueChange}
-                  />
-                )}
-                {hasRadiusEnabled && (
-                  <Radio
-                    title={_('RADIUS Authentication Only')}
-                    name="auth_method"
-                    value={AUTH_METHOD_RADIUS}
-                    checked={state.auth_method === AUTH_METHOD_RADIUS}
-                    onChange={onValueChange}
-                  />
-                )}
-              </FormGroup>
-            )}
-
-            {isEdit && (
-              <FormGroup title={_('Authentication')}>
+          {!isEdit && (
+            <FormGroup title={_('Authentication')} flex="column">
+              <Row>
                 <Radio
-                  title={_('Password: Use existing Password')}
+                  title={_('Password')}
                   name="auth_method"
                   value={AUTH_METHOD_PASSWORD}
                   checked={state.auth_method === AUTH_METHOD_PASSWORD}
                   onChange={onValueChange}
                 />
-                <Row>
-                  <Radio
-                    title={_('New Password')}
-                    name="auth_method"
-                    value={AUTH_METHOD_NEW_PASSWORD}
-                    checked={state.auth_method === AUTH_METHOD_NEW_PASSWORD}
-                    onChange={onValueChange}
-                  />
-                  <PasswordField
-                    grow="1"
-                    name="password"
-                    autoComplete="new-password"
-                    disabled={state.auth_method !== AUTH_METHOD_NEW_PASSWORD}
-                    value={state.password}
-                    onChange={onValueChange}
-                  />
-                </Row>
-                {hasLdapEnabled && (
-                  <Radio
-                    title={_('LDAP Authentication Only')}
-                    name="auth_method"
-                    value={AUTH_METHOD_LDAP}
-                    checked={state.auth_method === AUTH_METHOD_LDAP}
-                    onChange={onValueChange}
-                  />
-                )}
-                {hasRadiusEnabled && (
-                  <Radio
-                    title={_('RADIUS Authentication Only')}
-                    name="auth_method"
-                    value={AUTH_METHOD_RADIUS}
-                    checked={state.auth_method === AUTH_METHOD_RADIUS}
-                    onChange={onValueChange}
-                  />
-                )}
-              </FormGroup>
-            )}
-            {capabilities.mayAccess('roles') && (
-              <FormGroup title={_('Roles')}>
-                <MultiSelect
-                  name="role_ids"
-                  items={rolesOptions}
-                  value={roleIds}
-                  onChange={handleRoleIdsChange}
-                />
-              </FormGroup>
-            )}
-
-            {capabilities.mayAccess('groups') && (
-              <FormGroup title={_('Groups')}>
-                <MultiSelect
-                  name="group_ids"
-                  items={groupsOptions}
-                  value={state.group_ids}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-            )}
-
-            <FormGroup title={_('Host Access')}>
-              <Row>
-                <Radio
-                  name="hosts_allow"
-                  title={_('Allow all and deny')}
-                  value={ACCESS_ALLOW_ALL}
-                  checked={state.hosts_allow === ACCESS_ALLOW_ALL}
-                  onChange={onValueChange}
-                />
-                <Radio
-                  name="hosts_allow"
-                  title={_('Deny all and allow')}
-                  value={ACCESS_DENY_ALL}
-                  checked={state.hosts_allow === ACCESS_DENY_ALL}
+                <PasswordField
+                  grow="1"
+                  name="password"
+                  autoComplete="new-password"
+                  value={state.password}
                   onChange={onValueChange}
                 />
               </Row>
-              <TextField
-                grow="1"
-                name="access_hosts"
-                value={state.access_hosts}
+              {hasLdapEnabled && (
+                <Radio
+                  title={_('LDAP Authentication Only')}
+                  name="auth_method"
+                  value={AUTH_METHOD_LDAP}
+                  checked={state.auth_method === AUTH_METHOD_LDAP}
+                  onChange={onValueChange}
+                />
+              )}
+              {hasRadiusEnabled && (
+                <Radio
+                  title={_('RADIUS Authentication Only')}
+                  name="auth_method"
+                  value={AUTH_METHOD_RADIUS}
+                  checked={state.auth_method === AUTH_METHOD_RADIUS}
+                  onChange={onValueChange}
+                />
+              )}
+            </FormGroup>
+          )}
+
+          {isEdit && (
+            <FormGroup title={_('Authentication')}>
+              <Radio
+                title={_('Password: Use existing Password')}
+                name="auth_method"
+                value={AUTH_METHOD_PASSWORD}
+                checked={state.auth_method === AUTH_METHOD_PASSWORD}
+                onChange={onValueChange}
+              />
+              <Row>
+                <Radio
+                  title={_('New Password')}
+                  name="auth_method"
+                  value={AUTH_METHOD_NEW_PASSWORD}
+                  checked={state.auth_method === AUTH_METHOD_NEW_PASSWORD}
+                  onChange={onValueChange}
+                />
+                <PasswordField
+                  grow="1"
+                  name="password"
+                  autoComplete="new-password"
+                  disabled={state.auth_method !== AUTH_METHOD_NEW_PASSWORD}
+                  value={state.password}
+                  onChange={onValueChange}
+                />
+              </Row>
+              {hasLdapEnabled && (
+                <Radio
+                  title={_('LDAP Authentication Only')}
+                  name="auth_method"
+                  value={AUTH_METHOD_LDAP}
+                  checked={state.auth_method === AUTH_METHOD_LDAP}
+                  onChange={onValueChange}
+                />
+              )}
+              {hasRadiusEnabled && (
+                <Radio
+                  title={_('RADIUS Authentication Only')}
+                  name="auth_method"
+                  value={AUTH_METHOD_RADIUS}
+                  checked={state.auth_method === AUTH_METHOD_RADIUS}
+                  onChange={onValueChange}
+                />
+              )}
+            </FormGroup>
+          )}
+          {capabilities.mayAccess('roles') && (
+            <FormGroup title={_('Roles')}>
+              <MultiSelect
+                name="role_ids"
+                items={rolesOptions}
+                value={roleIds}
+                onChange={handleRoleIdsChange}
+              />
+            </FormGroup>
+          )}
+
+          {capabilities.mayAccess('groups') && (
+            <FormGroup title={_('Groups')}>
+              <MultiSelect
+                name="group_ids"
+                items={groupsOptions}
+                value={state.group_ids}
                 onChange={onValueChange}
               />
             </FormGroup>
-            {confirmationDialogVisibleSuperAdmin && (
-              <ConfirmationDialog
-                content={_(
-                  'Please note: You are about to change your own personal user data ' +
-                    'as Super Admin! It is not possible to change the login name. ' +
-                    'If you have modified the login name, neither the login name nor ' +
-                    'any other changes made will be saved. ' +
-                    'If you have made any modifications other than the login name, ' +
-                    'the data will be saved when clicking OK, and you will be logged ' +
-                    'out immediately.',
-                )}
-                title={_('Save Super Admin User')}
-                width="400px"
-                onClose={closeConfirmationDialogSuperAdmin}
-                onResumeClick={handleResumeClickSuperAdmin}
+          )}
+
+          <FormGroup title={_('Host Access')}>
+            <Row>
+              <Radio
+                name="hosts_allow"
+                title={_('Allow all and deny')}
+                value={ACCESS_ALLOW_ALL}
+                checked={state.hosts_allow === ACCESS_ALLOW_ALL}
+                onChange={onValueChange}
               />
-            )}
-            {confirmationDialogVisible && (
-              <ConfirmationDialog
-                content={_(
-                  'Please note: You are about to create a user ' +
-                    'without a role. This user will not have any ' +
-                    'permissions and as a result will not be able to login.',
-                )}
-                title={_('User without a role')}
-                width="400px"
-                onClose={closeConfirmationDialog}
-                onResumeClick={handleResumeClick}
+              <Radio
+                name="hosts_allow"
+                title={_('Deny all and allow')}
+                value={ACCESS_DENY_ALL}
+                checked={state.hosts_allow === ACCESS_DENY_ALL}
+                onChange={onValueChange}
               />
-            )}
-          </React.Fragment>
-        )}
-      </SaveDialog>
-    </React.Fragment>
+            </Row>
+            <TextField
+              grow="1"
+              name="access_hosts"
+              value={state.access_hosts}
+              onChange={onValueChange}
+            />
+          </FormGroup>
+          {confirmationDialogVisibleSuperAdmin && (
+            <ConfirmationDialog
+              content={_(
+                'Please note: You are about to change your own personal user data ' +
+                  'as Super Admin! It is not possible to change the login name. ' +
+                  'If you have modified the login name, neither the login name nor ' +
+                  'any other changes made will be saved. ' +
+                  'If you have made any modifications other than the login name, ' +
+                  'the data will be saved when clicking OK, and you will be logged ' +
+                  'out immediately.',
+              )}
+              title={_('Save Super Admin User')}
+              width="400px"
+              onClose={closeConfirmationDialogSuperAdmin}
+              onResumeClick={handleResumeClickSuperAdmin}
+              rightButtonAction={DELETE_ACTION}
+            />
+          )}
+          {confirmationDialogVisible && (
+            <ConfirmationDialog
+              content={_(
+                'Please note: You are about to create a user ' +
+                  'without a role. This user will not have any ' +
+                  'permissions and as a result will not be able to login.',
+              )}
+              title={_('User without a role')}
+              width="400px"
+              onClose={closeConfirmationDialog}
+              onResumeClick={handleResumeClick}
+              rightButtonAction={DELETE_ACTION}
+            />
+          )}
+        </>
+      )}
+    </SaveDialog>
   );
 };
 

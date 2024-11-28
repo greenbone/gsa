@@ -177,9 +177,9 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement, element} = render(<Detailspage id="46264" />);
+    const {baseElement} = render(<Detailspage id="46264" />);
 
-    expect(element).toHaveTextContent('Target: target 1');
+    expect(baseElement).toHaveTextContent('Target: target 1');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -192,56 +192,60 @@ describe('Target Detailspage tests', () => {
     expect(screen.getAllByTitle('Target List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/targets');
 
-    expect(element).toHaveTextContent('ID:46264');
-    expect(element).toHaveTextContent('Created:Wed, Dec 23, 2020 3:14 PM CET');
-    expect(element).toHaveTextContent('Modified:Mon, Jan 4, 2021 12:54 PM CET');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(baseElement).toHaveTextContent('ID:46264');
+    expect(baseElement).toHaveTextContent(
+      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[9]).toHaveTextContent('User Tags');
     expect(spans[11]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('Included');
-    expect(element).toHaveTextContent('127.0.0.1');
-    expect(element).toHaveTextContent('123.456.574.64');
+    expect(baseElement).toHaveTextContent('Included');
+    expect(baseElement).toHaveTextContent('127.0.0.1');
+    expect(baseElement).toHaveTextContent('123.456.574.64');
 
-    expect(element).toHaveTextContent('Excluded');
-    expect(element).toHaveTextContent('192.168.0.1');
+    expect(baseElement).toHaveTextContent('Excluded');
+    expect(baseElement).toHaveTextContent('192.168.0.1');
 
-    expect(element).toHaveTextContent('Maximum Number of Hosts');
-    expect(element).toHaveTextContent('2');
+    expect(baseElement).toHaveTextContent('Maximum Number of Hosts');
+    expect(baseElement).toHaveTextContent('2');
 
-    expect(element).toHaveTextContent('Reverse Lookup Only');
-    expect(element).toHaveTextContent('Yes');
+    expect(baseElement).toHaveTextContent('Reverse Lookup Only');
+    expect(baseElement).toHaveTextContent('Yes');
 
-    expect(element).toHaveTextContent('Reverse Lookup Unify');
-    expect(element).toHaveTextContent('No');
+    expect(baseElement).toHaveTextContent('Reverse Lookup Unify');
+    expect(baseElement).toHaveTextContent('No');
 
-    expect(element).toHaveTextContent('Alive Test');
-    expect(element).toHaveTextContent('Scan Config Default');
+    expect(baseElement).toHaveTextContent('Alive Test');
+    expect(baseElement).toHaveTextContent('Scan Config Default');
 
-    expect(element).toHaveTextContent('Port List');
+    expect(baseElement).toHaveTextContent('Port List');
     expect(links[2]).toHaveAttribute('href', '/portlist/32323');
-    expect(element).toHaveTextContent('All IANA assigned TCP');
+    expect(baseElement).toHaveTextContent('All IANA assigned TCP');
 
-    expect(element).toHaveTextContent('Credentials');
+    expect(baseElement).toHaveTextContent('Credentials');
 
-    expect(element).toHaveTextContent('SSH');
-    expect(element).toHaveTextContent('ssh');
+    expect(baseElement).toHaveTextContent('SSH');
+    expect(baseElement).toHaveTextContent('ssh');
     expect(links[3]).toHaveAttribute('href', '/credential/1235');
-    expect(element).toHaveTextContent('on Port 22');
+    expect(baseElement).toHaveTextContent('on Port 22');
 
-    expect(element).toHaveTextContent('SSH elevate credential');
-    expect(element).toHaveTextContent('ssh_elevate');
+    expect(baseElement).toHaveTextContent('SSH elevate credential');
+    expect(baseElement).toHaveTextContent('ssh_elevate');
     expect(links[4]).toHaveAttribute('href', '/credential/3456');
 
-    expect(element).toHaveTextContent('SMB');
-    expect(element).toHaveTextContent('smb_credential');
+    expect(baseElement).toHaveTextContent('SMB');
+    expect(baseElement).toHaveTextContent('smb_credential');
     expect(links[5]).toHaveAttribute('href', '/credential/4784');
 
-    expect(element).toHaveTextContent('Tasks using this Target (1)');
+    expect(baseElement).toHaveTextContent('Tasks using this Target (1)');
     expect(links[6]).toHaveAttribute('href', '/task/465');
-    expect(element).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('foo');
   });
 
   test('should render user tags tab', () => {

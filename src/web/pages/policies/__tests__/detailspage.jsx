@@ -240,12 +240,10 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
 
-    expect(element).toBeVisible();
-    expect(element).toHaveTextContent('Policy: foo');
+    expect(baseElement).toBeVisible();
+    expect(baseElement).toHaveTextContent('Policy: foo');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -259,15 +257,15 @@ describe('Policy Detailspage tests', () => {
     expect(links[1]).toHaveAttribute('href', '/policies');
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    expect(element).toHaveTextContent('12345');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
-    expect(element).toHaveTextContent('admin');
+    expect(baseElement).toHaveTextContent('12345');
+    expect(baseElement).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
+    expect(baseElement).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
+    expect(baseElement).toHaveTextContent('admin');
 
-    expect(element).toHaveTextContent('bar');
-    expect(element).toHaveTextContent('audit1');
-    expect(element).toHaveTextContent('audit2');
-    expect(element).not.toHaveTextContent('scanner');
+    expect(baseElement).toHaveTextContent('bar');
+    expect(baseElement).toHaveTextContent('audit1');
+    expect(baseElement).toHaveTextContent('audit2');
+    expect(baseElement).not.toHaveTextContent('scanner');
 
     const detailsLinks = getAllByTestId('details-link');
 
@@ -307,19 +305,17 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[10]);
 
-    expect(element).toHaveTextContent('family1');
-    expect(element).toHaveTextContent('1 of 1');
-    expect(element).toHaveTextContent('family2');
-    expect(element).toHaveTextContent('2 of 4');
-    expect(element).toHaveTextContent('family3');
-    expect(element).toHaveTextContent('0 of 2');
+    expect(baseElement).toHaveTextContent('family1');
+    expect(baseElement).toHaveTextContent('1 of 1');
+    expect(baseElement).toHaveTextContent('family2');
+    expect(baseElement).toHaveTextContent('2 of 4');
+    expect(baseElement).toHaveTextContent('family3');
+    expect(baseElement).toHaveTextContent('0 of 2');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -393,9 +389,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[12]);
@@ -404,18 +398,18 @@ describe('Policy Detailspage tests', () => {
 
     expect(detailsLinks[0]).toHaveAttribute('href', '/nvt/0');
     expect(detailsLinks[0]).toHaveTextContent('nvt0');
-    expect(element).toHaveTextContent('value2');
-    expect(element).toHaveTextContent('value1');
+    expect(baseElement).toHaveTextContent('value2');
+    expect(baseElement).toHaveTextContent('value1');
 
     expect(detailsLinks[1]).toHaveAttribute('href', '/nvt/1');
     expect(detailsLinks[1]).toHaveTextContent('nvt1');
-    expect(element).toHaveTextContent('yes');
-    expect(element).toHaveTextContent('no');
+    expect(baseElement).toHaveTextContent('yes');
+    expect(baseElement).toHaveTextContent('no');
 
     expect(detailsLinks[2]).toHaveAttribute('href', '/nvt/2');
     expect(detailsLinks[2]).toHaveTextContent('nvt2');
-    expect(element).toHaveTextContent('foo');
-    expect(element).toHaveTextContent('bar');
+    expect(baseElement).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('bar');
   });
 
   test('should render permissions tab', () => {
@@ -450,12 +444,12 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
 
-    expect(element).toHaveTextContent('No permissions available');
+    expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 const Theme = {
   /* source styleguide */
   lightGreen: '#A1DDBA',
@@ -61,7 +60,7 @@ const Theme = {
   Font: {
     default: 'Verdana, sans-serif',
     dialog: 'Trebuchet MS, Tahoma, Verdana, Arial, sans-serif',
-    defaultSize: '12px',
+    defaultSize: 'var(--mantine-font-size-md)',
   },
 };
 
