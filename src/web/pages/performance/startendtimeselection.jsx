@@ -25,11 +25,13 @@ const StartTimeSelection = props => {
     timezone,
     onChanged,
   } = props;
+
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
   const [startTime, setStartTime] = useState(
     formatTimeForTimePicker(initialStartDate),
   );
+
   const [endTime, setEndTime] = useState(
     formatTimeForTimePicker(initialEndDate),
   );
@@ -37,6 +39,8 @@ const StartTimeSelection = props => {
   useEffect(() => {
     setStartDate(initialStartDate);
     setEndDate(initialEndDate);
+    setStartTime(formatTimeForTimePicker(initialStartDate));
+    setEndTime(formatTimeForTimePicker(initialEndDate));
   }, [initialStartDate, initialEndDate]);
 
   const handleTimeChange = (selectedTime, type) => {
@@ -63,7 +67,7 @@ const StartTimeSelection = props => {
   return (
     <Column>
       <FormGroup data-testid="timezone" title={_('Timezone')}>
-        {timezone}
+        {timezone.replace('_', ' ')}
       </FormGroup>
       <FormGroup direction="row">
         <DatePicker
