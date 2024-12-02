@@ -32,7 +32,6 @@ describe('StartTimeSelection tests', () => {
     const checkElementVisibilityAndContent = (
       labelText,
       inputValue,
-      buttonContent,
       timePickerLabel,
       timePickerValue,
     ) => {
@@ -51,13 +50,11 @@ describe('StartTimeSelection tests', () => {
     checkElementVisibilityAndContent(
       'Start Date',
       '01/01/2019',
-      '01/01/2019',
       'Start Time',
       '13:00',
     );
     checkElementVisibilityAndContent(
       'End Date',
-      '01/02/2019',
       '01/02/2019',
       'End Time',
       '14:00',
@@ -93,4 +90,69 @@ describe('StartTimeSelection tests', () => {
 
     expect(handleChange).toHaveBeenCalledTimes(1);
   });
+
+  test.each([
+    {
+      initialStartDate: startDate,
+      initialEndDate: endDate,
+      newStartDate: startDate.clone().add(1, 'hour'),
+      newEndDate: endDate.clone().add(1, 'hour'),
+      expectedStartTime: '14:00',
+      expectedEndTime: '15:00',
+      expectedStartDate: '01/01/2019',
+      expectedEndDate: '01/02/2019',
+      description: 'should update startTime and endTime on props change',
+    },
+    {
+      initialStartDate: startDate,
+      initialEndDate: endDate,
+      newStartDate: startDate.clone().subtract(1, 'day'),
+      newEndDate: endDate.clone().add(1, 'day'),
+      expectedStartTime: '13:00',
+      expectedEndTime: '14:00',
+      expectedStartDate: '31/12/2018',
+      expectedEndDate: '02/02/2019',
+      description: 'should update startDate and endDate on props change',
+    },
+  ])(
+    '$description',
+    ({
+      initialStartDate,
+      initialEndDate,
+      newStartDate,
+      newEndDate,
+      expectedStartTime,
+      expectedEndTime,
+      expectedStartDate,
+      expectedEndDate,
+    }) => {
+      const {rerender, getByLabelText} = render(
+        <StartTimeSelection
+          timezone={timezone}
+          startDate={initialStartDate}
+          endDate={initialEndDate}
+          onChange={handleChange}
+        />,
+      );
+
+      expect(getByLabelText('Start Time')).toHaveValue('13:00');
+      expect(getByLabelText('End Time')).toHaveValue('14:00');
+      expect(getByLabelText('Start Date')).toHaveValue('01/01/2019');
+      expect(getByLabelText('End Date')).toHaveValue('01/02/2019');
+
+      rerender(
+        <StartTimeSelection
+          timezone={timezone}
+          startDate={newStartDate}
+          endDate={newEndDate}
+          onChange={handleChange}
+        />,
+      );
+
+      expect(getByLabelText('Start Time')).toHaveValue(expectedStartTime);
+      expect(getByLabelText('End Time')).toHaveValue(expectedEndTime);
+      expect(getByLabelText('Start Date')).toHaveValue(expectedStartDate);
+      expect(getByLabelText('End Date')).toHaveValue(expectedEndDate);
+    },
+  );
 });
