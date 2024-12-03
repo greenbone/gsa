@@ -141,8 +141,12 @@ const Dialog = ({
                       !isDefined(state.permissionName)
                     }
                     isLoading={isCreatingPermission}
-                    value={{roleId: state.id, name: state.permissionName}}
-                    onClick={onCreatePermission}
+                    onClick={() =>
+                      onCreatePermission({
+                        roleId: state.id,
+                        name: state.permissionName,
+                      })
+                    }
                   />
                 </FormGroup>
 
@@ -160,8 +164,12 @@ const Dialog = ({
                     title={_('Create Permission')}
                     disabled={!hasGroups || !isDefined(state.groupId)}
                     isLoading={isCreatingSuperPermission}
-                    value={{roleId: state.id, groupId: state.groupId}}
-                    onClick={onCreateSuperPermission}
+                    onClick={() =>
+                      onCreateSuperPermission({
+                        roleId: state.id,
+                        groupId: state.groupId,
+                      })
+                    }
                   />
                 </FormGroup>
 

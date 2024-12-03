@@ -5,7 +5,7 @@
 
 import withSvgIcon from './withSvgIcon';
 
-import {FileInput as Icon} from 'lucide-react';
+import {Import as Icon} from 'lucide-react';
 
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 

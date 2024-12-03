@@ -170,7 +170,6 @@ class PerformancePage extends React.Component {
       endDate: end,
       scanners: [],
     };
-
     this.handleDurationChange = this.handleDurationChange.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
     this.handleStartEndChange = this.handleStartEndChange.bind(this);
@@ -192,7 +191,7 @@ class PerformancePage extends React.Component {
       let startDate = date(start);
 
       if (!startDate.isValid()) {
-        startDate = date();
+        startDate = date().subtract(1, 'day');
       }
 
       let endDate = date(end);
@@ -235,7 +234,6 @@ class PerformancePage extends React.Component {
         startDate: start,
         endDate: end,
       });
-
       this.handleInteraction();
     }
   }
@@ -264,6 +262,7 @@ class PerformancePage extends React.Component {
   render() {
     const {scanners = [], gmp} = this.props;
     const {duration, reports, scannerId, startDate, endDate} = this.state;
+
     const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
       <React.Fragment>

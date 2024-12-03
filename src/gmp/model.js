@@ -45,8 +45,8 @@ class Model {
     }, {});
   }
 
-  static fromElement(element = {}) {
-    const f = new this();
+  static fromElement(element = {}, type) {
+    const f = new this(type);
     f.setProperties(this.parseElement(element));
     return f;
   }
