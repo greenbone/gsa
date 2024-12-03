@@ -13,13 +13,4 @@ const DialogContent = styled.div`
   gap: 20px;
 `;
 
-export const StickyFooter = styled.div`
-  position: sticky;
-  bottom: 0;
-  background-color: white;
-  padding: 20px 0;
-  z-index: 201;
-  margin-bottom: 20;
-`;
-
 export default DialogContent;
