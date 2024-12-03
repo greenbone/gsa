@@ -46,7 +46,7 @@ const Panel = styled.div`
   margin-bottom: 10px;
 `;
 
-const Error = styled.p`
+const StyledWarningError = styled.p`
   color: ${Theme.warningRed};
   font-weight: bold;
   text-align: center;
@@ -109,7 +109,9 @@ const LoginForm = ({
         <Layout flex="column">
           {showProtocolInsecure && (
             <StyledPanel data-testid="protocol-insecure">
-              <Error>{_('Warning: Connection unencrypted')}</Error>
+              <StyledWarningError>
+                {_('Warning: Connection unencrypted')}
+              </StyledWarningError>
               <p>
                 {_(
                   'The connection to this GSA is not encrypted, allowing ' +
@@ -129,7 +131,9 @@ const LoginForm = ({
         <Layout>
           {isIE11 && (
             <Panel data-testid="IE11">
-              <Error>{_('Warning: You are using IE11')}</Error>
+              <StyledWarningError>
+                {_('Warning: You are using IE11')}
+              </StyledWarningError>
               <p>
                 {_(
                   'You are using Internet Explorer 11. This browser is not supported anymore. Please use an up-to-date alternative or contact your system administrator.',
@@ -169,7 +173,7 @@ const LoginForm = ({
                 onChange={handleValueChange}
               />
               <Button data-testid="login-button" onClick={handleSubmit}>
-                {_('Sign In')}
+                {_('Sign in')}
               </Button>
             </FormGroup>
           )}
@@ -181,7 +185,7 @@ const LoginForm = ({
               data-testid="guest-login-button"
               onClick={onGuestLoginClick}
             >
-              {_('Sign In as Guest')}
+              {_('Sign in as Guest')}
             </Button>
           </FormGroup>
         )}
