@@ -4,6 +4,7 @@
  */
 
 import {Modal} from '@greenbone/opensight-ui-components-mantinev7';
+import {ScrollArea} from '@mantine/core';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
@@ -27,6 +28,10 @@ const DialogTitleButton = styled.button`
 `;
 
 const StyledModal = styled(Modal)`
+  position: relative;
+  left: ${({position}) => `${position.x}px`};
+  z-index: ${MODAL_Z_INDEX};
+
   .mantine-Modal-content {
     display: flex;
     flex-direction: column;
@@ -42,27 +47,30 @@ const StyledModal = styled(Modal)`
     flex: 1;
   }
   .mantine-Modal-body {
-    padding-bottom: 0px;
-    margin-bottom: 15px;
-    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
   .mantine-Modal-close {
     width: 2rem;
     height: 2rem;
   }
+`;
 
-  position: relative;
-  left: ${({position}) => `${position.x}px`};
-  z-index: ${MODAL_Z_INDEX};
-  resize: both;
+const StyledScrollArea = styled(ScrollArea)`
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 18px;
 `;
 
 const Dialog = ({
   children,
   title,
+  footer,
+  onClose,
   height = MODAL_HEIGHT,
   width = MODAL_WIDTH,
-  onClose,
 }) => {
   const [isResizing, setIsResizing] = useState(false);
 
@@ -150,17 +158,21 @@ const Dialog = ({
       height={height}
       position={position}
     >
-      {isFunction(children)
-        ? children({
-            close: handleClose,
-          })
-        : children}
+      <StyledScrollArea>
+        {isFunction(children)
+          ? children({
+              close: handleClose,
+            })
+          : children}
+      </StyledScrollArea>
+      {footer}
     </StyledModal>
   );
 };
 
 Dialog.propTypes = {
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+  footer: PropTypes.node,
   title: PropTypes.string,
   width: PropTypes.string,
   onClose: PropTypes.func,

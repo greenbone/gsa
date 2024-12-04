@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
-import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
+import Dialog from 'web/components/dialog/dialog';
 import DialogTwoButtonFooter, {
   DELETE_ACTION,
 } from 'web/components/dialog/twobuttonfooter';
@@ -16,43 +14,6 @@ import DialogTwoButtonFooter, {
 import useTranslation from 'web/hooks/useTranslation';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
-
-const ConfirmationDialogContent = ({
-  content,
-  close,
-  rightButtonTitle,
-  onResumeClick,
-  loading,
-  rightButtonAction,
-}) => {
-  const handleResume = useCallback(() => {
-    if (onResumeClick) {
-      onResumeClick();
-    }
-  }, [onResumeClick]);
-
-  return (
-    <DialogContent>
-      {content}
-      <DialogTwoButtonFooter
-        rightButtonTitle={rightButtonTitle}
-        onLeftButtonClick={close}
-        onRightButtonClick={handleResume}
-        loading={loading}
-        rightButtonAction={rightButtonAction}
-      />
-    </DialogContent>
-  );
-};
-
-ConfirmationDialogContent.propTypes = {
-  close: PropTypes.func.isRequired,
-  content: PropTypes.elementOrString,
-  rightButtonTitle: PropTypes.string,
-  onResumeClick: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
-  rightButtonAction: PropTypes.oneOf([undefined, DELETE_ACTION]),
-};
 
 const ConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
@@ -67,18 +28,23 @@ const ConfirmationDialog = ({
   const [_] = useTranslation();
 
   rightButtonTitle = rightButtonTitle || _('OK');
+
   return (
-    <Dialog width={width} onClose={onClose} title={title}>
-      {({close}) => (
-        <ConfirmationDialogContent
-          close={close}
-          content={content}
+    <Dialog
+      width={width}
+      onClose={onClose}
+      title={title}
+      footer={
+        <DialogTwoButtonFooter
           rightButtonTitle={rightButtonTitle}
-          onResumeClick={onResumeClick}
+          onLeftButtonClick={onClose}
+          onRightButtonClick={onResumeClick}
           loading={loading}
           rightButtonAction={rightButtonAction}
         />
-      )}
+      }
+    >
+      <DialogContent>{content}</DialogContent>
     </Dialog>
   );
 };
