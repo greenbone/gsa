@@ -75,6 +75,7 @@ const MultiSelect = ({
   if (isLoading) {
     return (
       <TextInput
+        data-testid="text-input"
         styles={{root: {flexGrow: grow}}}
         placeholder={_('Loading...')}
         readOnly={true}
@@ -84,6 +85,7 @@ const MultiSelect = ({
   }
   return (
     <StyledMultiSelect
+      data-testid="multi-select"
       {...props}
       styles={{root: {flexGrow: grow}}}
       disabled={disabled || !items?.length}

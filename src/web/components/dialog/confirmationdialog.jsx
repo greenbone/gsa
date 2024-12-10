@@ -31,6 +31,7 @@ const ConfirmationDialog = ({
 
   return (
     <Dialog
+      data-testid="confirmation-dialog"
       width={width}
       onClose={onClose}
       title={title}

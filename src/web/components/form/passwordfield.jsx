@@ -29,6 +29,7 @@ const PasswordField = ({
   const handleChange = useValueChange({onChange, name, disabled});
   return (
     <PasswordInput
+      data-testid="password-input"
       {...props}
       error={isDefined(errorContent) && `${errorContent}`}
       styles={{root: {flexGrow: grow}}}

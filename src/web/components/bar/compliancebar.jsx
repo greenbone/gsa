@@ -30,7 +30,7 @@ const ComplianceBar = ({compliance, toolTip}) => {
   const toolTipText = isDefined(toolTip) ? toolTip : title;
 
   return (
-    <ProgressBar title={toolTipText} progress={100} background={background}>
+    <ProgressBar title={toolTipText} progress={100} background={background} data-testid="compliance-bar">
       {title}
     </ProgressBar>
   );

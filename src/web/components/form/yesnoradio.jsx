@@ -33,6 +33,7 @@ const YesNoRadio = ({
       convert={convert}
       onChange={onChange}
       disabled={disabled}
+      data-testid="radio-yes"
     />
     <Radio
       title={_('No')}
@@ -42,6 +43,7 @@ const YesNoRadio = ({
       convert={convert}
       onChange={onChange}
       disabled={disabled}
+      data-testid="radio-no"
     />
   </Row>
 );

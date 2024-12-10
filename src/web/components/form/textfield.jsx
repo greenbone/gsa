@@ -29,6 +29,7 @@ const TextField = ({
   const handleChange = useValueChange({onChange, disabled, name});
   return (
     <Input
+      data-testid="form-input"
       {...props}
       styles={{root: {flexGrow: grow}}}
       autoComplete={autoComplete}

@@ -23,6 +23,7 @@ const FileField = ({disabled, grow, name, title, onChange, ...props}) => {
 
   return (
     <FileInput
+      data-testid="file-input"
       {...props}
       styles={{root: {flexGrow: grow}}}
       label={title}

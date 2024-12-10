@@ -24,15 +24,15 @@ import TableRow from 'web/components/table/row';
 const CertInfo = ({info}) => {
   const {activationTime, expirationTime, issuer, md5_fingerprint} = info;
   return (
-    <InfoTable>
+    <InfoTable data-testid="cert-info-table">
       <colgroup>
         <Col width="10%" />
         <Col width="90%" />
       </colgroup>
       <TableBody>
-        <TableRow>
-          <TableData>{_('Activation')}</TableData>
-          <TableData>
+        <TableRow data-testid="cert-info-activation-row">
+          <TableData data-testid="cert-info-activation-label">{_('Activation')}</TableData>
+          <TableData data-testid="cert-info-activation-data">
             {isDefined(activationTime) ? (
               <DateTime date={activationTime} />
             ) : (
@@ -41,9 +41,9 @@ const CertInfo = ({info}) => {
           </TableData>
         </TableRow>
 
-        <TableRow>
-          <TableData>{_('Expiration')}</TableData>
-          <TableData>
+        <TableRow data-testid="cert-info-expiration-row">
+          <TableData data-testid="cert-info-expiration-label">{_('Expiration')}</TableData>
+          <TableData data-testid="cert-info-expiration-data">
             {isDefined(expirationTime) ? (
               <DateTime date={expirationTime} />
             ) : (
@@ -52,14 +52,14 @@ const CertInfo = ({info}) => {
           </TableData>
         </TableRow>
 
-        <TableRow>
-          <TableData>{_('MD5 Fingerprint')}</TableData>
-          <TableData>{md5_fingerprint}</TableData>
+        <TableRow data-testid="cert-info-md5-row">
+          <TableData data-testid="cert-info-md5-label">{_('MD5 Fingerprint')}</TableData>
+          <TableData data-testid="cert-info-md5-data">{md5_fingerprint}</TableData>
         </TableRow>
 
-        <TableRow>
-          <TableData>{_('Issuer')}</TableData>
-          <TableData>{issuer}</TableData>
+        <TableRow data-testid="cert-info-issuer-row">
+          <TableData data-testid="cert-info-issuer-label">{_('Issuer')}</TableData>
+          <TableData data-testid="cert-info-issuer-data">{issuer}</TableData>
         </TableRow>
       </TableBody>
     </InfoTable>

@@ -81,6 +81,7 @@ const NumberField = forwardRef(
 
     return (
       <StyledNumberInput
+        data-testid="number-input"
         {...props}
         ref={ref}
         allowDecimal={type === 'float'}
