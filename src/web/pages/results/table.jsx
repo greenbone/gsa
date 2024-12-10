@@ -116,7 +116,7 @@ const Header = ({
           title={_('Location')}
         />
         {
-          gmp.settings.enableEPSS &&
+          gmp.settings.enableEPSS && !audit &&
           <TableHead colSpan="2">
             {_("EPSS")}
           </TableHead>
@@ -148,7 +148,7 @@ const Header = ({
           title={_('Name')}
         />
         {
-          gmp.settings.enableEPSS &&
+          gmp.settings.enableEPSS && !audit &&
           <>
             <TableHead
               width="3%"

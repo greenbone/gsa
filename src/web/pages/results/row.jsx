@@ -162,7 +162,7 @@ const Row = ({
       </TableData>
       <TableData>{entity.port}</TableData>
       {
-        gmp.settings.enableEPSS &&
+        gmp.settings.enableEPSS && !audit &&
         <>
           <TableData>
             {isNumber(epssScore) ? epssScore.toFixed(5) : _("N/A")}
