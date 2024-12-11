@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -39,7 +38,7 @@ import EntitiesActions from 'web/entities/actions';
 import PropTypes from 'web/utils/proptypes';
 
 import ResultDelta from './delta';
-import useGmp from "web/hooks/useGmp";
+import useGmp from 'web/hooks/useGmp';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -64,9 +63,9 @@ const Row = ({
   const deltaCompliance = entity.delta?.result?.compliance;
   const deltaHostname = entity.delta?.result?.host?.hostname;
   const deltaQoD = entity.delta?.result?.qod?.value;
-  const epssScore = entity?.information?.epss?.max_severity?.score
-  const epssPercentile = entity?.information?.epss?.max_severity?.percentile
-  const gmp = useGmp()
+  const epssScore = entity?.information?.epss?.max_severity?.score;
+  const epssPercentile = entity?.information?.epss?.max_severity?.percentile;
+  const gmp = useGmp();
   return (
     <TableRow>
       {delta && (
@@ -161,17 +160,18 @@ const Row = ({
         </IconDivider>
       </TableData>
       <TableData>{entity.port}</TableData>
-      {
-        gmp.settings.enableEPSS && !audit &&
+      {gmp.settings.enableEPSS && !audit && (
         <>
           <TableData>
-            {isNumber(epssScore) ? epssScore.toFixed(5) : _("N/A")}
+            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
           </TableData>
           <TableData>
-            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _("N/A")}
+            {isNumber(epssPercentile)
+              ? `${(epssPercentile * 100).toFixed(3)}%`
+              : _('N/A')}
           </TableData>
         </>
-      }
+      )}
       <TableData>
         <DateTime date={entity.creationTime} />
       </TableData>
@@ -190,5 +190,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import Filter from 'gmp/models/filter.js';
@@ -100,7 +99,9 @@ const Row = ({
             {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
           </TableData>
           <TableData>
-            {isNumber(epssPercentile) ? epssPercentile.toFixed(5) : _('N/A')}
+            {isNumber(epssPercentile)
+              ? `${(epssPercentile * 100).toFixed(3)}%`
+              : _('N/A')}
           </TableData>
         </>
       )}
@@ -118,5 +119,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -89,7 +89,7 @@ const ResultsFilterDialog = ({
     },
     {
       name: 'epss_percentile',
-      displayName: _('EPSS Percentile'),
+      displayName: _('EPSS Percentage'),
     },
   ];
 
@@ -205,5 +205,3 @@ ResultsFilterDialog.propTypes = {
 };
 
 export default ResultsFilterDialog;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -214,12 +214,12 @@ describe('Result Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Location80/tcp');
     expect(baseElement).toHaveTextContent('EPSS (CVE with highest severity)');
     expect(baseElement).toHaveTextContent('EPSS Score0.87650');
-    expect(baseElement).toHaveTextContent('EPSS Percentile0.80000');
+    expect(baseElement).toHaveTextContent('EPSS Percentage80.000%');
     expect(baseElement).toHaveTextContent('CVECVE-2019-1234');
     expect(baseElement).toHaveTextContent('CVE Severity5.0 (Medium)');
     expect(baseElement).toHaveTextContent('EPSS (highest EPSS score)');
     expect(baseElement).toHaveTextContent('EPSS Score0.98760');
-    expect(baseElement).toHaveTextContent('EPSS Percentile0.90000');
+    expect(baseElement).toHaveTextContent('EPSS Percentage90.000%');
     expect(baseElement).toHaveTextContent('CVECVE-2020-5678');
     expect(baseElement).toHaveTextContent('CVE Severity2.0 (Low)');
     expect(heading[2]).toHaveTextContent('Summary');

@@ -166,7 +166,7 @@ describe('CVE Detailspage tests', () => {
     );
 
     expect(baseElement).toHaveTextContent('Score0.50000');
-    expect(baseElement).toHaveTextContent('Percentile0.75000');
+    expect(baseElement).toHaveTextContent('Percentage75.000%');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');

@@ -113,10 +113,10 @@ const NvtDetails = ({entity, links = true}) => {
                   </TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>{_('EPSS Percentile')}</TableData>
+                  <TableData>{_('EPSS Percentage')}</TableData>
                   <TableData>
                     {isNumber(epss?.max_severity?.percentile)
-                      ? epss?.max_severity?.percentile.toFixed(5)
+                      ? `${(epss.max_severity.percentile * 100).toFixed(3)}%`
                       : _('N/A')}
                   </TableData>
                 </TableRow>
@@ -154,10 +154,10 @@ const NvtDetails = ({entity, links = true}) => {
                   </TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>{_('EPSS Percentile')}</TableData>
+                  <TableData>{_('EPSS Percentage')}</TableData>
                   <TableData>
                     {isNumber(epss?.max_epss?.percentile)
-                      ? epss?.max_epss?.percentile.toFixed(5)
+                      ? `${(epss?.max_epss?.percentile * 100).toFixed(3)}%`
                       : _('N/A')}
                   </TableData>
                 </TableRow>
@@ -246,5 +246,3 @@ NvtDetails.propTypes = {
 };
 
 export default NvtDetails;
-
-// vim: set ts=2 sw=2 tw=80:

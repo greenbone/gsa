@@ -26,7 +26,7 @@ import TableRow from 'web/components/table/row';
 
 import ResultsRow from './row';
 import ResultDetails from './details';
-import useGmp from "web/hooks/useGmp";
+import useGmp from 'web/hooks/useGmp';
 
 const Header = ({
   actionsColumn,
@@ -115,12 +115,9 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Location')}
         />
-        {
-          gmp.settings.enableEPSS && !audit &&
-          <TableHead colSpan="2">
-            {_("EPSS")}
-          </TableHead>
-        }
+        {gmp.settings.enableEPSS && !audit && (
+          <TableHead colSpan="2">{_('EPSS')}</TableHead>
+        )}
         <TableHead
           width="15%"
           rowSpan="2"
@@ -147,8 +144,7 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Name')}
         />
-        {
-          gmp.settings.enableEPSS && !audit &&
+        {gmp.settings.enableEPSS && !audit && (
           <>
             <TableHead
               width="3%"
@@ -164,10 +160,10 @@ const Header = ({
               currentSortBy={currentSortBy}
               sortBy={sort ? 'epss_percentile' : false}
               onSortChange={onSortChange}
-              title={_('Percentile')}
+              title={_('Percentage')}
             />
           </>
-        }
+        )}
       </TableRow>
     </TableHeader>
   );
@@ -194,5 +190,3 @@ export default createEntitiesTable({
   row: ResultsRow,
   rowDetails: withRowDetails('result', 7)(ResultDetails),
 });
-
-// vim: set ts=2 sw=2 tw=80:

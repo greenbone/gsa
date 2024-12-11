@@ -201,7 +201,7 @@ describe('CvesPage tests', () => {
     expect(row[2]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
     expect(row[2]).toHaveTextContent('9.3 (High)');
     expect(row[2]).toHaveTextContent('0.50000');
-    expect(row[2]).toHaveTextContent('0.75000');
+    expect(row[2]).toHaveTextContent('75.000%');
   });
 
   test('should allow to bulk action on page contents', async () => {
