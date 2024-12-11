@@ -464,7 +464,6 @@ module.exports = [
   'port_range_start',
   'ports_array',
   'port_type',
-  'pref_count',
   'preference_count',
   'privacy_algorithm',
   'privacy_password',
