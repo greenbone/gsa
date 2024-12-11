@@ -31,6 +31,7 @@ const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
         step="1"
         value={qod}
         onChange={onChange}
+        data-testid="min-qod"
       />
       <span>%</span>
     </FormGroup>

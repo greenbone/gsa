@@ -35,6 +35,7 @@ const SeverityValuesGroup = ({filter, name, title, onChange}) => {
         }}
       />
       <NumberField
+        data-testid="severity-value-filter"
         name={keyword}
         type="int"
         min={0}

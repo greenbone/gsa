@@ -27,6 +27,7 @@ const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
         name={name}
         value={trend}
         onChange={onChange}
+        data-testid="filter-trend"
         items={[
           {label: _('Severity increased'), value: 'up'},
           {label: _('Severity decreased'), value: 'down'},

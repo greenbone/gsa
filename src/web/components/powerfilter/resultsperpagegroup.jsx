@@ -22,7 +22,7 @@ const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
   }
 
   return (
-    <FormGroup title={_('Results per page')}>
+    <FormGroup title={_('Results per page')} data-testid="results-per-page"> 
       <Spinner type="int" name={name} value={rows} onChange={onChange} />
     </FormGroup>
   );

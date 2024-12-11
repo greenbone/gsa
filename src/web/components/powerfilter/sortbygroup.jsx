@@ -42,6 +42,7 @@ const SortByGroup = ({
         value={by}
         items={renderSortFieldItems()}
         onChange={onSortByChange}
+        data-testid="sort-by"
       />
       <Radio
         name="sort_order"
@@ -49,6 +50,7 @@ const SortByGroup = ({
         checked={order === 'sort'}
         title={_('Ascending')}
         onChange={onSortOrderChange}
+        data-testid="sort-order"
       />
       <Radio
         name="sort_order"
@@ -56,6 +58,7 @@ const SortByGroup = ({
         checked={order === 'sort-reverse'}
         title={_('Descending')}
         onChange={onSortOrderChange}
+        data-testid="sort-reverse"
       />
     </FormGroup>
   );

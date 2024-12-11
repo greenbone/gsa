@@ -30,6 +30,7 @@ const BooleanFilterGroup = ({filter, name, title, onChange}) => {
         noValue={0}
         convert={parseInt}
         onChange={onChange}
+        data-testid="boolean-filter-yesnoradio"
       />
     </FormGroup>
   );

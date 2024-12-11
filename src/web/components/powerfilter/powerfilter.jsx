@@ -192,12 +192,14 @@ class PowerFilter extends React.Component {
                 value={userFilterString}
                 onKeyDown={this.handleUserFilterKeyPress}
                 onChange={this.handleValueChange}
+                data-testid="powerfilter-text"
               />
             </Layout>
             <IconDivider align={['start', 'center']}>
               <RefreshIcon
                 title={_('Update Filter')}
                 onClick={this.handleUpdateFilter}
+                data-testid="powerfiler-refresh"
               />
 
               {onRemoveClick && (
@@ -207,6 +209,7 @@ class PowerFilter extends React.Component {
                   onClick={
                     isDefined(filter) ? this.handleRemoveClick : undefined
                   }
+                  data-testid="powefilter-delete"
                 />
               )}
               {onResetClick && (
@@ -216,6 +219,7 @@ class PowerFilter extends React.Component {
                   onClick={
                     isDefined(filter) ? this.handleResetClick : undefined
                   }
+                  data-testid="powerfilter-reset"
                 />
               )}
 
@@ -223,6 +227,7 @@ class PowerFilter extends React.Component {
                 title={_('Help: Powerfilter')}
                 page="web-interface"
                 anchor="filtering-the-page-content"
+                data-testid="powerfilter-help"
               />
 
               {onEditClick && (
@@ -230,6 +235,7 @@ class PowerFilter extends React.Component {
                   title={_('Edit Filter')}
                   disabled={!isDefined(filter) || isLoading}
                   onClick={isDefined(filter) ? onEditClick : undefined}
+                  data-testid="powerfilter-edit"
                 />
               )}
             </IconDivider>
@@ -245,6 +251,7 @@ class PowerFilter extends React.Component {
                   : DEFAULT_FILTER_ID
               }
               onChange={this.handleNamedFilterChange}
+              data-testid="powefilter-select"
             />
           )}
         </Layout>
