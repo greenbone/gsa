@@ -25,7 +25,7 @@ const TrashIcon = ({selectionType, title, ...other}) => {
       title = _('Move all filtered to trashcan');
     }
   }
-  return <TrashcanIcon {...other} title={title} />;
+  return <TrashcanIcon {...other} title={title} data-testid="tash-icon"/>;
 };
 
 TrashIcon.propTypes = {

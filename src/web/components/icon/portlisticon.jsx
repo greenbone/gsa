@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/port_list.svg';
 
-const PortListIcon = withSvgIcon()(Icon);
+const PortListIconComponent = withSvgIcon()(Icon);
+
+const PortListIcon = props => (
+  <PortListIconComponent {...props} data-testid="port-list-icon" />
+);
 
 export default PortListIcon;
 

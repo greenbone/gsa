@@ -20,7 +20,7 @@ import {CircleX as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const DeleteSvgIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="delete-icon"/>
 ));
 
 const DeleteIcon = ({selectionType, title, ...props}) => {

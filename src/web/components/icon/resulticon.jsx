@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/result.svg';
 
-const ResultIcon = withSvgIcon()(Icon);
+const ResultIconComponent = withSvgIcon()(Icon);
+
+const ResultIcon = props => (
+  <ResultIconComponent {...props} data-testid="result-icon" />
+);
 
 export default ResultIcon;
 

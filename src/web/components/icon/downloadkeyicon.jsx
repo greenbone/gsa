@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/dl_key.svg';
 
-const DownloadKeyIcon = withSvgIcon()(Icon);
+const DownloadKeyIconComponent = withSvgIcon()(Icon);
+
+const DownloadKeyIcon = props => (
+  <DownloadKeyIconComponent {...props} data-testid="download-key-icon" />
+);
 
 export default DownloadKeyIcon;
 

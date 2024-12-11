@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/sensor.svg';
 
-const SensorIcon = withSvgIcon()(Icon);
+const SensorIconComponent = withSvgIcon()(Icon);
+
+const SensorIcon = props => (
+  <SensorIconComponent {...props} data-testid="sensor-icon" />
+);
 
 export default SensorIcon;
 

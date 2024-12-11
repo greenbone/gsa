@@ -12,7 +12,7 @@ import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const DetailsIcon = props => (
   <SvgIcon {...props}>
-    <IconWithStrokeWidth IconComponent={Icon} {...props} />
+    <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="details-icon"/>
   </SvgIcon>
 );
 

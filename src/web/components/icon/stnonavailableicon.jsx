@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/st_nonavailable.svg';
 
-const StNonAvailableIcon = withSvgIcon()(Icon);
+const StNonAvailableIconComponent = withSvgIcon()(Icon);
+
+const StNonAvailableIcon = props => (
+  <StNonAvailableIconComponent {...props} data-testid="st-nonavailable-icon" />
+);
 
 export default StNonAvailableIcon;
 

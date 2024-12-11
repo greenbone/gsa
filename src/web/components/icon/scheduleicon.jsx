@@ -10,7 +10,7 @@ import {Clock3 as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const ScheduleIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="schedule-icon"/>
 ));
 
 export default ScheduleIcon;

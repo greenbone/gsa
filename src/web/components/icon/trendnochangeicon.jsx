@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/trend_nochange.svg';
 
-const TrendNoChangeIcon = withSvgIcon()(Icon);
+const TrendNoChangeIconComponent = withSvgIcon()(Icon);
+
+const TrendNoChangeIcon = props => (
+  <TrendNoChangeIconComponent {...props} data-testid="trend-nochange-icon" />
+);
 
 export default TrendNoChangeIcon;
 

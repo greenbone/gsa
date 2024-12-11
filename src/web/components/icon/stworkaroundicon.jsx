@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/st_workaround.svg';
 
-const StWorkaroundIcon = withSvgIcon()(Icon);
+const StWorkaroundIconComponent = withSvgIcon()(Icon);
+
+const StWorkaroundIcon = props => (
+  <StWorkaroundIconComponent {...props} data-testid="st-workaround-icon" />
+);
 
 export default StWorkaroundIcon;
 

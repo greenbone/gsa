@@ -7,8 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/override.svg';
 
-const OverrideIcon = withSvgIcon()(Icon);
+const OverrideIconComponent = withSvgIcon()(Icon);
 
+const OverrideIcon = props => (
+  <OverrideIconComponent {...props} data-testid="override-icon" />
+);
 export default OverrideIcon;
 
 // vim: set ts=2 sw=2 tw=80:

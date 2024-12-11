@@ -10,7 +10,7 @@ import {FolderOpen as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const UnfoldIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="unfold-icon" />
 ));
 
 export default UnfoldIcon;

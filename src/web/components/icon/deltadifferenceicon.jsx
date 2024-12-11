@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/delta_second.svg';
 
-const DeltaDifferenceIcon = withSvgIcon()(Icon);
+const DeltaDifferenceIconComponent = withSvgIcon()(Icon);
+
+const DeltaDifferenceIcon = props => (
+  <DeltaDifferenceIconComponent {...props} data-testid="delta-difference-icon" />
+);
 
 export default DeltaDifferenceIcon;
 

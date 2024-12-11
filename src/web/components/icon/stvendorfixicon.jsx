@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/st_vendorfix.svg';
 
-const StVendorFixIcon = withSvgIcon()(Icon);
+const StVendorFixIconComponent = withSvgIcon()(Icon);
+
+const StVendorFixIcon = props => (
+  <StVendorFixIconComponent {...props} data-testid="st-vendorfix-icon" />
+);
 
 export default StVendorFixIcon;
 

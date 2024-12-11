@@ -7,7 +7,12 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/restore.svg';
 
-const RestoreIcon = withSvgIcon()(Icon);
+const RestoreIconComponent = withSvgIcon()(Icon);
+
+const RestoreIcon = props => (
+  <RestoreIconComponent {...props} data-testid="restore-icon" />
+);
+
 
 export default RestoreIcon;
 

@@ -11,7 +11,7 @@ import Icon from './svg/ticket.svg';
 
 const TicketIcon = props => (
   <SvgIcon {...props}>
-    <Icon />
+    <Icon data-testid="ticket-icon"/>
   </SvgIcon>
 );
 

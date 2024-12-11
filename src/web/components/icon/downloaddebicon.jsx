@@ -6,7 +6,11 @@
 import Icon from './svg/dl_deb.svg';
 import withSvgIcon from './withSvgIcon';
 
-const DownloadDebIcon = withSvgIcon()(Icon);
+const DownloadDebIconComponent = withSvgIcon()(Icon);
+
+const DownloadDebIcon = props => (
+  <DownloadDebIconComponent {...props} data-testid="download-deb-icon" />
+);
 
 export default DownloadDebIcon;
 

@@ -10,7 +10,7 @@ import PropTypes from 'web/utils/proptypes';
 import DetailsLink from './detailslink';
 
 const CveLink = ({id, ...props}) => (
-  <DetailsLink {...props} id={id} type="cve">
+  <DetailsLink {...props} id={id} type="cve" data-testid="cve-link">
     {id}
   </DetailsLink>
 );

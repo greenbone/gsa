@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/delta.svg';
 
-const DeltaIcon = withSvgIcon()(Icon);
+const DeltaIconComponent = withSvgIcon()(Icon);
+
+const DeltaIcon = props => (
+  <DeltaIconComponent {...props} data-testid="delta-icon" />
+);
 
 export default DeltaIcon;
 

@@ -9,9 +9,13 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/dl_csv.svg';
 
-const DownloadCsvIcon = withSvgIcon({
+const DownloadCsvIconComponent = withSvgIcon({
   title: _('Download CSV'),
 })(Icon);
+
+const DownloadCsvIcon = props => (
+  <DownloadCsvIconComponent {...props} data-testid="download-csv-icon" />
+);
 
 export default DownloadCsvIcon;
 

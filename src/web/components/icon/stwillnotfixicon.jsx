@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/st_willnotfix.svg';
 
-const StWillNotFixIcon = withSvgIcon()(Icon);
+const StWillNotFixIconComponent = withSvgIcon()(Icon);
+
+const StWillNotFixIcon = props => (
+  <StWillNotFixIconComponent {...props} data-testid="st-willnotfix-icon" />
+);
 
 export default StWillNotFixIcon;
 

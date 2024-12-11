@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/toggle3d.svg';
 
-const Toggle3dIcon = withSvgIcon()(Icon);
+const Toggle3dIconComponent = withSvgIcon()(Icon);
+
+const Toggle3dIcon = props => (
+  <Toggle3dIconComponent {...props} data-testid="toggle-3d-icon" />
+);
 
 export default Toggle3dIcon;
 

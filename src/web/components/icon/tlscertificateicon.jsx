@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/tlscertificate.svg';
 
-const TlsCertificateIcon = withSvgIcon()(Icon);
+const TlsCertificateIconComponent = withSvgIcon()(Icon);
+
+const TlsCertificateIcon = props => (
+  <TlsCertificateIconComponent {...props} data-testid="tls-certificate-icon" />
+);
 
 export default TlsCertificateIcon;
 

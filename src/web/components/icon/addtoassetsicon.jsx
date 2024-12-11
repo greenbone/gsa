@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/add_to_assets.svg';
 
-const AddToAssetsIcon = withSvgIcon()(Icon);
+const AddToAssetsIconComponent = withSvgIcon()(Icon);
+
+const AddToAssetsIcon = props => (
+  <AddToAssetsIconComponent {...props} data-testid="add-to-assets-icon" />
+);
 
 export default AddToAssetsIcon;
 

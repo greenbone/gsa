@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/cvss_calculator.svg';
 
-const CvssIcon = withSvgIcon()(Icon);
+const CvssIconComponent = withSvgIcon()(Icon);
+
+const CvssIcon = props => (
+  <CvssIconComponent {...props} data-testid="cvss-icon" />
+);
 
 export default CvssIcon;
 

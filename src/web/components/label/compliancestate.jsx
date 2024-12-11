@@ -42,16 +42,16 @@ ComplianceLabel.propTypes = {
 };
 
 const YesLabel = props => (
-  <ComplianceLabel {...props} text="Yes" color="complianceYes" />
+  <ComplianceLabel {...props} text="Yes" color="complianceYes" data-testid="compliance-state-yes"/>
 );
 const NoLabel = props => (
-  <ComplianceLabel {...props} text="No" color="complianceNo" />
+  <ComplianceLabel {...props} text="No" color="complianceNo" data-testid="compliance-state-no"/>
 );
 const IncompleteLabel = props => (
-  <ComplianceLabel {...props} text="Incomplete" color="complianceIncomplete" />
+  <ComplianceLabel {...props} text="Incomplete" color="complianceIncomplete" data-testid="compliance-state-incomplete"/>
 );
 const UndefinedLabel = props => (
-  <ComplianceLabel {...props} text="Undefined" color="complianceUndefined" />
+  <ComplianceLabel {...props} text="Undefined" color="complianceUndefined" data-testid="compliance-state-undefined"/>
 );
 
 export const ComplianceStateLabels = {
