@@ -36,19 +36,22 @@ import TableRow from 'web/components/table/row';
 
 import useTranslation from 'web/hooks/useTranslation';
 
-const shouldNvtComponentUpdate = (props, nextProps) => {
-  return props.selected !== nextProps.selected || props.nvt !== nextProps.nvt;
+const EDIT_CONFIG_COLUMNS_SORT = {
+  name: 'name',
+  oid: 'oid',
+  severity: 'severity',
+  timeout: 'timeout',
+  selected: 'selected',
 };
 
 const Nvt = React.memo(
   ({nvt, selected, onSelectedChange, onEditNvtDetailsClick}) => {
     const [_] = useTranslation();
-    let pref_count = nvt.preference_count;
-    if (pref_count === '0') {
-      pref_count = '';
-    }
 
-    const {name, oid, severity, timeout, defaultTimeout} = nvt;
+    const {name, oid, severity, timeout, defaultTimeout, preference_count} =
+      nvt;
+    const prefCount = preference_count === '0' ? '' : preference_count;
+
     return (
       <TableRow>
         <TableData>{name}</TableData>
@@ -60,18 +63,15 @@ const Nvt = React.memo(
           {isEmpty(timeout) ? _('default') : timeout}
           {isEmpty(defaultTimeout) ? '' : ' (' + defaultTimeout + ')'}
         </TableData>
-        <TableData>{pref_count}</TableData>
-        <TableData align="center">
-          {/* wrap in span to allow centering */}
-          <div>
-            <Checkbox
-              checked={selected === YES_VALUE}
-              name={oid}
-              checkedValue={YES_VALUE}
-              unCheckedValue={NO_VALUE}
-              onChange={onSelectedChange}
-            />
-          </div>
+        <TableData>{prefCount}</TableData>
+        <TableData align={['center', 'center']}>
+          <Checkbox
+            checked={selected === YES_VALUE}
+            name={oid}
+            checkedValue={YES_VALUE}
+            unCheckedValue={NO_VALUE}
+            onChange={onSelectedChange}
+          />
         </TableData>
         <TableData align={['center', 'center']}>
           <EditIcon
@@ -83,7 +83,9 @@ const Nvt = React.memo(
       </TableRow>
     );
   },
-  shouldNvtComponentUpdate,
+  (prevProps, nextProps) =>
+    prevProps.selected === nextProps.selected &&
+    prevProps.nvt === nextProps.nvt,
 );
 
 Nvt.propTypes = {
@@ -94,14 +96,14 @@ Nvt.propTypes = {
 };
 
 const sortFunctions = {
-  name: makeCompareString('name'),
-  oid: makeCompareString('oid'),
+  name: makeCompareString(EDIT_CONFIG_COLUMNS_SORT.name),
+  oid: makeCompareString(EDIT_CONFIG_COLUMNS_SORT.oid),
   severity: makeCompareSeverity(),
-  timeout: makeCompareString('timeout'),
+  timeout: makeCompareString(EDIT_CONFIG_COLUMNS_SORT.timeout),
 };
 
-const sortNvts = (nvts = [], sortBy, sortReverse, selected = {}) => {
-  if (sortBy === 'selected') {
+const sortNvts = (sortBy, sortReverse, selected = {}, nvts = []) => {
+  if (sortBy === EDIT_CONFIG_COLUMNS_SORT.selected) {
     return [...nvts].sort((a, b) => {
       if (selected[a.oid] && !selected[b.oid]) {
         return sortReverse ? 1 : -1;
@@ -110,15 +112,15 @@ const sortNvts = (nvts = [], sortBy, sortReverse, selected = {}) => {
         return sortReverse ? -1 : 1;
       }
 
-      let {name: aname = ''} = a;
-      let {name: bname = ''} = b;
-      aname = aname.toLowerCase();
-      bname = bname.toLowerCase();
+      let {name: aName = ''} = a;
+      let {name: bName = ''} = b;
+      aName = aName.toLowerCase();
+      bName = bName.toLowerCase();
 
-      if (aname > bname) {
+      if (aName > bName) {
         return sortReverse ? -1 : 1;
       }
-      if (bname > aname) {
+      if (bName > aName) {
         return sortReverse ? 1 : -1;
       }
       return 0;
@@ -149,13 +151,13 @@ const EditScanConfigFamilyDialog = ({
   onSave,
 }) => {
   const [_] = useTranslation();
-  const [sortBy, setSortby] = useState('name');
+  const [sortBy, setSortBy] = useState(EDIT_CONFIG_COLUMNS_SORT.name);
   const [sortReverse, setSortReverse] = useState(false);
   const [selectedNvts, setSelectedNvts] = useState(selected);
 
   const handleSortChange = newSortBy => {
     setSortReverse(sortBy === newSortBy ? !sortReverse : false);
-    setSortby(newSortBy);
+    setSortBy(newSortBy);
   };
 
   const handleSelectedChange = (value, name) => {
@@ -177,7 +179,19 @@ const EditScanConfigFamilyDialog = ({
 
   const sortDir = sortReverse ? SortBy.DESC : SortBy.ASC;
 
-  const sortedNvts = sortNvts(nvts, sortBy, sortReverse, selectedNvts);
+  const sortedNvts = sortNvts(sortBy, sortReverse, selectedNvts, nvts);
+
+  if (isLoadingFamily || !isDefined(selectedNvts)) {
+    return <Loading />;
+  }
+
+  const tableHeaders = [
+    {sortBy: EDIT_CONFIG_COLUMNS_SORT.name, title: _('Name')},
+    {sortBy: EDIT_CONFIG_COLUMNS_SORT.oid, title: _('OID')},
+    {sortBy: EDIT_CONFIG_COLUMNS_SORT.severity, title: _('Severity')},
+    {sortBy: EDIT_CONFIG_COLUMNS_SORT.timeout, title: _('Timeout')},
+    {title: _('Prefs')},
+  ];
 
   return (
     <SaveDialog
@@ -187,83 +201,56 @@ const EditScanConfigFamilyDialog = ({
       onSave={onSave}
       values={data}
     >
-      {() =>
-        isLoadingFamily || !isDefined(selectedNvts) ? (
-          <Loading />
-        ) : (
-          <>
-            <div>
-              <div>
-                {configNameLabel}: {configName}
-              </div>
-              <div>
-                {_('Family')}: {familyName}
-              </div>
-            </div>
+      <div>
+        <div>
+          {configNameLabel}: {configName}
+        </div>
+        <div>
+          {_('Family')}: {familyName}
+        </div>
+      </div>
 
-            <Section title={_('Edit Network Vulnerability Tests')}>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead
-                      currentSortBy={sortBy}
-                      currentSortDir={sortDir}
-                      sortBy="name"
-                      onSortChange={handleSortChange}
-                      title={_('Name')}
-                    />
-                    <TableHead
-                      currentSortBy={sortBy}
-                      currentSortDir={sortDir}
-                      sortBy="oid"
-                      onSortChange={handleSortChange}
-                      title={_('OID')}
-                    />
-                    <TableHead
-                      currentSortBy={sortBy}
-                      currentSortDir={sortDir}
-                      sortBy="severity"
-                      onSortChange={handleSortChange}
-                      title={_('Severity')}
-                    />
-                    <TableHead
-                      currentSortBy={sortBy}
-                      currentSortDir={sortDir}
-                      sortBy="timeout"
-                      onSortChange={handleSortChange}
-                      title={_('Timeout')}
-                    />
-                    <TableHead>{_('Prefs')}</TableHead>
-                    <TableHead
-                      currentSortBy={sortBy}
-                      currentSortDir={sortDir}
-                      sortBy="selected"
-                      onSortChange={handleSortChange}
-                      align="center"
-                      title={_('Selected')}
-                    />
-                    <TableHead align="center">{_('Actions')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {sortedNvts.map(nvt => {
-                    const {oid} = nvt;
-                    return (
-                      <Nvt
-                        key={oid}
-                        nvt={nvt}
-                        selected={selectedNvts[oid]}
-                        onSelectedChange={handleSelectedChange}
-                        onEditNvtDetailsClick={onEditNvtDetailsClick}
-                      />
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </Section>
-          </>
-        )
-      }
+      <Section title={_('Edit Network Vulnerability Tests')}>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {tableHeaders.map(({sortBy, title}) => (
+                <TableHead
+                  key={title}
+                  currentSortBy={sortBy}
+                  currentSortDir={sortDir}
+                  sortBy={sortBy}
+                  onSortChange={handleSortChange}
+                  title={title}
+                />
+              ))}
+              <TableHead
+                currentSortBy={sortBy}
+                currentSortDir={sortDir}
+                sortBy={EDIT_CONFIG_COLUMNS_SORT.selected}
+                onSortChange={handleSortChange}
+                align="center"
+                title={_('Selected')}
+              />
+              <TableHead align="center">{_('Actions')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedNvts.map(nvt => {
+              const {oid} = nvt;
+              return (
+                <Nvt
+                  key={oid}
+                  nvt={nvt}
+                  selected={selectedNvts[oid]}
+                  onSelectedChange={handleSelectedChange}
+                  onEditNvtDetailsClick={onEditNvtDetailsClick}
+                />
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Section>
     </SaveDialog>
   );
 };
@@ -283,5 +270,3 @@ EditScanConfigFamilyDialog.propTypes = {
 };
 
 export default EditScanConfigFamilyDialog;
-
-// vim: set ts=2 sw=2 tw=80:

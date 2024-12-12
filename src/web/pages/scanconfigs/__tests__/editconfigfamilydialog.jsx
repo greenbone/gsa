@@ -327,4 +327,35 @@ describe('EditConfigFamilyDialog component tests', () => {
     expect(getOidColumn(rows[1])).toHaveTextContent('1234');
     expect(getOidColumn(rows[2])).toHaveTextContent('2345');
   });
+
+  test('should allow selecting an NVT', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    const {getAllByRole} = render(
+      <EditConfigFamilyDialog
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={false}
+        nvts={[nvt, nvt2]}
+        selected={selected}
+        title="Foo title"
+        onClose={handleClose}
+        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
+        onSave={handleSave}
+      />,
+    );
+
+    const checkboxes = getAllByRole('checkbox');
+
+    expect(checkboxes[0].checked).toBe(false);
+
+    fireEvent.click(checkboxes[0]);
+
+    expect(checkboxes[0].checked).toBe(true);
+  });
 });
