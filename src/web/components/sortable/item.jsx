@@ -7,10 +7,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {Draggable} from 'react-beautiful-dnd';
+import {Draggable} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
 
 import PropTypes from 'web/utils/proptypes';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
 export const GRID_ITEM_MARGIN = {
   top: 5,
@@ -19,7 +18,7 @@ export const GRID_ITEM_MARGIN = {
   right: 8,
 };
 
-const GridItem = styledExcludeProps(styled.div, ['isDragging'])`
+const GridItem = styled.div`
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
@@ -33,15 +32,12 @@ const GridItem = styledExcludeProps(styled.div, ['isDragging'])`
 
 const Item = ({children, index, id, ...props}) => (
   <Draggable draggableId={id} index={index}>
-    {(
-      provided,
-      snapshot, // eslint-disable-line no-shadow
-    ) => (
+    {(provided, snapshot) => (
       <GridItem
         data-testid="grid-item"
         ref={provided.innerRef}
         {...provided.draggableProps}
-        isDragging={snapshot.isDragging}
+        $isDragging={snapshot.isDragging}
         style={provided.draggableProps.style}
       >
         {children({
@@ -61,5 +57,3 @@ Item.propTypes = {
 };
 
 export default Item;
-
-// vim: set ts=2 sw=2 tw=80:
