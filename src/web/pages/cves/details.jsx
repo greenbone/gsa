@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
@@ -102,8 +101,8 @@ const CveDetails = ({entity}) => {
                 <TableData>{epss.score.toFixed(5)}</TableData>
               </TableRow>
               <TableRow>
-                <TableData>{_('Percentile')}</TableData>
-                <TableData>{epss.percentile.toFixed(5)}</TableData>
+                <TableData>{_('Percentage')}</TableData>
+                <TableData>{`${(epss?.percentile * 100).toFixed(3)}%`}</TableData>
               </TableRow>
             </TableBody>
           </InfoTable>
@@ -137,5 +136,3 @@ CveDetails.propTypes = {
 };
 
 export default CveDetails;
-
-// vim: set ts=2 sw=2 tw=80:

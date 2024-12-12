@@ -211,7 +211,7 @@ describe('NvtsPage tests', () => {
     expect(header[7]).toHaveTextContent('QoD');
     expect(header[8]).toHaveTextContent('EPSS');
     expect(header[9]).toHaveTextContent('Score');
-    expect(header[10]).toHaveTextContent('Percentile');
+    expect(header[10]).toHaveTextContent('Percentage');
 
     const row = baseElement.querySelectorAll('tr');
 
@@ -223,7 +223,7 @@ describe('NvtsPage tests', () => {
     expect(row[2]).toHaveTextContent('CVE-2020-5678');
     expect(row[2]).toHaveTextContent('80 %');
     expect(row[2]).toHaveTextContent('0.87650');
-    expect(row[2]).toHaveTextContent('0.90000');
+    expect(row[2]).toHaveTextContent('90.000%');
   });
 
   test('should allow to bulk action on page contents', async () => {

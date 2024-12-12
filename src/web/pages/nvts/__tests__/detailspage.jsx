@@ -316,8 +316,8 @@ describe('Nvt Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('EPSS (CVE with highest severity)');
     expect(baseElement).toHaveTextContent('EPSS Score');
     expect(baseElement).toHaveTextContent('0.87650');
-    expect(baseElement).toHaveTextContent('EPSS Percentile');
-    expect(baseElement).toHaveTextContent('0.90000');
+    expect(baseElement).toHaveTextContent('EPSS Percentage');
+    expect(baseElement).toHaveTextContent('90.000%');
     expect(baseElement).toHaveTextContent('EPSS (highest EPSS score)');
     expect(baseElement).toHaveTextContent('0.98760');
 

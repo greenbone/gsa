@@ -52,13 +52,13 @@ describe('Should render EPSS fields', () => {
     const {element} = render(
       <table>
         <tbody>
-        <Row entity={entity}/>
+          <Row entity={entity} />
         </tbody>
       </table>,
     );
 
-    expect(element).toHaveTextContent("0.87650");
-    expect(element).toHaveTextContent("0.80000");
+    expect(element).toHaveTextContent('0.87650');
+    expect(element).toHaveTextContent('80.000%');
   });
 });
 

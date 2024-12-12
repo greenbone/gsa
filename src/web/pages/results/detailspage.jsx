@@ -79,8 +79,8 @@ import OverrideComponent from '../overrides/component';
 import TicketComponent from '../tickets/component';
 
 import ResultDetails from './details';
-import CveLink from "web/components/link/cvelink.jsx";
-import Severitybar from "web/components/bar/severitybar.jsx";
+import CveLink from 'web/components/link/cvelink.jsx';
+import Severitybar from 'web/components/bar/severitybar.jsx';
 
 export const ToolBarIcons = ({
   entity,
@@ -180,8 +180,8 @@ const Details = ({entity, ...props}) => {
   const {notes, overrides, qod, host, userTags} = entity;
   const active_notes = notes.filter(active_filter);
   const active_overrides = overrides.filter(active_filter);
-  const epss = entity?.information?.epss
-  const gmp = useGmp()
+  const epss = entity?.information?.epss;
+  const gmp = useGmp();
 
   return (
     <React.Fragment>
@@ -236,7 +236,7 @@ const Details = ({entity, ...props}) => {
                   <TableData>{_('Location')}</TableData>
                   <TableData>{entity.port}</TableData>
                 </TableRow>
-                { gmp.settings.enableEPSS && isDefined(epss?.max_severity) &&
+                {gmp.settings.enableEPSS && isDefined(epss?.max_severity) && (
                   <>
                     <TableData colSpan="2">
                       <b>{_('EPSS (CVE with highest severity)')}</b>
@@ -245,14 +245,16 @@ const Details = ({entity, ...props}) => {
                       <TableData>{_('EPSS Score')}</TableData>
                       <TableData>
                         {isNumber(epss?.max_severity?.score)
-                          ? epss?.max_severity?.score.toFixed(5) : _("N/A")}
+                          ? epss?.max_severity?.score.toFixed(5)
+                          : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
-                      <TableData>{_('EPSS Percentile')}</TableData>
+                      <TableData>{_('EPSS Percentage')}</TableData>
                       <TableData>
                         {isNumber(epss?.max_severity?.percentile)
-                          ? epss?.max_severity?.percentile.toFixed(5) : _("N/A")}
+                          ? `${(epss?.max_severity?.percentile * 100).toFixed(3)}%`
+                          : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
@@ -266,13 +268,16 @@ const Details = ({entity, ...props}) => {
                     <TableRow>
                       <TableData>{_('CVE Severity')}</TableData>
                       <Severitybar
-                        severity={isDefined(epss?.max_severity?.cve?.severity)
-                          ? epss?.max_severity?.cve?.severity : _("N/A")}
+                        severity={
+                          isDefined(epss?.max_severity?.cve?.severity)
+                            ? epss?.max_severity?.cve?.severity
+                            : _('N/A')
+                        }
                       />
                     </TableRow>
                   </>
-                }
-                { gmp.settings.enableEPSS && isDefined(epss?.max_epss) &&
+                )}
+                {gmp.settings.enableEPSS && isDefined(epss?.max_epss) && (
                   <>
                     <TableData colSpan="2">
                       <b>{_('EPSS (highest EPSS score)')}</b>
@@ -281,14 +286,16 @@ const Details = ({entity, ...props}) => {
                       <TableData>{_('EPSS Score')}</TableData>
                       <TableData>
                         {isNumber(epss?.max_epss?.score)
-                          ? epss?.max_epss?.score.toFixed(5) : _("N/A")}
+                          ? epss?.max_epss?.score.toFixed(5)
+                          : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
-                      <TableData>{_('EPSS Percentile')}</TableData>
+                      <TableData>{_('EPSS Percentage')}</TableData>
                       <TableData>
                         {isNumber(epss?.max_epss?.percentile)
-                          ? epss?.max_epss?.percentile.toFixed(5) : _("N/A")}
+                          ? `${(epss?.max_epss?.percentile * 100).toFixed(3)}%`
+                          : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
@@ -303,13 +310,16 @@ const Details = ({entity, ...props}) => {
                       <TableData>{_('CVE Severity')}</TableData>
                       <TableData>
                         <Severitybar
-                          severity={isDefined(epss?.max_epss?.cve?.severity)
-                            ? epss?.max_epss?.cve?.severity : _("N/A")}
+                          severity={
+                            isDefined(epss?.max_epss?.cve?.severity)
+                              ? epss?.max_epss?.cve?.severity
+                              : _('N/A')
+                          }
                         />
                       </TableData>
                     </TableRow>
                   </>
-                }
+                )}
               </TableBody>
             </InfoTable>
           </Layout>

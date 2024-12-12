@@ -136,7 +136,7 @@ const Header = ({
             currentSortBy={currentSortBy}
             sortBy={sort ? 'epss_percentile' : false}
             onSortChange={onSortChange}
-            title={_('Percentile')}
+            title={_('Percentage')}
           />
         </TableRow>
       )}
@@ -169,5 +169,3 @@ export const NvtsTable = createEntitiesTable({
 });
 
 export default NvtsTable;
-
-// vim: set ts=2 sw=2 tw=80:
