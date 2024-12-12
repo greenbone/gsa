@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -109,10 +108,10 @@ const Row = ({
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
-        <HorizontalSeparator wrap>{roles}</HorizontalSeparator>
+        <HorizontalSeparator $wrap>{roles}</HorizontalSeparator>
       </TableData>
       <TableData>
-        <HorizontalSeparator wrap>{groups}</HorizontalSeparator>
+        <HorizontalSeparator $wrap>{groups}</HorizontalSeparator>
       </TableData>
       <TableData>{host_allow}</TableData>
       <TableData>{authMethod}</TableData>

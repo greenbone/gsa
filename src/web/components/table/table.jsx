@@ -8,7 +8,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
 const Table = ({children, className, footer, header}) => {
   return (
@@ -27,14 +26,14 @@ Table.propTypes = {
   header: PropTypes.element,
 };
 
-export default styledExcludeProps(styled(Table), ['fixed', 'size'])`
+export default styled(Table)`
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
   text-align: left;
-  table-layout: ${props => (props.fixed ? 'fixed' : 'auto')};
+  table-layout: ${props => (props.$fixed ? 'fixed' : 'auto')};
   ${props => {
-    const {size = 'full'} = props;
+    const size = props.$size || 'full';
     if (size === 'auto') {
       return {};
     }
@@ -51,5 +50,3 @@ export default styledExcludeProps(styled(Table), ['fixed', 'size'])`
     border-collapse: collapse;
   }
 `;
-
-// vim: set ts=2 sw=2 tw=80:

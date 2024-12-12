@@ -153,7 +153,7 @@ const Method = ({
                 <TableRow>
                   <TableData>{_('Report Formats')}</TableData>
                   <TableData>
-                    <HorizontalSep separator="," wrap spacing="0">
+                    <HorizontalSep $separator="," $wrap $spacing="0">
                       {data.report_formats.map(id => (
                         <span key={id}>{getReportFormatName(id)}</span>
                       ))}
@@ -165,7 +165,7 @@ const Method = ({
                 <TableRow>
                   <TableData>{_('Report Configs')}</TableData>
                   <TableData>
-                    <HorizontalSep separator="," wrap spacing="0">
+                    <HorizontalSep $separator="," $wrap $spacing="0">
                       {data.report_configs.map(id => (
                         <span key={id}>{getReportConfigName(id)}</span>
                       ))}

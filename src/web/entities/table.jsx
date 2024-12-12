@@ -29,7 +29,6 @@ import StripedTable from 'web/components/table/stripedtable';
 import PropTypes from 'web/utils/proptypes';
 
 import withComponentDefaults from 'web/utils/withComponentDefaults';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
 const exclude_props = [
   'row',
@@ -40,10 +39,8 @@ const exclude_props = [
   'children',
 ];
 
-const UpdatingStripedTable = styledExcludeProps(styled(StripedTable), [
-  'isUpdating',
-])`
-  opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
+const UpdatingStripedTable = styled(StripedTable)`
+  opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
 `;
 
 const DetailsIcon = styled(FoldIcon)`
@@ -254,7 +251,7 @@ class EntitiesTable extends React.Component {
         <UpdatingStripedTable
           header={header}
           footer={footer}
-          isUpdating={isUpdating}
+          $isUpdating={isUpdating}
         >
           {body}
         </UpdatingStripedTable>

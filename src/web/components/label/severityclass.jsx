@@ -8,12 +8,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
-const Label = styledExcludeProps(styled.div, [
-  'backgroundColor',
-  'borderColor',
-])`
+const Label = styled.div`
   text-align: center;
   font-weight: normal;
   font-style: normal;
@@ -23,16 +19,16 @@ const Label = styledExcludeProps(styled.div, [
   width: 70px;
   height: 1.5em;
   font-size: 0.8em;
-  background-color: ${props => props.backgroundColor};
-  border-color: ${props => props.borderColor};
+  background-color: ${props => props.$backgroundColor};
+  border-color: ${props => props.$borderColor};
 `;
 
 const HighLabel = props => {
   return (
     <Label
       {...props}
-      backgroundColor="#C83814"
-      borderColor="#C83814"
+      $backgroundColor="#C83814"
+      $borderColor="#C83814"
       data-testid="severity-class-High"
     >
       {_('High')}
@@ -44,8 +40,8 @@ const MediumLabel = props => {
   return (
     <Label
       {...props}
-      backgroundColor="#F0A519"
-      borderColor="#F0A519"
+      $backgroundColor="#F0A519"
+      $borderColor="#F0A519"
       data-testid="severity-class-Medium"
     >
       {_('Medium')}
@@ -57,8 +53,8 @@ const LowLabel = props => {
   return (
     <Label
       {...props}
-      backgroundColor="#4F91C7"
-      borderColor="#4F91C7"
+      $backgroundColor="#4F91C7"
+      $borderColor="#4F91C7"
       data-testid="severity-class-Low"
     >
       {_('Low')}
@@ -70,8 +66,8 @@ const LogLabel = props => {
   return (
     <Label
       {...props}
-      backgroundColor="#191919"
-      borderColor="#191919"
+      $backgroundColor="#191919"
+      $borderColor="#191919"
       data-testid="severity-class-Log"
     >
       {_('Log')}
@@ -83,8 +79,8 @@ const FalsePositiveLabel = props => {
   return (
     <Label
       {...props}
-      backgroundColor="#191919"
-      borderColor="#191919"
+      $backgroundColor="#191919"
+      $borderColor="#191919"
       data-testid="severity-class-False-Positive"
     >
       {_('False Pos.')}
@@ -101,5 +97,3 @@ export const SeverityClassLabels = {
 };
 
 export default SeverityClassLabels;
-
-// vim: set ts=2 sw=2 tw=80:

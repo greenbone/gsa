@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useState, useEffect} from 'react';
 
 import styled from 'styled-components';
@@ -32,10 +31,9 @@ import TableData from 'web/components/table/data';
 import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
-const UpdatingTable = styledExcludeProps(styled(Table), ['isUpdating'])`
-  opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
+const UpdatingTable = styled(Table)`
+  opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
 `;
 
 const scanDuration = (start, end) => {
@@ -119,7 +117,7 @@ const Summary = ({
           error={reportError}
         />
       )}
-      <UpdatingTable isUpdating={isUpdating}>
+      <UpdatingTable $isUpdating={isUpdating}>
         <colgroup>
           <Col width="10%" />
           <Col width="90%" />
@@ -270,5 +268,3 @@ Summary.propTypes = {
 };
 
 export default Summary;
-
-// vim: set ts=2 sw=2 tw=80:

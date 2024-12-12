@@ -48,7 +48,6 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import {renderSelectItems} from 'web/utils/render';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -140,11 +139,9 @@ ReportImage.propTypes = {
   startDate: PropTypes.date,
 };
 
-const Selector = withClickHandler()(styledExcludeProps(styled.span, [
-  'duration',
-])`
+const Selector = withClickHandler()(styled.span`
   ${props => {
-    if (props.value !== props.duration) {
+    if (props.value !== props.$duration) {
       return {
         color: 'blue',
         textDecoration: 'underline',
@@ -284,35 +281,35 @@ class PerformancePage extends React.Component {
               <FormGroup title={_('Report for Last')} direction="row">
                 <Selector
                   value="hour"
-                  duration={duration}
+                  $duration={duration}
                   onClick={this.handleDurationChange}
                 >
                   {_('Hour')}
                 </Selector>
                 <Selector
                   value="day"
-                  duration={duration}
+                  $duration={duration}
                   onClick={this.handleDurationChange}
                 >
                   {_('Day')}
                 </Selector>
                 <Selector
                   value="week"
-                  duration={duration}
+                  $duration={duration}
                   onClick={this.handleDurationChange}
                 >
                   {_('Week')}
                 </Selector>
                 <Selector
                   value="month"
-                  duration={duration}
+                  $duration={duration}
                   onClick={this.handleDurationChange}
                 >
                   {_('Month')}
                 </Selector>
                 <Selector
                   value="year"
-                  duration={duration}
+                  $duration={duration}
                   onClick={this.handleDurationChange}
                 >
                   {_('Year')}
