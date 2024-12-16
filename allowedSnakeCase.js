@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-module.exports = [
+const allowedSnakeCase = [
   'access_hosts',
   'action_result',
   'actions_column',
@@ -693,3 +693,5 @@ module.exports = [
   'yes_no_props',
   'zh_TW',
 ];
+
+export default allowedSnakeCase;
