@@ -33,7 +33,7 @@ const Heading = styled.div`
   padding: 10px 15px;
   min-height: 35px;
   background-color: ${props =>
-    props.isWarning ? Theme.mediumLightRed : Theme.lightBlue};
+    props.$isWarning ? Theme.mediumLightRed : Theme.lightBlue};
   border-color: ${Theme.mediumBlue};
 `;
 
@@ -62,14 +62,14 @@ const InfoPanel = ({
 }) => {
   return (
     <Panel
-      isWarning={isWarning}
-      noMargin={noMargin}
+      $isWarning={isWarning}
+      $noMargin={noMargin}
       align={['start', 'stretch']}
       flex="column"
       {...props}
     >
       {heading && (
-        <Heading data-testid="infopanel-heading" isWarning={isWarning}>
+        <Heading data-testid="infopanel-heading" $isWarning={isWarning}>
           {heading}
           {isDefined(onCloseClick) && (
             <Button data-testid="panel-close-button" onClick={onCloseClick}>
