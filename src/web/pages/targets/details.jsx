@@ -67,7 +67,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             <TableRow>
               <TableDataAlignTop>{_('Included')}</TableDataAlignTop>
               <TableData>
-                <HorizontalSep separator="," wrap spacing="0">
+                <HorizontalSep $separator="," $wrap $spacing="0">
                   {hostsListing}
                   {hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
                 </HorizontalSep>
@@ -78,7 +78,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
               <TableRow>
                 <TableDataAlignTop>{_('Excluded')}</TableDataAlignTop>
                 <TableData>
-                  <HorizontalSep separator="," wrap spacing="0">
+                  <HorizontalSep $separator="," $wrap $spacing="0">
                     {excludeHostsListing}
                     {exclude_hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
                   </HorizontalSep>

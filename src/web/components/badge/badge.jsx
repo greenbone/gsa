@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useRef, useState, useEffect} from 'react';
 
 import styled from 'styled-components';
@@ -12,20 +11,16 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
-const BadgeContainer = styledExcludeProps(styled.div, ['margin'])`
+const BadgeContainer = styled.div`
   position: relative;
   display: inline-flex;
-  margin-right: ${props => props.margin}px;
+  margin-right: ${props => props.$margin}px;
 `;
 
 BadgeContainer.displayName = 'BadgeContainer';
 
-const BadgeIcon = styledExcludeProps(styled.span, [
-  'backgroundColor',
-  'margin',
-])`
+const BadgeIcon = styled.span`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -34,16 +29,15 @@ const BadgeIcon = styledExcludeProps(styled.span, [
   align-items: center;
   position: absolute;
   font-size: 10px;
-  background-color: red;
   font-weight: bold;
   border-radius: 10px;
   min-width: 10px;
   padding: 3px 5px;
   z-index: ${Theme.Layers.higher};
-  background-color: ${({backgroundColor = Theme.green}) => backgroundColor};
-  color: ${({color = Theme.white}) => color};
-  ${({position = 'bottom'}) => position}: ${({radius = 8}) => -radius}px;
-  right: ${({margin = 8}) => -margin}px;
+  background-color: ${({$backgroundColor = Theme.green}) => $backgroundColor};
+  color: ${({$color = Theme.white}) => $color};
+  ${({$position = 'bottom'}) => $position}: ${({radius = 8}) => -radius}px;
+  right: ${({$margin = 8}) => -$margin}px;
 `;
 
 BadgeIcon.displayName = 'BadgeIcon';
@@ -74,17 +68,17 @@ const Badge = props => {
   } = props;
 
   return (
-    <BadgeContainer margin={dynamic ? margin : undefined}>
+    <BadgeContainer $margin={dynamic ? margin : undefined}>
       {children}
 
       {isDefined(content) && (
         <BadgeIcon
           data-testid="badge-icon"
           ref={icon}
-          color={color}
-          backgroundColor={backgroundColor}
-          position={position}
-          margin={dynamic ? margin : undefined}
+          $color={color}
+          $backgroundColor={backgroundColor}
+          $position={position}
+          $margin={dynamic ? margin : undefined}
         >
           {content}
         </BadgeIcon>
@@ -95,6 +89,7 @@ const Badge = props => {
 
 Badge.propTypes = {
   backgroundColor: PropTypes.string,
+  children: PropTypes.node,
   color: PropTypes.string,
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   dynamic: PropTypes.bool,
@@ -102,5 +97,3 @@ Badge.propTypes = {
 };
 
 export default Badge;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -8,7 +8,6 @@ import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
 /**
  * State used in foldable components
@@ -31,33 +30,33 @@ const foldDelay = keyframes`
   }
 `;
 
-const Div = styledExcludeProps(styled.div, ['foldState'])`
+const Div = styled.div`
   overflow: hidden;
   transition: 0.4s;
 
-  display: ${({foldState}) =>
-    foldState === FoldState.FOLDED ? 'none' : undefined};
+  display: ${({$foldState}) =>
+    $foldState === FoldState.FOLDED ? 'none' : undefined};
 
-  height: ${({foldState}) => {
-    if (foldState === FoldState.FOLDED || foldState === FoldState.FOLDING) {
+  height: ${({$foldState}) => {
+    if ($foldState === FoldState.FOLDED || $foldState === FoldState.FOLDING) {
       return 0;
     }
     if (
-      foldState === FoldState.FOLDING_START ||
-      foldState === FoldState.UNFOLDING
+      $foldState === FoldState.FOLDING_START ||
+      $foldState === FoldState.UNFOLDING
     ) {
       const windowHeight = Math.ceil(window.innerHeight * 1.2) + 'px';
       return windowHeight;
     }
-    if (foldState === FoldState.UNFOLDING_START) {
+    if ($foldState === FoldState.UNFOLDING_START) {
       return '1px';
     }
     return undefined;
   }};
 
-  animation: ${({foldState}) =>
-    foldState === FoldState.UNFOLDING_START ||
-    foldState === FoldState.FOLDING_START
+  animation: ${({$foldState}) =>
+    $foldState === FoldState.UNFOLDING_START ||
+    $foldState === FoldState.FOLDING_START
       ? css`
           ${foldDelay} 0.01s
         `
@@ -77,7 +76,7 @@ const FoldStatePropType = PropTypes.oneOf([
  * HOC for making a container content component foldable
  */
 
-export const withFolding = (Component, defaults = {}) => {
+export const withFolding = Component => {
   const FoldingWrapper = ({
     foldState,
     onFoldStepEnd,
@@ -85,7 +84,7 @@ export const withFolding = (Component, defaults = {}) => {
     ...props
   }) => (
     <Div
-      foldState={foldState}
+      $foldState={foldState}
       onTransitionEnd={onFoldStepEnd}
       onAnimationEnd={onFoldStepEnd}
     >
@@ -188,7 +187,7 @@ export const withFoldToggle = Component => {
 
       return (
         <Component
-          foldState={foldState}
+          $foldState={foldState}
           onFoldToggle={this.handleFoldToggle}
           onFoldStepEnd={this.handleFoldStepEnd}
           {...other}
@@ -203,5 +202,3 @@ export const withFoldToggle = Component => {
 
   return FoldToggleWrapper;
 };
-
-// vim: set ts=2 sw=2 tw=80:

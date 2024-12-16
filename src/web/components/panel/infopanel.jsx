@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
@@ -12,7 +11,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import XIcon from 'web/components/icon/XIcon';
 
-import {styledExcludeProps} from 'web/utils/styledConfig';
 import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
@@ -21,21 +19,21 @@ import Layout from 'web/components/layout/layout';
 
 import Button from './button';
 
-const Panel = styledExcludeProps(styled(Layout), ['isWarning', 'noMargin'])`
+const Panel = styled(Layout)`
   background-color: ${Theme.white};
   border: 1px solid
-    ${props => (props.isWarning ? Theme.darkRed : Theme.lightBlue)};
-  margin-top: ${props => (props.noMargin ? '0px' : '5px')};
+    ${props => (props.$isWarning ? Theme.darkRed : Theme.lightBlue)};
+  margin-top: ${props => (props.$noMargin ? '0px' : '5px')};
 `;
 
-const Heading = styledExcludeProps(styled.div, ['isWarning'])`
+const Heading = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
   min-height: 35px;
   background-color: ${props =>
-    props.isWarning ? Theme.mediumLightRed : Theme.lightBlue};
+    props.$isWarning ? Theme.mediumLightRed : Theme.lightBlue};
   border-color: ${Theme.mediumBlue};
 `;
 
@@ -59,17 +57,19 @@ const InfoPanel = ({
   isWarning = false,
   children,
   onCloseClick,
+  noMargin,
   ...props
 }) => {
   return (
     <Panel
-      isWarning={isWarning}
-      {...props}
+      $isWarning={isWarning}
+      $noMargin={noMargin}
       align={['start', 'stretch']}
       flex="column"
+      {...props}
     >
       {heading && (
-        <Heading data-testid="infopanel-heading" isWarning={isWarning}>
+        <Heading data-testid="infopanel-heading" $isWarning={isWarning}>
           {heading}
           {isDefined(onCloseClick) && (
             <Button data-testid="panel-close-button" onClick={onCloseClick}>
@@ -86,6 +86,7 @@ const InfoPanel = ({
 
 InfoPanel.propTypes = {
   children: PropTypes.element,
+  noMargin: PropTypes.bool,
   footer: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   heading: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   isWarning: PropTypes.bool,
@@ -93,5 +94,3 @@ InfoPanel.propTypes = {
 };
 
 export default InfoPanel;
-
-// vim: set ts=2 sw=2 tw=80:

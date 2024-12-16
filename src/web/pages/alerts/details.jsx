@@ -144,7 +144,7 @@ const AlertDetails = ({
             <TableRow>
               <TableData>{_('Tasks using this Alert')}</TableData>
               <TableData>
-                <HorizontalSep wrap>
+                <HorizontalSep $wrap>
                   {tasks.map(task => (
                     <span key={task.id}>
                       <DetailsLink id={task.id} type="task">

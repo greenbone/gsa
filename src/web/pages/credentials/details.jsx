@@ -98,7 +98,7 @@ const CredentialDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Targets using this Credential')}</TableData>
               <TableData>
-                <HorizontalSep wrap>
+                <HorizontalSep $wrap>
                   {targets.map(target => (
                     <span key={target.id}>
                       <DetailsLink id={target.id} type="target">
@@ -115,7 +115,7 @@ const CredentialDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Scanners using this Credential')}</TableData>
               <TableData>
-                <HorizontalSep wrap>
+                <HorizontalSep $wrap>
                   {scanners.map(scanner => (
                     <span key={scanner.id}>
                       <DetailsLink id={scanner.id} type="scanner">

@@ -3,19 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
-import {styledExcludeProps} from 'web/utils/styledConfig';
 
 import Layout from './layout';
 
 const DEFAULT_MARGIN = '5px';
 
-const DividerComponent = styledExcludeProps(styled(Layout), ['margin'])`
+const DividerComponent = styled(Layout)`
   & > * {
     display: inline-flex;
   }
@@ -24,10 +22,10 @@ const DividerComponent = styledExcludeProps(styled(Layout), ['margin'])`
     return {
       // try to fix flex-wrap indentation at second line and beyond by using a
       // negative outer margin
-      ['margin' + edge]: '-' + props.margin,
+      ['margin' + edge]: '-' + props.$margin,
 
       '& > *': {
-        ['margin' + edge]: props.margin,
+        ['margin' + edge]: props.$margin,
       },
     };
   }}
@@ -45,7 +43,7 @@ const Divider = ({margin = DEFAULT_MARGIN, grow, ...props}) => {
   // put Divider into a container div to allow dividers in dividers
   return (
     <DividerContainer grow={grow}>
-      <DividerComponent margin={margin} grow={grow} {...props} />
+      <DividerComponent $margin={margin} grow={grow} {...props} />
     </DividerContainer>
   );
 };
@@ -56,5 +54,3 @@ Divider.propTypes = {
 };
 
 export default Divider;
-
-// vim: set ts=2 sw=2 tw=80:
