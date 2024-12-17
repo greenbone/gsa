@@ -7,6 +7,7 @@ exports[`Qod tests > should render Qod value 1`] = `
 
 <span
   class="c0"
+  data-testid="qod"
 >
   42
    %
@@ -20,6 +21,7 @@ exports[`Qod tests > should render Qod value 2`] = `
 
 <span
   class="c0"
+  data-testid="qod"
 >
   42
    %
