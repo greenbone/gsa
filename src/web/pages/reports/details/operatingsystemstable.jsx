@@ -3,28 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
-import ComplianceBar from 'web/components/bar/compliancebar';
-import PropTypes from 'web/utils/proptypes';
-
-import SeverityBar from 'web/components/bar/severitybar';
-
-import OsIcon from 'web/components/icon/osicon';
-
 import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import ComplianceBar from 'web/components/bar/compliancebar';
+import SeverityBar from 'web/components/bar/severitybar';
+import OsIcon from 'web/components/icon/osicon';
 import IconDivider from 'web/components/layout/icondivider';
-
 import Link from 'web/components/link/link';
-
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
 import {createEntitiesTable} from 'web/entities/table';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   audit = false,
@@ -36,44 +29,44 @@ const Header = ({
   <TableHeader>
     <TableRow>
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'name' : false}
-        onSortChange={onSortChange}
         title={_('Operating System')}
-      />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'cpe' : false}
         onSortChange={onSortChange}
-        title={_('CPE')}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
+        sortBy={sort ? 'cpe' : false}
+        title={_('CPE')}
+        onSortChange={onSortChange}
+      />
+      <TableHead
+        currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'hosts' : false}
+        title={_('Hosts')}
         width="10%"
         onSortChange={onSortChange}
-        title={_('Hosts')}
       />
       {audit ? (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'compliant' : false}
+          title={_('Compliant')}
           width="10%"
           onSortChange={onSortChange}
-          title={_('Compliant')}
         />
       ) : (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'severity' : false}
+          title={_('Severity')}
           width="10%"
           onSortChange={onSortChange}
-          title={_('Severity')}
         />
       )}
     </TableRow>
@@ -93,7 +86,7 @@ const Row = ({audit = false, entity, links = true}) => {
   return (
     <TableRow>
       <TableData>
-        <Link to="operatingsystems" filter={'name=' + cpe} textOnly={!links}>
+        <Link filter={'name=' + cpe} textOnly={!links} to="operatingsystems">
           <IconDivider>
             <OsIcon osCpe={cpe} osTxt={name} />
             <span>{name}</span>
@@ -101,7 +94,7 @@ const Row = ({audit = false, entity, links = true}) => {
         </Link>
       </TableData>
       <TableData>
-        <Link to="operatingsystems" filter={'name=' + cpe} textOnly={!links}>
+        <Link filter={'name=' + cpe} textOnly={!links} to="operatingsystems">
           {cpe}
         </Link>
       </TableData>

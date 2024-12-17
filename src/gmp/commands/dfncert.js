@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
+import DfnCertAdv from 'gmp/models/dfncert';
 import {isDefined} from 'gmp/utils/identity';
 
 import InfoEntitiesCommand from './infoentities';
 import InfoEntityCommand from './infoentity';
-
-import registerCommand from 'gmp/command';
-
-import DfnCertAdv from 'gmp/models/dfncert';
 
 const info_filter = info => isDefined(info.dfn_cert_adv);
 

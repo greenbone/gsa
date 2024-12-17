@@ -5,7 +5,6 @@
 
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render} from 'web/utils/testing';
 
 import FootNote from '../footnote';

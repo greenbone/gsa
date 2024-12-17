@@ -3,13 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
-import Credential from 'gmp/models/credential';
-
 import DefaultTransform from 'gmp/http/transform/default';
+import logger from 'gmp/log';
+import Credential from 'gmp/models/credential';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

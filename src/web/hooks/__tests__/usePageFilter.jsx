@@ -3,20 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
+ 
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
-
+import {vi} from 'vitest';
+import {pageFilter} from 'web/store/pages/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, waitFor} from 'web/utils/testing';
 
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-
 import usePageFilter from '../usePageFilter';
-import {pageFilter} from 'web/store/pages/actions';
-import {vi} from 'vitest';
+
 
 const mockUseNavigate = testing.fn();
 

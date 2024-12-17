@@ -4,13 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Task from 'gmp/models/task';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import Theme from 'web/utils/theme';
 
 import EditIcon from '../editicon';
@@ -97,7 +93,7 @@ describe('Entity EditIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <EditIcon entity={entity} disabled={true} onClick={clickHandler} />,
+      <EditIcon disabled={true} entity={entity} onClick={clickHandler} />,
     );
 
     expect(entity.userCapabilities.mayEdit('schedule')).toEqual(true);

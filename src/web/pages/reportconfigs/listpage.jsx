@@ -3,33 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {REPORT_CONFIGS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
-import ReportConfigIcon from 'web/components/icon/reportconfigicon';
 import NewIcon from 'web/components/icon/newicon';
-
+import ReportConfigIcon from 'web/components/icon/reportconfigicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reportconfigs';
-
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import ReportConfigComponent from './component';
-import ReportConfigsTable from './table';
 import ReportConfigsFilterDialog from './filterdialog';
+import ReportConfigsTable from './table';
 
 const ToolBarIcons = ({onReportConfigCreateClick}) => {
   const capabilities = useCapabilities();
@@ -37,8 +31,8 @@ const ToolBarIcons = ({onReportConfigCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="reports"
         anchor="managing-report-configs"
+        page="reports"
         title={_('Help: Report Configs')}
       />
       {capabilities.mayCreate('report_config') && (
@@ -66,17 +60,17 @@ const ReportConfigsPage = ({
   const [_] = useTranslation();
   return (
     <ReportConfigComponent
-      onCreateError={onError}
-      onCreated={onChanged}
       onCloneError={onError}
       onCloned={onChanged}
+      onCreateError={onError}
+      onCreated={onChanged}
       onDeleteError={onError}
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
       onSaveError={onError}
       onSaved={onChanged}
-      onInteraction={onInteraction}
     >
       {({clone, delete: delete_func, download, edit, create: create_func}) => {
         return (
@@ -93,9 +87,9 @@ const ReportConfigsPage = ({
               onChanged={onChanged}
               onError={onError}
               onInteraction={onInteraction}
+              onReportConfigCloneClick={clone}
               onReportConfigCreateClick={create_func}
               onReportConfigDeleteClick={delete_func}
-              onReportConfigCloneClick={clone}
               onReportConfigDownloadClick={download}
               onReportConfigEditClick={edit}
             />

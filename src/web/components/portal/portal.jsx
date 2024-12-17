@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Logger from 'gmp/log';
+import {hasValue} from 'gmp/utils/identity';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Logger from 'gmp/log';
 
-import {hasValue} from 'gmp/utils/identity';
 
 const log = Logger.getLogger('web.components.portal');
 

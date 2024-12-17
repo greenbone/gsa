@@ -5,11 +5,9 @@
 
 
 import {_, _l} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {_localeData} from 'gmp/models/date';
 import {ReccurenceFrequency} from 'gmp/models/event';
+import {isDefined} from 'gmp/utils/identity';
 
 const WEEKDAY = {
   monday: _l('Monday'),

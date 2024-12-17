@@ -4,9 +4,7 @@
  */
 
 import React from 'react';
-
 import styled, {keyframes, css} from 'styled-components';
-
 import PropTypes from 'web/utils/proptypes';
 
 /**
@@ -85,8 +83,8 @@ export const withFolding = Component => {
   }) => (
     <Div
       $foldState={foldState}
-      onTransitionEnd={onFoldStepEnd}
       onAnimationEnd={onFoldStepEnd}
+      onTransitionEnd={onFoldStepEnd}
     >
       <Component {...props} />
     </Div>
@@ -188,8 +186,8 @@ export const withFoldToggle = Component => {
       return (
         <Component
           $foldState={foldState}
-          onFoldToggle={this.handleFoldToggle}
           onFoldStepEnd={this.handleFoldStepEnd}
+          onFoldToggle={this.handleFoldToggle}
           {...other}
         />
       );

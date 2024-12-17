@@ -4,14 +4,10 @@
  */
 
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
-
+import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 
 import ProgressBar, {adjustProgress} from './progressbar';
@@ -79,7 +75,7 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
       : getTranslatableTaskStatus(status);
 
   return (
-    <ProgressBar title={title} progress={progress} background={background} data-testid={`progress-bar-${status.toLowerCase()}`}>
+    <ProgressBar background={background} data-testid={`progress-bar-${status.toLowerCase()}`} progress={progress} title={title}>
       <Span data-testid="statusbar-text">{text}</Span>
     </ProgressBar>
   );

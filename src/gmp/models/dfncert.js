@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-import {forEach, map} from 'gmp/utils/array';
-
 import {parseSeverity} from 'gmp/parser';
+import {forEach, map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
 import Info from './info';
 

@@ -4,7 +4,6 @@
  */
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 class Rejection {

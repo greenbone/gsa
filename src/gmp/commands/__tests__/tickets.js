@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {ALL_FILTER} from 'gmp/models/filter';
 
 import {createHttp, createEntitiesResponse} from '../testing';

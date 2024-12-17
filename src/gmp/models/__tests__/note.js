@@ -4,12 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
 import {testModel} from 'gmp/models/testing';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 describe('Note model tests', () => {

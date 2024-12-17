@@ -3,19 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
 import {selectSaveId} from 'gmp/utils/id';
-import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
-
+import React, {useState} from 'react';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
 
-import Select from 'web/components/form/select';
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
-
-import useTranslation from 'web/hooks/useTranslation';
+import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 
 const SendMethodPart = ({
   prefix,
@@ -54,7 +52,7 @@ const SendMethodPart = ({
   };
   return (
     <>
-      <FormGroup title={_('Send to host')} direction="row">
+      <FormGroup direction="row" title={_('Send to host')}>
         <TextField
           grow="1"
           name={prefix + 'send_host'}
@@ -63,19 +61,19 @@ const SendMethodPart = ({
         />
         {_('on port')}
         <TextField
-          name={prefix + 'send_port'}
-          value={sendPort}
           maxLength="6"
+          name={prefix + 'send_port'}
           size="6"
+          value={sendPort}
           onChange={onChange}
         />
       </FormGroup>
 
       <FormGroup title={_('Report')}>
         <Select
+          items={renderSelectItems(reportFormats)}
           name={prefix + 'send_report_format'}
           value={reportFormatIdInState}
-          items={renderSelectItems(reportFormats)}
           onChange={handleReportFormatIdChange}
         />
         {capabilities.mayOp('get_report_configs') && (
@@ -84,10 +82,10 @@ const SendMethodPart = ({
               &nbsp; Report Config &nbsp;
             </label>
             <Select
-              name={prefix + 'send_report_config'}
               id="report-config-select"
-              value={sendConfigIdInState}
               items={reportConfigItems}
+              name={prefix + 'send_report_config'}
+              value={sendConfigIdInState}
               onChange={handleReportConfigIdChange}
             />
           </>

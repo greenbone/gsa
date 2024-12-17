@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import VerifyIcon from 'web/components/icon/verifyicon';
+import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 const EntityVerifyIcon = ({
@@ -39,7 +36,7 @@ const EntityVerifyIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Verify {{entity}}', {entity: displayName});
-      // eslint-disable-next-line no-negated-condition
+       
     } else if (!mayVerify) {
       title = _('{{entity}} may not be verified', {entity: displayName});
     } else {
@@ -51,9 +48,9 @@ const EntityVerifyIcon = ({
   return (
     <VerifyIcon
       {...props}
+      active={active}
       title={title}
       value={entity}
-      active={active}
       onClick={active ? onClick : undefined}
     />
   );

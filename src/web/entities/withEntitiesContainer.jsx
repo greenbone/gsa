@@ -4,21 +4,15 @@
  */
 
 import React from 'react';
-
-import {useSearchParams} from 'react-router-dom';
-
 import {connect} from 'react-redux';
-
-import FilterProvider from 'web/entities/filterprovider';
-
-import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
-import Reload from 'web/components/loading/reload';
+import {useSearchParams} from 'react-router-dom';
 import withDownload from 'web/components/form/withDownload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
-
+import Reload from 'web/components/loading/reload';
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';  
+import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
+import FilterProvider from 'web/entities/filterprovider';
 import {pageFilter} from 'web/store/pages/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -46,16 +40,16 @@ const withEntitiesContainer =
       ...props
     }) => (
       <Reload
-        reloadInterval={() => reloadInterval(props)}
-        reload={(newFilter = filter) => loadEntities(newFilter)}
         name={gmpname}
+        reload={(newFilter = filter) => loadEntities(newFilter)}
+        reloadInterval={() => reloadInterval(props)}
       >
         {({reload}) => (
           <EntitiesContainer
             {...props}
             filter={filter}
-            notify={notify}
             gmpname={gmpname}
+            notify={notify}
             reload={reload}
           >
             {pageProps => <Component {...pageProps} />}

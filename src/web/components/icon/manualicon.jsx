@@ -5,10 +5,8 @@
 
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import ManualLink from 'web/components/link/manuallink';
+import PropTypes from 'web/utils/proptypes';
 
 import HelpIcon from './helpicon';
 

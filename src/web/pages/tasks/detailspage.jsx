@@ -3,27 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
-
 import Filter from 'gmp/models/filter';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import Badge from 'web/components/badge/badge';
-
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import DetailsLink from 'web/components/link/detailslink';
-import Link from 'web/components/link/link';
-
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
@@ -33,38 +19,39 @@ import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
-
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
+import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
-import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
+import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
 import {
   selector as notesSelector,
   loadEntities as loadNotes,
@@ -81,20 +68,18 @@ import {
   selector as taskSelector,
   loadEntity as loadTask,
 } from 'web/store/entities/tasks';
-
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
+import TaskComponent from './component';
+import TaskDetails from './details';
 import ImportReportIcon from './icons/importreporticon';
 import NewIconMenu from './icons/newiconmenu';
-import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
 import ScheduleIcon from './icons/scheduleicon';
 import StopIcon from './icons/stopicon';
-
-import TaskDetails from './details';
 import TaskStatus from './status';
-import TaskComponent from './component';
 
 export const ToolBarIcons = ({
   entity,
@@ -116,11 +101,11 @@ export const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
         <ManualIcon
-          page="scanning"
           anchor="managing-tasks"
+          page="scanning"
           title={_('Help: Tasks')}
         />
-        <ListIcon title={_('Task List')} page="tasks" />
+        <ListIcon page="tasks" title={_('Task List')} />
         {entity.isAlterable() && !entity.isNew() && (
           <AlterableIcon
             title={_(
@@ -140,8 +125,8 @@ export const ToolBarIcons = ({
         <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
         <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
         <ExportIcon
-          value={entity}
           title={_('Export Task as XML')}
+          value={entity}
           onClick={onTaskDownloadClick}
         />
       </IconDivider>
@@ -149,14 +134,14 @@ export const ToolBarIcons = ({
       <IconDivider>
         {isDefined(entity.schedule) && (
           <ScheduleIcon
+            links={links}
             schedule={entity.schedule}
             schedulePeriods={entity.schedule_periods}
-            links={links}
           />
         )}
         <TaskIconWithSync
-          type="start"
           task={entity}
+          type="start"
           onClick={onTaskStartClick}
         />
 
@@ -166,8 +151,8 @@ export const ToolBarIcons = ({
 
         {!entity.isContainer() && (
           <TaskIconWithSync
-            type="resume"
             task={entity}
+            type="resume"
             onClick={onTaskResumeClick}
           />
         )}
@@ -177,7 +162,6 @@ export const ToolBarIcons = ({
         <IconDivider>
           {isDefined(entity.current_report) && (
             <DetailsLink
-              type="report"
               id={entity.current_report.id}
               title={_('Current Report for Task {{- name}} from {{- date}}', {
                 name: entity.name,
@@ -185,6 +169,7 @@ export const ToolBarIcons = ({
                   entity.current_report.scan_start,
                 ),
               })}
+              type="report"
             >
               <ReportIcon />
             </DetailsLink>
@@ -193,7 +178,6 @@ export const ToolBarIcons = ({
           {!isDefined(entity.current_report) &&
             isDefined(entity.last_report) && (
               <DetailsLink
-                type="report"
                 id={entity.last_report.id}
                 title={_('Last Report for Task {{- name}} from {{- date}}', {
                   name: entity.name,
@@ -201,15 +185,16 @@ export const ToolBarIcons = ({
                     entity.last_report.scan_start,
                   ),
                 })}
+                type="report"
               >
                 <ReportIcon />
               </DetailsLink>
             )}
 
           <Link
-            to="reports"
             filter={'task_id=' + entity.id}
             title={_('Total Reports for Task {{- name}}', entity)}
+            to="reports"
           >
             <Badge content={entity.report_count.total}>
               <ReportIcon />
@@ -218,9 +203,9 @@ export const ToolBarIcons = ({
         </IconDivider>
 
         <Link
-          to="results"
           filter={'task_id=' + entity.id}
           title={_('Results for Task {{- name}}', entity)}
+          to="results"
         >
           <Badge content={entity.result_count}>
             <ResultIcon />
@@ -229,9 +214,9 @@ export const ToolBarIcons = ({
 
         <IconDivider>
           <Link
-            to="notes"
             filter={'task_id=' + entity.id}
             title={_('Notes for Task {{- name}}', entity)}
+            to="notes"
           >
             <Badge content={notes.length}>
               <NoteIcon />
@@ -239,9 +224,9 @@ export const ToolBarIcons = ({
           </Link>
 
           <Link
-            to="overrides"
             filter={'task_id=' + entity.id}
             title={_('Overrides for Task {{- name}}', entity)}
+            to="overrides"
           >
             <Badge content={overrides.length}>
               <OverrideIcon />
@@ -333,24 +318,24 @@ class Page extends React.Component {
     } = this.props;
     return (
       <TaskComponent
-        onCloned={goto_details('task', props)}
         onCloneError={onError}
-        onCreated={goto_details('task', props)}
+        onCloned={goto_details('task', props)}
         onContainerCreated={goto_details('task', props)}
         onContainerSaved={onChanged}
-        onDeleted={goto_list('tasks', props)}
+        onCreated={goto_details('task', props)}
         onDeleteError={onError}
-        onDownloaded={onDownloaded}
+        onDeleted={goto_list('tasks', props)}
         onDownloadError={onError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
         onReportImported={onChanged}
-        onResumed={onChanged}
         onResumeError={onError}
+        onResumed={onChanged}
         onSaved={onChanged}
-        onStarted={onChanged}
         onStartError={onError}
-        onStopped={onChanged}
+        onStarted={onChanged}
         onStopError={onError}
+        onStopped={onChanged}
       >
         {({
           clone,
@@ -388,8 +373,8 @@ class Page extends React.Component {
               return (
                 <React.Fragment>
                   <PageTitle title={_('Task: {{name}}', {name: entity.name})} />
-                  <Layout grow="1" flex="column">
-                    <TabLayout grow="1" align={['start', 'end']}>
+                  <Layout flex="column" grow="1">
+                    <TabLayout align={['start', 'end']} grow="1">
                       <TabList
                         active={activeTab}
                         align={['start', 'stretch']}
@@ -424,8 +409,8 @@ class Page extends React.Component {
                             permissions={permissions}
                             onChanged={onChanged}
                             onDownloaded={onDownloaded}
-                            onInteraction={onInteraction}
                             onError={onError}
+                            onInteraction={onInteraction}
                           />
                         </TabPanel>
                       </TabPanels>

@@ -3,10 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
-
-import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
 
 import {
   ACCESS_ALLOW_ALL,
@@ -16,24 +12,22 @@ import {
   AUTH_METHOD_PASSWORD,
   AUTH_METHOD_RADIUS,
 } from 'gmp/models/user';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import React, {useState} from 'react';
 import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
 import SaveDialog from 'web/components/dialog/savedialog';
-
+import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
 import FormGroup from 'web/components/form/formgroup';
+import MultiSelect from 'web/components/form/multiselect';
 import PasswordField from 'web/components/form/passwordfield';
 import Radio from 'web/components/form/radio';
-import MultiSelect from 'web/components/form/multiselect';
 import TextField from 'web/components/form/textfield';
-
 import Row from 'web/components/layout/row';
-
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import useCapabilities from 'web/hooks/useCapabilities';
-import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
+import PropTypes from 'web/utils/proptypes';
 
 const Dialog = ({
   roleIds: initialRoleIds = [],
@@ -160,11 +154,11 @@ const Dialog = ({
 
   return (
     <SaveDialog
+      defaultValues={data}
       title={title}
       values={controlledValues}
       onClose={onClose}
       onSave={handleSaveClick}
-      defaultValues={data}
     >
       {({values: state, onValueChange}) => (
         <>
@@ -185,38 +179,38 @@ const Dialog = ({
           </FormGroup>
 
           {!isEdit && (
-            <FormGroup title={_('Authentication')} flex="column">
+            <FormGroup flex="column" title={_('Authentication')}>
               <Row>
                 <Radio
-                  title={_('Password')}
-                  name="auth_method"
-                  value={AUTH_METHOD_PASSWORD}
                   checked={state.auth_method === AUTH_METHOD_PASSWORD}
+                  name="auth_method"
+                  title={_('Password')}
+                  value={AUTH_METHOD_PASSWORD}
                   onChange={onValueChange}
                 />
                 <PasswordField
+                  autoComplete="new-password"
                   grow="1"
                   name="password"
-                  autoComplete="new-password"
                   value={state.password}
                   onChange={onValueChange}
                 />
               </Row>
               {hasLdapEnabled && (
                 <Radio
-                  title={_('LDAP Authentication Only')}
-                  name="auth_method"
-                  value={AUTH_METHOD_LDAP}
                   checked={state.auth_method === AUTH_METHOD_LDAP}
+                  name="auth_method"
+                  title={_('LDAP Authentication Only')}
+                  value={AUTH_METHOD_LDAP}
                   onChange={onValueChange}
                 />
               )}
               {hasRadiusEnabled && (
                 <Radio
-                  title={_('RADIUS Authentication Only')}
-                  name="auth_method"
-                  value={AUTH_METHOD_RADIUS}
                   checked={state.auth_method === AUTH_METHOD_RADIUS}
+                  name="auth_method"
+                  title={_('RADIUS Authentication Only')}
+                  value={AUTH_METHOD_RADIUS}
                   onChange={onValueChange}
                 />
               )}
@@ -226,44 +220,44 @@ const Dialog = ({
           {isEdit && (
             <FormGroup title={_('Authentication')}>
               <Radio
-                title={_('Password: Use existing Password')}
-                name="auth_method"
-                value={AUTH_METHOD_PASSWORD}
                 checked={state.auth_method === AUTH_METHOD_PASSWORD}
+                name="auth_method"
+                title={_('Password: Use existing Password')}
+                value={AUTH_METHOD_PASSWORD}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  title={_('New Password')}
-                  name="auth_method"
-                  value={AUTH_METHOD_NEW_PASSWORD}
                   checked={state.auth_method === AUTH_METHOD_NEW_PASSWORD}
+                  name="auth_method"
+                  title={_('New Password')}
+                  value={AUTH_METHOD_NEW_PASSWORD}
                   onChange={onValueChange}
                 />
                 <PasswordField
-                  grow="1"
-                  name="password"
                   autoComplete="new-password"
                   disabled={state.auth_method !== AUTH_METHOD_NEW_PASSWORD}
+                  grow="1"
+                  name="password"
                   value={state.password}
                   onChange={onValueChange}
                 />
               </Row>
               {hasLdapEnabled && (
                 <Radio
-                  title={_('LDAP Authentication Only')}
-                  name="auth_method"
-                  value={AUTH_METHOD_LDAP}
                   checked={state.auth_method === AUTH_METHOD_LDAP}
+                  name="auth_method"
+                  title={_('LDAP Authentication Only')}
+                  value={AUTH_METHOD_LDAP}
                   onChange={onValueChange}
                 />
               )}
               {hasRadiusEnabled && (
                 <Radio
-                  title={_('RADIUS Authentication Only')}
-                  name="auth_method"
-                  value={AUTH_METHOD_RADIUS}
                   checked={state.auth_method === AUTH_METHOD_RADIUS}
+                  name="auth_method"
+                  title={_('RADIUS Authentication Only')}
+                  value={AUTH_METHOD_RADIUS}
                   onChange={onValueChange}
                 />
               )}
@@ -272,8 +266,8 @@ const Dialog = ({
           {capabilities.mayAccess('roles') && (
             <FormGroup title={_('Roles')}>
               <MultiSelect
-                name="role_ids"
                 items={rolesOptions}
+                name="role_ids"
                 value={roleIds}
                 onChange={handleRoleIdsChange}
               />
@@ -283,8 +277,8 @@ const Dialog = ({
           {capabilities.mayAccess('groups') && (
             <FormGroup title={_('Groups')}>
               <MultiSelect
-                name="group_ids"
                 items={groupsOptions}
+                name="group_ids"
                 value={state.group_ids}
                 onChange={onValueChange}
               />
@@ -294,17 +288,17 @@ const Dialog = ({
           <FormGroup title={_('Host Access')}>
             <Row>
               <Radio
+                checked={state.hosts_allow === ACCESS_ALLOW_ALL}
                 name="hosts_allow"
                 title={_('Allow all and deny')}
                 value={ACCESS_ALLOW_ALL}
-                checked={state.hosts_allow === ACCESS_ALLOW_ALL}
                 onChange={onValueChange}
               />
               <Radio
+                checked={state.hosts_allow === ACCESS_DENY_ALL}
                 name="hosts_allow"
                 title={_('Deny all and allow')}
                 value={ACCESS_DENY_ALL}
-                checked={state.hosts_allow === ACCESS_DENY_ALL}
                 onChange={onValueChange}
               />
             </Row>
@@ -326,11 +320,11 @@ const Dialog = ({
                   'the data will be saved when clicking OK, and you will be logged ' +
                   'out immediately.',
               )}
+              rightButtonAction={DELETE_ACTION}
               title={_('Save Super Admin User')}
               width="400px"
               onClose={closeConfirmationDialogSuperAdmin}
               onResumeClick={handleResumeClickSuperAdmin}
-              rightButtonAction={DELETE_ACTION}
             />
           )}
           {confirmationDialogVisible && (
@@ -340,11 +334,11 @@ const Dialog = ({
                   'without a role. This user will not have any ' +
                   'permissions and as a result will not be able to login.',
               )}
+              rightButtonAction={DELETE_ACTION}
               title={_('User without a role')}
               width="400px"
               onClose={closeConfirmationDialog}
               onResumeClick={handleResumeClick}
-              rightButtonAction={DELETE_ACTION}
             />
           )}
         </>

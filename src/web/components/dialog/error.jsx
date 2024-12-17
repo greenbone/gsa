@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Theme from 'web/utils/theme';
-
+import React from 'react';
+import styled from 'styled-components';
 import Layout from 'web/components/layout/layout';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 import CloseButton from './closebutton';
 
@@ -50,7 +44,7 @@ const DialogError = ({error, onCloseClick}) => {
       >
         {error}
       </span>
-      <DialogCloseButton onClick={onCloseClick} title={_('Close')} data-testid="error-close-button"/>
+      <DialogCloseButton data-testid="error-close-button" title={_('Close')} onClick={onCloseClick}/>
     </StyledLayout>
   );
 };

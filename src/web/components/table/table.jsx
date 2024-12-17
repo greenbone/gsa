@@ -4,9 +4,7 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Table = ({children, className, footer, header}) => {

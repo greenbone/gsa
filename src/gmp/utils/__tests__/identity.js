@@ -25,7 +25,7 @@ describe('isDefined function test', () => {
   });
 
   test('should return true for defined let variable', () => {
-    let x = 1; // eslint-disable-line prefer-const
+    let x = 1;
     expect(isDefined(x)).toBe(true);
   });
 });
@@ -37,12 +37,12 @@ describe('hasValue function test', () => {
   });
 
   test('should return true for defined let variable', () => {
-    let x = 1; // eslint-disable-line prefer-const
+    let x = 1;
     expect(hasValue(x)).toBe(true);
   });
 
   test('should return false for null let variable', () => {
-    let x = null; // eslint-disable-line prefer-const
+    let x = null;
     expect(hasValue(x)).toBe(false);
   });
 });

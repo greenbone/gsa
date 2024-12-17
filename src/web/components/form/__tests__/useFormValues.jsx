@@ -3,14 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useRef} from 'react';
-
 import {describe, test, expect} from '@gsa/testing';
-
+import React, {useRef} from 'react';
 import {fireEvent, rendererWith, wait, screen} from 'web/utils/testing';
 
 import TextField from '../textfield';
-
 import useFormValues from '../useFormValues';
 
 const UseFormValuesTestComponent = () => {
@@ -27,7 +24,7 @@ const UseFormValuesTestComponent = () => {
         data-testid="changeToSameValue"
         onClick={() => handleValueChange('bar', 'foo')}
       />
-      <TextField name="foo" onChange={handleValueChange} value={values.foo} />
+      <TextField name="foo" value={values.foo} onChange={handleValueChange} />
     </React.Fragment>
   );
 };

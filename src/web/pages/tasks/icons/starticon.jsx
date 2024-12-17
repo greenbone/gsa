@@ -3,16 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
-import withCapabilities from 'web/utils/withCapabilities';
-
+import React from 'react';
 import StartIcon from 'web/components/icon/starticon';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const TaskStartIcon = ({
   capabilities,

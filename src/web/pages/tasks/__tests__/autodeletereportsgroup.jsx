@@ -4,16 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent} from 'web/utils/testing';
-
-import {changeInputValue, getRadioInputs} from 'web/components/testing';
-
 import {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_NO,
 } from 'gmp/models/task';
+import {changeInputValue, getRadioInputs} from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import AutoDeleteReportsGroup from '../autodeletereportsgroup';
 

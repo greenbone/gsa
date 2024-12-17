@@ -3,48 +3,40 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import DeleteIcon from 'web/entity/icon/deleteicon';
-
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import UserIcon from 'web/components/icon/usericon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import DeleteIcon from 'web/entity/icon/deleteicon';
+import EditIcon from 'web/entity/icon/editicon';
+import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
-
-import {selector, loadEntity} from 'web/store/entities/users';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/users';
 import PropTypes from 'web/utils/proptypes';
 
 import UserComponent from './component';
@@ -61,11 +53,11 @@ const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="web-interface-access"
         anchor="managing-users"
+        page="web-interface-access"
         title={_('Help: Users')}
       />
-      <ListIcon title={_('Users List')} page="users" />
+      <ListIcon page="users" title={_('Users List')} />
     </IconDivider>
     <IconDivider>
       <CreateIcon entity={entity} onClick={onUserCreateClick} />
@@ -77,8 +69,8 @@ const ToolBarIcons = ({
       <EditIcon entity={entity} onClick={onUserEditClick} />
       <DeleteIcon entity={entity} onClick={onUserDeleteClick} />
       <ExportIcon
-        value={entity}
         title={_('Export User as XML')}
+        value={entity}
         onClick={onUserDownloadClick}
       />
     </IconDivider>
@@ -104,13 +96,13 @@ const Page = ({
   ...props
 }) => (
   <UserComponent
-    onCloned={goto_details('user', props)}
     onCloneError={onError}
+    onCloned={goto_details('user', props)}
     onCreated={goto_details('user', props)}
-    onDeleted={goto_list('users', props)}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={goto_list('users', props)}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
@@ -133,8 +125,8 @@ const Page = ({
           return (
             <React.Fragment>
               <PageTitle title={_('User: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}

@@ -5,17 +5,15 @@
 
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import Layout from 'web/components/layout/layout';
+import PropTypes from 'web/utils/proptypes';
 
 import Identifiers from './identifiers';
 
 const HostDetails = ({entity, onHostIdentifierDeleteClick}) => {
   const {identifiers} = entity;
   return (
-    <Layout grow="1" flex="column">
+    <Layout flex="column" grow="1">
       <Identifiers
         displayActions
         identifiers={identifiers}

@@ -4,26 +4,22 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
-import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
-import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
-import FilterDialog from 'web/components/powerfilter/filterdialog';
-
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
-
-import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const TaskFilterDialog = ({
   filter: initialFilter,
@@ -95,51 +91,51 @@ const TaskFilterDialog = ({
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
-        name="filterstring"
         filter={filterString}
+        name="filterstring"
         onChange={onFilterStringChange}
       />
 
       <BooleanFilterGroup
+        filter={filter}
         name="apply_overrides"
         title={_('Apply Overrides')}
-        filter={filter}
         onChange={onFilterValueChange}
       />
 
       <FilterSearchGroup
+        filter={filter}
         name="name"
         title={_('Task Name')}
-        filter={filter}
         onChange={onSearchTermChange}
       />
 
       <SeverityValuesGroup
+        filter={filter}
         name="severity"
         title={_('Severity of Last Report')}
-        filter={filter}
         onChange={onFilterValueChange}
       />
 
       <MinQodGroup
-        name="min_qod"
         filter={filter}
+        name="min_qod"
         onChange={onFilterValueChange}
       />
 
       <TaskTrendGroup filter={filter} onChange={onFilterValueChange} />
 
       <FilterSearchGroup
+        filter={filter}
         name="schedule"
         title={_('Schedule')}
-        filter={filter}
         onChange={onSearchTermChange}
       />
 
       <FilterSearchGroup
+        filter={filter}
         name="comment"
         title={_('Comment')}
-        filter={filter}
         onChange={onSearchTermChange}
       />
 
@@ -148,10 +144,10 @@ const TaskFilterDialog = ({
       <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
 
       <SortByGroup
-        filter={filter}
         fields={SORT_FIELDS}
-        onSortOrderChange={onSortOrderChange}
+        filter={filter}
         onSortByChange={onSortByChange}
+        onSortOrderChange={onSortOrderChange}
       />
 
       {capabilities.mayCreate('filter') && (

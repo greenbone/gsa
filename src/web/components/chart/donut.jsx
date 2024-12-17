@@ -4,23 +4,16 @@
  */
 
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import {color as d3color} from 'd3-color';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
+import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 import {setRef} from 'web/utils/render';
 import Theme from 'web/utils/theme';
-
-import arc from './utils/arc';
-import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
-import {shouldUpdate} from './utils/update';
-
-import Layout from 'web/components/layout/layout';
 
 import Arc2d from './donut/arc2d';
 import Arc3d from './donut/arc3d';
@@ -28,10 +21,12 @@ import Labels from './donut/labels';
 import {PieInnerPath, PieTopPath, PieOuterPath} from './donut/paths';
 import Pie from './donut/pie';
 import {DataPropType} from './donut/proptypes';
-
+import Group from './group';
 import Legend from './legend';
 import Svg from './svg';
-import Group from './group';
+import arc from './utils/arc';
+import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 const LEGEND_MARGIN = 20;
 const MIN_RATIO = 2.0;
@@ -66,7 +61,7 @@ const EmptyDonut = ({
     .outerRadiusX(outerRadiusX)
     .outerRadiusY(outerRadiusY);
   return (
-    <Group top={top} left={left}>
+    <Group left={left} top={top}>
       <PieInnerPath
         color={darkEmptyColor}
         donutHeight={donutHeight}
@@ -174,7 +169,7 @@ class DonutChart extends React.Component {
       targetY = target.getAttribute('y');
 
       // compare target label with all other labels
-      // eslint-disable-next-line no-shadow
+       
       labels.forEach(label => {
         comparison = label;
         if (target === comparison) {
@@ -259,17 +254,17 @@ class DonutChart extends React.Component {
     return (
       <StyledLayout align={['start', 'start']}>
         <Svg
-          width={width}
-          height={height}
           ref={setRef(svgRef, ref => (this.svg = ref))}
+          height={height}
+          width={width}
         >
           {data.length > 0 ? (
             <React.Fragment>
               <Pie
                 data={data}
+                left={centerX}
                 pieValue={d => d.value}
                 top={centerY}
-                left={centerX}
                 {...donutProps}
               >
                 {({
@@ -283,39 +278,39 @@ class DonutChart extends React.Component {
                 }) => (
                   <Arc
                     key={index}
-                    index={index}
                     data={arcData}
+                    donutHeight={donutThickness}
+                    endAngle={endAngle}
+                    index={index}
                     path={arcPath}
                     startAngle={startAngle}
-                    endAngle={endAngle}
                     x={x}
                     y={y}
-                    donutHeight={donutThickness}
                     {...donutProps}
                     onDataClick={onDataClick}
                   />
                 )}
               </Pie>
               <Labels
-                data={data}
                 centerX={centerX}
                 centerY={centerY}
+                data={data}
                 {...donutProps}
               />
             </React.Fragment>
           ) : (
             <EmptyDonut
+              donutHeight={donutThickness}
               left={centerX}
               top={centerY}
-              donutHeight={donutThickness}
               {...donutProps}
             />
           )}
         </Svg>
         {data.length > 0 && showLegend && (
           <Legend
-            data={data}
             ref={this.legendRef}
+            data={data}
             onItemClick={onLegendItemClick}
           />
         )}

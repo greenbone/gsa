@@ -5,7 +5,6 @@
 
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 export const IconSizeContext = React.createContext();

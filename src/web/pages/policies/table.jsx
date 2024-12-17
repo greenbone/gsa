@@ -4,14 +4,13 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-
 import {createEntitiesFooter} from 'web/entities/footer';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
+import PolicyDetails from 'web/pages/policies/details';
 
 import Header from './header';
 import Row from './row';
-import PolicyDetails from 'web/pages/policies/details';
 
 export const SORT_FIELDS = [
   {

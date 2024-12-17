@@ -4,26 +4,21 @@
  */
 
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
+import React from 'react';
+import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
-
 import Divider from 'web/components/layout/divider';
 import Row from 'web/components/layout/row';
-
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
 export const CURRENT_RESOURCE_ONLY = '0';
 export const INCLUDE_RELATED_RESOURCES = '1';
@@ -96,20 +91,18 @@ const MultiplePermissionDialog = ({
 
   return (
     <SaveDialog
+      defaultValues={defaultValues}
       title={title}
+      values={values}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={defaultValues}
-      values={values}
     >
       {({values: state, onValueChange}) => {
         return (
           <>
-            <FormGroup title={_('Grant')} direction="row">
+            <FormGroup direction="row" title={_('Grant')}>
               <Select
                 grow="1"
-                name="permission"
-                value={state.permission}
                 items={[
                   {
                     label: _('read'),
@@ -120,6 +113,8 @@ const MultiplePermissionDialog = ({
                     value: 'write',
                   },
                 ]}
+                name="permission"
+                value={state.permission}
                 onChange={onValueChange}
               />
               <span>{_('Permission')}</span>
@@ -128,17 +123,17 @@ const MultiplePermissionDialog = ({
               {capabilities.mayAccess('users') && (
                 <Row>
                   <Radio
-                    name="subjectType"
                     checked={state.subjectType === 'user'}
+                    name="subjectType"
                     title={_('User')}
                     value="user"
                     onChange={onValueChange}
                   />
                   <Select
                     grow="1"
+                    items={renderSelectItems(users)}
                     name="userId"
                     value={state.userId}
-                    items={renderSelectItems(users)}
                     onChange={onChange}
                   />
                 </Row>
@@ -147,17 +142,17 @@ const MultiplePermissionDialog = ({
               {capabilities.mayAccess('roles') && (
                 <Row>
                   <Radio
-                    name="subjectType"
                     checked={state.subjectType === 'role'}
+                    name="subjectType"
                     title={_('Role')}
                     value="role"
                     onChange={onValueChange}
                   />
                   <Select
                     grow="1"
+                    items={renderSelectItems(roles)}
                     name="roleId"
                     value={state.roleId}
-                    items={renderSelectItems(roles)}
                     onChange={onChange}
                   />
                 </Row>
@@ -166,29 +161,29 @@ const MultiplePermissionDialog = ({
               {capabilities.mayAccess('groups') && (
                 <Row>
                   <Radio
-                    name="subjectType"
                     checked={state.subjectType === 'group'}
+                    name="subjectType"
                     title={_('Group')}
                     value="group"
                     onChange={onValueChange}
                   />
                   <Select
                     grow="1"
+                    items={renderSelectItems(groups)}
                     name="groupId"
                     value={state.groupId}
-                    items={renderSelectItems(groups)}
                     onChange={onChange}
                   />
                 </Row>
               )}
             </FormGroup>
-            <FormGroup title={_('on')} direction="row">
+            <FormGroup direction="row" title={_('on')}>
               <span>{typeName(getEntityType(state))}</span>
               <EntityName>{entityName}</EntityName>
               <Select
+                items={includeRelatedItems}
                 name="includeRelated"
                 value={state.includeRelated}
-                items={includeRelatedItems}
                 onChange={onChange}
               />
             </FormGroup>

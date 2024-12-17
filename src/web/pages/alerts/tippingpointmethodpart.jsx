@@ -3,24 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
-
-import {renderSelectItems} from 'web/utils/render';
-
-import PropTypes from 'web/utils/proptypes';
-import withPrefix from 'web/utils/withPrefix';
-
+import React from 'react';
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
-
 import NewIcon from 'web/components/icon/newicon';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withPrefix from 'web/utils/withPrefix';
 
 const TIPPINGPOINT_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
@@ -48,7 +43,7 @@ const TippingPointMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Credential')} direction="row">
+      <FormGroup direction="row" title={_('Credential')}>
         <Select
           grow="1"
           items={renderSelectItems(credentials)}

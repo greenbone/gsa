@@ -4,22 +4,16 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith} from 'web/utils/testing';
-
-import {getMockDeltaReport} from 'web/pages/reports/__mocks__/mockdeltareport';
-
 import {
   getPowerFilter,
   getSelectElement,
   getTextInputs,
 } from 'web/components/testing';
+import {getMockDeltaReport} from 'web/pages/reports/__mocks__/mockdeltareport';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 import DeltaDetailsContent from '../deltadetailscontent';
 
@@ -108,20 +102,23 @@ describe('Delta Report Details Content tests', () => {
         filters={filters}
         isLoading={false}
         isUpdating={false}
-        sorting={sorting}
         reportId={entity.report.id}
+        showError={showError}
+        showErrorMessage={showErrorMessage}
+        showSuccessMessage={showSuccessMessage}
+        sorting={sorting}
         task={entity.report.task}
         onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
+        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterEditClick={onFilterEditClick}
+        onFilterRemoveClick={onFilterRemoveClick}
         onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
         onFilterResetClick={onFilterResetClick}
-        onFilterRemoveClick={onFilterRemoveClick}
         onInteraction={onInteraction}
         onRemoveFromAssetsClick={onRemoveFromAssetsClick}
         onReportDownloadClick={onReportDownloadClick}
@@ -129,9 +126,6 @@ describe('Delta Report Details Content tests', () => {
         onTagSuccess={onTagSuccess}
         onTargetEditClick={onTargetEditClick}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-        showError={showError}
-        showErrorMessage={showErrorMessage}
-        showSuccessMessage={showSuccessMessage}
       />,
     );
 
@@ -278,20 +272,23 @@ describe('Delta Report Details Content tests', () => {
         filters={filters}
         isLoading={false}
         isUpdating={false}
-        sorting={sorting}
         reportId={entity.report.id}
+        showError={showError}
+        showErrorMessage={showErrorMessage}
+        showSuccessMessage={showSuccessMessage}
+        sorting={sorting}
         task={entity.report.task}
         onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
+        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterEditClick={onFilterEditClick}
+        onFilterRemoveClick={onFilterRemoveClick}
         onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
         onFilterResetClick={onFilterResetClick}
-        onFilterRemoveClick={onFilterRemoveClick}
         onInteraction={onInteraction}
         onRemoveFromAssetsClick={onRemoveFromAssetsClick}
         onReportDownloadClick={onReportDownloadClick}
@@ -299,9 +296,6 @@ describe('Delta Report Details Content tests', () => {
         onTagSuccess={onTagSuccess}
         onTargetEditClick={onTargetEditClick}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-        showError={showError}
-        showErrorMessage={showErrorMessage}
-        showSuccessMessage={showSuccessMessage}
       />,
     );
 

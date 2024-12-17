@@ -3,33 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {
   SNMP_CREDENTIAL_TYPE,
   SNMP_PRIVACY_ALOGRITHM_NONE,
   getCredentialTypeName,
 } from 'gmp/models/credential';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import Footnote from 'web/components/footnote/footnote';
-
 import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
+import PropTypes from 'web/utils/proptypes';
 
 const CredentialDetails = ({entity}) => {
   const {
@@ -44,7 +36,7 @@ const CredentialDetails = ({entity}) => {
     scanners = [],
   } = entity;
   return (
-    <Layout flex="column" grow>
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
           <Col width="10%" />

@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-
 import {SubscriptionContext} from 'web/components/provider/subscriptionprovider';
 
 const withSubscription = Component => {

@@ -4,20 +4,17 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import StMitigateIcon from 'web/components/icon/stmitigateicon';
 import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
 import StUnknownIcon from 'web/components/icon/stunknownicon';
 import StVendorFixIcon from 'web/components/icon/stvendorfixicon';
 import StWillNotFixIcon from 'web/components/icon/stwillnotfixicon';
 import StWorkaroundIcon from 'web/components/icon/stworkaroundicon';
-
 import Divider from 'web/components/layout/divider';
+import PropTypes from 'web/utils/proptypes';
 
 const SolutionType = ({type, displayTitleText = false}) => {
   let IconComponent;
@@ -55,13 +52,13 @@ const SolutionType = ({type, displayTitleText = false}) => {
   if (displayTitleText) {
     return (
       <Divider align={['start', 'center']}>
-        <IconComponent size="small" title={title} alt={title} />
+        <IconComponent alt={title} size="small" title={title} />
         <span>{title}</span>
       </Divider>
     );
   }
 
-  return <IconComponent size="small" title={title} alt={title} />;
+  return <IconComponent alt={title} size="small" title={title} />;
 };
 
 SolutionType.propTypes = {

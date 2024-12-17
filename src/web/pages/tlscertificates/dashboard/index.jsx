@@ -5,14 +5,13 @@
 
 
 import React from 'react';
-
 import Dashboard from 'web/components/dashboard/dashboard';
 
-import {TimeStatusDisplay, TimeStatusTableDisplay} from './timestatusdisplay';
 import {
   TlsCertificatesModifiedDisplay,
   TlsCertificatesModifiedTableDisplay,
 } from './modifieddisplay';
+import {TimeStatusDisplay, TimeStatusTableDisplay} from './timestatusdisplay';
 
 export const TLS_CERTIFICATES_DASHBOARD_ID =
   '9b62bf16-bf90-11e9-ad97-28d24461215b';
@@ -27,11 +26,11 @@ export const TLS_CERTFICATES_DISPLAYS = [
 const TlsCerticatesDashboard = props => (
   <Dashboard
     {...props}
-    id={TLS_CERTIFICATES_DASHBOARD_ID}
-    permittedDisplays={TLS_CERTFICATES_DISPLAYS}
     defaultDisplays={[
       [TimeStatusDisplay.displayId, TlsCertificatesModifiedDisplay.displayId],
     ]}
+    id={TLS_CERTIFICATES_DASHBOARD_ID}
+    permittedDisplays={TLS_CERTFICATES_DISPLAYS}
   />
 );
 

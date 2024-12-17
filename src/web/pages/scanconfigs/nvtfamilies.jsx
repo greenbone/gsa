@@ -3,37 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
   parseTrend,
 } from 'gmp/models/scanconfig';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import Checkbox from 'web/components/form/checkbox';
 import Radio from 'web/components/form/radio';
-
 import EditIcon from 'web/components/icon/editicon';
-
 import Divider from 'web/components/layout/divider';
-
 import Section from 'web/components/section/section';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
-import PropTypes from 'web/utils/proptypes';
-
+import Table from 'web/components/table/stripedtable';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import Trend from './trend';
 
@@ -85,23 +76,23 @@ const NvtFamily = ({
         <Divider>
           <Radio
             flex
-            name={familyName}
             checked={isToSelectWhole || trend === SCANCONFIG_TREND_DYNAMIC}
             convert={parseTrend}
             disabled={isToSelectWhole}
+            name={familyName}
             value={SCANCONFIG_TREND_DYNAMIC}
             onChange={onTrendChange}
           />
           <Trend active={!isToSelectWhole} trend={SCANCONFIG_TREND_DYNAMIC} />
           <Radio
             flex
-            name={familyName}
             checked={
               (!isToSelectWhole && trend === SCANCONFIG_TREND_STATIC) ||
               (isToSelectWhole && select === NO_VALUE)
             }
-            disabled={isToSelectWhole}
             convert={parseTrend}
+            disabled={isToSelectWhole}
+            name={familyName}
             value={SCANCONFIG_TREND_STATIC}
             onChange={onTrendChange}
           />
@@ -111,9 +102,9 @@ const NvtFamily = ({
       <TableData align={['start', 'center']}>
         <Checkbox
           flex
-          name={familyName}
           checked={select === YES_VALUE}
           checkedValue={YES_VALUE}
+          name={familyName}
           unCheckedValue={NO_VALUE}
           onChange={onSelectChange}
         />
@@ -190,14 +181,14 @@ const NvtFamilies = ({
             return (
               <NvtFamily
                 key={name}
-                familyName={family.name}
                 familyMaxNvtCount={family.maxNvtCount}
+                familyName={family.name}
                 familyNvtCount={
                   isDefined(configFamily) ? configFamily.nvts.count : 0
                 }
+                select={select[name]}
                 title={editTitle}
                 trend={trend[name]}
-                select={select[name]}
                 onEditConfigFamilyClick={onEditConfigFamilyClick}
                 onSelectChange={onSelectChange}
                 onTrendChange={onTrendChange}

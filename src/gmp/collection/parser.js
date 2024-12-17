@@ -4,15 +4,11 @@
  */
 
 import logger from '../log';
-
-import {isArray, isDefined} from '../utils/identity';
-import {map} from '../utils/array';
-
 import Model from '../model';
-
-import Filter from '../models/filter';
-
 import CollectionCounts from './collectioncounts';
+import Filter from '../models/filter';
+import {map} from '../utils/array';
+import {isArray, isDefined} from '../utils/identity';
 
 const log = logger.getLogger('gmp.collection.parser');
 

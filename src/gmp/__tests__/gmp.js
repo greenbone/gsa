@@ -12,9 +12,8 @@ import {
   testing,
 } from '@gsa/testing';
 
-import DefaultTransform from '../http/transform/default';
-
 import Gmp from '../gmp';
+import DefaultTransform from '../http/transform/default';
 
 describe('Gmp tests', () => {
   beforeAll(() => {

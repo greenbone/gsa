@@ -3,59 +3,48 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
+import DownloadIcon from 'web/components/icon/downloadicon';
+import ExportIcon from 'web/components/icon/exporticon';
+import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
 import Divider from 'web/components/layout/divider';
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import DownloadIcon from 'web/components/icon/downloadicon';
-import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import ListIcon from 'web/components/icon/listicon';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData, {TableDataAlignTop} from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import DetailsBlock from 'web/entity/block';
+import {goto_list} from 'web/entity/component';
+import DeleteIcon from 'web/entity/icon/deleteicon';
 import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
-import {goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import DeleteIcon from 'web/entity/icon/deleteicon';
-import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
-
-import {selector, loadEntity} from 'web/store/entities/tlscertificates';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/tlscertificates';
 import PropTypes from 'web/utils/proptypes';
 
-import TlsCertificateDetails from './details';
 import TlsCertificateComponent from './component';
+import TlsCertificateDetails from './details';
 
 const ToolBarIcons = ({
   entity,
@@ -67,22 +56,22 @@ const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="managing-assets"
           anchor="managing-tls-certificates"
+          page="managing-assets"
           title={_('Help: TLS Certificate Assets')}
         />
-        <ListIcon title={_('TLS Certificates List')} page="tlscertificates" />
+        <ListIcon page="tlscertificates" title={_('TLS Certificates List')} />
       </IconDivider>
       <IconDivider>
         <DeleteIcon entity={entity} onClick={onTlsCertificateDeleteClick} />
         <DownloadIcon
-          value={entity}
           title={_('Download TLS Certificate as .pem')}
+          value={entity}
           onClick={onTlsCertificateDownloadClick}
         />
         <ExportIcon
-          value={entity}
           title={_('Export TLS Certificate as XML')}
+          value={entity}
           onClick={onTlsCertificateExportClick}
         />
       </IconDivider>
@@ -208,10 +197,10 @@ const Page = ({
 }) => {
   return (
     <TlsCertificateComponent
-      onDeleted={goto_list('tlscertificates', props)}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={goto_list('tlscertificates', props)}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
     >
       {({delete: delete_func, download, exportFunc}) => (
@@ -219,8 +208,8 @@ const Page = ({
           {...props}
           entity={entity}
           sectionIcon={<TlsCertificateIcon size="large" />}
-          toolBarIcons={ToolBarIcons}
           title={_('TLS Certificate')}
+          toolBarIcons={ToolBarIcons}
           onInteraction={onInteraction}
           onTlsCertificateDeleteClick={delete_func}
           onTlsCertificateDownloadClick={download}
@@ -232,8 +221,8 @@ const Page = ({
                 <PageTitle
                   title={_('TLS Certificate: {{name}}', {name: entity.name})}
                 />
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
                     <TabList
                       active={activeTab}
                       align={['start', 'stretch']}

@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
-
 import {describe, test, expect} from '@gsa/testing';
-
+import {useState} from 'react';
 import {fireEvent, render, screen} from 'web/utils/testing';
 
 import usePreviousValue from '../usePreviousValue';

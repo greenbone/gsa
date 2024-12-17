@@ -4,12 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
-import {rendererWith} from 'web/utils/testing';
-
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {rendererWith} from 'web/utils/testing';
 
 import Status from '../status';
 

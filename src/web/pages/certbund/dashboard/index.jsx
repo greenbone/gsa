@@ -6,7 +6,6 @@
 
 import React from 'react';
 
-import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
   CertBundCreatedDisplay,
@@ -17,6 +16,7 @@ import {
   CertBundSeverityClassDisplay,
   CertBundSeverityClassTableDisplay,
 } from './severityclassdisplay';
+import Dashboard from '../../../components/dashboard/dashboard';
 
 export const CERTBUND_DASHBOARD_ID = 'a6946f44-480f-4f37-8a73-28a4cd5310c4';
 
@@ -32,8 +32,6 @@ export const CERTBUND_DISPLAYS = [
 const CertBundDashboard = props => (
   <Dashboard
     {...props}
-    id={CERTBUND_DASHBOARD_ID}
-    permittedDisplays={CERTBUND_DISPLAYS}
     defaultDisplays={[
       [
         CertBundSeverityClassDisplay.displayId,
@@ -41,6 +39,8 @@ const CertBundDashboard = props => (
         CertBundCvssDisplay.displayId,
       ],
     ]}
+    id={CERTBUND_DASHBOARD_ID}
+    permittedDisplays={CERTBUND_DISPLAYS}
   />
 );
 

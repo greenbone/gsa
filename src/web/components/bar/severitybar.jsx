@@ -3,15 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {parseFloat} from 'gmp/parser';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import {severityFormat} from 'web/utils/render';
 
+import ProgressBar from './progressbar';
 import {
   resultSeverityRiskFactor,
   _NA,
@@ -22,7 +20,6 @@ import {
   LOG_VALUE,
 } from '../../utils/severity';
 
-import ProgressBar from './progressbar';
 
 const SeverityBar = ({severity, toolTip}) => {
   let cvss;
@@ -60,7 +57,7 @@ const SeverityBar = ({severity, toolTip}) => {
   const toolTipText = isDefined(toolTip) ? toolTip : title;
 
   return (
-    <ProgressBar title={toolTipText} progress={fill} background={type} data-testid="severitybar">
+    <ProgressBar background={type} data-testid="severitybar" progress={fill} title={toolTipText}>
       {text}
     </ProgressBar>
   );

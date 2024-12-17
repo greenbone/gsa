@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PropTypes from 'web/utils/proptypes';
 
 import {useSelector} from 'react-redux';
-import StartIcon from 'web/components/icon/starticon';
-import TaskStartIconBase from 'web/pages/tasks/icons/starticon';
 import ResumeIcon from 'web/components/icon/resumeicon';
-import TaskResumeIconBase from 'web/pages/tasks/icons/resumeicon';
+import StartIcon from 'web/components/icon/starticon';
 import useTranslation from 'web/hooks/useTranslation';
+import TaskResumeIconBase from 'web/pages/tasks/icons/resumeicon';
+import TaskStartIconBase from 'web/pages/tasks/icons/starticon';
+import PropTypes from 'web/utils/proptypes';
 
 const TaskIconWithSync = ({type, ...props}) => {
   const [_] = useTranslation();

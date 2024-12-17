@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {parseDate} from 'gmp/parser';
 
 import {License} from '../license';

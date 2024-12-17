@@ -3,11 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {combineReducers} from 'web/store/utils';
-
-import defaults from './defaults/reducers';
-import defaultFilters from './defaultfilters/reducers';
-
 import {
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
   USER_SETTINGS_SET_TIMEZONE,
@@ -16,6 +11,10 @@ import {
   USER_SETTINGS_SET_SESSION_TIMEOUT,
   USER_SETTINGS_SET_LOGGED_IN,
 } from 'web/store/usersettings/actions';
+import {combineReducers} from 'web/store/utils';
+
+import defaultFilters from './defaultfilters/reducers';
+import defaults from './defaults/reducers';
 
 export const reportComposerDefaults = (state = {}, action) => {
   switch (action.type) {

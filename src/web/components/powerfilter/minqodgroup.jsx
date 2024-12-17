@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
 import Spinner from 'web/components/form/spinner';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
   const [_] = useTranslation();
@@ -21,17 +18,17 @@ const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
     qod = filter.get('min_qod');
   }
   return (
-    <FormGroup title={_('QoD')} direction="row">
+    <FormGroup direction="row" title={_('QoD')}>
       <span>{_('must be at least')}</span>
       <Spinner
-        type="int"
-        name={name}
-        min="0"
+        data-testid="min-qod"
         max="100"
+        min="0"
+        name={name}
         step="1"
+        type="int"
         value={qod}
         onChange={onChange}
-        data-testid="min-qod"
       />
       <span>%</span>
     </FormGroup>

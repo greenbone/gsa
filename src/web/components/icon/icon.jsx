@@ -7,10 +7,10 @@ import {useState, useEffect, useRef, useCallback} from 'react';
 import 'whatwg-fetch';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
+import useIconSize from 'web/hooks/useIconSize';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import {get_img_url} from 'web/utils/urls';
-import useIconSize from 'web/hooks/useIconSize';
 
 const Anchor = styled.a`
   display: flex;
@@ -89,17 +89,17 @@ const IconComponent = ({
   return (
     <StyledIcon
       $height={height}
-      $width={width}
       $lineHeight={height}
+      $width={width}
       onClick={isDefined(onClick) ? handleClick : undefined}
       {...other}
     >
       {isDefined(to) ? (
         <Anchor href={to}>
-          <div className={className} ref={svgRef} />
+          <div ref={svgRef} className={className} />
         </Anchor>
       ) : (
-        <div className={className} ref={svgRef} />
+        <div ref={svgRef} className={className} />
       )}
     </StyledIcon>
   );

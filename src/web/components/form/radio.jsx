@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {RadioButton as GreenboneRadio} from '@greenbone/opensight-ui-components-mantinev7';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 import useValueChange from './useValueChange';
@@ -30,11 +28,11 @@ const Radio = ({
   return (
     <GreenboneRadio
       {...props}
-      label={title}
       checked={checked}
+      disabled={disabled}
+      label={title}
       name={name}
       value={value}
-      disabled={disabled}
       onChange={handleChange}
     />
   );

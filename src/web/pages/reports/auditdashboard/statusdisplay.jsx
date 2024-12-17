@@ -5,22 +5,18 @@
 
 
 import {_, _l} from 'gmp/locale/lang';
-
-import {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {getTranslatableReportCompliance} from 'gmp/models/auditreport';
-
-import {registerDisplay} from 'web/components/dashboard/registry';
+import {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataTable from 'web/components/dashboard/display/datatable';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay';  
 import {
   complianceColorScale,
   totalCount,
   percent,
 } from 'web/components/dashboard/display/utils';
-
-import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataTable from 'web/components/dashboard/display/datatable';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-
-import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {ReportCompianceLoader} from './loaders';
 

@@ -4,9 +4,8 @@
  */
 
 import {useSelector, useDispatch} from 'react-redux';
-
-import {getTimezone} from 'web/store/usersettings/selectors';
 import {setTimezone} from 'web/store/usersettings/actions';
+import {getTimezone} from 'web/store/usersettings/selectors';
 
 const useUserTimezone = () => {
   const dispatch = useDispatch();

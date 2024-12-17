@@ -3,27 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
-import registerCommand from 'gmp/command';
-
-import {forEach, map} from 'gmp/utils/array';
-import {isArray, isDefined} from 'gmp/utils/identity';
-import {severityValue} from 'gmp/utils/number';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
+import registerCommand from 'gmp/command';
+import logger from 'gmp/log';
 import moment from 'gmp/models/date';
-
+import Setting from 'gmp/models/setting';
+import Settings from 'gmp/models/settings';
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
 } from 'gmp/models/user';
-import Setting from 'gmp/models/setting';
-import Settings from 'gmp/models/settings';
-
 import {parseInt} from 'gmp/parser';
+import {forEach, map} from 'gmp/utils/array';
+import {isArray, isDefined} from 'gmp/utils/identity';
+import {severityValue} from 'gmp/utils/number';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

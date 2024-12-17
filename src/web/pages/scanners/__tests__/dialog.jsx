@@ -4,15 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-
-import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import {
   changeInputValue,
   getDialog,
@@ -21,8 +17,8 @@ import {
   getSelectElement,
   getTextInputs,
 } from 'web/components/testing';
-
 import ScannerDialog from 'web/pages/scanners/dialog';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 const sensorScanner = {
   _id: '1234',
@@ -95,10 +91,10 @@ describe('ScannerDialog component tests', () => {
 
     render(
       <ScannerDialog
+        credential_id={'5678'}
         credentials={credentials}
         scanner={scanner}
         type={scanner.scannerType}
-        credential_id={'5678'}
         onClose={handleClose}
         onCredentialChange={handleCredentialChange}
         onSave={handleSave}
@@ -135,8 +131,8 @@ describe('ScannerDialog component tests', () => {
     render(
       <ScannerDialog
         comment={scanner.comment}
-        credentials={credentials}
         credential_id={scanner.credential.id}
+        credentials={credentials}
         host={scanner.host}
         name={scanner.name}
         scanner={scanner}
@@ -273,10 +269,10 @@ describe('ScannerDialog component tests', () => {
 
     render(
       <ScannerDialog
-        credentials={credentials}
         credential_id={'5678'}
-        type={scanner.scannerType}
+        credentials={credentials}
         scanner={scanner}
+        type={scanner.scannerType}
         onClose={handleClose}
         onCredentialChange={handleCredentialChange}
         onSave={handleSave}

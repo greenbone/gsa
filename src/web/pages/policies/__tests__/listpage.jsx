@@ -4,22 +4,16 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
-
-import {setUsername} from 'web/store/usersettings/actions';
-
-import {entitiesLoadingActions} from 'web/store/entities/audits';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-
 import {clickElement, testBulkTrashcanDialog} from 'web/components/testing';
+import {entitiesLoadingActions} from 'web/store/entities/audits';
+import {setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 

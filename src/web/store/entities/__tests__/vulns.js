@@ -4,7 +4,6 @@
  */
 
 import {testAll} from '../utils/testing';
-
 import * as funcs from '../vulns';
 
 testAll('vuln', funcs);

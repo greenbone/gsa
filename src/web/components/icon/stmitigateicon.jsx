@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Icon from './svg/st_mitigate.svg';
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/st_mitigate.svg';
 
 const StMitigateIconComponent = withSvgIcon()(Icon);
 

@@ -3,47 +3,36 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import {YES_VALUE} from 'gmp/parser';
-
 import {duration} from 'gmp/models/date';
 import {scannerTypeName} from 'gmp/models/scanner';
-
-import {
-  loadEntity as loadSchedule,
-  selector as scheduleSelector,
-} from 'web/store/entities/schedules';
-
+import {YES_VALUE} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {connect} from 'react-redux';
+import DateTime from 'web/components/date/datetime';
+import HorizontalSep from 'web/components/layout/horizontalsep';
+import Layout from 'web/components/layout/layout';
+import DetailsLink from 'web/components/link/detailslink';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import DetailsTable from 'web/components/table/detailstable';
+import TableRow from 'web/components/table/row';
+import DetailsBlock from 'web/entity/block';
 import {
   loadEntity as loadScanConfig,
   selector as scanConfigSelector,
 } from 'web/store/entities/scanconfigs';
-
-import PropTypes from 'web/utils/proptypes';
+import {
+  loadEntity as loadSchedule,
+  selector as scheduleSelector,
+} from 'web/store/entities/schedules';
 import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
+import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
-
-import DateTime from 'web/components/date/datetime';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
-import Layout from 'web/components/layout/layout';
-
-import DetailsLink from 'web/components/link/detailslink';
-
-import DetailsTable from 'web/components/table/detailstable';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-
-import DetailsBlock from 'web/entity/block';
+import withGmp from 'web/utils/withGmp';
 
 export const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
@@ -107,10 +96,10 @@ class TaskDetails extends React.Component {
     const av_duration = has_av_duration ? average_duration.humanize() : '';
 
     return (
-      <Layout grow="1" flex="column">
+      <Layout flex="column" grow="1">
         {isDefined(target) && (
           <DetailsBlock title={_('Target')}>
-            <DetailsLink textOnly={!links} type="target" id={target.id}>
+            <DetailsLink id={target.id} textOnly={!links} type="target">
               {target.name}
             </DetailsLink>
           </DetailsBlock>
@@ -121,7 +110,7 @@ class TaskDetails extends React.Component {
             <HorizontalSep>
               {alerts.sort(compareAlerts).map(alert => (
                 <span key={alert.id}>
-                  <DetailsLink textOnly={!links} type="alert" id={alert.id}>
+                  <DetailsLink id={alert.id} textOnly={!links} type="alert">
                     {alert.name}
                   </DetailsLink>
                 </span>
@@ -139,9 +128,9 @@ class TaskDetails extends React.Component {
                   <TableData>
                     <span>
                       <DetailsLink
+                        id={scanner.id}
                         textOnly={!links}
                         type="scanner"
-                        id={scanner.id}
                       >
                         {scanner.name}
                       </DetailsLink>
@@ -158,9 +147,9 @@ class TaskDetails extends React.Component {
                     <TableData>
                       <span>
                         <DetailsLink
+                          id={config.id}
                           textOnly={!links}
                           type="scanconfig"
-                          id={config.id}
                         >
                           {config.name}
                         </DetailsLink>
@@ -229,9 +218,9 @@ class TaskDetails extends React.Component {
                   <TableData>
                     <span>
                       <DetailsLink
+                        id={schedule.id}
                         textOnly={!links}
                         type="schedule"
-                        id={schedule.id}
                       >
                         {schedule.name}
                       </DetailsLink>

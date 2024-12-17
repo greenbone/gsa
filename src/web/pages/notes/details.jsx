@@ -3,37 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import HorizontalSep from 'web/components/layout/horizontalsep';
+import Layout from 'web/components/layout/layout';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
+import TableRow from 'web/components/table/row';
+import DetailsBlock from 'web/entity/block';
+import EntityLink from 'web/entity/link';
+import NoteBox from 'web/entity/note';
+import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 import {
   translatedResultSeverityRiskFactor,
   LOG_VALUE,
 } from 'web/utils/severity';
 
-import HorizontalSep from 'web/components/layout/horizontalsep';
-import Layout from 'web/components/layout/layout';
-
-import InfoTable from 'web/components/table/infotable';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-
-import EntityLink from 'web/entity/link';
-
-import DetailsBlock from 'web/entity/block';
-import NoteBox from 'web/entity/note';
-
-import {Col} from 'web/entity/page';
-
 const NoteDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;
   return (
-    <Layout grow="1" flex="column">
+    <Layout flex="column" grow="1">
       <DetailsBlock title={_('Application')}>
         <InfoTable size="full">
           <colgroup>
@@ -110,7 +103,7 @@ const NoteDetails = ({entity}) => {
           entity.isActive() ? _('Appearance') : _('Appearance when active')
         }
       >
-        <NoteBox note={entity} detailsLink={false} />
+        <NoteBox detailsLink={false} note={entity} />
       </DetailsBlock>
     </Layout>
   );

@@ -5,13 +5,13 @@
 
 
 import React from 'react';
+import PropTypes from 'web/utils/proptypes';
+import {makeCompareNumber, makeCompareString} from 'web/utils/sort';
 
 import OperatingSystemsTable from './operatingsystemstable';
 import ReportEntitiesContainer from './reportentitiescontainer';
 
-import PropTypes from 'web/utils/proptypes';
 
-import {makeCompareNumber, makeCompareString} from 'web/utils/sort';
 
 const operatingssystemsSortFunctions = {
   name: makeCompareString('name'),
@@ -36,8 +36,8 @@ const OperatingSystemsTab = ({
     counts={counts}
     entities={operatingsystems}
     filter={filter}
-    sortFunctions={operatingssystemsSortFunctions}
     sortField={sortField}
+    sortFunctions={operatingssystemsSortFunctions}
     sortReverse={sortReverse}
     onInteraction={onInteraction}
   >

@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import moment from 'gmp/models/date';
 
 import {

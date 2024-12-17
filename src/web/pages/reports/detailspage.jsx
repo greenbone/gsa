@@ -4,84 +4,67 @@
  */
 
 
-import React from 'react';
 
-import {connect} from 'react-redux';
-import {withRouter} from 'web/utils/withRouter';
 
 import _ from 'gmp/locale';
-
 import logger from 'gmp/log';
-
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
-
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import withDownload from 'web/components/form/withDownload';
-
+import PageTitle from 'web/components/layout/pagetitle';
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
-
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';  
 import FilterProvider from 'web/entities/filterprovider';
-
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
-
 import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
 } from 'web/store/entities/filters';
-
+import {loadReportWithThreshold} from 'web/store/entities/report/actions';
+import {reportSelector} from 'web/store/entities/report/selectors';
 import {
   loadAllEntities as loadReportConfigs,
   selector as reportConfigsSelector,
 } from 'web/store/entities/reportconfigs';
-
 import {
   loadAllEntities as loadReportFormats,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
-
-import {loadReportWithThreshold} from 'web/store/entities/report/actions';
-import {reportSelector} from 'web/store/entities/report/selectors';
-
+import {pageFilter as setPageFilter} from 'web/store/pages/actions';
+import getPage from 'web/store/pages/selectors';
 import {
   loadReportComposerDefaults,
   renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
-
+import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
-
 import {
   getReportComposerDefaults,
   getUsername,
 } from 'web/store/usersettings/selectors';
-
 import {create_pem_certificate} from 'web/utils/cert';
 import compose from 'web/utils/compose';
-import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
+import {generateFilename} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
-
-import TargetComponent from '../targets/component';
-import PageTitle from 'web/components/layout/pagetitle';
+import {withRouter} from 'web/utils/withRouter';
 
 import Page from './detailscontent';
 import ReportDetailsFilterDialog from './detailsfilterdialog';
-import {pageFilter as setPageFilter} from 'web/store/pages/actions';
-import getPage from 'web/store/pages/selectors';
+import TargetComponent from '../targets/component';
 
 const log = logger.getLogger('web.pages.report.detailspage');
 
@@ -595,8 +578,8 @@ class ReportDetails extends React.Component {
             <Page
               activeTab={activeTab}
               applicationsCounts={applicationsCounts}
-              cvesCounts={cvesCounts}
               closedCvesCounts={closedCvesCounts}
+              cvesCounts={cvesCounts}
               entity={entity}
               errorsCounts={errorsCounts}
               filters={filters}
@@ -612,6 +595,9 @@ class ReportDetails extends React.Component {
               reportId={reportId}
               resetFilter={REPORT_RESET_FILTER}
               resultsCounts={resultsCounts}
+              showError={showError}
+              showErrorMessage={showErrorMessage}
+              showSuccessMessage={showSuccessMessage}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
               tlsCertificatesCounts={tlsCertificatesCounts}
@@ -619,13 +605,13 @@ class ReportDetails extends React.Component {
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}
               onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
-              onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
               onFilterChanged={this.handleFilterChange}
               onFilterCreated={this.handleFilterCreated}
+              onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
               onFilterEditClick={this.handleFilterEditClick}
+              onFilterRemoveClick={this.handleFilterRemoveClick}
               onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
               onFilterResetClick={this.handleFilterResetClick}
-              onFilterRemoveClick={this.handleFilterRemoveClick}
               onInteraction={onInteraction}
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
               onReportDownloadClick={this.handleOpenDownloadReportDialog}
@@ -635,18 +621,15 @@ class ReportDetails extends React.Component {
                 this.loadTarget().then(response => edit(response.data))
               }
               onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
-              showError={showError}
-              showErrorMessage={showErrorMessage}
-              showSuccessMessage={showSuccessMessage}
             />
           )}
         </TargetComponent>
         {showFilterDialog && (
           <ReportDetailsFilterDialog
-            filter={reportFilter}
             delta={false}
-            onFilterChanged={this.handleFilterChange}
+            filter={reportFilter}
             onClose={this.handleFilterDialogClose}
+            onFilterChanged={this.handleFilterChange}
             onFilterCreated={this.handleFilterCreated}
           />
         )}
@@ -714,7 +697,7 @@ const load =
   ({
     defaultFilter,
     reportId,
-    // eslint-disable-next-line no-shadow
+     
     loadReportWithThreshold,
     pageFilter,
     reportFilter,
@@ -753,8 +736,8 @@ const ReportDetailsWrapper = ({reportFilter, ...props}) => (
   >
     {({filter}) => (
       <Reload
-        name={`report-${props.reportId}`}
         load={load({...props, defaultFilter: filter})}
+        name={`report-${props.reportId}`}
         reload={load({...props, defaultFilter: filter, reportFilter})}
         reloadInterval={() => reloadInterval(props.entity)}
       >
@@ -762,8 +745,8 @@ const ReportDetailsWrapper = ({reportFilter, ...props}) => (
           <ReportDetails
             {...props}
             defaultFilter={filter}
-            reportFilter={reportFilter}
             reload={reload}
+            reportFilter={reportFilter}
           />
         )}
       </Reload>

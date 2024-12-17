@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import TlsCertificate from 'gmp/models/tlscertificate';
 
 import EntitiesCommand from './entities';

@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {createState, createRootState} from 'web/store/entities/utils/testing';
 
 import {

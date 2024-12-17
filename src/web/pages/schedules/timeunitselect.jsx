@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {ReccurenceFrequency} from 'gmp/models/event';
-
+import React from 'react';
 import Select from 'web/components/form/select';
-
 import useTranslation from 'web/hooks/useTranslation';
 
 const TimeUnitSelect = props => {

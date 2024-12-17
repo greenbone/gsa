@@ -4,29 +4,24 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import Checkbox from 'web/components/form/checkbox';
-
-import FilterDialog from 'web/components/powerfilter/filterdialog';
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import ComplianceLevelsFilterGroup from 'web/components/powerfilter/compliancelevelsgroup';
+import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
-import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
-import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
-import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
-
+import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
-
-import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import DeltaResultsFilterGroup from './deltaresultsfiltergroup';
 
@@ -70,8 +65,8 @@ const ReportDetailsFilterDialog = ({
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
-        name="filterstring"
         filter={filterString}
+        name="filterstring"
         onChange={onFilterStringChange}
       />
 
@@ -84,32 +79,32 @@ const ReportDetailsFilterDialog = ({
 
       {!audit && (
         <BooleanFilterGroup
+          filter={filter}
           name="apply_overrides"
           title={_('Apply Overrides')}
-          filter={filter}
           onChange={onFilterValueChange}
         />
       )}
 
       <Checkbox
-        title={_('Only show hosts that have results')}
-        name="result_hosts_only"
-        checkedValue={1}
-        unCheckedValue={0}
         checked={resultHostsOnly === 1}
+        checkedValue={1}
+        name="result_hosts_only"
+        title={_('Only show hosts that have results')}
+        unCheckedValue={0}
         onChange={onFilterValueChange}
       />
 
       <MinQodGroup
-        name="min_qod"
         filter={filter}
+        name="min_qod"
         onChange={onFilterValueChange}
       />
 
       {audit ? (
         <ComplianceLevelsFilterGroup
-          isResult={true}
           filter={filter}
+          isResult={true}
           onChange={onFilterValueChange}
           onRemove={handleRemoveCompliance}
         />
@@ -123,9 +118,9 @@ const ReportDetailsFilterDialog = ({
 
       {!audit && (
         <SeverityValuesGroup
+          filter={filter}
           name="severity"
           title={_('Severity')}
-          filter={filter}
           onChange={onFilterValueChange}
         />
       )}
@@ -133,22 +128,22 @@ const ReportDetailsFilterDialog = ({
       <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
 
       <FilterSearchGroup
-        name="vulnerability"
         filter={filter}
+        name="vulnerability"
         title={_('Vulnerability')}
         onChange={onSearchTermChange}
       />
 
       <FilterSearchGroup
-        name="host"
         filter={filter}
+        name="host"
         title={_('Host (IP)')}
         onChange={onSearchTermChange}
       />
 
       <FilterSearchGroup
-        name="location"
         filter={filter}
+        name="location"
         title={_('Location (eg. port/protocol)')}
         onChange={onSearchTermChange}
       />

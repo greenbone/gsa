@@ -4,11 +4,9 @@
  */
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 import FilterDialog from './filterdialog';
-
 import useFilterDialog from './useFilterDialog';
 import useFilterDialogSave from './useFilterDialogSave';
 

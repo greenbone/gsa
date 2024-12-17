@@ -4,7 +4,6 @@
  */
 
 import {setLocale} from 'gmp/locale/lang';
-
 import Report from 'gmp/models/report';
 
 import {host1, host2} from './mockreport';

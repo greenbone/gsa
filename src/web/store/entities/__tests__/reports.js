@@ -10,9 +10,8 @@ import {
   testReducerForEntity,
 } from 'web/store/entities/utils/testing';
 
-import {entitiesActions, loadEntities, reducer, deltaReducer} from '../reports';
-
 import {deltaReportActions} from '../report/actions';
+import {entitiesActions, loadEntities, reducer, deltaReducer} from '../reports';
 
 testEntitiesActions('report', entitiesActions);
 testLoadEntities('report', loadEntities);

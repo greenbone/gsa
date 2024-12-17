@@ -4,11 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {isFunction} from 'gmp/utils/identity';
 
 import {getLocale as getDateLocale} from '../date';
-
 import {_, setLocale, getLocale, onLanguageChange, _l} from '../lang';
 
 describe('setLocale tests', () => {

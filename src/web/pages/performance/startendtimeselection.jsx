@@ -3,19 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useEffect} from 'react';
 
+
+
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {useState, useEffect} from 'react';
 import Button from 'web/components/form/button';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/formgroup';
-import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
-
 import Column from 'web/components/layout/column';
 import Row from 'web/components/layout/row';
+import PropTypes from 'web/utils/proptypes';
 import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
 const StartTimeSelection = props => {
@@ -71,12 +70,12 @@ const StartTimeSelection = props => {
       </FormGroup>
       <FormGroup direction="row">
         <DatePicker
-          value={startDate}
-          name="startDate"
-          onChange={setStartDate}
           label={_('Start Date')}
           maxDate={endDate}
           minDate={false}
+          name="startDate"
+          value={startDate}
+          onChange={setStartDate}
         />
         <TimePicker
           label={_('Start Time')}
@@ -88,11 +87,11 @@ const StartTimeSelection = props => {
 
       <FormGroup direction="row">
         <DatePicker
-          value={endDate}
-          name="endDate"
-          minDate={false}
-          onChange={setEndDate}
           label={_('End Date')}
+          minDate={false}
+          name="endDate"
+          value={endDate}
+          onChange={setEndDate}
         />
         <TimePicker
           label={_('End Time')}
@@ -104,10 +103,10 @@ const StartTimeSelection = props => {
 
       <Row>
         <Button
+          data-testid="update-button"
           disabled={
             startDate.isSameOrAfter(endDate) || startDate.isSame(endDate)
           }
-          data-testid="update-button"
           onClick={handleUpdate}
         >
           {_('Update')}

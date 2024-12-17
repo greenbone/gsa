@@ -5,9 +5,7 @@
 
 
 import styled from 'styled-components';
-
 import Layout from 'web/components/layout/layout';
-
 import Theme from 'web/utils/theme';
 
 const FootNote = styled(Layout)`

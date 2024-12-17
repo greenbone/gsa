@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 import path from '../utils/path';
@@ -13,8 +12,8 @@ const PI2 = 2 * Math.PI;
 
 export const PieTopPath = ({
   color,
-  path, // eslint-disable-line no-shadow
-}) => <path fill={color} stroke={color} d={path} />;
+  path,  
+}) => <path d={path} fill={color} stroke={color} />;
 
 PieTopPath.propTypes = {
   color: PropTypes.toString.isRequired,
@@ -102,6 +101,7 @@ export const PieOuterPath = React.forwardRef(
     ref,
   ) => (
     <path
+      ref={ref}
       d={pieOuterPath(
         startAngle,
         endAngle,
@@ -109,7 +109,6 @@ export const PieOuterPath = React.forwardRef(
         outerRadiusY,
         donutHeight,
       )}
-      ref={ref}
       fill={color}
     />
   ),

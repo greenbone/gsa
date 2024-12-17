@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {parseInt, parseDate} from 'gmp/parser';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-import {parseInt, parseDate} from 'gmp/parser';
 
 const transformCreated = (data = {}) => {
   const {groups = []} = data;

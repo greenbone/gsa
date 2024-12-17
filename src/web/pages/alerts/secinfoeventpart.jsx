@@ -3,19 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {EVENT_TYPE_NEW_SECINFO, isSecinfoEvent} from 'gmp/models/alert';
-
-import Row from 'web/components/layout/row';
-
-import Select from 'web/components/form/select';
+import React from 'react';
 import Radio from 'web/components/form/radio';
-
+import Select from 'web/components/form/select';
+import Row from 'web/components/layout/row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const SecinfoEventPart = ({
   event,
@@ -29,14 +24,14 @@ const SecinfoEventPart = ({
   return (
     <Row>
       <Radio
+        checked={event === EVENT_TYPE_NEW_SECINFO}
         name="event"
         value={EVENT_TYPE_NEW_SECINFO}
-        checked={event === EVENT_TYPE_NEW_SECINFO}
         onChange={onEventChange}
       />
       <Select
-        grow="1"
         disabled={!isSecinfoEvent(event)}
+        grow="1"
         items={[
           {
             value: 'new',
@@ -47,13 +42,13 @@ const SecinfoEventPart = ({
             label: _('Updated'),
           },
         ]}
-        value={feedEvent}
         name={prefix + 'feed_event'}
+        value={feedEvent}
         onChange={onChange}
       />
       <Select
-        grow="1"
         disabled={!isSecinfoEvent(event)}
+        grow="1"
         items={[
           {
             value: 'nvt',
@@ -76,8 +71,8 @@ const SecinfoEventPart = ({
             label: _('DFN-CERT Advisories'),
           },
         ]}
-        value={secinfoType}
         name={prefix + 'secinfo_type'}
+        value={secinfoType}
         onChange={onChange}
       />
     </Row>

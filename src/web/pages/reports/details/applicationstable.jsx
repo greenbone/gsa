@@ -3,58 +3,52 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
+import CpeIcon from 'web/components/icon/cpeicon';
 import IconDivider from 'web/components/layout/icondivider';
-
 import DetailsLink from 'web/components/link/detailslink';
-
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
 import {createEntitiesTable} from 'web/entities/table';
-import CpeIcon from 'web/components/icon/cpeicon';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}
           title={_('Application CPE')}
+          onSortChange={onSortChange}
         />
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'hosts' : false}
-          onSortChange={onSortChange}
           title={_('Hosts')}
-        />
-        <TableHead
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'occurrences' : false}
           onSortChange={onSortChange}
-          title={_('Occurrences')}
         />
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'occurrences' : false}
+          title={_('Occurrences')}
+          onSortChange={onSortChange}
+        />
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'severity' : false}
+          title={_('Severity')}
           width="10%"
           onSortChange={onSortChange}
-          title={_('Severity')}
         />
       </TableRow>
     </TableHeader>
@@ -75,7 +69,7 @@ const Row = ({entity, links = true, onToggleDetailsClick, ...props}) => {
     <TableRow>
       <TableData>
         <span>
-          <DetailsLink type="cpe" id={name} textOnly={!links}>
+          <DetailsLink id={name} textOnly={!links} type="cpe">
             <IconDivider>
               <CpeIcon name={name} />
               <span>{name}</span>

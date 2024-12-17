@@ -4,13 +4,9 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import Layout from 'web/components/layout/layout';
-
 import Tab from 'web/components/tab/tab';
-
 import PropTypes from 'web/utils/proptypes';
 
 const TabTitleCounts = styled.span`
@@ -24,7 +20,7 @@ const EntitiesTab = ({
   ...props
 }) => (
   <Tab {...props}>
-    <Layout flex="column" align={['center', 'center']}>
+    <Layout align={['center', 'center']} flex="column">
       <span>{children}</span>
       <TabTitleCounts>
         (<i>{count}</i>)

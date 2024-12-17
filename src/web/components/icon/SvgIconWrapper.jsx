@@ -4,6 +4,7 @@
  */
 
 import PropTypes from 'web/utils/proptypes';
+
 import SvgIcon from './svgicon';
 
 const SvgIconWrapper = ({component: Component, size, ...props}) => (

@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
+ 
+ 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Target from 'gmp/models/target';
-
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import Row from '../row';
@@ -193,11 +189,11 @@ describe('Target row tests', () => {
     const {baseElement} = render(
       <Row
         entity={target_no_elevate}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -246,11 +242,11 @@ describe('Target row tests', () => {
     const {baseElement} = render(
       <Row
         entity={target_elevate}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -296,11 +292,11 @@ describe('Target row tests', () => {
     const {baseElement} = render(
       <Row
         entity={target_no_portlist}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -333,11 +329,11 @@ describe('Target row tests', () => {
     const {baseElement} = render(
       <Row
         entity={target_no_elevate}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 

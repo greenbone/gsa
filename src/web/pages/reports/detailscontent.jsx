@@ -4,51 +4,36 @@
  */
 
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {TASK_STATUS} from 'gmp/models/task';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
-
 import DateTime from 'web/components/date/datetime';
-
 import ErrorPanel from 'web/components/error/errorpanel';
-
 import ReportIcon from 'web/components/icon/reporticon';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
 import Loading from 'web/components/loading/loading';
-
 import Powerfilter from 'web/components/powerfilter/powerfilter';
-
+import SectionHeader from 'web/components/section/header';
+import Section from 'web/components/section/section';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import Section from 'web/components/section/section';
-import SectionHeader from 'web/components/section/header';
-
 import EntityInfo from 'web/entity/info';
 import EntityTags from 'web/entity/tags';
-
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import ApplicationsTab from './details/applicationstab';
-import CvesTab from './details/cvestab';
 import ClosedCvesTab from './details/closedcvestab';
+import CvesTab from './details/cvestab';
 import ErrorsTab from './details/errorstab';
 import HostsTab from './details/hoststab';
 import OperatingSystemsTab from './details/operatingsystemstab';
@@ -134,8 +119,8 @@ const PageContent = ({
   if (!hasReport && isDefined(reportError)) {
     return (
       <ErrorPanel
-        message={_('Error while loading Report {{reportId}}', {reportId})}
         error={reportError}
+        message={_('Error while loading Report {{reportId}}', {reportId})}
       />
     );
   }
@@ -166,7 +151,7 @@ const PageContent = ({
         <Divider>
           <DateTime date={timestamp} />
           <Span>
-            <StatusBar status={status} progress={progress} />
+            <StatusBar progress={progress} status={status} />
           </Span>
         </Divider>
       )}
@@ -180,7 +165,7 @@ const PageContent = ({
   );
 
   return (
-    <Layout grow flex="column" align={['start', 'stretch']}>
+    <Layout grow align={['start', 'stretch']} flex="column">
       <ToolBar>
         <ToolBarIcons
           delta={false}
@@ -189,8 +174,8 @@ const PageContent = ({
           report={hasReport ? report : undefined}
           reportId={reportId}
           showError={showError}
-          showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
+          showSuccessMessage={showSuccessMessage}
           showThresholdMessage={showThresholdMessage}
           task={task}
           threshold={threshold}
@@ -201,9 +186,6 @@ const PageContent = ({
         />
         <Layout align="end">
           <Powerfilter
-            createFilterType="result"
-            // use loaded filter from report if available otherwise already show the requested filter
-            filter={isDefined(reportFilter) ? reportFilter : pageFilter}
             filters={filters}
             isLoading={isLoading || isUpdating}
             isLoadingFilters={isLoadingFilters}
@@ -211,9 +193,12 @@ const PageContent = ({
             onEditClick={onFilterEditClick}
             onError={onError}
             onFilterCreated={onFilterCreated}
-            onResetClick={onFilterResetClick}
             onRemoveClick={onFilterRemoveClick}
+            onResetClick={onFilterResetClick}
             onUpdate={onFilterChanged}
+            createFilterType="result"
+            // use loaded filter from report if available otherwise already show the requested filter
+            filter={isDefined(reportFilter) ? reportFilter : pageFilter}
           />
         </Layout>
       </ToolBar>
@@ -223,7 +208,7 @@ const PageContent = ({
           <Loading />
         ) : (
           <React.Fragment>
-            <TabLayout grow="1" align={['start', 'end']}>
+            <TabLayout align={['start', 'end']} grow="1">
               <TabList
                 active={activeTab}
                 align={['start', 'stretch']}
@@ -231,46 +216,46 @@ const PageContent = ({
               >
                 <Tab>{_('Information')}</Tab>
                 <Tab>
-                  <TabTitle title={_('Results')} counts={resultsCounts} />
+                  <TabTitle counts={resultsCounts} title={_('Results')} />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('Hosts')} counts={hostsCounts} />
+                  <TabTitle counts={hostsCounts} title={_('Hosts')} />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('Ports')} counts={portsCounts} />
+                  <TabTitle counts={portsCounts} title={_('Ports')} />
                 </Tab>
                 <Tab>
                   <TabTitle
-                    title={_('Applications')}
                     counts={applicationsCounts}
+                    title={_('Applications')}
                   />
                 </Tab>
                 <Tab>
                   <TabTitle
-                    title={_('Operating Systems')}
                     counts={operatingSystemsCounts}
+                    title={_('Operating Systems')}
                   />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('CVEs')} counts={cvesCounts} />
+                  <TabTitle counts={cvesCounts} title={_('CVEs')} />
                 </Tab>
                 <Tab>
                   <TabTitle
-                    title={_('Closed CVEs')}
                     counts={closedCvesCounts}
+                    title={_('Closed CVEs')}
                   />
                 </Tab>
                 <Tab>
                   <TabTitle
-                    title={_('TLS Certificates')}
                     counts={tlsCertificatesCounts}
+                    title={_('TLS Certificates')}
                   />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('Error Messages')} counts={errorsCounts} />
+                  <TabTitle counts={errorsCounts} title={_('Error Messages')} />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('User Tags')} count={userTagsCount} />
+                  <TabTitle count={userTagsCount} title={_('User Tags')} />
                 </Tab>
               </TabList>
             </TabLayout>
@@ -281,30 +266,30 @@ const PageContent = ({
                   <TabPanel>
                     <Summary
                       filter={reportFilter}
+                      isUpdating={isUpdating}
                       report={report}
                       reportError={reportError}
                       reportId={reportId}
-                      isUpdating={isUpdating}
                       onError={onError}
                       onTagChanged={onTagSuccess}
                     />
                   </TabPanel>
                   <TabPanel>
                     <ResultsTab
-                      status={status}
-                      progress={progress}
                       hasTarget={!isContainer}
+                      progress={progress}
                       reportFilter={reportFilter}
                       reportId={reportId}
-                      results={results.entities}
                       reportResultsCounts={resultsCounts}
+                      results={results.entities}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
+                      status={status}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-                      onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                       onFilterEditClick={onFilterEditClick}
                       onFilterRemoveClick={onFilterRemoveClick}
+                      onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                       onInteraction={onInteraction}
                       onSortChange={sortField =>
                         onSortChange('results', sortField)
@@ -321,8 +306,8 @@ const PageContent = ({
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
-                        onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
+                        onFilterEditClick={onFilterEditClick}
                       />
                     ) : (
                       <HostsTab
@@ -348,8 +333,8 @@ const PageContent = ({
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
-                        onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
+                        onFilterEditClick={onFilterEditClick}
                       />
                     ) : (
                       <PortsTab
@@ -375,13 +360,13 @@ const PageContent = ({
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
-                        onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
+                        onFilterEditClick={onFilterEditClick}
                       />
                     ) : (
                       <ApplicationsTab
-                        counts={applications.counts}
                         applications={applications.entities}
+                        counts={applications.counts}
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.apps.sortField}
@@ -402,17 +387,17 @@ const PageContent = ({
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
-                        onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
+                        onFilterEditClick={onFilterEditClick}
                       />
                     ) : (
                       <OperatingSystemsTab
                         counts={operatingsystems.counts}
-                        operatingsystems={operatingsystems.entities}
                         filter={reportFilter}
+                        isUpdating={isUpdating}
+                        operatingsystems={operatingsystems.entities}
                         sortField={sorting.os.sortField}
                         sortReverse={sorting.os.sortReverse}
-                        isUpdating={isUpdating}
                         onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('os', sortField)
@@ -429,8 +414,8 @@ const PageContent = ({
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
-                        onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
+                        onFilterEditClick={onFilterEditClick}
                       />
                     ) : (
                       <CvesTab
@@ -454,15 +439,15 @@ const PageContent = ({
                       <ThresholdPanel
                         entityType={_('Closed CVEs')}
                         filter={reportFilter}
-                        threshold={threshold}
                         isUpdating={isUpdating}
-                        onFilterEditClick={onFilterEditClick}
+                        threshold={threshold}
                         onFilterChanged={onFilterChanged}
+                        onFilterEditClick={onFilterEditClick}
                       />
                     ) : (
                       <ClosedCvesTab
-                        counts={closedCves.counts}
                         closedCves={closedCves.entities}
+                        counts={closedCves.counts}
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.closedcves.sortField}
@@ -483,17 +468,17 @@ const PageContent = ({
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
-                        onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
+                        onFilterEditClick={onFilterEditClick}
                       />
                     ) : (
                       <TLSCertificatesTab
                         counts={tlsCertificates.counts}
-                        tlsCertificates={tlsCertificates.entities}
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.tlscerts.sortField}
                         sortReverse={sorting.tlscerts.sortReverse}
+                        tlsCertificates={tlsCertificates.entities}
                         onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('tlscerts', sortField)

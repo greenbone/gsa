@@ -3,30 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useState} from 'react';
-
-import styled from 'styled-components';
-
-import {connect} from 'react-redux';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import {SYSTEM_DEFAULT} from 'gmp/locale/date';
-
+import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import React, {useCallback, useState} from 'react';
+import {connect} from 'react-redux';
+import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/savedialog';
-
-import Section from 'web/components/section/section';
-import Column from 'web/components/layout/column';
-
-import useFormValues from 'web/components/form/useFormValues';
 import useFormValidation from 'web/components/form/useFormValidation';
-
-import PropTypes from 'web/utils/proptypes';
-
-import useTranslation from 'web/hooks/useTranslation';
+import useFormValues from 'web/components/form/useFormValues';
+import Column from 'web/components/layout/column';
+import Section from 'web/components/section/section';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import DefaultsPart from './defaultspart';
 import FilterPart from './filterpart';
@@ -191,90 +181,96 @@ const UserSettingsDialogComponent = ({
     <SaveDialog
       error={error}
       title={_('Edit User Settings')}
+      values={formValues}
       onClose={onClose}
       onErrorClose={() => setError()}
       onSave={validate}
-      values={formValues}
     >
       {({values}) => (
         <React.Fragment>
-          <Section title={_('General Settings')} foldable>
+          <Section foldable title={_('General Settings')}>
             <FormGroupSizer>
               <GeneralPart
-                timezone={values.timezone}
-                userInterfaceTimeFormat={values.userInterfaceTimeFormat}
-                userInterfaceDateFormat={values.userInterfaceDateFormat}
+                autoCacheRebuild={values.autoCacheRebuild}
+                confPassword={values.confPassword}
+                detailsExportFileName={values.detailsExportFileName}
+                errors={errors}
                 isUserInterfaceTimeDateDefault={
                   values.isUserInterfaceTimeDateDefault
                 }
-                oldPassword={values.oldPassword}
-                newPassword={values.newPassword}
-                confPassword={values.confPassword}
-                userInterfaceLanguage={values.userInterfaceLanguage}
-                rowsPerPage={values.rowsPerPage}
-                maxRowsPerPage={values.maxRowsPerPage}
-                detailsExportFileName={values.detailsExportFileName}
                 listExportFileName={values.listExportFileName}
+                maxRowsPerPage={values.maxRowsPerPage}
+                newPassword={values.newPassword}
+                oldPassword={values.oldPassword}
                 reportExportFileName={values.reportExportFileName}
-                autoCacheRebuild={values.autoCacheRebuild}
-                errors={errors}
+                rowsPerPage={values.rowsPerPage}
                 shouldWarn={hasError}
+                timezone={values.timezone}
+                userInterfaceDateFormat={values.userInterfaceDateFormat}
+                userInterfaceLanguage={values.userInterfaceLanguage}
+                userInterfaceTimeFormat={values.userInterfaceTimeFormat}
                 onChange={handleValueChange}
               />
             </FormGroupSizer>
           </Section>
-          <Section title={_('Severity Settings')} foldable>
+          <Section foldable title={_('Severity Settings')}>
             <FormGroupSizer>
               <SeverityPart
-                dynamicSeverity={values.dynamicSeverity}
                 defaultSeverity={values.defaultSeverity}
+                dynamicSeverity={values.dynamicSeverity}
                 severityClass={values.severityClass}
                 onChange={handleValueChange}
               />
             </FormGroupSizer>
           </Section>
-          <Section title={_('Defaults Settings')} foldable>
+          <Section foldable title={_('Defaults Settings')}>
             <FormGroupSizer>
               <DefaultsPart
                 alerts={alerts}
                 credentials={credentials}
-                openVasScanConfigs={openVasScanConfigs}
-                openVasScanners={openVasScanners}
-                portLists={portLists}
-                schedules={schedules}
-                targets={targets}
                 defaultAlert={values.defaultAlert}
                 defaultEsxiCredential={values.defaultEsxiCredential}
                 defaultOpenvasScanConfig={values.defaultOpenvasScanConfig}
                 defaultOpenvasScanner={values.defaultOpenvasScanner}
                 defaultPortList={values.defaultPortList}
+                defaultSchedule={values.defaultSchedule}
                 defaultSmbCredential={values.defaultSmbCredential}
                 defaultSnmpCredential={values.defaultSnmpCredential}
                 defaultSshCredential={values.defaultSshCredential}
-                defaultSchedule={values.defaultSchedule}
                 defaultTarget={values.defaultTarget}
+                openVasScanConfigs={openVasScanConfigs}
+                openVasScanners={openVasScanners}
+                portLists={portLists}
+                schedules={schedules}
+                targets={targets}
                 onChange={handleValueChange}
               />
             </FormGroupSizer>
           </Section>
           {capabilities.mayAccess('filter') && (
-            <Section title={_('Filter Settings')} foldable>
+            <Section foldable title={_('Filter Settings')}>
               <FormGroupSizer>
                 <FilterPart
                   alertsFilter={values.alertsFilter}
                   auditReportsFilter={values.auditReportsFilter}
+                  certBundFilter={values.certBundFilter}
                   configsFilter={values.configsFilter}
+                  cpeFilter={values.cpeFilter}
                   credentialsFilter={values.credentialsFilter}
+                  cveFilter={values.cveFilter}
+                  dfnCertFilter={values.dfnCertFilter}
+                  filters={filters}
                   filtersFilter={values.filtersFilter}
                   groupsFilter={values.groupsFilter}
                   hostsFilter={values.hostsFilter}
                   notesFilter={values.notesFilter}
+                  nvtFilter={values.nvtFilter}
                   operatingSystemsFilter={values.operatingSystemsFilter}
                   overridesFilter={values.overridesFilter}
                   permissionsFilter={values.permissionsFilter}
                   portListsFilter={values.portListsFilter}
-                  reportsFilter={values.reportsFilter}
                   reportFormatsFilter={values.reportFormatsFilter}
+                  reportsFilter={values.reportsFilter}
                   resultsFilter={values.resultsFilter}
                   rolesFilter={values.rolesFilter}
                   scannersFilter={values.scannersFilter}
@@ -286,12 +282,6 @@ const UserSettingsDialogComponent = ({
                   tlsCertificatesFilter={values.tlsCertificatesFilter}
                   usersFilter={values.usersFilter}
                   vulnerabilitiesFilter={values.vulnerabilitiesFilter}
-                  cpeFilter={values.cpeFilter}
-                  cveFilter={values.cveFilter}
-                  nvtFilter={values.nvtFilter}
-                  certBundFilter={values.certBundFilter}
-                  dfnCertFilter={values.dfnCertFilter}
-                  filters={filters}
                   onChange={handleValueChange}
                 />
               </FormGroupSizer>

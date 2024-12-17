@@ -4,12 +4,9 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const FilterDialog = ({children, onClose, onSave}) => {
   const [_] = useTranslation();

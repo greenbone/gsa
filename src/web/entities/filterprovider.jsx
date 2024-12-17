@@ -4,11 +4,9 @@
  */
 
 import React from 'react';
-
 import Loading from 'web/components/loading/loading';
-
-import PropTypes from 'web/utils/proptypes';
 import usePageFilter from 'web/hooks/usePageFilter';
+import PropTypes from 'web/utils/proptypes';
 
 const FilterProvider = ({
   children,

@@ -4,11 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
-import {render} from 'web/utils/testing';
-
 import {
   clickElement,
   getElementOrDocument,
@@ -16,6 +12,7 @@ import {
   getSelectItemElements,
   openSelectElement,
 } from 'web/components/testing';
+import {render} from 'web/utils/testing';
 
 import TicketStatusGroup from '../ticketstatusgroup';
 

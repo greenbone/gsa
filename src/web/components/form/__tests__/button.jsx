@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent, screen} from 'web/utils/testing';
 
 import Button from '../button';
@@ -25,7 +24,7 @@ describe('Button tests', () => {
   test('should call click handler with value', () => {
     const handler = testing.fn();
 
-    render(<Button onClick={handler} value="bar" />);
+    render(<Button value="bar" onClick={handler} />);
 
     const element = screen.getByRole('button');
 
@@ -73,7 +72,7 @@ describe('Button tests', () => {
   test('should not call click handler when disabled', () => {
     const handler = testing.fn();
 
-    render(<Button name="foo" value="bar" disabled={true} onClick={handler} />);
+    render(<Button disabled={true} name="foo" value="bar" onClick={handler} />);
 
     const element = screen.getByRole('button');
 

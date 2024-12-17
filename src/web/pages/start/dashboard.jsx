@@ -4,31 +4,28 @@
  */
 
 import React from 'react';
-
+import {DashboardControls} from 'web/components/dashboard/controls';
+import {Dashboard} from 'web/components/dashboard/dashboard';
+import {canAddDisplay} from 'web/components/dashboard/utils';
+import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 
-import {Dashboard} from 'web/components/dashboard/dashboard';
-import {DashboardControls} from 'web/components/dashboard/controls';
-import {canAddDisplay} from 'web/components/dashboard/utils';
-
-import Layout from 'web/components/layout/layout';
-
-import {TASKS_DISPLAYS} from '../tasks/dashboard';
+import {DEFAULT_DISPLAYS} from './newdashboarddialog';
+import {CERTBUND_DISPLAYS} from '../certbund/dashboard';
+import {CPES_DISPLAYS} from '../cpes/dashboard';
+import {CVES_DISPLAYS} from '../cves/dashboard';
+import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
+import {HOSTS_DISPLAYS} from '../hosts/dashboard';
+import {NOTES_DISPLAYS} from '../notes/dashboard';
+import {NVTS_DISPLAYS} from '../nvts/dashboard';
+import {OS_DISPLAYS} from '../operatingsystems/dashboard';
+import {OVERRIDES_DISPLAYS} from '../overrides/dashboard';
+import {AUDIT_REPORTS_DISPLAYS} from '../reports/auditdashboard';
 import {REPORTS_DISPLAYS} from '../reports/dashboard';
 import {RESULTS_DISPLAYS} from '../results/dashboard';
-import {NOTES_DISPLAYS} from '../notes/dashboard';
-import {OVERRIDES_DISPLAYS} from '../overrides/dashboard';
-import {VULNS_DISPLAYS} from '../vulns/dashboard';
-import {HOSTS_DISPLAYS} from '../hosts/dashboard';
-import {OS_DISPLAYS} from '../operatingsystems/dashboard';
-import {NVTS_DISPLAYS} from '../nvts/dashboard';
-import {CERTBUND_DISPLAYS} from '../certbund/dashboard';
-import {CVES_DISPLAYS} from '../cves/dashboard';
-import {CPES_DISPLAYS} from '../cpes/dashboard';
-import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
+import {TASKS_DISPLAYS} from '../tasks/dashboard';
 import {TICKETS_DISPLAYS} from '../tickets/dashboard';
-import {AUDIT_REPORTS_DISPLAYS} from '../reports/auditdashboard';
-import {DEFAULT_DISPLAYS} from './newdashboarddialog';
+import {VULNS_DISPLAYS} from '../vulns/dashboard';
 
 const ALL_DISPLAYS = [
   ...TASKS_DISPLAYS,
@@ -59,13 +56,13 @@ const StartDashboard = ({
   ...props
 }) => {
   return (
-  <Layout flex="column" grow>
+  <Layout grow flex="column">
     <Layout align="end">
       <DashboardControls
-        settings={settings}
         canAdd={canAddDisplay(props)}
         dashboardId={id}
         displayIds={ALL_DISPLAYS}
+        settings={settings}
         onInteraction={onInteraction}
         onNewDisplay={onNewDisplay}
         onResetClick={onResetDashboard}
@@ -73,15 +70,15 @@ const StartDashboard = ({
     </Layout>
     <Dashboard
       {...props}
-      id={id}
-      isLoading={false}
-      settings={settings}
       showFilterSelection
       showFilterString
       defaultDisplays={DEFAULT_DISPLAYS}
-      permittedDisplays={ALL_DISPLAYS}
+      id={id}
+      isLoading={false}
       loadSettings={loadSettings}
+      permittedDisplays={ALL_DISPLAYS}
       saveSettings={saveSettings}
+      settings={settings}
       onInteraction={onInteraction}
     />
   </Layout>

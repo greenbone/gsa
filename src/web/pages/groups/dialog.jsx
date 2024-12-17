@@ -4,21 +4,17 @@
  */
 
 
-import React from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import MultiSelect from 'web/components/form/multiselect';
 import TextField from 'web/components/form/textfield';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const Dialog = ({allUsers, grant_full, group, title, onClose, onSave}) => {
   const [_] = useTranslation();
@@ -35,13 +31,13 @@ const Dialog = ({allUsers, grant_full, group, title, onClose, onSave}) => {
 
   return (
     <SaveDialog
-      title={title}
-      onClose={onClose}
-      onSave={onSave}
       defaultValues={{
         ...DEFAULTS,
         ...group,
       }}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -54,7 +50,7 @@ const Dialog = ({allUsers, grant_full, group, title, onClose, onSave}) => {
               />
             </FormGroup>
 
-            <FormGroup title={_('Comment')} flex="column">
+            <FormGroup flex="column" title={_('Comment')}>
               <TextField
                 name="comment"
                 value={state.comment}
@@ -64,8 +60,8 @@ const Dialog = ({allUsers, grant_full, group, title, onClose, onSave}) => {
 
             <FormGroup title={_('Users')}>
               <MultiSelect
-                name="users"
                 items={userOptions}
+                name="users"
                 value={state.users}
                 onChange={onValueChange}
               />
@@ -74,14 +70,14 @@ const Dialog = ({allUsers, grant_full, group, title, onClose, onSave}) => {
             {!is_edit && (
               <FormGroup title={_('Special Groups')}>
                 <Checkbox
-                  name="grant_full"
-                  checkedValue="1"
-                  unCheckedValue="0"
                   checked={state.grant_full === '1'}
+                  checkedValue="1"
+                  name="grant_full"
                   title={_(
                     'Create permission to grant full read and write ' +
                       'access among all group members and across any resources',
                   )}
+                  unCheckedValue="0"
                   onChange={onValueChange}
                 />
               </FormGroup>

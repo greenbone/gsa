@@ -4,7 +4,6 @@
  */
 
 import {parseInt, parseFloat} from 'gmp/parser';
-
 import {isDefined, isFunction} from 'gmp/utils/identity';
 
 const genericCompareAsc = (a, b) => {

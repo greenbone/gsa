@@ -3,23 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 import {createEntitiesFooter} from 'web/entities/footer';
 import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
+import PropTypes from 'web/utils/proptypes';
 
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
-
-import CertBundRow from './row';
 import CertBundDetails from './details';
+import CertBundRow from './row';
 
 const Header = ({
   actionsColumn,
@@ -33,44 +30,44 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="10%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}
           title={_('Name')}
-        />
-        <TableHead
-          width="70%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'title' : false}
-          onSortChange={onSortChange}
-          title={_('Title')}
-        />
-        <TableHead
           width="10%"
-          currentSortDir={currentSortDir}
+          onSortChange={onSortChange}
+        />
+        <TableHead
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'title' : false}
+          title={_('Title')}
+          width="70%"
+          onSortChange={onSortChange}
+        />
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'created' : false}
-          onSortChange={onSortChange}
           title={_('Created')}
+          width="10%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="2%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'cves' : false}
-          onSortChange={onSortChange}
           title={_('CVEs')}
+          width="2%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="8%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'severity' : false}
-          onSortChange={onSortChange}
           title={_('Severity')}
+          width="8%"
+          onSortChange={onSortChange}
         />
         {actionsColumn}
       </TableRow>

@@ -4,7 +4,6 @@
  */
 
 import {test, expect} from '@gsa/testing';
-
 import {isDate} from 'gmp/models/date';
 import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 

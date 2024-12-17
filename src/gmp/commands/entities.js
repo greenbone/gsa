@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
-import {isDefined, isString} from 'gmp/utils/identity';
-import {map, forEach} from 'gmp/utils/array';
-
 import {parseCollectionList} from 'gmp/collection/parser';
-
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
-
 import DefaultTransform from 'gmp/http/transform/default';
+import logger from 'gmp/log';
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import {map, forEach} from 'gmp/utils/array';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 import GmpCommand, {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp';
 

@@ -4,43 +4,32 @@
  */
 
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
 import logger from 'gmp/log';
-
 import {ALL_FILTER} from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import StartIcon from 'web/components/icon/starticon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
-import TriggerAlertDialog from 'web/pages/reports/triggeralertdialog';
-
 import AlertComponent from 'web/pages/alerts/component';
-
+import TriggerAlertDialog from 'web/pages/reports/triggeralertdialog';
 import {
   loadEntities as loadAlerts,
   selector as alertsSelector,
 } from 'web/store/entities/alerts';
-
 import {
   loadReportComposerDefaults,
   renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
-
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
 const log = logger.getLogger('web.report.alertactions');
 
@@ -57,10 +46,10 @@ class AlertActions extends React.Component {
     this.onAlertCreated = this.onAlertCreated.bind(this);
     this.handleOpenTriggerAlertDialog = this.handleOpenTriggerAlertDialog.bind(
       this,
-    ); /* eslint-disable-line max-len */
+    );  
     this.handleCloseTriggerAlertDialog = this.handleCloseTriggerAlertDialog.bind(
       this,
-    ); /* eslint-disable-line max-len */
+    );  
   }
 
   componentDidMount() {

@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent, screen} from 'web/utils/testing';
 
 import DialogTwoButtonFooter from '../twobuttonfooter';
@@ -22,7 +21,7 @@ describe('DialogTwoButtonFooter tests', () => {
   });
 
   test('should render loading and disable cancel button', () => {
-    render(<DialogTwoButtonFooter rightButtonTitle="Foo" loading={true} />);
+    render(<DialogTwoButtonFooter loading={true} rightButtonTitle="Foo" />);
 
     // ensure button is rendered
     screen.getByTestId('dialog-save-button');
@@ -43,7 +42,7 @@ describe('DialogTwoButtonFooter tests', () => {
 
   test('should render footer with custom titles', () => {
     render(
-      <DialogTwoButtonFooter rightButtonTitle="Foo" leftButtonTitle="Bar" />,
+      <DialogTwoButtonFooter leftButtonTitle="Bar" rightButtonTitle="Foo" />,
     );
 
     const buttonLeft = screen.getByTestId('dialog-close-button');
@@ -59,8 +58,8 @@ describe('DialogTwoButtonFooter tests', () => {
 
     render(
       <DialogTwoButtonFooter
-        rightButtonTitle="Foo"
         leftButtonTitle="Bar"
+        rightButtonTitle="Foo"
         onLeftButtonClick={handler1}
         onRightButtonClick={handler2}
       />,

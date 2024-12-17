@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
+ 
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {fireEvent, render, screen} from 'web/utils/testing';
 import SelectionType from 'web/utils/selectiontype';
+import {fireEvent, render, screen} from 'web/utils/testing';
 
 import useSelection from '../useSelection';
 
@@ -19,25 +18,25 @@ const TestComponent = () => {
     <>
       <span data-testid="selectionType">{selectionType}</span>
       <input
-        type="checkbox"
-        checked={selected?.includes(1) === true}
         readOnly
+        checked={selected?.includes(1) === true}
         data-testid="checked1"
+        type="checkbox"
       />
       <input
-        type="checkbox"
-        checked={selected?.includes(2) === true}
         readOnly
+        checked={selected?.includes(2) === true}
         data-testid="checked2"
+        type="checkbox"
       />
-      <button onClick={() => select(1)} data-testid="select1" />
-      <button onClick={() => select(2)} data-testid="select2" />
-      <button onClick={() => deselect(1)} data-testid="deselect1" />
+      <button data-testid="select1" onClick={() => select(1)} />
+      <button data-testid="select2" onClick={() => select(2)} />
+      <button data-testid="deselect1" onClick={() => deselect(1)} />
       <button
+        data-testid="selectPageContent"
         onClick={() =>
           changeSelectionType(SelectionType.SELECTION_PAGE_CONTENTS)
         }
-        data-testid="selectPageContent"
       />
     </>
   );

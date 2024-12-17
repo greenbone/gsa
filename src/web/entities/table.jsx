@@ -3,31 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {forEach} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-
-import FootNote from 'web/components/footnote/footnote';
-
+import React from 'react';
+import styled from 'styled-components';
 import {FoldState} from 'web/components/folding/folding';
-
+import FootNote from 'web/components/footnote/footnote';
 import FoldIcon from 'web/components/icon/foldstateicon';
-
 import Layout from 'web/components/layout/layout';
-
 import Pagination from 'web/components/pagination/pagination';
-
 import TableBody from 'web/components/table/body';
 import StripedTable from 'web/components/table/stripedtable';
-
 import PropTypes from 'web/utils/proptypes';
-
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
 const exclude_props = [
@@ -176,24 +167,24 @@ class EntitiesTable extends React.Component {
         rows.push(
           <RowComponent
             {...other}
-            onToggleDetailsClick={this.handleToggleShowDetails}
             key={entity.id}
             entity={entity}
+            onToggleDetailsClick={this.handleToggleShowDetails}
           />,
         );
         if (isDefined(RowDetailsComponent) && details[entity.id]) {
           if (doubleRow) {
             rows.push(
               <TableBody key={'details-' + entity.id}>
-                <RowDetailsComponent links={links} entity={entity} />
+                <RowDetailsComponent entity={entity} links={links} />
               </TableBody>,
             );
           } else {
             rows.push(
               <RowDetailsComponent
-                links={links}
                 key={'details-' + entity.id}
                 entity={entity}
+                links={links}
               />,
             );
           }
@@ -205,11 +196,11 @@ class EntitiesTable extends React.Component {
       PaginationComponent === false ? undefined : (
         <PaginationComponent
           {...other}
+          counts={entitiesCounts}
           onFirstClick={this.handleFirst}
           onLastClick={this.handleLast}
           onNextClick={this.handleNext}
           onPreviousClick={this.handlePrevious}
-          counts={entitiesCounts}
         />
       );
 
@@ -239,7 +230,7 @@ class EntitiesTable extends React.Component {
     );
 
     return (
-      <TableBox flex="column" grow="1" className="entities-table">
+      <TableBox className="entities-table" flex="column" grow="1">
         {toggleDetailsIcon ? (
           <Layout align="space-between" grow="1">
             {detailsIcon}
@@ -249,9 +240,9 @@ class EntitiesTable extends React.Component {
           pagination
         )}
         <UpdatingStripedTable
-          header={header}
-          footer={footer}
           $isUpdating={isUpdating}
+          footer={footer}
+          header={header}
         >
           {body}
         </UpdatingStripedTable>

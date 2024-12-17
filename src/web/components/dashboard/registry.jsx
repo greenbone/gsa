@@ -4,7 +4,6 @@
  */
 
 import Logger from 'gmp/log';
-
 import {isDefined} from 'gmp/utils/identity';
 
 const log = Logger.getLogger('web.components.dashboard.registry');

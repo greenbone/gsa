@@ -4,16 +4,12 @@
  */
 
 import React from 'react';
-
+import Radio from 'web/components/form/radio';
+import Spinner from 'web/components/form/spinner';
 import Row from 'web/components/layout/row';
-
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
-
-import Spinner from 'web/components/form/spinner';
-import Radio from 'web/components/form/radio';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const VALUE = 'Severity at least';
 
@@ -27,17 +23,17 @@ const SeverityLeastConditionPart = ({
   return (
     <Row>
       <Radio
-        title={_('Severity at least')}
-        value={VALUE}
         checked={condition === VALUE}
         name="condition"
+        title={_('Severity at least')}
+        value={VALUE}
         onChange={onChange}
       />
       <Spinner
-        value={severity}
+        min="0"
         name={prefix + 'severity'}
         type="float"
-        min="0"
+        value={severity}
         onChange={onChange}
       />
     </Row>

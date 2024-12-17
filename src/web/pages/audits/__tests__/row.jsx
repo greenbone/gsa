@@ -3,19 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-console */
+ 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {screen, rendererWith, fireEvent} from 'web/utils/testing';
-
 import {getActionItems} from 'web/components/testing';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen, rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
 
@@ -80,8 +75,8 @@ describe('Audit Row tests', () => {
     const {element} = render(
       <Row
         entity={audit}
-        links={true}
         gcrFormatDefined={true}
+        links={true}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -180,8 +175,8 @@ describe('Audit Row tests', () => {
     render(
       <Row
         entity={audit}
-        links={true}
         gcrFormatDefined={true}
+        links={true}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -243,8 +238,8 @@ describe('Audit Row tests', () => {
     const {baseElement, getAllByTestId, queryAllByTestId} = render(
       <Row
         entity={audit}
-        links={true}
         gcrFormatDefined={true}
+        links={true}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -346,8 +341,8 @@ describe('Audit Row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={audit}
-        links={true}
         gcrFormatDefined={true}
+        links={true}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -454,8 +449,8 @@ describe('Audit Row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={audit}
-        links={true}
         gcrFormatDefined={true}
+        links={true}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -564,8 +559,8 @@ describe('Audit Row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={audit}
-        links={true}
         gcrFormatDefined={true}
+        links={true}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -674,8 +669,8 @@ describe('Audit Row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={audit}
-        links={true}
         gcrFormatDefined={true}
+        links={true}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}

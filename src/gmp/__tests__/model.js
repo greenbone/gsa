@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model, {parseModelFromElement} from 'gmp/model';
 import {testModel} from 'gmp/models/testing';
 

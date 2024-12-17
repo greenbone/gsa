@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent} from 'web/utils/testing';
 
 import withDownload from '../withDownload';
@@ -20,11 +19,11 @@ window.URL.revokeObjectURL = testing.fn();
 describe('withDownload tests', () => {
   test('should render', () => {
     const {rerender, getByTestId} = render(
-      <TestComponent filename="foo" data="bar" />,
+      <TestComponent data="bar" filename="foo" />,
     );
 
     // rerender to set reference to Download component
-    rerender(<TestComponent filename="foo" data="bar" />);
+    rerender(<TestComponent data="bar" filename="foo" />);
 
     const button = getByTestId('button');
     fireEvent.click(button);

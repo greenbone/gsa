@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 import {fireEvent, rendererWith, wait, userEvent} from 'web/utils/testing';
 
-import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 
 const gmp = {
   user: {

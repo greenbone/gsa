@@ -3,54 +3,41 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import DateTime from 'web/components/date/datetime';
-
 import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
-
+import ManualIcon from 'web/components/icon/manualicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import DetailsLink from 'web/components/link/detailslink';
+import Loading from 'web/components/loading/loading';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import DetailsLink from 'web/components/link/detailslink';
-
-import Loading from 'web/components/loading/loading';
-
-import Table from 'web/components/table/stripedtable';
-import TableHeader from 'web/components/table/header';
-import TableHead from 'web/components/table/head';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
+import Table from 'web/components/table/stripedtable';
 import DetailsBlock from 'web/entity/block';
-import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
 import {InfoLayout} from 'web/entity/info';
+import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
-
 import {selector, loadEntity} from 'web/store/entities/cpes';
-
 import PropTypes from 'web/utils/proptypes';
 
 import CpeDetails from './details';
@@ -59,15 +46,15 @@ export const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="managing-secinfo"
         anchor="cpe"
+        page="managing-secinfo"
         title={_('Help: CPEs')}
       />
-      <ListIcon title={_('CPE List')} page="cpes" />
+      <ListIcon page="cpes" title={_('CPE List')} />
     </IconDivider>
     <ExportIcon
-      value={entity}
       title={_('Export CPE')}
+      value={entity}
       onClick={onCpeDownloadClick}
     />
   </Divider>
@@ -127,7 +114,7 @@ const Details = ({entity, links = true}) => {
                 <TableRow key={cve.id}>
                   <TableData>
                     <span>
-                      <DetailsLink id={cve.id} type="cve" textOnly={!links}>
+                      <DetailsLink id={cve.id} textOnly={!links} type="cve">
                         {cve.id}
                       </DetailsLink>
                     </span>
@@ -164,17 +151,17 @@ const CpePage = ({
 }) => (
   <EntityComponent
     name="cpe"
-    onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
   >
     {({download}) => (
       <EntityPage
         {...props}
         entity={entity}
+        infoComponent={EntityInfo}
         sectionIcon={<CpeLogoIcon size="large" />}
         title={_('CPE')}
-        infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}
         onCpeDownloadClick={download}
         onInteraction={onInteraction}
@@ -183,8 +170,8 @@ const CpePage = ({
           return (
             <React.Fragment>
               <PageTitle title={_('CPE: {{title}}', {title: entity.title})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}

@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
-
 import Task, {
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
@@ -17,7 +15,6 @@ import Task, {
 import Report from '../report';
 import Scanner from '../scanner';
 import Schedule from '../schedule';
-
 import {testModel} from '../testing';
 
 describe('Task Model parse tests', () => {

@@ -5,7 +5,6 @@
 
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 class Download extends React.Component {
@@ -41,9 +40,9 @@ class Download extends React.Component {
     const {filename} = this.props;
     return (
       <a
-        download={filename}
-        aria-hidden
         ref={ref => (this.anchor = ref)}
+        aria-hidden
+        download={filename}
         style={{display: 'none'}}
       >
         Download

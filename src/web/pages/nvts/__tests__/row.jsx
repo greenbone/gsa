@@ -4,17 +4,13 @@
  */
 
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
+ 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
-
-import NVT from 'gmp/models/nvt';
 import Filter from 'gmp/models/filter.js';
-
+import NVT from 'gmp/models/nvt';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
@@ -83,8 +79,8 @@ describe('NVT row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onFilterChanged={handleFilterChanged}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -127,8 +123,8 @@ describe('NVT row tests', () => {
     const {baseElement} = render(
       <Row
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onFilterChanged={handleFilterChanged}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 

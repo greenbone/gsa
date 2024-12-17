@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tlscertificate';
-
 import {entityLoadingActions} from 'web/store/entities/tlscertificates';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith} from 'web/utils/testing';
 
 import Detailspage from '../detailspage';

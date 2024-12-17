@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent, screen} from 'web/utils/testing';
-
 import MultiStepFooter from 'web/components/dialog/multistepfooter';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 const getRightButton = () => screen.getByTestId('dialog-save-button');
 const getLeftButton = () => screen.getByTestId('dialog-close-button');
@@ -28,7 +26,7 @@ describe('MultiStepFooter tests', () => {
   });
 
   test('should render loading and disable cancel button', () => {
-    render(<MultiStepFooter rightButtonTitle="Foo" loading={true} />);
+    render(<MultiStepFooter loading={true} rightButtonTitle="Foo" />);
 
     getRightButton();
 
@@ -47,10 +45,10 @@ describe('MultiStepFooter tests', () => {
   test('should render footer with custom titles', () => {
     render(
       <MultiStepFooter
-        rightButtonTitle="Foo"
         leftButtonTitle="Bar"
-        previousButtonTitle="Back"
         nextButtonTitle="Forward"
+        previousButtonTitle="Back"
+        rightButtonTitle="Foo"
       />,
     );
 
@@ -68,12 +66,12 @@ describe('MultiStepFooter tests', () => {
 
     render(
       <MultiStepFooter
-        rightButtonTitle="Foo"
         leftButtonTitle="Bar"
+        rightButtonTitle="Foo"
         onLeftButtonClick={handler1}
-        onRightButtonClick={handler2}
-        onPreviousButtonClick={handler3}
         onNextButtonClick={handler4}
+        onPreviousButtonClick={handler3}
+        onRightButtonClick={handler2}
       />,
     );
 
@@ -93,9 +91,9 @@ describe('MultiStepFooter tests', () => {
   test('should disable previous and next button', () => {
     render(
       <MultiStepFooter
-        rightButtonTitle="Foo"
-        prevDisabled={true}
         nextDisabled={true}
+        prevDisabled={true}
+        rightButtonTitle="Foo"
       />,
     );
 

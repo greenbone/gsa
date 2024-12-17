@@ -3,20 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_} from 'gmp/locale/lang';
-
+import React from 'react';
 import DownloadCsvIcon from 'web/components/icon/downloadcsvicon';
 import DownloadSvgIcon from 'web/components/icon/downloadsvgicon';
 import FilterIcon from 'web/components/icon/filtericon';
 import LegendIcon from 'web/components/icon/legendicon';
 import Toggle3dIcon from 'web/components/icon/toggle3dicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 export const renderDonutChartIcons = ({
-  setState, // eslint-disable-line react/prop-types
+  setState,  
   ...iconsProps
 }) => (
   <React.Fragment>

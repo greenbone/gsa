@@ -4,12 +4,9 @@
  */
 
 
-import React from 'react';
-
-import styled, {keyframes} from 'styled-components';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled, {keyframes} from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 

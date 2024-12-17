@@ -3,38 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useEffect} from 'react';
-import {useSearchParams} from 'react-router-dom';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
-import {KeyCode} from 'gmp/utils/event';
-import {isDefined} from 'gmp/utils/identity';
-
 import {
   parseCvssV2BaseVector,
   parseCvssV3BaseVector,
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
 } from 'gmp/parser/cvss';
-
+import {KeyCode} from 'gmp/utils/event';
+import {isDefined} from 'gmp/utils/identity';
+import React, {useState, useEffect} from 'react';
+import {useSearchParams} from 'react-router-dom';
+import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
-
 import CvssIcon from 'web/components/icon/cvssicon';
 import ManualIcon from 'web/components/icon/manualicon';
-
-import Layout from 'web/components/layout/layout';
 import Divider from 'web/components/layout/divider';
-
+import Layout from 'web/components/layout/layout';
 import Section from 'web/components/section/section';
-
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+
 import CvssV4Calculator from './cvssV4/CvssV4Calculator';
 
 const StyledTextField = styled(TextField)`
@@ -43,8 +34,8 @@ const StyledTextField = styled(TextField)`
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="managing-secinfo"
     anchor="cvss"
+    page="managing-secinfo"
     size="small"
     title={_('Help: CVSS Base Score Calculator')}
   />
@@ -185,7 +176,7 @@ const CvssV2Calculator = props => {
   } = state;
 
   return (
-    <Layout flex="column" grow>
+    <Layout grow flex="column">
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv2 Base Score Calculator')}
@@ -323,8 +314,8 @@ const CvssV2Calculator = props => {
         <StyledTextField
           name="userVector"
           value={userVector}
-          onChange={handleInputChange}
           onBlur={handleVectorChange}
+          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
       </FormGroup>
@@ -486,7 +477,7 @@ const CvssV3Calculator = props => {
   } = state;
 
   return (
-    <Layout flex="column" grow>
+    <Layout grow flex="column">
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv3 Base Score Calculator')}
@@ -658,8 +649,8 @@ const CvssV3Calculator = props => {
         <StyledTextField
           name="userVector"
           value={userVector}
-          onChange={handleInputChange}
           onBlur={handleVectorChange}
+          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
       </FormGroup>
@@ -681,14 +672,14 @@ const CvssCalculator = props => (
       {/* span prevents Toolbar from growing */}
       <ToolBarIcons />
     </span>
-    <Divider margin="20px" flex="row" align={['flex-start', 'start']} grow wrap>
-      <Layout flex="1" grow>
+    <Divider grow wrap align={['flex-start', 'start']} flex="row" margin="20px">
+      <Layout grow flex="1">
         <CvssV2Calculator {...props} />
       </Layout>
-      <Layout flex="1" grow>
+      <Layout grow flex="1">
         <CvssV3Calculator {...props} />
       </Layout>
-      <Layout flex="1" grow>
+      <Layout grow flex="1">
         <CvssV4Calculator />
       </Layout>
     </Divider>

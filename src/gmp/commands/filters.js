@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import {parseCollectionList} from 'gmp/collection/parser';
-
 import registerCommand from 'gmp/command';
-
+import logger from 'gmp/log';
 import Filter from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -72,7 +68,7 @@ const parse_counts = element => {
     isDefined(element.filters) &&
     isDefined(element.filter_count)
   ) {
-    const es = element.filters[1]; // eslint-disable-line prefer-destructuring
+    const es = element.filters[1];
     const ec = element.filter_count;
     return {
       first: es._start,

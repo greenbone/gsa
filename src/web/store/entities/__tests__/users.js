@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {testAll} from '../utils/testing';
-
 import * as funcs from '../users';
+import {testAll} from '../utils/testing';
 
 testAll('user', funcs);
 

@@ -3,29 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {parseInt} from 'gmp/parser';
-
+import React from 'react';
 import {FoldState} from 'web/components/folding/folding';
-
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
-
 import Layout from 'web/components/layout/layout';
-
 import Section from 'web/components/section/section';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
-import PropTypes from 'web/utils/proptypes';
-
+import Table from 'web/components/table/stripedtable';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const ScannerPreference = ({
   displayName,
@@ -66,11 +59,11 @@ const ScannerPreference = ({
         {isRadio ? (
           <Layout>
             <YesNoRadio // booleans are now 1 and 0 and not yes/no.
-              yesValue={1}
-              noValue={0}
-              name={name}
-              value={value}
               convert={parseInt}
+              name={name}
+              noValue={0}
+              value={value}
+              yesValue={1}
               onChange={onPreferenceChange}
             />
           </Layout>

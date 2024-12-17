@@ -4,9 +4,8 @@
  */
 
 import {useSelector, useDispatch} from 'react-redux';
-
-import {getUsername} from 'web/store/usersettings/selectors';
 import {setUsername} from 'web/store/usersettings/actions';
+import {getUsername} from 'web/store/usersettings/selectors';
 
 const useUserName = () => {
   const dispatch = useDispatch();

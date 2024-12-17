@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Schedule from 'gmp/models/schedule';
-
 import {render, fireEvent, screen} from 'web/utils/testing';
 
 const checkElementVisibilityAndContent = (
@@ -85,17 +83,17 @@ describe('ScheduleDialog component tests', () => {
   test('should render with default values', () => {
     const {baseElement} = render(
       <ScheduleDialog
-        id={scheduleId}
-        title={`Edit Schedule ${scheduleName}`}
         comment={scheduleComment}
         duration={scheduleDuration}
         freq={scheduleFrequency}
+        id={scheduleId}
+        interval={scheduleInterval}
+        monthdays={scheduleMonthDays}
         name={scheduleName}
         startDate={scheduleStartDate}
         timezone={scheduleTimezone}
-        interval={scheduleInterval}
+        title={`Edit Schedule ${scheduleName}`}
         weekdays={scheduleWeekDays}
-        monthdays={scheduleMonthDays}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -175,17 +173,17 @@ describe('ScheduleDialog component tests', () => {
   test('should allow changing select values', async () => {
     render(
       <ScheduleDialog
-        id={scheduleId}
-        title={`Edit Schedule ${scheduleName}`}
         comment={scheduleComment}
         duration={scheduleDuration}
         freq={scheduleFrequency}
+        id={scheduleId}
+        interval={scheduleInterval}
+        monthdays={scheduleMonthDays}
         name={scheduleName}
         startDate={scheduleStartDate}
         timezone={scheduleTimezone}
-        interval={scheduleInterval}
+        title={`Edit Schedule ${scheduleName}`}
         weekdays={scheduleWeekDays}
-        monthdays={scheduleMonthDays}
         onClose={handleClose}
         onSave={handleSave}
       />,

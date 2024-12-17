@@ -4,25 +4,19 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import ExportIcon from 'web/components/icon/exporticon';
+import IconDivider from 'web/components/layout/icondivider';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
-import ExportIcon from 'web/components/icon/exporticon';
-
-import IconDivider from 'web/components/layout/icondivider';
-
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
+import PropTypes from 'web/utils/proptypes';
 
 const IconActions = ({
   entity,
@@ -31,29 +25,29 @@ const IconActions = ({
   onPortListCloneClick,
   onPortListEditClick,
 }) => (
-  <IconDivider align={['center', 'center']} grow>
+  <IconDivider grow align={['center', 'center']}>
     <TrashIcon
-      entity={entity}
       displayName={_('Port List')}
+      entity={entity}
       name="portlist"
       onClick={onPortListDeleteClick}
     />
     <EditIcon
-      entity={entity}
       disabled={entity.predefined}
       displayName={_('Port List')}
+      entity={entity}
       name="port_list"
       onClick={onPortListEditClick}
     />
     <CloneIcon
-      entity={entity}
       displayName={_('Port List')}
+      entity={entity}
       name="port_list"
       onClick={onPortListCloneClick}
     />
     <ExportIcon
-      value={entity}
       title={_('Export Port List')}
+      value={entity}
       onClick={onPortListDownloadClick}
     />
   </IconDivider>
@@ -78,10 +72,10 @@ const Row = ({
 }) => (
   <TableRow>
     <EntityNameTableData
+      displayName={_('Port List')}
       entity={entity}
       link={links}
       type="portlist"
-      displayName={_('Port List')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData align="start">{entity.port_count.all}</TableData>

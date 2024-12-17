@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import moment from 'gmp/models/date';
-
 import {isFunction} from 'gmp/utils/identity';
 
 import {

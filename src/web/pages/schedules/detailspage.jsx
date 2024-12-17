@@ -3,48 +3,40 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import ScheduleIcon from 'web/components/icon/scheduleicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import {selector, loadEntity} from 'web/store/entities/schedules';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/schedules';
 import PropTypes from 'web/utils/proptypes';
 
 import ScheduleComponent from './component';
@@ -61,11 +53,11 @@ export const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="scanning"
         anchor="managing-schedules"
+        page="scanning"
         title={_('Help: Schedules')}
       />
-      <ListIcon title={_('Schedules List')} page="schedules" />
+      <ListIcon page="schedules" title={_('Schedules List')} />
     </IconDivider>
     <IconDivider>
       <CreateIcon entity={entity} onClick={onScheduleCreateClick} />
@@ -73,8 +65,8 @@ export const ToolBarIcons = ({
       <EditIcon entity={entity} onClick={onScheduleEditClick} />
       <TrashIcon entity={entity} onClick={onScheduleDeleteClick} />
       <ExportIcon
-        value={entity}
         title={_('Export Schedule as XML')}
+        value={entity}
         onClick={onScheduleDownloadClick}
       />
     </IconDivider>
@@ -100,13 +92,13 @@ const Page = ({
   ...props
 }) => (
   <ScheduleComponent
-    onCloned={goto_details('schedule', props)}
     onCloneError={onError}
+    onCloned={goto_details('schedule', props)}
     onCreated={goto_details('schedule', props)}
-    onDeleted={goto_list('schedules', props)}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={goto_list('schedules', props)}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
@@ -129,8 +121,8 @@ const Page = ({
           return (
             <React.Fragment>
               <PageTitle title={_('Schedule: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}

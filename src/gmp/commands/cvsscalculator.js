@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import {parseSeverity} from 'gmp/parser';
 
 import HttpCommand from './http';

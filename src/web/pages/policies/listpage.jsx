@@ -3,30 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {RESET_FILTER, SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 import PolicyIcon from 'web/components/icon/policyicon';
 import UploadIcon from 'web/components/icon/uploadicon';
-import NewIcon from 'web/components/icon/newicon';
-import ManualIcon from 'web/components/icon/manualicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/policies';
-
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import PoliciesComponent from './component';
 import Table from './table';
@@ -37,8 +31,8 @@ export const ToolBarIcons = ({onPolicyCreateClick, onPolicyImportClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="compliance-and-special-scans"
         anchor="configuring-and-managing-policies"
+        page="compliance-and-special-scans"
         title={_('Help: Policies')}
       />
       {capabilities.mayCreate('config') && (
@@ -66,13 +60,13 @@ const PoliciesPage = ({
   const [_] = useTranslation();
   return (
     <PoliciesComponent
-      onCloned={onChanged}
       onCloneError={onError}
+      onCloned={onChanged}
       onCreated={onChanged}
-      onDeleted={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onImported={onChanged}
       onInteraction={onInteraction}
       onSaved={onChanged}
@@ -95,15 +89,15 @@ const PoliciesPage = ({
             table={Table}
             title={_('Policies')}
             toolBarIcons={ToolBarIcons}
+            onCreateAuditClick={createAudit}
             onError={onError}
             onInteraction={onInteraction}
-            onPolicyImportClick={importFunc}
             onPolicyCloneClick={clone}
             onPolicyCreateClick={create}
-            onCreateAuditClick={createAudit}
             onPolicyDeleteClick={deleteFunc}
             onPolicyDownloadClick={download}
             onPolicyEditClick={edit}
+            onPolicyImportClick={importFunc}
           />
         </React.Fragment>
       )}

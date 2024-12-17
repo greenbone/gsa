@@ -3,39 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_l, _} from 'gmp/locale/lang';
-
 import {getTranslatableTicketStatus} from 'gmp/models/ticket';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import DateTime from 'web/components/date/datetime';
-
 import SolutionType from 'web/components/icon/solutiontypeicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
-import EntityCloneIcon from 'web/entity/icon/cloneicon';
-import EntityEditIcon from 'web/entity/icon/editicon';
-import EntityTrashIcon from 'web/entity/icon/trashicon';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import {createEntitiesFooter} from 'web/entities/footer';
 import {createEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import withRowDetails from 'web/entities/withRowDetails';
-
+import EntityCloneIcon from 'web/entity/icon/cloneicon';
+import EntityEditIcon from 'web/entity/icon/editicon';
+import EntityTrashIcon from 'web/entity/icon/trashicon';
 import PropTypes from 'web/utils/proptypes';
-
 import {NA_VALUE} from 'web/utils/severity';
 
 import TicketDetails from './details';
@@ -131,9 +120,9 @@ const Row = ({
   return (
     <TableRow>
       <EntityNameTableData
+        displayName={_('Ticket')}
         entity={entity}
         link={links}
-        displayName={_('Ticket')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>

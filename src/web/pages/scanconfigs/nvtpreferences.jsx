@@ -4,25 +4,18 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import {FoldState} from 'web/components/folding/folding';
-
 import EditIcon from 'web/components/icon/editicon';
-
 import Section from 'web/components/section/section';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
-import PropTypes from 'web/utils/proptypes';
-
+import Table from 'web/components/table/stripedtable';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const StyledTableData = styled(TableData)`
   overflow-wrap: break-word;
@@ -86,7 +79,7 @@ const NvtPreferences = ({
             <TableHead width="30%">{_('NVT')}</TableHead>
             <TableHead width="30%">{_('Name')}</TableHead>
             <TableHead width="30%">{_('Value')}</TableHead>
-            <TableHead width="10%" align="center">
+            <TableHead align="center" width="10%">
               {_('Actions')}
             </TableHead>
           </TableRow>
@@ -95,8 +88,8 @@ const NvtPreferences = ({
           {preferences.map(pref => (
             <NvtPreferenceDisplay
               key={pref.nvt.name + pref.name}
-              title={editTitle}
               preference={pref}
+              title={editTitle}
               onEditNvtDetailsClick={onEditNvtDetailsClick}
             />
           ))}

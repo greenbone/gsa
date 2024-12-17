@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
+ 
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {fireEvent, render, screen} from 'web/utils/testing';
-
 import Filter from 'gmp/models/filter';
+import {fireEvent, render, screen} from 'web/utils/testing';
 
 import usePagination from '../usePagination';
 
@@ -37,9 +35,9 @@ describe('usePageFilter', () => {
 
     render(
       <TestComponent
-        filter={filter}
-        counts={counts}
         changeFilter={changeFilter}
+        counts={counts}
+        filter={filter}
       />,
     );
 
@@ -55,9 +53,9 @@ describe('usePageFilter', () => {
 
     render(
       <TestComponent
-        filter={filter}
-        counts={counts}
         changeFilter={changeFilter}
+        counts={counts}
+        filter={filter}
       />,
     );
 
@@ -73,9 +71,9 @@ describe('usePageFilter', () => {
 
     render(
       <TestComponent
-        filter={filter}
-        counts={counts}
         changeFilter={changeFilter}
+        counts={counts}
+        filter={filter}
       />,
     );
 
@@ -93,9 +91,9 @@ describe('usePageFilter', () => {
 
     render(
       <TestComponent
-        filter={filter}
-        counts={counts}
         changeFilter={changeFilter}
+        counts={counts}
+        filter={filter}
       />,
     );
 

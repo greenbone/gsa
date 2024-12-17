@@ -3,31 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
+import React from 'react';
+import SolutionTypeSvgIcon from 'web/components/icon/solutiontypesvgicon';
 import Layout from 'web/components/layout/layout';
-
-import PropTypes from 'web/utils/proptypes';
-
+import Sort from 'web/components/sortby/sortby';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 import {createEntitiesFooter} from 'web/entities/footer';
 import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
-
-import SolutionTypeSvgIcon from 'web/components/icon/solutiontypesvgicon';
-
-import Sort from 'web/components/sortby/sortby';
-
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
+import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
 
 import NvtDetails from './details';
 import NvtRow from './row';
-
-import useGmp from 'web/hooks/useGmp';
 
 const Header = ({
   actionsColumn,
@@ -42,49 +35,49 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          rowSpan="2"
-          width={gmp.settings.enableEPSS ? '26%' : '32%'}
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}
           title={_('Name')}
+          width={gmp.settings.enableEPSS ? '26%' : '32%'}
+          onSortChange={onSortChange}
         />
         <TableHead
-          rowSpan="2"
-          width="10%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'family' : false}
-          onSortChange={onSortChange}
           title={_('Family')}
+          width="10%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          rowSpan="2"
-          width="10%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'created' : false}
-          onSortChange={onSortChange}
           title={_('Created')}
-        />
-        <TableHead
-          rowSpan="2"
           width="10%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}
-          title={_('Modified')}
         />
         <TableHead
-          rowSpan="2"
-          width="18%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'cve' : false}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
+          sortBy={sort ? 'modified' : false}
+          title={_('Modified')}
+          width="10%"
           onSortChange={onSortChange}
+        />
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
+          sortBy={sort ? 'cve' : false}
           title={_('CVE')}
+          width="18%"
+          onSortChange={onSortChange}
         />
         <TableHead rowSpan="2" width="1%">
           <Layout align="center">
@@ -98,22 +91,22 @@ const Header = ({
           </Layout>
         </TableHead>
         <TableHead
-          rowSpan="2"
-          width="8%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'severity' : false}
-          onSortChange={onSortChange}
           title={_('Severity')}
+          width="8%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          rowSpan="2"
-          width="3%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'qod' : false}
-          onSortChange={onSortChange}
           title={_('QoD')}
+          width="3%"
+          onSortChange={onSortChange}
         />
         {gmp.settings.enableEPSS && (
           <TableHead colSpan="2">{_('EPSS')}</TableHead>
@@ -123,20 +116,20 @@ const Header = ({
       {gmp.settings.enableEPSS && (
         <TableRow>
           <TableHead
-            width="3%"
-            currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
+            currentSortDir={currentSortDir}
             sortBy={sort ? 'epss_score' : false}
-            onSortChange={onSortChange}
             title={_('Score')}
+            width="3%"
+            onSortChange={onSortChange}
           />
           <TableHead
-            width="3%"
-            currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
+            currentSortDir={currentSortDir}
             sortBy={sort ? 'epss_percentile' : false}
-            onSortChange={onSortChange}
             title={_('Percentage')}
+            width="3%"
+            onSortChange={onSortChange}
           />
         </TableRow>
       )}

@@ -4,12 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent} from 'web/utils/testing';
 
 import withClickHandler from '../withClickHandler';
 
-/* eslint-disable react/prop-types */
+ 
 
 const TestInput = ({value, ...props}) => <input {...props} type="text" />;
 

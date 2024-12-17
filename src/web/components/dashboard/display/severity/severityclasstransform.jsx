@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {parseSeverity, parseInt} from 'gmp/parser';
-
+import {isDefined} from 'gmp/utils/identity';
+import {severityValue} from 'gmp/utils/number';
 import {
   NA_VALUE,
   resultSeverityRiskFactor,
@@ -25,7 +24,6 @@ import {
 } from 'web/utils/severity';
 
 import {totalCount, percent, riskFactorColorScale} from '../utils';
-import {severityValue} from 'gmp/utils/number';
 
 export const severityClassDataRow = row => [row.label, row.value];
 

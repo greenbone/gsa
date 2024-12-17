@@ -5,9 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {createResponse, createHttp} from '../testing';
-
 import {FeedStatus} from '../feedstatus';
+import {createResponse, createHttp} from '../testing';
 
 describe('FeedStatusCommand tests', () => {
   test('should return feed information', () => {

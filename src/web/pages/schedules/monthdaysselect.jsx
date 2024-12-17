@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {parseInt} from 'gmp/parser';
-
-import Divider from 'web/components/layout/divider';
-
+import {isDefined} from 'gmp/utils/identity';
+import React, {useCallback} from 'react';
 import ToggleButton from 'web/components/form/togglebutton';
-
-import PropTypes from 'web/utils/proptypes';
-
+import Divider from 'web/components/layout/divider';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const RANGE = [1, 2, 3, 4, 5, 6, 7];
 const ROWS = [0, 1, 2, 3];
@@ -56,10 +50,10 @@ const MonthDaysSelect = ({disabled, onChange, value = [], name}) => {
             const k = j * 7 + i;
             return (
               <ToggleButton
-                name={'' + k}
                 key={k}
                 checked={value.includes(k)}
                 disabled={disabled}
+                name={'' + k}
                 onToggle={handleChange}
               >
                 {k}
@@ -70,33 +64,33 @@ const MonthDaysSelect = ({disabled, onChange, value = [], name}) => {
       ))}
       <Divider>
         <ToggleButton
-          name="29"
           checked={value.includes(29)}
           disabled={disabled}
+          name="29"
           onToggle={handleChange}
         >
           29
         </ToggleButton>
         <ToggleButton
-          name="30"
           checked={value.includes(30)}
           disabled={disabled}
+          name="30"
           onToggle={handleChange}
         >
           30
         </ToggleButton>
         <ToggleButton
-          name="31"
           checked={value.includes(31)}
           disabled={disabled}
+          name="31"
           onToggle={handleChange}
         >
           31
         </ToggleButton>
         <ToggleButton
-          name="-1"
           checked={value.includes(-1)}
           disabled={disabled}
+          name="-1"
           width="64px"
           onToggle={handleChange}
         >

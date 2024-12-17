@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render} from 'web/utils/testing';
 
 import InnerLink from '../innerlink';
@@ -18,7 +17,7 @@ describe('InnerLink tests', () => {
 
   test('should forward props', () => {
     const {element} = render(
-      <InnerLink to="foo" title="bar">
+      <InnerLink title="bar" to="foo">
         Ipsum
       </InnerLink>,
     );

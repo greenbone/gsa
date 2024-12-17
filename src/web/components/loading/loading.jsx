@@ -3,20 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {Spinner} from '@greenbone/opensight-ui-components-mantinev7';
 import React from 'react';
-
 import styled from 'styled-components';
-
 import Layout from 'web/components/layout/layout';
 
-import {Spinner} from '@greenbone/opensight-ui-components-mantinev7';
 
 const StyledLayout = styled(Layout)`
   width: 100%;
 `;
 
 const Loading = () => (
-  <StyledLayout data-testid="loading" align={['center', 'center']}>
+  <StyledLayout align={['center', 'center']} data-testid="loading">
     <Spinner />
   </StyledLayout>
 );

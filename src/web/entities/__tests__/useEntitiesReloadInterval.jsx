@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
+ 
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {screen, rendererWith} from 'web/utils/testing';
 
 import useEntitiesReloadInterval from '../useEntitiesReloadInterval';
@@ -90,7 +89,7 @@ describe('useEntitiesReloadInterval', () => {
     const {render} = rendererWith({gmp});
 
     render(
-      <TestComponent entities={entities} useActive={true} isVisible={false} />,
+      <TestComponent entities={entities} isVisible={false} useActive={true} />,
     );
 
     expect(screen.getByTestId('timeout')).toHaveTextContent('40000');

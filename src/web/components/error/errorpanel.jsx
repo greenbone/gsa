@@ -3,21 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
-
-import styled from 'styled-components';
-
+import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React, {useState} from 'react';
+import styled from 'styled-components';
 import Divider from 'web/components/layout/divider';
-
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import ErrorMessage from './errormessage';
-import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
+
 
 const ErrorDetails = styled.div`
   margin-top: 10px;
@@ -40,15 +36,15 @@ const ErrorPanel = ({error, message, info}) => {
   };
   return (
     <ErrorMessage
-      message={message}
       details={_('Please try again.')}
       flex="column"
+      message={message}
     >
       {isDefined(error) && (
         <OpenSightButton
-          variant="danger"
-          size="sm"
           data-testid="errorpanel-toggle"
+          size="sm"
+          variant="danger"
           onClick={handleToggleDetails}
         >
           {showDetails ? _('Hide Error Details') : _('Show Error Details')}

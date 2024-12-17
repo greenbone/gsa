@@ -5,7 +5,6 @@
 
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {rendererWith} from 'web/utils/testing';
 
 import ProductImage from '../product';

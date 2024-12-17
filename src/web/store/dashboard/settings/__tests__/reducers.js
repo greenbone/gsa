@@ -5,8 +5,6 @@
 
 import {describe, test, expect} from '@gsa/testing';
 
-import dashboardSettings from '../reducers';
-
 import {
   loadDashboardSettingsSuccess,
   loadDashboardSettingsRequest,
@@ -15,6 +13,7 @@ import {
   setDashboardSettingDefaults,
   resetDashboardSettingsRequest,
 } from '../actions';
+import dashboardSettings from '../reducers';
 
 describe('dashboard settings reducers tests for initial state', () => {
   test('should return the initial state', () => {

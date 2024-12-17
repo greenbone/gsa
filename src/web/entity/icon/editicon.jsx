@@ -4,16 +4,13 @@
  */
 
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import EditIcon from 'web/components/icon/editicon';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import EditIcon from 'web/components/icon/editicon';
 
 const EntityEditIcon = ({
   capabilities,
@@ -43,7 +40,7 @@ const EntityEditIcon = ({
       title = _('Edit {{entity}}', {entity: displayName});
     } else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
-      // eslint-disable-next-line no-negated-condition
+       
     } else if (!mayEdit) {
       title = _('Permission to edit {{entity}} denied', {entity: displayName});
     } else {
@@ -53,9 +50,9 @@ const EntityEditIcon = ({
   return (
     <EditIcon
       {...props}
+      active={active}
       title={title}
       value={entity}
-      active={active}
       onClick={active ? onClick : undefined}
     />
   );

@@ -4,17 +4,12 @@
  */
 
 import {scaleLinear} from 'd3-scale';
-
 import {_, _l} from 'gmp/locale/lang';
-
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
-
 import BubbleChart from 'web/components/chart/bubble';
-
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {TicketsListLoader} from './loaders';

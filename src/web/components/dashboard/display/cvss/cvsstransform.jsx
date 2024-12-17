@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {parseInt, parseFloat, parseSeverity} from 'gmp/parser';
-
+import {isDefined} from 'gmp/utils/identity';
 import {
   NA_VALUE,
   LOG_VALUE,

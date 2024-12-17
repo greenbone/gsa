@@ -3,19 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
-import {withRouter} from 'web/utils/withRouter';
 
 import Logger from 'gmp/log';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
+import {withRouter} from 'web/utils/withRouter';
 
 const log = Logger.getLogger('web.observer.locationobserver');
 

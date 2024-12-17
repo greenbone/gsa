@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Audit, {
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
   HOSTS_ORDERING_SEQUENTIAL,
   AUDIT_STATUS,
 } from 'gmp/models/audit';
+
 import {testModel} from '../testing';
 
 describe('Audit model tests', () => {

@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {
   fireEvent,
   getByRole,

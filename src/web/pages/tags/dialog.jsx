@@ -4,31 +4,25 @@
  */
 
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
-import {isEmpty} from 'gmp/utils/string';
-
 import {YES_VALUE} from 'gmp/parser';
-
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+import React from 'react';
+import styled from 'styled-components';
+import SaveDialog from 'web/components/dialog/savedialog';
+import FormGroup from 'web/components/form/formgroup';
+import MultiSelect from 'web/components/form/multiselect';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
+import YesNoRadio from 'web/components/form/yesnoradio';
+import {SELECT_MAX_RESOURCES} from 'web/pages/tags/component';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
-
-import SaveDialog from 'web/components/dialog/savedialog';
-
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
-import MultiSelect from 'web/components/form/multiselect';
-import Select from 'web/components/form/select';
-import YesNoRadio from 'web/components/form/yesnoradio';
-
-import {SELECT_MAX_RESOURCES} from 'web/pages/tags/component';
 
 const Divider = styled.div`
   margin: 0 5px;
@@ -221,11 +215,11 @@ class TagDialog extends React.Component {
 
     return (
       <SaveDialog
+        defaultValues={data}
         title={title}
+        values={controlledData}
         onClose={onClose}
         onSave={onSave}
-        defaultValues={data}
-        values={controlledData}
       >
         {({values: state, onValueChange}) => {
           return (
@@ -257,10 +251,10 @@ class TagDialog extends React.Component {
               {showResourceSelection && (
                 <FormGroup title={_('Resource Type')}>
                   <Select
-                    name="resource_type"
-                    items={resourceTypesOptions}
-                    value={this.state.resourceType}
                     disabled={fixed || resourceTypesOptions.length === 0}
+                    items={resourceTypesOptions}
+                    name="resource_type"
+                    value={this.state.resourceType}
                     onChange={type =>
                       this.handleResourceTypeChange(type, onValueChange)
                     }
@@ -271,9 +265,6 @@ class TagDialog extends React.Component {
                 <FormGroup title={_('Resources')}>
                   <ScrollableContent className="multiselect-scroll">
                     <MultiSelect
-                      name="resource_ids"
-                      items={renderSelectItems(this.state.resourceOptions)}
-                      value={this.state.resourceIdsSelected}
                       disabled={
                         !typeIsChosen ||
                         fixed ||
@@ -283,14 +274,17 @@ class TagDialog extends React.Component {
                         this.state.isLoading &&
                         this.state.resourceOptions.length === 0
                       }
+                      items={renderSelectItems(this.state.resourceOptions)}
+                      name="resource_ids"
+                      value={this.state.resourceIdsSelected}
                       onChange={ids => this.handleIdChange(ids, onValueChange)}
                     />
                   </ScrollableContent>
                   <Divider>{_('or add by ID:')}</Divider>
                   <TextField
+                    disabled={!typeIsChosen || fixed}
                     name="resource_id_text"
                     value={this.state.resourceIdText}
-                    disabled={!typeIsChosen || fixed}
                     onChange={id =>
                       this.handleIdChangeByText(id, onValueChange)
                     }

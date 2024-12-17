@@ -4,26 +4,19 @@
  */
 
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-
 import {isFunction} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Theme from 'web/utils/theme';
-
+import React from 'react';
+import styled from 'styled-components';
 import DetailsIcon from 'web/components/icon/detailsicon';
-
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const Indent = styled.div`
   display: flex;
@@ -50,13 +43,13 @@ const withRowDetails =
   Component => {
     const RowDetailsWrapper = ({entity, links = true, ...props}) => (
       <StyledTableRow>
-        <TableData colSpan={colSpan} flex align={['start', 'stretch']}>
+        <TableData flex align={['start', 'stretch']} colSpan={colSpan}>
           {links && (
             <Layout align={['start', 'start']}>
               {details && (
                 <DetailsLink
-                  type={isFunction(type) ? type(entity) : type}
                   id={entity.id}
+                  type={isFunction(type) ? type(entity) : type}
                 >
                   <DetailsIcon size="small" title={_('Open all details')} />
                 </DetailsLink>
@@ -65,7 +58,7 @@ const withRowDetails =
           )}
           <Indent />
           <Layout flex="column" grow="1">
-            <Component {...props} links={links} entity={entity} />
+            <Component {...props} entity={entity} links={links} />
           </Layout>
         </TableData>
       </StyledTableRow>

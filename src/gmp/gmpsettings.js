@@ -30,7 +30,6 @@ const setAndFreeze = (obj, name, value) => {
 };
 
 const warnDeprecatedSetting = (oldName, newName) => {
-  // eslint-disable-next-line no-console
   console.warn(
     'A deprecated setting',
     oldName,

@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import TrashcanIcon from 'web/components/icon/trashcanicon';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import TrashcanIcon from 'web/components/icon/trashcanicon';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 const EntityTrashIcon = ({
   capabilities,
@@ -43,7 +39,7 @@ const EntityTrashIcon = ({
       title = _('{{entity}} is still in use', {entity: displayName});
     } else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
-      // eslint-disable-next-line no-negated-condition
+       
     } else if (!mayDelete) {
       title = _('Permission to move {{entity}} to trashcan denied', {
         entity: displayName,
@@ -55,9 +51,9 @@ const EntityTrashIcon = ({
   return (
     <TrashcanIcon
       {...props}
+      active={active}
       title={title}
       value={entity}
-      active={active}
       onClick={active ? onClick : undefined}
     />
   );

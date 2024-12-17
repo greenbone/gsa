@@ -4,14 +4,10 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Layout from 'web/components/layout/layout';
-
 import Button from 'web/components/form/button';
+import Layout from 'web/components/layout/layout';
+import PropTypes from 'web/utils/proptypes';
 
 export const DialogFooterLayout = styled(Layout)`
   margin-top: 15px;
@@ -28,10 +24,10 @@ const DialogFooter = ({
 }) => (
   <DialogFooterLayout
     align={['end', 'center']}
-    shrink="0"
     data-testid={dataTestId}
+    shrink="0"
   >
-    <Button onClick={onClick} title={title} isLoading={isLoading}>
+    <Button isLoading={isLoading} title={title} onClick={onClick}>
       {title}
     </Button>
   </DialogFooterLayout>

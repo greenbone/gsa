@@ -4,11 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Nvt from 'gmp/models/nvt';
-
-import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import {
   clickElement,
   getDialog,
@@ -16,6 +12,7 @@ import {
   getTableBody,
   getTableHeader,
 } from 'web/components/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import EditConfigFamilyDialog from '../editconfigfamilydialog';
 

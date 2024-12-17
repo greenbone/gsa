@@ -4,48 +4,39 @@
  */
 
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import PortListIcon from 'web/components/icon/portlisticon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
-import {selector, loadEntity} from 'web/store/entities/portlists';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/portlists';
 import PropTypes from 'web/utils/proptypes';
 
 import PortListComponent from './component';
@@ -63,24 +54,24 @@ const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="scanning"
         anchor="creating-and-managing-port-lists"
+        page="scanning"
         title={_('Help: Port Lists')}
       />
-      <ListIcon title={_('PortList List')} page="portlists" />
+      <ListIcon page="portlists" title={_('PortList List')} />
     </IconDivider>
     <IconDivider>
       <CreateIcon entity={entity} onClick={onPortListCreateClick} />
       <CloneIcon entity={entity} onClick={onPortListCloneClick} />
       <EditIcon
-        entity={entity}
         disabled={entity.predefined}
+        entity={entity}
         onClick={onPortListEditClick}
       />
       <TrashIcon entity={entity} onClick={onPortListDeleteClick} />
       <ExportIcon
-        value={entity}
         title={_('Export PortList as XML')}
+        value={entity}
         onClick={onPortListDownloadClick}
       />
     </IconDivider>
@@ -137,13 +128,13 @@ const Page = ({
   ...props
 }) => (
   <PortListComponent
-    onCloned={goto_details('portlist', props)}
     onCloneError={onError}
+    onCloned={goto_details('portlist', props)}
     onCreated={goto_details('portlist', props)}
-    onDeleted={goto_list('portlists', props)}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={goto_list('portlists', props)}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
@@ -171,8 +162,8 @@ const Page = ({
               <PageTitle
                 title={_('Port List: {{name}}', {name: entity.name})}
               />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}

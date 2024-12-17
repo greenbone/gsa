@@ -4,21 +4,16 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
-
+import {clickElement, getActionItems} from 'web/components/testing';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
-
-import {clickElement, getActionItems} from 'web/components/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 

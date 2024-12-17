@@ -4,9 +4,7 @@
  */
 
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
 import {filterIdentifier} from 'web/store/utils';
 
 export class EntitySelector {

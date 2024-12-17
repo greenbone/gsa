@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import _ from 'gmp/locale';
 import {useCallback, useState} from 'react';
 
-import _ from 'gmp/locale';
 
 /**
  * Hook to handle the state for showing different types of messages in a dialog

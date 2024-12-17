@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {

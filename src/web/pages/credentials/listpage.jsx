@@ -3,33 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {CREDENTIALS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import CredentialIcon from 'web/components/icon/credentialicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/credentials';
+import PropTypes from 'web/utils/proptypes';
 
 import CredentialComponent from './component';
-import CredentialsTable from './table';
 import CredentialsFilterDialog from './filterdialog';
+import CredentialsTable from './table';
 
 export const ToolBarIcons = ({onCredentialCreateClick}) => {
   const capabilities = useCapabilities();
@@ -37,8 +31,8 @@ export const ToolBarIcons = ({onCredentialCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="scanning"
         anchor="managing-credentials"
+        page="scanning"
         title={_('Help: Credentials')}
       />
       {capabilities.mayCreate('credential') && (
@@ -65,17 +59,17 @@ const CredentialsPage = ({
   const [_] = useTranslation();
   return (
     <CredentialComponent
-      onCreated={onChanged}
-      onSaved={onChanged}
-      onCloned={onChanged}
       onCloneError={onError}
-      onDeleted={onChanged}
+      onCloned={onChanged}
+      onCreated={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
-      onInstallerDownloaded={onDownloaded}
+      onDownloaded={onDownloaded}
       onInstallerDownloadError={onError}
+      onInstallerDownloaded={onDownloaded}
       onInteraction={onInteraction}
+      onSaved={onChanged}
     >
       {({
         clone,
@@ -102,8 +96,8 @@ const CredentialsPage = ({
             onCredentialDeleteClick={delete_func}
             onCredentialDownloadClick={download}
             onCredentialEditClick={edit}
-            onCredentialSaveClick={save}
             onCredentialInstallerDownloadClick={downloadinstaller}
+            onCredentialSaveClick={save}
             onDownloaded={onDownloaded}
             onError={onError}
             onInteraction={onInteraction}

@@ -4,13 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import ReportFormat from 'gmp/models/reportformat';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import Theme from 'web/utils/theme';
 
 import VerifyIcon from '../verifyicon';

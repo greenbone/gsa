@@ -3,79 +3,66 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import Badge from 'web/components/badge/badge';
-
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import DetailsLink from 'web/components/link/detailslink';
-import Link from 'web/components/link/link';
-
 import AlterableIcon from 'web/components/icon/alterableicon';
+import AuditIcon from 'web/components/icon/auditicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
-import AuditIcon from 'web/components/icon/auditicon';
-
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
-import EntityPage, {Col} from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage, {Col} from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
-import {
-  selector as auditSelector,
-  loadEntity as loadAudit,
-} from 'web/store/entities/audits';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
-
-import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
-import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
-import StartIcon from 'web/pages/tasks/icons/starticon';
-import StopIcon from 'web/pages/tasks/icons/stopicon';
-
-import AuditDetails from './details';
-import AuditStatus from 'web/pages/tasks/status';
-import AuditComponent from './component';
-
 import {
   TaskPermissions as AuditPermissions,
   reloadInterval,
 } from 'web/pages/tasks/detailspage';
+import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
+import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
+import StartIcon from 'web/pages/tasks/icons/starticon';
+import StopIcon from 'web/pages/tasks/icons/stopicon';
+import AuditStatus from 'web/pages/tasks/status';
+import {
+  selector as auditSelector,
+  loadEntity as loadAudit,
+} from 'web/store/entities/audits';
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+
+import AuditComponent from './component';
+import AuditDetails from './details';
 
 export const ToolBarIcons = ({
   entity,
@@ -92,11 +79,11 @@ export const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
         <ManualIcon
-          page="compliance-and-special-scans"
           anchor="configuring-and-managing-audits"
+          page="compliance-and-special-scans"
           title={_('Help: Audits')}
         />
-        <ListIcon title={_('Audit List')} page="audits" />
+        <ListIcon page="audits" title={_('Audit List')} />
         {entity.isAlterable() && !entity.isNew() && (
           <AlterableIcon
             title={_(
@@ -127,8 +114,8 @@ export const ToolBarIcons = ({
           onClick={onAuditDeleteClick}
         />
         <ExportIcon
-          value={entity}
           title={_('Export Audit as XML')}
+          value={entity}
           onClick={onAuditDownloadClick}
         />
       </IconDivider>
@@ -136,9 +123,9 @@ export const ToolBarIcons = ({
       <IconDivider>
         {isDefined(entity.schedule) && (
           <ScheduleIcon
+            links={links}
             schedule={entity.schedule}
             schedulePeriods={entity.schedule_periods}
-            links={links}
           />
         )}
         <StartIcon
@@ -166,7 +153,6 @@ export const ToolBarIcons = ({
         <IconDivider>
           {isDefined(entity.current_report) && (
             <DetailsLink
-              type="report"
               id={entity.current_report.id}
               title={_('Current Report for Audit {{- name}} from {{- date}}', {
                 name: entity.name,
@@ -174,6 +160,7 @@ export const ToolBarIcons = ({
                   entity.current_report.scan_start,
                 ),
               })}
+              type="report"
             >
               <ReportIcon />
             </DetailsLink>
@@ -182,7 +169,6 @@ export const ToolBarIcons = ({
           {!isDefined(entity.current_report) &&
             isDefined(entity.last_report) && (
               <DetailsLink
-                type="report"
                 id={entity.last_report.id}
                 title={_('Last Report for Audit {{- name}} from {{- date}}', {
                   name: entity.name,
@@ -190,15 +176,16 @@ export const ToolBarIcons = ({
                     entity.last_report.scan_start,
                   ),
                 })}
+                type="report"
               >
                 <ReportIcon />
               </DetailsLink>
             )}
 
           <Link
-            to="reports"
             filter={'task_id=' + entity.id}
             title={_('Total Reports for Audit {{- name}}', entity)}
+            to="reports"
           >
             <Badge content={entity.report_count.total}>
               <ReportIcon />
@@ -207,9 +194,9 @@ export const ToolBarIcons = ({
         </IconDivider>
 
         <Link
-          to="results"
           filter={'task_id=' + entity.id}
           title={_('Results for Audit {{- name}}', entity)}
+          to="results"
         >
           <Badge content={entity.result_count}>
             <ResultIcon />
@@ -284,21 +271,21 @@ const Page = ({
   ...props
 }) => (
   <AuditComponent
-    onCloned={goto_details('audit', props)}
     onCloneError={onError}
+    onCloned={goto_details('audit', props)}
     onContainerSaved={onChanged}
-    onDeleted={goto_list('audits', props)}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={goto_list('audits', props)}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
-    onResumed={onChanged}
     onResumeError={onError}
+    onResumed={onChanged}
     onSaved={onChanged}
-    onStarted={onChanged}
     onStartError={onError}
-    onStopped={onChanged}
+    onStarted={onChanged}
     onStopError={onError}
+    onStopped={onChanged}
   >
     {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
       <EntityPage
@@ -307,9 +294,6 @@ const Page = ({
         sectionIcon={<AuditIcon size="large" />}
         title={_('Audit')}
         toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onError={onError}
-        onInteraction={onInteraction}
         onAuditCloneClick={clone}
         onAuditDeleteClick={deleteFunc}
         onAuditDownloadClick={download}
@@ -317,13 +301,16 @@ const Page = ({
         onAuditResumeClick={resume}
         onAuditStartClick={start}
         onAuditStopClick={stop}
+        onChanged={onChanged}
+        onError={onError}
+        onInteraction={onInteraction}
       >
         {({activeTab = 0, onActivateTab}) => {
           return (
             <React.Fragment>
               <PageTitle title={_('Audit: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
@@ -347,8 +334,8 @@ const Page = ({
                         permissions={permissions}
                         onChanged={onChanged}
                         onDownloaded={onDownloaded}
-                        onInteraction={onInteraction}
                         onError={onError}
+                        onInteraction={onInteraction}
                       />
                     </TabPanel>
                   </TabPanels>

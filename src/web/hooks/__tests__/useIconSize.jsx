@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {describe, test, expect} from '@gsa/testing';
 import useIconSize, {
   ICON_SIZE_LARGE_PIXELS,
   ICON_SIZE_MEDIUM_PIXELS,
   ICON_SIZE_SMALL_PIXELS,
   ICON_SIZE_TINY_PIXELS,
 } from 'web/hooks/useIconSize';
-import {describe, test, expect} from '@gsa/testing';
 import {renderHook} from 'web/utils/testing';
 
 describe('useIconSize', () => {

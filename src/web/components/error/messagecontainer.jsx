@@ -4,7 +4,6 @@
  */
 
 import styled from 'styled-components';
-
 import Layout from 'web/components/layout/layout';
 
 const MessageContainer = styled(Layout)`

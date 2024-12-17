@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {isDefined} from 'gmp/utils/identity';
 import Logger from 'gmp/log';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 const log = Logger.getLogger('web.components.provider.subscription');
@@ -44,7 +42,7 @@ class SubscriptionProvider extends React.Component {
     subscribers.push(func);
 
     return () => {
-      const subscribers = this.getSubscribers(name); // eslint-disable-line no-shadow
+      const subscribers = this.getSubscribers(name);  
       this.setSubscribers(name, subscribers.filter(item => item !== func));
     };
   }

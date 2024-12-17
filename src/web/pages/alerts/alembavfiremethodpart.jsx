@@ -3,26 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
-
+import React from 'react';
+import FormGroup from 'web/components/form/formgroup';
+import MultiSelect from 'web/components/form/multiselect';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import NewIcon from 'web/components/icon/newicon';
+import useTranslation from 'web/hooks/useTranslation';
+import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/dialog';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
-
-import MultiSelect from 'web/components/form/multiselect';
-import Select from 'web/components/form/select';
-import FormGroup from 'web/components/form/formgroup';
-import Radio from 'web/components/form/radio';
-import TextArea from 'web/components/form/textarea';
-import TextField from 'web/components/form/textfield';
-
-import NewIcon from 'web/components/icon/newicon';
-
-import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/dialog';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const VFIRE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
@@ -54,8 +49,8 @@ const AlembaVfireMethodPart = ({
     <>
       <FormGroup title={_('Report Formats')}>
         <MultiSelect
-          name={'report_format_ids'}
           items={renderSelectItems(reportFormats)}
+          name={'report_format_ids'}
           value={reportFormatIds}
           onChange={onReportFormatsChange}
         />
@@ -70,11 +65,11 @@ const AlembaVfireMethodPart = ({
         />
       </FormGroup>
 
-      <FormGroup title={_('Credential')} direction="row">
+      <FormGroup direction="row" title={_('Credential')}>
         <Select
           grow="1"
-          name={prefix + 'vfire_credential'}
           items={renderSelectItems(credentials)}
+          name={prefix + 'vfire_credential'}
           value={vFireCredential}
           onChange={onCredentialChange}
         />
@@ -86,18 +81,18 @@ const AlembaVfireMethodPart = ({
         />
       </FormGroup>
 
-      <FormGroup title={_('Session Type')} direction="row">
+      <FormGroup direction="row" title={_('Session Type')}>
         <Radio
-          title={_('Analyst')}
-          name={prefix + 'vfire_session_type'}
           checked={vFireSessionType === 'Analyst'}
+          name={prefix + 'vfire_session_type'}
+          title={_('Analyst')}
           value="Analyst"
           onChange={onChange}
         />
         <Radio
-          title={_('User')}
-          name={prefix + 'vfire_session_type'}
           checked={vFireSessionType === 'User'}
+          name={prefix + 'vfire_session_type'}
+          title={_('User')}
           value="User"
           onChange={onChange}
         />
@@ -124,8 +119,8 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Call Description')}>
         <TextArea
           grow="1"
-          rows="9"
           name={prefix + 'vfire_call_description'}
+          rows="9"
           value={vFireCallDescription}
           onChange={onChange}
         />

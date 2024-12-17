@@ -4,22 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import ReportConfig from 'gmp/models/reportconfig';
 import ReportFormat from 'gmp/models/reportformat';
-
-import {
-  rendererWith,
-  fireEvent,
-  getByName,
-  getAllByName,
-  screen,
-  within,
-} from 'web/utils/testing';
-
-import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/mockreportconfig';
-import {mockReportFormats} from '../__mocks__/mockreportformats';
-
 import {
   changeInputValue,
   clickElement,
@@ -35,7 +21,17 @@ import {
   getSelectedItems,
   getTableBody,
 } from 'web/components/testing';
+import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/mockreportconfig';
+import {
+  rendererWith,
+  fireEvent,
+  getByName,
+  getAllByName,
+  screen,
+  within,
+} from 'web/utils/testing';
 
+import {mockReportFormats} from '../__mocks__/mockreportformats';
 import ReportConfigDialog from '../dialog';
 
 const config = ReportConfig.fromElement(mockReportConfig);
@@ -52,8 +48,8 @@ describe('Edit Report Config Dialog component tests', () => {
 
     render(
       <ReportConfigDialog
-        reportconfig={config}
         formats={formats}
+        reportconfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -78,8 +74,8 @@ describe('Edit Report Config Dialog component tests', () => {
     const {render} = rendererWith({capabilities: true, router: true, gmp});
     render(
       <ReportConfigDialog
-        reportconfig={config}
         formats={formats}
+        reportconfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -130,8 +126,8 @@ describe('Edit Report Config Dialog component tests', () => {
     const {render} = rendererWith({capabilities: true, router: true, gmp});
     render(
       <ReportConfigDialog
-        reportconfig={config}
         formats={formats}
+        reportconfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -156,8 +152,8 @@ describe('Edit Report Config Dialog component tests', () => {
     const {render} = rendererWith({capabilities: true, router: true, gmp});
     render(
       <ReportConfigDialog
-        reportconfig={config}
         formats={formats}
+        reportconfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -249,8 +245,8 @@ describe('Edit Report Config Dialog component tests', () => {
     const {render} = rendererWith({capabilities: true, router: true, gmp});
     render(
       <ReportConfigDialog
-        reportconfig={config}
         formats={formats}
+        reportconfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -330,8 +326,8 @@ describe('New Report Config Dialog component tests', () => {
 
     const {baseElement} = render(
       <ReportConfigDialog
-        reportconfig={undefined}
         formats={formats}
+        reportconfig={undefined}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -410,8 +406,8 @@ describe('New Report Config Dialog component tests', () => {
 
     render(
       <ReportConfigDialog
-        reportconfig={undefined}
         formats={formats}
+        reportconfig={undefined}
         onClose={handleClose}
         onSave={handleSave}
         onValueChange={handleValueChange}

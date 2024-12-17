@@ -3,18 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {
   configureStore as reduxConfigureStore,
   isImmutableDefault,
 } from '@reduxjs/toolkit';
-
-import logger from 'redux-logger';
-
 import Rejection from 'gmp/http/rejection';
-
 import {isDate} from 'gmp/models/date';
 import {isEvent} from 'gmp/models/event';
+import logger from 'redux-logger';
 
 import rootReducer from './reducers';
 

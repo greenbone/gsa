@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {isFunction} from 'gmp/utils/identity';
 
 import entitiesReducer from '../reducers';

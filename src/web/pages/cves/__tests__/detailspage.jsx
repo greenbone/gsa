@@ -4,14 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Cve from 'gmp/models/cve';
-
 import {entityLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith} from 'web/utils/testing';
 
 import CvePage from '../detailspage';

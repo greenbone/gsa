@@ -5,18 +5,16 @@
 
 
 import React from 'react';
-
-import TLSCertificatesTable from './tlscertificatestable';
-import ReportEntitiesContainer from './reportentitiescontainer';
-
 import PropTypes from 'web/utils/proptypes';
-
 import {
   makeCompareDate,
   makeCompareIp,
   makeComparePort,
   makeCompareString,
 } from 'web/utils/sort';
+
+import ReportEntitiesContainer from './reportentitiescontainer';
+import TLSCertificatesTable from './tlscertificatestable';
 
 const tlsCertificatesSortFunctions = {
   dn: makeCompareString('subjectDn'),
@@ -43,8 +41,8 @@ const TLSCertificatesTab = ({
     counts={counts}
     entities={tlsCertificates}
     filter={filter}
-    sortFunctions={tlsCertificatesSortFunctions}
     sortField={sortField}
+    sortFunctions={tlsCertificatesSortFunctions}
     sortReverse={sortReverse}
     onInteraction={onInteraction}
   >

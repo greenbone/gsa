@@ -3,60 +3,49 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
-
-import _ from 'gmp/locale';
-
-import {parseInt} from 'gmp/parser';
-
 import {
   NVT_FEED,
   SCAP_FEED,
   CERT_FEED,
   GVMD_DATA_FEED,
 } from 'gmp/commands/feedstatus';
-
+import _ from 'gmp/locale';
+import {parseInt} from 'gmp/parser';
 import {hasValue} from 'gmp/utils/identity';
-
+import React, {useState} from 'react';
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
+import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import CveIcon from 'web/components/icon/cveicon';
 import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NvtIcon from 'web/components/icon/nvticon';
-import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import PolicyIcon from 'web/components/icon/policyicon';
 import PortListIcon from 'web/components/icon/portlisticon';
 import ReportFormatIcon from 'web/components/icon/reportformaticon';
 import ScanConfigIcon from 'web/components/icon/scanconfigicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import Link from 'web/components/link/link';
-
-import Section from 'web/components/section/section';
-
-import Table from 'web/components/table/stripedtable';
-import TableBody from 'web/components/table/body';
-import TableRow from 'web/components/table/row';
-import TableHead from 'web/components/table/head';
-import TableData from 'web/components/table/data';
-
 import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-
+import Section from 'web/components/section/section';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHead from 'web/components/table/head';
+import TableRow from 'web/components/table/row';
+import Table from 'web/components/table/stripedtable';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/proptypes';
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="web-interface"
     anchor="displaying-the-feed-status"
+    page="web-interface"
     size="small"
     title={_('Help: Feed Status')}
   />
@@ -162,25 +151,25 @@ const FeedStatus = ({feeds}) => {
                   )}
                   {feed.feedType === GVMD_DATA_FEED && (
                     <IconDivider>
-                      <Link to="policies" filter="predefined=1">
+                      <Link filter="predefined=1" to="policies">
                         <IconDivider align={['start', 'center']}>
                           <PolicyIcon size="medium" />
                           <span>{_('Compliance Policies')}</span>
                         </IconDivider>
                       </Link>
-                      <Link to="portlists" filter="predefined=1">
+                      <Link filter="predefined=1" to="portlists">
                         <IconDivider align={['start', 'center']}>
                           <PortListIcon size="medium" />
                           <span>{_('Port Lists')}</span>
                         </IconDivider>
                       </Link>
-                      <Link to="reportformats" filter="predefined=1">
+                      <Link filter="predefined=1" to="reportformats">
                         <IconDivider align={['start', 'center']}>
                           <ReportFormatIcon size="medium" />
                           <span>{_('Report Formats')}</span>
                         </IconDivider>
                       </Link>
-                      <Link to="scanconfigs" filter="predefined=1">
+                      <Link filter="predefined=1" to="scanconfigs">
                         <IconDivider align={['start', 'center']}>
                           <ScanConfigIcon size="medium" />
                           <span>{_('Scan Configs')}</span>

@@ -3,12 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
-import {NO_VALUE} from 'gmp/parser';
-
+import logger from 'gmp/log';
 import Override, {
   ANY,
   MANUAL,
@@ -16,6 +12,7 @@ import Override, {
   DEFAULT_DAYS,
   SEVERITY_FALSE_POSITIVE,
 } from 'gmp/models/override';
+import {NO_VALUE} from 'gmp/parser';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

@@ -3,30 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import SolutionTypeSvgIcon from 'web/components/icon/solutiontypesvgicon';
+import Layout from 'web/components/layout/layout';
+import Sort from 'web/components/sortby/sortby';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 import {createEntitiesFooter} from 'web/entities/footer';
 import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
-
-import SolutionTypeSvgIcon from 'web/components/icon/solutiontypesvgicon';
-
-import Layout from 'web/components/layout/layout';
-
-import Sort from 'web/components/sortby/sortby';
-
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
-
-import ResultsRow from './row';
-import ResultDetails from './details';
 import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
+
+import ResultDetails from './details';
+import ResultsRow from './row';
 
 const Header = ({
   actionsColumn,
@@ -44,25 +38,25 @@ const Header = ({
       <TableRow>
         {delta && (
           <TableHead
-            width="4%"
-            rowSpan="2"
-            currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
+            currentSortDir={currentSortDir}
+            rowSpan="2"
             sortBy={sort ? 'delta' : false}
-            onSortChange={onSortChange}
             title={_('Delta')}
+            width="4%"
+            onSortChange={onSortChange}
           />
         )}
         <TableHead
-          width="40%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'vulnerability' : false}
-          onSortChange={onSortChange}
           title={_('Vulnerability')}
+          width="40%"
+          onSortChange={onSortChange}
         />
-        <TableHead width="2%" rowSpan="2">
+        <TableHead rowSpan="2" width="2%">
           <Layout align="center">
             {sort ? (
               <Sort by="solution_type" onClick={onSortChange}>
@@ -75,92 +69,92 @@ const Header = ({
         </TableHead>
         {audit ? (
           <TableHead
-            width="8%"
-            rowSpan="2"
-            currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
+            currentSortDir={currentSortDir}
+            rowSpan="2"
             sortBy={sort ? 'compliant' : false}
-            onSortChange={onSortChange}
             title={_('Compliant')}
+            width="8%"
+            onSortChange={onSortChange}
           />
         ) : (
           <TableHead
-            width="8%"
-            rowSpan="2"
-            currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
+            currentSortDir={currentSortDir}
+            rowSpan="2"
             sortBy={sort ? 'severity' : false}
-            onSortChange={onSortChange}
             title={_('Severity')}
+            width="8%"
+            onSortChange={onSortChange}
           />
         )}
         <TableHead
-          width="3%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'qod' : false}
-          onSortChange={onSortChange}
           title={_('QoD')}
+          width="3%"
+          onSortChange={onSortChange}
         />
         <TableHead colSpan="2" width="23%">
           {_('Host')}
         </TableHead>
         <TableHead
-          width="9%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'location' : false}
-          onSortChange={onSortChange}
           title={_('Location')}
+          width="9%"
+          onSortChange={onSortChange}
         />
         {gmp.settings.enableEPSS && !audit && (
           <TableHead colSpan="2">{_('EPSS')}</TableHead>
         )}
         <TableHead
-          width="15%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'created' : false}
-          onSortChange={onSortChange}
           title={_('Created')}
+          width="15%"
+          onSortChange={onSortChange}
         />
         {actionsColumn}
       </TableRow>
       <TableRow>
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'host' : false}
-          onSortChange={onSortChange}
           title={_('IP')}
+          onSortChange={onSortChange}
         />
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'hostname' : false}
-          onSortChange={onSortChange}
           title={_('Name')}
+          onSortChange={onSortChange}
         />
         {gmp.settings.enableEPSS && !audit && (
           <>
             <TableHead
-              width="3%"
-              currentSortDir={currentSortDir}
               currentSortBy={currentSortBy}
+              currentSortDir={currentSortDir}
               sortBy={sort ? 'epss_score' : false}
-              onSortChange={onSortChange}
               title={_('Score')}
+              width="3%"
+              onSortChange={onSortChange}
             />
             <TableHead
-              width="3%"
-              currentSortDir={currentSortDir}
               currentSortBy={currentSortBy}
+              currentSortDir={currentSortDir}
               sortBy={sort ? 'epss_percentile' : false}
-              onSortChange={onSortChange}
               title={_('Percentage')}
+              width="3%"
+              onSortChange={onSortChange}
             />
           </>
         )}

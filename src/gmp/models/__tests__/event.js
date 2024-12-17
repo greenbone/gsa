@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 
 import date from '../date';
-
 import Event, {isEvent} from '../event';
 
 const ICAL_FORMAT = 'YYYYMMDD[T]HHmmss[Z]';

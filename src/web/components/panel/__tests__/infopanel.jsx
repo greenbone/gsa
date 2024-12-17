@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, userEvent} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
@@ -13,7 +12,7 @@ import InfoPanel from '../infopanel';
 describe('InfoPanel tests', () => {
   test('should render with children', () => {
     const {element, queryByRole, getByTestId} = render(
-      <InfoPanel heading="heading text" footer="footer text">
+      <InfoPanel footer="footer text" heading="heading text">
         <span data-testid="child-span">child</span>
       </InfoPanel>,
     );
@@ -32,8 +31,8 @@ describe('InfoPanel tests', () => {
     const handleCloseClick = testing.fn();
     const {element, queryByRole} = render(
       <InfoPanel
-        heading="heading text"
         footer="footer text"
+        heading="heading text"
         onCloseClick={handleCloseClick}
       />,
     );
@@ -49,8 +48,8 @@ describe('InfoPanel tests', () => {
     const handleCloseClick = testing.fn();
     const {element, queryByRole, getByTestId} = render(
       <InfoPanel
-        heading="heading text"
         footer="footer text"
+        heading="heading text"
         onCloseClick={handleCloseClick}
       />,
     );
@@ -68,9 +67,9 @@ describe('InfoPanel tests', () => {
     const handleCloseClick = testing.fn();
     const {element, queryByRole, getByTestId} = render(
       <InfoPanel
-        isWarning={true}
-        heading="heading text"
         footer="footer text"
+        heading="heading text"
+        isWarning={true}
         onCloseClick={handleCloseClick}
       />,
     );
@@ -88,8 +87,8 @@ describe('InfoPanel tests', () => {
     const handleCloseClick = testing.fn();
     const {queryByRole} = render(
       <InfoPanel
-        heading="heading text"
         footer="footer text"
+        heading="heading text"
         onCloseClick={handleCloseClick}
       />,
     );

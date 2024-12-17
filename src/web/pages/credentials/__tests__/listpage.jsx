@@ -4,20 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-
-import CredentialPage, {ToolBarIcons} from '../listpage';
 import {
   clickElement,
   getCheckBoxes,
@@ -29,6 +19,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+
+import CredentialPage, {ToolBarIcons} from '../listpage';
+
 
 const credential = Credential.fromElement({
   _id: '6575',

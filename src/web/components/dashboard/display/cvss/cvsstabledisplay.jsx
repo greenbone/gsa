@@ -6,7 +6,6 @@
 import React from 'react';
 
 import DataTableDisplay from '../datatabledisplay';
-
 import transformCvssData, {cvssDataRow} from './cvsstransform';
 
 const CvssTableDisplay = props => (

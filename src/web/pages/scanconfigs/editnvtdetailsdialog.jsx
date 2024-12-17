@@ -3,40 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useReducer, useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React, {useEffect, useReducer, useState} from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import DateTime from 'web/components/date/datetime';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
-
 import Loading from 'web/components/loading/loading';
-
-import SimpleTable from 'web/components/table/simpletable';
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import SimpleTable from 'web/components/table/simpletable';
+import Table from 'web/components/table/stripedtable';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import NvtPreference from '../nvts/nvtpreference';
 import Preformatted from '../nvts/preformatted';
-import useTranslation from 'web/hooks/useTranslation';
 
 const createPrefValues = (preferences = []) => {
   const preferenceValues = {};
@@ -142,9 +133,9 @@ const EditNvtDetailsDialog = ({
   return (
     <SaveDialog
       title={title}
+      values={controlledData}
       onClose={onClose}
       onSave={onSave}
-      values={controlledData}
     >
       {({values: state, onValueChange}) =>
         isLoadingNvt ? (
@@ -213,8 +204,8 @@ const EditNvtDetailsDialog = ({
                       <TableData>{_('CVSS base vector')}</TableData>
                       <TableData>
                         <Link
-                          to="cvsscalculator"
                           query={{cvssVector: nvtCvssVector}}
+                          to="cvsscalculator"
                         >
                           {nvtCvssVector}
                         </Link>
@@ -240,9 +231,9 @@ const EditNvtDetailsDialog = ({
                     <Divider flex="column">
                       <Divider>
                         <Radio
-                          value="1"
-                          name="useDefaultTimeout"
                           checked={state.useDefaultTimeout === '1'}
+                          name="useDefaultTimeout"
+                          value="1"
                           onChange={value => setDefaultTimeout(value)}
                         />
                         <span>
@@ -254,9 +245,9 @@ const EditNvtDetailsDialog = ({
                       </Divider>
                       <Divider>
                         <Radio
-                          value="0"
-                          name="useDefaultTimeout"
                           checked={state.useDefaultTimeout === '0'}
+                          name="useDefaultTimeout"
+                          value="0"
                           onChange={value => setDefaultTimeout(value)}
                         />
                         <TextField

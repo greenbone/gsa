@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {isDate} from 'gmp/models/date';
 import Login from 'gmp/models/login';
 

@@ -4,27 +4,21 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Layout from 'web/components/layout/layout';
-
-import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
-import TableBody from 'web/components/table/body';
-import TableData, {TableDataAlignTop} from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-
-import {Col} from 'web/entity/page';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import {renderYesNo} from 'web/utils/render';
-
+import React from 'react';
 import styled from 'styled-components';
+import Layout from 'web/components/layout/layout';
+import DetailsLink from 'web/components/link/detailslink';
+import TableBody from 'web/components/table/body';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
+import TableRow from 'web/components/table/row';
+import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 
 export const ReportConfigParamValue = ({
   param,
@@ -39,10 +33,10 @@ export const ReportConfigParamValue = ({
         : report_format_id;
       return (
         <DetailsLink
-          type="reportformat"
           key={param.name + '_' + report_format_id}
           id={report_format_id}
           textOnly={!links}
+          type="reportformat"
         >
           {label}
         </DetailsLink>
@@ -82,7 +76,7 @@ const ReportConfigDetails = ({entity, links = true}) => {
   const reportFormatLink = orphan ? (
     report_format.id
   ) : (
-    <DetailsLink type="reportformat" id={report_format.id} textOnly={!links}>
+    <DetailsLink id={report_format.id} textOnly={!links} type="reportformat">
       {report_format.name}
     </DetailsLink>
   );
@@ -98,7 +92,7 @@ const ReportConfigDetails = ({entity, links = true}) => {
         <TableRow key={param.name}>
           <TableDataAlignTop>{param.name}</TableDataAlignTop>
           <TableData>
-            <ReportConfigParamValue param={param} links={links} />
+            <ReportConfigParamValue links={links} param={param} />
           </TableData>
         </TableRow>
       );

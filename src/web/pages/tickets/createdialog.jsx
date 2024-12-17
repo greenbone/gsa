@@ -4,19 +4,15 @@
  */
 
 import React, {useState} from 'react';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import useFormValidation from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
-
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 import {createTicketRules as validationRules} from './validationrules';
 
@@ -47,30 +43,30 @@ const CreateTicketDialog = ({
     <SaveDialog
       error={error}
       title={title}
-      onClose={onClose}
-      onErrorClose={() => setError()}
-      onSave={validate}
       values={{
         resultId,
         userId,
         ...formValues,
       }}
+      onClose={onClose}
+      onErrorClose={() => setError()}
+      onSave={validate}
     >
       {({values}) => (
         <>
           <FormGroup title={_('Assign To User')}>
             <Select
+              items={renderSelectItems(users)}
               name="userId"
               value={values.userId}
-              items={renderSelectItems(users)}
               onChange={onUserIdChange}
             />
           </FormGroup>
           <FormGroup title={_('Note')}>
             <TextArea
               errorContent={errors.note}
-              name="note"
               minRows="5"
+              name="note"
               value={values.note}
               onChange={handleValueChange}
             />

@@ -4,12 +4,9 @@
  */
 
 import logger from 'gmp/log';
-
-import {isDefined, isString, isJsDate} from 'gmp/utils/identity';
-
-import {parseDate} from 'gmp/parser';
-
 import {setLocale as setMomentLocale, isDate} from 'gmp/models/date';
+import {parseDate} from 'gmp/parser';
+import {isDefined, isString, isJsDate} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.locale.date');
 

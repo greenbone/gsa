@@ -3,17 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import CreateIcon from 'web/components/icon/newicon';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import CreateIcon from 'web/components/icon/newicon';
 
 const EntityCreateIcon = ({
   capabilities,
@@ -42,7 +39,7 @@ const EntityCreateIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Create new {{entity}}', {entity: displayName});
-      // eslint-disable-next-line no-negated-condition
+       
     } else if (!mayCreate) {
       title = _('{{entity}} may not be created', {entity: displayName});
     } else {
@@ -54,8 +51,8 @@ const EntityCreateIcon = ({
   return (
     <CreateIcon
       {...props}
-      title={title}
       active={active}
+      title={title}
       onClick={active ? onClick : undefined}
     />
   );

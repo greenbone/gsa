@@ -5,9 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 
-import {createResponse, createHttp} from '../testing';
-
 import {ResourceNamesCommand} from '../resourcenames';
+import {createResponse, createHttp} from '../testing';
 
 describe('ResourceNamesCommand tests', () => {
   test('should return resource names', () => {

@@ -4,14 +4,12 @@
  */
 
 
-import React from 'react';
 
 import {getLocale} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
+import React from 'react';
 import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
 
 import BlankLink from './blanklink';
 

@@ -4,12 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import ReportConfig from 'gmp/models/reportconfig';
 import Capabilities from 'gmp/capabilities/capabilities';
-
-import {fireEvent, getByTestId, rendererWith, wait} from 'web/utils/testing';
-
+import ReportConfig from 'gmp/models/reportconfig';
 import {
   clickElement,
   getDialogContent,
@@ -19,6 +15,7 @@ import {
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
+import {fireEvent, getByTestId, rendererWith, wait} from 'web/utils/testing';
 
 import ReportFormatComponent from '../component';
 

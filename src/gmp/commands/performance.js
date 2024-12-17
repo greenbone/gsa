@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
 import {isDefined, isArray} from 'gmp/utils/identity';
 
 import HttpCommand from './http';
-
-import registerCommand from 'gmp/command';
 
 class PerformanceCommand extends HttpCommand {
   constructor(http) {

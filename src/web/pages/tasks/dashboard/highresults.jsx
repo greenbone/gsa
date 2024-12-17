@@ -3,33 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {withRouter} from 'web/utils/withRouter';
 
 import {format as d3format} from 'd3-format';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import {parseFloat, parseSeverity} from 'gmp/parser';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
+import {parseFloat, parseSeverity} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import BubbleChart from 'web/components/chart/bubble';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
+import {registerDisplay} from 'web/components/dashboard/registry';
 import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
 import {severityFormat} from 'web/utils/render';
 import {resultSeverityRiskFactor, _NA} from 'web/utils/severity';
-
-import BubbleChart from 'web/components/chart/bubble';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard/display/createDisplay';
-import {registerDisplay} from 'web/components/dashboard/registry';
-import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+import {withRouter} from 'web/utils/withRouter';
 
 import {TasksHighResultsLoader} from './loaders';
 
@@ -86,17 +79,17 @@ export class TasksHighResultsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
             dataTransform={transformHighResultsData}
-            title={() => _('Tasks by High Results per Host')}
+            filter={filter}
             showToggleLegend={false}
+            title={() => _('Tasks by High Results per Host')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BubbleChart
-                width={width}
-                height={height}
                 data={tdata}
+                height={height}
                 svgRef={svgRef}
+                width={width}
                 onDataClick={this.handleDataClick}
               />
             )}

@@ -3,31 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
 
-import {filter, map} from 'gmp/utils/array';
-import {hasValue, isDefined} from 'gmp/utils/identity';
-
-import {parseInt} from 'gmp/parser';
 
 import {
   GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
+import {parseInt} from 'gmp/parser';
+import {filter, map} from 'gmp/utils/array';
+import {hasValue, isDefined} from 'gmp/utils/identity';
+import React, {useCallback} from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
-
 import NewIcon from 'web/components/icon/newicon';
-
-import useTranslation from 'web/hooks/useTranslation';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
 const AVAILABLE_SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
 
@@ -57,7 +51,7 @@ const ScannerDialog = ({
   title = title || _('New Scanner');
 
   const handleTypeChange = useCallback(
-    // eslint-disable-next-line no-shadow
+     
     (value, name) => {
       if (onScannerTypeChange) {
         value = parseInt(value);
@@ -133,34 +127,34 @@ const ScannerDialog = ({
             </FormGroup>
             <FormGroup title={_('Type')}>
               <Select
+                disabled={isInUse}
+                items={scannerTypesOptions}
                 name="type"
                 value={state.type}
-                items={scannerTypesOptions}
-                disabled={isInUse}
                 onChange={handleTypeChange}
               />
             </FormGroup>
             <FormGroup title={_('Host')}>
               <TextField
+                disabled={isInUse}
                 name="host"
                 value={state.host}
-                disabled={isInUse}
                 onChange={onValueChange}
               />
             </FormGroup>
 
             {!isGreenboneSensorType && (
-              <FormGroup title={_('Credential')} direction="row">
+              <FormGroup direction="row" title={_('Credential')}>
                 <Select
                   grow="1"
-                  name="credential_id"
                   items={renderSelectItems(scanner_credentials)}
+                  name="credential_id"
                   value={credential_id}
                   onChange={onCredentialChange}
                 />
                 <NewIcon
-                  value={type}
                   title={_('Create a new Credential')}
+                  value={type}
                   onClick={onNewCredentialClick}
                 />
               </FormGroup>

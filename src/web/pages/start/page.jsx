@@ -3,24 +3,41 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {v4 as uuid} from 'uuid';
 
-import memoize from 'memoize-one';
 
-import styled from 'styled-components';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
+import memoize from 'memoize-one';
+import React from 'react';
+import {connect} from 'react-redux';
+import styled from 'styled-components';
+import {v4 as uuid} from 'uuid';
+import {
+  addDisplayToSettings,
+  canAddDisplay,
+  convertDefaultDisplays,
+} from 'web/components/dashboard/utils';
+import DashboardIcon from 'web/components/icon/dashboardicon';
+import DeleteIcon from 'web/components/icon/deleteicon';
+import EditIcon from 'web/components/icon/editicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+import Loading from 'web/components/loading/loading';
+import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
+import Section from 'web/components/section/section';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 import {
   loadSettings,
   saveSettings,
@@ -30,41 +47,14 @@ import getDashboardSettings, {
   DashboardSetting,
 } from 'web/store/dashboard/settings/selectors';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import {
-  addDisplayToSettings,
-  canAddDisplay,
-  convertDefaultDisplays,
-} from 'web/components/dashboard/utils';
-
-import DashboardIcon from 'web/components/icon/dashboardicon';
-import DeleteIcon from 'web/components/icon/deleteicon';
-import EditIcon from 'web/components/icon/editicon';
-import ManualIcon from 'web/components/icon/manualicon';
-import NewIcon from 'web/components/icon/newicon';
-
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import Loading from 'web/components/loading/loading';
-
-import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
-
-import Section from 'web/components/section/section';
-
-import Tab from 'web/components/tab/tab';
-import TabLayout from 'web/components/tab/tablayout';
-import TabList from 'web/components/tab/tablist';
-import TabPanel from 'web/components/tab/tabpanel';
-import TabPanels from 'web/components/tab/tabpanels';
-import Tabs from 'web/components/tab/tabs';
-
-import Dashboard from './dashboard';
 import ConfirmRemoveDialog from './confirmremovedialog';
-import NewDashboardDialog, {DEFAULT_DISPLAYS} from './newdashboarddialog';
+import Dashboard from './dashboard';
 import EditDashboardDialog from './editdashboarddialog';
-import Divider from 'web/components/layout/divider';
+import NewDashboardDialog, {DEFAULT_DISPLAYS} from './newdashboarddialog';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
@@ -98,8 +88,8 @@ const StyledTab = styled(Tab)`
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="web-interface"
     anchor="dashboards-and-dashboard-displays"
+    page="web-interface"
     title={_('Help: Dashboards')}
   />
 );
@@ -394,12 +384,12 @@ class StartPage extends React.Component {
           {/* span prevents Toolbar from growing */}
           <ToolBarIcons />
         </span>
-        <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
+        <Section img={<DashboardIcon size="large" />} title={_('Dashboards')}>
           {isLoading ? (
             <Loading />
           ) : (
             <React.Fragment>
-              <TabLayout grow="1" align={['start', 'end']}>
+              <TabLayout align={['start', 'end']} grow="1">
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
@@ -418,7 +408,7 @@ class StartPage extends React.Component {
                                 title={_('Edit Dashboard Title')}
                                 onClick={() =>
                                   this.handleOpenEditDashboardDialog(id)
-                                } // eslint-disable-line max-len
+                                }  
                               />
                               <DeleteIcon
                                 size="tiny"
@@ -427,7 +417,7 @@ class StartPage extends React.Component {
                                   this.handleOpenConfirmRemoveDashboardDialog(
                                     id,
                                   )
-                                } // eslint-disable-line max-len
+                                }  
                               />
                             </IconDivider>
                           )}
@@ -436,14 +426,14 @@ class StartPage extends React.Component {
                     );
                   })}
 
-                  <Layout align={['center', 'center']} grow>
+                  <Layout grow align={['center', 'center']}>
                     <StyledNewIcon
+                      active={canAdd}
                       title={
                         canAdd
                           ? _('Add new Dashboard')
                           : _('Dashboards limit reached')
                       }
-                      active={canAdd}
                       onClick={
                         canAdd ? this.handleOpenNewDashboardDialog : undefined
                       }
@@ -461,12 +451,12 @@ class StartPage extends React.Component {
                         <SubscriptionProvider>
                           {({notify}) => (
                             <Dashboard
-                              settings={settings}
                               id={id}
                               loadSettings={this.handleLoadDashboardSettings}
                               notify={notify}
                               saveSettings={this.handleSaveDashboardSettings}
                               setDefaultSettings={this.handleSetDefaultSettings}
+                              settings={settings}
                               onInteraction={this.props.renewSessionTimeout}
                               onNewDisplay={this.handleAddNewDisplay}
                               onResetDashboard={this.handleResetDashboard}
@@ -485,8 +475,8 @@ class StartPage extends React.Component {
           <ConfirmRemoveDialog
             dashboardId={removeDashboardId}
             dashboardTitle={this.getDashboardTitle(removeDashboardId)}
-            onDeny={this.handleCloseConfirmRemoveDashboardDialog}
             onConfirm={this.handleRemoveDashboard}
+            onDeny={this.handleCloseConfirmRemoveDashboardDialog}
           />
         )}
         {showNewDashboardDialog && (

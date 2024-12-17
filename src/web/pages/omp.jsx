@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useNavigate, useSearchParams} from 'react-router-dom';
 import {useEffect} from 'react';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 
 /**
  * Component to redirect old secinfo urls like

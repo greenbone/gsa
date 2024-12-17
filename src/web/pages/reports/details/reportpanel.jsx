@@ -3,17 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
+import Divider from 'web/components/layout/divider';
+import InfoPanel from 'web/components/panel/infopanel';
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
 
-import InfoPanel from 'web/components/panel/infopanel';
 
 const Content = styled.span`
   ${props => {
@@ -33,7 +30,7 @@ const Content = styled.span`
 const ReportPanel = ({children, icon, title, onClick}) => {
   return (
     <InfoPanel heading={title}>
-      <Divider margin="1em" align={['start', 'center']}>
+      <Divider align={['start', 'center']} margin="1em">
         {icon({size: 'large', onClick})}
         <Content onClick={onClick}>{children}</Content>
       </Divider>

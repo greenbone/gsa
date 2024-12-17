@@ -4,7 +4,6 @@
  */
 
 import styled from 'styled-components';
-
 import Theme from 'web/utils/theme';
 
 const TableHeader = styled.thead`

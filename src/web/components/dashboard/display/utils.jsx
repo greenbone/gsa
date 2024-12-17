@@ -4,13 +4,11 @@
  */
 
 
-import {_l} from 'gmp/locale/lang';
-
 import {scaleOrdinal, scaleLinear} from 'd3-scale';
-
+import {_l} from 'gmp/locale/lang';
+import {COMPLIANCE_STATES} from 'gmp/models/auditreport';
 import {parseInt} from 'gmp/parser';
 
-import {COMPLIANCE_STATES} from 'gmp/models/auditreport';
 
 import {
   ERROR,

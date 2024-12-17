@@ -4,30 +4,22 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
 import {severityValue} from 'gmp/utils/number';
-
+import {shorten} from 'gmp/utils/string';
+import React from 'react';
+import SeverityBar from 'web/components/bar/severitybar';
+import ExportIcon from 'web/components/icon/exporticon';
+import IconDivider from 'web/components/layout/icondivider';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+import {RowDetailsToggle} from 'web/entities/row';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
-import SeverityBar from 'web/components/bar/severitybar';
-
-import ExportIcon from 'web/components/icon/exporticon';
-
-import IconDivider from 'web/components/layout/icondivider';
-
-import TableRow from 'web/components/table/row';
-import TableData from 'web/components/table/data';
-
-import {RowDetailsToggle} from 'web/entities/row';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import PropTypes from 'web/utils/proptypes';
 import {
   extraRiskFactor,
@@ -53,7 +45,7 @@ const Actions = withEntitiesActions(
     onOverrideCloneClick,
     onOverrideEditClick,
   }) => (
-    <IconDivider align={['center', 'center']} grow>
+    <IconDivider grow align={['center', 'center']}>
       <TrashIcon
         entity={entity}
         name="override"
@@ -66,8 +58,8 @@ const Actions = withEntitiesActions(
         onClick={onOverrideCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Override')}
+        value={entity}
         onClick={onOverrideDownloadClick}
       />
     </IconDivider>

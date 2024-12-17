@@ -3,20 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
-
 import {isDefined, isNumber} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import Badge from 'web/components/badge/badge';
-
 import SeverityBar from 'web/components/bar/severitybar';
-
+import Severitybar from 'web/components/bar/severitybar.jsx';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -28,59 +22,48 @@ import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 import TicketIcon from 'web/components/icon/ticketicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import CveLink from 'web/components/link/cvelink.jsx';
 import DetailsLink from 'web/components/link/detailslink';
 import InnerLink from 'web/components/link/innerlink';
 import Link from 'web/components/link/link';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import DetailsBlock from 'web/entity/block';
 import {goto_details} from 'web/entity/component';
-import EntityPage, {Col} from 'web/entity/page';
 import Note from 'web/entity/note';
 import Override from 'web/entity/override';
+import EntityPage, {Col} from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
-
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
 import {loadEntity, selector} from 'web/store/entities/results';
-
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-
 import compose from 'web/utils/compose';
-import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-import useCapabilities from 'web/hooks/useCapabilities';
-import useGmp from 'web/hooks/useGmp';
-
-import NoteComponent from '../notes/component';
-
-import OverrideComponent from '../overrides/component';
-
-import TicketComponent from '../tickets/component';
+import {generateFilename} from 'web/utils/render';
 
 import ResultDetails from './details';
-import CveLink from 'web/components/link/cvelink.jsx';
-import Severitybar from 'web/components/bar/severitybar.jsx';
+import NoteComponent from '../notes/component';
+import OverrideComponent from '../overrides/component';
+import TicketComponent from '../tickets/component';
+
 
 export const ToolBarIcons = ({
   entity,
@@ -104,14 +87,14 @@ export const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="reports"
           anchor="displaying-all-existing-results"
+          page="reports"
           title={_('Help: Results')}
         />
-        <ListIcon title={_('Results List')} page="results" />
+        <ListIcon page="results" title={_('Results List')} />
         <ExportIcon
-          value={entity}
           title={_('Export Result as XML')}
+          value={entity}
           onClick={onResultDownloadClick}
         />
       </IconDivider>
@@ -132,8 +115,8 @@ export const ToolBarIcons = ({
         )}
         {capabilities.mayCreate('ticket') && (
           <NewTicketIcon
-            title={createTicketIconTitle}
             disabled={isMissingPermissions}
+            title={createTicketIconTitle}
             value={entity}
             onClick={onTicketCreateClick}
           />
@@ -141,20 +124,20 @@ export const ToolBarIcons = ({
       </IconDivider>
       <IconDivider>
         {capabilities.mayAccess('tasks') && isDefined(entity.task) && (
-          <DetailsLink type="task" id={entity.task.id}>
+          <DetailsLink id={entity.task.id} type="task">
             <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
           </DetailsLink>
         )}
         {capabilities.mayAccess('reports') && isDefined(entity.report) && (
-          <DetailsLink type="report" id={entity.report.id}>
+          <DetailsLink id={entity.report.id} type="report">
             <ReportIcon title={_('Corresponding Report')} />
           </DetailsLink>
         )}
         {capabilities.mayAccess('tickets') && entity.tickets.length > 0 && (
           <Link
-            to="tickets"
             filter={'result_id=' + entity.id}
             title={_('Corresponding Tickets')}
+            to="tickets"
           >
             <Badge content={entity.tickets.length}>
               <TicketIcon />
@@ -223,7 +206,7 @@ const Details = ({entity, ...props}) => {
                   <TableData>
                     <span>
                       {isDefined(host.id) ? (
-                        <DetailsLink type="host" id={host.id}>
+                        <DetailsLink id={host.id} type="host">
                           {host.name}
                         </DetailsLink>
                       ) : (
@@ -453,8 +436,8 @@ class Page extends React.Component {
                     onTicketCreateClick={createticket}
                   >
                     {({activeTab = 0, onActivateTab}) => (
-                      <Layout grow="1" flex="column">
-                        <TabLayout grow="1" align={['start', 'end']}>
+                      <Layout flex="column" grow="1">
+                        <TabLayout align={['start', 'end']} grow="1">
                           <TabList
                             active={activeTab}
                             align={['start', 'stretch']}

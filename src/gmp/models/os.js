@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Asset from './asset';
 import {parseSeverity} from 'gmp/parser';
+
+import Asset from './asset';
 
 class OperatingSystem extends Asset {
   static entityType = 'operatingsystem';

@@ -4,10 +4,8 @@
  */
 
 import {PointerEventsCheckLevel} from '@testing-library/user-event';
-
 import {isDefined} from 'gmp/utils/identity';
 import {expect} from 'vitest';
-
 import {
   userEvent,
   act,

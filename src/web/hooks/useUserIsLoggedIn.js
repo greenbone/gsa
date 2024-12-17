@@ -4,9 +4,8 @@
  */
 
 import {useSelector, useDispatch} from 'react-redux';
-
-import {isLoggedIn} from 'web/store/usersettings/selectors';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
+import {isLoggedIn} from 'web/store/usersettings/selectors';
 
 const useUserIsLoggedIn = () => {
   const dispatch = useDispatch();

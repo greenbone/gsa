@@ -3,18 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {pack, hierarchy} from 'd3-hierarchy';
-
 import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 
-import PropTypes from '../../utils/proptypes';
-import Theme from '../../utils/theme';
 
 import Group from './group';
 import Svg from './svg';
 import ToolTip from './tooltip';
+import PropTypes from '../../utils/proptypes';
+import Theme from '../../utils/theme';
 
 const margin = {
   top: 5,
@@ -37,8 +36,8 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
 
   const nodes = bubbles(root).leaves();
   return (
-    <Svg width={width} height={height} ref={svgRef}>
-      <Group top={margin.top} left={margin.left}>
+    <Svg ref={svgRef} height={height} width={width}>
+      <Group left={margin.left} top={margin.top}>
         {hasBubbles ? (
           nodes.map((node, i) => {
             const {data: d, x, y, r} = node;
@@ -50,13 +49,13 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
                     <Group
                       left={x}
                       top={y}
-                      onMouseEnter={show}
-                      onMouseLeave={hide}
                       onClick={
                         isDefined(onDataClick)
                           ? () => onDataClick(d)
                           : undefined
                       }
+                      onMouseEnter={show}
+                      onMouseLeave={hide}
                     >
                       <circle fill={d.color} r={r} />
 
@@ -67,11 +66,11 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
 
                       <text
                         ref={targetRef}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fontWeight="normal"
-                        fontSize="10px"
                         clipPath={`url(#${clippathId})`}
+                        dominantBaseline="middle"
+                        fontSize="10px"
+                        fontWeight="normal"
+                        textAnchor="middle"
                       >
                         {d.label}
                       </text>
@@ -83,10 +82,10 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
           })
         ) : (
           <circle
-            fill={Theme.lightGray}
-            r={maxHeight / 2}
             cx={maxWidth / 2}
             cy={maxHeight / 2}
+            fill={Theme.lightGray}
+            r={maxHeight / 2}
           />
         )}
       </Group>

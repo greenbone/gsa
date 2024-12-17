@@ -4,10 +4,9 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
+import {filterIdentifier} from 'web/store/utils';
 
 import {types} from './actions';
-
-import {filterIdentifier} from 'web/store/utils';
 
 /**
  * Return true if error is not a Rejection class or if Rejection class has a

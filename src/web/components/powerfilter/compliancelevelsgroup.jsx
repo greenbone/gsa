@@ -3,20 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import useTranslation from 'web/hooks/useTranslation';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
-
-import IconDivider from 'web/components/layout/icondivider';
-
 import ComplianceStateLabels from 'web/components/label/compliancestate';
+import IconDivider from 'web/components/layout/icondivider';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const ComplianceLevelsFilterGroup = ({
   filter,
@@ -59,36 +55,36 @@ const ComplianceLevelsFilterGroup = ({
   }
   return (
     <FormGroup
-      title={_('Compliance')}
       data-testid="compliance-levels-filter-group"
+      title={_('Compliance')}
     >
       <IconDivider>
         <Checkbox
           checked={complianceLevels.includes('y')}
+          data-testid="compliance-checkbox-yes"
           name="y"
           onChange={handleComplianceChange}
-          data-testid="compliance-checkbox-yes"
         />
         <ComplianceStateLabels.Yes />
         <Checkbox
           checked={complianceLevels.includes('n')}
+          data-testid="compliance-checkbox-no"
           name="n"
           onChange={handleComplianceChange}
-          data-testid="compliance-checkbox-no"
         />
         <ComplianceStateLabels.No />
         <Checkbox
           checked={complianceLevels.includes('i')}
+          data-testid="compliance-checkbox-incomplete"
           name="i"
           onChange={handleComplianceChange}
-          data-testid="compliance-checkbox-incomplete"
         />
         <ComplianceStateLabels.Incomplete />
         <Checkbox
           checked={complianceLevels.includes('u')}
+          data-testid="compliance-checkbox-undefined"
           name="u"
           onChange={handleComplianceChange}
-          data-testid="compliance-checkbox-undefined"
         />
         <ComplianceStateLabels.Undefined />
       </IconDivider>

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {applianceComponent} from 'web/utils/applianceData';
 import PropTypes from 'web/utils/proptypes';
 
-import {applianceComponent} from 'web/utils/applianceData';
 
 const getLogo = model => {
   const Component = applianceComponent[model];

@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
 
 import {FileInput} from '@greenbone/opensight-ui-components-mantinev7';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React, {useCallback} from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 const FileField = ({disabled, grow, name, title, onChange, ...props}) => {
@@ -25,10 +23,10 @@ const FileField = ({disabled, grow, name, title, onChange, ...props}) => {
     <FileInput
       data-testid="file-input"
       {...props}
-      styles={{root: {flexGrow: grow}}}
+      disabled={disabled}
       label={title}
       name={name}
-      disabled={disabled}
+      styles={{root: {flexGrow: grow}}}
       onChange={handleChange}
     />
   );

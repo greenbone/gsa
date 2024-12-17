@@ -3,29 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {format as d3format} from 'd3-format';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
+import FilterTerm from 'gmp/models/filter/filterterm';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import BarChart from 'web/components/chart/bar';
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
 import {
   vulnsByHostsColorScale,
   percent,
 } from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
 import {registerDisplay} from 'web/components/dashboard/registry';
+import PropTypes from 'web/utils/proptypes';
 
 import {VulnsHostsLoader} from './loaders';
 
@@ -173,21 +169,21 @@ export class VulnsHostsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
             dataTransform={transformHostsData}
+            filter={filter}
+            showToggleLegend={false}
             title={({data: tdata}) =>
               _('Vulnerabilities by Hosts (Total: {{count}})', {
                 count: tdata.total,
               })
             }
-            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart
-                svgRef={svgRef}
                 data={tdata}
-                showLegend={false}
                 height={height}
+                showLegend={false}
+                svgRef={svgRef}
                 width={width}
                 xLabel={_('# of Hosts')}
                 yLabel={_('# of Vulnerabilities')}

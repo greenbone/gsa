@@ -4,33 +4,25 @@
  */
 
 
-import memoize from 'memoize-one';
-
-import React from 'react';
-
-import styled from 'styled-components';
-
-import {scaleLinear, scaleUtc} from 'd3-scale';
-
 import {Line, LinePath} from '@visx/shape';
-
-import {isDefined} from 'gmp/utils/identity';
-
+import {scaleLinear, scaleUtc} from 'd3-scale';
 import date from 'gmp/models/date';
-
+import {isDefined} from 'gmp/utils/identity';
+import memoize from 'memoize-one';
+import React from 'react';
+import styled from 'styled-components';
 import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
 import {setRef} from 'web/utils/render';
+import Theme from 'web/utils/theme';
 
+import Axis from './axis';
+import Group from './group';
+import Legend, {Item, Label, Line as LegendLine} from './legend';
+import Svg from './svg';
 import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
 import {shouldUpdate} from './utils/update';
 
-import Legend, {Item, Label, Line as LegendLine} from './legend';
-import Axis from './axis';
-import Svg from './svg';
-import Group from './group';
 
 const LEGEND_MARGIN = 20;
 
@@ -153,17 +145,17 @@ const Cross = ({x, y, color, dashArray, lineWidth = 1}) => (
   <Group>
     <Line
       from={{x: x - 5, y: y - 5}}
-      to={{x: x + 5, y: y + 5}}
       stroke={color}
       strokeDasharray={dashArray}
       strokeWidth={lineWidth}
+      to={{x: x + 5, y: y + 5}}
     />
     <Line
       from={{x: x + 5, y: y - 5}}
-      to={{x: x - 5, y: y + 5}}
       stroke={color}
       strokeDasharray={dashArray}
       strokeWidth={lineWidth}
+      to={{x: x - 5, y: y + 5}}
     />
   </Group>
 );
@@ -174,17 +166,17 @@ const CrossY2 = ({x, y, color, dashArray, lineWidth = 1}) => (
   <Group>
     <Line
       from={{x: x - 6, y}}
-      to={{x: x + 6, y}}
       stroke={color}
       strokeDasharray={[2, 1]}
       strokeWidth={lineWidth}
+      to={{x: x + 6, y}}
     />
     <Line
       from={{x, y: y - 6}}
-      to={{x, y: y + 6}}
       stroke={color}
       strokeDasharray={[2, 1]}
       strokeWidth={lineWidth}
+      to={{x, y: y + 6}}
     />
   </Group>
 );
@@ -368,31 +360,31 @@ class LineChart extends React.Component {
         <CrispEdgesLine from={{x, y: 0}} to={{x, y: maxHeight(height)}} />
         <Group left={x + infoMargin} top={mouseY}>
           <rect
+            fill={Theme.mediumGray}
+            height={infoHeight + 2 * itemMargin}
+            opacity="0.75"
+            width={infoWidth + 3 * itemMargin}
             x={0}
             y={0}
-            width={infoWidth + 3 * itemMargin}
-            height={infoHeight + 2 * itemMargin}
-            fill={Theme.mediumGray}
-            opacity="0.75"
           />
           <rect
+            fill={Theme.white}
+            height={infoHeight + 2 * itemMargin}
+            width={15 + 2 * itemMargin}
             x={itemMargin}
             y={0}
-            width={15 + 2 * itemMargin}
-            height={infoHeight + 2 * itemMargin}
-            fill={Theme.white}
           />
-          <Group top={LINE_HEIGHT} left={2 * itemMargin} textAnchor="end">
-            <LabelTitle x={infoWidth} y={0} fontWeight="bold">
+          <Group left={2 * itemMargin} textAnchor="end" top={LINE_HEIGHT}>
+            <LabelTitle fontWeight="bold" x={infoWidth} y={0}>
               {label}
             </LabelTitle>
             <Group>
               <Line
                 from={{x: 0, y: lineY}}
-                to={{x: lineLength, y: lineY}}
                 stroke={yLine.color}
                 strokeDasharray={yLine.dashArray}
                 strokeWidth={yLine.lineWidth}
+                to={{x: lineLength, y: lineY}}
               />
               <Text x={infoWidth} y={LINE_HEIGHT - 1}>
                 {y}
@@ -401,10 +393,10 @@ class LineChart extends React.Component {
             <Group top={LINE_HEIGHT}>
               <Line
                 from={{x: 0, y: lineY}}
-                to={{x: lineLength, y: lineY}}
                 stroke={y2Line.color}
                 strokeDasharray={y2Line.dashArray}
                 strokeWidth={y2Line.lineWidth}
+                to={{x: lineLength, y: lineY}}
               />
               <Text x={infoWidth} y={LINE_HEIGHT - 1}>
                 {y2}
@@ -434,15 +426,15 @@ class LineChart extends React.Component {
       <Group>
         <CrispEdgesLine
           from={{x: startX, y: 0}}
-          to={{x: startX, y: maxHeight(height)}}
           stroke={Theme.green}
+          to={{x: startX, y: maxHeight(height)}}
         />
         <rect
-          x={rightDirection ? startX : endX}
           fill={Theme.green}
-          opacity={0.125}
           height={maxHeight(height)}
+          opacity={0.125}
           width={rangeWidth}
+          x={rightDirection ? startX : endX}
         />
       </Group>
     );
@@ -476,62 +468,62 @@ class LineChart extends React.Component {
     return (
       <Layout align={['start', 'start']}>
         <Svg
-          width={width}
-          height={height}
           ref={setRef(svgRef, ref => (this.svg = ref))}
-          onMouseLeave={hasValue ? this.hideInfo : undefined}
-          onMouseEnter={hasValue ? this.showInfo : undefined}
-          onMouseMove={hasValue ? this.handleMouseMove : undefined}
+          height={height}
+          width={width}
           onMouseDown={showRange ? this.startRangeSelection : undefined}
+          onMouseEnter={hasValue ? this.showInfo : undefined}
+          onMouseLeave={hasValue ? this.hideInfo : undefined}
+          onMouseMove={hasValue ? this.handleMouseMove : undefined}
           onMouseUp={showRange ? this.endRangeSelection : undefined}
         >
-          <Group top={margin.top} left={margin.left}>
+          <Group left={margin.left} top={margin.top}>
             {isDefined(yLine) && (
               <Axis
+                label={`${yAxisLabel}`}
+                left={0}
+                numTicks={10}
                 orientation="left"
                 scale={yScale}
                 top={0}
-                left={0}
-                label={`${yAxisLabel}`}
-                numTicks={10}
               />
             )}
             <Axis
+              label={`${xAxisLabel}`}
+              numTicks={xAxisTicks}
               orientation="bottom"
               scale={xScale}
               top={maxHeight(height)}
-              label={`${xAxisLabel}`}
-              numTicks={xAxisTicks}
             />
             {y2Line && (
               <Axis
+                label={`${y2AxisLabel}`}
+                left={maxWidth(width)}
+                numTicks={10}
                 orientation="right"
                 scale={y2Scale}
                 top={0}
-                left={maxWidth(width)}
-                label={`${y2AxisLabel}`}
-                numTicks={10}
               />
             )}
             {hasValues && (
               <Group>
                 <LinePath
                   data={data}
+                  stroke={yLine.color}
+                  strokeDasharray={yLine.dashArray}
+                  strokeWidth={isDefined(yLine.lineWidth) ? yLine.lineWidth : 1}
                   x={d => xScale(xValue(d, timeline))}
                   y={d => yScale(d.y)}
-                  stroke={yLine.color}
-                  strokeWidth={isDefined(yLine.lineWidth) ? yLine.lineWidth : 1}
-                  strokeDasharray={yLine.dashArray}
                 />
                 <LinePath
                   data={data}
-                  x={d => xScale(xValue(d, timeline))}
-                  y={d => y2Scale(d.y2)}
                   stroke={y2Line.color}
+                  strokeDasharray={y2Line.dashArray}
                   strokeWidth={
                     isDefined(y2Line.lineWidth) ? y2Line.lineWidth : 1
                   }
-                  strokeDasharray={y2Line.dashArray}
+                  x={d => xScale(xValue(d, timeline))}
+                  y={d => y2Scale(d.y2)}
                 />
               </Group>
             )}
@@ -539,20 +531,20 @@ class LineChart extends React.Component {
               <Group>
                 {isDefined(yLine) && (
                   <Cross
-                    x={xScale(xValue(data[0], timeline))}
-                    y={yScale(data[0].y)}
                     color={yLine.color}
                     dashArray={yLine.dashArray}
                     lineWidth={yLine.lineWidth}
+                    x={xScale(xValue(data[0], timeline))}
+                    y={yScale(data[0].y)}
                   />
                 )}
                 {isDefined(y2Line) && (
                   <CrossY2
-                    x={xScale(xValue(data[0], timeline))}
-                    y={y2Scale(data[0].y2)}
                     color={y2Line.color}
                     dashArray={y2Line.dashArray}
                     lineWidth={y2Line.lineWidth}
+                    x={xScale(xValue(data[0], timeline))}
+                    y={y2Scale(data[0].y2)}
                   />
                 )}
               </Group>
@@ -567,8 +559,8 @@ class LineChart extends React.Component {
               <Item {...toolTipProps}>
                 <LegendLine
                   color={d.color}
-                  lineWidth={d.width}
                   dashArray={d.dashArray}
+                  lineWidth={d.width}
                 />
                 <Label>
                   {React.isValidElement(d.label) ? d.label : `${d.label}`}

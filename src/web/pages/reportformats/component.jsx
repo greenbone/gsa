@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import EntityComponent from 'web/entity/component';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
-import EntityComponent from 'web/entity/component';
 
 import ReportFormatDialog from './dialog';
 
@@ -121,8 +117,8 @@ class ReportFormatComponent extends React.Component {
     return (
       <EntityComponent
         name="reportformat"
-        onDeleted={onDeleted}
         onDeleteError={onDeleteError}
+        onDeleted={onDeleted}
         onInteraction={onInteraction}
       >
         {other => (
@@ -134,8 +130,8 @@ class ReportFormatComponent extends React.Component {
             })}
             {dialogVisible && (
               <ReportFormatDialog
-                reportformat={reportformat}
                 preferences={preferences}
+                reportformat={reportformat}
                 title={title}
                 onClose={this.handleCloseReportFormatDialog}
                 onSave={this.handleSave}

@@ -4,19 +4,15 @@
  */
 
 import React from 'react';
-
-import Row from 'web/components/layout/row';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
 import Layout from 'web/components/layout/layout';
-
+import Row from 'web/components/layout/row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
-
-import Select from 'web/components/form/select';
-import Spinner from 'web/components/form/spinner';
-import Radio from 'web/components/form/radio';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const VALUE = 'Filter count at least';
 
@@ -32,24 +28,24 @@ const FilterCountLeastConditionPart = ({
   return (
     <Row>
       <Radio
+        checked={condition === VALUE}
+        name="condition"
         title={_('Filter')}
         value={VALUE}
-        name="condition"
-        checked={condition === VALUE}
         onChange={onChange}
       />
       <Select
-        value={atLeastFilterId}
-        name={prefix + 'at_least_filter_id'}
         items={renderSelectItems(filters)}
+        name={prefix + 'at_least_filter_id'}
+        value={atLeastFilterId}
         onChange={onChange}
       />
       <Layout>{_('matches at least')}</Layout>
       <Spinner
-        value={atLeastCount}
+        min="0"
         name={prefix + 'at_least_count'}
         type="int"
-        min="0"
+        value={atLeastCount}
         onChange={onChange}
       />
       <Layout>{_('result(s) NVT(s)')}</Layout>

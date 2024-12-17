@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {isFunction} from 'gmp/utils/identity';
 
 import {reportActions} from '../actions';

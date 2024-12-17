@@ -3,16 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {AppNavigation} from '@greenbone/opensight-ui-components-mantinev7';
-
-import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/hooks/useCapabilities';
-import useGmp from 'web/hooks/useGmp';
-import {useMatch} from 'react-router-dom';
-
-import Link from 'web/components/link/link';
+import {isDefined} from 'gmp/utils/identity';
 import {
   BarChart3,
   Server,
@@ -23,7 +15,12 @@ import {
   FileCheck,
   CircleHelp,
 } from 'lucide-react';
-import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {useMatch} from 'react-router-dom';
+import Link from 'web/components/link/link';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 
 const Menu = () => {
   const [_] = useTranslation();
@@ -382,7 +379,7 @@ const Menu = () => {
       },
     ].filter(Boolean),
   ];
-  return <AppNavigation menuPoints={menuPoints} as={Link} />;
+  return <AppNavigation as={Link} menuPoints={menuPoints} />;
 };
 
 export default Menu;

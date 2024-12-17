@@ -3,28 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {NO_VALUE, YES_VALUE, parseYesNo} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
-
 import NewIcon from 'web/components/icon/newicon';
-
-import Section from 'web/components/section/section';
-
 import Row from 'web/components/layout/row';
-
+import Section from 'web/components/section/section';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import PortRangesTable from './portrangestable';
 
@@ -53,8 +45,8 @@ const PortListsDialog = ({
   const newRangeIcon = (
     <div>
       <NewIcon
-        value={port_list}
         title={_('Add Port Range')}
+        value={port_list}
         onClick={onNewPortRangeClick}
       />
     </div>
@@ -70,11 +62,11 @@ const PortListsDialog = ({
 
   return (
     <SaveDialog
+      defaultValues={data}
       title={title}
+      values={{port_ranges}}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
-      values={{port_ranges}}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -97,39 +89,39 @@ const PortListsDialog = ({
               <FormGroup title={_('Port Ranges')}>
                 <Row>
                   <Radio
-                    title={_('Manual')}
+                    checked={parseYesNo(state.from_file) !== FROM_FILE}
                     name="from_file"
+                    title={_('Manual')}
                     value={NOT_FROM_FILE}
                     onChange={onValueChange}
-                    checked={parseYesNo(state.from_file) !== FROM_FILE}
                   />
                   <TextField
+                    disabled={parseYesNo(state.from_file) === FROM_FILE}
                     grow="1"
                     name="port_range"
                     value={state.port_range}
-                    disabled={parseYesNo(state.from_file) === FROM_FILE}
                     onChange={onValueChange}
                   />
                 </Row>
                 <Row>
                   <Radio
-                    title={_('From file')}
+                    checked={parseYesNo(state.from_file) === FROM_FILE}
                     name="from_file"
+                    title={_('From file')}
                     value={FROM_FILE}
                     onChange={onValueChange}
-                    checked={parseYesNo(state.from_file) === FROM_FILE}
                   />
                   <FileField
-                    name="file"
-                    grow="1"
                     disabled={parseYesNo(state.from_file) !== FROM_FILE}
+                    grow="1"
+                    name="file"
                     onChange={onValueChange}
                   />
                 </Row>
               </FormGroup>
             )}
             {isEdit && (
-              <Section title={_('Port Ranges')} extra={newRangeIcon}>
+              <Section extra={newRangeIcon} title={_('Port Ranges')}>
                 {isDefined(port_list) && (
                   <PortRangesTable
                     portRanges={state.port_ranges}

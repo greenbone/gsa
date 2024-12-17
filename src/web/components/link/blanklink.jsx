@@ -4,15 +4,14 @@
  */
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 const BlankLink = ({to, children, ...props}) => (
   <a
     {...props}
     href={to}
-    target="_blank"
     rel="noopener noreferrer" // https://mathiasbynens.github.io/rel-noopener
+    target="_blank"
   >
     {children}
   </a>

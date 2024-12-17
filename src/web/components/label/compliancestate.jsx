@@ -4,8 +4,8 @@
  */
 
 import styled from 'styled-components';
-import PropTypes from 'web/utils/proptypes';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 const Label = styled.div`
@@ -42,16 +42,16 @@ ComplianceLabel.propTypes = {
 };
 
 const YesLabel = props => (
-  <ComplianceLabel {...props} text="Yes" color="complianceYes" data-testid="compliance-state-yes"/>
+  <ComplianceLabel {...props} color="complianceYes" data-testid="compliance-state-yes" text="Yes"/>
 );
 const NoLabel = props => (
-  <ComplianceLabel {...props} text="No" color="complianceNo" data-testid="compliance-state-no"/>
+  <ComplianceLabel {...props} color="complianceNo" data-testid="compliance-state-no" text="No"/>
 );
 const IncompleteLabel = props => (
-  <ComplianceLabel {...props} text="Incomplete" color="complianceIncomplete" data-testid="compliance-state-incomplete"/>
+  <ComplianceLabel {...props} color="complianceIncomplete" data-testid="compliance-state-incomplete" text="Incomplete"/>
 );
 const UndefinedLabel = props => (
-  <ComplianceLabel {...props} text="Undefined" color="complianceUndefined" data-testid="compliance-state-undefined"/>
+  <ComplianceLabel {...props} color="complianceUndefined" data-testid="compliance-state-undefined" text="Undefined"/>
 );
 
 export const ComplianceStateLabels = {

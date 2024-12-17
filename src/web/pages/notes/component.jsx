@@ -4,14 +4,7 @@
  */
 
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {hasId} from 'gmp/utils/id';
-import {isDefined, isArray} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
-
 import {
   ACTIVE_NO_VALUE,
   ACTIVE_YES_ALWAYS_VALUE,
@@ -23,11 +16,13 @@ import {
   MANUAL,
   ANY,
 } from 'gmp/models/override';
-
+import {hasId} from 'gmp/utils/id';
+import {isDefined, isArray} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import React from 'react';
+import EntityComponent from 'web/entity/component';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
-import EntityComponent from 'web/entity/component';
 
 import NoteDialog from './dialog';
 
@@ -171,17 +166,17 @@ class NoteComponent extends React.Component {
     return (
       <EntityComponent
         name="note"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -196,9 +191,9 @@ class NoteComponent extends React.Component {
                 hosts={hosts}
                 hosts_manual={hosts_manual}
                 id={id}
-                oid={oid}
                 note={note}
                 nvt_name={nvt_name}
+                oid={oid}
                 port={port}
                 result_id={result_id}
                 result_uuid={result_uuid}

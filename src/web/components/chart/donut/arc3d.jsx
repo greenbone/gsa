@@ -3,18 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {color as d3color} from 'd3-color';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import Group from '../group';
 import ToolTip from '../tooltip';
-
 import {PieOuterPath, PieTopPath, PieInnerPath} from './paths';
 import {ArcDataPropType} from './proptypes';
 
@@ -38,26 +35,26 @@ const Arc3d = ({
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <Group
+          onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
           onMouseEnter={show}
           onMouseLeave={hide}
-          onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
         >
           <PieInnerPath
-            startAngle={startAngle}
-            endAngle={endAngle}
             color={darker}
             donutHeight={donutHeight}
+            endAngle={endAngle}
             innerRadiusX={innerRadiusX}
             innerRadiusY={innerRadiusY}
+            startAngle={startAngle}
           />
           <PieTopPath color={color} path={path} />
           <PieOuterPath
-            startAngle={startAngle}
-            endAngle={endAngle}
             color={darker}
             donutHeight={donutHeight}
+            endAngle={endAngle}
             outerRadiusX={outerRadiusX}
             outerRadiusY={outerRadiusY}
+            startAngle={startAngle}
           />
           <circle // used as positioning ref for tooltips
             ref={targetRef}

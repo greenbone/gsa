@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-import {parseDate} from 'gmp/parser';
-
-import Filter from 'gmp/models/filter';
 import Cve from 'gmp/models/cve';
-
+import Filter from 'gmp/models/filter';
+import {parseDate} from 'gmp/parser';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import CveTable from '../table';
@@ -88,9 +84,9 @@ describe('Cve table tests', () => {
 
     const {baseElement} = render(
       <CveTable
-        filter={filter}
         entities={[entity, entity2, entity3, entity_v3]}
         entitiesCounts={counts}
+        filter={filter}
       />,
     );
 
@@ -118,9 +114,9 @@ describe('Cve table tests', () => {
 
     const {element, getAllByTestId} = render(
       <CveTable
-        filter={filter}
         entities={[entity, entity2, entity3, entity_v3]}
         entitiesCounts={counts}
+        filter={filter}
       />,
     );
 

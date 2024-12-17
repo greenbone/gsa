@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {render} from 'web/utils/testing';
 import getLogo from 'web/components/structure/getLogo';
+import {render} from 'web/utils/testing';
 
 describe('getLogo', () => {
   const testCases = [

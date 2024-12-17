@@ -3,13 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
-import {NO_VALUE} from 'gmp/parser';
-
+import logger from 'gmp/log';
 import Audit, {HOSTS_ORDERING_SEQUENTIAL} from 'gmp/models/audit';
+import {NO_VALUE} from 'gmp/parser';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

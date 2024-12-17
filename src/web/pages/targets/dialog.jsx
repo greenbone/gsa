@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
   snmp_credential_filter,
@@ -17,26 +15,22 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   SSH_ELEVATE_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import React from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
-
 import InfoIcon from 'web/components/icon/infoicon';
 import NewIcon from 'web/components/icon/newicon';
-
 import Row from 'web/components/layout/row';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const DEFAULT_PORT = 22;
 
@@ -183,8 +177,8 @@ const TargetDialog = ({
 
   return (
     <SaveDialog
-      title={title}
       defaultValues={uncontrolledValues}
+      title={title}
       values={controlledValues}
       onClose={onClose}
       onSave={onSave}
@@ -194,8 +188,8 @@ const TargetDialog = ({
           <>
             <FormGroup title={_('Name')}>
               <TextField
-                name="name"
                 grow="1"
+                name="name"
                 value={state.name}
                 onChange={onValueChange}
               />
@@ -212,16 +206,16 @@ const TargetDialog = ({
             <FormGroup title={_('Hosts')}>
               <Row>
                 <Radio
-                  title={_('Manual')}
-                  name="target_source"
-                  disabled={in_use}
                   checked={state.target_source === 'manual'}
+                  disabled={in_use}
+                  name="target_source"
+                  title={_('Manual')}
                   value="manual"
                   onChange={onValueChange}
                 />
                 <TextField
-                  grow="1"
                   disabled={in_use || state.target_source !== 'manual'}
+                  grow="1"
                   name="hosts"
                   value={state.hosts}
                   onChange={onValueChange}
@@ -229,28 +223,28 @@ const TargetDialog = ({
               </Row>
               <Row>
                 <Radio
-                  title={_('From file')}
-                  name="target_source"
-                  disabled={in_use}
                   checked={state.target_source === 'file'}
+                  disabled={in_use}
+                  name="target_source"
+                  title={_('From file')}
                   value="file"
                   onChange={onValueChange}
                 />
                 <FileField
+                  disabled={in_use || state.target_source !== 'file'}
                   grow="1"
                   name="file"
-                  disabled={in_use || state.target_source !== 'file'}
                   onChange={onValueChange}
                 />
 
                 {state.hosts_count && (
                   <Radio
+                    checked={state.target_source === 'asset_hosts'}
+                    disabled={in_use}
+                    name="target_source"
                     title={_('From host assets ({{count}} hosts)', {
                       count: state.hosts_count,
                     })}
-                    name="target_source"
-                    disabled={in_use}
-                    checked={state.target_source === 'asset_hosts'}
                     value="asset_hosts"
                     onChange={onValueChange}
                   />
@@ -261,16 +255,16 @@ const TargetDialog = ({
             <FormGroup title={_('Exclude Hosts')}>
               <Row>
                 <Radio
-                  title={_('Manual')}
-                  name="target_exclude_source"
-                  disabled={in_use}
                   checked={state.target_exclude_source === 'manual'}
+                  disabled={in_use}
+                  name="target_exclude_source"
+                  title={_('Manual')}
                   value="manual"
                   onChange={onValueChange}
                 />
                 <TextField
-                  grow="1"
                   disabled={in_use || state.target_exclude_source !== 'manual'}
+                  grow="1"
                   name="exclude_hosts"
                   value={state.exclude_hosts}
                   onChange={onValueChange}
@@ -278,17 +272,17 @@ const TargetDialog = ({
               </Row>
               <Row>
                 <Radio
-                  title={_('From file')}
-                  name="target_exclude_source"
-                  disabled={in_use}
                   checked={state.target_exclude_source === 'file'}
+                  disabled={in_use}
+                  name="target_exclude_source"
+                  title={_('From file')}
                   value="file"
                   onChange={onValueChange}
                 />
                 <FileField
+                  disabled={in_use || state.target_exclude_source !== 'file'}
                   grow="1"
                   name="exclude_file"
-                  disabled={in_use || state.target_exclude_source !== 'file'}
                   onChange={onValueChange}
                 />
               </Row>
@@ -305,12 +299,12 @@ const TargetDialog = ({
             </FormGroup>
 
             {capabilities.mayOp('get_port_lists') && (
-              <FormGroup title={_('Port List')} direction="row">
+              <FormGroup direction="row" title={_('Port List')}>
                 <Select
-                  grow="1"
-                  name="port_list_id"
                   disabled={in_use}
+                  grow="1"
                   items={renderSelectItems(port_lists)}
+                  name="port_list_id"
                   value={state.port_list_id}
                   onChange={onPortListChange}
                 />
@@ -325,8 +319,8 @@ const TargetDialog = ({
 
             <FormGroup title={_('Alive Test')}>
               <Select
-                name="alive_tests"
                 items={ALIVE_TESTS_ITEMS}
+                name="alive_tests"
                 value={state.alive_tests}
                 onChange={onValueChange}
               />
@@ -340,17 +334,17 @@ const TargetDialog = ({
               <FormGroup title={_('SSH')}>
                 <Row>
                   <Select
-                    grow="1"
-                    name="ssh_credential_id"
                     disabled={in_use}
+                    grow="1"
                     items={renderSelectItems(ssh_credentials, UNSET_VALUE)}
+                    name="ssh_credential_id"
                     value={state.ssh_credential_id}
                     onChange={onSshCredentialChange}
                   />
                   {_('on port')}
                   <TextField
-                    name="port"
                     disabled={in_use}
+                    name="port"
                     value={state.port}
                     onChange={onValueChange}
                   />
@@ -372,13 +366,13 @@ const TargetDialog = ({
                     />
                     <span>{_('Elevate privileges')}</span>
                     <Select
-                      grow="1"
-                      name="ssh_elevate_credential_id"
                       disabled={in_use}
+                      grow="1"
                       items={renderSelectItems(
                         elevateUpCredentials,
                         UNSET_VALUE,
                       )}
+                      name="ssh_elevate_credential_id"
                       value={state.ssh_elevate_credential_id}
                       onChange={onSshElevateCredentialChange}
                     />
@@ -395,12 +389,12 @@ const TargetDialog = ({
             )}
 
             {capabilities.mayOp('get_credentials') && (
-              <FormGroup title={_('SMB')} direction="row">
+              <FormGroup direction="row" title={_('SMB')}>
                 <Select
-                  grow="1"
-                  name="smb_credential_id"
                   disabled={in_use}
+                  grow="1"
                   items={renderSelectItems(up_credentials, UNSET_VALUE)}
+                  name="smb_credential_id"
                   value={state.smb_credential_id}
                   onChange={onSmbCredentialChange}
                 />
@@ -415,12 +409,12 @@ const TargetDialog = ({
             )}
 
             {capabilities.mayOp('get_credentials') && (
-              <FormGroup title={_('ESXi')} direction="row">
+              <FormGroup direction="row" title={_('ESXi')}>
                 <Select
-                  grow="1"
                   disabled={in_use}
-                  name="esxi_credential_id"
+                  grow="1"
                   items={renderSelectItems(up_credentials, UNSET_VALUE)}
+                  name="esxi_credential_id"
                   value={state.esxi_credential_id}
                   onChange={onEsxiCredentialChange}
                 />
@@ -435,12 +429,12 @@ const TargetDialog = ({
             )}
 
             {capabilities.mayOp('get_credentials') && (
-              <FormGroup title={_('SNMP')} direction="row">
+              <FormGroup direction="row" title={_('SNMP')}>
                 <Select
-                  grow="1"
                   disabled={in_use}
-                  name="snmp_credential_id"
+                  grow="1"
                   items={renderSelectItems(snmp_credentials, UNSET_VALUE)}
+                  name="snmp_credential_id"
                   value={state.snmp_credential_id}
                   onChange={onSnmpCredentialChange}
                 />
@@ -456,8 +450,8 @@ const TargetDialog = ({
 
             <FormGroup title={_('Reverse Lookup Only')}>
               <YesNoRadio
-                name="reverse_lookup_only"
                 disabled={in_use}
+                name="reverse_lookup_only"
                 value={state.reverse_lookup_only}
                 onChange={onValueChange}
               />
@@ -465,8 +459,8 @@ const TargetDialog = ({
 
             <FormGroup title={_('Reverse Lookup Unify')}>
               <YesNoRadio
-                name="reverse_lookup_unify"
                 disabled={in_use}
+                name="reverse_lookup_unify"
                 value={state.reverse_lookup_unify}
                 onChange={onValueChange}
               />

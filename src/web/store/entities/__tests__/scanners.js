@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {testAll} from '../utils/testing';
-
 import * as scanner from '../scanners';
+import {testAll} from '../utils/testing';
 
 testAll('scanner', scanner);
 

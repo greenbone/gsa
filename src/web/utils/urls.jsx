@@ -5,7 +5,7 @@
 
 
 const public_url_loader = name => {
-  return import.meta.env.BASE_URL + 'img/' + name; // eslint-disable-line no-process-env,no-undef
+  return import.meta.env.BASE_URL + 'img/' + name;  
 };
 
 let url_loader = public_url_loader;

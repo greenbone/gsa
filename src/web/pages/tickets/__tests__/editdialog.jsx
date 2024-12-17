@@ -4,12 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {TICKET_STATUS} from 'gmp/models/ticket';
 import User from 'gmp/models/user';
-
 import {
   clickElement,
   getDialog,
@@ -18,6 +14,7 @@ import {
   queryAllSelectElements,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import EditTicketDialog from '../editdialog';
 
@@ -57,9 +54,9 @@ describe('EditTicketDialog component tests', () => {
 
     const {baseElement} = render(
       <EditTicketDialog
-        openNote="Ticket has been opened"
-        fixedNote="Ticket has been fixed"
         closedNote="Ticket has been closed"
+        fixedNote="Ticket has been fixed"
+        openNote="Ticket has been opened"
         status={TICKET_STATUS.open}
         ticketId="t1"
         userId="u1"
@@ -86,9 +83,9 @@ describe('EditTicketDialog component tests', () => {
 
     render(
       <EditTicketDialog
-        openNote="Ticket has been opened"
-        fixedNote="Ticket has been fixed"
         closedNote="Ticket has been closed"
+        fixedNote="Ticket has been fixed"
+        openNote="Ticket has been opened"
         status={TICKET_STATUS.open}
         ticketId="t1"
         userId="u1"

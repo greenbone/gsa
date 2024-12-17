@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import FeedSyncNotification from 'web/components/notification/FeedSyncNotification/FeedSyncNotification';
 import {rendererWith, waitFor, screen} from 'web/utils/testing';
 
-import FeedSyncNotification from 'web/components/notification/FeedSyncNotification/FeedSyncNotification';
 
 describe('FeedSyncNotification', () => {
   test('should display syncing message when feed is syncing', async () => {

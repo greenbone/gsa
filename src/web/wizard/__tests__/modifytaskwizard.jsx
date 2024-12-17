@@ -4,19 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Date from 'gmp/models/date';
 import Task from 'gmp/models/task';
-
-import {rendererWith, fireEvent, screen} from 'web/utils/testing';
-
 import {
   closeDialog,
   getElementOrDocument,
   getRadioInputs,
 } from 'web/components/testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import ModifyTaskWizard from '../modifytaskwizard';
 
@@ -58,13 +54,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <ModifyTaskWizard
-        start_date={startDate}
-        tasks={tasks}
         reschedule={reschedule}
-        task_id={taskId}
-        start_minute={startMinute}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        task_id={taskId}
+        tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -116,13 +112,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <ModifyTaskWizard
-        start_date={startDate}
-        tasks={tasks}
         reschedule={reschedule}
-        task_id={taskId}
-        start_minute={startMinute}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        task_id={taskId}
+        tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -153,13 +149,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <ModifyTaskWizard
-        start_date={startDate}
-        tasks={tasks}
         reschedule={reschedule}
-        task_id={taskId}
-        start_minute={startMinute}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        task_id={taskId}
+        tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -197,13 +193,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     render(
       <ModifyTaskWizard
-        start_date={startDate}
-        tasks={tasks}
         reschedule={reschedule}
-        task_id={taskId}
-        start_minute={startMinute}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        task_id={taskId}
+        tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -224,13 +220,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     render(
       <ModifyTaskWizard
-        start_date={startDate}
-        tasks={tasks}
         reschedule={reschedule}
-        task_id={taskId}
-        start_minute={startMinute}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        task_id={taskId}
+        tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -253,13 +249,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     const {getByName} = render(
       <ModifyTaskWizard
-        start_date={startDate}
-        tasks={tasks}
         reschedule={reschedule}
-        task_id={taskId}
-        start_minute={startMinute}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        task_id={taskId}
+        tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
       />,

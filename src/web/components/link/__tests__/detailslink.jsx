@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import {fireEvent, rendererWith} from 'web/utils/testing';
 
 import DetailsLink from '../detailslink';
@@ -18,7 +16,7 @@ describe('DetailsLink tests', () => {
   test('should render DetailsLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(
-      <DetailsLink title="Foo" type="foo" id="bar">
+      <DetailsLink id="bar" title="Foo" type="foo">
         Foo
       </DetailsLink>,
     );
@@ -31,7 +29,7 @@ describe('DetailsLink tests', () => {
     const {render} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <DetailsLink title="Foo" type="foo" id="1">
+      <DetailsLink id="1" title="Foo" type="foo">
         Foo
       </DetailsLink>,
     );
@@ -47,7 +45,7 @@ describe('DetailsLink tests', () => {
     const {render} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <DetailsLink title="Foo" type="foo" id="cpe:/a:jenkins:jenkins:2.141">
+      <DetailsLink id="cpe:/a:jenkins:jenkins:2.141" title="Foo" type="foo">
         Foo
       </DetailsLink>,
     );
@@ -65,7 +63,7 @@ describe('DetailsLink tests', () => {
     const {render} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <DetailsLink title="Foo" type="foo" id="1" textOnly={true}>
+      <DetailsLink id="1" textOnly={true} title="Foo" type="foo">
         Foo
       </DetailsLink>,
     );
@@ -82,7 +80,7 @@ describe('DetailsLink tests', () => {
     const {render} = rendererWith({capabilities, router: true});
 
     const {element} = render(
-      <DetailsLink title="Foo" type="foo" id="1">
+      <DetailsLink id="1" title="Foo" type="foo">
         Foo
       </DetailsLink>,
     );

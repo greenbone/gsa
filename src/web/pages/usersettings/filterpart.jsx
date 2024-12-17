@@ -4,14 +4,11 @@
  */
 
 import React from 'react';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const filterFilters = (filters, type) =>
   filters.filter(filter => filter.filter_type === type);
@@ -55,292 +52,292 @@ const FilterPart = ({
     <React.Fragment>
       <FormGroup title={_('Alerts Filter')} titleSize="3">
         <Select
-          name="alertsFilter"
-          value={alertsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'alert'),
             UNSET_VALUE,
           )}
+          name="alertsFilter"
+          value={alertsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Audit Reports Filter')} titleSize="3">
         <Select
-          name="auditReportsFilter"
-          value={auditReportsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'audit_report'),
             UNSET_VALUE,
           )}
+          name="auditReportsFilter"
+          value={auditReportsFilter}
           onChange={onChange}
         />
         </FormGroup>
       <FormGroup title={_('Scan Configs Filter')} titleSize="3">
         <Select
-          name="configsFilter"
-          value={configsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'config'),
             UNSET_VALUE,
           )}
+          name="configsFilter"
+          value={configsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Credentials Filter')} titleSize="3">
         <Select
-          name="credentialsFilter"
-          value={credentialsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'credential'),
             UNSET_VALUE,
           )}
+          name="credentialsFilter"
+          value={credentialsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Filters Filter')} titleSize="3">
         <Select
-          name="filtersFilter"
-          value={filtersFilter}
           items={renderSelectItems(
             filterFilters(filters, 'filter'),
             UNSET_VALUE,
           )}
+          name="filtersFilter"
+          value={filtersFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Groups Filter')} titleSize="3">
         <Select
-          name="groupsFilter"
-          value={groupsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'group'),
             UNSET_VALUE,
           )}
+          name="groupsFilter"
+          value={groupsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Hosts Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'host'), UNSET_VALUE)}
           name="hostsFilter"
           value={hostsFilter}
-          items={renderSelectItems(filterFilters(filters, 'host'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Notes Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'note'), UNSET_VALUE)}
           name="notesFilter"
           value={notesFilter}
-          items={renderSelectItems(filterFilters(filters, 'note'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Operating Systems Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'os'), UNSET_VALUE)}
           name="operatingSystemsFilter"
           value={operatingSystemsFilter}
-          items={renderSelectItems(filterFilters(filters, 'os'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Overrides Filter')} titleSize="3">
         <Select
-          name="overridesFilter"
-          value={overridesFilter}
           items={renderSelectItems(
             filterFilters(filters, 'override'),
             UNSET_VALUE,
           )}
+          name="overridesFilter"
+          value={overridesFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Permissions Filter')} titleSize="3">
         <Select
-          name="permissionsFilter"
-          value={permissionsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'permission'),
             UNSET_VALUE,
           )}
+          name="permissionsFilter"
+          value={permissionsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Port Lists Filter')} titleSize="3">
         <Select
-          name="portListsFilter"
-          value={portListsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'port_list'),
             UNSET_VALUE,
           )}
+          name="portListsFilter"
+          value={portListsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Reports Filter')} titleSize="3">
         <Select
-          name="reportsFilter"
-          value={reportsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'report'),
             UNSET_VALUE,
           )}
+          name="reportsFilter"
+          value={reportsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Report Formats Filter')} titleSize="3">
         <Select
-          name="reportFormatsFilter"
-          value={reportFormatsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'report_format'),
             UNSET_VALUE,
           )}
+          name="reportFormatsFilter"
+          value={reportFormatsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Results Filter')} titleSize="3">
         <Select
-          name="resultsFilter"
-          value={resultsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'result'),
             UNSET_VALUE,
           )}
+          name="resultsFilter"
+          value={resultsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Roles Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'role'), UNSET_VALUE)}
           name="rolesFilter"
           value={rolesFilter}
-          items={renderSelectItems(filterFilters(filters, 'role'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Scanners Filter')} titleSize="3">
         <Select
-          name="scannersFilter"
-          value={scannersFilter}
           items={renderSelectItems(
             filterFilters(filters, 'scanner'),
             UNSET_VALUE,
           )}
+          name="scannersFilter"
+          value={scannersFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Schedules Filter')} titleSize="3">
         <Select
-          name="schedulesFilter"
-          value={schedulesFilter}
           items={renderSelectItems(
             filterFilters(filters, 'schedule'),
             UNSET_VALUE,
           )}
+          name="schedulesFilter"
+          value={schedulesFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Tags Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'tag'), UNSET_VALUE)}
           name="tagsFilter"
           value={tagsFilter}
-          items={renderSelectItems(filterFilters(filters, 'tag'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Targets Filter')} titleSize="3">
         <Select
-          name="targetsFilter"
-          value={targetsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'target'),
             UNSET_VALUE,
           )}
+          name="targetsFilter"
+          value={targetsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Tasks Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'task'), UNSET_VALUE)}
           name="tasksFilter"
           value={tasksFilter}
-          items={renderSelectItems(filterFilters(filters, 'task'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Tickets Filter')} titleSize="3">
         <Select
-          name="ticketsFilter"
-          value={ticketsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'ticket'),
             UNSET_VALUE,
           )}
+          name="ticketsFilter"
+          value={ticketsFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('TLS Certificates Filter')} titleSize="3">
         <Select
-          name="tlsCertificatesFilter"
-          value={tlsCertificatesFilter}
           items={renderSelectItems(
             filterFilters(filters, 'tls_certificate'),
             UNSET_VALUE,
           )}
+          name="tlsCertificatesFilter"
+          value={tlsCertificatesFilter}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Users Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'user'), UNSET_VALUE)}
           name="usersFilter"
           value={usersFilter}
-          items={renderSelectItems(filterFilters(filters, 'user'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Vulnerabilities Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'vuln'), UNSET_VALUE)}
           name="vulnerabilitiesFilter"
           value={vulnerabilitiesFilter}
-          items={renderSelectItems(filterFilters(filters, 'vuln'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('CPE Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           name="cpeFilter"
           value={cpeFilter}
-          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('CVE Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           name="cveFilter"
           value={cveFilter}
-          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('NVT Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           name="nvtFilter"
           value={nvtFilter}
-          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('CERT-Bund Advisories Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           name="certBundFilter"
           value={certBundFilter}
-          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('DFN-CERT Advisories Filter')} titleSize="3">
         <Select
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           name="dfnCertFilter"
           value={dfnCertFilter}
-          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>

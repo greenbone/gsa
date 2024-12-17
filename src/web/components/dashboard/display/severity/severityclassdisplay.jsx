@@ -3,20 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
+import FilterTerm from 'gmp/models/filter/filterterm';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import DonutChart from 'web/components/chart/donut';
+import PropTypes from 'web/utils/proptypes';
 
 import DataDisplay from '../datadisplay';
 import {renderDonutChartIcons} from '../datadisplayicons';
-
 import transformSeverityData from './severityclasstransform';
 
 class SeverityClassDisplay extends React.Component {
@@ -76,20 +71,20 @@ class SeverityClassDisplay extends React.Component {
     return (
       <DataDisplay
         {...props}
+        dataTransform={transformSeverityData}
+        icons={renderDonutChartIcons}
         initialState={{
           show3d: true,
         }}
-        dataTransform={transformSeverityData}
-        icons={renderDonutChartIcons}
       >
         {({width, height, data, svgRef, state}) => (
           <DonutChart
-            svgRef={svgRef}
-            width={width}
-            height={height}
             data={data}
+            height={height}
             show3d={state.show3d}
             showLegend={state.showLegend}
+            svgRef={svgRef}
+            width={width}
             onDataClick={
               isDefined(onFilterChanged) ? this.handleDataClick : undefined
             }

@@ -3,20 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
+import React from 'react';
+import EntityComponent from 'web/entity/component';
+import FilterDialog from 'web/pages/filters/dialog';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import EntityComponent from 'web/entity/component';
-
-import FilterDialog from 'web/pages/filters/dialog';
 
 const FILTER_OPTIONS = [
   ['alert', _l('Alert')],
@@ -105,7 +101,7 @@ class FilterComponent extends React.Component {
         types,
       });
     } else {
-      const type = first(types, [])[0]; // eslint-disable-line prefer-destructuring
+      const type = first(types, [])[0];  
 
       this.setState({
         comment: undefined,
@@ -157,17 +153,17 @@ class FilterComponent extends React.Component {
     return (
       <EntityComponent
         name="filter"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>

@@ -3,14 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {Droppable} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
-
+import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
-
 import Theme from 'web/utils/theme';
 
 const EmptyGridRow = styled.div`
@@ -23,14 +19,14 @@ const EmptyGridRow = styled.div`
 `;
 
 const EmptyRow = ({children, active = false, height}) => (
-  <Droppable droppableId="empty" direction="horizontal">
+  <Droppable direction="horizontal" droppableId="empty">
     {(provided, snapshot) => (
       <EmptyGridRow
-        data-testid="empty-grid-row"
-        $active={active}
-        height={height}
         ref={provided.innerRef}
+        $active={active}
         $isDraggingOver={snapshot.isDraggingOver}
+        data-testid="empty-grid-row"
+        height={height}
       >
         {children}
         {provided.placeholder}

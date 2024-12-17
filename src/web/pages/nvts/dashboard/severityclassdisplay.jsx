@@ -4,12 +4,10 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
-
-import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
-import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay';  
+import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay';  
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {NvtsSeverityLoader} from './loaders';

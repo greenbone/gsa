@@ -5,9 +5,7 @@
 
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
-
 import {
   makeCompareDate,
   makeCompareIp,
@@ -62,8 +60,8 @@ const HostsTab = ({
     entities={hosts}
     filter={filter}
     sortField={sortField}
-    sortReverse={sortReverse}
     sortFunctions={hostsSortFunctions}
+    sortReverse={sortReverse}
     onInteraction={onInteraction}
   >
     {({

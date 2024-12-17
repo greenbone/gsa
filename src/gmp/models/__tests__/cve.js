@@ -4,13 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Cve from 'gmp/models/cve';
 import {isDate} from 'gmp/models/date';
 import Info from 'gmp/models/info';
-
 import {testModel} from 'gmp/models/testing';
-
 import {parseDate} from 'gmp/parser';
 
 testModel(Cve, 'cve');

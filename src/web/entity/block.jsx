@@ -5,13 +5,11 @@
 
 
 import React from 'react';
-
 import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 
 const DetailsBlock = ({id, children, className, title}) => (
-  <Layout flex="column" id={id} className={className}>
+  <Layout className={className} flex="column" id={id}>
     <h2>{title}</h2>
     <div>{children}</div>
   </Layout>

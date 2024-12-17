@@ -4,12 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import logger from 'gmp/log';
-
-import {isArray} from 'gmp/utils/identity';
-
 import Group from 'gmp/models/group';
+import {isArray} from 'gmp/utils/identity';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

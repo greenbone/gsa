@@ -3,13 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {throttleAnimation} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
@@ -47,7 +44,7 @@ class Resizer extends React.Component {
   }
 
   handleMouseDown(event) {
-    // eslint-disable-next-line no-bitwise
+     
     if (event.buttons & 1) {
       this.startY = event.pageY;
 

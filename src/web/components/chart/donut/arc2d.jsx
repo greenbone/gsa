@@ -3,16 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {ArcDataPropType} from 'web/components/chart/donut/proptypes';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import Group from '../group';
 import ToolTip from '../tooltip';
-import {ArcDataPropType} from 'web/components/chart/donut/proptypes';
 
 const Arc2d = ({data, path, x, y, onDataClick}) => {
   const {color = Theme.lightGray, toolTip} = data;
@@ -20,9 +18,9 @@ const Arc2d = ({data, path, x, y, onDataClick}) => {
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <Group
+          onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
           onMouseEnter={show}
           onMouseLeave={hide}
-          onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
         >
           <path d={path} fill={color} />
           <circle // used as positioning ref for tooltips

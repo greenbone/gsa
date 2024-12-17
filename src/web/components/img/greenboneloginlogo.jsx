@@ -4,11 +4,10 @@
  */
 
 
+import _ from 'gmp/locale';
 import React from 'react';
-
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
 
 import Img from './img';
 
@@ -19,7 +18,7 @@ const Image = styled(Img)`
 
 const LoginLogo = props => {
   return (
-    <Image alt={_('Greenbone AG')} src='greenbonehorizontal.png' data-testid="greenbone-login-logo"/>
+    <Image alt={_('Greenbone AG')} data-testid="greenbone-login-logo" src='greenbonehorizontal.png'/>
   );
 };
 

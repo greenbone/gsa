@@ -3,14 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import ical from 'ical.js';
-
-import {v4 as uuid} from 'uuid';
-
 import Logger from 'gmp/log';
-
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
+import ical from 'ical.js';
+import {v4 as uuid} from 'uuid';
 
 import date, {duration as createDuration} from './date';
 
@@ -383,7 +380,6 @@ class Event {
       const it = this.event.iterator();
       const dates = [];
 
-      // eslint-disable-next-line no-constant-condition
       while (true) {
         const next = it.next();
 

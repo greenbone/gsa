@@ -4,17 +4,8 @@
  */
 
 
-import React from 'react';
-
-import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
-import {parseInt, NO_VALUE, YES_VALUE} from 'gmp/parser';
-
 import {
   CONDITION_TYPE_ALWAYS,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
@@ -37,44 +28,43 @@ import {
   isTicketEvent,
   isSecinfoEvent,
 } from 'gmp/models/alert';
-
-import PropTypes from 'web/utils/proptypes';
+import {parseInt, NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {selectSaveId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/savedialog';
-
-import Select from 'web/components/form/select';
 import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
 import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
-
 import ReportIcon from 'web/components/icon/reporticon';
-
 import Divider from 'web/components/layout/divider';
 import Row from 'web/components/layout/row';
-
+import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import AlembaVfireMethodPart from './alembavfiremethodpart';
+import EmailMethodPart from './emailmethodpart';
+import FilterCountChangedConditionPart from './filtercountchangedconditionpart';
+import FilterCountLeastConditionPart from './filtercountleastconditionpart';
 import HttpMethodPart from './httpmethodpart';
 import ScpMethodPart from './scpmethodpart';
-import EmailMethodPart from './emailmethodpart';
+import SecInfoEventPart from './secinfoeventpart';
 import SendMethodPart from './sendmethodpart';
-import StartTaskMethodPart from './starttaskmethodpart';
+import SeverityChangedConditionPart from './severitychangedconditionpart';
+import SeverityLeastConditionPart from './severityleastconditionpart';
 import SmbMethodPart from './smbmethodpart';
 import SnmpMethodPart from './snmpmethodpart';
 import SourcefireMethodPart from './sourcefiremethodpart';
+import StartTaskMethodPart from './starttaskmethodpart';
+import TaskEventPart from './taskeventpart';
+import TicketEventPart from './ticketeventpart';
 import TippingPontMethodPart from './tippingpointmethodpart';
 import VeriniceMethodPart from './verinicemethodpart';
 
-import TaskEventPart from './taskeventpart';
-import TicketEventPart from './ticketeventpart';
-import SecInfoEventPart from './secinfoeventpart';
-
-import SeverityLeastConditionPart from './severityleastconditionpart';
-import SeverityChangedConditionPart from './severitychangedconditionpart';
-import FilterCountLeastConditionPart from './filtercountleastconditionpart';
-import FilterCountChangedConditionPart from './filtercountchangedconditionpart';
 
 export const DEFAULT_DEFENSE_CENTER_PORT = '8307';
 export const DEFAULT_DIRECTION = 'changed';
@@ -496,8 +486,8 @@ class AlertDialog extends React.Component {
 
     return (
       <SaveDialog
-        title={title}
         defaultValues={data}
+        title={title}
         values={controlledValues}
         onClose={onClose}
         onSave={onSave}
@@ -507,8 +497,8 @@ class AlertDialog extends React.Component {
             <>
               <FormGroup title={_('Name')}>
                 <TextField
-                  name="name"
                   grow="1"
+                  name="name"
                   value={values.name}
                   onChange={onValueChange}
                 />
@@ -516,33 +506,33 @@ class AlertDialog extends React.Component {
 
               <FormGroup title={_('Comment')}>
                 <TextField
+                  grow="1"
                   name="comment"
                   value={values.comment}
-                  grow="1"
                   onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup title={_('Event')}>
                 <TaskEventPart
-                  prefix="event_data"
                   event={values.event}
+                  prefix="event_data"
                   status={values.event_data_status}
+                  onChange={onValueChange}
                   onEventChange={value =>
                     this.handleEventChange(value, onValueChange)
                   }
-                  onChange={onValueChange}
                 />
 
                 <SecInfoEventPart
-                  prefix="event_data"
                   event={values.event}
-                  secinfoType={values.event_data_secinfo_type}
                   feedEvent={values.event_data_feed_event}
+                  prefix="event_data"
+                  secinfoType={values.event_data_secinfo_type}
+                  onChange={onValueChange}
                   onEventChange={value =>
                     this.handleEventChange(value, onValueChange)
                   }
-                  onChange={onValueChange}
                 />
 
                 <TicketEventPart
@@ -555,17 +545,17 @@ class AlertDialog extends React.Component {
 
               <FormGroup title={_('Condition')}>
                 <Radio
-                  title={_('Always')}
-                  name="condition"
-                  value={CONDITION_TYPE_ALWAYS}
                   checked={values.condition === CONDITION_TYPE_ALWAYS}
+                  name="condition"
+                  title={_('Always')}
+                  value={CONDITION_TYPE_ALWAYS}
                   onChange={onValueChange}
                 />
 
                 {taskEvent && (
                   <SeverityLeastConditionPart
-                    prefix="condition_data"
                     condition={values.condition}
+                    prefix="condition_data"
                     severity={values.condition_data_severity}
                     onChange={onValueChange}
                   />
@@ -573,31 +563,31 @@ class AlertDialog extends React.Component {
 
                 {taskEvent && (
                   <SeverityChangedConditionPart
-                    prefix="condition_data"
                     condition={values.condition}
                     direction={values.condition_data_direction}
+                    prefix="condition_data"
                     onChange={onValueChange}
                   />
                 )}
 
                 {(secinfoEvent || taskEvent) && (
                   <FilterCountLeastConditionPart
-                    prefix="condition_data"
-                    condition={values.condition}
-                    atLeastFilterId={values.condition_data_at_least_filter_id}
                     atLeastCount={values.condition_data_at_least_count}
+                    atLeastFilterId={values.condition_data_at_least_filter_id}
+                    condition={values.condition}
                     filters={values.condition_data_filters}
+                    prefix="condition_data"
                     onChange={onValueChange}
                   />
                 )}
 
                 {taskEvent && (
                   <FilterCountChangedConditionPart
-                    prefix="condition_data"
                     condition={values.condition}
-                    filterId={values.condition_data_filter_id}
                     count={values.condition_data_count}
+                    filterId={values.condition_data_filter_id}
                     filters={values.condition_data_filters}
+                    prefix="condition_data"
                     onChange={onValueChange}
                   />
                 )}
@@ -626,31 +616,31 @@ class AlertDialog extends React.Component {
               {taskEvent && (
                 <FormGroup title={_('Delta Report')}>
                   <Radio
-                    title={_('None')}
-                    name="method_data_delta_type"
-                    value={DELTA_TYPE_NONE}
                     checked={values.method_data_delta_type === DELTA_TYPE_NONE}
+                    name="method_data_delta_type"
+                    title={_('None')}
+                    value={DELTA_TYPE_NONE}
                     onChange={onValueChange}
                   />
 
                   <Radio
-                    title={_('Previous completed report of the same task')}
-                    name="method_data_delta_type"
-                    value={DELTA_TYPE_PREVIOUS}
                     checked={
                       values.method_data_delta_type === DELTA_TYPE_PREVIOUS
                     }
+                    name="method_data_delta_type"
+                    title={_('Previous completed report of the same task')}
+                    value={DELTA_TYPE_PREVIOUS}
                     onChange={onValueChange}
                   />
 
                   <Row>
                     <Radio
-                      title={_('Report with ID')}
-                      name="method_data_delta_type"
-                      value={DELTA_TYPE_REPORT}
                       checked={
                         values.method_data_delta_type === DELTA_TYPE_REPORT
                       }
+                      name="method_data_delta_type"
+                      title={_('Report with ID')}
+                      value={DELTA_TYPE_REPORT}
                       onChange={onValueChange}
                     />
                     <TextField
@@ -665,74 +655,74 @@ class AlertDialog extends React.Component {
 
               <FormGroup title={_('Method')}>
                 <Select
+                  items={methodTypes}
                   name="method"
                   value={values.method}
-                  items={methodTypes}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
               {values.method === METHOD_TYPE_EMAIL && (
                 <EmailMethodPart
-                  prefix="method_data"
                   credentials={credentials}
                   event={event}
                   fromAddress={values.method_data_from_address}
                   message={values.method_data_message}
                   messageAttach={values.method_data_message_attach}
                   notice={values.method_data_notice}
-                  noticeAttachFormat={values.method_data_notice_attach_format}
-                  noticeReportFormat={values.method_data_notice_report_format}
                   noticeAttachConfig={values.method_data_notice_attach_config}
+                  noticeAttachFormat={values.method_data_notice_attach_format}
                   noticeReportConfig={values.method_data_notice_report_config}
+                  noticeReportFormat={values.method_data_notice_report_format}
+                  prefix="method_data"
+                  recipientCredential={values.method_data_recipient_credential}
+                  reportConfigs={report_configs}
+                  reportFormats={report_formats}
                   subject={values.method_data_subject}
                   toAddress={values.method_data_to_address}
-                  recipientCredential={values.method_data_recipient_credential}
-                  reportFormats={report_formats}
-                  reportConfigs={report_configs}
-                  onSave={onSave}
                   onChange={onValueChange}
                   onCredentialChange={onEmailCredentialChange}
                   onNewCredentialClick={onNewEmailCredentialClick}
+                  onSave={onSave}
                 />
               )}
 
               {values.method === METHOD_TYPE_HTTP_GET && (
                 <HttpMethodPart
-                  prefix="method_data"
                   URL={values.method_data_URL}
+                  prefix="method_data"
                   onChange={onValueChange}
                 />
               )}
 
               {values.method === METHOD_TYPE_SCP && (
                 <ScpMethodPart
-                  prefix="method_data"
                   credentials={credentials}
+                  prefix="method_data"
                   reportConfigs={report_configs}
                   reportFormats={report_formats}
                   scpCredential={values.method_data_scp_credential}
                   scpHost={values.method_data_scp_host}
-                  scpPort={values.method_data_scp_port}
                   scpKnownHosts={values.method_data_scp_known_hosts}
                   scpPath={values.method_data_scp_path}
+                  scpPort={values.method_data_scp_port}
                   scpReportConfig={values.method_data_scp_report_config}
                   scpReportFormat={values.method_data_scp_report_format}
-                  onNewCredentialClick={onNewScpCredentialClick}
-                  onCredentialChange={onScpCredentialChange}
                   onChange={onValueChange}
+                  onCredentialChange={onScpCredentialChange}
+                  onNewCredentialClick={onNewScpCredentialClick}
                 />
               )}
 
               {values.method === METHOD_TYPE_SEND && (
                 <SendMethodPart
                   prefix="method_data"
+                  reportConfigs={report_configs}
+                  reportFormats={report_formats}
                   sendHost={values.method_data_send_host}
                   sendPort={values.method_data_send_port}
                   sendReportConfig={values.method_data_send_report_config}
                   sendReportFormat={values.method_data_send_report_format}
-                  reportConfigs={report_configs}
-                  reportFormats={report_formats}
                   onChange={onValueChange}
                 />
               )}
@@ -740,27 +730,27 @@ class AlertDialog extends React.Component {
               {values.method === METHOD_TYPE_START_TASK && (
                 <StartTaskMethodPart
                   prefix="method_data"
-                  tasks={values.tasks}
                   startTaskTask={values.method_data_start_task_task}
+                  tasks={values.tasks}
                   onChange={onValueChange}
                 />
               )}
 
               {values.method === METHOD_TYPE_SMB && (
                 <SmbMethodPart
-                  prefix="method_data"
                   credentials={credentials}
+                  prefix="method_data"
                   reportConfigs={report_configs}
                   reportFormats={report_formats}
                   smbCredential={values.method_data_smb_credential}
                   smbFilePath={values.method_data_smb_file_path}
                   smbMaxProtocol={values.method_data_smb_max_protocol}
-                  smbSharePath={values.method_data_smb_share_path}
                   smbReportConfig={values.method_data_smb_report_config}
                   smbReportFormat={values.method_data_smb_report_format}
-                  onNewCredentialClick={onNewSmbCredentialClick}
+                  smbSharePath={values.method_data_smb_share_path}
                   onChange={onValueChange}
                   onCredentialChange={onSmbCredentialChange}
+                  onNewCredentialClick={onNewSmbCredentialClick}
                 />
               )}
 
@@ -777,12 +767,12 @@ class AlertDialog extends React.Component {
               {values.method === METHOD_TYPE_SOURCEFIRE && (
                 <SourcefireMethodPart
                   credentials={credentials}
-                  pkcs12Credential={values.method_data_pkcs12_credential}
-                  prefix="method_data"
                   defenseCenterIp={values.method_data_defense_center_ip}
                   defenseCenterPort={parseInt(
                     values.method_data_defense_center_port,
                   )}
+                  pkcs12Credential={values.method_data_pkcs12_credential}
+                  prefix="method_data"
                   onChange={onValueChange}
                   onCredentialChange={onPasswordOnlyCredentialChange}
                   onNewCredentialClick={onNewPasswordOnlyCredentialClick}
@@ -791,11 +781,10 @@ class AlertDialog extends React.Component {
 
               {values.method === METHOD_TYPE_VERINICE && (
                 <VeriniceMethodPart
-                  prefix="method_data"
                   credentials={credentials}
+                  prefix="method_data"
                   reportConfigs={report_configs}
                   reportFormats={report_formats}
-                  veriniceServerUrl={values.method_data_verinice_server_url}
                   veriniceServerCredential={
                     values.method_data_verinice_server_credential
                   }
@@ -805,31 +794,32 @@ class AlertDialog extends React.Component {
                   veriniceServerReportFormat={
                     values.method_data_verinice_server_report_format
                   }
-                  onNewCredentialClick={onNewVeriniceCredentialClick}
+                  veriniceServerUrl={values.method_data_verinice_server_url}
                   onChange={onValueChange}
                   onCredentialChange={onVerinceCredentialChange}
+                  onNewCredentialClick={onNewVeriniceCredentialClick}
                 />
               )}
 
               {values.method === METHOD_TYPE_TIPPING_POINT && (
                 <TippingPontMethodPart
-                  prefix="method_data"
                   credentials={credentials}
+                  prefix="method_data"
                   tpSmsCredential={values.method_data_tp_sms_credential}
                   tpSmsHostname={values.method_data_tp_sms_hostname}
                   tpSmsTlsWorkaround={values.method_data_tp_sms_tls_workaround}
-                  onNewCredentialClick={onNewTippingPointCredentialClick}
                   onChange={onValueChange}
                   onCredentialChange={onTippingPointCredentialChange}
+                  onNewCredentialClick={onNewTippingPointCredentialClick}
                 />
               )}
 
               {values.method === METHOD_TYPE_ALEMBA_VFIRE && (
                 <AlembaVfireMethodPart
-                  prefix="method_data"
                   credentials={credentials}
-                  reportFormats={report_formats}
+                  prefix="method_data"
                   reportFormatIds={values.report_format_ids}
+                  reportFormats={report_formats}
                   vFireBaseUrl={values.method_data_vfire_base_url}
                   vFireCallDescription={
                     values.method_data_vfire_call_description
@@ -852,9 +842,9 @@ class AlertDialog extends React.Component {
                   vFireSessionType={values.method_data_vfire_session_type}
                   onChange={onValueChange}
                   onCredentialChange={onVfireCredentialChange}
-                  onReportFormatsChange={onReportFormatsChange}
-                  onReportConfigsChange={onReportConfigsChange}
                   onNewVfireCredentialClick={onNewVfireCredentialClick}
+                  onReportConfigsChange={onReportConfigsChange}
+                  onReportFormatsChange={onReportFormatsChange}
                 />
               )}
 

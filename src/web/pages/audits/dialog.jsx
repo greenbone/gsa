@@ -4,14 +4,7 @@
  */
 
 
-import React from 'react';
 
-import styled from 'styled-components';
-
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
@@ -20,32 +13,30 @@ import {
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
 } from 'gmp/models/audit';
-
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
 } from 'gmp/models/scanner';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {selectSaveId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/savedialog';
-
+import Checkbox from 'web/components/form/checkbox';
+import FormGroup from 'web/components/form/formgroup';
 import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
-import FormGroup from 'web/components/form/formgroup';
-import Checkbox from 'web/components/form/checkbox';
-import YesNoRadio from 'web/components/form/yesnoradio';
 import TextField from 'web/components/form/textfield';
-
+import YesNoRadio from 'web/components/form/yesnoradio';
 import NewIcon from 'web/components/icon/newicon';
-
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
-
-import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/hooks/useCapabilities';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 const Title = styled.div`
   flex-grow: 1;
@@ -72,11 +63,11 @@ const ScannerSelect = ({
   return (
     <FormGroup title={_('Scanner')}>
       <Select
+        disabled={!changeAudit}
+        isLoading={isLoading}
+        items={renderSelectItems(scanners)}
         name="scanner_id"
         value={scannerId}
-        disabled={!changeAudit}
-        items={renderSelectItems(scanners)}
-        isLoading={isLoading}
         onChange={onChange}
       />
     </FormGroup>
@@ -184,11 +175,11 @@ const AuditDialog = ({
 
   return (
     <SaveDialog
+      defaultValues={uncontrolledData}
       title={title}
+      values={controlledData}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={uncontrolledData}
-      values={controlledData}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -209,11 +200,11 @@ const AuditDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Scan Targets')} direction="row">
+            <FormGroup direction="row" title={_('Scan Targets')}>
               <Select
-                name="targetId"
                 disabled={!changeAudit}
                 items={targetItems}
+                name="targetId"
                 value={state.targetId}
                 onChange={onChange}
               />
@@ -226,10 +217,10 @@ const AuditDialog = ({
             </FormGroup>
 
             {capabilities.mayOp('get_alerts') && (
-              <FormGroup title={_('Alerts')} direction="row">
+              <FormGroup direction="row" title={_('Alerts')}>
                 <MultiSelect
-                  name="alertIds"
                   items={alertItems}
+                  name="alertIds"
                   value={state.alertIds}
                   onChange={onChange}
                 />
@@ -241,19 +232,19 @@ const AuditDialog = ({
             )}
 
             {capabilities.mayOp('get_schedules') && (
-              <FormGroup title={_('Schedule')} direction="row">
+              <FormGroup direction="row" title={_('Schedule')}>
                 <Select
+                  items={scheduleItems}
                   name="scheduleId"
                   value={state.scheduleId}
-                  items={scheduleItems}
                   onChange={onChange}
                 />
                 <Checkbox
-                  name="schedulePeriods"
                   checked={state.schedulePeriods === YES_VALUE}
                   checkedValue={YES_VALUE}
-                  unCheckedValue={NO_VALUE}
+                  name="schedulePeriods"
                   title={_('Once')}
+                  unCheckedValue={NO_VALUE}
                   onChange={onValueChange}
                 />
                 <NewIcon
@@ -271,8 +262,8 @@ const AuditDialog = ({
             {changeAudit && (
               <FormGroup title={_('Alterable Audit')}>
                 <YesNoRadio
-                  name="alterable"
                   disabled={audit && !audit.isNew()}
+                  name="alterable"
                   value={state.alterable}
                   onChange={onValueChange}
                 />
@@ -295,27 +286,26 @@ const AuditDialog = ({
               }
             >
               <ScannerSelect
-                scanners={scanners}
-                scannerId={state.scannerId}
                 changeAudit={changeAudit}
                 isLoading={isLoadingScanners}
+                scannerId={state.scannerId}
+                scanners={scanners}
                 onChange={onScannerChange}
               />
             </Title>
 
             <FormGroup title={_('Policy')}>
               <Select
-                name="policyId"
                 disabled={!changeAudit || hasAudit || fromPolicy}
                 items={policyItems}
+                name="policyId"
                 value={policyId}
                 onChange={onChange}
               />
             </FormGroup>
 
-            <FormGroup titleSize="4" title={_('Order for target hosts')}>
+            <FormGroup title={_('Order for target hosts')} titleSize="4">
               <Select
-                name="hostsOrdering"
                 items={[
                   {
                     value: 'sequential',
@@ -330,24 +320,25 @@ const AuditDialog = ({
                     label: _('Reverse'),
                   },
                 ]}
+                name="hostsOrdering"
                 value={state.hostsOrdering}
                 onChange={onValueChange}
               />
             </FormGroup>
             <FormGroup title={_('Maximum concurrently executed NVTs per host')}>
               <Spinner
+                min="0"
                 name="maxChecks"
                 type="int"
-                min="0"
                 value={state.maxChecks}
                 onChange={onValueChange}
               />
             </FormGroup>
             <FormGroup title={_('Maximum concurrently scanned hosts')}>
               <Spinner
+                min="0"
                 name="maxHosts"
                 type="int"
-                min="0"
                 value={state.maxHosts}
                 onChange={onValueChange}
               />

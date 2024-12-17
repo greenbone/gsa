@@ -6,9 +6,9 @@
 
 import styled from 'styled-components';
 
+import Layout from '../../components/layout/layout';
 import Theme from '../../utils/theme';
 
-import Layout from '../../components/layout/layout';
 
 const TabLayout = styled(Layout)`
   border-bottom: 2px solid ${Theme.green};

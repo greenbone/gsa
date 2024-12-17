@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import Target from 'gmp/models/target';
-
 import {rendererWith} from 'web/utils/testing';
 
 import Details from '../details';

@@ -4,13 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {isFunction} from 'gmp/utils/identity';
-
-import Filter from 'gmp/models/filter';
-
 import Rejection from 'gmp/http/rejection';
-
+import Filter from 'gmp/models/filter';
+import {isFunction} from 'gmp/utils/identity';
 import {filterIdentifier} from 'web/store/utils';
 
 import {

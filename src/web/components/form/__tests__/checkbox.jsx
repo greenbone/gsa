@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent, screen} from 'web/utils/testing';
 
 import CheckBox from '../checkbox';
@@ -14,9 +13,9 @@ describe('CheckBox component tests', () => {
     const change = testing.fn();
     render(
       <CheckBox
+        checked={false}
         data-testid="checkbox"
         name="foo"
-        checked={false}
         onChange={change}
       />,
     );
@@ -32,10 +31,10 @@ describe('CheckBox component tests', () => {
     const change = testing.fn();
     render(
       <CheckBox
-        data-testid="checkbox"
-        name="foo"
         checked={false}
         checkedValue="ipsum"
+        data-testid="checkbox"
+        name="foo"
         unCheckedValue="lorem"
         onChange={change}
       />,
@@ -52,10 +51,10 @@ describe('CheckBox component tests', () => {
     const change = testing.fn();
     render(
       <CheckBox
-        data-testid="checkbox"
-        name="foo"
         checked={true}
         checkedValue="ipsum"
+        data-testid="checkbox"
+        name="foo"
         unCheckedValue="lorem"
         onChange={change}
       />,
@@ -72,11 +71,11 @@ describe('CheckBox component tests', () => {
     const change = testing.fn();
     render(
       <CheckBox
-        data-testid="checkbox"
-        name="foo"
-        disabled={true}
         checked={true}
         checkedValue="ipsum"
+        data-testid="checkbox"
+        disabled={true}
+        name="foo"
         unCheckedValue="lorem"
         onChange={change}
       />,

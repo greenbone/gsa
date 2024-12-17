@@ -4,22 +4,16 @@
  */
 
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/component';
-
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-
-import compose from 'web/utils/compose';
-
 import {create_pem_certificate} from 'web/utils/cert';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
@@ -89,10 +83,10 @@ class TlsCertificateComponent extends React.Component {
     return (
       <EntityComponent
         name="tlscertificate"
-        onDeleted={onDeleted}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
       >
         {({download, ...other}) => (

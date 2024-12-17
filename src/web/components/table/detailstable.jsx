@@ -5,9 +5,7 @@
 
 
 import React from 'react';
-
 import {Col} from 'web/entity/page';
-
 import PropTypes from 'web/utils/proptypes';
 
 import InfoTable from './infotable';

@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Model, {parseModelFromElement} from 'gmp/model';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import Model, {parseModelFromElement} from 'gmp/model';
 
 class Permission extends Model {
   static entityType = 'permission';

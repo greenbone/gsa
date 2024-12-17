@@ -3,60 +3,49 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
+import React from 'react';
 import Badge from 'web/components/badge/badge';
-
 import SeverityBar from 'web/components/bar/severitybar';
-
 import CpeIcon from 'web/components/icon/cpeicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import HostIcon from 'web/components/icon/hosticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import OsSvgIcon from 'web/components/icon/ossvgicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import Link from 'web/components/link/link';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
-import EntityPage, {Col} from 'web/entity/page';
 import {goto_list} from 'web/entity/component';
+import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
 import {
   selector as osSelector,
   loadEntity,
 } from 'web/store/entities/operatingsystems';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -74,11 +63,11 @@ let ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="managing-assets"
           anchor="managing-operating-systems"
+          page="managing-assets"
           title={_('Help: Operating Systems')}
         />
-        <ListIcon title={_('Operating System List')} page="operatingsystems" />
+        <ListIcon page="operatingsystems" title={_('Operating System List')} />
       </IconDivider>
       <IconDivider>
         {capabilities.mayDelete('os') &&
@@ -89,24 +78,24 @@ let ToolBarIcons = ({
             />
           ) : (
             <DeleteIcon
-              value={entity}
               title={_('Delete')}
+              value={entity}
               onClick={onOperatingSystemDeleteClick}
             />
           ))}
         <ExportIcon
+          title={_('Export Operating System')}
           value={entity}
           onClick={onOperatingSystemDownloadClick}
-          title={_('Export Operating System')}
         />
       </IconDivider>
       <IconDivider>
         <Badge content={allHosts.length}>
           <Link
-            to="hosts"
             filter={'os_id="' + entity.id + '"'}
             textOnly={!links}
             title={_('Hosts with Operating System {{- name}}', entity)}
+            to="hosts"
           >
             <HostIcon />
           </Link>
@@ -115,13 +104,13 @@ let ToolBarIcons = ({
       <IconDivider>
         <Badge content={hosts.length}>
           <Link
-            to="hosts"
             filter={'best_os_cpe="' + entity.name + '"'}
             textOnly={!links}
             title={_(
               'Hosts with Operating System {{- name}} as the best match',
               entity,
             )}
+            to="hosts"
           >
             <HostIcon />
           </Link>
@@ -201,10 +190,10 @@ const Page = ({
   ...props
 }) => (
   <OsComponent
-    onDeleted={goto_list('operatingsystems', props)}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={goto_list('operatingsystems', props)}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
   >
     {({delete: delete_func, download}) => (
@@ -218,8 +207,8 @@ const Page = ({
         onOperatingSystemDeleteClick={delete_func}
         onOperatingSystemDownloadClick={download}
         onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
         onPermissionDownloadError={onError}
+        onPermissionDownloaded={onDownloaded}
       >
         {({activeTab = 0, onActivateTab}) => {
           return (
@@ -227,8 +216,8 @@ const Page = ({
               <PageTitle
                 title={_('Operating System: {{name}}', {name: entity.name})}
               />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}

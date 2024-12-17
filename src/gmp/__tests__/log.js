@@ -11,9 +11,9 @@ import {
   afterEach,
   testing,
 } from '@gsa/testing';
+import {isFunction} from 'util';
 
 import {RootLogger, DEFAULT_LOG_LEVEL, LogLevels} from '../log.js';
-import {isFunction} from 'util';
 
 let origConsole;
 let testConsole;

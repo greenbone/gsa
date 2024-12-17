@@ -3,29 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import HorizontalSep from 'web/components/layout/horizontalsep';
+import Layout from 'web/components/layout/layout';
+import DetailsLink from 'web/components/link/detailslink';
+import TableBody from 'web/components/table/body';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
+import TableRow from 'web/components/table/row';
+import DetailsBlock from 'web/entity/block';
+import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import Layout from 'web/components/layout/layout';
-
-import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
-import TableBody from 'web/components/table/body';
-import TableData, {TableDataAlignTop} from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-
-import DetailsBlock from 'web/entity/block';
-import {Col} from 'web/entity/page';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
 
 const MAX_HOSTS_LISTINGS = 70;
 
@@ -56,7 +48,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     .map(host => <span key={host}>{host}</span>);
 
   return (
-    <Layout grow="1" flex="column">
+    <Layout flex="column" grow="1">
       <DetailsBlock title={_('Hosts')}>
         <InfoTable size="full">
           <colgroup>
@@ -67,7 +59,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             <TableRow>
               <TableDataAlignTop>{_('Included')}</TableDataAlignTop>
               <TableData>
-                <HorizontalSep $separator="," $wrap $spacing="0">
+                <HorizontalSep $wrap $separator="," $spacing="0">
                   {hostsListing}
                   {hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
                 </HorizontalSep>
@@ -78,7 +70,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
               <TableRow>
                 <TableDataAlignTop>{_('Excluded')}</TableDataAlignTop>
                 <TableData>
-                  <HorizontalSep $separator="," $wrap $spacing="0">
+                  <HorizontalSep $wrap $separator="," $spacing="0">
                     {excludeHostsListing}
                     {exclude_hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
                   </HorizontalSep>

@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import Theme from 'web/utils/theme';
 import {render, fireEvent} from 'web/utils/testing';
+import Theme from 'web/utils/theme';
 
 import ToggleButton from '../togglebutton';
 
@@ -58,7 +57,7 @@ describe('ToggleButton tests', () => {
   test('should toggle checked state', () => {
     const handler = testing.fn();
     const {element} = render(
-      <ToggleButton name="foo" checked={true} onToggle={handler} />,
+      <ToggleButton checked={true} name="foo" onToggle={handler} />,
     );
 
     fireEvent.click(element);

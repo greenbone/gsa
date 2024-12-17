@@ -3,20 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
 import logger from 'gmp/log';
-
+import Policy from 'gmp/models/policy';
+import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-
-import registerCommand from 'gmp/command';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
-import Policy from 'gmp/models/policy';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 import {convert, convertSelect, convertPreferences} from './scanconfigs';
-import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
 const log = logger.getLogger('gmp.commands.policies');
 

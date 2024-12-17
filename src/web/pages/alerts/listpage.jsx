@@ -3,43 +3,35 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+import AlertIcon from 'web/components/icon/alerticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
-import AlertIcon from 'web/components/icon/alerticon';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import AlertsFilterDialog from 'web/pages/alerts/filterdialog';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/alerts';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import AlertComponent from './component';
 import AlertTable from './table';
 
-import {useTranslation} from 'react-i18next';
-import AlertsFilterDialog from 'web/pages/alerts/filterdialog';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="scanning"
         anchor="managing-alerts"
+        page="scanning"
         title={_('Help: Alerts')}
       />
       {capabilities.mayCreate('alert') && (
@@ -66,17 +58,17 @@ const AlertsPage = ({
 
   return (
     <AlertComponent
-      onCreated={onChanged}
-      onSaved={onChanged}
-      onCloned={onChanged}
       onCloneError={onError}
-      onDeleted={onChanged}
+      onCloned={onChanged}
+      onCreated={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
-      onTestSuccess={showSuccess}
+      onSaved={onChanged}
       onTestError={showError}
+      onTestSuccess={showSuccess}
     >
       {({clone, create, delete: delete_func, download, edit, save, test}) => (
         <>
@@ -94,13 +86,13 @@ const AlertsPage = ({
             onAlertDeleteClick={delete_func}
             onAlertDownloadClick={download}
             onAlertEditClick={edit}
-            onAlertTestClick={test}
             onAlertSaveClick={save}
+            onAlertTestClick={test}
             onError={onError}
             onInteraction={onInteraction}
             onPermissionChanged={onChanged}
-            onPermissionDownloaded={onDownloaded}
             onPermissionDownloadError={onError}
+            onPermissionDownloaded={onDownloaded}
           />
         </>
       )}

@@ -4,15 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
-
 import {entityLoadingActions} from 'web/store/entities/hosts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';

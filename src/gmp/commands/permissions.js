@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
+import logger from 'gmp/log';
 import Permission from 'gmp/models/permission';
-
 import {apiType} from 'gmp/utils/entitytype';
 
 import EntitiesCommand from './entities';

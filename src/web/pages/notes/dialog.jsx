@@ -3,12 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 
-import {parseFloat} from 'gmp/parser';
 
 import {
   ANY,
@@ -23,13 +19,20 @@ import {
   RESULT_ANY,
   RESULT_UUID,
 } from 'gmp/models/override';
-
+import {parseFloat} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+import React from 'react';
 import DateTime from 'web/components/date/datetime';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
 import Row from 'web/components/layout/row';
-
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import {
   renderNvtName,
@@ -40,15 +43,6 @@ import {
   LOG_VALUE,
   translatedResultSeverityRiskFactor,
 } from 'web/utils/severity';
-
-import FormGroup from 'web/components/form/formgroup';
-import TextArea from 'web/components/form/textarea';
-import TextField from 'web/components/form/textfield';
-import Radio from 'web/components/form/radio';
-import Select from 'web/components/form/select';
-import Spinner from 'web/components/form/spinner';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const NoteDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
@@ -102,8 +96,8 @@ const NoteDialog = ({
 
   return (
     <SaveDialog
-      title={title}
       defaultValues={data}
+      title={title}
       values={{id}}
       onClose={onClose}
       onSave={onSave}
@@ -112,34 +106,34 @@ const NoteDialog = ({
         return (
           <>
             {state.fixed && isDefined(oid) && (
-              <FormGroup title={_('NVT')} flex="column">
+              <FormGroup flex="column" title={_('NVT')}>
                 <span>{renderNvtName(oid, nvt_name)}</span>
               </FormGroup>
             )}
             {state.fixed && !isDefined(oid) && (
-              <FormGroup title={_('NVT')} flex="column">
+              <FormGroup flex="column" title={_('NVT')}>
                 <span>{renderNvtName(state.oid, nvt_name)}</span>
               </FormGroup>
             )}
             {isEdit && !state.fixed && (
-              <FormGroup title={_('NVT')} direction="column">
+              <FormGroup direction="column" title={_('NVT')}>
                 <Radio
-                  title={renderNvtName(oid, nvt_name)}
-                  name="oid"
                   checked={state.oid === oid}
+                  name="oid"
+                  title={renderNvtName(oid, nvt_name)}
                   value={oid}
                   onChange={onValueChange}
                 />
                 <Row>
                   <Radio
-                    name="oid"
                     checked={state.oid !== oid}
+                    name="oid"
                     value={DEFAULT_OID_VALUE}
                     onChange={onValueChange}
                   />
                   <TextField
-                    name="oid"
                     disabled={state.oid === oid}
+                    name="oid"
                     value={state.oid === oid ? DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />
@@ -158,18 +152,18 @@ const NoteDialog = ({
             <FormGroup title={_('Active')}>
               <Row>
                 <Radio
+                  checked={state.active === ACTIVE_YES_ALWAYS_VALUE}
                   name="active"
                   title={_('yes, always')}
-                  checked={state.active === ACTIVE_YES_ALWAYS_VALUE}
                   value={ACTIVE_YES_ALWAYS_VALUE}
                   onChange={onValueChange}
                 />
                 {isEdit && note.isActive() && isDefined(note.endTime) && (
                   <Row>
                     <Radio
+                      checked={state.active === ACTIVE_YES_UNTIL_VALUE}
                       name="active"
                       title={_('yes, until')}
-                      checked={state.active === ACTIVE_YES_UNTIL_VALUE}
                       value={ACTIVE_YES_UNTIL_VALUE}
                       onChange={onValueChange}
                     />
@@ -179,26 +173,26 @@ const NoteDialog = ({
               </Row>
               <Row>
                 <Radio
-                  name="active"
                   checked={state.active === ACTIVE_YES_FOR_NEXT_VALUE}
+                  name="active"
                   title={_('yes, for the next')}
                   value={ACTIVE_YES_FOR_NEXT_VALUE}
                   onChange={onValueChange}
                 />
                 <Spinner
+                  disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
+                  min="1"
                   name="days"
                   type="int"
-                  min="1"
-                  disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
                   value={state.days}
                   onChange={onValueChange}
                 />
                 <span>{_('days')}</span>
               </Row>
               <Radio
+                checked={state.active === ACTIVE_NO_VALUE}
                 name="active"
                 title={_('no')}
-                checked={state.active === ACTIVE_NO_VALUE}
                 value={ACTIVE_NO_VALUE}
                 onChange={onValueChange}
               />
@@ -206,22 +200,22 @@ const NoteDialog = ({
 
             <FormGroup title={_('Hosts')}>
               <Radio
+                checked={state.hosts === ANY}
                 name="hosts"
                 title={_('Any')}
-                checked={state.hosts === ANY}
                 value={ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  name="hosts"
                   checked={state.hosts === MANUAL}
+                  name="hosts"
                   value={MANUAL}
                   onChange={onValueChange}
                 />
                 <TextField
-                  name="hosts_manual"
                   disabled={state.hosts !== MANUAL}
+                  name="hosts_manual"
                   value={state.hosts_manual}
                   onChange={onValueChange}
                 />
@@ -230,22 +224,22 @@ const NoteDialog = ({
 
             <FormGroup title={_('Location')}>
               <Radio
+                checked={state.port === ANY}
                 name="port"
                 title={_('Any')}
-                checked={state.port === ANY}
                 value={ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  name="port"
                   checked={state.port === MANUAL}
+                  name="port"
                   value={MANUAL}
                   onChange={onValueChange}
                 />
                 <TextField
-                  name="port_manual"
                   disabled={state.port !== MANUAL}
+                  name="port_manual"
                   value={state.port_manual}
                   onChange={onValueChange}
                 />
@@ -255,9 +249,9 @@ const NoteDialog = ({
             <FormGroup title={_('Severity')}>
               <Row>
                 <Radio
+                  checked={isEmpty(state.severity)}
                   name="severity"
                   title={_('Any')}
-                  checked={isEmpty(state.severity)}
                   value=""
                   onChange={onValueChange}
                 />
@@ -265,19 +259,19 @@ const NoteDialog = ({
                   <>
                     {severity > LOG_VALUE ? (
                       <Radio
-                        name="severity"
-                        title={' > ' + severityFormat(severity - 0.1)}
                         checked={true}
                         convert={parseFloat}
+                        name="severity"
+                        title={' > ' + severityFormat(severity - 0.1)}
                         value={severity}
                         onChange={onValueChange}
                       />
                     ) : (
                       <Radio
-                        name="severity"
-                        title={translatedResultSeverityRiskFactor(severity)}
                         checked={state.severity === severity}
                         convert={parseFloat}
+                        name="severity"
+                        title={translatedResultSeverityRiskFactor(severity)}
                         value={severity}
                         onChange={onValueChange}
                       />
@@ -288,19 +282,19 @@ const NoteDialog = ({
               {!isDefined(severity) && (
                 <>
                   <Radio
-                    name="severity"
-                    title={_('> 0.0')}
                     checked={state.severity === 0.1}
                     convert={parseFloat}
+                    name="severity"
+                    title={_('> 0.0')}
                     value="0.1"
                     onChange={onValueChange}
                   />
                   <Radio
-                    name="severity"
-                    value="0.0"
-                    title={_('Log')}
                     checked={state.severity === 0.0}
                     convert={parseFloat}
+                    name="severity"
+                    title={_('Log')}
+                    value="0.0"
                     onChange={onValueChange}
                   />
                 </>
@@ -309,24 +303,24 @@ const NoteDialog = ({
 
             <FormGroup title={_('Task')}>
               <Radio
+                checked={state.task_id === ''}
                 name="task_id"
                 title={_('Any')}
-                checked={state.task_id === ''}
                 value=""
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  name="task_id"
                   checked={state.task_id === '0'}
+                  name="task_id"
                   value="0"
                   onChange={onValueChange}
                 />
                 <Select
+                  disabled={state.task_id !== '0'}
+                  items={renderSelectItems(tasks)}
                   name="task_uuid"
                   value={state.task_uuid}
-                  items={renderSelectItems(tasks)}
-                  disabled={state.task_id !== '0'}
                   onChange={onValueChange}
                 />
               </Row>
@@ -334,14 +328,15 @@ const NoteDialog = ({
 
             <FormGroup title={_('Result')}>
               <Radio
+                checked={state.result_id === RESULT_ANY}
                 name="result_id"
                 title={_('Any')}
-                checked={state.result_id === RESULT_ANY}
                 value={RESULT_ANY}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
+                  checked={state.result_id === RESULT_UUID}
                   name="result_id"
                   title={
                     state.fixed
@@ -350,14 +345,13 @@ const NoteDialog = ({
                         })
                       : _('UUID')
                   }
-                  checked={state.result_id === RESULT_UUID}
                   value={RESULT_UUID}
                   onChange={onValueChange}
                 />
                 {!fixed && (
                   <TextField
-                    name="result_uuid"
                     disabled={state.result_id !== RESULT_UUID}
+                    name="result_uuid"
                     value={state.result_uuid}
                     onChange={onValueChange}
                   />
@@ -367,9 +361,9 @@ const NoteDialog = ({
 
             <FormGroup title={_('Text')}>
               <TextArea
-                name="text"
-                minRows="4"
                 autosize={true}
+                minRows="4"
+                name="text"
                 value={state.text}
                 onChange={onValueChange}
               />

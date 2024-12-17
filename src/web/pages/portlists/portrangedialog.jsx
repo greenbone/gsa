@@ -3,19 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {parseInt} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const convertPort = value => (value === '' ? value : parseInt(value));
 
@@ -33,46 +29,46 @@ const PortRangeDialog = ({id, port_type = 'tcp', title, onClose, onSave}) => {
 
   return (
     <SaveDialog
+      defaultValues={data}
       title={title}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
     >
       {({values: state, onValueChange}) => {
         return (
           <>
             <FormGroup title={_('Start')}>
               <TextField
+                convert={convertPort}
                 name="port_range_start"
                 value={state.port_range_start}
-                convert={convertPort}
                 onChange={onValueChange}
               />
             </FormGroup>
 
             <FormGroup title={_('End')}>
               <TextField
+                convert={convertPort}
                 name="port_range_end"
                 value={state.port_range_end}
-                convert={convertPort}
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Protocol')} direction="row">
+            <FormGroup direction="row" title={_('Protocol')}>
               <Radio
-                title={_('TCP')}
+                checked={state.port_type === 'tcp'}
                 name="port_type"
+                title={_('TCP')}
                 value="tcp"
                 onChange={onValueChange}
-                checked={state.port_type === 'tcp'}
               />
               <Radio
-                title={_('UDP')}
+                checked={state.port_type === 'udp'}
                 name="port_type"
+                title={_('UDP')}
                 value="udp"
                 onChange={onValueChange}
-                checked={state.port_type === 'udp'}
               />
             </FormGroup>
           </>

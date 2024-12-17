@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
-import Task, {TASK_STATUS} from 'gmp/models/task';
-import Schedule from 'gmp/models/schedule';
 import ScanConfig from 'gmp/models/scanconfig';
-
+import Schedule from 'gmp/models/schedule';
+import Task, {TASK_STATUS} from 'gmp/models/task';
 import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
-
 import {rendererWith} from 'web/utils/testing';
 
 import Details from '../details';

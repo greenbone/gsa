@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
+import logger from 'gmp/log';
+import {isArray, isDefined} from 'gmp/utils/identity';
 import {v4 as uuid} from 'uuid';
 
-import {isArray, isDefined} from 'gmp/utils/identity';
-
-import logger from 'gmp/log';
-
 import GmpCommand from './gmp';
-import registerCommand from 'gmp/command';
 
 const log = logger.getLogger('gmp.commands.dashboards');
 

@@ -4,16 +4,11 @@
  */
 
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import ExportIcon from 'web/components/icon/exporticon';
 import HostIcon from 'web/components/icon/hosticon';
 import ListIcon from 'web/components/icon/listicon';
@@ -21,50 +16,41 @@ import ManualIcon from 'web/components/icon/manualicon';
 import OsIcon from 'web/components/icon/osicon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
-import EntityPage, {Col} from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
+import CreateIcon from 'web/entity/icon/createicon';
+import DeleteIcon from 'web/entity/icon/deleteicon';
+import EditIcon from 'web/entity/icon/editicon';
+import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import CreateIcon from 'web/entity/icon/createicon';
-import DeleteIcon from 'web/entity/icon/deleteicon';
-import EditIcon from 'web/entity/icon/editicon';
-
 import {selector as hostsSelector, loadEntity} from 'web/store/entities/hosts';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
 import PropTypes from 'web/utils/proptypes';
 
-import HostDetails from './details';
 import HostComponent from './component';
+import HostDetails from './details';
 
 export const ToolBarIcons = ({
   entity,
@@ -77,46 +63,46 @@ export const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="managing-assets"
           anchor="managing-hosts"
+          page="managing-assets"
           title={_('Help: Hosts')}
         />
-        <ListIcon title={_('Host List')} page="hosts" />
+        <ListIcon page="hosts" title={_('Host List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon
-          entity={entity}
           displayName={_('Host')}
+          entity={entity}
           onClick={onHostCreateClick}
         />
         <EditIcon
-          entity={entity}
           displayName={_('Host')}
+          entity={entity}
           onClick={onHostEditClick}
         />
         <DeleteIcon
-          entity={entity}
           displayName={_('Host')}
+          entity={entity}
           onClick={onHostDeleteClick}
         />
         <ExportIcon
-          value={entity}
           title={_('Export Host as XML')}
+          value={entity}
           onClick={onHostDownloadClick}
         />
       </IconDivider>
       <IconDivider>
         <Link
-          to="results"
           filter={'host=' + entity.name}
           title={_('Results for this Host')}
+          to="results"
         >
           <ResultIcon />
         </Link>
         <Link
-          to="tlsCertificates"
           filter={'host_id=' + entity.id}
           title={_('TLS Certificates for this Host')}
+          to="tlsCertificates"
         >
           <TlsCertificateIcon />
         </Link>
@@ -197,9 +183,9 @@ const Details = ({entity, ...props}) => {
             <TableData>
               <span>
                 <DetailsLink
-                  type="operatingsystem"
-                  textOnly={!isDefined(bestMatchingOsId)}
                   id={bestMatchingOsId}
+                  textOnly={!isDefined(bestMatchingOsId)}
+                  type="operatingsystem"
                 >
                   <OsIcon displayOsName osCpe={os_cpe} osTxt={os_txt} />
                 </DetailsLink>
@@ -217,9 +203,9 @@ const Details = ({entity, ...props}) => {
                       {route.map(host => (
                         <Hop key={host.ip}>
                           <DetailsLink
-                            type="host"
                             id={host.id}
                             textOnly={!isDefined(host.id)}
+                            type="host"
                           >
                             {host.ip}
                           </DetailsLink>
@@ -262,37 +248,37 @@ const Page = ({
   const goto_host = goto_details('host', props);
   return (
     <HostComponent
-      onTargetCreated={goto_details('target', props)}
-      onTargetCreateError={onError}
       onCreated={goto_host}
       onDeleted={goto_list('hosts', props)}
-      onDownloaded={onDownloaded}
       onDownloadError={onError}
-      onIdentifierDeleted={onChanged}
+      onDownloaded={onDownloaded}
       onIdentifierDeleteError={onError}
+      onIdentifierDeleted={onChanged}
       onInteraction={onInteraction}
       onSaved={onChanged}
+      onTargetCreateError={onError}
+      onTargetCreated={goto_details('target', props)}
     >
       {({create, delete: delete_func, deleteidentifier, download, edit}) => (
         <EntityPage
           {...props}
           entity={entity}
           sectionIcon={<HostIcon size="large" />}
-          toolBarIcons={ToolBarIcons}
           title={_('Host')}
+          toolBarIcons={ToolBarIcons}
           onChanged={onChanged}
           onDownloaded={onDownloaded}
           onError={onError}
-          onInteraction={onInteraction}
           onHostCreateClick={create}
           onHostDeleteClick={delete_func}
           onHostDownloadClick={download}
           onHostEditClick={edit}
+          onInteraction={onInteraction}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}

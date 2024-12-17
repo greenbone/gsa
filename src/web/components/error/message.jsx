@@ -3,15 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 import MessageContainer from './messagecontainer';
@@ -24,7 +20,7 @@ const Message = ({
   ...props
 }) => (
   <MessageContainer data-testid={dataTestId}>
-    <Divider margin="15px" align={['start', 'start']}>
+    <Divider align={['start', 'start']} margin="15px">
       <StNonAvailableIcon size="medium" />
       <Layout {...props}>
         <Divider>

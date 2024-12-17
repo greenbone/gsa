@@ -3,32 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
-
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {useState} from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
-import Select from 'web/components/form/select';
+import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
-import DatePicker from 'web/components/form/DatePicker';
-import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
-
-import Layout from 'web/components/layout/layout';
 import Column from 'web/components/layout/column';
-
-import {renderSelectItems} from 'web/utils/render';
-
-import useTranslation from 'web/hooks/useTranslation';
+import Layout from 'web/components/layout/layout';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import {formatSplitTime} from 'web/utils/timePickerHelpers';
 
 import {WizardContent, WizardIcon} from './taskwizard';
-import {formatSplitTime} from 'web/utils/timePickerHelpers';
 
 const ModifyTaskWizard = ({
   alert_email = '',
@@ -120,9 +113,9 @@ const ModifyTaskWizard = ({
           <Column>
             <FormGroup title={_('Task')}>
               <Select
+                items={renderSelectItems(tasks)}
                 name="task_id"
                 value={state.task_id}
-                items={renderSelectItems(tasks)}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -131,27 +124,27 @@ const ModifyTaskWizard = ({
               capabilities.mayAccess('schedules') && (
                 <FormGroup title={_('Start Time')}>
                   <Radio
-                    title={_('Do not change')}
-                    value={NO_VALUE}
                     checked={state.reschedule === NO_VALUE}
                     convert={parseYesNo}
                     name="reschedule"
+                    title={_('Do not change')}
+                    value={NO_VALUE}
                     onChange={onValueChange}
                   />
                   <Radio
-                    title={_('Create Schedule')}
-                    value={YES_VALUE}
                     checked={state.reschedule === YES_VALUE}
                     convert={parseYesNo}
                     name="reschedule"
+                    title={_('Create Schedule')}
+                    value={YES_VALUE}
                     onChange={onValueChange}
                   />
                   <DatePicker
+                    label={_('Start Date')}
                     name="start_date"
                     timezone={state.start_timezone}
                     value={state.start_date}
                     onChange={onValueChange}
-                    label={_('Start Date')}
                   />
                   <TimePicker
                     label={_('Start Time')}
@@ -162,8 +155,8 @@ const ModifyTaskWizard = ({
                   />
 
                   <TimeZoneSelect
-                    name="start_timezone"
                     label={_('Timezone')}
+                    name="start_timezone"
                     value={state.start_timezone}
                     onChange={onValueChange}
                   />
@@ -175,9 +168,9 @@ const ModifyTaskWizard = ({
                 <FormGroup title={_('Email report to')}>
                   <TextField
                     grow="1"
+                    maxLength="80"
                     name="alert_email"
                     value={state.alert_email}
-                    maxLength="80"
                     onChange={onValueChange}
                   />
                 </FormGroup>

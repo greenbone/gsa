@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ZoomIn as Icon} from 'lucide-react';
 import React from 'react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 import SvgIcon from './svgicon';
 
-import {ZoomIn as Icon} from 'lucide-react';
-import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const DetailsIcon = props => (
   <SvgIcon {...props}>

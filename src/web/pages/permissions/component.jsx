@@ -4,21 +4,19 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
+import React from 'react';
+import EntityComponent from 'web/entity/component';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from 'web/entity/component';
 
 import PermissionDialog from './dialog';
 
@@ -210,17 +208,17 @@ class PermissionsComponent extends React.Component {
     return (
       <EntityComponent
         name="permission"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>

@@ -4,10 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent} from 'web/utils/testing';
-
-import CreatePolicyDialog from '../dialog';
 import {
   changeInputValue,
   closeDialog,
@@ -15,6 +11,10 @@ import {
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
+
+import CreatePolicyDialog from '../dialog';
+
 
 describe('CreatePolicyDialog component tests', () => {
   test('should render dialog', () => {

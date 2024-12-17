@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Settings from 'gmp/models/settings';
 
 describe('Settings model tests', () => {

@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
-import {parseSeverity, parseDate} from 'gmp/parser';
-
 import Model, {parseModelFromElement} from 'gmp/model';
+import {parseSeverity, parseDate} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 import ReportReport from './report/report';
 

@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import Filter from 'gmp/models/filter';
 
 import {defaultFilterLoadingActions} from '../actions';
 import reducer from '../reducers';
-import Filter from 'gmp/models/filter';
 
 describe('default filters reducers tests', () => {
   test('should init state', () => {

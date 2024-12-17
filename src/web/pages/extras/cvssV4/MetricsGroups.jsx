@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PropTypes from 'prop-types';
 import _ from 'gmp/locale';
-
+import PropTypes from 'prop-types';
 import Metrics from 'web/pages/extras/cvssV4/Metrics';
 
 const MetricsGroups = ({
@@ -25,9 +24,9 @@ const MetricsGroups = ({
               {isDifferentMetricType && <h3>{_(metricType)}</h3>}
               {metricType !== metricGroupName && <h4>{_(metricGroupName)}</h4>}
               <Metrics
+                handleOptionChange={handleOptionChange}
                 metrics={metrics}
                 selectedOptions={selectedOptions}
-                handleOptionChange={handleOptionChange}
               />
             </section>
           );

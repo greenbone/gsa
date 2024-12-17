@@ -4,16 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-
-import {rendererWith, fireEvent, screen} from 'web/utils/testing';
-
-import TargetDialog from 'web/pages/targets/dialog';
 import {
   changeInputValue,
   getDialogCloseButton,
@@ -24,6 +19,8 @@ import {
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
+import TargetDialog from 'web/pages/targets/dialog';
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 const cred1 = Credential.fromElement({
   _id: '5678',
@@ -66,15 +63,15 @@ describe('TargetDialog component tests', () => {
       <TargetDialog
         credentials={credentials}
         onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
         onSnmpCredentialChange={handleChange}
         onSshCredentialChange={handleChange}
-        onEsxiCredentialChange={handleChange}
-        onSmbCredentialChange={handleChange}
         onSshElevateCredentialChange={handleChange}
-        onSave={handleSave}
       />,
     );
 
@@ -168,13 +165,13 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement} = render(
       <TargetDialog
-        credentials={credentials}
-        id={'foo'}
         alive_tests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
+        credentials={credentials}
         exclude_hosts={''}
         hosts={'123.455.67.434'}
+        id={'foo'}
         in_use={false}
         name={'target'}
         reverse_lookup_only={0}
@@ -182,15 +179,15 @@ describe('TargetDialog component tests', () => {
         smb_credential_id={'2345'}
         target_title={'Edit Target target'}
         onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
         onSnmpCredentialChange={handleChange}
         onSshCredentialChange={handleChange}
-        onEsxiCredentialChange={handleChange}
-        onSmbCredentialChange={handleChange}
         onSshElevateCredentialChange={handleChange}
-        onSave={handleSave}
       />,
     );
 
@@ -282,13 +279,13 @@ describe('TargetDialog component tests', () => {
 
     const {getByName, getAllByName} = render(
       <TargetDialog
-        credentials={credentials}
-        id={'foo'}
         alive_tests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
+        credentials={credentials}
         exclude_hosts={''}
         hosts={'123.455.67.434'}
+        id={'foo'}
         in_use={false}
         name={'target'}
         reverse_lookup_only={0}
@@ -296,15 +293,15 @@ describe('TargetDialog component tests', () => {
         smb_credential_id={'2345'}
         target_title={'Edit Target target'}
         onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
         onSnmpCredentialChange={handleChange}
         onSshCredentialChange={handleChange}
-        onEsxiCredentialChange={handleChange}
-        onSmbCredentialChange={handleChange}
         onSshElevateCredentialChange={handleChange}
-        onSave={handleSave}
       />,
     );
 
@@ -362,13 +359,13 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement} = render(
       <TargetDialog
-        credentials={credentials}
-        id={'foo'}
         alive_tests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
+        credentials={credentials}
         exclude_hosts={''}
         hosts={'123.455.67.434'}
+        id={'foo'}
         in_use={false}
         name={'target'}
         reverse_lookup_only={0}
@@ -377,15 +374,15 @@ describe('TargetDialog component tests', () => {
         ssh_credential_id={'2345'}
         target_title={'Edit Target target'}
         onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
         onSnmpCredentialChange={handleChange}
         onSshCredentialChange={handleChange}
-        onEsxiCredentialChange={handleChange}
-        onSmbCredentialChange={handleChange}
         onSshElevateCredentialChange={handleChange}
-        onSave={handleSave}
       />,
     );
 
@@ -410,13 +407,13 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement} = render(
       <TargetDialog
-        credentials={credentials}
-        id={'foo'}
         alive_tests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
+        credentials={credentials}
         exclude_hosts={''}
         hosts={'123.455.67.434'}
+        id={'foo'}
         in_use={false}
         name={'target'}
         reverse_lookup_only={0}
@@ -425,15 +422,15 @@ describe('TargetDialog component tests', () => {
         ssh_credential_id={'2345'}
         target_title={'Edit Target target'}
         onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
         onSnmpCredentialChange={handleChange}
         onSshCredentialChange={handleChange}
-        onEsxiCredentialChange={handleChange}
-        onSmbCredentialChange={handleChange}
         onSshElevateCredentialChange={handleChange}
-        onSave={handleSave}
       />,
     );
 
@@ -459,30 +456,30 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement} = render(
       <TargetDialog
-        credentials={credentials}
-        id={'foo'}
         alive_tests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
+        credentials={credentials}
         exclude_hosts={''}
         hosts={'123.455.67.434'}
+        id={'foo'}
         in_use={false}
         name={'target'}
         reverse_lookup_only={0}
         reverse_lookup_unify={0}
-        ssh_elevate_credential_id={'5463'}
         ssh_credential_id={'2345'}
+        ssh_elevate_credential_id={'5463'}
         target_title={'Edit Target target'}
         onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
         onSnmpCredentialChange={handleChange}
         onSshCredentialChange={handleChange}
-        onEsxiCredentialChange={handleChange}
-        onSmbCredentialChange={handleChange}
         onSshElevateCredentialChange={handleChange}
-        onSave={handleSave}
       />,
     );
 
@@ -509,13 +506,13 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement, queryAllByTitle} = render(
       <TargetDialog
-        credentials={credentials}
-        id={'foo'}
         alive_tests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
+        credentials={credentials}
         exclude_hosts={''}
         hosts={'123.455.67.434'}
+        id={'foo'}
         in_use={true}
         name={'target'}
         reverse_lookup_only={0}
@@ -524,15 +521,15 @@ describe('TargetDialog component tests', () => {
         ssh_elevate_credential_id={'5463'}
         target_title={'Edit Target target'}
         onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
         onSnmpCredentialChange={handleChange}
         onSshCredentialChange={handleChange}
-        onEsxiCredentialChange={handleChange}
-        onSmbCredentialChange={handleChange}
         onSshElevateCredentialChange={handleChange}
-        onSave={handleSave}
       />,
     );
 
@@ -575,15 +572,15 @@ describe('TargetDialog component tests', () => {
       <TargetDialog
         credentials={credentials}
         onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
         onSnmpCredentialChange={handleChange}
         onSshCredentialChange={handleChange}
-        onEsxiCredentialChange={handleChange}
-        onSmbCredentialChange={handleChange}
         onSshElevateCredentialChange={handleChange}
-        onSave={handleSave}
       />,
     );
 

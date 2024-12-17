@@ -4,58 +4,51 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import CreateIcon from 'web/entity/icon/createicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-import Divider from 'web/components/layout/divider';
-import EditIcon from 'web/entity/icon/editicon';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
+import React from 'react';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ReportConfigIcon from 'web/components/icon/reportconfigicon';
-
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
-import EntityPage from 'web/entity/page';
+import Table from 'web/components/table/stripedtable';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import {selector, loadEntity} from 'web/store/entities/reportconfigs';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
-import {renderYesNo} from 'web/utils/render';
+import {selector, loadEntity} from 'web/store/entities/reportconfigs';
 import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import ReportConfigComponent from './component';
 import ReportConfigDetails, {ReportConfigParamValue} from './details';
-import CloneIcon from 'web/entity/icon/cloneicon';
 
 const ToolBarIcons = withCapabilities(
   ({
@@ -69,11 +62,11 @@ const ToolBarIcons = withCapabilities(
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="reports"
           anchor="managing-report-configs"
+          page="reports"
           title={_('Help: Report Configs')}
         />
-        <ListIcon title={_('Report Configs List')} page="reportconfigs" />
+        <ListIcon page="reportconfigs" title={_('Report Configs List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon
@@ -83,8 +76,8 @@ const ToolBarIcons = withCapabilities(
         />
         <CloneIcon entity={entity} onClick={onReportConfigCloneClick} />
         <EditIcon
-          displayName={_('Report Config')}
           disabled={entity.predefined}
+          displayName={_('Report Config')}
           entity={entity}
           onClick={onReportConfigEditClick}
         />
@@ -175,15 +168,15 @@ const Page = ({
   ...props
 }) => (
   <ReportConfigComponent
-    onDeleted={goto_list('reportconfigs', props)}
-    onDeleteError={onError}
-    onCloned={goto_details('reportconfig', props)}
     onCloneError={onError}
-    onCreated={goto_details('reportconfig', props)}
+    onCloned={goto_details('reportconfig', props)}
     onCreateError={onError}
+    onCreated={goto_details('reportconfig', props)}
+    onDeleteError={onError}
+    onDeleted={goto_list('reportconfigs', props)}
     onInteraction={onInteraction}
-    onSaved={onChanged}
     onSaveError={onError}
+    onSaved={onChanged}
   >
     {({clone, delete: delete_func, edit, create: create_func, save}) => (
       <EntityPage
@@ -193,11 +186,11 @@ const Page = ({
         title={_('Report Config')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
+        onReportConfigCloneClick={clone}
         onReportConfigCreateClick={create_func}
         onReportConfigDeleteClick={delete_func}
         onReportConfigEditClick={edit}
         onReportConfigSaveClick={save}
-        onReportConfigCloneClick={clone}
       >
         {({activeTab = 0, onActivateTab}) => {
           return (
@@ -205,8 +198,8 @@ const Page = ({
               <PageTitle
                 title={_('Report Config: {{name}}', {name: entity.name})}
               />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}

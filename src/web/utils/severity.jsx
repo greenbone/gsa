@@ -4,7 +4,6 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
 
 export const _LOG = _l('Log');

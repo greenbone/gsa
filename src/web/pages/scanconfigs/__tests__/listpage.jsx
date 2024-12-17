@@ -4,29 +4,23 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
-
-import {setUsername} from 'web/store/usersettings/actions';
-
-import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
-
 import {
   clickElement,
   getTable,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
+import {setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 

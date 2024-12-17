@@ -4,23 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import {parseDate} from 'gmp/parser';
-
-import Filter from 'gmp/models/filter';
 import Cve from 'gmp/models/cve';
-
-import {entitiesLoadingActions} from 'web/store/entities/cves';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-
-import {rendererWith, screen, wait} from 'web/utils/testing';
-
-import CvesPage, {ToolBarIcons} from '../listpage';
+import Filter from 'gmp/models/filter';
+import {parseDate} from 'gmp/parser';
 import {
   clickElement,
   getCheckBoxes,
@@ -31,6 +18,14 @@ import {
   getTableFooter,
   getTextInputs,
 } from 'web/components/testing';
+import {entitiesLoadingActions} from 'web/store/entities/cves';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, screen, wait} from 'web/utils/testing';
+
+import CvesPage, {ToolBarIcons} from '../listpage';
+
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',

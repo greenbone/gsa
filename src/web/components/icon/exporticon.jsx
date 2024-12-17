@@ -4,19 +4,16 @@
  */
 
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import {FileOutput as Icon} from 'lucide-react';
+import React from 'react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 import PropTypes from 'web/utils/proptypes';
-
 import SelectionType from 'web/utils/selectiontype';
 
 import withSvgIcon from './withSvgIcon';
 
-import {FileOutput as Icon} from 'lucide-react';
 
-import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const ExportSvgIcon = withSvgIcon()(props => (
   <IconWithStrokeWidth IconComponent={Icon} {...props} />
@@ -31,7 +28,7 @@ const ExportIcon = ({selectionType, title, ...other}) => {
   } else if (selectionType === SelectionType.SELECTION_FILTER) {
     download_title = _('Export all filtered');
   }
-  return <ExportSvgIcon {...other} title={download_title} data-testid="export-icon"/>;
+  return <ExportSvgIcon {...other} data-testid="export-icon" title={download_title}/>;
 };
 
 ExportIcon.propTypes = {

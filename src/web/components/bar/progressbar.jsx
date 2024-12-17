@@ -4,9 +4,7 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
@@ -95,14 +93,14 @@ const ProgressBar = ({
 }) => {
   return (
     <ProgressBarBox
+      $boxBackground={boxBackground}
       data-testid="progressbar-box"
       title={title}
-      $boxBackground={boxBackground}
     >
       <Progress
-        data-testid="progress"
-        $progress={progress}
         $background={background}
+        $progress={progress}
+        data-testid="progress"
       />
       <Content>{children}</Content>
     </ProgressBarBox>

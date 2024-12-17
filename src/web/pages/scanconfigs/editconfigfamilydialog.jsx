@@ -3,38 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useEffect} from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-import {makeCompareSeverity, makeCompareString} from 'web/utils/sort';
-
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+import React, {useState, useEffect} from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import Checkbox from 'web/components/form/checkbox';
-
 import EditIcon from 'web/components/icon/editicon';
-
 import Loading from 'web/components/loading/loading';
-
 import Section from 'web/components/section/section';
-
 import SortBy from 'web/components/sortby/sortby';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
+import Table from 'web/components/table/stripedtable';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {makeCompareSeverity, makeCompareString} from 'web/utils/sort';
 
 const EDIT_CONFIG_COLUMNS_SORT = {
   name: 'name',
@@ -67,8 +57,8 @@ const Nvt = React.memo(
         <TableData align={['center', 'center']}>
           <Checkbox
             checked={selected === YES_VALUE}
-            name={oid}
             checkedValue={YES_VALUE}
+            name={oid}
             unCheckedValue={NO_VALUE}
             onChange={onSelectedChange}
           />
@@ -195,11 +185,11 @@ const EditScanConfigFamilyDialog = ({
 
   return (
     <SaveDialog
-      width="auto"
       title={title}
+      values={data}
+      width="auto"
       onClose={onClose}
       onSave={onSave}
-      values={data}
     >
       <div>
         <div>
@@ -220,17 +210,17 @@ const EditScanConfigFamilyDialog = ({
                   currentSortBy={sortBy}
                   currentSortDir={sortDir}
                   sortBy={sortBy}
-                  onSortChange={handleSortChange}
                   title={title}
+                  onSortChange={handleSortChange}
                 />
               ))}
               <TableHead
+                align="center"
                 currentSortBy={sortBy}
                 currentSortDir={sortDir}
                 sortBy={EDIT_CONFIG_COLUMNS_SORT.selected}
-                onSortChange={handleSortChange}
-                align="center"
                 title={_('Selected')}
+                onSortChange={handleSortChange}
               />
               <TableHead align="center">{_('Actions')}</TableHead>
             </TableRow>
@@ -243,8 +233,8 @@ const EditScanConfigFamilyDialog = ({
                   key={oid}
                   nvt={nvt}
                   selected={selectedNvts[oid]}
-                  onSelectedChange={handleSelectedChange}
                   onEditNvtDetailsClick={onEditNvtDetailsClick}
+                  onSelectedChange={handleSelectedChange}
                 />
               );
             })}

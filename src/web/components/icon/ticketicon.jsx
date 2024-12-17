@@ -5,9 +5,9 @@
 
 import React from 'react';
 
+import Icon from './svg/ticket.svg';
 import SvgIcon from './svgicon';
 
-import Icon from './svg/ticket.svg';
 
 const TicketIcon = props => (
   <SvgIcon {...props}>

@@ -3,17 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
-import {map} from 'gmp/utils/array';
-
 import registerCommand from 'gmp/command';
+import logger from 'gmp/log';
 import {parseModelFromElement} from 'gmp/model';
-import {isDefined} from 'gmp/utils/identity';
-
 import Alert from 'gmp/models/alert';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

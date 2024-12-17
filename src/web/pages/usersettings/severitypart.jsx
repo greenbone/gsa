@@ -4,38 +4,34 @@
  */
 
 
-import React from 'react';
-
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
+import React from 'react';
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Spinner from 'web/components/form/spinner';
-
-import PropTypes from 'web/utils/proptypes';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const SeverityPart = ({defaultSeverity, dynamicSeverity, onChange}) => {
   const [_] = useTranslation();
   return (
     <React.Fragment>
       <Checkbox
-        title={_('Dynamic Severity')}
-        name="dynamicSeverity"
         checked={dynamicSeverity === YES_VALUE}
         checkedValue={YES_VALUE}
+        name="dynamicSeverity"
+        title={_('Dynamic Severity')}
         unCheckedValue={NO_VALUE}
         onChange={onChange}
       />
       <FormGroup title={_('Default Severity')}>
         <Spinner
-          name="defaultSeverity"
-          value={defaultSeverity}
-          min="0"
           max="10"
+          min="0"
+          name="defaultSeverity"
           step="0.1"
           type="float"
+          value={defaultSeverity}
           onChange={onChange}
         />
       </FormGroup>

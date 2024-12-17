@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-console */
+ 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
-import Task, {TASK_STATUS} from 'gmp/models/task';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-
+import Task, {TASK_STATUS} from 'gmp/models/task';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';

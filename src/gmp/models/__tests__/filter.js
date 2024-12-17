@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 
 import {isArray} from '../../utils/identity';
-
 import Filter, {UNKNOWN_FILTER_ID} from '../filter';
 import FilterTerm from '../filter/filterterm';
 

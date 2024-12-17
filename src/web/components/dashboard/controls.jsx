@@ -3,34 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
+import SaveDialog from 'web/components/dialog/savedialog';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import NewIcon from 'web/components/icon/newicon';
+import ResetIcon from 'web/components/icon/reseticon';
+import IconDivider from 'web/components/layout/icondivider';
 import {
   resetSettings,
   saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
-import SaveDialog from 'web/components/dialog/savedialog';
-
-import FormGroup from 'web/components/form/formgroup';
-import Select from 'web/components/form/select';
-
-import NewIcon from 'web/components/icon/newicon';
-import ResetIcon from 'web/components/icon/reseticon';
-
-import IconDivider from 'web/components/layout/icondivider';
 
 import {getDisplay} from './registry';
 import {
@@ -113,13 +106,13 @@ export class DashboardControls extends React.Component {
         <IconDivider>
           <NewIcon
             active={canAdd}
+            data-testid="add-dashboard-display"
             title={
               canAdd
                 ? _('Add new Dashboard Display')
                 : _('Dashboard limit reached')
             }
             onClick={canAdd ? this.handleNewClick : undefined}
-            data-testid="add-dashboard-display"
           />
           <ResetIcon
             title={_('Reset to Defaults')}
@@ -128,21 +121,21 @@ export class DashboardControls extends React.Component {
         </IconDivider>
         {showNewDialog && (
           <SaveDialog
-            title={_('Add new Dashboard Display')}
             buttonTitle={_('Add')}
-            minHeight={163}
-            width="660px"
             defaultValues={{
               displayId: first(displays).displayId,
             }}
+            minHeight={163}
+            title={_('Add new Dashboard Display')}
+            width="660px"
             onClose={this.handleNewDialogClose}
             onSave={this.handleNewDisplay}
           >
             {({values, onValueChange}) => (
               <FormGroup title={_('Choose Display')} titleSize={3}>
                 <Select
-                  name="displayId"
                   items={displayItems}
+                  name="displayId"
                   value={values.displayId}
                   width="auto"
                   onChange={onValueChange}

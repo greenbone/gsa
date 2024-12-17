@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
 import Spinner from 'web/components/form/spinner';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
   const [_] = useTranslation();
@@ -23,9 +20,9 @@ const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
   return (
     <FormGroup title={_('First result')}>
       <Spinner
-        type="int"
         min="0"
         name={name}
+        type="int"
         value={first}
         onChange={onChange}
       />

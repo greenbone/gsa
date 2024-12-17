@@ -4,11 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {setLocale} from 'gmp/locale/lang';
-
 import Model from 'gmp/model';
-
 import Credential, {
   SNMP_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -22,9 +19,7 @@ import Credential, {
   PGP_CREDENTIAL_TYPE,
   getCredentialTypeName,
 } from 'gmp/models/credential';
-
 import {testModel} from 'gmp/models/testing';
-
 import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 const USERNAME_PASSWORD_CREDENTIAL = Credential.fromElement({

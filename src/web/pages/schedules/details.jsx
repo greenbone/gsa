@@ -3,27 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import DateTime from 'web/components/date/datetime';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData, {TableDataAlignTop} from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
 
 import {renderDuration, renderRecurrence} from './render';
 

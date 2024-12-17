@@ -3,10 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isArray, isString} from 'gmp/utils/identity';
-import {isEmpty, split} from 'gmp/utils/string';
-import {map} from 'gmp/utils/array';
-
 import {
   parseDate,
   parseFloat,
@@ -15,6 +11,9 @@ import {
   parseYesNo,
   YES_VALUE,
 } from 'gmp/parser';
+import {map} from 'gmp/utils/array';
+import {isDefined, isArray, isString} from 'gmp/utils/identity';
+import {isEmpty, split} from 'gmp/utils/string';
 
 import Info from './info';
 

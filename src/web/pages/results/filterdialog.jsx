@@ -4,27 +4,23 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
-import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
-import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
-import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
-import FilterDialog from 'web/components/powerfilter/filterdialog';
-
+import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
+import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
-
-import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const ResultsFilterDialog = ({
   filter: initialFilter,
@@ -112,15 +108,15 @@ const ResultsFilterDialog = ({
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
-        name="filterstring"
         filter={filterString}
+        name="filterstring"
         onChange={onFilterStringChange}
       />
 
       <BooleanFilterGroup
+        filter={filter}
         name="apply_overrides"
         title={_('Apply Overrides')}
-        filter={filter}
         onChange={onFilterValueChange}
       />
 
@@ -131,8 +127,8 @@ const ResultsFilterDialog = ({
       />
 
       <SeverityValuesGroup
-        name="severity"
         filter={filter}
+        name="severity"
         title={_('Severity')}
         onChange={onFilterValueChange}
       />
@@ -140,35 +136,35 @@ const ResultsFilterDialog = ({
       <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
       <MinQodGroup
-        name="min_qod"
         filter={filter}
+        name="min_qod"
         onChange={onFilterValueChange}
       />
 
       <FilterSearchGroup
-        name="owner"
         filter={filter}
+        name="owner"
         title={_('Owner')}
         onChange={onSearchTermChange}
       />
 
       <FilterSearchGroup
-        name="vulnerability"
         filter={filter}
+        name="vulnerability"
         title={_('Vulnerability')}
         onChange={onSearchTermChange}
       />
 
       <FilterSearchGroup
-        name="host"
         filter={filter}
+        name="host"
         title={_('Host (IP)')}
         onChange={onSearchTermChange}
       />
 
       <FilterSearchGroup
-        name="location"
         filter={filter}
+        name="location"
         title={_('Location (eg. port/protocol)')}
         onChange={onSearchTermChange}
       />
@@ -178,10 +174,10 @@ const ResultsFilterDialog = ({
       <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
 
       <SortByGroup
-        filter={filter}
         fields={SORT_FIELDS}
-        onSortOrderChange={onSortOrderChange}
+        filter={filter}
         onSortByChange={onSortByChange}
+        onSortOrderChange={onSortOrderChange}
       />
 
       {capabilities.mayCreate('filter') && (

@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {setProperties} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 class OperatingSystem {
   constructor() {

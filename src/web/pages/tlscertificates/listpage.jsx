@@ -3,44 +3,37 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {TLS_CERTIFICATES_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
-
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tlscertificates';
+import PropTypes from 'web/utils/proptypes';
 
-import useTranslation from 'web/hooks/useTranslation';
-
+import TlsCertificateComponent from './component';
 import TlsCertificatesDashboard, {
   TLS_CERTIFICATES_DASHBOARD_ID,
 } from './dashboard';
 import TlsCertificatesFilterDialog from './filterdialog';
 import TlsCertificateTable from './table';
-import TlsCertificateComponent from './component';
 
 const ToolBarIcons = () => {
   const [_] = useTranslation();
   return (
     <Layout>
       <ManualIcon
-        page="managing-assets"
         anchor="managing-tls-certificates"
+        page="managing-assets"
         title={_('Help: TLS Certificate Assets')}
       />
     </Layout>
@@ -59,10 +52,10 @@ const Page = ({
   const [_] = useTranslation();
   return (
     <TlsCertificateComponent
-      onDeleted={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
     >
       {({delete: delete_func, download, exportFunc}) => (
@@ -84,8 +77,8 @@ const Page = ({
               />
             )}
             filter={filter}
-            filtersFilter={TLS_CERTIFICATES_FILTER_FILTER}
             filterEditDialog={TlsCertificatesFilterDialog}
+            filtersFilter={TLS_CERTIFICATES_FILTER_FILTER}
             sectionIcon={<TlsCertificateIcon size="large" />}
             table={TlsCertificateTable}
             title={_('TLS Certificates')}

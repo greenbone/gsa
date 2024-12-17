@@ -3,18 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType, normalizeType} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
   const {id, name, userCapabilities, deleted} = entity;
@@ -24,7 +21,7 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
     return (
       <span>
         {name} (<span>in </span>
-        <Link textOnly={textOnly} to="trashcan" anchor={type}>
+        <Link anchor={type} textOnly={textOnly} to="trashcan">
           {_('Trashcan')}
         </Link>
         )
@@ -45,7 +42,7 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
   }
 
   return (
-    <DetailsLink {...props} id={id} type={type} textOnly={textOnly}>
+    <DetailsLink {...props} id={id} textOnly={textOnly} type={type}>
       {name}
     </DetailsLink>
   );

@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {WeekDays} from 'gmp/models/event';
-
-import Divider from 'web/components/layout/divider';
-
+import {isDefined} from 'gmp/utils/identity';
+import React, {useCallback} from 'react';
 import ToggleButton from 'web/components/form/togglebutton';
-
-import PropTypes from 'web/utils/proptypes';
-
+import Divider from 'web/components/layout/divider';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 export const WeekDaysPropType = PropTypes.instanceOf(WeekDays);
 
@@ -40,57 +34,57 @@ const WeekDaySelect = ({name, value, onChange}) => {
   return (
     <Divider>
       <ToggleButton
+        checked={value.monday}
         name="monday"
         title={_('Monday')}
-        checked={value.monday}
         onToggle={handleChange}
       >
         {_('Mo.')}
       </ToggleButton>
       <ToggleButton
+        checked={value.tuesday}
         name="tuesday"
         title={_('Tuesday')}
-        checked={value.tuesday}
         onToggle={handleChange}
       >
         {_('Tu.')}
       </ToggleButton>
       <ToggleButton
+        checked={value.wednesday}
         name="wednesday"
         title={_('Wednesday')}
-        checked={value.wednesday}
         onToggle={handleChange}
       >
         {_('We.')}
       </ToggleButton>
       <ToggleButton
+        checked={value.thursday}
         name="thursday"
         title={_('Thursday')}
-        checked={value.thursday}
         onToggle={handleChange}
       >
         {_('Th.')}
       </ToggleButton>
       <ToggleButton
+        checked={value.friday}
         name="friday"
         title={_('Friday')}
-        checked={value.friday}
         onToggle={handleChange}
       >
         {_('Fr.')}
       </ToggleButton>
       <ToggleButton
+        checked={value.saturday}
         name="saturday"
         title={_('Saturday')}
-        checked={value.saturday}
         onToggle={handleChange}
       >
         {_('Sa.')}
       </ToggleButton>
       <ToggleButton
+        checked={value.sunday}
         name="sunday"
         title={_('Sunday')}
-        checked={value.sunday}
         onToggle={handleChange}
       >
         {_('Su.')}

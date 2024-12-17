@@ -4,25 +4,21 @@
  */
 
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import {hasValue, isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {connect} from 'react-redux';
+import {loadEntities, selector} from 'web/store/entities/filters';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
 import SaveDialog from '../../dialog/savedialog';
-
 import FormGroup from '../../form/formgroup';
 import Select from '../../form/select';
 
-import {loadEntities, selector} from 'web/store/entities/filters';
 
-import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/render';
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
 
 class FilterSelection extends React.Component {
   constructor(...args) {
@@ -78,11 +74,11 @@ class FilterSelection extends React.Component {
         })}
         {showDialog && (
           <SaveDialog
+            buttonTitle={_('Select')}
             defaultValues={{
               filterId: isDefined(filterId) ? filterId : UNSET_VALUE,
             }}
             title={_('Select Filter')}
-            buttonTitle={_('Select')}
             width="500px"
             onClose={this.handleCloseDialog}
             onSave={this.handleSaveDialog}
@@ -100,8 +96,8 @@ class FilterSelection extends React.Component {
                       value: f.id,
                     })),
                   ]}
-                  value={values.filterId}
                   name="filterId"
+                  value={values.filterId}
                   onChange={onValueChange}
                 />
               </FormGroup>

@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import getPage from 'web/store/pages/selectors';
 
 describe('pages selectors tests', () => {

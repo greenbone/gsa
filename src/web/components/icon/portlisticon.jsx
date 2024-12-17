@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Icon from './svg/port_list.svg';
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/port_list.svg';
 
 const PortListIconComponent = withSvgIcon()(Icon);
 

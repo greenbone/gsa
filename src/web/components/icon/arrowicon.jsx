@@ -4,12 +4,9 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
-import PropTypes from 'web/utils/proptypes';
-
 import useIconSize, {ICON_SIZE_SMALL_PIXELS} from 'web/hooks/useIconSize';
+import PropTypes from 'web/utils/proptypes';
 
 const Styled = styled.span`
   background-color: transparent;
@@ -44,7 +41,7 @@ const ArrowIcon = ({down = false, isLoading = false, size, ...props}) => {
     icon = <Loading />;
   }
   return (
-    <Styled $height={height} $width={width} $lineHeight={height} {...props} data-testid="arrow-icon">
+    <Styled $height={height} $lineHeight={height} $width={width} {...props} data-testid="arrow-icon">
       {icon}
     </Styled>
   );

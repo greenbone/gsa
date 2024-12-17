@@ -3,29 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
+import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import {hasId} from 'gmp/utils/id';
-
+import React from 'react';
+import {connect} from 'react-redux';
+import EntityComponent from 'web/entity/component';
+import CredentialsDialog from 'web/pages/credentials/dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
-
-import EntityComponent from 'web/entity/component';
-
-import CredentialsDialog from 'web/pages/credentials/dialog';
 
 import ScannerDialog from './dialog';
 
@@ -277,17 +270,17 @@ class ScannerComponent extends React.Component {
     return (
       <EntityComponent
         name="scanner"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -303,8 +296,8 @@ class ScannerComponent extends React.Component {
               <ScannerDialog
                 ca_pub={ca_pub}
                 comment={comment}
-                credentials={credentials}
                 credential_id={credential_id}
+                credentials={credentials}
                 host={host}
                 id={id}
                 name={name}

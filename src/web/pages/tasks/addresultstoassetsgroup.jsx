@@ -4,13 +4,10 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import FormGroup from 'web/components/form/formgroup';
 import YesNoRadio from 'web/components/form/yesnoradio';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
   const [_] = useTranslation();

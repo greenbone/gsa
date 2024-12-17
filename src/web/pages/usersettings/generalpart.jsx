@@ -3,25 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
-import styled from 'styled-components';
-
+import {dateTimeFormatOptions, SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import {dateTimeFormatOptions, SYSTEM_DEFAULT} from 'gmp/locale/date';
-
+import {useState} from 'react';
+import styled from 'styled-components';
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import PasswordField from 'web/components/form/passwordfield';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
-
+import useTranslation from 'web/hooks/useTranslation';
 import Languages from 'web/utils/languages';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const renderLanguageItems = () =>
   Object.entries(Languages).map(([code, {name, native_name}]) => ({
@@ -137,75 +133,75 @@ const GeneralPart = ({
       </FormGroup>
 
       <Checkbox
-        title={_('Use System Default for Time and Date Format')}
-        name="isUserInterfaceTimeDateDefault"
         checked={parseYesNo(isUserInterfaceTimeDateDefault) === YES_VALUE}
         checkedValue={YES_VALUE}
+        name="isUserInterfaceTimeDateDefault"
+        title={_('Use System Default for Time and Date Format')}
         unCheckedValue={NO_VALUE}
         onChange={handleSysDefaultChange}
       />
 
       <Select
+        disabled={isUserInterfaceTimeDateDefault}
+        items={getSelectItems('time')}
         label={_('Time Format')}
         name="userInterfaceTimeFormat"
         value={userInterfaceTimeFormat}
-        items={getSelectItems('time')}
         onChange={onChange}
-        disabled={isUserInterfaceTimeDateDefault}
       />
       <Select
+        disabled={isUserInterfaceTimeDateDefault}
+        items={getSelectItems('longDate')}
         label={_('Date Format')}
         name="userInterfaceDateFormat"
         value={userInterfaceDateFormat}
-        items={getSelectItems('longDate')}
         onChange={onChange}
-        disabled={isUserInterfaceTimeDateDefault}
       />
       <FormGroup title={_('Change Password')}>
         <PasswordField
+          autoComplete="off"
           grow="1"
-          title={_('Old')}
           name="oldPassword"
+          title={_('Old')}
           value={oldPassword}
-          autoComplete="off"
           onChange={onChange}
         />
         <PasswordField
+          autoComplete="off"
           grow="1"
-          title={_('New')}
           name="newPassword"
+          title={_('New')}
           value={newPassword}
-          autoComplete="off"
           onChange={onChange}
         />
         <PasswordField
-          title={_('Confirm')}
-          name="confPassword"
-          value={confPassword}
           autoComplete="off"
+          name="confPassword"
+          title={_('Confirm')}
+          value={confPassword}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title=" ">
         <Notification
+          confPassword={confPassword}
           newPassword={newPassword}
           oldPassword={oldPassword}
-          confPassword={confPassword}
         />
       </FormGroup>
       <FormGroup title={_('User Interface Language')}>
         <Select
+          items={renderLanguageItems()}
           name="userInterfaceLanguage"
           value={userInterfaceLanguage}
-          items={renderLanguageItems()}
           onChange={onChange}
         />
       </FormGroup>
       <FormGroup title={_('Rows Per Page')}>
         <TextField
-          name="rowsPerPage"
-          hasError={shouldWarn && !!errors.rowsPerPage}
           errorContent={errors.rowsPerPage}
+          hasError={shouldWarn && !!errors.rowsPerPage}
+          name="rowsPerPage"
           value={rowsPerPage}
           onChange={onChange}
         />
@@ -232,10 +228,10 @@ const GeneralPart = ({
         />
       </FormGroup>
       <Checkbox
-        title={_('Auto Cache Rebuild')}
-        name="autoCacheRebuild"
         checked={parseYesNo(autoCacheRebuild) === YES_VALUE}
         checkedValue={YES_VALUE}
+        name="autoCacheRebuild"
+        title={_('Auto Cache Rebuild')}
         unCheckedValue={NO_VALUE}
         onChange={onChange}
       />

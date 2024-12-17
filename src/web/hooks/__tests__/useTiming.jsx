@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
-
-import {useState} from 'react';
+ 
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
+import {useState} from 'react';
 import {act, fireEvent, render, screen} from 'web/utils/testing';
 
 import useTiming from '../useTiming';
@@ -22,8 +20,8 @@ const TestComponent = ({doFunc}) => {
   const [startTimer, clearTimer, isRunning] = useTiming(timingFunc, 900);
   return (
     <>
-      <button onClick={startTimer} data-testid="startTimer"></button>
-      <button onClick={clearTimer} data-testid="clearTimer"></button>
+      <button data-testid="startTimer" onClick={startTimer}></button>
+      <button data-testid="clearTimer" onClick={clearTimer}></button>
       <span data-testid="value">{value}</span>
       <span data-testid="isRunning">{'' + isRunning}</span>
     </>

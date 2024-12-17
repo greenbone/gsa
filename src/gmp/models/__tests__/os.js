@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Asset from 'gmp/models/asset';
 import OperatingSystem from 'gmp/models/os';
-
 import {testModel} from 'gmp/models/testing';
 
 testModel(OperatingSystem, 'operatingsystem');

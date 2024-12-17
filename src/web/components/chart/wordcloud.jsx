@@ -3,18 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {scaleLinear} from 'd3-scale';
 
 import d3cloud from 'd3-cloud';
-
+import {scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 
-import PropTypes from '../../utils/proptypes';
 
 import Group from './group';
 import Svg from './svg';
+import PropTypes from '../../utils/proptypes';
 
 const margin = {
   top: 5,
@@ -119,8 +117,8 @@ class WordCloudChart extends React.Component {
 
     const {words = []} = this.state;
     return (
-      <Svg width={width} height={height} ref={svgRef}>
-        <Group top={height / 2 + margin.top} left={width / 2 + margin.left}>
+      <Svg ref={svgRef} height={height} width={width}>
+        <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
           {words.map(word => (
             <Group
               key={word.text}
@@ -131,10 +129,10 @@ class WordCloudChart extends React.Component {
               }
             >
               <text
-                fontSize={word.size + 'px'}
-                fontFamily={word.font}
-                fontWeight={word.weight}
                 fill={word.color}
+                fontFamily={word.font}
+                fontSize={word.size + 'px'}
+                fontWeight={word.weight}
                 textAnchor="middle"
                 transform={
                   'translate(' +

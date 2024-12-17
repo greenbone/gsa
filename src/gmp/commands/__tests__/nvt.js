@@ -5,9 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 
-import {createResponse, createHttp} from '../testing';
-
 import {NvtCommand} from '../nvt';
+import {createResponse, createHttp} from '../testing';
 
 describe('NvtCommand tests', () => {
   test('should request single nvt', () => {

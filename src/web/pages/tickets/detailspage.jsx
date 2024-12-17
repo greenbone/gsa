@@ -3,56 +3,43 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {getTranslatableTicketStatus} from 'gmp/models/ticket';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import Comment from 'web/components/comment/comment';
-
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import SolutionType from 'web/components/icon/solutiontypeicon';
 import TicketIcon from 'web/components/icon/ticketicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import DetailsLink from 'web/components/link/detailslink';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {goto_details, goto_list} from 'web/entity/component';
+import EntityCloneIcon from 'web/entity/icon/cloneicon';
+import EntityEditIcon from 'web/entity/icon/editicon';
+import EntityTrashIcon from 'web/entity/icon/trashicon';
 import EntityPage, {Col} from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
-
-import EntityCloneIcon from 'web/entity/icon/cloneicon';
-import EntityEditIcon from 'web/entity/icon/editicon';
-import EntityTrashIcon from 'web/entity/icon/trashicon';
-
 import {
   selector as ticketSelector,
   loadEntity as loadTicket,
 } from 'web/store/entities/tickets';
-
 import PropTypes from 'web/utils/proptypes';
 
 import TicketComponent from './component';
@@ -67,11 +54,11 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <ManualIcon
-      page="reports"
       anchor="managing-tickets"
+      page="reports"
       title={_('Help: Remediation Tickets')}
     />
-    <ListIcon title={_('Ticket List')} page="tickets" />
+    <ListIcon page="tickets" title={_('Ticket List')} />
     <IconDivider>
       <EntityCloneIcon
         entity={entity}
@@ -89,8 +76,8 @@ const ToolBarIcons = ({
         onClick={onTicketDeleteClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Ticket as XML')}
+        value={entity}
         onClick={onTicketDownloadClick}
       />
     </IconDivider>
@@ -137,7 +124,7 @@ const Details = ({entity}) => (
           <TableData>{_('Assigned To')}</TableData>
           <TableData>
             <span>
-              <DetailsLink type="user" id={entity.assignedTo.user.id}>
+              <DetailsLink id={entity.assignedTo.user.id} type="user">
                 {entity.assignedTo.user.name}
               </DetailsLink>
             </span>
@@ -176,12 +163,12 @@ const Page = ({
   ...props
 }) => (
   <TicketComponent
-    onCloned={goto_details('ticket', props)}
     onCloneError={onError}
-    onDeleted={goto_list('tickets', props)}
+    onCloned={goto_details('ticket', props)}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={goto_list('tickets', props)}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
@@ -205,8 +192,8 @@ const Page = ({
         {({activeTab = 0, onActivateTab}) => (
           <React.Fragment>
             <PageTitle title={_('Ticket: {{name}}', {name: entity.name})} />
-            <Layout grow="1" flex="column">
-              <TabLayout grow="1" align={['start', 'end']}>
+            <Layout flex="column" grow="1">
+              <TabLayout align={['start', 'end']} grow="1">
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}

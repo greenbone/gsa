@@ -4,26 +4,19 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {typeName} from 'gmp/utils/entitytype';
-
-import IconDivider from 'web/components/layout/icondivider';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-
+import IconDivider from 'web/components/layout/icondivider';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Actions = withEntitiesActions(
@@ -37,27 +30,27 @@ const Actions = withEntitiesActions(
     <IconDivider grow align={['center', 'center']}>
       <TrashIcon
         displayName={_('Filter')}
-        name="filter"
         entity={entity}
+        name="filter"
         onClick={onFilterDeleteClick}
       />
       <EditIcon
         displayName={_('Filter')}
-        name="filter"
         entity={entity}
+        name="filter"
         onClick={onFilterEditClick}
       />
       <CloneIcon
         displayName={_('Filter')}
-        name="filter"
         entity={entity}
+        name="filter"
         title={_('Clone Filter')}
         value={entity}
         onClick={onFilterCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Filter')}
+        value={entity}
         onClick={onFilterDownloadClick}
       />
     </IconDivider>
@@ -81,10 +74,10 @@ const Row = ({
 }) => (
   <TableRow>
     <EntityNameTableData
+      displayName={_('Filter')}
       entity={entity}
       link={links}
       type="filter"
-      displayName={_('Filter')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>{entity.toFilterString()}</TableData>

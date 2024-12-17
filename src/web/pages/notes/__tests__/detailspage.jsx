@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
-
 import {entityLoadingActions} from 'web/store/entities/notes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -389,10 +385,10 @@ describe('Note ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={note}
         onNoteCloneClick={handleNoteCloneClick}
+        onNoteCreateClick={handleNoteCreateClick}
         onNoteDeleteClick={handleNoteDeleteClick}
         onNoteDownloadClick={handleNoteDownloadClick}
         onNoteEditClick={handleNoteEditClick}
-        onNoteCreateClick={handleNoteCreateClick}
       />,
     );
 
@@ -427,10 +423,10 @@ describe('Note ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={note}
         onNoteCloneClick={handleNoteCloneClick}
+        onNoteCreateClick={handleNoteCreateClick}
         onNoteDeleteClick={handleNoteDeleteClick}
         onNoteDownloadClick={handleNoteDownloadClick}
         onNoteEditClick={handleNoteEditClick}
-        onNoteCreateClick={handleNoteCreateClick}
       />,
     );
 
@@ -475,10 +471,10 @@ describe('Note ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={noPermNote}
         onNoteCloneClick={handleNoteCloneClick}
+        onNoteCreateClick={handleNoteCreateClick}
         onNoteDeleteClick={handleNoteDeleteClick}
         onNoteDownloadClick={handleNoteDownloadClick}
         onNoteEditClick={handleNoteEditClick}
-        onNoteCreateClick={handleNoteCreateClick}
       />,
     );
 
@@ -529,10 +525,10 @@ describe('Note ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={noteInUse}
         onNoteCloneClick={handleNoteCloneClick}
+        onNoteCreateClick={handleNoteCreateClick}
         onNoteDeleteClick={handleNoteDeleteClick}
         onNoteDownloadClick={handleNoteDownloadClick}
         onNoteEditClick={handleNoteEditClick}
-        onNoteCreateClick={handleNoteCreateClick}
       />,
     );
     const cloneIcon = screen.getAllByTitle('Clone Note');

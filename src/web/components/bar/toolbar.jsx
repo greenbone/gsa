@@ -5,9 +5,7 @@
 
 
 import React from 'react';
-
 import Layout from 'web/components/layout/layout';
-
 import IconSizeProvider from 'web/components/provider/iconsizeprovider';
 
 const Toolbar = props => {

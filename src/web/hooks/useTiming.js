@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useCallback, useState} from 'react';
-
 import logger from 'gmp/log';
-
 import {hasValue, isFunction} from 'gmp/utils/identity';
+import {useEffect, useCallback, useState} from 'react';
 
 import useInstanceVariable from './useInstanceVariable';
 

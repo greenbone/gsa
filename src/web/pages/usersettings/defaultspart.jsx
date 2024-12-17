@@ -4,15 +4,12 @@
  */
 
 import React from 'react';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 const DefaultsPart = ({
   alerts,
@@ -41,9 +38,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('alert') && (
         <FormGroup title={_('Default Alert')} titleSize="3">
           <Select
+            items={renderSelectItems(alerts, UNSET_VALUE)}
             name="defaultAlert"
             value={defaultAlert}
-            items={renderSelectItems(alerts, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -51,9 +48,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default ESXi Credential')} titleSize="3">
           <Select
+            items={renderSelectItems(credentials, UNSET_VALUE)}
             name="defaultEsxiCredential"
             value={defaultEsxiCredential}
-            items={renderSelectItems(credentials, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -61,9 +58,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('scanconfig') && (
         <FormGroup title={_('Default OpenVAS Scan Config')} titleSize="3">
           <Select
+            items={renderSelectItems(openVasScanConfigs, UNSET_VALUE)}
             name="defaultOpenvasScanConfig"
             value={defaultOpenvasScanConfig}
-            items={renderSelectItems(openVasScanConfigs, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -71,9 +68,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('scanner') && (
         <FormGroup title={_('Default OpenVAS Scanner')} titleSize="3">
           <Select
+            items={renderSelectItems(openVasScanners, UNSET_VALUE)}
             name="defaultOpenvasScanner"
             value={defaultOpenvasScanner}
-            items={renderSelectItems(openVasScanners, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -81,9 +78,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('portlist') && (
         <FormGroup title={_('Default Port List')} titleSize="3">
           <Select
+            items={renderSelectItems(portLists, UNSET_VALUE)}
             name="defaultPortList"
             value={defaultPortList}
-            items={renderSelectItems(portLists, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -91,9 +88,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default SMB Credential')} titleSize="3">
           <Select
+            items={renderSelectItems(credentials, UNSET_VALUE)}
             name="defaultSmbCredential"
             value={defaultSmbCredential}
-            items={renderSelectItems(credentials, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -101,9 +98,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default SNMP Credential')} titleSize="3">
           <Select
+            items={renderSelectItems(credentials, UNSET_VALUE)}
             name="defaultSnmpCredential"
             value={defaultSnmpCredential}
-            items={renderSelectItems(credentials, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -111,9 +108,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default SSH Credential')} titleSize="3">
           <Select
+            items={renderSelectItems(credentials, UNSET_VALUE)}
             name="defaultSshCredential"
             value={defaultSshCredential}
-            items={renderSelectItems(credentials, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -121,9 +118,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('schedule') && (
         <FormGroup title={_('Default Schedule')} titleSize="3">
           <Select
+            items={renderSelectItems(schedules, UNSET_VALUE)}
             name="defaultSchedule"
             value={defaultSchedule}
-            items={renderSelectItems(schedules, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -131,9 +128,9 @@ const DefaultsPart = ({
       {capabilities.mayAccess('target') && (
         <FormGroup title={_('Default Target')} titleSize="3">
           <Select
+            items={renderSelectItems(targets, UNSET_VALUE)}
             name="defaultTarget"
             value={defaultTarget}
-            items={renderSelectItems(targets, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>

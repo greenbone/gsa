@@ -6,17 +6,16 @@
 
 import React from 'react';
 
-import Dashboard from '../../../components/dashboard/dashboard';
-
+import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './createddisplay';
 import {NvtsCvssDisplay, NvtsCvssTableDisplay} from './cvssdisplay';
 import {NvtsFamilyDisplay, NvtsFamilyTableDisplay} from './familydisplay';
+import {NvtsQodDisplay, NvtsQodTableDisplay} from './qoddisplay';
+import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from './qodtypedisplay';
 import {
   NvtsSeverityClassDisplay,
   NvtsSeverityClassTableDisplay,
 } from './severityclassdisplay';
-import {NvtsQodDisplay, NvtsQodTableDisplay} from './qoddisplay';
-import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from './qodtypedisplay';
-import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './createddisplay';
+import Dashboard from '../../../components/dashboard/dashboard';
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
 
@@ -38,8 +37,6 @@ export const NVTS_DISPLAYS = [
 const NvtsDashboard = props => (
   <Dashboard
     {...props}
-    id={NVTS_DASHBOARD_ID}
-    permittedDisplays={NVTS_DISPLAYS}
     defaultDisplays={[
       [
         NvtsSeverityClassDisplay.displayId,
@@ -47,6 +44,8 @@ const NvtsDashboard = props => (
         NvtsFamilyDisplay.displayId,
       ],
     ]}
+    id={NVTS_DASHBOARD_ID}
+    permittedDisplays={NVTS_DISPLAYS}
   />
 );
 

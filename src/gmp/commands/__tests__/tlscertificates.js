@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {ALL_FILTER} from 'gmp/models/filter';
-
 import defaults from 'gmp/http/transform/default';
+import {ALL_FILTER} from 'gmp/models/filter';
 
 import {
   createActionResultResponse,

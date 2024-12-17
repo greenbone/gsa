@@ -4,11 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import Ticket from '../ticket';
-import {isDate} from '../date';
-
 import {testModel} from 'gmp/models/testing';
+
+import {isDate} from '../date';
+import Ticket from '../ticket';
 
 testModel(Ticket, 'ticket');
 

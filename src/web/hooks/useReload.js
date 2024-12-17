@@ -4,7 +4,6 @@
  */
 
 import {useCallback, useEffect} from 'react';
-
 import useTiming from 'web/hooks/useTiming';
 
 /**

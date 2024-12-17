@@ -3,27 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useEffect, useMemo} from 'react';
 import _ from 'gmp/locale';
-
-import {cvssConfigData} from 'web/pages/extras/cvssV4/cvssConfig';
 import {
   expectedMetricOptionsOrdered,
   processVector,
   calculateScoreSafely,
   removeUnusedMetrics,
 } from 'gmp/parser/cvssV4';
-
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+import {useState, useEffect, useMemo} from 'react';
+import {useSearchParams} from 'react-router-dom';
+import styled from 'styled-components';
+import SeverityBar from 'web/components/bar/severitybar';
 import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import CvssIcon from 'web/components/icon/cvssicon';
 import Layout from 'web/components/layout/layout';
 import Section from 'web/components/section/section';
-import CvssIcon from 'web/components/icon/cvssicon';
-import SeverityBar from 'web/components/bar/severitybar';
-import styled from 'styled-components';
-import TextField from 'web/components/form/textfield';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+import {cvssConfigData} from 'web/pages/extras/cvssV4/cvssConfig';
 import MetricsGroups from 'web/pages/extras/cvssV4/MetricsGroups';
-import {useSearchParams} from 'react-router-dom';
 
 const StyledTextField = styled(TextField)`
   width: 180px;
@@ -82,7 +80,7 @@ const CvssV4Calculator = () => {
   const cvssScore = calculateScoreSafely(cvssVector);
 
   return (
-    <Layout flex="column" basis={'50%'}>
+    <Layout basis={'50%'} flex="column">
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv4 Score Calculator')}
@@ -90,8 +88,8 @@ const CvssV4Calculator = () => {
       <h3>{_('From Metrics')}:</h3>
       <MetricsGroups
         cvssConfigData={cvssConfigData}
-        selectedOptions={selectedOptions}
         handleOptionChange={handleOptionChange}
+        selectedOptions={selectedOptions}
       />
       <h3>{_('From Vector')}:</h3>
       <FormGroup title={`CVSS 4.0 ${_('Vector')}`}>

@@ -6,7 +6,6 @@
 
 import React from 'react';
 
-import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
   NotesActiveDaysDisplay,
@@ -17,6 +16,7 @@ import {
   NotesWordCloudDisplay,
   NotesWordCloudTableDisplay,
 } from './wordclouddisplay';
+import Dashboard from '../../../components/dashboard/dashboard';
 
 export const NOTES_DASHBOARD_ID = 'ce7b121-c609-47b0-ab57-fd020a0336f4a';
 
@@ -32,8 +32,6 @@ export const NOTES_DISPLAYS = [
 const NotesDashboard = props => (
   <Dashboard
     {...props}
-    id={NOTES_DASHBOARD_ID}
-    permittedDisplays={NOTES_DISPLAYS}
     defaultDisplays={[
       [
         NotesActiveDaysDisplay.displayId,
@@ -41,6 +39,8 @@ const NotesDashboard = props => (
         NotesWordCloudDisplay.displayId,
       ],
     ]}
+    id={NOTES_DASHBOARD_ID}
+    permittedDisplays={NOTES_DISPLAYS}
   />
 );
 

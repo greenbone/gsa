@@ -4,25 +4,21 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
+import {YES_VALUE} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entitytype';
-
-import {YES_VALUE} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
-import withCapabilities from 'web/utils/withCapabilities';
-
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import React from 'react';
 import EntityComponent from 'web/entity/component';
-
 import TagDialog from 'web/pages/tags/dialog';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
+
 
 export const SELECT_MAX_RESOURCES = 200; // concerns items in TagDialog's Select
 export const MAX_RESOURCES = 40; // concerns listing in "Assigned Resources" tab
@@ -239,17 +235,17 @@ class TagComponent extends React.Component {
     return (
       <EntityComponent
         name="tag"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -268,10 +264,10 @@ class TagComponent extends React.Component {
                 comment={comment}
                 id={id}
                 name={name}
+                resourceCount={resourceCount}
                 resource_ids={resource_ids}
                 resource_type={resource_type}
                 resource_types={resource_types}
-                resourceCount={resourceCount}
                 title={title}
                 value={value}
                 onClose={this.handleCloseTagDialog}

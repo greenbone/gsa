@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {severityValue, fixedValue} from 'gmp/utils/number';
 
 describe('severityValue function tests', () => {

@@ -4,13 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import date from 'gmp/models/date';
-
-import {setTimezone} from 'web/store/usersettings/actions';
-
-import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import {
   changeInputValue,
   getDialogCloseButton,
@@ -20,6 +14,8 @@ import {
   getRadioInputs,
   getTextInputs,
 } from 'web/components/testing';
+import {setTimezone} from 'web/store/usersettings/actions';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import EditNvtDetailsDialog from '../editnvtdetailsdialog';
 

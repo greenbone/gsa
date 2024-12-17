@@ -4,21 +4,17 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-import {ReccurenceFrequency} from 'gmp/models/event';
 import date from 'gmp/models/date';
-
+import {ReccurenceFrequency} from 'gmp/models/event';
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
 import ScheduleChart from 'web/components/chart/schedule';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import DataTable from 'web/components/dashboard/display/datatable';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTable from 'web/components/dashboard/display/datatable';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
 import {registerDisplay} from 'web/components/dashboard/registry';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
 import {TasksSchedulesLoader} from './loaders';
 

@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isString} from 'gmp/utils/identity';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 import DetailsLink from './detailslink';
@@ -35,7 +33,7 @@ const CertLink = ({id, textOnly = false, type}) => {
     info_type = 'dfncert';
   }
   return (
-    <DetailsLink title={title} id={id} type={info_type} textOnly={textOnly} data-testid="cert_link">
+    <DetailsLink data-testid="cert_link" id={id} textOnly={textOnly} title={title} type={info_type}>
       {id}
     </DetailsLink>
   );

@@ -4,54 +4,45 @@
  */
 
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
 import {USERS_FILTER_FILTER} from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
-
-import SelectionType from 'web/utils/selectiontype';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import UserIcon from 'web/components/icon/usericon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   loadAllEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/users';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
+import withGmp from 'web/utils/withGmp';
 
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
-
-import ConfirmDeleteDialog from './confirmdeletedialog';
 import UserComponent from './component';
-import UsersTable from './table';
+import ConfirmDeleteDialog from './confirmdeletedialog';
 import UsersFilterDialog from './filterdialog';
+import UsersTable from './table';
 
 const ToolBarIcons = ({onUserCreateClick}) => {
   const capabilities = useCapabilities();
-  const [_] = useTranslation(); // eslint-disable-line no-shadow
+  const [_] = useTranslation();  
   return (
     <IconDivider>
       <ManualIcon
-        page="web-interface-access"
         anchor="managing-users"
+        page="web-interface-access"
         title={_('Help: Users')}
       />
       {capabilities.mayCreate('user') && (
@@ -88,7 +79,7 @@ class UsersPage extends React.Component {
     this.handleInteraction();
 
     if (deleteUsers.length === 1) {
-      const {id} = deleteUsers[0]; // eslint-disable-line prefer-destructuring
+      const {id} = deleteUsers[0];  
       return gmp.user.delete({id, inheritorId}).then(onChanged);
     }
 
@@ -173,15 +164,15 @@ class UsersPage extends React.Component {
     return (
       <React.Fragment>
         <UserComponent
-          onCreated={onChanged}
-          onSaved={onChanged}
-          onCloned={onChanged}
           onCloneError={onError}
-          onDeleted={onChanged}
+          onCloned={onChanged}
+          onCreated={onChanged}
           onDeleteError={onError}
-          onDownloaded={onDownloaded}
+          onDeleted={onChanged}
           onDownloadError={onError}
+          onDownloaded={onDownloaded}
           onInteraction={onInteraction}
+          onSaved={onChanged}
         >
           {({clone, create, download, edit, save}) => (
             <React.Fragment>
@@ -190,11 +181,11 @@ class UsersPage extends React.Component {
                 {...props}
                 filterEditDialog={UsersFilterDialog}
                 filtersFilter={USERS_FILTER_FILTER}
+                isGenericBulkTrashcanDeleteDialog={false}
                 sectionIcon={<UserIcon size="large" />}
                 table={UsersTable}
                 title={_('Users')}
                 toolBarIcons={ToolBarIcons}
-                isGenericBulkTrashcanDeleteDialog={false}
                 onChanged={onChanged}
                 onDeleteBulk={this.openConfirmDeleteDialog}
                 onDownloaded={onDownloaded}
@@ -213,8 +204,8 @@ class UsersPage extends React.Component {
         {confirmDeleteDialogVisible && (
           <ConfirmDeleteDialog
             deleteUsers={deleteUsers}
-            title={title}
             inheritorUsers={inheritorUsers}
+            title={title}
             onClose={this.handleCloseConfirmDeleteDialog}
             onSave={d =>
               this.handleDeleteUser(d).then(() =>

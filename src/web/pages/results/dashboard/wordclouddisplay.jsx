@@ -3,25 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
-import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import FilterTerm from 'gmp/models/filter/filterterm';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import WordCloudChart from 'web/components/chart/wordcloud';
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
 import {randomColor} from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
 import {registerDisplay} from 'web/components/dashboard/registry';
+import PropTypes from 'web/utils/proptypes';
 
 import {ResultsWordCountLoader} from './loaders';
 
@@ -80,16 +77,16 @@ export class ResultsWordCloudDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
             dataTransform={transformWordCountData}
-            title={() => _('Results Vulnerability Word Cloud')}
+            filter={filter}
             showToggleLegend={false}
+            title={() => _('Results Vulnerability Word Cloud')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <WordCloudChart
-                svgRef={svgRef}
                 data={tdata}
                 height={height}
+                svgRef={svgRef}
                 width={width}
                 onDataClick={
                   isDefined(onFilterChanged) ? this.handleDataClick : undefined

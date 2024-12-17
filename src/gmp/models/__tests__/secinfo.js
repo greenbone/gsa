@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Info from 'gmp/models/info';
 import SecInfo, {secInfoType, secInfoTypeName} from 'gmp/models/secinfo';
 import {testModel} from 'gmp/models/testing';

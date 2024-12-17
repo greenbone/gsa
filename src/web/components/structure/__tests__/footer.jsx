@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import date from 'gmp/models/date';
-
 import {render} from 'web/utils/testing';
 
 import Footer from '../footer';

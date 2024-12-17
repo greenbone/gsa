@@ -4,24 +4,18 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {YES_VALUE} from 'gmp/parser';
-
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import EntityComponent from 'web/entity/component';
-
 import CredentialsDialog from 'web/pages/credentials/dialog';
-
 import PortListDialog from 'web/pages/portlists/dialog';
-
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 import {UNSET_VALUE} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
 import TargetDialog from './dialog';
 
@@ -337,17 +331,17 @@ class TargetComponent extends React.Component {
     return (
       <EntityComponent
         name="target"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -372,39 +366,39 @@ class TargetComponent extends React.Component {
                 in_use={in_use}
                 name={name}
                 port={port}
-                port_lists={port_lists}
                 port_list_id={port_list_id}
+                port_lists={port_lists}
                 reverse_lookup_only={reverse_lookup_only}
                 reverse_lookup_unify={reverse_lookup_unify}
                 smb_credential_id={smb_credential_id}
                 snmp_credential_id={snmp_credential_id}
                 ssh_credential_id={ssh_credential_id}
                 ssh_elevate_credential_id={ssh_elevate_credential_id}
-                target_source={target_source}
                 target_exclude_source={target_exclude_source}
+                target_source={target_source}
                 title={target_title}
                 onClose={this.handleCloseTargetDialog}
+                onEsxiCredentialChange={this.handleEsxiCredentialChange}
                 onNewCredentialsClick={this.openCredentialsDialog}
                 onNewPortListClick={this.openPortListDialog}
                 onPortListChange={this.handlePortListChange}
-                onSnmpCredentialChange={this.handleSnmpCredentialChange}
-                onSshCredentialChange={this.handleSshCredentialChange}
-                onEsxiCredentialChange={this.handleEsxiCredentialChange}
-                onSmbCredentialChange={this.handleSmbCredentialChange}
-                onSshElevateCredentialChange={
-                  this.handleSshElevateCredentialChange
-                }
                 onSave={d => {
                   this.handleInteraction();
                   return save(d).then(() => this.closeTargetDialog());
                 }}
+                onSmbCredentialChange={this.handleSmbCredentialChange}
+                onSnmpCredentialChange={this.handleSnmpCredentialChange}
+                onSshCredentialChange={this.handleSshCredentialChange}
+                onSshElevateCredentialChange={
+                  this.handleSshElevateCredentialChange
+                }
               />
             )}
             {credentialsDialogVisible && (
               <CredentialsDialog
-                types={credentialTypes}
                 base={first(credentialTypes)}
                 title={`${credentials_title}`}
+                types={credentialTypes}
                 onClose={this.handleCloseCredentialsDialog}
                 onSave={this.handleCreateCredential}
               />

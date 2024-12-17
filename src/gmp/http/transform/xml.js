@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import Rejection from 'gmp/http//rejection';
+import {_} from 'gmp/locale/lang';
+import {isDefined} from 'gmp/utils/identity';
 
 export const success =
   transform =>

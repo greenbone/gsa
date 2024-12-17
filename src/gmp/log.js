@@ -27,8 +27,6 @@ const getLogLevel = logLevel =>
 
 function noop() {}
 
-/* eslint-disable no-console */
-
 class Logger {
   constructor(name, level = DEFAULT_LOG_LEVEL) {
     this.name = name;
@@ -45,7 +43,6 @@ class Logger {
         logValue < newLogValue
           ? noop
           : (...args) => {
-              // eslint-disable-line no-loop-func
               return console[logName](
                 '%c' + this.name,
                 'color: ' + GREENBONE_GREEN,
@@ -117,8 +114,6 @@ export class RootLogger {
     return logger;
   }
 }
-
-/* eslint-enable no-console */
 
 const logger = new RootLogger();
 

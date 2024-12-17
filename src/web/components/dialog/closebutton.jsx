@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
-import Theme from 'web/utils/theme';
-
-import PropTypes from 'web/utils/proptypes';
+import React from 'react';
+import styled from 'styled-components';
 import useIconSize from 'web/hooks/useIconSize';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const StyledCloseButton = styled.div`
   display: flex;
@@ -43,9 +39,9 @@ const CloseButton = ({title = _('Close'), size = 'medium', ...props}) => {
 
   return (
     <StyledCloseButton
-      $width={width}
       $height={height}
       $lineHeight={height}
+      $width={width}
       title={title}
       {...props}
       data-testid="close-button"

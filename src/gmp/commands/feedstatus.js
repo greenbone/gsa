@@ -4,12 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
-
-import {parseDate} from 'gmp/parser';
-
-import {map} from 'gmp/utils/array';
-
 import date, {duration} from 'gmp/models/date';
+import {parseDate} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
 
 import HttpCommand from './http';
 

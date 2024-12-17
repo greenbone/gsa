@@ -3,18 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
-import LineChart, {lineDataPropType} from '../../../chart/line';
 
 import transformCreated from './createdtransform';
+import LineChart, {lineDataPropType} from '../../../chart/line';
 import DataDisplay from '../datadisplay';
 
 class CreatedDisplay extends React.Component {
@@ -82,16 +81,16 @@ class CreatedDisplay extends React.Component {
         {({width, height, data: tdata, svgRef, state}) => (
           <LineChart
             timeline
+            data={tdata}
+            height={height}
+            showLegend={state.showLegend}
             svgRef={svgRef}
             width={width}
-            height={height}
-            data={tdata}
-            yAxisLabel={yAxisLabel}
-            y2AxisLabel={y2AxisLabel}
             xAxisLabel={xAxisLabel}
-            yLine={yLine}
+            y2AxisLabel={y2AxisLabel}
             y2Line={y2Line}
-            showLegend={state.showLegend}
+            yAxisLabel={yAxisLabel}
+            yLine={yLine}
             onRangeSelected={
               isDefined(onFilterChanged) ? this.handleRangeSelect : undefined
             }

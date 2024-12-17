@@ -4,22 +4,17 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import DateTime from 'web/components/date/datetime';
-
-import {Col} from 'web/entity/page';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
+import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
 
 const CertInfo = ({info}) => {
   const {activationTime, expirationTime, issuer, md5_fingerprint} = info;

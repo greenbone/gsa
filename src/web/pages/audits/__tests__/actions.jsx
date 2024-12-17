@@ -3,16 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-console */
+ 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
 import Actions from '../actions';
-import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_task']);

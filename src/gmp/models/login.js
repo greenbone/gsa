@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseInt} from 'gmp/parser';
-
 import moment from 'gmp/models/date';
-
+import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 class Login {

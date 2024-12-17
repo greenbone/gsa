@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render} from 'web/utils/testing';
 
 import ErrorMessage from '../errormessage';
@@ -12,7 +11,7 @@ import ErrorMessage from '../errormessage';
 describe('ErrorMessage tests', () => {
   test('should render', () => {
     const {element} = render(
-      <ErrorMessage message="An error occurred." details="Because of foo." />,
+      <ErrorMessage details="Because of foo." message="An error occurred." />,
     );
 
     expect(element).toBeVisible();
@@ -23,7 +22,7 @@ describe('ErrorMessage tests', () => {
     const details = 'Because of foo.';
 
     const {element, getByTestId} = render(
-      <ErrorMessage message={message} details={details}>
+      <ErrorMessage details={details} message={message}>
         <span id="bar">bar</span>
       </ErrorMessage>,
     );

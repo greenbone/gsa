@@ -6,7 +6,6 @@
 
 import React from 'react';
 
-import Dashboard from '../../../components/dashboard/dashboard';
 
 import {ResultsCvssDisplay, ResultsCvssTableDisplay} from './cvssdisplay';
 import {
@@ -21,6 +20,7 @@ import {
   ResultsWordCloudDisplay,
   ResultsWordCloudTableDisplay,
 } from './wordclouddisplay';
+import Dashboard from '../../../components/dashboard/dashboard';
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
 
@@ -38,11 +38,11 @@ export const RESULTS_DISPLAYS = [
 const ResultsDashboard = props => (
   <Dashboard
     {...props}
-    id={RESULTS_DASHBOARD_ID}
-    permittedDisplays={RESULTS_DISPLAYS}
     defaultDisplays={[
       [ResultsSeverityDisplay.displayId, ResultsCvssDisplay.displayId],
     ]}
+    id={RESULTS_DASHBOARD_ID}
+    permittedDisplays={RESULTS_DISPLAYS}
   />
 );
 

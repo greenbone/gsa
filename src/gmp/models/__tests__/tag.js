@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Tag from 'gmp/models/tag';
-
 import {testModel} from 'gmp/models/testing';
 
 testModel(Tag, 'tag');

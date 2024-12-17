@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import date, {duration} from 'gmp/models/date';
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import date, {duration} from 'gmp/models/date';
 
 export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);

@@ -5,7 +5,6 @@
 
 
 import React from 'react';
-
 import EntityComponent from 'web/entity/component';
 
 const OsComponent = props => (

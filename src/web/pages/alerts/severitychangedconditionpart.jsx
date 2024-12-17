@@ -4,16 +4,12 @@
  */
 
 import React from 'react';
-
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
 import Row from 'web/components/layout/row';
-
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
-
-import Select from 'web/components/form/select';
-import Radio from 'web/components/form/radio';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const VALUE = 'Severity changed';
 
@@ -27,10 +23,10 @@ const SeverityChangedConditionPart = ({
   return (
     <Row>
       <Radio
+        checked={condition === VALUE}
+        name="condition"
         title={_('Severity Level')}
         value={VALUE}
-        name="condition"
-        checked={condition === VALUE}
         onChange={onChange}
       />
       <Select
@@ -49,8 +45,8 @@ const SeverityChangedConditionPart = ({
             label: _('decreased'),
           },
         ]}
-        value={direction}
         name={prefix + 'direction'}
+        value={direction}
         onChange={onChange}
       />
     </Row>

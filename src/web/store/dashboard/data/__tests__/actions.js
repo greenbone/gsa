@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
 
 import {

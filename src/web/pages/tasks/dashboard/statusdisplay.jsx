@@ -4,24 +4,18 @@
  */
 
 
-import {scaleOrdinal} from 'd3-scale';
 
 import {interpolateHcl} from 'd3-interpolate';
-
+import {scaleOrdinal} from 'd3-scale';
 import {_, _l} from 'gmp/locale/lang';
-
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
-
-import {registerDisplay} from 'web/components/dashboard/registry';
-import {totalCount, percent} from 'web/components/dashboard/display/utils';
-
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTable from 'web/components/dashboard/display/datatable';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-
-import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay'; // eslint-disable-line max-len
-
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay';  
+import {totalCount, percent} from 'web/components/dashboard/display/utils';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import Theme from 'web/utils/theme';
 
 import {TaskStatusLoader} from './loaders';

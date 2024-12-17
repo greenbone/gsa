@@ -4,10 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {parseModelFromElement} from 'gmp/model';
-import Nvt from 'gmp/models/nvt';
 import Host from 'gmp/models/host';
+import Nvt from 'gmp/models/nvt';
 
 import {
   getEntityType,

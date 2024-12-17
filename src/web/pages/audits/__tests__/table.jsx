@@ -4,15 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-
+import Filter from 'gmp/models/filter';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
@@ -115,16 +111,16 @@ describe('Audits table tests', () => {
 
     const {baseElement} = render(
       <Table
-        filter={filter}
         entities={[audit, audit2, audit3]}
         entitiesCounts={counts}
+        filter={filter}
         onAuditCloneClick={handleAuditCloneClick}
         onAuditDeleteClick={handleAuditDeleteClick}
         onAuditDownloadClick={handleAuditDownloadClick}
         onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
         onAuditStartClick={handleAuditStartClick}
         onAuditStopClick={handleAuditStopClick}
-        onAuditResumeClick={handleAuditResumeClick}
         onReportDownloadClick={handleReportDownloadClick}
       />,
     );
@@ -163,16 +159,16 @@ describe('Audits table tests', () => {
 
     const {element, getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[audit, audit2, audit3]}
         entitiesCounts={counts}
+        filter={filter}
         onAuditCloneClick={handleAuditCloneClick}
         onAuditDeleteClick={handleAuditDeleteClick}
         onAuditDownloadClick={handleAuditDownloadClick}
         onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
         onAuditStartClick={handleAuditStartClick}
         onAuditStopClick={handleAuditStopClick}
-        onAuditResumeClick={handleAuditResumeClick}
         onReportDownloadClick={handleReportDownloadClick}
       />,
     );
@@ -212,17 +208,17 @@ describe('Audits table tests', () => {
 
     const {getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[audit, audit2, audit3]}
         entitiesCounts={counts}
+        filter={filter}
         gcrFormatDefined={true}
         onAuditCloneClick={handleAuditCloneClick}
         onAuditDeleteClick={handleAuditDeleteClick}
         onAuditDownloadClick={handleAuditDownloadClick}
         onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
         onAuditStartClick={handleAuditStartClick}
         onAuditStopClick={handleAuditStopClick}
-        onAuditResumeClick={handleAuditResumeClick}
         onReportDownloadClick={handleReportDownloadClick}
       />,
     );

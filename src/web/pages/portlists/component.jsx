@@ -3,22 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {parseInt} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
+import React from 'react';
+import EntityComponent from 'web/entity/component';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from 'web/entity/component';
-
-import ImportPortListDialog from './importdialog';
 import PortListsDialog from './dialog';
+import ImportPortListDialog from './importdialog';
 import PortRangeDialog from './portrangedialog';
 
 class PortListComponent extends React.Component {
@@ -306,17 +302,17 @@ class PortListComponent extends React.Component {
     return (
       <EntityComponent
         name="portlist"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -332,8 +328,8 @@ class PortListComponent extends React.Component {
                 id={id}
                 name={name}
                 port_list={port_list}
-                title={title}
                 port_ranges={port_ranges}
+                title={title}
                 onClose={this.handleClosePortListDialog}
                 onNewPortRangeClick={this.openNewPortRangeDialog}
                 onSave={(...args) => this.handleSavePortList(save, ...args)}

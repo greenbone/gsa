@@ -3,31 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
-import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
-
+import FilterTerm from 'gmp/models/filter/filterterm';
 import {parseFloat} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import DonutChart from 'web/components/chart/donut';
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons'; // eslint-disable-line max-len
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons';  
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
 import {
   totalCount,
   percent,
   activeDaysColorScale,
 } from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
 import {registerDisplay} from 'web/components/dashboard/registry';
+import PropTypes from 'web/utils/proptypes';
 
 import {OverridesActiveDaysLoader} from './loaders';
 
@@ -140,26 +135,26 @@ export class OverridesActiveDaysDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
             dataTransform={transformActiveDaysData}
+            filter={filter}
+            icons={renderDonutChartIcons}
+            initialState={{
+              show3d: true,
+            }}
             title={({data: tdata}) =>
               _('Overrides by Active Days (Total: {{count}})', {
                 count: tdata.total,
               })
             }
-            initialState={{
-              show3d: true,
-            }}
-            icons={renderDonutChartIcons}
           >
             {({width, height, data: tdata, svgRef, state}) => (
               <DonutChart
-                svgRef={svgRef}
                 data={tdata}
                 height={height}
-                width={width}
                 show3d={state.show3d}
                 showLegend={state.showLegend}
+                svgRef={svgRef}
+                width={width}
                 onDataClick={
                   isDefined(onFilterChanged) ? this.handleDataClick : undefined
                 }

@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Task from 'gmp/models/task';
-
 import {render} from 'web/utils/testing';
 
 import ObserverIcon from '../observericon';

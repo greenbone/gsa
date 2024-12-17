@@ -3,25 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import DetailsIcon from 'web/components/icon/detailsicon';
+import IconDivider from 'web/components/layout/icondivider';
+import DetailsLink from 'web/components/link/detailslink';
+import EntityBox from 'web/entity/box';
 import PropTypes from 'web/utils/proptypes';
 import {
   LOG_VALUE,
   translatedResultSeverityRiskFactor,
 } from 'web/utils/severity';
-
-import EntityBox from 'web/entity/box';
-
-import DetailsIcon from 'web/components/icon/detailsicon';
-
-import IconDivider from 'web/components/layout/icondivider';
-
-import DetailsLink from 'web/components/link/detailslink';
 
 const OverrideBox = ({override, detailsLink = true}) => {
   let severity;
@@ -43,8 +37,8 @@ const OverrideBox = ({override, detailsLink = true}) => {
     <IconDivider>
       <DetailsLink
         id={override.id}
-        type="override"
         title={_('Override Details')}
+        type="override"
       >
         <DetailsIcon />
       </DetailsLink>
@@ -54,14 +48,14 @@ const OverrideBox = ({override, detailsLink = true}) => {
   );
   return (
     <EntityBox
+      end={override.endTime}
+      modified={override.modificationTime}
+      text={override.text}
       title={_('Override from {{- severity}} to {{- newSeverity}}', {
         severity,
         newSeverity,
       })}
-      text={override.text}
-      end={override.endTime}
       toolbox={toolbox}
-      modified={override.modificationTime}
     />
   );
 };

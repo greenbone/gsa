@@ -4,11 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Asset from 'gmp/models/asset';
 import Host from 'gmp/models/host';
 import {testModel} from 'gmp/models/testing';
-
 import {parseDate} from 'gmp/parser';
 
 testModel(Host, 'host');

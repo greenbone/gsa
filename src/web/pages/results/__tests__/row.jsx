@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Result from 'gmp/models/result';
-
 import {rendererWith} from 'web/utils/testing';
 
 import Row from '../row';
@@ -163,7 +161,7 @@ describe('Audit reports with compliance', () => {
     const {getAllByTestId} = render(
       <table>
         <tbody>
-          <Row entity={entity} audit={true} />
+          <Row audit={true} entity={entity} />
         </tbody>
       </table>,
     );
@@ -190,7 +188,7 @@ describe('Audit reports with compliance', () => {
     const {getAllByTestId} = render(
       <table>
         <tbody>
-          <Row entity={entity} audit={true} />
+          <Row audit={true} entity={entity} />
         </tbody>
       </table>,
     );
@@ -216,7 +214,7 @@ describe('Audit reports with compliance', () => {
     const {getAllByTestId} = render(
       <table>
         <tbody>
-          <Row entity={entity} audit={true} />
+          <Row audit={true} entity={entity} />
         </tbody>
       </table>,
     );
@@ -242,7 +240,7 @@ describe('Audit reports with compliance', () => {
     const {getAllByTestId} = render(
       <table>
         <tbody>
-          <Row entity={entity} audit={true} />
+          <Row audit={true} entity={entity} />
         </tbody>
       </table>,
     );
@@ -274,7 +272,7 @@ describe('Audit reports with compliance', () => {
     const {getAllByTestId} = render(
       <table>
         <tbody>
-          <Row entity={entity} audit={true} />
+          <Row audit={true} entity={entity} />
         </tbody>
       </table>,
     );

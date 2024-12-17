@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import PortList from 'gmp/models/portlist';
 import {testModel} from 'gmp/models/testing';

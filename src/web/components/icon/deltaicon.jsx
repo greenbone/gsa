@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Icon from './svg/delta.svg';
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/delta.svg';
 
 const DeltaIconComponent = withSvgIcon()(Icon);
 

@@ -4,7 +4,6 @@
  */
 
 import {_} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import Info from './info';

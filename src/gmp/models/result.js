@@ -3,19 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Model, {parseModelFromElement} from 'gmp/model';
+import {parseSeverity, parseQod} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement} from 'gmp/model';
-import {parseSeverity, parseQod} from 'gmp/parser';
-
-import Nvt from './nvt';
-
-import Note from './note';
-
-import Override from './override';
 import Cve from './cve';
+import Note from './note';
+import Nvt from './nvt';
+import Override from './override';
 
 export class Delta {
   static TYPE_NEW = 'new';

@@ -3,26 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import Layout from 'web/components/layout/layout';
-
 import ExternalLink from 'web/components/link/externallink';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
 
 const CertBundAdvDetails = ({entity}) => {
   const {
@@ -38,7 +31,7 @@ const CertBundAdvDetails = ({entity}) => {
     referenceUrl,
   } = entity;
   return (
-    <Layout flex="column" grow>
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
           <Col width="10%" />

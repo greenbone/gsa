@@ -3,21 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState} from 'react';
 
 import {isDefined, isFunction} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import State from 'web/utils/state';
-
-import ErrorBoundary from 'web/components/error/errorboundary';
-
-import useTranslation from 'web/hooks/useTranslation';
-
+import {useEffect, useState} from 'react';
 import DialogContent from 'web/components/dialog/content';
 import Dialog from 'web/components/dialog/dialog';
 import DialogError from 'web/components/dialog/error';
 import SaveDialogFooter from 'web/components/dialog/SaveDialogFooter';
+import ErrorBoundary from 'web/components/error/errorboundary';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import State from 'web/utils/state';
 
 const SaveDialog = ({
   buttonTitle,
@@ -88,22 +84,22 @@ const SaveDialog = ({
 
         return (
           <Dialog
-            width={width}
-            title={title}
-            onClose={onClose}
             footer={
               <SaveDialogFooter
-                multiStep={multiStep}
-                isLoading={isLoading}
-                prevDisabled={prevDisabled}
-                nextDisabled={nextDisabled}
                 buttonTitle={buttonTitle}
                 currentStep={currentStep}
+                handleSaveClick={() => handleSaveClick(childValues)}
+                isLoading={isLoading}
+                multiStep={multiStep}
+                nextDisabled={nextDisabled}
+                prevDisabled={prevDisabled}
                 setCurrentStep={setCurrentStep}
                 onClose={onClose}
-                handleSaveClick={() => handleSaveClick(childValues)}
               />
             }
+            title={title}
+            width={width}
+            onClose={onClose}
           >
             <DialogContent>
               {stateError && (

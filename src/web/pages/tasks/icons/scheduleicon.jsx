@@ -3,22 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import ScheduleIcon from 'web/components/icon/scheduleicon';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 import {getTimezone} from 'web/store/usersettings/selectors';
+import PropTypes from 'web/utils/proptypes';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
 const TaskScheduleIcon = ({size, links = true, schedule, timezone}) => {
   if (
@@ -68,12 +63,12 @@ const TaskScheduleIcon = ({size, links = true, schedule, timezone}) => {
 
   return (
     <DetailsLink
-      type="schedule"
       id={schedule.id}
-      title={title}
       textOnly={!links}
+      title={title}
+      type="schedule"
     >
-      <ScheduleIcon size={size} alt={_('Schedule Details')} />
+      <ScheduleIcon alt={_('Schedule Details')} size={size} />
     </DetailsLink>
   );
 };

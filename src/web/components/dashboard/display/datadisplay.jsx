@@ -3,27 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import equal from 'fast-deep-equal';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-
+import React from 'react';
+import styled from 'styled-components';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
 import Loading from 'web/components/loading/loading';
-
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import Display, {DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH} from './display';
 import DataDisplayIcons from './datadisplayicons';
+import Display, {DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH} from './display';
 
 const ownProps = [
   'title',

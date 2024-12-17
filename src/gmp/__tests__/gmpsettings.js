@@ -11,7 +11,6 @@ import {
   afterAll,
   testing,
 } from '@gsa/testing';
-
 import GmpSettings, {
   DEFAULT_MANUAL_URL,
   DEFAULT_RELOAD_INTERVAL,

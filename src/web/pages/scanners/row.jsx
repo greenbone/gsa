@@ -3,38 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {
   scannerTypeName,
   CVE_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import IconDivider from 'web/components/layout/icondivider';
-
+import React from 'react';
 import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import VerifyIcon from 'web/components/icon/verifyicon';
-
+import IconDivider from 'web/components/layout/icondivider';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
-import EntityLink from 'web/entity/link';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
-import PropTypes from 'web/utils/proptypes';
+import EntityLink from 'web/entity/link';
 import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
 
 const Actions = withEntitiesActions(
   ({
@@ -47,35 +38,35 @@ const Actions = withEntitiesActions(
     onScannerEditClick,
     onScannerVerifyClick,
   }) => (
-    <IconDivider align={['start', 'center']} grow>
+    <IconDivider grow align={['start', 'center']}>
       <TrashIcon
         displayName={_('Scanner')}
-        name="permission"
         entity={entity}
+        name="permission"
         onClick={onScannerDeleteClick}
       />
       <EditIcon
         displayName={_('Scanner')}
-        name="permission"
         entity={entity}
+        name="permission"
         onClick={onScannerEditClick}
       />
       <CloneIcon
         displayName={_('Scanner')}
-        name="permission"
         entity={entity}
-        value={entity}
         mayClone={entity.isClonable()}
+        name="permission"
+        value={entity}
         onClick={onScannerCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Scanner')}
+        value={entity}
         onClick={onScannerDownloadClick}
       />
       <VerifyIcon
-        value={entity}
         title={_('Verify Scanner')}
+        value={entity}
         onClick={onScannerVerifyClick}
       />
       {isDefined(entity.credential) && (
@@ -122,10 +113,10 @@ const Row = ({
       {(showSensors || !isSensor) && (
         <TableRow>
           <EntityNameTableData
+            displayName={_('Scanner')}
             entity={entity}
             link={links}
             type="scanner"
-            displayName={_('Scanner')}
             onToggleDetailsClick={onToggleDetailsClick}
           />
           <TableData>

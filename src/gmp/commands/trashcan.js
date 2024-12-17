@@ -4,13 +4,7 @@
  */
 
 import registerCommand from 'gmp/command';
-
-import {apiType} from 'gmp/utils/entitytype';
-import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
-
 import Alert from 'gmp/models/alert';
-import Scanconfig from 'gmp/models/scanconfig';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 import Group from 'gmp/models/group';
@@ -21,12 +15,16 @@ import PortList from 'gmp/models/portlist';
 import ReportConfig from 'gmp/models/reportconfig';
 import ReportFormat from 'gmp/models/reportformat';
 import Role from 'gmp/models/role';
+import Scanconfig from 'gmp/models/scanconfig';
 import Scanner from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
 import Tag from 'gmp/models/tag';
 import Target from 'gmp/models/target';
 import Task from 'gmp/models/task';
 import Ticket from 'gmp/models/ticket';
+import {map} from 'gmp/utils/array';
+import {apiType} from 'gmp/utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
 
 import HttpCommand from './http';
 

@@ -3,28 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
-import GSA_VERSION from 'version';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
+import GSA_VERSION from 'version';
 import HelpIcon from 'web/components/icon/helpicon';
-
 import Img from 'web/components/img/img';
-
-import ExternalLink from 'web/components/link/externallink';
-import ProtocolDocLink from 'web/components/link/protocoldoclink';
-
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import ExternalLink from 'web/components/link/externallink';
+import ProtocolDocLink from 'web/components/link/protocoldoclink';
 import Section from 'web/components/section/section';
-
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
@@ -42,8 +32,8 @@ const About = ({gmp}) => (
     <PageTitle title={_('About GSA')} />
     <Layout flex="column">
       <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
-        <StyledLayout flex="column" align="center">
-          <Img src="greenbone_banner.png" alt="GSA" width="100%" />
+        <StyledLayout align="center" flex="column">
+          <Img alt="GSA" src="greenbone_banner.png" width="100%" />
           <h1>Greenbone Security Assistant</h1>
           <h3>
             {isDefined(gmp.settings.vendorVersion)
@@ -75,8 +65,8 @@ const About = ({gmp}) => (
             Copyright (C) 2017-2024 by&nbsp;
             <a
               href="https://www.greenbone.net"
-              target="_blank"
               rel="noopener noreferrer"
+              target="_blank"
             >
               Greenbone AG
             </a>

@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import styled from 'styled-components';
 
+import {color} from 'd3-color';
 import {
   forceSimulation,
   forceLink,
@@ -15,27 +14,21 @@ import {
   forceX,
   forceY,
 } from 'd3-force';
-
-import {color} from 'd3-color';
-
 import {scaleLinear} from 'd3-scale';
-
 import equal from 'fast-deep-equal';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import {setRef} from 'web/utils/render';
 import {
   getSeverityLevelsOld as getSeverityLevels,
   FALSE_POSITIVE_VALUE,
   HIGH_VALUE,
 } from 'web/utils/severity';
-import {setRef} from 'web/utils/render';
+import Theme from 'web/utils/theme';
 
 import Group from './group';
 
@@ -440,24 +433,24 @@ class HostsTopologyChart extends React.Component {
           </Layout>
         )}
         <Svg
-          dragging={dragging}
-          width={width}
-          height={height}
-          onWheel={this.handleMouseWheel}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMousUp}
-          onMouseMove={this.handleMousMove}
           ref={setRef(ref => (this.svg = ref), svgRef)}
+          dragging={dragging}
+          height={height}
+          width={width}
+          onMouseDown={this.handleMouseDown}
+          onMouseMove={this.handleMousMove}
+          onMouseUp={this.handleMousUp}
+          onWheel={this.handleMouseWheel}
         >
-          <Group left={translateX} top={translateY} scale={scale}>
+          <Group left={translateX} scale={scale} top={translateY}>
             {links.map(link => {
               return (
                 <line
                   key={link.index}
                   stroke={Theme.green}
                   x1={link.source.x}
-                  y1={link.source.y}
                   x2={link.target.x}
+                  y1={link.source.y}
                   y2={link.target.y}
                 />
               );
@@ -468,13 +461,13 @@ class HostsTopologyChart extends React.Component {
                 <React.Fragment key={host.id}>
                   {scale > TEXT_SCALE_THRESHOLD && (
                     <text
-                      fontWeight="normal"
-                      textAnchor="middle"
                       dominantBaseline="hanging"
-                      fontSize="6px"
                       fill={
                         isDefined(host.uuid) ? Theme.black : Theme.lightGray
                       }
+                      fontSize="6px"
+                      fontWeight="normal"
+                      textAnchor="middle"
                       x={host.x}
                       y={host.y + 1 + radius}
                     >
@@ -482,16 +475,16 @@ class HostsTopologyChart extends React.Component {
                     </text>
                   )}
                   <Circle
-                    r={radius}
+                    cx={host.x}
+                    cy={host.y}
                     fill={this.hostFillColor(host)}
+                    r={radius}
                     stroke={this.hostStrokeColor(host)}
                     strokeWidth={
                       host.isScanner
                         ? SCANNER_STROKE_WIDTH
                         : DEFAULT_STROKE_WIDTH
                     }
-                    cx={host.x}
-                    cy={host.y}
                     onMouseDown={event => this.handleHostDragStart(event, host)}
                   />
                 </React.Fragment>

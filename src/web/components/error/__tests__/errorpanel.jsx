@@ -4,10 +4,9 @@
  */
 
 
-/* eslint-disable no-console */
+ 
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render, fireEvent} from 'web/utils/testing';
 
 import ErrorPanel from '../errorpanel';
@@ -31,7 +30,7 @@ describe('ErrorPanel tests', () => {
     };
 
     const {getByTestId, queryByTestId} = render(
-      <ErrorPanel message={message} error={error} />,
+      <ErrorPanel error={error} message={message} />,
     );
 
     const toggle = getByTestId('errorpanel-toggle');
@@ -57,7 +56,7 @@ describe('ErrorPanel tests', () => {
     };
 
     const {getByTestId} = render(
-      <ErrorPanel message={message} error={error} info={info} />,
+      <ErrorPanel error={error} info={info} message={message} />,
     );
 
     const toggle = getByTestId('errorpanel-toggle');

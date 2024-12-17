@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import {License} from 'gmp/models/license';
 
 import GMPCommand from './gmp';

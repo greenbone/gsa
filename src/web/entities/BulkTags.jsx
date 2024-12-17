@@ -3,20 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
-import SelectionType from 'web/utils/selectiontype';
-
+import {isDefined} from 'gmp/utils/identity';
+import React, {useCallback, useEffect, useState} from 'react';
 import useGmp from 'web/hooks/useGmp';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
-
 import TagDialog from 'web/pages/tags/dialog';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 
 import TagsDialog from './tagsdialog';
 
@@ -202,16 +199,16 @@ const BulkTags = ({
         value={tag.value}
         onClose={handleCloseTagsDialog}
         onErrorClose={handleErrorClose}
-        onSave={handleAddMultiTag}
         onNewTagClick={openTagDialog}
+        onSave={handleAddMultiTag}
         onTagChanged={handleTagChange}
       />
       {tagDialogVisible && (
         <TagDialog
           fixed={true}
-          resources={selectedEntities}
           resource_type={entitiesType}
           resource_types={resourceTypes}
+          resources={selectedEntities}
           onClose={handleCloseTagDialog}
           onSave={handleCreateTag}
         />

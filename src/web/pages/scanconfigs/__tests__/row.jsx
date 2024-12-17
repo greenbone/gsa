@@ -4,18 +4,14 @@
  */
 
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
+ 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
-
 import {setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
@@ -62,11 +58,11 @@ describe('Scan Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -122,11 +118,11 @@ describe('Scan Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -171,11 +167,11 @@ describe('Scan Config row tests', () => {
     const {getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -199,11 +195,11 @@ describe('Scan Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -262,11 +258,11 @@ describe('Scan Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -335,11 +331,11 @@ describe('Scan Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -399,11 +395,11 @@ describe('Scan Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 

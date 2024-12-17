@@ -3,18 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
-
 import Divider from 'web/components/layout/divider';
+import PropTypes from 'web/utils/proptypes';
 
 class DeltaStatesFilterGroup extends React.Component {
   constructor(...args) {
@@ -54,29 +50,29 @@ class DeltaStatesFilterGroup extends React.Component {
           <Checkbox
             checked={delta_states.includes('s')}
             name="s"
-            onChange={this.handleDeltaStatesChange}
             title={_('Same')}
+            onChange={this.handleDeltaStatesChange}
           />
 
           <Checkbox
             checked={delta_states.includes('n')}
             name="n"
-            onChange={this.handleDeltaStatesChange}
             title={_('New')}
+            onChange={this.handleDeltaStatesChange}
           />
 
           <Checkbox
             checked={delta_states.includes('g')}
             name="g"
-            onChange={this.handleDeltaStatesChange}
             title={_('Gone')}
+            onChange={this.handleDeltaStatesChange}
           />
 
           <Checkbox
             checked={delta_states.includes('c')}
             name="c"
-            onChange={this.handleDeltaStatesChange}
             title={_('Changed')}
+            onChange={this.handleDeltaStatesChange}
           />
         </Divider>
       </FormGroup>

@@ -4,10 +4,8 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
 
 import BlankLink from './blanklink';
 
@@ -16,7 +14,7 @@ const ProtocolDocLink = ({title}) => {
   const {protocolDocUrl} = gmp.settings;
 
   return (
-    <BlankLink to={protocolDocUrl} title={title}>
+    <BlankLink title={title} to={protocolDocUrl}>
       {title}
     </BlankLink>
   );

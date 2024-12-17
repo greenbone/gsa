@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import OperatingSystem from 'gmp/models/os';
 
 import EntitiesCommand from './entities';

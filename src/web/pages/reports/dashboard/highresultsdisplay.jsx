@@ -3,28 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
-
-import {parseInt, parseFloat, parseDate} from 'gmp/parser';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
-
+import FilterTerm from 'gmp/models/filter/filterterm';
+import {parseInt, parseFloat, parseDate} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import LineChart from 'web/components/chart/line';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
+import {registerDisplay} from 'web/components/dashboard/registry';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import LineChart from 'web/components/chart/line';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard/display/createDisplay';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
-import {registerDisplay} from 'web/components/dashboard/registry';
+import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {ReportsHighResultsLoader} from './loaders';
 
@@ -104,23 +98,23 @@ export class ReportsHighResultsDisplay extends React.Component {
             {({width, height, data: tdata, svgRef, state}) => (
               <LineChart
                 timeline
+                data={tdata}
+                height={height}
+                showLegend={state.showLegend}
                 svgRef={svgRef}
                 width={width}
-                height={height}
-                data={tdata}
-                yAxisLabel={_('Max High')}
-                y2AxisLabel={_('Max High per Host')}
                 xAxisLabel={_('Time')}
-                yLine={{
-                  color: Theme.darkGreenTransparent,
-                  label: _('Max High'),
-                }}
+                y2AxisLabel={_('Max High per Host')}
                 y2Line={{
                   color: Theme.darkGreenTransparent,
                   dashArray: '3, 2',
                   label: _('Max High per Host'),
                 }}
-                showLegend={state.showLegend}
+                yAxisLabel={_('Max High')}
+                yLine={{
+                  color: Theme.darkGreenTransparent,
+                  label: _('Max High'),
+                }}
                 onRangeSelected={this.handleRangeSelect}
               />
             )}

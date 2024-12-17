@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Icon from './svg/dfn_cert_adv.svg';
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/dfn_cert_adv.svg';
 
 const DfnCertAdvIconComponent = withSvgIcon()(Icon);
 

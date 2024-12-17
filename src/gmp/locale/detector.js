@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {BROWSER_LANGUAGE} from './languages';
-
 import logger from 'gmp/log';
-
 import {isArray, isDefined} from 'gmp/utils/identity';
+
+import {BROWSER_LANGUAGE} from './languages';
 
 const log = logger.getLogger('gmp.locale.detector');
 

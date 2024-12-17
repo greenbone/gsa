@@ -3,14 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
-
 import SelectionType from 'web/utils/selectiontype';
 
 import TagsSvgIcon from './tagssvgicon';

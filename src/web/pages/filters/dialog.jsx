@@ -4,16 +4,12 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
-
+import TextField from 'web/components/form/textfield';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const FilterDialog = ({
   comment = '',
@@ -37,9 +33,6 @@ const FilterDialog = ({
 
   return (
     <SaveDialog
-      title={title}
-      onClose={onClose}
-      onSave={onSave}
       defaultValues={{
         comment,
         id,
@@ -47,14 +40,17 @@ const FilterDialog = ({
         term,
         type,
       }}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
     >
       {({values: state, onValueChange}) => {
         return (
           <>
             <FormGroup title={_('Name')}>
               <TextField
-                name="name"
                 grow="1"
+                name="name"
                 value={state.name}
                 onChange={onValueChange}
               />
@@ -62,8 +58,8 @@ const FilterDialog = ({
 
             <FormGroup title={_('Comment')}>
               <TextField
-                name="comment"
                 grow="1"
+                name="comment"
                 value={state.comment}
                 onChange={onValueChange}
               />
@@ -71,8 +67,8 @@ const FilterDialog = ({
 
             <FormGroup title={_('Term')}>
               <TextField
-                name="term"
                 grow="1"
+                name="term"
                 value={state.term}
                 onChange={onValueChange}
               />
@@ -80,10 +76,10 @@ const FilterDialog = ({
 
             <FormGroup title={_('Type')}>
               <Select
-                name="type"
                 items={filterOptions}
-                onChange={onValueChange}
+                name="type"
                 value={state.type}
+                onChange={onValueChange}
               />
             </FormGroup>
           </>

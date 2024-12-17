@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import {parseInt} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
 import YesNoRadio from 'web/components/form/yesnoradio';
+import PropTypes from 'web/utils/proptypes';
 
 const BooleanFilterGroup = ({filter, name, title, onChange}) => {
   let filterVal;
@@ -24,13 +21,13 @@ const BooleanFilterGroup = ({filter, name, title, onChange}) => {
   return (
     <FormGroup title={title}>
       <YesNoRadio
-        value={filterVal}
-        name={name}
-        yesValue={1}
-        noValue={0}
         convert={parseInt}
-        onChange={onChange}
         data-testid="boolean-filter-yesnoradio"
+        name={name}
+        noValue={0}
+        value={filterVal}
+        yesValue={1}
+        onChange={onChange}
       />
     </FormGroup>
   );

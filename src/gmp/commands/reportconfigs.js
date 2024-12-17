@@ -3,17 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
+import {convertBoolean} from 'gmp/commands/convert';
+import logger from 'gmp/log';
 import ReportConfig from 'gmp/models/reportconfig';
-
 import {isArray} from 'gmp/utils/identity';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
-import {convertBoolean} from 'gmp/commands/convert';
 
 const log = logger.getLogger('gmp.commands.reportconfigs');
 

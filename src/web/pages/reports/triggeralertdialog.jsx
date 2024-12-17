@@ -4,28 +4,23 @@
  */
 
 
-import React from 'react';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined, isString} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
+import React from 'react';
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
-} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
+} from 'web/components/dialog/composercontent';  
 import SaveDialog from 'web/components/dialog/savedialog';
-import ThresholdMessage from 'web/pages/reports/thresholdmessage';
-
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
 import NewIcon from 'web/components/icon/newicon';
-
 import useTranslation from 'web/hooks/useTranslation';
+import ThresholdMessage from 'web/pages/reports/thresholdmessage';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
 const TriggerAlertDialog = ({
   alertId,
@@ -66,8 +61,8 @@ const TriggerAlertDialog = ({
   return (
     <SaveDialog
       buttonTitle={_('OK')}
-      title={_('Trigger Alert for Scan Report')}
       defaultValues={unControlledValues}
+      title={_('Trigger Alert for Scan Report')}
       values={controlledValues}
       onClose={onClose}
       onSave={onSave}
@@ -81,25 +76,25 @@ const TriggerAlertDialog = ({
             includeOverrides={values.includeOverrides}
             onValueChange={onValueChange}
           />
-          <FormGroup title={_('Alert')} direction="row">
+          <FormGroup direction="row" title={_('Alert')}>
             <Select
               grow="1"
+              items={renderSelectItems(alerts)}
               name="alertId"
               value={values.alertId}
-              items={renderSelectItems(alerts)}
               onChange={onAlertChange}
             />
             <NewIcon onClick={onNewAlertClick} />
           </FormGroup>
           <CheckBox
-            name="storeAsDefault"
             checked={storeAsDefault}
             checkedValue={YES_VALUE}
-            unCheckedValue={NO_VALUE}
+            name="storeAsDefault"
+            title={_('Store as default')}
             toolTipTitle={_(
               'Store indicated settings (without filter) as default',
             )}
-            title={_('Store as default')}
+            unCheckedValue={NO_VALUE}
             onChange={onValueChange}
           />
           {showThresholdMessage && <ThresholdMessage threshold={threshold} />}

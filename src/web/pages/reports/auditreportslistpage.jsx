@@ -3,55 +3,46 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useState} from 'react';
 
-import {useNavigate} from 'react-router-dom';
 
-import useTranslation from 'web/hooks/useTranslation';
 
 import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
-
 import {isActive} from 'gmp/models/task';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import ReportIcon from 'web/components/icon/reporticon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/auditreports';
-
 import PropTypes from 'web/utils/proptypes';
 
-import AuditFilterDialog from './auditfilterdialog';
-import AuditReportsTable from './auditreportstable';
 
 import AuditReportsDashboard, {
   AUDIT_REPORTS_DASHBOARD_ID,
 } from './auditdashboard';
+import AuditFilterDialog from './auditfilterdialog';
+import AuditReportsTable from './auditreportstable';
 
 const ToolBarIcons = () => {
   const [_] = useTranslation();
   return (
     <IconDivider>
       <ManualIcon
-        page="reports"
         anchor="using-and-managing-audit-reports"
+        page="reports"
         title={_('Help: Audit Reports')}
       />
     </IconDivider>
@@ -111,7 +102,6 @@ const AuditReportsPage = ({
       <PageTitle title={_('Audit Reports')} />
       <EntitiesPage
         {...props}
-        selectedDeltaReport={selectedDeltaReport}
         dashboard={() => (
           <AuditReportsDashboard
             filter={filter}
@@ -125,17 +115,18 @@ const AuditReportsPage = ({
             onInteraction={onInteraction}
           />
         )}
-        filtersFilter={AUDIT_REPORTS_FILTER_FILTER}
-        filterEditDialog={AuditFilterDialog}
-        table={AuditReportsTable}
-        toolBarIcons={ToolBarIcons}
-        title={_('Audit Reports')}
-        sectionIcon={<ReportIcon size="large" />}
         filter={filter}
+        filterEditDialog={AuditFilterDialog}
+        filtersFilter={AUDIT_REPORTS_FILTER_FILTER}
+        sectionIcon={<ReportIcon size="large" />}
+        selectedDeltaReport={selectedDeltaReport}
+        table={AuditReportsTable}
+        title={_('Audit Reports')}
+        toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
         onInteraction={onInteraction}
-        onReportDeltaSelect={handleReportDeltaSelect}
         onReportDeleteClick={handleReportDeleteClick}
+        onReportDeltaSelect={handleReportDeltaSelect}
       />
     </React.Fragment>
   );

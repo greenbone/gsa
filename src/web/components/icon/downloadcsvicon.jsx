@@ -5,9 +5,9 @@
 
 import {_} from 'gmp/locale/lang';
 
+import Icon from './svg/dl_csv.svg';
 import withSvgIcon from './withSvgIcon';
 
-import Icon from './svg/dl_csv.svg';
 
 const DownloadCsvIconComponent = withSvgIcon({
   title: _('Download CSV'),

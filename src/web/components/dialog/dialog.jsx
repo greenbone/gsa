@@ -131,32 +131,32 @@ const Dialog = ({
 
   return (
     <StyledModal
+      centered={false}
+      height={height}
       opened={true}
+      position={position}
       size="auto"
-      yOffset={position.y}
-      onClose={handleClose}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      width={width}
       title={
         <DialogTitleButton
-          type="button"
           className="dialog-title-button"
-          onMouseDown={handleDragMouseDown}
+          isDragging={isDragging}
+          type="button"
           onKeyDown={e => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               handleDragMouseDown(e);
             }
           }}
-          isDragging={isDragging}
+          onMouseDown={handleDragMouseDown}
         >
           {title}
         </DialogTitleButton>
       }
-      centered={false}
-      height={height}
-      position={position}
+      width={width}
+      yOffset={position.y}
+      onClose={handleClose}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     >
       <StyledScrollArea>
         {isFunction(children)

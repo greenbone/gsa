@@ -3,17 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import {AlertCircle} from 'lucide-react';
+import React from 'react';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import {AlertCircle} from 'lucide-react';
+import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import PropTypes from 'web/utils/proptypes';
 
 import ErrorContainer from './errorcontainer';
 
@@ -25,11 +22,11 @@ const ErrorMessage = ({
   ...props
 }) => (
   <ErrorContainer data-testid={dataTestId}>
-    <Divider margin="20px" flex="column" align={['center', 'center']} grow>
-      <AlertCircle size="24" color={Theme.darkRed} />
-      <Layout flex="column" align={['center', 'center']} {...props}>
+    <Divider grow align={['center', 'center']} flex="column" margin="20px">
+      <AlertCircle color={Theme.darkRed} size="24" />
+      <Layout align={['center', 'center']} flex="column" {...props}>
         <b data-testid="error-message">{message}</b>
-        <Divider margin="20px" flex="row" align={['center', 'start']} grow>
+        <Divider grow align={['center', 'start']} flex="row" margin="20px">
           {isDefined(details) && (
             <div>
               <span data-testid="error-details">{details}</span>

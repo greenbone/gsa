@@ -4,7 +4,6 @@
  */
 
 import {Flex} from '@mantine/core';
-
 import PropTypes from 'web/utils/proptypes';
 
 /**
@@ -23,12 +22,12 @@ const Row = ({
   return (
     <Flex
       {...props}
+      align={align}
       direction="row"
       gap={gap}
       grow={grow}
-      align={align}
-      wrap={wrap}
       justify={justify}
+      wrap={wrap}
     >
       {children}
     </Flex>

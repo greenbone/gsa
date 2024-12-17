@@ -4,9 +4,8 @@
  */
 
 import Http from './http';
-import {buildServerUrl} from './utils';
-
 import transform from './transform/fastxml';
+import {buildServerUrl} from './utils';
 
 class GmpHttp extends Http {
   constructor(settings) {

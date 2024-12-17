@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
+import CertBundAdv from 'gmp/models/certbund';
 import {isDefined} from 'gmp/utils/identity';
 
 import InfoEntitiesCommand from './infoentities';
 import InfoEntityCommand from './infoentity';
-
-import registerCommand from 'gmp/command';
-
-import CertBundAdv from 'gmp/models/certbund';
 
 const info_filter = info => isDefined(info.cert_bund_adv);
 

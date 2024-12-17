@@ -4,13 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {isFunction} from 'gmp/utils/identity';
-
 import {types} from 'web/store/entities/utils/actions';
-
 import {createState, testEntityActions} from 'web/store/entities/utils/testing';
 
 import {
@@ -26,7 +22,6 @@ import {
   loadReportWithThreshold,
   reportActions,
 } from '../actions';
-
 import {reportIdentifier} from '../selectors';
 
 testEntityActions('report', reportActions);

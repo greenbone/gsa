@@ -3,18 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import Logger from 'gmp/log';
-
 import moment from 'gmp/models/date';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
-
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 

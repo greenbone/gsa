@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import {CVSS40} from '@pandatix/js-cvss';
+import {isDefined} from 'gmp/utils/identity';
 
 export const expectedMetricOptionsOrdered = [
   ['AV', 'N', 'A', 'L', 'P'],

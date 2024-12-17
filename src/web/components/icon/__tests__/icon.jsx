@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Icon from 'web/components/icon/icon';
 import {describe, test, expect, testing} from '@gsa/testing';
-import {fireEvent, render} from 'web/utils/testing';
+import Icon from 'web/components/icon/icon';
 import {ICON_SIZE_LARGE_PIXELS} from 'web/hooks/useIconSize';
+import {fireEvent, render} from 'web/utils/testing';
 
 describe('Icon', () => {
   test('renders with specified size', () => {

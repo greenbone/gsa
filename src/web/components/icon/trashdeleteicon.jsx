@@ -5,7 +5,6 @@
 
 
 import styled from 'styled-components';
-
 import Theme from 'web/utils/theme';
 
 import DeleteIcon from './deleteicon';

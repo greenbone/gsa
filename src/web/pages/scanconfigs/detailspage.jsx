@@ -4,67 +4,55 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
+import React from 'react';
 import styled from 'styled-components';
-
-import DetailsLink from 'web/components/link/detailslink';
-
+import ExportIcon from 'web/components/icon/exporticon';
+import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ScanConfigIcon from 'web/components/icon/scanconfigicon';
+import UploadIcon from 'web/components/icon/uploadicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
-import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import UploadIcon from 'web/components/icon/uploadicon';
-import ListIcon from 'web/components/icon/listicon';
-import ScanConfigIcon from 'web/components/icon/scanconfigicon';
-
+import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
-
-import StripedTable from 'web/components/table/stripedtable';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import EntityPage from 'web/entity/page';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
+import StripedTable from 'web/components/table/stripedtable';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
-import {selector, loadEntity} from 'web/store/entities/scanconfigs';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import ScanConfigDetails from './details';
 import ScanConfigComponent from './component';
+import ScanConfigDetails from './details';
 import Trend from './trend';
 
 export const ToolBarIcons = withCapabilities(
@@ -81,24 +69,24 @@ export const ToolBarIcons = withCapabilities(
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="scanning"
           anchor="managing-scan-configurations"
+          page="scanning"
           title={_('Help: ScanConfigs')}
         />
-        <ListIcon title={_('ScanConfig List')} page="scanconfigs" />
+        <ListIcon page="scanconfigs" title={_('ScanConfig List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon entity={entity} onClick={onScanConfigCreateClick} />
         <CloneIcon entity={entity} onClick={onScanConfigCloneClick} />
         <EditIcon
-          entity={entity}
           disabled={entity.predefined}
+          entity={entity}
           onClick={onScanConfigEditClick}
         />
         <TrashIcon entity={entity} onClick={onScanConfigDeleteClick} />
         <ExportIcon
-          value={entity}
           title={_('Export Scan Config as XML')}
+          value={entity}
           onClick={onScanConfigDownloadClick}
         />
         {capabilities.mayCreate('config') && (
@@ -136,7 +124,6 @@ export const NvtFamilies = ({entity}) => {
                 <Divider>
                   {_('Trend')}
                   <Trend
-                    trend={families.trend}
                     titleDynamic={_(
                       'The families selection is DYNAMIC. New ' +
                         'families will automatically be added and considered.',
@@ -145,6 +132,7 @@ export const NvtFamilies = ({entity}) => {
                       'The families selection is STATIC. New ' +
                         'families will NOT automatically be added and considered.',
                     )}
+                    trend={families.trend}
                   />
                 </Divider>
               </TableHead>
@@ -156,9 +144,9 @@ export const NvtFamilies = ({entity}) => {
                 <TableData>
                   <span>
                     <Link
-                      to="nvts"
                       filter={'family="' + family.name + '"'}
                       title={_('NVTs of family {{name}}', {name: family.name})}
+                      to="nvts"
                     >
                       {family.name}
                     </Link>
@@ -169,7 +157,6 @@ export const NvtFamilies = ({entity}) => {
                 </TableData>
                 <TableData align={['center', 'center']}>
                   <Trend
-                    trend={family.trend}
                     titleDynamic={_(
                       'The NVT selection is DYNAMIC. New ' +
                         'NVTs will automatically be added and considered.',
@@ -178,6 +165,7 @@ export const NvtFamilies = ({entity}) => {
                       'The NVT selection is STATIC. New ' +
                         'NVTs will NOT automatically be added and considered.',
                     )}
+                    trend={family.trend}
                   />
                 </TableData>
               </TableRow>
@@ -294,13 +282,13 @@ const Page = ({
 }) => {
   return (
     <ScanConfigComponent
-      onCloned={goto_details('scanconfig', props)}
       onCloneError={onError}
+      onCloned={goto_details('scanconfig', props)}
       onCreated={goto_details('scanconfig', props)}
-      onDeleted={goto_list('scanconfigs', props)}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={goto_list('scanconfigs', props)}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onImported={goto_details('scanconfig', props)}
       onInteraction={onInteraction}
       onSaved={onChanged}
@@ -318,16 +306,16 @@ const Page = ({
           {...props}
           entity={entity}
           sectionIcon={<ScanConfigIcon size="large" />}
-          toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}
+          toolBarIcons={ToolBarIcons}
           onInteraction={onInteraction}
           onScanConfigCloneClick={clone}
           onScanConfigCreateClick={create}
           onScanConfigDeleteClick={delete_func}
           onScanConfigDownloadClick={download}
           onScanConfigEditClick={edit}
-          onScanConfigSaveClick={save}
           onScanConfigImportClick={import_func}
+          onScanConfigSaveClick={save}
         >
           {({activeTab = 0, onActivateTab}) => {
             const {preferences} = entity;
@@ -336,8 +324,8 @@ const Page = ({
                 <PageTitle
                   title={_('Scan Config: {{name}}', {name: entity.name})}
                 />
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
                     <TabList
                       active={activeTab}
                       align={['start', 'stretch']}

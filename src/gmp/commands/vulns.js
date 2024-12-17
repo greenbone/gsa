@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import Vulnerability from 'gmp/models/vulnerability';
 
 import EntitiesCommand from './entities';

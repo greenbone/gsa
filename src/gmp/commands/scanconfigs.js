@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
-import {forEach, map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
-
 import registerCommand from 'gmp/command';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
+import logger from 'gmp/log';
 import Nvt from 'gmp/models/nvt';
 import ScanConfig from 'gmp/models/scanconfig';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {forEach, map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

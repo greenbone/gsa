@@ -3,14 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {parseModelFromElement} from 'gmp/model';
-
 import {_l} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
-
+import Model, {parseModelFromElement} from 'gmp/model';
 import {parseYesNo, NO_VALUE, parseDate} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';

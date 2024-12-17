@@ -4,7 +4,6 @@
  */
 
 import {testing} from '@gsa/testing';
-
 import Response from 'gmp/http/response';
 
 const entitiesRange = {

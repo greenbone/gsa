@@ -4,9 +4,7 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import Theme from 'web/utils/theme';
 
 const Link = styled.a`
@@ -30,9 +28,9 @@ const GreenboneFooter = () => {
     <Footer>
       Copyright © 2009-2024 by Greenbone AG,&nbsp;
       <Link
-        target="_blank"
-        rel="noopener noreferrer"
         href="http://www.greenbone.net"
+        rel="noopener noreferrer"
+        target="_blank"
       >
         www.greenbone.net
       </Link>

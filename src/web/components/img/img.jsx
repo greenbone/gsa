@@ -5,9 +5,7 @@
 
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
-
 import {get_img_url} from 'web/utils/urls';
 
 const Img = ({alt = '', src, ...other}) => {

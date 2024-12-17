@@ -4,24 +4,17 @@
  */
 
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-import DateTime from 'web/components/date/datetime';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
+import DateTime from 'web/components/date/datetime';
 import Layout from 'web/components/layout/layout';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import PropTypes from 'web/utils/proptypes';
-
 import Theme from 'web/utils/theme';
 
 const Pre = styled.pre`
@@ -49,7 +42,7 @@ const EntityBox = ({
   ...props
 }) => {
   return (
-    <BoxLayout {...props} flex="column" align="space-between">
+    <BoxLayout {...props} align="space-between" flex="column">
       <Layout align={['space-between', 'start']}>
         <h3>{title}</h3>
         {isDefined(toolbox) && toolbox}

@@ -4,17 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render} from 'web/utils/testing';
-
-import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
 import Filter from 'gmp/models/filter';
+import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
 import {
   clickElement,
   getSelectElement,
   getSelectItemElements,
   openSelectElement,
 } from 'web/components/testing';
+import {render} from 'web/utils/testing';
 
 describe('Task Trend Selector Tests', () => {
   test('should render', () => {
@@ -78,7 +76,7 @@ describe('Task Trend Selector Tests', () => {
     const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
 
-    render(<TaskTrendGroup trend="up" filter={filter} onChange={onChange} />);
+    render(<TaskTrendGroup filter={filter} trend="up" onChange={onChange} />);
 
     const select = getSelectElement();
     expect(select).toHaveValue('Severity increased');

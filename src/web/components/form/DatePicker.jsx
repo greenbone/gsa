@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
 
 import {DatePickerInput} from '@greenbone/opensight-ui-components-mantinev7';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import date from 'gmp/models/date';
-
 import {getLocale} from 'gmp/locale/lang';
-
+import date from 'gmp/models/date';
+import {isDefined} from 'gmp/utils/identity';
+import React, {useCallback} from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 const DatePickerComponent = (
@@ -33,14 +29,14 @@ const DatePickerComponent = (
     <DatePickerInput
       data-testid="datepicker-input"
       disabled={disabled}
+      label={label}
       locale={getLocale()}
-      value={value.toDate()}
-      onChange={handleChange}
+      maxDate={date().add(3, 'years').toDate()}
       minDate={
         minDate === false || !isDefined(minDate) ? undefined : minDate.toDate()
       }
-      maxDate={date().add(3, 'years').toDate()}
-      label={label}
+      value={value.toDate()}
+      onChange={handleChange}
     />
   );
 };

@@ -6,7 +6,6 @@
 
 import React from 'react';
 
-import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
   OverridesActiveDaysDisplay,
@@ -20,6 +19,7 @@ import {
   OverridesWordCloudDisplay,
   OverridesWordCloudTableDisplay,
 } from './wordclouddisplay';
+import Dashboard from '../../../components/dashboard/dashboard';
 
 export const OVERRIDES_DASHBOARD_ID = '054862fe-0781-4527-b1aa-2113bcd16ce7';
 
@@ -35,8 +35,6 @@ export const OVERRIDES_DISPLAYS = [
 const OverridesDashboard = props => (
   <Dashboard
     {...props}
-    id={OVERRIDES_DASHBOARD_ID}
-    permittedDisplays={OVERRIDES_DISPLAYS}
     defaultDisplays={[
       [
         OverridesActiveDaysDisplay.displayId,
@@ -44,6 +42,8 @@ const OverridesDashboard = props => (
         OverridesWordCloudDisplay.displayId,
       ],
     ]}
+    id={OVERRIDES_DASHBOARD_ID}
+    permittedDisplays={OVERRIDES_DISPLAYS}
   />
 );
 

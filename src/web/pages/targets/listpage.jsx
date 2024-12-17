@@ -3,33 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {TARGETS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import TargetIcon from 'web/components/icon/targeticon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/targets';
+import PropTypes from 'web/utils/proptypes';
 
-import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/hooks/useCapabilities';
-
+import TargetComponent from './component';
 import TargetsFilterDialog from './filterdialog';
 import TargetsTable from './table';
-import TargetComponent from './component';
 
 export const ToolBarIcons = ({onTargetCreateClick}) => {
   const [_] = useTranslation();
@@ -37,8 +31,8 @@ export const ToolBarIcons = ({onTargetCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="scanning"
         anchor="managing-targets"
+        page="scanning"
         title={_('Help: Targets')}
       />
       {capabilities.mayCreate('target') && (
@@ -62,15 +56,15 @@ const TargetsPage = ({
   const [_] = useTranslation();
   return (
     <TargetComponent
-      onCreated={onChanged}
-      onSaved={onChanged}
-      onCloned={onChanged}
       onCloneError={onError}
-      onDeleted={onChanged}
+      onCloned={onChanged}
+      onCreated={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
+      onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
         <React.Fragment>

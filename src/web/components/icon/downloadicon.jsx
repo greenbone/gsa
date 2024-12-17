@@ -4,11 +4,11 @@
  */
 
 
-import withSvgIcon from './withSvgIcon';
 
 import {Download as Icon} from 'lucide-react';
-
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
+
+import withSvgIcon from './withSvgIcon';
 
 const DownloadIcon = withSvgIcon()(props => (
   <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="download-icon"/>

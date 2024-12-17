@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import styled from 'styled-components';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 
 import Divider from './divider';

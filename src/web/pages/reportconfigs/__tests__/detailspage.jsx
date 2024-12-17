@@ -4,20 +4,16 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-import ReportConfig from 'gmp/models/reportconfig';
-
-import Filter from 'gmp/models/filter';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
+import Filter from 'gmp/models/filter';
+import ReportConfig from 'gmp/models/reportconfig';
 import {entityLoadingActions} from 'web/store/entities/reportconfigs';
-
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
-import DetailsPage from '../detailspage';
 import {mockReportConfig} from '../__mocks__/mockreportconfig';
+import DetailsPage from '../detailspage';
 
 const entityType = 'reportconfig';
 const reloadInterval = 1;

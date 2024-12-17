@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
 import Ticket from 'gmp/models/ticket';
+import {isDefined} from 'gmp/utils/identity';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
-
-import registerCommand from 'gmp/command';
-import {isDefined} from 'gmp/utils/identity';
 
 const convertNote = note => {
   if (!isDefined(note)) {

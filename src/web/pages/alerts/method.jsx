@@ -3,11 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import styled from 'styled-components';
 
-import {isDefined} from 'gmp/utils/identity';
 
 import {
   EMAIL_NOTICE_ATTACH,
@@ -25,22 +22,19 @@ import {
   METHOD_TYPE_TIPPING_POINT,
   METHOD_TYPE_VERINICE,
 } from 'gmp/models/alert';
-
-import PropTypes from 'web/utils/proptypes';
-import HorizontalSep from 'web/components/layout/horizontalsep';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 import CertInfo from 'web/components/certinfo/certinfo';
-
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import DetailsLink from 'web/components/link/detailslink';
-
-import SimpleTable from 'web/components/table/simpletable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
+import SimpleTable from 'web/components/table/simpletable';
 import {Col} from 'web/entity/page';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const Table = styled(SimpleTable)`
   margin-top: 5px;
@@ -153,7 +147,7 @@ const Method = ({
                 <TableRow>
                   <TableData>{_('Report Formats')}</TableData>
                   <TableData>
-                    <HorizontalSep $separator="," $wrap $spacing="0">
+                    <HorizontalSep $wrap $separator="," $spacing="0">
                       {data.report_formats.map(id => (
                         <span key={id}>{getReportFormatName(id)}</span>
                       ))}
@@ -165,7 +159,7 @@ const Method = ({
                 <TableRow>
                   <TableData>{_('Report Configs')}</TableData>
                   <TableData>
-                    <HorizontalSep $separator="," $wrap $spacing="0">
+                    <HorizontalSep $wrap $separator="," $spacing="0">
                       {data.report_configs.map(id => (
                         <span key={id}>{getReportConfigName(id)}</span>
                       ))}

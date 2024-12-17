@@ -6,7 +6,7 @@
 
 const warning = (condition, ...args) => {
   if (process.env.NODE_ENV !== 'production' && condition) {
-    console.warn(...args); // eslint-disable-line no-console
+    console.warn(...args);  
   }
 };
 

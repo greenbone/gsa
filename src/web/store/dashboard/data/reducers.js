@@ -4,7 +4,6 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-
 import {filterIdentifier} from 'web/store/utils';
 
 import {

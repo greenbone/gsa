@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
+import ImportIcon from 'web/components/icon/importicon';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import ImportIcon from 'web/components/icon/importicon';
 
 const ImportReportIcon = ({capabilities, size, task, onClick}) => {
   if (!task.isContainer() || !capabilities.mayCreate('report')) {
@@ -19,11 +17,11 @@ const ImportReportIcon = ({capabilities, size, task, onClick}) => {
 
   return (
     <ImportIcon
-      value={task}
-      size={size}
-      onClick={onClick}
       alt={_('Import Report')}
+      size={size}
       title={_('Import Report')}
+      value={task}
+      onClick={onClick}
     />
   );
 };

@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
+ 
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {fireEvent, render, screen} from 'web/utils/testing';
-
 import Filter from 'gmp/models/filter';
+import {fireEvent, render, screen} from 'web/utils/testing';
 
 import useFilterSortBy from '../useFilterSortBy';
 
@@ -19,10 +17,10 @@ const TestComponent = ({filter, changeFilter}) => {
     <>
       <span data-testid="sortBy">{sortBy}</span>
       <span data-testid="sortDir">{sortDir}</span>
-      <button onClick={() => sortChange('field')} data-testid="sortDirChange" />
+      <button data-testid="sortDirChange" onClick={() => sortChange('field')} />
       <button
-        onClick={() => sortChange('other-field')}
         data-testid="sortFieldChange"
+        onClick={() => sortChange('other-field')}
       />
     </>
   );
@@ -33,7 +31,7 @@ describe('useFilterSortBy', () => {
     const changeFilter = testing.fn();
     const filter = Filter.fromString('sort=field');
 
-    render(<TestComponent filter={filter} changeFilter={changeFilter} />);
+    render(<TestComponent changeFilter={changeFilter} filter={filter} />);
 
     expect(screen.getByTestId('sortBy')).toHaveTextContent('field');
     expect(screen.getByTestId('sortDir')).toHaveTextContent('asc');
@@ -47,7 +45,7 @@ describe('useFilterSortBy', () => {
     });
 
     const {rerender} = render(
-      <TestComponent filter={currentFilter} changeFilter={changeFilter} />,
+      <TestComponent changeFilter={changeFilter} filter={currentFilter} />,
     );
 
     fireEvent.click(screen.getByTestId('sortDirChange'));
@@ -58,7 +56,7 @@ describe('useFilterSortBy', () => {
 
     // the filter is not in the state. so a rerender with the new filter is needed
     rerender(
-      <TestComponent filter={currentFilter} changeFilter={changeFilter} />,
+      <TestComponent changeFilter={changeFilter} filter={currentFilter} />,
     );
 
     expect(screen.getByTestId('sortBy')).toHaveTextContent('field');

@@ -4,13 +4,10 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import {parseModelFromElement} from 'gmp/model';
-
 import Credential from 'gmp/models/credential';
-import Task from 'gmp/models/task';
 import Settings from 'gmp/models/settings';
-
+import Task from 'gmp/models/task';
 import {forEach, map} from 'gmp/utils/array';
 
 import HttpCommand from './http';

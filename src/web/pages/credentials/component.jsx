@@ -3,30 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
+import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
-import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
-
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/component';
-
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-
 import compose from 'web/utils/compose';
-
+import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
 import CredentialsDialog from './dialog';
 
@@ -151,17 +144,17 @@ class CredentialsComponent extends React.Component {
     return (
       <EntityComponent
         name="credential"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>

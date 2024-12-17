@@ -3,15 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
 import registerCommand from 'gmp/command';
-
-import AuditReport from 'gmp/models/auditreport';
-
-import {ALL_FILTER} from 'gmp/models/filter';
-
 import DefaultTransform from 'gmp/http/transform/default';
+import AuditReport from 'gmp/models/auditreport';
+import {ALL_FILTER} from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
 
 import {convertBoolean} from './convert';
 import EntitiesCommand from './entities';

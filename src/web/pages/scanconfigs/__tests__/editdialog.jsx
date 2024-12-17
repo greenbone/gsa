@@ -4,14 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
-
-import {rendererWith, fireEvent, getAllByTestId} from 'web/utils/testing';
-
 import {
   changeInputValue,
   clickElement,
@@ -23,6 +19,7 @@ import {
   getTableBody,
   getTextInputs,
 } from 'web/components/testing';
+import {rendererWith, fireEvent, getAllByTestId} from 'web/utils/testing';
 
 import EditScanConfigDialog from '../editdialog';
 

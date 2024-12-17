@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import Result from 'gmp/models/result';
 
 import EntitiesCommand from './entities';

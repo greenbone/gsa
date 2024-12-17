@@ -3,40 +3,33 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
-
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/vulns';
-
 import PropTypes from 'web/utils/proptypes';
 
-import VulnsFilterDialog from './filterdialog';
-import VulnsTable from './table';
 
 import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from './dashboard';
+import VulnsFilterDialog from './filterdialog';
+import VulnsTable from './table';
 
 const ToolBarIcons = () => (
   <Layout>
     <ManualIcon
-      page="reports"
       anchor="displaying-all-existing-vulnerabilities"
+      page="reports"
       title={_('Vulnerabilities')}
     />
   </Layout>
@@ -63,10 +56,10 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
       filter={filter}
       filterEditDialog={VulnsFilterDialog}
       filtersFilter={VULNS_FILTER_FILTER}
+      sectionIcon={<VulnerabilityIcon size="large" />}
       table={VulnsTable}
       tags={false}
       title={_('Vulnerabilities')}
-      sectionIcon={<VulnerabilityIcon size="large" />}
       toolBarIcons={ToolBarIcons}
       onFilterChanged={onFilterChanged}
       onInteraction={onInteraction}

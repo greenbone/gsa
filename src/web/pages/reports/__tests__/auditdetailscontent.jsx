@@ -4,24 +4,18 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import React from 'react';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith} from 'web/utils/testing';
-
-import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
+import React from 'react';
 import {
   getPowerFilter,
   getTextInputs,
   getSelectElement,
 } from 'web/components/testing';
-
+import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
 import DetailsContent from 'web/pages/reports/auditdetailscontent';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
@@ -115,10 +109,13 @@ describe('Audit Report Details Content tests', () => {
         operatingSystemsCounts={{all: 2, filtered: 2}}
         pageFilter={filter}
         portsCounts={{all: 2, filtered: 2}}
-        resultsCounts={{all: 3, filtered: 2}}
         reportFilter={filter}
         reportId={entity.report.id}
         resetFilter={resetFilter}
+        resultsCounts={{all: 3, filtered: 2}}
+        showError={showError}
+        showErrorMessage={showErrorMessage}
+        showSuccessMessage={showSuccessMessage}
         sorting={sorting}
         task={entity.report.task}
         tlsCertificatesCounts={{all: 2, filtered: 2}}
@@ -126,13 +123,13 @@ describe('Audit Report Details Content tests', () => {
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
+        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterEditClick={onFilterEditClick}
+        onFilterRemoveClick={onFilterRemoveClick}
         onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
         onFilterResetClick={onFilterResetClick}
-        onFilterRemoveClick={onFilterRemoveClick}
         onInteraction={onInteraction}
         onRemoveFromAssetsClick={onRemoveFromAssetsClick}
         onReportDownloadClick={onReportDownloadClick}
@@ -140,9 +137,6 @@ describe('Audit Report Details Content tests', () => {
         onTagSuccess={onTagSuccess}
         onTargetEditClick={onTargetEditClick}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-        showError={showError}
-        showErrorMessage={showErrorMessage}
-        showSuccessMessage={showSuccessMessage}
       />,
     );
 
@@ -287,6 +281,9 @@ describe('Audit Report Details Content tests', () => {
         reportId={entity.report.id}
         resetFilter={resetFilter}
         resultsCounts={{all: 3, filtered: 2}}
+        showError={showError}
+        showErrorMessage={showErrorMessage}
+        showSuccessMessage={showSuccessMessage}
         sorting={sorting}
         task={entity.report.task}
         tlsCertificatesCounts={{all: 2, filtered: 2}}
@@ -294,13 +291,13 @@ describe('Audit Report Details Content tests', () => {
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
+        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterEditClick={onFilterEditClick}
+        onFilterRemoveClick={onFilterRemoveClick}
         onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
         onFilterResetClick={onFilterResetClick}
-        onFilterRemoveClick={onFilterRemoveClick}
         onInteraction={onInteraction}
         onRemoveFromAssetsClick={onRemoveFromAssetsClick}
         onReportDownloadClick={onReportDownloadClick}
@@ -308,9 +305,6 @@ describe('Audit Report Details Content tests', () => {
         onTagSuccess={onTagSuccess}
         onTargetEditClick={onTargetEditClick}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-        showError={showError}
-        showErrorMessage={showErrorMessage}
-        showSuccessMessage={showSuccessMessage}
       />,
     );
 

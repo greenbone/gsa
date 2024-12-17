@@ -3,34 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
-import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
 import ScanConfigIcon from 'web/components/icon/scanconfigicon';
-
-import PageTitle from 'web/components/layout/pagetitle';
-
+import UploadIcon from 'web/components/icon/uploadicon';
 import IconDivider from 'web/components/layout/icondivider';
-
+import PageTitle from 'web/components/layout/pagetitle';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
+import ScanConfigFilterDialog from 'web/pages/scanconfigs/filterdialog';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/scanconfigs';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import ScanConfigComponent from './component';
 import Table from './table';
-import useTranslation from 'web/hooks/useTranslation';
-import ScanConfigFilterDialog from 'web/pages/scanconfigs/filterdialog';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => {
@@ -38,8 +32,8 @@ export const ToolBarIcons = withCapabilities(
     return (
       <IconDivider>
         <ManualIcon
-          page="scanning"
           anchor="managing-scan-configurations"
+          page="scanning"
           title={_('Help: Scan Configs')}
         />
         {capabilities.mayCreate('config') && (
@@ -75,13 +69,13 @@ const ScanConfigsPage = ({
 
   return (
     <ScanConfigComponent
-      onCloned={onChanged}
       onCloneError={onError}
+      onCloned={onChanged}
       onCreated={onChanged}
-      onDeleted={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onImported={onChanged}
       onInteraction={onInteraction}
       onSaved={onChanged}
@@ -106,12 +100,12 @@ const ScanConfigsPage = ({
             toolBarIcons={ToolBarIcons}
             onError={onError}
             onInteraction={onInteraction}
-            onScanConfigImportClick={import_func}
             onScanConfigCloneClick={clone}
             onScanConfigCreateClick={create}
             onScanConfigDeleteClick={delete_func}
             onScanConfigDownloadClick={download}
             onScanConfigEditClick={edit}
+            onScanConfigImportClick={import_func}
           />
         </>
       )}

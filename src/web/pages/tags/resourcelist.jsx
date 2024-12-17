@@ -3,33 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import styled from 'styled-components';
-
-import {connect} from 'react-redux';
-
 import Filter from 'gmp/models/filter';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
+import styled from 'styled-components';
 import ListIcon from 'web/components/icon/listicon';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 import DetailsLink from 'web/components/link/detailslink';
 import Loading from 'web/components/loading/loading';
-
 import {MAX_RESOURCES} from 'web/pages/tags/component';
-
 import {
   createLoadEntities,
   createEntitiesLoadingActions,
 } from 'web/store/entities/utils/actions';
 import {createSelector} from 'web/store/entities/utils/selectors';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -47,9 +39,9 @@ const Notification = ({id, resourceType}) => {
         {_('To see all assigned resources click here:')}
       </span>
       <ListIcon
-        title={_('List Items')}
         filter={filter}
         page={pluralizeType(normalizeType(resourceType))}
+        title={_('List Items')}
       />
     </Divider>
   );

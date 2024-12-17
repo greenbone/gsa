@@ -3,20 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import {createEntitiesFooter} from 'web/entities/footer';
-import {createEntitiesTable} from 'web/entities/table';
-
+import React from 'react';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import {createEntitiesFooter} from 'web/entities/footer';
+import {createEntitiesTable} from 'web/entities/table';
+import PropTypes from 'web/utils/proptypes';
 
 import OsRow from './row';
 
@@ -32,86 +28,86 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="24%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}
           title={_('Name')}
+          width="24%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="19%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'title' : false}
-          onSortChange={onSortChange}
           title={_('Title')}
+          width="19%"
+          onSortChange={onSortChange}
         />
-        <TableHead width="24%" colSpan="3">
+        <TableHead colSpan="3" width="24%">
           {_('Severity')}
         </TableHead>
-        <TableHead width="10%" colSpan="2">
+        <TableHead colSpan="2" width="10%">
           {_('Hosts')}
         </TableHead>
         <TableHead
-          width="15%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'modified' : false}
-          onSortChange={onSortChange}
           title={_('Modified')}
+          width="15%"
+          onSortChange={onSortChange}
         />
         {isDefined(actionsColumn) ? (
           actionsColumn
         ) : (
-          <TableHead rowSpan="2" width="5em" align="center">
+          <TableHead align="center" rowSpan="2" width="5em">
             {_('Actions')}
           </TableHead>
         )}
       </TableRow>
       <TableRow>
         <TableHead
-          width="8%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'latest_severity' : false}
-          onSortChange={onSortChange}
           title={_('Latest')}
+          width="8%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="8%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'highest_severity' : false}
-          onSortChange={onSortChange}
           title={_('Highest')}
-        />
-        <TableHead
           width="8%"
-          currentSortDir={currentSortDir}
+          onSortChange={onSortChange}
+        />
+        <TableHead
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'average_severity' : false}
-          onSortChange={onSortChange}
           title={_('Average')}
+          width="8%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'all_hosts' : false}
-          onSortChange={onSortChange}
           title={_('All')}
+          width="5%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'hosts' : false}
-          onSortChange={onSortChange}
           title={_('Best OS')}
+          width="5%"
+          onSortChange={onSortChange}
         />
       </TableRow>
     </TableHeader>

@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {setLocale} from 'gmp/locale/lang';
-
 import {rendererWith} from 'web/utils/testing';
 
 import ManualLink from '../manuallink';
@@ -21,7 +19,7 @@ const createGmp = (settings = {}) => ({
 describe('ManualLink tests', () => {
   test('should render ManualLink', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(<ManualLink title="Foo" page="foo" />);
+    const {element} = render(<ManualLink page="foo" title="Foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
@@ -31,7 +29,7 @@ describe('ManualLink tests', () => {
 
   test('should render with anchor', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(<ManualLink page="foo" anchor="bar" />);
+    const {element} = render(<ManualLink anchor="bar" page="foo" />);
 
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html#bar');
     expect(element).toHaveAttribute('target', '_blank');
@@ -54,7 +52,7 @@ describe('ManualLink tests', () => {
     setLocale('de');
 
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(<ManualLink title="Foo" page="foo" />);
+    const {element} = render(<ManualLink page="foo" title="Foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', 'http://foo.bar/de/foo.html');
@@ -66,7 +64,7 @@ describe('ManualLink tests', () => {
     setLocale('en');
 
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(<ManualLink title="Foo" page="foo" />);
+    const {element} = render(<ManualLink page="foo" title="Foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
@@ -76,7 +74,7 @@ describe('ManualLink tests', () => {
 
   test('should render fallback to english locale', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(<ManualLink title="Foo" lang="foo" page="foo" />);
+    const {element} = render(<ManualLink lang="foo" page="foo" title="Foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
@@ -92,7 +90,7 @@ describe('ManualLink tests', () => {
         },
       }),
     });
-    const {element} = render(<ManualLink title="Foo" lang="de" page="foo" />);
+    const {element} = render(<ManualLink lang="de" page="foo" title="Foo" />);
 
     expect(element).toHaveAttribute('href', 'http://foo.bar/foo/foo.html');
   });

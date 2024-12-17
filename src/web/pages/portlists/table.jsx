@@ -4,21 +4,17 @@
  */
 
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import {createEntitiesFooter} from 'web/entities/footer';
-import {createEntitiesTable} from 'web/entities/table';
-import withRowDetails from 'web/entities/withRowDetails';
-
+import React from 'react';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import {createEntitiesFooter} from 'web/entities/footer';
+import {createEntitiesTable} from 'web/entities/table';
+import withRowDetails from 'web/entities/withRowDetails';
+import PropTypes from 'web/utils/proptypes';
 
 import PortListDetails from './details';
 import Row from './row';
@@ -35,49 +31,49 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="59%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'name' : false}
+          currentSortDir={currentSortDir}
           rowSpan="2"
-          onSortChange={onSortChange}
+          sortBy={sort ? 'name' : false}
           title={_('Name')}
+          width="59%"
+          onSortChange={onSortChange}
         />
-        <TableHead width="33%" colSpan="3">
+        <TableHead colSpan="3" width="33%">
           {_('Port Counts')}
         </TableHead>
         {isDefined(actionsColumn) ? (
           actionsColumn
         ) : (
-          <TableHead rowSpan="2" width="6em" align="center">
+          <TableHead align="center" rowSpan="2" width="6em">
             {_('Actions')}
           </TableHead>
         )}
       </TableRow>
       <TableRow>
         <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'total' : false}
-          onSortChange={onSortChange}
           title={_('Total')}
+          width="11%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'tcp' : false}
-          onSortChange={onSortChange}
           title={_('TCP')}
+          width="11%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'udp' : false}
-          onSortChange={onSortChange}
           title={_('UDP')}
+          width="11%"
+          onSortChange={onSortChange}
         />
       </TableRow>
     </TableHeader>

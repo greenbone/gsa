@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getUserSettingsDefaults} from './selectors';
-
+import {transformSettingName} from 'gmp/commands/users';
 import {isDefined} from 'gmp/utils/identity';
 
-import {transformSettingName} from 'gmp/commands/users';
+import {getUserSettingsDefaults} from './selectors';
 
 export const USER_SETTINGS_DEFAULTS_LOADING_REQUEST =
   'USER_SETTINGS_DEFAULTS_LOADING_REQUEST';

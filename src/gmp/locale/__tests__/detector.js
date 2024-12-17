@@ -6,7 +6,6 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import {isFunction} from '../../utils/identity';
-
 import LanguageDetector from '../detector';
 
 describe('LanguageDetector tests', () => {

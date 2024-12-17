@@ -5,20 +5,14 @@
 
 
 import {scaleOrdinal} from 'd3-scale';
-
 import {_, _l} from 'gmp/locale/lang';
-
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 import {TICKET_STATUS, getTranslatableTicketStatus} from 'gmp/models/ticket';
-
-import {registerDisplay} from 'web/components/dashboard/registry';
-
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay';  
 import {percent} from 'web/components/dashboard/display/utils';
-
-import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay'; // eslint-disable-line max-len
-
+import {registerDisplay} from 'web/components/dashboard/registry';
 import Theme from 'web/utils/theme';
 
 import {TicketsListLoader} from './loaders';

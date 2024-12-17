@@ -5,9 +5,7 @@
 
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Anchor = styled.a`
@@ -35,7 +33,7 @@ class SortBy extends React.Component {
   render() {
     const {children, className} = this.props;
     return (
-      <Anchor onClick={this.handleClick} className={className}>
+      <Anchor className={className} onClick={this.handleClick}>
         {children}
       </Anchor>
     );

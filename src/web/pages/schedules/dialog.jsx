@@ -3,39 +3,36 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
 
+
+
+
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import date, {duration as createDuration} from 'gmp/models/date';
 import Event, {ReccurenceFrequency, WeekDays} from 'gmp/models/event';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {isDefined} from 'gmp/utils/identity';
+import React, {useState} from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import Button from 'web/components/form/button';
+import CheckBox from 'web/components/form/checkbox';
+import DatePicker from 'web/components/form/DatePicker';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
-import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
-import DatePicker from 'web/components/form/DatePicker';
-import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
-
 import TimeZoneSelect from 'web/components/form/timezoneselect';
-import CheckBox from 'web/components/form/checkbox';
-import Radio from 'web/components/form/radio';
-
 import Row from 'web/components/layout/row';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
+import DaySelect from './dayselect';
+import MonthDaysSelect from './monthdaysselect';
 import {renderDuration} from './render';
 import TimeUnitSelect from './timeunitselect';
 import WeekDaySelect, {WeekDaysPropType} from './weekdayselect';
-import DaySelect from './dayselect';
-import MonthDaysSelect from './monthdaysselect';
-import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
 const RECURRENCE_ONCE = 'once';
 const RECURRENCE_HOURLY = ReccurenceFrequency.HOURLY;
@@ -360,8 +357,8 @@ const ScheduleDialog = ({
 
   return (
     <SaveDialog
-      title={title}
       defaultValues={defaultValues}
+      title={title}
       values={values}
       onClose={onClose}
       onSave={handleSave}
@@ -384,13 +381,13 @@ const ScheduleDialog = ({
             />
           </FormGroup>
 
-          <Row flex="row" align={'end'} gap={'lg'}>
+          <Row align={'end'} flex="row" gap={'lg'}>
             <DatePicker
-              timezone={timezone}
+              label={_('Start Date')}
               name="startDate"
+              timezone={timezone}
               value={startDate}
               onChange={setStartDate}
-              label={_('Start Date')}
             />
             <TimePicker
               label={_('Start Time')}
@@ -411,18 +408,18 @@ const ScheduleDialog = ({
           </FormGroup>
           <FormGroup title={_('Run Until')}>
             <CheckBox
-              title={_('Open End')}
-              name="endOpen"
               checked={state.endOpen}
+              name="endOpen"
+              title={_('Open End')}
               onChange={setEndOpen}
             />
 
             <DatePicker
               disabled={state.endOpen}
+              label={_('End Date')}
               name="endDate"
               value={state.endDate}
               onChange={setEndDate}
-              label={_('End Date')}
             />
 
             <TimePicker
@@ -440,8 +437,8 @@ const ScheduleDialog = ({
 
           <FormGroup title={_('Recurrence')}>
             <Select
-              name="recurrenceType"
               items={RECURRENCE_TYPE_ITEMS}
+              name="recurrenceType"
               value={state.recurrenceType}
               onChange={setRecurrenceType}
             />
@@ -449,12 +446,12 @@ const ScheduleDialog = ({
 
           {state.recurrenceType === RECURRENCE_CUSTOM && (
             <>
-              <FormGroup title={_('Repeat')} direction="row">
+              <FormGroup direction="row" title={_('Repeat')}>
                 <span>{_('Every')}</span>
                 <Spinner
+                  min="1"
                   name="interval"
                   type="int"
-                  min="1"
                   value={state.interval}
                   onChange={setInterval}
                 />
@@ -479,36 +476,36 @@ const ScheduleDialog = ({
                 <FormGroup title={_('Repeat at')}>
                   <Row>
                     <Radio
-                      name="monthly"
                       checked={state.monthly === RepeatMonthly.nth}
+                      name="monthly"
                       value={RepeatMonthly.nth}
                       onChange={setMonthly}
                     />
                     <Select
-                      items={NTH_DAY_ITEMS}
                       disabled={state.monthly !== RepeatMonthly.nth}
+                      items={NTH_DAY_ITEMS}
                       name="monthlyNth"
                       value={state.monthlyNth}
                       onChange={setMonthlyNth}
                     />
                     <DaySelect
-                      name="monthlyDay"
                       disabled={state.monthly !== RepeatMonthly.nth}
+                      name="monthlyDay"
                       value={state.monthlyDay}
                       onChange={setMonthlyDay}
                     />
                   </Row>
                   <Row>
                     <Radio
-                      title={_('Recur on day(s)')}
-                      name="monthly"
                       checked={state.monthly === RepeatMonthly.days}
+                      name="monthly"
+                      title={_('Recur on day(s)')}
                       value={RepeatMonthly.days}
                       onChange={setMonthly}
                     />
                     <MonthDaysSelect
-                      name="monthdays"
                       disabled={state.monthly !== RepeatMonthly.days}
+                      name="monthdays"
                       value={state.monthdays}
                       onChange={setMonthdays}
                     />

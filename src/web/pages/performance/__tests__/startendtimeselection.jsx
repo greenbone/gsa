@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import MomentDate from 'gmp/models/date';
 import {render, screen, fireEvent} from 'web/utils/testing';
 
@@ -20,9 +19,9 @@ describe('StartTimeSelection tests', () => {
   test('should render correct dates', () => {
     const {element} = render(
       <StartTimeSelection
-        timezone={timezone}
-        startDate={startDate}
         endDate={endDate}
+        startDate={startDate}
+        timezone={timezone}
         onChanged={handleChange}
       />,
     );
@@ -64,9 +63,9 @@ describe('StartTimeSelection tests', () => {
   test('should display timezone', () => {
     const {getByTestId} = render(
       <StartTimeSelection
-        timezone={timezone}
-        startDate={startDate}
         endDate={endDate}
+        startDate={startDate}
+        timezone={timezone}
         onChanged={handleChange}
       />,
     );
@@ -78,9 +77,9 @@ describe('StartTimeSelection tests', () => {
   test('Update button click event', () => {
     const {getByTestId} = render(
       <StartTimeSelection
-        timezone={timezone}
-        startDate={startDate}
         endDate={endDate}
+        startDate={startDate}
+        timezone={timezone}
         onChanged={handleChange}
       />,
     );
@@ -128,9 +127,9 @@ describe('StartTimeSelection tests', () => {
     }) => {
       const {rerender, getByLabelText} = render(
         <StartTimeSelection
-          timezone={timezone}
-          startDate={initialStartDate}
           endDate={initialEndDate}
+          startDate={initialStartDate}
+          timezone={timezone}
           onChange={handleChange}
         />,
       );
@@ -142,9 +141,9 @@ describe('StartTimeSelection tests', () => {
 
       rerender(
         <StartTimeSelection
-          timezone={timezone}
-          startDate={newStartDate}
           endDate={newEndDate}
+          startDate={newStartDate}
+          timezone={timezone}
           onChange={handleChange}
         />,
       );

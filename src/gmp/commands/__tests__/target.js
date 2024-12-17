@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 
 import {TargetCommand} from '../targets';
-
 import {createActionResultResponse, createHttp} from '../testing';
 
 describe('TargetCommand tests', () => {

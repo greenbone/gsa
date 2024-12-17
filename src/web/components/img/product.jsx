@@ -4,14 +4,10 @@
  */
 
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import useGmp from 'web/hooks/useGmp';
 
 import Img from './img';

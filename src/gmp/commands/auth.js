@@ -4,10 +4,8 @@
  */
 
 import registerCommand from '../command';
-
-import HttpCommand from './http';
-
 import {convertBoolean} from './convert';
+import HttpCommand from './http';
 
 export class AuthenticationCommand extends HttpCommand {
   saveLdap({authdn, certificate, enable, ldaphost, ldapsOnly}) {

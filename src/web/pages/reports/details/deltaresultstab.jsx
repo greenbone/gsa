@@ -5,11 +5,8 @@
 
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import ResultsTable from 'web/pages/results/table';
-
+import PropTypes from 'web/utils/proptypes';
 import {
   makeCompareDate,
   makeCompareIp,
@@ -61,8 +58,8 @@ const ResultsTab = ({
       return (
         <EmptyReport
           hasTarget={hasTarget}
-          status={status}
           progress={progress}
+          status={status}
           onTargetEditClick={onTargetEditClick}
         />
       );
@@ -82,8 +79,8 @@ const ResultsTab = ({
   }
   return (
     <ReportEntitiesContainer
-      entities={results}
       counts={counts}
+      entities={results}
       filter={filter}
       sortField={sortField}
       sortFunctions={resultsSortFunctions}
@@ -112,11 +109,11 @@ const ResultsTab = ({
           sortBy={sortBy}
           sortDir={sortDir}
           toggleDetailsIcon={false}
-          onSortChange={onSortChange}
           onFirstClick={onFirstClick}
           onLastClick={onLastClick}
           onNextClick={onNextClick}
           onPreviousClick={onPreviousClick}
+          onSortChange={onSortChange}
         />
       )}
     </ReportEntitiesContainer>

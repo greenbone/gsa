@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 import useValueChange from './useValueChange';
@@ -33,8 +31,8 @@ const Button = ({
       data-testid="opensight-button"
       {...other}
       disabled={disabled}
-      name={name}
       loading={isLoading}
+      name={name}
       value={value}
       onClick={handleChange}
     >

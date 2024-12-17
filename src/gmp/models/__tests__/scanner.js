@@ -4,10 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
-import {isDate} from 'gmp/models/date';
 import Credential from 'gmp/models/credential';
+import {isDate} from 'gmp/models/date';
 import Scanner, {
   scannerTypeName,
   openVasScannersFilter,
@@ -16,7 +15,6 @@ import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
-
 import {YES_VALUE} from 'gmp/parser';
 
 testModel(Scanner, 'scanner');

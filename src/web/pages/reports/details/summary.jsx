@@ -3,33 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useEffect} from 'react';
 
-import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-
 import {duration as createDuration} from 'gmp/models/date';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 import StatusBar from 'web/components/bar/statusbar';
-
 import DateTime from 'web/components/date/datetime';
-
 import ErrorPanel from 'web/components/error/errorpanel';
-
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import Table from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
-import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
-
+import Table from 'web/components/table/infotable';
+import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
-
 import PropTypes from 'web/utils/proptypes';
 
 const UpdatingTable = styled(Table)`
@@ -113,8 +103,8 @@ const Summary = ({
     <Layout flex="column">
       {isDefined(reportError) && (
         <ErrorPanel
-          message={_('Error while loading Report {{reportId}}', {reportId})}
           error={reportError}
+          message={_('Error while loading Report {{reportId}}', {reportId})}
         />
       )}
       <UpdatingTable $isUpdating={isUpdating}>
@@ -127,7 +117,7 @@ const Summary = ({
             <TableData>{_('Task Name')}</TableData>
             <TableData>
               <span>
-                <DetailsLink textOnly={!links} type="task" id={id}>
+                <DetailsLink id={id} textOnly={!links} type="task">
                   {name}
                 </DetailsLink>
               </span>
@@ -144,7 +134,7 @@ const Summary = ({
               <TableData>{_('Report 1')}</TableData>
               <TableData>
                 <span>
-                  <DetailsLink textOnly={!links} type="report" id={report.id}>
+                  <DetailsLink id={report.id} textOnly={!links} type="report">
                     {report.id}
                   </DetailsLink>
                 </span>
@@ -180,7 +170,7 @@ const Summary = ({
               {delta ? _('Scan Status Report 1') : _('Scan Status')}
             </TableData>
             <TableData>
-              <StatusBar status={status} progress={progress} />
+              <StatusBar progress={progress} status={status} />
             </TableData>
           </TableRow>
           {delta && (
@@ -189,9 +179,9 @@ const Summary = ({
               <TableData>
                 <span>
                   <DetailsLink
+                    id={delta_report.id}
                     textOnly={!links}
                     type="report"
-                    id={delta_report.id}
                   >
                     {delta_report.id}
                   </DetailsLink>

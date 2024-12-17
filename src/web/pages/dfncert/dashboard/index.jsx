@@ -6,7 +6,6 @@
 
 import React from 'react';
 
-import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
   DfnCertsCreatedDisplay,
@@ -17,6 +16,7 @@ import {
   DfnCertSeverityClassDisplay,
   DfnCertSeverityClassTableDisplay,
 } from './severityclassdisplay';
+import Dashboard from '../../../components/dashboard/dashboard';
 
 export const DFNCERT_DASHBOARD_ID = '9812ea49-682d-4f99-b3cc-eca051d1ce59';
 
@@ -32,8 +32,6 @@ export const DFNCERT_DISPLAYS = [
 const DfnCertDashboard = props => (
   <Dashboard
     {...props}
-    id={DFNCERT_DASHBOARD_ID}
-    permittedDisplays={DFNCERT_DISPLAYS}
     defaultDisplays={[
       [
         DfnCertSeverityClassDisplay.displayId,
@@ -41,6 +39,8 @@ const DfnCertDashboard = props => (
         DfnCertCvssDisplay.displayId,
       ],
     ]}
+    id={DFNCERT_DASHBOARD_ID}
+    permittedDisplays={DFNCERT_DISPLAYS}
   />
 );
 

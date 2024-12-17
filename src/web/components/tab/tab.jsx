@@ -4,12 +4,9 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
-import Theme from 'web/utils/theme';
-
 import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const StyledDiv = styled.div`
   font-size: 16px;

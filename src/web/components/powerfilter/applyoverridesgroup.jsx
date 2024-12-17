@@ -3,18 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
 
 import {parseInt} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-
-import useTranslation from 'web/hooks/useTranslation';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
 import YesNoRadio from 'web/components/form/yesnoradio';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const ApplyOverridesGroup = ({
   filter,
@@ -30,13 +27,13 @@ const ApplyOverridesGroup = ({
   return (
     <FormGroup title={_('Apply Overrides')}>
       <YesNoRadio
-        value={overrides}
-        name={name}
-        yesValue={1}
-        noValue={0}
         convert={parseInt}
-        onChange={onChange}
         data-testid="apply-overrides-yesnoradio"
+        name={name}
+        noValue={0}
+        value={overrides}
+        yesValue={1}
+        onChange={onChange}
       />
     </FormGroup>
   );

@@ -3,32 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
 
-import {isDefined, isArray, hasValue} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {isDefined, isArray, hasValue} from 'gmp/utils/identity';
+import React, {useCallback} from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
+import MultiSelect from 'web/components/form/multiselect';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import TextArea from 'web/components/form/textarea';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
-import MultiSelect from 'web/components/form/multiselect';
-import Spinner from 'web/components/form/spinner';
-import Select from 'web/components/form/select';
-import TextArea from 'web/components/form/textarea';
-
-import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
+import Table from 'web/components/table/table';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const ReportFormatListParam = ({formats, idList, name, onValueChange}) => {
   const formatOptions = map(formats, format => ({
@@ -41,8 +36,8 @@ const ReportFormatListParam = ({formats, idList, name, onValueChange}) => {
       <TableData>{name}</TableData>
       <TableData>
         <MultiSelect
-          name={name}
           items={formatOptions}
+          name={name}
           value={idList}
           onChange={onValueChange}
         />
@@ -70,10 +65,10 @@ const Param = ({data, value, onPrefChange}) => {
   } else if (type === 'integer') {
     field = (
       <Spinner
-        type="int"
-        name={name}
-        min={min}
         max={max}
+        min={min}
+        name={name}
+        type="int"
         value={field_value}
         onChange={onPrefChange}
       />
@@ -81,8 +76,8 @@ const Param = ({data, value, onPrefChange}) => {
   } else if (type === 'string') {
     field = (
       <TextField
-        name={name}
         maxLength={max}
+        name={name}
         value={field_value}
         onChange={onPrefChange}
       />
@@ -95,8 +90,8 @@ const Param = ({data, value, onPrefChange}) => {
 
     field = (
       <Select
-        name={name}
         items={typeOptions}
+        name={name}
         value={isArray(field_value) ? field_value : [field_value]}
         onChange={onPrefChange}
       />
@@ -168,13 +163,13 @@ const Dialog = ({
   if (isDefined(reportFormat)) {
     return (
       <SaveDialog
+        defaultValues={reportFormat}
         title={title}
         onClose={onClose}
         onSave={onSave}
-        defaultValues={reportFormat}
       >
         {
-          // eslint-disable-next-line no-shadow
+           
           ({values: state, onValueChange}) => {
             return (
               <>
@@ -227,8 +222,8 @@ const Dialog = ({
                         return (
                           <Param
                             key={param.name}
-                            value={param}
                             data={preferences}
+                            value={param}
                             onPrefChange={handlePrefChange}
                           />
                         );
@@ -246,7 +241,7 @@ const Dialog = ({
   return (
     <SaveDialog title={title} onClose={onClose} onSave={onSave}>
       {
-        // eslint-disable-next-line no-shadow
+         
         ({values: state, onValueChange}) => {
           return (
             <>

@@ -3,20 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isActive, TASK_STATUS} from 'gmp/models/task';
-
-import TaskIcon from 'web/components/icon/taskicon';
+import React from 'react';
 import RefreshIcon from 'web/components/icon/refreshicon';
 import TargetIcon from 'web/components/icon/targeticon';
-
+import TaskIcon from 'web/components/icon/taskicon';
 import Divider from 'web/components/layout/divider';
-
 import InfoPanel from 'web/components/panel/infopanel';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -32,7 +27,7 @@ const EmptyReport = ({
   const may_edit_target = capabilities.mayEdit('target');
   const isActiveReport = hasTarget && isActive(status);
   return (
-    <Divider flex="column" align={['start', 'stretch']} grow>
+    <Divider grow align={['start', 'stretch']} flex="column">
       <InfoPanel
         heading={_(
           'The Report is empty. This can happen for the following ' +

@@ -4,15 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import Task, {TASK_STATUS} from 'gmp/models/task';
 import Event from 'gmp/models/event';
-
+import Task, {TASK_STATUS} from 'gmp/models/task';
 import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import Theme from 'web/utils/theme';
 
 import StartIcon from '../starticon';

@@ -4,25 +4,18 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
-import PropTypes from 'web/utils/proptypes';
-
-import SelectionType from 'web/utils/selectiontype';
-
+import React from 'react';
 import EntityComponent from 'web/entity/component';
-
-import withGmp from 'web/utils/withGmp';
-
-import TargetComponent from 'web/pages/targets/component';
-
 import HostDialog from 'web/pages/hosts/dialog';
+import TargetComponent from 'web/pages/targets/component';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
+import withGmp from 'web/utils/withGmp';
 
 class HostComponent extends React.Component {
   constructor(...args) {
@@ -134,15 +127,15 @@ class HostComponent extends React.Component {
     return (
       <EntityComponent
         name="host"
-        onCreated={onCreated}
         onCreateError={onCreateError}
-        onDeleted={onDeleted}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -201,8 +194,8 @@ const HostWithTargetComponent = ({
 }) => {
   return (
     <TargetComponent
-      onCreated={onTargetCreated}
       onCreateError={onTargetCreateError}
+      onCreated={onTargetCreated}
       onInteraction={onInteraction}
     >
       {({create}) => (

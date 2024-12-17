@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-import {map} from 'gmp/utils/array';
-
 import Model, {parseModelFromElement} from 'gmp/model';
 import {parseCsv} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 export const AUTH_METHOD_PASSWORD = 'password';
 export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';

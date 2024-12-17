@@ -3,18 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isArray, isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-import {map} from 'gmp/utils/array';
-
 import {parseSeverity, parseDate, setProperties} from 'gmp/parser';
-
 import {
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
 } from 'gmp/parser/cvss';
-
 import {parseCvssV4MetricsFromVector} from 'gmp/parser/cvssV4';
+import {map} from 'gmp/utils/array';
+import {isArray, isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import Info from './info';
 

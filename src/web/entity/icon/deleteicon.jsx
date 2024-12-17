@@ -4,17 +4,13 @@
  */
 
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import DeleteIcon from 'web/components/icon/deleteicon';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import DeleteIcon from 'web/components/icon/deleteicon';
 
 const EntityDeleteIcon = ({
   capabilities,
@@ -44,7 +40,7 @@ const EntityDeleteIcon = ({
       title = _('{{entity}} is not writable', {entity: displayName});
     } else if (entity.isInUse()) {
       title = _('{{entity}} is still in use', {entity: displayName});
-      // eslint-disable-next-line no-negated-condition
+       
     } else if (!mayDelete) {
       title = _('Permission to delete {{entity}} denied', {
         entity: displayName,
@@ -56,9 +52,9 @@ const EntityDeleteIcon = ({
   return (
     <DeleteIcon
       {...props}
+      active={active}
       title={title}
       value={entity}
-      active={active}
       onClick={active ? onClick : undefined}
     />
   );

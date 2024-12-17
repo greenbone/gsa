@@ -3,27 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import Comment from 'web/components/comment/comment';
-
 import DateTime from 'web/components/date/datetime';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
-import TableData from 'web/components/table/data';
 import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import DetailsBlock from 'web/entity/block';
 import EntityLink from 'web/entity/link';
 import {Col} from 'web/entity/page';
-
 import PropTypes from 'web/utils/proptypes';
 
 const TicketDetails = ({entity, links = true}) => {
@@ -55,9 +48,9 @@ const TicketDetails = ({entity, links = true}) => {
                   <TableData>
                     <span>
                       <DetailsLink
-                        type="report"
                         id={entity.report.id}
                         textOnly={!links}
+                        type="report"
                       >
                         <DateTime date={entity.report.timestamp} />
                       </DetailsLink>
@@ -71,9 +64,9 @@ const TicketDetails = ({entity, links = true}) => {
                   <TableData>
                     <span>
                       <DetailsLink
-                        type="result"
                         id={entity.result.id}
                         textOnly={!links || taskIsInTrash}
+                        type="result"
                       >
                         {entity.name}
                       </DetailsLink>
@@ -137,9 +130,9 @@ const TicketDetails = ({entity, links = true}) => {
                   <TableData>
                     <span>
                       <DetailsLink
-                        type="report"
                         id={entity.fixedVerifiedReport.id}
                         textOnly={!links}
+                        type="report"
                       >
                         <DateTime date={entity.fixedVerifiedReport.timestamp} />
                       </DetailsLink>

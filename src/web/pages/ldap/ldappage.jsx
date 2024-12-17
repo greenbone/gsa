@@ -3,34 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import EditIcon from 'web/components/icon/editicon';
 import LdapIcon from 'web/components/icon/ldapicon';
 import ManualIcon from 'web/components/icon/manualicon';
-
-import Layout from 'web/components/layout/layout';
 import IconDivider from 'web/components/layout/icondivider';
-import Section from 'web/components/section/section';
+import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
-import Table from 'web/components/table/simpletable';
+import Loading from 'web/components/loading/loading';
+import Section from 'web/components/section/section';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
-import Loading from 'web/components/loading/loading';
-
+import Table from 'web/components/table/simpletable';
 import {Col} from 'web/entity/page';
-
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
@@ -41,14 +31,14 @@ import LdapDialog from './dialog';
 const ToolBarIcons = ({onOpenDialogClick}) => (
   <IconDivider>
     <ManualIcon
-      page="web-interface-access"
       anchor="ldap"
+      page="web-interface-access"
       size="small"
       title={_('Help: LDAP per-User Authentication')}
     />
     <EditIcon
-      onClick={onOpenDialogClick}
       title={_('Edit LDAP per-User Authentication')}
+      onClick={onOpenDialogClick}
     />
   </IconDivider>
 );

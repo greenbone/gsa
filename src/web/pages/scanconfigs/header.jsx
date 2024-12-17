@@ -3,15 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   actions = true,
@@ -25,22 +23,22 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="72%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan="2"
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}
           title={_('Name')}
+          width="72%"
+          onSortChange={onSortChange}
         />
-        <TableHead width="10%" colSpan="2">
+        <TableHead colSpan="2" width="10%">
           {_('Family')}
         </TableHead>
-        <TableHead width="10%" colSpan="2">
+        <TableHead colSpan="2" width="10%">
           {_('NVTs')}
         </TableHead>
         {actions && (
-          <TableHead rowSpan="2" width="8%" align="center">
+          <TableHead align="center" rowSpan="2" width="8%">
             {_('Actions')}
           </TableHead>
         )}
@@ -48,37 +46,37 @@ const Header = ({
 
       <TableRow>
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'families_total' : false}
-          onSortChange={onSortChange}
           title={_('Total')}
+          width="5%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'families_trend' : false}
-          onSortChange={onSortChange}
           title={_('Trend')}
+          width="5%"
+          onSortChange={onSortChange}
         />
 
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'nvts_total' : false}
-          onSortChange={onSortChange}
           title={_('Total')}
+          width="5%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'nvts_trend' : false}
-          onSortChange={onSortChange}
           title={_('Trend')}
+          width="5%"
+          onSortChange={onSortChange}
         />
       </TableRow>
     </TableHeader>

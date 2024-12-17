@@ -3,23 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import styled from 'styled-components';
 import FirstIcon from 'web/components/icon/firsticon';
 import LastIcon from 'web/components/icon/lasticon';
 import NextIcon from 'web/components/icon/nexticon';
 import PreviousIcon from 'web/components/icon/previousicon';
-
-import Layout from 'web/components/layout/layout';
 import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PropTypes from 'web/utils/proptypes';
 
 const PaginationText = styled.span`
   margin: 0 3px;

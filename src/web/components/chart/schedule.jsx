@@ -3,31 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {LinearGradient} from '@visx/gradient';
-
 import {scaleBand, scaleUtc} from 'd3-scale';
-
 import _ from 'gmp/locale';
-import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
-
 import date from 'gmp/models/date';
-
 import {shorten} from 'gmp/utils/string';
-
+import React from 'react';
+import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
-import Layout from 'web/components/layout/layout';
-
-import path from './utils/path';
-import {shouldUpdate} from './utils/update';
 
 import Axis from './axis';
+import Group from './group';
 import Svg from './svg';
 import ToolTip from './tooltip';
-import Group from './group';
+import path from './utils/path';
+import {shouldUpdate} from './utils/update';
 
 const ONE_DAY = 60 * 60 * 24;
 
@@ -113,11 +107,11 @@ const Triangle = ({x = 0, y = 0, height, width = TRIANGLE_WIDTH, toolTip}) => {
     <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <path
-          d={d}
           ref={targetRef}
+          d={d}
           fill={Theme.darkGreen}
-          stroke={Theme.darkGreen}
           opacity="0.5"
+          stroke={Theme.darkGreen}
           onMouseEnter={show}
           onMouseLeave={hide}
         />
@@ -195,24 +189,24 @@ class ScheduleChart extends React.Component {
     const bandwidth = yScale.bandwidth();
     return (
       <Layout align={['start', 'start']}>
-        <Svg width={width} height={height} ref={svgRef}>
-          <Group top={margin.top} left={marginLeft}>
+        <Svg ref={svgRef} height={height} width={width}>
+          <Group left={marginLeft} top={margin.top}>
             <Axis
-              orientation="left"
-              scale={yScale}
-              top={0}
-              left={0}
               label={yAxisLabel}
+              left={0}
+              orientation="left"
               rangePadding={0}
+              scale={yScale}
               tickFormat={tickFormat}
+              top={0}
             />
             <Axis
-              orientation="bottom"
-              scale={xScale}
-              top={maxHeight}
               label={yAxisLabel}
               numTicks={7}
+              orientation="bottom"
               rangePadding={0}
+              scale={xScale}
+              top={maxHeight}
             />
             <StrokeGradient />
             <FillGradient />
@@ -242,12 +236,12 @@ class ScheduleChart extends React.Component {
                   {({targetRef, show, hide}) => (
                     <rect
                       ref={targetRef}
-                      y={yScale(label)}
-                      x={startX}
-                      height={bandwidth}
-                      width={rwidth}
                       fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
+                      height={bandwidth}
                       stroke={hasDuration ? Theme.darkGreen : strokeGradientUrl}
+                      width={rwidth}
+                      x={startX}
+                      y={yScale(label)}
                       onMouseEnter={show}
                       onMouseLeave={hide}
                     />
@@ -263,9 +257,9 @@ class ScheduleChart extends React.Component {
             {futureRuns.map((run, i) => (
               <Triangle
                 key={i}
-                y={yScale(run.label)}
                 height={bandwidth}
                 toolTip={getFutureRunLabel(run.futureRun)}
+                y={yScale(run.label)}
               />
             ))}
           </Group>

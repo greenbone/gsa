@@ -4,14 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {filterIdentifier} from 'web/store/utils';
 
-import {createRootState, createState} from '../testing';
-
 import {createSelector} from '../selectors';
+import {createRootState, createState} from '../testing';
 
 describe('EntitiesSelector isLoadingEntities tests', () => {
   test('should be false for undefined state', () => {

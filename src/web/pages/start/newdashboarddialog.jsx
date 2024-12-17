@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
-
-/* eslint-disable max-len */
+import TextField from 'web/components/form/textfield';
+import useTranslation from 'web/hooks/useTranslation';
 import {CertBundCreatedDisplay} from 'web/pages/certbund/dashboard/createddisplay';
 import {CertBundCvssDisplay} from 'web/pages/certbund/dashboard/cvssdisplay';
 import {CvesCreatedDisplay} from 'web/pages/cves/dashboard/createddisplay';
@@ -27,9 +24,7 @@ import {ReportsSeverityDisplay} from 'web/pages/reports/dashboard/severityclassd
 import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/severityclassdisplay';
 import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/severityclassdisplay';
 import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/statusdisplay';
-/* eslint-enable max-len */
-
-import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 export const MAX_TITLE_LENGTH = 50;
 
@@ -101,8 +96,8 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
   return (
     <SaveDialog
       buttonTitle={_('Add')}
-      title={_('Add new Dashboard')}
       defaultValues={{title: _('Unnamed'), defaultDisplays: 'default'}}
+      title={_('Add new Dashboard')}
       onClose={onClose}
       onSave={values =>
         onSave({
@@ -117,19 +112,19 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
         <>
           <FormGroup title={_('Dashboard Title')}>
             <TextField
-              name="title"
               maxLength={MAX_TITLE_LENGTH}
+              name="title"
               value={values.title}
               onChange={onValueChange}
             />
           </FormGroup>
           <FormGroup title={_('Initial Displays')}>
             <Select
-              name="defaultDisplays"
               items={uniqueDisplayChoices.map(({label, key}) => ({
                 label,
                 value: key,
               }))}
+              name="defaultDisplays"
               value={values.defaultDisplays}
               onChange={onValueChange}
             />

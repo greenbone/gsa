@@ -3,23 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 import {createEntitiesFooter} from 'web/entities/footer';
 import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
-
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
+import AuditDetails from 'web/pages/audits/details';
+import PropTypes from 'web/utils/proptypes';
 
 import Row from './row';
-import AuditDetails from 'web/pages/audits/details';
 
 const Header = ({
   actionsColumn,
@@ -38,20 +35,20 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead {...sortProps} sortBy="name" width="52%" title={_('Name')} />
+        <TableHead {...sortProps} sortBy="name" title={_('Name')} width="52%" />
         <TableHead
           {...sortProps}
-          width="8%"
           sortBy="status"
           title={_('Status')}
+          width="8%"
         />
         <TableHead
           {...sortProps}
           sortBy="last"
-          width="24%"
           title={_('Report')}
+          width="24%"
         />
-        <TableHead width="8%" title={_('Compliance Percent')} />
+        <TableHead title={_('Compliance Percent')} width="8%" />
         {actionsColumn}
       </TableRow>
     </TableHeader>
@@ -68,7 +65,7 @@ Header.propTypes = {
 };
 
 const actionsColumn = (
-  <TableHead width="10em" title={_l('Actions')} align="center" />
+  <TableHead align="center" title={_l('Actions')} width="10em" />
 );
 
 export default createEntitiesTable({

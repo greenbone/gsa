@@ -3,21 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import {CircleX as Icon} from 'lucide-react';
+import React from 'react';
+import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 import PropTypes from 'web/utils/proptypes';
-
 import SelectionType from 'web/utils/selectiontype';
 
 import withSvgIcon from './withSvgIcon';
 
-import {CircleX as Icon} from 'lucide-react';
-
-import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const DeleteSvgIcon = withSvgIcon()(props => (
   <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="delete-icon"/>

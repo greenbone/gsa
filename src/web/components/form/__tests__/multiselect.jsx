@@ -4,15 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, screen, userEvent, within} from 'web/utils/testing';
-
 import {
   clickElement,
   getMultiSelectElement,
   getSelectItemElementsForMultiSelect,
   getSelectedItems,
 } from 'web/components/testing';
+import {render, screen, userEvent, within} from 'web/utils/testing';
 
 import MultiSelect from '../multiselect';
 
@@ -46,7 +44,7 @@ describe('MultiSelect tests', () => {
   test('should render loading', async () => {
     const items = [{value: '0', label: '--'}];
 
-    render(<MultiSelect items={items} isLoading={true} />);
+    render(<MultiSelect isLoading={true} items={items} />);
 
     const element = screen.getByPlaceholderText('Loading...');
     expect(screen.queryAllByRole('option').length).toEqual(0);

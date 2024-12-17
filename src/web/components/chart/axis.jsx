@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {Axis as VxAxis} from '@visx/axis';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
@@ -67,16 +65,16 @@ const Axis = ({
   <VxAxis
     {...props}
     axisLineClassName="axis-line"
-    tickClassName="axis-tick"
-    labelOffset={labelOffset}
     labelClassName="axis-label"
+    labelOffset={labelOffset}
     orientation={orientation}
     rangePadding={rangePadding}
-    tickLabelProps={tickLabelProps}
-    tickLength={tickLength}
+    tickClassName="axis-tick"
     tickComponent={({formattedValue, ...tickProps}) =>
       hideTickLabels ? null : <text {...tickProps}>{formattedValue}</text>
     }
+    tickLabelProps={tickLabelProps}
+    tickLength={tickLength}
   />
 );
 

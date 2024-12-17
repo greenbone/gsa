@@ -5,7 +5,6 @@
 
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 const props_value = (event, props) => props.value;

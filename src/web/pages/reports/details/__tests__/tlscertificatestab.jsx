@@ -4,14 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import TLSCertificatesTab from '../tlscertificatestab';
 
@@ -38,11 +34,11 @@ describe('Report TLS Certificates Tab tests', () => {
     const {baseElement} = render(
       <TLSCertificatesTab
         counts={tlsCertificates.counts}
-        tlsCertificates={tlsCertificates.entities}
         filter={filter}
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
+        tlsCertificates={tlsCertificates.entities}
         onInteraction={onInteraction}
         onSortChange={onSortChange}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
@@ -135,11 +131,11 @@ describe('Report TLS Certificates Tab tests', () => {
     const {baseElement} = render(
       <TLSCertificatesTab
         counts={tlsCertificates.counts}
-        tlsCertificates={tlsCertificates.entities}
         filter={filter}
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
+        tlsCertificates={tlsCertificates.entities}
         onInteraction={onInteraction}
         onSortChange={onSortChange}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}

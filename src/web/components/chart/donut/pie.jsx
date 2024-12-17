@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {pie as d3pie} from 'd3-shape';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import arc from 'web/components/chart/utils/arc';
-
+import React from 'react';
 import Group from 'web/components/chart/group';
+import arc from 'web/components/chart/utils/arc';
+import PropTypes from 'web/utils/proptypes';
 
 const sortArcsByStartAngle = (a, b) => (a.startAngle > b.startAngle ? -1 : 1);
 
@@ -80,7 +76,7 @@ const Pie = ({
 
   arcs.sort(arcsSort);
   return (
-    <Group className={className} top={top} left={left}>
+    <Group className={className} left={left} top={top}>
       {arcs.map((currentArc, i) => {
         const {x, y} = arcPath.centroid(currentArc);
         return children({

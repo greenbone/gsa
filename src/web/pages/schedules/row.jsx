@@ -4,31 +4,23 @@
  */
 
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import DateTime from 'web/components/date/datetime';
-
 import ExportIcon from 'web/components/icon/exporticon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
-
+import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 import {renderDuration, renderRecurrence} from './render';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
+
 
 const Actions = withEntitiesActions(
   ({
@@ -41,27 +33,27 @@ const Actions = withEntitiesActions(
     <IconDivider grow align={['center', 'center']}>
       <TrashIcon
         displayName={_('Schedule')}
-        name="schedule"
         entity={entity}
+        name="schedule"
         onClick={onScheduleDeleteClick}
       />
       <EditIcon
         displayName={_('Schedule')}
-        name="schedule"
         entity={entity}
+        name="schedule"
         onClick={onScheduleEditClick}
       />
       <CloneIcon
         displayName={_('Schedule')}
-        name="schedule"
         entity={entity}
+        name="schedule"
         title={_('Clone Schedule')}
         value={entity}
         onClick={onScheduleCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Schedule')}
+        value={entity}
         onClick={onScheduleDownloadClick}
       />
     </IconDivider>
@@ -88,10 +80,10 @@ const Row = ({
   return (
     <TableRow>
       <EntityNameTableData
+        displayName={_('Schedule')}
         entity={entity}
         link={links}
         type="schedule"
-        displayName={_('Schedule')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>

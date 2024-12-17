@@ -4,18 +4,15 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {filterIdentifier} from 'web/store/utils';
-
-import dashboardData from '../reducers';
 
 import {
   receivedDashboardData,
   requestDashboardData,
   receivedDashboardError,
 } from '../actions';
+import dashboardData from '../reducers';
 
 describe('dashboard data reducers tests', () => {
   test('should return the initial state', () => {

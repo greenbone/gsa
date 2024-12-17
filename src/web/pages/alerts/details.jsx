@@ -3,33 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
   DELTA_TYPE_PREVIOUS,
   DELTA_TYPE_REPORT,
 } from 'gmp/models/alert';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import Layout from 'web/components/layout/layout';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import HorizontalSep from 'web/components/layout/horizontalsep';
-
+import Layout from 'web/components/layout/layout';
 import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import Condition from './condition';
 import Event from './event';
@@ -44,7 +37,7 @@ const AlertDetails = ({
 }) => {
   const {comment, condition, event, method, tasks = [], filter} = entity;
   return (
-    <Layout flex="column" grow>
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
           <Col width="10%" />
@@ -105,10 +98,10 @@ const AlertDetails = ({
             <TableData>{_('Method')}</TableData>
             <TableData>
               <Method
-                method={method}
                 details={true}
-                reportFormats={reportFormats}
+                method={method}
                 reportConfigs={reportConfigs}
+                reportFormats={reportFormats}
               />
             </TableData>
           </TableRow>

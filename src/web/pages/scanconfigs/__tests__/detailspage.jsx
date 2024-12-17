@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scanconfig';
-
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -927,8 +923,8 @@ describe('Scan Config ToolBarIcons tests', () => {
     const {element, getAllByTestId} = render(
       <ToolBarIcons
         entity={config}
-        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
@@ -968,8 +964,8 @@ describe('Scan Config ToolBarIcons tests', () => {
     const {getAllByTestId} = render(
       <ToolBarIcons
         entity={config}
-        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
@@ -1024,8 +1020,8 @@ describe('Scan Config ToolBarIcons tests', () => {
     const {getAllByTestId} = render(
       <ToolBarIcons
         entity={config2}
-        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
@@ -1084,8 +1080,8 @@ describe('Scan Config ToolBarIcons tests', () => {
     const {getAllByTestId} = render(
       <ToolBarIcons
         entity={config3}
-        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
@@ -1140,8 +1136,8 @@ describe('Scan Config ToolBarIcons tests', () => {
     const {getAllByTestId} = render(
       <ToolBarIcons
         entity={config4}
-        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigCreateClick={handleScanConfigCreate}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}

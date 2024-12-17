@@ -3,26 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import {scaleBand, scaleLinear} from 'd3-scale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 
-import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
-import {shouldUpdate} from './utils/update';
 
 import Axis from './axis';
 import Group from './group';
 import Legend from './legend';
-import ToolTip from './tooltip';
 import Svg from './svg';
+import ToolTip from './tooltip';
+import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 const StyledLayout = styled(Layout)`
   overflow: hidden;
@@ -161,24 +158,24 @@ class BarChart extends React.Component {
     const hideTickLabels = maxWidth / numTicks < MIN_TICK_WIDTH;
     return (
       <StyledLayout align={['start', 'start']}>
-        <Svg ref={svgRef} width={width} height={height}>
-          <Group top={margin.top} left={marginLeft}>
+        <Svg ref={svgRef} height={height} width={width}>
+          <Group left={marginLeft} top={margin.top}>
             <Axis
+              label={`${yLabel}`}
+              left={0}
+              numTicks={10}
               orientation="left"
               scale={horizontal ? xScale : yScale}
-              top={0}
-              left={0}
-              label={`${yLabel}`}
-              numTicks={10}
               tickFormat={horizontal ? tickFormat : undefined}
+              top={0}
             />
             <Axis
+              hideTickLabels={hideTickLabels}
+              label={`${xLabel}`}
               orientation="bottom"
               scale={horizontal ? yScale : xScale}
-              top={maxHeight}
-              label={`${xLabel}`}
               tickValues={tickValues}
-              hideTickLabels={hideTickLabels}
+              top={maxHeight}
             />
             {data.map((d, i) => (
               <ToolTip key={i} content={d.toolTip}>
@@ -191,14 +188,14 @@ class BarChart extends React.Component {
                     <rect
                       ref={targetRef}
                       fill={d.color}
-                      x={horizontal ? 1 : xScale(d.x)}
-                      y={horizontal ? xScale(d.x) : yScale(d.y)}
                       height={
                         horizontal
                           ? xScale.bandwidth()
                           : maxHeight - yScale(d.y)
                       }
                       width={horizontal ? yScale(d.y) : xScale.bandwidth()}
+                      x={horizontal ? 1 : xScale(d.x)}
+                      y={horizontal ? xScale(d.x) : yScale(d.y)}
                       onMouseEnter={show}
                       onMouseLeave={hide}
                     />

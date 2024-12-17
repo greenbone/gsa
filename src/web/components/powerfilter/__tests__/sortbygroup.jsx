@@ -4,11 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {
   clickElement,
   getRadioInputs,
@@ -16,6 +12,7 @@ import {
   getSelectItemElements,
   openSelectElement,
 } from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import SortByGroup from '../sortbygroup';
 

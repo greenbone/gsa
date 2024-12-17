@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import DonutChart from 'web/components/chart/donut';
 import PropTypes from 'web/utils/proptypes';
 
@@ -50,20 +48,20 @@ class StatusDisplay extends React.Component {
     return (
       <DataDisplay
         {...props}
+        filter={filter}
+        icons={renderDonutChartIcons}
         initialState={{
           show3d: true,
         }}
-        filter={filter}
-        icons={renderDonutChartIcons}
       >
         {({width, height, data: tdata, svgRef, state}) => (
           <DonutChart
-            svgRef={svgRef}
-            width={width}
-            height={height}
             data={tdata}
+            height={height}
             show3d={state.show3d}
             showLegend={state.showLegend}
+            svgRef={svgRef}
+            width={width}
             onDataClick={
               isDefined(onFilterChanged) ? this.handleDataClick : undefined
             }

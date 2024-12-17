@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {testAll} from '../utils/testing';
-
 import * as nvts from '../nvts';
+import {testAll} from '../utils/testing';
 
 testAll('nvt', nvts);
 

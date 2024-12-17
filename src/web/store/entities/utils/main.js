@@ -10,9 +10,7 @@ import {
   createLoadEntities,
   createLoadEntity,
 } from './actions';
-
 import {createReducer} from './reducers';
-
 import {createSelector} from './selectors';
 
 export const createAll = entityType => {

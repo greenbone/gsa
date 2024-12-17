@@ -4,17 +4,14 @@
  */
 
 
-/* eslint-disable react/prop-types */
+ 
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import React, {useState} from 'react';
-
 import {render, fireEvent, screen} from 'web/utils/testing';
 
-import TextField from '../textfield';
 import Button from '../button';
-
+import TextField from '../textfield';
 import useFormValidation, {shouldBeNonEmpty} from '../useFormValidation';
 import useFormValues from '../useFormValues';
 
@@ -50,10 +47,10 @@ const UseFormValidationTestComponent = ({onSave}) => {
       <div data-testid="value">{values.foo}</div>
       {hasError && <span data-testid="error">{error}</span>}
       <TextField
-        name="foo"
         data-testid="foo"
-        value={values.foo}
         errorContent={errors.foo}
+        name="foo"
+        value={values.foo}
         onChange={handleValueChange}
       />
       <Button data-testid="button" onClick={() => validate(values)} />

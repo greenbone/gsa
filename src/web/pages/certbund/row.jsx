@@ -5,19 +5,13 @@
 
 
 import React from 'react';
-
 import SeverityBar from 'web/components/bar/severitybar';
-
 import Comment from 'web/components/comment/comment';
-
 import DateTime from 'web/components/date/datetime';
-
-import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
-
+import TableRow from 'web/components/table/row';
 import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
-
 import PropTypes from 'web/utils/proptypes';
 import {na} from 'web/utils/render';
 

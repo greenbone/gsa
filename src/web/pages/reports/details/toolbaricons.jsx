@@ -4,15 +4,12 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
-import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import PerformanceIcon from 'web/components/icon/performanceicon';
@@ -20,14 +17,11 @@ import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
-
-import IconDivider from 'web/components/layout/icondivider';
-
+import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import Divider from 'web/components/layout/divider';
-
+import IconDivider from 'web/components/layout/icondivider';
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
-
 import PropTypes from 'web/utils/proptypes';
 
 import AlertActions from './alertactions';
@@ -53,14 +47,14 @@ const ToolBarIcons = ({
   <Divider margin="15px">
     <IconDivider>
       <ManualIcon
-        page="reports"
         anchor="reading-a-report"
+        page="reports"
         title={_('Help: Reading Reports')}
       />
       {audit ? (
-        <ListIcon title={_('Audit Reports List')} page="auditreports" />
+        <ListIcon page="auditreports" title={_('Audit Reports List')} />
       ) : (
-        <ListIcon title={_('Reports List')} page="reports" />
+        <ListIcon page="reports" title={_('Reports List')} />
       )}
     </IconDivider>
     {!isLoading && (
@@ -77,42 +71,40 @@ const ToolBarIcons = ({
         </IconDivider>
         <IconDivider>
           <DetailsLink
-            type="task"
-            textOnly={!isDefined(task)}
             id={isDefined(task) ? task.id : ''}
+            textOnly={!isDefined(task)}
             title={_('Corresponding Task')}
+            type="task"
           >
             <TaskIcon />
           </DetailsLink>
           <Link
-            to="results"
             filter={'report_id=' + reportId}
             title={_('Corresponding Results')}
+            to="results"
           >
             <ResultIcon />
           </Link>
           {!audit && (
             <Link
-              to="vulnerabilities"
               filter={'report_id=' + reportId}
               title={_('Corresponding Vulnerabilities')}
+              to="vulnerabilities"
             >
               <VulnerabilityIcon />
             </Link>
           )}
           {!delta && (
             <Link
-              to="tlscertificates"
               filter={'report_id=' + reportId}
               title={_('Corresponding TLS Certificates')}
+              to="tlscertificates"
             >
               <TlsCertificateIcon />
             </Link>
           )}
           {isDefined(task) && !task.isContainer() && (
             <Link
-              to="performance"
-              title={_('Corresponding Performance')}
               query={{
                 start: isDefined(report.scan_start)
                   ? report.scan_start.toISOString()
@@ -122,6 +114,8 @@ const ToolBarIcons = ({
                   : undefined,
                 ...(isDefined(report.slave) && {scanner: report.slave.id}),
               }}
+              title={_('Corresponding Performance')}
+              to="performance"
             >
               <PerformanceIcon />
             </Link>
@@ -137,8 +131,8 @@ const ToolBarIcons = ({
               filter={filter}
               reportId={reportId}
               showError={showError}
-              showSuccessMessage={showSuccessMessage}
               showErrorMessage={showErrorMessage}
+              showSuccessMessage={showSuccessMessage}
               showThresholdMessage={showThresholdMessage}
               threshold={threshold}
               onInteraction={onInteraction}

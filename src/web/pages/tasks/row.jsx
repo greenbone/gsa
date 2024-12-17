@@ -4,43 +4,31 @@
  */
 
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import withUserName from 'web/utils/withUserName';
-
-import {RowDetailsToggle} from 'web/entities/row';
-
-import ObserverIcon from 'web/entity/icon/observericon';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import Comment from 'web/components/comment/comment';
-
 import DateTime from 'web/components/date/datetime';
-
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ProvideViewIcon from 'web/components/icon/provideviewicon';
 import SensorIcon from 'web/components/icon/sensoricon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
-
-import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+import {RowDetailsToggle} from 'web/entities/row';
+import ObserverIcon from 'web/entity/icon/observericon';
+import PropTypes from 'web/utils/proptypes';
+import withUserName from 'web/utils/withUserName';
 
 import Actions from './actions';
 import TaskStatus from './status';
 import Trend from './trend';
 
-import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 export const renderReport = (report, links) => {
   if (!isDefined(report)) {
@@ -48,7 +36,7 @@ export const renderReport = (report, links) => {
   }
   return (
     <span>
-      <DetailsLink type="report" id={report.id} textOnly={!links}>
+      <DetailsLink id={report.id} textOnly={!links} type="report">
         <DateTime date={report.timestamp} />
       </DetailsLink>
     </span>
@@ -62,14 +50,14 @@ const renderReportTotal = (entity, links) => {
   return (
     <Layout>
       <Link
-        to={'reports'}
         filter={'task_id=' + entity.id + ' sort-reverse=date'}
+        textOnly={!links || entity.report_count.total === 0}
         title={_(
           'View list of all reports for Task {{name}},' +
             ' including unfinished ones',
           {name: entity.name},
         )}
-        textOnly={!links || entity.report_count.total === 0}
+        to={'reports'}
       >
         {entity.report_count.total}
       </Link>
@@ -146,7 +134,7 @@ const Row = ({
         {entity.comment && <Comment>({entity.comment})</Comment>}
       </TableData>
       <TableData>
-        <TaskStatus task={entity} links={links} />
+        <TaskStatus links={links} task={entity} />
       </TableData>
       <TableData>{renderReportTotal(entity, links)}</TableData>
       <TableData>{renderReport(entity.last_report, links)}</TableData>
@@ -158,7 +146,7 @@ const Row = ({
       <TableData align="center">
         {!entity.isContainer() && <Trend name={entity.trend} />}
       </TableData>
-      <ActionsComponent {...props} links={links} entity={entity} />
+      <ActionsComponent {...props} entity={entity} links={links} />
     </TableRow>
   );
 };

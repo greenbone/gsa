@@ -4,15 +4,14 @@
  */
 
 import {combineReducers} from 'redux';
+import {CLEAR_STORE} from 'web/store/actions';
+import feedStatus from 'web/store/feedStatus/reducers';
 
 import dashboardData from './dashboard/data/reducers';
 import dashboardSettings from './dashboard/settings/reducers';
-import userSettings from './usersettings/reducers';
-import pages from './pages/reducers';
-
 import entities from './entities/reducers';
-import {CLEAR_STORE} from 'web/store/actions';
-import feedStatus from 'web/store/feedStatus/reducers';
+import pages from './pages/reducers';
+import userSettings from './usersettings/reducers';
 
 const rootReducer = combineReducers({
   dashboardData,

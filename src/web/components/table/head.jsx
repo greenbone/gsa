@@ -3,20 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
+import Layout from 'web/components/layout/layout';
+import Sort from 'web/components/sortby/sortby';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import Layout from 'web/components/layout/layout';
-
-import Sort from 'web/components/sortby/sortby';
 
 const TableHead = ({
   children,
@@ -62,7 +56,7 @@ const TableHead = ({
     children = `${title}`;
   }
   return (
-    <th className={className} rowSpan={rowSpan} colSpan={colSpan}>
+    <th className={className} colSpan={colSpan} rowSpan={rowSpan}>
       {sort && sortBy && isDefined(onSortChange) ? (
         <Sort by={sortBy} onClick={onSortChange}>
           <Layout {...other}>

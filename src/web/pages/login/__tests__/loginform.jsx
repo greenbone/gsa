@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import LoginForm from '../loginform';
@@ -20,12 +19,12 @@ describe('LoginForm tests', () => {
 
     const {getByName} = render(
       <LoginForm
-        error="An Error Occurred"
         showGuestLogin
         showLogin
         showProtocolInsecure
-        onSubmit={handleSubmit}
+        error="An Error Occurred"
         onGuestLoginClick={handleClick}
+        onSubmit={handleSubmit}
       />,
     );
 
@@ -42,8 +41,8 @@ describe('LoginForm tests', () => {
     render(
       <LoginForm
         error="An Error Occurred"
-        onSubmit={handleSubmit}
         onGuestLoginClick={handleClick}
+        onSubmit={handleSubmit}
       />,
     );
 
@@ -57,7 +56,7 @@ describe('LoginForm tests', () => {
     const {render} = rendererWith({gmp});
 
     render(
-      <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
+      <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
     expect(screen.queryByTestId('error')).not.toBeInTheDocument();
@@ -72,8 +71,8 @@ describe('LoginForm tests', () => {
     render(
       <LoginForm
         showProtocolInsecure
-        onSubmit={handleSubmit}
         onGuestLoginClick={handleClick}
+        onSubmit={handleSubmit}
       />,
     );
 
@@ -87,7 +86,7 @@ describe('LoginForm tests', () => {
     const {render} = rendererWith({gmp});
 
     const {queryByTestId} = render(
-      <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
+      <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
     expect(queryByTestId('protocol-insecure')).toBeNull();
@@ -102,8 +101,8 @@ describe('LoginForm tests', () => {
     render(
       <LoginForm
         isIE11
-        onSubmit={handleSubmit}
         onGuestLoginClick={handleClick}
+        onSubmit={handleSubmit}
       />,
     );
 
@@ -117,7 +116,7 @@ describe('LoginForm tests', () => {
     const {render} = rendererWith({gmp});
 
     const {queryByTestId} = render(
-      <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
+      <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
     expect(queryByTestId('IE11')).toBeNull();
@@ -130,7 +129,7 @@ describe('LoginForm tests', () => {
     const {render} = rendererWith({gmp});
 
     const {getByName} = render(
-      <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
+      <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
     expect(getByName('username')).toBeInTheDocument();
@@ -146,8 +145,8 @@ describe('LoginForm tests', () => {
     const {queryByName} = render(
       <LoginForm
         showLogin={false}
-        onSubmit={handleSubmit}
         onGuestLoginClick={handleClick}
+        onSubmit={handleSubmit}
       />,
     );
 
@@ -162,7 +161,7 @@ describe('LoginForm tests', () => {
     const {render} = rendererWith({gmp});
 
     const {getByName} = render(
-      <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
+      <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
     const usernameField = getByName('username');
@@ -184,7 +183,7 @@ describe('LoginForm tests', () => {
     const {render} = rendererWith({gmp});
 
     render(
-      <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
+      <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
     expect(screen.queryByTestId('guest-login')).not.toBeInTheDocument();
@@ -200,8 +199,8 @@ describe('LoginForm tests', () => {
     render(
       <LoginForm
         showGuestLogin={true}
-        onSubmit={handleSubmit}
         onGuestLoginClick={handleClick}
+        onSubmit={handleSubmit}
       />,
     );
 
@@ -218,8 +217,8 @@ describe('LoginForm tests', () => {
     render(
       <LoginForm
         showGuestLogin={true}
-        onSubmit={handleSubmit}
         onGuestLoginClick={handleClick}
+        onSubmit={handleSubmit}
       />,
     );
 

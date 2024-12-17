@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {setProperties, parseInt, parseDate} from 'gmp/parser';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import {setProperties, parseInt, parseDate} from 'gmp/parser';
 
 const parse_count = value => {
   const parsed = parseInt(value);

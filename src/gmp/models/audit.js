@@ -3,11 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isArray, isString} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-import {map} from 'gmp/utils/array';
-import {normalizeType} from 'gmp/utils/entitytype';
-
+import Model, {parseModelFromElement} from 'gmp/model';
 import {
   parseInt,
   parseProgressElement,
@@ -18,13 +14,14 @@ import {
   parseDuration,
   NO_VALUE,
 } from 'gmp/parser';
-
-import Model, {parseModelFromElement} from 'gmp/model';
+import {map} from 'gmp/utils/array';
+import {normalizeType} from 'gmp/utils/entitytype';
+import {isDefined, isArray, isString} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import Report from './report';
-import Schedule from './schedule';
 import Scanner from './scanner';
-
+import Schedule from './schedule';
 import {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_NO,

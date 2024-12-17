@@ -6,7 +6,6 @@
 import {describe, test, expect, beforeEach} from '@gsa/testing';
 
 import date, {setLocale as locale} from '../../models/date';
-
 import {
   setLocale,
   getLocale,

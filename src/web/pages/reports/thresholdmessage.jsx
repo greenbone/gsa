@@ -4,12 +4,9 @@
  */
 
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
 import ErrorContainer from 'web/components/error/errorcontainer';
-
 import PropTypes from 'web/utils/proptypes';
 
 const ThresholdMessage = ({threshold}) => (

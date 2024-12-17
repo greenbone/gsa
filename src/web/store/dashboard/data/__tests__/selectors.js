@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {filterIdentifier} from 'web/store/utils';
 
 import getDashboardData from '../selectors';

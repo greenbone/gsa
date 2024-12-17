@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useState} from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'web/utils/proptypes';
 
-import TabPanels from './tabpanels';
 import TabList from './tablist';
+import TabPanels from './tabpanels';
 
 /*
  * Tabs and its sub components are using the "compound components" pattern

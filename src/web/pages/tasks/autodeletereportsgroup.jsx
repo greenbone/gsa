@@ -3,19 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Spinner from 'web/components/form/spinner';
-
 import Row from 'web/components/layout/row';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const AutoDeleteReportsGroup = ({
   autoDelete = AUTO_DELETE_NO,
@@ -26,30 +22,30 @@ const AutoDeleteReportsGroup = ({
   return (
     <FormGroup title={_('Auto Delete Reports')}>
       <Radio
-        title={_('Do not automatically delete reports')}
+        checked={autoDelete !== AUTO_DELETE_KEEP}
         name="auto_delete"
+        title={_('Do not automatically delete reports')}
         value={AUTO_DELETE_NO}
         onChange={onChange}
-        checked={autoDelete !== AUTO_DELETE_KEEP}
       />
       <Row>
         <Radio
+          checked={autoDelete === AUTO_DELETE_KEEP}
           name="auto_delete"
-          value="keep"
-          onChange={onChange}
           title={_(
             'Automatically delete oldest reports but always keep newest',
           )}
-          checked={autoDelete === AUTO_DELETE_KEEP}
+          value="keep"
+          onChange={onChange}
         />
         <Spinner
-          grow="1"
-          type="int"
-          min="2"
-          max="1200"
-          name="auto_delete_data"
-          value={autoDeleteData}
           disabled={autoDelete !== AUTO_DELETE_KEEP}
+          grow="1"
+          max="1200"
+          min="2"
+          name="auto_delete_data"
+          type="int"
+          value={autoDeleteData}
           onChange={onChange}
         />
         <span>{_('reports')}</span>

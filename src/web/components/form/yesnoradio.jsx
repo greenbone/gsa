@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import Row from 'web/components/layout/row';
+import PropTypes from 'web/utils/proptypes';
 
 import Radio from './radio';
 
@@ -26,24 +23,24 @@ const YesNoRadio = ({
 }) => (
   <Row>
     <Radio
-      title={_('Yes')}
-      value={yesValue}
-      name={name}
       checked={value === yesValue}
       convert={convert}
-      onChange={onChange}
-      disabled={disabled}
       data-testid="radio-yes"
+      disabled={disabled}
+      name={name}
+      title={_('Yes')}
+      value={yesValue}
+      onChange={onChange}
     />
     <Radio
-      title={_('No')}
-      value={noValue}
-      name={name}
       checked={value === noValue}
       convert={convert}
-      onChange={onChange}
-      disabled={disabled}
       data-testid="radio-no"
+      disabled={disabled}
+      name={name}
+      title={_('No')}
+      value={noValue}
+      onChange={onChange}
     />
   </Row>
 );

@@ -7,7 +7,6 @@
 import React from 'react';
 
 import PropTypes from '../../utils/proptypes';
-
 import Layout from '../layout/layout';
 
 const TabList = ({active = 0, children, onActivateTab, ...props}) => {
