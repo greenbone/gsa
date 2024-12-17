@@ -138,5 +138,3 @@ export const resetSettings = gmp => id => (dispatch, getState) => {
     error => dispatch(resetDashboardSettingsError(id, error)),
   );
 };
-
-// vim: set ts=2 sw=2 tw=80:

@@ -14,7 +14,7 @@ const CpeIcon = ({name, ...props}) => {
 
   const icon = isDefined(cpe) ? cpe.icon : 'cpe/other.svg';
 
-  return <Img {...props} data-testid="cpe-icon" src={icon} width="16px"/>;
+  return <Img {...props} data-testid="cpe-icon" src={icon} width="16px" />;
 };
 
 CpeIcon.propTypes = {
@@ -22,5 +22,3 @@ CpeIcon.propTypes = {
 };
 
 export default CpeIcon;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -47,5 +47,3 @@ export const CvesSeverityLoader = ({filter, children}) => (
 );
 
 CvesSeverityLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

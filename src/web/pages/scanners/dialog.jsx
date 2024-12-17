@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {
   GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
@@ -51,7 +49,6 @@ const ScannerDialog = ({
   title = title || _('New Scanner');
 
   const handleTypeChange = useCallback(
-     
     (value, name) => {
       if (onScannerTypeChange) {
         value = parseInt(value);
@@ -188,5 +185,3 @@ ScannerDialog.propTypes = {
 };
 
 export default ScannerDialog;
-
-// vim: set ts=2 sw=2 tw=80:

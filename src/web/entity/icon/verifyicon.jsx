@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
@@ -36,7 +35,6 @@ const EntityVerifyIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Verify {{entity}}', {entity: displayName});
-       
     } else if (!mayVerify) {
       title = _('{{entity}} may not be verified', {entity: displayName});
     } else {
@@ -67,5 +65,3 @@ EntityVerifyIcon.propTypes = {
 };
 
 export default withCapabilities(EntityVerifyIcon);
-
-// vim: set ts=2 sw=2 tw=80:

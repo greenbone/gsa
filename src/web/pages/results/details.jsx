@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import _ from 'gmp/locale';
 import {TAG_NA} from 'gmp/models/nvt';
 import {DEFAULT_OID_VALUE} from 'gmp/models/override';
@@ -23,7 +20,6 @@ import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 import {renderNvtName} from 'web/utils/render';
-
 
 import Diff, {Added, Removed} from './diff';
 import P from '../nvts/preformatted';
@@ -327,5 +323,3 @@ ResultDetails.propTypes = {
 };
 
 export default ResultDetails;
-
-// vim: set ts=2 sw=2 tw=80:

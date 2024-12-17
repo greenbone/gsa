@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
 import TableHead from 'web/components/table/head';
@@ -94,5 +93,3 @@ export default createEntitiesTable({
   footer: Footer,
   rowDetails: withRowDetails('target', 10)(TargetDetails),
 });
-
-// vim: set ts=2 sw=2 tw=80:

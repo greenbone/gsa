@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
@@ -72,5 +71,3 @@ export default createEntitiesTable({
   emptyTitle: _l('No Ports available'),
   row: Row,
 });
-
-// vim: set ts=2 sw=2 tw=80:

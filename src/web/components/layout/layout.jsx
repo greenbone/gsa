@@ -10,5 +10,3 @@ const Layout = withLayout()('div');
 Layout.displayName = 'Layout';
 
 export default Layout;
-
-// vim: set ts=2 sw=2 tw=80:

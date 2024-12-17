@@ -8,7 +8,6 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 
-
 import PropTypes from '../../utils/proptypes';
 
 const Container = styled.div`
@@ -92,5 +91,3 @@ class AutoSize extends React.Component {
 }
 
 export default AutoSize;
-
-// vim: set ts=2 sw=2 tw=80:

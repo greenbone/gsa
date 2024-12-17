@@ -11,5 +11,3 @@ import WizardIcon from '../wizardicon';
 describe('WizardIcon component tests', () => {
   testIcon(WizardIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

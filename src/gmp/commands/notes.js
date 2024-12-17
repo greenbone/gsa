@@ -114,5 +114,3 @@ class NotesCommand extends EntitiesCommand {
 
 registerCommand('note', NoteCommand);
 registerCommand('notes', NotesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

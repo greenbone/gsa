@@ -6,7 +6,6 @@
 import Icon from './svg/st_workaround.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const StWorkaroundIconComponent = withSvgIcon()(Icon);
 
 const StWorkaroundIcon = props => (
@@ -14,5 +13,3 @@ const StWorkaroundIcon = props => (
 );
 
 export default StWorkaroundIcon;
-
-// vim: set ts=2 sw=2 tw=80:

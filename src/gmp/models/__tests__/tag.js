@@ -44,5 +44,3 @@ describe('Tag model tests', () => {
     expect(tag.value).toEqual('foo');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

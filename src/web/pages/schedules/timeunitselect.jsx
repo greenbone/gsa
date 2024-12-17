@@ -22,5 +22,3 @@ const TimeUnitSelect = props => {
 };
 
 export default TimeUnitSelect;
-
-// vim: set ts=2 sw=2 tw=80:

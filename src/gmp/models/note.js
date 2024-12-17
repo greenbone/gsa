@@ -64,5 +64,3 @@ class Note extends Model {
 }
 
 export default Note;
-
-// vim: set ts=2 sw=2 tw=80:

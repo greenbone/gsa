@@ -20,7 +20,7 @@ const TrashIcon = ({selectionType, title, ...other}) => {
       title = _('Move all filtered to trashcan');
     }
   }
-  return <TrashcanIcon {...other} data-testid="tash-icon" title={title}/>;
+  return <TrashcanIcon {...other} data-testid="tash-icon" title={title} />;
 };
 
 TrashIcon.propTypes = {
@@ -29,5 +29,3 @@ TrashIcon.propTypes = {
 };
 
 export default TrashIcon;
-
-// vim: set ts=2 sw=2 tw=80:

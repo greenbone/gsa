@@ -118,5 +118,3 @@ export class RootLogger {
 const logger = new RootLogger();
 
 export default logger;
-
-// vim: set ts=2 sw=2 tw=80:

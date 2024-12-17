@@ -41,5 +41,3 @@ describe('Login model tests', () => {
     expect(login2.sessionTimeout).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

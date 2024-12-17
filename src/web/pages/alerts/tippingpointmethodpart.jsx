@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import React from 'react';
 import FileField from 'web/components/form/filefield';
@@ -87,5 +86,3 @@ TippingPointMethodPart.propTypes = {
 };
 
 export default withPrefix(TippingPointMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -7,5 +7,3 @@ import * as funcs from '../permissions';
 import {testAll} from '../utils/testing';
 
 testAll('permission', funcs);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -10,8 +10,6 @@ import Divider from 'web/components/layout/divider';
 import InfoPanel from 'web/components/panel/infopanel';
 import PropTypes from 'web/utils/proptypes';
 
-
-
 const Content = styled.span`
   ${props => {
     if (!isDefined(props.onClick)) {
@@ -45,5 +43,3 @@ ReportPanel.propTypes = {
 };
 
 export default ReportPanel;
-
-// vim: set ts=2 sw=2 tw=80:

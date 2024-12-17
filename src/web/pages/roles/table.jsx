@@ -33,5 +33,3 @@ const RolesTable = createEntitiesTable({
 });
 
 export default RolesTable;
-
-// vim: set ts=2 sw=2 tw=80:

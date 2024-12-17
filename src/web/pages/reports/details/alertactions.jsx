@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import {ALL_FILTER} from 'gmp/models/filter';
@@ -44,12 +41,10 @@ class AlertActions extends React.Component {
     this.handleAlertChange = this.handleAlertChange.bind(this);
     this.handleTriggerAlert = this.handleTriggerAlert.bind(this);
     this.onAlertCreated = this.onAlertCreated.bind(this);
-    this.handleOpenTriggerAlertDialog = this.handleOpenTriggerAlertDialog.bind(
-      this,
-    );  
-    this.handleCloseTriggerAlertDialog = this.handleCloseTriggerAlertDialog.bind(
-      this,
-    );  
+    this.handleOpenTriggerAlertDialog =
+      this.handleOpenTriggerAlertDialog.bind(this);
+    this.handleCloseTriggerAlertDialog =
+      this.handleCloseTriggerAlertDialog.bind(this);
   }
 
   componentDidMount() {
@@ -227,10 +222,5 @@ const mapStateToProps = rootState => {
 export default compose(
   withGmp,
   withCapabilities,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(AlertActions);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -22,9 +21,8 @@ class TlsCertificateComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.handleTlsCertificateDownload = this.handleTlsCertificateDownload.bind(
-      this,
-    );
+    this.handleTlsCertificateDownload =
+      this.handleTlsCertificateDownload.bind(this);
   }
 
   handleInteraction() {
@@ -136,5 +134,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(TlsCertificateComponent);
-
-// vim: set ts=2 sw=2 tw=80:

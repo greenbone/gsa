@@ -7,5 +7,3 @@ import * as audits from '../audits';
 import {testAll} from '../utils/testing';
 
 testAll('audit', audits);
-
-// vim: set ts=2 sw=2 tw=80:

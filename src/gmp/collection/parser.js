@@ -173,5 +173,3 @@ export const parseCollectionList = (
     counts: collection_count_parse_func(response, name, plural_name),
   };
 };
-
-// vim: set ts=2 sw=2 tw=80:

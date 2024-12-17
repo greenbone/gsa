@@ -46,5 +46,3 @@ class GmpCommand extends HttpCommand {
 }
 
 export default GmpCommand;
-
-// vim: set ts=2 sw=2 tw=80:

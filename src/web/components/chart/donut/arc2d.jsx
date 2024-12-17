@@ -45,5 +45,3 @@ Arc2d.propTypes = {
 };
 
 export default Arc2d;
-
-// vim: set ts=2 sw=2 tw=80:

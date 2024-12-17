@@ -209,5 +209,3 @@ class ScanConfigsCommand extends EntitiesCommand {
 
 registerCommand('scanconfig', ScanConfigCommand);
 registerCommand('scanconfigs', ScanConfigsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

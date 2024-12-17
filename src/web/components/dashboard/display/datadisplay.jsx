@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import equal from 'fast-deep-equal';
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
@@ -357,5 +355,3 @@ DataDisplay.propTypes = {
 };
 
 export default DataDisplay;
-
-// vim: set ts=2 sw=2 tw=80:

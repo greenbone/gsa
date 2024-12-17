@@ -23,5 +23,3 @@ describe('filter_string function tests', () => {
     expect(filter_string(filter)).toEqual('name=foo and severity>1');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

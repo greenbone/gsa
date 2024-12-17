@@ -26,8 +26,6 @@ import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
 import FilterDialog from './filterdialog';
 import NotesTable from './table';
 
-
-
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onNoteCreateClick}) => (
     <IconDivider>
@@ -119,5 +117,3 @@ export default withEntitiesContainer('note', {
   entitiesSelector,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

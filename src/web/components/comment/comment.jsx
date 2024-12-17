@@ -15,7 +15,11 @@ const Comment = ({text, children}) => {
   if (!isDefined(text)) {
     return null;
   }
-  return <div className="comment" data-testid="comment">{text}</div>;
+  return (
+    <div className="comment" data-testid="comment">
+      {text}
+    </div>
+  );
 };
 
 Comment.propTypes = {
@@ -23,5 +27,3 @@ Comment.propTypes = {
 };
 
 export default Comment;
-
-// vim: set ts=2 sw=2 tw=80:

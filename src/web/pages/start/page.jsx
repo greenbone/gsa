@@ -3,11 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
-
-
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import memoize from 'memoize-one';
@@ -106,40 +101,33 @@ class StartPage extends React.Component {
 
     this.handleActivateTab = this.handleActivateTab.bind(this);
 
-    this.handleOpenConfirmRemoveDashboardDialog = this.handleOpenConfirmRemoveDashboardDialog.bind(
-      this,
-    );
-    this.handleCloseConfirmRemoveDashboardDialog = this.handleCloseConfirmRemoveDashboardDialog.bind(
-      this,
-    );
+    this.handleOpenConfirmRemoveDashboardDialog =
+      this.handleOpenConfirmRemoveDashboardDialog.bind(this);
+    this.handleCloseConfirmRemoveDashboardDialog =
+      this.handleCloseConfirmRemoveDashboardDialog.bind(this);
 
     this.handleRemoveDashboard = this.handleRemoveDashboard.bind(this);
 
-    this.handleLoadDashboardSettings = this.handleLoadDashboardSettings.bind(
-      this,
-    );
-    this.handleSaveDashboardSettings = this.handleSaveDashboardSettings.bind(
-      this,
-    );
+    this.handleLoadDashboardSettings =
+      this.handleLoadDashboardSettings.bind(this);
+    this.handleSaveDashboardSettings =
+      this.handleSaveDashboardSettings.bind(this);
 
     this.handleResetDashboard = this.handleResetDashboard.bind(this);
     this.handleAddNewDisplay = this.handleAddNewDisplay.bind(this);
 
-    this.handleOpenNewDashboardDialog = this.handleOpenNewDashboardDialog.bind(
-      this,
-    );
-    this.handleCloseNewDashboardDialog = this.handleCloseNewDashboardDialog.bind(
-      this,
-    );
+    this.handleOpenNewDashboardDialog =
+      this.handleOpenNewDashboardDialog.bind(this);
+    this.handleCloseNewDashboardDialog =
+      this.handleCloseNewDashboardDialog.bind(this);
 
     this.handleAddNewDashboard = this.handleAddNewDashboard.bind(this);
 
     this.handleResetDashboards = this.handleResetDashboards.bind(this);
     this.handleSetDefaultSettings = this.handleSetDefaultSettings.bind(this);
 
-    this.handleCloseEditDashboardDialog = this.handleCloseEditDashboardDialog.bind(
-      this,
-    );
+    this.handleCloseEditDashboardDialog =
+      this.handleCloseEditDashboardDialog.bind(this);
     this.handleSaveEditDashboard = this.handleSaveEditDashboard.bind(this);
 
     this.getDashboardSelector = memoize(
@@ -408,7 +396,7 @@ class StartPage extends React.Component {
                                 title={_('Edit Dashboard Title')}
                                 onClick={() =>
                                   this.handleOpenEditDashboardDialog(id)
-                                }  
+                                }
                               />
                               <DeleteIcon
                                 size="tiny"
@@ -417,7 +405,7 @@ class StartPage extends React.Component {
                                   this.handleOpenConfirmRemoveDashboardDialog(
                                     id,
                                   )
-                                }  
+                                }
                               />
                             </IconDivider>
                           )}
@@ -541,5 +529,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(StartPage);
-
-// vim: set ts=2 sw=2 tw=80:

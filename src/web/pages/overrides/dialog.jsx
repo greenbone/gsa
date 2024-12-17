@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import {
   ANY,
   MANUAL,
@@ -495,5 +492,3 @@ OverrideDialog.propTypes = {
 };
 
 export default OverrideDialog;
-
-// vim: set ts=2 sw=2 tw=80:

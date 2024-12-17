@@ -12,8 +12,6 @@ import withLayout from 'web/components/layout/withLayout';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-
-
 const HeaderLayout = styled(Layout)`
   margin: 26px 0px 10px 0px;
   padding-bottom: 15px;
@@ -66,5 +64,3 @@ SectionHeader.propTypes = {
 };
 
 export default SectionHeader;
-
-// vim: set ts=2 sw=2 tw=80:

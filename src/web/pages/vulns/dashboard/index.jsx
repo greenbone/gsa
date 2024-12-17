@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 
 import {VulnsCvssDisplay, VulnsCvssTableDisplay} from './cvssdisplay';
 import {VulnsHostsDisplay, VulnsHostsTableDisplay} from './hostsdisplay';
@@ -38,5 +36,3 @@ const VulnerabilitiesDashboard = props => (
 );
 
 export default VulnerabilitiesDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

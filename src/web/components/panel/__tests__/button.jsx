@@ -31,5 +31,3 @@ describe('InfoPanel button tests', () => {
     expect(element).toHaveTextContent('bar');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

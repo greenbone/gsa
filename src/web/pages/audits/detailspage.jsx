@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -381,5 +380,3 @@ export default withEntityContainer('audit', {
   mapStateToProps,
   reloadInterval,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import _ from 'gmp/locale';
 import {USERS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
@@ -37,7 +34,7 @@ import UsersTable from './table';
 
 const ToolBarIcons = ({onUserCreateClick}) => {
   const capabilities = useCapabilities();
-  const [_] = useTranslation();  
+  const [_] = useTranslation();
   return (
     <IconDivider>
       <ManualIcon
@@ -79,7 +76,7 @@ class UsersPage extends React.Component {
     this.handleInteraction();
 
     if (deleteUsers.length === 1) {
-      const {id} = deleteUsers[0];  
+      const {id} = deleteUsers[0];
       return gmp.user.delete({id, inheritorId}).then(onChanged);
     }
 
@@ -252,5 +249,3 @@ export default compose(
   }),
   connect(mapStateToProps, mapDispatchToProps),
 )(UsersPage);
-
-// vim: set ts=2 sw=2 tw=80:

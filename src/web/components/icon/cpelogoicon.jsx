@@ -6,7 +6,6 @@
 import Icon from './svg/cpe.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const CpeLogoIconComponent = withSvgIcon()(Icon);
 
 const CpeLogoIcon = props => (
@@ -14,5 +13,3 @@ const CpeLogoIcon = props => (
 );
 
 export default CpeLogoIcon;
-
-// vim: set ts=2 sw=2 tw=80:

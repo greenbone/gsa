@@ -29,5 +29,3 @@ const TableHeader = styled.thead`
 `;
 
 export default TableHeader;
-
-// vim: set ts=2 sw=2 tw=80:

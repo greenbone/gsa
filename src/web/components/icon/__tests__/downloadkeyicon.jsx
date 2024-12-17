@@ -11,5 +11,3 @@ import DownloadKeyIcon from '../downloadkeyicon';
 describe('DownloadKeyIcon component tests', () => {
   testIcon(DownloadKeyIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

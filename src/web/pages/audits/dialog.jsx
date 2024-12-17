@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
@@ -385,5 +382,3 @@ AuditDialog.propTypes = {
 };
 
 export default AuditDialog;
-
-// vim: set ts=2 sw=2 tw=80:

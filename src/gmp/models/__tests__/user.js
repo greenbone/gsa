@@ -121,5 +121,3 @@ describe('User model tests', () => {
     expect(user3.isSuperAdmin()).toEqual(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -38,5 +38,3 @@ export const registerDisplay = (displayId, component, {title}) => {
 };
 
 export const getDisplay = displayId => registry[displayId];
-
-// vim: set ts=2 sw=2 tw=80:

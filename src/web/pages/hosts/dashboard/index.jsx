@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 
 import {HostsCvssDisplay, HostsCvssTableDisplay} from './cvssdisplay';
 import {
@@ -59,5 +57,3 @@ const HostsDashboard = props => (
 );
 
 export default HostsDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

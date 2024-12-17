@@ -13,5 +13,3 @@ const DownloadDebIcon = props => (
 );
 
 export default DownloadDebIcon;
-
-// vim: set ts=2 sw=2 tw=80:

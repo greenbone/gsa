@@ -6,7 +6,6 @@
 import Icon from './svg/sensor.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const SensorIconComponent = withSvgIcon()(Icon);
 
 const SensorIcon = props => (
@@ -14,5 +13,3 @@ const SensorIcon = props => (
 );
 
 export default SensorIcon;
-
-// vim: set ts=2 sw=2 tw=80:

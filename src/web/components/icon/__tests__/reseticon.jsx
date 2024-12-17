@@ -11,5 +11,3 @@ import ResetIcon from '../reseticon';
 describe('ResetIcon component tests', () => {
   testIcon(ResetIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

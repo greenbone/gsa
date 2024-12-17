@@ -7,5 +7,3 @@ import * as reportformat from '../reportformats';
 import {testAll} from '../utils/testing';
 
 testAll('reportformat', reportformat);
-
-// vim: set ts=2 sw=2 tw=80:

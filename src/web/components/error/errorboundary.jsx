@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import * as Sentry from '@sentry/react';
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
@@ -53,5 +51,3 @@ ErrorBoundary.propTypes = {
 };
 
 export default ErrorBoundary;
-
-// vim: set ts=2 sw=2 tw=80:

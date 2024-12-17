@@ -123,5 +123,3 @@ describe('ConfirmationDialog component tests', () => {
     expect(handleClose).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

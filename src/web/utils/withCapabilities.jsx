@@ -18,5 +18,3 @@ const withCapabilities = Component => {
 };
 
 export default withCapabilities;
-
-// vim: set ts=2 sw=2 tw=80:

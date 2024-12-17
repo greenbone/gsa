@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import Filter, {
@@ -24,7 +21,7 @@ import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';  
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import FilterProvider from 'web/entities/filterprovider';
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 import {
@@ -697,7 +694,7 @@ const load =
   ({
     defaultFilter,
     reportId,
-     
+
     loadReportWithThreshold,
     pageFilter,
     reportFilter,
@@ -831,5 +828,3 @@ export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(ReportDetailsWrapper);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -153,4 +153,3 @@ export const createDeleteEntity =
     gmp[entityType]
       .delete({id})
       .then(() => dispatch(entityDeleteActions.success(entityType, id)));
-// vim: set ts=2 sw=2 tw=80:

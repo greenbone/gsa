@@ -15,5 +15,3 @@ describe('Loading component tests', () => {
     expect(element).toBeVisible();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -7,5 +7,3 @@ import * as portlist from '../portlists';
 import {testAll} from '../utils/testing';
 
 testAll('portlist', portlist);
-
-// vim: set ts=2 sw=2 tw=80:

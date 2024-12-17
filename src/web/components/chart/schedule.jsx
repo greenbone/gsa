@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {LinearGradient} from '@visx/gradient';
 import {scaleBand, scaleUtc} from 'd3-scale';
 import _ from 'gmp/locale';
@@ -14,7 +13,6 @@ import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
-
 
 import Axis from './axis';
 import Group from './group';
@@ -288,5 +286,3 @@ ScheduleChart.propTypes = {
 };
 
 export default ScheduleChart;
-
-// vim: set ts=2 sw=2 tw=80:

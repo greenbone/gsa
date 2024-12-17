@@ -52,5 +52,3 @@ Button.propTypes = {
 };
 
 export default Button;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -47,5 +47,3 @@ export const split = (string, separator, limit) => {
 };
 
 export const isEmpty = string => !isDefined(string) || string.length === 0;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -89,5 +89,3 @@ SecinfoEventPart.propTypes = {
 };
 
 export default withPrefix(SecinfoEventPart);
-
-// vim: set ts=2 sw=2 tw=80:

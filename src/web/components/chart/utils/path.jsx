@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 class Path {
   constructor() {
     this.paths = [];
@@ -58,4 +57,3 @@ class Path {
 const pathFunc = () => new Path();
 
 export default pathFunc;
-// vim: set ts=2 sw=2 tw=80:

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
@@ -108,5 +106,3 @@ TaskWizard.propTypes = {
 };
 
 export default TaskWizard;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import LegendIcon from '../legendicon';
 describe('LegendIcon component tests', () => {
   testIcon(LegendIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

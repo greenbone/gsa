@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import {selectSaveId} from 'gmp/utils/id';
 import React, {useState} from 'react';
@@ -129,5 +128,3 @@ VeriniceMethodPart.propTypes = {
 };
 
 export default withPrefix(VeriniceMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

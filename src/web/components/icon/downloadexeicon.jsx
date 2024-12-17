@@ -6,7 +6,6 @@
 import Icon from './svg/dl_exe.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const DownloadExeIconComponent = withSvgIcon()(Icon);
 
 const DownloadExeIcon = props => (
@@ -14,5 +13,3 @@ const DownloadExeIcon = props => (
 );
 
 export default DownloadExeIcon;
-
-// vim: set ts=2 sw=2 tw=80:

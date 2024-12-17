@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback} from 'react';
 import Checkbox from 'web/components/form/checkbox';
@@ -98,5 +97,3 @@ SeverityLevelsFilterGroup.propTypes = {
 };
 
 export default SeverityLevelsFilterGroup;
-
-// vim: set ts=2 sw=2 tw=80:

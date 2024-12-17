@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import styled from 'styled-components';
 import {DialogFooterLayout} from 'web/components/dialog/footer';
@@ -87,5 +86,3 @@ MultiStepFooter.propTypes = {
 };
 
 export default MultiStepFooter;
-
-// vim: set ts=2 sw=2 tw=80:

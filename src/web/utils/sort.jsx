@@ -98,5 +98,3 @@ export const makeComparePort = name => makeCompare(parseInt)(name, -1);
 
 export const makeCompareSeverity = (name = 'severity') =>
   makeCompareNumber(name, 0);
-
-// vim: set ts=2 sw=2 tw=80:

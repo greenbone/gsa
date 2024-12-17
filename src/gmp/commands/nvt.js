@@ -85,5 +85,3 @@ class NvtsCommand extends InfoEntitiesCommand {
 
 registerCommand('nvt', NvtCommand);
 registerCommand('nvts', NvtsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

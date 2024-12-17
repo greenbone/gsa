@@ -241,5 +241,3 @@ export default withEntityContainer('ticket', {
   load: loadTicket,
   entitySelector: ticketSelector,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

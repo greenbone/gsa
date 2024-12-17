@@ -11,5 +11,3 @@ import CertBundAdvIcon from '../certbundadvicon';
 describe('CertBundAdvIcon component tests', () => {
   testIcon(CertBundAdvIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

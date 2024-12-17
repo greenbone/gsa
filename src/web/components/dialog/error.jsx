@@ -44,7 +44,11 @@ const DialogError = ({error, onCloseClick}) => {
       >
         {error}
       </span>
-      <DialogCloseButton data-testid="error-close-button" title={_('Close')} onClick={onCloseClick}/>
+      <DialogCloseButton
+        data-testid="error-close-button"
+        title={_('Close')}
+        onClick={onCloseClick}
+      />
     </StyledLayout>
   );
 };
@@ -55,5 +59,3 @@ DialogError.propTypes = {
 };
 
 export default DialogError;
-
-// vim: set ts=2 sw=2 tw=80:

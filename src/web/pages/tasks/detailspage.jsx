@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
@@ -515,5 +514,3 @@ export default withEntityContainer('task', {
   mapStateToProps,
   reloadInterval,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

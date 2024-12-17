@@ -11,5 +11,3 @@ import VerifyNoIcon from '../verifynoicon';
 describe('VerifyNoIcon component tests', () => {
   testIcon(VerifyNoIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

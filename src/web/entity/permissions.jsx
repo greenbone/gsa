@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
@@ -293,5 +290,3 @@ EntityPermissions.propTypes = {
 };
 
 export default EntityPermissions;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import StVendorFixIcon from '../stvendorfixicon';
 describe('StVendorFixIcon component tests', () => {
   testIcon(StVendorFixIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

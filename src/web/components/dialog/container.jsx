@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
@@ -47,5 +46,3 @@ DialogContainer.propTypes = {
 };
 
 export default DialogContainer;
-
-// vim: set ts=2 sw=2 tw=80:

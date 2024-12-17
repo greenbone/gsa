@@ -11,5 +11,3 @@ import UnfoldIcon from '../unfoldicon';
 describe('UnfoldIcon component tests', () => {
   testIcon(UnfoldIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

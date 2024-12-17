@@ -9,7 +9,6 @@ import {fireEvent, rendererWith} from 'web/utils/testing';
 
 import CertLink from '../certlink';
 
-
 describe('CertLink tests', () => {
   beforeEach(() => {
     window.history.pushState({}, 'Test page', '/');
@@ -77,5 +76,3 @@ describe('CertLink tests', () => {
     expect(window.location.pathname).toEqual('/');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

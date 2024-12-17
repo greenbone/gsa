@@ -11,5 +11,3 @@ import LastIcon from '../lasticon';
 describe('LastIcon component tests', () => {
   testIcon(LastIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

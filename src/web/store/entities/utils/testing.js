@@ -572,5 +572,3 @@ export const testAll = (
   testReducerForEntities(name, reducer, entitiesLoadingActions);
   testReducerForEntity(name, reducer, entityLoadingActions);
 };
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import CloneIcon from '../cloneicon';
 describe('CloneIcon component tests', () => {
   testIcon(CloneIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

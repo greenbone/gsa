@@ -274,5 +274,3 @@ describe('Result model tests', () => {
     expect(result2.hasDelta()).toEqual(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

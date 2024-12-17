@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {isString} from 'gmp/utils/identity';
 import React from 'react';
@@ -33,7 +32,13 @@ const CertLink = ({id, textOnly = false, type}) => {
     info_type = 'dfncert';
   }
   return (
-    <DetailsLink data-testid="cert_link" id={id} textOnly={textOnly} title={title} type={info_type}>
+    <DetailsLink
+      data-testid="cert_link"
+      id={id}
+      textOnly={textOnly}
+      title={title}
+      type={info_type}
+    >
       {id}
     </DetailsLink>
   );
@@ -46,5 +51,3 @@ CertLink.propTypes = {
 };
 
 export default CertLink;
-
-// vim: set ts=2 sw=2 tw=80:

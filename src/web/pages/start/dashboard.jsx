@@ -56,33 +56,34 @@ const StartDashboard = ({
   ...props
 }) => {
   return (
-  <Layout grow flex="column">
-    <Layout align="end">
-      <DashboardControls
-        canAdd={canAddDisplay(props)}
-        dashboardId={id}
-        displayIds={ALL_DISPLAYS}
+    <Layout grow flex="column">
+      <Layout align="end">
+        <DashboardControls
+          canAdd={canAddDisplay(props)}
+          dashboardId={id}
+          displayIds={ALL_DISPLAYS}
+          settings={settings}
+          onInteraction={onInteraction}
+          onNewDisplay={onNewDisplay}
+          onResetClick={onResetDashboard}
+        />
+      </Layout>
+      <Dashboard
+        {...props}
+        showFilterSelection
+        showFilterString
+        defaultDisplays={DEFAULT_DISPLAYS}
+        id={id}
+        isLoading={false}
+        loadSettings={loadSettings}
+        permittedDisplays={ALL_DISPLAYS}
+        saveSettings={saveSettings}
         settings={settings}
         onInteraction={onInteraction}
-        onNewDisplay={onNewDisplay}
-        onResetClick={onResetDashboard}
       />
     </Layout>
-    <Dashboard
-      {...props}
-      showFilterSelection
-      showFilterString
-      defaultDisplays={DEFAULT_DISPLAYS}
-      id={id}
-      isLoading={false}
-      loadSettings={loadSettings}
-      permittedDisplays={ALL_DISPLAYS}
-      saveSettings={saveSettings}
-      settings={settings}
-      onInteraction={onInteraction}
-    />
-  </Layout>
-)};
+  );
+};
 
 StartDashboard.propTypes = {
   id: PropTypes.id.isRequired,
@@ -95,5 +96,3 @@ StartDashboard.propTypes = {
 };
 
 export default StartDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

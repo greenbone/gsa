@@ -50,5 +50,3 @@ class Cpe extends Info {
 }
 
 export default Cpe;
-
-// vim: set ts=2 sw=2 tw=80:

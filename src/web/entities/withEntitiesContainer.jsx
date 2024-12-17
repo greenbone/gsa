@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {useSearchParams} from 'react-router-dom';
 import withDownload from 'web/components/form/withDownload';
 import Reload from 'web/components/loading/reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';  
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 import FilterProvider from 'web/entities/filterprovider';
 import {pageFilter} from 'web/store/pages/actions';
@@ -115,5 +115,3 @@ const withEntitiesContainer =
   };
 
 export default withEntitiesContainer;
-
-// vim: set ts=2 sw=2 tw=80:

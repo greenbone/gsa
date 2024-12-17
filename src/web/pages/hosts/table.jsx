@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -167,5 +166,3 @@ export const HostsTable = createEntitiesTable({
 });
 
 export default HostsTable;
-
-// vim: set ts=2 sw=2 tw=80:

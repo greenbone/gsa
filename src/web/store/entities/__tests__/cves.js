@@ -7,5 +7,3 @@ import * as cve from '../cves';
 import {testAll} from '../utils/testing';
 
 testAll('cve', cve);
-
-// vim: set ts=2 sw=2 tw=80:

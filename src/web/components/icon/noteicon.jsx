@@ -6,7 +6,6 @@
 import Icon from './svg/note.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const NoteIconComponent = withSvgIcon()(Icon);
 
 const NoteIcon = props => (
@@ -14,5 +13,3 @@ const NoteIcon = props => (
 );
 
 export default NoteIcon;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -76,5 +76,3 @@ class CertBundAdv extends Info {
 }
 
 export default CertBundAdv;
-
-// vim: set ts=2 sw=2 tw=80:

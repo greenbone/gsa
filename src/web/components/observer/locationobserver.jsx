@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import Logger from 'gmp/log';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -73,5 +70,3 @@ export default compose(
     renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
   })),
 )(LocationObserver);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -6,7 +6,6 @@
 import Icon from './svg/dl_key.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const DownloadKeyIconComponent = withSvgIcon()(Icon);
 
 const DownloadKeyIcon = props => (
@@ -14,5 +13,3 @@ const DownloadKeyIcon = props => (
 );
 
 export default DownloadKeyIcon;
-
-// vim: set ts=2 sw=2 tw=80:

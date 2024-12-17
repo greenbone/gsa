@@ -11,5 +11,3 @@ import TrendUpIcon from '../trendupicon';
 describe('TrendUpIcon component tests', () => {
   testIcon(TrendUpIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

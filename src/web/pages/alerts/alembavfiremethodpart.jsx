@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
@@ -187,5 +186,3 @@ AlembaVfireMethodPart.propTypes = {
 };
 
 export default withPrefix(AlembaVfireMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -6,7 +6,6 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 
-
 import PropTypes from './proptypes';
 
 export const withPrefix = Component => {
@@ -27,5 +26,3 @@ export const withPrefix = Component => {
 };
 
 export default withPrefix;
-
-// vim: set ts=2 sw=2 tw=80:

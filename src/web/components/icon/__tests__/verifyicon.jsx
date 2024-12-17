@@ -11,5 +11,3 @@ import VerifyIcon from '../verifyicon';
 describe('VerifyIcon component tests', () => {
   testIcon(VerifyIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

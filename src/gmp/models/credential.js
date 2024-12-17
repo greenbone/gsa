@@ -134,5 +134,3 @@ class Credential extends Model {
 }
 
 export default Credential;
-
-// vim: set ts=2 sw=2 tw=80:

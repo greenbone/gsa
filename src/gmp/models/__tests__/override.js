@@ -125,5 +125,3 @@ describe('Note model tests', () => {
     expect(override.name).toEqual('foo');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

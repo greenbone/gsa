@@ -3,15 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined, isString} from 'gmp/utils/identity';
 import React from 'react';
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
-} from 'web/components/dialog/composercontent';  
+} from 'web/components/dialog/composercontent';
 import SaveDialog from 'web/components/dialog/savedialog';
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
@@ -122,5 +120,3 @@ TriggerAlertDialog.propTypes = {
 };
 
 export default TriggerAlertDialog;
-
-// vim: set ts=2 sw=2 tw=80:

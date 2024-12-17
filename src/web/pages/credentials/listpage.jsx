@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {CREDENTIALS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import CredentialIcon from 'web/components/icon/credentialicon';
@@ -119,5 +118,3 @@ export default withEntitiesContainer('credential', {
   entitiesSelector,
   loadEntities,
 })(CredentialsPage);
-
-// vim: set ts=2 sw=2 tw=80:

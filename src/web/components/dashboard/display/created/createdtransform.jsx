@@ -6,7 +6,6 @@
 import {parseInt, parseDate} from 'gmp/parser';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-
 const transformCreated = (data = {}) => {
   const {groups = []} = data;
   return groups.map(group => {
@@ -22,5 +21,3 @@ const transformCreated = (data = {}) => {
 };
 
 export default transformCreated;
-
-// vim: set ts=2 sw=2 tw=80:

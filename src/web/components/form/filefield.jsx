@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {FileInput} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback} from 'react';
@@ -41,5 +40,3 @@ FileField.propTypes = {
 };
 
 export default FileField;
-
-// vim: set ts=2 sw=2 tw=80:

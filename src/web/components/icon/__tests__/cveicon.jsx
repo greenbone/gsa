@@ -11,5 +11,3 @@ import CveIcon from '../cveicon';
 describe('CveIcon component tests', () => {
   testIcon(CveIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

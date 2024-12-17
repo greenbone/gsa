@@ -19,5 +19,3 @@ CveLink.propTypes = {
 };
 
 export default CveLink;
-
-// vim: set ts=2 sw=2 tw=80:

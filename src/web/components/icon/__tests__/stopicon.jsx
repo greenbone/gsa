@@ -11,5 +11,3 @@ import StopIcon from '../stopicon';
 describe('StopIcon component tests', () => {
   testIcon(StopIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

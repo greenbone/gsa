@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
@@ -36,9 +34,8 @@ class TargetComponent extends React.Component {
     };
 
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
-    this.handleCloseCredentialsDialog = this.handleCloseCredentialsDialog.bind(
-      this,
-    );
+    this.handleCloseCredentialsDialog =
+      this.handleCloseCredentialsDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
     this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
@@ -47,17 +44,14 @@ class TargetComponent extends React.Component {
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
     this.handlePortListChange = this.handlePortListChange.bind(this);
-    this.handleEsxiCredentialChange = this.handleEsxiCredentialChange.bind(
-      this,
-    );
+    this.handleEsxiCredentialChange =
+      this.handleEsxiCredentialChange.bind(this);
     this.handleSshCredentialChange = this.handleSshCredentialChange.bind(this);
-    this.handleSshElevateCredentialChange = this.handleSshElevateCredentialChange.bind(
-      this,
-    );
+    this.handleSshElevateCredentialChange =
+      this.handleSshElevateCredentialChange.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
-    this.handleSnmpCredentialChange = this.handleSnmpCredentialChange.bind(
-      this,
-    );
+    this.handleSnmpCredentialChange =
+      this.handleSnmpCredentialChange.bind(this);
   }
 
   openCredentialsDialog({id_field, types, title}) {
@@ -435,5 +429,3 @@ TargetComponent.propTypes = {
 };
 
 export default withGmp(TargetComponent);
-
-// vim: set ts=2 sw=2 tw=80:

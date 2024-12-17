@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
@@ -19,7 +18,7 @@ const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
   }
 
   return (
-    <FormGroup data-testid="results-per-page" title={_('Results per page')}> 
+    <FormGroup data-testid="results-per-page" title={_('Results per page')}>
       <Spinner name={name} type="int" value={rows} onChange={onChange} />
     </FormGroup>
   );
@@ -33,5 +32,3 @@ ResultsPerPageGroup.propTypes = {
 };
 
 export default ResultsPerPageGroup;
-
-// vim: set ts=2 sw=2 tw=80:

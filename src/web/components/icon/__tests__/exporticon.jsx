@@ -11,5 +11,3 @@ import ExportIcon from '../exporticon';
 describe('ExportIcon component tests', () => {
   testIcon(ExportIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -7,5 +7,3 @@ import * as group from '../groups';
 import {testAll} from '../utils/testing';
 
 testAll('group', group);
-
-// vim: set ts=2 sw=2 tw=80:

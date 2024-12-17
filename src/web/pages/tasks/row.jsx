@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
@@ -28,7 +27,6 @@ import withUserName from 'web/utils/withUserName';
 import Actions from './actions';
 import TaskStatus from './status';
 import Trend from './trend';
-
 
 export const renderReport = (report, links) => {
   if (!isDefined(report)) {
@@ -160,5 +158,3 @@ Row.propTypes = {
 };
 
 export default withUserName(Row);
-
-// vim: set ts=2 sw=2 tw=80:

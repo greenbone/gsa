@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import React from 'react';
 import styled from 'styled-components';
@@ -234,5 +231,3 @@ MultiplePermissionDialog.propTypes = {
 };
 
 export default MultiplePermissionDialog;
-
-// vim: set ts=2 sw=2 tw=80:

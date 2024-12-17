@@ -175,5 +175,3 @@ ReportDetailsFilterDialog.propTypes = {
 };
 
 export default ReportDetailsFilterDialog;
-
-// vim: set ts=2 sw=2 tw=80:

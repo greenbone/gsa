@@ -11,5 +11,3 @@ import DisableIcon from '../disableicon';
 describe('DisableIcon component tests', () => {
   testIcon(DisableIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

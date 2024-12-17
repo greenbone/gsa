@@ -9,7 +9,6 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Link from '../link';
 
-
 describe('Link tests', () => {
   beforeEach(() => {
     window.history.pushState({}, 'Test page', '/');
@@ -134,5 +133,3 @@ describe('Link tests', () => {
     expect(element).toMatchSnapshot();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

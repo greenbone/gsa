@@ -17,5 +17,3 @@ const CvssTableDisplay = props => (
 );
 
 export default CvssTableDisplay;
-
-// vim: set ts=2 sw=2 tw=80:

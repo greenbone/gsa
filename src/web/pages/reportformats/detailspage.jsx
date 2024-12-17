@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -51,7 +50,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import ReportFormatComponent from './component';
 import ReportFormatDetails from './details';
-
 
 const ToolBarIcons = withCapabilities(
   ({
@@ -317,5 +315,3 @@ export default withEntityContainer('reportformat', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

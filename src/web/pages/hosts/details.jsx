@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
@@ -29,5 +28,3 @@ HostDetails.propTypes = {
 };
 
 export default HostDetails;
-
-// vim: set ts=2 sw=2 tw=80:

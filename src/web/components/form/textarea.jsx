@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {Textarea as GreenboneTextArea} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -63,5 +62,3 @@ TextArea.propTypes = {
 };
 
 export default TextArea;
-
-// vim: set ts=2 sw=2 tw=80:

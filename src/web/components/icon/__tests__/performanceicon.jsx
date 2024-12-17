@@ -11,5 +11,3 @@ import PerformanceIcon from '../performanceicon';
 describe('PerformanceIcon component tests', () => {
   testIcon(PerformanceIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -188,5 +188,3 @@ UserComponent.propTypes = {
 };
 
 export default withGmp(UserComponent);
-
-// vim: set ts=2 sw=2 tw=80:

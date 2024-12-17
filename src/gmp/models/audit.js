@@ -232,5 +232,3 @@ class Audit extends Model {
 }
 
 export default Audit;
-
-// vim: set ts=2 sw=2 tw=80:

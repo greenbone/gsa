@@ -229,5 +229,3 @@ TargetDetails.propTypes = {
 };
 
 export default withCapabilities(TargetDetails);
-
-// vim: set ts=2 sw=2 tw=80:

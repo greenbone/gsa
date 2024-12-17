@@ -61,5 +61,3 @@ class SchedulesCommand extends EntitiesCommand {
 
 registerCommand('schedule', ScheduleCommand);
 registerCommand('schedules', SchedulesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

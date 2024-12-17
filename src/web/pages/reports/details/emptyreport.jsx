@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {isActive, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
@@ -105,5 +104,3 @@ EmptyReport.propTypes = {
 };
 
 export default withCapabilities(EmptyReport);
-
-// vim: set ts=2 sw=2 tw=80:

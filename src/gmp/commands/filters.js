@@ -108,5 +108,3 @@ export default FiltersCommand;
 
 registerCommand('filter', FilterCommand);
 registerCommand('filters', FiltersCommand);
-
-// vim: set ts=2 sw=2 tw=80:

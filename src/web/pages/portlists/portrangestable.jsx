@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DeleteIcon from 'web/components/icon/deleteicon';
@@ -60,5 +59,3 @@ PortRangesTable.propTypes = {
 };
 
 export default PortRangesTable;
-
-// vim: set ts=2 sw=2 tw=80:

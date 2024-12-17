@@ -111,5 +111,3 @@ describe('Target model tests', () => {
     expect(target.tasks[0].id).toEqual('123');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

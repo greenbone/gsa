@@ -33,5 +33,3 @@ StartTaskMethodPart.propTypes = {
 };
 
 export default withPrefix(StartTaskMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

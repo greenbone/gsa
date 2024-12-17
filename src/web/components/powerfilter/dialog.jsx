@@ -13,7 +13,6 @@ import FirstResultGroup from './firstresultgroup';
 import ResultsPerPageGroup from './resultsperpagegroup';
 import SortByGroup from './sortbygroup';
 
-
 export const DefaultFilterDialog = ({
   filter,
   filterName,
@@ -58,5 +57,3 @@ DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
 export {DefaultFilterDialogPropTypes};
 
 export default DefaultFilterDialog;
-
-// vim: set ts=2 sw=2 tw=80:

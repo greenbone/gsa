@@ -6,7 +6,6 @@
 import Icon from './svg/add_to_assets.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const AddToAssetsIconComponent = withSvgIcon()(Icon);
 
 const AddToAssetsIcon = props => (
@@ -14,5 +13,3 @@ const AddToAssetsIcon = props => (
 );
 
 export default AddToAssetsIcon;
-
-// vim: set ts=2 sw=2 tw=80:

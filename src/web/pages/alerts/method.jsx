@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import {
   EMAIL_NOTICE_ATTACH,
   EMAIL_NOTICE_INCLUDE,
@@ -752,5 +749,3 @@ Method.propTypes = {
 };
 
 export default Method;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -7,5 +7,3 @@ import * as host from '../hosts';
 import {testAll} from '../utils/testing';
 
 testAll('host', host);
-
-// vim: set ts=2 sw=2 tw=80:

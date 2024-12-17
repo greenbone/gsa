@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {Settings as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 import withSvgIcon from './withSvgIcon';
 
 const MySettingsIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="my-settings-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="my-settings-icon"
+  />
 ));
 
 export default MySettingsIcon;
-
-// vim: set ts=2 sw=2 tw=80:

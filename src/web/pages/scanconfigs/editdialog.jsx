@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -243,5 +242,3 @@ EditScanConfigDialog.propTypes = {
 };
 
 export default EditScanConfigDialog;
-
-// vim: set ts=2 sw=2 tw=80:

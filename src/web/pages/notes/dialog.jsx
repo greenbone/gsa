@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import {
   ANY,
   MANUAL,
@@ -407,5 +404,3 @@ NoteDialog.propTypes = {
 };
 
 export default NoteDialog;
-
-// vim: set ts=2 sw=2 tw=80:

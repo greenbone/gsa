@@ -44,7 +44,6 @@ class Resizer extends React.Component {
   }
 
   handleMouseDown(event) {
-     
     if (event.buttons & 1) {
       this.startY = event.pageY;
 
@@ -93,5 +92,3 @@ class Resizer extends React.Component {
 }
 
 export default Resizer;
-
-// vim: set ts=2 sw=2 tw=80:

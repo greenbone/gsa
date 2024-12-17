@@ -11,5 +11,3 @@ import DownloadExeIcon from '../downloadexeicon';
 describe('DownloadExeIcon component tests', () => {
   testIcon(DownloadExeIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

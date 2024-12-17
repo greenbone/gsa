@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
@@ -27,7 +26,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tasks';
 import PropTypes from 'web/utils/proptypes';
-
 
 import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
@@ -205,5 +203,3 @@ export default withEntitiesContainer('task', {
   loadEntities,
   reloadInterval: taskReloadInterval,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

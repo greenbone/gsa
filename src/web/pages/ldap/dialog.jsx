@@ -92,5 +92,3 @@ LdapDialog.propTypes = {
 };
 
 export default LdapDialog;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
 import TableHead from 'web/components/table/head';
@@ -96,5 +95,3 @@ export const TlsCertificatesTable = createEntitiesTable({
 });
 
 export default TlsCertificatesTable;
-
-// vim: set ts=2 sw=2 tw=80:

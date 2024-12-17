@@ -11,5 +11,3 @@ import HelpIcon from '../helpicon';
 describe('HelpIcon component tests', () => {
   testIcon(HelpIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

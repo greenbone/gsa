@@ -43,5 +43,3 @@ const TicketsDashboard = props => (
 );
 
 export default TicketsDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -5,10 +5,10 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import {CVES_FILTER_FILTER} from 'gmp/models/filter';
-import CreatedDisplay from 'web/components/dashboard/display/created/createddisplay';  
-import transformCreated from 'web/components/dashboard/display/created/createdtransform';  
+import CreatedDisplay from 'web/components/dashboard/display/created/createddisplay';
+import transformCreated from 'web/components/dashboard/display/created/createdtransform';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import Theme from 'web/utils/theme';
 
@@ -54,5 +54,3 @@ registerDisplay(CvesCreatedTableDisplay.displayId, CvesCreatedTableDisplay, {
 registerDisplay(CvesCreatedDisplay.displayId, CvesCreatedDisplay, {
   title: _l('Chart: CVEs by Creation Time'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

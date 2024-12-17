@@ -11,5 +11,3 @@ import StartIcon from '../starticon';
 describe('StartIcon component tests', () => {
   testIcon(StartIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

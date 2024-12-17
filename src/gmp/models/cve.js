@@ -165,5 +165,3 @@ class Cve extends Info {
 }
 
 export default Cve;
-
-// vim: set ts=2 sw=2 tw=80:

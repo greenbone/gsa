@@ -39,5 +39,3 @@ ComplianceStatusBar.propTypes = {
 };
 
 export default ComplianceStatusBar;
-
-// vim: set ts=2 sw=2 tw=80:

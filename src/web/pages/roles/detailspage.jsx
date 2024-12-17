@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import React from 'react';
@@ -50,7 +49,6 @@ import {permissionDescription} from 'web/utils/render';
 
 import RoleComponent from './component';
 import RoleDetails from './details';
-
 
 const ToolBarIcons = ({
   entity,
@@ -283,5 +281,3 @@ export default withEntityContainer('role', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

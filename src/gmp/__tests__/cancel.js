@@ -69,5 +69,3 @@ describe('CancelToken tests', () => {
     await expect(token.promise).resolves.toBe('because of a test');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

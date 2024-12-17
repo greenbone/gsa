@@ -32,5 +32,3 @@ describe('fixedValue function tests', () => {
     expect(fixedValue(2.55, 1)).toEqual('2.5');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

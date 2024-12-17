@@ -14,5 +14,3 @@ const Preformatted = styled.div`
 `;
 
 export default Preformatted;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
@@ -75,7 +74,12 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
       : getTranslatableTaskStatus(status);
 
   return (
-    <ProgressBar background={background} data-testid={`progress-bar-${status.toLowerCase()}`} progress={progress} title={title}>
+    <ProgressBar
+      background={background}
+      data-testid={`progress-bar-${status.toLowerCase()}`}
+      progress={progress}
+      title={title}
+    >
       <Span data-testid="statusbar-text">{text}</Span>
     </ProgressBar>
   );
@@ -87,5 +91,3 @@ StatusBar.propTypes = {
 };
 
 export default StatusBar;
-
-// vim: set ts=2 sw=2 tw=80:

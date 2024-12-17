@@ -49,5 +49,3 @@ export const DfnCertSeverityLoader = ({filter, children}) => (
 );
 
 DfnCertSeverityLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

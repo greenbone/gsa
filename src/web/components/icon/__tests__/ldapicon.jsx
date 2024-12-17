@@ -11,5 +11,3 @@ import LdapIcon from '../ldapicon';
 describe('LdapIcon component tests', () => {
   testIcon(LdapIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

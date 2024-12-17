@@ -200,5 +200,3 @@ class EntitiesCommand extends GmpCommand {
 }
 
 export default EntitiesCommand;
-
-// vim: set ts=2 sw=2 tw=80:

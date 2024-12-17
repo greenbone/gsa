@@ -6,7 +6,6 @@
 import Icon from './svg/cert_bund_adv.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const CertBundAdvIconComponent = withSvgIcon()(Icon);
 
 const CertBundAdvIcon = props => (
@@ -14,5 +13,3 @@ const CertBundAdvIcon = props => (
 );
 
 export default CertBundAdvIcon;
-
-// vim: set ts=2 sw=2 tw=80:

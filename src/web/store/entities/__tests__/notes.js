@@ -7,5 +7,3 @@ import * as note from '../notes';
 import {testAll} from '../utils/testing';
 
 testAll('note', note);
-
-// vim: set ts=2 sw=2 tw=80:

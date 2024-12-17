@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import {_, _l} from 'gmp/locale/lang';
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
@@ -14,9 +11,9 @@ import styled from 'styled-components';
 import BarChart from 'web/components/chart/bar';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -153,5 +150,3 @@ registerDisplay(OsVulnScoreDisplay.displayId, OsVulnScoreDisplay, {
 registerDisplay(OsVulnScoreTableDisplay.displayId, OsVulnScoreTableDisplay, {
   title: _l('Table: Operating Systems by Vulnerability Score'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

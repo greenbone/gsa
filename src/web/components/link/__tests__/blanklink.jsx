@@ -29,5 +29,3 @@ describe('BlankLink tests', () => {
     expect(element).toHaveTextContent('Ipsum');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

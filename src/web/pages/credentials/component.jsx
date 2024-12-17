@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 import {isDefined} from 'gmp/utils/identity';
@@ -223,5 +221,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(CredentialsComponent);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -182,5 +182,3 @@ export default withEntityContainer('dfncert', {
   load: loadEntity,
   entitySelector: selector,
 })(DfnCertAdvPage);
-
-// vim: set ts=2 sw=2 tw=80:

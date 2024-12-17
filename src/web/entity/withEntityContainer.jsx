@@ -12,7 +12,7 @@ import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL,
 } from 'web/components/loading/reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';  
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -20,7 +20,6 @@ import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
 import EntityContainer from './container';
-
 
 const defaultEntityReloadIntervalFunc = ({entity}) =>
   isDefined(entity) ? USE_DEFAULT_RELOAD_INTERVAL : NO_RELOAD;
@@ -104,5 +103,3 @@ const withEntityContainer =
   };
 
 export default withEntityContainer;
-
-// vim: set ts=2 sw=2 tw=80:

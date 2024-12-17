@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {FilePenLine as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 import withSvgIcon from './withSvgIcon';
 
 const AlterableIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="alterable-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="alterable-icon"
+  />
 ));
 
 export default AlterableIcon;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -41,5 +41,3 @@ describe('getLanguageCodes test', () => {
     expect(called).toEqual(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import MySettingsIcon from '../mysettingsicon';
 describe('MySettingsIcon component tests', () => {
   testIcon(MySettingsIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {
   snmp_credential_filter,
   ssh_credential_filter,
@@ -509,5 +507,3 @@ TargetDialog.propTypes = {
 };
 
 export default withCapabilities(TargetDialog);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {ChevronLeft as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 import withSvgIcon from './withSvgIcon';
 
 const PreviousIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="previous-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="previous-icon"
+  />
 ));
 
 export default PreviousIcon;
-
-// vim: set ts=2 sw=2 tw=80:

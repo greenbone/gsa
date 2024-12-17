@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import Loading from 'web/components/loading/loading';
@@ -120,14 +119,8 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   render() {
-    const {
-      children,
-      counts,
-      entities,
-      sortFunctions,
-      sortReverse,
-      sortField,
-    } = this.props;
+    const {children, counts, entities, sortFunctions, sortReverse, sortField} =
+      this.props;
     const {page} = this.state;
 
     if (!isDefined(children) || !isDefined(entities)) {
@@ -187,5 +180,3 @@ ReportEntitiesContainer.propTypes = {
 };
 
 export default ReportEntitiesContainer;
-
-// vim: set ts=2 sw=2 tw=80:

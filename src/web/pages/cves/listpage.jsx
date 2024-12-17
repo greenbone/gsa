@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import Filter, {CVES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
@@ -18,7 +17,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cves';
 import PropTypes from 'web/utils/proptypes';
-
 
 import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard';
 import CveFilterDialog from './filterdialog';
@@ -73,5 +71,3 @@ export default withEntitiesContainer('cve', {
   fallbackFilter,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

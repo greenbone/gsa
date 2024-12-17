@@ -35,5 +35,3 @@ const pageByName = (state = {}, action) => {
 };
 
 export default pageByName;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -65,4 +65,3 @@ describe('Schedule model tests', () => {
     console.error = consoleError;
   });
 });
-// vim: set ts=2 sw=2 tw=80:

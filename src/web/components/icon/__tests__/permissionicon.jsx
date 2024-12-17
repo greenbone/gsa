@@ -11,5 +11,3 @@ import PermissionIcon from '../permissionicon';
 describe('PermissionIcon component tests', () => {
   testIcon(PermissionIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

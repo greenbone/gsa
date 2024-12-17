@@ -6,7 +6,6 @@
 import Icon from './svg/provide_view.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const ProvideViewIconComponent = withSvgIcon()(Icon);
 
 const ProvideViewIcon = props => (
@@ -14,5 +13,3 @@ const ProvideViewIcon = props => (
 );
 
 export default ProvideViewIcon;
-
-// vim: set ts=2 sw=2 tw=80:

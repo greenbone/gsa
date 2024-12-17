@@ -700,5 +700,3 @@ describe('addDisplayToSettings tests', () => {
     expect(settings).not.toBe(newSettings);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -35,5 +34,3 @@ Task.propTypes = {
 };
 
 export default withGmp(Task);
-
-// vim: set ts=2 sw=2 tw=80:

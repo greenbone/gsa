@@ -6,7 +6,6 @@
 import Icon from './svg/delta_second.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const DeltaSecondIconComponent = withSvgIcon()(Icon);
 
 const DeltaSecondIcon = props => (
@@ -14,5 +13,3 @@ const DeltaSecondIcon = props => (
 );
 
 export default DeltaSecondIcon;
-
-// vim: set ts=2 sw=2 tw=80:

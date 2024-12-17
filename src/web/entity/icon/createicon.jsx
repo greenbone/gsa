@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
@@ -39,7 +38,6 @@ const EntityCreateIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Create new {{entity}}', {entity: displayName});
-       
     } else if (!mayCreate) {
       title = _('{{entity}} may not be created', {entity: displayName});
     } else {
@@ -70,5 +68,3 @@ EntityCreateIcon.propTypes = {
 };
 
 export default withCapabilities(EntityCreateIcon);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -98,5 +98,3 @@ const dashboardSettings = combineReducers({
 });
 
 export default dashboardSettings;
-
-// vim: set ts=2 sw=2 tw=80:

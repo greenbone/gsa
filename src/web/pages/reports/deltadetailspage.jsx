@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import Filter, {
@@ -22,7 +20,7 @@ import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';  
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 import {
   loadAllEntities as loadFilters,
@@ -56,7 +54,6 @@ import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
-
 
 import Page from './deltadetailscontent';
 import ReportDetailsFilterDialog from './detailsfilterdialog';
@@ -695,5 +692,3 @@ export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(DeltaReportDetailsWrapper);
-
-// vim: set ts=2 sw=2 tw=80:

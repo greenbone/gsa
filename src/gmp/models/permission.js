@@ -35,5 +35,3 @@ class Permission extends Model {
 }
 
 export default Permission;
-
-// vim: set ts=2 sw=2 tw=80:

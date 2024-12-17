@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
@@ -78,5 +77,3 @@ export default withEntitiesContainer('result', {
   loadEntities,
   fallbackFilter,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

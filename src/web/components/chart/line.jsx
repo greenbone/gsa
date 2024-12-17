@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {Line, LinePath} from '@visx/shape';
 import {scaleLinear, scaleUtc} from 'd3-scale';
 import date from 'gmp/models/date';
@@ -22,7 +21,6 @@ import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Svg from './svg';
 import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
 import {shouldUpdate} from './utils/update';
-
 
 const LEGEND_MARGIN = 20;
 
@@ -597,5 +595,3 @@ LineChart.propTypes = {
 };
 
 export default LineChart;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -6,7 +6,6 @@
 import Icon from './svg/dfn_cert_adv.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const DfnCertAdvIconComponent = withSvgIcon()(Icon);
 
 const DfnCertAdvIcon = props => (
@@ -14,5 +13,3 @@ const DfnCertAdvIcon = props => (
 );
 
 export default DfnCertAdvIcon;
-
-// vim: set ts=2 sw=2 tw=80:

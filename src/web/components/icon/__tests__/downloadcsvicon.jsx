@@ -11,5 +11,3 @@ import DownloadCsvIcon from '../downloadcsvicon';
 describe('DownloadCsvIcon component tests', () => {
   testIcon(DownloadCsvIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

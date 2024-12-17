@@ -6,12 +6,9 @@
 import Icon from './svg/trend_more.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const TrendMoreIconComponent = withSvgIcon()(Icon);
 
 const TrendMoreIcon = props => (
   <TrendMoreIconComponent {...props} data-testid="trend-more-icon" />
 );
 export default TrendMoreIcon;
-
-// vim: set ts=2 sw=2 tw=80:

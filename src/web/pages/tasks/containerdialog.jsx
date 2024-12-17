@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {YES_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -87,5 +86,3 @@ ContainerTaskDialog.propTypes = {
 };
 
 export default ContainerTaskDialog;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import DashboardIcon from '../dashboardicon';
 describe('DashboardIcon component tests', () => {
   testIcon(DashboardIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

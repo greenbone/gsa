@@ -229,4 +229,3 @@ describe('Scanner model function tests', () => {
     expect(openVasScannersFilter(config2)).toEqual(true);
   });
 });
-// vim: set ts=2 sw=2 tw=80:

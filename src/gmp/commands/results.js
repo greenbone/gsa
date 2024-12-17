@@ -63,5 +63,3 @@ export class ResultCommand extends EntityCommand {
 
 registerCommand('result', ResultCommand);
 registerCommand('results', ResultsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -116,5 +116,3 @@ export class FeedStatus extends HttpCommand {
 }
 
 registerCommand('feedstatus', FeedStatus);
-
-// vim: set ts=2 sw=2 tw=80:

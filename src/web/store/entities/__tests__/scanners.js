@@ -7,5 +7,3 @@ import * as scanner from '../scanners';
 import {testAll} from '../utils/testing';
 
 testAll('scanner', scanner);
-
-// vim: set ts=2 sw=2 tw=80:

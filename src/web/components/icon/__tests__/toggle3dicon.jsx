@@ -11,5 +11,3 @@ import Toggle3dIcon from '../toggle3dicon';
 describe('Toggle3dIcon component tests', () => {
   testIcon(Toggle3dIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

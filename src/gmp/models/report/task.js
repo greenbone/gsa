@@ -36,5 +36,3 @@ class ReportTask extends Model {
 }
 
 export default ReportTask;
-
-// vim: set ts=2 sw=2 tw=80:

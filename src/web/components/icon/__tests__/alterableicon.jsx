@@ -11,5 +11,3 @@ import AlterableIcon from '../alterableicon';
 describe('AlterableIcon component tests', () => {
   testIcon(AlterableIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

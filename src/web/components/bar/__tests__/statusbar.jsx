@@ -10,7 +10,6 @@ import Theme from 'web/utils/theme';
 
 import StatusBar from '../statusbar';
 
-
 describe('StatusBar tests', () => {
   test('should render', () => {
     const {element} = render(<StatusBar progress="90" status="Unknown" />);
@@ -75,5 +74,3 @@ describe('StatusBar tests', () => {
     );
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

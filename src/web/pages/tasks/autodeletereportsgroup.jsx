@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
 import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
@@ -61,5 +60,3 @@ AutoDeleteReportsGroup.propTypes = {
 };
 
 export default AutoDeleteReportsGroup;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -95,5 +95,3 @@ describe('CheckBox component tests', () => {
     screen.getByLabelText('bar');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

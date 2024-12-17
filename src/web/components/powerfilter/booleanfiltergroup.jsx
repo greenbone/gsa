@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -41,5 +40,3 @@ BooleanFilterGroup.propTypes = {
 };
 
 export default BooleanFilterGroup;
-
-// vim: set ts=2 sw=2 tw=80:

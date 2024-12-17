@@ -11,5 +11,3 @@ import ReportFormatIcon from '../reportformaticon';
 describe('ReportFormatIcon component tests', () => {
   testIcon(ReportFormatIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

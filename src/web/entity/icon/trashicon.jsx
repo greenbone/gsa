@@ -39,7 +39,6 @@ const EntityTrashIcon = ({
       title = _('{{entity}} is still in use', {entity: displayName});
     } else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
-       
     } else if (!mayDelete) {
       title = _('Permission to move {{entity}} to trashcan denied', {
         entity: displayName,
@@ -69,5 +68,3 @@ EntityTrashIcon.propTypes = {
 };
 
 export default withCapabilities(EntityTrashIcon);
-
-// vim: set ts=2 sw=2 tw=80:

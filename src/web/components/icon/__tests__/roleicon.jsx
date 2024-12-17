@@ -11,5 +11,3 @@ import RoleIcon from '../roleicon';
 describe('RoleIcon component tests', () => {
   testIcon(RoleIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

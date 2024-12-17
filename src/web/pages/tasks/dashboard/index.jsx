@@ -5,7 +5,6 @@
 
 import React from 'react';
 
-
 import {TasksCvssDisplay, TasksCvssTableDisplay} from './cvssdisplay';
 import {
   TasksHighResultsDisplay,
@@ -59,5 +58,3 @@ const TaskDashboard = props => (
 );
 
 export default TaskDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

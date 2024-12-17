@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import React from 'react';
 import styled from 'styled-components';
@@ -12,7 +11,6 @@ import FormGroup from 'web/components/form/formgroup';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
 
 export const COMPOSER_CONTENT_DEFAULTS = {
   includeNotes: YES_VALUE,
@@ -93,5 +91,3 @@ ComposerContent.propTypes = {
 };
 
 export default ComposerContent;
-
-// vim: set ts=2 sw=2 tw=80:

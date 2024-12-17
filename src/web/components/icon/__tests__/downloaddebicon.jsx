@@ -11,5 +11,3 @@ import DownloadDebIcon from '../downloaddebicon';
 describe('DownloadDebIcon component tests', () => {
   testIcon(DownloadDebIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

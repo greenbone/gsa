@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {getEntityType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
@@ -55,5 +54,3 @@ EntityLink.propTypes = {
 };
 
 export default withCapabilities(EntityLink);
-
-// vim: set ts=2 sw=2 tw=80:

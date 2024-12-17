@@ -121,5 +121,3 @@ class OverridesCommand extends EntitiesCommand {
 
 registerCommand('override', OverrideCommand);
 registerCommand('overrides', OverridesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

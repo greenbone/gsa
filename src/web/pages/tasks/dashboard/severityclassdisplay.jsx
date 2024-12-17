@@ -6,8 +6,8 @@
 import {_, _l} from 'gmp/locale/lang';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay';  
-import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay';  
+import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay';
+import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {TasksSeverityLoader} from './loaders';
@@ -44,5 +44,3 @@ registerDisplay(
 registerDisplay(TasksSeverityDisplay.displayId, TasksSeverityDisplay, {
   title: _l('Chart: Tasks by Severity Class'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

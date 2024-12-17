@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {
   ThemeProvider,
   theme,
@@ -25,8 +23,6 @@ import {
   setTimezone,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
-
-
 
 import Routes from './routes';
 import configureStore from './store';
@@ -100,5 +96,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-// vim: set ts=2 sw=2 tw=80:

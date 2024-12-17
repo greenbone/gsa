@@ -20,7 +20,6 @@ import {
   LOG_VALUE,
 } from '../../utils/severity';
 
-
 const SeverityBar = ({severity, toolTip}) => {
   let cvss;
   let threat;
@@ -57,7 +56,12 @@ const SeverityBar = ({severity, toolTip}) => {
   const toolTipText = isDefined(toolTip) ? toolTip : title;
 
   return (
-    <ProgressBar background={type} data-testid="severitybar" progress={fill} title={toolTipText}>
+    <ProgressBar
+      background={type}
+      data-testid="severitybar"
+      progress={fill}
+      title={toolTipText}
+    >
       {text}
     </ProgressBar>
   );
@@ -69,5 +73,3 @@ SeverityBar.propTypes = {
 };
 
 export default SeverityBar;
-
-// vim: set ts=2 sw=2 tw=80:

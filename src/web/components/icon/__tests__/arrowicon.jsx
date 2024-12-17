@@ -9,7 +9,6 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import ArrowIcon from '../arrowicon';
 
-
 describe('ArrowIcon component tests', () => {
   test('should render', () => {
     const {element} = render(<ArrowIcon />);
@@ -39,5 +38,3 @@ describe('ArrowIcon component tests', () => {
     expect(handler).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

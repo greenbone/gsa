@@ -12,10 +12,7 @@ import LegendIcon from 'web/components/icon/legendicon';
 import Toggle3dIcon from 'web/components/icon/toggle3dicon';
 import PropTypes from 'web/utils/proptypes';
 
-export const renderDonutChartIcons = ({
-  setState,  
-  ...iconsProps
-}) => (
+export const renderDonutChartIcons = ({setState, ...iconsProps}) => (
   <React.Fragment>
     <DataDisplayIcons {...iconsProps} setState={setState} />
     <Toggle3dIcon
@@ -62,5 +59,3 @@ DataDisplayIcons.propTypes = {
 };
 
 export default DataDisplayIcons;
-
-// vim: set ts=2 sw=2 tw=80:

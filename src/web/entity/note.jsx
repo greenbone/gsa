@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import React from 'react';
 import DetailsIcon from 'web/components/icon/detailsicon';
@@ -20,9 +19,7 @@ const NoteBox = ({note, detailsLink = true}) => {
         <DetailsIcon />
       </DetailsLink>
     </IconDivider>
-  ) : (
-    undefined
-  );
+  ) : undefined;
   return (
     <EntityBox
       end={note.endTime}
@@ -40,5 +37,3 @@ NoteBox.propTypes = {
 };
 
 export default NoteBox;
-
-// vim: set ts=2 sw=2 tw=80:

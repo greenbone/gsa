@@ -42,5 +42,3 @@ class CpesCommand extends InfoEntitiesCommand {
 
 registerCommand('cpe', CpeCommand);
 registerCommand('cpes', CpesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

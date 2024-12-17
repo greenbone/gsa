@@ -151,5 +151,3 @@ export const createEntitiesSelector = name => rootState =>
 
 export const createSelector = name => rootState =>
   new Selector(rootState.entities[name]);
-
-// vim: set ts=2 sw=2 tw=80:

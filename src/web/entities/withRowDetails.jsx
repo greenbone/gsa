@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import _ from 'gmp/locale';
 import {isFunction} from 'gmp/utils/identity';
 import React from 'react';
@@ -72,5 +69,3 @@ const withRowDetails =
   };
 
 export default withRowDetails;
-
-// vim: set ts=2 sw=2 tw=80:

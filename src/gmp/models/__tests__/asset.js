@@ -7,5 +7,3 @@ import Asset from 'gmp/models/asset';
 import {testModel} from 'gmp/models/testing';
 
 testModel(Asset, 'asset');
-
-// vim: set ts=2 sw=2 tw=80:

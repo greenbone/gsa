@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {
   SSH_CREDENTIAL_TYPES,
   ssh_credential_filter,
@@ -167,5 +166,3 @@ ScpMethodPart.propTypes = {
 };
 
 export default withPrefix(ScpMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

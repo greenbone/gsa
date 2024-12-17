@@ -11,5 +11,3 @@ import SolutionTypeSvgIcon from '../solutiontypesvgicon';
 describe('SolutionTypeSvgIcon component tests', () => {
   testIcon(SolutionTypeSvgIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

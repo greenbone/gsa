@@ -75,5 +75,3 @@ describe('OperatingSystem model tests', () => {
     expect(os.os).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

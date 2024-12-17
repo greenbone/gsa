@@ -68,5 +68,3 @@ export const NotesWordCountLoader = ({filter, children}) => (
 );
 
 NotesWordCountLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -7,5 +7,3 @@ import * as funcs from '../tags';
 import {testAll} from '../utils/testing';
 
 testAll('tag', funcs);
-
-// vim: set ts=2 sw=2 tw=80:

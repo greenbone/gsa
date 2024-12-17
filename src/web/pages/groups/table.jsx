@@ -12,7 +12,6 @@ import {createEntitiesFooter} from '../../entities/footer';
 import {createEntitiesTable} from '../../entities/table';
 import withRowDetails from '../../entities/withRowDetails';
 
-
 export const SORT_FIELDS = [
   {
     name: 'name',
@@ -33,5 +32,3 @@ const GroupsTable = createEntitiesTable({
 });
 
 export default GroupsTable;
-
-// vim: set ts=2 sw=2 tw=80:

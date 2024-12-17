@@ -3,14 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import PropTypes from 'web/utils/proptypes';
-
 
 import transformCreated from './createdtransform';
 import LineChart, {lineDataPropType} from '../../../chart/line';
@@ -113,5 +110,3 @@ CreatedDisplay.propTypes = {
 };
 
 export default CreatedDisplay;
-
-// vim: set ts=2 sw=2 tw=80:

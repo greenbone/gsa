@@ -1435,5 +1435,3 @@ describe('Filter merge', () => {
     expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

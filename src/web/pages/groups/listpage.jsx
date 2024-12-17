@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {GROUPS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import GroupIcon from 'web/components/icon/groupicon';
@@ -105,5 +104,3 @@ export default withEntitiesContainer('group', {
   entitiesSelector,
   loadEntities,
 })(GroupsPage);
-
-// vim: set ts=2 sw=2 tw=80:

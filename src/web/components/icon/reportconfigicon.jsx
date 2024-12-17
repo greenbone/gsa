@@ -6,7 +6,6 @@
 import Icon from './svg/report_format.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const ReportConfigIconComponent = withSvgIcon()(Icon);
 
 const ReportConfigIcon = props => (
@@ -14,5 +13,3 @@ const ReportConfigIcon = props => (
 );
 
 export default ReportConfigIcon;
-
-// vim: set ts=2 sw=2 tw=80:

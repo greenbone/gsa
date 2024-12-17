@@ -119,5 +119,3 @@ class Ticket extends Model {
 }
 
 export default Ticket;
-
-// vim: set ts=2 sw=2 tw=80:

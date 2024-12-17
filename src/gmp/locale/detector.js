@@ -78,5 +78,3 @@ class LanguageDetector {
 }
 
 export default LanguageDetector;
-
-// vim: set ts=2 sw=2 tw=80:

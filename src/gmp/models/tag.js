@@ -28,5 +28,3 @@ class Tag extends Model {
 }
 
 export default Tag;
-
-// vim: set ts=2 sw=2 tw=80:

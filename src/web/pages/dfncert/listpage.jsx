@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import Filter, {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
@@ -20,7 +19,6 @@ import {
 import PropTypes from 'web/utils/proptypes';
 
 // DFN-CERT uses same filter dialog as CERT-Bund
-
 
 import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard';
 import DfnCertTable from './table';
@@ -79,5 +77,3 @@ export default withEntitiesContainer('dfncert', {
   fallbackFilter,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

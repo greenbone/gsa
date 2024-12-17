@@ -142,5 +142,3 @@ class TargetsCommand extends EntitiesCommand {
 
 registerCommand('target', TargetCommand);
 registerCommand('targets', TargetsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

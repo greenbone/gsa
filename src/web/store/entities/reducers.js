@@ -81,5 +81,3 @@ const entitiesReducer = combineReducers({
 });
 
 export default entitiesReducer;
-
-// vim: set ts=2 sw=2 tw=80:

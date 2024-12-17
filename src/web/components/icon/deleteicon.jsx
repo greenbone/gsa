@@ -13,9 +13,12 @@ import SelectionType from 'web/utils/selectiontype';
 
 import withSvgIcon from './withSvgIcon';
 
-
 const DeleteSvgIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="delete-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="delete-icon"
+  />
 ));
 
 const DeleteIcon = ({selectionType, title, ...props}) => {
@@ -37,5 +40,3 @@ DeleteIcon.propTypes = {
 };
 
 export default DeleteIcon;
-
-// vim: set ts=2 sw=2 tw=80:

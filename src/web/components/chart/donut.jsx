@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import {color as d3color} from 'd3-color';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -169,7 +166,7 @@ class DonutChart extends React.Component {
       targetY = target.getAttribute('y');
 
       // compare target label with all other labels
-       
+
       labels.forEach(label => {
         comparison = label;
         if (target === comparison) {
@@ -332,5 +329,3 @@ DonutChart.propTypes = {
 };
 
 export default DonutChart;
-
-// vim: set ts=2 sw=2 tw=80:

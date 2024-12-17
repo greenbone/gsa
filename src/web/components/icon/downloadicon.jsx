@@ -3,17 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {Download as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 import withSvgIcon from './withSvgIcon';
 
 const DownloadIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="download-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="download-icon"
+  />
 ));
 
 export default DownloadIcon;
-
-// vim: set ts=2 sw=2 tw=80:

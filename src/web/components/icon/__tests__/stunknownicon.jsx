@@ -11,5 +11,3 @@ import StUnknownIcon from '../stunknownicon';
 describe('StUnknownIcon component tests', () => {
   testIcon(StUnknownIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

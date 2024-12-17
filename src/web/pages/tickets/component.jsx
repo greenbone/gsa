@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {_} from 'gmp/locale/lang';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {TICKET_STATUS} from 'gmp/models/ticket';
@@ -114,13 +112,8 @@ class TicketComponent extends React.Component {
       onSaved,
       onSaveError,
     } = this.props;
-    const {
-      createDialogVisible,
-      editDialogVisible,
-      result,
-      ticket,
-      userId,
-    } = this.state;
+    const {createDialogVisible, editDialogVisible, result, ticket, userId} =
+      this.state;
     return (
       <EntityComponent
         name="ticket"
@@ -180,7 +173,7 @@ class TicketComponent extends React.Component {
                   closedNote,
                   status,
                   ticketId,
-                  userId,  
+                  userId,
                 }) => {
                   this.handleInteraction();
                   return save({
@@ -232,10 +225,5 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(TicketComponent);
-
-// vim: set ts=2 sw=2 tw=80:

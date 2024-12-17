@@ -18,9 +18,8 @@ class ReportFormatComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.handleCloseReportFormatDialog = this.handleCloseReportFormatDialog.bind(
-      this,
-    );
+    this.handleCloseReportFormatDialog =
+      this.handleCloseReportFormatDialog.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.openReportFormatDialog = this.openReportFormatDialog.bind(this);
   }
@@ -157,5 +156,3 @@ ReportFormatComponent.propTypes = {
 };
 
 export default withGmp(ReportFormatComponent);
-
-// vim: set ts=2 sw=2 tw=80:

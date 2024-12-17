@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import {get_img_url} from 'web/utils/urls';
@@ -19,5 +18,3 @@ Img.propTypes = {
 };
 
 export default Img;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -52,5 +52,3 @@ describe('CveLink tests', () => {
     expect(window.location.pathname).toEqual('/');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -104,12 +104,9 @@ describe('Layout tests', () => {
   });
 
   test('should create Layout with flex="column" align=[stretch, center]', () => {
-     
     const {element} = render(
       <Layout align={['stretch', 'center']} flex="column" />,
     );
     expect(element).toMatchSnapshot();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

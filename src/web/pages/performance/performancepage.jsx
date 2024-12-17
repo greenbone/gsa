@@ -56,7 +56,7 @@ const DURATIONS = {
 };
 
 const ToolBar = ({onDurationChangeClick}) => {
-  const [_] = useTranslation();  
+  const [_] = useTranslation();
   return (
     <IconDivider>
       <ManualIcon
@@ -367,5 +367,3 @@ export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(PerformancePage);
-
-// vim: set ts=2 sw=2 tw=80:

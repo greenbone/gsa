@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import _ from 'gmp/locale';
 import Logger from 'gmp/log';
@@ -353,5 +352,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(Dashboard);
-
-// vim: set ts=2 sw=2 tw=80:

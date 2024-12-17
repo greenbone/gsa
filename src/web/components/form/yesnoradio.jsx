@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import React from 'react';
@@ -56,5 +55,3 @@ YesNoRadio.propTypes = {
 };
 
 export default YesNoRadio;
-
-// vim: set ts=2 sw=2 tw=80:

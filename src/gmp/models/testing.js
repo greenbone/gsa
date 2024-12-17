@@ -298,5 +298,3 @@ export const testModel = (modelClass, type, options) => {
   testModelGetProperties(modelClass, type);
   testId(modelClass);
 };
-
-// vim: set ts=2 sw=2 tw=80:

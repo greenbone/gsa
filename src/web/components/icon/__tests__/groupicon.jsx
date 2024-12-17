@@ -11,5 +11,3 @@ import GroupIcon from '../groupicon';
 describe('GroupIcon component tests', () => {
   testIcon(GroupIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

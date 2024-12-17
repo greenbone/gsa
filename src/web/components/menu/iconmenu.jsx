@@ -10,7 +10,6 @@ import Icon from 'web/components/icon/icon';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-
 const IconMenu = styled.span`
   display: inline-flex;
   flex-direction: column;
@@ -87,5 +86,3 @@ IconMenuContainer.propTypes = {
 };
 
 export default IconMenuContainer;
-
-// vim: set ts=2 sw=2 tw=80:

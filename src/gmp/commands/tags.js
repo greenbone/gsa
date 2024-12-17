@@ -107,5 +107,3 @@ export class TagsCommand extends EntitiesCommand {
 
 registerCommand('tag', TagCommand);
 registerCommand('tags', TagsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -42,5 +42,3 @@ class CvesCommand extends InfoEntitiesCommand {
 
 registerCommand('cve', CveCommand);
 registerCommand('cves', CvesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -25,5 +25,3 @@ const ScanConfigsTable = createEntitiesTable({
 });
 
 export default ScanConfigsTable;
-
-// vim: set ts=2 sw=2 tw=80:

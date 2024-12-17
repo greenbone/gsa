@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 /**
  * Compose several HOCs
  *
@@ -44,9 +43,11 @@ const compose = (...funcs) => {
     return funcs[0];
   }
 
-  return funcs.reduce((a, b) => (...args) => a(b(...args)));
+  return funcs.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(...args)),
+  );
 };
 
 export default compose;
-
-// vim: set ts=2 sw=2 tw=80:

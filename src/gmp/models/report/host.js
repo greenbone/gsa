@@ -168,5 +168,3 @@ class Host {
 }
 
 export default Host;
-
-// vim: set ts=2 sw=2 tw=80:

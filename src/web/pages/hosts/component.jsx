@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -27,9 +25,8 @@ class HostComponent extends React.Component {
     this.handleIdentifierDelete = this.handleIdentifierDelete.bind(this);
     this.openHostDialog = this.openHostDialog.bind(this);
     this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
-    this.openCreateTargetSelectionDialog = this.openCreateTargetSelectionDialog.bind(
-      this,
-    );
+    this.openCreateTargetSelectionDialog =
+      this.openCreateTargetSelectionDialog.bind(this);
   }
 
   handleIdentifierDelete(identifier) {
@@ -216,5 +213,3 @@ HostWithTargetComponent.propTypes = {
 };
 
 export default HostWithTargetComponent;
-
-// vim: set ts=2 sw=2 tw=80:

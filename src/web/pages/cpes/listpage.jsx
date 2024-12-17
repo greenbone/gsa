@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import Filter, {CPES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
@@ -18,7 +17,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/proptypes';
-
 
 import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard';
 import CpeFilterDialog from './filterdialog';
@@ -72,5 +70,3 @@ export default withEntitiesContainer('cpe', {
   fallbackFilter,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

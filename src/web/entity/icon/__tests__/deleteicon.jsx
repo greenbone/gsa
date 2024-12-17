@@ -86,5 +86,3 @@ describe('Entity DeleteIcon component tests', () => {
     expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -6,13 +6,8 @@
 import Icon from './svg/new.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const NewIconComponent = withSvgIcon()(Icon);
 
-const NewIcon = props => (
-  <NewIconComponent {...props} data-testid="new-icon" />
-);
+const NewIcon = props => <NewIconComponent {...props} data-testid="new-icon" />;
 
 export default NewIcon;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -13,5 +13,3 @@ export const ArcDataPropType = PropTypes.shape({
 });
 
 export const DataPropType = PropTypes.arrayOf(ArcDataPropType);
-
-// vim: set ts=2 sw=2 tw=80:

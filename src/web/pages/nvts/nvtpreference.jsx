@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
@@ -152,5 +151,3 @@ NvtPreference.propTypes = {
 };
 
 export default NvtPreference;
-
-// vim: set ts=2 sw=2 tw=80:

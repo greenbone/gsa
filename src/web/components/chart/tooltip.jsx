@@ -10,7 +10,6 @@ import Portal from 'web/components/portal/portal';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-
 const ToolTipText = styled.div`
   box-sizing: border-box;
   font-weight: bold;
@@ -124,5 +123,3 @@ class ToolTip extends React.Component {
 }
 
 export default ToolTip;
-
-// vim: set ts=2 sw=2 tw=80:

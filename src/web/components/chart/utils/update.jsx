@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 /**
  * Default implementation for checking if a chart component must be updated
  *
@@ -19,5 +18,3 @@ export const shouldUpdate = (nextProps, props) =>
   nextProps.width !== props.width ||
   nextProps.height !== props.height ||
   nextProps.showLegend !== props.showLegend;
-
-// vim: set ts=2 sw=2 tw=80:

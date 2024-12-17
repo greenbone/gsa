@@ -6,7 +6,6 @@
 import Icon from './svg/st_nonavailable.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const StNonAvailableIconComponent = withSvgIcon()(Icon);
 
 const StNonAvailableIcon = props => (
@@ -14,5 +13,3 @@ const StNonAvailableIcon = props => (
 );
 
 export default StNonAvailableIcon;
-
-// vim: set ts=2 sw=2 tw=80:

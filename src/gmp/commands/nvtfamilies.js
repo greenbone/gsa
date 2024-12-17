@@ -30,5 +30,3 @@ export class NvtFamiliesCommand extends GmpCommand {
 }
 
 registerCommand('nvtfamilies', NvtFamiliesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

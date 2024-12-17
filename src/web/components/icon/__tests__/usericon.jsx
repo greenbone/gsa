@@ -11,5 +11,3 @@ import UserIcon from '../usericon';
 describe('UserIcon component tests', () => {
   testIcon(UserIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -273,5 +273,3 @@ class TasksCommand extends EntitiesCommand {
 
 registerCommand('task', TaskCommand);
 registerCommand('tasks', TasksCommand);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -8,7 +8,6 @@ import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-
 import Link from './link';
 
 const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
@@ -32,5 +31,3 @@ DetailsLink.propTypes = {
 };
 
 export default withCapabilities(DetailsLink);
-
-// vim: set ts=2 sw=2 tw=80:

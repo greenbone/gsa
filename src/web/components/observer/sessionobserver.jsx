@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import Logger from 'gmp/log';
 import moment from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
@@ -96,5 +94,3 @@ SessionObserver.propTypes = {
 export default connect(rootState => ({
   sessionTimeout: getSessionTimeout(rootState),
 }))(SessionObserver);
-
-// vim: set ts=2 sw=2 tw=80:

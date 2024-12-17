@@ -201,5 +201,3 @@ describe('isTicketEvent tests', () => {
     expect(isTicketEvent(EVENT_TYPE_UPDATED_SECINFO)).toEqual(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

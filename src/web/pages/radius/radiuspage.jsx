@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -193,5 +191,3 @@ export default compose(
   withGmp,
   connect(undefined, mapDispatchToProps),
 )(RadiusAuthentication);
-
-// vim: set ts=2 sw=2 tw=80:

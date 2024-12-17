@@ -18,5 +18,3 @@ const withEntitiesActions = Component => {
 };
 
 export default withEntitiesActions;
-
-// vim: set ts=2 sw=2 tw=80:

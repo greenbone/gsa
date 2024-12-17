@@ -6,7 +6,6 @@
 import Icon from './svg/task.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const TaskIconComponent = withSvgIcon()(Icon);
 
 const TaskIcon = props => (
@@ -14,5 +13,3 @@ const TaskIcon = props => (
 );
 
 export default TaskIcon;
-
-// vim: set ts=2 sw=2 tw=80:

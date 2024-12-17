@@ -11,5 +11,3 @@ import NvtIcon from '../nvticon';
 describe('NvtIcon component tests', () => {
   testIcon(NvtIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

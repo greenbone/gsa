@@ -7,5 +7,3 @@ import * as policy from '../policies';
 import {testAll} from '../utils/testing';
 
 testAll('policy', policy);
-
-// vim: set ts=2 sw=2 tw=80:

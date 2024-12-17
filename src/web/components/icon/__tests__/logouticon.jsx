@@ -11,5 +11,3 @@ import LogoutIcon from '../logouticon';
 describe('LogoutIcon component tests', () => {
   testIcon(LogoutIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

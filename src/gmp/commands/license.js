@@ -32,5 +32,3 @@ export class LicenseCommand extends GMPCommand {
 }
 
 registerCommand('license', LicenseCommand);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import React from 'react';
 import Checkbox from 'web/components/form/checkbox';
@@ -46,5 +45,3 @@ SeverityPart.propTypes = {
 };
 
 export default SeverityPart;
-
-// vim: set ts=2 sw=2 tw=80:

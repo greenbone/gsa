@@ -10,10 +10,9 @@ import path from '../utils/path';
 
 const PI2 = 2 * Math.PI;
 
-export const PieTopPath = ({
-  color,
-  path,  
-}) => <path d={path} fill={color} stroke={color} />;
+export const PieTopPath = ({color, path}) => (
+  <path d={path} fill={color} stroke={color} />
+);
 
 PieTopPath.propTypes = {
   color: PropTypes.toString.isRequired,
@@ -122,5 +121,3 @@ PieOuterPath.propTypes = {
   outerRadiusY: PropTypes.number.isRequired,
   startAngle: PropTypes.number,
 };
-
-// vim: set ts=2 sw=2 tw=80:

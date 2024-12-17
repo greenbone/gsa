@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
@@ -209,5 +208,3 @@ EntityPage.propTypes = {
 };
 
 export default EntityPage;
-
-// vim: set ts=2 sw=2 tw=80:

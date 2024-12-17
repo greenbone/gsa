@@ -31,5 +31,3 @@ describe('SolutionTypeIcon component tests', () => {
     expect(element8).toBeVisible();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

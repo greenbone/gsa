@@ -371,5 +371,3 @@ describe('GmpSettings tests', () => {
     expect(settings.vendorLabel).toEqual('foo.bar');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

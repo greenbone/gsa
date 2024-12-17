@@ -25,7 +25,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 import AlertComponent from './component';
 import AlertTable from './table';
 
-
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
     <IconDivider>
@@ -113,5 +112,3 @@ export default withEntitiesContainer('alert', {
   entitiesSelector,
   loadEntities,
 })(AlertsPage);
-
-// vim: set ts=2 sw=2 tw=80:

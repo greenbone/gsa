@@ -102,5 +102,3 @@ describe('InfoPanel tests', () => {
     expect(handleCloseClick).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

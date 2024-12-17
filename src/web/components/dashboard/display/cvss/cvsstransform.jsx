@@ -136,5 +136,3 @@ const transformCvssData = (data = {}) => {
 };
 
 export default transformCvssData;
-
-// vim: set ts=2 sw=2 tw=80:

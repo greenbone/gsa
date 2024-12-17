@@ -194,5 +194,3 @@ class Nvt extends Info {
 }
 
 export default Nvt;
-
-// vim: set ts=2 sw=2 tw=80:

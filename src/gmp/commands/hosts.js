@@ -103,5 +103,3 @@ class HostsCommand extends EntitiesCommand {
 
 registerCommand('host', HostCommand);
 registerCommand('hosts', HostsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

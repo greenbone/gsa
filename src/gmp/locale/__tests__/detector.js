@@ -177,5 +177,3 @@ describe('LanguageDetector tests', () => {
     expect(languageUtils.isSupportedCode).not.toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 
 import {OsCvssDisplay, OsCvssTableDisplay} from './cvssdisplay';
 import {
@@ -42,5 +40,3 @@ const OsDashboard = props => (
 );
 
 export default OsDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

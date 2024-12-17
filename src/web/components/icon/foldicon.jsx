@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {Folder as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 import withSvgIcon from './withSvgIcon';
 
 const FoldIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="fold-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="fold-icon"
+  />
 ));
 
 export default FoldIcon;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {REPORT_FORMATS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import ImportIcon from 'web/components/icon/importicon';
@@ -100,5 +99,3 @@ export default withEntitiesContainer('reportformat', {
   entitiesSelector,
   loadEntities,
 })(ReportFormatsPage);
-
-// vim: set ts=2 sw=2 tw=80:

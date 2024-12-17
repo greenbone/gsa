@@ -263,5 +263,3 @@ class Task extends Model {
 }
 
 export default Task;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import InfoIcon from '../infoicon';
 describe('InfoIcon component tests', () => {
   testIcon(InfoIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

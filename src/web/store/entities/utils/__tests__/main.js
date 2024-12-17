@@ -47,5 +47,3 @@ describe('createAll function tests', () => {
     expect(selector(rootState).isLoadingEntity(id)).toBe(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

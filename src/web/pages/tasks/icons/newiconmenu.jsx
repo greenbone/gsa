@@ -33,5 +33,3 @@ NewIconMenu.propTypes = {
 };
 
 export default withCapabilities(NewIconMenu);
-
-// vim: set ts=2 sw=2 tw=80:

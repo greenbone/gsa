@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {scaleOrdinal, scaleLinear} from 'd3-scale';
 import {_l} from 'gmp/locale/lang';
 import {COMPLIANCE_STATES} from 'gmp/models/auditreport';
 import {parseInt} from 'gmp/parser';
-
 
 import {
   ERROR,
@@ -152,5 +150,3 @@ export const secInfoTypeColorScale = scaleOrdinal()
 export const complianceColorScale = scaleOrdinal()
   .domain(Object.keys(COMPLIANCE_STATES))
   .range(['#4cb045', '#D80000', 'orange', 'silver']);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -55,5 +55,3 @@ class Report extends Model {
 }
 
 export default Report;
-
-// vim: set ts=2 sw=2 tw=80:

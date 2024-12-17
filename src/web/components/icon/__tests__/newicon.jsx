@@ -11,5 +11,3 @@ import NewIcon from '../newicon';
 describe('NewIcon component tests', () => {
   testIcon(NewIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -6,7 +6,6 @@
 import Icon from './svg/port_list.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const PortListIconComponent = withSvgIcon()(Icon);
 
 const PortListIcon = props => (
@@ -14,5 +13,3 @@ const PortListIcon = props => (
 );
 
 export default PortListIcon;
-
-// vim: set ts=2 sw=2 tw=80:

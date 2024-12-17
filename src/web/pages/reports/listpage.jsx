@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import _ from 'gmp/locale';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
@@ -36,7 +33,6 @@ import {
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
 
 import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
 import ReportFilterDialog from './filterdialog';
@@ -279,5 +275,3 @@ export default compose(
     reloadInterval: reportsReloadInterval,
   }),
 )(Page);
-
-// vim: set ts=2 sw=2 tw=80:

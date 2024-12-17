@@ -478,5 +478,3 @@ describe('makeComparePort tests', () => {
     expect(compareValues(objD, objF)).toEqual(0);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

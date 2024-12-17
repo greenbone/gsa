@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -290,5 +288,3 @@ export const createEntitiesTable = options =>
   withComponentDefaults(options)(EntitiesTable);
 
 export default EntitiesTable;
-
-// vim: set ts=2 sw=2 tw=80:

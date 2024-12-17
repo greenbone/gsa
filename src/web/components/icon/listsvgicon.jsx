@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {List as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
@@ -14,5 +13,3 @@ const ListSvgIcon = withSvgIcon()(props => (
 ));
 
 export default ListSvgIcon;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import DfnCertAdvIcon from '../dfncertadvicon';
 describe('DfnCertAdvIcon component tests', () => {
   testIcon(DfnCertAdvIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

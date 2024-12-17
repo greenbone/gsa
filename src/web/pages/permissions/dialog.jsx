@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import Model from 'gmp/model';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
@@ -347,5 +346,3 @@ PermissionDialog.propTypes = {
 };
 
 export default PermissionDialog;
-
-// vim: set ts=2 sw=2 tw=80:

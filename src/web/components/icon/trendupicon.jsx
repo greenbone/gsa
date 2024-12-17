@@ -6,7 +6,6 @@
 import Icon from './svg/trend_up.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const TrendUpIconComponent = withSvgIcon()(Icon);
 
 const TrendUpIcon = props => (
@@ -14,5 +13,3 @@ const TrendUpIcon = props => (
 );
 
 export default TrendUpIcon;
-
-// vim: set ts=2 sw=2 tw=80:

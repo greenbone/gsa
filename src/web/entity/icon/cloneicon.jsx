@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
@@ -37,7 +36,6 @@ const EntityCloneIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});
-       
     } else if (!mayClone) {
       title = _('{{entity}} may not be cloned', {entity: displayName});
     } else {
@@ -66,5 +64,3 @@ EntityCloneIcon.propTypes = {
 };
 
 export default withCapabilities(EntityCloneIcon);
-
-// vim: set ts=2 sw=2 tw=80:

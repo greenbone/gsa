@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import d3cloud from 'd3-cloud';
 import {scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-
 
 import Group from './group';
 import Svg from './svg';
@@ -167,5 +165,3 @@ WordCloudChart.propTypes = {
 };
 
 export default WordCloudChart;
-
-// vim: set ts=2 sw=2 tw=80:

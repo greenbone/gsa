@@ -41,7 +41,6 @@ import PropTypes from 'web/utils/proptypes';
 import FilterComponent from './component';
 import FilterDetails from './details';
 
-
 const ToolBarIcons = ({
   entity,
   onFilterCloneClick,
@@ -205,5 +204,3 @@ export default withEntityContainer('filter', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

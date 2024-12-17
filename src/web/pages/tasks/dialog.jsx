@@ -3,11 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
-
-
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -512,5 +507,3 @@ TaskDialog.propTypes = {
 };
 
 export default withCapabilities(TaskDialog);
-
-// vim: set ts=2 sw=2 tw=80:

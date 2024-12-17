@@ -25,5 +25,3 @@ class GmpHttp extends Http {
 }
 
 export default GmpHttp;
-
-// vim: set ts=2 sw=2 tw=80:

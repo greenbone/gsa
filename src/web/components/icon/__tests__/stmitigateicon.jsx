@@ -11,5 +11,3 @@ import StMitigateIcon from '../stmitigateicon';
 describe('StMitigateIcon component tests', () => {
   testIcon(StMitigateIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

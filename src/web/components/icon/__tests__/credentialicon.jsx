@@ -11,5 +11,3 @@ import CredentialIcon from '../credentialicon';
 describe('CredentialIcon component tests', () => {
   testIcon(CredentialIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -182,10 +180,5 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(DashboardControls);
-
-// vim: set ts=2 sw=2 tw=80:

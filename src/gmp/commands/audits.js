@@ -195,5 +195,3 @@ export class AuditsCommand extends EntitiesCommand {
 
 registerCommand('audit', AuditCommand);
 registerCommand('audits', AuditsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import FoldIcon from '../foldicon';
 describe('FoldIcon component tests', () => {
   testIcon(FoldIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -34,5 +34,3 @@ describe('excludeObjectProps function test', () => {
     expect(result.abc).toBe(3);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

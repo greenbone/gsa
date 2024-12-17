@@ -247,5 +247,3 @@ describe('ScanConfigs model function test', () => {
     expect(filterEmptyScanConfig(config2)).toEqual(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

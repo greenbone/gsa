@@ -127,5 +127,3 @@ class TlsCertificate extends Model {
 }
 
 export default TlsCertificate;
-
-// vim: set ts=2 sw=2 tw=80:

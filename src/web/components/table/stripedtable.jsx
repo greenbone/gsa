@@ -8,7 +8,6 @@ import Theme from 'web/utils/theme';
 
 import Table from './table';
 
-
 const StripedTable = styled(Table)`
   & th,
   & td {
@@ -37,5 +36,3 @@ const StripedTable = styled(Table)`
 StripedTable.displayName = 'StripedTable';
 
 export default StripedTable;
-
-// vim: set ts=2 sw=2 tw=80:

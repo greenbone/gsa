@@ -11,5 +11,3 @@ import StNonAvailableIcon from '../stnonavailableicon';
 describe('StNonAvailableIcon component tests', () => {
   testIcon(StNonAvailableIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

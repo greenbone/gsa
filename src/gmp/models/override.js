@@ -84,5 +84,3 @@ class Override extends Model {
 }
 
 export default Override;
-
-// vim: set ts=2 sw=2 tw=80:

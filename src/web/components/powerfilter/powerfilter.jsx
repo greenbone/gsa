@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import {KeyCode} from 'gmp/utils/event';
@@ -273,5 +271,3 @@ PowerFilter.propTypes = {
 };
 
 export default compose(withCapabilities, withGmp)(PowerFilter);
-
-// vim: set ts=2 sw=2 tw=80:

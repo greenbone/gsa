@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
@@ -16,9 +14,9 @@ import BubbleChart from 'web/components/chart/bubble';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
 import DataTable from 'web/components/dashboard/display/datatable';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import PropTypes from 'web/utils/proptypes';
 import {severityFormat} from 'web/utils/render';
@@ -158,5 +156,3 @@ registerDisplay(NvtsFamilyDisplay.displayId, NvtsFamilyDisplay, {
 registerDisplay(NvtsFamilyTableDisplay.displayId, NvtsFamilyTableDisplay, {
   title: _l('Table: NVTs by Family'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

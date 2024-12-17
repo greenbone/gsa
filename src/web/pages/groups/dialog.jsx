@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -99,5 +97,3 @@ Dialog.propTypes = {
 };
 
 export default Dialog;
-
-// vim: set ts=2 sw=2 tw=80:

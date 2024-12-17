@@ -7,5 +7,3 @@ import * as tickets from '../tickets';
 import {testAll} from '../utils/testing';
 
 testAll('ticket', tickets);
-
-// vim: set ts=2 sw=2 tw=80:

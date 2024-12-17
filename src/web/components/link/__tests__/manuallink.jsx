@@ -95,5 +95,3 @@ describe('ManualLink tests', () => {
     expect(element).toHaveAttribute('href', 'http://foo.bar/foo/foo.html');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -27,5 +27,3 @@ export const selectSaveId = (list, id, empty_default) => {
   }
   return id;
 };
-
-// vim: set ts=2 sw=2 tw=80:

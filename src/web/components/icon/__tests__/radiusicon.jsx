@@ -11,5 +11,3 @@ import RadiusIcon from '../radiusicon';
 describe('RadiusIcon component tests', () => {
   testIcon(RadiusIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

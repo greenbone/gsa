@@ -324,5 +324,3 @@ describe('isModelElement function test', () => {
     expect(isModelElement({_id: '1'})).toBe(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

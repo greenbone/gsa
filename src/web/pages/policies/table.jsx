@@ -33,5 +33,3 @@ const PoliciesTable = createEntitiesTable({
 });
 
 export default PoliciesTable;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {
   SMB_CREDENTIAL_TYPES,
   smb_credential_filter,
@@ -14,7 +13,7 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import NewIcon from 'web/components/icon/newicon';
-import useCapabilities from "web/hooks/useCapabilities";
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
@@ -120,10 +119,11 @@ const SmbMethodPart = ({
           value={reportFormatIdInState}
           onChange={handleReportFormatIdChange}
         />
-        {
-          capabilities.mayOp('get_report_configs') &&
+        {capabilities.mayOp('get_report_configs') && (
           <>
-            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <label htmlFor="report-config-select">
+              &nbsp; Report Config &nbsp;{' '}
+            </label>
             <Select
               id="report-config-select"
               items={reportConfigItems}
@@ -132,7 +132,7 @@ const SmbMethodPart = ({
               onChange={handleReportConfigIdChange}
             />
           </>
-        }
+        )}
       </FormGroup>
 
       <FormGroup title={_('Max Protocol')}>
@@ -164,5 +164,3 @@ SmbMethodPart.propTypes = {
 };
 
 export default withPrefix(SmbMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

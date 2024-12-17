@@ -405,5 +405,3 @@ class UsersCommand extends EntitiesCommand {
 
 registerCommand('user', UserCommand);
 registerCommand('users', UsersCommand);
-
-// vim: set ts=2 sw=2 tw=80:

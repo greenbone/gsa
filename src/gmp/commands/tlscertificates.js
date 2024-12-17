@@ -47,5 +47,3 @@ export class TlsCertificatesCommand extends EntitiesCommand {
 
 registerCommand('tlscertificate', TlsCertificateCommand);
 registerCommand('tlscertificates', TlsCertificatesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {
   email_credential_filter,
@@ -31,8 +29,6 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
-
-
 
 import ContentComposerDialog from './contentcomposerdialog';
 import AlertDialog, {
@@ -1319,5 +1315,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(AlertComponent);
-
-// vim: set ts=2 sw=2 tw=80:

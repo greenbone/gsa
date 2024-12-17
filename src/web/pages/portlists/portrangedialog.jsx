@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {parseInt} from 'gmp/parser';
 import React from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -88,5 +87,3 @@ PortRangeDialog.propTypes = {
 };
 
 export default PortRangeDialog;
-
-// vim: set ts=2 sw=2 tw=80:

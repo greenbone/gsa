@@ -42,8 +42,11 @@ class SubscriptionProvider extends React.Component {
     subscribers.push(func);
 
     return () => {
-      const subscribers = this.getSubscribers(name);  
-      this.setSubscribers(name, subscribers.filter(item => item !== func));
+      const subscribers = this.getSubscribers(name);
+      this.setSubscribers(
+        name,
+        subscribers.filter(item => item !== func),
+      );
     };
   }
 
@@ -74,5 +77,3 @@ SubscriptionProvider.propTypes = {
 };
 
 export default SubscriptionProvider;
-
-// vim: set ts=2 sw=2 tw=80:

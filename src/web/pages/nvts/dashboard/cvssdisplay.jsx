@@ -7,7 +7,7 @@ import {_, _l} from 'gmp/locale/lang';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/cvssdisplay';
-import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay';  
+import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {NvtsSeverityLoader} from './loaders';
@@ -41,5 +41,3 @@ registerDisplay(NvtsCvssDisplay.displayId, NvtsCvssDisplay, {
 registerDisplay(NvtsCvssTableDisplay.displayId, NvtsCvssTableDisplay, {
   title: _l('Table: NVTs by CVSS'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

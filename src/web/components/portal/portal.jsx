@@ -8,8 +8,6 @@ import {hasValue} from 'gmp/utils/identity';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-
-
 const log = Logger.getLogger('web.components.portal');
 
 let portal = document.getElementById('portals');
@@ -45,5 +43,3 @@ class Portal extends React.Component {
 }
 
 export default Portal;
-
-// vim: set ts=2 sw=2 tw=80:

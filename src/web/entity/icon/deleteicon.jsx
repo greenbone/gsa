@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
@@ -40,7 +39,6 @@ const EntityDeleteIcon = ({
       title = _('{{entity}} is not writable', {entity: displayName});
     } else if (entity.isInUse()) {
       title = _('{{entity}} is still in use', {entity: displayName});
-       
     } else if (!mayDelete) {
       title = _('Permission to delete {{entity}} denied', {
         entity: displayName,
@@ -70,5 +68,3 @@ EntityDeleteIcon.propTypes = {
 };
 
 export default withCapabilities(EntityDeleteIcon);
-
-// vim: set ts=2 sw=2 tw=80:

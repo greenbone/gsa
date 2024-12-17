@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import React from 'react';
 import ListIcon from 'web/components/icon/listicon';
@@ -285,5 +283,3 @@ export default withEntityContainer('reportconfig', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

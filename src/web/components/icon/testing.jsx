@@ -92,5 +92,3 @@ export const testIcon = Icon => {
     expect(svgElement).toHaveAttribute('title', 'foo');
   });
 };
-
-// vim: set ts=2 sw=2 tw=80:

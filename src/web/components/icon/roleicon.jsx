@@ -6,7 +6,6 @@
 import Icon from './svg/role.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const RoleIconComponent = withSvgIcon()(Icon);
 
 const RoleIcon = props => (
@@ -14,5 +13,3 @@ const RoleIcon = props => (
 );
 
 export default RoleIcon;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import ResumeIcon from '../resumeicon';
 describe('ResumeIcon component tests', () => {
   testIcon(ResumeIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

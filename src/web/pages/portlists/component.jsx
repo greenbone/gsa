@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -32,9 +31,8 @@ class PortListComponent extends React.Component {
 
     this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
     this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
-    this.handleCloseNewPortRangeDialog = this.handleCloseNewPortRangeDialog.bind(
-      this,
-    );
+    this.handleCloseNewPortRangeDialog =
+      this.handleCloseNewPortRangeDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
     this.openNewPortRangeDialog = this.openNewPortRangeDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
@@ -375,5 +373,3 @@ PortListComponent.propTypes = {
 };
 
 export default withGmp(PortListComponent);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 
 import MenuEntry from './menuentry';
 import ManualLink from '../link/manuallink';
-
 
 const StyledManualLink = styled(ManualLink)`
   height: 100%;
@@ -29,5 +27,3 @@ MenuHelpEntry.propTypes = {
 };
 
 export default MenuHelpEntry;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -1353,5 +1353,3 @@ describe('parseBoolean tests', () => {
     expect(parseBoolean(true)).toBe(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import EnableIcon from '../enableicon';
 describe('EnableIcon component tests', () => {
   testIcon(EnableIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

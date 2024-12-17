@@ -6,7 +6,6 @@
 import Icon from './svg/new_override.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const NewOverrideIconComponent = withSvgIcon()(Icon);
 
 const NewOverrideIcon = props => (
@@ -14,5 +13,3 @@ const NewOverrideIcon = props => (
 );
 
 export default NewOverrideIcon;
-
-// vim: set ts=2 sw=2 tw=80:

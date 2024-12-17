@@ -40,5 +40,3 @@ describe('Dialog error tests', () => {
     expect(handler).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {REPORT_CONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -114,5 +113,3 @@ export default withEntitiesContainer('reportconfig', {
 })(ReportConfigsPage);
 
 export {ToolBarIcons};
-
-// vim: set ts=2 sw=2 tw=80:

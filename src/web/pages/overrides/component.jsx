@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {
   ANY,
@@ -31,7 +30,6 @@ import {
   LOW_VALUE,
 } from 'web/utils/severity';
 import withGmp from 'web/utils/withGmp';
-
 
 import OverrideDialog from './dialog';
 
@@ -278,5 +276,3 @@ OverrideComponent.propTypes = {
 };
 
 export default withGmp(OverrideComponent);
-
-// vim: set ts=2 sw=2 tw=80:

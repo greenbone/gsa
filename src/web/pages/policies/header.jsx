@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import React from 'react';
 import TableHead from 'web/components/table/head';
@@ -50,5 +49,3 @@ Header.propTypes = {
 };
 
 export default Header;
-
-// vim: set ts=2 sw=2 tw=80:

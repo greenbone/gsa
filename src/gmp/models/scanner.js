@@ -143,5 +143,3 @@ class Scanner extends Model {
 }
 
 export default Scanner;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -6,7 +6,6 @@
 import Icon from './svg/wizard.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const WizardIconComponent = withSvgIcon()(Icon);
 
 const WizardIcon = props => (
@@ -14,5 +13,3 @@ const WizardIcon = props => (
 );
 
 export default WizardIcon;
-
-// vim: set ts=2 sw=2 tw=80:

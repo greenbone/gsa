@@ -41,5 +41,3 @@ describe('pages selectors tests', () => {
     expect(selector.getFilter('foo')).toEqual('name=foo');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

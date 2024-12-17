@@ -31,5 +31,3 @@ HttpMethodPart.propTypes = {
 };
 
 export default withPrefix(HttpMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

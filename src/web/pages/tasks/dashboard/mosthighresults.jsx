@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {format as d3format} from 'd3-format';
 import {_, _l} from 'gmp/locale/lang';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
@@ -13,9 +11,9 @@ import React from 'react';
 import BarChart from 'web/components/chart/bar';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -140,5 +138,3 @@ registerDisplay(
     title: _l('Table: Tasks with most High Results per Host'),
   },
 );
-
-// vim: set ts=2 sw=2 tw=80:

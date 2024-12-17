@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -202,5 +201,3 @@ LoginForm.propTypes = {
 };
 
 export default LoginForm;
-
-// vim: set ts=2 sw=2 tw=80:

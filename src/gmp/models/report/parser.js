@@ -627,5 +627,3 @@ export const parseCves = (report, filter) => {
     filter: isDefined(filter) ? filter : parseFilter(report),
   };
 };
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 
 import {ResultsCvssDisplay, ResultsCvssTableDisplay} from './cvssdisplay';
 import {
@@ -47,5 +45,3 @@ const ResultsDashboard = props => (
 );
 
 export default ResultsDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

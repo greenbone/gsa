@@ -7,5 +7,3 @@ import * as funcs from '../operatingsystems';
 import {testAll} from '../utils/testing';
 
 testAll('operatingsystem', funcs);
-
-// vim: set ts=2 sw=2 tw=80:

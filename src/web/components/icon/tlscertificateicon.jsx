@@ -6,7 +6,6 @@
 import Icon from './svg/tlscertificate.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const TlsCertificateIconComponent = withSvgIcon()(Icon);
 
 const TlsCertificateIcon = props => (
@@ -14,5 +13,3 @@ const TlsCertificateIcon = props => (
 );
 
 export default TlsCertificateIcon;
-
-// vim: set ts=2 sw=2 tw=80:

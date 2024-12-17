@@ -7,5 +7,3 @@ import * as funcs from '../overrides';
 import {testAll} from '../utils/testing';
 
 testAll('override', funcs);
-
-// vim: set ts=2 sw=2 tw=80:

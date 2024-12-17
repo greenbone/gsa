@@ -11,5 +11,3 @@ import CalendarIcon from '../calendaricon';
 describe('CalendarIcon component tests', () => {
   testIcon(CalendarIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

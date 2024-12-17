@@ -6,7 +6,6 @@
 import Icon from './svg/ldap.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const LdapIconComponent = withSvgIcon()(Icon);
 
 const LdapIcon = props => (
@@ -14,5 +13,3 @@ const LdapIcon = props => (
 );
 
 export default LdapIcon;
-
-// vim: set ts=2 sw=2 tw=80:

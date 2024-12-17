@@ -159,5 +159,3 @@ export class PoliciesCommand extends EntitiesCommand {
 
 registerCommand('policy', PolicyCommand);
 registerCommand('policies', PoliciesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

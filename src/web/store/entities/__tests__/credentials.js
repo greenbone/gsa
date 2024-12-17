@@ -7,5 +7,3 @@ import * as credential from '../credentials';
 import {testAll} from '../utils/testing';
 
 testAll('credential', credential);
-
-// vim: set ts=2 sw=2 tw=80:

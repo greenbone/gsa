@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -17,8 +16,6 @@ import withGmp from 'web/utils/withGmp';
 import SaveDialog from '../../dialog/savedialog';
 import FormGroup from '../../form/formgroup';
 import Select from '../../form/select';
-
-
 
 class FilterSelection extends React.Component {
   constructor(...args) {
@@ -145,5 +142,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(FilterSelection);
-
-// vim: set ts=2 sw=2 tw=80:

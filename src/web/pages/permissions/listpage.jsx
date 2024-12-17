@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {PERMISSIONS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -99,5 +98,3 @@ export default withEntitiesContainer('permission', {
   entitiesSelector,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

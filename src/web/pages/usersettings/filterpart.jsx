@@ -71,7 +71,7 @@ const FilterPart = ({
           value={auditReportsFilter}
           onChange={onChange}
         />
-        </FormGroup>
+      </FormGroup>
       <FormGroup title={_('Scan Configs Filter')} titleSize="3">
         <Select
           items={renderSelectItems(
@@ -381,5 +381,3 @@ FilterPart.propTypes = {
 };
 
 export default FilterPart;
-
-// vim: set ts=2 sw=2 tw=80:

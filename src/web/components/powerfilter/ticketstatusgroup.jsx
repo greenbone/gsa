@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
@@ -49,5 +48,3 @@ TicketStatusFilterGroup.propTypes = {
 };
 
 export default TicketStatusFilterGroup;
-
-// vim: set ts=2 sw=2 tw=80:

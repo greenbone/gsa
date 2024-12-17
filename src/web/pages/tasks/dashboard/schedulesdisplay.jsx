@@ -12,7 +12,7 @@ import ScheduleChart from 'web/components/chart/schedule';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
 import DataTable from 'web/components/dashboard/display/datatable';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
@@ -88,5 +88,3 @@ registerDisplay(
     title: _l('Table: Next Scheduled Tasks'),
   },
 );
-
-// vim: set ts=2 sw=2 tw=80:

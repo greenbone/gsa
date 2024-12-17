@@ -8,7 +8,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/layout';
 
-
 const StyledLayout = styled(Layout)`
   width: 100%;
 `;
@@ -20,5 +19,3 @@ const Loading = () => (
 );
 
 export default Loading;
-
-// vim: set ts=2 sw=2 tw=80:

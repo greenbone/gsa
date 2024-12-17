@@ -6,14 +6,10 @@
 import Icon from './svg/restore.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const RestoreIconComponent = withSvgIcon()(Icon);
 
 const RestoreIcon = props => (
   <RestoreIconComponent {...props} data-testid="restore-icon" />
 );
 
-
 export default RestoreIcon;
-
-// vim: set ts=2 sw=2 tw=80:

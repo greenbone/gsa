@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {createDisplay, createRow} from 'gmp/commands/dashboards';
 import {isDefined, isArray} from 'gmp/utils/identity';
 import {v4 as uuid} from 'uuid';
@@ -115,5 +114,3 @@ export const addDisplayToSettings = (settings, displayId, uuidFunc) => {
     rows,
   };
 };
-
-// vim: set ts=2 sw=2 tw=80:

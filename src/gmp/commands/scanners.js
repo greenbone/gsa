@@ -83,5 +83,3 @@ class ScannerCommand extends EntityCommand {
 
 registerCommand('scanner', ScannerCommand);
 registerCommand('scanners', ScannersCommand);
-
-// vim: set ts=2 sw=2 tw=80:

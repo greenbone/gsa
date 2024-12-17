@@ -119,5 +119,3 @@ describe('UserSettings Defaults selector tests', () => {
     expect(selector.getValueByName('foo')).toEqual('bar');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

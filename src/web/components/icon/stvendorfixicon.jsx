@@ -6,7 +6,6 @@
 import Icon from './svg/st_vendorfix.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const StVendorFixIconComponent = withSvgIcon()(Icon);
 
 const StVendorFixIcon = props => (
@@ -14,5 +13,3 @@ const StVendorFixIcon = props => (
 );
 
 export default StVendorFixIcon;
-
-// vim: set ts=2 sw=2 tw=80:

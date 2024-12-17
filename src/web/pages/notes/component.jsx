@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {
   ACTIVE_NO_VALUE,
@@ -235,5 +234,3 @@ NoteComponent.propTypes = {
 };
 
 export default withGmp(NoteComponent);
-
-// vim: set ts=2 sw=2 tw=80:

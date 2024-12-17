@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
@@ -14,14 +12,14 @@ import React from 'react';
 import DonutChart from 'web/components/chart/donut';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons';  
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {
   totalCount,
   percent,
   qodColorScale,
 } from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import PropTypes from 'web/utils/proptypes';
 
@@ -147,5 +145,3 @@ registerDisplay(NvtsQodDisplay.displayId, NvtsQodDisplay, {
 registerDisplay(NvtsQodTableDisplay.displayId, NvtsQodTableDisplay, {
   title: _l('Table: NVTs by QoD'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

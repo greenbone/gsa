@@ -113,5 +113,3 @@ export default withEntitiesContainer('audit', {
   defaultFilter: RESET_FILTER,
   reloadInterval: taskReloadInterval,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

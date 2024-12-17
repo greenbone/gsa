@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
@@ -13,9 +12,9 @@ import React from 'react';
 import LineChart, {lineDataPropType} from 'web/components/chart/line';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {totalCount} from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -179,5 +178,3 @@ registerDisplay(
     title: _l('Table: Hosts by Modification Time'),
   },
 );
-
-// vim: set ts=2 sw=2 tw=80:

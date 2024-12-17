@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import Checkbox from 'web/components/form/checkbox';
 import TextField from 'web/components/form/textfield';
@@ -48,5 +47,3 @@ CreateNamedFilterGroup.propTypes = {
 };
 
 export default CreateNamedFilterGroup;
-
-// vim: set ts=2 sw=2 tw=80:

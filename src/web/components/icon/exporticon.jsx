@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {FileOutput as Icon} from 'lucide-react';
 import React from 'react';
@@ -12,8 +11,6 @@ import PropTypes from 'web/utils/proptypes';
 import SelectionType from 'web/utils/selectiontype';
 
 import withSvgIcon from './withSvgIcon';
-
-
 
 const ExportSvgIcon = withSvgIcon()(props => (
   <IconWithStrokeWidth IconComponent={Icon} {...props} />
@@ -28,7 +25,13 @@ const ExportIcon = ({selectionType, title, ...other}) => {
   } else if (selectionType === SelectionType.SELECTION_FILTER) {
     download_title = _('Export all filtered');
   }
-  return <ExportSvgIcon {...other} data-testid="export-icon" title={download_title}/>;
+  return (
+    <ExportSvgIcon
+      {...other}
+      data-testid="export-icon"
+      title={download_title}
+    />
+  );
 };
 
 ExportIcon.propTypes = {
@@ -37,5 +40,3 @@ ExportIcon.propTypes = {
 };
 
 export default ExportIcon;
-
-// vim: set ts=2 sw=2 tw=80:

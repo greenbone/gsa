@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 const operating_systems = [
   {
     pattern: 'cpe:/o:microsoft:windows_nt:4.0:sp1',
@@ -1078,4 +1077,3 @@ const osObject = {
 };
 
 export default osObject;
-// vim: set ts=2 sw=2 tw=80:

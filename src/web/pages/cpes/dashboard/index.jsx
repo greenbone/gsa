@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 
 import {CpesCreatedDisplay, CpesCreatedTableDisplay} from './createddisplay';
 import {CpesCvssDisplay, CpesCvssTableDisplay} from './cvssdisplay';
@@ -42,5 +40,3 @@ const CpesDashboard = props => (
 );
 
 export default CpesDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

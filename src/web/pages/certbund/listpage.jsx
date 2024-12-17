@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import Filter, {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
@@ -18,7 +17,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/proptypes';
-
 
 import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard';
 import CertBundFilterDialog from './filterdialog';
@@ -76,5 +74,3 @@ export default withEntitiesContainer('certbund', {
   fallbackFilter,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

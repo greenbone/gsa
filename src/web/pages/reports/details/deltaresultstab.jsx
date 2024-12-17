@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import ResultsTable from 'web/pages/results/table';
 import PropTypes from 'web/utils/proptypes';
@@ -143,5 +142,3 @@ ResultsTab.propTypes = {
 };
 
 export default ResultsTab;
-
-// vim: set ts=2 sw=2 tw=80:

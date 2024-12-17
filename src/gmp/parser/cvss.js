@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined} from 'gmp/utils/identity';
 
 /* CVSS v2 .... */
@@ -686,5 +685,3 @@ const V3ScoreBase = ({av, ac, pr, ui, s, c, i, a} = {}) => {
     ? roundUp(Math.min(exploitability + impact, 10))
     : roundUp(Math.min(1.08 * (exploitability + impact), 10));
 };
-
-// vim: set ts=2 sw=2 tw=80:

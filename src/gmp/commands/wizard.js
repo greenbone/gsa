@@ -210,5 +210,3 @@ class WizardCommand extends HttpCommand {
 export default WizardCommand;
 
 registerCommand('wizard', WizardCommand);
-
-// vim: set ts=2 sw=2 tw=80:

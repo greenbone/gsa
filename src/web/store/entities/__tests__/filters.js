@@ -7,5 +7,3 @@ import * as filter from '../filters';
 import {testAll} from '../utils/testing';
 
 testAll('filter', filter);
-
-// vim: set ts=2 sw=2 tw=80:

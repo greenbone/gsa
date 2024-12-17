@@ -63,5 +63,3 @@ export class TicketsCommand extends EntitiesCommand {
 
 registerCommand('tickets', TicketsCommand);
 registerCommand('ticket', TicketCommand);
-
-// vim: set ts=2 sw=2 tw=80:

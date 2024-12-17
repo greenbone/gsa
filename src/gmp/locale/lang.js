@@ -130,5 +130,3 @@ const translateLazy = (key, options) => new LazyTranslate(key, options);
 
 export {translate as _};
 export {translateLazy as _l};
-
-// vim: set ts=2 sw=2 tw=80:

@@ -37,5 +37,3 @@ const ReportConfigsTable = createEntitiesTable({
 });
 
 export default ReportConfigsTable;
-
-// vim: set ts=2 sw=2 tw=80:

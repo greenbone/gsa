@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {
   ACCESS_ALLOW_ALL,
   ACCESS_DENY_ALL,
@@ -373,5 +372,3 @@ Dialog.propTypes = {
 };
 
 export default Dialog;
-
-// vim: set ts=2 sw=2 tw=80:

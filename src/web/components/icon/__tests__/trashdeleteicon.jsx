@@ -11,5 +11,3 @@ import TrashDeleteIcon from '../trashdeleteicon';
 describe('TrashDeleteIcon component tests', () => {
   testIcon(TrashDeleteIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {_} from 'gmp/locale/lang';
 import {
   SNMP_CREDENTIAL_TYPE,
@@ -475,5 +473,3 @@ CredentialsDialog.propTypes = {
 };
 
 export default withCapabilities(CredentialsDialog);
-
-// vim: set ts=2 sw=2 tw=80:

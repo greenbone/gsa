@@ -11,5 +11,3 @@ import StWillNotFixIcon from '../stwillnotfixicon';
 describe('StWillNotFixIcon component tests', () => {
   testIcon(StWillNotFixIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

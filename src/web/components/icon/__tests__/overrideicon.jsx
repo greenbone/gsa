@@ -11,5 +11,3 @@ import OverrideIcon from '../overrideicon';
 describe('OverrideIcon component tests', () => {
   testIcon(OverrideIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

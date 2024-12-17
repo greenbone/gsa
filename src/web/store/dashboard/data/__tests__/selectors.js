@@ -180,5 +180,3 @@ describe('dashboard data selector getData tests', () => {
     expect(selector.getData(id, filter)).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

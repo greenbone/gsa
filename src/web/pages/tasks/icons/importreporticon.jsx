@@ -9,7 +9,6 @@ import ImportIcon from 'web/components/icon/importicon';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-
 const ImportReportIcon = ({capabilities, size, task, onClick}) => {
   if (!task.isContainer() || !capabilities.mayCreate('report')) {
     return null;
@@ -34,5 +33,3 @@ ImportReportIcon.propTypes = {
 };
 
 export default withCapabilities(ImportReportIcon);
-
-// vim: set ts=2 sw=2 tw=80:

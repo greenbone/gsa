@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 
 import {
   OverridesActiveDaysDisplay,
@@ -48,5 +46,3 @@ const OverridesDashboard = props => (
 );
 
 export default OverridesDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

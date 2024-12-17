@@ -55,5 +55,3 @@ class LoginCommand extends HttpCommand {
 }
 
 export default LoginCommand;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {scaleBand, scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
-
 
 import Axis from './axis';
 import Group from './group';
@@ -250,5 +247,3 @@ BarChart.propTypes = {
 };
 
 export default BarChart;
-
-// vim: set ts=2 sw=2 tw=80:

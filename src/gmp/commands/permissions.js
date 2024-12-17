@@ -133,5 +133,3 @@ class PermissionsCommand extends EntitiesCommand {
 
 registerCommand('permission', PermissionCommand);
 registerCommand('permissions', PermissionsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

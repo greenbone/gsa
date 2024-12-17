@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {duration} from 'gmp/models/date';
 import {scannerTypeName} from 'gmp/models/scanner';
@@ -291,5 +289,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(AuditDetails);
-
-// vim: set ts=2 sw=2 tw=80:

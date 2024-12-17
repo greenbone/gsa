@@ -154,5 +154,3 @@ describe('Additional Ticket Model tests', () => {
     expect(ticket.closedNote).toEqual('foo');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

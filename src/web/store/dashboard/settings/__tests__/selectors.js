@@ -187,5 +187,3 @@ describe('dashboard setting selector hasSettings tests', () => {
     expect(selector.hasSettings('b')).toBe(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {pack, hierarchy} from 'd3-hierarchy';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-
 
 import Group from './group';
 import Svg from './svg';
@@ -28,9 +26,7 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
 
   const hasBubbles = data.length > 0;
 
-  const bubbles = pack()
-    .size([maxWidth, maxHeight])
-    .padding(1.5);
+  const bubbles = pack().size([maxWidth, maxHeight]).padding(1.5);
 
   const root = hierarchy({children: data}).sum(d => d.value);
 
@@ -109,5 +105,3 @@ BubbleChart.propTypes = {
 };
 
 export default BubbleChart;
-
-// vim: set ts=2 sw=2 tw=80:

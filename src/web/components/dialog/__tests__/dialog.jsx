@@ -22,7 +22,6 @@ describe('Dialog component tests', () => {
 
     expect(renderFunc).toHaveBeenCalled();
 
-     
     const renderProps = renderFunc.mock.calls[0][0];
     expect(isFunction(renderProps.close)).toEqual(true);
   });
@@ -35,7 +34,6 @@ describe('Dialog component tests', () => {
 
     expect(renderFunc).toHaveBeenCalled();
 
-     
     const renderProps = renderFunc.mock.calls[0][0];
     expect(isFunction(renderProps.close)).toEqual(true);
     renderProps.close();
@@ -61,5 +59,3 @@ describe('Dialog component tests', () => {
     expect(handleClose).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

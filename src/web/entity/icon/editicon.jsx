@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
@@ -40,7 +39,6 @@ const EntityEditIcon = ({
       title = _('Edit {{entity}}', {entity: displayName});
     } else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
-       
     } else if (!mayEdit) {
       title = _('Permission to edit {{entity}} denied', {entity: displayName});
     } else {
@@ -69,5 +67,3 @@ EntityEditIcon.propTypes = {
 };
 
 export default withCapabilities(EntityEditIcon);
-
-// vim: set ts=2 sw=2 tw=80:

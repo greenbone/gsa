@@ -39,5 +39,3 @@ describe('Group model tests', () => {
     expect(group.users).toEqual([]);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

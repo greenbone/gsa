@@ -9,30 +9,30 @@ import PropTypes from 'web/utils/proptypes';
 
 import FilterSelection from './filterselection';
 
-const withFilterSelection = ({filtersFilter}) => Component => {
-  const FilterSelectionWrapper = ({showFilterSelection = false, ...props}) =>
-    showFilterSelection ? (
-      <FilterSelection {...props} filtersFilter={filtersFilter}>
-        {({filter, selectFilter}) => (
-          <Component
-            {...props}
-            filter={filter}
-            showFilterSelection={showFilterSelection}
-            onSelectFilterClick={selectFilter}
-          />
-        )}
-      </FilterSelection>
-    ) : (
-      <Component {...props} showFilterSelection={showFilterSelection} />
-    );
+const withFilterSelection =
+  ({filtersFilter}) =>
+  Component => {
+    const FilterSelectionWrapper = ({showFilterSelection = false, ...props}) =>
+      showFilterSelection ? (
+        <FilterSelection {...props} filtersFilter={filtersFilter}>
+          {({filter, selectFilter}) => (
+            <Component
+              {...props}
+              filter={filter}
+              showFilterSelection={showFilterSelection}
+              onSelectFilterClick={selectFilter}
+            />
+          )}
+        </FilterSelection>
+      ) : (
+        <Component {...props} showFilterSelection={showFilterSelection} />
+      );
 
-  FilterSelectionWrapper.propTypes = {
-    showFilterSelection: PropTypes.bool,
+    FilterSelectionWrapper.propTypes = {
+      showFilterSelection: PropTypes.bool,
+    };
+
+    return hoistStatics(FilterSelectionWrapper, Component);
   };
 
-  return hoistStatics(FilterSelectionWrapper, Component);
-};
-
 export default withFilterSelection;
-
-// vim: set ts=2 sw=2 tw=80:

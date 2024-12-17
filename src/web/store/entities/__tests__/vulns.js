@@ -7,5 +7,3 @@ import {testAll} from '../utils/testing';
 import * as funcs from '../vulns';
 
 testAll('vuln', funcs);
-
-// vim: set ts=2 sw=2 tw=80:

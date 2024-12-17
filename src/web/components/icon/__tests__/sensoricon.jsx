@@ -11,5 +11,3 @@ import SensorIcon from '../sensoricon';
 describe('SensorIcon component tests', () => {
   testIcon(SensorIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

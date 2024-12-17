@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
@@ -107,5 +106,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

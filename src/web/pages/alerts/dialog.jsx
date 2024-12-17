@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {
   CONDITION_TYPE_ALWAYS,
@@ -64,7 +62,6 @@ import TaskEventPart from './taskeventpart';
 import TicketEventPart from './ticketeventpart';
 import TippingPontMethodPart from './tippingpointmethodpart';
 import VeriniceMethodPart from './verinicemethodpart';
-
 
 export const DEFAULT_DEFENSE_CENTER_PORT = '8307';
 export const DEFAULT_DIRECTION = 'changed';
@@ -971,5 +968,3 @@ AlertDialog.propTypes = {
 };
 
 export default withCapabilities(AlertDialog);
-
-// vim: set ts=2 sw=2 tw=80:

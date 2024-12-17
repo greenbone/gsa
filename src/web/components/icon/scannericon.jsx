@@ -6,7 +6,6 @@
 import Icon from './svg/scanner.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const ScannerIconComponent = withSvgIcon()(Icon);
 
 const ScannerIcon = props => (
@@ -14,5 +13,3 @@ const ScannerIcon = props => (
 );
 
 export default ScannerIcon;
-
-// vim: set ts=2 sw=2 tw=80:

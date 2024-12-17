@@ -9,7 +9,6 @@ import StopIcon from 'web/components/icon/stopicon';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-
 const TaskStopIcon = ({
   capabilities,
   size,
@@ -45,5 +44,3 @@ TaskStopIcon.propTypes = {
 };
 
 export default withCapabilities(TaskStopIcon);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -39,5 +39,3 @@ const GreenboneFooter = () => {
 };
 
 export default GreenboneFooter;
-
-// vim: set ts=2 sw=2 tw=80:

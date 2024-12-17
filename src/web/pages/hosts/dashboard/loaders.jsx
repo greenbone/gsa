@@ -99,5 +99,3 @@ export const HostsVulnScoreLoader = ({children, filter}) => (
 );
 
 HostsVulnScoreLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -64,7 +64,6 @@ import NoteComponent from '../notes/component';
 import OverrideComponent from '../overrides/component';
 import TicketComponent from '../tickets/component';
 
-
 export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,
@@ -513,5 +512,3 @@ export default compose(
   }),
   connect(mapStateToProps, mapDispatchToProps),
 )(Page);
-
-// vim: set ts=2 sw=2 tw=80:

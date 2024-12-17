@@ -11,5 +11,3 @@ import NewNoteIcon from '../newnoteicon';
 describe('NewNoteIcon component tests', () => {
   testIcon(NewNoteIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

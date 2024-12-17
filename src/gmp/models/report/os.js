@@ -75,5 +75,3 @@ class OperatingSystem {
 }
 
 export default OperatingSystem;
-
-// vim: set ts=2 sw=2 tw=80:

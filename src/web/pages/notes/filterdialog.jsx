@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
@@ -142,5 +141,3 @@ NotesFilterDialogComponent.propTypes = {
 };
 
 export default NotesFilterDialogComponent;
-
-// vim: set ts=2 sw=2 tw=80:

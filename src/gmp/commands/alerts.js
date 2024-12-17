@@ -280,5 +280,3 @@ class AlertsCommand extends EntitiesCommand {
 
 registerCommand('alert', AlertCommand);
 registerCommand('alerts', AlertsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

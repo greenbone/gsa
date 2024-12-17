@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -20,7 +19,6 @@ import TrashIcon from 'web/entity/icon/trashicon';
 import PropTypes from 'web/utils/proptypes';
 
 import {renderDuration, renderRecurrence} from './render';
-
 
 const Actions = withEntitiesActions(
   ({
@@ -115,5 +113,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

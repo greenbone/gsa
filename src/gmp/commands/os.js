@@ -63,5 +63,3 @@ class OperatingSystemsCommand extends EntitiesCommand {
 
 registerCommand('operatingsystem', OperatingSystemCommand);
 registerCommand('operatingsystems', OperatingSystemsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

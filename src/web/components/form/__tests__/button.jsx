@@ -88,5 +88,3 @@ describe('Button tests', () => {
     expect(element).toHaveAttribute('data-loading', 'true');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

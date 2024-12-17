@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -123,5 +122,3 @@ export default createEntitiesTable({
   emptyTitle: _l('No Operating Systems available'),
   row: Row,
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -252,5 +252,3 @@ export default withEntityContainer('target', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

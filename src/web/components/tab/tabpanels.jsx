@@ -6,7 +6,6 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 
-
 import PropTypes from '../../utils/proptypes';
 
 const TabPanels = ({active = 0, children}) => {
@@ -19,5 +18,3 @@ TabPanels.propTypes = {
 };
 
 export default TabPanels;
-
-// vim: set ts=2 sw=2 tw=80:

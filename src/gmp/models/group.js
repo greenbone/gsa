@@ -19,5 +19,3 @@ class Group extends Model {
 }
 
 export default Group;
-
-// vim: set ts=2 sw=2 tw=80:

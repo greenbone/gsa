@@ -143,5 +143,3 @@ class Alert extends Model {
 }
 
 export default Alert;
-
-// vim: set ts=2 sw=2 tw=80:

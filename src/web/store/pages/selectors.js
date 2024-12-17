@@ -19,5 +19,3 @@ class PageSelector {
 const getPage = (rootState = {}) => new PageSelector(rootState.pages);
 
 export default getPage;
-
-// vim: set ts=2 sw=2 tw=80:

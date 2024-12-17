@@ -56,5 +56,3 @@ ConfirmRemoveDialog.propTypes = {
 };
 
 export default ConfirmRemoveDialog;
-
-// vim: set ts=2 sw=2 tw=80:

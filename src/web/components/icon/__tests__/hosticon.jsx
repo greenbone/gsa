@@ -11,5 +11,3 @@ import HostIcon from '../hosticon';
 describe('HostIcon component tests', () => {
   testIcon(HostIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import React from 'react';
 import TopologyChart from 'web/components/chart/topology';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -164,5 +161,3 @@ HostsTopologyDisplay.displayId = DISPLAY_ID;
 registerDisplay(DISPLAY_ID, HostsTopologyDisplay, {
   title: _l('Chart: Hosts Topology'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

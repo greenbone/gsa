@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 import ManualLink from 'web/components/link/manuallink';
 import PropTypes from 'web/utils/proptypes';
@@ -26,5 +25,3 @@ ManualIcon.propTypes = {
 };
 
 export default ManualIcon;
-
-// vim: set ts=2 sw=2 tw=80:

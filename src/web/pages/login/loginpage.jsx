@@ -3,10 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
-
 import Rejection from 'gmp/http/rejection';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
@@ -128,7 +124,7 @@ class LoginPage extends React.Component {
   }
 
   componentDidMount() {
-    const {navigate, isLoggedIn = false} = this.props;  
+    const {navigate, isLoggedIn = false} = this.props;
 
     // redirect user to main page if he is already logged in
     if (isLoggedIn) {
@@ -207,5 +203,3 @@ export default compose(
   withGmp,
   connect(mapStateToProp, mapDispatchToProps),
 )(LoginPage);
-
-// vim: set ts=2 sw=2 tw=80:

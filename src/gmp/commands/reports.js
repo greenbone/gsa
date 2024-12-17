@@ -156,5 +156,3 @@ export class ReportCommand extends EntityCommand {
 
 registerCommand('report', ReportCommand);
 registerCommand('reports', ReportsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import LicenseIcon from '../licenseicon';
 describe('LicenseIcon component tests', () => {
   testIcon(LicenseIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -10,7 +10,6 @@ import PropTypes from 'web/utils/proptypes';
 import {withTextOnly} from './link';
 import ConfirmationDialog from '../dialog/confirmationdialog';
 
-
 class ExternalLink extends React.Component {
   constructor() {
     super();
@@ -82,5 +81,3 @@ ExternalLink.propTypes = {
 };
 
 export default withTextOnly(ExternalLink);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -12,7 +12,6 @@ import {createEntitiesHeader} from '../../entities/header';
 import {createEntitiesTable} from '../../entities/table';
 import withRowDetails from '../../entities/withRowDetails';
 
-
 export const SORT_FIELDS = [
   {
     name: 'name',
@@ -59,5 +58,3 @@ const AlertsTable = createEntitiesTable({
 });
 
 export default AlertsTable;
-
-// vim: set ts=2 sw=2 tw=80:

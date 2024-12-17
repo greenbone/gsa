@@ -7,5 +7,3 @@ import * as nvts from '../nvts';
 import {testAll} from '../utils/testing';
 
 testAll('nvt', nvts);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
 import styled from 'styled-components';
@@ -166,5 +164,3 @@ export default createEntitiesTable({
   row: Row,
   rowDetails: withRowDetails('tlscertificate', 6, false)(TlsCertificateDetails),
 });
-
-// vim: set ts=2 sw=2 tw=80:

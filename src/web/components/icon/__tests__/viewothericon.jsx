@@ -11,5 +11,3 @@ import ViewOtherIcon from '../viewothericon';
 describe('ViewOtherIcon component tests', () => {
   testIcon(ViewOtherIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
@@ -131,14 +129,9 @@ const Row = ({
         {entity.comment && <Comment>({entity.comment})</Comment>}
       </TableData>
       <TableData>
-        <AuditStatus 
-          isAudit={true}
-          links={links}
-          task={entity}/>
+        <AuditStatus isAudit={true} links={links} task={entity} />
       </TableData>
-      <TableData>
-        {renderAuditReport(entity.last_report, links)}
-      </TableData>
+      <TableData>{renderAuditReport(entity.last_report, links)}</TableData>
       <TableData>
         {isDefined(entity.last_report) && (
           <ComplianceStatusBar
@@ -160,5 +153,3 @@ Row.propTypes = {
 };
 
 export default withUserName(Row);
-
-// vim: set ts=2 sw=2 tw=80:

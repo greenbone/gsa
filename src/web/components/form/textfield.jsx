@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {Input} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -57,5 +56,3 @@ TextField.propTypes = {
 };
 
 export default TextField;
-
-// vim: set ts=2 sw=2 tw=80:

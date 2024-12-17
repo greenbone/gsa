@@ -7,7 +7,7 @@ import {_, _l} from 'gmp/locale/lang';
 import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/cvssdisplay';
-import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay';  
+import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {DfnCertSeverityLoader} from './loaders';
@@ -41,5 +41,3 @@ registerDisplay(DfnCertCvssDisplay.displayId, DfnCertCvssDisplay, {
 registerDisplay(DfnCertCvssTableDisplay.displayId, DfnCertCvssTableDisplay, {
   title: _l('Table: DFN-CERT Advisories by CVSS'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

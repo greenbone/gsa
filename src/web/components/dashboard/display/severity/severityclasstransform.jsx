@@ -27,9 +27,7 @@ import {totalCount, percent, riskFactorColorScale} from '../utils';
 
 export const severityClassDataRow = row => [row.label, row.value];
 
-const transformSeverityData = (
-  data = {},
-) => {
+const transformSeverityData = (data = {}) => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);
@@ -136,5 +134,3 @@ const transformSeverityData = (
 };
 
 export default transformSeverityData;
-
-// vim: set ts=2 sw=2 tw=80:

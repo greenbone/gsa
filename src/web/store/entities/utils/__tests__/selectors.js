@@ -688,5 +688,3 @@ describe('EntitiesSelector getEntityError tests', () => {
     expect(fooSelector.getEntityError(id)).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -11,5 +11,3 @@ import KeyIcon from '../keyicon';
 describe('KeyIcon component tests', () => {
   testIcon(KeyIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

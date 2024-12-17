@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 
 import {
   CertBundCreatedDisplay,
@@ -45,5 +43,3 @@ const CertBundDashboard = props => (
 );
 
 export default CertBundDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

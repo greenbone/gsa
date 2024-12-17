@@ -85,5 +85,3 @@ const convert = (keyword, value, relation) => {
 };
 
 export default convert;
-
-// vim: set ts=2 sw=2 tw=80:

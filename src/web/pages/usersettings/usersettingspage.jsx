@@ -116,7 +116,7 @@ SettingTableRow.propTypes = {
 
 const ToolBarIcons = ({disableEditIcon, onEditSettingsClick}) => {
   const capabilities = useCapabilities();
-   
+
   const [_] = useTranslation();
   const mayEdit = capabilities.mayEdit('setting');
   const editIconTitle = mayEdit
@@ -1136,5 +1136,3 @@ export default compose(
   withCapabilities,
   connect(mapStateToProps, mapDispatchToProps),
 )(UserSettings);
-
-// vim: set ts=2 sw=2 tw=80:

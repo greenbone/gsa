@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
@@ -17,7 +15,6 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
-
 import PermissionDialog from './dialog';
 
 class PermissionsComponent extends React.Component {
@@ -26,9 +23,8 @@ class PermissionsComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.handleClosePermissionDialog = this.handleClosePermissionDialog.bind(
-      this,
-    );
+    this.handleClosePermissionDialog =
+      this.handleClosePermissionDialog.bind(this);
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
 
@@ -276,9 +272,4 @@ PermissionsComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(PermissionsComponent);
-
-// vim: set ts=2 sw=2 tw=80:
+export default compose(withGmp, withCapabilities)(PermissionsComponent);

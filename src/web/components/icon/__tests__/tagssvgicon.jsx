@@ -11,5 +11,3 @@ import TagsSvgIcon from '../tagssvgicon';
 describe('TagsSvgIcon component tests', () => {
   testIcon(TagsSvgIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

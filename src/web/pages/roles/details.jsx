@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import React from 'react';
 import HorizontalSep from 'web/components/layout/horizontalsep';
@@ -52,5 +51,3 @@ RoleDetails.propTypes = {
 };
 
 export default RoleDetails;
-
-// vim: set ts=2 sw=2 tw=80:

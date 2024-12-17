@@ -46,7 +46,6 @@ import PropTypes from 'web/utils/proptypes';
 import ScannerComponent from './component';
 import ScannerDetails from './details';
 
-
 const ToolBarIcons = ({
   entity,
   onScannerCertificateDownloadClick,
@@ -268,5 +267,3 @@ export default withEntityContainer('scanner', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

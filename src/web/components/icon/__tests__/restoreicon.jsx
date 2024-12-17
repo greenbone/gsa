@@ -11,5 +11,3 @@ import RestoreIcon from '../restoreicon';
 describe('RestoreIcon component tests', () => {
   testIcon(RestoreIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

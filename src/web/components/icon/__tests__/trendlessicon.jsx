@@ -11,5 +11,3 @@ import TrendLessIcon from '../trendlessicon';
 describe('TrendLessIcon component tests', () => {
   testIcon(TrendLessIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

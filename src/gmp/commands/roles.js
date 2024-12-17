@@ -58,5 +58,3 @@ class RolesCommand extends EntitiesCommand {
 
 registerCommand('role', RoleCommand);
 registerCommand('roles', RolesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

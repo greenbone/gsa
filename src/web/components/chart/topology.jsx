@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {color} from 'd3-color';
 import {
   forceSimulation,
@@ -523,5 +521,3 @@ HostsTopologyChart.propTypes = {
 };
 
 export default HostsTopologyChart;
-
-// vim: set ts=2 sw=2 tw=80:

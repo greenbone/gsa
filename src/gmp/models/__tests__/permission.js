@@ -61,5 +61,3 @@ describe('Permission model tests', () => {
     expect(permission.subject).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

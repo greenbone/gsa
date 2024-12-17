@@ -6,7 +6,6 @@
 import Icon from './svg/cvss_calculator.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const CvssIconComponent = withSvgIcon()(Icon);
 
 const CvssIcon = props => (
@@ -14,5 +13,3 @@ const CvssIcon = props => (
 );
 
 export default CvssIcon;
-
-// vim: set ts=2 sw=2 tw=80:

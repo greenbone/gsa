@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
@@ -579,5 +578,3 @@ ScanConfigComponent.propTypes = {
 };
 
 export default withGmp(ScanConfigComponent);
-
-// vim: set ts=2 sw=2 tw=80:

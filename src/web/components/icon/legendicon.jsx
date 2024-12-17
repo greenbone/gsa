@@ -6,7 +6,6 @@
 import Icon from './svg/legend.svg';
 import withSvgIcon from './withSvgIcon';
 
-
 const LegendIconComponent = withSvgIcon()(Icon);
 
 const LegendIcon = props => (
@@ -14,5 +13,3 @@ const LegendIcon = props => (
 );
 
 export default LegendIcon;
-
-// vim: set ts=2 sw=2 tw=80:

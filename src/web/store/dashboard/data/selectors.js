@@ -48,5 +48,3 @@ const getDashboardData = rootState => {
 };
 
 export default getDashboardData;
-
-// vim: set ts=2 sw=2 tw=80:
