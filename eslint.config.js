@@ -2,10 +2,9 @@ import pluginJs from '@eslint/js';
 import pluginHeader from 'eslint-plugin-header';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
-import pluginVitest from 'eslint-plugin-vitest';
 import globals from 'globals';
 import * as importPlugin from 'eslint-plugin-import';
-
+import vitest from '@vitest/eslint-plugin';
 import allowedSnakeCase from './allowedSnakeCase.js';
 
 pluginHeader.rules.header.meta.schema = false; // https://github.com/Stuk/eslint-plugin-header/issues/57
@@ -23,7 +22,7 @@ export default [
     plugins: {
       react: pluginReact,
       'react-hooks': pluginReactHooks,
-      vitest: pluginVitest,
+      vitest,
       import: importPlugin,
       header: pluginHeader,
     },
@@ -127,13 +126,11 @@ export default [
 
   {
     files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
-    plugins: {
-      vitest: pluginVitest,
-    },
+    plugins: {vitest},
     rules: {
-      'vitest/expect-expect': 'off',
-      'vitest/no-disabled-tests': 'warn',
+      ...vitest.configs.recommended.rules,
       'vitest/no-focused-tests': 'error',
+      'vitest/no-disabled-tests': 'warn',
       'vitest/no-identical-title': 'error',
       'react/prop-types': 'off',
     },
