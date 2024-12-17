@@ -50,7 +50,7 @@ const DialogError = ({error, onCloseClick}) => {
       >
         {error}
       </span>
-      <DialogCloseButton onClick={onCloseClick} title={_('Close')} />
+      <DialogCloseButton onClick={onCloseClick} title={_('Close')} data-testid="error-close-button"/>
     </StyledLayout>
   );
 };

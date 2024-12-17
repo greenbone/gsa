@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/dfn_cert_adv.svg';
 
-const DfnCertAdvIcon = withSvgIcon()(Icon);
+const DfnCertAdvIconComponent = withSvgIcon()(Icon);
+
+const DfnCertAdvIcon = props => (
+  <DfnCertAdvIconComponent {...props} data-testid="dfn-cert-adv-icon" />
+);
 
 export default DfnCertAdvIcon;
 

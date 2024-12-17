@@ -9,7 +9,7 @@ import {Rss as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const FeedIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="feed-icon"/>
 ));
 
 export default FeedIcon;

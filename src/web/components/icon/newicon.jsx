@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/new.svg';
 
-const NewIcon = withSvgIcon()(Icon);
+const NewIconComponent = withSvgIcon()(Icon);
+
+const NewIcon = props => (
+  <NewIconComponent {...props} data-testid="new-icon" />
+);
 
 export default NewIcon;
 

@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/cert_bund_adv.svg';
 
-const CertBundAdvIcon = withSvgIcon()(Icon);
+const CertBundAdvIconComponent = withSvgIcon()(Icon);
+
+const CertBundAdvIcon = props => (
+  <CertBundAdvIconComponent {...props} data-testid="cert-bund-adv-icon" />
+);
 
 export default CertBundAdvIcon;
 

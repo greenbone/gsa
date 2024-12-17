@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/dl_exe.svg';
 
-const DownloadExeIcon = withSvgIcon()(Icon);
+const DownloadExeIconComponent = withSvgIcon()(Icon);
+
+const DownloadExeIcon = props => (
+  <DownloadExeIconComponent {...props} data-testid="download-exe-icon" />
+);
 
 export default DownloadExeIcon;
 

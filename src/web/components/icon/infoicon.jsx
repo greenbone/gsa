@@ -10,7 +10,7 @@ import {Info as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const InfoIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="info-icon"/>
 ));
 
 export default InfoIcon;

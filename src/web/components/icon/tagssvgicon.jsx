@@ -10,7 +10,7 @@ import {Tags as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const TagsSvgIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="tags-icon"/>
 ));
 
 export default TagsSvgIcon;

@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/scanner.svg';
 
-const ScannerIcon = withSvgIcon()(Icon);
+const ScannerIconComponent = withSvgIcon()(Icon);
+
+const ScannerIcon = props => (
+  <ScannerIconComponent {...props} data-testid="scanner-icon" />
+);
 
 export default ScannerIcon;
 

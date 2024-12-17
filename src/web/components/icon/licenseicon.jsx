@@ -10,7 +10,7 @@ import {FileBadge as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const LicenseIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="license-icon"/>
 ));
 
 export default LicenseIcon;

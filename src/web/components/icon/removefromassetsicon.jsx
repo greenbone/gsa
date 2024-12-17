@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/remove_from_assets.svg';
 
-const RemoveFromAssetsIcon = withSvgIcon()(Icon);
+const RemoveFromAssetsIconComponent = withSvgIcon()(Icon);
+
+const RemoveFromAssetsIcon = props => (
+  <RemoveFromAssetsIconComponent {...props} data-testid="remove-from-assets-icon" />
+);
 
 export default RemoveFromAssetsIcon;
 

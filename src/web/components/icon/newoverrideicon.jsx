@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/new_override.svg';
 
-const NewOverrideIcon = withSvgIcon()(Icon);
+const NewOverrideIconComponent = withSvgIcon()(Icon);
+
+const NewOverrideIcon = props => (
+  <NewOverrideIconComponent {...props} data-testid="new-override-icon" />
+);
 
 export default NewOverrideIcon;
 

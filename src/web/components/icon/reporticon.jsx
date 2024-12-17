@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/report.svg';
 
-const ReportIcon = withSvgIcon()(Icon);
+const ReportIconComponent = withSvgIcon()(Icon);
+
+const ReportIcon = props => (
+  <ReportIconComponent {...props} data-testid="report-icon" />
+);
 
 export default ReportIcon;
 

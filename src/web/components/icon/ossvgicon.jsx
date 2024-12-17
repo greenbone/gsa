@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/os.svg';
 
-const OsSvgIcon = withSvgIcon()(Icon);
+const OsSvgIconComponent = withSvgIcon()(Icon);
+
+const OsSvgIcon = props => (
+  <OsSvgIconComponent {...props} data-testid="os-svg-icon" />
+);
 
 export default OsSvgIcon;
 

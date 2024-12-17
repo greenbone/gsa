@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/nvt.svg';
 
-const NvtIcon = withSvgIcon()(Icon);
+const NvtIconComponent = withSvgIcon()(Icon);
+
+const NvtIcon = props => (
+  <NvtIconComponent {...props} data-testid="nvt-icon" />
+);
 
 export default NvtIcon;
 

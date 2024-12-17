@@ -32,6 +32,7 @@ const TicketStatusFilterGroup = ({
         name={name}
         value={status}
         onChange={onChange}
+        data-testid="filter-status"
         items={[
           {label: _('Open'), value: 'Open'},
           {label: _('Fixed'), value: 'Fixed'},

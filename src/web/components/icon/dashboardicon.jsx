@@ -10,7 +10,7 @@ import {BarChart3 as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const DashboardIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="dashboard-icon"/>
 ));
 
 export default DashboardIcon;

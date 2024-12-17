@@ -67,24 +67,28 @@ const ComplianceLevelsFilterGroup = ({
           checked={complianceLevels.includes('y')}
           name="y"
           onChange={handleComplianceChange}
+          data-testid="compliance-checkbox-yes"
         />
         <ComplianceStateLabels.Yes />
         <Checkbox
           checked={complianceLevels.includes('n')}
           name="n"
           onChange={handleComplianceChange}
+          data-testid="compliance-checkbox-no"
         />
         <ComplianceStateLabels.No />
         <Checkbox
           checked={complianceLevels.includes('i')}
           name="i"
           onChange={handleComplianceChange}
+          data-testid="compliance-checkbox-incomplete"
         />
         <ComplianceStateLabels.Incomplete />
         <Checkbox
           checked={complianceLevels.includes('u')}
           name="u"
           onChange={handleComplianceChange}
+          data-testid="compliance-checkbox-undefined"
         />
         <ComplianceStateLabels.Undefined />
       </IconDivider>

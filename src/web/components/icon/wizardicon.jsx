@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/wizard.svg';
 
-const WizardIcon = withSvgIcon()(Icon);
+const WizardIconComponent = withSvgIcon()(Icon);
+
+const WizardIcon = props => (
+  <WizardIconComponent {...props} data-testid="wizard-icon" />
+);
 
 export default WizardIcon;
 

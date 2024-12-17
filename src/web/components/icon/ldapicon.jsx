@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/ldap.svg';
 
-const LdapIcon = withSvgIcon()(Icon);
+const LdapIconComponent = withSvgIcon()(Icon);
+
+const LdapIcon = props => (
+  <LdapIconComponent {...props} data-testid="ldap-icon" />
+);
 
 export default LdapIcon;
 

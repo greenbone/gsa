@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/cve.svg';
 
-const CveIcon = withSvgIcon()(Icon);
+const CveIconComponent = withSvgIcon()(Icon);
+
+const CveIcon = props => (
+  <CveIconComponent {...props} data-testid="cve-icon" />
+);
 
 export default CveIcon;
 

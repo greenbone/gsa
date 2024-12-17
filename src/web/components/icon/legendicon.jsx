@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/legend.svg';
 
-const LegendIcon = withSvgIcon()(Icon);
+const LegendIconComponent = withSvgIcon()(Icon);
+
+const LegendIcon = props => (
+  <LegendIconComponent {...props} data-testid="legend-icon" />
+);
 
 export default LegendIcon;
 

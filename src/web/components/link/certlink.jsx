@@ -35,7 +35,7 @@ const CertLink = ({id, textOnly = false, type}) => {
     info_type = 'dfncert';
   }
   return (
-    <DetailsLink title={title} id={id} type={info_type} textOnly={textOnly}>
+    <DetailsLink title={title} id={id} type={info_type} textOnly={textOnly} data-testid="cert_link">
       {id}
     </DetailsLink>
   );

@@ -18,6 +18,7 @@ const RelationSelector = ({relation, onChange}) => {
   const [_] = useTranslation();
   return (
     <Select
+      data-testid="relationselector"
       value={relation}
       onChange={onChange}
       items={[

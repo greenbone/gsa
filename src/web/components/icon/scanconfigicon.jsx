@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/config.svg';
 
-const ScanConfigIcon = withSvgIcon()(Icon);
+const ScanConfigIconComponent = withSvgIcon()(Icon);
+
+const ScanConfigIcon = props => (
+  <ScanConfigIconComponent {...props} data-testid="scan-config-icon" />
+);
 
 export default ScanConfigIcon;
 

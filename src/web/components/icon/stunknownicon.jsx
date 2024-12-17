@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/st_unknown.svg';
 
-const StUnknownIcon = withSvgIcon()(Icon);
+const StUnknownIconComponent = withSvgIcon()(Icon);
+
+const StUnknownIcon = props => (
+  <StUnknownIconComponent {...props} data-testid="st-unknown-icon" />
+);
 
 export default StUnknownIcon;
 

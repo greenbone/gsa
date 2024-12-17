@@ -64,6 +64,7 @@ const ComposerContent = ({
           onChange={onValueChange}
         />
         <CheckBox
+          data-testid="include-overrides"
           name="includeOverrides"
           checked={includeOverrides}
           checkedValue={YES_VALUE}
@@ -72,6 +73,7 @@ const ComposerContent = ({
           onChange={onValueChange}
         />
         <CheckBox
+          data-testid="include-tls-cert"
           disabled={true}
           name="includeTlsCertificates"
           checked={true}

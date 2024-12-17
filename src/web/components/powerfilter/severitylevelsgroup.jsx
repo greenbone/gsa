@@ -60,30 +60,35 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
           checked={levels.includes('h')}
           name="h"
           onChange={handleLevelChange}
+          data-testid="severity-filter-high"
         />
         <SeverityClassLabel.High />
         <Checkbox
           checked={levels.includes('m')}
           name="m"
           onChange={handleLevelChange}
+          data-testid="severity-filter-medium"
         />
         <SeverityClassLabel.Medium />
         <Checkbox
           checked={levels.includes('l')}
           name="l"
           onChange={handleLevelChange}
+          data-testid="severity-filter-low"
         />
         <SeverityClassLabel.Low />
         <Checkbox
           checked={levels.includes('g')}
           name="g"
           onChange={handleLevelChange}
+          data-testid="severity-filter-log"
         />
         <SeverityClassLabel.Log />
         <Checkbox
           checked={levels.includes('f')}
           name="f"
           onChange={handleLevelChange}
+          data-testid="severity-filter-false-positive"
         />
         <SeverityClassLabel.FalsePositive />
       </IconDivider>

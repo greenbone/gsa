@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/st_mitigate.svg';
 
-const StMitigateIcon = withSvgIcon()(Icon);
+const StMitigateIconComponent = withSvgIcon()(Icon);
+
+const StMitigateIcon = props => (
+  <StMitigateIconComponent {...props} data-testid="st-mitigate-icon" />
+);
 
 export default StMitigateIcon;
 

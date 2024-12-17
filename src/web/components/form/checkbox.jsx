@@ -50,6 +50,7 @@ const Checkbox = ({
   );
   return (
     <OpenSightCheckbox
+      data-testid="opensight-checkbox"
       {...props}
       label={title}
       title={toolTipTitle}

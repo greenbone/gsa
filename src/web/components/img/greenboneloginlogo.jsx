@@ -19,7 +19,7 @@ const Image = styled(Img)`
 
 const LoginLogo = props => {
   return (
-    <Image alt={_('Greenbone AG')} src='greenbonehorizontal.png' />
+    <Image alt={_('Greenbone AG')} src='greenbonehorizontal.png' data-testid="greenbone-login-logo"/>
   );
 };
 

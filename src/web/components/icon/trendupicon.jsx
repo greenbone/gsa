@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/trend_up.svg';
 
-const TrendUpIcon = withSvgIcon()(Icon);
+const TrendUpIconComponent = withSvgIcon()(Icon);
+
+const TrendUpIcon = props => (
+  <TrendUpIconComponent {...props} data-testid="trend-up-icon" />
+);
 
 export default TrendUpIcon;
 

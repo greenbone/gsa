@@ -9,7 +9,7 @@ import {Trash2 as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const TrashcanIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="trashcan-icon"/>
 ));
 
 export default TrashcanIcon;

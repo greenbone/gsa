@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/cpe.svg';
 
-const CpeLogoIcon = withSvgIcon()(Icon);
+const CpeLogoIconComponent = withSvgIcon()(Icon);
+
+const CpeLogoIcon = props => (
+  <CpeLogoIconComponent {...props} data-testid="cpe-logo-icon" />
+);
 
 export default CpeLogoIcon;
 

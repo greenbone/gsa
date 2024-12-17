@@ -9,7 +9,7 @@ import React from 'react';
 import GbLogo from 'web/components/icon/svg/greenbone.svg?url';
 
 const GreenboneLogo = props => (
-  <img alt="Greenbone Security Assistant" {...props} src={GbLogo} />
+  <img alt="Greenbone Security Assistant" {...props} src={GbLogo} data-testid="greenbone-logo"/>
 );
 
 export default GreenboneLogo;

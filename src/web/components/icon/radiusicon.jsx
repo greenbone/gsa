@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/radius.svg';
 
-const RadiusIcon = withSvgIcon()(Icon);
+const RadiusIconComponent = withSvgIcon()(Icon);
+
+const RadiusIcon = props => (
+  <RadiusIconComponent {...props} data-testid="radius-icon" />
+);
 
 export default RadiusIcon;
 

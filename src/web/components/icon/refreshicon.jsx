@@ -10,7 +10,7 @@ import {RefreshCcw as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const RefreshIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="refresh-icon"/>
 ));
 
 export default RefreshIcon;

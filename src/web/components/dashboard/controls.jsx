@@ -119,6 +119,7 @@ export class DashboardControls extends React.Component {
                 : _('Dashboard limit reached')
             }
             onClick={canAdd ? this.handleNewClick : undefined}
+            data-testid="add-dashboard-display"
           />
           <ResetIcon
             title={_('Reset to Defaults')}

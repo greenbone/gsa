@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/role.svg';
 
-const RoleIcon = withSvgIcon()(Icon);
+const RoleIconComponent = withSvgIcon()(Icon);
+
+const RoleIcon = props => (
+  <RoleIconComponent {...props} data-testid="role-icon" />
+);
 
 export default RoleIcon;
 

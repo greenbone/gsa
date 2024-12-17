@@ -10,7 +10,7 @@ import {ShieldX as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const VerifyNoIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props}  data-testid="verify-no-icon"/>
 ));
 
 export default VerifyNoIcon;

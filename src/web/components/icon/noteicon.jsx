@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/note.svg';
 
-const NoteIcon = withSvgIcon()(Icon);
+const NoteIconComponent = withSvgIcon()(Icon);
+
+const NoteIcon = props => (
+  <NoteIconComponent {...props} data-testid="note-icon" />
+);
 
 export default NoteIcon;
 

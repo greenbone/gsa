@@ -7,7 +7,9 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/clone.svg';
 
-const CloneIcon = withSvgIcon()(Icon);
+const CloneIconComponent = withSvgIcon()(Icon);
+
+const CloneIcon = props => <CloneIconComponent {...props} data-testid="clone-icon" />;
 
 export default CloneIcon;
 

@@ -7,7 +7,11 @@ import withSvgIcon from './withSvgIcon';
 
 import Icon from './svg/dl_rpm.svg';
 
-const DownloadRpmIcon = withSvgIcon()(Icon);
+const DownloadRpmIconComponent = withSvgIcon()(Icon);
+
+const DownloadRpmIcon = props => (
+  <DownloadRpmIconComponent {...props} data-testid="download-rpm-icon" />
+);
 
 export default DownloadRpmIcon;
 

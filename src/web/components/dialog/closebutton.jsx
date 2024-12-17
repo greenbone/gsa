@@ -48,6 +48,7 @@ const CloseButton = ({title = _('Close'), size = 'medium', ...props}) => {
       $lineHeight={height}
       title={title}
       {...props}
+      data-testid="close-button"
     >
       ×{/* Javascript unicode: \u00D7 */}
     </StyledCloseButton>

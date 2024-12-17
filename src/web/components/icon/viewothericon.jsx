@@ -10,7 +10,7 @@ import {Glasses as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
 const ViewOtherIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} />
+  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="view-other-icon"/>
 ));
 
 export default ViewOtherIcon;

@@ -30,6 +30,7 @@ const Button = ({
   });
   return (
     <OpenSightButton
+      data-testid="opensight-button"
       {...other}
       disabled={disabled}
       name={name}

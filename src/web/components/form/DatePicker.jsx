@@ -31,6 +31,7 @@ const DatePickerComponent = (
 
   return (
     <DatePickerInput
+      data-testid="datepicker-input"
       disabled={disabled}
       locale={getLocale()}
       value={value.toDate()}
