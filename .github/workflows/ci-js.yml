@@ -86,7 +86,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Lint JavaScript files
-        run: npm run lint -- --format junit -o ${{ env.REPORT_FILE }}
+        run: npm run lint > ${{ env.REPORT_FILE }}
       - name: Store Lint Results
         uses: actions/upload-artifact@v4
         with:
