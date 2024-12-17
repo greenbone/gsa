@@ -4,12 +4,9 @@
  */
 
 import {testing, beforeEach, expect} from '@gsa/testing';
-
 import '../setupTests';
-
 // setup additional matchers for vitest
 import '@testing-library/jest-dom/vitest';
-
 import * as ResizeObserverModule from 'resize-observer-polyfill';
 
 global.beforeEach = beforeEach;

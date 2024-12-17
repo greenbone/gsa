@@ -3,10 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
-
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -177,6 +173,9 @@ const PageContent = ({
         />
         <Layout align="end">
           <Powerfilter
+            createFilterType="result"
+            // use loaded filter from report if available otherwise already show the requested filter
+            filter={isDefined(reportFilter) ? reportFilter : pageFilter}
             filters={filters}
             isLoading={isLoading || isUpdating}
             isLoadingFilters={isLoadingFilters}
@@ -187,9 +186,6 @@ const PageContent = ({
             onRemoveClick={onFilterRemoveClick}
             onResetClick={onFilterResetClick}
             onUpdate={onFilterChanged}
-            createFilterType="result"
-            // use loaded filter from report if available otherwise already show the requested filter
-            filter={isDefined(reportFilter) ? reportFilter : pageFilter}
           />
         </Layout>
       </ToolBar>

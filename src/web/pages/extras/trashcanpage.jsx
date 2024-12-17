@@ -52,7 +52,6 @@ import TargetsTable from '../targets/table';
 import TasksTable from '../tasks/table';
 import TicketsTable from '../tickets/table';
 
-
 const Col = styled.col`
   width: 50%;
 `;
@@ -320,7 +319,7 @@ const TrashCan = () => {
         setTrash(response.data);
         setIsLoading(false);
       },
-       
+
       error => {
         showError(error);
         setIsLoading(false);
@@ -349,7 +348,7 @@ const TrashCan = () => {
     try {
       await gmp.trashcan.empty();
       loadTrash();
-    } catch (error) {
+    } catch {
       setIsErrorEmptyingTrash(true);
       localIsErrorEmptyingTrash = true;
     } finally {

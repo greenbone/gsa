@@ -81,7 +81,7 @@ class DashboardCommand extends GmpCommand {
       let config;
       try {
         config = JSON.parse(value);
-      } catch (e) {
+      } catch {
         log.warn('Could not parse dashboard setting', id, value);
         return;
       }

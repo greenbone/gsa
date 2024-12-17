@@ -32,7 +32,7 @@ export const getProperty = (object, property) => {
     }
 
     return object[property];
-  } catch (err) {
+  } catch {
     return undefined;
   }
 };
@@ -73,17 +73,18 @@ export const getValue = (convertFunc, value, property, undefinedVal) => {
   return isDefined(val) ? val : undefinedVal;
 };
 
-const makeCompare = convertFunc => (property, undefinedVal) => (
-  reverse = false,
-) => {
-  const valCompare = reverse ? genericCompareDesc : genericCompareAsc;
+const makeCompare =
+  convertFunc =>
+  (property, undefinedVal) =>
+  (reverse = false) => {
+    const valCompare = reverse ? genericCompareDesc : genericCompareAsc;
 
-  return (a, b) =>
-    valCompare(
-      getValue(convertFunc, a, property, undefinedVal),
-      getValue(convertFunc, b, property, undefinedVal),
-    );
-};
+    return (a, b) =>
+      valCompare(
+        getValue(convertFunc, a, property, undefinedVal),
+        getValue(convertFunc, b, property, undefinedVal),
+      );
+  };
 
 export const makeCompareString = makeCompare((value = '') => '' + value);
 

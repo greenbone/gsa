@@ -5,7 +5,18 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Schedule from 'gmp/models/schedule';
+import {
+  changeInputValue,
+  clickElement,
+  closeDialog,
+  getDialogSaveButton,
+  queryAllSelectElements,
+  getSelectItemElementsForSelect,
+  getTextInputs,
+} from 'web/components/testing';
 import {render, fireEvent, screen} from 'web/utils/testing';
+
+import ScheduleDialog from '../dialog';
 
 const checkElementVisibilityAndContent = (
   labelText,
@@ -25,18 +36,6 @@ const checkElementVisibilityAndContent = (
   expect(timePicker).toBeVisible();
   expect(timePicker).toHaveValue(timePickerValue);
 };
-
-import {
-  changeInputValue,
-  clickElement,
-  closeDialog,
-  getDialogSaveButton,
-  queryAllSelectElements,
-  getSelectItemElementsForSelect,
-  getTextInputs,
-} from 'web/components/testing';
-
-import ScheduleDialog from '../dialog';
 
 let handleSave;
 let handleClose;

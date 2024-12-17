@@ -349,7 +349,7 @@ export class UserCommand extends EntityCommand {
 
       try {
         defaults = JSON.parse(value);
-      } catch (e) {
+      } catch {
         log.warn(
           'Could not parse saved report composer defaults, setting ' +
             'back to default defaults...',

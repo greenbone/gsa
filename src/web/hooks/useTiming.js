@@ -60,7 +60,7 @@ const useTiming = (doFunc, timeout) => {
           } else {
             updateTimerId();
           }
-        } catch (error) {
+        } catch {
           updateTimerId();
         }
       }, timeoutValue),

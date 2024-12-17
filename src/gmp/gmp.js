@@ -3,10 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-import logger from 'gmp/log';
-
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/auditreports';
@@ -58,6 +54,9 @@ import DefaultTransform from 'gmp/http/transform/default';
 import {buildServerUrl, buildUrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
 import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
+import logger from 'gmp/log';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 const log = logger.getLogger('gmp');
 

@@ -338,7 +338,7 @@ class Event {
       const it = this.event.iterator();
 
       let retries = 0;
-      while (true && retries <= 5) {
+      while (retries <= 5) {
         try {
           const next = it.next();
           if (convertIcalDate(next, this.timezone).unix() >= now.unix()) {

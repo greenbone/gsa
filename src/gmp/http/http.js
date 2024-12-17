@@ -214,7 +214,7 @@ class Http {
     );
     try {
       reject(this.transformRejection(rej, options));
-    } catch (error) {
+    } catch {
       reject(rej);
     }
   }
@@ -229,7 +229,7 @@ class Http {
     );
     try {
       reject(this.transformRejection(rej, options));
-    } catch (error) {
+    } catch {
       reject(rej);
     }
   }
