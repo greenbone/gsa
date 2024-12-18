@@ -20,10 +20,10 @@ export const FoldState = {
 };
 
 const foldDelay = keyframes`
-  0%: {
+  0% {
     min-width: 0px;
   }
-  100%: {
+  100% {
     min-width: 1px;
   }
 `;
@@ -185,7 +185,7 @@ export const withFoldToggle = Component => {
 
       return (
         <Component
-          $foldState={foldState}
+          foldState={foldState}
           onFoldStepEnd={this.handleFoldStepEnd}
           onFoldToggle={this.handleFoldToggle}
           {...other}
