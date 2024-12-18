@@ -3,41 +3,33 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import Filter, {OS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import OsSvgIcon from 'web/components/icon/ossvgicon';
-
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/operatingsystems';
+import PropTypes from 'web/utils/proptypes';
 
+import OsComponent from './component';
+import OsDashboard, {OS_DASHBOARD_ID} from './dashboard';
 import OsFilterDialog from './filterdialog';
 import OsTable from './table';
-import OsComponent from './component';
-
-import OsDashboard, {OS_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
   <Layout>
     <ManualIcon
-      page="managing-assets"
       anchor="managing-operating-systems"
+      page="managing-assets"
       title={_('Help: Operating Systems')}
     />
   </Layout>
@@ -53,13 +45,13 @@ const Page = ({
   ...props
 }) => (
   <OsComponent
-    onCloned={onChanged}
     onCloneError={onError}
+    onCloned={onChanged}
     onCreated={onChanged}
-    onDeleted={onChanged}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={onChanged}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
@@ -83,8 +75,8 @@ const Page = ({
             />
           )}
           filter={filter}
-          filtersFilter={OS_FILTER_FILTER}
           filterEditDialog={OsFilterDialog}
+          filtersFilter={OS_FILTER_FILTER}
           sectionIcon={<OsSvgIcon size="large" />}
           table={OsTable}
           title={_('Operating Systems')}

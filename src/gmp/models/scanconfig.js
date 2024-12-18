@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-import {forEach, map} from 'gmp/utils/array';
-import {isEmpty} from 'gmp/utils/string';
-
-import {parseInt, parseBoolean} from 'gmp/parser';
-
 import Model, {parseModelFromElement} from 'gmp/model';
+import {parseInt, parseBoolean} from 'gmp/parser';
+import {forEach, map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =
@@ -143,5 +141,3 @@ class ScanConfig extends Model {
 }
 
 export default ScanConfig;
-
-// vim: set ts=2 sw=2 tw=80:

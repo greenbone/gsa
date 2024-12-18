@@ -6,7 +6,6 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 
 import {isFunction} from '../../utils/identity';
-
 import LanguageDetector from '../detector';
 
 describe('LanguageDetector tests', () => {
@@ -178,5 +177,3 @@ describe('LanguageDetector tests', () => {
     expect(languageUtils.isSupportedCode).not.toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

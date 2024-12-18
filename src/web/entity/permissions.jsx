@@ -3,33 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {getEntityType} from 'gmp/utils/entitytype';
-import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
-
-import Layout from 'web/components/layout/layout';
 import IconDivider from 'web/components/layout/icondivider';
-
+import Layout from 'web/components/layout/layout';
+import PermissionComponent from 'web/pages/permissions/component';
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,
   INCLUDE_RELATED_RESOURCES,
 } from 'web/pages/permissions/multipledialog';
 import PermissionsTable from 'web/pages/permissions/table';
-import PermissionComponent from 'web/pages/permissions/component';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
 const SectionElementDivider = styled(IconDivider)`
   margin-bottom: 3px;
@@ -46,8 +38,8 @@ const SectionElements = withCapabilities(
           />
         )}
         <ManualIcon
-          page="web-interface-access"
           anchor="permissions"
+          page="web-interface-access"
           title={_('Help: Permissions')}
         />
       </SectionElementDivider>
@@ -204,16 +196,16 @@ class Permissions extends React.Component {
           <PermissionsTable
             {...props}
             entities={permissions}
-            pagination={false}
             footer={false}
             footnote={false}
+            pagination={false}
             onPermissionEditClick={this.openPermissionDialog}
           />
         )}
         {multiplePermissionDialogVisible && (
           <MultiplePermissionDialog
-            entityType={entityType}
             entityName={entityName}
+            entityType={entityType}
             groupId={groupId}
             groups={groups}
             id={id}
@@ -259,13 +251,13 @@ const EntityPermissions = ({
   onInteraction,
 }) => (
   <PermissionComponent
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onCloned={onChanged}
     onCloneError={onError}
+    onCloned={onChanged}
     onCreated={onChanged}
-    onDeleted={onChanged}
     onDeleteError={onError}
+    onDeleted={onChanged}
+    onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
@@ -277,8 +269,8 @@ const EntityPermissions = ({
         toggleDetailsIcon={false}
         onChanged={onChanged}
         onInteraction={onInteraction}
-        onPermissionCreateClick={create}
         onPermissionCloneClick={clone}
+        onPermissionCreateClick={create}
         onPermissionDeleteClick={delete_func}
         onPermissionDownloadClick={download}
         onPermissionEditClick={edit}
@@ -298,5 +290,3 @@ EntityPermissions.propTypes = {
 };
 
 export default EntityPermissions;
-
-// vim: set ts=2 sw=2 tw=80:

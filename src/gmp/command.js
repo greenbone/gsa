@@ -12,5 +12,3 @@ const registerCommand = (name, clazz) => {
 export const getCommands = () => COMMANDS;
 
 export default registerCommand;
-
-// vim: set ts=2 sw=2 tw=80:

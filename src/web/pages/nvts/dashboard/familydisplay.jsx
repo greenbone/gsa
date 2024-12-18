@@ -3,31 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
-
 import {parseFloat, parseSeverity} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
+import React from 'react';
+import BubbleChart from 'web/components/chart/bubble';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTable from 'web/components/dashboard/display/datatable';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import PropTypes from 'web/utils/proptypes';
 import {severityFormat} from 'web/utils/render';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
-
-import BubbleChart from 'web/components/chart/bubble';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import DataTable from 'web/components/dashboard/display/datatable';
-import createDisplay from 'web/components/dashboard/display/createDisplay';
-import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
-import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {NvtsFamilyLoader} from './loaders';
 
@@ -106,18 +99,18 @@ export class NvtsFamilyDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
             dataTransform={transformFamilyData}
+            filter={filter}
+            showToggleLegend={false}
             title={({data: tdata}) =>
               _('NVTs by Family (Total: {{count}})', {count: tdata.total})
             }
-            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BubbleChart
-                svgRef={svgRef}
                 data={tdata}
                 height={height}
+                svgRef={svgRef}
                 width={width}
                 onDataClick={
                   isDefined(onFilterChanged) ? this.handleDataClick : undefined
@@ -163,5 +156,3 @@ registerDisplay(NvtsFamilyDisplay.displayId, NvtsFamilyDisplay, {
 registerDisplay(NvtsFamilyTableDisplay.displayId, NvtsFamilyTableDisplay, {
   title: _l('Table: NVTs by Family'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

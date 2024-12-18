@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import feedStatus from 'web/store/feedStatus/reducers';
 import {SET_SYNC_STATUS, SET_ERROR} from 'web/store/feedStatus/actions';
+import feedStatus from 'web/store/feedStatus/reducers';
 
 describe('feedStatus reducer', () => {
   const initialState = {

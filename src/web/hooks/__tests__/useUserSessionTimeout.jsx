@@ -4,15 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {getFormattedDate} from 'gmp/locale/date';
 import date from 'gmp/models/date';
-
-import {setSessionTimeout as setSessionTimeoutAction} from 'web/store/usersettings/actions';
-
-import {rendererWith} from 'web/utils/testing';
-
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+import {setSessionTimeout as setSessionTimeoutAction} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 const TestUserSessionTimeout = () => {
   const [sessionTimeout, setSessionTimeout] = useUserSessionTimeout();

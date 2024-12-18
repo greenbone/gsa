@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
-import {withEntitiesHeader} from 'web/entities/header';
-
+import React from 'react';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import {withEntitiesHeader} from 'web/entities/header';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   actionsColumn,
@@ -28,44 +24,44 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="20%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}
           title={_('Name')}
+          width="20%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="26%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'roles' : false}
-          onSortChange={onSortChange}
           title={_('Roles')}
-        />
-        <TableHead
           width="26%"
-          currentSortDir={currentSortDir}
+          onSortChange={onSortChange}
+        />
+        <TableHead
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'groups' : false}
-          onSortChange={onSortChange}
           title={_('Groups')}
+          width="26%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="10%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'host_access' : false}
-          onSortChange={onSortChange}
           title={_('Host Access')}
+          width="10%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="10%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'ldap' : false}
-          onSortChange={onSortChange}
           title={_('Authentication Type')}
+          width="10%"
+          onSortChange={onSortChange}
         />
         {actionsColumn}
       </TableRow>
@@ -84,5 +80,3 @@ Header.propTypes = {
 };
 
 export default withEntitiesHeader()(Header);
-
-// vim: set ts=2 sw=2 tw=80:

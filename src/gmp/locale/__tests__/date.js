@@ -6,7 +6,6 @@
 import {describe, test, expect, beforeEach} from '@gsa/testing';
 
 import date, {setLocale as locale} from '../../models/date';
-
 import {
   setLocale,
   getLocale,
@@ -239,5 +238,3 @@ describe('dateTimeWithTimeZone tests', () => {
     );
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

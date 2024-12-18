@@ -3,25 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType} from 'gmp/utils/entitytype';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import Comment from 'web/components/comment/comment';
+import Layout from 'web/components/layout/layout';
+import DetailsLink from 'web/components/link/detailslink';
+import TableData from 'web/components/table/data';
+import ObserverIcon from 'web/entity/icon/observericon';
 import PropTypes from 'web/utils/proptypes';
 import withUsername from 'web/utils/withUserName';
-
-import Comment from 'web/components/comment/comment';
-
-import Layout from 'web/components/layout/layout';
-
-import DetailsLink from 'web/components/link/detailslink';
-
-import TableData from 'web/components/table/data';
-
-import ObserverIcon from 'web/entity/icon/observericon';
 
 import {RowDetailsToggle} from './row';
 
@@ -47,7 +39,7 @@ const EntityNameTableData = ({
           </span>
         ) : (
           <span>
-            <DetailsLink type={type} id={entity.id} textOnly={!links}>
+            <DetailsLink id={entity.id} textOnly={!links} type={type}>
               {entity.name}
             </DetailsLink>
             {entity.deprecated && <b> ({_('Deprecated')})</b>}
@@ -75,5 +67,3 @@ EntityNameTableData.propTypes = {
 };
 
 export default withUsername(EntityNameTableData);
-
-// vim: set ts=2 sw=2 tw=80:

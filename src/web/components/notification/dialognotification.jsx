@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {hasValue} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import useTranslation from 'web/hooks/useTranslation';
-
+import React from 'react';
 import Dialog from 'web/components/dialog/dialog';
 import DialogFooter from 'web/components/dialog/footer';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const DialogNotification = ({
   title,
@@ -29,9 +26,9 @@ const DialogNotification = ({
     <Dialog opened={true} size="400px" title={title} onClose={onClose}>
       {message}
       <DialogFooter
+        data-testid="dialog-notification-footer"
         title={_('Close')}
         onClick={onCloseClick}
-        data-testid="dialog-notification-footer"
       />
     </Dialog>
   );

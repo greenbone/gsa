@@ -4,12 +4,10 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
-
-import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
-import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay';
+import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {CpesSeverityLoader} from './loaders';
@@ -46,5 +44,3 @@ registerDisplay(
     title: _l('Table: CPEs by Severity Class'),
   },
 );
-
-// vim: set ts=2 sw=2 tw=80:

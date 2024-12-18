@@ -3,20 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
-
+import React from 'react';
+import styled from 'styled-components';
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 export const COMPOSER_CONTENT_DEFAULTS = {
   includeNotes: YES_VALUE,
@@ -53,34 +47,34 @@ const ComposerContent = ({
       <FormGroup title={_('Results Filter')}>
         <FilterField title={filterFieldTitle}>{filterString}</FilterField>
       </FormGroup>
-      <FormGroup title={_('Include')} direction="row">
+      <FormGroup direction="row" title={_('Include')}>
         <CheckBox
-          data-testid="includeNotes"
-          name="includeNotes"
           checked={includeNotes}
           checkedValue={YES_VALUE}
-          unCheckedValue={NO_VALUE}
+          data-testid="includeNotes"
+          name="includeNotes"
           title={_('Notes')}
+          unCheckedValue={NO_VALUE}
           onChange={onValueChange}
         />
         <CheckBox
-          data-testid="include-overrides"
-          name="includeOverrides"
           checked={includeOverrides}
           checkedValue={YES_VALUE}
-          unCheckedValue={NO_VALUE}
+          data-testid="include-overrides"
+          name="includeOverrides"
           title={_('Overrides')}
+          unCheckedValue={NO_VALUE}
           onChange={onValueChange}
         />
         <CheckBox
+          checked={true}
+          checkedValue={YES_VALUE}
           data-testid="include-tls-cert"
           disabled={true}
           name="includeTlsCertificates"
-          checked={true}
-          checkedValue={YES_VALUE}
-          unCheckedValue={NO_VALUE}
           title={_('TLS Certificates')}
           toolTipTitle={_('TLS Certificates are always included for now')}
+          unCheckedValue={NO_VALUE}
           onChange={onValueChange}
         />
       </FormGroup>
@@ -97,5 +91,3 @@ ComposerContent.propTypes = {
 };
 
 export default ComposerContent;
-
-// vim: set ts=2 sw=2 tw=80:

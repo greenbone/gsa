@@ -4,17 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, screen, fireEvent} from 'web/utils/testing';
-
+import RelationSelector from 'web/components/powerfilter/relationselector';
 import {
   openSelectElement,
   getSelectItemElements,
   clickElement,
   getSelectElement,
 } from 'web/components/testing';
-
-import RelationSelector from 'web/components/powerfilter/relationselector';
+import {render, screen, fireEvent} from 'web/utils/testing';
 
 describe('Relation Selector Tests', () => {
   test('should render', () => {

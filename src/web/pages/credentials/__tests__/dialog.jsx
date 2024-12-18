@@ -4,11 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Credential, {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
-
-import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import {
   changeInputValue,
   clickElement,
@@ -20,6 +16,7 @@ import {
   getSelectElement,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import CredentialsDialog from '../dialog';
 
@@ -60,8 +57,8 @@ describe('CredentialsDialog component tests', () => {
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -106,8 +103,8 @@ describe('CredentialsDialog component tests', () => {
         name={credential.name}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -136,8 +133,8 @@ describe('CredentialsDialog component tests', () => {
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -185,8 +182,8 @@ describe('CredentialsDialog component tests', () => {
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -234,8 +231,8 @@ describe('CredentialsDialog component tests', () => {
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -253,8 +250,8 @@ describe('CredentialsDialog component tests', () => {
         credential_type={'usk'}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -279,8 +276,8 @@ describe('CredentialsDialog component tests', () => {
         credential_type="snmp"
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -323,8 +320,8 @@ describe('CredentialsDialog component tests', () => {
         credential_type="smime"
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -346,8 +343,8 @@ describe('CredentialsDialog component tests', () => {
         credential_type={'pgp'}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 
@@ -368,8 +365,8 @@ describe('CredentialsDialog component tests', () => {
         credential_type={'pw'}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
-        onSave={handleSave}
         onErrorClose={handleErrorClose}
+        onSave={handleSave}
       />,
     );
 

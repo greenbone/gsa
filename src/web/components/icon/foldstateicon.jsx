@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
+import {FoldState} from 'web/components/folding/folding';
 import PropTypes from 'web/utils/proptypes';
 
-import {FoldState} from 'web/components/folding/folding';
-
-import UnfoldIcon from './unfoldicon';
 import FoldIcon from './foldicon';
+import UnfoldIcon from './unfoldicon';
 
 const FoldStateIcon = ({foldState, ...props}) => {
   const folded =
@@ -21,10 +18,22 @@ const FoldStateIcon = ({foldState, ...props}) => {
     foldState === FoldState.FOLDING_START;
 
   if (folded) {
-    return <FoldIcon title={_('Unfold')} {...props} data-testid="fold-state-icon-unfold"/>;
+    return (
+      <FoldIcon
+        title={_('Unfold')}
+        {...props}
+        data-testid="fold-state-icon-unfold"
+      />
+    );
   }
 
-  return <UnfoldIcon title={_('Fold')} {...props} data-testid="fold-state-icon-fold"/>;
+  return (
+    <UnfoldIcon
+      title={_('Fold')}
+      {...props}
+      data-testid="fold-state-icon-fold"
+    />
+  );
 };
 
 FoldStateIcon.propTypes = {
@@ -33,5 +42,3 @@ FoldStateIcon.propTypes = {
 };
 
 export default FoldStateIcon;
-
-// vim: set ts=2 sw=2 tw=80:

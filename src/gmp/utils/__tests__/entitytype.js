@@ -4,10 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {parseModelFromElement} from 'gmp/model';
-import Nvt from 'gmp/models/nvt';
 import Host from 'gmp/models/host';
+import Nvt from 'gmp/models/nvt';
 
 import {
   getEntityType,
@@ -137,5 +136,3 @@ describe('typeName function tests', () => {
     expect(typeName('vulnerability')).toEqual('Vulnerability');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,16 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import timezones from 'gmp/timezones';
-
-import {render, userEvent} from 'web/utils/testing';
-
 import {
   openSelectElement,
   getSelectItemElements,
   getSelectElement,
 } from 'web/components/testing';
+import {render, userEvent} from 'web/utils/testing';
 
 import TimezoneSelect from '../timezoneselect';
 
@@ -57,7 +54,7 @@ describe('TimezoneSelect tests', () => {
   });
 
   test('should render selected value', () => {
-    const timezone = timezones[1]; // eslint-disable-line prefer-destructuring
+    const timezone = timezones[1];  
     render(<TimezoneSelect value={timezone.name} />);
 
     const input = getSelectElement();

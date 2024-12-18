@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
+import Nvt from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 
 import InfoEntitiesCommand from './infoentities';
 import InfoEntityCommand from './infoentity';
-
-import registerCommand from 'gmp/command';
-
-import Nvt from 'gmp/models/nvt';
 
 const info_filter = info => isDefined(info.nvt);
 
@@ -87,5 +85,3 @@ class NvtsCommand extends InfoEntitiesCommand {
 
 registerCommand('nvt', NvtCommand);
 registerCommand('nvts', NvtsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

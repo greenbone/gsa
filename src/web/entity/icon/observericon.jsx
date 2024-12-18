@@ -3,16 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import ViewOtherIcon from 'web/components/icon/viewothericon';
+import PropTypes from 'web/utils/proptypes';
 
 const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
   const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
@@ -37,5 +32,3 @@ ObserverIcon.propTypes = {
 };
 
 export default ObserverIcon;
-
-// vim: set ts=2 sw=2 tw=80:

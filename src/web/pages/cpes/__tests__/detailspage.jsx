@@ -4,17 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
-import CPE from 'gmp/models/cpe';
-
-import Filter from 'gmp/models/filter';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
+import CPE from 'gmp/models/cpe';
+import Filter from 'gmp/models/filter';
 import {entityLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, wait, fireEvent} from 'web/utils/testing';
 
 import CpePage, {ToolBarIcons} from '../detailspage';

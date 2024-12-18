@@ -4,7 +4,6 @@
  */
 
 import logger from 'gmp/log';
-
 import {trace} from 'gmp/utils/trace';
 
 const log = logger.getLogger('gmp.commands.utils');

@@ -4,12 +4,9 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import {parseDate} from 'gmp/parser';
-
 import Model, {parseModelFromElement} from 'gmp/model';
+import {parseDate} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 import AuditReportReport from './report/auditreport';
 
@@ -19,7 +16,6 @@ export const COMPLIANCE_STATES = {
   incomplete: _l('Incomplete'),
   undefined: _l('Undefined'),
 };
-/* eslint-disable quote-props */
 
 export const getTranslatableReportCompliance = compliance =>
   `${COMPLIANCE_STATES[compliance]}`;

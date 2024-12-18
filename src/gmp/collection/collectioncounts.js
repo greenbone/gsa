@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from '../utils/identity';
-
 import {parseInt} from '../parser.js';
+import {isDefined} from '../utils/identity';
 
 class CollectionCounts {
   /**
@@ -55,5 +54,3 @@ class CollectionCounts {
 }
 
 export default CollectionCounts;
-
-// vim: set ts=2 sw=2 tw=80:

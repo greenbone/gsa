@@ -4,24 +4,19 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/task';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {entitiesLoadingActions} from 'web/store/entities/tasks';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-
-import {rendererWith, wait} from 'web/utils/testing';
-
 import {
   getPowerFilter,
   getSelectElement,
   getTextInputs,
 } from 'web/components/testing';
+import {entitiesLoadingActions} from 'web/store/entities/tasks';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, wait} from 'web/utils/testing';
 
 import TlsCertificatePage from '../listpage';
 

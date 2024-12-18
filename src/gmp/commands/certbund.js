@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
+import CertBundAdv from 'gmp/models/certbund';
 import {isDefined} from 'gmp/utils/identity';
 
 import InfoEntitiesCommand from './infoentities';
 import InfoEntityCommand from './infoentity';
-
-import registerCommand from 'gmp/command';
-
-import CertBundAdv from 'gmp/models/certbund';
 
 const info_filter = info => isDefined(info.cert_bund_adv);
 
@@ -44,5 +42,3 @@ class CertBundsCommand extends InfoEntitiesCommand {
 
 registerCommand('certbund', CertBundCommand);
 registerCommand('certbunds', CertBundsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

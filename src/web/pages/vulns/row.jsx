@@ -3,23 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
+import SeverityBar from 'web/components/bar/severitybar';
 import DateTime from 'web/components/date/datetime';
-
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
-
-import SeverityBar from 'web/components/bar/severitybar';
-
-import TableRow from 'web/components/table/row';
-import TableData from 'web/components/table/data';
-
 import Qod from 'web/components/qod/qod';
-
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 import EntitiesActions from 'web/entities/actions';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Row = ({
@@ -33,7 +25,7 @@ const Row = ({
     <TableRow>
       <TableData>
         <span>
-          <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
+          <DetailsLink id={entity.id} textOnly={!links} type="nvt">
             {entity.name}
           </DetailsLink>
         </span>
@@ -52,7 +44,7 @@ const Row = ({
       </TableData>
       <TableData>
         <span>
-          <Link to="results" filter={'nvt=' + entity.id} textOnly={!links}>
+          <Link filter={'nvt=' + entity.id} textOnly={!links} to="results">
             {results.count}
           </Link>
         </span>
@@ -70,5 +62,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

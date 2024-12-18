@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import withSvgIcon from './withSvgIcon';
-
 import {Gauge as Icon} from 'lucide-react';
-
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
+import withSvgIcon from './withSvgIcon';
+
 const PerformanceIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="performance-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="performance-icon"
+  />
 ));
 
 export default PerformanceIcon;
-
-// vim: set ts=2 sw=2 tw=80:

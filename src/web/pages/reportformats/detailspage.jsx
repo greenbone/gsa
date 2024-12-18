@@ -3,62 +3,53 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import CreateIcon from 'web/entity/icon/createicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-import Divider from 'web/components/layout/divider';
-import EditIcon from 'web/entity/icon/editicon';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ReportFormatIcon from 'web/components/icon/reportformaticon';
-
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+import DetailsLink from 'web/components/link/detailslink';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData, {TableDataAlignTop} from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
-import EntityPage from 'web/entity/page';
+import Table from 'web/components/table/stripedtable';
 import {goto_details, goto_list} from 'web/entity/component';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import {selector, loadEntity} from 'web/store/entities/reportformats';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import ReportFormatComponent from './component';
 import ReportFormatDetails from './details';
-import DetailsLink from 'web/components/link/detailslink';
-import {map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
-import {renderYesNo} from 'web/utils/render';
-import styled from 'styled-components';
 
 const ToolBarIcons = withCapabilities(
   ({
@@ -71,11 +62,11 @@ const ToolBarIcons = withCapabilities(
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="reports"
           anchor="managing-report-formats"
+          page="reports"
           title={_('Help: Report Formats')}
         />
-        <ListIcon title={_('Report Formats List')} page="reportformats" />
+        <ListIcon page="reportformats" title={_('Report Formats List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon
@@ -84,8 +75,8 @@ const ToolBarIcons = withCapabilities(
           onClick={onReportFormatImportClick}
         />
         <EditIcon
-          displayName={_('Report Format')}
           disabled={entity.predefined}
+          displayName={_('Report Format')}
           entity={entity}
           onClick={onReportFormatEditClick}
         />
@@ -131,10 +122,10 @@ const ReportFormatParamValue = ({
         : report_format_id;
       return (
         <DetailsLink
-          type="reportformat"
           key={param.name + '_' + report_format_id}
           id={report_format_id}
           textOnly={!links}
+          type="reportformat"
         >
           {label}
         </DetailsLink>
@@ -212,8 +203,8 @@ const Page = ({
   ...props
 }) => (
   <ReportFormatComponent
-    onDeleted={goto_list('reportformats', props)}
     onDeleteError={onError}
+    onDeleted={goto_list('reportformats', props)}
     onImported={goto_details('reportformat', props)}
     onInteraction={onInteraction}
     onSaved={onChanged}
@@ -226,9 +217,9 @@ const Page = ({
         title={_('Report Format')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
-        onReportFormatImportClick={import_func}
         onReportFormatDeleteClick={delete_func}
         onReportFormatEditClick={edit}
+        onReportFormatImportClick={import_func}
         onReportFormatSaveClick={save}
       >
         {({activeTab = 0, onActivateTab}) => {
@@ -237,8 +228,8 @@ const Page = ({
               <PageTitle
                 title={_('Report Format: {{name}}', {name: entity.name})}
               />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
@@ -324,5 +315,3 @@ export default withEntityContainer('reportformat', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

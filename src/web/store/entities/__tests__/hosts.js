@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import * as host from '../hosts';
 import {testAll} from '../utils/testing';
 
-import * as host from '../hosts';
-
 testAll('host', host);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,28 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
+import styled from 'styled-components';
 import DateTime from 'web/components/date/datetime';
-
 import DeleteIcon from 'web/components/icon/deleteicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
 import ExportIcon from 'web/components/icon/exporticon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import {RowDetailsToggle} from 'web/entities/row';
-
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Div = styled.div`
@@ -38,24 +28,24 @@ const Actions = withEntitiesActions(
     onTlsCertificateDownloadClick,
     onTlsCertificateExportClick,
   }) => (
-    <IconDivider align={['center', 'center']} grow>
+    <IconDivider grow align={['center', 'center']}>
       {entity.isInUse() ? (
         <DeleteIcon disabled={true} title={_('TLS Certificate is in use')} />
       ) : (
         <DeleteIcon
-          value={entity}
           title={_('Delete TLS Certificate')}
+          value={entity}
           onClick={onTlsCertificateDeleteClick}
         />
       )}
       <DownloadIcon
-        value={entity}
         title={_('Download TLS Certificate')}
+        value={entity}
         onClick={onTlsCertificateDownloadClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export TLS Certificate as XML')}
+        value={entity}
         onClick={onTlsCertificateExportClick}
       />
     </IconDivider>
@@ -108,5 +98,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

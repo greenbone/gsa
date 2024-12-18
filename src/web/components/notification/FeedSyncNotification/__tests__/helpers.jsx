@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {describe, test, expect, testing} from '@gsa/testing';
 import {
   useFeedSyncStatus,
   useFeedSyncDialog,
 } from 'web/components/notification/FeedSyncNotification/helpers';
-
-import {describe, test, expect, testing} from '@gsa/testing';
-
 import {act, rendererWith} from 'web/utils/testing';
 
 const mockCheckFeedSync = testing.fn();

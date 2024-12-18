@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import * as credential from '../credentials';
 import {testAll} from '../utils/testing';
 
-import * as credential from '../credentials';
-
 testAll('credential', credential);
-
-// vim: set ts=2 sw=2 tw=80:

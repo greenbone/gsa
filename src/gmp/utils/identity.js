@@ -27,5 +27,3 @@ export const isJsDate = value =>
 
 export const isModelElement = elem =>
   isDefined(elem) && isString(elem._id) && elem._id.length > 0;
-
-// vim: set ts=2 sw=2 tw=80:

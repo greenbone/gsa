@@ -4,28 +4,24 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {ALL_FILTER} from 'gmp/models/filter';
-
 import {
-  createActionResultResponse,
-  createEntityResponse,
-  createEntitiesResponse,
-  createHttp,
-} from '../testing';
-
+  OPENVAS_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
+} from 'gmp/models/scanner';
 import {
   HOSTS_ORDERING_RANDOM,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_KEEP,
 } from 'gmp/models/task';
 
-import {
-  OPENVAS_SCANNER_TYPE,
-  OPENVAS_DEFAULT_SCANNER_ID,
-} from 'gmp/models/scanner';
-
 import {AuditCommand, AuditsCommand} from '../audits';
+import {
+  createActionResultResponse,
+  createEntityResponse,
+  createEntitiesResponse,
+  createHttp,
+} from '../testing';
 
 describe('AuditCommand tests', () => {
   test('should create new audit', () => {

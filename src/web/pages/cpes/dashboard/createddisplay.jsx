@@ -4,16 +4,13 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
-
-import Theme from 'web/utils/theme';
-
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import transformCreated from 'web/components/dashboard/display/created/createdtransform'; // eslint-disable-line max-len
-import CreatedDisplay from 'web/components/dashboard/display/created/createddisplay'; // eslint-disable-line max-len
+import CreatedDisplay from 'web/components/dashboard/display/created/createddisplay';
+import transformCreated from 'web/components/dashboard/display/created/createdtransform';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
+import Theme from 'web/utils/theme';
 
 import {CpesCreatedLoader} from './loaders';
 
@@ -57,5 +54,3 @@ registerDisplay(CpesCreatedDisplay.displayId, CpesCreatedDisplay, {
 registerDisplay(CpesCreatedTableDisplay.displayId, CpesCreatedTableDisplay, {
   title: _l('Table: CPEs by Creation Time'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

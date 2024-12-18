@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
+import {parseBoolean} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {pluralizeType} from 'gmp/utils/entitytype';
-import {parseBoolean} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 const types = {
   auditreport: 'audit_report',
@@ -127,5 +127,3 @@ class Capabilities {
 }
 
 export default Capabilities;
-
-// vim: set ts=2 sw=2 tw=80:

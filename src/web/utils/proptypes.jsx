@@ -3,22 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import ReactPropTypes from 'prop-types';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import {isDate, isDuration} from 'gmp/models/date';
-
+import Capabilities from 'gmp/capabilities/capabilities';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import Gmp from 'gmp/gmp';
 import Model from 'gmp/model';
-
-import EntityCommand from 'gmp/commands/entity';
-import EntitiesCommand from 'gmp/commands/entities';
-
-import Capabilities from 'gmp/capabilities/capabilities';
-
+import {isDate, isDuration} from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import Settings from 'gmp/models/settings';
+import {isDefined} from 'gmp/utils/identity';
+import ReactPropTypes from 'prop-types';
 
 import warning from './warning';
 
@@ -253,5 +247,3 @@ const gsaPropTypes = {
 };
 
 export default gsaPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

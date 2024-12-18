@@ -11,7 +11,6 @@ import {
   afterAll,
   testing,
 } from '@gsa/testing';
-
 import GmpSettings, {
   DEFAULT_MANUAL_URL,
   DEFAULT_RELOAD_INTERVAL,
@@ -372,5 +371,3 @@ describe('GmpSettings tests', () => {
     expect(settings.vendorLabel).toEqual('foo.bar');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

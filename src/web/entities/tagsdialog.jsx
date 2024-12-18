@@ -3,24 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-
-import {renderSelectItems} from 'web/utils/render';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
 import NewIcon from 'web/components/icon/newicon';
-
 import Layout from 'web/components/layout/layout';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
 const ENTITIES_THRESHOLD = 50000;
 
@@ -45,31 +39,31 @@ const TagsDialog = ({
 }) => (
   <SaveDialog
     buttonTitle="Add Tag"
+    data-testid="dialog-title-bar"
     error={error}
     title={title}
-    width="650px"
     values={{
       comment,
       id,
       name,
       value,
     }}
+    width="650px"
     onClose={onClose}
     onErrorClose={onErrorClose}
     onSave={onSave}
-    data-testid="dialog-title-bar"
   >
-    <FormGroup title={_('Choose Tag')} direction="row">
+    <FormGroup direction="row" title={_('Choose Tag')}>
       <Select
         grow="1"
+        items={renderSelectItems(tags)}
         name="name"
         value={id}
-        items={renderSelectItems(tags)}
         onChange={onTagChanged}
       />
       <NewIcon
-        value={'tag'}
         title={_('Create a new Tag')}
+        value={'tag'}
         onClick={onNewTagClick}
       />
     </FormGroup>

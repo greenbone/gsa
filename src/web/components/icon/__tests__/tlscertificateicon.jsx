@@ -4,7 +4,6 @@
  */
 
 import {describe} from '@gsa/testing';
-
 import {testIcon} from 'web/components/icon/testing';
 
 import TlsCertificateIcon from '../tlscertificateicon';
@@ -12,5 +11,3 @@ import TlsCertificateIcon from '../tlscertificateicon';
 describe('TlsCertificateIcon component tests', () => {
   testIcon(TlsCertificateIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

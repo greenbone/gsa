@@ -3,32 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
-
+import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
 import PropTypes from 'web/utils/proptypes';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 const Actions = withEntitiesActions(
   ({
@@ -38,30 +28,30 @@ const Actions = withEntitiesActions(
     onTargetDownloadClick,
     onTargetDeleteClick,
   }) => (
-    <IconDivider align={['center', 'center']} grow>
+    <IconDivider grow align={['center', 'center']}>
       <TrashIcon
         displayName={_('Target')}
-        name="target"
         entity={entity}
+        name="target"
         onClick={onTargetDeleteClick}
       />
       <EditIcon
         displayName={_('Target')}
-        name="target"
         entity={entity}
+        name="target"
         onClick={onTargetEditClick}
       />
       <CloneIcon
         displayName={_('Target')}
-        name="target"
         entity={entity}
+        name="target"
         title={_('Clone Target')}
         value={entity}
         onClick={onTargetCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Target')}
+        value={entity}
         onClick={onTargetDownloadClick}
       />
     </IconDivider>
@@ -84,7 +74,7 @@ const Cred = ({cred, title, links = true}) => {
     <Layout>
       <span>{title}: </span>
       <Layout>
-        <DetailsLink type="credential" id={cred.id} textOnly={!links}>
+        <DetailsLink id={cred.id} textOnly={!links} type="credential">
           {cred.name}
         </DetailsLink>
       </Layout>
@@ -107,10 +97,10 @@ export const Row = ({
 }) => (
   <TableRow>
     <EntityNameTableData
+      displayName={_('Target')}
       entity={entity}
       link={links}
       type="target"
-      displayName={_('Target')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
@@ -119,25 +109,25 @@ export const Row = ({
       {isDefined(entity.port_list) && (
         <span>
           <DetailsLink
-            type="portlist"
             id={entity.port_list.id}
             textOnly={!links}
+            type="portlist"
           >
             {entity.port_list.name}
           </DetailsLink>
         </span>
       )}
     </TableData>
-    <TableData flex="column" align="center">
-      <Cred cred={entity.ssh_credential} title={'SSH'} links={links} />
+    <TableData align="center" flex="column">
+      <Cred cred={entity.ssh_credential} links={links} title={'SSH'} />
       <Cred
         cred={entity.ssh_elevate_credential}
-        title={_('SSH Elevate')}
         links={links}
+        title={_('SSH Elevate')}
       />
-      <Cred cred={entity.smb_credential} title={'SMB'} links={links} />
-      <Cred cred={entity.esxi_credential} title={'ESXi'} links={links} />
-      <Cred cred={entity.snmp_credential} title={'SNMP'} links={links} />
+      <Cred cred={entity.smb_credential} links={links} title={'SMB'} />
+      <Cred cred={entity.esxi_credential} links={links} title={'ESXi'} />
+      <Cred cred={entity.snmp_credential} links={links} title={'SNMP'} />
     </TableData>
     <ActionsComponent {...props} entity={entity} />
   </TableRow>
@@ -151,5 +141,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

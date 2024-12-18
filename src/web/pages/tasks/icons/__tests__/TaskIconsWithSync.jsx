@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Theme from 'web/utils/theme';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import {rendererWith, fireEvent} from 'web/utils/testing';
 import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
 import {setSyncStatus} from 'web/store/feedStatus/actions';
+import {rendererWith, fireEvent} from 'web/utils/testing';
+import Theme from 'web/utils/theme';
 
 describe('TaskIconWithSync component tests', () => {
   const testCases = [
@@ -55,7 +55,7 @@ describe('TaskIconWithSync component tests', () => {
       store.dispatch(setSyncStatus(isSyncing));
 
       const {element} = render(
-        <TaskIconWithSync type={type} task={task} onClick={clickHandler} />,
+        <TaskIconWithSync task={task} type={type} onClick={clickHandler} />,
       );
 
       if (!isSyncing) {

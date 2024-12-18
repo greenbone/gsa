@@ -5,13 +5,12 @@
 
 import {describe, test, expect} from '@gsa/testing';
 
-import {TicketCommand} from '../tickets';
-
 import {
   createActionResultResponse,
   createEntityResponse,
   createHttp,
 } from '../testing';
+import {TicketCommand} from '../tickets';
 
 describe('TicketCommand tests', () => {
   test('should trim note when creating ticket', () => {

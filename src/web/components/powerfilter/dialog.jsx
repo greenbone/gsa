@@ -4,16 +4,14 @@
  */
 
 import React from 'react';
-
 import useCapabilities from 'web/hooks/useCapabilities';
 
 import CreateNamedFilterGroup from './createnamedfiltergroup';
+import DefaultFilterDialogPropTypes from './dialogproptypes';
 import FilterStringGroup from './filterstringgroup';
 import FirstResultGroup from './firstresultgroup';
 import ResultsPerPageGroup from './resultsperpagegroup';
 import SortByGroup from './sortbygroup';
-
-import DefaultFilterDialogPropTypes from './dialogproptypes';
 
 export const DefaultFilterDialog = ({
   filter,
@@ -59,5 +57,3 @@ DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
 export {DefaultFilterDialogPropTypes};
 
 export default DefaultFilterDialog;
-
-// vim: set ts=2 sw=2 tw=80:

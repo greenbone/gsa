@@ -4,13 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Model from 'gmp/model';
-
 import {YES_VALUE} from 'gmp/parser';
-
 import {rendererWith} from 'web/utils/testing';
 
 import EntityLink from '../link';
@@ -42,7 +38,7 @@ describe('EntityLink component tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps, router: true});
-    const {element} = render(<EntityLink textOnly={true} entity={entity} />);
+    const {element} = render(<EntityLink entity={entity} textOnly={true} />);
 
     const a = element.querySelector('a');
 

@@ -10,5 +10,3 @@ export const pageFilter = (page, filter) => ({
   page,
   filter,
 });
-
-// vim: set ts=2 sw=2 tw=80:

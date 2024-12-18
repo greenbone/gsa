@@ -4,15 +4,11 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const ImportDialog = ({onClose, onSave}) => {
   const [_] = useTranslation();

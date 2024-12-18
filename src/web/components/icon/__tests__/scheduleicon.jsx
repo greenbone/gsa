@@ -4,7 +4,6 @@
  */
 
 import {describe} from '@gsa/testing';
-
 import {testIcon} from 'web/components/icon/testing';
 
 import ScheduleIcon from '../scheduleicon';
@@ -12,5 +11,3 @@ import ScheduleIcon from '../scheduleicon';
 describe('ScheduleIcon component tests', () => {
   testIcon(ScheduleIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

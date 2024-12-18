@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {isDefined} from 'gmp/utils/identity';
 import {useCallback} from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
 
 const eventTargetValue = event => event.target.value;
 const noOpConvert = value => value;

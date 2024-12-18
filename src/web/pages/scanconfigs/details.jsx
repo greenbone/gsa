@@ -3,30 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
 
 const ScanConfigDetails = ({entity}) => {
   const {comment, deprecated, tasks = []} = entity;
   return (
-    <Layout flex="column" grow>
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
           <Col width="10%" />
@@ -75,5 +68,3 @@ ScanConfigDetails.propTypes = {
 };
 
 export default ScanConfigDetails;
-
-// vim: set ts=2 sw=2 tw=80:

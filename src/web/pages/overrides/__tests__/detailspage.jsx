@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
-
 import {entityLoadingActions} from 'web/store/entities/overrides';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -397,10 +393,10 @@ describe('Override ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={override}
         onOverrideCloneClick={handleOverrideCloneClick}
+        onOverrideCreateClick={handleOverrideCreateClick}
         onOverrideDeleteClick={handleOverrideDeleteClick}
         onOverrideDownloadClick={handleOverrideDownloadClick}
         onOverrideEditClick={handleOverrideEditClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
       />,
     );
 
@@ -435,10 +431,10 @@ describe('Override ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={override}
         onOverrideCloneClick={handleOverrideCloneClick}
+        onOverrideCreateClick={handleOverrideCreateClick}
         onOverrideDeleteClick={handleOverrideDeleteClick}
         onOverrideDownloadClick={handleOverrideDownloadClick}
         onOverrideEditClick={handleOverrideEditClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
       />,
     );
 
@@ -483,10 +479,10 @@ describe('Override ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={noPermOverride}
         onOverrideCloneClick={handleOverrideCloneClick}
+        onOverrideCreateClick={handleOverrideCreateClick}
         onOverrideDeleteClick={handleOverrideDeleteClick}
         onOverrideDownloadClick={handleOverrideDownloadClick}
         onOverrideEditClick={handleOverrideEditClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
       />,
     );
 
@@ -537,10 +533,10 @@ describe('Override ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={overrideInUse}
         onOverrideCloneClick={handleOverrideCloneClick}
+        onOverrideCreateClick={handleOverrideCreateClick}
         onOverrideDeleteClick={handleOverrideDeleteClick}
         onOverrideDownloadClick={handleOverrideDownloadClick}
         onOverrideEditClick={handleOverrideEditClick}
-        onOverrideCreateClick={handleOverrideCreateClick}
       />,
     );
     const cloneIcon = screen.getAllByTitle('Clone Override');

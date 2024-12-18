@@ -7,14 +7,12 @@
 /* this is experimental. trying to consolidate all filter terms whose
  * method should be ~'value' into one. */
 
-import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
+import PropTypes from 'web/utils/proptypes';
 
 const FilterSearchGroup = ({name, filter, title, onChange}) => {
   let filterVal;

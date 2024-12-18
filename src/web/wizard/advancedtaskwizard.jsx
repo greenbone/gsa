@@ -3,34 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
-
+import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import {
   esxi_credential_filter,
   smb_credential_filter,
   ssh_credential_filter,
 } from 'gmp/models/credential';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
+import {useState} from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
+import DatePicker from 'web/components/form/DatePicker';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
-import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
-import Radio from 'web/components/form/radio';
-import DatePicker from 'web/components/form/DatePicker';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
-import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
-import {formatSplitTime} from 'web/utils/timePickerHelpers';
-
-import Layout from 'web/components/layout/layout';
 import Column from 'web/components/layout/column';
-
-import useTranslation from 'web/hooks/useTranslation';
+import Layout from 'web/components/layout/layout';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import {formatSplitTime} from 'web/utils/timePickerHelpers';
 
 import {WizardContent, WizardIcon} from './taskwizard';
 
@@ -113,11 +107,11 @@ const AdvancedTaskWizard = ({
   return (
     <SaveDialog
       buttonTitle={_('Create')}
+      defaultValues={data}
       title={_('Advanced Task Wizard')}
       width="900px"
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -185,39 +179,39 @@ const AdvancedTaskWizard = ({
             <Column>
               <FormGroup title={_('Task Name')}>
                 <TextField
-                  name="task_name"
                   grow="1"
-                  onChange={onValueChange}
-                  value={state.task_name}
                   maxLength="80"
+                  name="task_name"
+                  value={state.task_name}
+                  onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup title={_('Scan Config')}>
                 <Select
+                  items={configItems}
                   name="config_id"
                   value={state.config_id}
-                  items={configItems}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup title={_('Target Host(s)')}>
                 <TextField
-                  name="target_hosts"
                   grow="1"
-                  onChange={onValueChange}
-                  value={state.target_hosts}
                   maxLength="2000"
+                  name="target_hosts"
+                  value={state.target_hosts}
+                  onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup title={_('Start Time')}>
                 <Radio
-                  title={_('Start immediately')}
-                  value={IMMEDIATELY_START_VALUE}
                   checked={state.auto_start === IMMEDIATELY_START_VALUE}
                   name="auto_start"
+                  title={_('Start immediately')}
+                  value={IMMEDIATELY_START_VALUE}
                   onChange={onValueChange}
                 />
 
@@ -226,21 +220,21 @@ const AdvancedTaskWizard = ({
                     <>
                       <Column>
                         <Radio
-                          title={_('Create Schedule:')}
-                          value={SCHEDULE_START_VALUE}
                           checked={state.auto_start === SCHEDULE_START_VALUE}
                           name="auto_start"
+                          title={_('Create Schedule:')}
+                          value={SCHEDULE_START_VALUE}
                           onChange={onValueChange}
                         />
                         <DatePicker
+                          label={_('Start Date')}
                           name={'start_date'}
                           value={state.start_date}
                           onChange={onValueChange}
-                          label={_('Start Date')}
                         />
                         <TimePicker
-                          name="startTime"
                           label={_('Start Time')}
+                          name="startTime"
                           value={timePickerValue}
                           onChange={selectedTime =>
                             handleTimeChange(selectedTime, onValueChange)
@@ -248,8 +242,8 @@ const AdvancedTaskWizard = ({
                         />
                       </Column>
                       <TimeZoneSelect
-                        name="start_timezone"
                         label={_('Timezone')}
+                        name="start_timezone"
                         value={state.start_timezone}
                         onChange={onValueChange}
                       />
@@ -257,27 +251,27 @@ const AdvancedTaskWizard = ({
                   )}
 
                 <Radio
-                  title={_('Do not start automatically')}
-                  value={DONT_START_VALUE}
                   checked={state.auto_start === DONT_START_VALUE}
                   name="auto_start"
+                  title={_('Do not start automatically')}
+                  value={DONT_START_VALUE}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
-              <FormGroup title={_('SSH Credential')} direction="row">
+              <FormGroup direction="row" title={_('SSH Credential')}>
                 <Select
-                  value={state.ssh_credential}
-                  name="ssh_credential"
                   items={sshCredentialItems}
+                  name="ssh_credential"
+                  value={state.ssh_credential}
                   onChange={onValueChange}
                 />
                 <span>{_(' on port ')}</span>
                 <Spinner
-                  min="0"
                   max="65535"
-                  type="int"
+                  min="0"
                   name="ssh_port"
+                  type="int"
                   value={state.ssh_port}
                   onChange={onValueChange}
                 />
@@ -285,18 +279,18 @@ const AdvancedTaskWizard = ({
 
               <FormGroup title={_('SMB Credential')}>
                 <Select
-                  value={state.smb_credential}
-                  name="smb_credential"
                   items={smbCredentialItems}
+                  name="smb_credential"
+                  value={state.smb_credential}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup title={_('ESXi Credential')}>
                 <Select
-                  value={state.esxi_credential}
-                  name="esxi_credential"
                   items={esxiCredentialItems}
+                  name="esxi_credential"
+                  value={state.esxi_credential}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -305,10 +299,10 @@ const AdvancedTaskWizard = ({
                 capabilities.mayAccess('alerts') && (
                   <FormGroup title={_('Email report to')}>
                     <TextField
-                      name="alert_email"
                       grow="1"
-                      value={state.alert_email}
                       maxLength="80"
+                      name="alert_email"
+                      value={state.alert_email}
                       onChange={onValueChange}
                     />
                   </FormGroup>

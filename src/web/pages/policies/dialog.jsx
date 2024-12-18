@@ -4,15 +4,11 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const CreatePolicyDialog = ({comment = '', name, title, onClose, onSave}) => {
   const [_] = useTranslation();
@@ -26,10 +22,10 @@ const CreatePolicyDialog = ({comment = '', name, title, onClose, onSave}) => {
   };
   return (
     <SaveDialog
+      defaultValues={data}
       title={title}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -65,5 +61,3 @@ CreatePolicyDialog.propTypes = {
 };
 
 export default CreatePolicyDialog;
-
-// vim: set ts=2 sw=2 tw=80:

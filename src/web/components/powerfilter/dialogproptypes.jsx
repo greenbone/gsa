@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import PropTypes from 'web/utils/proptypes';
 
 const dialogPropType = {
@@ -17,4 +16,3 @@ const dialogPropType = {
 };
 
 export default dialogPropType;
-// vim: set ts=2 sw=2 tw=80:

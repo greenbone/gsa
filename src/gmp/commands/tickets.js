@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
 import Ticket from 'gmp/models/ticket';
+import {isDefined} from 'gmp/utils/identity';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
-
-import registerCommand from 'gmp/command';
-import {isDefined} from 'gmp/utils/identity';
 
 const convertNote = note => {
   if (!isDefined(note)) {
@@ -64,5 +63,3 @@ export class TicketsCommand extends EntitiesCommand {
 
 registerCommand('tickets', TicketsCommand);
 registerCommand('ticket', TicketCommand);
-
-// vim: set ts=2 sw=2 tw=80:

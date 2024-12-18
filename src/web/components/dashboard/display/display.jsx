@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
-import Theme from 'web/utils/theme';
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import styled from 'styled-components';
 import CloseButton from 'web/components/dialog/closebutton';
-
 import ErrorBoundary from 'web/components/error/errorboundary';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 export const DISPLAY_HEADER_HEIGHT = 20;
 export const DISPLAY_BORDER_WIDTH = 2;
@@ -117,5 +111,3 @@ Display.propTypes = {
 };
 
 export default Display;
-
-// vim: set ts=2 sw=2 tw=80:

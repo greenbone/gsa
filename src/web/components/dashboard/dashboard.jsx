@@ -3,30 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import memoize from 'memoize-one';
-
-import React from 'react';
-
-import {connect} from 'react-redux';
-
-import styled from 'styled-components';
-
-import _ from 'gmp/locale';
-
-import Logger from 'gmp/log';
-
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
-
+import _ from 'gmp/locale';
+import Logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-
-import {
-  loadSettings,
-  saveSettings,
-  setDashboardSettingDefaults,
-} from 'web/store/dashboard/settings/actions';
-import DashboardSettings from 'web/store/dashboard/settings/selectors';
+import memoize from 'memoize-one';
+import React from 'react';
+import {connect} from 'react-redux';
+import styled from 'styled-components';
 import {
   convertDefaultDisplays,
   convertDisplaysToGridItems,
@@ -35,16 +20,18 @@ import {
   getDisplaysById,
   removeDisplay,
 } from 'web/components/dashboard/utils';
-
 import ErrorBoundary from 'web/components/error/errorboundary';
-
 import Loading from 'web/components/loading/loading';
-
 import Grid from 'web/components/sortable/grid';
-
+import {
+  loadSettings,
+  saveSettings,
+  setDashboardSettingDefaults,
+} from 'web/store/dashboard/settings/actions';
+import DashboardSettings from 'web/store/dashboard/settings/selectors';
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-import compose from 'web/utils/compose';
 
 import {getDisplay} from './registry';
 import {getRows} from './utils';
@@ -292,12 +279,12 @@ export class Dashboard extends React.Component {
                 {...displayProps}
                 dragHandleProps={dragHandleProps}
                 height={height}
-                width={width}
                 id={id}
-                state={state}
                 setState={stateFunc =>
                   this.handleSetDisplayState(id, stateFunc)
                 }
+                state={state}
+                width={width}
                 onFilterIdChanged={filterId =>
                   this.handleUpdateDisplay(id, {filterId})
                 }
@@ -365,5 +352,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(Dashboard);
-
-// vim: set ts=2 sw=2 tw=80:

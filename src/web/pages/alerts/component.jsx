@@ -3,45 +3,34 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-import {first} from 'gmp/utils/array';
-import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
-
-import {parseInt, parseSeverity, parseYesNo, NO_VALUE} from 'gmp/parser';
-
 import {
   email_credential_filter,
   password_only_credential_filter,
   smb_credential_filter,
   vFire_credential_filter,
 } from 'gmp/models/credential';
-
-import EntityComponent from 'web/entity/component';
-
+import {parseInt, parseSeverity, parseYesNo, NO_VALUE} from 'gmp/parser';
+import {first} from 'gmp/utils/array';
+import {selectSaveId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
+import React from 'react';
+import {connect} from 'react-redux';
 import FootNote from 'web/components/footnote/footnote';
-
 import Layout from 'web/components/layout/layout';
-
+import EntityComponent from 'web/entity/component';
 import {
   loadReportComposerDefaults,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
 
-import CredentialsDialog from '../credentials/dialog';
-
+import ContentComposerDialog from './contentcomposerdialog';
 import AlertDialog, {
   ATTACH_MESSAGE_DEFAULT,
   ATTACH_MESSAGE_SECINFO,
@@ -61,8 +50,7 @@ import AlertDialog, {
   SECINFO_SUBJECT,
   TASK_SUBJECT,
 } from './dialog';
-
-import ContentComposerDialog from './contentcomposerdialog';
+import CredentialsDialog from '../credentials/dialog';
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
@@ -1067,17 +1055,17 @@ class AlertComponent extends React.Component {
     return (
       <EntityComponent
         name="alert"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <Layout>
@@ -1089,32 +1077,29 @@ class AlertComponent extends React.Component {
             })}
             {alertDialogVisible && (
               <AlertDialog
-                title={title}
-                id={id}
-                alert={alert}
                 active={active}
-                name={name}
+                alert={alert}
                 comment={comment}
-                filters={filters}
-                filter_id={filter_id}
-                credentials={credentials}
-                result_filters={result_filters}
-                secinfo_filters={secinfo_filters}
                 condition={condition}
-                condition_data_count={condition_data_count}
-                condition_data_direction={condition_data_direction}
-                condition_data_filters={condition_data_filters}
-                condition_data_filter_id={condition_data_filter_id}
+                condition_data_at_least_count={condition_data_at_least_count}
                 condition_data_at_least_filter_id={
                   condition_data_at_least_filter_id
                 }
-                condition_data_at_least_count={condition_data_at_least_count}
+                condition_data_count={condition_data_count}
+                condition_data_direction={condition_data_direction}
+                condition_data_filter_id={condition_data_filter_id}
+                condition_data_filters={condition_data_filters}
                 condition_data_severity={condition_data_severity}
+                credentials={credentials}
                 event={event}
-                event_data_status={event_data_status}
                 event_data_feed_event={event_data_feed_event}
                 event_data_secinfo_type={event_data_secinfo_type}
+                event_data_status={event_data_status}
+                filter_id={filter_id}
+                filters={filters}
+                id={id}
                 method={method}
+                method_data_URL={method_data_URL}
                 method_data_composer_ignore_pagination={
                   method_data_composer_ignore_pagination
                 }
@@ -1128,39 +1113,38 @@ class AlertComponent extends React.Component {
                 method_data_defense_center_port={
                   method_data_defense_center_port
                 }
+                method_data_delta_report_id={method_data_delta_report_id}
+                method_data_delta_type={method_data_delta_type}
                 method_data_details_url={method_data_details_url}
-                report_formats={report_formats}
-                report_configs={report_configs}
-                method_data_to_address={method_data_to_address}
                 method_data_from_address={method_data_from_address}
-                method_data_subject={method_data_subject}
                 method_data_message={method_data_message}
                 method_data_message_attach={method_data_message_attach}
                 method_data_notice={method_data_notice}
-                method_data_notice_report_format={
-                  method_data_notice_report_format
-                }
-                method_data_notice_report_config={
-                  method_data_notice_report_config
+                method_data_notice_attach_config={
+                  method_data_notice_attach_config
                 }
                 method_data_notice_attach_format={
                   method_data_notice_attach_format
                 }
-                method_data_notice_attach_config={
-                  method_data_notice_attach_config
+                method_data_notice_report_config={
+                  method_data_notice_report_config
                 }
+                method_data_notice_report_format={
+                  method_data_notice_report_format
+                }
+                method_data_pkcs12_credential={method_data_pkcs12_credential}
                 method_data_recipient_credential={
                   method_data_recipient_credential
                 }
                 method_data_scp_credential={method_data_scp_credential}
+                method_data_scp_host={method_data_scp_host}
+                method_data_scp_known_hosts={method_data_scp_known_hosts}
+                method_data_scp_path={method_data_scp_path}
+                method_data_scp_port={method_data_scp_port}
                 method_data_scp_report_config={method_data_scp_report_config}
                 method_data_scp_report_format={method_data_scp_report_format}
-                method_data_scp_path={method_data_scp_path}
-                method_data_scp_host={method_data_scp_host}
-                method_data_scp_port={method_data_scp_port}
-                method_data_scp_known_hosts={method_data_scp_known_hosts}
-                method_data_send_port={method_data_send_port}
                 method_data_send_host={method_data_send_host}
+                method_data_send_port={method_data_send_port}
                 method_data_send_report_config={method_data_send_report_config}
                 method_data_send_report_format={method_data_send_report_format}
                 method_data_smb_credential={method_data_smb_credential}
@@ -1174,10 +1158,15 @@ class AlertComponent extends React.Component {
                 method_data_snmp_community={method_data_snmp_community}
                 method_data_snmp_message={method_data_snmp_message}
                 method_data_start_task_task={method_data_start_task_task}
+                method_data_subject={method_data_subject}
+                method_data_to_address={method_data_to_address}
                 method_data_tp_sms_credential={method_data_tp_sms_credential}
                 method_data_tp_sms_hostname={method_data_tp_sms_hostname}
                 method_data_tp_sms_tls_workaround={
                   method_data_tp_sms_tls_workaround
+                }
+                method_data_verinice_server_credential={
+                  method_data_verinice_server_credential
                 }
                 method_data_verinice_server_report_config={
                   method_data_verinice_server_report_config
@@ -1188,11 +1177,6 @@ class AlertComponent extends React.Component {
                 method_data_verinice_server_url={
                   method_data_verinice_server_url
                 }
-                method_data_verinice_server_credential={
-                  method_data_verinice_server_credential
-                }
-                method_data_pkcs12_credential={method_data_pkcs12_credential}
-                method_data_vfire_credential={method_data_vfire_credential}
                 method_data_vfire_base_url={method_data_vfire_base_url}
                 method_data_vfire_call_description={
                   method_data_vfire_call_description
@@ -1213,45 +1197,49 @@ class AlertComponent extends React.Component {
                   method_data_vfire_call_urgency_name
                 }
                 method_data_vfire_client_id={method_data_vfire_client_id}
+                method_data_vfire_credential={method_data_vfire_credential}
                 method_data_vfire_session_type={method_data_vfire_session_type}
-                method_data_URL={method_data_URL}
-                method_data_delta_type={method_data_delta_type}
-                method_data_delta_report_id={method_data_delta_report_id}
-                report_format_ids={report_format_ids}
+                name={name}
                 report_config_ids={report_config_ids}
+                report_configs={report_configs}
+                report_format_ids={report_format_ids}
+                report_formats={report_formats}
+                result_filters={result_filters}
+                secinfo_filters={secinfo_filters}
                 tasks={tasks}
+                title={title}
                 onClose={this.handleCloseAlertDialog}
-                onOpenContentComposerDialogClick={
-                  this.handleOpenContentComposerDialog
-                }
+                onEmailCredentialChange={this.handleEmailCredentialChange}
                 onNewEmailCredentialClick={this.openEmailCredentialDialog}
                 onNewPasswordOnlyCredentialClick={
                   this.openPasswordOnlyCredentialDialog
                 }
                 onNewScpCredentialClick={this.openScpCredentialDialog}
                 onNewSmbCredentialClick={this.openSmbCredentialDialog}
-                onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
-                onNewVfireCredentialClick={this.openVfireCredentialDialog}
                 onNewTippingPointCredentialClick={
                   this.openTippingPointCredentialDialog
                 }
+                onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
+                onNewVfireCredentialClick={this.openVfireCredentialDialog}
+                onOpenContentComposerDialogClick={
+                  this.handleOpenContentComposerDialog
+                }
+                onPasswordOnlyCredentialChange={
+                  this.handlePasswordOnlyCredentialChange
+                }
+                onReportConfigsChange={this.handleReportConfigsChange}
+                onReportFormatsChange={this.handleReportFormatsChange}
                 onSave={d => {
                   this.handleInteraction();
                   return save(d).then(() => this.closeAlertDialog());
                 }}
-                onReportFormatsChange={this.handleReportFormatsChange}
-                onReportConfigsChange={this.handleReportConfigsChange}
-                onEmailCredentialChange={this.handleEmailCredentialChange}
-                onPasswordOnlyCredentialChange={
-                  this.handlePasswordOnlyCredentialChange
-                }
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
-                onVerinceCredentialChange={this.handleVeriniceCredentialChange}
-                onVfireCredentialChange={this.handleVfireCredentialChange}
                 onTippingPointCredentialChange={
                   this.handleTippingPointCredentialChange
                 }
+                onVerinceCredentialChange={this.handleVeriniceCredentialChange}
+                onVfireCredentialChange={this.handleVfireCredentialChange}
               />
             )}
             {credentialDialogVisible && (
@@ -1266,11 +1254,11 @@ class AlertComponent extends React.Component {
             )}
             {contentComposerDialogVisible && (
               <ContentComposerDialog
+                filterId={composerFilterId}
+                filters={result_filters}
                 ignorePagination={parseYesNo(composerIgnorePagination)}
                 includeNotes={parseYesNo(composerIncludeNotes)}
                 includeOverrides={parseYesNo(composerIncludeOverrides)}
-                filterId={composerFilterId}
-                filters={result_filters}
                 storeAsDefault={parseYesNo(composerStoreAsDefault)}
                 title={_('Compose Content for Scan Report')}
                 onChange={this.handleValueChange}
@@ -1327,5 +1315,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(AlertComponent);
-
-// vim: set ts=2 sw=2 tw=80:

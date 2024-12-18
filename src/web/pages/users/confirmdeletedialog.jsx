@@ -4,16 +4,12 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
 const ConfirmDeleteDialog = ({
   deleteUsers = [],
@@ -55,10 +51,10 @@ const ConfirmDeleteDialog = ({
   return (
     <SaveDialog
       buttonTitle={_('Delete')}
+      defaultValues={data}
       title={title}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -72,8 +68,8 @@ const ConfirmDeleteDialog = ({
             </p>
             <FormGroup title={_('Inheriting user')}>
               <Select
-                name="inheritorId"
                 items={inheritingUserItems}
+                name="inheritorId"
                 value={state.inheritorId}
                 onChange={onValueChange}
               />
@@ -95,5 +91,3 @@ ConfirmDeleteDialog.propTypes = {
 };
 
 export default ConfirmDeleteDialog;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,5 +4,3 @@
  */
 
 export const MENU_PLACEHOLDER_WIDTH = 26;
-
-// vim: set ts=2 sw=2 tw=80:

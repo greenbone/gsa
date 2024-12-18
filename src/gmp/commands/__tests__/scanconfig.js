@@ -4,7 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {
+  SCANCONFIG_TREND_STATIC,
+  SCANCONFIG_TREND_DYNAMIC,
+} from 'gmp/models/scanconfig';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
+import {convertPreferences, ScanConfigCommand} from '../scanconfigs';
 import {
   createEntityResponse,
   createHttp,
@@ -12,14 +18,6 @@ import {
   createActionResultResponse,
   createResponse,
 } from '../testing';
-
-import {
-  SCANCONFIG_TREND_STATIC,
-  SCANCONFIG_TREND_DYNAMIC,
-} from 'gmp/models/scanconfig';
-
-import {convertPreferences, ScanConfigCommand} from '../scanconfigs';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 describe('convertPreferences tests', () => {
   test('should convert preferences', () => {

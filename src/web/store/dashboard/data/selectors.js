@@ -4,7 +4,6 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-
 import {filterIdentifier} from 'web/store/utils';
 
 class DashboardData {
@@ -49,5 +48,3 @@ const getDashboardData = rootState => {
 };
 
 export default getDashboardData;
-
-// vim: set ts=2 sw=2 tw=80:

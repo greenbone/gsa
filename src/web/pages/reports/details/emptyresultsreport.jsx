@@ -3,26 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import styled from 'styled-components';
+import DeleteIcon from 'web/components/icon/deleteicon';
+import EditIcon from 'web/components/icon/editicon';
+import FilterIcon from 'web/components/icon/filtericon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
 import InfoPanel from 'web/components/panel/infopanel';
+import PropTypes from 'web/utils/proptypes';
 
 import ReportPanel from './reportpanel';
-import FilterIcon from 'web/components/icon/filtericon';
-import EditIcon from 'web/components/icon/editicon';
-import DeleteIcon from 'web/components/icon/deleteicon';
 
 const FilterString = styled.span`
   font-style: italic;
@@ -43,7 +36,7 @@ const EmptyResultsReport = ({
   const min_qod = filter.get('min_qod');
   const has_severity_filter = isDefined(severity) && severity.relation === '>';
   return (
-    <Layout flex="column" align={['start', 'stretch']} grow>
+    <Layout grow align={['start', 'stretch']} flex="column">
       <InfoPanel
         heading={_(
           'The report is empty. The filter does not match any of the ' +
@@ -55,7 +48,7 @@ const EmptyResultsReport = ({
         <FilterString>{filter.toFilterString()}</FilterString>
       </InfoPanel>
 
-      <Divider align={['start', 'stretch']} wrap>
+      <Divider wrap align={['start', 'stretch']}>
         {!levels.includes('g') && isDefined(onFilterAddLogLevelClick) && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
@@ -125,5 +118,3 @@ EmptyResultsReport.propTypes = {
 };
 
 export default EmptyResultsReport;
-
-// vim: set ts=2 sw=2 tw=80:

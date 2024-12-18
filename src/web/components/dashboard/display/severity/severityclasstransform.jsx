@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {parseSeverity, parseInt} from 'gmp/parser';
-
+import {isDefined} from 'gmp/utils/identity';
+import {severityValue} from 'gmp/utils/number';
 import {
   NA_VALUE,
   resultSeverityRiskFactor,
@@ -25,13 +24,10 @@ import {
 } from 'web/utils/severity';
 
 import {totalCount, percent, riskFactorColorScale} from '../utils';
-import {severityValue} from 'gmp/utils/number';
 
 export const severityClassDataRow = row => [row.label, row.value];
 
-const transformSeverityData = (
-  data = {},
-) => {
+const transformSeverityData = (data = {}) => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);
@@ -138,5 +134,3 @@ const transformSeverityData = (
 };
 
 export default transformSeverityData;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,9 +4,7 @@
  */
 
 import {XMLParser} from 'fast-xml-parser';
-
 import {parseEnvelopeMeta, parseXmlEncodedString} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import {success, rejection} from './xml';

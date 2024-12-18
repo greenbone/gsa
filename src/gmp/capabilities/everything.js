@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import Capabilities from './capabilities.js';
 
 class EverythingCapabilities extends Capabilities {
@@ -13,5 +12,3 @@ class EverythingCapabilities extends Capabilities {
 }
 
 export default EverythingCapabilities;
-
-// vim: set ts=2 sw=2 tw=80:

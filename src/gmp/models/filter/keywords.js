@@ -20,5 +20,3 @@ export const EXTRA_KEYWORDS = [
   'sort-reverse',
   'timezone',
 ];
-
-// vim: set ts=2 sw=2 tw=80:

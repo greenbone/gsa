@@ -4,22 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import Filter from 'gmp/models/filter';
 import Alert from 'gmp/models/alert';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {entitiesLoadingActions} from 'web/store/entities/alerts';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-
-import AlertPage, {ToolBarIcons} from '../listpage';
+import Filter from 'gmp/models/filter';
 import {
   clickElement,
   getBulkActionItems,
@@ -33,6 +21,14 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {entitiesLoadingActions} from 'web/store/entities/alerts';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+
+import AlertPage, {ToolBarIcons} from '../listpage';
+
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);

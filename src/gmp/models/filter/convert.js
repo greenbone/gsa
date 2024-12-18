@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {parseInt, parseFloat} from '../../parser';
 import {isDefined, isNumberOrNumberString} from '../../utils/identity';
 import {isEmpty} from '../../utils/string';
-
-import {parseInt, parseFloat} from '../../parser';
 
 const convertBooleanInt = (keyword, value, relation) => ({
   keyword,
@@ -86,5 +85,3 @@ const convert = (keyword, value, relation) => {
 };
 
 export default convert;
-
-// vim: set ts=2 sw=2 tw=80:

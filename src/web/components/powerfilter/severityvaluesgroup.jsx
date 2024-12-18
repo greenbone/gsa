@@ -3,20 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
 
 import {parseSeverity} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import {UNSET_VALUE} from 'web/utils/render';
-
-import RelationSelector from 'web/components/powerfilter/relationselector';
-
+import React, {useState} from 'react';
 import FormGroup from 'web/components/form/formgroup';
 import NumberField from 'web/components/form/numberfield';
+import RelationSelector from 'web/components/powerfilter/relationselector';
+import PropTypes from 'web/utils/proptypes';
+import {UNSET_VALUE} from 'web/utils/render';
 
 const SeverityValuesGroup = ({filter, name, title, onChange}) => {
   const term = filter.getTerm(name);
@@ -26,7 +21,7 @@ const SeverityValuesGroup = ({filter, name, title, onChange}) => {
   const keyword = name;
 
   return (
-    <FormGroup title={title} direction="row">
+    <FormGroup direction="row" title={title}>
       <RelationSelector
         relation={rel}
         onChange={newRel => {
@@ -36,12 +31,12 @@ const SeverityValuesGroup = ({filter, name, title, onChange}) => {
       />
       <NumberField
         data-testid="severity-value-filter"
+        max={10}
+        min={0}
         name={keyword}
         type="int"
-        min={0}
-        max={10}
         value={severity}
-        // eslint-disable-next-line no-shadow
+         
         onChange={(value = severity, name = keyword) =>
           onChange(value, name, rel)
         }

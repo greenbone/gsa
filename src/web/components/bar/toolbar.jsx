@@ -3,11 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 import Layout from 'web/components/layout/layout';
-
 import IconSizeProvider from 'web/components/provider/iconsizeprovider';
 
 const Toolbar = props => {
@@ -24,5 +21,3 @@ const Toolbar = props => {
 };
 
 export default Toolbar;
-
-// vim: set ts=2 sw=2 tw=80:

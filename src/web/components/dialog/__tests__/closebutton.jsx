@@ -4,13 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {
   ICON_SIZE_LARGE_PIXELS,
   ICON_SIZE_MEDIUM_PIXELS,
 } from 'web/hooks/useIconSize';
+import {render, fireEvent} from 'web/utils/testing';
 
 import CloseButton from '../closebutton';
 
@@ -34,7 +32,7 @@ describe('Dialog CloseButton tests', () => {
   });
 
   test('should render a large button', () => {
-    const {element} = render(<CloseButton onClick={() => {}} size="large" />);
+    const {element} = render(<CloseButton size="large" onClick={() => {}} />);
 
     expect(element).toHaveStyleRule('height', ICON_SIZE_LARGE_PIXELS);
     expect(element).toHaveStyleRule('width', ICON_SIZE_LARGE_PIXELS);

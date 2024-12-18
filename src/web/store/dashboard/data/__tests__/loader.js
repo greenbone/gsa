@@ -4,16 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
+import {filterIdentifier} from 'web/store/utils';
 
-import {loadFunc} from '../loader';
 import {
   DASHBOARD_DATA_LOADING_REQUEST,
   DASHBOARD_DATA_LOADING_SUCCESS,
   DASHBOARD_DATA_LOADING_ERROR,
 } from '../actions';
-import {filterIdentifier} from 'web/store/utils';
+import {loadFunc} from '../loader';
 
 const createState = state => ({
   dashboardData: {
@@ -119,5 +118,3 @@ describe('loadFunc tests', () => {
     });
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

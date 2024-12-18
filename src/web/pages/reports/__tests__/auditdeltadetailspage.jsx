@@ -4,24 +4,18 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import React from 'react';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith} from 'web/utils/testing';
+import React from 'react';
 import {
   getPowerFilter,
   getSelectElement,
   getTextInputs,
 } from 'web/components/testing';
-
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/mockauditdeltareport';
-
 import DeltaDetailsContent from 'web/pages/reports/deltadetailscontent';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
@@ -98,28 +92,31 @@ describe('Audit Detla Report Details Content tests', () => {
 
     const {baseElement, getAllByTestId, within} = render(
       <DeltaDetailsContent
-        audit={true}
         activeTab={0}
+        audit={true}
         entity={entity}
         errorsCounts={{all: 2, filtered: 2}}
         filter={filterWithName}
         filters={filters}
         isLoading={false}
         isUpdating={false}
-        sorting={sorting}
         reportId={entity.report.id}
+        showError={showError}
+        showErrorMessage={showErrorMessage}
+        showSuccessMessage={showSuccessMessage}
+        sorting={sorting}
         task={entity.report.task}
         onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
+        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterEditClick={onFilterEditClick}
+        onFilterRemoveClick={onFilterRemoveClick}
         onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
         onFilterResetClick={onFilterResetClick}
-        onFilterRemoveClick={onFilterRemoveClick}
         onInteraction={onInteraction}
         onRemoveFromAssetsClick={onRemoveFromAssetsClick}
         onReportDownloadClick={onReportDownloadClick}
@@ -127,9 +124,6 @@ describe('Audit Detla Report Details Content tests', () => {
         onTagSuccess={onTagSuccess}
         onTargetEditClick={onTargetEditClick}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-        showError={showError}
-        showErrorMessage={showErrorMessage}
-        showSuccessMessage={showSuccessMessage}
       />,
     );
 
@@ -282,20 +276,23 @@ describe('Audit Detla Report Details Content tests', () => {
         filters={filters}
         isLoading={false}
         isUpdating={false}
-        sorting={sorting}
         reportId={entity.report.id}
+        showError={showError}
+        showErrorMessage={showErrorMessage}
+        showSuccessMessage={showSuccessMessage}
+        sorting={sorting}
         task={entity.report.task}
         onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
+        onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
         onFilterEditClick={onFilterEditClick}
+        onFilterRemoveClick={onFilterRemoveClick}
         onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
         onFilterResetClick={onFilterResetClick}
-        onFilterRemoveClick={onFilterRemoveClick}
         onInteraction={onInteraction}
         onRemoveFromAssetsClick={onRemoveFromAssetsClick}
         onReportDownloadClick={onReportDownloadClick}
@@ -303,9 +300,6 @@ describe('Audit Detla Report Details Content tests', () => {
         onTagSuccess={onTagSuccess}
         onTargetEditClick={onTargetEditClick}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
-        showError={showError}
-        showErrorMessage={showErrorMessage}
-        showSuccessMessage={showSuccessMessage}
       />,
     );
 

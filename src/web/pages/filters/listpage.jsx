@@ -3,33 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {FILTERS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import FilterIcon from 'web/components/icon/filtericon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/filters';
+import PropTypes from 'web/utils/proptypes';
 
 import FilterComponent from './component';
-import FiltersTable from './table';
 import FiltersFilterDialog from './filterdialog';
+import FiltersTable from './table';
 
 const ToolBarIcons = ({onFilterCreateClick}) => {
   const capabilities = useCapabilities();
@@ -37,8 +30,8 @@ const ToolBarIcons = ({onFilterCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="web-interface"
         anchor="managing-powerfilters"
+        page="web-interface"
         title={_('Help: Filters')}
       />
       {capabilities.mayCreate('filter') && (
@@ -62,15 +55,15 @@ const FiltersPage = ({
   const [_] = useTranslation();
   return (
     <FilterComponent
-      onCreated={onChanged}
-      onSaved={onChanged}
-      onCloned={onChanged}
       onCloneError={onError}
-      onDeleted={onChanged}
+      onCloned={onChanged}
+      onCreated={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
+      onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
         <React.Fragment>
@@ -112,5 +105,3 @@ export default withEntitiesContainer('filter', {
   entitiesSelector,
   loadEntities,
 })(FiltersPage);
-
-// vim: set ts=2 sw=2 tw=80:

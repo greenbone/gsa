@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {severityValue, fixedValue} from 'gmp/utils/number';
 
 describe('severityValue function tests', () => {
@@ -33,5 +32,3 @@ describe('fixedValue function tests', () => {
     expect(fixedValue(2.55, 1)).toEqual('2.5');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

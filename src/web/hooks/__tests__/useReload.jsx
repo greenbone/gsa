@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
+ 
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {act, fireEvent, render, screen} from 'web/utils/testing';
 
 import useReload from '../useReload';
@@ -15,8 +14,8 @@ const TestComponent = ({reload, timeout}) => {
   const [startTimer, clearTimer, isRunning] = useReload(reload, timeout);
   return (
     <>
-      <button onClick={startTimer} data-testid="startTimer"></button>
-      <button onClick={clearTimer} data-testid="clearTimer"></button>
+      <button data-testid="startTimer" onClick={startTimer}></button>
+      <button data-testid="clearTimer" onClick={clearTimer}></button>
       <span data-testid="isRunning">{'' + isRunning}</span>
     </>
   );

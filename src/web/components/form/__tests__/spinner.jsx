@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {KeyCode} from 'gmp/utils/event';
-
 import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
 
 import Spinner from '../spinner';
@@ -178,7 +176,7 @@ describe('Spinner tests', () => {
 
   test('should not increment value beyond max', async () => {
     const handler = testing.fn();
-    const {element} = render(<Spinner value={1} max={1} onChange={handler} />);
+    const {element} = render(<Spinner max={1} value={1} onChange={handler} />);
 
     await clickIncrementButton(element);
 
@@ -187,7 +185,7 @@ describe('Spinner tests', () => {
 
   test('should not decrement value below min', async () => {
     const handler = testing.fn();
-    const {element} = render(<Spinner value={1} min={1} onChange={handler} />);
+    const {element} = render(<Spinner min={1} value={1} onChange={handler} />);
 
     await clickDecrementButton(element);
 

@@ -3,45 +3,34 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/tasks';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import TaskIcon from 'web/components/icon/taskicon';
 import WizardIcon from 'web/components/icon/wizardicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-
-import NewIconMenu from './icons/newiconmenu';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/tasks';
+import PropTypes from 'web/utils/proptypes';
 
 import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
+import NewIconMenu from './icons/newiconmenu';
 import Table from './table';
 
 export const ToolBarIcons = ({
@@ -59,8 +48,8 @@ export const ToolBarIcons = ({
   return (
     <IconDivider>
       <ManualIcon
-        page="scanning"
         anchor="managing-tasks"
+        page="scanning"
         title={_('Help: Tasks')}
       />
       {capabilities.mayOp('run_wizard') && (
@@ -112,25 +101,25 @@ const Page = ({
   return (
     <TaskComponent
       onAdvancedTaskWizardSaved={onChanged}
-      onCloned={onChanged}
       onCloneError={onError}
+      onCloned={onChanged}
+      onContainerCreated={onChanged}
       onContainerSaved={onChanged}
       onCreated={onChanged}
-      onContainerCreated={onChanged}
-      onDeleted={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
       onModifyTaskWizardSaved={onChanged}
       onReportImported={onChanged}
-      onResumed={onChanged}
       onResumeError={onError}
+      onResumed={onChanged}
       onSaved={onChanged}
-      onStarted={onChanged}
       onStartError={onError}
-      onStopped={onChanged}
+      onStarted={onChanged}
       onStopError={onError}
+      onStopped={onChanged}
       onTaskWizardSaved={onChanged}
     >
       {({
@@ -214,5 +203,3 @@ export default withEntitiesContainer('task', {
   loadEntities,
   reloadInterval: taskReloadInterval,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

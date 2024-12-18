@@ -4,18 +4,14 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
-
 import date from 'gmp/models/date';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
-
+import CreatedDisplay from 'web/components/dashboard/display/created/createddisplay';  
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';  
 import {registerDisplay} from 'web/components/dashboard/registry';
-
-import CreatedDisplay from 'web/components/dashboard/display/created/createddisplay'; // eslint-disable-line max-len
-
 import Theme from 'web/utils/theme';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {TicketsListLoader} from './loaders';
 

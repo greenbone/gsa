@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {fireEvent, rendererWith} from 'web/utils/testing';
 
 import CveLink from '../cvelink';
@@ -15,7 +14,7 @@ describe('CveLink tests', () => {
   });
   test('should render CveLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CveLink title="Foo" id="foo" />);
+    const {element} = render(<CveLink id="foo" title="Foo" />);
 
     expect(element).toHaveTextContent('foo');
     expect(element).toHaveAttribute('title', 'Foo');
@@ -24,7 +23,7 @@ describe('CveLink tests', () => {
 
   test('should not override type', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CveLink title="Foo" type="bar" id="foo" />);
+    const {element} = render(<CveLink id="foo" title="Foo" type="bar" />);
 
     expect(element).toHaveTextContent('foo');
     expect(element).toHaveAttribute('title', 'Foo');
@@ -33,7 +32,7 @@ describe('CveLink tests', () => {
 
   test('should route to details', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CveLink title="Foo" id="foo" />);
+    const {element} = render(<CveLink id="foo" title="Foo" />);
 
     expect(window.location.pathname).toEqual('/');
 
@@ -44,7 +43,7 @@ describe('CveLink tests', () => {
 
   test('should not route to details in text mode', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CveLink title="Foo" id="foo" textOnly={true} />);
+    const {element} = render(<CveLink id="foo" textOnly={true} title="Foo" />);
 
     expect(window.location.pathname).toEqual('/');
 
@@ -53,5 +52,3 @@ describe('CveLink tests', () => {
     expect(window.location.pathname).toEqual('/');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

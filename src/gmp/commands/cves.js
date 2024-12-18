@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
+import Cve from 'gmp/models/cve';
 import {isDefined} from 'gmp/utils/identity';
 
 import InfoEntitiesCommand from './infoentities';
 import InfoEntityCommand from './infoentity';
-
-import registerCommand from 'gmp/command';
-
-import Cve from 'gmp/models/cve';
 
 const info_filter = info => isDefined(info.cve);
 
@@ -44,5 +42,3 @@ class CvesCommand extends InfoEntitiesCommand {
 
 registerCommand('cve', CveCommand);
 registerCommand('cves', CvesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

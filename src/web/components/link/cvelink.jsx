@@ -4,13 +4,12 @@
  */
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 import DetailsLink from './detailslink';
 
 const CveLink = ({id, ...props}) => (
-  <DetailsLink {...props} id={id} type="cve" data-testid="cve-link">
+  <DetailsLink {...props} data-testid="cve-link" id={id} type="cve">
     {id}
   </DetailsLink>
 );
@@ -20,5 +19,3 @@ CveLink.propTypes = {
 };
 
 export default CveLink;
-
-// vim: set ts=2 sw=2 tw=80:

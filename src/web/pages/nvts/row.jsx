@@ -3,34 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
+import {_} from 'gmp/locale/lang.js';
 import Filter from 'gmp/models/filter.js';
-
 import {isDefined, isNumber} from 'gmp/utils/identity';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import DateTime from 'web/components/date/datetime';
-
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
-
 import Divider from 'web/components/layout/divider';
-
 import CveLink from 'web/components/link/cvelink';
 import Link from 'web/components/link/link';
-
-import TableRow from 'web/components/table/row';
-import TableData from 'web/components/table/data';
-
 import Qod from 'web/components/qod/qod';
-
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
-
-import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/hooks/useGmp';
-import {_} from 'gmp/locale/lang.js';
+import PropTypes from 'web/utils/proptypes';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -60,9 +49,9 @@ const Row = ({
       <TableData>
         <span>
           <Link
-            to="nvts"
             filter={'family="' + entity.family + '"'}
             textOnly={!links}
+            to="nvts"
             onClick={handleFilterChanged}
           >
             {entity.family}

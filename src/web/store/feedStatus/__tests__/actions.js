@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   SET_SYNC_STATUS,
   SET_ERROR,

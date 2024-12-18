@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent, screen} from 'web/utils/testing';
 
 import Radio from '../radio';
@@ -78,8 +77,8 @@ describe('Radio tests', () => {
 
     render(
       <Radio
-        data-testid="input"
         checked={true}
+        data-testid="input"
         value="foo"
         onChange={onChange}
       />,

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-console */
+ 
 import {
   describe,
   test,
@@ -12,15 +12,13 @@ import {
   beforeAll,
   afterAll,
 } from '@gsa/testing';
-
 import Date from 'gmp/models/date';
-
+import {setTimezone} from 'web/store/usersettings/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith} from 'web/utils/testing';
 
-import {setTimezone} from 'web/store/usersettings/actions';
-
 import DateTime from '../datetime';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
+
 
 const getSetting = testing.fn().mockResolvedValue({});
 

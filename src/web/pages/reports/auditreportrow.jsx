@@ -4,33 +4,21 @@
  */
 
 
-import React from 'react';
-
-import useTranslation from 'web/hooks/useTranslation';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {TASK_STATUS, isActive} from 'gmp/models/task';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import ComplianceBar from 'web/components/bar/compliancebar';
 import StatusBar from 'web/components/bar/statusbar';
-
 import DateTime from 'web/components/date/datetime';
-
 import DeleteIcon from 'web/components/icon/deleteicon';
 import DeltaIcon from 'web/components/icon/deltaicon';
 import DeltaSecondIcon from 'web/components/icon/deltasecondicon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import DetailsLink from 'web/components/link/detailslink';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
-import ComplianceBar from 'web/components/bar/compliancebar';
-
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 
 const Actions = withEntitiesActions(
@@ -43,7 +31,7 @@ const Actions = withEntitiesActions(
     const title = scanActive ? _('Scan is active') : _('Delete Report');
 
     return (
-      <IconDivider align={['center', 'center']} grow>
+      <IconDivider grow align={['center', 'center']}>
         {isDefined(selectedDeltaReport) ? (
           entity.id === selectedDeltaReport.id ? (
             <DeltaIcon
@@ -66,8 +54,8 @@ const Actions = withEntitiesActions(
         )}
         <DeleteIcon
           active={!scanActive}
-          value={entity}
           title={title}
+          value={entity}
           onClick={scanActive ? undefined : onReportDeleteClick}
         />
       </IconDivider>
@@ -110,17 +98,17 @@ const AuditRow = ({
     <TableRow>
       <TableData>
         <span>
-          <DetailsLink type="auditreport" id={entity.id} textOnly={!links}>
+          <DetailsLink id={entity.id} textOnly={!links} type="auditreport">
             <DateTime date={report.timestamp} />
           </DetailsLink>
         </span>
       </TableData>
       <TableData>
-        <StatusBar status={status} progress={progress} />
+        <StatusBar progress={progress} status={status} />
       </TableData>
       <TableData>
         <span>
-          <DetailsLink type="task" id={entity.task.id} textOnly={!links}>
+          <DetailsLink id={entity.task.id} textOnly={!links} type="task">
             {entity.task.name}
           </DetailsLink>
         </span>

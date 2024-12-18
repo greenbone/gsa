@@ -3,63 +3,50 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import ExportIcon from 'web/components/icon/exporticon';
+import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import TargetIcon from 'web/components/icon/targeticon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
-import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import ListIcon from 'web/components/icon/listicon';
-
+import PageTitle from 'web/components/layout/pagetitle';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
+import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
-import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TargetIcon from 'web/components/icon/targeticon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
-import PageTitle from 'web/components/layout/pagetitle';
-
-import {selector, loadEntity} from 'web/store/entities/targets';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/targets';
 import PropTypes from 'web/utils/proptypes';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
-import TargetDetails from './details';
 import TargetComponent from './component';
+import TargetDetails from './details';
 
 export const ToolBarIcons = ({
   entity,
@@ -73,11 +60,11 @@ export const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="scanning"
           anchor="managing-targets"
+          page="scanning"
           title={_('Help: Targets')}
         />
-        <ListIcon title={_('Target List')} page="targets" />
+        <ListIcon page="targets" title={_('Target List')} />
       </IconDivider>
       <IconDivider>
         <CreateIcon entity={entity} onClick={onTargetCreateClick} />
@@ -85,8 +72,8 @@ export const ToolBarIcons = ({
         <EditIcon entity={entity} onClick={onTargetEditClick} />
         <TrashIcon entity={entity} onClick={onTargetDeleteClick} />
         <ExportIcon
-          value={entity}
           title={_('Export Target as XML')}
+          value={entity}
           onClick={onTargetDownloadClick}
         />
       </IconDivider>
@@ -138,13 +125,13 @@ const Page = ({
 }) => {
   return (
     <TargetComponent
-      onCloned={goto_details('target', props)}
       onCloneError={onError}
+      onCloned={goto_details('target', props)}
       onCreated={goto_details('target', props)}
-      onDeleted={goto_list('targets', props)}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={goto_list('targets', props)}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
       onSaved={onChanged}
     >
@@ -153,8 +140,8 @@ const Page = ({
           {...props}
           entity={entity}
           sectionIcon={<TargetIcon size="large" />}
-          toolBarIcons={ToolBarIcons}
           title={_('Target')}
+          toolBarIcons={ToolBarIcons}
           onInteraction={onInteraction}
           onTargetCloneClick={clone}
           onTargetCreateClick={create}
@@ -167,8 +154,8 @@ const Page = ({
             return (
               <React.Fragment>
                 <PageTitle title={_('Target: {{name}}', {name: entity.name})} />
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
                     <TabList
                       active={activeTab}
                       align={['start', 'stretch']}
@@ -265,5 +252,3 @@ export default withEntityContainer('target', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

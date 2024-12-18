@@ -3,29 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
 import StartIcon from 'web/components/icon/starticon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import DetailsLink from 'web/components/link/detailslink';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -43,35 +34,35 @@ const Actions = withEntitiesActions(
     onAlertEditClick,
     onAlertTestClick,
   }) => (
-    <IconDivider align={['center', 'center']} grow>
+    <IconDivider grow align={['center', 'center']}>
       <TrashIcon
         displayName={_('Alert')}
-        name="alert"
         entity={entity}
+        name="alert"
         onClick={onAlertDeleteClick}
       />
       <EditIcon
         displayName={_('Alert')}
-        name="alert"
         entity={entity}
+        name="alert"
         onClick={onAlertEditClick}
       />
       <CloneIcon
         displayName={_('Alert')}
-        name="alert"
         entity={entity}
+        name="alert"
         title={_('Clone Alert')}
         value={entity}
         onClick={onAlertCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Alert')}
+        value={entity}
         onClick={onAlertDownloadClick}
       />
       <StartIcon
-        value={entity}
         title={_('Test Alert')}
+        value={entity}
         onClick={onAlertTestClick}
       />
     </IconDivider>
@@ -94,9 +85,9 @@ const render_filter = (filter, caps, links = true) => {
 
   return (
     <DetailsLink
+      id={filter.id}
       textOnly={!caps.mayAccess('filters') || !links}
       type="filter"
-      id={filter.id}
     >
       {filter.name}
     </DetailsLink>
@@ -113,10 +104,10 @@ const Row = ({
 }) => (
   <TableRow>
     <EntityNameTableData
+      displayName={_('Alert')}
       entity={entity}
       link={links}
       type="alert"
-      displayName={_('Alert')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
@@ -143,5 +134,3 @@ Row.propTypes = {
 };
 
 export default withCapabilities(Row);
-
-// vim: set ts=2 sw=2 tw=80:

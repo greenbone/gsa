@@ -4,24 +4,19 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
-import Date from 'gmp/models/date';
-
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
+import Date from 'gmp/models/date';
 import ScanConfig from 'gmp/models/scanconfig';
-
-import {rendererWith, fireEvent, screen} from 'web/utils/testing';
-
 import {
   closeDialog,
   getElementOrDocument,
   getRadioInputs,
 } from 'web/components/testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import AdvancedTaskWizard from '../advancedtaskwizard';
 
@@ -83,18 +78,18 @@ describe('AdvancedTaskWizard component tests', () => {
 
     const {getByName} = render(
       <AdvancedTaskWizard
-        credentials={credentials}
-        scan_configs={scanConfigs}
-        start_date={startDate}
-        task_name={taskName}
-        target_hosts={targetHosts}
         config_id={configId}
-        ssh_credential={sshCredential}
-        smb_credential={smbCredential}
+        credentials={credentials}
         esxi_credential={esxiCredential}
-        start_minute={startMinute}
+        scan_configs={scanConfigs}
+        smb_credential={smbCredential}
+        ssh_credential={sshCredential}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        target_hosts={targetHosts}
+        task_name={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -156,18 +151,18 @@ describe('AdvancedTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <AdvancedTaskWizard
-        credentials={credentials}
-        scan_configs={scanConfigs}
-        start_date={startDate}
-        task_name={taskName}
-        target_hosts={targetHosts}
         config_id={configId}
-        ssh_credential={sshCredential}
-        smb_credential={smbCredential}
+        credentials={credentials}
         esxi_credential={esxiCredential}
-        start_minute={startMinute}
+        scan_configs={scanConfigs}
+        smb_credential={smbCredential}
+        ssh_credential={sshCredential}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        target_hosts={targetHosts}
+        task_name={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -213,18 +208,18 @@ describe('AdvancedTaskWizard component tests', () => {
 
     const {baseElement, getByName} = render(
       <AdvancedTaskWizard
-        credentials={credentials}
-        scan_configs={scanConfigs}
-        start_date={startDate}
-        task_name={taskName}
-        target_hosts={targetHosts}
         config_id={configId}
-        ssh_credential={sshCredential}
-        smb_credential={smbCredential}
+        credentials={credentials}
         esxi_credential={esxiCredential}
-        start_minute={startMinute}
+        scan_configs={scanConfigs}
+        smb_credential={smbCredential}
+        ssh_credential={sshCredential}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        target_hosts={targetHosts}
+        task_name={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -273,18 +268,18 @@ describe('AdvancedTaskWizard component tests', () => {
 
     render(
       <AdvancedTaskWizard
-        credentials={credentials}
-        scan_configs={scanConfigs}
-        start_date={startDate}
-        task_name={taskName}
-        target_hosts={targetHosts}
         config_id={configId}
-        ssh_credential={sshCredential}
-        smb_credential={smbCredential}
+        credentials={credentials}
         esxi_credential={esxiCredential}
-        start_minute={startMinute}
+        scan_configs={scanConfigs}
+        smb_credential={smbCredential}
+        ssh_credential={sshCredential}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        target_hosts={targetHosts}
+        task_name={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -305,18 +300,18 @@ describe('AdvancedTaskWizard component tests', () => {
 
     render(
       <AdvancedTaskWizard
-        credentials={credentials}
-        scan_configs={scanConfigs}
-        start_date={startDate}
-        task_name={taskName}
-        target_hosts={targetHosts}
         config_id={configId}
-        ssh_credential={sshCredential}
-        smb_credential={smbCredential}
+        credentials={credentials}
         esxi_credential={esxiCredential}
-        start_minute={startMinute}
+        scan_configs={scanConfigs}
+        smb_credential={smbCredential}
+        ssh_credential={sshCredential}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        target_hosts={targetHosts}
+        task_name={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -339,18 +334,18 @@ describe('AdvancedTaskWizard component tests', () => {
 
     const {getByName} = render(
       <AdvancedTaskWizard
-        credentials={credentials}
-        scan_configs={scanConfigs}
-        start_date={startDate}
-        task_name={taskName}
-        target_hosts={targetHosts}
         config_id={configId}
-        ssh_credential={sshCredential}
-        smb_credential={smbCredential}
+        credentials={credentials}
         esxi_credential={esxiCredential}
-        start_minute={startMinute}
+        scan_configs={scanConfigs}
+        smb_credential={smbCredential}
+        ssh_credential={sshCredential}
+        start_date={startDate}
         start_hour={startHour}
+        start_minute={startMinute}
         start_timezone={startTimezone}
+        target_hosts={targetHosts}
+        task_name={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,

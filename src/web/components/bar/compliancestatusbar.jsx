@@ -4,13 +4,10 @@
  */
 
 import React from 'react';
-
+import ProgressBar from 'web/components/bar/progressbar';
 import useTranslation from 'web/hooks/useTranslation';
-
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import ProgressBar from 'web/components/bar/progressbar';
 
 const ComplianceStatusBar = ({complianceStatus}) => {
   let text;
@@ -26,11 +23,11 @@ const ComplianceStatusBar = ({complianceStatus}) => {
 
   return (
     <ProgressBar
-      title={text}
-      progress={complianceStatus}
       background={Theme.statusRunGreen}
       boxBackground={boxBackground}
       data-testid="compliance-status-bar"
+      progress={complianceStatus}
+      title={text}
     >
       {text}
     </ProgressBar>
@@ -42,5 +39,3 @@ ComplianceStatusBar.propTypes = {
 };
 
 export default ComplianceStatusBar;
-
-// vim: set ts=2 sw=2 tw=80:

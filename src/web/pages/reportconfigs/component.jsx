@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import EntityComponent from 'web/entity/component';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
-import EntityComponent from 'web/entity/component';
 
 import ReportConfigDialog from './dialog';
 
@@ -150,10 +146,10 @@ class ReportConfigComponent extends React.Component {
             })}
             {dialogVisible && (
               <ReportConfigDialog
-                reportconfig={reportconfig}
                 formats={formats}
-                title={title}
                 preferences={preferences}
+                reportconfig={reportconfig}
+                title={title}
                 onClose={this.handleCloseReportConfigDialog}
                 onSave={this.handleSave}
               />
@@ -182,5 +178,3 @@ ReportConfigComponent.propTypes = {
 };
 
 export default withGmp(ReportConfigComponent);
-
-// vim: set ts=2 sw=2 tw=80:

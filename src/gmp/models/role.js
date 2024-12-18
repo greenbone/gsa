@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseCsv} from 'gmp/parser';
-
 import Model from 'gmp/model';
+import {parseCsv} from 'gmp/parser';
 
 class Role extends Model {
   static entityType = 'role';
@@ -20,5 +19,3 @@ class Role extends Model {
 }
 
 export default Role;
-
-// vim: set ts=2 sw=2 tw=80:

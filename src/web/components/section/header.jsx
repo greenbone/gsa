@@ -3,20 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {isDefined, isString} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Theme from 'web/utils/theme';
-
+import React from 'react';
+import styled from 'styled-components';
 import Icon from 'web/components/icon/icon';
-
 import Layout from 'web/components/layout/layout';
 import withLayout from 'web/components/layout/withLayout';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const HeaderLayout = styled(Layout)`
   margin: 26px 0px 10px 0px;
@@ -51,7 +45,7 @@ const SectionHeader = ({
       <HeaderHeading align={['start', 'stretch']}>
         {isDefined(img) && (
           <HeaderIconLayout flex align={['start', 'end']}>
-            {isString(img) ? <Icon size="large" img={img} /> : img}
+            {isString(img) ? <Icon img={img} size="large" /> : img}
           </HeaderIconLayout>
         )}
         {isDefined(title) && (
@@ -70,5 +64,3 @@ SectionHeader.propTypes = {
 };
 
 export default SectionHeader;
-
-// vim: set ts=2 sw=2 tw=80:

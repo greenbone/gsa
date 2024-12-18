@@ -4,72 +4,55 @@
  */
 
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
-import {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
-
-import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
-import {selectSaveId} from 'gmp/utils/id';
-
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
+import {ALL_FILTER} from 'gmp/models/filter';
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-
-import {
-  loadEntities as loadAlerts,
-  selector as alertSelector,
-} from 'web/store/entities/alerts';
-
-import {
-  loadEntities as loadScanners,
-  selector as scannerSelector,
-} from 'web/store/entities/scanners';
-
-import {
-  loadEntities as loadSchedules,
-  selector as scheduleSelector,
-} from 'web/store/entities/schedules';
-
-import {
-  loadEntities as loadTargets,
-  selector as targetSelector,
-} from 'web/store/entities/targets';
-
-import {getTimezone} from 'web/store/usersettings/selectors';
-
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {selectSaveId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import React from 'react';
+import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/component';
-
 import AlertComponent from 'web/pages/alerts/component';
-
 import AuditDialog from 'web/pages/audits/dialog';
-
 import {createSelectedNvts} from 'web/pages/scanconfigs/component';
 import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
 import EditPolicyDialog from 'web/pages/scanconfigs/editdialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
 import ImportDialog from 'web/pages/scanconfigs/importdialog';
-
 import ScheduleComponent from 'web/pages/schedules/component';
-
 import TargetComponent from 'web/pages/targets/component';
+import {
+  loadEntities as loadAlerts,
+  selector as alertSelector,
+} from 'web/store/entities/alerts';
+import {
+  loadEntities as loadScanners,
+  selector as scannerSelector,
+} from 'web/store/entities/scanners';
+import {
+  loadEntities as loadSchedules,
+  selector as scheduleSelector,
+} from 'web/store/entities/schedules';
+import {
+  loadEntities as loadTargets,
+  selector as targetSelector,
+} from 'web/store/entities/targets';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getTimezone} from 'web/store/usersettings/selectors';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
 import PolicyDialog from './dialog';
 
@@ -644,17 +627,17 @@ class PolicyComponent extends React.Component {
       <React.Fragment>
         <EntityComponent
           name="policy"
-          onCreated={onCreated}
-          onCreateError={onCreateError}
-          onCloned={onCloned}
           onCloneError={onCloneError}
-          onDeleted={onDeleted}
+          onCloned={onCloned}
+          onCreateError={onCreateError}
+          onCreated={onCreated}
           onDeleteError={onDeleteError}
-          onDownloaded={onDownloaded}
+          onDeleted={onDeleted}
           onDownloadError={onDownloadError}
+          onDownloaded={onDownloaded}
           onInteraction={onInteraction}
-          onSaved={onSaved}
           onSaveError={onSaveError}
+          onSaved={onSaved}
         >
           {({save, ...other}) => (
             <React.Fragment>
@@ -682,8 +665,8 @@ class PolicyComponent extends React.Component {
                         >
                           {({create: createschedule}) => (
                             <AuditDialog
-                              alerts={alerts}
                               alertIds={alertIds}
+                              alerts={alerts}
                               alterable={alterable}
                               auto_delete={auto_delete}
                               auto_delete_data={auto_delete_data}
@@ -707,10 +690,10 @@ class PolicyComponent extends React.Component {
                               targets={targets}
                               title={title}
                               onChange={this.handleChange}
-                              onNewAlertClick={createalert}
-                              onNewTargetClick={createtarget}
-                              onNewScheduleClick={createschedule}
                               onClose={this.handleCloseCreateAuditDialog}
+                              onNewAlertClick={createalert}
+                              onNewScheduleClick={createschedule}
+                              onNewTargetClick={createtarget}
                               onSave={this.handleSaveAudit}
                               onScannerChange={this.handleScannerChange}
                             />
@@ -760,8 +743,8 @@ class PolicyComponent extends React.Component {
         </EntityComponent>
         {importDialogVisible && (
           <ImportDialog
-            title={_('Import Policy')}
             text={_('Import XML policy')}
+            title={_('Import Policy')}
             onClose={this.handleCloseImportDialog}
             onSave={this.handleImportPolicy}
           />
@@ -769,8 +752,8 @@ class PolicyComponent extends React.Component {
         {editPolicyFamilyDialogVisible && (
           <EditPolicyFamilyDialog
             configId={policy.id}
-            configNameLabel={_('Policy')}
             configName={policy.name}
+            configNameLabel={_('Policy')}
             familyName={familyName}
             isLoadingFamily={isLoadingFamily}
             nvts={familyNvts}
@@ -793,8 +776,8 @@ class PolicyComponent extends React.Component {
               isDefined(nvt) ? nvt.tags.cvss_base_vector : undefined
             }
             nvtFamily={isDefined(nvt) ? nvt.family : undefined}
-            nvtName={isDefined(nvt) ? nvt.name : undefined}
             nvtLastModified={isDefined(nvt) ? nvt.modificationTime : undefined}
+            nvtName={isDefined(nvt) ? nvt.name : undefined}
             nvtOid={isDefined(nvt) ? nvt.oid : undefined}
             nvtSeverity={isDefined(nvt) ? nvt.severity : undefined}
             nvtSummary={isDefined(nvt) ? nvt.tags.summary : undefined}

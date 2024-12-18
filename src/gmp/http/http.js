@@ -3,22 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import _ from 'gmp/locale';
-
-import {isDefined, hasValue, isArray} from '../utils/identity';
+import logger from 'gmp/log';
 
 import Rejection from './rejection';
 import Response from './response';
-
 import DefaultTransform from './transform/default';
-
 import {
   buildUrlParams,
   getFeedAccessStatusMessage,
   findActionInXMLString,
 } from './utils';
+import {isDefined, hasValue, isArray} from '../utils/identity';
 
 const log = logger.getLogger('gmp.http');
 
@@ -218,7 +214,7 @@ class Http {
     );
     try {
       reject(this.transformRejection(rej, options));
-    } catch (error) {
+    } catch {
       reject(rej);
     }
   }
@@ -233,7 +229,7 @@ class Http {
     );
     try {
       reject(this.transformRejection(rej, options));
-    } catch (error) {
+    } catch {
       reject(rej);
     }
   }
@@ -254,5 +250,3 @@ class Http {
 }
 
 export default Http;
-
-// vim: set ts=2 sw=2 tw=80:

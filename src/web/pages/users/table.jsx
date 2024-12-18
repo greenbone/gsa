@@ -4,7 +4,6 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-
 import {createEntitiesFooter} from 'web/entities/footer';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
@@ -49,5 +48,3 @@ const UsersTable = createEntitiesTable({
 });
 
 export default UsersTable;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useCallback} from 'react';
-import {isDefined} from 'gmp/utils/identity';
-
-import {useSelector, useDispatch} from 'react-redux';
-
 import {
   setLocale as setGlobalLocale,
   getLocale as getGlobalLocal,
 } from 'gmp/locale/lang';
-
+import {isDefined} from 'gmp/utils/identity';
+import {useEffect, useCallback} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {setLocale} from 'web/store/usersettings/actions';
 import {getLocale} from 'web/store/usersettings/selectors';
 

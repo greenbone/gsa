@@ -4,24 +4,20 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
-import SortByGroup from 'web/components/powerfilter/sortbygroup';
-import TicketStatusFilterGroup from 'web/components/powerfilter/ticketstatusgroup';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
-import FilterDialog from 'web/components/powerfilter/filterdialog';
-
+import SortByGroup from 'web/components/powerfilter/sortbygroup';
+import TicketStatusFilterGroup from 'web/components/powerfilter/ticketstatusgroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
-
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const TicketsFilterDialogComponent = ({
   filter: initialFilter,
@@ -88,17 +84,17 @@ const TicketsFilterDialogComponent = ({
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
-        name="filterstring"
         filter={filterString}
+        name="filterstring"
         onChange={onFilterStringChange}
       />
 
       <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
       <SeverityValuesGroup
+        filter={filter}
         name="severity"
         title={_('Severity')}
-        filter={filter}
         onChange={onFilterValueChange}
       />
 
@@ -109,10 +105,10 @@ const TicketsFilterDialogComponent = ({
       <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
 
       <SortByGroup
-        filter={filter}
         fields={SORT_FIELDS}
-        onSortOrderChange={onSortOrderChange}
+        filter={filter}
         onSortByChange={onSortByChange}
+        onSortOrderChange={onSortOrderChange}
       />
 
       {capabilities.mayCreate('filter') && (

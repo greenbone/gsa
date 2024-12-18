@@ -3,24 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import {withRouter} from 'web/utils/withRouter';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import {isDefined, hasValue} from 'gmp/utils/identity';
-
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-
+import {isDefined, hasValue} from 'gmp/utils/identity';
+import React from 'react';
 import TopologyChart from 'web/components/chart/topology';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {withRouter} from 'web/utils/withRouter';
 
 import {HostsTopologyLoader} from './loaders';
 
@@ -128,17 +121,17 @@ export class HostsTopologyDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
             dataTransform={transformTopologyData}
-            title={() => _('Hosts Topology')}
+            filter={filter}
             showToggleLegend={false}
+            title={() => _('Hosts Topology')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <TopologyChart
+                data={tdata}
+                height={height}
                 svgRef={svgRef}
                 width={width}
-                height={height}
-                data={tdata}
                 onDataClick={this.handleDataClick}
               />
             )}
@@ -168,5 +161,3 @@ HostsTopologyDisplay.displayId = DISPLAY_ID;
 registerDisplay(DISPLAY_ID, HostsTopologyDisplay, {
   title: _l('Chart: Hosts Topology'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

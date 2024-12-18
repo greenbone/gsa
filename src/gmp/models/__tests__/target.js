@@ -4,11 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import PortList from 'gmp/models/portlist';
 import Target from 'gmp/models/target';
-
 import {testModel} from 'gmp/models/testing';
 
 testModel(Target, 'target');
@@ -113,5 +111,3 @@ describe('Target model tests', () => {
     expect(target.tasks[0].id).toEqual('123');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

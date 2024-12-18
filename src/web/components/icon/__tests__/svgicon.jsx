@@ -3,14 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect} from 'react';
-
 import {describe, test, expect, testing} from '@gsa/testing';
-
+import React, {useEffect} from 'react';
 import {render, fireEvent, act} from 'web/utils/testing';
 
 import CloneIcon from '../cloneicon';
-
 import {useStateWithMountCheck, useIsMountedRef} from '../svgicon';
 
 const entity = {name: 'entity'};
@@ -21,9 +18,9 @@ describe('SVG icon component tests', () => {
 
     const {container} = render(
       <CloneIcon
+        active={true}
         title="Clone Entity"
         value={entity}
-        active={true}
         onClick={handleClick}
       />,
     );
@@ -40,9 +37,9 @@ describe('SVG icon component tests', () => {
 
     const {element} = render(
       <CloneIcon
+        active={true}
         title="Clone Entity"
         value={entity}
-        active={true}
         onClick={handleClick}
       />,
     );

@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Model from 'gmp/model';
+import {parseInt} from 'gmp/parser';
 import {normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import {parseInt} from 'gmp/parser';
-
-import Model from 'gmp/model';
 
 class Tag extends Model {
   static entityType = 'tag';
@@ -30,5 +28,3 @@ class Tag extends Model {
 }
 
 export default Tag;
-
-// vim: set ts=2 sw=2 tw=80:

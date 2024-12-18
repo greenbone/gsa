@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import withSvgIcon from './withSvgIcon';
-
 import {PowerOff as Icon} from 'lucide-react';
-
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
+import withSvgIcon from './withSvgIcon';
+
 const DisableIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="disable-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="disable-icon"
+  />
 ));
 
 export default DisableIcon;
-
-// vim: set ts=2 sw=2 tw=80:

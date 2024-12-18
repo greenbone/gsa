@@ -3,27 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
-import {permissionDescription} from 'web/utils/render';
-
-import EntityLink from 'web/entity/link';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
+import EntityLink from 'web/entity/link';
 import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
+import {permissionDescription} from 'web/utils/render';
 
 const PermissionDetails = ({entity}) => {
   const {comment, name, resource, subject} = entity;
@@ -81,5 +74,3 @@ PermissionDetails.propTypes = {
 };
 
 export default PermissionDetails;
-
-// vim: set ts=2 sw=2 tw=80:

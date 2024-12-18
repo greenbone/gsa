@@ -3,23 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
-import TrashIcon from 'web/entity/icon/trashicon';
 import EditIcon from 'web/entity/icon/editicon';
-
+import TrashIcon from 'web/entity/icon/trashicon';
 import PropTypes from 'web/utils/proptypes';
 
 const Actions = withEntitiesActions(
@@ -30,30 +23,30 @@ const Actions = withEntitiesActions(
     onRoleDownloadClick,
     onRoleEditClick,
   }) => (
-    <IconDivider align={['center', 'center']} grow>
+    <IconDivider grow align={['center', 'center']}>
       <TrashIcon
         displayName={_('Role')}
-        name="role"
         entity={entity}
+        name="role"
         onClick={onRoleDeleteClick}
       />
       <EditIcon
         displayName={_('Role')}
-        name="role"
         entity={entity}
+        name="role"
         onClick={onRoleEditClick}
       />
       <CloneIcon
         displayName={_('Role')}
-        name="role"
         entity={entity}
+        name="role"
         title={_('Clone Role')}
         value={entity}
         onClick={onRoleCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Role')}
+        value={entity}
         onClick={onRoleDownloadClick}
       />
     </IconDivider>
@@ -77,10 +70,10 @@ const Row = ({
 }) => (
   <TableRow>
     <EntityNameTableData
+      displayName={_('Role')}
       entity={entity}
       link={links}
       type="role"
-      displayName={_('Role')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <ActionsComponent {...props} entity={entity} />
@@ -95,5 +88,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

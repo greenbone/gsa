@@ -30,7 +30,6 @@ const setAndFreeze = (obj, name, value) => {
 };
 
 const warnDeprecatedSetting = (oldName, newName) => {
-  // eslint-disable-next-line no-console
   console.warn(
     'A deprecated setting',
     oldName,
@@ -180,5 +179,3 @@ class GmpSettings {
 }
 
 export default GmpSettings;
-
-// vim: set ts=2 sw=2 tw=80:

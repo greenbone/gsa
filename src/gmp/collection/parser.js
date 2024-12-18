@@ -4,15 +4,11 @@
  */
 
 import logger from '../log';
-
-import {isArray, isDefined} from '../utils/identity';
-import {map} from '../utils/array';
-
 import Model from '../model';
-
-import Filter from '../models/filter';
-
 import CollectionCounts from './collectioncounts';
+import Filter from '../models/filter';
+import {map} from '../utils/array';
+import {isArray, isDefined} from '../utils/identity';
 
 const log = logger.getLogger('gmp.collection.parser');
 
@@ -177,5 +173,3 @@ export const parseCollectionList = (
     counts: collection_count_parse_func(response, name, plural_name),
   };
 };
-
-// vim: set ts=2 sw=2 tw=80:

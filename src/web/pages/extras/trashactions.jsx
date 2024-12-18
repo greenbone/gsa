@@ -3,20 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType} from 'gmp/utils/entitytype';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import RestoreIcon from 'web/components/icon/restoreicon';
 import TrashDeleteIcon from 'web/components/icon/trashdeleteicon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import TableData from 'web/components/table/data';
-
 import PropTypes from 'web/utils/proptypes';
 
 const getRestorableDeletableForEntityType = {
@@ -163,7 +158,7 @@ const TrashActions = ({entity, onEntityDelete, onEntityRestore}) => {
   );
   return (
     <TableData>
-      <IconDivider align={['center', 'center']} grow>
+      <IconDivider grow align={['center', 'center']}>
         <RestoreIcon name="restore" value={entity} {...restoreprops} />
         <TrashDeleteIcon name="delete" value={entity} {...deleteprops} />
       </IconDivider>

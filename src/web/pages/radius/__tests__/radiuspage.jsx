@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Settings from 'gmp/models/settings';
-
 import {rendererWith, wait} from 'web/utils/testing';
 
 import RadiusAuthentication from '../radiuspage';

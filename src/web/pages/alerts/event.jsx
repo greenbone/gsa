@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
-import {secInfoTypeName} from 'gmp/models/secinfo';
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
@@ -14,10 +11,10 @@ import {
   EVENT_TYPE_ASSIGNED_TICKET_CHANGED,
   EVENT_TYPE_OWNED_TICKET_CHANGED,
 } from 'gmp/models/alert';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {secInfoTypeName} from 'gmp/models/secinfo';
+import {isDefined} from 'gmp/utils/identity';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const Event = ({event = {}}) => {
   const [_] = useTranslation();
@@ -66,5 +63,3 @@ Event.propTypes = {
 };
 
 export default Event;
-
-// vim: set ts=2 sw=2 tw=80:

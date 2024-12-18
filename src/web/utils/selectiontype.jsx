@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 const SelectionType = {
   SELECTION_PAGE_CONTENTS: '0',
   SELECTION_USER: '1',
@@ -11,5 +10,3 @@ const SelectionType = {
 };
 
 export default SelectionType;
-
-// vim: set ts=2 sw=2 tw=80:

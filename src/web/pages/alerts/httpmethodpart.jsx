@@ -4,15 +4,11 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
-import withPrefix from 'web/utils/withPrefix';
-
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import withPrefix from 'web/utils/withPrefix';
 
 const HttpMethodPart = ({prefix, URL, onChange}) => {
   const [_] = useTranslation();
@@ -35,5 +31,3 @@ HttpMethodPart.propTypes = {
 };
 
 export default withPrefix(HttpMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

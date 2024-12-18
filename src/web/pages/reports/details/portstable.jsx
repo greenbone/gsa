@@ -3,45 +3,40 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
 import {createEntitiesTable} from 'web/entities/table';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
   <TableHeader>
     <TableRow>
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'name' : false}
-        onSortChange={onSortChange}
         title={_('Port')}
+        onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'hosts' : false}
-        onSortChange={onSortChange}
         title={_('Hosts')}
+        onSortChange={onSortChange}
       />
       <TableHead
-        width="10%"
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'severity' : false}
-        onSortChange={onSortChange}
         title={_('Severity')}
+        width="10%"
+        onSortChange={onSortChange}
       />
     </TableRow>
   </TableHeader>
@@ -76,5 +71,3 @@ export default createEntitiesTable({
   emptyTitle: _l('No Ports available'),
   row: Row,
 });
-
-// vim: set ts=2 sw=2 tw=80:

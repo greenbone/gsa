@@ -3,16 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
-
-import {afterEach} from '@gsa/testing';
-
 // jest-styled-components provides expect.toHaveStyleRule and snapshots for styled-components
 // it requires global.beforeEach and expect
 import 'jest-styled-components';
 
-import React from 'react';
-
+import {
+  ThemeProvider,
+  theme,
+} from '@greenbone/opensight-ui-components-mantinev7';
+import {afterEach} from '@gsa/testing';
 import {
   act,
   render as reactTestingRender,
@@ -23,26 +22,15 @@ import {
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
 import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
-
-import {
-  ThemeProvider,
-  theme,
-} from '@greenbone/opensight-ui-components-mantinev7';
-
-import {BrowserRouter} from 'react-router-dom';
-
-import {Provider} from 'react-redux';
-
 import EverythingCapabilities from 'gmp/capabilities/everything';
-
 import {hasValue, isDefined} from 'gmp/utils/identity';
-
-import GmpContext from 'web/components/provider/gmpprovider';
-import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
-import LicenseProvider from 'web/components/provider/licenseprovider';
-
-import configureStore from 'web/store';
+import {Provider} from 'react-redux';
+import {BrowserRouter} from 'react-router-dom';
 import {StyleSheetManager} from 'styled-components';
+import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
+import GmpContext from 'web/components/provider/gmpprovider';
+import LicenseProvider from 'web/components/provider/licenseprovider';
+import configureStore from 'web/store';
 
 export * from '@testing-library/react/pure';
 export {userEvent};
@@ -175,5 +163,3 @@ export const rendererWith = (
     renderHook: hook => rtlRenderHook(hook, {wrapper}),
   };
 };
-
-// vim: set ts=2 sw=2 tw=80:

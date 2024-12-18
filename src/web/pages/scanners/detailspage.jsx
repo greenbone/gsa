@@ -3,60 +3,48 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {CVE_SCANNER_TYPE} from 'gmp/models/scanner';
-
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import Tab from 'web/components/tab/tab';
-import TabLayout from 'web/components/tab/tablayout';
-import TabList from 'web/components/tab/tablist';
-import TabPanel from 'web/components/tab/tabpanel';
-import TabPanels from 'web/components/tab/tabpanels';
-import Tabs from 'web/components/tab/tabs';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ScannerIcon from 'web/components/icon/scannericon';
 import VerifyIcon from 'web/components/icon/verifyicon';
-
-import EntityPage from 'web/entity/page';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
-import {selector, loadEntity} from 'web/store/entities/scanners';
-
+import useGmp from 'web/hooks/useGmp';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/scanners';
 import PropTypes from 'web/utils/proptypes';
 
 import ScannerComponent from './component';
 import ScannerDetails from './details';
-
-import useGmp from 'web/hooks/useGmp';
 
 const ToolBarIcons = ({
   entity,
@@ -74,11 +62,11 @@ const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="scanning"
           anchor="managing-scanners"
+          page="scanning"
           title={_('Help: Scanners')}
         />
-        <ListIcon title={_('Scanner List')} page="scanners" />
+        <ListIcon page="scanners" title={_('Scanner List')} />
       </IconDivider>
       <IconDivider>
         {gmp.settings.enableGreenboneSensor && (
@@ -92,13 +80,13 @@ const ToolBarIcons = ({
         <EditIcon entity={entity} onClick={onScannerEditClick} />
         <TrashIcon entity={entity} onClick={onScannerDeleteClick} />
         <ExportIcon
-          value={entity}
           title={_('Export Scanner as XML')}
+          value={entity}
           onClick={onScannerDownloadClick}
         />
         <VerifyIcon
-          value={entity}
           title={_('Verify Scanner')}
+          value={entity}
           onClick={onScannerVerifyClick}
         />
       </IconDivider>
@@ -147,15 +135,15 @@ const Page = ({
   <ScannerComponent
     onCertificateDownloadError={onError}
     onCertificateDownloaded={onDownloaded}
-    onCloned={goto_details('scanner', props)}
     onCloneError={onError}
+    onCloned={goto_details('scanner', props)}
     onCreated={goto_details('scanner', props)}
-    onCredentialDownloaded={onDownloaded}
     onCredentialDownloadError={onError}
-    onDeleted={goto_list('scanners', props)}
+    onCredentialDownloaded={onDownloaded}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={goto_list('scanners', props)}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
     onVerified={() => {
@@ -179,8 +167,8 @@ const Page = ({
         {...props}
         entity={entity}
         sectionIcon={<ScannerIcon size="large" />}
-        toolBarIcons={ToolBarIcons}
         title={_('Scanner')}
+        toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
         onScannerCertificateDownloadClick={downloadcertificate}
         onScannerCloneClick={clone}
@@ -196,8 +184,8 @@ const Page = ({
           return (
             <React.Fragment>
               <PageTitle title={_('Scanner: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
@@ -279,5 +267,3 @@ export default withEntityContainer('scanner', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

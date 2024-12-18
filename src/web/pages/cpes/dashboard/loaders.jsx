@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-
 import Loader, {
   loadFunc,
   loaderPropTypes,
@@ -48,5 +47,3 @@ export const CpesSeverityLoader = ({filter, children}) => (
 );
 
 CpesSeverityLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

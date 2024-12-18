@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {render} from 'web/utils/testing';
 import Metrics from 'web/pages/extras/cvssV4/Metrics';
+import {render} from 'web/utils/testing';
 
 describe('Metrics', () => {
   test('renders the correct number of Select components', () => {
@@ -24,9 +24,9 @@ describe('Metrics', () => {
 
     const {getAllByTestId} = render(
       <Metrics
+        handleOptionChange={handleOptionChange}
         metrics={metrics}
         selectedOptions={selectedOptions}
-        handleOptionChange={handleOptionChange}
       />,
     );
 

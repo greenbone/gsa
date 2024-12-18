@@ -3,29 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {map} from 'gmp/utils/array';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-
-import IconDivider from 'web/components/layout/icondivider';
 import HorizontalSeparator from 'web/components/layout/horizontalsep';
-
+import IconDivider from 'web/components/layout/icondivider';
 import DetailsLink from 'web/components/link/detailslink';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import DeleteIcon from 'web/entity/icon/deleteicon';
 import EditIcon from 'web/entity/icon/editicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 import {convert_auth_method, convert_allow} from './details';
@@ -41,28 +32,28 @@ const Actions = withEntitiesActions(
     <IconDivider grow align="center">
       <DeleteIcon
         displayName={_('User')}
-        name="user"
         entity={entity}
+        name="user"
         onClick={onUserDeleteClick}
       />
       <EditIcon
         displayName={_('User')}
-        name="user"
         entity={entity}
+        name="user"
         onClick={onUserEditClick}
       />
       <CloneIcon
         displayName={_('User')}
+        entity={entity}
         mayClone={!entity.isSuperAdmin()}
         name="user"
-        entity={entity}
         title={_('Clone User')}
         value={entity}
         onClick={onUserCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export User')}
+        value={entity}
         onClick={onUserDownloadClick}
       />
     </IconDivider>
@@ -85,13 +76,13 @@ const Row = ({
   ...props
 }) => {
   const roles = map(entity.roles, role => (
-    <DetailsLink textOnly={!links} key={role.id} type="role" id={role.id}>
+    <DetailsLink key={role.id} id={role.id} textOnly={!links} type="role">
       {role.name}
     </DetailsLink>
   ));
 
   const groups = map(entity.groups, group => (
-    <DetailsLink textOnly={!links} type="group" key={group.id} id={group.id}>
+    <DetailsLink key={group.id} id={group.id} textOnly={!links} type="group">
       {group.name}
     </DetailsLink>
   ));
@@ -101,10 +92,10 @@ const Row = ({
   return (
     <TableRow>
       <EntityNameTableData
+        displayName={_('User')}
         entity={entity}
         link={links}
         type="user"
-        displayName={_('User')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
@@ -128,5 +119,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

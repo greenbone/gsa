@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
 import Model from 'gmp/model.js';
+import {isDefined} from 'gmp/utils/identity';
 
 class Info extends Model {
   static entityType = 'info';
@@ -28,5 +27,3 @@ class Info extends Model {
 }
 
 export default Info;
-
-// vim: set ts=2 sw=2 tw=80:

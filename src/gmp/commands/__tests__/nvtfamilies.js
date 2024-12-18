@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 
 import {NvtFamiliesCommand} from '../nvtfamilies';
-
 import {createResponse, createHttp} from '../testing';
 
 describe('NvtFamiliesCommand tests', () => {

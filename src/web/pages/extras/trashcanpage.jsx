@@ -3,41 +3,36 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
-
-import styled from 'styled-components';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React, {useCallback, useEffect, useState} from 'react';
+import styled from 'styled-components';
+import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
+import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
 import Button from 'web/components/form/button';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import TrashcanIcon from 'web/components/icon/trashcanicon';
-
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import InnerLink from 'web/components/link/innerlink';
 import LinkTarget from 'web/components/link/target';
-
 import Loading from 'web/components/loading/loading';
-
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
 import Section from 'web/components/section/section';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
-
+import TableRow from 'web/components/table/row';
+import Table from 'web/components/table/stripedtable';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
+import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import PropTypes from 'web/utils/proptypes';
 
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
-
+import TrashActions from './trashactions';
 import AlertsTable from '../alerts/table';
-import ScanConfigsTable from '../scanconfigs/table';
 import CredentialsTable from '../credentials/table';
 import FiltersTable from '../filters/table';
 import GroupsTable from '../groups/table';
@@ -49,20 +44,13 @@ import PortListsTable from '../portlists/table';
 import ReportConfigsTable from '../reportconfigs/table';
 import ReportFormatsTable from '../reportformats/table';
 import RolesTable from '../roles/table';
+import ScanConfigsTable from '../scanconfigs/table';
 import ScannersTable from '../scanners/table';
 import SchedulesTable from '../schedules/table';
 import TagsTable from '../tags/table';
 import TargetsTable from '../targets/table';
 import TasksTable from '../tasks/table';
 import TicketsTable from '../tickets/table';
-
-import TrashActions from './trashactions';
-import useGmp from 'web/hooks/useGmp';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-import DialogNotification from 'web/components/notification/dialognotification';
-import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
-import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
 
 const Col = styled.col`
   width: 50%;
@@ -72,8 +60,8 @@ const ToolBarIcons = () => {
   const [_] = useTranslation();
   return (
     <ManualIcon
-      page="web-interface"
       anchor="using-the-trashcan"
+      page="web-interface"
       title={_('Help: Trashcan')}
     />
   );
@@ -164,138 +152,138 @@ const TrashCanContentsTable = ({trash}) => {
     <TableBody>
       {render_alerts && (
         <TrashCanTableRow
-          type="alert"
-          title={_('Alerts')}
           count={trash.alert_list.length}
+          title={_('Alerts')}
+          type="alert"
         />
       )}
       {renderAudits && (
         <TrashCanTableRow
-          type="audit"
-          title={_('Audits')}
           count={audits.length}
+          title={_('Audits')}
+          type="audit"
         />
       )}
       {render_credentials && (
         <TrashCanTableRow
-          type="credential"
-          title={_('Credentials')}
           count={trash.credential_list.length}
+          title={_('Credentials')}
+          type="credential"
         />
       )}
       {render_filters && (
         <TrashCanTableRow
-          type="filter"
-          title={_('Filters')}
           count={trash.filter_list.length}
+          title={_('Filters')}
+          type="filter"
         />
       )}
       {render_groups && (
         <TrashCanTableRow
-          type="group"
-          title={_('Groups')}
           count={trash.group_list.length}
+          title={_('Groups')}
+          type="group"
         />
       )}
       {render_notes && (
         <TrashCanTableRow
-          type="note"
-          title={_('Notes')}
           count={trash.note_list.length}
+          title={_('Notes')}
+          type="note"
         />
       )}
       {render_overrides && (
         <TrashCanTableRow
-          type="override"
-          title={_('Overrides')}
           count={trash.override_list.length}
+          title={_('Overrides')}
+          type="override"
         />
       )}
       {render_permissions && (
         <TrashCanTableRow
-          type="permission"
-          title={_('Permissions')}
           count={trash.permission_list.length}
+          title={_('Permissions')}
+          type="permission"
         />
       )}
       {renderPolicies && (
         <TrashCanTableRow
-          type="policy"
-          title={_('Policies')}
           count={policies.length}
+          title={_('Policies')}
+          type="policy"
         />
       )}
       {render_port_lists && (
         <TrashCanTableRow
-          type="port_list"
-          title={_('Port Lists')}
           count={trash.port_list_list.length}
+          title={_('Port Lists')}
+          type="port_list"
         />
       )}
       {render_report_configs && (
         <TrashCanTableRow
-          type="report_config"
-          title={_('Report Configs')}
           count={trash.report_config_list.length}
+          title={_('Report Configs')}
+          type="report_config"
         />
       )}
       {render_report_formats && (
         <TrashCanTableRow
-          type="report_format"
-          title={_('Report Formats')}
           count={trash.report_format_list.length}
+          title={_('Report Formats')}
+          type="report_format"
         />
       )}
       {render_roles && (
         <TrashCanTableRow
-          type="role"
-          title={_('Roles')}
           count={trash.role_list.length}
+          title={_('Roles')}
+          type="role"
         />
       )}
       {renderConfigs && (
         <TrashCanTableRow
-          type="config"
-          title={_('Scan Configs')}
           count={configs.length}
+          title={_('Scan Configs')}
+          type="config"
         />
       )}
       {render_scanners && (
         <TrashCanTableRow
-          type="scanner"
-          title={_('Scanners')}
           count={trash.scanner_list.length}
+          title={_('Scanners')}
+          type="scanner"
         />
       )}
       {render_schedules && (
         <TrashCanTableRow
-          type="schedule"
-          title={_('Schedules')}
           count={trash.schedule_list.length}
+          title={_('Schedules')}
+          type="schedule"
         />
       )}
       {render_tags && (
         <TrashCanTableRow
-          type="tag"
-          title={_('Tags')}
           count={trash.tag_list.length}
+          title={_('Tags')}
+          type="tag"
         />
       )}
       {render_targets && (
         <TrashCanTableRow
-          type="target"
-          title={_('Targets')}
           count={trash.target_list.length}
+          title={_('Targets')}
+          type="target"
         />
       )}
       {renderTasks && (
-        <TrashCanTableRow type="task" title={_('Tasks')} count={tasks.length} />
+        <TrashCanTableRow count={tasks.length} title={_('Tasks')} type="task" />
       )}
       {render_tickets && (
         <TrashCanTableRow
-          type="ticket"
-          title={_('Tickets')}
           count={trash.ticket_list.length}
+          title={_('Tickets')}
+          type="ticket"
         />
       )}
     </TableBody>
@@ -331,7 +319,7 @@ const TrashCan = () => {
         setTrash(response.data);
         setIsLoading(false);
       },
-      // eslint-disable-next-line no-shadow
+
       error => {
         showError(error);
         setIsLoading(false);
@@ -360,7 +348,7 @@ const TrashCan = () => {
     try {
       await gmp.trashcan.empty();
       loadTrash();
-    } catch (error) {
+    } catch {
       setIsErrorEmptyingTrash(true);
       localIsErrorEmptyingTrash = true;
     } finally {
@@ -429,8 +417,6 @@ const TrashCan = () => {
         <EmptyTrashButton onClick={openEmptyTrashDialog} />
         {isEmptyTrashDialogVisible && (
           <ConfirmationDialog
-            onClose={closeEmptyTrashDialog}
-            onResumeClick={handleEmpty}
             content={
               !isErrorEmptyingTrash
                 ? _('Are you sure you want to empty the trash?')
@@ -438,11 +424,13 @@ const TrashCan = () => {
                     'An error occurred while emptying the trash, please try again.',
                   )
             }
-            title={_('Empty Trash')}
-            rightButtonTitle={_('Confirm')}
             loading={isEmptyingTrash || isLoading}
-            width="500px"
             rightButtonAction={DELETE_ACTION}
+            rightButtonTitle={_('Confirm')}
+            title={_('Empty Trash')}
+            width="500px"
+            onClose={closeEmptyTrashDialog}
+            onResumeClick={handleEmpty}
           />
         )}
         <LinkTarget id="Contents" />

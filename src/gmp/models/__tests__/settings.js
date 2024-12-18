@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Settings from 'gmp/models/settings';
 
 describe('Settings model tests', () => {
@@ -41,5 +40,3 @@ describe('Settings model tests', () => {
     expect(settings.has('foo')).toEqual(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

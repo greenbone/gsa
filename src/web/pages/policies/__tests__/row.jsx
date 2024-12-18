@@ -4,15 +4,11 @@
  */
 
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
+ 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Policy from 'gmp/models/policy';
-
 import {setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
@@ -52,12 +48,12 @@ describe('Row tests', () => {
     const {baseElement} = render(
       <Row
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        onCreateAuditClick={handleCreateAudit}
         onPolicyCloneClick={handlePolicyClone}
         onPolicyDeleteClick={handlePolicyDelete}
         onPolicyDownloadClick={handlePolicyDownload}
         onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -95,12 +91,12 @@ describe('Row tests', () => {
     const {getAllByTestId} = render(
       <Row
         entity={policy}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        onCreateAuditClick={handleCreateAudit}
         onPolicyCloneClick={handlePolicyClone}
         onPolicyDeleteClick={handlePolicyDelete}
         onPolicyDownloadClick={handlePolicyDownload}
         onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -125,12 +121,12 @@ describe('Row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        onCreateAuditClick={handleCreateAudit}
         onPolicyCloneClick={handlePolicyClone}
         onPolicyDeleteClick={handlePolicyDelete}
         onPolicyDownloadClick={handlePolicyDownload}
         onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -188,12 +184,12 @@ describe('Row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={policy}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        onCreateAuditClick={handleCreateAudit}
         onPolicyCloneClick={handlePolicyClone}
         onPolicyDeleteClick={handlePolicyDelete}
         onPolicyDownloadClick={handlePolicyDownload}
         onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -258,12 +254,12 @@ describe('Row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={policy}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        onCreateAuditClick={handleCreateAudit}
         onPolicyCloneClick={handlePolicyClone}
         onPolicyDeleteClick={handlePolicyDelete}
         onPolicyDownloadClick={handlePolicyDownload}
         onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -320,12 +316,12 @@ describe('Row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={policy}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        onCreateAuditClick={handleCreateAudit}
         onPolicyCloneClick={handlePolicyClone}
         onPolicyDeleteClick={handlePolicyDelete}
         onPolicyDownloadClick={handlePolicyDownload}
         onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 

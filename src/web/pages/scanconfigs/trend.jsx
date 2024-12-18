@@ -3,19 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
-
-import PropTypes from 'web/utils/proptypes';
-
-import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
+import React from 'react';
 import TrendMoreIcon from 'web/components/icon/trendmoreicon';
+import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
+import PropTypes from 'web/utils/proptypes';
 
 const Trend = ({trend, titleDynamic, titleStatic, ...props}) => {
   if (trend === SCANCONFIG_TREND_DYNAMIC) {
@@ -36,5 +32,3 @@ Trend.propTypes = {
 };
 
 export default Trend;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,36 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import Filter, {CPES_FILTER_FILTER} from 'gmp/models/filter';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import ManualIcon from 'web/components/icon/manualicon';
-
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/cpes';
-
 import PropTypes from 'web/utils/proptypes';
 
+import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard';
 import CpeFilterDialog from './filterdialog';
 import CpesTable from './table';
 
-import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard';
-
 export const ToolBarIcons = props => (
-  <ManualIcon page="managing-secinfo" anchor="cpe" title={_('Help: CPEs')} />
+  <ManualIcon anchor="cpe" page="managing-secinfo" title={_('Help: CPEs')} />
 );
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
@@ -79,5 +70,3 @@ export default withEntitiesContainer('cpe', {
   fallbackFilter,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

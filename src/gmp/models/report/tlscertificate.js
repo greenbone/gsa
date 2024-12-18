@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {setProperties, parseInt} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 class TLSCertificate {
   constructor() {
@@ -54,5 +53,3 @@ class TLSCertificate {
 }
 
 export default TLSCertificate;
-
-// vim: set ts=2 sw=2 tw=80:

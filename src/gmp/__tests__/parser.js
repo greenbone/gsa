@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {isDate, isDuration} from 'gmp/models/date';
 
 import {
@@ -27,7 +26,6 @@ import {
   NO_VALUE,
   setProperties,
 } from '../parser';
-
 import {
   parseCvssV2BaseVector,
   parseCvssV3BaseVector,
@@ -1355,5 +1353,3 @@ describe('parseBoolean tests', () => {
     expect(parseBoolean(true)).toBe(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

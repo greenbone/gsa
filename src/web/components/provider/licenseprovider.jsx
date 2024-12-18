@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useEffect, useState} from 'react';
-
 import useGmp from 'web/hooks/useGmp';
 
 export const LicenseContext = React.createContext({});
@@ -45,5 +43,3 @@ const LicenseProvider = ({children}) => {
 };
 
 export default LicenseProvider;
-
-// vim: set ts=2 sw=2 tw=80:

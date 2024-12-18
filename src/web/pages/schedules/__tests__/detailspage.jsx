@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
-
 import {entityLoadingActions} from 'web/store/entities/schedules';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -326,10 +322,10 @@ describe('Schedule ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={schedule}
         onScheduleCloneClick={handleScheduleCloneClick}
+        onScheduleCreateClick={handleScheduleCreateClick}
         onScheduleDeleteClick={handleScheduleDeleteClick}
         onScheduleDownloadClick={handleScheduleDownloadClick}
         onScheduleEditClick={handleScheduleEditClick}
-        onScheduleCreateClick={handleScheduleCreateClick}
       />,
     );
 
@@ -364,10 +360,10 @@ describe('Schedule ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={schedule}
         onScheduleCloneClick={handleScheduleCloneClick}
+        onScheduleCreateClick={handleScheduleCreateClick}
         onScheduleDeleteClick={handleScheduleDeleteClick}
         onScheduleDownloadClick={handleScheduleDownloadClick}
         onScheduleEditClick={handleScheduleEditClick}
-        onScheduleCreateClick={handleScheduleCreateClick}
       />,
     );
 
@@ -412,10 +408,10 @@ describe('Schedule ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={noPermSchedule}
         onScheduleCloneClick={handleScheduleCloneClick}
+        onScheduleCreateClick={handleScheduleCreateClick}
         onScheduleDeleteClick={handleScheduleDeleteClick}
         onScheduleDownloadClick={handleScheduleDownloadClick}
         onScheduleEditClick={handleScheduleEditClick}
-        onScheduleCreateClick={handleScheduleCreateClick}
       />,
     );
 
@@ -466,10 +462,10 @@ describe('Schedule ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={scheduleInUse}
         onScheduleCloneClick={handleScheduleCloneClick}
+        onScheduleCreateClick={handleScheduleCreateClick}
         onScheduleDeleteClick={handleScheduleDeleteClick}
         onScheduleDownloadClick={handleScheduleDownloadClick}
         onScheduleEditClick={handleScheduleEditClick}
-        onScheduleCreateClick={handleScheduleCreateClick}
       />,
     );
     const cloneIcon = screen.getAllByTitle('Clone Schedule');

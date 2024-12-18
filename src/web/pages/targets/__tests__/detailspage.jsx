@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Target from 'gmp/models/target';
-
 import {entityLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -414,10 +410,10 @@ describe('Target ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={target}
         onTargetCloneClick={handleTargetCloneClick}
+        onTargetCreateClick={handleTargetCreateClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onTargetCreateClick={handleTargetCreateClick}
       />,
     );
 
@@ -452,10 +448,10 @@ describe('Target ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={target}
         onTargetCloneClick={handleTargetCloneClick}
+        onTargetCreateClick={handleTargetCreateClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onTargetCreateClick={handleTargetCreateClick}
       />,
     );
 
@@ -500,10 +496,10 @@ describe('Target ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={noPermTarget}
         onTargetCloneClick={handleTargetCloneClick}
+        onTargetCreateClick={handleTargetCreateClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onTargetCreateClick={handleTargetCreateClick}
       />,
     );
 
@@ -554,10 +550,10 @@ describe('Target ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={targetInUse}
         onTargetCloneClick={handleTargetCloneClick}
+        onTargetCreateClick={handleTargetCreateClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onTargetCreateClick={handleTargetCreateClick}
       />,
     );
     const cloneIcon = screen.getAllByTitle('Clone Target');

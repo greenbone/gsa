@@ -45,5 +45,3 @@ class InfoEntitiesCommand extends EntitiesCommand {
 }
 
 export default InfoEntitiesCommand;
-
-// vim: set ts=2 sw=2 tw=80:

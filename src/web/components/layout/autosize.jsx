@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 
 import PropTypes from '../../utils/proptypes';
 
@@ -93,5 +91,3 @@ class AutoSize extends React.Component {
 }
 
 export default AutoSize;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, forwardRef} from 'react';
-
-import {Loader} from '@mantine/core';
-
 import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components-mantinev7';
-
-import {isDefined, isArray} from 'gmp/utils/identity';
-
-import PropTypes, {mayRequire} from 'web/utils/proptypes';
-
-import useTranslation from 'web/hooks/useTranslation';
-
+import {Loader} from '@mantine/core';
 import {_} from 'gmp/locale/lang';
+import {isDefined, isArray} from 'gmp/utils/identity';
+import {useCallback, forwardRef} from 'react';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes, {mayRequire} from 'web/utils/proptypes';
 
 const findItem = (items, value) =>
   isDefined(items) ? items.find(i => i.value === value) : undefined;
@@ -119,21 +113,21 @@ const Select = ({
   return (
     <OpenSightSelect
       {...props}
-      styles={{root: {flexGrow: grow}}}
-      dropdownPosition={dropdownPosition}
       data={selectableItems}
+      data-testid={'form-select'}
       disabled={disabled || !items?.length}
+      dropdownPosition={dropdownPosition}
       error={isDefined(errorContent) && `${errorContent}`}
-      searchable={searchable}
+      itemComponent={SelectItem}
       label={label}
-      title={toolTipTitle}
-      placeholder={selectPlaceholder}
       name={name}
+      placeholder={selectPlaceholder}
+      rightSection={rightSection}
+      searchable={searchable}
+      styles={{root: {flexGrow: grow}}}
+      title={toolTipTitle}
       value={selectedValue}
       onChange={handleChange}
-      rightSection={rightSection}
-      itemComponent={SelectItem}
-      data-testid={'form-select'}
     />
   );
 };

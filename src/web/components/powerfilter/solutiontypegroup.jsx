@@ -3,29 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Radio from 'web/components/form/radio';
+import React from 'react';
+import styled from 'styled-components';
 import FormGroup from 'web/components/form/formgroup';
-
+import Radio from 'web/components/form/radio';
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
-
-import Table from 'web/components/table/table';
-import TableBody from 'web/components/table/body';
-import TableRow from 'web/components/table/row';
-import TableData from 'web/components/table/data';
-
 import Layout from 'web/components/layout/layout';
 import Row from 'web/components/layout/row';
-
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+import Table from 'web/components/table/table';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const StyledLayout = styled(Layout)`
   flex-grow: 0;
@@ -55,9 +46,9 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                 <Row>
                   <Radio
                     checked={!isDefined(solutionType) || solutionType === 'All'}
+                    data-testid="filter-solution-all"
                     name="All"
                     onChange={handleSolutionTypeChange}
-                    data-testid="filter-solution-all"
                   ></Radio>
                   <span>{_('All')}</span>
                 </Row>
@@ -66,9 +57,9 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                 <Row>
                   <Radio
                     checked={solutionType === 'Workaround'}
+                    data-testid="filter-solution-workaround"
                     name="Workaround"
                     onChange={handleSolutionTypeChange}
-                    data-testid="filter-solution-workaround"
                   />
                   <SolutionTypeIcon type="Workaround" />
                   <span>{_('Workaround')}</span>
@@ -78,9 +69,9 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                 <Row>
                   <Radio
                     checked={solutionType === 'Mitigation'}
+                    data-testid="filter-solution-mitigation"
                     name="Mitigation"
                     onChange={handleSolutionTypeChange}
-                    data-testid="filter-solution-mitigation"
                   />
                   <SolutionTypeIcon type="Mitigation" />
                   <span>{_('Mitigation')}</span>
@@ -92,9 +83,9 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                 <Row>
                   <Radio
                     checked={solutionType === 'VendorFix'}
+                    data-testid="filter-solution-vendor-fix"
                     name="VendorFix"
                     onChange={handleSolutionTypeChange}
-                    data-testid="filter-solution-vendor-fix"
                   />
                   <SolutionTypeIcon type="VendorFix" />
                   <span>{_('Vendor fix')}</span>
@@ -104,9 +95,9 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                 <Row>
                   <Radio
                     checked={solutionType === 'NoneAvailable'}
+                    data-testid="filter-solution-none-available"
                     name="NoneAvailable"
                     onChange={handleSolutionTypeChange}
-                    data-testid="filter-solution-none-available"
                   />
                   <SolutionTypeIcon type="NoneAvailable" />
                   <span>{_('None available')}</span>
@@ -116,9 +107,9 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                 <Row>
                   <Radio
                     checked={solutionType === 'WillNotFix'}
+                    data-testid="filter-solution-will-not-fix"
                     name="WillNotFix"
                     onChange={handleSolutionTypeChange}
-                    data-testid="filter-solution-will-not-fix"
                   />
                   <SolutionTypeIcon type="WillNotFix" />
                   <span>{_('Will not fix')}</span>{' '}
@@ -138,5 +129,3 @@ SolutionTypesFilterGroup.propTypes = {
 };
 
 export default SolutionTypesFilterGroup;
-
-// vim: set ts=2 sw=2 tw=80:

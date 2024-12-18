@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseCsv} from 'gmp/parser';
-
 import Model from 'gmp/model';
+import {parseCsv} from 'gmp/parser';
 
 class Group extends Model {
   static entityType = 'group';
@@ -20,5 +19,3 @@ class Group extends Model {
 }
 
 export default Group;
-
-// vim: set ts=2 sw=2 tw=80:

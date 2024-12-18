@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import styled from 'styled-components';
-
 import Theme from 'web/utils/theme';
 
 import DeleteIcon from './deleteicon';
@@ -20,5 +18,3 @@ const TrashDeleteIcon = styled(DeleteIcon)`
 `;
 
 export default TrashDeleteIcon;
-
-// vim: set ts=2 sw=2 tw=80:

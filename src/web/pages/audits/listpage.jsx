@@ -3,41 +3,33 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {RESET_FILTER, TASKS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
+import React from 'react';
+import AuditIcon from 'web/components/icon/auditicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
+import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/audits';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
-import IconDivider from 'web/components/layout/icondivider';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import NewIcon from 'web/components/icon/newicon';
-import ManualIcon from 'web/components/icon/manualicon';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import AuditComponent from './component';
 import Table from './table';
-
-import AuditIcon from 'web/components/icon/auditicon';
 import {taskReloadInterval} from '../tasks/listpage';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAuditCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="compliance-and-special-scans"
         anchor="configuring-and-managing-audits"
+        page="compliance-and-special-scans"
         title={_('Help: Audits')}
       />
       {capabilities.mayCreate('task') && (
@@ -53,21 +45,21 @@ ToolBarIcons.propTypes = {
 
 const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
   <AuditComponent
-    onCloned={onChanged}
     onCloneError={onError}
+    onCloned={onChanged}
     onCreated={onChanged}
-    onDeleted={onChanged}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={onChanged}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
-    onResumed={onChanged}
     onResumeError={onError}
+    onResumed={onChanged}
     onSaved={onChanged}
-    onStarted={onChanged}
     onStartError={onError}
-    onStopped={onChanged}
+    onStarted={onChanged}
     onStopError={onError}
+    onStopped={onChanged}
   >
     {({
       clone,
@@ -91,9 +83,6 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
           table={Table}
           title={_('Audits')}
           toolBarIcons={ToolBarIcons}
-          onError={onError}
-          onInteraction={onInteraction}
-          onReportDownloadClick={reportDownload}
           onAuditCloneClick={clone}
           onAuditCreateClick={create}
           onAuditDeleteClick={deleteFunc}
@@ -102,6 +91,9 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
           onAuditResumeClick={resume}
           onAuditStartClick={start}
           onAuditStopClick={stop}
+          onError={onError}
+          onInteraction={onInteraction}
+          onReportDownloadClick={reportDownload}
         />
       </React.Fragment>
     )}
@@ -121,5 +113,3 @@ export default withEntitiesContainer('audit', {
   defaultFilter: RESET_FILTER,
   reloadInterval: taskReloadInterval,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 import styled from 'styled-components';
-
-import PropTypes from 'web/utils/proptypes';
-
 import {DialogFooterLayout} from 'web/components/dialog/footer';
-
 import Button from 'web/components/form/button';
-
 import Divider from 'web/components/layout/divider';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const StyledLayout = styled(DialogFooterLayout)`
   justify-content: space-between;
@@ -42,8 +36,8 @@ const MultiStepFooter = ({
       <Button
         data-testid="dialog-close-button"
         disabled={loading}
-        onClick={onLeftButtonClick}
         title={leftButtonTitle}
+        onClick={onLeftButtonClick}
       >
         {leftButtonTitle}
       </Button>
@@ -51,24 +45,24 @@ const MultiStepFooter = ({
         <Button
           data-testid="dialog-previous-button"
           disabled={prevDisabled}
-          onClick={onPreviousButtonClick}
           title={previousButtonTitle}
+          onClick={onPreviousButtonClick}
         >
           {previousButtonTitle}
         </Button>
         <Button
           data-testid="dialog-next-button"
           disabled={nextDisabled}
-          onClick={onNextButtonClick}
           title={nextButtonTitle}
+          onClick={onNextButtonClick}
         >
           {nextButtonTitle}
         </Button>
         <Button
           data-testid="dialog-save-button"
-          onClick={onRightButtonClick}
-          title={rightButtonTitle}
           loading={loading}
+          title={rightButtonTitle}
+          onClick={onRightButtonClick}
         >
           {rightButtonTitle}
         </Button>
@@ -92,5 +86,3 @@ MultiStepFooter.propTypes = {
 };
 
 export default MultiStepFooter;
-
-// vim: set ts=2 sw=2 tw=80:

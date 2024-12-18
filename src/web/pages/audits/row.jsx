@@ -3,41 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import withUserName from 'web/utils/withUserName';
-
-import {RowDetailsToggle} from 'web/entities/row';
-
-import ObserverIcon from 'web/entity/icon/observericon';
-
+import React from 'react';
+import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
 import Comment from 'web/components/comment/comment';
-
+import DateTime from 'web/components/date/datetime';
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ProvideViewIcon from 'web/components/icon/provideviewicon';
 import SensorIcon from 'web/components/icon/sensoricon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
-import TableRow from 'web/components/table/row';
+import DetailsLink from 'web/components/link/detailslink';
 import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+import {RowDetailsToggle} from 'web/entities/row';
+import ObserverIcon from 'web/entity/icon/observericon';
+import AuditStatus from 'web/pages/tasks/status';
+import PropTypes from 'web/utils/proptypes';
+import withUserName from 'web/utils/withUserName';
 
 import Actions from './actions';
-import AuditStatus from 'web/pages/tasks/status';
-
-import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-
-import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
-
-import DateTime from 'web/components/date/datetime';
-import DetailsLink from 'web/components/link/detailslink';
 
 const renderAuditReport = (report, links) => {
   if (!isDefined(report)) {
@@ -45,7 +32,7 @@ const renderAuditReport = (report, links) => {
   }
   return (
     <span>
-      <DetailsLink type="auditreport" id={report.id} textOnly={!links}>
+      <DetailsLink id={report.id} textOnly={!links} type="auditreport">
         <DateTime date={report.timestamp} />
       </DetailsLink>
     </span>
@@ -142,14 +129,9 @@ const Row = ({
         {entity.comment && <Comment>({entity.comment})</Comment>}
       </TableData>
       <TableData>
-        <AuditStatus 
-          isAudit={true}
-          task={entity}
-          links={links}/>
+        <AuditStatus isAudit={true} links={links} task={entity} />
       </TableData>
-      <TableData>
-        {renderAuditReport(entity.last_report, links)}
-      </TableData>
+      <TableData>{renderAuditReport(entity.last_report, links)}</TableData>
       <TableData>
         {isDefined(entity.last_report) && (
           <ComplianceStatusBar
@@ -157,7 +139,7 @@ const Row = ({
           />
         )}
       </TableData>
-      <ActionsComponent {...props} links={links} entity={entity} />
+      <ActionsComponent {...props} entity={entity} links={links} />
     </TableRow>
   );
 };
@@ -171,5 +153,3 @@ Row.propTypes = {
 };
 
 export default withUserName(Row);
-
-// vim: set ts=2 sw=2 tw=80:

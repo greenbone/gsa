@@ -4,10 +4,10 @@
  */
 
 
-import React from 'react';
-import styled from 'styled-components';
-import {Link as RLink} from 'react-router-dom';
 import {isDefined, isString} from 'gmp/utils/identity';
+import React from 'react';
+import {Link as RLink} from 'react-router-dom';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 
 RLink.displayName = 'RouterLink';

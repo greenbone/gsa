@@ -4,9 +4,8 @@
  */
 
 import Http from './http';
-import {buildServerUrl} from './utils';
-
 import transform from './transform/fastxml';
+import {buildServerUrl} from './utils';
 
 class GmpHttp extends Http {
   constructor(settings) {
@@ -26,5 +25,3 @@ class GmpHttp extends Http {
 }
 
 export default GmpHttp;
-
-// vim: set ts=2 sw=2 tw=80:

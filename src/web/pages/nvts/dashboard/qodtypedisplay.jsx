@@ -3,31 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
+import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import DonutChart from 'web/components/chart/donut';
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons'; // eslint-disable-line max-len
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
-
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {
   totalCount,
   percent,
   qodTypeColorScale,
   QOD_TYPES,
 } from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
+import PropTypes from 'web/utils/proptypes';
 
 import {NvtsQodTypeLoader} from './loaders';
 
@@ -91,22 +85,22 @@ export class NvtsQodTypeDisplay extends React.Component {
             {...props}
             {...loaderProps}
             dataTransform={transformQodTypeData}
-            title={({data: tdata}) =>
-              _('NVTs by QoD-Type (Total: {{count}})', {count: tdata.total})
-            }
+            icons={renderDonutChartIcons}
             initialState={{
               show3d: true,
             }}
-            icons={renderDonutChartIcons}
+            title={({data: tdata}) =>
+              _('NVTs by QoD-Type (Total: {{count}})', {count: tdata.total})
+            }
           >
             {({width, height, data: tdata, svgRef, state}) => (
               <DonutChart
-                svgRef={svgRef}
                 data={tdata}
                 height={height}
-                width={width}
                 show3d={state.show3d}
                 showLegend={state.showLegend}
+                svgRef={svgRef}
+                width={width}
                 onDataClick={
                   isDefined(onFilterChanged) ? this.handleDataClick : undefined
                 }
@@ -150,5 +144,3 @@ registerDisplay(NvtsQodTypeDisplay.displayId, NvtsQodTypeDisplay, {
 registerDisplay(NvtsQodTypeTableDisplay.displayId, NvtsQodTypeTableDisplay, {
   title: _l('Table: NVTs by QoD-Type'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

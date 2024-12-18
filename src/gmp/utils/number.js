@@ -28,5 +28,3 @@ export const fixedValue = (value, digits) =>
  * @returns {String} Formatted Severity
  */
 export const severityValue = severity => fixedValue(severity, 1);
-
-// vim: set ts=2 sw=2 tw=80:

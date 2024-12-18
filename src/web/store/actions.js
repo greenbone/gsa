@@ -12,5 +12,3 @@ const clearStoreAction = {
 export const clearStore = dispatch => {
   dispatch(clearStoreAction);
 };
-
-// vim: set ts=2 sw=2 tw=80:

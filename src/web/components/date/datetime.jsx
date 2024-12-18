@@ -4,12 +4,10 @@
  */
 
 import {ensureDate} from 'gmp/locale/date';
-import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
-
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
 import useUserTimezone from 'web/hooks/useUserTimezone';
+import PropTypes from 'web/utils/proptypes';
+import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
 const DateTime = ({
   formatter = formattedUserSettingDateTimeWithTimeZone,

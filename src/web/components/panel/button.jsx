@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 import styled from 'styled-components';
-
+import withLayout from 'web/components/layout/withLayout';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import withLayout from 'web/components/layout/withLayout';
 
 const StyledButton = styled.button`
   display: inline-block;
@@ -66,5 +62,3 @@ export default compose(
   withLayout({align: ['center', 'center']}),
   // withClickHandler(),
 )(Button);
-
-// vim: set ts=2 sw=2 tw=80:

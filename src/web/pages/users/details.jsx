@@ -3,30 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_RADIUS,
   ACCESS_ALLOW_ALL,
   ACCESS_DENY_ALL,
 } from 'gmp/models/user';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
 
 export const convert_auth_method = auth_method => {
   if (auth_method === AUTH_METHOD_LDAP) {
@@ -79,7 +72,7 @@ const UserDetails = ({entity, links = true}) => {
               <HorizontalSep>
                 {roles.map(role => (
                   <span key={role.id}>
-                    <DetailsLink textOnly={!links} type="role" id={role.id}>
+                    <DetailsLink id={role.id} textOnly={!links} type="role">
                       {role.name}
                     </DetailsLink>
                   </span>
@@ -95,10 +88,10 @@ const UserDetails = ({entity, links = true}) => {
                 {groups.map(group => (
                   <span key={group.id}>
                     <DetailsLink
-                      textOnly={!links}
-                      type="group"
                       key={group.id}
                       id={group.id}
+                      textOnly={!links}
+                      type="group"
                     >
                       {group.name}
                     </DetailsLink>
@@ -131,5 +124,3 @@ UserDetails.propTypes = {
 };
 
 export default UserDetails;
-
-// vim: set ts=2 sw=2 tw=80:

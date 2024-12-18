@@ -4,14 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {isFunction} from 'gmp/utils/identity';
+import {filterIdentifier} from 'web/store/utils';
 
 import {entitiesActions as actions} from '../../reports';
 import {reportsReducer} from '../reducers';
-import {filterIdentifier} from 'web/store/utils';
 
 describe('report entities reducer tests', () => {
   test('should be a reportsReducer function', () => {

@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Qod from 'web/components/qod/qod';
-
 import {render} from 'web/utils/testing';
 
 describe('Qod tests', () => {
@@ -24,5 +22,3 @@ describe('Qod tests', () => {
     expect(element).toHaveStyleRule('white-space', 'nowrap');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

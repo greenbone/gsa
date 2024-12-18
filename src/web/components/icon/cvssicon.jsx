@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import withSvgIcon from './withSvgIcon';
-
 import Icon from './svg/cvss_calculator.svg';
+import withSvgIcon from './withSvgIcon';
 
 const CvssIconComponent = withSvgIcon()(Icon);
 
@@ -14,5 +13,3 @@ const CvssIcon = props => (
 );
 
 export default CvssIcon;
-
-// vim: set ts=2 sw=2 tw=80:

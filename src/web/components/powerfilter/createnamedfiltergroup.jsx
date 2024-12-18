@@ -3,17 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import Checkbox from 'web/components/form/checkbox';
 import TextField from 'web/components/form/textfield';
-
 import Row from 'web/components/layout/row';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const CreateNamedFilterGroup = ({
   filterName = '',
@@ -24,20 +19,20 @@ const CreateNamedFilterGroup = ({
   return (
     <Row>
       <Checkbox
+        checked={saveNamedFilter}
+        checkedValue={true}
         data-testid="createnamedfiltergroup-checkbox"
         name="saveNamedFilter"
-        checkedValue={true}
-        unCheckedValue={false}
-        checked={saveNamedFilter}
         title={_('Store filter as: ')}
+        unCheckedValue={false}
         onChange={onValueChange}
       />
       <TextField
         data-testid="createnamedfiltergroup-textfield"
         disabled={!saveNamedFilter}
+        grow="1"
         name="filterName"
         placeholder={_('Filter Name')}
-        grow="1"
         value={filterName}
         onChange={onValueChange}
       />
@@ -52,5 +47,3 @@ CreateNamedFilterGroup.propTypes = {
 };
 
 export default CreateNamedFilterGroup;
-
-// vim: set ts=2 sw=2 tw=80:

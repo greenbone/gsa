@@ -3,33 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {ROLES_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import RoleIcon from 'web/components/icon/roleicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/roles';
-
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import RoleComponent from './component';
-import Table from './table';
 import RolesFilterDialog from './filterdialog';
+import Table from './table';
 
 const ToolBarIcons = ({onRoleCreateClick}) => {
   const capabilities = useCapabilities();
@@ -37,8 +30,8 @@ const ToolBarIcons = ({onRoleCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="web-interface-access"
         anchor="managing-roles"
+        page="web-interface-access"
         title={_('Help: Roles')}
       />
       {capabilities.mayCreate('role') && (
@@ -62,15 +55,15 @@ const RolesPage = ({
   const [_] = useTranslation();
   return (
     <RoleComponent
-      onCreated={onChanged}
-      onSaved={onChanged}
-      onCloned={onChanged}
       onCloneError={onError}
-      onDeleted={onChanged}
+      onCloned={onChanged}
+      onCreated={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
+      onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
         <React.Fragment>
@@ -111,5 +104,3 @@ export default withEntitiesContainer('role', {
   entitiesSelector,
   loadEntities,
 })(RolesPage);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useRef, useState, useEffect} from 'react';
-
-import styled from 'styled-components';
-
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
+import React, {useRef, useState, useEffect} from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
@@ -73,12 +70,12 @@ const Badge = props => {
 
       {isDefined(content) && (
         <BadgeIcon
-          data-testid="badge-icon"
           ref={icon}
-          $color={color}
           $backgroundColor={backgroundColor}
-          $position={position}
+          $color={color}
           $margin={dynamic ? margin : undefined}
+          $position={position}
+          data-testid="badge-icon"
         >
           {content}
         </BadgeIcon>

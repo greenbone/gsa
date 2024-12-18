@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-
 import Loader, {
   loadFunc,
   loaderPropTypes,
@@ -58,5 +57,3 @@ export const TlsCertificatesModifiedLoader = ({filter, children}) => (
 );
 
 TlsCertificatesModifiedLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

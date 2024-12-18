@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {PasswordInput} from '@greenbone/opensight-ui-components-mantinev7';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 import useValueChange from './useValueChange';
@@ -31,13 +28,13 @@ const PasswordField = ({
     <PasswordInput
       data-testid="password-input"
       {...props}
-      error={isDefined(errorContent) && `${errorContent}`}
-      styles={{root: {flexGrow: grow}}}
       autoComplete={autoComplete}
       disabled={disabled}
+      error={isDefined(errorContent) && `${errorContent}`}
+      label={title}
       name={name}
       placeholder={placeholder}
-      label={title}
+      styles={{root: {flexGrow: grow}}}
       value={value}
       onChange={handleChange}
       onKeyDown={onKeyDown}
@@ -59,5 +56,3 @@ PasswordField.propTypes = {
 };
 
 export default PasswordField;
-
-// vim: set ts=2 sw=2 tw=80:

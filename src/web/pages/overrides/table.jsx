@@ -3,20 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 import {createEntitiesFooter} from 'web/entities/footer';
 import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
-
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
+import PropTypes from 'web/utils/proptypes';
 
 import OverrideDetails from './details';
 import Row from './row';
@@ -33,60 +29,60 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="19%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'text' : false}
-          onSortChange={onSortChange}
           title={_('Text')}
+          width="19%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="30%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'nvt' : false}
-          onSortChange={onSortChange}
           title={_('NVT')}
+          width="30%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="12%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'hosts' : false}
-          onSortChange={onSortChange}
           title={_('Hosts')}
-        />
-        <TableHead
           width="12%"
-          currentSortDir={currentSortDir}
+          onSortChange={onSortChange}
+        />
+        <TableHead
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'port' : false}
-          onSortChange={onSortChange}
           title={_('Location')}
+          width="12%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="9%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'severity' : false}
-          onSortChange={onSortChange}
           title={_('From')}
+          width="9%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          width="8%"
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'newSeverity' : false}
-          onSortChange={onSortChange}
           title={_('To')}
+          width="8%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="4%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'active' : false}
-          onSortChange={onSortChange}
           title={_('Active')}
+          width="4%"
+          onSortChange={onSortChange}
         />
         {actionsColumn}
       </TableRow>
@@ -114,5 +110,3 @@ export default createEntitiesTable({
     download: 'overrides.xml',
   }),
 });
-
-// vim: set ts=2 sw=2 tw=80:

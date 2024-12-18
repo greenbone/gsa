@@ -4,7 +4,6 @@
  */
 
 import {test, expect} from '@gsa/testing';
-
 import {isDate} from 'gmp/models/date';
 import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -299,5 +298,3 @@ export const testModel = (modelClass, type, options) => {
   testModelGetProperties(modelClass, type);
   testId(modelClass);
 };
-
-// vim: set ts=2 sw=2 tw=80:

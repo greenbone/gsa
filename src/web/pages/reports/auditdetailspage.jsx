@@ -3,86 +3,66 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useState} from 'react';
-
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-
-import {useParams} from 'react-router-dom';
-
-import useTranslation from 'web/hooks/useTranslation';
-
 import logger from 'gmp/log';
-
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
-
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {useParams} from 'react-router-dom';
 import withDownload from 'web/components/form/withDownload';
-
+import PageTitle from 'web/components/layout/pagetitle';
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
-
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';  
 import FilterProvider from 'web/entities/filterprovider';
-
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
-
 import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
 } from 'web/store/entities/filters';
-
-import {
-  loadAllEntities as loadReportFormats,
-  selector as reportFormatsSelector,
-} from 'web/store/entities/reportformats';
-
+import {loadAuditReportWithThreshold} from 'web/store/entities/report/actions';
+import {auditReportSelector} from 'web/store/entities/report/selectors';
 import {
   loadAllEntities as loadReportConfigs,
   selector as reportConfigsSelector,
 } from 'web/store/entities/reportconfigs';
-
-import {loadAuditReportWithThreshold} from 'web/store/entities/report/actions';
-import {auditReportSelector} from 'web/store/entities/report/selectors';
-
+import {
+  loadAllEntities as loadReportFormats,
+  selector as reportFormatsSelector,
+} from 'web/store/entities/reportformats';
+import {pageFilter as setPageFilter} from 'web/store/pages/actions';
+import getPage from 'web/store/pages/selectors';
 import {
   loadReportComposerDefaults,
   renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
-
+import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
-
 import {
   getReportComposerDefaults,
   getUsername,
 } from 'web/store/usersettings/selectors';
-
 import {create_pem_certificate} from 'web/utils/cert';
 import compose from 'web/utils/compose';
-import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-
-import TargetComponent from '../targets/component';
-import PageTitle from 'web/components/layout/pagetitle';
+import {generateFilename} from 'web/utils/render';
 
 import Page from './auditdetailscontent';
-
 import FilterDialog from './detailsfilterdialog';
-import {pageFilter as setPageFilter} from 'web/store/pages/actions';
-import getPage from 'web/store/pages/selectors';
-import useGmp from 'web/hooks/useGmp';
+import TargetComponent from '../targets/component';
+
 
 const log = logger.getLogger('web.pages.auditreport.detailspage');
 
@@ -381,9 +361,9 @@ const ReportDetails = props => {
     const {
       includeNotes,
       includeOverrides,
-      // eslint-disable-next-line no-shadow
+       
       reportFormatId,
-      // eslint-disable-next-line no-shadow
+       
       storeAsDefault,
     } = state;
 
@@ -531,18 +511,21 @@ const ReportDetails = props => {
             reportId={reportId}
             resetFilter={AUDIT_REPORT_RESET_FILTER}
             resultsCounts={resultsCounts}
+            showError={showError}
+            showErrorMessage={showErrorMessage}
+            showSuccessMessage={showSuccessMessage}
             sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
             tlsCertificatesCounts={tlsCertificatesCounts}
             onActivateTab={handleActivateTab}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
-            onFilterDecreaseMinQoDClick={handleFilterDecreaseMinQoD}
             onFilterChanged={handleFilterChange}
             onFilterCreated={handleFilterCreated}
+            onFilterDecreaseMinQoDClick={handleFilterDecreaseMinQoD}
             onFilterEditClick={handleFilterEditClick}
-            onFilterResetClick={handleFilterResetClick}
             onFilterRemoveClick={handleFilterRemoveClick}
+            onFilterResetClick={handleFilterResetClick}
             onInteraction={handleInteraction}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
@@ -552,20 +535,17 @@ const ReportDetails = props => {
               loadTarget().then(response => edit(response.data))
             }
             onTlsCertificateDownloadClick={handleTlsCertificateDownload}
-            showError={showError}
-            showErrorMessage={showErrorMessage}
-            showSuccessMessage={showSuccessMessage}
           />
         )}
       </TargetComponent>
       {showFilterDialog && (
         <FilterDialog
           audit={true}
-          filter={reportFilter}
-          delta={false}
-          onFilterChanged={handleFilterChange}
-          onCloseClick={handleFilterDialogClose}
           createFilterType="result"
+          delta={false}
+          filter={reportFilter}
+          onCloseClick={handleFilterDialogClose}
+          onFilterChanged={handleFilterChange}
           onFilterCreated={handleFilterCreated}
         />
       )}
@@ -575,8 +555,8 @@ const ReportDetails = props => {
           filter={reportFilter}
           includeNotes={reportComposerDefaults.includeNotes}
           includeOverrides={reportComposerDefaults.includeOverrides}
-          reportFormats={reportFormats}
           reportConfigs={reportConfigs}
+          reportFormats={reportFormats}
           showThresholdMessage={showThresholdMessage}
           storeAsDefault={storeAsDefault}
           threshold={threshold}
@@ -609,7 +589,7 @@ const load =
   ({
     defaultFilter,
     reportId,
-    // eslint-disable-next-line no-shadow
+     
     dispatch,
     gmp,
     params,
@@ -661,7 +641,6 @@ const ReportDetailsWrapper = props => {
     >
       {({filter}) => (
         <Reload
-          name={`report-${reportId}`}
           load={load({
             ...props,
             dispatch,
@@ -672,6 +651,7 @@ const ReportDetailsWrapper = props => {
             reportId,
             pageFilter,
           })}
+          name={`report-${reportId}`}
           reload={load({
             ...props,
             dispatch,
@@ -688,8 +668,8 @@ const ReportDetailsWrapper = props => {
             <ReportDetails
               {...props}
               defaultFilter={filter}
-              reportFilter={reportFilter}
               reload={reload}
+              reportFilter={reportFilter}
             />
           )}
         </Reload>

@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-console */
+ 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
-
 import {render} from 'web/utils/testing';
 
 import Trend from '../trend';

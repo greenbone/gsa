@@ -3,15 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {LabelWithIcon as Label} from '@greenbone/opensight-ui-components-mantinev7';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import Row from 'web/components/layout/row';
+import React from 'react';
 import Column from 'web/components/layout/column';
-
+import Row from 'web/components/layout/row';
 import PropTypes from 'web/utils/proptypes';
 
 const FormGroup = ({
@@ -25,9 +21,9 @@ const FormGroup = ({
   return (
     <Column
       align="stretch"
-      justify="flex-start"
-      gap="8"
       data-testid={dataTestId}
+      gap="8"
+      justify="flex-start"
     >
       {isDefined(title) && <Label>{title}</Label>}
       <Layout gap={gap}>{children}</Layout>
@@ -44,5 +40,3 @@ FormGroup.propTypes = {
 };
 
 export default FormGroup;
-
-// vim: set ts=2 sw=2 tw=80:

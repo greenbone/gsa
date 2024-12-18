@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {
@@ -701,5 +700,3 @@ describe('addDisplayToSettings tests', () => {
     expect(settings).not.toBe(newSettings);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

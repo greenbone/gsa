@@ -3,34 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import SeverityBar from 'web/components/bar/severitybar';
+import React from 'react';
 import ComplianceBar from 'web/components/bar/compliancebar';
-
+import SeverityBar from 'web/components/bar/severitybar';
 import DateTime from 'web/components/date/datetime';
-
 import OsIcon from 'web/components/icon/osicon';
 import VerifyIcon from 'web/components/icon/verifyicon';
 import VerifyNoIcon from 'web/components/icon/verifynoicon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
-
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
 import {createEntitiesTable} from 'web/entities/table';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   audit = false,
@@ -42,183 +32,183 @@ const Header = ({
   <TableHeader>
     <TableRow>
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'ip' : false}
+        title={_('IP Address')}
         width="10%"
         onSortChange={onSortChange}
-        title={_('IP Address')}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'hostname' : false}
+        title={_('Hostname')}
         width="20%"
         onSortChange={onSortChange}
-        title={_('Hostname')}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'os' : false}
+        title={_('OS')}
         width="1%"
         onSortChange={onSortChange}
-        title={_('OS')}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'portsCount' : false}
-        width="3%"
-        onSortChange={onSortChange}
         title={_('Ports')}
+        width="3%"
+        onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'appsCount' : false}
-        width="3%"
-        onSortChange={onSortChange}
         title={_('Apps')}
-      />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'distance' : false}
         width="3%"
         onSortChange={onSortChange}
+      />
+      <TableHead
+        currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
+        sortBy={sort ? 'distance' : false}
         title={_('Distance')}
+        width="3%"
+        onSortChange={onSortChange}
       />
-      <TableHead width="8%" title={_('Auth')} />
+      <TableHead title={_('Auth')} width="8%" />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'start' : false}
+        title={_('Start')}
         width="13%"
         onSortChange={onSortChange}
-        title={_('Start')}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'end' : false}
+        title={_('End')}
         width="13%"
         onSortChange={onSortChange}
-        title={_('End')}
       />
       {audit ? (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'complianceYes' : false}
-          width="4.5%"
-          onSortChange={onSortChange}
           title={_('Yes')}
+          width="4.5%"
+          onSortChange={onSortChange}
         />
       ) : (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'high' : false}
-          width="3%"
-          onSortChange={onSortChange}
           title={_('High')}
+          width="3%"
+          onSortChange={onSortChange}
         />
       )}
       {audit ? (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'complianceNo' : false}
-          width="4.5%"
-          onSortChange={onSortChange}
           title={_('No')}
+          width="4.5%"
+          onSortChange={onSortChange}
         />
       ) : (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'medium' : false}
-          width="3%"
-          onSortChange={onSortChange}
           title={_('Medium')}
+          width="3%"
+          onSortChange={onSortChange}
         />
       )}
       {audit ? (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'complianceIncomplete' : false}
-          width="4.5%"
-          onSortChange={onSortChange}
           title={_('Incomplete')}
-        />
-      ) : (
-        <TableHead
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'low' : false}
-          width="3%"
-          onSortChange={onSortChange}
-          title={_('Low')}
-        />
-      )}
-      {!audit && (
-        <TableHead
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'log' : false}
-          width="3%"
-          onSortChange={onSortChange}
-          title={_('Log')}
-        />
-      )}
-      {!audit && (
-        <TableHead
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'false_positive' : false}
-          width="3%"
-          onSortChange={onSortChange}
-          title={_('False Positive')}
-        />
-      )}
-      {audit ? (
-        <TableHead
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'complianceTotal' : false}
           width="4.5%"
           onSortChange={onSortChange}
-          title={_('Total')}
         />
       ) : (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'total' : false}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'low' : false}
+          title={_('Low')}
           width="3%"
           onSortChange={onSortChange}
-          title={_('Total')}
+        />
+      )}
+      {!audit && (
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'log' : false}
+          title={_('Log')}
+          width="3%"
+          onSortChange={onSortChange}
+        />
+      )}
+      {!audit && (
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'false_positive' : false}
+          title={_('False Positive')}
+          width="3%"
+          onSortChange={onSortChange}
         />
       )}
       {audit ? (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'compliant' : false}
-          width="8%"
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'complianceTotal' : false}
+          title={_('Total')}
+          width="4.5%"
           onSortChange={onSortChange}
-          title={_('Compliant')}
         />
       ) : (
         <TableHead
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'severity' : false}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'total' : false}
+          title={_('Total')}
+          width="3%"
+          onSortChange={onSortChange}
+        />
+      )}
+      {audit ? (
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'compliant' : false}
+          title={_('Compliant')}
           width="8%"
           onSortChange={onSortChange}
+        />
+      ) : (
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'severity' : false}
           title={_('Severity')}
+          width="8%"
+          onSortChange={onSortChange}
         />
       )}
     </TableRow>
@@ -294,12 +284,12 @@ const Row = ({entity, links = true, audit = false}) => {
       <TableData>
         {isDefined(asset.id) ? (
           <span>
-            <DetailsLink type="host" id={asset.id} textOnly={!links}>
+            <DetailsLink id={asset.id} textOnly={!links} type="host">
               {ip}
             </DetailsLink>
           </span>
         ) : (
-          <Link to="hosts" filter={'name=' + ip} textOnly={!links}>
+          <Link filter={'name=' + ip} textOnly={!links} to="hosts">
             {ip}
           </Link>
         )}
@@ -366,5 +356,3 @@ export default createEntitiesTable({
   emptyTitle: _l('No Hosts available'),
   row: Row,
 });
-
-// vim: set ts=2 sw=2 tw=80:

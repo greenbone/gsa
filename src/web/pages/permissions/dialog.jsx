@@ -3,27 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import Model from 'gmp/model';
-
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
-
-import PropTypes from 'web/utils/proptypes';
-import {permissionDescription, renderSelectItems} from 'web/utils/render';
-
+import React from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
-
 import Row from 'web/components/layout/row';
-
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {permissionDescription, renderSelectItems} from 'web/utils/render';
 
 const NEED_RESOURCE_ID = [
   'Super',
@@ -163,10 +156,10 @@ const PermissionDialog = ({
 
   return (
     <SaveDialog
+      defaultValues={data}
       title={title}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
     >
       {({values: state, onValueChange}) => {
         const showResourceId = NEED_RESOURCE_ID.includes(state.name);
@@ -208,18 +201,18 @@ const PermissionDialog = ({
             <FormGroup title={_('Name')}>
               <Select
                 grow="1"
+                items={permItems}
                 name="name"
                 value={state.name}
-                items={permItems}
                 onChange={handleNameValueChange(onValueChange)}
               />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
               <TextField
+                grow="1"
                 name="comment"
                 value={state.comment}
-                grow="1"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -228,16 +221,16 @@ const PermissionDialog = ({
               {capabilities.mayAccess('users') && (
                 <Row>
                   <Radio
-                    name="subjectType"
                     checked={state.subjectType === 'user'}
+                    name="subjectType"
                     title={_('User')}
                     value="user"
                     onChange={onValueChange}
                   />
                   <Select
                     grow="1"
-                    name="userId"
                     items={renderSelectItems(users)}
+                    name="userId"
                     value={state.userId}
                     onChange={onValueChange}
                   />
@@ -246,16 +239,16 @@ const PermissionDialog = ({
               {capabilities.mayAccess('roles') && (
                 <Row>
                   <Radio
-                    name="subjectType"
                     checked={state.subjectType === 'role'}
+                    name="subjectType"
                     title={_('Role')}
                     value="role"
                     onChange={onValueChange}
                   />
                   <Select
                     grow="1"
-                    name="roleId"
                     items={renderSelectItems(roles)}
+                    name="roleId"
                     value={state.roleId}
                     onChange={onValueChange}
                   />
@@ -264,17 +257,17 @@ const PermissionDialog = ({
               {capabilities.mayAccess('groups') && (
                 <Row>
                   <Radio
-                    name="subjectType"
                     checked={state.subjectType === 'group'}
                     disabled={groups.length === 0}
+                    name="subjectType"
                     title={_('Group')}
                     value="group"
                     onChange={onValueChange}
                   />
                   <Select
                     grow="1"
-                    name="groupId"
                     items={renderSelectItems(groups)}
+                    name="groupId"
                     value={state.groupId}
                     onChange={onValueChange}
                   />
@@ -313,10 +306,10 @@ const PermissionDialog = ({
             {showResourceId && (
               <FormGroup title={resourceIdTitle}>
                 <TextField
+                  disabled={fixedResource}
                   grow="1"
                   name="resourceId"
                   value={state.resourceId}
-                  disabled={fixedResource}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -353,5 +346,3 @@ PermissionDialog.propTypes = {
 };
 
 export default PermissionDialog;
-
-// vim: set ts=2 sw=2 tw=80:

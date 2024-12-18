@@ -4,12 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import Nvt from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
 import {testModel} from 'gmp/models/testing';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 describe('Note model tests', () => {
@@ -127,5 +125,3 @@ describe('Note model tests', () => {
     expect(override.name).toEqual('foo');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

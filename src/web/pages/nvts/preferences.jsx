@@ -3,20 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Table from 'web/components/table/stripedtable';
+import React from 'react';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import Table from 'web/components/table/stripedtable';
+import PropTypes from 'web/utils/proptypes';
 
 const Preferences = ({preferences = [], defaultTimeout}) => {
   return (
@@ -51,5 +47,3 @@ Preferences.propTypes = {
 };
 
 export default Preferences;
-
-// vim: set ts=2 sw=2 tw=80:

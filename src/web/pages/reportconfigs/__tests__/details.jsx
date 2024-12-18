@@ -4,14 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import ReportConfig from 'gmp/models/reportconfig';
-
 import {rendererWith} from 'web/utils/testing';
 
-import Details from '../details';
 import {mockReportConfig} from '../__mocks__/mockreportconfig';
+import Details from '../details';
 
 describe('Report Config Details tests', () => {
   test('should render full Details', () => {

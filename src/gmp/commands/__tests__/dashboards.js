@@ -49,5 +49,3 @@ describe('createDisplay tests', () => {
     expect(uuid).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

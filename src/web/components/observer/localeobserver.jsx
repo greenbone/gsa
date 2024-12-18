@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect} from 'react';
 
 import {onLanguageChange, getLocale} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React, {useEffect} from 'react';
 import useLocale from 'web/hooks/useLocale';
 
 /**

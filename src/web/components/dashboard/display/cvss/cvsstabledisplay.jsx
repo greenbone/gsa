@@ -6,7 +6,6 @@
 import React from 'react';
 
 import DataTableDisplay from '../datatabledisplay';
-
 import transformCvssData, {cvssDataRow} from './cvsstransform';
 
 const CvssTableDisplay = props => (
@@ -18,5 +17,3 @@ const CvssTableDisplay = props => (
 );
 
 export default CvssTableDisplay;
-
-// vim: set ts=2 sw=2 tw=80:

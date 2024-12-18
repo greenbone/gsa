@@ -4,12 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {ALL_FILTER} from 'gmp/models/filter';
 
-import {createEntitiesResponse, createHttp} from '../testing';
-
 import {PoliciesCommand} from '../policies';
+import {createEntitiesResponse, createHttp} from '../testing';
 
 describe('PoliciesCommand tests', () => {
   test('should return all policies', () => {

@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent, screen} from 'web/utils/testing';
+
 import SaveDialogFooter from '../SaveDialogFooter';
 
 describe('SaveDialogFooter', () => {
@@ -39,7 +39,7 @@ describe('SaveDialogFooter', () => {
 
   test('calls setCurrentStep with decremented value on previous button click in MultiStepFooter', () => {
     render(
-      <SaveDialogFooter {...defaultProps} multiStep={3} currentStep={2} />,
+      <SaveDialogFooter {...defaultProps} currentStep={2} multiStep={3} />,
     );
     fireEvent.click(screen.getByTestId('dialog-previous-button'));
     expect(defaultProps.setCurrentStep).toHaveBeenCalledWith(1);

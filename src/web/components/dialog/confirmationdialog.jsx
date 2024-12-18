@@ -3,15 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PropTypes from 'web/utils/proptypes';
 
 import DialogContent from 'web/components/dialog/content';
 import Dialog from 'web/components/dialog/dialog';
 import DialogTwoButtonFooter, {
   DELETE_ACTION,
 } from 'web/components/dialog/twobuttonfooter';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
 
@@ -32,18 +31,18 @@ const ConfirmationDialog = ({
   return (
     <Dialog
       data-testid="confirmation-dialog"
-      width={width}
-      onClose={onClose}
-      title={title}
       footer={
         <DialogTwoButtonFooter
+          loading={loading}
+          rightButtonAction={rightButtonAction}
           rightButtonTitle={rightButtonTitle}
           onLeftButtonClick={onClose}
           onRightButtonClick={onResumeClick}
-          loading={loading}
-          rightButtonAction={rightButtonAction}
         />
       }
+      title={title}
+      width={width}
+      onClose={onClose}
     >
       <DialogContent>{content}</DialogContent>
     </Dialog>

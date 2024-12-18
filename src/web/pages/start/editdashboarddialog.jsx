@@ -4,15 +4,11 @@
  */
 
 import React from 'react';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
-
-import PropTypes from 'web/utils/proptypes';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import {MAX_TITLE_LENGTH} from './newdashboarddialog';
 
@@ -25,11 +21,11 @@ const EditDashboardDialog = ({
   const [_] = useTranslation();
   return (
     <SaveDialog
-      title={_('Edit Dashboard')}
       defaultValues={{
         dashboardId,
         dashboardTitle,
       }}
+      title={_('Edit Dashboard')}
       onClose={onClose}
       onSave={onSave}
     >
@@ -37,8 +33,8 @@ const EditDashboardDialog = ({
         <FormGroup title={_('Dashboard Title')}>
           <TextField
             grow="1"
-            name="dashboardTitle"
             maxLength={MAX_TITLE_LENGTH}
+            name="dashboardTitle"
             value={values.dashboardTitle}
             onChange={onValueChange}
           />

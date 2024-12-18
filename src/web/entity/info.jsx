@@ -3,20 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-import DateTime from 'web/components/date/datetime';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import styled from 'styled-components';
+import DateTime from 'web/components/date/datetime';
 import Layout from 'web/components/layout/layout';
-
+import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 const OwnerInfo = ({owner}) =>
@@ -64,5 +57,3 @@ EntityInfo.propTypes = {
 };
 
 export default EntityInfo;
-
-// vim: set ts=2 sw=2 tw=80:

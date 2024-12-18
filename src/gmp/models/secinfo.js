@@ -4,7 +4,6 @@
  */
 
 import {_} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import Info from './info';
@@ -58,5 +57,3 @@ class SecInfo extends Info {
 }
 
 export default SecInfo;
-
-// vim: set ts=2 sw=2 tw=80:

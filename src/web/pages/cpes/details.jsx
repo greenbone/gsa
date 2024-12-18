@@ -3,28 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import DateTime from 'web/components/date/datetime';
-
-import DetailsLink from 'web/components/link/detailslink';
-
 import Layout from 'web/components/layout/layout';
-
-import InfoTable from 'web/components/table/infotable';
+import DetailsLink from 'web/components/link/detailslink';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
 
 const CpeDetails = ({entity, links = true}) => {
   const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
@@ -61,7 +52,7 @@ const CpeDetails = ({entity, links = true}) => {
             <TableRow>
               <TableData>{_('Deprecated By')}</TableData>
               <TableData>
-                <DetailsLink id={deprecatedBy} type="cpe" textOnly={!links}>
+                <DetailsLink id={deprecatedBy} textOnly={!links} type="cpe">
                   {deprecatedBy}
                 </DetailsLink>
               </TableData>
@@ -101,5 +92,3 @@ CpeDetails.propTypes = {
 };
 
 export default CpeDetails;
-
-// vim: set ts=2 sw=2 tw=80:

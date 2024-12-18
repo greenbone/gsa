@@ -3,23 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import TextField from 'web/components/form/textfield';
-
-import {default as WizIcon} from 'web/components/icon/wizardicon';
 import NewIcon from 'web/components/icon/newicon';
-
+import {default as WizIcon} from 'web/components/icon/wizardicon';
 import Column from 'web/components/layout/column';
 import Row from 'web/components/layout/row';
+import PropTypes from 'web/utils/proptypes';
 
 export const WizardContent = styled.div`
   margin: 0 20px;
@@ -44,10 +37,10 @@ const TaskWizard = ({
 }) => (
   <SaveDialog
     buttonTitle={_('Start Scan')}
+    defaultValues={{hosts}}
     title={title}
     onClose={onClose}
     onSave={onSave}
-    defaultValues={{hosts}}
   >
     {({values: state, onValueChange}) => (
       <Row>
@@ -61,9 +54,9 @@ const TaskWizard = ({
               <span>{_('IP address or hostname:')}</span>
               <TextField
                 grow="1"
-                value={state.hosts}
-                name="hosts"
                 maxLength="2000"
+                name="hosts"
+                value={state.hosts}
                 onChange={onValueChange}
               />
             </Row>
@@ -113,5 +106,3 @@ TaskWizard.propTypes = {
 };
 
 export default TaskWizard;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,80 +3,61 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-import {withRouter} from 'web/utils/withRouter';
-
 import _ from 'gmp/locale';
-
 import logger from 'gmp/log';
-
 import Filter, {
   ALL_FILTER,
   RESET_FILTER,
   RESULTS_FILTER_FILTER,
 } from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
-
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import withDownload from 'web/components/form/withDownload';
-
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
-
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
-
 import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
 } from 'web/store/entities/filters';
-
+import {loadDeltaReport} from 'web/store/entities/report/actions';
+import {deltaReportSelector} from 'web/store/entities/report/selectors';
 import {
   loadAllEntities as loadReportConfigs,
   selector as reportConfigsSelector,
 } from 'web/store/entities/reportconfigs';
-
 import {
   loadAllEntities as loadReportFormats,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
-
-import {loadDeltaReport} from 'web/store/entities/report/actions';
-
-import {deltaReportSelector} from 'web/store/entities/report/selectors';
-
 import {
   loadReportComposerDefaults,
   renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
-
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
-
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {
   getReportComposerDefaults,
   getUsername,
 } from 'web/store/usersettings/selectors';
-
 import compose from 'web/utils/compose';
-import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
+import {generateFilename} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
-
-import TargetComponent from '../targets/component';
+import {withRouter} from 'web/utils/withRouter';
 
 import Page from './deltadetailscontent';
 import ReportDetailsFilterDialog from './detailsfilterdialog';
+import TargetComponent from '../targets/component';
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
@@ -490,20 +471,23 @@ class DeltaReportDetails extends React.Component {
               filters={filters}
               isLoading={isLoading}
               isUpdating={isUpdating}
-              sorting={sorting}
               reportId={reportId}
+              showError={showError}
+              showErrorMessage={showErrorMessage}
+              showSuccessMessage={showSuccessMessage}
+              sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}
               onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
-              onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
               onFilterChanged={this.handleFilterChange}
               onFilterCreated={this.handleFilterCreated}
+              onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
               onFilterEditClick={this.handleFilterEditClick}
+              onFilterRemoveClick={this.handleFilterRemoveClick}
               onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
               onFilterResetClick={this.handleFilterResetClick}
-              onFilterRemoveClick={this.handleFilterRemoveClick}
               onInteraction={onInteraction}
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
               onReportDownloadClick={this.handleOpenDownloadReportDialog}
@@ -512,19 +496,16 @@ class DeltaReportDetails extends React.Component {
               onTargetEditClick={() =>
                 this.loadTarget().then(response => edit(response.data))
               }
-              showError={showError}
-              showErrorMessage={showErrorMessage}
-              showSuccessMessage={showSuccessMessage}
             />
           )}
         </TargetComponent>
         {showFilterDialog && (
           <ReportDetailsFilterDialog
-            filter={reportFilter}
-            delta={true}
-            onFilterChanged={this.handleFilterChange}
-            onCloseClick={this.handleFilterDialogClose}
             createFilterType="result"
+            delta={true}
+            filter={reportFilter}
+            onCloseClick={this.handleFilterDialogClose}
+            onFilterChanged={this.handleFilterChange}
             onFilterCreated={this.handleFilterCreated}
           />
         )}
@@ -535,8 +516,8 @@ class DeltaReportDetails extends React.Component {
             filter={reportFilter}
             includeNotes={reportComposerDefaults.includeNotes}
             includeOverrides={reportComposerDefaults.includeOverrides}
-            reportFormats={reportFormats}
             reportConfigs={reportConfigs}
+            reportFormats={reportFormats}
             storeAsDefault={storeAsDefault}
             onClose={this.handleCloseDownloadReportDialog}
             onSave={this.handleReportDownload}
@@ -681,8 +662,8 @@ const load =
 
 const DeltaReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
   <Reload
-    name="report"
     load={load({...props, defaultFilter})}
+    name="report"
     reload={load({...props, defaultFilter, reportFilter})}
     reloadInterval={() => reloadInterval(props.entity)}
   >
@@ -690,8 +671,8 @@ const DeltaReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
       <DeltaReportDetails
         {...props}
         defaultFilter={defaultFilter}
-        reportFilter={reportFilter}
         reload={reload}
+        reportFilter={reportFilter}
       />
     )}
   </Reload>
@@ -711,5 +692,3 @@ export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(DeltaReportDetailsWrapper);
-
-// vim: set ts=2 sw=2 tw=80:

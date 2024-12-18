@@ -4,12 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
+import Filter from 'gmp/models/filter';
 import {render, fireEvent} from 'web/utils/testing';
 
 import SeverityLevelsFilterGroup from '../severitylevelsgroup';
 
-import Filter from 'gmp/models/filter';
 
 describe('SeverityLevelsFilterGroup tests', () => {
   test('should render', () => {

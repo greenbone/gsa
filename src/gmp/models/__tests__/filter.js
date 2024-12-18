@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 
 import {isArray} from '../../utils/identity';
-
 import Filter, {UNKNOWN_FILTER_ID} from '../filter';
 import FilterTerm from '../filter/filterterm';
 
@@ -1436,5 +1435,3 @@ describe('Filter merge', () => {
     expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

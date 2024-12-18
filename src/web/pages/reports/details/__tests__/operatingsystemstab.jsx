@@ -4,16 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith} from 'web/utils/testing';
-
-import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
-
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
+import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 import OperatingSystemsTab from '../operatingsystemstab';
 
@@ -39,11 +34,11 @@ describe('Report Operating Systems Tab tests', () => {
     const {baseElement, getAllByTestId} = render(
       <OperatingSystemsTab
         counts={operatingsystems.counts}
-        operatingsystems={operatingsystems.entities}
         filter={filter}
+        isUpdating={false}
+        operatingsystems={operatingsystems.entities}
         sortField={'severity'}
         sortReverse={true}
-        isUpdating={false}
         onInteraction={onInteraction}
         onSortChange={onSortChange}
       />,
@@ -120,11 +115,11 @@ describe('Audit Report Operating Systems Tab tests', () => {
       <OperatingSystemsTab
         audit={true}
         counts={operatingsystems.counts}
-        operatingsystems={operatingsystems.entities}
         filter={auditfilter}
+        isUpdating={false}
+        operatingsystems={operatingsystems.entities}
         sortField={'compliant'}
         sortReverse={true}
-        isUpdating={false}
         onInteraction={onInteraction}
         onSortChange={onSortChange}
       />,

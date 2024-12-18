@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isObject} from 'gmp/utils/identity';
-import {forEach, map} from 'gmp/utils/array';
-
-import {parseBoolean} from 'gmp/parser';
-
 import Model, {parseModelFromElement} from 'gmp/model';
+import {parseBoolean} from 'gmp/parser';
+import {forEach, map} from 'gmp/utils/array';
+import {isDefined, isObject} from 'gmp/utils/identity';
 
 const get_value = val => {
   return isObject(val) ? val.__text : val;
@@ -94,5 +92,3 @@ class ReportConfig extends Model {
 }
 
 export default ReportConfig;
-
-// vim: set ts=2 sw=2 tw=80:

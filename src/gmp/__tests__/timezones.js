@@ -5,9 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 
-import {isArray} from '../utils/identity';
-
 import timezones from '../timezones';
+import {isArray} from '../utils/identity';
 
 describe('timezones tests', () => {
   test('should be a list of timezone objects', () => {
@@ -22,5 +21,3 @@ describe('timezones tests', () => {
     }
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

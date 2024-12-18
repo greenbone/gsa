@@ -4,7 +4,6 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-
 import {createEntitiesFooter} from 'web/entities/footer';
 import {createEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
@@ -54,5 +53,3 @@ const SchedulesTable = createEntitiesTable({
 });
 
 export default SchedulesTable;
-
-// vim: set ts=2 sw=2 tw=80:

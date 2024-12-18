@@ -3,33 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {TAGS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import TagIcon from 'web/components/icon/tagicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tags';
-
-import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/hooks/useCapabilities';
+import PropTypes from 'web/utils/proptypes';
 
 import TagComponent from './component';
-import TagsTable from './table';
 import TagsFilterDialog from './filterdialog';
+import TagsTable from './table';
 
 const ToolBarIcons = ({onTagCreateClick}) => {
   const [_] = useTranslation();
@@ -37,8 +31,8 @@ const ToolBarIcons = ({onTagCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="web-interface"
         anchor="managing-tags"
+        page="web-interface"
         title={_('Help: Tags')}
       />
       {capabilities.mayCreate('tag') && (
@@ -62,19 +56,19 @@ const TagsPage = ({
   const [_] = useTranslation();
   return (
     <TagComponent
-      onCreated={onChanged}
-      onSaved={onChanged}
-      onCloned={onChanged}
       onCloneError={onError}
-      onDeleted={onChanged}
+      onCloned={onChanged}
+      onCreated={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
-      onDownloadError={onError}
+      onDeleted={onChanged}
       onDisableError={onError}
       onDisabled={onChanged}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onEnableError={onError}
       onEnabled={onChanged}
       onInteraction={onInteraction}
+      onSaved={onChanged}
     >
       {({
         clone,
@@ -104,11 +98,11 @@ const TagsPage = ({
             onTagCloneClick={clone}
             onTagCreateClick={create}
             onTagDeleteClick={delete_func}
+            onTagDisableClick={disable}
             onTagDownloadClick={download}
             onTagEditClick={edit}
-            onTagSaveClick={save}
             onTagEnableClick={enable}
-            onTagDisableClick={disable}
+            onTagSaveClick={save}
           />
         </React.Fragment>
       )}

@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-
 import Loader, {
   loadFunc,
   loaderPropTypes,
@@ -103,5 +102,3 @@ export const TasksHighResultsLoader = ({children, filter}) => (
 );
 
 TasksHighResultsLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

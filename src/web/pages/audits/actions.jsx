@@ -3,28 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import IconDivider from 'web/components/layout/icondivider';
-
+import React from 'react';
+import DownloadIcon from 'web/components/icon/downloadicon';
 import ExportIcon from 'web/components/icon/exporticon';
-
+import IconDivider from 'web/components/layout/icondivider';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-import DownloadIcon from 'web/components/icon/downloadicon';
-
 import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
 import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Actions = ({
@@ -40,9 +32,9 @@ const Actions = ({
   onAuditStartClick,
   onAuditStopClick,
 }) => (
-  <IconDivider align={['center', 'center']} grow>
+  <IconDivider grow align={['center', 'center']}>
     {isDefined(entity.schedule) ? (
-      <ScheduleIcon schedule={entity.schedule} links={links} />
+      <ScheduleIcon links={links} schedule={entity.schedule} />
     ) : (
       <StartIcon
         task={entity}
@@ -57,37 +49,37 @@ const Actions = ({
       onClick={onAuditResumeClick}
     />
     <TrashIcon
+      displayName="Audit"
       entity={entity}
       name="task"
-      displayName="Audit"
       onClick={onAuditDeleteClick}
     />
     <EditIcon
+      displayName="Audit"
       entity={entity}
       name="task"
-      displayName="Audit"
       onClick={onAuditEditClick}
     />
     <CloneIcon
+      displayName="Audit"
       entity={entity}
       name="task"
-      displayName="Audit"
       onClick={onAuditCloneClick}
     />
     <ExportIcon
-      value={entity}
       title={_('Export Audit')}
+      value={entity}
       onClick={onAuditDownloadClick}
     />
     <DownloadIcon
-      value={entity}
+      disabled={!gcrFormatDefined || !isDefined(entity.last_report)}
       title={
         gcrFormatDefined && isDefined(entity.last_report)
           ? _('Download Greenbone Compliance Report')
           : _('Report download not available')
       }
+      value={entity}
       onClick={onReportDownloadClick}
-      disabled={!gcrFormatDefined || !isDefined(entity.last_report)}
     />
   </IconDivider>
 );
@@ -107,5 +99,3 @@ Actions.propTypes = {
 };
 
 export default withEntitiesActions(Actions);
-
-// vim: set ts=2 sw=2 tw=80:

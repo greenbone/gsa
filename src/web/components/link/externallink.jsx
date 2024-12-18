@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
-import ConfirmationDialog from '../dialog/confirmationdialog';
-
 import {withTextOnly} from './link';
+import ConfirmationDialog from '../dialog/confirmationdialog';
 
 class ExternalLink extends React.Component {
   constructor() {
@@ -65,13 +62,13 @@ class ExternalLink extends React.Component {
         </a>
         {dialogvisible && (
           <ConfirmationDialog
-            onClose={this.handleCloseDialog}
-            onResumeClick={this.handleOpenLink}
             content={dialogtext}
-            title={dialogtitle}
             rightButtonTitle={_('Follow Link')}
+            title={dialogtitle}
             to={to}
             width="500px"
+            onClose={this.handleCloseDialog}
+            onResumeClick={this.handleOpenLink}
           />
         )}
       </React.Fragment>
@@ -84,5 +81,3 @@ ExternalLink.propTypes = {
 };
 
 export default withTextOnly(ExternalLink);
-
-// vim: set ts=2 sw=2 tw=80:

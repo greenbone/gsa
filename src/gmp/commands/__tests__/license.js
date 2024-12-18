@@ -4,12 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {createResponse, createHttp} from '../testing';
-
 import {parseDate} from 'gmp/parser';
 
 import {LicenseCommand} from '../license';
+import {createResponse, createHttp} from '../testing';
 
 describe('LicenseCommand tests', () => {
   test('should request license', () => {

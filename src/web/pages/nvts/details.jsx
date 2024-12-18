@@ -3,37 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined, isNumber} from 'gmp/utils/identity';
-
 import {TAG_NA} from 'gmp/models/nvt';
-
-import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/hooks/useGmp';
-
-import {na, getTranslatableSeverityOrigin} from 'web/utils/render';
-
-import DetailsBlock from 'web/entity/block';
-
+import {isDefined, isNumber} from 'gmp/utils/identity';
+import React from 'react';
 import Severitybar from 'web/components/bar/severitybar';
-
-import Layout from 'web/components/layout/layout';
-
-import Link from 'web/components/link/link';
-
 import DateTime from 'web/components/date/datetime';
-import InfoTable from 'web/components/table/infotable';
+import Layout from 'web/components/layout/layout';
+import CveLink from 'web/components/link/cvelink';
+import Link from 'web/components/link/link';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
+import DetailsBlock from 'web/entity/block';
+import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
+import {na, getTranslatableSeverityOrigin} from 'web/utils/render';
 
+import Pre from './preformatted';
 import References from './references';
 import Solution from './solution';
-import Pre from './preformatted';
-import CveLink from 'web/components/link/cvelink';
+
 
 const NvtDetails = ({entity, links = true}) => {
   const {
@@ -75,8 +66,8 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>{_('CVSS Base Vector')}</TableData>
                   <TableData>
                     <Link
-                      to="cvsscalculator"
                       query={{cvssVector: tags.cvss_base_vector}}
+                      to="cvsscalculator"
                     >
                       {tags.cvss_base_vector}
                     </Link>
@@ -229,7 +220,7 @@ const NvtDetails = ({entity, links = true}) => {
 
       {isDefined(family) && (
         <DetailsBlock title={_('Family')}>
-          <Link to="nvts" filter={'family="' + family + '"'} textOnly={!links}>
+          <Link filter={'family="' + family + '"'} textOnly={!links} to="nvts">
             {family}
           </Link>
         </DetailsBlock>

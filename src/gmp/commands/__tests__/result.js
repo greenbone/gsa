@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 
 import {ResultCommand} from '../results';
-
 import {createEntityResponse, createHttp} from '../testing';
 
 describe('ResultCommand tests', () => {

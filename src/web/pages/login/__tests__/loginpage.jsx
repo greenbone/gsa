@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Logger from 'gmp/log';
-
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import LoginPage from '../loginpage';

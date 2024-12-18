@@ -4,12 +4,10 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-
 import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
-
-import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay'; // eslint-disable-line max-len
-import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay';
+import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {CertBundSeverityLoader} from './loaders';
@@ -54,5 +52,3 @@ registerDisplay(
     title: _l('Table: CERT-Bund Advisories by Severity Class'),
   },
 );
-
-// vim: set ts=2 sw=2 tw=80:

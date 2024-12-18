@@ -4,11 +4,9 @@
  */
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 import FilterDialog from './filterdialog';
-
 import useFilterDialog from './useFilterDialog';
 import useFilterDialogSave from './useFilterDialogSave';
 
@@ -69,5 +67,3 @@ const withFilterDialog =
   );
 
 export default withFilterDialog;
-
-// vim: set ts=2 sw=2 tw=80:

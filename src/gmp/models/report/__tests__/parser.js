@@ -1007,5 +1007,3 @@ describe('report parser tests', () => {
     expect(closedCve2.severity).toEqual(5);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

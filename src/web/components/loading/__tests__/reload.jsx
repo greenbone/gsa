@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {act, fireEvent, rendererWith} from 'web/utils/testing';
 
 import Reload, {
@@ -14,7 +13,7 @@ import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL_INACTIVE,
 } from '../reload';
 
-// eslint-disable-next-line react/prop-types
+ 
 const TestComponent = ({reload, id, reloadOptions}) => (
   <button data-testid={id} onClick={() => reload(reloadOptions)} />
 );
@@ -40,7 +39,7 @@ describe('Reload component tests', () => {
     const reloadFunc = testing.fn().mockResolvedValue();
 
     const {getByTestId} = render(
-      <Reload load={loadFunc} reload={reloadFunc} name="foo">
+      <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
     );
@@ -65,7 +64,7 @@ describe('Reload component tests', () => {
     const reloadFunc = testing.fn().mockResolvedValue();
 
     const {getByTestId} = render(
-      <Reload reload={reloadFunc} name="foo">
+      <Reload name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
     );
@@ -95,7 +94,7 @@ describe('Reload component tests', () => {
     const reloadFunc = testing.fn().mockResolvedValue();
 
     const {queryByTestId} = render(
-      <Reload load={loadFunc} reload={reloadFunc} name="foo">
+      <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
     );
@@ -139,7 +138,7 @@ describe('Reload component tests', () => {
     const reloadFunc = testing.fn().mockResolvedValue();
 
     const {queryByTestId} = render(
-      <Reload load={loadFunc} reload={reloadFunc} name="foo">
+      <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
     );
@@ -183,7 +182,7 @@ describe('Reload component tests', () => {
     const reloadFunc = testing.fn().mockRejectedValue();
 
     const {queryByTestId} = render(
-      <Reload load={loadFunc} reload={reloadFunc} name="foo">
+      <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
     );
@@ -222,7 +221,7 @@ describe('Reload component tests', () => {
     const renderFunc = testing
       .fn()
       .mockImplementationOnce(({reload}) => (
-        <TestComponent reload={reload} id="one" />
+        <TestComponent id="one" reload={reload} />
       ));
     const loadFunc = testing.fn().mockRejectedValue();
     const reloadFunc = testing.fn().mockResolvedValue();
@@ -236,7 +235,7 @@ describe('Reload component tests', () => {
     const {render} = rendererWith({gmp});
 
     const {queryByTestId} = render(
-      <Reload load={loadFunc} reload={reloadFunc} name="foo">
+      <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
     );
@@ -265,7 +264,7 @@ describe('Reload component tests', () => {
     const renderFunc = testing
       .fn()
       .mockImplementationOnce(({reload}) => (
-        <TestComponent reload={reload} id="one" />
+        <TestComponent id="one" reload={reload} />
       ));
     const loadFunc = testing.fn().mockResolvedValue();
     const reloadFunc = testing.fn().mockResolvedValue();
@@ -279,7 +278,7 @@ describe('Reload component tests', () => {
     const {render} = rendererWith({gmp});
 
     const {queryByTestId} = render(
-      <Reload load={loadFunc} reload={reloadFunc} name="foo">
+      <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
     );
@@ -335,9 +334,9 @@ describe('Reload component tests', () => {
     const {queryByTestId} = render(
       <Reload
         load={loadFunc}
+        name="foo"
         reload={reloadFunc}
         reloadInterval={reloadInterval}
-        name="foo"
       >
         {renderFunc}
       </Reload>,
@@ -388,9 +387,9 @@ describe('Reload component tests', () => {
     const {queryByTestId} = render(
       <Reload
         load={loadFunc}
+        name="foo"
         reload={reloadFunc}
         reloadInterval={reloadInterval}
-        name="foo"
       >
         {renderFunc}
       </Reload>,
@@ -447,9 +446,9 @@ describe('Reload component tests', () => {
         <Reload
           defaultReloadInterval={NO_RELOAD}
           load={loadFunc}
+          name="foo"
           reload={reloadFunc}
           reloadInterval={reloadInterval}
-          name="foo"
         >
           {renderFunc}
         </Reload>,
@@ -507,9 +506,9 @@ describe('Reload component tests', () => {
         <Reload
           defaultReloadIntervalActive={NO_RELOAD}
           load={loadFunc}
+          name="foo"
           reload={reloadFunc}
           reloadInterval={reloadInterval}
-          name="foo"
         >
           {renderFunc}
         </Reload>,
@@ -567,9 +566,9 @@ describe('Reload component tests', () => {
         <Reload
           defaultReloadIntervalActive={NO_RELOAD}
           load={loadFunc}
+          name="foo"
           reload={reloadFunc}
           reloadInterval={reloadInterval}
-          name="foo"
         >
           {renderFunc}
         </Reload>,
@@ -616,7 +615,7 @@ describe('Reload component tests', () => {
     const {render} = rendererWith({gmp});
 
     const {queryByTestId} = render(
-      <Reload load={loadFunc} reload={reloadFunc} name="foo">
+      <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
     );
@@ -664,9 +663,9 @@ describe('Reload component tests', () => {
     const {queryByTestId} = render(
       <Reload
         load={loadFunc}
-        reloadInterval={reloadIntervalFunc}
-        reload={reloadFunc}
         name="foo"
+        reload={reloadFunc}
+        reloadInterval={reloadIntervalFunc}
       >
         {renderFunc}
       </Reload>,
@@ -717,9 +716,9 @@ describe('Reload component tests', () => {
     const {queryByTestId} = render(
       <Reload
         load={loadFunc}
-        reloadInterval={reloadIntervalFunc}
-        reload={reloadFunc}
         name="foo"
+        reload={reloadFunc}
+        reloadInterval={reloadIntervalFunc}
       >
         {renderFunc}
       </Reload>,

@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import EmptyReport from '../emptyreport';
@@ -25,8 +23,8 @@ describe('Empty Report tests', () => {
     const {baseElement} = render(
       <EmptyReport
         hasTarget={true}
-        status={'Done'}
         progress={0}
+        status={'Done'}
         onTargetEditClick={onTargetEditClick}
       />,
     );
@@ -72,8 +70,8 @@ describe('Empty Report tests', () => {
     const {baseElement} = render(
       <EmptyReport
         hasTarget={true}
-        status={'Running'}
         progress={1}
+        status={'Running'}
         onTargetEditClick={onTargetEditClick}
       />,
     );
@@ -97,8 +95,8 @@ describe('Empty Report tests', () => {
     const {baseElement} = render(
       <EmptyReport
         hasTarget={true}
-        status={'Running'}
         progress={50}
+        status={'Running'}
         onTargetEditClick={onTargetEditClick}
       />,
     );
@@ -119,8 +117,8 @@ describe('Empty Report tests', () => {
     const {baseElement} = render(
       <EmptyReport
         hasTarget={true}
-        status={'Done'}
         progress={0}
+        status={'Done'}
         onTargetEditClick={onTargetEditClick}
       />,
     );
@@ -141,8 +139,8 @@ describe('Empty Report tests', () => {
     const {baseElement} = render(
       <EmptyReport
         hasTarget={true}
-        status={'Done'}
         progress={0}
+        status={'Done'}
         onTargetEditClick={onTargetEditClick}
       />,
     );

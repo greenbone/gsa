@@ -4,12 +4,10 @@
  */
 
 import Model, {parseModelFromElement} from 'gmp/model';
-
+import {parseInt, parseYesNo, parseCsv} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import {map} from 'gmp/utils/array';
-
-import {parseInt, parseYesNo, parseCsv} from 'gmp/parser';
 
 import PortList from './portlist';
 
@@ -63,5 +61,3 @@ class Target extends Model {
 }
 
 export default Target;
-
-// vim: set ts=2 sw=2 tw=80:

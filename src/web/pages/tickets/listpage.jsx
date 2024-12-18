@@ -3,38 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
-
+import React from 'react';
+import DashboardControls from 'web/components/dashboard/controls';
 import ManualIcon from 'web/components/icon/manualicon';
 import TicketIcon from 'web/components/icon/ticketicon';
-
-import DashboardControls from 'web/components/dashboard/controls';
-
 import PageTitle from 'web/components/layout/pagetitle';
-
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tickets';
-
 import PropTypes from 'web/utils/proptypes';
 
 import TicketComponent from './component';
 import TicketsDashboard, {TICKETS_DASHBOARD_ID} from './dashboard';
-import Table from './table';
 import TicketsFilterDialogComponent from './filterdialog';
+import Table from './table';
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="reports"
     anchor="managing-tickets"
+    page="reports"
     title={_('Help: Remediation Tickets')}
   />
 );
@@ -49,19 +41,19 @@ const Page = ({
   ...props
 }) => (
   <TicketComponent
-    onCreated={onChanged}
-    onSaved={onChanged}
-    onCloned={onChanged}
     onCloneError={onError}
-    onClosed={onChanged}
+    onCloned={onChanged}
     onCloseError={onError}
-    onDeleted={onChanged}
+    onClosed={onChanged}
+    onCreated={onChanged}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={onChanged}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
-    onSolved={onChanged}
+    onSaved={onChanged}
     onSolveError={onError}
+    onSolved={onChanged}
   >
     {({clone, close, delete: deleteTicket, edit, solve}) => (
       <React.Fragment>

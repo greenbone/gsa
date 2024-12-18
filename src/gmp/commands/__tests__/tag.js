@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 
 import {TagCommand} from '../tags';
-
 import {
   createActionResultResponse,
   createEntityResponse,

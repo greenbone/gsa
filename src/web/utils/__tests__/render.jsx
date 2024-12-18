@@ -173,5 +173,3 @@ describe('generateFilename tests', () => {
     expect(filename).toEqual('unnamed.unknown');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

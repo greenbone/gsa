@@ -4,7 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
+import date from 'gmp/models/date';
+import Filter from 'gmp/models/filter';
+import Tag from 'gmp/models/tag';
+import Task from 'gmp/models/task';
+import {isDefined} from 'gmp/utils/identity';
+import {setSessionTimeout} from 'web/store/usersettings/actions';
+import SelectionType from 'web/utils/selectiontype';
 import {
   screen,
   rendererWith,
@@ -14,17 +20,6 @@ import {
   wait,
   getByRole,
 } from 'web/utils/testing';
-
-import {setSessionTimeout} from 'web/store/usersettings/actions';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import date from 'gmp/models/date';
-import Filter from 'gmp/models/filter';
-import Tag from 'gmp/models/tag';
-import Task from 'gmp/models/task';
-
-import SelectionType from 'web/utils/selectiontype';
 
 import BulkTags from '../BulkTags';
 

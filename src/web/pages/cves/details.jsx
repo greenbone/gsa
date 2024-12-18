@@ -3,28 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import DetailsBlock from 'web/entity/block';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import Layout from 'web/components/layout/layout';
-
 import ExternalLink from 'web/components/link/externallink';
 import Link from 'web/components/link/link';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
-import PropTypes from 'web/utils/proptypes';
+import DetailsBlock from 'web/entity/block';
 import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
 
 const CVSS_PROPS = {
   cvssAccessVector: _l('Access Vector'),
@@ -72,8 +65,8 @@ const CveDetails = ({entity}) => {
                 <TableData>{_('Base Vector')}</TableData>
                 <TableData>
                   <Link
-                    to="cvsscalculator"
                     query={{cvssVector: cvssBaseVector}}
+                    to="cvsscalculator"
                   >
                     {cvssBaseVector}
                   </Link>

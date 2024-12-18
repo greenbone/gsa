@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {FeedStatus} from 'gmp/commands/feedstatus';
+import _ from 'gmp/locale';
+import {isDefined} from 'gmp/utils/identity';
 
 export const buildUrlParams = params => {
   let argcount = 0;

@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import LanguageSwitch from 'web/components/structure/languageswitch';
 import {setLocale} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
-import LanguageSwitch from 'web/components/structure/languageswitch';
 
 const mockSaveSetting = testing.fn();
 const mockSetLocale = testing.fn();

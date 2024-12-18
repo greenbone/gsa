@@ -6,11 +6,11 @@
 import {combineReducers} from 'redux';
 
 import {reducer as alert} from './alerts';
-import {reducer as audit} from './audits';
 import {
   reducer as auditreport,
   deltaAuditReducer as deltaAuditReport,
 } from './auditreports';
+import {reducer as audit} from './audits';
 import {reducer as certbund} from './certbund';
 import {reducer as cpe} from './cpes';
 import {reducer as credential} from './credentials';
@@ -81,5 +81,3 @@ const entitiesReducer = combineReducers({
 });
 
 export default entitiesReducer;
-
-// vim: set ts=2 sw=2 tw=80:

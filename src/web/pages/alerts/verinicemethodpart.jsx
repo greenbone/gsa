@@ -3,23 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
-import {selectSaveId} from 'gmp/utils/id';
-
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
-
+import {selectSaveId} from 'gmp/utils/id';
+import React, {useState} from 'react';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
+import NewIcon from 'web/components/icon/newicon';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
-import Select from 'web/components/form/select';
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
-
-import NewIcon from 'web/components/icon/newicon';
-
-import useTranslation from 'web/hooks/useTranslation';
+import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 
 const VERINICE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
@@ -75,11 +71,11 @@ const VeriniceMethodPart = ({
         />
       </FormGroup>
 
-      <FormGroup title={_('Credential')} direction="row">
+      <FormGroup direction="row" title={_('Credential')}>
         <Select
           grow="1"
-          name={prefix + 'verinice_server_credential'}
           items={renderSelectItems(credentials)}
+          name={prefix + 'verinice_server_credential'}
           value={veriniceServerCredential}
           onChange={onCredentialChange}
         />
@@ -93,8 +89,8 @@ const VeriniceMethodPart = ({
 
       <FormGroup title={_('verinice.PRO Report')}>
         <Select
-          name={prefix + 'verinice_server_report_format'}
           items={renderSelectItems(reportFormats)}
+          name={prefix + 'verinice_server_report_format'}
           value={reportFormatIdInState}
           onChange={handleReportFormatIdChange}
         />
@@ -104,10 +100,10 @@ const VeriniceMethodPart = ({
               &nbsp; Report Config &nbsp;{' '}
             </label>
             <Select
-              name={prefix + 'verinice_server_report_config'}
               id="report-config-select"
-              value={veriniceServerConfigIdInState}
               items={reportConfigItems}
+              name={prefix + 'verinice_server_report_config'}
+              value={veriniceServerConfigIdInState}
               onChange={handleReportConfigIdChange}
             />
           </>
@@ -132,5 +128,3 @@ VeriniceMethodPart.propTypes = {
 };
 
 export default withPrefix(VeriniceMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,32 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-
+import React from 'react';
+import {connect} from 'react-redux';
+import Toolbar from 'web/components/bar/toolbar';
+import ErrorMessage from 'web/components/error/errormessage';
+import Layout from 'web/components/layout/layout';
+import PowerFilter from 'web/components/powerfilter/powerfilter';
+import Section from 'web/components/section/section';
+import {loadAllEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Toolbar from 'web/components/bar/toolbar';
-
-import ErrorMessage from 'web/components/error/errormessage';
-
-import Layout from 'web/components/layout/layout';
-
 import Loading from '../components/loading/loading';
-
-import PowerFilter from 'web/components/powerfilter/powerfilter';
-
-import Section from 'web/components/section/section';
-
-import {loadAllEntities, selector} from 'web/store/entities/filters';
 
 const exclude_props = [
   'children',
@@ -115,10 +105,10 @@ class EntitiesPage extends React.Component {
       : undefined;
     return (
       <SectionComponent
-        title={this.getSectionTitle()}
         className="entities-section"
-        img={sectionIcon}
         extra={extra}
+        img={sectionIcon}
+        title={this.getSectionTitle()}
       >
         <Layout flex="column" grow="1">
           {isDefined(dashboard) && dashboard()}
@@ -151,9 +141,9 @@ class EntitiesPage extends React.Component {
     return (
       <TableComponent
         {...other}
-        filter={filter}
         entities={entities}
         entitiesCounts={entitiesCounts}
+        filter={filter}
       />
     );
   }
@@ -244,16 +234,16 @@ class EntitiesPage extends React.Component {
       <FilterDialogComponent
         createFilterType={createFilterType}
         filter={filter}
+        onCloseClick={this.handleFilterDialogCloseClick}
         onFilterChanged={onFilterChanged}
         onFilterCreated={this.handleFilterCreated}
-        onCloseClick={this.handleFilterDialogCloseClick}
       />
     );
   }
 
   render() {
     return (
-      <Layout grow="1" flex="column" align="start">
+      <Layout align="start" flex="column" grow="1">
         {this.renderToolbar()}
         {this.renderSection()}
         {this.renderDialogs()}
@@ -322,5 +312,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesPage);
-
-// vim: set ts=2 sw=2 tw=80:

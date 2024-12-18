@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import CloneIcon from 'web/components/icon/cloneicon';
+import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 const EntityCloneIcon = ({
@@ -40,7 +36,6 @@ const EntityCloneIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});
-      // eslint-disable-next-line no-negated-condition
     } else if (!mayClone) {
       title = _('{{entity}} may not be cloned', {entity: displayName});
     } else {
@@ -50,9 +45,9 @@ const EntityCloneIcon = ({
   return (
     <CloneIcon
       {...props}
+      active={active}
       title={title}
       value={entity}
-      active={active}
       onClick={active ? onClick : undefined}
     />
   );
@@ -69,5 +64,3 @@ EntityCloneIcon.propTypes = {
 };
 
 export default withCapabilities(EntityCloneIcon);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,17 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {KeyCode} from 'gmp/utils/event';
-
-import {render, fireEvent, screen} from 'web/utils/testing';
-
 import {
   closeDialog,
   getDialogContent,
   getDialogTitle,
   queryDialog,
 } from 'web/components/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 import ConfirmationDialog from '../confirmationdialog';
 
@@ -126,5 +123,3 @@ describe('ConfirmationDialog component tests', () => {
     expect(handleClose).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

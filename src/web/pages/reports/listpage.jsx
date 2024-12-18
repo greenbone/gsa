@@ -3,65 +3,49 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
-
 import {isActive} from 'gmp/models/task';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import ManualIcon from 'web/components/icon/manualicon';
-import UploadIcon from 'web/components/icon/uploadicon';
 import ReportIcon from 'web/components/icon/reporticon';
-
+import UploadIcon from 'web/components/icon/uploadicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reports';
-
 import {
   loadAllEntities as loadAllTasks,
   selector as tasksSelector,
 } from 'web/store/entities/tasks';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
+import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
 import ReportFilterDialog from './filterdialog';
 import ImportReportDialog from './importdialog';
 import ReportsTable from './table';
-
-import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
 
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 
 const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>
     <ManualIcon
-      page="reports"
       anchor="using-and-managing-reports"
+      page="reports"
       title={_('Help: Reports')}
     />
     <UploadIcon title={_('Upload report')} onClick={onUploadReportClick} />
@@ -216,23 +200,23 @@ class Page extends React.Component {
               onInteraction={onInteraction}
             />
           )}
-          filtersFilter={REPORTS_FILTER_FILTER}
           filterEditDialog={ReportFilterDialog}
-          table={ReportsTable}
-          toolBarIcons={ToolBarIcons}
-          title={_('Reports')}
+          filtersFilter={REPORTS_FILTER_FILTER}
           sectionIcon={<ReportIcon size="large" />}
+          table={ReportsTable}
+          title={_('Reports')}
+          toolBarIcons={ToolBarIcons}
           onInteraction={onInteraction}
-          onUploadReportClick={this.openImportDialog}
-          onReportDeltaSelect={this.handleReportDeltaSelect}
           onReportDeleteClick={this.handleReportDeleteClick}
+          onReportDeltaSelect={this.handleReportDeltaSelect}
+          onUploadReportClick={this.openImportDialog}
         />
         {importDialogVisible && (
           <ImportReportDialog
             task_id={task_id}
             tasks={tasks}
-            onNewContainerTaskClick={this.openCreateTaskDialog}
             onClose={this.handleCloseImportDialog}
+            onNewContainerTaskClick={this.openCreateTaskDialog}
             onSave={this.handleImportReport}
             onTaskChange={this.handleTaskChange}
           />
@@ -291,5 +275,3 @@ export default compose(
     reloadInterval: reportsReloadInterval,
   }),
 )(Page);
-
-// vim: set ts=2 sw=2 tw=80:

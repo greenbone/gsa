@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import OperatingSystem from 'gmp/models/os';
 
 import EntitiesCommand from './entities';
@@ -64,5 +63,3 @@ class OperatingSystemsCommand extends EntitiesCommand {
 
 registerCommand('operatingsystem', OperatingSystemCommand);
 registerCommand('operatingsystems', OperatingSystemsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

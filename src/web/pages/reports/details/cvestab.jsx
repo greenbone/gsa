@@ -5,17 +5,17 @@
 
 
 import React from 'react';
-
-import CvesTable from './cvestable';
-import ReportEntitiesContainer from './reportentitiescontainer';
-
 import PropTypes from 'web/utils/proptypes';
-
 import {
   makeCompareNumber,
   makeCompareString,
   makeCompareSeverity,
 } from 'web/utils/sort';
+
+import CvesTable from './cvestable';
+import ReportEntitiesContainer from './reportentitiescontainer';
+
+
 
 const cvesSortFunctions = {
   cve: makeCompareString(entity => entity.cves.join(' ')),
@@ -39,8 +39,8 @@ const CvesTab = ({
     counts={counts}
     entities={cves}
     filter={filter}
-    sortFunctions={cvesSortFunctions}
     sortField={sortField}
+    sortFunctions={cvesSortFunctions}
     sortReverse={sortReverse}
     onInteraction={onInteraction}
   >

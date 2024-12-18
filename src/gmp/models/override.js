@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isModelElement} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-
 import Model, {parseModelFromElement} from 'gmp/model';
 import {
   parseCsv,
@@ -14,6 +11,8 @@ import {
   parseYesNo,
   YES_VALUE,
 } from 'gmp/parser';
+import {isModelElement} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import Nvt from './nvt';
 
@@ -85,5 +84,3 @@ class Override extends Model {
 }
 
 export default Override;
-
-// vim: set ts=2 sw=2 tw=80:

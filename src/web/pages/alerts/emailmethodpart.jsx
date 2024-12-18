@@ -3,11 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React, {useState} from 'react';
-
-import {selectSaveId} from 'gmp/utils/id';
-
 import {
   isTaskEvent,
   isSecinfoEvent,
@@ -19,23 +14,20 @@ import {
   EMAIL_CREDENTIAL_TYPES,
   email_credential_filter,
 } from 'gmp/models/credential';
-
-import Select from 'web/components/form/select';
+import {selectSaveId} from 'gmp/utils/id';
+import React, {useState} from 'react';
 import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import TextField from 'web/components/form/textfield';
-import Radio from 'web/components/form/radio';
-
 import NewIcon from 'web/components/icon/newicon';
-
 import Row from 'web/components/layout/row';
-
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
-
-import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/hooks/useCapabilities';
 
 const EmailMethodPart = ({
   credentials = [],
@@ -146,18 +138,18 @@ const EmailMethodPart = ({
         </FormGroup>
       )}
 
-      <FormGroup title={_('Email Encryption')} direction="row">
+      <FormGroup direction="row" title={_('Email Encryption')}>
         <Select
           grow="1"
+          items={renderSelectItems(credentials, UNSET_VALUE)}
           name={prefix + 'recipient_credential'}
           value={recipientCredential}
-          items={renderSelectItems(credentials, UNSET_VALUE)}
           onChange={onCredentialChange}
         />
         <NewIcon
           size="small"
-          value={EMAIL_CREDENTIAL_TYPES}
           title={_('Create a credential')}
+          value={EMAIL_CREDENTIAL_TYPES}
           onClick={onNewCredentialClick}
         />
       </FormGroup>
@@ -165,9 +157,9 @@ const EmailMethodPart = ({
       {(taskEvent || secinfoEvent) && (
         <FormGroup title={_('Content')}>
           <Radio
-            title={_('Simple Notice')}
-            name={prefix + 'notice'}
             checked={notice === EMAIL_NOTICE_SIMPLE}
+            name={prefix + 'notice'}
+            title={_('Simple Notice')}
             value="1"
             onChange={onChange}
           />
@@ -176,23 +168,23 @@ const EmailMethodPart = ({
             <>
               <Row>
                 <Radio
+                  checked={notice === EMAIL_NOTICE_INCLUDE}
                   name={prefix + 'notice'}
                   title={
                     taskEvent
                       ? _('Include report')
                       : _('Include list of resources with message:')
                   }
-                  checked={notice === EMAIL_NOTICE_INCLUDE}
                   value="0"
                   onChange={onChange}
                 />
                 {taskEvent && (
                   <Select
-                    grow="1"
                     disabled={notice !== EMAIL_NOTICE_INCLUDE}
+                    grow="1"
+                    items={textReportFormatItems}
                     name={prefix + 'notice_report_format'}
                     value={reportFormatIdInState}
-                    items={textReportFormatItems}
                     onChange={handleReportFormatIdChange}
                   />
                 )}
@@ -202,20 +194,20 @@ const EmailMethodPart = ({
                     <label htmlFor="report-config-select">Report Config</label>
                     <Select
                       disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                      name={prefix + 'notice_report_config'}
                       id="report-config-select"
-                      value={reportConfigIdInState}
                       items={reportConfigItems}
+                      name={prefix + 'notice_report_config'}
+                      value={reportConfigIdInState}
                       onChange={handleReportConfigIdChange}
                     />
                   </>
                 )}
               </Row>
               <TextArea
+                cols="50"
                 disabled={notice !== EMAIL_NOTICE_INCLUDE}
                 name={prefix + 'message'}
                 rows="8"
-                cols="50"
                 title={
                   notice === EMAIL_NOTICE_INCLUDE
                     ? undefined
@@ -231,23 +223,23 @@ const EmailMethodPart = ({
             <>
               <Row>
                 <Radio
+                  checked={notice === EMAIL_NOTICE_ATTACH}
                   name={prefix + 'notice'}
                   title={
                     taskEvent
                       ? _('Attach report')
                       : _('Attach list of resources with message:')
                   }
-                  checked={notice === EMAIL_NOTICE_ATTACH}
                   value="2"
                   onChange={onChange}
                 />
                 {taskEvent && (
                   <Select
-                    grow="1"
                     disabled={notice !== EMAIL_NOTICE_ATTACH}
+                    grow="1"
+                    items={reportFormatItems}
                     name={prefix + 'notice_attach_format'}
                     value={attachFormatIdInState}
-                    items={reportFormatItems}
                     onChange={handleAttachFormatIdChange}
                   />
                 )}
@@ -256,20 +248,20 @@ const EmailMethodPart = ({
                     <label htmlFor="attach-config-select">Report Config</label>
                     <Select
                       disabled={notice !== EMAIL_NOTICE_ATTACH}
-                      name={prefix + 'notice_attach_config'}
                       id="attach-config-select"
-                      value={attachConfigIdInState}
                       items={attachConfigItems}
+                      name={prefix + 'notice_attach_config'}
+                      value={attachConfigIdInState}
                       onChange={handleAttachConfigIdChange}
                     />
                   </>
                 )}
               </Row>
               <TextArea
+                cols="50"
                 disabled={notice !== EMAIL_NOTICE_ATTACH}
                 name={prefix + 'message_attach'}
                 rows="8"
-                cols="50"
                 title={
                   notice === EMAIL_NOTICE_ATTACH
                     ? undefined
@@ -311,5 +303,3 @@ EmailMethodPart.propTypes = {
 };
 
 export default withPrefix(EmailMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,19 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-import {filter as filter_func, forEach, map} from 'gmp/utils/array';
-
-import {parseBoolean, parseSeverity, parseDate} from 'gmp/parser';
-
+import CollectionCounts from 'gmp/collection/collectioncounts';
 import {
   parseCollectionList,
   parseFilter,
   parseReportResultEntities,
 } from 'gmp/collection/parser';
-
-import CollectionCounts from 'gmp/collection/collectioncounts';
+import {parseBoolean, parseSeverity, parseDate} from 'gmp/parser';
+import {filter as filter_func, forEach, map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import ReportApp from './app';
 import ReportCve from './cve';
@@ -23,9 +20,8 @@ import ReportHost from './host';
 import ReportOperatingSystem from './os';
 import ReportPort from './port';
 import ReportTLSCertificate from './tlscertificate';
-
-import Result from '../result';
 import {getRefs, hasRefType} from '../nvt';
+import Result from '../result';
 
 // reports with details=1 always have a results element
 // (that can be empty) whereas reports with details=0
@@ -631,5 +627,3 @@ export const parseCves = (report, filter) => {
     filter: isDefined(filter) ? filter : parseFilter(report),
   };
 };
-
-// vim: set ts=2 sw=2 tw=80:

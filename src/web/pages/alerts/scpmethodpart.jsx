@@ -3,29 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
-import {selectSaveId} from 'gmp/utils/id';
-
 import {
   SSH_CREDENTIAL_TYPES,
   ssh_credential_filter,
 } from 'gmp/models/credential';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {selectSaveId} from 'gmp/utils/id';
+import React, {useState} from 'react';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import NewIcon from 'web/components/icon/newicon';
 import useCapabilities from 'web/hooks/useCapabilities';
-import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
 
-import Select from 'web/components/form/select';
-import FormGroup from 'web/components/form/formgroup';
-import Spinner from 'web/components/form/spinner';
-import TextField from 'web/components/form/textfield';
-import TextArea from 'web/components/form/textarea';
-
-import NewIcon from 'web/components/icon/newicon';
-
-import useTranslation from 'web/hooks/useTranslation';
+import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 
 const ScpMethodPart = ({
   prefix,
@@ -72,18 +67,18 @@ const ScpMethodPart = ({
   credentials = credentials.filter(ssh_credential_filter);
   return (
     <>
-      <FormGroup title={_('Credential')} direction="row">
+      <FormGroup direction="row" title={_('Credential')}>
         <Select
           grow="1"
+          items={renderSelectItems(credentials)}
           name={prefix + 'scp_credential'}
           value={scpCredential}
-          items={renderSelectItems(credentials)}
           onChange={onCredentialChange}
         />
         <NewIcon
           size="small"
-          value={SSH_CREDENTIAL_TYPES}
           title={_('Create a credential')}
+          value={SSH_CREDENTIAL_TYPES}
           onClick={onNewCredentialClick}
         />
       </FormGroup>
@@ -99,21 +94,21 @@ const ScpMethodPart = ({
 
       <FormGroup title={_('Port')}>
         <Spinner
-          name={prefix + 'scp_port'}
-          value={scpPort}
-          type="int"
-          onChange={onChange}
-          min={1}
           max={65535}
+          min={1}
+          name={prefix + 'scp_port'}
+          type="int"
+          value={scpPort}
+          onChange={onChange}
         />
       </FormGroup>
 
       <FormGroup title={_('Known Hosts')}>
         <TextArea
-          grow="1"
-          rows="3"
           cols="50"
+          grow="1"
           name={prefix + 'scp_known_hosts'}
+          rows="3"
           value={scpKnownHosts}
           onChange={onChange}
         />
@@ -129,9 +124,9 @@ const ScpMethodPart = ({
 
       <FormGroup title={_('Report')}>
         <Select
+          items={renderSelectItems(reportFormats)}
           name={prefix + 'scp_report_format'}
           value={reportFormatIdInState}
-          items={renderSelectItems(reportFormats)}
           onChange={handleReportFormatIdChange}
         />
         {capabilities.mayOp('get_report_configs') && (
@@ -140,10 +135,10 @@ const ScpMethodPart = ({
               &nbsp; Report Config &nbsp;
             </label>
             <Select
-              name={prefix + 'scp_report_config'}
               id="report-config-select"
-              value={scpConfigIdInState}
               items={reportConfigItems}
+              name={prefix + 'scp_report_config'}
+              value={scpConfigIdInState}
               onChange={handleReportConfigIdChange}
             />
           </>
@@ -171,5 +166,3 @@ ScpMethodPart.propTypes = {
 };
 
 export default withPrefix(ScpMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

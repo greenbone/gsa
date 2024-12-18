@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
+import React from 'react';
+import styled from 'styled-components';
 
 import Img from './img';
 
@@ -19,10 +16,12 @@ const Image = styled(Img)`
 
 const LoginLogo = props => {
   return (
-    <Image alt={_('Greenbone AG')} src='greenbonehorizontal.png' data-testid="greenbone-login-logo"/>
+    <Image
+      alt={_('Greenbone AG')}
+      data-testid="greenbone-login-logo"
+      src="greenbonehorizontal.png"
+    />
   );
 };
 
 export default LoginLogo;
-
-// vim: set ts=2 sw=2 tw=80:

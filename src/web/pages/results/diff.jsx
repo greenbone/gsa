@@ -4,11 +4,10 @@
  */
 
 
+import {isString} from 'gmp/utils/identity';
 import React from 'react';
-
 import styled from 'styled-components';
 
-import {isString} from 'gmp/utils/identity';
 
 const Pre = styled.div`
   white-space: pre-wrap;

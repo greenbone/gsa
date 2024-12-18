@@ -3,41 +3,32 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
-
+import ManualIcon from 'web/components/icon/manualicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import DetailsLink from 'web/components/link/detailslink';
+import ExternalLink from 'web/components/link/externallink';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import DetailsLink from 'web/components/link/detailslink';
-import ExternalLink from 'web/components/link/externallink';
-
 import DetailsBlock from 'web/entity/block';
-import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
+import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
-
 import {selector, loadEntity} from 'web/store/entities/dfncerts';
-
 import PropTypes from 'web/utils/proptypes';
 
 import DfnCertAdvDetails from './details';
@@ -46,15 +37,15 @@ const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="managing-secinfo"
         anchor="dfn-cert-advisories"
+        page="managing-secinfo"
         title={_('Help: DFN-CERT Advisories')}
       />
-      <ListIcon title={_('DFN-CERT Advisories')} page="dfncerts" />
+      <ListIcon page="dfncerts" title={_('DFN-CERT Advisories')} />
     </IconDivider>
     <ExportIcon
-      value={entity}
       title={_('Export DFN-CERT Advisory')}
+      value={entity}
       onClick={onDfnCertAdvDownloadClick}
     />
   </Divider>
@@ -92,7 +83,7 @@ const Details = ({entity, links = true}) => {
           <ul>
             {cves.map(cve => (
               <li key={cve}>
-                <DetailsLink type="cve" id={cve}>
+                <DetailsLink id={cve} type="cve">
                   {cve}
                 </DetailsLink>
               </li>
@@ -121,8 +112,8 @@ const DfnCertAdvPage = ({
 }) => (
   <EntityComponent
     name="dfncert"
-    onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
   >
     {({download}) => (
@@ -141,8 +132,8 @@ const DfnCertAdvPage = ({
               <PageTitle
                 title={_('DFN-CERT Advisory: {{title}}', {title: entity.title})}
               />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
@@ -191,5 +182,3 @@ export default withEntityContainer('dfncert', {
   load: loadEntity,
   entitySelector: selector,
 })(DfnCertAdvPage);
-
-// vim: set ts=2 sw=2 tw=80:

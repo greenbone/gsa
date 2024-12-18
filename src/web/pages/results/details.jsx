@@ -3,40 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
+import {TAG_NA} from 'gmp/models/nvt';
+import {DEFAULT_OID_VALUE} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import {TAG_NA} from 'gmp/models/nvt';
-
-import {DEFAULT_OID_VALUE} from 'gmp/models/override';
-
+import React from 'react';
+import styled from 'styled-components';
 import Layout from 'web/components/layout/layout';
-
+import DetailsLink from 'web/components/link/detailslink';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
+import TableRow from 'web/components/table/row';
+import DetailsBlock from 'web/entity/block';
+import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 import {renderNvtName} from 'web/utils/render';
 
-import DetailsBlock from 'web/entity/block';
-import {Col} from 'web/entity/page';
-
-import DetailsLink from 'web/components/link/detailslink';
-
-import InfoTable from 'web/components/table/infotable';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-
+import Diff, {Added, Removed} from './diff';
+import P from '../nvts/preformatted';
 import References from '../nvts/references';
 import Solution from '../nvts/solution';
-import P from '../nvts/preformatted';
-
-import Diff, {Added, Removed} from './diff';
 
 /*
  security and log messages from nvts are converted to results
@@ -135,7 +123,7 @@ const ResultDetails = ({className, links = true, entity}) => {
   }
 
   return (
-    <Layout flex="column" grow="1" className={className}>
+    <Layout className={className} flex="column" grow="1">
       {isDefined(tags.summary) && (
         <DetailsBlock title={_('Summary')}>
           <P>{tags.summary}</P>
@@ -213,9 +201,9 @@ const ResultDetails = ({className, links = true, entity}) => {
                 <TableData>
                   <span>
                     <DetailsLink
-                      type="cpe"
                       id={detection_details.product}
                       textOnly={!links}
+                      type="cpe"
                     >
                       {detection_details.product}
                     </DetailsLink>
@@ -228,12 +216,12 @@ const ResultDetails = ({className, links = true, entity}) => {
                   <span>
                     <DetailsLink
                       id={detection_details.source_oid}
+                      textOnly={!links}
                       type={
                         detection_details.source_oid.startsWith('CVE-')
                           ? 'cve'
                           : 'nvt'
                       }
-                      textOnly={!links}
                     >
                       {detection_details.source_name +
                         ' (OID: ' +
@@ -248,9 +236,9 @@ const ResultDetails = ({className, links = true, entity}) => {
                 <TableData>
                   <span>
                     <DetailsLink
-                      type="result"
                       id={result.detection.result.id}
                       textOnly={!links}
+                      type="result"
                     >
                       {_('View details of product detection')}
                     </DetailsLink>
@@ -283,7 +271,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                   {isDefined(infoId) &&
                     infoId.startsWith(DEFAULT_OID_VALUE) && (
                       <span>
-                        <DetailsLink type="nvt" id={infoId} textOnly={!links}>
+                        <DetailsLink id={infoId} textOnly={!links} type="nvt">
                           {renderNvtName(infoId, information.name)}
                           {' OID: ' + infoId}
                         </DetailsLink>
@@ -335,5 +323,3 @@ ResultDetails.propTypes = {
 };
 
 export default ResultDetails;
-
-// vim: set ts=2 sw=2 tw=80:

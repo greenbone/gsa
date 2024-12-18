@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Layout from 'web/components/layout/layout';
-
 import {render} from 'web/utils/testing';
 
 describe('Layout tests', () => {
@@ -91,7 +89,7 @@ describe('Layout tests', () => {
   });
 
   test('should create Layout with flex="column" and align="start"', () => {
-    const {element} = render(<Layout flex="column" align="start" />);
+    const {element} = render(<Layout align="start" flex="column" />);
     expect(element).toMatchSnapshot();
   });
 
@@ -106,12 +104,9 @@ describe('Layout tests', () => {
   });
 
   test('should create Layout with flex="column" align=[stretch, center]', () => {
-    // eslint-disable-line max-len
     const {element} = render(
-      <Layout flex="column" align={['stretch', 'center']} />,
+      <Layout align={['stretch', 'center']} flex="column" />,
     );
     expect(element).toMatchSnapshot();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

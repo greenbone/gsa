@@ -3,46 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {TASK_STATUS} from 'gmp/models/task';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
-
 import DateTime from 'web/components/date/datetime';
-
 import ErrorMessage from 'web/components/error/errormessage';
-
 import ReportIcon from 'web/components/icon/reporticon';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
 import Loading from 'web/components/loading/loading';
-
 import Powerfilter from 'web/components/powerfilter/powerfilter';
-
+import SectionHeader from 'web/components/section/header';
+import Section from 'web/components/section/section';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import Section from 'web/components/section/section';
-import SectionHeader from 'web/components/section/header';
-
 import EntityInfo from 'web/entity/info';
 import EntityTags from 'web/entity/tags';
-
 import PropTypes from 'web/utils/proptypes';
 
 import DeltaResultsTab from './details/deltaresultstab';
@@ -119,7 +103,7 @@ const PageContent = ({
         <Divider>
           <DateTime date={timestamp} />
           <Span>
-            <StatusBar status={status} progress={progress} />
+            <StatusBar progress={progress} status={status} />
           </Span>
         </Divider>
       )}
@@ -135,7 +119,7 @@ const PageContent = ({
   const {filtered} = audit ? complianceCounts : result_count;
 
   return (
-    <Layout grow flex="column" align={['start', 'stretch']}>
+    <Layout grow align={['start', 'stretch']} flex="column">
       <ToolBar>
         <ToolBarIcons
           audit={audit}
@@ -145,8 +129,8 @@ const PageContent = ({
           report={report}
           reportId={reportId}
           showError={showError}
-          showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
+          showSuccessMessage={showSuccessMessage}
           task={task}
           onAddToAssetsClick={onAddToAssetsClick}
           onInteraction={onInteraction}
@@ -161,8 +145,8 @@ const PageContent = ({
             onEditClick={onFilterEditClick}
             onError={onError}
             onFilterCreated={onFilterCreated}
-            onResetClick={onFilterResetClick}
             onRemoveClick={onFilterRemoveClick}
+            onResetClick={onFilterResetClick}
             onUpdate={onFilterChanged}
           />
         </Layout>
@@ -173,7 +157,7 @@ const PageContent = ({
           <Loading />
         ) : (
           <React.Fragment>
-            <TabLayout grow="1" align={['start', 'end']}>
+            <TabLayout align={['start', 'end']} grow="1">
               <TabList
                 active={activeTab}
                 align={['start', 'stretch']}
@@ -181,10 +165,10 @@ const PageContent = ({
               >
                 <Tab>{_('Information')}</Tab>
                 <Tab>
-                  <TabTitle title={_('Results')} count={filtered} />
+                  <TabTitle count={filtered} title={_('Results')} />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('User Tags')} count={userTagsCount} />
+                  <TabTitle count={userTagsCount} title={_('User Tags')} />
                 </Tab>
               </TabList>
             </TabLayout>
@@ -215,9 +199,9 @@ const PageContent = ({
                       status={status}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-                      onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                       onFilterEditClick={onFilterEditClick}
                       onFilterRemoveClick={onFilterRemoveClick}
+                      onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                       onInteraction={onInteraction}
                       onSortChange={sortField =>
                         onSortChange('results', sortField)
@@ -280,5 +264,3 @@ PageContent.propTypes = {
 };
 
 export default PageContent;
-
-// vim: set ts=2 sw=2 tw=80:

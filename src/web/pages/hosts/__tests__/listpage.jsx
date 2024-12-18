@@ -4,21 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
-
-import {entitiesLoadingActions} from 'web/store/entities/hosts';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-
 import {
   clickElement,
   getPowerFilter,
@@ -28,6 +17,11 @@ import {
   getTextInputs,
   testBulkDeleteDialog,
 } from 'web/components/testing';
+import {entitiesLoadingActions} from 'web/store/entities/hosts';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import HostPage, {ToolBarIcons} from '../listpage';
 

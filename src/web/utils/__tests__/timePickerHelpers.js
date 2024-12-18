@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {formatSplitTime, formatTimeForTimePicker} from '../timePickerHelpers';
 import {describe, test, expect} from '@gsa/testing';
+
+import {formatSplitTime, formatTimeForTimePicker} from '../timePickerHelpers';
 
 describe('timePickerHelpers', () => {
   describe('formatSplitTime', () => {

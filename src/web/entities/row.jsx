@@ -4,9 +4,7 @@
  */
 
 import styled from 'styled-components';
-
 import withClickHandler from 'web/components/form/withClickHandler';
-
 import Theme from 'web/utils/theme';
 
 export const RowDetailsToggle = withClickHandler()(styled.span`
@@ -21,5 +19,3 @@ export const RowDetailsToggle = withClickHandler()(styled.span`
     color: ${Theme.black};
   }
 `);
-
-// vim: set ts=2 sw=2 tw=80:

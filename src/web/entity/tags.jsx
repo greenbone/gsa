@@ -3,38 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
+import React from 'react';
+import styled from 'styled-components';
+import DeleteIcon from 'web/components/icon/deleteicon';
 import DisableIcon from 'web/components/icon/disableicon';
 import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
-import DeleteIcon from 'web/components/icon/deleteicon';
-
 import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 import IconDivider from 'web/components/layout/icondivider';
-
+import Layout from 'web/components/layout/layout';
 import DetailsLink from 'web/components/link/detailslink';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
+import Table from 'web/components/table/stripedtable';
 import TagComponent from 'web/pages/tags/component';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const SectionElementDivider = styled(Divider)`
   margin-bottom: 3px;
@@ -53,8 +43,8 @@ const SectionElements = withCapabilities(
             />
           )}
           <ManualIcon
-            page="web-interface"
             anchor="tags"
+            page="web-interface"
             title={_('Help: User Tags')}
           />
         </IconDivider>
@@ -114,7 +104,7 @@ class EntityTagsTable extends React.Component {
                 <TableHead>{_('Name')}</TableHead>
                 <TableHead>{_('Value')}</TableHead>
                 <TableHead>{_('Comment')}</TableHead>
-                <TableHead width="8%" align="center">
+                <TableHead align="center" width="8%">
                   {_('Actions')}
                 </TableHead>
               </TableRow>
@@ -133,22 +123,22 @@ class EntityTagsTable extends React.Component {
                     <TableData>{tag.value}</TableData>
                     <TableData>{tag.comment}</TableData>
                     <TableData>
-                      <IconDivider align="center" grow>
+                      <IconDivider grow align="center">
                         <DisableIcon
-                          value={tag}
                           title={_('Disable Tag')}
+                          value={tag}
                           onClick={onTagDisableClick}
                         />
                         <DeleteIcon
-                          value={tag}
                           title={_('Remove Tag from {{type}}', {
                             type: typeName(entityType),
                           })}
+                          value={tag}
                           onClick={() => onTagRemoveClick(tag.id, entity)}
                         />
                         <EditIcon
-                          value={tag}
                           title={_('Edit Tag')}
+                          value={tag}
                           onClick={this.handleEditTag}
                         />
                       </IconDivider>
@@ -174,21 +164,21 @@ EntityTagsTable.propTypes = {
 
 const EntityTags = ({entity, onChanged, onError, onInteraction}) => (
   <TagComponent
-    onAdded={onChanged}
     onAddError={onError}
-    onCreated={onChanged}
+    onAdded={onChanged}
     onCreateError={onError}
-    onDeleted={onChanged}
+    onCreated={onChanged}
     onDeleteError={onError}
-    onDisabled={onChanged}
+    onDeleted={onChanged}
     onDisableError={onError}
-    onEnabled={onChanged}
+    onDisabled={onChanged}
     onEnableError={onError}
+    onEnabled={onChanged}
     onInteraction={onInteraction}
-    onRemoved={onChanged}
     onRemoveError={onError}
-    onSaved={onChanged}
+    onRemoved={onChanged}
     onSaveError={onError}
+    onSaved={onChanged}
   >
     {({create, disable, edit, remove}) => (
       <EntityTagsTable
@@ -210,5 +200,3 @@ EntityTags.propTypes = {
 };
 
 export default EntityTags;
-
-// vim: set ts=2 sw=2 tw=80:

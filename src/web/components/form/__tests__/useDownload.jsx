@@ -3,14 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
+ 
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {fireEvent, render, screen} from 'web/utils/testing';
 
-import useDownload from '../useDownload';
 import Download from '../download';
+import useDownload from '../useDownload';
 
 const TestComponent = () => {
   const [ref, download] = useDownload();

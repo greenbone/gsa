@@ -4,9 +4,7 @@
  */
 
 import {types} from 'web/store/entities/utils/actions';
-
 import {isError} from 'web/store/entities/utils/reducers';
-
 import {filterIdentifier} from 'web/store/utils';
 
 const isLoading = (state = {}, action) => {

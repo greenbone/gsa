@@ -4,13 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import ScanConfig from 'gmp/models/scanconfig';
-
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
-
 import {rendererWith} from 'web/utils/testing';
 
 import Details from '../details';

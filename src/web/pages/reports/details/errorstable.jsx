@@ -3,60 +3,54 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import DetailsLink from 'web/components/link/detailslink';
-
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
 import {createEntitiesTable} from 'web/entities/table';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
   <TableHeader>
     <TableRow>
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'error' : false}
-        onSortChange={onSortChange}
         title={_('Error Message')}
+        onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'host' : false}
-        onSortChange={onSortChange}
         title={_('Host')}
+        onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'hostname' : false}
-        onSortChange={onSortChange}
         title={_('Hostname')}
+        onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'nvt' : false}
-        onSortChange={onSortChange}
         title={_('NVT')}
+        onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'port' : false}
-        onSortChange={onSortChange}
         title={_('Port')}
+        onSortChange={onSortChange}
       />
     </TableRow>
   </TableHeader>
@@ -77,7 +71,7 @@ const Row = ({entity, links = true}) => {
       <TableData>
         {isDefined(host.id) ? (
           <span>
-            <DetailsLink type="host" id={host.id} textOnly={!links}>
+            <DetailsLink id={host.id} textOnly={!links} type="host">
               {host.ip}
             </DetailsLink>
           </span>
@@ -90,7 +84,7 @@ const Row = ({entity, links = true}) => {
       </TableData>
       <TableData>
         <span>
-          <DetailsLink type="nvt" id={nvt.id} textOnly={!links}>
+          <DetailsLink id={nvt.id} textOnly={!links} type="nvt">
             {nvt.name}
           </DetailsLink>
         </span>
@@ -110,5 +104,3 @@ export default createEntitiesTable({
   emptyTitle: _l('No Errors available'),
   row: Row,
 });
-
-// vim: set ts=2 sw=2 tw=80:

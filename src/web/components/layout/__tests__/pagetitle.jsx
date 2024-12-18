@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import PageTitle from 'web/components/layout/pagetitle';
-
 import {rendererWith} from 'web/utils/testing';
 
 const gmp = {

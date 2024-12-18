@@ -3,29 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useReducer, useState, useEffect} from 'react';
-
 import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
-
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import SaveDialog from 'web/components/dialog/savedialog';
+import React, {useReducer, useState, useEffect} from 'react';
 import DialogInlineNotification from 'web/components/dialog/dialoginlinenotification';
-
+import SaveDialog from 'web/components/dialog/savedialog';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import Loading from 'web/components/loading/loading';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import NvtFamilies from './nvtfamilies';
 import NvtPreferences, {NvtPreferencePropType} from './nvtpreferences';
 import ScannerPreferences, {
   ScannerPreferencePropType,
 } from './scannerpreferences';
-import useTranslation from 'web/hooks/useTranslation';
 
 const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
   const trend = {};
@@ -146,12 +140,12 @@ const EditScanConfigDialog = ({
 
   return (
     <SaveDialog
+      defaultValues={uncontrolledData}
       loading={isLoadingConfig}
       title={title}
+      values={controlledData}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={uncontrolledData}
-      values={controlledData}
     >
       {({values: state, onValueChange}) => (
         <>
@@ -183,8 +177,8 @@ const EditScanConfigDialog = ({
                   configFamilies={configFamilies}
                   editTitle={editNvtFamiliesTitle}
                   families={families}
-                  trend={trendValues}
                   select={selectValues}
+                  trend={trendValues}
                   onEditConfigFamilyClick={onEditConfigFamilyClick}
                   onValueChange={onValueChange}
                 />
@@ -194,8 +188,8 @@ const EditScanConfigDialog = ({
                 <Loading />
               ) : (
                 <ScannerPreferences
-                  values={scannerPreferenceValues}
                   preferences={scannerPreferences}
+                  values={scannerPreferenceValues}
                   onValuesChange={dispatch}
                 />
               )}
@@ -248,5 +242,3 @@ EditScanConfigDialog.propTypes = {
 };
 
 export default EditScanConfigDialog;
-
-// vim: set ts=2 sw=2 tw=80:

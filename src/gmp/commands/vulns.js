@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import Vulnerability from 'gmp/models/vulnerability';
 
 import EntitiesCommand from './entities';
@@ -44,5 +43,3 @@ class VulnerabilitiesCommand extends EntitiesCommand {
 
 registerCommand('vuln', VulnerabilityCommand);
 registerCommand('vulns', VulnerabilitiesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

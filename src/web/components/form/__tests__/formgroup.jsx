@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render, screen} from 'web/utils/testing';
 
 import FormGroup from '../formgroup';

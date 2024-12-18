@@ -3,27 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
-import {selectSaveId} from 'gmp/utils/id';
-
 import {
   SMB_CREDENTIAL_TYPES,
   smb_credential_filter,
 } from 'gmp/models/credential';
-
+import {selectSaveId} from 'gmp/utils/id';
+import React, {useState} from 'react';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
+import NewIcon from 'web/components/icon/newicon';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
-
-import useCapabilities from "web/hooks/useCapabilities";
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
-
-import Select from 'web/components/form/select';
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
-
-import NewIcon from 'web/components/icon/newicon';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const SmbMethodPart = ({
   prefix,
@@ -84,18 +78,18 @@ const SmbMethodPart = ({
         </span>
       </FormGroup>
 
-      <FormGroup title={_('Credential')} direction="row">
+      <FormGroup direction="row" title={_('Credential')}>
         <Select
           grow="1"
-          name={prefix + 'smb_credential'}
           items={renderSelectItems(credentials)}
+          name={prefix + 'smb_credential'}
           value={smbCredential}
           onChange={onCredentialChange}
         />
         <NewIcon
           size="small"
-          value={SMB_CREDENTIAL_TYPES}
           title={_('Create a credential')}
+          value={SMB_CREDENTIAL_TYPES}
           onClick={onNewCredentialClick}
         />
       </FormGroup>
@@ -120,30 +114,31 @@ const SmbMethodPart = ({
 
       <FormGroup title={_('Report Format')}>
         <Select
-          name={prefix + 'smb_report_format'}
           items={renderSelectItems(reportFormats)}
+          name={prefix + 'smb_report_format'}
           value={reportFormatIdInState}
           onChange={handleReportFormatIdChange}
         />
-        {
-          capabilities.mayOp('get_report_configs') &&
+        {capabilities.mayOp('get_report_configs') && (
           <>
-            <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+            <label htmlFor="report-config-select">
+              &nbsp; Report Config &nbsp;{' '}
+            </label>
             <Select
-              name={prefix + 'smb_report_config'}
               id="report-config-select"
-              value={smbConfigIdInState}
               items={reportConfigItems}
+              name={prefix + 'smb_report_config'}
+              value={smbConfigIdInState}
               onChange={handleReportConfigIdChange}
             />
           </>
-        }
+        )}
       </FormGroup>
 
       <FormGroup title={_('Max Protocol')}>
         <Select
-          name={prefix + 'smb_max_protocol'}
           items={smbMaxProtocolItems}
+          name={prefix + 'smb_max_protocol'}
           value={smbMaxProtocol}
           onChange={onChange}
         />
@@ -169,5 +164,3 @@ SmbMethodPart.propTypes = {
 };
 
 export default withPrefix(SmbMethodPart);
-
-// vim: set ts=2 sw=2 tw=80:

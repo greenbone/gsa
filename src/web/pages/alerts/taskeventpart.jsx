@@ -3,37 +3,32 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
   isTaskEvent,
 } from 'gmp/models/alert';
-
+import React from 'react';
 import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
-
 import Row from 'web/components/layout/row';
-
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
-
-import useTranslation from 'web/hooks/useTranslation';
 
 const TaskEventPart = ({prefix, event, status, onChange, onEventChange}) => {
   const [_] = useTranslation();
   return (
     <Row>
       <Radio
-        title={_('Task run status changed to')}
-        name="event"
-        value={EVENT_TYPE_TASK_RUN_STATUS_CHANGED}
         checked={isTaskEvent(event)}
+        name="event"
+        title={_('Task run status changed to')}
+        value={EVENT_TYPE_TASK_RUN_STATUS_CHANGED}
         onChange={onEventChange}
       />
       <Select
-        grow="1"
         disabled={!isTaskEvent(event)}
+        grow="1"
         items={[
           {
             value: 'Done',
@@ -77,5 +72,3 @@ TaskEventPart.propTypes = {
 };
 
 export default withPrefix(TaskEventPart);
-
-// vim: set ts=2 sw=2 tw=80:

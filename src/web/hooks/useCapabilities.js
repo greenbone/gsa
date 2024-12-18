@@ -4,7 +4,6 @@
  */
 
 import {useContext} from 'react';
-
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 const useCapabilities = () => useContext(CapabilitiesContext);

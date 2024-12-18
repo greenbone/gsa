@@ -3,33 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {GROUPS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import GroupIcon from 'web/components/icon/groupicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/groups';
-
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import GroupComponent from './component';
-import Table from './table';
 import GroupsFilterDialog from './filterdialog';
+import Table from './table';
 
 const ToolBarIcons = ({onGroupCreateClick}) => {
   const capabilities = useCapabilities();
@@ -37,8 +30,8 @@ const ToolBarIcons = ({onGroupCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="web-interface-access"
         anchor="managing-groups"
+        page="web-interface-access"
         title={_('Help: Groups')}
       />
       {capabilities.mayCreate('group') && (
@@ -62,15 +55,15 @@ const GroupsPage = ({
   const [_] = useTranslation();
   return (
     <GroupComponent
-      onCreated={onChanged}
-      onSaved={onChanged}
-      onCloned={onChanged}
       onCloneError={onError}
-      onDeleted={onChanged}
+      onCloned={onChanged}
+      onCreated={onChanged}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
+      onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
         <React.Fragment>
@@ -111,5 +104,3 @@ export default withEntitiesContainer('group', {
   entitiesSelector,
   loadEntities,
 })(GroupsPage);
-
-// vim: set ts=2 sw=2 tw=80:

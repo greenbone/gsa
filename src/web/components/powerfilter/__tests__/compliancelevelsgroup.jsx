@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import Filter from 'gmp/models/filter';
+import ComplianceLevelsFilterGroup from 'web/components/powerfilter/compliancelevelsgroup';
 import {render, fireEvent} from 'web/utils/testing';
 
-import ComplianceLevelsFilterGroup from 'web/components/powerfilter/compliancelevelsgroup';
 
-import Filter from 'gmp/models/filter';
 
 describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   test('should call change handler', () => {

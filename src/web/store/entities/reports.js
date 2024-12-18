@@ -9,7 +9,6 @@ import {
   createLoadEntities,
   types,
 } from 'web/store/entities/utils/actions';
-
 import {createReducer, initialState} from 'web/store/entities/utils/reducers';
 import {createEntitiesSelector} from 'web/store/entities/utils/selectors';
 
@@ -58,5 +57,3 @@ export {
   reportsSelector as selector,
   entitiesActions,
 };
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import * as cpe from '../cpes';
 import {testAll} from '../utils/testing';
 
-import * as cpe from '../cpes';
-
 testAll('cpe', cpe);
-
-// vim: set ts=2 sw=2 tw=80:

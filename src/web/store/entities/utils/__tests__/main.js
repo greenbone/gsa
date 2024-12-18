@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {isFunction} from 'gmp/utils/identity';
 
 import {createAll} from '../main';
@@ -48,5 +47,3 @@ describe('createAll function tests', () => {
     expect(selector(rootState).isLoadingEntity(id)).toBe(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

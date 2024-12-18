@@ -4,18 +4,14 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
-
-import Table from 'web/components/table/stripedtable';
-import TableHeader from 'web/components/table/header';
-import TableHead from 'web/components/table/head';
-import TableRow from 'web/components/table/row';
-import TableData from 'web/components/table/data';
 import TableBody from 'web/components/table/body';
-
+import TableData from 'web/components/table/data';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
+import Table from 'web/components/table/stripedtable';
 import PropTypes from 'web/utils/proptypes';
 
 const Margin = styled.div`
@@ -59,5 +55,3 @@ DataTable.propTypes = {
 };
 
 export default DataTable;
-
-// vim: set ts=2 sw=2 tw=80:

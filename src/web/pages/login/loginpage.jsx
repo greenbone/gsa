@@ -3,42 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
-import {withRouter} from 'web/utils/withRouter';
-
-import styled from 'styled-components';
-
 import Rejection from 'gmp/http/rejection';
-
 import _ from 'gmp/locale';
-
 import logger from 'gmp/log';
-
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
-import withGmp from 'web/utils/withGmp';
-
+import React from 'react';
+import {connect} from 'react-redux';
+import styled from 'styled-components';
 import Img from 'web/components/img/img';
-
 import Layout from 'web/components/layout/layout';
-
 import Footer from 'web/components/structure/footer';
-
 import {
   setSessionTimeout,
   setUsername,
   updateTimezone,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
-
 import {isLoggedIn} from 'web/store/usersettings/selectors';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
+import withGmp from 'web/utils/withGmp';
+import {withRouter} from 'web/utils/withRouter';
 
 import LoginForm from './loginform';
 
@@ -137,7 +124,7 @@ class LoginPage extends React.Component {
   }
 
   componentDidMount() {
-    const {navigate, isLoggedIn = false} = this.props; // eslint-disable-line no-shadow
+    const {navigate, isLoggedIn = false} = this.props;
 
     // redirect user to main page if he is already logged in
     if (isLoggedIn) {
@@ -174,10 +161,10 @@ class LoginPage extends React.Component {
         <BackgroundBottomImage src="login-bottom.svg" />
         <LoginForm
           error={message}
+          isIE11={isIE11()}
           showGuestLogin={showGuestLogin}
           showLogin={showLogin}
           showProtocolInsecure={showProtocolInsecure}
-          isIE11={isIE11()}
           onGuestLoginClick={this.handleGuestLogin}
           onSubmit={this.handleSubmit}
         />
@@ -216,5 +203,3 @@ export default compose(
   withGmp,
   connect(mapStateToProp, mapDispatchToProps),
 )(LoginPage);
-
-// vim: set ts=2 sw=2 tw=80:

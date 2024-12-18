@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import Checkbox from 'web/components/form/checkbox';
+import PropTypes from 'web/utils/proptypes';
 
 export class EntitySelection extends React.Component {
   constructor(...args) {
@@ -41,5 +38,3 @@ EntitySelection.propTypes = {
 };
 
 export default EntitySelection;
-
-// vim: set ts=2 sw=2 tw=80:

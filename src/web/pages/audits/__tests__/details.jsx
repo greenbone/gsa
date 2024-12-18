@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
-
 import {entityLoadingActions as policyActions} from 'web/store/entities/policies';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
-
 import {rendererWith} from 'web/utils/testing';
 
 import Details from '../details';

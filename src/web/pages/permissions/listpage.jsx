@@ -3,33 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {PERMISSIONS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import PermissionIcon from 'web/components/icon/permissionicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+import FilterDialog from 'web/pages/permissions/filterdialog';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/permissions';
+import PropTypes from 'web/utils/proptypes';
 
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
-
-import Table from './table';
 import PermissionComponent from './component';
-import FilterDialog from 'web/pages/permissions/filterdialog';
+import Table from './table';
 
 const ToolBarIcons = ({onPermissionCreateClick}) => {
   const capabilities = useCapabilities();
@@ -37,8 +30,8 @@ const ToolBarIcons = ({onPermissionCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="web-interface-access"
         anchor="managing-permissions"
+        page="web-interface-access"
         title={_('Help: Permissions')}
       />
       {capabilities.mayCreate('permission') && (
@@ -59,25 +52,25 @@ const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => {
   const [_] = useTranslation();
   return (
     <PermissionComponent
-      onCloned={onChanged}
       onCloneError={onError}
-      onDeleted={onChanged}
+      onCloned={onChanged}
       onDeleteError={onError}
-      onSaved={onChanged}
-      onSaveError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
+      onSaveError={onError}
+      onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit}) => (
         <React.Fragment>
           <PageTitle title={_('Permissions')} />
           <EntitiesPage
             {...props}
-            sectionIcon={<PermissionIcon size="large" />}
-            table={Table}
             filterEditDialog={FilterDialog}
             filtersFilter={PERMISSIONS_FILTER_FILTER}
+            sectionIcon={<PermissionIcon size="large" />}
+            table={Table}
             title={_('Permissions')}
             toolBarIcons={ToolBarIcons}
             onError={onError}
@@ -105,5 +98,3 @@ export default withEntitiesContainer('permission', {
   entitiesSelector,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

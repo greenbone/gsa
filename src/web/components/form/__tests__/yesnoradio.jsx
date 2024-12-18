@@ -4,12 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {getRadioInputs} from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import YesNoRadio from '../yesnoradio';
 
@@ -59,8 +56,8 @@ describe('YesNoRadio tests', () => {
       <YesNoRadio
         convert={v => v}
         name="ipsum"
-        yesValue="foo"
         noValue="bar"
+        yesValue="foo"
         onChange={onChange}
       />,
     );

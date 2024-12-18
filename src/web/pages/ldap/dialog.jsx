@@ -4,17 +4,13 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import CheckBox from 'web/components/form/checkbox';
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const LdapDialog = ({
   authdn = '',
@@ -34,19 +30,19 @@ const LdapDialog = ({
   return (
     <SaveDialog
       buttonTitle={_('Save')}
-      title={_('Edit LDAP per-User Authentication')}
       defaultValues={uncontrolledValues}
+      title={_('Edit LDAP per-User Authentication')}
       onClose={onClose}
       onSave={onSave}
     >
       {({values, onValueChange}) => (
         <>
           <CheckBox
-            title={_('Enable')}
-            data-testid="enable-checkbox"
-            name="enable"
             checked={values.enable}
             checkedValue={true}
+            data-testid="enable-checkbox"
+            name="enable"
+            title={_('Enable')}
             unCheckedValue={false}
             onChange={onValueChange}
           />
@@ -54,8 +50,8 @@ const LdapDialog = ({
             <TextField
               data-testid="ldaphost-textfield"
               name="ldaphost"
-              value={values.ldaphost}
               size="30"
+              value={values.ldaphost}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -63,8 +59,8 @@ const LdapDialog = ({
             <TextField
               data-testid="authdn-textfield"
               name="authdn"
-              value={values.authdn}
               size="30"
+              value={values.authdn}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -72,11 +68,11 @@ const LdapDialog = ({
             <FileField name="certificate" onChange={onValueChange} />
           </FormGroup>
           <CheckBox
-            title={_('Use LDAPS only')}
-            data-testid="ldapsOnly-checkbox"
-            name="ldapsOnly"
             checked={values.ldapsOnly}
             checkedValue={true}
+            data-testid="ldapsOnly-checkbox"
+            name="ldapsOnly"
+            title={_('Use LDAPS only')}
             unCheckedValue={false}
             onChange={onValueChange}
           />
@@ -96,5 +92,3 @@ LdapDialog.propTypes = {
 };
 
 export default LdapDialog;
-
-// vim: set ts=2 sw=2 tw=80:

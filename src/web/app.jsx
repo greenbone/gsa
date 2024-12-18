@@ -3,43 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {Provider as StoreProvider} from 'react-redux';
-
 import {
   ThemeProvider,
   theme,
 } from '@greenbone/opensight-ui-components-mantinev7';
-
 import Gmp from 'gmp';
 import GmpSettings from 'gmp/gmpsettings';
-
-import {LOG_LEVEL_DEBUG} from 'gmp/log';
-
 import {_, initLocale} from 'gmp/locale/lang';
-
+import {LOG_LEVEL_DEBUG} from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {Provider as StoreProvider} from 'react-redux';
 import ErrorBoundary from 'web/components/error/errorboundary';
-
 import GlobalStyles from 'web/components/layout/globalstyles';
-
 import LocaleObserver from 'web/components/observer/localeobserver';
-
 import GmpContext from 'web/components/provider/gmpprovider';
-
 import {
   setUsername,
   setTimezone,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
 
-import configureStore from './store';
-
-import {clearStore} from './store/actions';
-
 import Routes from './routes';
+import configureStore from './store';
+import {clearStore} from './store/actions';
 
 initLocale();
 
@@ -109,5 +96,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-// vim: set ts=2 sw=2 tw=80:

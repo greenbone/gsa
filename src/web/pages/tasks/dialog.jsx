@@ -3,17 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
-import {first} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
+import {
+  OPENVAS_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
@@ -22,32 +16,26 @@ import {
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
 } from 'gmp/models/task';
-
-import {
-  OPENVAS_SCANNER_TYPE,
-  OPENVAS_DEFAULT_SCANNER_ID,
-  GREENBONE_SENSOR_SCANNER_TYPE,
-} from 'gmp/models/scanner';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {first} from 'gmp/utils/array';
+import {selectSaveId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/savedialog';
-
+import Checkbox from 'web/components/form/checkbox';
+import FormGroup from 'web/components/form/formgroup';
 import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
-import FormGroup from 'web/components/form/formgroup';
-import Checkbox from 'web/components/form/checkbox';
-import YesNoRadio from 'web/components/form/yesnoradio';
 import TextField from 'web/components/form/textfield';
-
+import YesNoRadio from 'web/components/form/yesnoradio';
 import NewIcon from 'web/components/icon/newicon';
-
 import Divider from 'web/components/layout/divider';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 import AutoDeleteReportsGroup from './autodeletereportsgroup';
@@ -77,11 +65,11 @@ const ScannerSelect = ({
   return (
     <FormGroup title={_('Scanner')}>
       <Select
+        disabled={!changeTask}
+        isLoading={isLoading}
+        items={renderSelectItems(scanners)}
         name="scanner_id"
         value={scannerId}
-        disabled={!changeTask}
-        items={renderSelectItems(scanners)}
-        isLoading={isLoading}
         onChange={onChange}
       />
     </FormGroup>
@@ -211,11 +199,11 @@ const TaskDialog = ({
 
   return (
     <SaveDialog
+      defaultValues={uncontrolledData}
       title={title}
+      values={controlledData}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={uncontrolledData}
-      values={controlledData}
     >
       {({values: state, onValueChange}) => {
         const openvasConfigId = selectSaveId(scan_configs, state.config_id);
@@ -242,7 +230,7 @@ const TaskDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Scan Targets')} direction="row">
+            <FormGroup direction="row" title={_('Scan Targets')}>
               <Title
                 title={
                   changeTask
@@ -253,10 +241,10 @@ const TaskDialog = ({
                 }
               >
                 <Select
-                  name="target_id"
                   disabled={!changeTask}
-                  items={targetItems}
                   isLoading={isLoadingTargets}
+                  items={targetItems}
+                  name="target_id"
                   value={state.target_id}
                   onChange={onTargetChange}
                 />
@@ -270,12 +258,12 @@ const TaskDialog = ({
             </FormGroup>
 
             {capabilities.mayOp('get_alerts') && (
-              <FormGroup title={_('Alerts')} direction="row">
+              <FormGroup direction="row" title={_('Alerts')}>
                 <MultiSelect
                   grow="1"
-                  name="alert_ids"
-                  items={alertItems}
                   isLoading={isLoadingAlerts}
+                  items={alertItems}
+                  name="alert_ids"
                   value={state.alert_ids}
                   onChange={onAlertsChange}
                 />
@@ -287,21 +275,21 @@ const TaskDialog = ({
             )}
 
             {capabilities.mayOp('get_schedules') && (
-              <FormGroup title={_('Schedule')} direction="row">
+              <FormGroup direction="row" title={_('Schedule')}>
                 <Select
                   grow="1"
+                  isLoading={isLoadingSchedules}
+                  items={scheduleItems}
                   name="schedule_id"
                   value={state.schedule_id}
-                  items={scheduleItems}
-                  isLoading={isLoadingSchedules}
                   onChange={onScheduleChange}
                 />
                 <Checkbox
-                  name="schedule_periods"
                   checked={state.schedule_periods === YES_VALUE}
                   checkedValue={YES_VALUE}
-                  unCheckedValue={NO_VALUE}
+                  name="schedule_periods"
                   title={_('Once')}
+                  unCheckedValue={NO_VALUE}
                   onChange={onValueChange}
                 />
                 <NewIcon
@@ -318,8 +306,8 @@ const TaskDialog = ({
 
             <FormGroup title={_('Apply Overrides')}>
               <YesNoRadio
-                name="apply_overrides"
                 disabled={state.in_assets !== YES_VALUE}
+                name="apply_overrides"
                 value={state.apply_overrides}
                 onChange={onValueChange}
               />
@@ -327,12 +315,12 @@ const TaskDialog = ({
 
             <FormGroup title={_('Min QoD')}>
               <Spinner
-                name="min_qod"
                 disabled={state.in_assets !== YES_VALUE}
-                type="int"
-                min="0"
                 max="100"
+                min="0"
+                name="min_qod"
                 postfix="%"
+                type="int"
                 value={state.min_qod}
                 onChange={onValueChange}
               />
@@ -341,8 +329,8 @@ const TaskDialog = ({
             {changeTask && (
               <FormGroup title={_('Alterable Task')}>
                 <YesNoRadio
-                  name="alterable"
                   disabled={task && !task.isNew()}
+                  name="alterable"
                   value={state.alterable}
                   onChange={onValueChange}
                 />
@@ -365,10 +353,10 @@ const TaskDialog = ({
               }
             >
               <ScannerSelect
-                scanners={scanners}
-                scannerId={state.scanner_id}
                 changeTask={changeTask}
                 isLoading={isLoadingScanners}
+                scannerId={state.scanner_id}
+                scanners={scanners}
                 onChange={onScannerChange}
               />
             </Title>
@@ -385,10 +373,10 @@ const TaskDialog = ({
                     }
                   >
                     <Select
-                      name="config_id"
                       disabled={!changeTask}
-                      items={openvasScanConfigItems}
                       isLoading={isLoadingConfigs}
+                      items={openvasScanConfigItems}
+                      name="config_id"
                       value={openvasConfigId}
                       onChange={value => {
                         onScanConfigChange(value);
@@ -398,7 +386,6 @@ const TaskDialog = ({
                 </FormGroup>
                 <FormGroup title={_('Order for target hosts')}>
                   <Select
-                    name="hosts_ordering"
                     items={[
                       {
                         value: 'sequential',
@@ -413,6 +400,7 @@ const TaskDialog = ({
                         label: _('Reverse'),
                       },
                     ]}
+                    name="hosts_ordering"
                     value={state.hosts_ordering}
                     onChange={onValueChange}
                   />
@@ -421,17 +409,17 @@ const TaskDialog = ({
                   title={_('Maximum concurrently executed NVTs per host')}
                 >
                   <Spinner
-                    name="max_checks"
                     min="0"
+                    name="max_checks"
                     value={state.max_checks}
                     onChange={onValueChange}
                   />
                 </FormGroup>
                 <FormGroup title={_('Maximum concurrently scanned hosts')}>
                   <Spinner
+                    min="0"
                     name="max_hosts"
                     type="int"
-                    min="0"
                     value={state.max_hosts}
                     onChange={onValueChange}
                   />
@@ -445,19 +433,19 @@ const TaskDialog = ({
                 <FormGroup title={_('Tag')}>
                   <Divider>
                     <Checkbox
-                      title={_('Add:')}
-                      name="add_tag"
-                      checkedValue={YES_VALUE}
-                      unCheckedValue={NO_VALUE}
                       checked={state.add_tag === YES_VALUE}
+                      checkedValue={YES_VALUE}
+                      name="add_tag"
+                      title={_('Add:')}
+                      unCheckedValue={NO_VALUE}
                       onChange={onValueChange}
                     />
                     <Select
-                      grow="1"
                       disabled={state.add_tag !== YES_VALUE}
-                      name="tag_id"
-                      items={tagItems}
+                      grow="1"
                       isLoading={isLoadingTags}
+                      items={tagItems}
+                      name="tag_id"
                       value={state.tag_id}
                       onChange={onValueChange}
                     />
@@ -519,5 +507,3 @@ TaskDialog.propTypes = {
 };
 
 export default withCapabilities(TaskDialog);
-
-// vim: set ts=2 sw=2 tw=80:

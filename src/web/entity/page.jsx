@@ -3,31 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import styled from 'styled-components';
-
 import {typeName} from 'gmp/utils/entitytype';
-
 import {isDefined} from 'gmp/utils/identity';
-
 import {shorten} from 'gmp/utils/string';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import styled from 'styled-components';
 import Toolbar from 'web/components/bar/toolbar';
-
 import ErrorMessage from 'web/components/error/errormessage';
-
 import Message from 'web/components/error/message';
-
 import Layout from 'web/components/layout/layout';
-
 import Loading from 'web/components/loading/loading';
-
 import Section from 'web/components/section/section';
+import PropTypes from 'web/utils/proptypes';
 
 import EntityInfo from './info';
 
@@ -93,10 +81,10 @@ class EntityPage extends React.Component {
 
     return (
       <SectionComponent
-        title={section_title}
         className="entity-section"
-        img={sectionIcon}
         extra={this.renderInfo()}
+        img={sectionIcon}
+        title={section_title}
       >
         {children({
           activeTab,
@@ -198,7 +186,7 @@ class EntityPage extends React.Component {
     }
 
     return (
-      <Layout flex="column" align="start" grow="1">
+      <Layout align="start" flex="column" grow="1">
         <Toolbar>{this.renderToolbarIcons()}</Toolbar>
         {this.renderSection()}
       </Layout>
@@ -220,5 +208,3 @@ EntityPage.propTypes = {
 };
 
 export default EntityPage;
-
-// vim: set ts=2 sw=2 tw=80:

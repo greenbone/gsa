@@ -4,12 +4,9 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import Select from 'web/components/form/select';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const DaySelect = ({value, ...props}) => {
   const [_] = useTranslation();
@@ -44,7 +41,7 @@ const DaySelect = ({value, ...props}) => {
       value: 'sunday',
     },
   ];
-  return <Select {...props} value={value} items={DAY_SELECT_ITEMS} />;
+  return <Select {...props} items={DAY_SELECT_ITEMS} value={value} />;
 };
 
 DaySelect.propTypes = {
@@ -60,5 +57,3 @@ DaySelect.propTypes = {
 };
 
 export default DaySelect;
-
-// vim: set ts=2 sw=2 tw=80:

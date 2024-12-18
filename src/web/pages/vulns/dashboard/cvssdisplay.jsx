@@ -4,12 +4,10 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
-
-import CvssDisplay from 'web/components/dashboard/display/cvss/cvssdisplay';
-import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import CvssDisplay from 'web/components/dashboard/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {VulnsSeverityLoader} from './loaders';
@@ -43,5 +41,3 @@ registerDisplay(VulnsCvssDisplay.displayId, VulnsCvssDisplay, {
 registerDisplay(VulnsCvssTableDisplay.displayId, VulnsCvssTableDisplay, {
   title: _l('Table: Vulnerabilities by CVSS'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

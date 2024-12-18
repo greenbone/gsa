@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useState, useRef} from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {isDefined, isFunction} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Theme from 'web/utils/theme';
-
+import React, {useEffect, useState, useRef} from 'react';
+import styled from 'styled-components';
 import useIconSize from 'web/hooks/useIconSize';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const Anchor = styled.a`
   display: flex;
@@ -105,7 +99,7 @@ const SvgIcon = ({
 
     if (isDefined(promise) && isDefined(promise.then)) {
       setLoading(true);
-      // eslint-disable-next-line no-shadow
+       
       promise
         .then(() => {
           setLoading(false);
@@ -126,13 +120,13 @@ const SvgIcon = ({
   return (
     <Styled
       {...other}
-      data-testid="svg-icon"
-      title={title}
       $active={active && !loading}
-      $isLoading={loading}
       $height={height}
+      $isLoading={loading}
       $width={width}
       color={color}
+      data-testid="svg-icon"
+      title={title}
       onClick={
         isDefined(onClick) && !disabled && !loading ? handleClick : undefined
       }

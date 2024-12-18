@@ -4,18 +4,14 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
+import Dialog from 'web/components/dialog/dialog';
 import DialogTwoButtonFooter, {
   DELETE_ACTION,
 } from 'web/components/dialog/twobuttonfooter';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const Content = styled.div`
   padding: 5px 15px;
@@ -30,8 +26,8 @@ const ConfirmRemoveDialog = ({
   const [_] = useTranslation();
   return (
     <Dialog
-      onClose={onDeny}
       title={_('Remove Dashboard {{name}}', {name: dashboardTitle})}
+      onClose={onDeny}
     >
       <DialogContent>
         <Content>
@@ -42,10 +38,10 @@ const ConfirmRemoveDialog = ({
           )}
         </Content>
         <DialogTwoButtonFooter
+          rightButtonAction={DELETE_ACTION}
           rightButtonTitle={_('Remove')}
           onLeftButtonClick={onDeny}
           onRightButtonClick={() => onConfirm(dashboardId)}
-          rightButtonAction={DELETE_ACTION}
         />
       </DialogContent>
     </Dialog>
@@ -60,5 +56,3 @@ ConfirmRemoveDialog.propTypes = {
 };
 
 export default ConfirmRemoveDialog;
-
-// vim: set ts=2 sw=2 tw=80:

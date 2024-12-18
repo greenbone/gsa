@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {isFunction} from 'gmp/utils/identity';
-
 import Filter from 'gmp/models/filter';
+import {isFunction} from 'gmp/utils/identity';
 
 import {
   types,

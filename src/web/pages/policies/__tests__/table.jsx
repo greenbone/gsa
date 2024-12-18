@@ -4,14 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
-
 import {setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
@@ -72,11 +68,11 @@ describe('Policies table tests', () => {
 
     const {baseElement} = render(
       <Table
-        filter={filter}
         entities={[policy, policy2, policy3]}
         entitiesCounts={counts}
-        onPolicyCloneClick={handlePolicyCloneClick}
+        filter={filter}
         onCreateAuditClick={handleCreateAuditClick}
+        onPolicyCloneClick={handlePolicyCloneClick}
         onPolicyDeleteClick={handlePolicyDeleteClick}
         onPolicyDownloadClick={handlePolicyDownloadClick}
         onPolicyEditClick={handlePolicyEditClick}
@@ -111,11 +107,11 @@ describe('Policies table tests', () => {
 
     const {element, getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[policy, policy2, policy3]}
         entitiesCounts={counts}
-        onPolicyCloneClick={handlePolicyCloneClick}
+        filter={filter}
         onCreateAuditClick={handleCreateAuditClick}
+        onPolicyCloneClick={handlePolicyCloneClick}
         onPolicyDeleteClick={handlePolicyDeleteClick}
         onPolicyDownloadClick={handlePolicyDownloadClick}
         onPolicyEditClick={handlePolicyEditClick}
@@ -152,11 +148,11 @@ describe('Policies table tests', () => {
 
     const {getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[policy, policy2, policy3]}
         entitiesCounts={counts}
-        onPolicyCloneClick={handlePolicyCloneClick}
+        filter={filter}
         onCreateAuditClick={handleCreateAuditClick}
+        onPolicyCloneClick={handlePolicyCloneClick}
         onPolicyDeleteClick={handlePolicyDeleteClick}
         onPolicyDownloadClick={handlePolicyDownloadClick}
         onPolicyEditClick={handlePolicyEditClick}

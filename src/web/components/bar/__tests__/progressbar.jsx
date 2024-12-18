@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render} from 'web/utils/testing';
-
 import Theme from 'web/utils/theme';
 
 import ProgressBar from '../progressbar';
@@ -130,8 +128,8 @@ describe('ProgressBar tests', () => {
   test('should render box background', () => {
     const {getByTestId} = render(
       <ProgressBar
-        boxBackground={Theme.errorRed}
         background="run"
+        boxBackground={Theme.errorRed}
         progress="10"
         title="Progress"
       />,

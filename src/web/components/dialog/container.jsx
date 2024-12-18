@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 
 const StyledDialogContainer = styled.div`
@@ -33,8 +31,8 @@ const DialogContainer = React.forwardRef(
       <StyledDialogContainer
         {...other}
         ref={ref}
-        width={width}
         height={height}
+        width={width}
       />
     );
   },
@@ -48,5 +46,3 @@ DialogContainer.propTypes = {
 };
 
 export default DialogContainer;
-
-// vim: set ts=2 sw=2 tw=80:

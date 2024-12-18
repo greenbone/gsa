@@ -3,44 +3,35 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
-
-import IconDivider from 'web/components/layout/icondivider';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
-
+import NoteIcon from 'web/components/icon/noteicon';
+import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/notes';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
+import NoteComponent from './component';
+import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
 import FilterDialog from './filterdialog';
 import NotesTable from './table';
-import NoteComponent from './component';
-
-import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
-import NoteIcon from 'web/components/icon/noteicon';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onNoteCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="reports"
         anchor="managing-notes"
+        page="reports"
         title={_('Help: Notes')}
       />
       {capabilities.mayCreate('note') && (
@@ -64,13 +55,13 @@ const Page = ({
   ...props
 }) => (
   <NoteComponent
-    onCreated={onChanged}
-    onCloned={onChanged}
     onCloneError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onDeleted={onChanged}
+    onCloned={onChanged}
+    onCreated={onChanged}
     onDeleteError={onError}
+    onDeleted={onChanged}
+    onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
@@ -126,5 +117,3 @@ export default withEntitiesContainer('note', {
   entitiesSelector,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

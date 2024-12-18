@@ -4,7 +4,6 @@
  */
 
 import {setLocale} from 'gmp/locale/lang';
-
 import Report from 'gmp/models/report';
 
 setLocale('en');

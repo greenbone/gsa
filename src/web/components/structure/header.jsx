@@ -3,21 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback} from 'react';
-
-import {useNavigate} from 'react-router-dom';
-
 import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
-
 import _ from 'gmp/locale';
-
+import {useCallback} from 'react';
+import {useNavigate} from 'react-router-dom';
+import LogoutIcon from 'web/components/icon/logouticon';
+import MySettingsIcon from 'web/components/icon/mysettingsicon';
+import getLogo from 'web/components/structure/getLogo';
+import useGmp from 'web/hooks/useGmp';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
-import useGmp from 'web/hooks/useGmp';
 
-import LogoutIcon from 'web/components/icon/logouticon';
-import getLogo from 'web/components/structure/getLogo';
-import MySettingsIcon from 'web/components/icon/mysettingsicon';
 import LanguageSwitch from './languageswitch';
 import SessionTimer from '../sessionTimer/SessionTimer';
 
@@ -62,14 +58,14 @@ const Header = () => {
 
   return (
     <AppHeader
-      logo={logoComponent}
-      languageSwitch={<LanguageSwitch />}
-      menuPoints={menuPoints}
       isLoggedIn={loggedIn}
+      isThemeSwitchVisible={false}
+      languageSwitch={<LanguageSwitch />}
+      logo={logoComponent}
+      logoLink="/dashboards"
+      menuPoints={menuPoints}
       sessionTimer={<SessionTimer />}
       username={username}
-      logoLink="/dashboards"
-      isThemeSwitchVisible={false}
     />
   );
 };

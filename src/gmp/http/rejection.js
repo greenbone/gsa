@@ -4,7 +4,6 @@
  */
 
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 class Rejection {
@@ -58,5 +57,3 @@ class Rejection {
 }
 
 export default Rejection;
-
-// vim: set ts=2 sw=2 tw=80:

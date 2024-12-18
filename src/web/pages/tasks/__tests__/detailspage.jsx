@@ -4,18 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
-import Task, {TASK_STATUS} from 'gmp/models/task';
-import Schedule from 'gmp/models/schedule';
 import ScanConfig from 'gmp/models/scanconfig';
-
+import Schedule from 'gmp/models/schedule';
+import Task, {TASK_STATUS} from 'gmp/models/task';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -629,10 +625,10 @@ describe('Task ToolBarIcons tests', () => {
         entity={task}
         notes={[{_id: '2021'}, {_id: '2223'}]}
         overrides={[{_id: '2425'}, {_id: '2627'}, {_id: '2829'}]}
-        onReportImportClick={handleReportImport}
-        onTaskCreateClick={handleTaskCreate}
         onContainerTaskCreateClick={handleContainerTaskCreate}
+        onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
+        onTaskCreateClick={handleTaskCreate}
         onTaskDeleteClick={handleTaskDelete}
         onTaskDownloadClick={handleTaskDownload}
         onTaskEditClick={handleTaskEdit}
@@ -683,10 +679,10 @@ describe('Task ToolBarIcons tests', () => {
     const {baseElement, getAllByTestId} = render(
       <ToolBarIcons
         entity={task3}
-        onReportImportClick={handleReportImport}
-        onTaskCreateClick={handleTaskCreate}
         onContainerTaskCreateClick={handleContainerTaskCreate}
+        onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
+        onTaskCreateClick={handleTaskCreate}
         onTaskDeleteClick={handleTaskDelete}
         onTaskDownloadClick={handleTaskDownload}
         onTaskEditClick={handleTaskEdit}
@@ -780,10 +776,10 @@ describe('Task ToolBarIcons tests', () => {
     const {baseElement, getAllByTestId} = render(
       <ToolBarIcons
         entity={task4}
-        onReportImportClick={handleReportImport}
-        onTaskCreateClick={handleTaskCreate}
         onContainerTaskCreateClick={handleContainerTaskCreate}
+        onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
+        onTaskCreateClick={handleTaskCreate}
         onTaskDeleteClick={handleTaskDelete}
         onTaskDownloadClick={handleTaskDownload}
         onTaskEditClick={handleTaskEdit}
@@ -883,10 +879,10 @@ describe('Task ToolBarIcons tests', () => {
     const {baseElement, getAllByTestId} = render(
       <ToolBarIcons
         entity={task5}
-        onReportImportClick={handleReportImport}
-        onTaskCreateClick={handleTaskCreate}
         onContainerTaskCreateClick={handleContainerTaskCreate}
+        onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
+        onTaskCreateClick={handleTaskCreate}
         onTaskDeleteClick={handleTaskDelete}
         onTaskDownloadClick={handleTaskDownload}
         onTaskEditClick={handleTaskEdit}
@@ -987,10 +983,10 @@ describe('Task ToolBarIcons tests', () => {
         entity={task2}
         notes={[{_id: '2021'}, {_id: '2223'}]}
         overrides={[{_id: '2425'}, {_id: '2627'}, {_id: '2829'}]}
-        onReportImportClick={handleReportImport}
-        onTaskCreateClick={handleTaskCreate}
         onContainerTaskCreateClick={handleContainerTaskCreate}
+        onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
+        onTaskCreateClick={handleTaskCreate}
         onTaskDeleteClick={handleTaskDelete}
         onTaskDownloadClick={handleTaskDownload}
         onTaskEditClick={handleTaskEdit}
@@ -1089,10 +1085,10 @@ describe('Task ToolBarIcons tests', () => {
     const {baseElement, getAllByTestId} = render(
       <ToolBarIcons
         entity={task6}
-        onReportImportClick={handleReportImport}
-        onTaskCreateClick={handleTaskCreate}
         onContainerTaskCreateClick={handleContainerTaskCreate}
+        onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
+        onTaskCreateClick={handleTaskCreate}
         onTaskDeleteClick={handleTaskDelete}
         onTaskDownloadClick={handleTaskDownload}
         onTaskEditClick={handleTaskEdit}
@@ -1197,10 +1193,10 @@ describe('Task ToolBarIcons tests', () => {
     const {getAllByTestId} = render(
       <ToolBarIcons
         entity={task7}
-        onReportImportClick={handleReportImport}
-        onTaskCreateClick={handleTaskCreate}
         onContainerTaskCreateClick={handleContainerTaskCreate}
+        onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
+        onTaskCreateClick={handleTaskCreate}
         onTaskDeleteClick={handleTaskDelete}
         onTaskDownloadClick={handleTaskDownload}
         onTaskEditClick={handleTaskEdit}
@@ -1254,10 +1250,10 @@ describe('Task ToolBarIcons tests', () => {
     const {baseElement, getAllByTestId} = render(
       <ToolBarIcons
         entity={task8}
-        onReportImportClick={handleReportImport}
-        onTaskCreateClick={handleTaskCreate}
         onContainerTaskCreateClick={handleContainerTaskCreate}
+        onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
+        onTaskCreateClick={handleTaskCreate}
         onTaskDeleteClick={handleTaskDelete}
         onTaskDownloadClick={handleTaskDownload}
         onTaskEditClick={handleTaskEdit}

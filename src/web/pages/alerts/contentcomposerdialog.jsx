@@ -3,26 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-
+import React from 'react';
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
-} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len*/
-
+} from 'web/components/dialog/composercontent';
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 const ContentComposerDialog = ({
   filterId = UNSET_VALUE,
@@ -58,9 +51,9 @@ const ContentComposerDialog = ({
     >
       <FormGroup title={_('Report Result Filter')}>
         <Select
+          items={renderSelectItems(filters, UNSET_VALUE)}
           name="filterId"
           value={filterId}
-          items={renderSelectItems(filters, UNSET_VALUE)}
           onChange={onFilterIdChange}
         />
       </FormGroup>
@@ -75,21 +68,21 @@ const ContentComposerDialog = ({
         onValueChange={onChange}
       />
       <CheckBox
-        data-testid="ignorePagination"
-        name="ignorePagination"
         checked={ignorePagination}
         checkedValue={YES_VALUE}
-        uncheckedValue={NO_VALUE}
+        data-testid="ignorePagination"
+        name="ignorePagination"
         title={_('Ignore Pagination')}
+        uncheckedValue={NO_VALUE}
         onChange={onChange}
       />
       <CheckBox
-        name="storeAsDefault"
         checked={storeAsDefault}
         checkedValue={YES_VALUE}
-        unCheckedValue={NO_VALUE}
-        toolTipTitle={_('Store indicated settings (without filter) as default')}
+        name="storeAsDefault"
         title={_('Store as default')}
+        toolTipTitle={_('Store indicated settings (without filter) as default')}
+        unCheckedValue={NO_VALUE}
         onChange={onChange}
       />
     </SaveDialog>
@@ -114,5 +107,3 @@ ContentComposerDialog.propTypes = {
 };
 
 export default ContentComposerDialog;
-
-// vim: set ts=2 sw=2 tw=80:

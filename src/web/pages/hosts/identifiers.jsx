@@ -4,31 +4,25 @@
  */
 
 
-import React, {useState, useEffect} from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
 
-import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {isDefined} from 'gmp/utils/identity';
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 import DateTime from 'web/components/date/datetime';
-
 import DeleteIcon from 'web/components/icon/deleteicon';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
-import TableHead from 'web/components/table/head';
-import TableRow from 'web/components/table/row';
-
-import DetailsBlock from 'web/entity/block';
 import TableFooter from 'web/components/table/footer';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
+import Table from 'web/components/table/stripedtable';
+import DetailsBlock from 'web/entity/block';
+import PropTypes from 'web/utils/proptypes';
 
 const Action = styled.a`
   cursor: pointer;
@@ -56,12 +50,12 @@ const Source = ({source}) => {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
-        <DetailsLink textOnly={deleted} type="report" id={id}>
+        <DetailsLink id={id} textOnly={deleted} type="report">
           {id}
         </DetailsLink>{' '}
         <span>
           <span>(NVT</span>{' '}
-          <DetailsLink type="nvt" id={data}>
+          <DetailsLink id={data} type="nvt">
             {data}
           </DetailsLink>
           <span>)</span>
@@ -74,7 +68,7 @@ const Source = ({source}) => {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
-        <DetailsLink textOnly={deleted} type="report" id={id}>
+        <DetailsLink id={id} textOnly={deleted} type="report">
           {id}
         </DetailsLink>{' '}
         <span>{_('(Target Host)')}</span>
@@ -86,7 +80,7 @@ const Source = ({source}) => {
     return (
       <div>
         <span>{_('User')}</span>{' '}
-        <DetailsLink textOnly={deleted} type="user" id={id}>
+        <DetailsLink id={id} textOnly={deleted} type="user">
           {name}
         </DetailsLink>
       </div>
@@ -178,9 +172,9 @@ const Identifiers = props => {
               <TableData>
                 <span>
                   <DetailsLink
-                    type="operatingsystem"
                     id={isDefined(identifier.os) ? identifier.os.id : ''}
                     textOnly={identifier.name !== 'OS'}
+                    type="operatingsystem"
                   >
                     <Div>{identifier.value}</Div>
                   </DetailsLink>

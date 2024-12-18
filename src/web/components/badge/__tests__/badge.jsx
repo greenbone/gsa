@@ -5,11 +5,11 @@
 
 
 import {describe, test, expect} from '@gsa/testing';
-
+import ReportIcon from 'web/components/icon/reporticon';
 import {render} from 'web/utils/testing';
 
 import Badge from '../badge';
-import ReportIcon from 'web/components/icon/reporticon';
+
 
 describe('Badge tests', () => {
   test('should render badge', () => {
@@ -43,14 +43,14 @@ describe('Badge tests', () => {
   });
 
   test('should render position', () => {
-    const {getByTestId} = render(<Badge position="bottom" content="1" />);
+    const {getByTestId} = render(<Badge content="1" position="bottom" />);
     const icon = getByTestId('badge-icon');
 
     expect(icon).toHaveStyleRule('bottom', '-8px');
   });
 
   test('should not be dynamic', () => {
-    const {getByTestId} = render(<Badge dynamic={false} content="1" />);
+    const {getByTestId} = render(<Badge content="1" dynamic={false} />);
 
     const icon = getByTestId('badge-icon');
     expect(icon).toHaveStyleRule('right', '-8px');

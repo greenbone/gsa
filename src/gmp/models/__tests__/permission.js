@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import Permission from 'gmp/models/permission';
 import {testModel} from 'gmp/models/testing';
@@ -62,5 +61,3 @@ describe('Permission model tests', () => {
     expect(permission.subject).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

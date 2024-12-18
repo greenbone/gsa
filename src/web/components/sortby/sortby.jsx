@@ -3,11 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 import styled from 'styled-components';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Anchor = styled.a`
@@ -35,7 +32,7 @@ class SortBy extends React.Component {
   render() {
     const {children, className} = this.props;
     return (
-      <Anchor onClick={this.handleClick} className={className}>
+      <Anchor className={className} onClick={this.handleClick}>
         {children}
       </Anchor>
     );
@@ -49,5 +46,3 @@ SortBy.propTypes = {
 };
 
 export default SortBy;
-
-// vim: set ts=2 sw=2 tw=80:

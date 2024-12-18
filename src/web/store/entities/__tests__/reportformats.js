@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import * as reportformat from '../reportformats';
 import {testAll} from '../utils/testing';
 
-import * as reportformat from '../reportformats';
-
 testAll('reportformat', reportformat);
-
-// vim: set ts=2 sw=2 tw=80:

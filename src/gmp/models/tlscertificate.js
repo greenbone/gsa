@@ -4,9 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-
 import Model from 'gmp/model';
-
 import {parseBoolean, parseDate} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -129,5 +127,3 @@ class TlsCertificate extends Model {
 }
 
 export default TlsCertificate;
-
-// vim: set ts=2 sw=2 tw=80:

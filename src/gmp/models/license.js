@@ -4,9 +4,7 @@
  */
 
 import _ from 'gmp/locale';
-
 import {parseDate} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 
 const LICENSE_MODEL = {

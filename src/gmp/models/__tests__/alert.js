@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import Alert, {
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
@@ -202,5 +201,3 @@ describe('isTicketEvent tests', () => {
     expect(isTicketEvent(EVENT_TYPE_UPDATED_SECINFO)).toEqual(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

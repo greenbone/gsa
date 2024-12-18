@@ -3,15 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from 'gmp/command';
-
-import ResourceName from 'gmp/models/resourcename';
-import EntitiesCommand from './entities';
-
 import {
   parseCollectionList,
   parseResourceNamesEntities,
 } from 'gmp/collection/parser';
+import registerCommand from 'gmp/command';
+import ResourceName from 'gmp/models/resourcename';
+
+import EntitiesCommand from './entities';
 
 export class ResourceNamesCommand extends EntitiesCommand {
   constructor(http) {
@@ -85,5 +84,3 @@ export class ResourceNamesCommand extends EntitiesCommand {
 }
 
 registerCommand('resourcenames', ResourceNamesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

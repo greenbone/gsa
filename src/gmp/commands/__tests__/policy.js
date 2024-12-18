@@ -4,15 +4,14 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
   BASE_SCAN_CONFIG_ID,
 } from 'gmp/models/scanconfig';
-
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
+import {PolicyCommand} from '../policies';
 import {
   createActionResultResponse,
   createEntityResponse,
@@ -20,8 +19,6 @@ import {
   createHttpMany,
   createResponse,
 } from '../testing';
-
-import {PolicyCommand} from '../policies';
 
 describe('PolicyCommand tests', () => {
   test('should create new policy', () => {

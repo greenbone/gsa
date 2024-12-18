@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model, {parseModelFromElement} from 'gmp/model';
 import {testModel} from 'gmp/models/testing';
 
@@ -35,5 +34,3 @@ describe('parseModelFromElement tests', () => {
     expect(model.entityType).toEqual('foo');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

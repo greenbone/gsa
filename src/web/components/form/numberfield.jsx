@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, forwardRef} from 'react';
-
 import {NumberInput} from '@mantine/core';
-import styled from 'styled-components';
-
-import PropTypes from 'web/utils/proptypes';
 import {parseFloat, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import React, {useCallback, forwardRef} from 'react';
+import styled from 'styled-components';
+import PropTypes from 'web/utils/proptypes';
 
 const getSize = size => (size === 'lg' ? '40px' : '32px');
 
@@ -85,20 +83,20 @@ const NumberField = forwardRef(
         {...props}
         ref={ref}
         allowDecimal={type === 'float'}
-        error={isDefined(errorContent) && `${errorContent}`}
-        precision={parseFloat(precision)}
         disabled={disabled}
+        error={isDefined(errorContent) && `${errorContent}`}
+        errorContent={errorContent}
         hideControls={hideControls}
         label={title}
         max={parseInt(max)}
         min={parseInt(min)}
         name={name}
+        precision={parseFloat(precision)}
         prefix={prefix}
-        suffix={suffix}
-        step={parseFloat(step)}
-        value={value}
         size={size}
-        errorContent={errorContent}
+        step={parseFloat(step)}
+        suffix={suffix}
+        value={value}
         onChange={handleChange}
       />
     );
@@ -126,5 +124,3 @@ NumberField.propTypes = {
 };
 
 export default NumberField;
-
-// vim: set ts=2 sw=2 tw=80:

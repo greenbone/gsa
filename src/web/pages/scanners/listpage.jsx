@@ -3,34 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {SCANNERS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import ScannerIcon from 'web/components/icon/scannericon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
-
-import useGmp from 'web/hooks/useGmp';
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import ScannerComponent from './component';
-import ScannersTable from './table';
 import ScannersFilterDialog from './filterdialog';
+import ScannersTable from './table';
 
 const ToolBarIcons = ({onScannerCreateClick}) => {
   const gmp = useGmp();
@@ -39,8 +32,8 @@ const ToolBarIcons = ({onScannerCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="scanning"
         anchor="managing-scanners"
+        page="scanning"
         title={_('Help: Scanners')}
       />
       {capabilities.mayCreate('scanner') &&
@@ -66,19 +59,19 @@ const ScannersPage = ({
   const [_] = useTranslation();
   return (
     <ScannerComponent
-      onCreated={onChanged}
-      onSaved={onChanged}
       onCertificateDownloadError={onError}
       onCertificateDownloaded={onDownloaded}
-      onCloned={onChanged}
       onCloneError={onError}
-      onCredentialDownloaded={onDownloaded}
+      onCloned={onChanged}
+      onCreated={onChanged}
       onCredentialDownloadError={onError}
-      onDeleted={onChanged}
+      onCredentialDownloaded={onDownloaded}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={onChanged}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
+      onSaved={onChanged}
       onVerified={() => {
         onChanged();
         showSuccess(_('Scanner Verified'));
@@ -138,5 +131,3 @@ export default withEntitiesContainer('scanner', {
   entitiesSelector,
   loadEntities,
 })(ScannersPage);
-
-// vim: set ts=2 sw=2 tw=80:

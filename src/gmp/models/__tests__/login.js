@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {isDate} from 'gmp/models/date';
 import Login from 'gmp/models/login';
 
@@ -42,5 +41,3 @@ describe('Login model tests', () => {
     expect(login2.sessionTimeout).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

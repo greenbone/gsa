@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Alert from 'gmp/models/alert';
 import Filter from 'gmp/models/filter';
-
 import {entityLoadingActions} from 'web/store/entities/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -346,10 +342,10 @@ describe('Alert ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={alert}
         onAlertCloneClick={handleAlertCloneClick}
+        onAlertCreateClick={handleAlertCreateClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
         onAlertEditClick={handleAlertEditClick}
-        onAlertCreateClick={handleAlertCreateClick}
       />,
     );
 
@@ -385,10 +381,10 @@ describe('Alert ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={alert}
         onAlertCloneClick={handleAlertCloneClick}
+        onAlertCreateClick={handleAlertCreateClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
         onAlertEditClick={handleAlertEditClick}
-        onAlertCreateClick={handleAlertCreateClick}
       />,
     );
 
@@ -430,10 +426,10 @@ describe('Alert ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={observedAlert}
         onAlertCloneClick={handleAlertCloneClick}
+        onAlertCreateClick={handleAlertCreateClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
         onAlertEditClick={handleAlertEditClick}
-        onAlertCreateClick={handleAlertCreateClick}
       />,
     );
 
@@ -482,10 +478,10 @@ describe('Alert ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={alertInUse}
         onAlertCloneClick={handleAlertCloneClick}
+        onAlertCreateClick={handleAlertCreateClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
         onAlertEditClick={handleAlertEditClick}
-        onAlertCreateClick={handleAlertCreateClick}
       />,
     );
 

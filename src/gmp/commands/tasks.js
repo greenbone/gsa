@@ -3,20 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
-import {NO_VALUE} from 'gmp/parser';
-
+import logger from 'gmp/log';
 import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
 } from 'gmp/models/task';
-import {FeedStatus} from './feedstatus';
+import {NO_VALUE} from 'gmp/parser';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
+import {FeedStatus} from './feedstatus';
 
 const log = logger.getLogger('gmp.commands.tasks');
 
@@ -276,5 +273,3 @@ class TasksCommand extends EntitiesCommand {
 
 registerCommand('task', TaskCommand);
 registerCommand('tasks', TasksCommand);
-
-// vim: set ts=2 sw=2 tw=80:

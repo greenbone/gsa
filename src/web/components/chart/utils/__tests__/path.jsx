@@ -66,5 +66,3 @@ describe('path tests', () => {
     expect(p.toString()).toEqual('A 5 5 20 0 0 10 10');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

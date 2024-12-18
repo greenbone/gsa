@@ -136,5 +136,3 @@ export const apiType = type => {
   const name = CMD_TYPES[type];
   return isDefined(name) ? name : type;
 };
-
-// vim: set ts=2 sw=2 tw=80:

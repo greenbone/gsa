@@ -4,7 +4,6 @@
  */
 
 import _ from 'gmp/locale';
-
 import Select from 'web/components/form/select';
 
 const Metrics = ({metrics, selectedOptions, handleOptionChange}) => {
@@ -16,9 +15,9 @@ const Metrics = ({metrics, selectedOptions, handleOptionChange}) => {
           value: value,
         }))}
         label={`${_(metric.name)} (${metricShort})`}
+        menuPosition="adjust"
         name={metricShort}
         value={selectedOptions[metricShort]}
-        menuPosition="adjust"
         onChange={handleOptionChange}
       />
     </section>

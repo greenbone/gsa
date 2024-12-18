@@ -3,57 +3,43 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
-import {selectSaveId} from 'gmp/utils/id';
-import {isDefined} from 'gmp/utils/identity';
-
 import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-
+import {selectSaveId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {connect} from 'react-redux';
+import styled from 'styled-components';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import withClickHandler from 'web/components/form/withClickHandler';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import PerformanceIcon from 'web/components/icon/performanceicon';
 import WizardIcon from 'web/components/icon/wizardicon';
-
-import IconDivider from 'web/components/layout/icondivider';
 import Column from 'web/components/layout/column';
+import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import LinkTarget from 'web/components/link/target';
-
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
-
 import Section from 'web/components/section/section';
-
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-import {getTimezone} from 'web/store/usersettings/selectors';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities as loadScanners,
   selector as scannerSelector,
 } from 'web/store/entities/scanners';
-
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {getTimezone} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 import {renderSelectItems} from 'web/utils/render';
-
-import useGmp from 'web/hooks/useGmp';
-import useTranslation from 'web/hooks/useTranslation';
+import withGmp from 'web/utils/withGmp';
+import {withRouter} from 'web/utils/withRouter';
 
 import StartEndTimeSelection from './startendtimeselection';
-import {withRouter} from 'web/utils/withRouter';
 
 const DURATION_HOUR = 60 * 60;
 const DURATION_DAY = DURATION_HOUR * 24;
@@ -70,12 +56,12 @@ const DURATIONS = {
 };
 
 const ToolBar = ({onDurationChangeClick}) => {
-  const [_] = useTranslation(); // eslint-disable-line no-shadow
+  const [_] = useTranslation();
   return (
     <IconDivider>
       <ManualIcon
-        page="performance"
         anchor="optimizing-the-appliance-performance"
+        page="performance"
         size="small"
         title={_('Help: Performance')}
       />
@@ -273,43 +259,43 @@ class PerformancePage extends React.Component {
             <Column>
               <StartEndTimeSelection
                 endDate={endDate}
-                timezone={this.props.timezone}
                 startDate={startDate}
+                timezone={this.props.timezone}
                 onChanged={this.handleStartEndChange}
               />
 
-              <FormGroup title={_('Report for Last')} direction="row">
+              <FormGroup direction="row" title={_('Report for Last')}>
                 <Selector
-                  value="hour"
                   $duration={duration}
+                  value="hour"
                   onClick={this.handleDurationChange}
                 >
                   {_('Hour')}
                 </Selector>
                 <Selector
-                  value="day"
                   $duration={duration}
+                  value="day"
                   onClick={this.handleDurationChange}
                 >
                   {_('Day')}
                 </Selector>
                 <Selector
-                  value="week"
                   $duration={duration}
+                  value="week"
                   onClick={this.handleDurationChange}
                 >
                   {_('Week')}
                 </Selector>
                 <Selector
-                  value="month"
                   $duration={duration}
+                  value="month"
                   onClick={this.handleDurationChange}
                 >
                   {_('Month')}
                 </Selector>
                 <Selector
-                  value="year"
                   $duration={duration}
+                  value="year"
                   onClick={this.handleDurationChange}
                 >
                   {_('Year')}
@@ -319,9 +305,9 @@ class PerformancePage extends React.Component {
               {gmp.settings.enableGreenboneSensor && (
                 <FormGroup title={_('Report for Greenbone Sensor')}>
                   <Select
+                    items={renderSelectItems(scanners, 0)}
                     name="scannerId"
                     value={sensorId}
-                    items={renderSelectItems(scanners, 0)}
                     onChange={this.handleValueChange}
                   />
                 </FormGroup>
@@ -332,11 +318,11 @@ class PerformancePage extends React.Component {
                   <LinkTarget id={report.name} />
                   <h2>{report.title}</h2>
                   <ReportImage
-                    name={report.name}
                     duration={duration}
+                    endDate={endDate}
+                    name={report.name}
                     scannerId={sensorId}
                     startDate={startDate}
-                    endDate={endDate}
                   />
                 </div>
               ))}
@@ -381,5 +367,3 @@ export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(PerformancePage);
-
-// vim: set ts=2 sw=2 tw=80:

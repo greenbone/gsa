@@ -10,9 +10,7 @@ import {
   createLoadEntities,
   createLoadEntity,
 } from './actions';
-
 import {createReducer} from './reducers';
-
 import {createSelector} from './selectors';
 
 export const createAll = entityType => {
@@ -46,5 +44,3 @@ export const createAll = entityType => {
     selector,
   };
 };
-
-// vim: set ts=2 sw=2 tw=80:

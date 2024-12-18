@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
-import Dashboard from '../../../components/dashboard/dashboard';
 
 import {HostsCvssDisplay, HostsCvssTableDisplay} from './cvssdisplay';
 import {
@@ -26,6 +23,7 @@ import {
   HostsVulnScoreDisplay,
   HostsVulnScoreTableDisplay,
 } from './vulnscoredisplay';
+import Dashboard from '../../../components/dashboard/dashboard';
 
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 
@@ -46,8 +44,6 @@ export const HOSTS_DISPLAYS = [
 const HostsDashboard = props => (
   <Dashboard
     {...props}
-    id={HOSTS_DASHBOARD_ID}
-    permittedDisplays={HOSTS_DISPLAYS}
     defaultDisplays={[
       [
         HostsSeverityClassDisplay.displayId,
@@ -55,9 +51,9 @@ const HostsDashboard = props => (
         HostsModifiedDisplay.displayId,
       ],
     ]}
+    id={HOSTS_DASHBOARD_ID}
+    permittedDisplays={HOSTS_DISPLAYS}
   />
 );
 
 export default HostsDashboard;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,9 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {
   changeInputValue,
   closeDialog,
@@ -15,6 +12,7 @@ import {
   getDialogSaveButton,
   getRadioInputs,
 } from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import CreateScanConfigDialog from '../dialog';
 

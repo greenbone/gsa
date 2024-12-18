@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-console */
+ 
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render, fireEvent} from 'web/utils/testing';
+
 import ErrorBoundary from '../errorboundary';
 
 const ThrowError = () => {

@@ -4,27 +4,21 @@
  */
 
 import {useState} from 'react';
-
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
 import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
-
-import PropTypes from 'web/utils/proptypes';
-import SelectionType from 'web/utils/selectiontype';
-
+import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
+import Select from 'web/components/form/select';
 import DeleteIcon from 'web/components/icon/deleteicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import TagsIcon from 'web/components/icon/tagsicon';
 import TrashIcon from 'web/components/icon/trashicon';
-
-import Select from 'web/components/form/select';
-
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 import TableFooter from 'web/components/table/footer';
 import TableRow from 'web/components/table/row';
-
 import useTranslation from 'web/hooks/useTranslation';
-import {DELETE_ACTION} from 'web/components/dialog/twobuttonfooter';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 
 const DIALOG_TYPES = {
   TRASH: 'trash',
@@ -117,31 +111,31 @@ export const EntitiesFooter = ({
                 <IconDivider>
                   {tags && (
                     <TagsIcon
-                      onClick={onTagsClick}
                       selectionType={selectionType}
+                      onClick={onTagsClick}
                     />
                   )}
                   {trash && (
                     <TrashIcon
+                      selectionType={selectionType}
                       onClick={() =>
                         onIconClick(DIALOG_TYPES.TRASH, onTrashClick)
                       }
-                      selectionType={selectionType}
                     />
                   )}
                   {deleteEntities && (
                     <DeleteIcon
+                      selectionType={selectionType}
                       onClick={() =>
                         onIconClick(DIALOG_TYPES.DELETE, onDeleteClick)
                       }
-                      selectionType={selectionType}
                     />
                   )}
                   {download && (
                     <ExportIcon
-                      onClick={onDownloadClick}
                       selectionType={selectionType}
                       value={download}
+                      onClick={onDownloadClick}
                     />
                   )}
                   {children}
@@ -155,16 +149,16 @@ export const EntitiesFooter = ({
       </TableRow>
       {isDialogVisible && (
         <ConfirmationDialog
+          content={configDialog.dialogText}
+          rightButtonAction={DELETE_ACTION}
+          rightButtonTitle={configDialog.dialogButtonTitle}
+          title={configDialog.dialogTitle}
+          width="500px"
           onClose={closeDialog}
           onResumeClick={() => {
             configDialog.dialogFunction();
             closeDialog();
           }}
-          content={configDialog.dialogText}
-          title={configDialog.dialogTitle}
-          rightButtonTitle={configDialog.dialogButtonTitle}
-          rightButtonAction={DELETE_ACTION}
-          width="500px"
         />
       )}
     </TableFooter>
@@ -202,8 +196,8 @@ export const withEntitiesFooter =
         <Component
           {...options}
           {...props}
-          onDownloadClick={onDownloadBulk}
           onDeleteClick={onDeleteBulk}
+          onDownloadClick={onDownloadBulk}
           onTagsClick={onTagsBulk}
           onTrashClick={onDeleteBulk}
         />

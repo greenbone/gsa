@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
-
 import ActionResult from 'gmp/models/actionresult';
-
 import {filter_string} from 'gmp/models/filter/utils';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import HttpCommand from './http';
 
@@ -48,5 +46,3 @@ class GmpCommand extends HttpCommand {
 }
 
 export default GmpCommand;
-
-// vim: set ts=2 sw=2 tw=80:

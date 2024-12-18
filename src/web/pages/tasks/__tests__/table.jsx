@@ -4,15 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
@@ -119,9 +115,9 @@ describe('Tasks table tests', () => {
 
     const {baseElement} = render(
       <Table
-        filter={filter}
         entities={[task, task2, task3]}
         entitiesCounts={counts}
+        filter={filter}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -170,9 +166,9 @@ describe('Tasks table tests', () => {
 
     const {element, getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[task, task2, task3]}
         entitiesCounts={counts}
+        filter={filter}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -221,9 +217,9 @@ describe('Tasks table tests', () => {
 
     const {getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[task, task2, task3]}
         entitiesCounts={counts}
+        filter={filter}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}

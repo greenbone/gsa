@@ -4,14 +4,10 @@
  */
 
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
 import {DialogFooterLayout} from 'web/components/dialog/footer';
-
 import Button from 'web/components/form/button';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 export const DELETE_ACTION = 'delete';
 
@@ -39,9 +35,9 @@ const DialogTwoButtonFooter = ({
       </Button>
       <Button
         data-testid="dialog-save-button"
-        onClick={onRightButtonClick}
         isLoading={isLoading}
         variant={isRightButtonAction ? 'danger' : 'filled'}
+        onClick={onRightButtonClick}
       >
         {rightButtonTitle}
       </Button>
@@ -60,5 +56,3 @@ DialogTwoButtonFooter.propTypes = {
 };
 
 export default DialogTwoButtonFooter;
-
-// vim: set ts=2 sw=2 tw=80:

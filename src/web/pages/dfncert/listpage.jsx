@@ -3,40 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import Filter, {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import ManualIcon from 'web/components/icon/manualicon';
-
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/dfncerts';
-
 import PropTypes from 'web/utils/proptypes';
 
 // DFN-CERT uses same filter dialog as CERT-Bund
-import FilterDialog from '../certbund/filterdialog';
-
-import DfnCertTable from './table';
 
 import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard';
+import DfnCertTable from './table';
+import FilterDialog from '../certbund/filterdialog';
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="managing-secinfo"
     anchor="dfn-cert-advisories"
+    page="managing-secinfo"
     title={_('Help: DFN-CERT Advisories')}
   />
 );
@@ -86,5 +77,3 @@ export default withEntitiesContainer('dfncert', {
   fallbackFilter,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

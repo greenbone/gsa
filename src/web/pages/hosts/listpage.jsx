@@ -3,46 +3,36 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
-
-import IconDivider from 'web/components/layout/icondivider';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
-import {goto_details} from 'web/entity/component';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import HostIcon from 'web/components/icon/hosticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
-
+import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import {goto_details} from 'web/entity/component';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/hosts';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
+import HostComponent from './component';
+import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 import HostsFilterDialog from './filterdialog';
 import HostsTable from './table';
-import HostComponent from './component';
-
-import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onHostCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="managing-assets"
         anchor="managing-hosts"
+        page="managing-assets"
         title={_('Help: Hosts')}
       />
       {capabilities.mayCreate('host') && (
@@ -69,14 +59,14 @@ const Page = ({
 }) => (
   <HostComponent
     entitiesCounts={entitiesCounts}
-    onTargetCreated={goto_details('target', props)}
-    onTargetCreateError={onError}
     onCreated={onChanged}
     onDeleted={onChanged}
-    onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
+    onTargetCreateError={onError}
+    onTargetCreated={goto_details('target', props)}
   >
     {({
       create,
@@ -112,14 +102,14 @@ const Page = ({
           title={_('Hosts')}
           toolBarIcons={ToolBarIcons}
           onError={onError}
+          onFilterChanged={onFilterChanged}
           onHostCreateClick={create}
           onHostDeleteClick={delete_func}
           onHostDownloadClick={download}
           onHostEditClick={edit}
           onInteraction={onInteraction}
-          onFilterChanged={onFilterChanged}
-          onTargetCreateFromSelection={createtargetfromselection}
           onTargetCreateFromHostClick={createtargetfromhost}
+          onTargetCreateFromSelection={createtargetfromselection}
         />
       </React.Fragment>
     )}
@@ -145,5 +135,3 @@ export default withEntitiesContainer('host', {
   entitiesSelector,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

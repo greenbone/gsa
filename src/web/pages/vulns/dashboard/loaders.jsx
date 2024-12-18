@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-
 import Loader, {
   loadFunc,
   loaderPropTypes,
@@ -49,5 +48,3 @@ export const VulnsHostsLoader = ({filter, children}) => (
 );
 
 VulnsHostsLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

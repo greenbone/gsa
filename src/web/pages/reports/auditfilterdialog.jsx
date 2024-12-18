@@ -4,27 +4,21 @@
  */
 
 import React from 'react';
-
 import Layout from 'web/components/layout/layout';
-
-import useCapabilities from 'web/hooks/useCapabilities';
-
-import useTranslation from 'web/hooks/useTranslation';
-
-/* eslint-disable max-len */
-
+import ComplianceLevelFilterGroup from 'web/components/powerfilter/compliancelevelsgroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
-import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
-import ComplianceLevelFilterGroup from 'web/components/powerfilter/compliancelevelsgroup';
-import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
-/* eslint-enable */
+ 
 
 const AuditReportFilterDialogComponent = ({
   filter,
@@ -81,28 +75,28 @@ const AuditReportFilterDialogComponent = ({
   return (
     <Layout flex="column">
       <FilterStringGroup
-        name="filterstring"
         filter={filterstring}
+        name="filterstring"
         onChange={onFilterStringChange}
       />
 
       <ComplianceLevelFilterGroup
-        name="compliant"
         filter={filter}
+        name="compliant"
         onChange={onFilterValueChange}
         onRemove={handleRemoveCompliance}
       />
 
       <MinQodGroup
-        name="min_qod"
         filter={filter}
+        name="min_qod"
         onChange={onFilterValueChange}
       />
 
       <FilterSearchGroup
+        filter={filter}
         name="task"
         title={_('From Task (name)')}
-        filter={filter}
         onChange={onSearchTermChange}
       />
 
@@ -111,10 +105,10 @@ const AuditReportFilterDialogComponent = ({
       <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
 
       <SortByGroup
-        filter={filter}
         fields={SORT_FIELDS}
-        onSortOrderChange={onSortOrderChange}
+        filter={filter}
         onSortByChange={onSortByChange}
+        onSortOrderChange={onSortOrderChange}
       />
 
       {capabilities.mayCreate('filter') && (

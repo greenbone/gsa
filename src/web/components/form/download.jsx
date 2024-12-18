@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 class Download extends React.Component {
@@ -41,9 +39,9 @@ class Download extends React.Component {
     const {filename} = this.props;
     return (
       <a
-        download={filename}
-        aria-hidden
         ref={ref => (this.anchor = ref)}
+        aria-hidden
+        download={filename}
         style={{display: 'none'}}
       >
         Download
@@ -57,5 +55,3 @@ Download.propTypes = {
 };
 
 export default Download;
-
-// vim: set ts=2 sw=2 tw=80:

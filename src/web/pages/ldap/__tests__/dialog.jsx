@@ -4,14 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {
   getDialog,
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import Dialog from '../dialog';
 

@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import Policy from 'gmp/models/policy';
 import {testModel} from 'gmp/models/testing';
@@ -236,5 +235,3 @@ describe('Policy model tests', () => {
     expect(policy2.predefined).toEqual(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import styled from 'styled-components';
 
 import SimpleTable from './simpletable';
@@ -21,5 +20,3 @@ const Table = styled(SimpleTable)`
 `;
 
 export default Table;
-
-// vim: set ts=2 sw=2 tw=80:

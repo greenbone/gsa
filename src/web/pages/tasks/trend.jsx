@@ -3,18 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
-import TrendUpIcon from 'web/components/icon/trendupicon';
+import React from 'react';
 import TrendDownIcon from 'web/components/icon/trenddownicon';
-import TrendMoreIcon from 'web/components/icon/trendmoreicon';
 import TrendLessIcon from 'web/components/icon/trendlessicon';
+import TrendMoreIcon from 'web/components/icon/trendmoreicon';
 import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
+import TrendUpIcon from 'web/components/icon/trendupicon';
+import PropTypes from 'web/utils/proptypes';
 
 const Trend = ({name}) => {
   let title;
@@ -39,7 +35,7 @@ const Trend = ({name}) => {
     return <span />;
   }
 
-  return <IconComponent size="small" alt={title} title={title} />;
+  return <IconComponent alt={title} size="small" title={title} />;
 };
 
 Trend.propTypes = {
@@ -47,5 +43,3 @@ Trend.propTypes = {
 };
 
 export default Trend;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import ReportConfig from 'gmp/models/reportconfig';
-
 import {testModel} from 'gmp/models/testing';
 
 testModel(ReportConfig, 'reportconfig', {testIsActive: false});

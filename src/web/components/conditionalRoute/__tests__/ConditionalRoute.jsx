@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {screen, rendererWith} from 'web/utils/testing';
+import Capabilities from 'gmp/capabilities/capabilities';
 import {Route, Routes} from 'react-router-dom';
 import ConditionalRoute from 'web/components/conditionalRoute/ConditionalRoute';
-import Capabilities from 'gmp/capabilities/capabilities';
+import {screen, rendererWith} from 'web/utils/testing';
 
 const MockComponent = () => <div>Mock Component</div>;
 
@@ -38,12 +38,12 @@ describe('ConditionalRoute', () => {
     render(
       <Routes>
         <Route
-          path="/"
           element={
             <ConditionalRoute component={MockComponent} feature={feature} />
           }
+          path="/"
         />
-        <Route path="/notfound" element={<div>Not Found</div>} />
+        <Route element={<div>Not Found</div>} path="/notfound" />
       </Routes>,
     );
 

@@ -3,22 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_} from 'gmp/locale/lang';
-
+import React from 'react';
 import DownloadCsvIcon from 'web/components/icon/downloadcsvicon';
 import DownloadSvgIcon from 'web/components/icon/downloadsvgicon';
 import FilterIcon from 'web/components/icon/filtericon';
 import LegendIcon from 'web/components/icon/legendicon';
 import Toggle3dIcon from 'web/components/icon/toggle3dicon';
-
 import PropTypes from 'web/utils/proptypes';
 
-export const renderDonutChartIcons = ({
-  setState, // eslint-disable-line react/prop-types
-  ...iconsProps
-}) => (
+export const renderDonutChartIcons = ({setState, ...iconsProps}) => (
   <React.Fragment>
     <DataDisplayIcons {...iconsProps} setState={setState} />
     <Toggle3dIcon
@@ -65,5 +59,3 @@ DataDisplayIcons.propTypes = {
 };
 
 export default DataDisplayIcons;
-
-// vim: set ts=2 sw=2 tw=80:

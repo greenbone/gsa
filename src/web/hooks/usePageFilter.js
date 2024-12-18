@@ -3,30 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useState} from 'react';
-
-import {useSearchParams} from 'react-router-dom';
-
-import {useDispatch} from 'react-redux';
-
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
-
 import Filter, {
   DEFAULT_FALLBACK_FILTER,
   DEFAULT_ROWS_PER_PAGE,
   RESET_FILTER,
 } from 'gmp/models/filter';
-
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
-import getPage from 'web/store/pages/selectors';
+import {useCallback, useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {useSearchParams} from 'react-router-dom';
+import useGmp from 'web/hooks/useGmp';
 import {pageFilter as setPageFilter} from 'web/store/pages/actions';
-import {loadUserSettingDefault} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import getPage from 'web/store/pages/selectors';
 import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
-
-import useGmp from 'web/hooks/useGmp';
+import {loadUserSettingDefault} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import useShallowEqualSelector from './useShallowEqualSelector';
 

@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {AuditReportsCommand} from 'gmp/commands/auditreports';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 import {
@@ -11,7 +12,6 @@ import {
   createEntitiesResponse,
   createAggregatesResponse,
 } from '../testing';
-import {AuditReportsCommand} from 'gmp/commands/auditreports';
 
 describe('AuditReportsCommand tests', () => {
   test('should return all audit reports', () => {

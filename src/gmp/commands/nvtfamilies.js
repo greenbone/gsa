@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import registerCommand from 'gmp/command';
 import {parseInt} from 'gmp/parser';
-
 import {map} from 'gmp/utils/array';
 
 import GmpCommand from './gmp';
-
-import registerCommand from 'gmp/command';
 
 export class NvtFamiliesCommand extends GmpCommand {
   constructor(http) {
@@ -32,5 +30,3 @@ export class NvtFamiliesCommand extends GmpCommand {
 }
 
 registerCommand('nvtfamilies', NvtFamiliesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

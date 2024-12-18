@@ -5,8 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 
-import {filter_string} from '../utils';
 import Filter from '../../filter';
+import {filter_string} from '../utils';
 
 describe('filter_string function tests', () => {
   test('should return string for non Filter objects', () => {
@@ -23,5 +23,3 @@ describe('filter_string function tests', () => {
     expect(filter_string(filter)).toEqual('name=foo and severity>1');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

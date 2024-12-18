@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Info from 'gmp/models/info';
 import SecInfo, {secInfoType, secInfoTypeName} from 'gmp/models/secinfo';
 import {testModel} from 'gmp/models/testing';
@@ -60,5 +59,3 @@ describe('SecInfo model function tests', () => {
     expect(secInfoTypeName(undefined, 'other N/A')).toEqual('other N/A');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

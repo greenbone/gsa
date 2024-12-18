@@ -4,11 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import {License} from 'gmp/models/license';
-
 import {rendererWith, wait} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
@@ -530,5 +527,3 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).not.toHaveTextContent();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

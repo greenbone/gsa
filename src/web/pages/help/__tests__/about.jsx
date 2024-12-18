@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {rendererWith} from 'web/utils/testing';
-
 import {clickElement, getDialogTitle} from 'web/components/testing';
+import {rendererWith} from 'web/utils/testing';
 
 import AboutPage from '../about';
 

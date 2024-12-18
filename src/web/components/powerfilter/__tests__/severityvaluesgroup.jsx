@@ -4,17 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {
   clickElement,
   getElementOrDocument,
   getSelectItemElements,
   openSelectElement,
 } from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import SeverityValuesGroup from '../severityvaluesgroup';
 

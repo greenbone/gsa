@@ -3,22 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import {createEntitiesFooter} from 'web/entities/footer';
-import {createEntitiesTable} from 'web/entities/table';
-
+import React from 'react';
 import SeverityClassLabel from 'web/components/label/severityclass';
-
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import {createEntitiesFooter} from 'web/entities/footer';
+import {createEntitiesTable} from 'web/entities/table';
+import PropTypes from 'web/utils/proptypes';
 
 import ReportRow from './row';
 
@@ -34,91 +28,91 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="25%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'date' : false}
-          onSortChange={onSortChange}
           title={_('Date')}
+          width="25%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="8%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'status' : false}
-          onSortChange={onSortChange}
           title={_('Status')}
-        />
-        <TableHead
-          width="39%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'task' : false}
-          onSortChange={onSortChange}
-          title={_('Task')}
-        />
-        <TableHead
           width="8%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-          title={_('Severity')}
         />
         <TableHead
-          width="3%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'high' : false}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'task' : false}
+          title={_('Task')}
+          width="39%"
           onSortChange={onSortChange}
+        />
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'severity' : false}
+          title={_('Severity')}
+          width="8%"
+          onSortChange={onSortChange}
+        />
+        <TableHead
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          sortBy={sort ? 'high' : false}
           title={_('High')}
+          width="3%"
+          onSortChange={onSortChange}
         >
           <SeverityClassLabel.High />
         </TableHead>
         <TableHead
-          width="3%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'medium' : false}
-          onSortChange={onSortChange}
           title={_('Medium')}
+          width="3%"
+          onSortChange={onSortChange}
         >
           <SeverityClassLabel.Medium />
         </TableHead>
         <TableHead
-          width="3%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'low' : false}
-          onSortChange={onSortChange}
           title={_('Low')}
+          width="3%"
+          onSortChange={onSortChange}
         >
           <SeverityClassLabel.Low />
         </TableHead>
         <TableHead
-          width="3%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'log' : false}
-          onSortChange={onSortChange}
           title={_('Log')}
+          width="3%"
+          onSortChange={onSortChange}
         >
           <SeverityClassLabel.Log />
         </TableHead>
         <TableHead
-          width="3%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'false_positive' : false}
-          onSortChange={onSortChange}
           title={_('False Positive')}
+          width="3%"
+          onSortChange={onSortChange}
         >
           <SeverityClassLabel.FalsePositive />
         </TableHead>
         {isDefined(actionsColumn) ? (
           actionsColumn
         ) : (
-          <TableHead width="8%" align="center">
+          <TableHead align="center" width="8%">
             {_('Actions')}
           </TableHead>
         )}
@@ -148,5 +142,3 @@ export default createEntitiesTable({
   row: ReportRow,
   toggleDetailsIcon: false,
 });
-
-// vim: set ts=2 sw=2 tw=80:

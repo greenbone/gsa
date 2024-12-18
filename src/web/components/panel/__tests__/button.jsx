@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent} from 'web/utils/testing';
 
 import Button from '../button';
@@ -32,5 +31,3 @@ describe('InfoPanel button tests', () => {
     expect(element).toHaveTextContent('bar');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

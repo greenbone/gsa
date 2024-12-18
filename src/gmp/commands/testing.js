@@ -4,7 +4,6 @@
  */
 
 import {testing} from '@gsa/testing';
-
 import Response from 'gmp/http/response';
 
 const entitiesRange = {
@@ -70,5 +69,3 @@ export const createHttpMany = responses => {
       .mockImplementation(() => Promise.resolve(responses[i++])),
   };
 };
-
-// vim: set ts=2 sw=2 tw=80:

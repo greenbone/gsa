@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import logger from 'gmp/log';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 const log = logger.getLogger('web.entity.container');
@@ -68,5 +66,3 @@ EntityContainer.propTypes = {
 };
 
 export default EntityContainer;
-
-// vim: set ts=2 sw=2 tw=80:

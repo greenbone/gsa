@@ -9,7 +9,6 @@ import {
 } from '@greenbone/opensight-ui-components-mantinev7';
 import {ActionIcon} from '@mantine/core';
 import useGmp from 'web/hooks/useGmp';
-
 import useLocale from 'web/hooks/useLocale';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -48,10 +47,10 @@ const LanguageSwitch = () => {
 
   return (
     <ActionIcon
+      color="neutral.0"
+      title={titles[nextLanguage]}
       variant="transparent"
       onClick={handleLanguageChange}
-      title={titles[nextLanguage]}
-      color="neutral.0"
     >
       {language === LANGUAGES.EN ? <FlagEnIcon /> : <FlagDeIcon />}
     </ActionIcon>

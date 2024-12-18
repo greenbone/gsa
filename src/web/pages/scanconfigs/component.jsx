@@ -3,28 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import {YES_VALUE} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
+import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import {selectSaveId} from 'gmp/utils/id';
-
-import {YES_VALUE} from 'gmp/parser';
-
+import React from 'react';
+import EntityComponent from 'web/entity/component';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from 'web/entity/component';
-
+import ScanConfigDialog from './dialog';
 import EditConfigFamilyDialog from './editconfigfamilydialog';
 import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
-import ScanConfigDialog from './dialog';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -454,17 +448,17 @@ class ScanConfigComponent extends React.Component {
       <React.Fragment>
         <EntityComponent
           name="scanconfig"
-          onCreated={onCreated}
-          onCreateError={onCreateError}
-          onCloned={onCloned}
           onCloneError={onCloneError}
-          onDeleted={onDeleted}
+          onCloned={onCloned}
+          onCreateError={onCreateError}
+          onCreated={onCreated}
           onDeleteError={onDeleteError}
-          onDownloaded={onDownloaded}
+          onDeleted={onDeleted}
           onDownloadError={onDownloadError}
+          onDownloaded={onDownloaded}
           onInteraction={onInteraction}
-          onSaved={onSaved}
           onSaveError={onSaveError}
+          onSaved={onSaved}
         >
           {({save, ...other}) => (
             <React.Fragment>
@@ -515,8 +509,8 @@ class ScanConfigComponent extends React.Component {
         </EntityComponent>
         {importDialogVisible && (
           <ImportDialog
-            title={_('Import Scan Config')}
             text={_('Import XML config')}
+            title={_('Import Scan Config')}
             onClose={this.handleCloseImportDialog}
             onSave={this.handleImportConfig}
           />
@@ -524,8 +518,8 @@ class ScanConfigComponent extends React.Component {
         {editConfigFamilyDialogVisible && (
           <EditConfigFamilyDialog
             configId={config.id}
-            configNameLabel={_('Config')}
             configName={config.name}
+            configNameLabel={_('Config')}
             familyName={familyName}
             isLoadingFamily={isLoadingFamily}
             nvts={familyNvts}
@@ -548,8 +542,8 @@ class ScanConfigComponent extends React.Component {
               isDefined(nvt) ? nvt.tags.cvss_base_vector : undefined
             }
             nvtFamily={isDefined(nvt) ? nvt.family : undefined}
-            nvtName={isDefined(nvt) ? nvt.name : undefined}
             nvtLastModified={isDefined(nvt) ? nvt.modificationTime : undefined}
+            nvtName={isDefined(nvt) ? nvt.name : undefined}
             nvtOid={isDefined(nvt) ? nvt.oid : undefined}
             nvtSeverity={isDefined(nvt) ? nvt.severity : undefined}
             nvtSummary={isDefined(nvt) ? nvt.tags.summary : undefined}
@@ -584,5 +578,3 @@ ScanConfigComponent.propTypes = {
 };
 
 export default withGmp(ScanConfigComponent);
-
-// vim: set ts=2 sw=2 tw=80:

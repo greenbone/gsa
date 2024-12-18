@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
+import logger from 'gmp/log';
 import Host from 'gmp/models/host';
 
 import EntitiesCommand from './entities';
@@ -105,5 +103,3 @@ class HostsCommand extends EntitiesCommand {
 
 registerCommand('host', HostCommand);
 registerCommand('hosts', HostsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

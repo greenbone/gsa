@@ -3,32 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import Filter from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/component';
-
 import {
   loadAllEntities as loadAllGroups,
   selector as groupSelector,
 } from 'web/store/entities/groups';
-
 import {
   loadAllEntities as loadAllUsers,
   selector as userSelector,
 } from 'web/store/entities/users';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
 import RoleDialog from './dialog';
 
@@ -42,9 +34,8 @@ class RoleComponent extends React.Component {
     };
 
     this.handleCreatePermission = this.handleCreatePermission.bind(this);
-    this.handleCreateSuperPermission = this.handleCreateSuperPermission.bind(
-      this,
-    );
+    this.handleCreateSuperPermission =
+      this.handleCreateSuperPermission.bind(this);
     this.handleDeletePermission = this.handleDeletePermission.bind(this);
     this.handleErrorClose = this.handleErrorClose.bind(this);
 
@@ -102,7 +93,10 @@ class RoleComponent extends React.Component {
         roleId,
         subjectType: 'role',
       })
-      .then(() => this.loadSettings(roleId), error => this.setError(error))
+      .then(
+        () => this.loadSettings(roleId),
+        error => this.setError(error),
+      )
       .then(() => this.setState({isCreatingSuperPermission: false}));
   }
 
@@ -119,7 +113,10 @@ class RoleComponent extends React.Component {
         roleId,
         subjectType: 'role',
       })
-      .then(() => this.loadSettings(roleId), error => this.setError(error))
+      .then(
+        () => this.loadSettings(roleId),
+        error => this.setError(error),
+      )
       .then(() => this.setState({isCreatingPermission: false}));
   }
 
@@ -128,9 +125,10 @@ class RoleComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.permission
-      .delete({id: permissionId})
-      .then(() => this.loadSettings(roleId), error => this.setError(error));
+    return gmp.permission.delete({id: permissionId}).then(
+      () => this.loadSettings(roleId),
+      error => this.setError(error),
+    );
   }
 
   handleErrorClose() {
@@ -219,17 +217,17 @@ class RoleComponent extends React.Component {
     return (
       <EntityComponent
         name="role"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -240,9 +238,9 @@ class RoleComponent extends React.Component {
             })}
             {dialogVisible && (
               <RoleDialog
-                allUsers={allUsers}
                 allGroups={allGroups}
                 allPermissions={allPermissions}
+                allUsers={allUsers}
                 error={error}
                 isCreatingPermission={isCreatingPermission}
                 isCreatingSuperPermission={isCreatingSuperPermission}
@@ -252,16 +250,16 @@ class RoleComponent extends React.Component {
                 role={role}
                 title={title}
                 onClose={this.handleCloseRoleDialog}
+                onCreatePermission={this.handleCreatePermission}
+                onCreateSuperPermission={this.handleCreateSuperPermission}
+                onDeletePermission={this.handleDeletePermission}
+                onErrorClose={this.handleErrorClose}
                 onSave={d => {
                   this.handleInteraction();
                   return save(d)
                     .then(() => this.closeRoleDialog())
                     .catch(e => this.setError(e));
                 }}
-                onCreatePermission={this.handleCreatePermission}
-                onCreateSuperPermission={this.handleCreateSuperPermission}
-                onDeletePermission={this.handleDeletePermission}
-                onErrorClose={this.handleErrorClose}
               />
             )}
           </React.Fragment>
@@ -309,10 +307,5 @@ const mapDispatchToProp = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
-  connect(
-    mapStateToProps,
-    mapDispatchToProp,
-  ),
+  connect(mapStateToProps, mapDispatchToProp),
 )(RoleComponent);
-
-// vim: set ts=2 sw=2 tw=80:

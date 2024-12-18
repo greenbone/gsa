@@ -4,23 +4,20 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import CollectionCounts from 'gmp/collection/collectioncounts';
+import Filter from 'gmp/models/filter';
+import React from 'react';
 import {
   getPowerFilter,
   getTextInputs,
   getSelectElement,
   testBulkDeleteDialog,
 } from 'web/components/testing';
-import React from 'react';
-
-import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
 import {entitiesActions} from 'web/store/entities/auditreports';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {
   rendererWith,
   waitFor,
@@ -28,7 +25,7 @@ import {
   screen,
   wait,
 } from 'web/utils/testing';
-import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
+
 import AuditReportsPage from '../auditreportslistpage';
 
 window.URL.createObjectURL = testing.fn();

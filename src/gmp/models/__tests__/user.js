@@ -4,14 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
+import {testModel} from 'gmp/models/testing';
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_RADIUS,
   AUTH_METHOD_PASSWORD,
 } from 'gmp/models/user';
-import {testModel} from 'gmp/models/testing';
 
 testModel(User, 'user');
 
@@ -122,5 +121,3 @@ describe('User model tests', () => {
     expect(user3.isSuperAdmin()).toEqual(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

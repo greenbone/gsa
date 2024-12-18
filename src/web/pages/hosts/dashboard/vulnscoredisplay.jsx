@@ -3,31 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {withRouter} from 'web/utils/withRouter';
-
-import styled from 'styled-components';
-
 import {_, _l} from 'gmp/locale/lang';
-import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
-
-import {parseFloat, parseSeverity} from 'gmp/parser';
-
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-import {resultSeverityRiskFactor} from 'web/utils/severity';
-
+import {parseFloat, parseSeverity} from 'gmp/parser';
+import React from 'react';
+import styled from 'styled-components';
 import BarChart from 'web/components/chart/bar';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
+import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
+import {withRouter} from 'web/utils/withRouter';
 
 import {HostsVulnScoreLoader} from './loaders';
 
@@ -99,19 +91,19 @@ export class HostsVulnScoreDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
             dataTransform={transformVulnScoreData}
-            title={() => _('Most Vulnerable Hosts')}
+            filter={filter}
             showToggleLegend={false}
+            title={() => _('Most Vulnerable Hosts')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart
-                svgRef={svgRef}
                 horizontal
-                showLegend={false}
-                width={width}
-                height={height}
                 data={tdata}
+                height={height}
+                showLegend={false}
+                svgRef={svgRef}
+                width={width}
                 xLabel={_('Vulnerability (Severity) Score')}
                 onDataClick={this.handleDataClick}
               />
@@ -160,5 +152,3 @@ registerDisplay(
     title: _l('Table: Hosts by Vulnerability Score'),
   },
 );
-
-// vim: set ts=2 sw=2 tw=80:

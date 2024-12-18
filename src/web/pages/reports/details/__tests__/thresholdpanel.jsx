@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {render, fireEvent} from 'web/utils/testing';
 
 import Thresholdpanel from '../thresholdpanel';
@@ -26,8 +24,8 @@ describe('Report Threshold Panel tests', () => {
         filter={filter}
         isUpdating={false}
         threshold={10}
-        onFilterEditClick={onFilterEditClick}
         onFilterChanged={onFilterChanged}
+        onFilterEditClick={onFilterEditClick}
       />,
     );
 
@@ -81,8 +79,8 @@ describe('Report Threshold Panel tests', () => {
         filter={filter}
         isUpdating={false}
         threshold={10}
-        onFilterEditClick={onFilterEditClick}
         onFilterChanged={onFilterChanged}
+        onFilterEditClick={onFilterEditClick}
       />,
     );
 
@@ -144,8 +142,8 @@ describe('Report Threshold Panel tests', () => {
         filter={filter}
         isUpdating={false}
         threshold={10}
-        onFilterEditClick={onFilterEditClick}
         onFilterChanged={onFilterChanged}
+        onFilterEditClick={onFilterEditClick}
       />,
     );
 
@@ -184,8 +182,8 @@ describe('Report Threshold Panel tests', () => {
         filter={filter}
         isUpdating={false}
         threshold={10}
-        onFilterEditClick={onFilterEditClick}
         onFilterChanged={onFilterChanged}
+        onFilterEditClick={onFilterEditClick}
       />,
     );
 

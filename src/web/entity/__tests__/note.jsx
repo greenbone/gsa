@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
-
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/testing';
 

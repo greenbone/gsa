@@ -5,9 +5,8 @@
 
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
-import {setSyncStatus, setError} from 'web/store/feedStatus/actions';
 import useGmp from 'web/hooks/useGmp';
+import {setSyncStatus, setError} from 'web/store/feedStatus/actions';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 const THIRTY_SECONDS = 30 * 1000;

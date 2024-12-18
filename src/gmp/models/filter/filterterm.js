@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from '../../utils/identity';
-
 import convert from './convert.js';
+import {isDefined} from '../../utils/identity';
 
 const RELATIONS = ['=', ':', '~', '>', '<'];
 
@@ -119,5 +118,3 @@ export const OR = FilterTerm.fromString('or');
 export const NOT = FilterTerm.fromString('not');
 
 export default FilterTerm;
-
-// vim: set ts=2 sw=2 tw=80:

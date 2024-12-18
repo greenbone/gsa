@@ -4,14 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Filter from 'gmp/models/filter';
-
-import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import ToolBarIcons from '../toolbaricons';
 
@@ -62,8 +58,8 @@ describe('Report Details ToolBarIcons tests', () => {
         report={report}
         reportId={report.id}
         showError={showError}
-        showSuccessMessage={showSuccessMessage}
         showErrorMessage={showErrorMessage}
+        showSuccessMessage={showSuccessMessage}
         showThresholdMessage={false}
         task={report.task}
         threshold={10}
@@ -161,8 +157,8 @@ describe('Report Details ToolBarIcons tests', () => {
         report={report}
         reportId={report.id}
         showError={showError}
-        showSuccessMessage={showSuccessMessage}
         showErrorMessage={showErrorMessage}
+        showSuccessMessage={showSuccessMessage}
         showThresholdMessage={false}
         task={report.task}
         threshold={10}

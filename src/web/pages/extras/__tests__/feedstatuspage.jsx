@@ -4,13 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
+import {createFeed} from 'gmp/commands/feedstatus';
+import Response from 'gmp/http/response';
 import {rendererWith, waitFor} from 'web/utils/testing';
 
 import FeedStatus from '../feedstatuspage';
-import {createFeed} from 'gmp/commands/feedstatus';
 
-import Response from 'gmp/http/response';
 
 const mockDate = new Date(1595660400000); // Saturday July 25 090000
 

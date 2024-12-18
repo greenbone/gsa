@@ -5,13 +5,12 @@
 
 import {_l} from 'gmp/locale/lang';
 
+import CredentialDetails from './details';
+import Row from './row';
 import {createEntitiesFooter} from '../../entities/footer';
 import {createEntitiesHeader} from '../../entities/header';
 import {createEntitiesTable} from '../../entities/table';
 import withRowDetails from '../../entities/withRowDetails';
-
-import CredentialDetails from './details';
-import Row from './row';
 
 export const SORT_FIELDS = [
   {
@@ -49,5 +48,3 @@ const CredentialsTable = createEntitiesTable({
 });
 
 export default CredentialsTable;
-
-// vim: set ts=2 sw=2 tw=80:

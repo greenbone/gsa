@@ -3,13 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {_, _l} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {_localeData} from 'gmp/models/date';
 import {ReccurenceFrequency} from 'gmp/models/event';
+import {isDefined} from 'gmp/utils/identity';
 
 const WEEKDAY = {
   monday: _l('Monday'),
@@ -131,5 +128,3 @@ export const renderDuration = duration => {
     ? duration.humanize()
     : _('Entire Operation');
 };
-
-// vim: set ts=2 sw=2 tw=80:

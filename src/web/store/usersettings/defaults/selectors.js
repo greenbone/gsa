@@ -34,5 +34,3 @@ export const getUserSettingsDefaults = rootState => {
   const {defaults} = userSettings;
   return new UserSettingsDefaultsSelector(defaults);
 };
-
-// vim: set ts=2 sw=2 tw=80:

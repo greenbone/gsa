@@ -4,11 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import User from 'gmp/models/user';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {
   changeInputValue,
   clickElement,
@@ -18,6 +14,7 @@ import {
   getSelectElement,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import CreateTicketDialog from '../createdialog';
 

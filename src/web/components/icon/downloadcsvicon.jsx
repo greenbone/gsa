@@ -5,9 +5,8 @@
 
 import {_} from 'gmp/locale/lang';
 
-import withSvgIcon from './withSvgIcon';
-
 import Icon from './svg/dl_csv.svg';
+import withSvgIcon from './withSvgIcon';
 
 const DownloadCsvIconComponent = withSvgIcon({
   title: _('Download CSV'),
@@ -18,5 +17,3 @@ const DownloadCsvIcon = props => (
 );
 
 export default DownloadCsvIcon;
-
-// vim: set ts=2 sw=2 tw=80:

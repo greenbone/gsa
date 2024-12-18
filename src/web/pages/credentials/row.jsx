@@ -3,29 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {getCredentialTypeName} from 'gmp/models/credential';
-
+import React from 'react';
 import FootNote from 'web/components/footnote/footnote';
-
 import ExportIcon from 'web/components/icon/exporticon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 import CredentialDownloadIcon from './downloadicon';
@@ -39,30 +30,30 @@ const Actions = withEntitiesActions(
     onCredentialEditClick,
     onCredentialInstallerDownloadClick,
   }) => (
-    <IconDivider align={['start', 'center']} grow>
+    <IconDivider grow align={['start', 'center']}>
       <TrashIcon
         displayName={_('Credential')}
-        name="credential"
         entity={entity}
+        name="credential"
         onClick={onCredentialDeleteClick}
       />
       <EditIcon
         displayName={_('Credential')}
-        name="credential"
         entity={entity}
+        name="credential"
         onClick={onCredentialEditClick}
       />
       <CloneIcon
         displayName={_('Credential')}
-        name="credential"
         entity={entity}
+        name="credential"
         title={_('Clone Credential')}
         value={entity}
         onClick={onCredentialCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Credential')}
+        value={entity}
         onClick={onCredentialDownloadClick}
       />
       <CredentialDownloadIcon
@@ -91,10 +82,10 @@ const Row = ({
 }) => (
   <TableRow>
     <EntityNameTableData
+      displayName={_('Credential')}
       entity={entity}
       link={links}
       type="credential"
-      displayName={_('Credential')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
@@ -117,5 +108,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

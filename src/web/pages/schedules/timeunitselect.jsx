@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {ReccurenceFrequency} from 'gmp/models/event';
-
+import React from 'react';
 import Select from 'web/components/form/select';
-
 import useTranslation from 'web/hooks/useTranslation';
 
 const TimeUnitSelect = props => {
@@ -25,5 +22,3 @@ const TimeUnitSelect = props => {
 };
 
 export default TimeUnitSelect;
-
-// vim: set ts=2 sw=2 tw=80:

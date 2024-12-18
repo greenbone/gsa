@@ -3,29 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
-
-import {parseInt, parseDate} from 'gmp/parser';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
-
+import {parseInt, parseDate} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import LineChart, {lineDataPropType} from 'web/components/chart/line';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
+import {totalCount} from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import LineChart, {lineDataPropType} from 'web/components/chart/line';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard/display/createDisplay';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
-import {totalCount} from 'web/components/dashboard/display/utils';
-import {registerDisplay} from 'web/components/dashboard/registry';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 import {HostsModifiedLoader} from './loaders';
 
@@ -114,23 +107,23 @@ export class HostsModifiedDisplay extends React.Component {
             {({width, height, data: tdata, svgRef, state}) => (
               <LineChart
                 timeline
+                data={tdata}
+                height={height}
+                showLegend={state.showLegend}
                 svgRef={svgRef}
                 width={width}
-                height={height}
-                data={tdata}
-                yAxisLabel={_('# of Modified Hosts')}
-                y2AxisLabel={_('Total Hosts')}
                 xAxisLabel={_('Time')}
-                yLine={{
-                  color: Theme.darkGreenTransparent,
-                  label: _('Modified Hosts'),
-                }}
+                y2AxisLabel={_('Total Hosts')}
                 y2Line={{
                   color: Theme.darkGreenTransparent,
                   dashArray: '3, 2',
                   label: _('Total Hosts'),
                 }}
-                showLegend={state.showLegend}
+                yAxisLabel={_('# of Modified Hosts')}
+                yLine={{
+                  color: Theme.darkGreenTransparent,
+                  label: _('Modified Hosts'),
+                }}
                 onRangeSelected={this.handleRangeSelect}
               />
             )}
@@ -185,5 +178,3 @@ registerDisplay(
     title: _l('Table: Hosts by Modification Time'),
   },
 );
-
-// vim: set ts=2 sw=2 tw=80:

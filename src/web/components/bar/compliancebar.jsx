@@ -3,15 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
+import {getTranslatableReportCompliance} from 'gmp/models/auditreport';
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import ProgressBar from './progressbar';
-import {getTranslatableReportCompliance} from 'gmp/models/auditreport';
+
 
 const ComplianceBar = ({compliance, toolTip}) => {
   const title = getTranslatableReportCompliance(compliance);
@@ -30,7 +29,7 @@ const ComplianceBar = ({compliance, toolTip}) => {
   const toolTipText = isDefined(toolTip) ? toolTip : title;
 
   return (
-    <ProgressBar title={toolTipText} progress={100} background={background} data-testid="compliance-bar">
+    <ProgressBar background={background} data-testid="compliance-bar" progress={100} title={toolTipText}>
       {title}
     </ProgressBar>
   );

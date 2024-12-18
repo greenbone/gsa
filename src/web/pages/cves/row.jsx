@@ -3,29 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_} from 'gmp/locale/lang';
-
+import {isNumber} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import Comment from 'web/components/comment/comment';
-
 import DateTime from 'web/components/date/datetime';
-
 import Link from 'web/components/link/link';
-
-import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
-
+import TableRow from 'web/components/table/row';
 import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
-
-import PropTypes from 'web/utils/proptypes';
-import {isNumber} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -52,7 +43,7 @@ const Row = ({
         <DateTime date={entity.creationTime} />
       </TableData>
       <TableData>
-        <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
+        <Link query={{cvssVector: entity.cvssBaseVector}} to="cvsscalculator">
           {entity.cvssBaseVector}
         </Link>
       </TableData>

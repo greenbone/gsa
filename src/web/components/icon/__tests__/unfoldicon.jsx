@@ -4,7 +4,6 @@
  */
 
 import {describe} from '@gsa/testing';
-
 import {testIcon} from 'web/components/icon/testing';
 
 import UnfoldIcon from '../unfoldicon';
@@ -12,5 +11,3 @@ import UnfoldIcon from '../unfoldicon';
 describe('UnfoldIcon component tests', () => {
   testIcon(UnfoldIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

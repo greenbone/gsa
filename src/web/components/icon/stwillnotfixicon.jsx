@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import withSvgIcon from './withSvgIcon';
-
 import Icon from './svg/st_willnotfix.svg';
+import withSvgIcon from './withSvgIcon';
 
 const StWillNotFixIconComponent = withSvgIcon()(Icon);
 
@@ -14,5 +13,3 @@ const StWillNotFixIcon = props => (
 );
 
 export default StWillNotFixIcon;
-
-// vim: set ts=2 sw=2 tw=80:

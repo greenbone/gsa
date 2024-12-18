@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {getDialog, getSelectElement} from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import Dialog from '../tagsdialog';
 

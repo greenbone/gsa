@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {render, fireEvent, screen} from 'web/utils/testing';
 
 import DialogError from '../error';
@@ -41,5 +40,3 @@ describe('Dialog error tests', () => {
     expect(handler).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

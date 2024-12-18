@@ -3,15 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useMemo} from 'react';
-
-import {map} from 'gmp/utils/array';
-
 import timezones from 'gmp/timezones';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {map} from 'gmp/utils/array';
+import React, {useMemo} from 'react';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import Select from './select';
 
@@ -39,5 +35,3 @@ TimeZoneSelectComponent.propTypes = {
 };
 
 export default TimeZoneSelectComponent;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,13 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
 import ErrorContainer from 'web/components/error/errorcontainer';
-
 import PropTypes from 'web/utils/proptypes';
 
 const ThresholdMessage = ({threshold}) => (
@@ -29,5 +25,3 @@ ThresholdMessage.propTypes = {
 };
 
 export default ThresholdMessage;
-
-// vim: set ts=2 sw=2 tw=80:

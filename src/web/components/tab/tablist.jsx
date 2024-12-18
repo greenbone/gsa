@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
 
 import PropTypes from '../../utils/proptypes';
-
 import Layout from '../layout/layout';
 
 const TabList = ({active = 0, children, onActivateTab, ...props}) => {
@@ -30,5 +28,3 @@ TabList.propTypes = {
 };
 
 export default TabList;
-
-// vim: set ts=2 sw=2 tw=80:

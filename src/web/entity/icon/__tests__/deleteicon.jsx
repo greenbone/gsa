@@ -4,13 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Task from 'gmp/models/task';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
-
 import Theme from 'web/utils/theme';
 
 import DeleteIcon from '../deleteicon';
@@ -90,5 +86,3 @@ describe('Entity DeleteIcon component tests', () => {
     expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

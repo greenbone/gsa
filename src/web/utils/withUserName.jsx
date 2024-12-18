@@ -4,7 +4,6 @@
  */
 
 import {connect} from 'react-redux';
-
 import {getUsername} from 'web/store/usersettings/selectors.js';
 
 const withUsername = Component =>
@@ -13,5 +12,3 @@ const withUsername = Component =>
   }))(Component);
 
 export default withUsername;
-
-// vim: set ts=2 sw=2 tw=80:

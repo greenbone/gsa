@@ -3,64 +3,52 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import Filter from 'gmp/models/filter';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import RoleIcon from 'web/components/icon/roleicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
-import EntityPage from 'web/entity/page';
+import Table from 'web/components/table/stripedtable';
+import EntityNameTableData from 'web/entities/entitynametabledata';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage from 'web/entity/page';
+import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
-import {selector, loadEntity} from 'web/store/entities/roles';
-
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/roles';
 import PropTypes from 'web/utils/proptypes';
 import {permissionDescription} from 'web/utils/render';
 
 import RoleComponent from './component';
 import RoleDetails from './details';
-import EntityPermissions from 'web/entity/permissions';
 
 const ToolBarIcons = ({
   entity,
@@ -73,11 +61,11 @@ const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="web-interface-access"
         anchor="managing-roles"
+        page="web-interface-access"
         title={_('Help: Roles')}
       />
-      <ListIcon title={_('Roles List')} page="roles" />
+      <ListIcon page="roles" title={_('Roles List')} />
     </IconDivider>
     <IconDivider>
       <CreateIcon entity={entity} onClick={onRoleCreateClick} />
@@ -85,8 +73,8 @@ const ToolBarIcons = ({
       <EditIcon entity={entity} onClick={onRoleEditClick} />
       <TrashIcon entity={entity} onClick={onRoleDeleteClick} />
       <ExportIcon
-        value={entity}
         title={_('Export Role as XML')}
+        value={entity}
         onClick={onRoleDownloadClick}
       />
     </IconDivider>
@@ -131,10 +119,10 @@ const GeneralPermissions = ({permissions = [], links}) => {
             {permissions.map(perm => (
               <TableRow key={perm.id}>
                 <EntityNameTableData
+                  displayName={_('Permission')}
                   entity={perm}
                   links={links}
                   type="permission"
-                  displayName={_('Permission')}
                 />
                 <TableData>
                   {permissionDescription(perm.name, perm.resource)}
@@ -167,13 +155,13 @@ const Page = ({
   ...props
 }) => (
   <RoleComponent
-    onCloned={goto_details('role', props)}
     onCloneError={onError}
+    onCloned={goto_details('role', props)}
     onCreated={goto_details('role', props)}
-    onDeleted={goto_list('roles', props)}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
+    onDeleted={goto_list('roles', props)}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
@@ -196,8 +184,8 @@ const Page = ({
           return (
             <React.Fragment>
               <PageTitle title={_('Role: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
@@ -293,5 +281,3 @@ export default withEntityContainer('role', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

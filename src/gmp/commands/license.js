@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import {License} from 'gmp/models/license';
 
 import GMPCommand from './gmp';
@@ -33,5 +32,3 @@ export class LicenseCommand extends GMPCommand {
 }
 
 registerCommand('license', LicenseCommand);
-
-// vim: set ts=2 sw=2 tw=80:

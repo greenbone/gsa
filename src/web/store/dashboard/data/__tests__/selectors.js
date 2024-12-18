@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {filterIdentifier} from 'web/store/utils';
 
 import getDashboardData from '../selectors';
@@ -182,5 +180,3 @@ describe('dashboard data selector getData tests', () => {
     expect(selector.getData(id, filter)).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

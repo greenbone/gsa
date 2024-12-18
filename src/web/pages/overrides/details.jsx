@@ -3,36 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import HorizontalSep from 'web/components/layout/horizontalsep';
+import Layout from 'web/components/layout/layout';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
+import TableRow from 'web/components/table/row';
+import DetailsBlock from 'web/entity/block';
+import EntityLink from 'web/entity/link';
+import OverrideBox from 'web/entity/override';
+import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 import {
   translatedResultSeverityRiskFactor,
   LOG_VALUE,
 } from 'web/utils/severity';
 
-import HorizontalSep from 'web/components/layout/horizontalsep';
-import Layout from 'web/components/layout/layout';
-
-import InfoTable from 'web/components/table/infotable';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-
-import EntityLink from 'web/entity/link';
-
-import DetailsBlock from 'web/entity/block';
-import OverrideBox from 'web/entity/override';
-import {Col} from 'web/entity/page';
-
 const OverrideDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;
   return (
-    <Layout grow="1" flex="column">
+    <Layout flex="column" grow="1">
       <DetailsBlock title={_('Application')}>
         <InfoTable size="full">
           <colgroup>
@@ -109,7 +102,7 @@ const OverrideDetails = ({entity}) => {
           entity.isActive() ? _('Appearance') : _('Appearance when active')
         }
       >
-        <OverrideBox override={entity} detailsLink={false} />
+        <OverrideBox detailsLink={false} override={entity} />
       </DetailsBlock>
     </Layout>
   );
@@ -120,5 +113,3 @@ OverrideDetails.propTypes = {
 };
 
 export default OverrideDetails;
-
-// vim: set ts=2 sw=2 tw=80:

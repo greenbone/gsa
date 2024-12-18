@@ -4,37 +4,28 @@
  */
 
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
 import Filter from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
-
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import ErrorPanel from 'web/components/error/errorpanel';
-
 import Loading from 'web/components/loading/loading';
 import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
   NO_RELOAD,
 } from 'web/components/loading/reload';
-
 import SortBy from 'web/components/sortby/sortby';
-
 import ResultsTable from 'web/pages/results/table';
-
 import {
   loadEntities as loadResults,
   selector as resultsSelector,
 } from 'web/store/entities/results';
-
 import {pageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -169,10 +160,10 @@ class ResultsTab extends React.Component {
     if (isDefined(resultsError)) {
       return (
         <ErrorPanel
+          error={resultsError}
           message={_('Error while loading Results for Report {{reportId}}', {
             reportId,
           })}
-          error={resultsError}
         />
       );
     }
@@ -205,8 +196,8 @@ class ResultsTab extends React.Component {
         return (
           <EmptyReport
             hasTarget={hasTarget}
-            status={status}
             progress={progress}
+            status={status}
             onTargetEditClick={onTargetEditClick}
           />
         );
@@ -239,8 +230,8 @@ class ResultsTab extends React.Component {
         toggleDetailsIcon={false}
         onFirstClick={this.handleFirstClick}
         onLastClick={this.handleLastClick}
-        onPreviousClick={this.handlePreviousClick}
         onNextClick={this.handleNextClick}
+        onPreviousClick={this.handlePreviousClick}
         onSortChange={this.handleSortChange}
       />
     );
@@ -277,7 +268,7 @@ const loadInitial =
     reportFilter,
     reportId,
     resultsFilter,
-    // eslint-disable-next-line no-shadow
+     
     loadResults,
     updateFilter,
   }) =>
@@ -316,7 +307,7 @@ const load =
     reportFilter,
     reportId,
     resultsFilter,
-    // eslint-disable-next-line no-shadow
+     
     loadResults,
     updateFilter,
   }) =>
@@ -337,8 +328,8 @@ const load =
 
 const ResultsTabWrapper = props => (
   <Reload
-    name={`report-${props.reportId}-results`}
     load={loadInitial(props)}
+    name={`report-${props.reportId}-results`}
     reload={load(props)}
     reloadInterval={() => reloadInterval(props.status)}
   >

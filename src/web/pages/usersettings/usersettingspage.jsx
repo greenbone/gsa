@@ -3,41 +3,36 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
+import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
 import {openVasScannersFilter} from 'gmp/models/scanner';
-import {SYSTEM_DEFAULT} from 'gmp/locale/date';
-
 import {YES_VALUE, NO_VALUE, parseYesNo} from 'gmp/parser';
-
 import {hasValue, isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
+import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
-import EditIcon from 'web/components/icon/editicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import DetailsLink from 'web/components/link/detailslink';
-
 import Loading from 'web/components/loading/loading';
-
 import Section from 'web/components/section/section';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+import Table from 'web/components/table/table';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities as loadAlerts,
   loadEntity as loadAlert,
@@ -71,32 +66,20 @@ import {
   loadEntities as loadTargets,
   selector as targetsSelector,
 } from 'web/store/entities/targets';
-
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-
-import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
-import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
-
-import {getTimezone} from 'web/store/usersettings/selectors';
 import {
   updateTimezone,
   renewSessionTimeout,
 } from 'web/store/usersettings/actions';
-
-import Table from 'web/components/table/table';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-
+import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
+import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getTimezone} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import Languages, {BROWSER_LANGUAGE} from 'web/utils/languages';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
 
 import SettingsDialog from './dialog';
 
@@ -133,7 +116,7 @@ SettingTableRow.propTypes = {
 
 const ToolBarIcons = ({disableEditIcon, onEditSettingsClick}) => {
   const capabilities = useCapabilities();
-  // eslint-disable-next-line no-shadow
+
   const [_] = useTranslation();
   const mayEdit = capabilities.mayEdit('setting');
   const editIconTitle = mayEdit
@@ -144,9 +127,9 @@ const ToolBarIcons = ({disableEditIcon, onEditSettingsClick}) => {
     <Layout>
       <IconDivider>
         <ManualIcon
-          size="small"
-          page="web-interface"
           anchor="changing-the-user-settings"
+          page="web-interface"
+          size="small"
           title={_('Help: My Settings')}
         />
         <EditIcon
@@ -402,7 +385,7 @@ class UserSettings extends React.Component {
             <Loading />
           ) : (
             <>
-              <TabLayout grow="1" align={['start', 'end']}>
+              <TabLayout align={['start', 'end']} grow="1">
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
@@ -755,68 +738,68 @@ class UserSettings extends React.Component {
           {dialogVisible && !isLoading && (
             <SettingsDialog
               alerts={alerts}
-              filters={filters}
-              credentials={credentials}
-              openVasScanConfigs={scanconfigs}
-              openVasScanners={openVasScanners}
-              portLists={portlists}
-              schedules={schedules}
-              targets={targets}
-              timezone={timezone}
-              userInterfaceTimeFormat={userInterfaceTimeFormat.value}
-              userInterfaceDateFormat={userInterfaceDateFormat.value}
-              isUserInterfaceTimeDateDefault={
-                isUserInterfaceTimeDateDefault.value
-              }
-              userInterfaceLanguage={userInterfaceLanguage.value}
-              rowsPerPage={rowsPerPage.value}
-              maxRowsPerPage={maxRowsPerPage.value}
-              detailsExportFileName={detailsExportFileName.value}
-              listExportFileName={listExportFileName.value}
-              reportExportFileName={reportExportFileName.value}
+              alertsFilter={alertsFilter.id}
+              auditReportsFilter={auditReportsFilter.id}
               autoCacheRebuild={autoCacheRebuild.value}
-              dynamicSeverity={dynamicSeverity.value}
-              defaultSeverity={defaultSeverity.value}
+              certBundFilter={certBundFilter.id}
+              configsFilter={configsFilter.id}
+              cpeFilter={cpeFilter.id}
+              credentials={credentials}
+              credentialsFilter={credentialsFilter.id}
+              cveFilter={cveFilter.id}
               defaultAlert={defaultAlert.id}
               defaultEsxiCredential={defaultEsxiCredential.id}
               defaultOpenvasScanConfig={defaultOpenvasScanConfig.id}
               defaultOpenvasScanner={defaultOpenvasScanner.id}
               defaultPortList={defaultPortList.id}
+              defaultSchedule={defaultSchedule.id}
+              defaultSeverity={defaultSeverity.value}
               defaultSmbCredential={defaultSmbCredential.id}
               defaultSnmpCredential={defaultSnmpCredential.id}
               defaultSshCredential={defaultSshCredential.id}
-              defaultSchedule={defaultSchedule.id}
               defaultTarget={defaultTarget.id}
-              alertsFilter={alertsFilter.id}
-              auditReportsFilter={auditReportsFilter.id}
-              configsFilter={configsFilter.id}
-              credentialsFilter={credentialsFilter.id}
+              detailsExportFileName={detailsExportFileName.value}
+              dfnCertFilter={dfnCertFilter.id}
+              dynamicSeverity={dynamicSeverity.value}
+              filters={filters}
               filtersFilter={filtersFilter.id}
               groupsFilter={groupsFilter.id}
               hostsFilter={hostsFilter.id}
+              isUserInterfaceTimeDateDefault={
+                isUserInterfaceTimeDateDefault.value
+              }
+              listExportFileName={listExportFileName.value}
+              maxRowsPerPage={maxRowsPerPage.value}
               notesFilter={notesFilter.id}
+              nvtFilter={nvtFilter.id}
+              openVasScanConfigs={scanconfigs}
+              openVasScanners={openVasScanners}
               operatingSystemsFilter={operatingSystemsFilter.id}
               overridesFilter={overridesFilter.id}
               permissionsFilter={permissionsFilter.id}
+              portLists={portlists}
               portListsFilter={portListsFilter.id}
-              reportsFilter={reportsFilter.id}
+              reportExportFileName={reportExportFileName.value}
               reportFormatsFilter={reportFormatsFilter.id}
+              reportsFilter={reportsFilter.id}
               resultsFilter={resultsFilter.id}
               rolesFilter={rolesFilter.id}
+              rowsPerPage={rowsPerPage.value}
               scannersFilter={scannersFilter.id}
+              schedules={schedules}
               schedulesFilter={schedulesFilter.id}
               tagsFilter={tagsFilter.id}
+              targets={targets}
               targetsFilter={targetsFilter.id}
               tasksFilter={tasksFilter.id}
               ticketsFilter={ticketsFilter.id}
+              timezone={timezone}
               tlsCertificatesFilter={tlsCertificatesFilter.id}
+              userInterfaceDateFormat={userInterfaceDateFormat.value}
+              userInterfaceLanguage={userInterfaceLanguage.value}
+              userInterfaceTimeFormat={userInterfaceTimeFormat.value}
               usersFilter={usersFilter.id}
               vulnerabilitiesFilter={vulnerabilitiesFilter.id}
-              cpeFilter={cpeFilter.id}
-              cveFilter={cveFilter.id}
-              nvtFilter={nvtFilter.id}
-              certBundFilter={certBundFilter.id}
-              dfnCertFilter={dfnCertFilter.id}
               onClose={this.handleCloseDialog}
               onSave={this.handleSaveSettings}
               onValueChange={this.handleValueChange}
@@ -1153,5 +1136,3 @@ export default compose(
   withCapabilities,
   connect(mapStateToProps, mapDispatchToProps),
 )(UserSettings);
-
-// vim: set ts=2 sw=2 tw=80:

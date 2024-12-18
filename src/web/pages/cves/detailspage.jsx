@@ -3,65 +3,56 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
+import React from 'react';
 import DateTime from 'web/components/date/datetime';
-
 import CveIcon from 'web/components/icon/cveicon';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
-
+import ManualIcon from 'web/components/icon/manualicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import CertLink from 'web/components/link/certlink';
 import DetailsLink from 'web/components/link/detailslink';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import Table from 'web/components/table/stripedtable';
-import TableHeader from 'web/components/table/header';
-import TableHead from 'web/components/table/head';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
+import Table from 'web/components/table/stripedtable';
 import DetailsBlock from 'web/entity/block';
-import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
 import {InfoLayout} from 'web/entity/info';
+import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-
+import withEntityContainer from 'web/entity/withEntityContainer';
 import {selector, loadEntity} from 'web/store/entities/cves';
-
 import PropTypes from 'web/utils/proptypes';
 
 import CveDetails from './details';
-import withEntityContainer from 'web/entity/withEntityContainer';
 
 const ToolBarIcons = ({entity, onCveDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="managing-secinfo"
         anchor="cve"
+        page="managing-secinfo"
         title={_('Help: CVEs')}
       />
-      <ListIcon title={_('CVE List')} page="cves" />
+      <ListIcon page="cves" title={_('CVE List')} />
     </IconDivider>
     <ExportIcon
-      value={entity}
       title={_('Export CVE')}
+      value={entity}
       onClick={onCveDownloadClick}
     />
   </Divider>
@@ -96,8 +87,8 @@ const Details = ({entity, links = true}) => {
                     <span>
                       <CertLink
                         id={cert.name}
-                        type={cert.cert_type}
                         textOnly={!links}
+                        type={cert.cert_type}
                       />
                     </span>
                   </TableData>
@@ -114,7 +105,7 @@ const Details = ({entity, links = true}) => {
           <Layout flex="column">
             {products.map(product => (
               <span key={product}>
-                <DetailsLink type="cpe" id={product}>
+                <DetailsLink id={product} type="cpe">
                   {product}
                 </DetailsLink>
               </span>
@@ -128,7 +119,7 @@ const Details = ({entity, links = true}) => {
           <Layout flex="column">
             {nvts.map(nvt => (
               <span key={nvt.id}>
-                <DetailsLink type="nvt" id={nvt.id}>
+                <DetailsLink id={nvt.id} type="nvt">
                   {nvt.name}
                 </DetailsLink>
               </span>
@@ -181,17 +172,17 @@ const CvePage = ({
 }) => (
   <EntityComponent
     name="cve"
-    onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onDownloaded={onDownloaded}
     onInteraction={onInteraction}
   >
     {({download}) => (
       <EntityPage
         {...props}
         entity={entity}
+        infoComponent={EntityInfo}
         sectionIcon={<CveIcon size="large" />}
         title={_('CVE')}
-        infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}
         onCveDownloadClick={download}
         onInteraction={onInteraction}
@@ -200,8 +191,8 @@ const CvePage = ({
           return (
             <React.Fragment>
               <PageTitle title={_('CVE: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
@@ -250,5 +241,3 @@ export default withEntityContainer('cve', {
   load: loadEntity,
   entitySelector: selector,
 })(CvePage);
-
-// vim: set ts=2 sw=2 tw=80:

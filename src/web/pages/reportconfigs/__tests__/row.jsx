@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
+ 
+ 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import ReportConfig from 'gmp/models/reportconfig';
-
 import {setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
@@ -67,11 +63,11 @@ describe('Report Config row tests', () => {
     const {baseElement} = render(
       <Row
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -98,11 +94,11 @@ describe('Report Config row tests', () => {
     const {baseElement} = render(
       <Row
         entity={orphanEntity}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -148,11 +144,11 @@ describe('Report Config row tests', () => {
     const {getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -177,11 +173,11 @@ describe('Report Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -237,11 +233,11 @@ describe('Report Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -307,11 +303,11 @@ describe('Report Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -368,11 +364,11 @@ describe('Report Config row tests', () => {
     const {baseElement, getAllByTestId} = render(
       <Row
         entity={config}
-        onToggleDetailsClick={handleToggleDetailsClick}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
+        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 

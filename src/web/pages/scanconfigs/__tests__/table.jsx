@@ -4,17 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
-
 import {setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
@@ -98,9 +94,9 @@ describe('Scan Config table tests', () => {
 
     const {baseElement} = render(
       <Table
-        filter={filter}
         entities={[config, config2, config3]}
         entitiesCounts={counts}
+        filter={filter}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
@@ -141,9 +137,9 @@ describe('Scan Config table tests', () => {
 
     const {element, getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[config, config2, config3]}
         entitiesCounts={counts}
+        filter={filter}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
@@ -180,9 +176,9 @@ describe('Scan Config table tests', () => {
 
     const {getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[config, config2, config3]}
         entitiesCounts={counts}
+        filter={filter}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}

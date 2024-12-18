@@ -4,12 +4,10 @@
  */
 
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 
 import Label from '../label';
 import ToolTip from '../tooltip';
-
 import Pie from './pie';
 import {DataPropType} from './proptypes';
 
@@ -26,13 +24,13 @@ const Labels = ({
 }) => (
   <Pie
     data={data}
-    left={centerX}
-    top={centerY}
     innerRadiusX={innerRadiusX}
-    outerRadiusX={outerRadiusX}
     innerRadiusY={innerRadiusY}
+    left={centerX}
+    outerRadiusX={outerRadiusX}
     outerRadiusY={outerRadiusY}
     pieValue={d => d.value}
+    top={centerY}
   >
     {({data: arcData, index, startAngle, endAngle, x, y}) => {
       const angleAbs = Math.abs(startAngle - endAngle);
@@ -43,10 +41,10 @@ const Labels = ({
         <ToolTip key={index} content={arcData.toolTip}>
           {({targetRef, hide, show}) => (
             <Label
+              key={index}
+              ref={targetRef}
               x={x}
               y={y}
-              ref={targetRef}
-              key={index}
               onMouseEnter={show}
               onMouseLeave={hide}
             >
@@ -70,5 +68,3 @@ Labels.propTypes = {
 };
 
 export default Labels;
-
-// vim: set ts=2 sw=2 tw=80:

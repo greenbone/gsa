@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {combineReducers, filterIdentifier} from 'web/store/utils';
 
 describe('store utils module tests', () => {

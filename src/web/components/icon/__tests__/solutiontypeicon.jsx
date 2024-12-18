@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render} from 'web/utils/testing';
 
 import SolutionTypeIcon from '../solutiontypeicon';
@@ -32,5 +31,3 @@ describe('SolutionTypeIcon component tests', () => {
     expect(element8).toBeVisible();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

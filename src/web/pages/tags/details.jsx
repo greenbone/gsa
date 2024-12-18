@@ -3,24 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 import {typeName} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import Layout from 'web/components/layout/layout';
-
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 
 const TagDetails = ({entity}) => {
   const {comment, value, resourceType, resources} = entity;

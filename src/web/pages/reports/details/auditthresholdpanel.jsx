@@ -4,23 +4,18 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
-import useTranslation from 'web/hooks/useTranslation';
-
-import Divider from 'web/components/layout/divider';
-
-import InfoPanel from 'web/components/panel/infopanel';
-
+import FootNote from 'web/components/footnote/footnote';
+import EditIcon from 'web/components/icon/editicon';
 import FilterIcon from 'web/components/icon/filtericon';
-
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
+import InfoPanel from 'web/components/panel/infopanel';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 
 import ReportPanel from './reportpanel';
-import EditIcon from 'web/components/icon/editicon';
-import FootNote from 'web/components/footnote/footnote';
-import Layout from 'web/components/layout/layout';
+
 
 const UpdatingDivider = styled(({isUpdating, ...props}) => (
   <Divider {...props} />
@@ -72,9 +67,9 @@ const AuditThresholdPanel = ({
 
   return (
     <UpdatingDivider
-      flex="column"
-      align={['start', 'stretch']}
       grow
+      align={['start', 'stretch']}
+      flex="column"
       isUpdating={isUpdating}
     >
       <InfoPanel

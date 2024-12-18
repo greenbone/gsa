@@ -4,11 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
+import Filter from 'gmp/models/filter';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Link from '../link';
-import Filter from 'gmp/models/filter';
 
 describe('Link tests', () => {
   beforeEach(() => {
@@ -25,7 +24,7 @@ describe('Link tests', () => {
   test('renders correctly with anchor', () => {
     const {render} = rendererWith({router: true});
 
-    const {container} = render(<Link to="/test" anchor="section1" />);
+    const {container} = render(<Link anchor="section1" to="/test" />);
     expect(container.querySelector('a').getAttribute('href')).toBe(
       '/test#section1',
     );
@@ -48,7 +47,7 @@ describe('Link tests', () => {
     const {render} = rendererWith({router: true});
 
     const {element} = render(
-      <Link to="foo" filter={filter}>
+      <Link filter={filter} to="foo">
         Foo
       </Link>,
     );
@@ -68,7 +67,7 @@ describe('Link tests', () => {
     const query = {foo: 'bar'};
 
     const {element} = render(
-      <Link to="foo" query={query}>
+      <Link query={query} to="foo">
         Foo
       </Link>,
     );
@@ -87,7 +86,7 @@ describe('Link tests', () => {
     const {render} = rendererWith({router: true});
 
     const {element} = render(
-      <Link to="foo" anchor="bar">
+      <Link anchor="bar" to="foo">
         Foo
       </Link>,
     );
@@ -104,7 +103,7 @@ describe('Link tests', () => {
     const {render} = rendererWith({router: true});
 
     const {element} = render(
-      <Link to="foo" textOnly={true}>
+      <Link textOnly={true} to="foo">
         Foo
       </Link>,
     );
@@ -126,7 +125,7 @@ describe('Link tests', () => {
     const {render} = rendererWith({router: true});
 
     const {element} = render(
-      <Link to="foo" textOnly={true}>
+      <Link textOnly={true} to="foo">
         Foo
       </Link>,
     );
@@ -134,5 +133,3 @@ describe('Link tests', () => {
     expect(element).toMatchSnapshot();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

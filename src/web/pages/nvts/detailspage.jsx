@@ -3,37 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import Filter from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewNoteIcon from 'web/components/icon/newnoteicon';
 import NewOverrideIcon from 'web/components/icon/newoverrideicon';
 import NvtIcon from 'web/components/icon/nvticon';
 import ResultIcon from 'web/components/icon/resulticon';
-
+import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import Link from 'web/components/link/link';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
 import DetailsBlock from 'web/entity/block';
 import Note from 'web/entity/note';
 import Override from 'web/entity/override';
@@ -41,19 +33,15 @@ import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
-
 import {
   selector as notesSelector,
   loadEntities as loadNotes,
 } from 'web/store/entities/notes';
-
 import {selector as nvtsSelector, loadEntity} from 'web/store/entities/nvts';
-
 import {
   selector as overridesSelector,
   loadEntities as loadOverrides,
 } from 'web/store/entities/overrides';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -72,16 +60,16 @@ export let ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="managing-secinfo"
           anchor="vulnerability-tests-vt"
+          page="managing-secinfo"
           title={_('Help: NVTs')}
         />
-        <ListIcon title={_('NVT List')} page="nvts" />
+        <ListIcon page="nvts" title={_('NVT List')} />
       </IconDivider>
 
       <ExportIcon
-        value={entity}
         title={_('Export NVT')}
+        value={entity}
         onClick={onNvtDownloadClick}
       />
 
@@ -104,12 +92,12 @@ export let ToolBarIcons = ({
 
       <IconDivider>
         {capabilities.mayAccess('results') && (
-          <Link to="results" filter={'nvt=' + entity.id}>
+          <Link filter={'nvt=' + entity.id} to="results">
             <ResultIcon title={_('Corresponding Results')} />
           </Link>
         )}
         {capabilities.mayAccess('vulns') && (
-          <Link to="vulnerabilities" filter={'uuid=' + entity.id}>
+          <Link filter={'uuid=' + entity.id} to="vulnerabilities">
             <VulnerabilityIcon title={_('Corresponding Vulnerabilities')} />
           </Link>
         )}
@@ -191,17 +179,17 @@ const Page = ({
   return (
     <NvtComponent
       onChanged={onChanged}
-      onDownloaded={onDownloaded}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
     >
       {({notecreate, overridecreate, download}) => (
         <EntityPage
           {...props}
           entity={entity}
-          toolBarIcons={ToolBarIcons}
-          title={_('NVT')}
           sectionIcon={<NvtIcon size="large" />}
+          title={_('NVT')}
+          toolBarIcons={ToolBarIcons}
           onChanged={onChanged}
           onInteraction={onInteraction}
           onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
@@ -212,8 +200,8 @@ const Page = ({
             return (
               <React.Fragment>
                 <PageTitle title={_('NVT: {{name}}', {name: entity.name})} />
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
                     <TabList
                       active={activeTab}
                       align={['start', 'stretch']}
@@ -233,15 +221,15 @@ const Page = ({
                     <TabPanels>
                       <TabPanel>
                         <Details
+                          entity={entity}
                           notes={notes}
                           overrides={overrides}
-                          entity={entity}
                         />
                       </TabPanel>
                       <TabPanel>
                         <Preferences
-                          preferences={preferences}
                           defaultTimeout={defaultTimeout}
+                          preferences={preferences}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -302,5 +290,3 @@ export default withEntityContainer('nvt', {
   entitySelector: nvtsSelector,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

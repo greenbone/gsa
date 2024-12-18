@@ -3,27 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import IconDivider from 'web/components/layout/icondivider';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-
+import IconDivider from 'web/components/layout/icondivider';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
 import ImportReportIcon from 'web/pages/tasks/icons/importreporticon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Actions = ({
@@ -38,24 +30,24 @@ const Actions = ({
   onTaskStartClick,
   onTaskStopClick,
 }) => (
-  <IconDivider align={['center', 'center']} grow>
+  <IconDivider grow align={['center', 'center']}>
     {isDefined(entity.schedule) && (
-      <ScheduleIcon schedule={entity.schedule} links={links} />
+      <ScheduleIcon links={links} schedule={entity.schedule} />
     )}
-    <TaskIconWithSync type="start" task={entity} onClick={onTaskStartClick} />
+    <TaskIconWithSync task={entity} type="start" onClick={onTaskStartClick} />
 
     <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
     <StopIcon task={entity} onClick={onTaskStopClick} />
 
-    <TaskIconWithSync type="resume" task={entity} onClick={onTaskResumeClick} />
+    <TaskIconWithSync task={entity} type="resume" onClick={onTaskResumeClick} />
 
     <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
     <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
     <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
     <ExportIcon
-      value={entity}
       title={_('Export Task')}
+      value={entity}
       onClick={onTaskDownloadClick}
     />
   </IconDivider>
@@ -75,5 +67,3 @@ Actions.propTypes = {
 };
 
 export default withEntitiesActions(Actions);
-
-// vim: set ts=2 sw=2 tw=80:

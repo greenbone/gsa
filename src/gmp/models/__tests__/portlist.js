@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import PortList from 'gmp/models/portlist';
 import {testModel} from 'gmp/models/testing';
@@ -106,5 +105,3 @@ describe('PortList model tests', () => {
     expect(portList2.predefined).toEqual(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

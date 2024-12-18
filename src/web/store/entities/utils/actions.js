@@ -4,9 +4,7 @@
  */
 
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
-
 import {pluralizeType} from 'gmp/utils/entitytype';
-
 import {isDefined} from 'gmp/utils/identity';
 
 export const types = {
@@ -155,4 +153,3 @@ export const createDeleteEntity =
     gmp[entityType]
       .delete({id})
       .then(() => dispatch(entityDeleteActions.success(entityType, id)));
-// vim: set ts=2 sw=2 tw=80:

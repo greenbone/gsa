@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {testModel} from 'gmp/models/testing';
 
 import Role from '../role';
-import {testModel} from 'gmp/models/testing';
 
 testModel(Role, 'role');
 
@@ -38,5 +38,3 @@ describe('Role model tests', () => {
     expect(role.users).toEqual([]);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

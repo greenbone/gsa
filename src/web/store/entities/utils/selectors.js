@@ -4,9 +4,7 @@
  */
 
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
 import {filterIdentifier} from 'web/store/utils';
 
 export class EntitySelector {
@@ -153,5 +151,3 @@ export const createEntitiesSelector = name => rootState =>
 
 export const createSelector = name => rootState =>
   new Selector(rootState.entities[name]);
-
-// vim: set ts=2 sw=2 tw=80:

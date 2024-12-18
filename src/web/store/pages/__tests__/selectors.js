@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import getPage from 'web/store/pages/selectors';
 
 describe('pages selectors tests', () => {
@@ -42,5 +41,3 @@ describe('pages selectors tests', () => {
     expect(selector.getFilter('foo')).toEqual('name=foo');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,78 +3,61 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
-import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
-
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
-import {map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
-import {hasId} from 'gmp/utils/id';
-
-import withDownload from 'web/components/form/withDownload';
-import {withRouter} from 'web/utils/withRouter';
-
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
+import {hasId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {connect} from 'react-redux';
+import withDownload from 'web/components/form/withDownload';
+import EntityComponent from 'web/entity/component';
+import AlertComponent from 'web/pages/alerts/component';
+import AuditDialog from 'web/pages/audits/dialog';
+import ScheduleComponent from 'web/pages/schedules/component';
+import TargetComponent from 'web/pages/targets/component';
 import {
   loadEntities as loadAlerts,
   selector as alertSelector,
 } from 'web/store/entities/alerts';
-
 import {
   loadEntities as loadPolicies,
   selector as policiesSelector,
 } from 'web/store/entities/policies';
-
-import {
-  loadEntities as loadScanners,
-  selector as scannerSelector,
-} from 'web/store/entities/scanners';
-
-import {
-  loadEntities as loadSchedules,
-  selector as scheduleSelector,
-} from 'web/store/entities/schedules';
-
-import {
-  loadEntities as loadTargets,
-  selector as targetSelector,
-} from 'web/store/entities/targets';
-
 import {
   loadAllEntities as loadReportFormats,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
-
+import {
+  loadEntities as loadScanners,
+  selector as scannerSelector,
+} from 'web/store/entities/scanners';
+import {
+  loadEntities as loadSchedules,
+  selector as scheduleSelector,
+} from 'web/store/entities/schedules';
+import {
+  loadEntities as loadTargets,
+  selector as targetSelector,
+} from 'web/store/entities/targets';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-
 import {getUsername} from 'web/store/usersettings/selectors';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import {UNSET_VALUE, generateFilename} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-import {UNSET_VALUE, generateFilename} from 'web/utils/render';
-
-import EntityComponent from 'web/entity/component';
-
-import ScheduleComponent from 'web/pages/schedules/component';
-import AlertComponent from 'web/pages/alerts/component';
-import TargetComponent from 'web/pages/targets/component';
-
-import AuditDialog from 'web/pages/audits/dialog';
+import {withRouter} from 'web/utils/withRouter';
 
 const REPORT_FORMATS_FILTER = Filter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
@@ -457,14 +440,14 @@ class AuditComponent extends React.Component {
       <React.Fragment>
         <EntityComponent
           name="audit"
-          onCreated={onCreated}
-          onCreateError={onCreateError}
-          onCloned={onCloned}
           onCloneError={onCloneError}
-          onDeleted={onDeleted}
+          onCloned={onCloned}
+          onCreateError={onCreateError}
+          onCreated={onCreated}
           onDeleteError={onDeleteError}
-          onDownloaded={onDownloaded}
+          onDeleted={onDeleted}
           onDownloadError={onDownloadError}
+          onDownloaded={onDownloaded}
           onInteraction={onInteraction}
         >
           {other => (
@@ -497,13 +480,13 @@ class AuditComponent extends React.Component {
                         >
                           {({create: createschedule}) => (
                             <AuditDialog
-                              alerts={alerts}
                               alertIds={alertIds}
+                              alerts={alerts}
                               alterable={alterable}
+                              audit={audit}
                               auto_delete={auto_delete}
                               auto_delete_data={auto_delete_data}
                               comment={comment}
-                              policyId={policyId}
                               hostsOrdering={hostsOrdering}
                               id={id}
                               in_assets={in_assets}
@@ -512,6 +495,7 @@ class AuditComponent extends React.Component {
                               maxHosts={maxHosts}
                               name={name}
                               policies={policies}
+                              policyId={policyId}
                               scannerId={scannerId}
                               scanners={scanners}
                               scheduleId={scheduleId}
@@ -519,13 +503,12 @@ class AuditComponent extends React.Component {
                               schedules={schedules}
                               targetId={targetId}
                               targets={targets}
-                              audit={audit}
                               title={title}
-                              onNewAlertClick={createalert}
-                              onNewTargetClick={createtarget}
-                              onNewScheduleClick={createschedule}
                               onChange={this.handleChange}
                               onClose={this.handleCloseAuditDialog}
+                              onNewAlertClick={createalert}
+                              onNewScheduleClick={createschedule}
+                              onNewTargetClick={createtarget}
                               onSave={this.handleSaveAudit}
                               onScannerChange={this.handleScannerChange}
                             />

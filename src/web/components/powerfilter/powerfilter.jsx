@@ -3,35 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
-
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
+import DeleteIcon from 'web/components/icon/deleteicon';
+import EditIcon from 'web/components/icon/editicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
-import Select from 'web/components/form/select';
-import TextField from 'web/components/form/textfield';
-
-import DeleteIcon from 'web/components/icon/deleteicon';
-import EditIcon from 'web/components/icon/editicon';
-import ManualIcon from 'web/components/icon/manualicon';
 import RefreshIcon from '../icon/refreshicon';
 import ResetIcon from '../icon/reseticon';
-
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
 
 const DEFAULT_FILTER_ID = '0';
 
@@ -176,9 +169,9 @@ class PowerFilter extends React.Component {
     } = this.props;
     return (
       <Layout
-        flex="column"
         align={['start', 'stretch']}
         className="powerfilter"
+        flex="column"
       >
         <Layout align={['space-between', 'center']}>
           <LeftDivider align={['start', 'center']}>
@@ -187,63 +180,64 @@ class PowerFilter extends React.Component {
                 <b>{_('Filter')}</b>
               </Label>
               <PowerFilterTextField
-                name="userFilterString"
-                maxLength="1000"
-                value={userFilterString}
-                onKeyDown={this.handleUserFilterKeyPress}
-                onChange={this.handleValueChange}
                 data-testid="powerfilter-text"
+                maxLength="1000"
+                name="userFilterString"
+                value={userFilterString}
+                onChange={this.handleValueChange}
+                onKeyDown={this.handleUserFilterKeyPress}
               />
             </Layout>
             <IconDivider align={['start', 'center']}>
               <RefreshIcon
+                data-testid="powerfiler-refresh"
                 title={_('Update Filter')}
                 onClick={this.handleUpdateFilter}
-                data-testid="powerfiler-refresh"
               />
 
               {onRemoveClick && (
                 <DeleteIcon
-                  title={_('Remove Filter')}
                   active={isDefined(filter)}
+                  data-testid="powefilter-delete"
+                  title={_('Remove Filter')}
                   onClick={
                     isDefined(filter) ? this.handleRemoveClick : undefined
                   }
-                  data-testid="powefilter-delete"
                 />
               )}
               {onResetClick && (
                 <ResetIcon
-                  title={_('Reset to Default Filter')}
                   active={isDefined(filter)}
+                  data-testid="powerfilter-reset"
+                  title={_('Reset to Default Filter')}
                   onClick={
                     isDefined(filter) ? this.handleResetClick : undefined
                   }
-                  data-testid="powerfilter-reset"
                 />
               )}
 
               <ManualIcon
-                title={_('Help: Powerfilter')}
-                page="web-interface"
                 anchor="filtering-the-page-content"
                 data-testid="powerfilter-help"
+                page="web-interface"
+                title={_('Help: Powerfilter')}
               />
 
               {onEditClick && (
                 <EditIcon
-                  title={_('Edit Filter')}
-                  disabled={!isDefined(filter) || isLoading}
-                  onClick={isDefined(filter) ? onEditClick : undefined}
                   data-testid="powerfilter-edit"
+                  disabled={!isDefined(filter) || isLoading}
+                  title={_('Edit Filter')}
+                  onClick={isDefined(filter) ? onEditClick : undefined}
                 />
               )}
             </IconDivider>
           </LeftDivider>
           {capabilities.mayAccess('filters') && (
             <Select
-              items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
+              data-testid="powefilter-select"
               isLoading={isLoadingFilters}
+              items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
               toolTipTitle={_('Loaded filter')}
               value={
                 isDefined(filter) && isDefined(filter.id)
@@ -251,7 +245,6 @@ class PowerFilter extends React.Component {
                   : DEFAULT_FILTER_ID
               }
               onChange={this.handleNamedFilterChange}
-              data-testid="powefilter-select"
             />
           )}
         </Layout>
@@ -278,5 +271,3 @@ PowerFilter.propTypes = {
 };
 
 export default compose(withCapabilities, withGmp)(PowerFilter);
-
-// vim: set ts=2 sw=2 tw=80:

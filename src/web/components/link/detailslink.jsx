@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import Link from './link';
 
@@ -33,5 +31,3 @@ DetailsLink.propTypes = {
 };
 
 export default withCapabilities(DetailsLink);
-
-// vim: set ts=2 sw=2 tw=80:

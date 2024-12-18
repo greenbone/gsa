@@ -4,20 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {entitiesLoadingActions} from 'web/store/entities/tasks';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
-
 import {
   clickElement,
   getPowerFilter,
@@ -25,6 +15,11 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {entitiesLoadingActions} from 'web/store/entities/tasks';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import TaskPage, {ToolBarIcons} from '../listpage';
 
@@ -318,8 +313,8 @@ describe('TaskPage ToolBarIcons test', () => {
     const {element, getAllByTestId} = render(
       <ToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onTaskCreateClick={handleTaskCreateClick}
         onTaskWizardClick={handleTaskWizardClick}
       />,
@@ -356,8 +351,8 @@ describe('TaskPage ToolBarIcons test', () => {
     const {baseElement} = render(
       <ToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onTaskCreateClick={handleTaskCreateClick}
         onTaskWizardClick={handleTaskWizardClick}
       />,
@@ -405,8 +400,8 @@ describe('TaskPage ToolBarIcons test', () => {
     const {queryAllByTestId} = render(
       <ToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onModifyTaskWizardClick={handleModifyTaskWizardClick}
         onTaskCreateClick={handleTaskCreateClick}
         onTaskWizardClick={handleTaskWizardClick}
       />,

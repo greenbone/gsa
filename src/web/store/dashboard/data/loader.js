@@ -3,24 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
-import compose from '../../../utils/compose';
-import withGmp from '../../../utils/withGmp';
-import withSubscription from '../../../utils/withSubscription';
-import PropTypes from '../../../utils/proptypes';
+import React from 'react';
+import {connect} from 'react-redux';
 
 import {
   receivedDashboardData,
   receivedDashboardError,
   requestDashboardData,
 } from './actions';
-
 import getDashboardData from './selectors';
+import compose from '../../../utils/compose';
+import PropTypes from '../../../utils/proptypes';
+import withGmp from '../../../utils/withGmp';
+import withSubscription from '../../../utils/withSubscription';
 
 export const loaderPropTypes = {
   children: PropTypes.func,
@@ -147,5 +143,3 @@ export default compose(
   withSubscription,
   connect(mapStateToProps, mapDispatchToProps),
 )(Loader);
-
-// vim: set ts=2 sw=2 tw=80:

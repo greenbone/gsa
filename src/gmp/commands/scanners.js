@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
+import logger from 'gmp/log';
 import Scanner from 'gmp/models/scanner';
 
 import EntitiesCommand from './entities';
@@ -85,5 +83,3 @@ class ScannerCommand extends EntityCommand {
 
 registerCommand('scanner', ScannerCommand);
 registerCommand('scanners', ScannersCommand);
-
-// vim: set ts=2 sw=2 tw=80:

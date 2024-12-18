@@ -4,7 +4,6 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-
 import {filterIdentifier} from 'web/store/utils';
 
 import {
@@ -67,5 +66,3 @@ const dashboardDataById = (state = {}, action) => {
 };
 
 export default dashboardDataById;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,24 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
+import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-import {createDeleteEntity} from 'web/store/entities/utils/actions';
-
 import compose from 'web/utils/compose';
-
 import PropTypes from 'web/utils/proptypes';
-
 import {generateFilename} from 'web/utils/render';
-
 import withGmp from 'web/utils/withGmp';
 
 export const goto_details =
@@ -177,5 +170,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(EntityComponent);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -229,5 +229,3 @@ describe('Capabilities tests', () => {
     expect(caps.featureEnabled('UNDEFINED_FEATURE')).toBe(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

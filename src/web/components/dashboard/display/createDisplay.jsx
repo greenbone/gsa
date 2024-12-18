@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
+
 import withFilterSelection from './withFilterSelection';
 
 const createDisplay = ({
@@ -52,5 +51,3 @@ const createDisplay = ({
 };
 
 export default createDisplay;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,11 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
 import {Col} from 'web/entity/page';
-
 import PropTypes from 'web/utils/proptypes';
 
 import InfoTable from './infotable';
@@ -27,5 +24,3 @@ DetailsTable.propTypes = {
 };
 
 export default DetailsTable;
-
-// vim: set ts=2 sw=2 tw=80:

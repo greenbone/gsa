@@ -4,7 +4,6 @@
  */
 
 import {describe} from '@gsa/testing';
-
 import {testIcon} from 'web/components/icon/testing';
 
 import LegendIcon from '../legendicon';
@@ -12,5 +11,3 @@ import LegendIcon from '../legendicon';
 describe('LegendIcon component tests', () => {
   testIcon(LegendIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

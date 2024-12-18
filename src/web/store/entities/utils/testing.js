@@ -4,12 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {isFunction} from 'gmp/utils/identity';
-import {pluralizeType} from 'gmp/utils/entitytype';
-
 import Filter from 'gmp/models/filter';
-
+import {pluralizeType} from 'gmp/utils/entitytype';
+import {isFunction} from 'gmp/utils/identity';
 import {filterIdentifier} from 'web/store/utils';
 
 import {types} from './actions';
@@ -575,5 +572,3 @@ export const testAll = (
   testReducerForEntities(name, reducer, entitiesLoadingActions);
   testReducerForEntity(name, reducer, entityLoadingActions);
 };
-
-// vim: set ts=2 sw=2 tw=80:

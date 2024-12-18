@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import withSvgIcon from './withSvgIcon';
-
 import {Pencil as Icon} from 'lucide-react';
-
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 
+import withSvgIcon from './withSvgIcon';
+
 const EditIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="edit-icon"/>
+  <IconWithStrokeWidth
+    IconComponent={Icon}
+    {...props}
+    data-testid="edit-icon"
+  />
 ));
 
 export default EditIcon;
-
-// vim: set ts=2 sw=2 tw=80:

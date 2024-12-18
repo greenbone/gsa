@@ -3,35 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
 import {parseBoolean} from 'gmp/parser';
-
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-
+import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
+import MultiSelect from 'web/components/form/multiselect';
+import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
 import TextArea from 'web/components/form/textarea';
 import TextField from 'web/components/form/textfield';
-import MultiSelect from 'web/components/form/multiselect';
-import Select from 'web/components/form/select';
 import YesNoRadio from 'web/components/form/yesnoradio';
-
-import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-import Checkbox from 'web/components/form/checkbox';
+import Table from 'web/components/table/table';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 const Param = ({
   data,
@@ -54,20 +47,20 @@ const Param = ({
     field = (
       <YesNoRadio
         convert={parseBoolean}
-        yesValue={true}
-        noValue={false}
         name={name}
+        noValue={false}
         value={fieldValue}
+        yesValue={true}
         onChange={onPrefChange}
       />
     );
   } else if (type === 'integer') {
     field = (
       <Spinner
-        type="int"
-        name={name}
-        min={min}
         max={max}
+        min={min}
+        name={name}
+        type="int"
         value={fieldValue}
         onChange={onPrefChange}
       />
@@ -79,8 +72,8 @@ const Param = ({
     }));
     field = (
       <MultiSelect
-        name={name}
         items={typeOptions}
+        name={name}
         value={fieldValue}
         onChange={onPrefChange}
       />
@@ -88,8 +81,8 @@ const Param = ({
   } else if (type === 'string') {
     field = (
       <TextField
-        name={name}
         maxLength={max}
+        name={name}
         value={fieldValue}
         onChange={onPrefChange}
       />
@@ -102,8 +95,8 @@ const Param = ({
 
     field = (
       <Select
-        name={name}
         items={typeOptions}
+        name={name}
         value={fieldValue}
         onChange={onPrefChange}
       />
@@ -111,8 +104,8 @@ const Param = ({
   } else if (type === 'report_format_list') {
     field = (
       <MultiSelect
-        name={name}
         items={formatOptions}
+        name={name}
         value={fieldValue}
         onChange={onPrefChange}
       />
@@ -130,8 +123,8 @@ const Param = ({
 
   const useDefaultCheck = (
     <Checkbox
-      name={name}
       checked={usingDefaultData[name]}
+      name={name}
       onChange={onParamUsingDefaultChange}
     />
   );
@@ -301,14 +294,14 @@ class Dialog extends React.Component {
 
     return (
       <SaveDialog
-        title={title}
-        onClose={onClose}
-        onSave={this.handleSave}
         defaultValues={
           isDefined(report_config_values)
             ? report_config_values
             : default_values
         }
+        title={title}
+        onClose={onClose}
+        onSave={this.handleSave}
       >
         {({values: state, onValueChange}) => {
           return (
@@ -332,10 +325,10 @@ class Dialog extends React.Component {
               <FormGroup title={_('Report Format')}>
                 {isDefined(format_items) && format_items.length > 0 ? (
                   <Select
-                    grow="1"
-                    name="report_format"
                     disabled={is_edit}
+                    grow="1"
                     items={format_items}
+                    name="report_format"
                     value={state.report_format}
                     onChange={this.handleReportFormatChange}
                   />
@@ -359,11 +352,11 @@ class Dialog extends React.Component {
                       {originalParamInfo.map(param => (
                         <Param
                           key={param.name}
-                          value={param}
                           data={params}
                           formats={formats}
-                          usingDefaultData={params_using_default}
                           isEdit={is_edit}
+                          usingDefaultData={params_using_default}
+                          value={param}
                           onParamUsingDefaultChange={
                             this.handleParamUsingDefaultChange
                           }
@@ -398,5 +391,3 @@ Dialog.propTypes = {
 };
 
 export default withGmp(Dialog);
-
-// vim: set ts=2 sw=2 tw=80:

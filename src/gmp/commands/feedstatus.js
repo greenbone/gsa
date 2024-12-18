@@ -4,12 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
-
-import {parseDate} from 'gmp/parser';
-
-import {map} from 'gmp/utils/array';
-
 import date, {duration} from 'gmp/models/date';
+import {parseDate} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
 
 import HttpCommand from './http';
 
@@ -119,5 +116,3 @@ export class FeedStatus extends HttpCommand {
 }
 
 registerCommand('feedstatus', FeedStatus);
-
-// vim: set ts=2 sw=2 tw=80:

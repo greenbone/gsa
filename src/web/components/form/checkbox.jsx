@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
-
 import {Checkbox as OpenSightCheckbox} from '@greenbone/opensight-ui-components-mantinev7';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React, {useCallback} from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 const convertChecked = (value, checkedValue, unCheckedValue) => {
@@ -52,9 +49,9 @@ const Checkbox = ({
     <OpenSightCheckbox
       data-testid="opensight-checkbox"
       {...props}
+      disabled={disabled}
       label={title}
       title={toolTipTitle}
-      disabled={disabled}
       onChange={handleChange}
     />
   );
@@ -71,5 +68,3 @@ Checkbox.propTypes = {
 };
 
 export default Checkbox;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,20 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
-
 import {
   MultiSelect as MantineMultiSelect,
   TextInput,
   Loader,
 } from '@mantine/core';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import useTranslation from 'web/hooks/useTranslation';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const getSize = size => (size === 'lg' ? '40px' : '32px');
 
@@ -76,10 +72,10 @@ const MultiSelect = ({
     return (
       <TextInput
         data-testid="text-input"
-        styles={{root: {flexGrow: grow}}}
         placeholder={_('Loading...')}
         readOnly={true}
         rightSection={<Loader size="xs" />}
+        styles={{root: {flexGrow: grow}}}
       />
     );
   }
@@ -87,19 +83,19 @@ const MultiSelect = ({
     <StyledMultiSelect
       data-testid="multi-select"
       {...props}
-      styles={{root: {flexGrow: grow}}}
+      data={items}
       disabled={disabled || !items?.length}
       dropdownPosition={dropdownPosition}
       error={isDefined(errorContent) && `${errorContent}`}
-      data={items}
-      searchable={searchable}
-      title={title}
-      label={label}
-      placeholder={placeholder}
-      name={name}
-      value={value}
-      size={size}
       errorContent={errorContent}
+      label={label}
+      name={name}
+      placeholder={placeholder}
+      searchable={searchable}
+      size={size}
+      styles={{root: {flexGrow: grow}}}
+      title={title}
+      value={value}
       onChange={handleChange}
     />
   );
@@ -129,5 +125,3 @@ MultiSelect.propTypes = {
 };
 
 export default MultiSelect;
-
-// vim: set ts=2 sw=2 tw=80:

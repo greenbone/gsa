@@ -4,7 +4,6 @@
  */
 
 import styled from 'styled-components';
-
 import Theme from 'web/utils/theme';
 
 const TableHeader = styled.thead`
@@ -30,5 +29,3 @@ const TableHeader = styled.thead`
 `;
 
 export default TableHeader;
-
-// vim: set ts=2 sw=2 tw=80:

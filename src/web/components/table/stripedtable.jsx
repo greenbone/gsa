@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import styled from 'styled-components';
 import Theme from 'web/utils/theme';
 
 import Table from './table';
-
-import styled from 'styled-components';
 
 const StripedTable = styled(Table)`
   & th,
@@ -37,5 +36,3 @@ const StripedTable = styled(Table)`
 StripedTable.displayName = 'StripedTable';
 
 export default StripedTable;
-
-// vim: set ts=2 sw=2 tw=80:

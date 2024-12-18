@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import {map} from 'gmp/utils/array';
 
+import Capabilities from './capabilities/capabilities.js';
 import {
   parseProperties as parseDefaultProperties,
   parseYesNo,
@@ -17,8 +18,6 @@ import {
   NO_VALUE,
   YES_VALUE,
 } from './parser.js';
-
-import Capabilities from './capabilities/capabilities.js';
 
 export const parseModelFromElement = (element, entityType) => {
   const m = new Model(entityType);
@@ -140,5 +139,3 @@ class Model {
 }
 
 export default Model;
-
-// vim: set ts=2 sw=2 tw=80:

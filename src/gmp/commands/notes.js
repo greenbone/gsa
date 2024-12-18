@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
+import logger from 'gmp/log';
 import Note from 'gmp/models/note';
 import {
   DEFAULT_DAYS,
@@ -116,5 +114,3 @@ class NotesCommand extends EntitiesCommand {
 
 registerCommand('note', NoteCommand);
 registerCommand('notes', NotesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

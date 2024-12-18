@@ -3,17 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import SelectionType from 'web/utils/selectiontype';
-
+import React from 'react';
 import TrashcanIcon from 'web/components/icon/trashcanicon';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 
 const TrashIcon = ({selectionType, title, ...other}) => {
   if (!isDefined(title)) {
@@ -25,7 +20,7 @@ const TrashIcon = ({selectionType, title, ...other}) => {
       title = _('Move all filtered to trashcan');
     }
   }
-  return <TrashcanIcon {...other} title={title} data-testid="tash-icon"/>;
+  return <TrashcanIcon {...other} data-testid="tash-icon" title={title} />;
 };
 
 TrashIcon.propTypes = {
@@ -34,5 +29,3 @@ TrashIcon.propTypes = {
 };
 
 export default TrashIcon;
-
-// vim: set ts=2 sw=2 tw=80:

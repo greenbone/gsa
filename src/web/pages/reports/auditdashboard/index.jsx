@@ -22,14 +22,14 @@ export const AUDIT_REPORTS_DISPLAYS = [
 const AuditReportsDashboard = props => (
   <Dashboard
     {...props}
-    id={AUDIT_REPORTS_DASHBOARD_ID}
-    permittedDisplays={AUDIT_REPORTS_DISPLAYS}
     defaultDisplays={[
       [
         ReportComplianceDisplay.displayId,
         ReportComplianceTableDisplay.displayId,
       ],
     ]}
+    id={AUDIT_REPORTS_DASHBOARD_ID}
+    permittedDisplays={AUDIT_REPORTS_DISPLAYS}
   />
 );
 

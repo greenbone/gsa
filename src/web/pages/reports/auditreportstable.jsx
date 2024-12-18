@@ -3,23 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import {_l} from 'gmp/locale/lang';
-import useTranslation from 'web/hooks/useTranslation';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import {createEntitiesFooter} from 'web/entities/footer';
-import {createEntitiesTable} from 'web/entities/table';
-
+import React from 'react';
 import ComplianceState from 'web/components/label/compliancestate';
-
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import {createEntitiesFooter} from 'web/entities/footer';
+import {createEntitiesTable} from 'web/entities/table';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 import AuditReportRow from './auditreportrow';
 
@@ -35,71 +30,71 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="25%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'date' : false}
-          onSortChange={onSortChange}
           title={_('Date')}
+          width="25%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="8%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'status' : false}
-          onSortChange={onSortChange}
           title={_('Status')}
+          width="8%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="33%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'task' : false}
-          onSortChange={onSortChange}
           title={_('Task')}
+          width="33%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'compliant' : false}
-          onSortChange={onSortChange}
           title={_('Compliant')}
+          width="11%"
+          onSortChange={onSortChange}
         />
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'compliance_yes' : false}
-          onSortChange={onSortChange}
           title={_('Compliant')}
+          width="5%"
+          onSortChange={onSortChange}
         >
           <ComplianceState.Yes />
         </TableHead>
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'compliance_no' : false}
-          onSortChange={onSortChange}
           title={_('Not Compliant')}
+          width="5%"
+          onSortChange={onSortChange}
         >
           <ComplianceState.No />
         </TableHead>
         <TableHead
-          width="5%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'compliance_incomplete' : false}
-          onSortChange={onSortChange}
           title={_('Incomplete')}
+          width="5%"
+          onSortChange={onSortChange}
         >
           <ComplianceState.Incomplete />
         </TableHead>
         {isDefined(actionsColumn) ? (
           actionsColumn
         ) : (
-          <TableHead width="8%" align="center">
+          <TableHead align="center" width="8%">
             {_('Actions')}
           </TableHead>
         )}

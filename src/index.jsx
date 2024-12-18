@@ -3,18 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {createRoot} from 'react-dom/client';
-
 import * as Sentry from '@sentry/react';
-
 import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import {StyleSheetManager} from 'styled-components';
 
 import GSA_VERSION from './version';
 import App from './web/app';
 
-import {StyleSheetManager} from 'styled-components';
 
 const config = isDefined(global.config) ? global.config : {};
 const {sentryDSN, sentryEnvironment} = config;

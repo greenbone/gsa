@@ -3,17 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
-import {hasId} from 'gmp/utils/id';
-
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
 import {
   ANY,
   MANUAL,
@@ -25,9 +15,13 @@ import {
   ACTIVE_YES_ALWAYS_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
 } from 'gmp/models/override';
-
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {hasId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import React from 'react';
+import EntityComponent from 'web/entity/component';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 import {
   FALSE_POSITIVE_VALUE,
   LOG_VALUE,
@@ -35,8 +29,7 @@ import {
   MEDIUM_VALUE,
   LOW_VALUE,
 } from 'web/utils/severity';
-
-import EntityComponent from 'web/entity/component';
+import withGmp from 'web/utils/withGmp';
 
 import OverrideDialog from './dialog';
 
@@ -209,17 +202,17 @@ class OverrideComponent extends React.Component {
     return (
       <EntityComponent
         name="override"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -283,5 +276,3 @@ OverrideComponent.propTypes = {
 };
 
 export default withGmp(OverrideComponent);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
-
-import {withEntitiesHeader} from 'web/entities/header';
-
+import React from 'react';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import {withEntitiesHeader} from 'web/entities/header';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   actionsColumn,
@@ -28,12 +24,12 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="92%"
-          currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}
           title={_('Name')}
+          width="92%"
+          onSortChange={onSortChange}
         />
         {actionsColumn}
       </TableRow>
@@ -52,5 +48,3 @@ Header.propTypes = {
 };
 
 export default withEntitiesHeader()(Header);
-
-// vim: set ts=2 sw=2 tw=80:

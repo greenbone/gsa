@@ -3,33 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {REPORT_FORMATS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
-import ManualIcon from 'web/components/icon/manualicon';
+import React from 'react';
 import ImportIcon from 'web/components/icon/importicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import ReportFormatIcon from 'web/components/icon/reportformaticon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reportformats';
-
-import useTranslation from 'web/hooks/useTranslation';
-import useCapabilities from 'web/hooks/useCapabilities';
+import PropTypes from 'web/utils/proptypes';
 
 import ReportFormatComponent from './component';
-import ReportFormatsTable from './table';
 import ReportFormatsFilterDialog from './filterdialog';
+import ReportFormatsTable from './table';
 
 const ToolBarIcons = ({onReportFormatImportClick}) => {
   const capabilities = useCapabilities();
@@ -37,8 +30,8 @@ const ToolBarIcons = ({onReportFormatImportClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        page="reports"
         anchor="managing-report-formats"
+        page="reports"
         title={_('Help: Report Formats')}
       />
       {capabilities.mayCreate('report_format') && (
@@ -65,11 +58,11 @@ const ReportFormatsPage = ({
   const [_] = useTranslation();
   return (
     <ReportFormatComponent
-      onSaved={onChanged}
-      onDeleted={onChanged}
       onDeleteError={onError}
+      onDeleted={onChanged}
       onImported={onChanged}
       onInteraction={onInteraction}
+      onSaved={onChanged}
     >
       {({delete: delete_func, edit, import: import_func}) => (
         <React.Fragment>
@@ -85,9 +78,9 @@ const ReportFormatsPage = ({
             onChanged={onChanged}
             onError={onError}
             onInteraction={onInteraction}
-            onReportFormatImportClick={import_func}
             onReportFormatDeleteClick={delete_func}
             onReportFormatEditClick={edit}
+            onReportFormatImportClick={import_func}
           />
         </React.Fragment>
       )}
@@ -106,5 +99,3 @@ export default withEntitiesContainer('reportformat', {
   entitiesSelector,
   loadEntities,
 })(ReportFormatsPage);
-
-// vim: set ts=2 sw=2 tw=80:

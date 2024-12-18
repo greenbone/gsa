@@ -3,30 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PropTypes from 'web/utils/proptypes';
-
-import {useLocation} from 'react-router-dom';
-
-import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
-
+import {useLocation} from 'react-router-dom';
+import styled from 'styled-components';
 import ErrorBoundary from 'web/components/error/errorboundary';
-
 import Layout from 'web/components/layout/layout';
-
+import Menu from 'web/components/menu/menu';
+import FeedSyncNotification from 'web/components/notification/FeedSyncNotification/FeedSyncNotification';
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
-
-import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
-
 import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
-import FeedSyncNotification from 'web/components/notification/FeedSyncNotification/FeedSyncNotification';
-
-import Menu from 'web/components/menu/menu';
-
+import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const StyledLayout = styled(Layout)`
   height: calc(-48px + 100vh);
@@ -58,7 +49,7 @@ const Page = ({children}) => {
   return (
     <CapabilitiesContext.Provider value={capabilities}>
       <Header />
-      <StyledLayout flex="row" align={['start', 'stretch']}>
+      <StyledLayout align={['start', 'stretch']} flex="row">
         <ScrollableMenuContainer>
           <Menu />
         </ScrollableMenuContainer>

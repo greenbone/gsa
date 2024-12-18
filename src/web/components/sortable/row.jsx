@@ -3,16 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useRef} from 'react';
-
-import styled from 'styled-components';
-
 import {Droppable} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import {useCallback, useRef} from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
-
 import Theme from 'web/utils/theme';
 
 import Resizer from './resizer';
@@ -46,19 +41,19 @@ const Row = ({children, dropDisabled, id, height, onResize}) => {
   return (
     <>
       <Droppable
-        isDropDisabled={dropDisabled}
-        droppableId={id}
         direction="horizontal"
+        droppableId={id}
+        isDropDisabled={dropDisabled}
       >
         {(provided, snapshot) => (
           <GridRow
-            data-testid="grid-row"
             ref={ref => {
               rowRef.current = ref;
               provided.innerRef(ref);
             }}
-            $isDraggingOver={snapshot.isDraggingOver}
             $height={height}
+            $isDraggingOver={snapshot.isDraggingOver}
+            data-testid="grid-row"
           >
             {children}
             {provided.placeholder}

@@ -3,16 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {hasValue} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
+import Portal from 'web/components/portal/portal';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import Portal from 'web/components/portal/portal';
 
 const ToolTipText = styled.div`
   box-sizing: border-box;
@@ -127,5 +123,3 @@ class ToolTip extends React.Component {
 }
 
 export default ToolTip;
-
-// vim: set ts=2 sw=2 tw=80:

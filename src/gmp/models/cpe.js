@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {parseSeverity, parseDate} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import {map} from 'gmp/utils/array';
 
 import Info from './info';
-
-import {parseSeverity, parseDate} from 'gmp/parser';
 
 class Cpe extends Info {
   static entityType = 'cpe';
@@ -51,5 +50,3 @@ class Cpe extends Info {
 }
 
 export default Cpe;
-
-// vim: set ts=2 sw=2 tw=80:

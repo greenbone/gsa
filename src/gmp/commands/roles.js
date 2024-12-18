@@ -4,12 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import logger from 'gmp/log';
-
-import {isArray} from 'gmp/utils/identity';
-
 import Role from 'gmp/models/role';
+import {isArray} from 'gmp/utils/identity';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -61,5 +58,3 @@ class RolesCommand extends EntitiesCommand {
 
 registerCommand('role', RoleCommand);
 registerCommand('roles', RolesCommand);
-
-// vim: set ts=2 sw=2 tw=80:

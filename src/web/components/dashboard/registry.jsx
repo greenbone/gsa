@@ -4,7 +4,6 @@
  */
 
 import Logger from 'gmp/log';
-
 import {isDefined} from 'gmp/utils/identity';
 
 const log = Logger.getLogger('web.components.dashboard.registry');
@@ -39,5 +38,3 @@ export const registerDisplay = (displayId, component, {title}) => {
 };
 
 export const getDisplay = displayId => registry[displayId];
-
-// vim: set ts=2 sw=2 tw=80:

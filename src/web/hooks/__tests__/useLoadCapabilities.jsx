@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import useLoadCapabilities from '../useLoadCapabilities';
@@ -16,7 +15,7 @@ const TestComponent = () => {
       {capabilities &&
         capabilities.map(capability => {
           return (
-            <div data-testid="capability" key={capability.name}>
+            <div key={capability.name} data-testid="capability">
               {capability.name}
             </div>
           );

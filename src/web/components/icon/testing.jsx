@@ -4,11 +4,9 @@
  */
 
 import {test, expect, testing} from '@gsa/testing';
-
+import {ICON_SIZE_SMALL_PIXELS} from 'web/hooks/useIconSize';
 import {render, fireEvent, act} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
-
-import {ICON_SIZE_SMALL_PIXELS} from 'web/hooks/useIconSize';
 
 export const testIcon = Icon => {
   test('should render with default width and height', () => {
@@ -20,7 +18,7 @@ export const testIcon = Icon => {
 
   test('should handle click', () => {
     const handler = testing.fn();
-    const {element} = render(<Icon onClick={handler} value="1" />);
+    const {element} = render(<Icon value="1" onClick={handler} />);
 
     fireEvent.click(element);
 
@@ -62,7 +60,7 @@ export const testIcon = Icon => {
     const handler = testing.fn().mockReturnValue(promise);
 
     const {element} = render(
-      <Icon title="foo" loadingTitle="bar" onClick={handler} />,
+      <Icon loadingTitle="bar" title="foo" onClick={handler} />,
     );
 
     const svgElement = element.querySelector('svg');
@@ -94,5 +92,3 @@ export const testIcon = Icon => {
     expect(svgElement).toHaveAttribute('title', 'foo');
   });
 };
-
-// vim: set ts=2 sw=2 tw=80:

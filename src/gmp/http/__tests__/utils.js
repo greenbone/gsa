@@ -4,14 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
+import {FeedStatus} from 'gmp/commands/feedstatus';
 import {createResponse, createHttp} from 'gmp/commands/testing';
-
 import {
   getFeedAccessStatusMessage,
   findActionInXMLString,
 } from 'gmp/http/utils';
-import {FeedStatus} from 'gmp/commands/feedstatus';
 
 describe('Http', () => {
   describe('getFeedAccessStatusMessage', () => {

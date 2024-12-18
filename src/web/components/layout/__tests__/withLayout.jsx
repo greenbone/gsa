@@ -4,9 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import withLayout from 'web/components/layout/withLayout';
-
 import {render} from 'web/utils/testing';
 
 const MyComp = props => <div {...props} />;
@@ -121,7 +119,6 @@ describe('withLayout HOC tests', () => {
   });
 
   test('should create a new component with flex: column, align: [start, end]', () => {
-    // eslint-disable-line max-len
     const Comp = withLayout({flex: 'column', align: ['start', 'end']})(MyComp);
     const {element} = render(<Comp />);
     expect(element).toMatchSnapshot();
@@ -133,5 +130,3 @@ describe('withLayout HOC tests', () => {
     expect(element).toMatchSnapshot();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

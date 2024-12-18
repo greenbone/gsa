@@ -3,23 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 import {createEntitiesFooter} from 'web/entities/footer';
 import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
+import PropTypes from 'web/utils/proptypes';
 
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
-
-import Row from './row';
 import TaskDetails from './details';
+import Row from './row';
 
 const Header = ({
   actionsColumn,
@@ -38,37 +34,37 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead {...sortProps} sortBy="name" width="41%" title={_('Name')} />
+        <TableHead {...sortProps} sortBy="name" title={_('Name')} width="41%" />
         <TableHead
           {...sortProps}
-          width="8%"
           sortBy="status"
           title={_('Status')}
+          width="8%"
         />
         <TableHead
           {...sortProps}
           sortBy="total"
-          width="6%"
           title={_('Reports')}
+          width="6%"
         />
         <TableHead
           {...sortProps}
           sortBy="last"
-          width="24%"
           title={_('Last Report')}
+          width="24%"
         />
         <TableHead
           {...sortProps}
-          width="8%"
           sortBy="severity"
           title={_('Severity')}
+          width="8%"
         />
         <TableHead
           {...sortProps}
           align="center"
-          width="5%"
           sortBy="trend"
           title={_('Trend')}
+          width="5%"
         />
         {actionsColumn}
       </TableRow>
@@ -86,7 +82,7 @@ Header.propTypes = {
 };
 
 const actionsColumn = (
-  <TableHead width="10em" title={_l('Actions')} align="center" />
+  <TableHead align="center" title={_l('Actions')} width="10em" />
 );
 
 export default createEntitiesTable({
@@ -100,5 +96,3 @@ export default createEntitiesTable({
     download: 'tasks.xml',
   }),
 });
-
-// vim: set ts=2 sw=2 tw=80:

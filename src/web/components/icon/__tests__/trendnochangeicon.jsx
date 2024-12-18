@@ -4,7 +4,6 @@
  */
 
 import {describe} from '@gsa/testing';
-
 import {testIcon} from 'web/components/icon/testing';
 
 import TrendNoChange from '../trendnochangeicon';
@@ -12,5 +11,3 @@ import TrendNoChange from '../trendnochangeicon';
 describe('TrendNoChange component tests', () => {
   testIcon(TrendNoChange);
 });
-
-// vim: set ts=2 sw=2 tw=80:

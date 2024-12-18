@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import {TASK_STATUS} from 'gmp/models/task';
-
-import PropTypes from 'web/utils/proptypes';
-
-import DetailsLink from 'web/components/link/detailslink';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import styled from 'styled-components';
 import StatusBar from 'web/components/bar/statusbar';
+import DetailsLink from 'web/components/link/detailslink';
+import PropTypes from 'web/utils/proptypes';
 
 const StyledDetailsLink = styled(DetailsLink)`
   &:hover {
@@ -36,11 +30,12 @@ const TaskStatus = ({task, links = true, isAudit = false}) => {
 
   return (
     <StyledDetailsLink
-      type={isAudit ? 'auditreport' : 'report'}
       id={report_id}
       textOnly={!links}
+      type={isAudit ? 'auditreport' : 'report'}
     >
       <StatusBar
+        progress={task.progress}
         status={
           task.isContainer()
             ? task.status === TASK_STATUS.interrupted
@@ -51,7 +46,6 @@ const TaskStatus = ({task, links = true, isAudit = false}) => {
                 : TASK_STATUS.container
             : task.status
         }
-        progress={task.progress}
       />
     </StyledDetailsLink>
   );
@@ -64,5 +58,3 @@ TaskStatus.propTypes = {
 };
 
 export default TaskStatus;
-
-// vim: set ts=2 sw=2 tw=80:

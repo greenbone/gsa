@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
+import styled from 'styled-components';
 import Logo from 'web/components/img/greenbone';
 
 const StyledLogo = styled(Logo)`
@@ -35,5 +32,3 @@ const PageNotFound = () => (
 );
 
 export default PageNotFound;
-
-// vim: set ts=2 sw=2 tw=80:

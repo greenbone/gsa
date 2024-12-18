@@ -3,28 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined, isString} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
+import React, {useState} from 'react';
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
 } from 'web/components/dialog/composercontent';
-import ThresholdMessage from 'web/pages/reports/thresholdmessage';
-
 import SaveDialog from 'web/components/dialog/savedialog';
-
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
 import useTranslation from 'web/hooks/useTranslation';
+import ThresholdMessage from 'web/pages/reports/thresholdmessage';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
 const DownloadReportDialog = ({
   defaultReportConfigId,
@@ -82,8 +76,8 @@ const DownloadReportDialog = ({
   return (
     <SaveDialog
       buttonTitle={_('OK')}
-      title={_('Compose Content for Scan Report')}
       defaultValues={unControlledValues}
+      title={_('Compose Content for Scan Report')}
       onClose={onClose}
       onSave={handleSave}
     >
@@ -106,9 +100,9 @@ const DownloadReportDialog = ({
             <FormGroup title={_('Report Format')}>
               <Select
                 grow="1"
+                items={renderSelectItems(reportFormats)}
                 name="reportFormatId"
                 value={reportFormatIdInState}
-                items={renderSelectItems(reportFormats)}
                 width="auto"
                 onChange={handleReportFormatIdChange}
               />
@@ -117,23 +111,23 @@ const DownloadReportDialog = ({
               <FormGroup title={_('Report Config')}>
                 <Select
                   grow="1"
+                  items={renderSelectItems(filteredReportConfigs, '')}
                   name="reportConfigId"
                   value={reportConfigIdInState}
-                  items={renderSelectItems(filteredReportConfigs, '')}
                   width="auto"
                   onChange={handleReportConfigIdChange}
                 />
               </FormGroup>
             )}
             <CheckBox
-              name="storeAsDefault"
               checked={storeAsDefault}
               checkedValue={YES_VALUE}
-              unCheckedValue={NO_VALUE}
+              name="storeAsDefault"
               title={_('Store as default')}
               toolTipTitle={_(
                 'Store indicated settings (without filter) as default',
               )}
+              unCheckedValue={NO_VALUE}
               onChange={onValueChange}
             />
             {showThresholdMessage && <ThresholdMessage threshold={threshold} />}

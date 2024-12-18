@@ -3,56 +3,48 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-
+import React from 'react';
 import DisableIcon from 'web/components/icon/disableicon';
 import EnableIcon from 'web/components/icon/enableicon';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import TagIcon from 'web/components/icon/tagicon';
-
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
-import EntitiesTab from 'web/entity/tab';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
-import {selector, loadEntity} from 'web/store/entities/tags';
-
+import EntityPage from 'web/entity/page';
+import EntityPermissions from 'web/entity/permissions';
+import EntitiesTab from 'web/entity/tab';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
-
+import {selector, loadEntity} from 'web/store/entities/tags';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilties from 'web/utils/withCapabilities';
 
-import ResourceList from './resourcelist';
 import TagComponent from './component';
 import TagDetails from './details';
-import EntityPermissions from 'web/entity/permissions';
+import ResourceList from './resourcelist';
+
 
 const ToolBarIcons = withCapabilties(
   ({
@@ -72,16 +64,16 @@ const ToolBarIcons = withCapabilties(
       if (entity.isActive()) {
         endisableable = (
           <DisableIcon
-            value={entity}
             title={_('Disable Tag')}
+            value={entity}
             onClick={onTagDisableClick}
           />
         );
       } else {
         endisableable = (
           <EnableIcon
-            value={entity}
             title={_('Enable Tag')}
+            value={entity}
             onClick={onTagEnableClick}
           />
         );
@@ -91,11 +83,11 @@ const ToolBarIcons = withCapabilties(
       <Divider margin="10px">
         <IconDivider>
           <ManualIcon
-            page="web-interface"
             anchor="managing-tags"
+            page="web-interface"
             title={_('Help: Tags')}
           />
-          <ListIcon title={_('Tag List')} page="tags" />
+          <ListIcon page="tags" title={_('Tag List')} />
         </IconDivider>
         <IconDivider>
           <CreateIcon entity={entity} onClick={onTagCreateClick} />
@@ -103,8 +95,8 @@ const ToolBarIcons = withCapabilties(
           <EditIcon entity={entity} onClick={onTagEditClick} />
           <TrashIcon entity={entity} onClick={onTagDeleteClick} />
           <ExportIcon
-            value={entity}
             title={_('Export Tag as XML')}
+            value={entity}
             onClick={onTagDownloadClick}
           />
           {endisableable}
@@ -136,15 +128,15 @@ const Page = ({
 }) => {
   return (
     <TagComponent
-      onCloned={goto_details('tag', props)}
       onCloneError={onError}
+      onCloned={goto_details('tag', props)}
       onCreated={goto_details('tag', props)}
-      onDeleted={goto_list('tags', props)}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
-      onDownloadError={onError}
+      onDeleted={goto_list('tags', props)}
       onDisableError={onError}
       onDisabled={onChanged}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onEnableError={onError}
       onEnabled={onChanged}
       onInteraction={onInteraction}
@@ -165,25 +157,25 @@ const Page = ({
           {...props}
           entity={entity}
           sectionIcon={<TagIcon size="large" />}
-          toolBarIcons={ToolBarIcons}
           title={_('Tag')}
+          toolBarIcons={ToolBarIcons}
           onInteraction={onInteraction}
           onTagCloneClick={clone}
           onTagCreateClick={create}
           onTagDeleteClick={delete_func}
+          onTagDisableClick={disable}
           onTagDownloadClick={download}
           onTagEditClick={edit}
-          onTagSaveClick={save}
           onTagEnableClick={enable}
-          onTagDisableClick={disable}
           onTagRemoveClick={remove}
+          onTagSaveClick={save}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
               <React.Fragment>
                 <PageTitle title={_('Tag: {{name}}', {name: entity.name})} />
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
                     <TabList
                       active={activeTab}
                       align={['start', 'stretch']}

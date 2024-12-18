@@ -3,19 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import XIcon from 'web/components/icon/XIcon';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Theme from 'web/utils/theme';
-
 import Layout from 'web/components/layout/layout';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 import Button from './button';
 
@@ -69,7 +63,7 @@ const InfoPanel = ({
       {...props}
     >
       {heading && (
-        <Heading data-testid="infopanel-heading" $isWarning={isWarning}>
+        <Heading $isWarning={isWarning} data-testid="infopanel-heading">
           {heading}
           {isDefined(onCloseClick) && (
             <Button data-testid="panel-close-button" onClick={onCloseClick}>

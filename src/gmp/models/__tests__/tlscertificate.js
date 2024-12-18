@@ -4,12 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {testModel} from 'gmp/models/testing';
+import {parseDate} from 'gmp/parser';
 
 import TlsCertificate, {TIME_STATUS} from '../tlscertificate';
-
-import {testModel} from 'gmp/models/testing';
-
-import {parseDate} from 'gmp/parser';
 
 describe('TlsCertificate Model tests', () => {
   testModel(TlsCertificate, 'tlscertificate');
@@ -458,5 +456,3 @@ describe('TlsCertificate Model tests', () => {
     expect(tlsCertificate.sources).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,15 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {setLocale} from 'web/store/usersettings/actions';
-
 import {rendererWith, screen, fireEvent} from 'web/utils/testing';
 
 import useLocale from '../useLocale';
 
 const TestComponent = () => {
-  const [locale, setLocale] = useLocale(); // eslint-disable-line no-shadow
+  const [locale, setLocale] = useLocale();  
   return (
     <div>
       <div data-testid="locale">{locale}</div>

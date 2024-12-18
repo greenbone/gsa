@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from '../../utils/identity';
-
 import {setProperties, parseSeverity} from '../../parser';
-
+import {isDefined} from '../../utils/identity';
 import Nvt from '../nvt';
 
 class ReportCve {
@@ -58,5 +56,3 @@ class ReportCve {
 }
 
 export default ReportCve;
-
-// vim: set ts=2 sw=2 tw=80:

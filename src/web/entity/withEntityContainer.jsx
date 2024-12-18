@@ -3,31 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
-import {withRouter} from 'web/utils/withRouter';
-
 import Filter from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import withDownload from 'web/components/form/withDownload';
-
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
-
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
-import EntityContainer from './container';
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL,
 } from 'web/components/loading/reload';
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+import {withRouter} from 'web/utils/withRouter';
+
+import EntityContainer from './container';
 
 const defaultEntityReloadIntervalFunc = ({entity}) =>
   isDefined(entity) ? USE_DEFAULT_RELOAD_INTERVAL : NO_RELOAD;
@@ -58,9 +50,9 @@ const withEntityContainer =
   Component => {
     const EntityContainerWrapper = props => (
       <Reload
-        reloadInterval={() => reloadInterval(props)}
-        reload={(id = props.id) => props.load(id)}
         name={entityType}
+        reload={(id = props.id) => props.load(id)}
+        reloadInterval={() => reloadInterval(props)}
       >
         {({reload}) => (
           <EntityContainer {...props} entityType={entityType} reload={reload}>
@@ -111,5 +103,3 @@ const withEntityContainer =
   };
 
 export default withEntityContainer;
-
-// vim: set ts=2 sw=2 tw=80:

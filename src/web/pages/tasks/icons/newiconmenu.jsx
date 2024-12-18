@@ -3,15 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
+import React from 'react';
 import NewIcon from 'web/components/icon/newicon';
-
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -37,5 +33,3 @@ NewIconMenu.propTypes = {
 };
 
 export default withCapabilities(NewIconMenu);
-
-// vim: set ts=2 sw=2 tw=80:

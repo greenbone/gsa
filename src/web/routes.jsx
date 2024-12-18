@@ -4,109 +4,105 @@
  */
 
 import {useState, useEffect} from 'react';
-
+import {useSelector} from 'react-redux';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from 'react-router-dom';
-import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
+import Loading from 'web/components/loading/loading';
 import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
+import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 
-import Loading from 'web/components/loading/loading';
-
-import LegacyOmpPage from './pages/omp';
-import Page from './pages/page';
-import PageNotFound from './pages/notfoundpage';
-import StartPage from './pages/start/page';
-
-import AboutPage from './pages/help/about';
-import AlertsPage from './pages/alerts/listpage';
-import AuditReportDetailsPage from './pages/reports/auditdetailspage';
+import Authorized from './authorized';
 import AlertDetailsPage from './pages/alerts/detailspage';
-import AuditsPage from './pages/audits/listpage';
-import AuditReportsPage from './pages/reports/auditreportslistpage';
+import AlertsPage from './pages/alerts/listpage';
 import AuditsDetailsPage from './pages/audits/detailspage';
-import CertBundsPage from './pages/certbund/listpage';
+import AuditsPage from './pages/audits/listpage';
 import CertBundDetailsPage from './pages/certbund/detailspage';
-import CpesPage from './pages/cpes/listpage';
+import CertBundsPage from './pages/certbund/listpage';
 import CpeDetailsPage from './pages/cpes/detailspage';
-import CredentialsPage from './pages/credentials/listpage';
+import CpesPage from './pages/cpes/listpage';
 import CredentialDetailsPage from './pages/credentials/detailspage';
-import CvesPage from './pages/cves/listpage';
+import CredentialsPage from './pages/credentials/listpage';
 import CveDetailsPage from './pages/cves/detailspage';
-import CvssCalculatorPage from './pages/extras/cvsscalculatorpage';
-import DfnCertsPage from './pages/dfncert/listpage';
+import CvesPage from './pages/cves/listpage';
 import DfnCertDetailsPage from './pages/dfncert/detailspage';
+import DfnCertsPage from './pages/dfncert/listpage';
+import CvssCalculatorPage from './pages/extras/cvsscalculatorpage';
 import FeedStatusPage from './pages/extras/feedstatuspage';
-import FiltersPage from './pages/filters/listpage';
+import TrashcanPage from './pages/extras/trashcanpage';
 import FilterDetailsPage from './pages/filters/detailspage';
-import GroupsPage from './pages/groups/listpage';
+import FiltersPage from './pages/filters/listpage';
 import GroupDetailsPage from './pages/groups/detailspage';
-import HostsPage from './pages/hosts/listpage';
+import GroupsPage from './pages/groups/listpage';
+import AboutPage from './pages/help/about';
 import HostDetailsPage from './pages/hosts/detailspage';
+import HostsPage from './pages/hosts/listpage';
 import LdapPage from './pages/ldap/ldappage';
 import LoginPage from './pages/login/loginpage';
-import NotesPage from './pages/notes/listpage';
 import NoteDetailsPage from './pages/notes/detailspage';
-import NvtsPage from './pages/nvts/listpage';
+import NotesPage from './pages/notes/listpage';
+import PageNotFound from './pages/notfoundpage';
 import NvtDetailsPage from './pages/nvts/detailspage';
-import OperatingSystemsPage from './pages/operatingsystems/listpage';
+import NvtsPage from './pages/nvts/listpage';
+import LegacyOmpPage from './pages/omp';
 import OperatingSystemDetailsPage from './pages/operatingsystems/detailspage';
-import OverridesPage from './pages/overrides/listpage';
+import OperatingSystemsPage from './pages/operatingsystems/listpage';
 import OverrideDetailsPage from './pages/overrides/detailspage';
+import OverridesPage from './pages/overrides/listpage';
+import Page from './pages/page';
 import PerformancePage from './pages/performance/performancepage';
-import PermissionsPage from './pages/permissions/listpage';
 import PermissionDetailsPage from './pages/permissions/detailspage';
-import PoliciesPage from './pages/policies/listpage';
+import PermissionsPage from './pages/permissions/listpage';
 import PoliciesDetailsPage from './pages/policies/detailspage';
-import PortListsPage from './pages/portlists/listpage';
+import PoliciesPage from './pages/policies/listpage';
 import PortListDetailsPage from './pages/portlists/detailspage';
+import PortListsPage from './pages/portlists/listpage';
 import RadiusPage from './pages/radius/radiuspage';
-import ReportConfigsPage from './pages/reportconfigs/listpage';
 import ReportConfigDetailsPage from './pages/reportconfigs/detailspage';
-import ReportFormatsPage from './pages/reportformats/listpage';
+import ReportConfigsPage from './pages/reportconfigs/listpage';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage';
-import ReportsPage from './pages/reports/listpage';
-import ReportDetailsPage from './pages/reports/detailspage';
+import ReportFormatsPage from './pages/reportformats/listpage';
 import DeltaAuditReportDetailsPage from './pages/reports/auditdeltadetailspage';
+import AuditReportDetailsPage from './pages/reports/auditdetailspage';
+import AuditReportsPage from './pages/reports/auditreportslistpage';
 import DeltaReportDetailsPage from './pages/reports/deltadetailspage';
-import ResultsPage from './pages/results/listpage';
+import ReportDetailsPage from './pages/reports/detailspage';
+import ReportsPage from './pages/reports/listpage';
 import ResultDetailsPage from './pages/results/detailspage';
-import RolesPage from './pages/roles/listpage';
+import ResultsPage from './pages/results/listpage';
 import RoleDetailsPage from './pages/roles/detailspage';
-import ScanConfigsPage from './pages/scanconfigs/listpage';
+import RolesPage from './pages/roles/listpage';
 import ScanConfigDetailsPage from './pages/scanconfigs/detailspage';
-import ScannersPage from './pages/scanners/listpage';
+import ScanConfigsPage from './pages/scanconfigs/listpage';
 import ScannerDetailsPage from './pages/scanners/detailspage';
-import SchedulesPage from './pages/schedules/listpage';
+import ScannersPage from './pages/scanners/listpage';
 import ScheduleDetailsPage from './pages/schedules/detailspage';
-import TagsPage from './pages/tags/listpage';
+import SchedulesPage from './pages/schedules/listpage';
+import StartPage from './pages/start/page';
 import TagDetailsPage from './pages/tags/detailspage';
-import TargetsPage from './pages/targets/listpage';
+import TagsPage from './pages/tags/listpage';
 import TargetDetailsPage from './pages/targets/detailspage';
-import TasksPage from './pages/tasks/listpage';
+import TargetsPage from './pages/targets/listpage';
 import TaskDetailsPage from './pages/tasks/detailspage';
-import TicketsPage from './pages/tickets/listpage';
+import TasksPage from './pages/tasks/listpage';
 import TicketDetailsPage from './pages/tickets/detailspage';
-import TlsCertificatesPage from './pages/tlscertificates/listpage';
+import TicketsPage from './pages/tickets/listpage';
 import TlsCertificateDetailsPage from './pages/tlscertificates/detailspage';
-import TrashcanPage from './pages/extras/trashcanpage';
+import TlsCertificatesPage from './pages/tlscertificates/listpage';
 import UserDetailsPage from './pages/users/detailspage';
-import UserSettingsPage from './pages/usersettings/usersettingspage';
 import UsersPage from './pages/users/listpage';
+import UserSettingsPage from './pages/usersettings/usersettingspage';
 import VulnerabilitiesPage from './pages/vulns/listpage';
-
-import {useSelector} from 'react-redux';
-import Authorized from './authorized';
 
 const LoggedOutRoutes = () => (
   <Routes>
-    <Route path="/login" element={<LoginPage />} />
-    <Route path="/omp" element={<LegacyOmpPage />} />
-    <Route path="*" element={<Navigate to="/login" />} />
+    <Route element={<LoginPage />} path="/login" />
+    <Route element={<LegacyOmpPage />} path="/omp" />
+    <Route element={<Navigate to="/login" />} path="*" />
   </Routes>
 );
 
@@ -117,112 +113,112 @@ const LoggedInRoutes = () => {
       <LocationObserver>
         <Page>
           <Routes>
-            <Route path="/dashboards" element={<StartPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/alerts" element={<AlertsPage />} />
-            <Route path="/audits" element={<AuditsPage />} />
-            <Route path="/certbunds" element={<CertBundsPage />} />
-            <Route path="/cpes" element={<CpesPage />} />
-            <Route path="/credentials" element={<CredentialsPage />} />
-            <Route path="/cves" element={<CvesPage />} />
-            <Route path="/dfncerts" element={<DfnCertsPage />} />
-            <Route path="/feedstatus" element={<FeedStatusPage />} />
-            <Route path="/filters" element={<FiltersPage />} />
-            <Route path="/groups" element={<GroupsPage />} />
-            <Route path="/hosts" element={<HostsPage />} />
-            <Route path="/ldap" element={<LdapPage />} />
-            <Route path="/notes" element={<NotesPage />} />
+            <Route element={<StartPage />} path="/dashboards" />
+            <Route element={<AboutPage />} path="/about" />
+            <Route element={<AlertsPage />} path="/alerts" />
+            <Route element={<AuditsPage />} path="/audits" />
+            <Route element={<CertBundsPage />} path="/certbunds" />
+            <Route element={<CpesPage />} path="/cpes" />
+            <Route element={<CredentialsPage />} path="/credentials" />
+            <Route element={<CvesPage />} path="/cves" />
+            <Route element={<DfnCertsPage />} path="/dfncerts" />
+            <Route element={<FeedStatusPage />} path="/feedstatus" />
+            <Route element={<FiltersPage />} path="/filters" />
+            <Route element={<GroupsPage />} path="/groups" />
+            <Route element={<HostsPage />} path="/hosts" />
+            <Route element={<LdapPage />} path="/ldap" />
+            <Route element={<NotesPage />} path="/notes" />
             <Route
-              path="/operatingsystems"
               element={<OperatingSystemsPage />}
+              path="/operatingsystems"
             />
-            <Route path="/nvts" element={<NvtsPage />} />
-            <Route path="/overrides" element={<OverridesPage />} />
-            <Route path="/performance" element={<PerformancePage />} />
-            <Route path="/permissions" element={<PermissionsPage />} />
-            <Route path="/policies" element={<PoliciesPage />} />
-            <Route path="/portlists" element={<PortListsPage />} />
-            <Route path="/radius" element={<RadiusPage />} />
-            <Route path="/reports" element={<ReportsPage />} />
-            <Route path="/reportconfigs" element={<ReportConfigsPage />} />
-            <Route path="/reportformats" element={<ReportFormatsPage />} />
-            <Route path="/results" element={<ResultsPage />} />
-            <Route path="/roles" element={<RolesPage />} />
-            <Route path="/tags" element={<TagsPage />} />
-            <Route path="/permissions" element={<PermissionsPage />} />
-            <Route path="/scanners" element={<ScannersPage />} />
-            <Route path="/scanconfigs" element={<ScanConfigsPage />} />
-            <Route path="/scanners" element={<ScannersPage />} />
-            <Route path="/schedules" element={<SchedulesPage />} />
-            <Route path="/tags" element={<TagsPage />} />
-            <Route path="/targets" element={<TargetsPage />} />
-            <Route path="/tasks" element={<TasksPage />} />
-            <Route path="/tickets" element={<TicketsPage />} />
-            <Route path="/trashcan" element={<TrashcanPage />} />
-            <Route path="/tlscertificates" element={<TlsCertificatesPage />} />
-            <Route path="/users" element={<UsersPage />} />
-            <Route path="/usersettings" element={<UserSettingsPage />} />
-            <Route path="/vulnerabilities" element={<VulnerabilitiesPage />} />
-            <Route path="/cvsscalculator" element={<CvssCalculatorPage />} />
-            <Route path="/alert/:id" element={<AlertDetailsPage />} />
-            <Route path="/audit/:id" element={<AuditsDetailsPage />} />
-            <Route path="/certbund/:id" element={<CertBundDetailsPage />} />
-            <Route path="/cpe/:id" element={<CpeDetailsPage />} />
-            <Route path="/credential/:id" element={<CredentialDetailsPage />} />
-            <Route path="/cve/:id" element={<CveDetailsPage />} />
-            <Route path="/dfncert/:id" element={<DfnCertDetailsPage />} />
-            <Route path="/filter/:id" element={<FilterDetailsPage />} />
-            <Route path="/group/:id" element={<GroupDetailsPage />} />
-            <Route path="/host/:id" element={<HostDetailsPage />} />
-            <Route path="/note/:id" element={<NoteDetailsPage />} />
-            <Route path="/nvt/:id" element={<NvtDetailsPage />} />
-            <Route path="/portlist/:id" element={<PortListDetailsPage />} />
+            <Route element={<NvtsPage />} path="/nvts" />
+            <Route element={<OverridesPage />} path="/overrides" />
+            <Route element={<PerformancePage />} path="/performance" />
+            <Route element={<PermissionsPage />} path="/permissions" />
+            <Route element={<PoliciesPage />} path="/policies" />
+            <Route element={<PortListsPage />} path="/portlists" />
+            <Route element={<RadiusPage />} path="/radius" />
+            <Route element={<ReportsPage />} path="/reports" />
+            <Route element={<ReportConfigsPage />} path="/reportconfigs" />
+            <Route element={<ReportFormatsPage />} path="/reportformats" />
+            <Route element={<ResultsPage />} path="/results" />
+            <Route element={<RolesPage />} path="/roles" />
+            <Route element={<TagsPage />} path="/tags" />
+            <Route element={<PermissionsPage />} path="/permissions" />
+            <Route element={<ScannersPage />} path="/scanners" />
+            <Route element={<ScanConfigsPage />} path="/scanconfigs" />
+            <Route element={<ScannersPage />} path="/scanners" />
+            <Route element={<SchedulesPage />} path="/schedules" />
+            <Route element={<TagsPage />} path="/tags" />
+            <Route element={<TargetsPage />} path="/targets" />
+            <Route element={<TasksPage />} path="/tasks" />
+            <Route element={<TicketsPage />} path="/tickets" />
+            <Route element={<TrashcanPage />} path="/trashcan" />
+            <Route element={<TlsCertificatesPage />} path="/tlscertificates" />
+            <Route element={<UsersPage />} path="/users" />
+            <Route element={<UserSettingsPage />} path="/usersettings" />
+            <Route element={<VulnerabilitiesPage />} path="/vulnerabilities" />
+            <Route element={<CvssCalculatorPage />} path="/cvsscalculator" />
+            <Route element={<AlertDetailsPage />} path="/alert/:id" />
+            <Route element={<AuditsDetailsPage />} path="/audit/:id" />
+            <Route element={<CertBundDetailsPage />} path="/certbund/:id" />
+            <Route element={<CpeDetailsPage />} path="/cpe/:id" />
+            <Route element={<CredentialDetailsPage />} path="/credential/:id" />
+            <Route element={<CveDetailsPage />} path="/cve/:id" />
+            <Route element={<DfnCertDetailsPage />} path="/dfncert/:id" />
+            <Route element={<FilterDetailsPage />} path="/filter/:id" />
+            <Route element={<GroupDetailsPage />} path="/group/:id" />
+            <Route element={<HostDetailsPage />} path="/host/:id" />
+            <Route element={<NoteDetailsPage />} path="/note/:id" />
+            <Route element={<NvtDetailsPage />} path="/nvt/:id" />
+            <Route element={<PortListDetailsPage />} path="/portlist/:id" />
             <Route
-              path="/operatingsystem/:id"
               element={<OperatingSystemDetailsPage />}
+              path="/operatingsystem/:id"
             />
-            <Route path="/override/:id" element={<OverrideDetailsPage />} />
-            <Route path="/permission/:id" element={<PermissionDetailsPage />} />
-            <Route path="/policy/:id" element={<PoliciesDetailsPage />} />
+            <Route element={<OverrideDetailsPage />} path="/override/:id" />
+            <Route element={<PermissionDetailsPage />} path="/permission/:id" />
+            <Route element={<PoliciesDetailsPage />} path="/policy/:id" />
             <Route
-              path="/report/delta/:id/:deltaid"
               element={<DeltaReportDetailsPage />}
+              path="/report/delta/:id/:deltaid"
             />
-            <Route path="/report/:id" element={<ReportDetailsPage />} />
+            <Route element={<ReportDetailsPage />} path="/report/:id" />
             <Route
-              path="/reportconfig/:id"
               element={<ReportConfigDetailsPage />}
+              path="/reportconfig/:id"
             />
             <Route
-              path="/reportformat/:id"
               element={<ReportFormatDetailsPage />}
+              path="/reportformat/:id"
             />
-            <Route path="/result/:id" element={<ResultDetailsPage />} />
-            <Route path="/role/:id" element={<RoleDetailsPage />} />
-            <Route path="/filter/:id" element={<FilterDetailsPage />} />
-            <Route path="/tag/:id" element={<TagDetailsPage />} />
-            <Route path="/permission/:id" element={<PermissionDetailsPage />} />
-            <Route path="/scanconfig/:id" element={<ScanConfigDetailsPage />} />
-            <Route path="/scanner/:id" element={<ScannerDetailsPage />} />
-            <Route path="/schedule/:id" element={<ScheduleDetailsPage />} />
-            <Route path="/tag/:id" element={<TagDetailsPage />} />
-            <Route path="/target/:id" element={<TargetDetailsPage />} />
-            <Route path="/task/:id" element={<TaskDetailsPage />} />
-            <Route path="/ticket/:id" element={<TicketDetailsPage />} />
+            <Route element={<ResultDetailsPage />} path="/result/:id" />
+            <Route element={<RoleDetailsPage />} path="/role/:id" />
+            <Route element={<FilterDetailsPage />} path="/filter/:id" />
+            <Route element={<TagDetailsPage />} path="/tag/:id" />
+            <Route element={<PermissionDetailsPage />} path="/permission/:id" />
+            <Route element={<ScanConfigDetailsPage />} path="/scanconfig/:id" />
+            <Route element={<ScannerDetailsPage />} path="/scanner/:id" />
+            <Route element={<ScheduleDetailsPage />} path="/schedule/:id" />
+            <Route element={<TagDetailsPage />} path="/tag/:id" />
+            <Route element={<TargetDetailsPage />} path="/target/:id" />
+            <Route element={<TaskDetailsPage />} path="/task/:id" />
+            <Route element={<TicketDetailsPage />} path="/ticket/:id" />
             <Route
-              path="/tlscertificate/:id"
               element={<TlsCertificateDetailsPage />}
+              path="/tlscertificate/:id"
             />
-            <Route path="/user/:id" element={<UserDetailsPage />} />
+            <Route element={<UserDetailsPage />} path="/user/:id" />
 
-            <Route path="/notfound" element={<PageNotFound />} />
-            <Route path="/auditreports" element={<AuditReportsPage />} />
-            <Route path="/auditreport/delta/:id/:deltaid"
-                        element={<DeltaAuditReportDetailsPage />} />
-            <Route path="/auditreport/:id" element= {<AuditReportDetailsPage />} />
-            <Route path="/" element={<Navigate to="/dashboards" />} />
+            <Route element={<PageNotFound />} path="/notfound" />
+            <Route element={<AuditReportsPage />} path="/auditreports" />
+            <Route element={<DeltaAuditReportDetailsPage />}
+                        path="/auditreport/delta/:id/:deltaid" />
+            <Route element= {<AuditReportDetailsPage />} path="/auditreport/:id" />
+            <Route element={<Navigate to="/dashboards" />} path="/" />
 
-            <Route path="*" element={<PageNotFound />} />
+            <Route element={<PageNotFound />} path="*" />
           </Routes>
         </Page>
       </LocationObserver>

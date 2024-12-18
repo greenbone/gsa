@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {Textarea as GreenboneTextArea} from '@greenbone/opensight-ui-components-mantinev7';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 import useValueChange from './useValueChange';
@@ -33,19 +30,19 @@ const TextArea = ({
     <GreenboneTextArea
       {...props}
       autosize={autosize}
-      disabled={disabled}
-      error={isDefined(errorContent) && `${errorContent}`}
-      label={title}
-      minRows={minRows}
-      maxRows={maxRows}
-      name={name}
-      value={value}
-      placeholder={placeholder}
-      onChange={handleChange}
       classNames={{
         input: `default-input-class ${classNames?.input || ''}`,
       }}
+      disabled={disabled}
+      error={isDefined(errorContent) && `${errorContent}`}
+      label={title}
+      maxRows={maxRows}
+      minRows={minRows}
+      name={name}
+      placeholder={placeholder}
       resize="vertical"
+      value={value}
+      onChange={handleChange}
     />
   );
 };
@@ -65,5 +62,3 @@ TextArea.propTypes = {
 };
 
 export default TextArea;
-
-// vim: set ts=2 sw=2 tw=80:

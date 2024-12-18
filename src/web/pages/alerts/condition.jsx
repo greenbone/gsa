@@ -3,10 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
-import {parseInt} from 'gmp/parser';
-
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
@@ -16,10 +12,10 @@ import {
   CONDITION_DIRECTION_DECREASED,
   CONDITION_DIRECTION_INCREASED,
 } from 'gmp/models/alert';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {parseInt} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const Condition = ({condition = {}, event}) => {
   const [_] = useTranslation();
@@ -95,5 +91,3 @@ Condition.propTypes = {
 };
 
 export default Condition;
-
-// vim: set ts=2 sw=2 tw=80:

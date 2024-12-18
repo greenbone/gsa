@@ -4,20 +4,16 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import date from 'gmp/models/date';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import Layout from 'web/components/layout/layout';
 import Link from 'web/components/link/link';
 import InfoPanel from 'web/components/panel/infopanel';
-
-import PropTypes from 'web/utils/proptypes';
 import useLicense from 'web/hooks/useLicense';
+import PropTypes from 'web/utils/proptypes';
 
 const LICENSE_EXPIRATION_THRESHOLD = 30;
 
@@ -28,8 +24,8 @@ const LicenseLinkComponent = () => (
 const SupportPageLinkComponent = () => (
   <a
     href="https://service.greenbone.net"
-    target="_blank"
     rel="noopener noreferrer"
+    target="_blank"
   >
     {'https://service.greenbone.net'}
   </a>
@@ -183,9 +179,9 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
 
   return (
     <InfoPanel
+      heading={titleMessage}
       isWarning={isWarning}
       noMargin={true}
-      heading={titleMessage}
       onCloseClick={onCloseClick}
     >
       {message}

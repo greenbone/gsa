@@ -3,20 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import {withRouter} from 'web/utils/withRouter';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import logger from 'gmp/log';
-
+import {RESET_FILTER} from 'gmp/models/filter';
+import {YES_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
-import {excludeObjectProps} from 'gmp/utils/object';
 import {
   getEntityType,
   apiType,
@@ -24,27 +15,22 @@ import {
   pluralizeType,
 } from 'gmp/utils/entitytype';
 import {debounce} from 'gmp/utils/event';
-
-import {RESET_FILTER} from 'gmp/models/filter';
-
-import {YES_VALUE} from 'gmp/parser';
-
+import {isDefined} from 'gmp/utils/identity';
+import {excludeObjectProps} from 'gmp/utils/object';
+import React from 'react';
+import {connect} from 'react-redux';
+import SortBy from 'web/components/sortby/sortby';
+import TagDialog from 'web/pages/tags/dialog';
+import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-
 import compose from 'web/utils/compose';
-
 import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import SelectionType from 'web/utils/selectiontype';
-
-import {createDeleteEntity} from 'web/store/entities/utils/actions';
-
-import SortBy from 'web/components/sortby/sortby';
-
-import TagDialog from 'web/pages/tags/dialog';
+import {withRouter} from 'web/utils/withRouter';
 
 import TagsDialog from './tagsdialog';
 
@@ -559,17 +545,17 @@ class EntitiesContainer extends React.Component {
             title={title}
             value={tag.value}
             onClose={this.handleCloseTagsDialog}
-            onSave={this.handleAddMultiTag}
             onNewTagClick={this.openTagDialog}
+            onSave={this.handleAddMultiTag}
             onTagChanged={this.handleTagChange}
           />
         )}
         {tagDialogVisible && (
           <TagDialog
             fixed={true}
-            resources={selected}
             resource_type={entitiesType}
             resource_types={resourceTypes}
+            resources={selected}
             onClose={this.handleCloseTagDialog}
             onSave={this.handleCreateTag}
           />
@@ -631,5 +617,3 @@ export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesContainer);
-
-// vim: set ts=2 sw=2 tw=80:

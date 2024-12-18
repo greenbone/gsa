@@ -3,22 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import DeleteIcon from 'web/components/icon/deleteicon';
-
-import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
+import Table from 'web/components/table/stripedtable';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const PortRangesTable = ({actions = true, portRanges, onDeleteClick}) => {
   const [_] = useTranslation();
@@ -64,5 +59,3 @@ PortRangesTable.propTypes = {
 };
 
 export default PortRangesTable;
-
-// vim: set ts=2 sw=2 tw=80:

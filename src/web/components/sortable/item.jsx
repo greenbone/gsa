@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {Draggable} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
-
+import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 
 export const GRID_ITEM_MARGIN = {
@@ -34,8 +31,8 @@ const Item = ({children, index, id, ...props}) => (
   <Draggable draggableId={id} index={index}>
     {(provided, snapshot) => (
       <GridItem
-        data-testid="grid-item"
         ref={provided.innerRef}
+        data-testid="grid-item"
         {...provided.draggableProps}
         $isDragging={snapshot.isDragging}
         style={provided.draggableProps.style}

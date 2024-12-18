@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {isString} from 'gmp/utils/identity';
 
 import Languages, {getLanguageCodes} from '../languages';
@@ -42,5 +41,3 @@ describe('getLanguageCodes test', () => {
     expect(called).toEqual(true);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

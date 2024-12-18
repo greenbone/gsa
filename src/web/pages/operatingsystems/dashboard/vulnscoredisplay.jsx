@@ -3,31 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {withRouter} from 'web/utils/withRouter';
-
-import styled from 'styled-components';
-
 import {_, _l} from 'gmp/locale/lang';
-import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
-
-import {parseFloat, parseSeverity} from 'gmp/parser';
-
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
-
-import {resultSeverityRiskFactor} from 'web/utils/severity';
+import {parseFloat, parseSeverity} from 'gmp/parser';
+import React from 'react';
+import styled from 'styled-components';
+import BarChart from 'web/components/chart/bar';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-
-import BarChart from 'web/components/chart/bar';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard/display/createDisplay';
-import {registerDisplay} from 'web/components/dashboard/registry';
-import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
+import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
+import {withRouter} from 'web/utils/withRouter';
 
 import {OsVulnScoreLoader} from './loaders';
 
@@ -101,19 +93,19 @@ export class OsVulnScoreDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
             dataTransform={transformVulnScoreData}
-            title={() => _('Most Vulnerable Operating Systems')}
+            filter={filter}
             showToggleLegend={false}
+            title={() => _('Most Vulnerable Operating Systems')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart
-                svgRef={svgRef}
                 horizontal
-                showLegend={false}
-                width={width}
-                height={height}
                 data={tdata}
+                height={height}
+                showLegend={false}
+                svgRef={svgRef}
+                width={width}
                 xLabel={_('Vulnerability (Severity) Score')}
                 onDataClick={this.handleDataClick}
               />
@@ -158,5 +150,3 @@ registerDisplay(OsVulnScoreDisplay.displayId, OsVulnScoreDisplay, {
 registerDisplay(OsVulnScoreTableDisplay.displayId, OsVulnScoreTableDisplay, {
   title: _l('Table: Operating Systems by Vulnerability Score'),
 });
-
-// vim: set ts=2 sw=2 tw=80:

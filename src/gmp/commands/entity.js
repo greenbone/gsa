@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
-import logger from 'gmp/log';
-
 import DefaultTransform from 'gmp/http/transform/default';
+import logger from 'gmp/log';
+import {isDefined} from 'gmp/utils/identity';
 
 import GmpCommand, {BULK_SELECT_BY_IDS} from './gmp';
 
@@ -102,5 +100,3 @@ class EntityCommand extends GmpCommand {
 }
 
 export default EntityCommand;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,21 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
-
+import FilterTerm from 'gmp/models/filter/filterterm';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import BarChart from 'web/components/chart/bar';
 import PropTypes from 'web/utils/proptypes';
 
-import BarChart from 'web/components/chart/bar';
-
 import DataDisplay from '../datadisplay';
-
 import transformCvssData from './cvsstransform';
 
 class CvssDisplay extends React.Component {
@@ -87,16 +81,16 @@ class CvssDisplay extends React.Component {
       <DataDisplay
         {...props}
         dataTransform={transformCvssData}
-        title={title}
         showToggleLegend={false}
+        title={title}
       >
         {({width, height, data, svgRef}) => (
           <BarChart
-            svgRef={svgRef}
-            showLegend={false}
-            width={width}
-            height={height}
             data={data}
+            height={height}
+            showLegend={false}
+            svgRef={svgRef}
+            width={width}
             xLabel={xLabel}
             yLabel={yLabel}
             onDataClick={
@@ -118,5 +112,3 @@ CvssDisplay.propTypes = {
 };
 
 export default CvssDisplay;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,14 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Filter from 'gmp/models/filter';
-
 import {filterIdentifier} from 'web/store/utils';
 
-import {createRootState, createState} from '../testing';
-
 import {createSelector} from '../selectors';
+import {createRootState, createState} from '../testing';
 
 describe('EntitiesSelector isLoadingEntities tests', () => {
   test('should be false for undefined state', () => {
@@ -691,5 +688,3 @@ describe('EntitiesSelector getEntityError tests', () => {
     expect(fooSelector.getEntityError(id)).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

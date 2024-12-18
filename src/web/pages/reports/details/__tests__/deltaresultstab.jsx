@@ -4,16 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith} from 'web/utils/testing';
-
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/mockdeltareport';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 import DeltaResultsTab from '../deltaresultstab';
 
@@ -64,9 +59,9 @@ describe('Delta Results Tab tests', () => {
         status={report.scan_run_status}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-        onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
         onFilterEditClick={onFilterEditClick}
         onFilterRemoveClick={onFilterRemoveClick}
+        onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
         onInteraction={onInteraction}
         onSortChange={onSortChange}
         onTargetEditClick={onTargetEditClick}

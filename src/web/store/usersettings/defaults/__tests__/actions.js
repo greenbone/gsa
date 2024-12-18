@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {isFunction} from 'gmp/utils/identity';
 
 import {
   loadingActions,
@@ -13,7 +14,6 @@ import {
   loadUserSettingDefault,
   loadUserSettingDefaults,
 } from '../actions';
-import {isFunction} from 'gmp/utils/identity';
 
 describe('UserSettings Defaults action tests', () => {
   describe('action creator tests', () => {

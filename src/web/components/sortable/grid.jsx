@@ -3,19 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {v4 as uuid} from 'uuid';
 
-import {useState} from 'react';
 
 import {DragDropContext} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
-
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import {useState} from 'react';
+import {v4 as uuid} from 'uuid';
 import AutoSize from 'web/components/layout/autosize';
 import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 
 import EmptyRow from './emptyrow';
@@ -131,9 +127,9 @@ const Grid = props => {
   const getRowItems = row => row.items;
   return (
     <DragDropContext
+      onBeforeCapture={handleOnBeforeCapture}
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
-      onBeforeCapture={handleOnBeforeCapture}
     >
       <AutoSize>
         {({width: fullWidth}) => (
@@ -164,17 +160,17 @@ const Grid = props => {
               return (
                 <Row
                   key={rowId}
-                  id={rowId}
                   dropDisabled={disabled}
                   height={height}
+                  id={rowId}
                   onResize={h => handleRowResize(rowId, h)}
                 >
                   {rowItems.map((id, index) => (
                     <Item
                       key={id}
+                      height={itemHeight}
                       id={id}
                       index={index}
-                      height={itemHeight}
                       width={itemWidth}
                     >
                       {children}

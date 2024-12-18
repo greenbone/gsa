@@ -3,18 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 
 import withClickHandler from '../form/withClickHandler';
-
 import Layout from '../layout/layout';
-
 import Link from '../link/link';
 
 const StyledLink = styled(Link)`
@@ -22,7 +17,7 @@ const StyledLink = styled(Link)`
 `;
 
 const MenuEntry = ({children, title = children, to, ...props}) => (
-  <Layout {...props} grow="1" align={['start', 'center']}>
+  <Layout {...props} align={['start', 'center']} grow="1">
     {isDefined(to) ? <StyledLink to={to}>{title}</StyledLink> : title}
   </Layout>
 );
@@ -33,5 +28,3 @@ MenuEntry.propTypes = {
 };
 
 export default withClickHandler()(MenuEntry);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,16 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
-
 import {entityLoadingActions} from 'web/store/entities/credentials';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, screen, fireEvent} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -319,10 +315,10 @@ describe('Credential ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={credential}
         onCredentialCloneClick={handleCredentialCloneClick}
+        onCredentialCreateClick={handleCredentialCreateClick}
         onCredentialDeleteClick={handleCredentialDeleteClick}
         onCredentialDownloadClick={handleCredentialDownloadClick}
         onCredentialEditClick={handleCredentialEditClick}
-        onCredentialCreateClick={handleCredentialCreateClick}
         onCredentialInstallerDownloadClick={
           handleCredentialInstallerDownloadClick
         }
@@ -361,10 +357,10 @@ describe('Credential ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={credential}
         onCredentialCloneClick={handleCredentialCloneClick}
+        onCredentialCreateClick={handleCredentialCreateClick}
         onCredentialDeleteClick={handleCredentialDeleteClick}
         onCredentialDownloadClick={handleCredentialDownloadClick}
         onCredentialEditClick={handleCredentialEditClick}
-        onCredentialCreateClick={handleCredentialCreateClick}
         onCredentialInstallerDownloadClick={
           handleCredentialInstallerDownloadClick
         }
@@ -423,10 +419,10 @@ describe('Credential ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={noPermCredential}
         onCredentialCloneClick={handleCredentialCloneClick}
+        onCredentialCreateClick={handleCredentialCreateClick}
         onCredentialDeleteClick={handleCredentialDeleteClick}
         onCredentialDownloadClick={handleCredentialDownloadClick}
         onCredentialEditClick={handleCredentialEditClick}
-        onCredentialCreateClick={handleCredentialCreateClick}
         onCredentialInstallerDownloadClick={
           handleCredentialInstallerDownloadClick
         }
@@ -482,10 +478,10 @@ describe('Credential ToolBarIcons tests', () => {
       <ToolBarIcons
         entity={credentialInUse}
         onCredentialCloneClick={handleCredentialCloneClick}
+        onCredentialCreateClick={handleCredentialCreateClick}
         onCredentialDeleteClick={handleCredentialDeleteClick}
         onCredentialDownloadClick={handleCredentialDownloadClick}
         onCredentialEditClick={handleCredentialEditClick}
-        onCredentialCreateClick={handleCredentialCreateClick}
         onCredentialInstallerDownloadClick={
           handleCredentialInstallerDownloadClick
         }

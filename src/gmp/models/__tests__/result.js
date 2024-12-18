@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
@@ -275,5 +274,3 @@ describe('Result model tests', () => {
     expect(result2.hasDelta()).toEqual(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

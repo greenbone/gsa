@@ -4,17 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith} from 'web/utils/testing';
-
-import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
+import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 import HostsTab from '../hoststab';
 

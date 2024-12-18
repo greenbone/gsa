@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useState} from 'react';
 
 import Filter from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
+import {useCallback, useState} from 'react';
 
 /**
  * React hook for handling filter dialog state
@@ -26,17 +25,17 @@ const useFilterDialog = initialFilter => {
     isDefined(initialFilter) ? initialFilter.toFilterCriteriaString() : '',
   );
 
-  // eslint-disable-next-line no-shadow
+   
   const handleFilterChange = useCallback(filter => {
     setFilter(filter);
   }, []);
 
   const handleFilterValueChange = useCallback((value, name, relation = '=') => {
-    setFilter(filter => filter.copy().set(name, value, relation)); // eslint-disable-line no-shadow
+    setFilter(filter => filter.copy().set(name, value, relation));  
   }, []);
 
   const handleSearchTermChange = useCallback((value, name, relation = '~') => {
-    setFilter(filter => filter.copy().set(name, `"${value}"`, relation)); // eslint-disable-line no-shadow
+    setFilter(filter => filter.copy().set(name, `"${value}"`, relation));  
   }, []);
 
   const handleFilterStringChange = useCallback(value => {
@@ -44,11 +43,11 @@ const useFilterDialog = initialFilter => {
   }, []);
 
   const handleSortByChange = useCallback(value => {
-    setFilter(filter => filter.copy().setSortBy(value)); // eslint-disable-line no-shadow
+    setFilter(filter => filter.copy().setSortBy(value));  
   }, []);
 
   const handleSortOrderChange = useCallback(value => {
-    setFilter(filter => filter.copy().setSortOrder(value)); // eslint-disable-line no-shadow
+    setFilter(filter => filter.copy().setSortOrder(value));  
   }, []);
 
   const handleChange = useCallback((value, name) => {

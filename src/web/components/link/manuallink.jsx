@@ -3,15 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import {getLocale} from 'gmp/locale/lang';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
+import React from 'react';
 import useGmp from 'web/hooks/useGmp';
+import PropTypes from 'web/utils/proptypes';
 
 import BlankLink from './blanklink';
 
@@ -62,5 +58,3 @@ ManualLink.propTypes = {
 };
 
 export default ManualLink;
-
-// vim: set ts=2 sw=2 tw=80:

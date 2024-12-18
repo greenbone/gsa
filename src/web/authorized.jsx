@@ -4,12 +4,13 @@
  */
 
 import {useEffect, useCallback} from 'react';
-import {setIsLoggedIn} from './store/usersettings/actions';
-import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
-import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/hooks/useGmp';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate, useLocation} from 'react-router-dom';
+import useGmp from 'web/hooks/useGmp';
+import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
+import PropTypes from 'web/utils/proptypes';
+
+import {setIsLoggedIn} from './store/usersettings/actions';
 
 const Authorized = ({children}) => {
   const gmp = useGmp();

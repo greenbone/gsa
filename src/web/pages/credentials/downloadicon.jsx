@@ -3,23 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-
-import IconDivider from 'web/components/layout/icondivider';
-
-import PropTypes from 'web/utils/proptypes';
-
-import DownloadExeIcon from 'web/components/icon/downloadexeicon';
+import React from 'react';
 import DownloadDebIcon from 'web/components/icon/downloaddebicon';
+import DownloadExeIcon from 'web/components/icon/downloadexeicon';
 import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import DownloadRpmIcon from 'web/components/icon/downloadrpmicon';
+import IconDivider from 'web/components/layout/icondivider';
+import PropTypes from 'web/utils/proptypes';
 
 const CredentialDownloadIcon = ({credential, onDownload}) => {
   const type = credential.credential_type;
@@ -63,5 +58,3 @@ CredentialDownloadIcon.propTypes = {
 };
 
 export default CredentialDownloadIcon;
-
-// vim: set ts=2 sw=2 tw=80:

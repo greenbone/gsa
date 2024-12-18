@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
 import TableData from 'web/components/table/data';
-
 import PropTypes from 'web/utils/proptypes';
 import SelectionType from 'web/utils/selectiontype';
 
@@ -29,8 +26,8 @@ const EntitiesActions = ({
     <TableData align={['center', 'center']}>
       <EntitySelection
         entity={entity}
-        onSelected={onEntitySelected}
         onDeselected={onEntityDeselected}
+        onSelected={onEntitySelected}
       />
     </TableData>
   ) : (
@@ -47,5 +44,3 @@ EntitiesActions.propTypes = {
 };
 
 export default EntitiesActions;
-
-// vim: set ts=2 sw=2 tw=80:

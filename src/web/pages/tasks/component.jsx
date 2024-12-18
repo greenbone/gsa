@@ -3,86 +3,64 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
-import {ALL_FILTER} from 'gmp/models/filter';
-
-import {NO_VALUE} from 'gmp/parser';
-
-import {map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId, hasId} from 'gmp/utils/id';
-
 import date from 'gmp/models/date';
-
+import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
-
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-
+import {NO_VALUE} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
+import {selectSaveId, hasId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {connect} from 'react-redux';
+import EntityComponent from 'web/entity/component';
+import AlertComponent from 'web/pages/alerts/component';
+import ImportReportDialog from 'web/pages/reports/importdialog';
+import ScheduleComponent from 'web/pages/schedules/component';
+import TargetComponent from 'web/pages/targets/component';
 import {
   loadEntities as loadAlerts,
   selector as alertSelector,
 } from 'web/store/entities/alerts';
-
 import {
   loadEntities as loadCredentials,
   selector as credentialsSelector,
 } from 'web/store/entities/credentials';
-
 import {
   loadEntities as loadScanConfigs,
   selector as scanConfigsSelector,
 } from 'web/store/entities/scanconfigs';
-
 import {
   loadEntities as loadScanners,
   selector as scannerSelector,
 } from 'web/store/entities/scanners';
-
 import {
   loadEntities as loadSchedules,
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
-
 import {
   loadEntities as loadTags,
   selector as tagsSelector,
 } from 'web/store/entities/tags';
-
 import {
   loadEntities as loadTargets,
   selector as targetSelector,
 } from 'web/store/entities/targets';
-
-import {getTimezone} from 'web/store/usersettings/selectors';
-
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-
+import {getTimezone} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import {UNSET_VALUE} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-import {UNSET_VALUE} from 'web/utils/render';
-
-import EntityComponent from 'web/entity/component';
-
-import ImportReportDialog from 'web/pages/reports/importdialog';
-
 import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
 import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
 import TaskWizard from 'web/wizard/taskwizard';
 
-import ScheduleComponent from 'web/pages/schedules/component';
-import AlertComponent from 'web/pages/alerts/component';
-import TargetComponent from 'web/pages/targets/component';
-
-import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
+import TaskDialog from './dialog';
 
 class TaskComponent extends React.Component {
   constructor(...args) {
@@ -708,14 +686,14 @@ class TaskComponent extends React.Component {
       <React.Fragment>
         <EntityComponent
           name="task"
-          onCreated={onCreated}
-          onCreateError={onCreateError}
-          onCloned={onCloned}
           onCloneError={onCloneError}
-          onDeleted={onDeleted}
+          onCloned={onCloned}
+          onCreateError={onCreateError}
+          onCreated={onCreated}
           onDeleteError={onDeleteError}
-          onDownloaded={onDownloaded}
+          onDeleted={onDeleted}
           onDownloadError={onDownloadError}
+          onDownloaded={onDownloaded}
           onInteraction={onInteraction}
         >
           {other => (
@@ -751,8 +729,8 @@ class TaskComponent extends React.Component {
                         >
                           {({create: createschedule}) => (
                             <TaskDialog
-                              alerts={alerts}
                               alert_ids={alert_ids}
+                              alerts={alerts}
                               alterable={alterable}
                               apply_overrides={apply_overrides}
                               auto_delete={auto_delete}
@@ -766,8 +744,8 @@ class TaskComponent extends React.Component {
                               isLoadingConfigs={isLoadingConfigs}
                               isLoadingScanners={isLoadingScanners}
                               isLoadingSchedules={isLoadingSchedules}
-                              isLoadingTargets={isLoadingTargets}
                               isLoadingTags={isLoadingTags}
+                              isLoadingTargets={isLoadingTargets}
                               max_checks={max_checks}
                               max_hosts={max_hosts}
                               min_qod={min_qod}
@@ -785,15 +763,15 @@ class TaskComponent extends React.Component {
                               task={task}
                               title={title}
                               onAlertsChange={this.handleAlertsChange}
+                              onClose={this.handleCloseTaskDialog}
                               onNewAlertClick={createalert}
-                              onNewTargetClick={createtarget}
                               onNewScheduleClick={createschedule}
+                              onNewTargetClick={createtarget}
+                              onSave={this.handleSaveTask}
                               onScanConfigChange={this.handleScanConfigChange}
                               onScannerChange={this.handleScannerChange}
                               onScheduleChange={this.handleScheduleChange}
                               onTargetChange={this.handleTargetChange}
-                              onClose={this.handleCloseTaskDialog}
-                              onSave={this.handleSaveTask}
                             />
                           )}
                         </ScheduleComponent>
@@ -808,13 +786,13 @@ class TaskComponent extends React.Component {
 
         {containerTaskDialogVisible && (
           <ContainerTaskDialog
-            task={task}
-            name={name}
+            auto_delete={auto_delete}
+            auto_delete_data={auto_delete_data}
             comment={comment}
             id={id}
             in_assets={in_assets}
-            auto_delete={auto_delete}
-            auto_delete_data={auto_delete_data}
+            name={name}
+            task={task}
             title={title}
             onClose={this.handleCloseContainerTaskDialog}
             onSave={this.handleSaveContainerTask}
@@ -823,37 +801,37 @@ class TaskComponent extends React.Component {
 
         {taskWizardVisible && (
           <TaskWizard
-            hosts={hosts}
-            port_list_id={port_list_id}
             alert_id={alert_id}
             config_id={config_id}
-            ssh_credential={ssh_credential}
-            smb_credential={smb_credential}
             esxi_credential={esxi_credential}
+            hosts={hosts}
+            port_list_id={port_list_id}
             scanner_id={scanner_id}
+            smb_credential={smb_credential}
+            ssh_credential={ssh_credential}
             onClose={this.handleCloseTaskWizard}
-            onSave={this.handleSaveTaskWizard}
             onNewClick={this.handleTaskWizardNewClick}
+            onSave={this.handleSaveTaskWizard}
           />
         )}
 
         {advancedTaskWizardVisible && (
           <AdvancedTaskWizard
-            credentials={credentials}
-            scan_configs={scanConfigs}
-            start_date={start_date}
-            task_name={task_name}
-            target_hosts={target_hosts}
-            port_list_id={port_list_id}
             alert_id={alert_id}
             config_id={config_id}
-            ssh_credential={ssh_credential}
-            smb_credential={smb_credential}
+            credentials={credentials}
             esxi_credential={esxi_credential}
+            port_list_id={port_list_id}
+            scan_configs={scanConfigs}
             scanner_id={scanner_id}
-            start_minute={start_minute}
+            smb_credential={smb_credential}
+            ssh_credential={ssh_credential}
+            start_date={start_date}
             start_hour={start_hour}
+            start_minute={start_minute}
             start_timezone={start_timezone}
+            target_hosts={target_hosts}
+            task_name={task_name}
             onClose={this.handleCloseAdvancedTaskWizard}
             onSave={this.handleSaveAdvancedTaskWizard}
           />
@@ -861,13 +839,13 @@ class TaskComponent extends React.Component {
 
         {modifyTaskWizardVisible && (
           <ModifyTaskWizard
-            start_date={start_date}
-            tasks={tasks}
             reschedule={reschedule}
-            task_id={task_id}
-            start_minute={start_minute}
+            start_date={start_date}
             start_hour={start_hour}
+            start_minute={start_minute}
             start_timezone={start_timezone}
+            task_id={task_id}
+            tasks={tasks}
             onClose={this.handleCloseModifyTaskWizard}
             onSave={this.handleSaveModifyTaskWizard}
           />

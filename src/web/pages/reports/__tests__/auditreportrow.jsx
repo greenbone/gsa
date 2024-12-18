@@ -5,11 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
-import {rendererWith} from 'web/utils/testing';
-import AuditRow from '../auditreportrow';
-import {setTimezone} from 'web/store/usersettings/actions';
-
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
+import {setTimezone} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
+
+import AuditRow from '../auditreportrow';
+
 
 describe('Audit report row', () => {
   test('should render row for Audit report', () => {

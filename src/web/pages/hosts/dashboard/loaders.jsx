@@ -3,18 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import Filter from 'gmp/models/filter';
-
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {MAX_HOSTS} from 'web/components/chart/topology';
 import Loader, {
   loadFunc,
   loaderPropTypes,
 } from 'web/store/dashboard/data/loader';
-
-import {MAX_HOSTS} from 'web/components/chart/topology';
 
 export const HOSTS_MODIFIED = 'hosts-modified';
 export const HOSTS_SEVERITY = 'hosts-severity';
@@ -103,5 +99,3 @@ export const HostsVulnScoreLoader = ({children, filter}) => (
 );
 
 HostsVulnScoreLoader.propTypes = loaderPropTypes;
-
-// vim: set ts=2 sw=2 tw=80:

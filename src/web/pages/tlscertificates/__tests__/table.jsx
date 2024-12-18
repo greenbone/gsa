@@ -4,15 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tlscertificate';
-
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
@@ -70,8 +66,8 @@ describe('TlsCertificates table tests', () => {
 
     const {baseElement} = render(
       <Table
-        filter={filter}
         entities={[tlsCertificate]}
+        filter={filter}
         onTlsCertificateDeleteClick={handleTlsCertificateDelete}
         onTlsCertificateDownloadClick={handleTlsCertificateDownload}
         onTlsCertificateExportClick={handleTlsCertificateExport}
@@ -108,9 +104,9 @@ describe('TlsCertificates table tests', () => {
 
     const {element, getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[tlsCertificate]}
         entitiesCounts={counts}
+        filter={filter}
         onTlsCertificateDeleteClick={handleTlsCertificateDelete}
         onTlsCertificateDownloadClick={handleTlsCertificateDownload}
         onTlsCertificateExportClick={handleTlsCertificateExport}
@@ -151,9 +147,9 @@ describe('TlsCertificates table tests', () => {
 
     const {getAllByTestId} = render(
       <Table
-        filter={filter}
         entities={[tlsCertificate]}
         entitiesCounts={counts}
+        filter={filter}
         onTlsCertificateDeleteClick={handleTlsCertificateDelete}
         onTlsCertificateDownloadClick={handleTlsCertificateDownload}
         onTlsCertificateExportClick={handleTlsCertificateExport}

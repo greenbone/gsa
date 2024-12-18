@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {render} from 'web/utils/testing';
 
 import Loading from '../loading';
@@ -16,5 +15,3 @@ describe('Loading component tests', () => {
     expect(element).toBeVisible();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

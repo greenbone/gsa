@@ -13,5 +13,3 @@ const Svg = styled.svg`
 `;
 
 export default Svg;
-
-// vim: set ts=2 sw=2 tw=80:

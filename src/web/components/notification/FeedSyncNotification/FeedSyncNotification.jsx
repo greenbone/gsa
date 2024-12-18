@@ -3,15 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import InfoPanel from 'web/components/panel/infopanel';
-import BlankLink from 'web/components/link/blanklink';
-import useTranslation from 'web/hooks/useTranslation';
 import styled from 'styled-components';
-
+import BlankLink from 'web/components/link/blanklink';
 import {
   useFeedSyncStatus,
   useFeedSyncDialog,
 } from 'web/components/notification/FeedSyncNotification/helpers';
+import InfoPanel from 'web/components/panel/infopanel';
+import useTranslation from 'web/hooks/useTranslation';
 
 const NotificationWrapper = styled.div`
   padding-bottom: 20px;

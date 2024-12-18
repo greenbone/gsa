@@ -3,28 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-import CloneIcon from 'web/entity/icon/cloneicon';
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
+import DetailsLink from 'web/components/link/detailslink';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-import DetailsLink from 'web/components/link/detailslink';
-
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 const Actions = compose(
   withCapabilities,
@@ -38,29 +31,29 @@ const Actions = compose(
   onReportConfigDownloadClick,
 }) => {
   return (
-    <IconDivider align={['center', 'center']} grow>
+    <IconDivider grow align={['center', 'center']}>
       <TrashIcon
         displayName={_('Report Config')}
-        name="report_config"
         entity={entity}
+        name="report_config"
         onClick={onReportConfigDeleteClick}
       />
       <EditIcon
-        displayName={_('Report Config')}
         disabled={entity.predefined}
-        name="report_config"
+        displayName={_('Report Config')}
         entity={entity}
+        name="report_config"
         onClick={onReportConfigEditClick}
       />
       <CloneIcon
-        entity={entity}
         displayName={_('Report Config')}
+        entity={entity}
         name="report_config"
         onClick={onReportConfigCloneClick}
       />
       <ExportIcon
-        value={entity}
         title={_('Export Report Config')}
+        value={entity}
         onClick={onReportConfigDownloadClick}
       />
     </IconDivider>
@@ -84,9 +77,9 @@ const Row = ({
     entity.report_format.id
   ) : (
     <DetailsLink
-      type="reportformat"
       id={entity.report_format.id}
       textOnly={!links}
+      type="reportformat"
     >
       {entity.report_format.name}
     </DetailsLink>
@@ -95,10 +88,10 @@ const Row = ({
   return (
     <TableRow>
       <EntityNameTableData
+        displayName={_('Report Config')}
         entity={entity}
         links={links}
         type="reportconfig"
-        displayName={_('Report Config')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
@@ -117,5 +110,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

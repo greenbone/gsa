@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-
 import {SubscriptionContext} from 'web/components/provider/subscriptionprovider';
 
 const withSubscription = Component => {
@@ -18,5 +17,3 @@ const withSubscription = Component => {
 };
 
 export default withSubscription;
-
-// vim: set ts=2 sw=2 tw=80:

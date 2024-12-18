@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {CLEAR_STORE} from 'web/store/actions';
 
 import {

@@ -3,38 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import DateTime from 'web/components/date/datetime';
-
 import Layout from 'web/components/layout/layout';
-
-import InfoTable from 'web/components/table/infotable';
-import TableData from 'web/components/table/data';
 import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-
 import {Col} from 'web/entity/page';
-
 import {
   loadEntity as loadTlsCertificate,
   selector as tlsCertificateSelector,
 } from 'web/store/entities/tlscertificates';
-
 import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
 const TlsCertificateDetails = ({entity, links = true}) => {
   return (
-    <Layout grow="1" flex="column">
+    <Layout flex="column" grow="1">
       <InfoTable>
         <colgroup>
           <Col width="10%" />
@@ -113,5 +104,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(TlsCertificateDetails);
-
-// vim: set ts=2 sw=2 tw=80:

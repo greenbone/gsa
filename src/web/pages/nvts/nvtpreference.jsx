@@ -3,28 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
-
-import PropTypes from 'web/utils/proptypes';
-
+import {isEmpty} from 'gmp/utils/string';
+import React from 'react';
 import Checkbox from 'web/components/form/checkbox';
 import FileField from 'web/components/form/filefield';
 import PasswordField from 'web/components/form/passwordfield';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
-
+import Column from 'web/components/layout/column';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-import Column from 'web/components/layout/column';
+import PropTypes from 'web/utils/proptypes';
 
 const noop_convert = value => value;
 
@@ -65,10 +59,10 @@ class NvtPreference extends React.Component {
     if (type === 'checkbox') {
       input = (
         <YesNoRadio
-          yesValue="yes"
+          convert={noop_convert}
           noValue="no"
           value={value}
-          convert={noop_convert}
+          yesValue="yes"
           onChange={this.onPreferenceChange}
         />
       );
@@ -76,8 +70,8 @@ class NvtPreference extends React.Component {
       input = (
         <Column>
           <Checkbox
-            title={_('Replace existing password with')}
             checked={checked}
+            title={_('Replace existing password with')}
             onChange={this.onCheckedChange}
           />
           <PasswordField
@@ -91,12 +85,12 @@ class NvtPreference extends React.Component {
       input = (
         <Divider>
           <Checkbox
+            checked={checked}
             title={
               isEmpty(preference.value)
                 ? _('Upload file')
                 : _('Replace existing file')
             }
-            checked={checked}
             onChange={this.onCheckedChange}
           />
           <FileField disabled={!checked} onChange={this.onPreferenceChange} />
@@ -106,18 +100,18 @@ class NvtPreference extends React.Component {
       input = (
         <Layout flex="column">
           <Radio
+            checked={value === preference.value}
             title={preference.value}
             value={preference.value}
-            checked={value === preference.value}
             onChange={this.onPreferenceChange}
           />
           {map(preference.alt, alt => {
             return (
               <Radio
-                title={alt}
-                value={alt}
                 key={alt}
                 checked={value === alt}
+                title={alt}
+                value={alt}
                 onChange={this.onPreferenceChange}
               />
             );
@@ -157,5 +151,3 @@ NvtPreference.propTypes = {
 };
 
 export default NvtPreference;
-
-// vim: set ts=2 sw=2 tw=80:

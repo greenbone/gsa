@@ -3,25 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
-import PropTypes from 'web/utils/proptypes';
-
+import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
-import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
-import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
-import FilterDialog from 'web/components/powerfilter/filterdialog';
-
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
-
-import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const NotesFilterDialogComponent = ({
   filter: initialFilter,
@@ -81,36 +76,36 @@ const NotesFilterDialogComponent = ({
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
-        name="filterstring"
         filter={filterString}
+        name="filterstring"
         onChange={onFilterStringChange}
       />
 
       <BooleanFilterGroup
+        filter={filter}
         name="active"
         title={_('Note is active')}
-        filter={filter}
         onChange={onFilterValueChange}
       />
 
       <FilterSearchGroup
+        filter={filter}
         name="text"
         title={_('Search by content')}
-        filter={filter}
         onChange={onSearchTermChange}
       />
 
       <FilterSearchGroup
+        filter={filter}
         name="nvt"
         title={_('NVT Name')}
-        filter={filter}
         onChange={onSearchTermChange}
       />
 
       <FilterSearchGroup
+        filter={filter}
         name="task_name"
         title={_('Task Name')}
-        filter={filter}
         onChange={onSearchTermChange}
       />
 
@@ -119,10 +114,10 @@ const NotesFilterDialogComponent = ({
       <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
 
       <SortByGroup
-        filter={filter}
         fields={SORT_FIELDS}
-        onSortOrderChange={onSortOrderChange}
+        filter={filter}
         onSortByChange={onSortByChange}
+        onSortOrderChange={onSortOrderChange}
       />
 
       {capabilities.mayCreate('filter') && (
@@ -146,5 +141,3 @@ NotesFilterDialogComponent.propTypes = {
 };
 
 export default NotesFilterDialogComponent;
-
-// vim: set ts=2 sw=2 tw=80:

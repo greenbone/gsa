@@ -4,15 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import React from 'react';
-
 import Capabilities from 'gmp/capabilities/capabilities';
-
 import Filter from 'gmp/models/filter';
-
-import {rendererWith, within} from 'web/utils/testing';
-
+import React from 'react';
 import FilterDialog from 'web/pages/reports/detailsfilterdialog';
+import {rendererWith, within} from 'web/utils/testing';
 
 const caps = new Capabilities(['everything']);
 
@@ -40,11 +36,11 @@ describe('Details Filter Dialog for Audit report', () => {
     const {baseElement, getByText, getByLabelText, getByTestId} = render(
       <FilterDialog
         audit={true}
-        filter={filter}
-        delta={false}
-        onFilterChanged={onFilterChanged}
-        onCloseClick={onCloseClick}
         createFilterType="result"
+        delta={false}
+        filter={filter}
+        onCloseClick={onCloseClick}
+        onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
       />,
     );
@@ -113,11 +109,11 @@ describe('Details Filter Dialog for Audit report', () => {
     const {getByText, baseElement, getByLabelText, getByTestId} = render(
       <FilterDialog
         audit={false}
-        filter={filter}
-        delta={false}
-        onFilterChanged={onFilterChanged}
-        onCloseClick={onCloseClick}
         createFilterType="result"
+        delta={false}
+        filter={filter}
+        onCloseClick={onCloseClick}
+        onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
       />,
     );

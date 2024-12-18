@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React from 'react';
-
+import EntityComponent from 'web/entity/component';
 import PropTypes from 'web/utils/proptypes';
 
-import OverrideComponent from '../overrides/component';
 import NoteComponent from '../notes/component';
-
-import EntityComponent from 'web/entity/component';
+import OverrideComponent from '../overrides/component';
 
 const NvtComponent = ({
   children,
@@ -34,8 +31,8 @@ const NvtComponent = ({
         {({create: overridecreate}) => (
           <EntityComponent
             name="nvt"
-            onDownloaded={onDownloaded}
             onDownloadError={onDownloadError}
+            onDownloaded={onDownloaded}
             onInteraction={onInteraction}
           >
             {({download}) =>
@@ -61,5 +58,3 @@ NvtComponent.propTypes = {
 };
 
 export default NvtComponent;
-
-// vim: set ts=2 sw=2 tw=80:

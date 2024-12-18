@@ -3,28 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-
+import React from 'react';
 import Comment from 'web/components/comment/comment';
-
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
+import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 import withCapabilities from 'web/utils/withCapabilities';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 const Actions = compose(
   withCapabilities,
@@ -36,18 +29,18 @@ const Actions = compose(
     onReportFormatDeleteClick,
     onReportFormatEditClick,
   }) => (
-    <IconDivider align={['center', 'center']} grow>
+    <IconDivider grow align={['center', 'center']}>
       <TrashIcon
         displayName={_('Report Format')}
-        name="report_format"
         entity={entity}
+        name="report_format"
         onClick={onReportFormatDeleteClick}
       />
       <EditIcon
-        displayName={_('Report Format')}
         disabled={entity.predefined}
-        name="report_format"
+        displayName={_('Report Format')}
         entity={entity}
+        name="report_format"
         onClick={onReportFormatEditClick}
       />
     </IconDivider>
@@ -69,10 +62,10 @@ const Row = ({
 }) => (
   <TableRow>
     <EntityNameTableData
+      displayName={_('Report Format')}
       entity={entity}
       links={links}
       type="reportformat"
-      displayName={_('Report Format')}
       onToggleDetailsClick={onToggleDetailsClick}
     >
       {entity.summary && <Comment>({entity.summary})</Comment>}
@@ -98,5 +91,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

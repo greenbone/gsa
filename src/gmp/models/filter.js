@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
-import {forEach, map} from 'gmp/utils/array';
-
 import Model, {parseModelFromElement} from 'gmp/model';
-
 import {setProperties} from 'gmp/parser';
+import {forEach, map} from 'gmp/utils/array';
+import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
 
 import convert from './filter/convert';
 import FilterTerm, {AND} from './filter/filterterm';
@@ -811,5 +809,3 @@ export const RESET_FILTER = Filter.fromString('first=1');
 export const DEFAULT_ROWS_PER_PAGE = 50;
 
 export default Filter;
-
-// vim: set ts=2 sw=2 tw=80:

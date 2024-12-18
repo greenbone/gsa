@@ -3,18 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/component';
-
 import {getTimezone} from 'web/store/usersettings/selectors';
-
 import PropTypes from 'web/utils/proptypes';
 
 import ScheduleDialog from './dialog';
@@ -109,17 +103,17 @@ class ScheduleComponent extends React.Component {
     return (
       <EntityComponent
         name="schedule"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
         onCloneError={onCloneError}
-        onDeleted={onDeleted}
+        onCloned={onCloned}
+        onCreateError={onCreateError}
+        onCreated={onCreated}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
+        onDeleted={onDeleted}
         onDownloadError={onDownloadError}
+        onDownloaded={onDownloaded}
         onInteraction={onInteraction}
-        onSaved={onSaved}
         onSaveError={onSaveError}
+        onSaved={onSaved}
       >
         {({save, ...other}) => (
           <React.Fragment>
@@ -164,5 +158,3 @@ ScheduleComponent.propTypes = {
 export default connect(rootState => ({
   timezone: getTimezone(rootState),
 }))(ScheduleComponent);
-
-// vim: set ts=2 sw=2 tw=80:

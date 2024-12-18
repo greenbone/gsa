@@ -3,66 +3,58 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
 import {shorten} from 'gmp/utils/string';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import SeverityBar from 'web/components/bar/severitybar';
-
 import Divider from 'web/components/layout/divider';
-
 import CveLink from 'web/components/link/cvelink';
 import DetailsLink from 'web/components/link/detailslink';
-
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
 import {createEntitiesTable} from 'web/entities/table';
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
   <TableHeader>
     <TableRow>
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'cve' : false}
         title={_('CVE')}
         width="50%"
         onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'nvt' : false}
         title={_('NVT')}
         width="30%"
         onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'hosts' : false}
         title={_('Hosts')}
         width="5%"
         onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'occurrences' : false}
         title={_('Occurrences')}
         width="5%"
         onSortChange={onSortChange}
       />
       <TableHead
-        currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
         sortBy={sort ? 'severity' : false}
         title={_('Severity')}
         width="10%"
@@ -91,7 +83,7 @@ const Row = ({entity}) => {
         </Divider>
       </TableData>
       <TableData>
-        <DetailsLink type="nvt" id={id} title={nvtName}>
+        <DetailsLink id={id} title={nvtName} type="nvt">
           {shorten(nvtName, 80)}
         </DetailsLink>
       </TableData>
@@ -113,5 +105,3 @@ export default createEntitiesTable({
   emptyTitle: _l('No CVEs available'),
   row: Row,
 });
-
-// vim: set ts=2 sw=2 tw=80:

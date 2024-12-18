@@ -4,11 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import Ticket from '../ticket';
-import {isDate} from '../date';
-
 import {testModel} from 'gmp/models/testing';
+
+import {isDate} from '../date';
+import Ticket from '../ticket';
 
 testModel(Ticket, 'ticket');
 
@@ -155,5 +154,3 @@ describe('Additional Ticket Model tests', () => {
     expect(ticket.closedNote).toEqual('foo');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

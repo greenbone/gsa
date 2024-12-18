@@ -21,13 +21,13 @@ const SaveDialogFooter = ({
   return multiStep > 0 ? (
     <MultiStepFooter
       loading={isLoading}
-      prevDisabled={prevDisabled}
       nextDisabled={nextDisabled}
+      prevDisabled={prevDisabled}
       rightButtonTitle={buttonTitle}
+      onLeftButtonClick={onClose}
       onNextButtonClick={() =>
         setCurrentStep(currentStep < multiStep ? currentStep + 1 : currentStep)
       }
-      onLeftButtonClick={onClose}
       onPreviousButtonClick={() =>
         setCurrentStep(currentStep > 0 ? currentStep - 1 : currentStep)
       }

@@ -4,7 +4,6 @@
  */
 
 import {describe} from '@gsa/testing';
-
 import {testIcon} from 'web/components/icon/testing';
 
 import AddToAssetsIcon from '../addtoassetsicon';
@@ -12,5 +11,3 @@ import AddToAssetsIcon from '../addtoassetsicon';
 describe('AddToAssetsIcon component tests', () => {
   testIcon(AddToAssetsIcon);
 });
-
-// vim: set ts=2 sw=2 tw=80:

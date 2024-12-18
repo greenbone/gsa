@@ -4,13 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
-
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {rendererWith, screen} from 'web/utils/testing';
 
 import StartPage from '../page';

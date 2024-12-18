@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable react/prop-types */
-
-import {useCallback} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {configureStore} from '@reduxjs/toolkit';
+ 
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
+import {configureStore} from '@reduxjs/toolkit';
+import {useCallback} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {fireEvent, rendererWith, screen} from 'web/utils/testing';
 
 import useShallowEqualSelector from '../useShallowEqualSelector';

@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {parseSeverity, setProperties} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 class App {
   constructor() {
@@ -61,5 +60,3 @@ class App {
 }
 
 export default App;
-
-// vim: set ts=2 sw=2 tw=80:

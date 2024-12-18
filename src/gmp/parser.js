@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import date, {duration} from 'gmp/models/date';
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import date, {duration} from 'gmp/models/date';
 
 export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);
@@ -225,5 +224,3 @@ export const parseBoolean = value => {
   }
   return value === true;
 };
-
-// vim: set ts=2 sw=2 tw=80:

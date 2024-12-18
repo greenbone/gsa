@@ -4,18 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import React from 'react';
-
-import Filter from 'gmp/models/filter';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import {rendererWith, wait} from 'web/utils/testing';
+import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import React from 'react';
 import {entitiesLoadingActions} from 'web/store/entities/results';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, wait} from 'web/utils/testing';
 
 import ResultsTab from '../resultstab';
 
@@ -200,12 +197,12 @@ describe('Report Results Tab tests', () => {
     const {baseElement} = render(
       <ResultsTab
         audit={true}
+        isLoading={true}
         progress={100}
         reload={reload}
-        results={results}
         reportFilter={filter}
         reportId={'123'}
-        isLoading={true}
+        results={results}
         resultsFilter={filter}
         status={'Stopped'}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
@@ -312,12 +309,12 @@ describe('Report Results Tab tests', () => {
     const {baseElement} = render(
       <ResultsTab
         audit={false}
+        isLoading={true}
         progress={100}
         reload={reload}
-        results={results}
         reportFilter={filter}
         reportId={'123'}
-        isLoading={true}
+        results={results}
         resultsFilter={filter}
         status={'Stopped'}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}

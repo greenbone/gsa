@@ -4,17 +4,14 @@
  */
 
 
-/* eslint-disable react/prop-types */
-import React from 'react';
+ 
 
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
   const [_] = useTranslation();
@@ -24,9 +21,6 @@ const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
   return (
     <FormGroup title={_('Trend')}>
       <Select
-        name={name}
-        value={trend}
-        onChange={onChange}
         data-testid="filter-trend"
         items={[
           {label: _('Severity increased'), value: 'up'},
@@ -35,6 +29,9 @@ const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
           {label: _('Vulnerability count decreased'), value: 'less'},
           {label: _('Vulnerabilities did not change'), value: 'same'},
         ]}
+        name={name}
+        value={trend}
+        onChange={onChange}
       />
     </FormGroup>
   );

@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from 'gmp/log';
-
 import registerCommand from 'gmp/command';
-
+import logger from 'gmp/log';
 import ReportFormat from 'gmp/models/reportformat';
 
 import EntitiesCommand from './entities';
@@ -60,5 +58,3 @@ class ReportFormatsCommand extends EntitiesCommand {
 
 registerCommand('reportformat', ReportFormatCommand);
 registerCommand('reportformats', ReportFormatsCommand);
-
-// vim: set ts=2 sw=2 tw=80:

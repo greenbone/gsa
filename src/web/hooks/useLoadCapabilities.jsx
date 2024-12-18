@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState} from 'react';
-
-import logger from 'gmp/log';
 import Capabilities from 'gmp/capabilities/capabilities';
-
+import logger from 'gmp/log';
+import {useEffect, useState} from 'react';
 import useGmp from 'web/hooks/useGmp';
 
 const log = logger.getLogger('web.useLoadCapabilities');

@@ -3,30 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import {withRouter} from 'web/utils/withRouter';
-
 import {format as d3format} from 'd3-format';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import {parseFloat, parseSeverity} from 'gmp/parser';
-
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-
-import {resultSeverityRiskFactor} from 'web/utils/severity';
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-
+import {parseFloat, parseSeverity} from 'gmp/parser';
+import React from 'react';
 import BarChart from 'web/components/chart/bar';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import {registerDisplay} from 'web/components/dashboard/registry';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
+import {registerDisplay} from 'web/components/dashboard/registry';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
+import {withRouter} from 'web/utils/withRouter';
 
 import {TasksHighResultsLoader} from './loaders';
 
@@ -79,21 +71,21 @@ export class TasksMostHighResultsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            filter={filter}
-            dataTitles={[_('Task Name'), _('Max. High per Host')]}
             dataRow={row => [row.x, row.y]}
+            dataTitles={[_('Task Name'), _('Max. High per Host')]}
             dataTransform={transformHighResultsData}
-            title={() => _('Tasks with most High Results per Host')}
+            filter={filter}
             showToggleLegend={false}
+            title={() => _('Tasks with most High Results per Host')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart
-                svgRef={svgRef}
                 horizontal
-                showLegend={false}
-                width={width}
-                height={height}
                 data={tdata}
+                height={height}
+                showLegend={false}
+                svgRef={svgRef}
+                width={width}
                 xLabel={_('Results per Host')}
                 onDataClick={this.handleDataClick}
               />
@@ -146,5 +138,3 @@ registerDisplay(
     title: _l('Table: Tasks with most High Results per Host'),
   },
 );
-
-// vim: set ts=2 sw=2 tw=80:

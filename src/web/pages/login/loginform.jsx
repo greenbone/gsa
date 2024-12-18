@@ -3,29 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-
-import useTranslation from 'web/hooks/useTranslation';
-
+import React from 'react';
+import styled from 'styled-components';
+import ErrorContainer from 'web/components/error/errorcontainer';
 import Button from 'web/components/form/button';
 import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
 import PasswordField from 'web/components/form/passwordfield';
+import TextField from 'web/components/form/textfield';
 import useFormValues from 'web/components/form/useFormValues';
-
-import ProductImage from 'web/components/img/product';
 import GreenboneLoginLogo from 'web/components/img/greenboneloginlogo';
-
-import ErrorContainer from 'web/components/error/errorcontainer';
-
+import ProductImage from 'web/components/img/product';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
@@ -101,7 +93,7 @@ const LoginForm = ({
 
   return (
     <Paper>
-      <Divider flex="column" margin="10px" grow="1">
+      <Divider flex="column" grow="1" margin="10px">
         <Layout align="center">
           <GreenboneLoginLogo width="300px" />
         </Layout>
@@ -155,12 +147,12 @@ const LoginForm = ({
               <H1>{_('Sign in to your account')}</H1>
               <TextField
                 autoComplete="username"
+                autoFocus={true}
                 name="username"
                 placeholder={_('Username')}
-                value={username}
-                autoFocus={true}
                 tabIndex="1"
                 title={_('Username')}
+                value={username}
                 onChange={handleValueChange}
               />
               <PasswordField
@@ -169,8 +161,8 @@ const LoginForm = ({
                 placeholder={_('Password')}
                 title={_('Password')}
                 value={password}
-                onKeyDown={handleKeyDown}
                 onChange={handleValueChange}
+                onKeyDown={handleKeyDown}
               />
               <Button data-testid="login-button" onClick={handleSubmit}>
                 {_('Sign in')}
@@ -209,5 +201,3 @@ LoginForm.propTypes = {
 };
 
 export default LoginForm;
-
-// vim: set ts=2 sw=2 tw=80:

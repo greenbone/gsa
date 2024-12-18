@@ -3,37 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-import PageTitle from 'web/components/layout/pagetitle';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import NvtIcon from 'web/components/icon/nvticon';
-
+import PageTitle from 'web/components/layout/pagetitle';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/nvts';
-
 import PropTypes from 'web/utils/proptypes';
 
+import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard';
 import NvtsFilterDialog from './filterdialog';
 import NvtsTable from './table';
 
-import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard';
-
 export const ToolBarIcons = () => (
   <ManualIcon
-    page="managing-secinfo"
     anchor="vulnerability-tests-vt"
+    page="managing-secinfo"
     title={_('Help: NVTs')}
   />
 );
@@ -83,5 +75,3 @@ export default withEntitiesContainer('nvt', {
   fallbackFilter,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

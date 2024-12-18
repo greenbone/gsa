@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import hoistStatics from 'hoist-non-react-statics';
-
+import React from 'react';
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 const withCapabilities = Component => {
@@ -20,5 +18,3 @@ const withCapabilities = Component => {
 };
 
 export default withCapabilities;
-
-// vim: set ts=2 sw=2 tw=80:

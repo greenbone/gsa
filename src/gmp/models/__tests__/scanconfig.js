@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import ScanConfig, {
   filterEmptyScanConfig,
@@ -248,5 +247,3 @@ describe('ScanConfigs model function test', () => {
     expect(filterEmptyScanConfig(config2)).toEqual(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

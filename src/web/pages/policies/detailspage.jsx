@@ -3,58 +3,47 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import PolicyIcon from 'web/components/icon/policyicon';
-
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
-import {selector, loadEntity} from 'web/store/entities/policies';
-
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import PolicyDetails from './details';
-import PolicyComponent from './component';
-
 import {
   NvtFamilies,
   ScannerPreferences,
   NvtPreferences,
 } from 'web/pages/scanconfigs/detailspage';
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+import {selector, loadEntity} from 'web/store/entities/policies';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import PolicyComponent from './component';
+import PolicyDetails from './details';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -68,32 +57,32 @@ export const ToolBarIcons = withCapabilities(
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="compliance-and-special-scans"
           anchor="configuring-and-managing-policies"
+          page="compliance-and-special-scans"
           title={_('Help: Policies')}
         />
-        <ListIcon title={_('Policies List')} page="policies" />
+        <ListIcon page="policies" title={_('Policies List')} />
       </IconDivider>
       <IconDivider>
         <CloneIcon
-          entity={entity}
           displayName={_('Policy')}
+          entity={entity}
           onClick={onPolicyCloneClick}
         />
         <EditIcon
           disabled={entity.predefined}
-          entity={entity}
           displayName={_('Policy')}
+          entity={entity}
           onClick={onPolicyEditClick}
         />
         <TrashIcon
-          entity={entity}
           displayName={_('Policy')}
+          entity={entity}
           onClick={onPolicyDeleteClick}
         />
         <ExportIcon
-          value={entity}
           title={_('Export Policy as XML')}
+          value={entity}
           onClick={onPolicyDownloadClick}
         />
       </IconDivider>
@@ -132,12 +121,12 @@ const Page = ({
 }) => {
   return (
     <PolicyComponent
-      onCloned={goto_details('policies', props)}
       onCloneError={onError}
-      onDeleted={goto_list('policies', props)}
+      onCloned={goto_details('policies', props)}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDeleted={goto_list('policies', props)}
       onDownloadError={onError}
+      onDownloaded={onDownloaded}
       onInteraction={onInteraction}
       onSaved={onChanged}
     >
@@ -146,8 +135,8 @@ const Page = ({
           {...props}
           entity={entity}
           sectionIcon={<PolicyIcon size="large" />}
-          toolBarIcons={ToolBarIcons}
           title={_('Policy')}
+          toolBarIcons={ToolBarIcons}
           onInteraction={onInteraction}
           onPolicyCloneClick={clone}
           onPolicyDeleteClick={delete_func}
@@ -160,8 +149,8 @@ const Page = ({
             return (
               <React.Fragment>
                 <PageTitle title={_('Policy: {{name}}', {name: entity.name})} />
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
                     <TabList
                       active={activeTab}
                       align={['start', 'stretch']}
@@ -250,5 +239,3 @@ export default withEntityContainer('policy', {
   load,
   mapStateToProps,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

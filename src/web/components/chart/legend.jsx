@@ -3,16 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import styled from 'styled-components';
-
 import {Line as VxLine} from '@visx/shape';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
-
 import Theme from 'web/utils/theme';
 
 import ToolTip from './tooltip';
@@ -74,13 +69,13 @@ export const Line = ({
   const y = height / 2;
   return (
     <StyledDiv>
-      <svg width={width} height={height}>
+      <svg height={height} width={width}>
         <VxLine
           from={{x: 0, y}}
-          to={{x: width, y}}
-          strokeDasharray={dashArray}
           stroke={color}
+          strokeDasharray={dashArray}
           strokeWidth={lineWidth}
+          to={{x: width, y}}
         />
       </svg>
     </StyledDiv>
@@ -113,11 +108,11 @@ const Legend = React.forwardRef(({data, children, onItemClick}, ref) => (
           ) : (
             <Item
               ref={targetRef}
-              onMouseEnter={show}
-              onMouseLeave={hide}
               onClick={
                 isDefined(onItemClick) ? () => onItemClick(d) : undefined
               }
+              onMouseEnter={show}
+              onMouseLeave={hide}
             >
               <Rect color={d.color} />
               <Label>{d.label}</Label>
@@ -142,5 +137,3 @@ Legend.propTypes = {
 };
 
 export default Legend;
-
-// vim: set ts=2 sw=2 tw=80:

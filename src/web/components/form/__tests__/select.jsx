@@ -4,15 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {render, fireEvent, screen} from 'web/utils/testing';
-
 import {
   getSelectElement,
   getSelectItemElements,
   openSelectElement,
   clickElement,
 } from 'web/components/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 import Select, {SelectItem} from '../select';
 
@@ -52,7 +50,7 @@ describe('Select component tests', () => {
       },
     ];
 
-    render(<Select items={items} isLoading={true} />);
+    render(<Select isLoading={true} items={items} />);
 
     const element = getSelectElement();
 
@@ -121,7 +119,7 @@ describe('Select component tests', () => {
 
     const onChange = testing.fn();
 
-    render(<Select name="abc" items={items} onChange={onChange} />);
+    render(<Select items={items} name="abc" onChange={onChange} />);
 
     await openSelectElement();
 
@@ -228,7 +226,7 @@ describe('Select component tests', () => {
       'renders $label correctly with deprecated status $deprecated',
       ({label, deprecated, expectedText}) => {
         const {getByText} = render(
-          <SelectItem label={label} deprecated={deprecated} />,
+          <SelectItem deprecated={deprecated} label={label} />,
         );
         expect(getByText(expectedText)).toBeInTheDocument();
       },

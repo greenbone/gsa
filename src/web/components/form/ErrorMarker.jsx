@@ -4,11 +4,9 @@
  */
 
 import React from 'react';
-
 import styled from 'styled-components';
-
-import Theme from 'web/utils/theme';
 import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const StyledMarker = styled.div`
   color: ${Theme.darkRed};

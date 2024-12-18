@@ -4,20 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
-
-import {entitiesLoadingActions} from 'web/store/entities/nvts';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-
-import {rendererWith, screen, wait} from 'web/utils/testing';
-
 import {
   clickElement,
   getCheckBoxes,
@@ -28,6 +17,11 @@ import {
   getTableFooter,
   getTextInputs,
 } from 'web/components/testing';
+import {entitiesLoadingActions} from 'web/store/entities/nvts';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import NvtsPage, {ToolBarIcons} from '../listpage';
 

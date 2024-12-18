@@ -3,15 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
+import React from 'react';
+import styled from 'styled-components';
 import useGmp from 'web/hooks/useGmp';
 
 import Img from './img';
@@ -37,5 +32,3 @@ const ProductImage = props => {
 };
 
 export default ProductImage;
-
-// vim: set ts=2 sw=2 tw=80:

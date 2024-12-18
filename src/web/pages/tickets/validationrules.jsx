@@ -4,7 +4,6 @@
  */
 
 import {_} from 'gmp/locale/lang';
-
 import {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
 
 export const editTicketRules = {

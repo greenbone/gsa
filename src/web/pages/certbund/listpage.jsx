@@ -3,38 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import Filter, {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
+import React from 'react';
 import DashboardControls from 'web/components/dashboard/controls';
-
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import ManualIcon from 'web/components/icon/manualicon';
-
 import PageTitle from 'web/components/layout/pagetitle';
-
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/certbund';
-
 import PropTypes from 'web/utils/proptypes';
 
+import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard';
 import CertBundFilterDialog from './filterdialog';
 import CertBundTable from './table';
 
-import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard';
-
 const ToolBarIcons = props => (
   <ManualIcon
-    page="managing-secinfo"
     anchor="cert-bund-advisories"
+    page="managing-secinfo"
     title={_('Help: CERT-Bund Advisories')}
   />
 );
@@ -83,5 +74,3 @@ export default withEntitiesContainer('certbund', {
   fallbackFilter,
   loadEntities,
 })(Page);
-
-// vim: set ts=2 sw=2 tw=80:

@@ -3,42 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {isDefined, isNumber} from 'gmp/utils/identity';
-
 import {shorten} from 'gmp/utils/string';
-
-import SeverityBar from 'web/components/bar/severitybar';
+import React from 'react';
 import ComplianceBar from 'web/components/bar/compliancebar';
-
+import SeverityBar from 'web/components/bar/severitybar';
 import DateTime from 'web/components/date/datetime';
-
 import DeltaDifferenceIcon from 'web/components/icon/deltadifferenceicon';
 import NoteIcon from 'web/components/icon/noteicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 import TicketIcon from 'web/components/icon/ticketicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
 import DetailsLink from 'web/components/link/detailslink';
-
-import TableRow from 'web/components/table/row';
-import TableData from 'web/components/table/data';
-
 import Qod from 'web/components/qod/qod';
-
-import {RowDetailsToggle} from 'web/entities/row';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 import EntitiesActions from 'web/entities/actions';
-
+import {RowDetailsToggle} from 'web/entities/row';
+import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/proptypes';
 
 import ResultDelta from './delta';
-import useGmp from 'web/hooks/useGmp';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -135,7 +124,7 @@ const Row = ({
       <TableData>
         <span>
           {isDefined(host.id) ? (
-            <DetailsLink type="host" id={host.id} textOnly={!links}>
+            <DetailsLink id={host.id} textOnly={!links} type="host">
               {host.name}
             </DetailsLink>
           ) : (

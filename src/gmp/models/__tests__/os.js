@@ -4,10 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import Asset from 'gmp/models/asset';
 import OperatingSystem from 'gmp/models/os';
-
 import {testModel} from 'gmp/models/testing';
 
 testModel(OperatingSystem, 'operatingsystem');
@@ -77,5 +75,3 @@ describe('OperatingSystem model tests', () => {
     expect(os.os).toBeUndefined();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

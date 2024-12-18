@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import withSvgIcon from './withSvgIcon';
-
 import Icon from './svg/trend_nochange.svg';
+import withSvgIcon from './withSvgIcon';
 
 const TrendNoChangeIconComponent = withSvgIcon()(Icon);
 
@@ -14,5 +13,3 @@ const TrendNoChangeIcon = props => (
 );
 
 export default TrendNoChangeIcon;
-
-// vim: set ts=2 sw=2 tw=80:

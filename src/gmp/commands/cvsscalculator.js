@@ -4,7 +4,6 @@
  */
 
 import registerCommand from 'gmp/command';
-
 import {parseSeverity} from 'gmp/parser';
 
 import HttpCommand from './http';
@@ -26,5 +25,3 @@ class CvssCalculator extends HttpCommand {
 }
 
 registerCommand('cvsscalculator', CvssCalculator);
-
-// vim: set ts=2 sw=2 tw=80:

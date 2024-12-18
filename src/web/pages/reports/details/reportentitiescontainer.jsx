@@ -3,15 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React from 'react';
 import Loading from 'web/components/loading/loading';
-
 import SortBy from 'web/components/sortby/sortby';
+import PropTypes from 'web/utils/proptypes';
 
 const sortEntities = ({
   entities,
@@ -123,14 +119,8 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   render() {
-    const {
-      children,
-      counts,
-      entities,
-      sortFunctions,
-      sortReverse,
-      sortField,
-    } = this.props;
+    const {children, counts, entities, sortFunctions, sortReverse, sortField} =
+      this.props;
     const {page} = this.state;
 
     if (!isDefined(children) || !isDefined(entities)) {
@@ -190,5 +180,3 @@ ReportEntitiesContainer.propTypes = {
 };
 
 export default ReportEntitiesContainer;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Model from 'gmp/model';
 import Schedule from 'gmp/models/schedule';
 import {testModel} from 'gmp/models/testing';
@@ -49,7 +48,6 @@ describe('Schedule model tests', () => {
   });
 
   test('should handle invalid ical data safely', () => {
-    /* eslint-disable no-console */
     const consoleError = console.log;
     const errorLog = testing.fn();
 
@@ -65,7 +63,5 @@ describe('Schedule model tests', () => {
     expect(schedule.event).toBeUndefined();
 
     console.error = consoleError;
-    /* eslint-enable no-console */
   });
 });
-// vim: set ts=2 sw=2 tw=80:

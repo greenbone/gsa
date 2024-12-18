@@ -4,13 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
-
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {pageFilter} from 'web/store/pages/actions';
-
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, screen} from 'web/utils/testing';
 
 import FilterProvider from '../filterprovider';
@@ -46,7 +43,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider locationQuery={locationQuery} gmpname="task">
+      <FilterProvider gmpname="task" locationQuery={locationQuery}>
         {renderFunc}
       </FilterProvider>,
     );
@@ -209,7 +206,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider gmpname="task" fallbackFilter={fallbackFilter}>
+      <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
         {renderFunc}
       </FilterProvider>,
     );
@@ -249,7 +246,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider gmpname="task" fallbackFilter={fallbackFilter}>
+      <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
         {renderFunc}
       </FilterProvider>,
     );

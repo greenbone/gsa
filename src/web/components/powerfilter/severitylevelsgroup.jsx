@@ -3,20 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback} from 'react';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
+import React, {useCallback} from 'react';
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
-
-import IconDivider from 'web/components/layout/icondivider';
-
 import SeverityClassLabel from 'web/components/label/severityclass';
-
+import IconDivider from 'web/components/layout/icondivider';
 import useTranslation from 'web/hooks/useTranslation';
+import PropTypes from 'web/utils/proptypes';
 
 const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
   const [_] = useTranslation();
@@ -52,43 +46,43 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
   }
   return (
     <FormGroup
-      title={_('Severity (Class)')}
       data-testid="severity-levels-filter-group"
+      title={_('Severity (Class)')}
     >
       <IconDivider>
         <Checkbox
           checked={levels.includes('h')}
+          data-testid="severity-filter-high"
           name="h"
           onChange={handleLevelChange}
-          data-testid="severity-filter-high"
         />
         <SeverityClassLabel.High />
         <Checkbox
           checked={levels.includes('m')}
+          data-testid="severity-filter-medium"
           name="m"
           onChange={handleLevelChange}
-          data-testid="severity-filter-medium"
         />
         <SeverityClassLabel.Medium />
         <Checkbox
           checked={levels.includes('l')}
+          data-testid="severity-filter-low"
           name="l"
           onChange={handleLevelChange}
-          data-testid="severity-filter-low"
         />
         <SeverityClassLabel.Low />
         <Checkbox
           checked={levels.includes('g')}
+          data-testid="severity-filter-log"
           name="g"
           onChange={handleLevelChange}
-          data-testid="severity-filter-log"
         />
         <SeverityClassLabel.Log />
         <Checkbox
           checked={levels.includes('f')}
+          data-testid="severity-filter-false-positive"
           name="f"
           onChange={handleLevelChange}
-          data-testid="severity-filter-false-positive"
         />
         <SeverityClassLabel.FalsePositive />
       </IconDivider>
@@ -103,5 +97,3 @@ SeverityLevelsFilterGroup.propTypes = {
 };
 
 export default SeverityLevelsFilterGroup;
-
-// vim: set ts=2 sw=2 tw=80:

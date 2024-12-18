@@ -3,27 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
 import {shorten} from 'gmp/utils/string';
-
+import React from 'react';
 import ExportIcon from 'web/components/icon/exporticon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
-import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
-
+import TableRow from 'web/components/table/row';
 import {RowDetailsToggle} from 'web/entities/row';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 const Actions = withEntitiesActions(
@@ -34,13 +25,13 @@ const Actions = withEntitiesActions(
     onNoteCloneClick,
     onNoteEditClick,
   }) => (
-    <IconDivider align={['center', 'center']} grow>
+    <IconDivider grow align={['center', 'center']}>
       <TrashIcon entity={entity} name="note" onClick={onNoteDeleteClick} />
       <EditIcon entity={entity} name="note" onClick={onNoteEditClick} />
       <CloneIcon entity={entity} name="note" onClick={onNoteCloneClick} />
       <ExportIcon
-        value={entity}
         title={_('Export Note')}
+        value={entity}
         onClick={onNoteDownloadClick}
       />
     </IconDivider>
@@ -100,5 +91,3 @@ Row.propTypes = {
 };
 
 export default Row;
-
-// vim: set ts=2 sw=2 tw=80:

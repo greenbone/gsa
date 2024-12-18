@@ -4,11 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import Nvt, {getRefs, hasRefType, getFilteredRefIds} from 'gmp/models/nvt';
-import Info from 'gmp/models/info';
-import {testModelFromElement, testModelMethods} from 'gmp/models/testing';
 import date from 'gmp/models/date';
+import Info from 'gmp/models/info';
+import Nvt, {getRefs, hasRefType, getFilteredRefIds} from 'gmp/models/nvt';
+import {testModelFromElement, testModelMethods} from 'gmp/models/testing';
 
 describe('nvt Model tests', () => {
   testModelFromElement(Nvt, 'nvt');

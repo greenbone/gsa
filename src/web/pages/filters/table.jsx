@@ -5,13 +5,12 @@
 
 import {_l} from 'gmp/locale/lang';
 
+import FilterDetails from './details';
+import Row from './row';
 import {createEntitiesFooter} from '../../entities/footer';
 import {createEntitiesHeader} from '../../entities/header';
 import {createEntitiesTable} from '../../entities/table';
 import withRowDetails from '../../entities/withRowDetails';
-
-import FilterDetails from './details';
-import Row from './row';
 
 export const SORT_FIELDS = [
   {
@@ -44,5 +43,3 @@ const FiltersTable = createEntitiesTable({
 });
 
 export default FiltersTable;
-
-// vim: set ts=2 sw=2 tw=80:

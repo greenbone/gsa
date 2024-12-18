@@ -4,17 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
 import Task from 'gmp/models/task';
-
-import {render, fireEvent} from 'web/utils/testing';
-
 import {
   changeInputValue,
   getDialog,
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import ContainerDialog from '../containerdialog';
 
@@ -50,8 +47,8 @@ describe('ContainerDialog tests', () => {
 
     const {getByName} = render(
       <ContainerDialog
-        name="foo"
         comment="bar"
+        name="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -81,9 +78,9 @@ describe('ContainerDialog tests', () => {
 
     const {getByName, getAllByName} = render(
       <ContainerDialog
-        task={task}
-        name="foo"
         comment="bar"
+        name="foo"
+        task={task}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -115,8 +112,8 @@ describe('ContainerDialog tests', () => {
 
     render(
       <ContainerDialog
-        name="foo"
         comment="bar"
+        name="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,

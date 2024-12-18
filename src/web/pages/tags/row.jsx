@@ -4,30 +4,22 @@
  */
 
 
-import React from 'react';
 
 import _ from 'gmp/locale';
-
 import {typeName} from 'gmp/utils/entitytype';
-
+import React from 'react';
 import DateTime from 'web/components/date/datetime';
-
 import DisableIcon from 'web/components/icon/disableicon';
 import EnableIcon from 'web/components/icon/enableicon';
 import ExportIcon from 'web/components/icon/exporticon';
-
 import IconDivider from 'web/components/layout/icondivider';
-
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
@@ -53,47 +45,47 @@ const Actions = compose(
       if (entity.isActive()) {
         endisableable = (
           <DisableIcon
-            value={entity}
             title={_('Disable Tag')}
+            value={entity}
             onClick={onTagDisableClick}
           />
         );
       } else {
         endisableable = (
           <EnableIcon
-            value={entity}
             title={_('Enable Tag')}
+            value={entity}
             onClick={onTagEnableClick}
           />
         );
       }
     }
     return (
-      <IconDivider align={['center', 'center']} grow>
+      <IconDivider grow align={['center', 'center']}>
         {endisableable}
         <TrashIcon
           displayName={_('Tag')}
-          name="tag"
           entity={entity}
+          name="tag"
           onClick={onTagDeleteClick}
         />
         <EditIcon
           displayName={_('Tag')}
-          name="tag"
           entity={entity}
+          name="tag"
           onClick={onTagEditClick}
         />
         <CloneIcon
           displayName={_('Tag')}
-          name="tag"
           entity={entity}
+          name="tag"
           title={_('Clone Tag')}
           value={entity}
           onClick={onTagCloneClick}
         />
         <ExportIcon
-          value={entity}
           title={_('Export Tag')}
+          value={entity}
           onClick={onTagDownloadClick}
         />
       </IconDivider>
@@ -122,10 +114,10 @@ const Row = ({
   return (
     <TableRow>
       <EntityNameTableData
+        displayName={_('Tag')}
         entity={entity}
         link={links}
         type="tag"
-        displayName={_('Tag')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>{entity.value}</TableData>

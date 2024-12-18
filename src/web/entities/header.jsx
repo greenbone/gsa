@@ -3,20 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import {_, _l} from 'gmp/locale/lang';
-
-import PropTypes from 'web/utils/proptypes';
-
-import SelectionType from 'web/utils/selectiontype';
-
+import React from 'react';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 
 const defaultactions = (
-  <TableHead width="8%" align="center" title={_l('Actions')} />
+  <TableHead align="center" title={_l('Actions')} width="8%" />
 );
 
 /**
@@ -108,12 +104,12 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
             <TableHead
               key={name}
               align={align}
-              width={width}
               currentSortBy={currentSortBy}
               currentSortDir={currentSortDir}
               sortBy={sort ? name : false}
-              onSortChange={onSortChange}
               title={`${displayName}`}
+              width={width}
+              onSortChange={onSortChange}
             />
           );
         })}
@@ -132,5 +128,3 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
   };
   return withEntitiesHeader(actions_column, options)(Header);
 };
-
-// vim: set ts=2 sw=2 tw=80:
