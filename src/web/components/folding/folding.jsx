@@ -28,28 +28,26 @@ const foldDelay = keyframes`
   }
 `;
 
-const Div = styled.div`
+const FoldableDiv = styled.div`
   overflow: hidden;
-  transition: 0.4s;
+  transition: height 0.4s;
 
   display: ${({$foldState}) =>
-    $foldState === FoldState.FOLDED ? 'none' : undefined};
+    $foldState === FoldState.FOLDED ? 'none' : 'block'};
 
   height: ${({$foldState}) => {
-    if ($foldState === FoldState.FOLDED || $foldState === FoldState.FOLDING) {
-      return 0;
+    switch ($foldState) {
+      case FoldState.FOLDED:
+      case FoldState.FOLDING:
+        return '0px';
+      case FoldState.FOLDING_START:
+      case FoldState.UNFOLDING:
+        return `${Math.ceil(window.innerHeight * 1.2)}px`;
+      case FoldState.UNFOLDING_START:
+        return '1px';
+      default:
+        return 'auto';
     }
-    if (
-      $foldState === FoldState.FOLDING_START ||
-      $foldState === FoldState.UNFOLDING
-    ) {
-      const windowHeight = Math.ceil(window.innerHeight * 1.2) + 'px';
-      return windowHeight;
-    }
-    if ($foldState === FoldState.UNFOLDING_START) {
-      return '1px';
-    }
-    return undefined;
   }};
 
   animation: ${({$foldState}) =>
@@ -58,7 +56,7 @@ const Div = styled.div`
       ? css`
           ${foldDelay} 0.01s
         `
-      : undefined};
+      : 'none'};
 `;
 
 const FoldStatePropType = PropTypes.oneOf([
@@ -81,13 +79,13 @@ export const withFolding = Component => {
     onFoldToggle,
     ...props
   }) => (
-    <Div
+    <FoldableDiv
       $foldState={foldState}
       onAnimationEnd={onFoldStepEnd}
       onTransitionEnd={onFoldStepEnd}
     >
       <Component {...props} />
-    </Div>
+    </FoldableDiv>
   );
 
   FoldingWrapper.propTypes = {
