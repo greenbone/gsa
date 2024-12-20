@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
 import PropTypes from '../../utils/proptypes';
 
 const TableRow = ({items = [], children, ...other}) => {
   const data = items.map((item, i) => {
-    return <th key={i}>{item}</th>;
+    return (
+      <th key={item.id && item.name ? `${item.id}-${item.name}` : i}>{item}</th>
+    );
   });
   return (
     <tr {...other}>
@@ -20,6 +20,7 @@ const TableRow = ({items = [], children, ...other}) => {
 };
 
 TableRow.propTypes = {
+  children: PropTypes.node,
   items: PropTypes.array,
 };
 
