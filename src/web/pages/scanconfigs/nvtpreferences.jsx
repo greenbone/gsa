@@ -19,6 +19,8 @@ import PropTypes from 'web/utils/proptypes';
 
 const StyledTableData = styled(TableData)`
   overflow-wrap: break-word;
+  white-space: normal;
+  word-break: break-word;
 `;
 
 const shouldComponentUpdate = (props, nextProps) =>
