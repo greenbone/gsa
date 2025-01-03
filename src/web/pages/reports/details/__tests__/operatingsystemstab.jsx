@@ -57,31 +57,31 @@ describe('Report Operating Systems Tab tests', () => {
 
     // Row 1
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(links[4]).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
-    expect(links[4]).toHaveTextContent('Foo OS');
-    expect(links[5]).toHaveAttribute(
+    expect(links[0]).toHaveTextContent('Foo OS');
+    expect(links[0]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
-    expect(links[5]).toHaveTextContent('cpe:/foo/bar');
+    expect(links[1]).toHaveTextContent('cpe:/foo/bar');
     expect(bars[0]).toHaveAttribute('title', 'High');
     expect(bars[0]).toHaveTextContent('10.0 (High)');
 
     // Row 2
     expect(images[1]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(links[6]).toHaveAttribute(
+    expect(links[2]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
-    expect(links[6]).toHaveTextContent('Lorem OS');
-    expect(links[7]).toHaveAttribute(
+    expect(links[2]).toHaveTextContent('Lorem OS');
+    expect(links[2]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
-    expect(links[7]).toHaveTextContent('cpe:/lorem/ipsum');
+    expect(links[3]).toHaveTextContent('cpe:/lorem/ipsum');
     expect(bars[1]).toHaveAttribute('title', 'Medium');
     expect(bars[1]).toHaveTextContent('5.0 (Medium)');
 
@@ -138,31 +138,31 @@ describe('Audit Report Operating Systems Tab tests', () => {
 
     // Row 1
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(links[4]).toHaveAttribute(
+    expect(links[0]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
-    expect(links[4]).toHaveTextContent('Foo OS');
-    expect(links[5]).toHaveAttribute(
+    expect(links[0]).toHaveTextContent('Foo OS');
+    expect(links[1]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
-    expect(links[5]).toHaveTextContent('cpe:/foo/bar');
+    expect(links[1]).toHaveTextContent('cpe:/foo/bar');
     expect(bars[0]).toHaveAttribute('title', 'No');
     expect(bars[0]).toHaveTextContent('No');
 
     // Row 2
     expect(images[1]).toHaveAttribute('src', '/img/os_unknown.svg');
-    expect(links[6]).toHaveAttribute(
+    expect(links[2]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
-    expect(links[6]).toHaveTextContent('Lorem OS');
-    expect(links[7]).toHaveAttribute(
+    expect(links[2]).toHaveTextContent('Lorem OS');
+    expect(links[2]).toHaveAttribute(
       'href',
       '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
-    expect(links[7]).toHaveTextContent('cpe:/lorem/ipsum');
+    expect(links[3]).toHaveTextContent('cpe:/lorem/ipsum');
     expect(bars[1]).toHaveAttribute('title', 'Incomplete');
     expect(bars[1]).toHaveTextContent('Incomplete');
 

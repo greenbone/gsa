@@ -24,9 +24,11 @@ import {
   fireEvent,
   screen,
   wait,
+  prettyDOM,
 } from 'web/utils/testing';
 
 import AuditReportsPage from '../auditreportslistpage';
+import {get} from 'react-hook-form';
 
 window.URL.createObjectURL = testing.fn();
 
@@ -256,14 +258,13 @@ describe('AuditReportsPage tests', () => {
       entitiesActions.success([entity], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<AuditReportsPage />);
+    const {baseElement, getByTestId} = render(<AuditReportsPage />);
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[19]).toHaveAttribute('title', 'Add tag to page contents');
-    fireEvent.click(icons[19]);
+    const icon = getByTestId('tags-icon');
+    expect(icon).toHaveAttribute('title', 'Add tag to page contents');
+    fireEvent.click(icon);
     expect(getAll).toHaveBeenCalled();
 
     fireEvent.click(screen.getAllByTitle('Delete page contents')[0]);

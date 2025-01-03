@@ -60,16 +60,16 @@ describe('Report Applications Tab tests', () => {
     expect(header[3]).toHaveTextContent('Severity');
 
     // Row 1
-    expect(links[4]).toHaveAttribute('href', '/cpe/cpe%3A%2Fa%3A%20123');
-    expect(links[4]).toHaveTextContent('123');
+    expect(links[0]).toHaveAttribute('href', '/cpe/cpe%3A%2Fa%3A%20123');
+    expect(links[0]).toHaveTextContent('123');
     expect(images[0]).toHaveAttribute('src', '/img/cpe/other.svg');
     expect(rows[1]).toHaveTextContent('22'); // 2 Hosts, 2 Occurrences
     expect(bars[0]).toHaveAttribute('title', 'High');
     expect(bars[0]).toHaveTextContent('10.0 (High)');
 
     // Row 2
-    expect(links[5]).toHaveAttribute('href', '/cpe/cpe%3A%2Fa%3A%20456');
-    expect(links[5]).toHaveTextContent('456');
+    expect(links[1]).toHaveAttribute('href', '/cpe/cpe%3A%2Fa%3A%20456');
+    expect(links[1]).toHaveTextContent('456');
     expect(images[1]).toHaveAttribute('src', '/img/cpe/other.svg');
     expect(rows[2]).toHaveTextContent('11'); // 1 Hosts, 1 Occurrences
     expect(bars[1]).toHaveAttribute('title', 'Medium');
