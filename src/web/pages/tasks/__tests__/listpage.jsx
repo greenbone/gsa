@@ -19,7 +19,13 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
+import {
+  rendererWith,
+  fireEvent,
+  wait,
+  screen,
+  prettyDOM,
+} from 'web/utils/testing';
 
 import TaskPage, {ToolBarIcons} from '../listpage';
 
@@ -168,6 +174,8 @@ describe('TaskPage tests', () => {
     const select = getSelectElement(powerFilter);
     const inputs = getTextInputs(powerFilter);
 
+    console.log('ivo', icons.length);
+
     // Toolbar Icons
     expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
 
@@ -205,12 +213,12 @@ describe('TaskPage tests', () => {
     expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 2:51 PM CEST');
     expect(row[1]).toHaveTextContent('5.0 (Medium)');
 
-    expect(icons[24]).toHaveAttribute('title', 'Start');
-    expect(icons[25]).toHaveAttribute('title', 'Task is not stopped');
-    expect(icons[26]).toHaveAttribute('title', 'Move Task to trashcan');
-    expect(icons[27]).toHaveAttribute('title', 'Edit Task');
-    expect(icons[28]).toHaveAttribute('title', 'Clone Task');
-    expect(icons[29]).toHaveAttribute('title', 'Export Task');
+    expect(icons[30]).toHaveAttribute('title', 'Start');
+    expect(icons[31]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[32]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[33]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[34]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[35]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call commands for bulk actions', async () => {

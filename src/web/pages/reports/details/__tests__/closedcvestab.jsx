@@ -57,25 +57,25 @@ describe('Report Closed CVEs Tab tests', () => {
     expect(header[3]).toHaveTextContent('Severity');
 
     // Row 1
-    expect(links[4]).toHaveAttribute('href', '/cve/CVE-2000-1234');
-    expect(links[4]).toHaveTextContent('CVE-2000-1234');
-    expect(links[5]).toHaveAttribute('href', '/host/123');
-    expect(links[5]).toHaveTextContent('123.456.78.910');
-    expect(links[6]).toHaveAttribute('href', '/nvt/201');
-    expect(links[6]).toHaveTextContent('This is a description');
+    expect(links[0]).toHaveAttribute('href', '/cve/CVE-2000-1234');
+    expect(links[0]).toHaveTextContent('CVE-2000-1234');
+    expect(links[1]).toHaveAttribute('href', '/host/123');
+    expect(links[1]).toHaveTextContent('123.456.78.910');
+    expect(links[2]).toHaveAttribute('href', '/nvt/201');
+    expect(links[2]).toHaveTextContent('This is a description');
     expect(bars[0]).toHaveAttribute('title', 'High');
     expect(bars[0]).toHaveTextContent('10.0 (High)');
 
     // Row 2
-    expect(links[7]).toHaveAttribute('href', '/cve/CVE-2000-5678');
-    expect(links[7]).toHaveTextContent('CVE-2000-5678');
-    expect(links[8]).toHaveAttribute(
+    expect(links[3]).toHaveAttribute('href', '/cve/CVE-2000-5678');
+    expect(links[3]).toHaveTextContent('CVE-2000-5678');
+    expect(links[4]).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D109.876.54.321',
     ); // because the host has no asset id
-    expect(links[8]).toHaveTextContent('109.876.54.321');
-    expect(links[9]).toHaveAttribute('href', '/nvt/202');
-    expect(links[9]).toHaveTextContent('This is another description');
+    expect(links[4]).toHaveTextContent('109.876.54.321');
+    expect(links[5]).toHaveAttribute('href', '/nvt/202');
+    expect(links[5]).toHaveTextContent('This is another description');
     expect(bars[1]).toHaveAttribute('title', 'Medium');
     expect(bars[1]).toHaveTextContent('5.0 (Medium)');
 

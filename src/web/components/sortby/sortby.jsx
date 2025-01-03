@@ -7,39 +7,33 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 
-const Anchor = styled.a`
+const SortButton = styled.button`
   cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
 `;
 
-class SortBy extends React.Component {
-  static ASC = 'asc';
-  static DESC = 'desc';
-
-  constructor(...args) {
-    super(...args);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    const {by, onClick} = this.props;
-
+const SortBy = ({by, children, className, onClick}) => {
+  const handleClick = () => {
     if (onClick) {
       onClick(by);
     }
-  }
+  };
 
-  render() {
-    const {children, className} = this.props;
-    return (
-      <Anchor className={className} onClick={this.handleClick}>
-        {children}
-      </Anchor>
-    );
-  }
-}
+  return (
+    <SortButton className={className} onClick={handleClick}>
+      {children}
+    </SortButton>
+  );
+};
+
+SortBy.ASC = 'asc';
+SortBy.DESC = 'desc';
 
 SortBy.propTypes = {
+  children: PropTypes.node,
   by: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,

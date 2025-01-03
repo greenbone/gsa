@@ -60,20 +60,20 @@ describe('Report Errors Tab tests', () => {
 
     // Row 1
     expect(rows[1]).toHaveTextContent('This is an error.');
-    expect(links[5]).toHaveAttribute('href', '/host/123');
-    expect(links[5]).toHaveTextContent('123.456.78.910');
+    expect(links[0]).toHaveAttribute('href', '/host/123');
+    expect(links[0]).toHaveTextContent('123.456.78.910');
     expect(rows[1]).toHaveTextContent('foo.bar');
-    expect(links[6]).toHaveAttribute('href', '/nvt/314');
-    expect(links[6]).toHaveTextContent('NVT1');
+    expect(links[1]).toHaveAttribute('href', '/nvt/314');
+    expect(links[1]).toHaveTextContent('NVT1');
     expect(rows[1]).toHaveTextContent('123/tcp');
 
     // Row 2
     expect(rows[2]).toHaveTextContent('This is another error');
-    expect(links[7]).toHaveAttribute('href', '/host/109');
-    expect(links[7]).toHaveTextContent('109.876.54.321');
+    expect(links[2]).toHaveAttribute('href', '/host/109');
+    expect(links[2]).toHaveTextContent('109.876.54.321');
     expect(rows[2]).toHaveTextContent('lorem.ipsum');
-    expect(links[8]).toHaveAttribute('href', '/nvt/159');
-    expect(links[8]).toHaveTextContent('NVT2');
+    expect(links[3]).toHaveAttribute('href', '/nvt/159');
+    expect(links[3]).toHaveTextContent('NVT2');
     expect(rows[2]).toHaveTextContent('456/tcp');
 
     // Filter
