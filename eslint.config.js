@@ -9,6 +9,8 @@ import allowedSnakeCase from './allowedSnakeCase.js';
 
 pluginHeader.rules.header.meta.schema = false; // https://github.com/Stuk/eslint-plugin-header/issues/57
 
+const year = new Date().getFullYear();
+
 export default [
   pluginJs.configs.recommended,
   pluginReact.configs.flat?.recommended,
@@ -88,7 +90,7 @@ export default [
         [
           {
             pattern: ' SPDX-FileCopyrightText: \\d{4} Greenbone AG',
-            template: ' SPDX-FileCopyrightText: 2024 Greenbone AG',
+            template: ` SPDX-FileCopyrightText: ${year} Greenbone AG`,
           },
           ' *',
           ' * SPDX-License-Identifier: AGPL-3.0-or-later',

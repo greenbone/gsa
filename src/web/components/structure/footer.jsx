@@ -26,7 +26,7 @@ const Footer = styled.footer`
 const GreenboneFooter = () => {
   return (
     <Footer>
-      Copyright © 2009-2024 by Greenbone AG,&nbsp;
+      Copyright © 2009-2025 by Greenbone AG,&nbsp;
       <Link
         href="http://www.greenbone.net"
         rel="noopener noreferrer"
