@@ -64,15 +64,16 @@ describe('Report TLS Certificates Tab tests', () => {
     expect(rows[1]).toHaveTextContent('00B49C541FF5A8E1D9');
     expect(rows[1]).toHaveTextContent('Sat, Aug 10, 2019');
     expect(rows[1]).toHaveTextContent('Tue, Sep 10, 2019');
-    expect(links[7]).toHaveAttribute(
+
+    expect(links[1]).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D192.168.9.90',
     );
-    expect(links[7]).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'title',
       'Show all Hosts with IP 192.168.9.90',
     );
-    expect(links[7]).toHaveTextContent('192.168.9.90');
+    expect(links[1]).toHaveTextContent('192.168.9.90');
     expect(rows[1]).toHaveTextContent('foo.bar');
     expect(rows[1]).toHaveTextContent('4021');
 
@@ -81,30 +82,30 @@ describe('Report TLS Certificates Tab tests', () => {
     expect(rows[2]).toHaveTextContent('00B49C541FF5A8E1D9');
     expect(rows[2]).toHaveTextContent('Sat, Aug 10, 2019');
     expect(rows[2]).toHaveTextContent('Tue, Sep 10, 2019');
-    expect(links[8]).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D192.168.9.90',
     );
-    expect(links[8]).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'title',
       'Show all Hosts with IP 192.168.9.90',
     );
-    expect(links[8]).toHaveTextContent('192.168.9.90');
+    expect(links[1]).toHaveTextContent('192.168.9.90');
     expect(rows[2]).toHaveTextContent('foo.bar');
     expect(rows[2]).toHaveTextContent('4023');
 
     // Row 3
     expect(rows[3]).toHaveTextContent('CN=LoremIpsumSubject2 C=Dolor');
     expect(rows[3]).toHaveTextContent('00C387C32CBB861F5C');
-    expect(links[9]).toHaveAttribute(
+    expect(links[2]).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D191.164.9.93',
     );
-    expect(links[9]).toHaveAttribute(
+    expect(links[2]).toHaveAttribute(
       'title',
       'Show all Hosts with IP 191.164.9.93',
     );
-    expect(links[9]).toHaveTextContent('191.164.9.93');
+    expect(links[2]).toHaveTextContent('191.164.9.93');
     expect(rows[3]).toHaveTextContent('8445');
 
     // Filter
@@ -144,12 +145,12 @@ describe('Report TLS Certificates Tab tests', () => {
 
     const icons = baseElement.querySelectorAll('svg');
 
-    fireEvent.click(icons[4]);
+    fireEvent.click(icons[11]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
       tlsCertificates.entities[0],
     );
 
-    fireEvent.click(icons[5]);
+    fireEvent.click(icons[12]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
       tlsCertificates.entities[1],
     );
