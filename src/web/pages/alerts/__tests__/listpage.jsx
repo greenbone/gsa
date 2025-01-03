@@ -29,7 +29,6 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import AlertPage, {ToolBarIcons} from '../listpage';
 
-
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
@@ -184,11 +183,11 @@ describe('Alert listpage tests', () => {
     expect(row[1]).toHaveTextContent('report results filter');
     expect(row[1]).toHaveTextContent('Yes');
 
-    expect(icons[13]).toHaveAttribute('title', 'Move Alert to trashcan');
-    expect(icons[14]).toHaveAttribute('title', 'Edit Alert');
-    expect(icons[15]).toHaveAttribute('title', 'Clone Alert');
-    expect(icons[16]).toHaveAttribute('title', 'Export Alert');
-    expect(icons[17]).toHaveAttribute('title', 'Test Alert');
+    expect(icons[19]).toHaveAttribute('title', 'Move Alert to trashcan');
+    expect(icons[20]).toHaveAttribute('title', 'Edit Alert');
+    expect(icons[21]).toHaveAttribute('title', 'Clone Alert');
+    expect(icons[22]).toHaveAttribute('title', 'Export Alert');
+    expect(icons[23]).toHaveAttribute('title', 'Test Alert');
   });
 
   test('should allow to bulk action on page contents', async () => {

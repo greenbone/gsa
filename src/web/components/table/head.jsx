@@ -7,10 +7,18 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import ArrowDown from 'web/components/icon/ArrowDown';
+import ArrowUp from 'web/components/icon/ArrowUp';
+import ArrowUpDown from 'web/components/icon/ArrowUpDown';
 import Layout from 'web/components/layout/layout';
 import Sort from 'web/components/sortby/sortby';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+
+const SortSymbol = styled.span`
+  display: inline-flex;
+  align-items: center;
+`;
 
 const TableHead = ({
   children,
@@ -26,42 +34,39 @@ const TableHead = ({
   onSortChange,
   ...other
 }) => {
-  let sortSymbol;
-  if (isDefined(sortBy) && currentSortBy === sortBy) {
-    if (currentSortDir === Sort.DESC) {
-      sortSymbol = // triangle pointing down
-        (
-          <span
-            title={_('Sorted In Descending Order By {{sortBy}}', {
-              sortBy: `${title}`,
-            })}
-          >
-            &nbsp;&#9660;
-          </span>
-        );
-    } else if (currentSortDir === Sort.ASC) {
-      sortSymbol = // triangle pointing up
-        (
-          <span
-            title={_('Sorted In Ascending Order By {{sortBy}}', {
-              sortBy: `${title}`,
-            })}
-          >
-            &nbsp;&#9650;
-          </span>
-        );
+  const getSortSymbol = () => {
+    if (!isDefined(sortBy) || currentSortBy !== sortBy) {
+      return (
+        <SortSymbol title={_('Not Sorted')}>
+          &nbsp;
+          <ArrowUpDown />
+        </SortSymbol>
+      );
     }
-  }
+    const titleText =
+      currentSortDir === Sort.DESC
+        ? _('Sorted In Descending Order By {{sortBy}}', {sortBy: `${title}`})
+        : _('Sorted In Ascending Order By {{sortBy}}', {sortBy: `${title}`});
+    const Icon = currentSortDir === Sort.DESC ? ArrowDown : ArrowUp;
+    return (
+      <SortSymbol title={titleText}>
+        &nbsp;
+        <Icon />
+      </SortSymbol>
+    );
+  };
+
   if (isDefined(title) && !isDefined(children)) {
     children = `${title}`;
   }
+
   return (
     <th className={className} colSpan={colSpan} rowSpan={rowSpan}>
       {sort && sortBy && isDefined(onSortChange) ? (
         <Sort by={sortBy} onClick={onSortChange}>
           <Layout {...other}>
             {children}
-            {sortSymbol}
+            {getSortSymbol()}
           </Layout>
         </Sort>
       ) : (
@@ -72,6 +77,7 @@ const TableHead = ({
 };
 
 TableHead.propTypes = {
+  children: PropTypes.node,
   className: PropTypes.string,
   colSpan: PropTypes.numberString,
   currentSortBy: PropTypes.string,

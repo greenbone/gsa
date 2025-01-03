@@ -205,12 +205,12 @@ describe('TaskPage tests', () => {
     expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 2:51 PM CEST');
     expect(row[1]).toHaveTextContent('5.0 (Medium)');
 
-    expect(icons[24]).toHaveAttribute('title', 'Start');
-    expect(icons[25]).toHaveAttribute('title', 'Task is not stopped');
-    expect(icons[26]).toHaveAttribute('title', 'Move Task to trashcan');
-    expect(icons[27]).toHaveAttribute('title', 'Edit Task');
-    expect(icons[28]).toHaveAttribute('title', 'Clone Task');
-    expect(icons[29]).toHaveAttribute('title', 'Export Task');
+    expect(icons[30]).toHaveAttribute('title', 'Start');
+    expect(icons[31]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[32]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[33]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[34]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[35]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call commands for bulk actions', async () => {

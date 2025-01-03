@@ -78,8 +78,9 @@ describe('Report Hosts Tab tests', () => {
     expect(header[15]).toHaveTextContent('Severity');
 
     // Row 1
-    expect(links[15]).toHaveAttribute('href', '/host/123');
-    expect(links[15]).toHaveTextContent('123.456.78.910');
+    expect(links[0]).toHaveAttribute('href', '/host/123');
+
+    expect(links[0]).toHaveTextContent('123.456.78.910');
     expect(rows[1]).toHaveTextContent('foo.bar');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[1]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
@@ -90,11 +91,11 @@ describe('Report Hosts Tab tests', () => {
     expect(bars[0]).toHaveTextContent('10.0 (High)');
 
     // Row 2
-    expect(links[16]).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D109.876.54.321',
     ); // filter by name because host has no asset id
-    expect(links[16]).toHaveTextContent('109.876.54.321');
+    expect(links[1]).toHaveTextContent('109.876.54.321');
     expect(rows[2]).toHaveTextContent('lorem.ipsum');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[2]).toHaveTextContent('1521'); // 15 Ports, 2 Apps, 1 Distance
@@ -170,11 +171,11 @@ describe('Audit Report Hosts Tab tests', () => {
     expect(header[13]).toHaveTextContent('Compliant');
 
     // Row 1
-    expect(links[13]).toHaveAttribute(
+    expect(links[0]).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D109.876.54.321',
     ); // filter by name because host has no asset id
-    expect(links[13]).toHaveTextContent('109.876.54.321');
+    expect(links[0]).toHaveTextContent('109.876.54.321');
     expect(rows[1]).toHaveTextContent('lorem.ipsum');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[1]).toHaveTextContent('1521'); // 15 Ports, 2 Apps, 1 Distance
@@ -185,8 +186,8 @@ describe('Audit Report Hosts Tab tests', () => {
     expect(bars[0]).toHaveTextContent('Incomplete');
 
     // Row 2
-    expect(links[14]).toHaveAttribute('href', '/host/123');
-    expect(links[14]).toHaveTextContent('123.456.78.910');
+    expect(links[1]).toHaveAttribute('href', '/host/123');
+    expect(links[1]).toHaveTextContent('123.456.78.910');
     expect(rows[2]).toHaveTextContent('foo.bar');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[2]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
@@ -197,8 +198,8 @@ describe('Audit Report Hosts Tab tests', () => {
     expect(bars[1]).toHaveTextContent('No');
 
     // Row 3
-    expect(links[15]).toHaveAttribute('href', '/host/123');
-    expect(links[15]).toHaveTextContent('123.456.78.810');
+    expect(links[2]).toHaveAttribute('href', '/host/123');
+    expect(links[2]).toHaveTextContent('123.456.78.810');
     expect(rows[3]).toHaveTextContent('foo.bar');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[3]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance

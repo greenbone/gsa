@@ -193,12 +193,12 @@ describe('TlsCertificatePage tests', () => {
     // expect(row[1]).toHaveTextContent('Tue, Sep 10, 2019 12:51 PM UTC');
     // expect(row[1]).toHaveTextContent('Thu, Oct 10, 2019 12:51 PM UTC');
 
-    expect(icons[19]).toHaveAttribute('title', 'Delete TLS Certificate');
-    expect(icons[20]).toHaveAttribute('title', 'Download TLS Certificate');
-    expect(icons[21]).toHaveAttribute('title', 'Export TLS Certificate as XML');
+    expect(icons[24]).toHaveAttribute('title', 'Delete TLS Certificate');
+    expect(icons[25]).toHaveAttribute('title', 'Download TLS Certificate');
+    expect(icons[26]).toHaveAttribute('title', 'Export TLS Certificate as XML');
 
-    expect(icons[22]).toHaveAttribute('title', 'Add tag to page contents');
-    expect(icons[23]).toHaveAttribute('title', 'Delete page contents');
-    expect(icons[24]).toHaveAttribute('title', 'Export page contents');
+    expect(icons[27]).toHaveAttribute('title', 'Add tag to page contents');
+    expect(icons[28]).toHaveAttribute('title', 'Delete page contents');
+    expect(icons[29]).toHaveAttribute('title', 'Export page contents');
   });
 });
