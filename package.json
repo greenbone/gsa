@@ -34,7 +34,7 @@
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration": "^1.2.4",
     "@greenbone/opensight-ui-components-mantinev7": "^0.0.7-alpha3",
-    "@mantine/core": "^7.12.1",
+    "@mantine/core": "^7.15.2",
     "@reduxjs/toolkit": "^2.5.0",
     "@sentry/react": "^8.39.0",
     "@visx/axis": "^3.12.0",
