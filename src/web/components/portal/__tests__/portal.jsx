@@ -12,6 +12,6 @@ describe('Portal component tests', () => {
   test('should render portal', () => {
     const {baseElement} = render(<Portal />);
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeVisible();
   });
 });

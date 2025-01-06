@@ -21,7 +21,7 @@ const DialogTitleButton = styled.button`
   border: none;
   padding: 0;
   outline: none;
-  cursor: ${({isDragging}) => (isDragging ? 'grabbing' : 'grab')};
+  cursor: ${({$isDragging}) => ($isDragging ? 'grabbing' : 'grab')};
   display: flex;
   align-items: center;
   width: 100%;
@@ -71,6 +71,7 @@ const Dialog = ({
   onClose,
   height = MODAL_HEIGHT,
   width = MODAL_WIDTH,
+  testId = 'dialog-2222',
 }) => {
   const [isResizing, setIsResizing] = useState(false);
 
@@ -132,14 +133,15 @@ const Dialog = ({
   return (
     <StyledModal
       centered={false}
+      data-testid={testId}
       height={height}
       opened={true}
       position={position}
       size="auto"
       title={
         <DialogTitleButton
+          $isDragging={isDragging}
           className="dialog-title-button"
-          isDragging={isDragging}
           type="button"
           onKeyDown={e => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -172,6 +174,7 @@ const Dialog = ({
 
 Dialog.propTypes = {
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+  testId: PropTypes.string,
   footer: PropTypes.node,
   title: PropTypes.string,
   width: PropTypes.string,
