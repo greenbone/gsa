@@ -55,7 +55,7 @@ export const EntitiesFooter = ({
     const configMap = {
       [DIALOG_TYPES.DELETE]: {
         dialogText: _(
-          'Are you sure you want to delete all rows in the page of the table? This action cannot be undone.',
+          'Are you sure you want to delete all rows in the page of the table?\n This action cannot be undone.',
         ),
         dialogTitle: _('Confirm Deletion'),
         dialogButtonTitle: _('Delete'),
