@@ -43,6 +43,7 @@ class Logger {
         logValue < newLogValue
           ? noop
           : (...args) => {
+              // eslint-disable-next-line no-console
               return console[logName](
                 '%c' + this.name,
                 'color: ' + GREENBONE_GREEN,
