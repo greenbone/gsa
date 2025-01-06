@@ -6,21 +6,12 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Nvt from 'gmp/models/nvt';
 import {
-  clickElement,
   getDialog,
   getDialogSaveButton,
   getTableBody,
   getTableHeader,
 } from 'web/components/testing';
-import {
-  rendererWith,
-  fireEvent,
-  prettyDOM,
-  within,
-  wait,
-  userEvent,
-  screen,
-} from 'web/utils/testing';
+import {rendererWith, fireEvent, within, screen} from 'web/utils/testing';
 
 import EditConfigFamilyDialog from '../editconfigfamilydialog';
 
