@@ -291,8 +291,12 @@ export const testBulkTrashcanDialog = (screen, dialogAction) => {
 };
 
 export const testBulkDeleteDialog = (screen, dialogAction) => {
-  const dialog = screen.getByRole('dialog');
+  const dialog = screen.getByTestId('confirmation-dialog');
   expect(dialog).toBeVisible();
+
+  const title = screen.getByText('Confirm Deletion');
+
+  expect(title).toBeVisible();
 
   const deleteButton = screen.getByText('Delete');
   fireEvent.click(deleteButton);

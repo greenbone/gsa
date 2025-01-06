@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import DialogContent from 'web/components/dialog/content';
 import Dialog from 'web/components/dialog/dialog';
 import DialogTwoButtonFooter, {
@@ -30,7 +29,6 @@ const ConfirmationDialog = ({
 
   return (
     <Dialog
-      data-testid="confirmation-dialog"
       footer={
         <DialogTwoButtonFooter
           loading={loading}
@@ -40,6 +38,7 @@ const ConfirmationDialog = ({
           onRightButtonClick={onResumeClick}
         />
       }
+      testId="confirmation-dialog"
       title={title}
       width={width}
       onClose={onClose}
