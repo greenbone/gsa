@@ -319,7 +319,7 @@ describe('Audit Detla Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons.length).toEqual(25);
+    expect(icons.length).toEqual(33);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

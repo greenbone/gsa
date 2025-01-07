@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -127,6 +125,20 @@ const sortNvts = (sortBy, sortReverse, selected = {}, nvts = []) => {
   return [...nvts].sort(compare);
 };
 
+const renderTableHead = (sortBy, sortDir, handleSortChange, columns) => {
+  return columns.map(({sortBy: columnSortBy, title, align}) => (
+    <TableHead
+      key={columnSortBy || title}
+      align={align}
+      currentSortBy={sortBy}
+      currentSortDir={sortDir}
+      sortBy={columnSortBy}
+      title={title}
+      onSortChange={handleSortChange}
+    />
+  ));
+};
+
 const EditScanConfigFamilyDialog = ({
   configId,
   configName,
@@ -181,6 +193,12 @@ const EditScanConfigFamilyDialog = ({
     {sortBy: EDIT_CONFIG_COLUMNS_SORT.severity, title: _('Severity')},
     {sortBy: EDIT_CONFIG_COLUMNS_SORT.timeout, title: _('Timeout')},
     {title: _('Prefs')},
+    {
+      sortBy: EDIT_CONFIG_COLUMNS_SORT.selected,
+      title: _('Selected'),
+      align: 'center',
+    },
+    {title: _('Actions'), align: 'center'},
   ];
 
   return (
@@ -204,25 +222,7 @@ const EditScanConfigFamilyDialog = ({
         <Table>
           <TableHeader>
             <TableRow>
-              {tableHeaders.map(({sortBy, title}) => (
-                <TableHead
-                  key={title}
-                  currentSortBy={sortBy}
-                  currentSortDir={sortDir}
-                  sortBy={sortBy}
-                  title={title}
-                  onSortChange={handleSortChange}
-                />
-              ))}
-              <TableHead
-                align="center"
-                currentSortBy={sortBy}
-                currentSortDir={sortDir}
-                sortBy={EDIT_CONFIG_COLUMNS_SORT.selected}
-                title={_('Selected')}
-                onSortChange={handleSortChange}
-              />
-              <TableHead align="center">{_('Actions')}</TableHead>
+              {renderTableHead(sortBy, sortDir, handleSortChange, tableHeaders)}
             </TableRow>
           </TableHeader>
           <TableBody>

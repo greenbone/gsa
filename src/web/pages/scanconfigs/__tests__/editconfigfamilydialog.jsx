@@ -6,13 +6,12 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Nvt from 'gmp/models/nvt';
 import {
-  clickElement,
   getDialog,
   getDialogSaveButton,
   getTableBody,
   getTableHeader,
 } from 'web/components/testing';
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, within, screen} from 'web/utils/testing';
 
 import EditConfigFamilyDialog from '../editconfigfamilydialog';
 
@@ -229,102 +228,72 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    const editButtons = getAllByTestId('svg-icon');
+    const editButtons = getAllByTestId('edit-icon');
     fireEvent.click(editButtons[0]);
 
     expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith(nvt.id);
   });
 
-  test('should sort table', async () => {
-    const handleClose = testing.fn();
-    const handleSave = testing.fn();
-    const handleOpenEditNvtDetailsDialog = testing.fn();
+  test.each`
+    columnIndex | columnName    | initialOrder                | sortedOrder
+    ${0}        | ${'Name'}     | ${['1234', '5678', '2345']} | ${['2345', '5678', '1234']}
+    ${1}        | ${'OID'}      | ${['1234', '5678', '2345']} | ${['1234', '2345', '5678']}
+    ${2}        | ${'Severity'} | ${['1234', '5678', '2345']} | ${['2345', '1234', '5678']}
+    ${3}        | ${'Timeout'}  | ${['1234', '5678', '2345']} | ${['1234', '5678', '2345']}
+    ${5}        | ${'Selected'} | ${['1234', '5678', '2345']} | ${['5678', '1234', '2345']}
+  `(
+    'should sort table by $columnName column',
+    async ({columnName, initialOrder, sortedOrder}) => {
+      const handleClose = testing.fn();
+      const handleSave = testing.fn();
+      const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const newSelected = {
-      1234: 0,
-      5678: 1,
-      2345: 0,
-    };
+      const newSelected = {
+        1234: 0,
+        5678: 1,
+        2345: 0,
+      };
 
-    const {render} = rendererWith({capabilities: true});
-    render(
-      <EditConfigFamilyDialog
-        configId="c1"
-        configName="foo"
-        configNameLabel="Config"
-        familyName="family"
-        isLoadingFamily={false}
-        nvts={[nvt, nvt2, nvt3]}
-        selected={newSelected}
-        title="Foo title"
-        onClose={handleClose}
-        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
-        onSave={handleSave}
-      />,
-    );
-    const getOidColumn = row => row.querySelectorAll('td')[1];
+      const {render} = rendererWith({capabilities: true});
+      render(
+        <EditConfigFamilyDialog
+          configId="c1"
+          configName="foo"
+          configNameLabel="Config"
+          familyName="family"
+          isLoadingFamily={false}
+          nvts={[nvt, nvt2, nvt3]}
+          selected={newSelected}
+          title="Foo title"
+          onClose={handleClose}
+          onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
+          onSave={handleSave}
+        />,
+      );
 
-    const dialog = getDialog();
-    const tableHeader = getTableHeader(dialog);
-    const tableBody = getTableBody(dialog);
-    let rows = tableBody.querySelectorAll('tr');
-    const columns = tableHeader.querySelectorAll('a');
+      const getOidColumn = row => row.querySelectorAll('td')[1];
 
-    expect(getOidColumn(rows[0])).toHaveTextContent('1234');
-    expect(getOidColumn(rows[1])).toHaveTextContent('5678');
-    expect(getOidColumn(rows[2])).toHaveTextContent('2345');
+      const dialog = getDialog();
+      const tableHeader = getTableHeader(dialog);
+      const tableBody = getTableBody(dialog);
+      let rows = tableBody.querySelectorAll('tr');
+      const columns = within(tableHeader).getAllByRole('columnheader');
+      expect(columns).toHaveLength(7);
 
-    // sort by name column desc
-    expect(columns[0]).toHaveTextContent('Name');
-    await clickElement(columns[0]);
+      initialOrder.forEach((oid, index) => {
+        expect(getOidColumn(rows[index])).toHaveTextContent(oid);
+      });
 
-    rows = tableBody.querySelectorAll('tr');
+      const columnHeader = screen.getByText(columnName);
+      fireEvent.click(columnHeader);
 
-    expect(getOidColumn(rows[0])).toHaveTextContent('2345');
-    expect(getOidColumn(rows[1])).toHaveTextContent('5678');
-    expect(getOidColumn(rows[2])).toHaveTextContent('1234');
+      rows = tableBody.querySelectorAll('tr');
 
-    // sort by oid column
-    expect(columns[1]).toHaveTextContent('OID');
-    await clickElement(columns[1]);
-
-    rows = tableBody.querySelectorAll('tr');
-
-    expect(getOidColumn(rows[0])).toHaveTextContent('1234');
-    expect(getOidColumn(rows[1])).toHaveTextContent('2345');
-    expect(getOidColumn(rows[2])).toHaveTextContent('5678');
-
-    // sort by severity column
-    expect(columns[2]).toHaveTextContent('Severity');
-    await clickElement(columns[2]);
-
-    rows = tableBody.querySelectorAll('tr');
-
-    expect(getOidColumn(rows[0])).toHaveTextContent('2345');
-    expect(getOidColumn(rows[1])).toHaveTextContent('1234');
-    expect(getOidColumn(rows[2])).toHaveTextContent('5678');
-
-    // sort by timeout column
-    expect(columns[3]).toHaveTextContent('Timeout');
-    await clickElement(columns[3]);
-
-    rows = tableBody.querySelectorAll('tr');
-
-    expect(getOidColumn(rows[0])).toHaveTextContent('1234');
-    expect(getOidColumn(rows[1])).toHaveTextContent('5678');
-    expect(getOidColumn(rows[2])).toHaveTextContent('2345');
-
-    // sort by selected column
-    expect(columns[4]).toHaveTextContent('Selected');
-    fireEvent.click(columns[4]);
-
-    rows = tableBody.querySelectorAll('tr');
-
-    expect(getOidColumn(rows[0])).toHaveTextContent('5678');
-    expect(getOidColumn(rows[1])).toHaveTextContent('1234');
-    expect(getOidColumn(rows[2])).toHaveTextContent('2345');
-  });
-
+      sortedOrder.forEach((oid, index) => {
+        expect(getOidColumn(rows[index])).toHaveTextContent(oid);
+      });
+    },
+  );
   test('should allow selecting an NVT', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();

@@ -59,19 +59,19 @@ describe('Report CVEs Tab tests', () => {
     expect(header[4]).toHaveTextContent('Severity');
 
     // Row 1
-    expect(links[5]).toHaveAttribute('href', '/cve/CVE-2019-1234');
-    expect(links[5]).toHaveTextContent('CVE-2019-1234');
-    expect(links[6]).toHaveAttribute('href', '/nvt/201');
-    expect(links[6]).toHaveTextContent('nvt1');
+    expect(links[0]).toHaveAttribute('href', '/cve/CVE-2019-1234');
+    expect(links[0]).toHaveTextContent('CVE-2019-1234');
+    expect(links[1]).toHaveAttribute('href', '/nvt/201');
+    expect(links[1]).toHaveTextContent('nvt1');
     expect(rows[1]).toHaveTextContent('22'); // 2 Hosts, 2 Occurrences
     expect(bars[0]).toHaveAttribute('title', 'High');
     expect(bars[0]).toHaveTextContent('10.0 (High)');
 
     // Row 2
-    expect(links[7]).toHaveAttribute('href', '/cve/CVE-2019-5678');
-    expect(links[7]).toHaveTextContent('CVE-2019-5678');
-    expect(links[8]).toHaveAttribute('href', '/nvt/202');
-    expect(links[8]).toHaveTextContent('nvt2');
+    expect(links[2]).toHaveAttribute('href', '/cve/CVE-2019-5678');
+    expect(links[2]).toHaveTextContent('CVE-2019-5678');
+    expect(links[3]).toHaveAttribute('href', '/nvt/202');
+    expect(links[3]).toHaveTextContent('nvt2');
     expect(rows[2]).toHaveTextContent('11'); // 1 Hosts, 1 Occurrences
     expect(bars[1]).toHaveAttribute('title', 'Medium');
     expect(bars[1]).toHaveTextContent('5.0 (Medium)');
