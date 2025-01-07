@@ -92,10 +92,13 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <Layout align="space-between">
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            {entity.name}
-          </RowDetailsToggle>
+        <Layout align={'space-between'} columns={2}>
+          <div>
+            <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+              {entity.name}
+            </RowDetailsToggle>
+            {entity.comment && <Comment>({entity.comment})</Comment>}
+          </div>
           <IconDivider>
             {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Task is alterable')} />
@@ -129,7 +132,6 @@ const Row = ({
             )}
           </IconDivider>
         </Layout>
-        {entity.comment && <Comment>({entity.comment})</Comment>}
       </TableData>
       <TableData>
         <TaskStatus links={links} task={entity} />
