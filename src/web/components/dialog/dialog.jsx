@@ -71,7 +71,7 @@ const Dialog = ({
   onClose,
   height = MODAL_HEIGHT,
   width = MODAL_WIDTH,
-  testId = 'dialog-2222',
+  testId = 'dialog-test-id',
 }) => {
   const [isResizing, setIsResizing] = useState(false);
 
