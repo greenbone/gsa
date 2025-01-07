@@ -84,6 +84,12 @@ export default [
       'no-prototype-builtins': 'off',
       'no-case-declarations': 'off',
       'react-hooks/exhaustive-deps': 'warn',
+      'no-console': [
+        'warn',
+        {
+          allow: ['warn', 'error', 'info'],
+        },
+      ],
       'header/header': [
         2,
         'block',

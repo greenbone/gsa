@@ -11,6 +11,7 @@ const DialogContent = styled.div`
   height: inherit;
   padding: 0;
   gap: 20px;
+  white-space: pre-line;
 `;
 
 export default DialogContent;
