@@ -26,9 +26,9 @@ const EntityNameTableData = ({
   children,
   onToggleDetailsClick,
 }) => (
-  <TableData flex="column">
-    <Layout align="space-between">
-      <Layout flex="column">
+  <TableData>
+    <Layout align={'space-between'} columns={2}>
+      <div>
         {entity.isOrphan() && <b>{_('Orphan')}</b>}
         {isDefined(onToggleDetailsClick) ? (
           <span>
@@ -45,19 +45,22 @@ const EntityNameTableData = ({
             {entity.deprecated && <b> ({_('Deprecated')})</b>}
           </span>
         )}
+        {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
+        {children}
+      </div>
+      <Layout alignItems="center">
+        <ObserverIcon
+          displayName={displayName}
+          entity={entity}
+          userName={username}
+        />
       </Layout>
-      <ObserverIcon
-        displayName={displayName}
-        entity={entity}
-        userName={username}
-      />
     </Layout>
-    {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
-    {children}
   </TableData>
 );
 
 EntityNameTableData.propTypes = {
+  children: PropTypes.node,
   displayName: PropTypes.string.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
