@@ -79,155 +79,155 @@ const Menu = () => {
   const subNavConfigs = {
     scans: [
       {
-        label: 'Tasks',
+        label: _('Tasks'),
         to: '/tasks',
         activeCondition: useIsActive('/tasks'),
       },
       {
-        label: 'Reports',
+        label: _('Reports'),
         to: '/reports',
         activeCondition: useIsActive('/reports'),
       },
       {
-        label: 'Results',
+        label: _('Results'),
         to: '/results',
         activeCondition: useIsActive('/results'),
       },
       {
-        label: 'Vulnerabilities',
+        label: _('Vulnerabilities'),
         to: '/vulnerabilities',
         activeCondition: useIsActive('/vulnerabilities'),
       },
       {
-        label: 'Notes',
+        label: _('Notes'),
         to: '/notes',
         activeCondition: useIsActive('/notes'),
       },
       {
-        label: 'Overrides',
+        label: _('Overrides'),
         to: '/overrides',
         activeCondition: useIsActive('/overrides'),
       },
     ],
     assets: [
       {
-        label: 'Hosts',
+        label: _('Hosts'),
         to: '/hosts',
         activeCondition: useIsActive('/hosts'),
       },
       {
-        label: 'Operating Systems',
+        label: _('Operating Systems'),
         to: '/operatingsystems',
         activeCondition: useIsActive('/operatingsystems'),
       },
       {
-        label: 'TLS Certificates',
+        label: _('TLS Certificates'),
         to: '/tlscertificates',
         activeCondition: useIsActive('/tlscertificates'),
       },
     ],
     resilience: [
       {
-        label: 'Remediation Tickets',
+        label: _('Remediation Tickets'),
         to: '/tickets',
         activeCondition: useIsActive('/tickets'),
       },
       {
-        label: 'Compliance Policies',
+        label: _('Compliance Policies'),
         to: '/policies',
         activeCondition: useIsActive('/policies'),
       },
       {
-        label: 'Compliance Audits',
+        label: _('Compliance Audits'),
         to: '/audits',
         activeCondition: useIsActive('/audits'),
       },
       {
-        label: 'Compliance Audit Reports',
+        label: _('Compliance Audit Reports'),
         to: '/auditreports',
         activeCondition: useIsActive('/auditreports'),
       },
     ],
     secInfo: [
       {
-        label: 'NVTs',
+        label: _('NVTs'),
         to: '/nvts',
         activeCondition: useIsActive('/nvts'),
       },
       {
-        label: 'CVEs',
+        label: _('CVEs'),
         to: '/cves',
         activeCondition: useIsActive('/cves'),
       },
       {
-        label: 'CPEs',
+        label: _('CPEs'),
         to: '/cpes',
         activeCondition: useIsActive('/cpes'),
       },
       {
-        label: 'CERT-Bund Advisories',
+        label: _('CERT-Bund Advisories'),
         to: '/certbunds',
         activeCondition: useIsActive('/certbunds'),
       },
       {
-        label: 'DFN-CERT Advisories',
+        label: _('DFN-CERT Advisories'),
         to: '/dfncerts',
         activeCondition: useIsActive('/dfncerts'),
       },
     ],
     configuration: [
       {
-        label: 'Targets',
+        label: _('Targets'),
         to: '/targets',
         activeCondition: useIsActive('/targets'),
       },
       {
-        label: 'Port Lists',
+        label: _('Port Lists'),
         to: '/portlists',
         activeCondition: useIsActive('/portlists'),
       },
       {
-        label: 'Credentials',
+        label: _('Credentials'),
         to: '/credentials',
         activeCondition: useIsActive('/credentials'),
       },
       {
-        label: 'Scan Configs',
+        label: _('Scan Configs'),
         to: '/scanconfigs',
         activeCondition: useIsActive('/scanconfigs'),
       },
       {
-        label: 'Alerts',
+        label: _('Alerts'),
         to: '/alerts',
         activeCondition: useIsActive('/alerts'),
       },
       {
-        label: 'Schedules',
+        label: _('Schedules'),
         to: '/schedules',
         activeCondition: useIsActive('/schedules'),
       },
       {
-        label: 'Report Configs',
+        label: _('Report Configs'),
         to: '/reportconfigs',
         activeCondition: useIsActive('/reportconfigs'),
       },
       {
-        label: 'Report Formats',
+        label: _('Report Formats'),
         to: '/reportformats',
         activeCondition: useIsActive('/reportformats'),
       },
       {
-        label: 'Scanners',
+        label: _('Scanners'),
         to: '/scanners',
         activeCondition: useIsActive('/scanners'),
       },
       {
-        label: 'Filters',
+        label: _('Filters'),
         to: '/filters',
         activeCondition: useIsActive('/filters'),
       },
       {
-        label: 'Tags',
+        label: _('Tags'),
         to: '/tags',
         activeCondition: useIsActive('/tags'),
       },
@@ -235,12 +235,12 @@ const Menu = () => {
   };
 
   const createMenuItemWithSubNav = (label, key, icon, config) => ({
-    label: _(label),
+    label: label,
     key: key,
     icon: icon,
     subNav: config
       .map(({label, to, activeCondition, featureEnabled}) => ({
-        label: _(label),
+        label: label,
         to: to,
         active: activeCondition,
         visible:
@@ -261,35 +261,35 @@ const Menu = () => {
     [
       mayOpScans &&
         createMenuItemWithSubNav(
-          'Scans',
+          _('Scans'),
           'scans',
           ShieldCheck,
           subNavConfigs.scans,
         ),
       mayOpAssets &&
         createMenuItemWithSubNav(
-          'Assets',
+          _('Assets'),
           'assets',
           Server,
           subNavConfigs.assets,
         ),
       mayOpResilience &&
         createMenuItemWithSubNav(
-          'Resilience',
+          _('Resilience'),
           'resilience',
           FileCheck,
           subNavConfigs.resilience,
         ),
       capabilities.mayAccess('info') &&
         createMenuItemWithSubNav(
-          'Security Information',
+          _('Security Information'),
           'secInfo',
           View,
           subNavConfigs.secInfo,
         ),
       mayOpConfiguration &&
         createMenuItemWithSubNav(
-          'Configuration',
+          _('Configuration'),
           'configuration',
           Wrench,
           subNavConfigs.configuration,
