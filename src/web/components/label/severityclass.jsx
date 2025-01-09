@@ -49,6 +49,7 @@ const HighLabel = createLabel(
   Theme.errorRed,
   Theme.white,
   'severity-class-High',
+  // _('High')
   'High',
 );
 const MediumLabel = createLabel(
@@ -56,6 +57,7 @@ const MediumLabel = createLabel(
   Theme.severityWarnYellow,
   Theme.black,
   'severity-class-Medium',
+  // _('Medium')
   'Medium',
 );
 const LowLabel = createLabel(
@@ -63,6 +65,7 @@ const LowLabel = createLabel(
   Theme.severityLowBlue,
   Theme.white,
   'severity-class-Low',
+  // _('Low')
   'Low',
 );
 const LogLabel = createLabel(
@@ -70,6 +73,7 @@ const LogLabel = createLabel(
   Theme.mediumGray,
   Theme.white,
   'severity-class-Log',
+  // _('Log')
   'Log',
 );
 const FalsePositiveLabel = createLabel(
@@ -77,6 +81,7 @@ const FalsePositiveLabel = createLabel(
   Theme.mediumGray,
   Theme.white,
   'severity-class-False-Positive',
+  // _('False Pos.')
   'False Pos.',
 );
 
