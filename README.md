@@ -177,30 +177,19 @@ But sometimes the UI changes and new English descriptions are added or existing
 ones have been rephrased. In this case the new keys must be extracted from the
 source code and added to the JSON files. This can be done by running
 
-```
+```sh
 npm run i18n-extract
 ```
 
 New translation strings are added with an empty string `“”` as default value.
 Therefore searching for empty strings will find the to be translated values.
-Keys with a `_plural` suffix can be ignored. They are just added for technical
-reasons and are unused.
-
-If not all strings are translated at once the remaining empty strings would
-cause missing text in web UI. Therefore, the JSON files must be cleaned up
-before adding the changes to git and creating a pull request. To clean up the
-JSON files the following command can be used
-
-```
-npm run clean-up-translations
-```
 
 ### Support a new Language
 
 The currently supported languages are listed at [src/gmp/locale/languages.js](./src/gmp/locale/languages.js#L23).
 If a new language should be available in the web UI, it needs an entry in this
 object. Additionally the corresponding language codes must be added to the
-[babel config](./.babelrc) and [cleanup script](./scripts/cleanuptranslations.js).
+[i18next-parser.config.js](./i18next-parser.config.js).
 
 ## Settings
 
