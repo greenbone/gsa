@@ -16,7 +16,7 @@ import {
   getSelectElement,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, render} from 'web/utils/testing';
 
 import CredentialsDialog from '../dialog';
 
@@ -30,7 +30,7 @@ beforeEach(() => {
   handleErrorClose = testing.fn();
 });
 
-const credential = Credential.fromElement({
+const credentialMock = Credential.fromElement({
   _id: 'foo',
   allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
@@ -49,10 +49,6 @@ const credential = Credential.fromElement({
 
 describe('CredentialsDialog component tests', () => {
   test('should render', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
     const {getByName} = render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
@@ -96,11 +92,11 @@ describe('CredentialsDialog component tests', () => {
 
     const {getByName, getAllByName} = render(
       <CredentialsDialog
-        allow_insecure={credential.allow_insecure}
-        comment={credential.comment}
-        credential={credential}
-        credential_type={credential.credential_type}
-        name={credential.name}
+        allow_insecure={credentialMock.allow_insecure}
+        comment={credentialMock.comment}
+        credential={credentialMock}
+        credential_type={credentialMock.credential_type}
+        name={credentialMock.name}
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
         onErrorClose={handleErrorClose}
@@ -125,10 +121,6 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should allow to change text field', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
     const {getByName} = render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
@@ -156,8 +148,8 @@ describe('CredentialsDialog component tests', () => {
       auth_algorithm: 'sha1',
       autogenerate: 0,
       change_community: undefined,
-      change_passphrase: undefined,
       change_password: undefined,
+      change_passphrase: undefined,
       change_privacy_password: undefined,
       comment: 'bar',
       community: '',
@@ -174,10 +166,6 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should allow changing select values', async () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
     render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
@@ -223,10 +211,6 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
     render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
@@ -241,10 +225,6 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for Username + SSH', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
     const {getByName} = render(
       <CredentialsDialog
         credential_type={'usk'}
@@ -267,10 +247,6 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for SNMP', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
     const {getByName, getAllByName} = render(
       <CredentialsDialog
         credential_type="snmp"
@@ -311,10 +287,6 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for S/MIME Certificate', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
     const {getByName} = render(
       <CredentialsDialog
         credential_type="smime"
@@ -334,10 +306,6 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for PGP Encryption Key', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
     const {getByName} = render(
       <CredentialsDialog
         credential_type={'pgp'}
@@ -356,11 +324,7 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for Password Only', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
-    const {getByName} = render(
+    render(
       <CredentialsDialog
         credential_type={'pw'}
         types={ALL_CREDENTIAL_TYPES}
@@ -373,8 +337,58 @@ describe('CredentialsDialog component tests', () => {
     const select = getSelectElement();
     expect(select).toHaveValue('Password only');
 
-    const password = getByName('password');
+    const password = screen.getByTestId('password-input');
     expect(password).toHaveValue('');
     expect(password).toHaveAttribute('type', 'password');
+  });
+
+  test('should render CredentialsDialog and handle replace password interactions correctly', () => {
+    const credentialEntryMock = Credential.fromElement({
+      _id: '9b0',
+      allow_insecure: 1,
+      creation_time: '2025-01-08T15:50:23.000Z',
+      comment: 'MockComment',
+      formats: {format: 'exe'},
+      full_type: 'username + password',
+      in_use: 0,
+      login: 'user42',
+      modification_time: '2025-01-09T08:58:33.000Z',
+      name: 'Unnamed',
+      owner: {name: 'admin'},
+      permissions: {permission: {name: 'Everything'}},
+      type: 'up',
+      writable: 1,
+    });
+
+    render(
+      <CredentialsDialog
+        allow_insecure={credentialEntryMock.allow_insecure}
+        comment={credentialEntryMock.comment}
+        credential={credentialEntryMock}
+        credential_type={credentialEntryMock.credential_type}
+        name={credentialEntryMock.name}
+        title={'Edit Credential'}
+        types={ALL_CREDENTIAL_TYPES}
+        onClose={handleClose}
+        onErrorClose={handleErrorClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const title = screen.getByText('Edit Credential');
+    expect(title).toBeVisible();
+
+    const passwordField = screen.getByTestId('password-input');
+    expect(passwordField).toBeDisabled();
+
+    const checkbox = screen.getByLabelText('Replace existing password with');
+
+    expect(checkbox).not.toBeChecked();
+
+    fireEvent.click(checkbox);
+
+    expect(checkbox).toBeChecked();
+
+    expect(passwordField).not.toBeDisabled();
   });
 });

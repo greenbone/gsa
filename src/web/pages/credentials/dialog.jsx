@@ -70,8 +70,8 @@ const CredentialsDialog = props => {
   const isEdit = isDefined(credential);
 
   useEffect(() => {
-    const {autogenerate: pAutogen, credential_type} = props;
-    setCredentialTypeAndAutoGenerate(credential_type, pAutogen);
+    const {autogenerate: pAutogenerate, credential_type} = props;
+    setCredentialTypeAndAutoGenerate(credential_type, pAutogenerate);
   }, [props]);
 
   const setCredentialTypeAndAutoGenerate = (type, autogenerate) => {
@@ -270,7 +270,7 @@ const CredentialsDialog = props => {
                   autoComplete="new-password"
                   disabled={
                     state.autogenerate === YES_VALUE ||
-                    state.change_password === NO_VALUE
+                    (isEdit && state.change_password !== YES_VALUE)
                   }
                   grow="1"
                   name="password"
@@ -296,7 +296,7 @@ const CredentialsDialog = props => {
                   autoComplete="new-password"
                   disabled={
                     state.autogenerate === YES_VALUE ||
-                    state.change_passphrase === NO_VALUE
+                    (isEdit && state.change_passphrase !== YES_VALUE)
                   }
                   grow="1"
                   name="passphrase"
@@ -320,7 +320,10 @@ const CredentialsDialog = props => {
                 )}
                 <PasswordField
                   autoComplete="new-password"
-                  disabled={state.change_privacy_password === NO_VALUE}
+                  disabled={
+                    state.autogenerate === YES_VALUE ||
+                    (isEdit && state.change_privacy_password !== YES_VALUE)
+                  }
                   grow="1"
                   name="privacy_password"
                   value={state.privacy_password}
