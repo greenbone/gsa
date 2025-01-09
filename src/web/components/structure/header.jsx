@@ -4,25 +4,28 @@
  */
 
 import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
-import _ from 'gmp/locale';
 import {useCallback} from 'react';
+import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import LogoutIcon from 'web/components/icon/logouticon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
+import SessionTimer from 'web/components/sessionTimer/SessionTimer';
 import getLogo from 'web/components/structure/getLogo';
+import LanguageSwitch from 'web/components/structure/languageswitch';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
 
-import LanguageSwitch from './languageswitch';
-import SessionTimer from '../sessionTimer/SessionTimer';
-
 const Header = () => {
+  const [_] = useTranslation();
+
   const gmp = useGmp();
   const username = useUserName();
   const loggedIn = useUserIsLoggedIn();
   const navigate = useNavigate();
   const logoComponent = getLogo(gmp.settings.vendorLabel);
+  const timezone = useSelector(state => state.userSettings.timezone);
 
   const handleSettingsClick = useCallback(
     event => {
@@ -58,6 +61,7 @@ const Header = () => {
 
   return (
     <AppHeader
+      ianaTimeZone={timezone}
       isLoggedIn={loggedIn}
       isThemeSwitchVisible={false}
       languageSwitch={<LanguageSwitch />}
