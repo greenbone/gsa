@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import {
   SNMP_CREDENTIAL_TYPE,
-  SNMP_PRIVACY_ALOGRITHM_NONE,
+  SNMP_PRIVACY_ALGORITHM_NONE,
   getCredentialTypeName,
 } from 'gmp/models/credential';
 import React from 'react';
@@ -29,7 +29,7 @@ const CredentialDetails = ({entity}) => {
     login,
     auth_algorithm,
     privacy = {
-      algorithm: SNMP_PRIVACY_ALOGRITHM_NONE,
+      algorithm: SNMP_PRIVACY_ALGORITHM_NONE,
     },
     targets = [],
     scanners = [],
@@ -78,7 +78,7 @@ const CredentialDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Privacy Algorithm')}</TableData>
               <TableData>
-                {privacy.algorithm === SNMP_PRIVACY_ALOGRITHM_NONE
+                {privacy.algorithm === SNMP_PRIVACY_ALGORITHM_NONE
                   ? _('None')
                   : privacy.algorithm}
               </TableData>

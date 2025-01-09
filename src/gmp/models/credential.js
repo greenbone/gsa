@@ -71,7 +71,7 @@ export const vFire_credential_filter = credential =>
 export const SNMP_AUTH_ALGORITHM_MD5 = 'md5';
 export const SNMP_AUTH_ALGORITHM_SHA1 = 'sha1';
 
-export const SNMP_PRIVACY_ALOGRITHM_NONE = '';
+export const SNMP_PRIVACY_ALGORITHM_NONE = '';
 export const SNMP_PRIVACY_ALGORITHM_AES = 'aes';
 export const SNMP_PRIVACY_ALGORITHM_DES = 'des';
 
