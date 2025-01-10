@@ -160,6 +160,39 @@ class Cve extends Info {
       ret.references = [];
     }
 
+    if (isDefined(element.cve?.references?.reference)) {
+      ret.references = map(element.cve.references.reference, ref => {
+        let tags = [];
+        if (isArray(ref.tags.tag)) {
+          tags = ref.tags.tag;
+        } else if (isDefined(ref.tags.tag)) {
+          tags = [ref.tags.tag];
+        }
+        return {
+          name: ref.url,
+          tags: tags,
+        };
+      });
+    }
+
+    if (isDefined(element.cve?.configuration_nodes?.node)) {
+      const nodes = isArray(element.cve.configuration_nodes.node)
+        ? element.cve.configuration_nodes.node
+        : [element.cve.configuration_nodes.node];
+      nodes.forEach(node => {
+        if (isDefined(node.match_string?.matched_cpes?.cpe)) {
+          const cpes = isArray(node.match_string.matched_cpes.cpe)
+            ? node.match_string.matched_cpes.cpe
+            : [node.match_string.matched_cpes.cpe];
+          cpes.forEach(cpe => {
+            if (isDefined(cpe._id)) {
+              ret.products.push(cpe._id);
+            }
+          });
+        }
+      });
+    }
+
     return ret;
   }
 }
