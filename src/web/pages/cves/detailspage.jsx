@@ -64,9 +64,12 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const {certs = [], nvts = []} = entity;
-  let {products} = entity;
-  products = products.sort();
+  const {
+    certs = [],
+    nvts = [],
+    configuration_nodes: configurationNode,
+  } = entity;
+
   return (
     <Layout flex="column">
       <CveDetails entity={entity} />
@@ -100,16 +103,31 @@ const Details = ({entity, links = true}) => {
         </DetailsBlock>
       )}
 
-      {products.length > 0 && (
+      {configurationNode?.node && (
         <DetailsBlock title={_('Vulnerable Products')}>
           <Layout flex="column">
-            {products.map(product => (
-              <span key={product}>
-                <DetailsLink id={product} type="cpe">
-                  {product}
-                </DetailsLink>
-              </span>
-            ))}
+            {Array.isArray(configurationNode.node)
+              ? configurationNode.node.map((node, idx) => (
+                  <div key={node.match_string?.criteria || idx}>
+                    <strong>
+                      Configuration : {node.match_string?.criteria}
+                    </strong>
+                    <Layout flex="column">
+                      {node.match_string?.matched_cpes?.cpe &&
+                        (Array.isArray(node.match_string.matched_cpes.cpe)
+                          ? node.match_string.matched_cpes.cpe
+                          : [node.match_string.matched_cpes.cpe]
+                        ).map(cpe => (
+                          <span key={cpe._id}>
+                            <DetailsLink id={cpe._id} type="cpe">
+                              {cpe._id}
+                            </DetailsLink>
+                          </span>
+                        ))}
+                    </Layout>
+                  </div>
+                ))
+              : null}
           </Layout>
         </DetailsBlock>
       )}
