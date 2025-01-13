@@ -133,6 +133,7 @@ class AlertActions extends React.Component {
   render() {
     const {
       alerts,
+      audit = false,
       capabilities,
       reportComposerDefaults,
       filter,
@@ -163,6 +164,7 @@ class AlertActions extends React.Component {
               <TriggerAlertDialog
                 alertId={alertId}
                 alerts={alerts}
+                audit={audit}
                 defaultAlertId={reportComposerDefaults.defaultAlertId}
                 filter={filter}
                 includeNotes={reportComposerDefaults.includeNotes}
@@ -185,6 +187,7 @@ class AlertActions extends React.Component {
 
 AlertActions.propTypes = {
   alerts: PropTypes.array,
+  audit: PropTypes.bool,
   capabilities: PropTypes.capabilities.isRequired,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,

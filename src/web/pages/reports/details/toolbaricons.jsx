@@ -60,10 +60,17 @@ const ToolBarIcons = ({
     {!isLoading && (
       <React.Fragment>
         <IconDivider>
-          <AddToAssetsIcon
-            title={_('Add to Assets with QoD=>70% and Overrides enabled')}
-            onClick={onAddToAssetsClick}
-          />
+          {audit ? (
+            <AddToAssetsIcon
+              title= {_('Add to Assets with QoD >= 70%')}
+              onClick={onAddToAssetsClick}
+            />
+          ) : (
+            <AddToAssetsIcon
+              title= {_('Add to Assets with QoD >= 70% and Overrides enabled')}
+              onClick={onAddToAssetsClick}
+            />
+          )}
           <RemoveFromAssetsIcon
             title={_('Remove from Assets')}
             onClick={onRemoveFromAssetsClick}
@@ -128,6 +135,7 @@ const ToolBarIcons = ({
           />
           {!delta && (
             <AlertActions
+              audit={audit}
               filter={filter}
               reportId={reportId}
               showError={showError}

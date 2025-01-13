@@ -23,6 +23,7 @@ import {renderSelectItems} from 'web/utils/render';
 const TriggerAlertDialog = ({
   alertId,
   alerts = [],
+  audit = false,
   applyOverrides = COMPOSER_CONTENT_DEFAULTS.applyOverrides,
   defaultAlertId,
   filter = {},
@@ -60,7 +61,9 @@ const TriggerAlertDialog = ({
     <SaveDialog
       buttonTitle={_('OK')}
       defaultValues={unControlledValues}
-      title={_('Trigger Alert for Scan Report')}
+      title={audit
+        ? _('Trigger Alert for Compliance Report')
+        : _('Trigger Alert for Scan Report')}
       values={controlledValues}
       onClose={onClose}
       onSave={onSave}
@@ -69,6 +72,7 @@ const TriggerAlertDialog = ({
         <>
           <ComposerContent
             applyOverrides={values.applyOverrides}
+            audit={audit}
             filterString={filterString}
             includeNotes={values.includeNotes}
             includeOverrides={values.includeOverrides}
@@ -105,6 +109,7 @@ const TriggerAlertDialog = ({
 TriggerAlertDialog.propTypes = {
   alertId: PropTypes.id,
   alerts: PropTypes.array,
+  audit: PropTypes.bool,
   applyOverrides: PropTypes.numberOrNumberString,
   defaultAlertId: PropTypes.id,
   filter: PropTypes.filter.isRequired,
