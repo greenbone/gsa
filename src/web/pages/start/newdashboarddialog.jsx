@@ -82,7 +82,7 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
       key: 'secinfo-displays',
       value: SECINFO_DEFAULT_DISPLAYS,
     },
-    {label: _('Empty'), key: 'empty', value: EMPTY_DISPLAYS},
+    {label: _('No Displays'), key: 'empty', value: EMPTY_DISPLAYS},
     ...additionalDisplayChoices.map(choice => ({
       label: choice.label,
       key: `${choice.label}-${JSON.stringify(choice.value)}`,
