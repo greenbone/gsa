@@ -10,6 +10,7 @@ import DateTime from 'web/components/date/datetime';
 import SaveDialog from 'web/components/dialog/savedialog';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
+import Column from 'web/components/layout/column';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 import DetailsLink from 'web/components/link/detailslink';
@@ -227,7 +228,7 @@ const EditNvtDetailsDialog = ({
                 <TableRow>
                   <TableData>{_('Timeout')}</TableData>
                   <TableData>
-                    <Divider flex="column">
+                    <Column>
                       <Divider>
                         <Radio
                           checked={state.useDefaultTimeout === '1'}
@@ -242,21 +243,19 @@ const EditNvtDetailsDialog = ({
                             : ''}
                         </span>
                       </Divider>
-                      <Divider>
-                        <Radio
-                          checked={state.useDefaultTimeout === '0'}
-                          name="useDefaultTimeout"
-                          value="0"
-                          onChange={value => setDefaultTimeout(value)}
-                        />
-                        <TextField
-                          disabled={state.useDefaultTimeout === '1'}
-                          name="timeout"
-                          value={isDefined(state.timeout) ? state.timeout : ''}
-                          onChange={handleChangeTimeout}
-                        />
-                      </Divider>
-                    </Divider>
+                      <Radio
+                        checked={state.useDefaultTimeout === '0'}
+                        name="useDefaultTimeout"
+                        value="0"
+                        onChange={value => setDefaultTimeout(value)}
+                      />
+                      <TextField
+                        disabled={state.useDefaultTimeout === '1'}
+                        name="timeout"
+                        value={isDefined(state.timeout) ? state.timeout : ''}
+                        onChange={handleChangeTimeout}
+                      />
+                    </Column>
                   </TableData>
                   <TableData>
                     {isDefined(defaultTimeout) ? defaultTimeout : ''}
