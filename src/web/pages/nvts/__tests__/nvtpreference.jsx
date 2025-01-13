@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import NvtPreference from 'web/pages/nvts/nvtpreference';
-import {render, fireEvent, screen, wait} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 describe('NvtPreference', () => {
   const mockOnChange = testing.fn();
@@ -29,9 +29,9 @@ describe('NvtPreference', () => {
     };
     renderComponent(preference, 'yes');
 
-    expect(screen.getByText('Checkbox Preference')).toBeInTheDocument();
-    expect(screen.getByRole('radio', {name: /yes/i})).toBeInTheDocument();
-    expect(screen.getByRole('radio', {name: /no/i})).toBeInTheDocument();
+    expect(screen.getByText('Checkbox Preference')).toBeVisible();
+    expect(screen.getByRole('radio', {name: /yes/i})).toBeVisible();
+    expect(screen.getByRole('radio', {name: /no/i})).toBeVisible();
   });
 
   test('renders password input', () => {
@@ -42,11 +42,11 @@ describe('NvtPreference', () => {
     };
     renderComponent(preference, '');
 
-    expect(screen.getByText('Password Preference')).toBeInTheDocument();
+    expect(screen.getByText('Password Preference')).toBeVisible();
     expect(
       screen.getByRole('checkbox', {name: /Replace existing password with/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText('Password')).toBeDisabled();
+    ).toBeVisible();
+    expect(screen.getByTestId('password-input')).toBeDisabled();
   });
 
   test('renders file input', () => {
@@ -58,11 +58,9 @@ describe('NvtPreference', () => {
     };
     renderComponent(preference, '');
 
-    expect(screen.getByText('File Preference')).toBeInTheDocument();
-    expect(
-      screen.getByRole('checkbox', {name: /Upload file/i}),
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText('File')).toBeDisabled();
+    expect(screen.getByText('File Preference')).toBeVisible();
+    expect(screen.getByRole('checkbox', {name: /Upload file/i})).toBeVisible();
+    expect(screen.getByTestId('file-input')).toBeDisabled();
   });
 
   test('renders radio input', () => {
@@ -75,10 +73,10 @@ describe('NvtPreference', () => {
     };
     renderComponent(preference, 'option1');
 
-    expect(screen.getByText('Radio Preference')).toBeInTheDocument();
+    expect(screen.getByText('Radio Preference')).toBeVisible();
     expect(screen.getByRole('radio', {name: /option1/i})).toBeChecked();
-    expect(screen.getByRole('radio', {name: /option2/i})).toBeInTheDocument();
-    expect(screen.getByRole('radio', {name: /option3/i})).toBeInTheDocument();
+    expect(screen.getByRole('radio', {name: /option2/i})).toBeVisible();
+    expect(screen.getByRole('radio', {name: /option3/i})).toBeVisible();
   });
 
   test('renders radio input with numeric value 0', () => {
@@ -99,7 +97,7 @@ describe('NvtPreference', () => {
     fireEvent.click(screen.getByRole('radio', {name: '0'}));
     expect(mockOnChange).toHaveBeenCalledWith({
       type: 'setValue',
-      newState: {name: 'radio_preference', value: '0'},
+      newState: {name: 'radio_preference', value: 0},
     });
   });
 
@@ -111,7 +109,7 @@ describe('NvtPreference', () => {
     };
     renderComponent(preference, 'some text');
 
-    expect(screen.getByText('Text Preference')).toBeInTheDocument();
+    expect(screen.getByText('Text Preference')).toBeVisible();
     expect(screen.getByRole('textbox')).toHaveValue('some text');
   });
 
@@ -141,6 +139,8 @@ describe('NvtPreference', () => {
     fireEvent.click(
       screen.getByRole('checkbox', {name: /Replace existing password with/i}),
     );
+
+    expect(screen.getByTestId('password-input')).not.toBeDisabled();
     expect(mockOnChange).toHaveBeenCalledWith({
       type: 'setValue',
       newState: {name: 'password_preference', value: ''},
