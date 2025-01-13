@@ -66,7 +66,6 @@ const NvtPreference = ({preference, value = '', onChange}) => {
           onChange={onCheckedChange}
         />
         <PasswordField
-          aria-label="Password"
           disabled={!checked}
           value={value}
           onChange={onPreferenceChange}
@@ -85,11 +84,7 @@ const NvtPreference = ({preference, value = '', onChange}) => {
           }
           onChange={onCheckedChange}
         />
-        <FileField
-          aria-label="File"
-          disabled={!checked}
-          onChange={onPreferenceChange}
-        />
+        <FileField disabled={!checked} onChange={onPreferenceChange} />
       </Divider>
     );
   } else if (type === 'radio') {
@@ -97,18 +92,18 @@ const NvtPreference = ({preference, value = '', onChange}) => {
       <Column>
         <Radio
           checked={value === preference.value}
-          title={preference.value}
+          title={String(preference.value)}
           value={preference.value}
-          onChange={onPreferenceChange}
+          onChange={() => onPreferenceChange(preference.value)}
         />
         {map(preference.alt, alt => {
           return (
             <Radio
               key={alt}
               checked={value === alt}
-              title={alt}
+              title={String(alt)}
               value={alt}
-              onChange={onPreferenceChange}
+              onChange={() => onPreferenceChange(alt)}
             />
           );
         })}
