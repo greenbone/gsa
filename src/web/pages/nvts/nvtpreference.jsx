@@ -75,6 +75,7 @@ class NvtPreference extends React.Component {
             onChange={this.onCheckedChange}
           />
           <PasswordField
+            aria-label="Password"
             disabled={!checked}
             value={value}
             onChange={this.onPreferenceChange}
@@ -93,7 +94,11 @@ class NvtPreference extends React.Component {
             }
             onChange={this.onCheckedChange}
           />
-          <FileField disabled={!checked} onChange={this.onPreferenceChange} />
+          <FileField
+            aria-label="File"
+            disabled={!checked}
+            onChange={this.onPreferenceChange}
+          />
         </Divider>
       );
     } else if (type === 'radio') {
