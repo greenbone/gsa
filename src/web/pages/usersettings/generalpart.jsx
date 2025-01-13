@@ -253,7 +253,7 @@ GeneralPart.propTypes = {
   timezone: PropTypes.string,
   userInterfaceTimeFormat: PropTypes.oneOf([12, 24, SYSTEM_DEFAULT]),
   userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy', SYSTEM_DEFAULT]),
-  isUserInterfaceTimeDateDefault: PropTypes.oneOfType([YES_VALUE, NO_VALUE]),
+  isUserInterfaceTimeDateDefault: PropTypes.oneOf([YES_VALUE, NO_VALUE]),
   userInterfaceLanguage: PropTypes.string,
   onChange: PropTypes.func,
 };

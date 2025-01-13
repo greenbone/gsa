@@ -576,7 +576,7 @@ EntitiesContainer.propTypes = {
   location: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string.isRequired,
-  navigate: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isGenericBulkTrashcanDeleteDialog: PropTypes.bool,
   listExportFileName: PropTypes.string,
