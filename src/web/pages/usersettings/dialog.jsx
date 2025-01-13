@@ -324,7 +324,7 @@ UserSettingsDialogComponent.propTypes = {
   filtersFilter: PropTypes.string,
   groupsFilter: PropTypes.string,
   hostsFilter: PropTypes.string,
-  isUserInterfaceTimeDateDefault: PropTypes.oneOfType([YES_VALUE, NO_VALUE]),
+  isUserInterfaceTimeDateDefault: PropTypes.oneOf([YES_VALUE, NO_VALUE]),
   listExportFileName: PropTypes.string,
   maxRowsPerPage: PropTypes.number,
   notesFilter: PropTypes.string,

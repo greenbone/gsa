@@ -840,7 +840,7 @@ UserSettings.propTypes = {
   dynamicSeverity: PropTypes.object,
   filters: PropTypes.array,
   filtersFilter: PropTypes.object,
-  isUserInterfaceTimeDateDefault: PropTypes.oneOfType([YES_VALUE, NO_VALUE]),
+  isUserInterfaceTimeDateDefault: PropTypes.oneOf([YES_VALUE, NO_VALUE]),
   gmp: PropTypes.gmp.isRequired,
   groupsFilter: PropTypes.object,
   hostsFilter: PropTypes.object,
