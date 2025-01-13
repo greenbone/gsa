@@ -175,7 +175,7 @@ export const ToolBarIcons = ({
                     entity.last_report.scan_start,
                   ),
                 })}
-                type="report"
+                type="auditreport"
               >
                 <ReportIcon />
               </DetailsLink>
@@ -184,7 +184,7 @@ export const ToolBarIcons = ({
           <Link
             filter={'task_id=' + entity.id}
             title={_('Total Reports for Audit {{- name}}', entity)}
-            to="reports"
+            to="auditreports"
           >
             <Badge content={entity.report_count.total}>
               <ReportIcon />

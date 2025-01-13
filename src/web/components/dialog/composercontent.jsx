@@ -30,6 +30,7 @@ const FilterField = styled.div`
 `;
 
 const ComposerContent = ({
+  audit=false,
   filterFieldTitle,
   filterString,
   includeNotes,
@@ -57,15 +58,18 @@ const ComposerContent = ({
           unCheckedValue={NO_VALUE}
           onChange={onValueChange}
         />
-        <CheckBox
-          checked={includeOverrides}
-          checkedValue={YES_VALUE}
-          data-testid="include-overrides"
-          name="includeOverrides"
-          title={_('Overrides')}
-          unCheckedValue={NO_VALUE}
-          onChange={onValueChange}
-        />
+        {!audit && 
+          (
+            <CheckBox
+              checked={includeOverrides}
+              checkedValue={YES_VALUE}
+              data-testid="include-overrides"
+              name="includeOverrides"
+              title={_('Overrides')}
+              unCheckedValue={NO_VALUE}
+              onChange={onValueChange}
+          />
+          )}
         <CheckBox
           checked={true}
           checkedValue={YES_VALUE}
@@ -83,6 +87,7 @@ const ComposerContent = ({
 };
 
 ComposerContent.propTypes = {
+  audit: PropTypes.bool,
   filterFieldTitle: PropTypes.string,
   filterString: PropTypes.string.isRequired,
   includeNotes: PropTypes.number.isRequired,

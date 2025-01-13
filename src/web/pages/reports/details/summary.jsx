@@ -56,6 +56,7 @@ const scanDuration = (start, end) => {
 };
 
 const Summary = ({
+  audit = false,
   filter,
   isUpdating = false,
   links = true,
@@ -99,6 +100,9 @@ const Summary = ({
     : false;
 
   const is_ended = isDefined(scan_end) && scan_end.isValid();
+
+  const reportType = audit ? 'auditreport' : 'report';
+
   return (
     <Layout flex="column">
       {isDefined(reportError) && (
@@ -134,7 +138,7 @@ const Summary = ({
               <TableData>{_('Report 1')}</TableData>
               <TableData>
                 <span>
-                  <DetailsLink id={report.id} textOnly={!links} type="report">
+                  <DetailsLink id={report.id} textOnly={!links} type={reportType}>
                     {report.id}
                   </DetailsLink>
                 </span>
@@ -181,7 +185,7 @@ const Summary = ({
                   <DetailsLink
                     id={delta_report.id}
                     textOnly={!links}
-                    type="report"
+                    type={reportType}
                   >
                     {delta_report.id}
                   </DetailsLink>
@@ -249,6 +253,7 @@ const Summary = ({
 };
 
 Summary.propTypes = {
+  audit: PropTypes.bool,
   filter: PropTypes.filter.isRequired,
   isUpdating: PropTypes.bool,
   links: PropTypes.bool,

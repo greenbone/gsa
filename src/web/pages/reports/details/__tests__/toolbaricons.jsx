@@ -87,7 +87,7 @@ describe('Report Details ToolBarIcons tests', () => {
     // Add to Assets Icon
     expect(spans[2]).toHaveAttribute(
       'title',
-      'Add to Assets with QoD=>70% and Overrides enabled',
+      'Add to Assets with QoD >= 70% and Overrides enabled',
     );
 
     // Remove from Assets Icon
@@ -173,7 +173,7 @@ describe('Report Details ToolBarIcons tests', () => {
 
     expect(spans[2]).toHaveAttribute(
       'title',
-      'Add to Assets with QoD=>70% and Overrides enabled',
+      'Add to Assets with QoD >= 70% and Overrides enabled',
     );
     fireEvent.click(spans[2]);
     expect(onAddToAssetsClick).toHaveBeenCalled();
