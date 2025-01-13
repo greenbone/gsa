@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
-import {vi} from 'vitest';
+import {beforeEach, vi} from 'vitest';
 import {pageFilter} from 'web/store/pages/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
@@ -13,7 +13,14 @@ import {rendererWith, waitFor} from 'web/utils/testing';
 
 import usePageFilter from '../usePageFilter';
 
+let mockSearchParams = {};
 const mockUseNavigate = testing.fn();
+const mockUseSearchParams = testing
+  .fn()
+  .mockReturnValue([
+    {get: key => mockSearchParams[key]},
+    {set: (key, value) => (mockSearchParams[key] = value)},
+  ]);
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -21,14 +28,18 @@ vi.mock('react-router-dom', async () => {
     ...actual,
     useLocation: () => ({pathname: '/'}),
     useNavigate: () => mockUseNavigate(),
+    useSearchParams: () => mockUseSearchParams(),
   };
 });
 
-describe('usePageFilter tests', () => {
-  test('should prefer locationQuery filter over defaultSettingFilter', async () => {
-    const locationQuery = {filter: 'location=query'};
+beforeEach(() => {
+  mockSearchParams = {};
+});
 
+describe('usePageFilter tests', () => {
+  test('should prefer search params filter over defaultSettingFilter', async () => {
     const defaultSettingFilter = Filter.fromString('foo=bar');
+    mockSearchParams['filter'] = 'location=query';
 
     const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
@@ -48,11 +59,7 @@ describe('usePageFilter tests', () => {
       defaultFilterLoadingActions.success('somePage', defaultSettingFilter),
     );
 
-    const {result} = renderHook(() =>
-      usePageFilter('somePage', 'gmpName', {
-        locationQueryFilterString: locationQuery.filter,
-      }),
-    );
+    const {result} = renderHook(() => usePageFilter('somePage', 'gmpName'));
 
     expect(result.current[0]).toEqual(
       Filter.fromString('location=query rows=42'),

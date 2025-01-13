@@ -5,7 +5,6 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {useSearchParams} from 'react-router-dom';
 import withDownload from 'web/components/form/withDownload';
 import Reload from 'web/components/loading/reload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
@@ -91,15 +90,10 @@ const withEntitiesContainer =
     )(EntitiesContainerWrapper);
 
     return props => {
-      const [searchParams] = useSearchParams();
       return (
         <SubscriptionProvider>
           {({notify}) => (
-            <FilterProvider
-              fallbackFilter={fallbackFilter}
-              gmpname={gmpname}
-              locationQuery={searchParams.toString()}
-            >
+            <FilterProvider fallbackFilter={fallbackFilter} gmpname={gmpname}>
               {({filter}) => (
                 <EntitiesContainerWrapper
                   {...props}

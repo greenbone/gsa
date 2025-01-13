@@ -13,11 +13,9 @@ const FilterProvider = ({
   fallbackFilter,
   gmpname,
   pageName = gmpname,
-  locationQuery = {},
 }) => {
   const [returnedFilter, isLoadingFilter] = usePageFilter(pageName, gmpname, {
     fallbackFilter,
-    locationQueryFilterString: locationQuery?.filter,
   });
   return (
     <React.Fragment>
@@ -29,9 +27,6 @@ const FilterProvider = ({
 FilterProvider.propTypes = {
   fallbackFilter: PropTypes.filter,
   gmpname: PropTypes.string,
-  locationQuery: PropTypes.shape({
-    filter: PropTypes.string,
-  }),
   pageName: PropTypes.string,
 };
 
