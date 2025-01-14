@@ -26,7 +26,7 @@ const StyledTableData = styled(TableData)`
   word-break: break-word;
 `;
 
-const noop_convert = value => value;
+const noopConvert = value => value;
 
 const NvtPreference = ({preference, value = '', onChange}) => {
   const [checked, setChecked] = useState(false);
@@ -50,7 +50,7 @@ const NvtPreference = ({preference, value = '', onChange}) => {
   if (type === 'checkbox') {
     input = (
       <YesNoRadio
-        convert={noop_convert}
+        convert={noopConvert}
         noValue="no"
         value={value}
         yesValue="yes"
