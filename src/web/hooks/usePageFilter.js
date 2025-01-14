@@ -134,7 +134,7 @@ const usePageFilter = (
   }
 
   if (!returnedFilter.has('rows') && isDefined(rowsPerPage)) {
-    returnedFilter = returnedFilter.set('rows', rowsPerPage);
+    returnedFilter = returnedFilter.copy().set('rows', rowsPerPage);
   }
 
   const finishedLoading =
