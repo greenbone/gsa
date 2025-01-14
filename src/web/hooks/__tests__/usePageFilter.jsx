@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
- 
-
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
 import {vi} from 'vitest';
@@ -14,7 +12,6 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, waitFor} from 'web/utils/testing';
 
 import usePageFilter from '../usePageFilter';
-
 
 const mockUseNavigate = testing.fn();
 
@@ -61,6 +58,7 @@ describe('usePageFilter tests', () => {
       Filter.fromString('location=query rows=42'),
     );
   });
+
   test('should prefer pageFilter over defaultSettingFilter', async () => {
     const pFilter = Filter.fromString('page=filter');
     const defaultSettingFilter = Filter.fromString('foo=bar');
@@ -86,7 +84,7 @@ describe('usePageFilter tests', () => {
 
     const {result} = renderHook(() => usePageFilter('somePage2', 'somePage'));
 
-    expect(result.current[0]).toEqual(pFilter);
+    expect(result.current[0]).toEqual(pFilter.set('rows', 42));
   });
 
   test('should use defaultSettingFilter', async () => {
