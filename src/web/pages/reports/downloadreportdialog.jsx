@@ -21,6 +21,7 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
 const DownloadReportDialog = ({
+  audit = false,
   defaultReportConfigId,
   defaultReportFormatId,
   filter = {},
@@ -77,7 +78,9 @@ const DownloadReportDialog = ({
     <SaveDialog
       buttonTitle={_('OK')}
       defaultValues={unControlledValues}
-      title={_('Compose Content for Scan Report')}
+      title={audit 
+        ? _('Compose Content for Compliance Report')
+        : _('Compose Content for Scan Report')}
       onClose={onClose}
       onSave={handleSave}
     >
@@ -91,6 +94,7 @@ const DownloadReportDialog = ({
         return (
           <>
             <ComposerContent
+              audit={audit}
               filterString={filterString}
               includeNotes={values.includeNotes}
               includeOverrides={values.includeOverrides}
@@ -139,6 +143,7 @@ const DownloadReportDialog = ({
 };
 
 DownloadReportDialog.propTypes = {
+  audit: PropTypes.bool,
   defaultReportConfigId: PropTypes.id,
   defaultReportFormatId: PropTypes.id,
   filter: PropTypes.filter.isRequired,

@@ -427,6 +427,7 @@ const DeltaAuditReportDetails = props => {
       )}
       {showDownloadReportDialog && (
         <DownloadReportDialog
+          audit={true}
           defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
           filter={reportFilter}
           includeNotes={reportComposerDefaults.includeNotes}

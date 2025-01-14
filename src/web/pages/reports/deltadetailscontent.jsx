@@ -96,7 +96,9 @@ const PageContent = ({
 
   const header_title = (
     <Divider>
-      <span>{_('Report:')}</span>
+      {audit ? (
+        <span>{_('Audit Report:')}</span>
+      ) : (<span>{_('Report:')}</span>)}
       {isLoading ? (
         <span>{_('Loading')}</span>
       ) : (
@@ -177,6 +179,7 @@ const PageContent = ({
                 <TabPanels>
                   <TabPanel>
                     <Summary
+                      audit={audit}
                       filter={filter}
                       report={report}
                       reportId={reportId}

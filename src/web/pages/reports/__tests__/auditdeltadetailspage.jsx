@@ -172,7 +172,7 @@ describe('Audit Detla Report Details Content tests', () => {
     expect(tableData[3]).toHaveTextContent('bar');
 
     expect(tableData[4]).toHaveTextContent('Report 1');
-    expect(links[7]).toHaveAttribute('href', '/report/1234');
+    expect(links[7]).toHaveAttribute('href', '/auditreport/1234');
     expect(tableData[5]).toHaveTextContent('1234');
 
     expect(tableData[6]).toHaveTextContent('Scan Time Report 1');
@@ -187,7 +187,7 @@ describe('Audit Detla Report Details Content tests', () => {
     expect(bars[1]).toHaveTextContent('Done');
 
     expect(tableData[12]).toHaveTextContent('Report 2');
-    expect(links[8]).toHaveAttribute('href', '/report/5678');
+    expect(links[8]).toHaveAttribute('href', '/auditreport/5678');
     expect(tableData[13]).toHaveTextContent('5678');
 
     expect(tableData[14]).toHaveTextContent('Scan Time Report 2');

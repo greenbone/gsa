@@ -601,7 +601,7 @@ describe('Audit ToolBarIcons tests', () => {
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
     expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
 
-    expect(links[2]).toHaveAttribute('href', '/reports?filter=task_id%3D12345');
+    expect(links[2]).toHaveAttribute('href', '/auditreports?filter=task_id%3D12345');
     expect(links[2]).toHaveAttribute('title', 'Total Reports for Audit foo');
     expect(badgeIcons[0]).toHaveTextContent('0');
 
@@ -679,7 +679,7 @@ describe('Audit ToolBarIcons tests', () => {
       'Current Report for Audit foo from 07/30/2019',
     );
 
-    expect(links[3]).toHaveAttribute('href', '/reports?filter=task_id%3D12345');
+    expect(links[3]).toHaveAttribute('href', '/auditreports?filter=task_id%3D12345');
     expect(links[3]).toHaveAttribute('title', 'Total Reports for Audit foo');
     expect(badgeIcons[0]).toHaveTextContent('1');
 
@@ -758,7 +758,7 @@ describe('Audit ToolBarIcons tests', () => {
       'Current Report for Audit foo from 07/30/2019',
     );
 
-    expect(links[3]).toHaveAttribute('href', '/reports?filter=task_id%3D12345');
+    expect(links[3]).toHaveAttribute('href', '/auditreports?filter=task_id%3D12345');
     expect(links[3]).toHaveAttribute('title', 'Total Reports for Audit foo');
     expect(badgeIcons[0]).toHaveTextContent('2');
 
@@ -829,13 +829,13 @@ describe('Audit ToolBarIcons tests', () => {
     fireEvent.click(icons[7]);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
 
-    expect(links[2]).toHaveAttribute('href', '/report/1234');
+    expect(links[2]).toHaveAttribute('href', '/auditreport/1234');
     expect(links[2]).toHaveAttribute(
       'title',
       'Last Report for Audit foo from 07/30/2019',
     );
 
-    expect(links[3]).toHaveAttribute('href', '/reports?filter=task_id%3D12345');
+    expect(links[3]).toHaveAttribute('href', '/auditreports?filter=task_id%3D12345');
     expect(links[3]).toHaveAttribute('title', 'Total Reports for Audit foo');
     expect(badgeIcons[0]).toHaveTextContent('1');
 
@@ -913,13 +913,13 @@ describe('Audit ToolBarIcons tests', () => {
     fireEvent.click(icons[7]);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
 
-    expect(links[2]).toHaveAttribute('href', '/report/1234');
+    expect(links[2]).toHaveAttribute('href', '/auditreport/1234');
     expect(links[2]).toHaveAttribute(
       'title',
       'Last Report for Audit foo from 07/30/2019',
     );
 
-    expect(links[3]).toHaveAttribute('href', '/reports?filter=task_id%3D12345');
+    expect(links[3]).toHaveAttribute('href', '/auditreports?filter=task_id%3D12345');
     expect(links[3]).toHaveAttribute('title', 'Total Reports for Audit foo');
     expect(badgeIcons[0]).toHaveTextContent('1');
 
