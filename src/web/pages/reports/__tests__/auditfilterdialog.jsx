@@ -54,10 +54,10 @@ describe('Filter Dialog for Audit report', () => {
     const filterGroup = getByTestId('compliance-levels-filter-group');
     const {queryByTestId, queryAllByRole} = within(filterGroup);
 
-    const yesCheckbox = queryByTestId('compliance-state-Yes');
-    const noCheckbox = queryByTestId('compliance-state-No');
-    const incompleteCheckbox = queryByTestId('compliance-state-Incomplete');
-    const undefinedCheckbox = queryByTestId('compliance-state-Undefined');
+    const yesCheckbox = queryByTestId('compliance-state-yes');
+    const noCheckbox = queryByTestId('compliance-state-no');
+    const incompleteCheckbox = queryByTestId('compliance-state-incomplete');
+    const undefinedCheckbox = queryByTestId('compliance-state-undefined');
 
     expect(yesCheckbox).toHaveTextContent('Yes');
     expect(noCheckbox).toHaveTextContent('No');

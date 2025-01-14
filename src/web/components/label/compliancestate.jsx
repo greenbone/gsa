@@ -3,55 +3,37 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import styled from 'styled-components';
-import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/proptypes';
+import createLabel from 'web/components/label/label';
 import Theme from 'web/utils/theme';
 
-const Label = styled.div`
-  text-align: center;
-  font-weight: normal;
-  font-style: normal;
-  color: white;
-  padding: 1px;
-  display: inline-block;
-  width: 70px;
-  height: 1.5em;
-  font-size: 0.8em;
-  background-color: ${props => props.$backgroundColor};
-  border-color: ${props => props.$borderColor};
-`;
-
-const ComplianceLabel = ({text, color, ...props}) => {
-  const [_] = useTranslation();
-  return (
-    <Label
-      {...props}
-      $backgroundColor={Theme[color]}
-      $borderColor={Theme[color]}
-      data-testid={`compliance-state-${text}`}
-    >
-      {_(text)}
-    </Label>
-  );
-};
-
-ComplianceLabel.propTypes = {
-  text: PropTypes.string,
-  color: PropTypes.string,
-};
-
-const YesLabel = props => (
-  <ComplianceLabel {...props} color="complianceYes" data-testid="compliance-state-yes" text="Yes"/>
+const YesLabel = createLabel(
+  Theme.complianceYes,
+  Theme.complianceYes,
+  Theme.white,
+  'compliance-state-yes',
+  'Yes',
 );
-const NoLabel = props => (
-  <ComplianceLabel {...props} color="complianceNo" data-testid="compliance-state-no" text="No"/>
+
+const NoLabel = createLabel(
+  Theme.complianceNo,
+  Theme.complianceNo,
+  Theme.white,
+  'compliance-state-no',
+  'No',
 );
-const IncompleteLabel = props => (
-  <ComplianceLabel {...props} color="complianceIncomplete" data-testid="compliance-state-incomplete" text="Incomplete"/>
+const IncompleteLabel = createLabel(
+  Theme.complianceIncomplete,
+  Theme.complianceIncomplete,
+  Theme.white,
+  'compliance-state-incomplete',
+  'Incomplete',
 );
-const UndefinedLabel = props => (
-  <ComplianceLabel {...props} color="complianceUndefined" data-testid="compliance-state-undefined" text="Undefined"/>
+const UndefinedLabel = createLabel(
+  Theme.complianceUndefined,
+  Theme.complianceUndefined,
+  Theme.white,
+  'compliance-state-undefined',
+  'Undefined',
 );
 
 export const ComplianceStateLabels = {
