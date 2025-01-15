@@ -16,6 +16,12 @@ class PageSelector {
   }
 }
 
+/**
+ * Get a PageSelector from the root state
+ *
+ * @param {Object} rootState
+ * @returns {PageSelector} A PageSelector instance
+ */
 const getPage = (rootState = {}) => new PageSelector(rootState.pages);
 
 export default getPage;
