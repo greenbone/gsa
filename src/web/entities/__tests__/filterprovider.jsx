@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
+import {beforeEach, vi} from 'vitest';
 import {pageFilter} from 'web/store/pages/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
@@ -12,11 +13,34 @@ import {rendererWith, screen} from 'web/utils/testing';
 
 import FilterProvider from '../filterprovider';
 
+let mockSearchParams = {};
+const mockUseNavigate = vi.fn();
+const mockUseSearchParams = vi
+  .fn()
+  .mockReturnValue([
+    {get: key => mockSearchParams[key]},
+    {set: (key, value) => (mockSearchParams[key] = value)},
+  ]);
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useLocation: () => ({pathname: '/'}),
+    useNavigate: () => mockUseNavigate(),
+    useSearchParams: () => mockUseSearchParams(),
+  };
+});
+
+beforeEach(() => {
+  mockSearchParams = {};
+});
+
 describe('FilterProvider component tests', () => {
-  test('should prefer locationQuery filter over defaultSettingFilter', async () => {
+  test('should prefer search params filter over defaultSettingFilter', async () => {
     const resultingFilter = Filter.fromString('location=query rows=42');
 
-    const locationQuery = {filter: 'location=query'};
+    mockSearchParams['filter'] = 'location=query';
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
 
@@ -42,11 +66,7 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    render(
-      <FilterProvider gmpname="task" locationQuery={locationQuery}>
-        {renderFunc}
-      </FilterProvider>,
-    );
+    render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
 
     await screen.findByTestId('awaiting-span');
 

@@ -46,14 +46,7 @@ const useDefaultFilter = pageName =>
  *          filter and function to reset the filter
  */
 
-const usePageFilter = (
-  pageName,
-  gmpName,
-  {
-    fallbackFilter,
-    locationQueryFilterString: initialLocationQueryFilterString,
-  } = {},
-) => {
+const usePageFilter = (pageName, gmpName, {fallbackFilter} = {}) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -73,9 +66,7 @@ const usePageFilter = (
 
   // use null as value for not set at all
   let returnedFilter;
-  // only use searchParams directly if locationQueryFilterString is undefined
-  const locationQueryFilterString =
-    initialLocationQueryFilterString || searchParams.get('filter');
+  const locationQueryFilterString = searchParams.get('filter');
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
     hasValue(locationQueryFilterString)
