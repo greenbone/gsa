@@ -213,9 +213,14 @@ const LoggedInRoutes = () => {
 
             <Route element={<PageNotFound />} path="/notfound" />
             <Route element={<AuditReportsPage />} path="/auditreports" />
-            <Route element={<DeltaAuditReportDetailsPage />}
-                        path="/auditreport/delta/:id/:deltaid" />
-            <Route element= {<AuditReportDetailsPage />} path="/auditreport/:id" />
+            <Route
+              element={<DeltaAuditReportDetailsPage />}
+              path="/auditreport/delta/:id/:deltaid"
+            />
+            <Route
+              element={<AuditReportDetailsPage />}
+              path="/auditreport/:id"
+            />
             <Route element={<Navigate to="/dashboards" />} path="/" />
 
             <Route element={<PageNotFound />} path="*" />
@@ -241,7 +246,16 @@ const AppRoutes = () => {
   }
 
   return (
-    <Router>{isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}</Router>
+    <Router
+      future={{
+        // eslint-disable-next-line camelcase
+        v7_startTransition: true,
+        // eslint-disable-next-line camelcase
+        v7_relativeSplatPath: false,
+      }}
+    >
+      {isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}
+    </Router>
   );
 };
 
