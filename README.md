@@ -52,7 +52,8 @@ and the fingerprint is `8AE4 BE42 9B60 A59B 311C  2E73 9823 FAA6 0ED1 E580`.
 ## Installation
 
 Prerequisites for GSA:
-* node.js >= 18.0
+
+- node.js >= 18.0
 
 To install nodejs the following commands can be used
 
@@ -132,10 +133,10 @@ file](#config-file). The following lines can be used for a local gsad running
 with HTTP on port 9392:
 
 ```javascript
-  config = {
-    apiProtocol: 'http',
-    apiServer: '127.0.0.1:9392',
-  };
+config = {
+  apiProtocol: 'http',
+  apiServer: '127.0.0.1:9392',
+};
 ```
 
 For HTTPS only the protocol property must be `'https'` accordingly.
@@ -202,7 +203,7 @@ This sections lists all settings and explains their behavior.
 ### Config File
 
 The config file is a normal JavaScript file (with a .js suffix). It is named
-`config.js` and will be loaded from  the `/usr/share/gvm/gsad/web/` (or
+`config.js` and will be loaded from the `/usr/share/gvm/gsad/web/` (or
 `/usr/local/share/gvm/gsad/web/`) directory when using [gsad] for providing GSA
 e.g. in production environments.
 
@@ -216,7 +217,7 @@ properties e.g.
 config = {
   // javascript files in contrast to JSON files allow comments
   foo: 'bar',
-}
+};
 ```
 
 It is evaluated in the `GmpSettings` object implemented in the
@@ -224,8 +225,9 @@ It is evaluated in the `GmpSettings` object implemented in the
 instantiated once for the [GSA application](./src/web/app.js#L53)
 
 ### Config Variables
+
 | Name                                              | Type                       | Default                                                                          | Changeable during runtime | Persistent after reload |
-|---------------------------------------------------|----------------------------|----------------------------------------------------------------------------------|---------------------------|-------------------------|
+| ------------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
 | [apiProtocol](#apiprotocol)                       | String ('http' or 'https') | `global.location.protocol`                                                       | -                         | x                       |
 | [apiServer](#apiserver)                           | String                     | `global.location.host`                                                           | -                         | x                       |
 | enableGreenboneSensor                             | Boolean                    | false                                                                            | -                         | x                       |
@@ -239,9 +241,9 @@ instantiated once for the [GSA application](./src/web/app.js#L53)
 | [manualUrl](#manualurl)                           | String                     | [https://docs.greenbone.net/GSM-Manual/gos-22.04/](./src/gmp/gmpsettings.js#L24) | -                         | x                       |
 | [manualLanguageMapping](#manuallanguagemapping)   | Object                     | undefined                                                                        | -                         | x                       |
 | [protocolDocUrl](#protocoldocurl)                 | String                     | [https://docs.greenbone.net/API/GMP/gmp-22.4.html](./src/gmp/gmpsettings.js#L25) | -                         | x                       |
-| [reloadInterval](#reloadinterval)                 | Integer                    | [15 * 1000; // fifteen seconds](./src/gmp/gmpsettings.js#L21)                    | x                         | -                       |
-| [reloadIntervalActive](#reloadintervalactive)     | Integer                    | [3 * 1000; // three seconds](./src/gmp/gmpsettings.js#L22)                       | x                         | -                       |
-| [reloadIntervalInactive](#reloadintervalinactive) | Integer                    | [60 * 1000; // one minute](./src/gmp/gmpsettings.js#L22)                         | x                         | -                       |
+| [reloadInterval](#reloadinterval)                 | Integer                    | [15 \* 1000; // fifteen seconds](./src/gmp/gmpsettings.js#L21)                   | x                         | -                       |
+| [reloadIntervalActive](#reloadintervalactive)     | Integer                    | [3 \* 1000; // three seconds](./src/gmp/gmpsettings.js#L22)                      | x                         | -                       |
+| [reloadIntervalInactive](#reloadintervalinactive) | Integer                    | [60 \* 1000; // one minute](./src/gmp/gmpsettings.js#L22)                        | x                         | -                       |
 | [reportResultsThreshold](#reportresultsthreshold) | Integer                    | [25000](./src/gmp/gmpsettings.js#L26)                                            | x                         | -                       |
 | [timeout](#timeout)                               | Integer                    | [300000; // 5 minutes](./src/gmp/gmpsettings.js#L28)                             | x                         | -                       |
 | [vendorVersion](#vendorversion)                   | String                     | undefined                                                                        | -                         | x                       |
@@ -268,7 +270,7 @@ will be shown.
 #### disableLoginForm
 
 This setting allows to deactivate the username password form at the Login page.
-It can be used to deactivate login for *normal* users.
+It can be used to deactivate login for _normal_ users.
 
 #### enableEPSS
 
@@ -327,12 +329,11 @@ English (`en`) locale.
 #### protocolDocUrl
 
 This setting contains the URL to the public Greenbone Management Protocol (GMP)
-documentation. It is https://docs.greenbone.net/API/GMP/gmp-22.4.html and only
-used at the About page.
+documentation. It is only used at the About page.
 
 #### reloadInterval
 
-The *standard* interval for reloading data. The default is 15 seconds
+The _standard_ interval for reloading data. The default is 15 seconds
 (15000 ms).
 
 #### reloadIntervalActive
