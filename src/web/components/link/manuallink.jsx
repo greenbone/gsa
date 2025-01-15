@@ -10,13 +10,15 @@ import PropTypes from 'web/utils/proptypes';
 
 import BlankLink from './blanklink';
 
-const ManualLink = ({anchor, page, searchTerm, lang, ...props}) => {
+const ManualLink = ({anchor, page, searchTerm, lang, highlight, ...props}) => {
   const manualURL = useManualURL(lang);
 
   let url = manualURL + '/' + page + '.html';
 
   if (page === 'search' && isDefined(searchTerm)) {
     url += '?q=' + searchTerm;
+  } else if (isDefined(highlight)) {
+    url += '?highlight=' + highlight;
   } else if (isDefined(anchor)) {
     url += '#' + anchor;
   }
@@ -25,6 +27,7 @@ const ManualLink = ({anchor, page, searchTerm, lang, ...props}) => {
 
 ManualLink.propTypes = {
   anchor: PropTypes.string,
+  highlight: PropTypes.string,
   lang: PropTypes.string,
   page: PropTypes.string.isRequired,
   searchTerm: PropTypes.string,
