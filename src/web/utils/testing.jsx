@@ -125,7 +125,7 @@ const TestingLicenseProvider = withProvider(
 )(LicenseProvider);
 
 export const rendererWith = (
-  {capabilities, gmp, license, store, router} = {
+  {capabilities, gmp, license, store = true, router} = {
     store: true,
     router: true,
   },
