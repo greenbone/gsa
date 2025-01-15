@@ -823,7 +823,10 @@ UserSettings.propTypes = {
   credentials: PropTypes.array,
   credentialsFilter: PropTypes.object,
   cveFilter: PropTypes.object,
-  userInterfaceDateFormat: PropTypes.oneOf(['wdmy', 'wmdy', SYSTEM_DEFAULT]),
+  userInterfaceDateFormat: PropTypes.shape({
+    comment: PropTypes.string,
+    value: PropTypes.oneOf(['wdmy', 'wmdy', SYSTEM_DEFAULT]),
+  }),
   defaultAlert: PropTypes.object,
   defaultEsxiCredential: PropTypes.object,
   defaultOpenvasScanConfig: PropTypes.object,
@@ -883,7 +886,10 @@ UserSettings.propTypes = {
   tasksFilter: PropTypes.object,
   ticketsFilter: PropTypes.object,
   timezone: PropTypes.string,
-  userInterfaceTimeFormat: PropTypes.oneOf([12, 24, SYSTEM_DEFAULT]),
+  userInterfaceTimeFormat: PropTypes.shape({
+    comment: PropTypes.string,
+    value: PropTypes.oneOf([12, 24, SYSTEM_DEFAULT]),
+  }),
   tlsCertificatesFilter: PropTypes.object,
   userInterfaceLanguage: PropTypes.object,
   usersFilter: PropTypes.object,
