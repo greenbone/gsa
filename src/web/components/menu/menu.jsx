@@ -20,12 +20,14 @@ import {useMatch} from 'react-router-dom';
 import Link from 'web/components/link/link';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
+import useManualURL from 'web/hooks/useManualURL';
 import useTranslation from 'web/hooks/useTranslation';
 
 const Menu = () => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const gmp = useGmp();
+  const manualURL = useManualURL();
 
   function checkCapabilities(capabilitiesList) {
     return capabilitiesList.reduce(
@@ -355,7 +357,7 @@ const Menu = () => {
         subNav: [
           {
             label: _('User Manual'),
-            to: 'https://docs.greenbone.net/GSM-Manual/gos-22.04/en/',
+            to: manualURL,
             isExternal: true,
           },
           {
