@@ -3,44 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useGmp from 'web/hooks/useGmp';
+import useManualURL from 'web/hooks/useManualURL';
 import PropTypes from 'web/utils/proptypes';
 
 import BlankLink from './blanklink';
 
-const LANGUAGE_MAPPING = {
-  de: 'de',
-};
-
-const DEFAULT_LANGUAGE_PATH = 'en';
-
-const getLanguagePath = (
-  lang = getLocale(),
-  languageMapping = LANGUAGE_MAPPING,
-) => {
-  if (!isDefined(lang)) {
-    return DEFAULT_LANGUAGE_PATH;
-  }
-
-  const code = lang.slice(0, 2);
-  const path = languageMapping[code];
-
-  return isDefined(path) ? path : DEFAULT_LANGUAGE_PATH;
-};
-
 const ManualLink = ({anchor, page, searchTerm, lang, ...props}) => {
-  const gmp = useGmp();
-  const {manualUrl, manualLanguageMapping} = gmp.settings;
+  const manualURL = useManualURL(lang);
 
-  let url = manualUrl;
-  if (!url.endsWith('/')) {
-    url += '/';
-  }
-
-  url += getLanguagePath(lang, manualLanguageMapping) + '/' + page + '.html';
+  let url = manualURL + '/' + page + '.html';
 
   if (page === 'search' && isDefined(searchTerm)) {
     url += '?q=' + searchTerm;
