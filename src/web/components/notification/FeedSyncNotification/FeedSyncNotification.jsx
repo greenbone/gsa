@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import BlankLink from 'web/components/link/blanklink';
+import ManualLink from 'web/components/link/manuallink';
 import {
   useFeedSyncStatus,
   useFeedSyncDialog,
@@ -51,13 +51,14 @@ const FeedSyncNotification = () => {
             {_(
               `Please wait while the feed is syncing. Scans are not available during this time. For more information, visit the`,
             )}{' '}
-            <BlankLink
-              to={
-                'https://docs.greenbone.net/GSM-Manual/gos-21.04/en/scanning.html?highlight=scan'
-              }
+            <ManualLink
+              highlight="scan"
+              page="scanning"
+              title={_('Documentation')}
             >
-              {_('Documentation')}.
-            </BlankLink>
+              {_('Documentation')}
+            </ManualLink>
+            .
           </p>
         )}
       </InfoPanel>
