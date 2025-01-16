@@ -39,12 +39,17 @@ class Cpe extends Info {
       delete ret.update_time;
     }
 
-    if (isDefined(ret.raw_data) && isDefined(ret.raw_data['cpe-item'])) {
-      const cpeItem = ret.raw_data['cpe-item'];
-      if (isDefined(cpeItem._deprecated_by)) {
-        ret.deprecatedBy = cpeItem._deprecated_by;
-      }
+    /*
+     * This code includes a backup check for deprecated field `raw_data`.
+     * Once `raw_data` is removed from the API, this backup check can be removed.
+     */
+
+    if (ret.deprecate === 1 && isDefined(ret.deprecated_by)) {
+      ret.deprecatedBy = ret.deprecated_by;
+    } else if (isDefined(ret.raw_data?.['cpe-item']?._deprecated_by)) {
+      ret.deprecatedBy = ret.raw_data['cpe-item']._deprecated_by;
     }
+
     return ret;
   }
 }

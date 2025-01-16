@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseSeverity, parseDate, setProperties} from 'gmp/parser';
+import {parseDate, parseSeverity, setProperties} from 'gmp/parser';
 import {
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
@@ -116,10 +116,16 @@ class Cve extends Info {
     ret.cvssBaseVector = ret.cvss_vector;
     ret.products = isEmpty(ret.products) ? [] : ret.products.split(' ');
 
+    /*
+     * This code includes a check for deprecated field `raw_data`.
+     * Once `raw_data` is removed from the API, this check can be removed.
+     */
+
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
       const {entry} = ret.raw_data;
 
       ret.publishedTime = parseDate(entry['published-datetime']);
+
       ret.lastModifiedTime = parseDate(entry['last-modified-datetime']);
 
       ret.references = map(entry.references, ref => ({
@@ -154,43 +160,47 @@ class Cve extends Info {
           ret.products = [];
         }
       }
-
       delete ret.raw_data;
     } else {
+      ret.publishedTime = parseDate(ret['published-datetime']);
+      ret.lastModifiedTime = parseDate(ret['last-modified-datetime']);
+
       ret.references = [];
-    }
+      if (isDefined(element.cve?.references?.reference)) {
+        ret.references = map(element.cve.references.reference, ref => {
+          let tags = [];
+          if (isArray(ref.tags.tag)) {
+            tags = ref.tags.tag;
+          } else if (isDefined(ref.tags.tag)) {
+            tags = [ref.tags.tag];
+          }
+          return {
+            name: ref.url,
+            tags: tags,
+          };
+        });
+      }
 
-    if (isDefined(element.cve?.references?.reference)) {
-      ret.references = map(element.cve.references.reference, ref => {
-        let tags = [];
-        if (isArray(ref.tags.tag)) {
-          tags = ref.tags.tag;
-        } else if (isDefined(ref.tags.tag)) {
-          tags = [ref.tags.tag];
-        }
-        return {
-          name: ref.url,
-          tags: tags,
-        };
-      });
-    }
-
-    if (isDefined(element.cve?.configuration_nodes?.node)) {
-      const nodes = isArray(element.cve.configuration_nodes.node)
-        ? element.cve.configuration_nodes.node
-        : [element.cve.configuration_nodes.node];
-      nodes.forEach(node => {
-        if (isDefined(node.match_string?.matched_cpes?.cpe)) {
-          const cpes = isArray(node.match_string.matched_cpes.cpe)
-            ? node.match_string.matched_cpes.cpe
-            : [node.match_string.matched_cpes.cpe];
-          cpes.forEach(cpe => {
-            if (isDefined(cpe._id)) {
-              ret.products.push(cpe._id);
-            }
-          });
-        }
-      });
+      if (
+        ret.products.length === 0 &&
+        isDefined(element.cve?.configuration_nodes?.node)
+      ) {
+        const nodes = isArray(element.cve.configuration_nodes.node)
+          ? element.cve.configuration_nodes.node
+          : [element.cve.configuration_nodes.node];
+        nodes.forEach(node => {
+          if (isDefined(node.match_string?.matched_cpes?.cpe)) {
+            const cpes = isArray(node.match_string.matched_cpes.cpe)
+              ? node.match_string.matched_cpes.cpe
+              : [node.match_string.matched_cpes.cpe];
+            cpes.forEach(cpe => {
+              if (isDefined(cpe._id)) {
+                ret.products.push(cpe._id);
+              }
+            });
+          }
+        });
+      }
     }
 
     return ret;
