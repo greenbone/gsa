@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {DEFAULT_MANUAL_URL} from 'gmp/gmpsettings';
 import {isDefined} from 'gmp/utils/identity';
 
 import useGmp from './useGmp';
@@ -28,13 +29,18 @@ const getLanguagePath = (locale, languageMapping) => {
 const useManualURL = locale => {
   const [userLocale] = useLocale();
   const gmp = useGmp();
-  const {manualUrl, manualLanguageMapping = DEFAULT_LANGUAGE_MAPPING} =
-    gmp.settings;
+  const {
+    manualUrl = DEFAULT_MANUAL_URL,
+    manualLanguageMapping = DEFAULT_LANGUAGE_MAPPING,
+  } = gmp.settings;
 
-  const baseUrl = manualUrl.endsWith('/') ? manualUrl : `${manualUrl}/`
-  const languagePath = getLanguagePath(locale ||userLocale, manualLanguageMapping)
-  
-  return `${baseUrl}${languagePath}` 
+  const baseUrl = manualUrl.endsWith('/') ? manualUrl : `${manualUrl}/`;
+  const languagePath = getLanguagePath(
+    locale || userLocale,
+    manualLanguageMapping,
+  );
+
+  return `${baseUrl}${languagePath}`;
 };
 
 export default useManualURL;
