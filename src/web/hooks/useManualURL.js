@@ -31,12 +31,10 @@ const useManualURL = locale => {
   const {manualUrl, manualLanguageMapping = DEFAULT_LANGUAGE_MAPPING} =
     gmp.settings;
 
-  let url = manualUrl;
-  if (!url.endsWith('/')) {
-    url += '/';
-  }
-  url += getLanguagePath(locale || userLocale, manualLanguageMapping);
-  return url;
+  const baseUrl = manualUrl.endsWith('/') ? manualUrl : `${manualUrl}/`
+  const languagePath = getLanguagePath(locale ||userLocale, manualLanguageMapping)
+  
+  return `${baseUrl}${languagePath}` 
 };
 
 export default useManualURL;
