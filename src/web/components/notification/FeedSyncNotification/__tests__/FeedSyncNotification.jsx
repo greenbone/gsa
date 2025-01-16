@@ -5,37 +5,36 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import FeedSyncNotification from 'web/components/notification/FeedSyncNotification/FeedSyncNotification';
+import {setSyncStatus, setError} from 'web/store/feedStatus/actions';
 import {rendererWith, waitFor, screen} from 'web/utils/testing';
 
+const gmp = {settings: {manualUrl: 'http://localhost/manual'}};
 
 describe('FeedSyncNotification', () => {
   test('should display syncing message when feed is syncing', async () => {
-    const {render, store} = rendererWith({store: true});
+    const {render, store} = rendererWith({store: true, gmp});
 
     render(<FeedSyncNotification />);
 
-    store.dispatch({type: 'SET_SYNC_STATUS', payload: {isSyncing: true}});
+    store.dispatch(setSyncStatus(true));
 
     await waitFor(() => {
       expect(screen.getByText('Feed is currently syncing.')).toBeVisible();
     });
     expect(
       screen.getByText(
-        'Please wait while the feed is syncing. Scans are not available during this time. For more information, visit the',
+        /Please wait while the feed is syncing. Scans are not available during this time. For more information, visit the/,
       ),
     ).toBeVisible();
-    expect(screen.getByText('Documentation.')).toBeVisible();
+    expect(screen.getByText(/Documentation/)).toBeVisible();
   });
 
   test('should display error message when there is an error', () => {
-    const {render, store} = rendererWith({store: true});
+    const {render, store} = rendererWith({store: true, gmp});
 
     render(<FeedSyncNotification />);
 
-    store.dispatch({
-      type: 'SET_ERROR',
-      payload: 'Error fetching the feed',
-    });
+    store.dispatch(setError('Error fetching the feed'));
 
     expect(screen.getByText('Error fetching the feed')).toBeVisible();
     expect(
@@ -49,8 +48,9 @@ describe('FeedSyncNotification', () => {
       ),
     ).toBeVisible();
   });
+
   test('should not render anything when isFeedSyncDialogOpened is false', async () => {
-    const {render} = rendererWith({store: true});
+    const {render} = rendererWith({store: true, gmp});
 
     render(<FeedSyncNotification />);
     expect(screen.queryByText('Feed is currently syncing.')).toBeNull();
