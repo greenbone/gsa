@@ -44,8 +44,8 @@ class Cpe extends Info {
      * Once `raw_data` is removed from the API, this backup check can be removed.
      */
 
-    if (ret.deprecate === 1 && isDefined(ret.deprecated_by)) {
-      ret.deprecatedBy = ret.deprecated_by;
+    if (ret.deprecated === 1 && isDefined(ret.deprecated_by)) {
+      ret.deprecatedBy = ret.deprecated_by._cpe_id;
     } else if (isDefined(ret.raw_data?.['cpe-item']?._deprecated_by)) {
       ret.deprecatedBy = ret.raw_data['cpe-item']._deprecated_by;
     }

@@ -117,89 +117,73 @@ class Cve extends Info {
     ret.products = isEmpty(ret.products) ? [] : ret.products.split(' ');
 
     /*
-     * This code includes a check for deprecated field `raw_data`.
+     * The following code blocks for published-datetime, last-modified-datetime, products, and references
+     * include a backup check for deprecated field `raw_data`.
      * Once `raw_data` is removed from the API, this check can be removed.
      */
 
-    if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
-      const {entry} = ret.raw_data;
+    ret.publishedTime = parseDate(
+      ret['creationTime'] ?? ret.raw_data?.entry?.['published-datetime'],
+    );
+    ret.lastModifiedTime = parseDate(
+      ret['modificationTime'] ??
+        ret.raw_data?.entry?.['last-modified-datetime'],
+    );
 
-      ret.publishedTime = parseDate(entry['published-datetime']);
-
-      ret.lastModifiedTime = parseDate(entry['last-modified-datetime']);
-
-      ret.references = map(entry.references, ref => ({
-        name: ref.reference.__text,
-        href: ref.reference._href,
+    ret.references = [];
+    if (isDefined(element.cve.references?.reference)) {
+      ret.references = map(element.cve.references.reference, ref => {
+        let tags = [];
+        if (isArray(ref.tags.tag)) {
+          tags = ref.tags.tag;
+        } else if (isDefined(ref.tags.tag)) {
+          tags = [ref.tags.tag];
+        }
+        return {
+          name: ref.url,
+          tags: tags,
+        };
+      });
+    } else {
+      const {entry} = ret.raw_data ?? {};
+      const referencesList = entry?.references || [];
+      ret.references = map(referencesList, ref => ({
+        name: ref.reference?.__text,
+        href: ref.reference?._href,
         source: ref.source,
         reference_type: ref._reference_type,
       }));
+    }
 
-      if (
-        isDefined(entry.cvss) &&
-        isDefined(entry.cvss.base_metrics) &&
-        isDefined(entry.cvss.base_metrics.source)
-      ) {
-        ret.source = entry.cvss.base_metrics.source;
-      }
-
-      if (isDefined(entry.summary)) {
-        // really don't know why entry.summary and ret.description can differ
-        // but xslt did use the summary and and e.g. the description of
-        // CVE-2017-2988 was empty but summary not
-        ret.description = entry.summary;
-      }
-
-      const products = entry['vulnerable-software-list'];
-      if (isDefined(products)) {
-        if (isDefined(products.product)) {
-          ret.products = isArray(products.product)
-            ? products.product
-            : [products.product];
-        } else {
-          ret.products = [];
+    if (
+      ret.products.length === 0 &&
+      isDefined(element.cve?.configuration_nodes?.node)
+    ) {
+      const nodes = isArray(element.cve.configuration_nodes.node)
+        ? element.cve.configuration_nodes.node
+        : [element.cve.configuration_nodes.node];
+      nodes.forEach(node => {
+        if (
+          node.match_string?.vulnerable === 1 &&
+          isDefined(node.match_string?.matched_cpes?.cpe)
+        ) {
+          const cpes = isArray(node.match_string.matched_cpes.cpe)
+            ? node.match_string.matched_cpes.cpe
+            : [node.match_string.matched_cpes.cpe];
+          cpes.forEach(cpe => {
+            if (isDefined(cpe._id)) {
+              ret.products.push(cpe._id);
+            }
+          });
         }
-      }
-      delete ret.raw_data;
+      });
     } else {
-      ret.publishedTime = parseDate(ret['published-datetime']);
-      ret.lastModifiedTime = parseDate(ret['last-modified-datetime']);
-
-      ret.references = [];
-      if (isDefined(element.cve?.references?.reference)) {
-        ret.references = map(element.cve.references.reference, ref => {
-          let tags = [];
-          if (isArray(ref.tags.tag)) {
-            tags = ref.tags.tag;
-          } else if (isDefined(ref.tags.tag)) {
-            tags = [ref.tags.tag];
-          }
-          return {
-            name: ref.url,
-            tags: tags,
-          };
-        });
-      }
-
-      if (
-        ret.products.length === 0 &&
-        isDefined(element.cve?.configuration_nodes?.node)
-      ) {
-        const nodes = isArray(element.cve.configuration_nodes.node)
-          ? element.cve.configuration_nodes.node
-          : [element.cve.configuration_nodes.node];
-        nodes.forEach(node => {
-          if (isDefined(node.match_string?.matched_cpes?.cpe)) {
-            const cpes = isArray(node.match_string.matched_cpes.cpe)
-              ? node.match_string.matched_cpes.cpe
-              : [node.match_string.matched_cpes.cpe];
-            cpes.forEach(cpe => {
-              if (isDefined(cpe._id)) {
-                ret.products.push(cpe._id);
-              }
-            });
-          }
-        });
+      const productsEntry =
+        ret.raw_data?.entry?.['vulnerable-software-list']?.product;
+      if (productsEntry) {
+        ret.products = isArray(productsEntry) ? productsEntry : [productsEntry];
+      } else {
+        ret.products = [];
       }
     }
 
