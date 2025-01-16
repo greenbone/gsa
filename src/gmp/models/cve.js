@@ -114,6 +114,7 @@ class Cve extends Info {
     }
 
     ret.cvssBaseVector = ret.cvss_vector;
+
     ret.products = isEmpty(ret.products) ? [] : ret.products.split(' ');
 
     /*
@@ -131,7 +132,7 @@ class Cve extends Info {
     );
 
     ret.references = [];
-    if (isDefined(element.cve.references?.reference)) {
+    if (element.cve && isDefined(element.cve.references?.reference)) {
       ret.references = map(element.cve.references.reference, ref => {
         let tags = [];
         if (isArray(ref.tags.tag)) {
@@ -156,6 +157,7 @@ class Cve extends Info {
     }
 
     if (
+      ret.products &&
       ret.products.length === 0 &&
       isDefined(element.cve?.configuration_nodes?.node)
     ) {
@@ -182,10 +184,10 @@ class Cve extends Info {
         ret.raw_data?.entry?.['vulnerable-software-list']?.product;
       if (productsEntry) {
         ret.products = isArray(productsEntry) ? productsEntry : [productsEntry];
-      } else {
-        ret.products = [];
       }
     }
+
+    ret.products = ret.products.filter(product => product !== '');
 
     return ret;
   }

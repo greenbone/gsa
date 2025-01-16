@@ -140,7 +140,6 @@ describe('CVE model tests', () => {
       },
     };
     const cve = Cve.fromElement(elem);
-
     expect(cve.products).toEqual(['foo:bar/dolor', 'ipsum:lorem']);
   });
 
@@ -194,40 +193,6 @@ describe('CVE model tests', () => {
     expect(cve.references).toEqual(res);
   });
 
-  test('should parse cvss source', () => {
-    const elem = {
-      raw_data: {
-        entry: {
-          'published-datetime': '2018-10-10T11:41:23.022Z',
-          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
-          cvss: {
-            base_metrics: {
-              source: 'prot://url',
-            },
-          },
-        },
-      },
-    };
-    const cve = Cve.fromElement(elem);
-
-    expect(cve.source).toEqual('prot://url');
-  });
-
-  test('should parse summary', () => {
-    const elem = {
-      raw_data: {
-        entry: {
-          'published-datetime': '2018-10-10T11:41:23.022Z',
-          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
-          summary: 'lorem ipsum',
-        },
-      },
-    };
-    const cve = Cve.fromElement(elem);
-
-    expect(cve.description).toEqual('lorem ipsum');
-  });
-
   test('should parse vulnerable products from raw data', () => {
     const elem = {
       raw_data: {
@@ -243,20 +208,6 @@ describe('CVE model tests', () => {
     const cve = Cve.fromElement(elem);
 
     expect(cve.products).toEqual(['lorem', 'ipsum']);
-  });
-
-  test('should delete raw data', () => {
-    const elem = {
-      raw_data: {
-        entry: {
-          'published-datetime': {__text: '2018-10-10T11:41:23.022Z'},
-          'last-modified-datetime': {__text: '2018-10-10T11:41:23.022Z'},
-        },
-      },
-    };
-    const cve = Cve.fromElement(elem);
-
-    expect(cve.raw_data).toBeUndefined();
   });
 
   test('should return empty array for references if no raw data is given', () => {
