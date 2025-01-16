@@ -4,6 +4,7 @@
  */
 
 import _ from 'gmp/locale';
+import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DateTime from 'web/components/date/datetime';
 import CveIcon from 'web/components/icon/cveicon';
@@ -144,15 +145,23 @@ const EntityInfo = ({entity}) => {
       <div>{id}</div>
       <div>{_('Published:')}</div>
       <div>
-        <DateTime date={publishedTime} />
+        {isDefined(publishedTime) ? (
+          <DateTime date={publishedTime} />
+        ) : (
+          _('N/A')
+        )}
       </div>
       <div>{_('Modified:')}</div>
       <div>
-        <DateTime date={updateTime} />
+        {isDefined(updateTime) ? <DateTime date={updateTime} /> : _('N/A')}
       </div>
       <div>{_('Last updated:')}</div>
       <div>
-        <DateTime date={lastModifiedTime} />
+        {isDefined(lastModifiedTime) ? (
+          <DateTime date={lastModifiedTime} />
+        ) : (
+          _('N/A')
+        )}
       </div>
     </InfoLayout>
   );
