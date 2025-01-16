@@ -143,6 +143,7 @@ class Cve extends Info {
         return {
           name: ref.url,
           tags: tags,
+          href: ref.url,
         };
       });
     } else {
