@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
-
 import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -41,8 +38,7 @@ const ToolBarIcons = () => {
   return (
     <IconDivider>
       <ManualIcon
-        anchor="using-and-managing-audit-reports"
-        page="reports"
+        page="compliance-and-special-scans"
         title={_('Help: Audit Reports')}
       />
     </IconDivider>
