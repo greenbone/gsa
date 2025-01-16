@@ -144,7 +144,17 @@ export const rendererWith = (
         <TestingLicenseProvider license={license}>
           <TestingStoreProvider store={store}>
             {router ? (
-              <BrowserRouter initialEntries={['/']}>{children}</BrowserRouter>
+              <BrowserRouter
+                future={{
+                  // eslint-disable-next-line camelcase
+                  v7_startTransition: true,
+                  // eslint-disable-next-line camelcase
+                  v7_relativeSplatPath: false,
+                }}
+                initialEntries={['/']}
+              >
+                {children}
+              </BrowserRouter>
             ) : (
               children
             )}
