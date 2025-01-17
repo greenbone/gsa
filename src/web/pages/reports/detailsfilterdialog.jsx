@@ -125,7 +125,10 @@ const ReportDetailsFilterDialog = ({
         />
       )}
 
-      <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
+      <SolutionTypeGroup
+        filter={filter}
+        onChange={value => onFilterChange(value)}
+      />
 
       <FilterSearchGroup
         filter={filter}
