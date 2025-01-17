@@ -48,9 +48,9 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     checked={!isDefined(solutionType) || solutionType === 'All'}
                     data-testid="filter-solution-all"
                     name="All"
+                    title={_('All')}
                     onChange={handleSolutionTypeChange}
-                  ></Radio>
-                  <span>{_('All')}</span>
+                  />
                 </Row>
               </TableData>
               <TableData>
@@ -59,10 +59,10 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     checked={solutionType === 'Workaround'}
                     data-testid="filter-solution-workaround"
                     name="Workaround"
+                    title={_('Workaround')}
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="Workaround" />
-                  <span>{_('Workaround')}</span>
                 </Row>
               </TableData>
               <TableData>
@@ -71,10 +71,10 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     checked={solutionType === 'Mitigation'}
                     data-testid="filter-solution-mitigation"
                     name="Mitigation"
+                    title={_('Mitigation')}
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="Mitigation" />
-                  <span>{_('Mitigation')}</span>
                 </Row>
               </TableData>
             </TableRow>
@@ -85,10 +85,10 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     checked={solutionType === 'VendorFix'}
                     data-testid="filter-solution-vendor-fix"
                     name="VendorFix"
+                    title={_('Vendor Fix')}
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="VendorFix" />
-                  <span>{_('Vendor fix')}</span>
                 </Row>
               </TableData>
               <TableData>
@@ -97,10 +97,10 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     checked={solutionType === 'NoneAvailable'}
                     data-testid="filter-solution-none-available"
                     name="NoneAvailable"
+                    title={_('None available')}
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="NoneAvailable" />
-                  <span>{_('None available')}</span>
                 </Row>
               </TableData>
               <TableData>
@@ -109,10 +109,10 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     checked={solutionType === 'WillNotFix'}
                     data-testid="filter-solution-will-not-fix"
                     name="WillNotFix"
+                    title={_('Will not fix')}
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="WillNotFix" />
-                  <span>{_('Will not fix')}</span>{' '}
                 </Row>
               </TableData>
             </TableRow>
