@@ -28,7 +28,7 @@ const GreenboneFooter = () => {
     <Footer>
       Copyright © 2009-2025 by Greenbone AG,&nbsp;
       <Link
-        href="http://www.greenbone.net"
+        href="https://www.greenbone.net"
         rel="noopener noreferrer"
         target="_blank"
       >
