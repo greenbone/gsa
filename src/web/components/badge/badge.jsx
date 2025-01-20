@@ -18,23 +18,22 @@ const BadgeContainer = styled.div`
 BadgeContainer.displayName = 'BadgeContainer';
 
 const BadgeIcon = styled.span`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: inline-flex;
   justify-content: center;
-  align-content: center;
   align-items: center;
   position: absolute;
-  font-size: 10px;
+  font-size: 0.75em;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 50%;
   min-width: 10px;
-  padding: 3px 5px;
+  padding: 0.25em 0.5em;
   z-index: ${Theme.Layers.higher};
   background-color: ${({$backgroundColor = Theme.green}) => $backgroundColor};
   color: ${({$color = Theme.white}) => $color};
-  ${({$position = 'bottom'}) => $position}: ${({radius = 8}) => -radius}px;
-  right: ${({$margin = 8}) => -$margin}px;
+  top: ${({$position}) => ($position === 'top' ? '0' : 'auto')};
+  bottom: ${({$position}) => ($position === 'bottom' ? '0' : 'auto')};
+  right: 0;
+  transform: translate(80%, -50%);
 `;
 
 BadgeIcon.displayName = 'BadgeIcon';

@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {describe, test, expect} from '@gsa/testing';
 import ReportIcon from 'web/components/icon/reporticon';
 import {render} from 'web/utils/testing';
 
 import Badge from '../badge';
-
 
 describe('Badge tests', () => {
   test('should render badge', () => {
@@ -46,13 +44,13 @@ describe('Badge tests', () => {
     const {getByTestId} = render(<Badge content="1" position="bottom" />);
     const icon = getByTestId('badge-icon');
 
-    expect(icon).toHaveStyleRule('bottom', '-8px');
+    expect(icon).toHaveStyleRule('bottom', '0');
   });
 
   test('should not be dynamic', () => {
     const {getByTestId} = render(<Badge content="1" dynamic={false} />);
 
     const icon = getByTestId('badge-icon');
-    expect(icon).toHaveStyleRule('right', '-8px');
+    expect(icon).toHaveStyleRule('right', '0');
   });
 });
