@@ -49,7 +49,7 @@ describe('Edit Report Config Dialog component tests', () => {
     render(
       <ReportConfigDialog
         formats={formats}
-        reportconfig={config}
+        reportConfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -75,7 +75,7 @@ describe('Edit Report Config Dialog component tests', () => {
     render(
       <ReportConfigDialog
         formats={formats}
-        reportconfig={config}
+        reportConfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -128,7 +128,7 @@ describe('Edit Report Config Dialog component tests', () => {
     render(
       <ReportConfigDialog
         formats={formats}
-        reportconfig={config}
+        reportConfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -154,7 +154,7 @@ describe('Edit Report Config Dialog component tests', () => {
     render(
       <ReportConfigDialog
         formats={formats}
-        reportconfig={config}
+        reportConfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -246,7 +246,7 @@ describe('Edit Report Config Dialog component tests', () => {
     render(
       <ReportConfigDialog
         formats={formats}
-        reportconfig={config}
+        reportConfig={config}
         title="Edit Report Config"
         onClose={handleClose}
         onSave={handleSave}
@@ -328,7 +328,7 @@ describe('New Report Config Dialog component tests', () => {
     const {baseElement} = render(
       <ReportConfigDialog
         formats={formats}
-        reportconfig={undefined}
+        reportConfig={undefined}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -408,7 +408,7 @@ describe('New Report Config Dialog component tests', () => {
     render(
       <ReportConfigDialog
         formats={formats}
-        reportconfig={undefined}
+        reportConfig={undefined}
         onClose={handleClose}
         onSave={handleSave}
         onValueChange={handleValueChange}
