@@ -178,6 +178,7 @@ class Dialog extends React.Component {
         originalParamInfo,
         params,
         paramsUsingDefault,
+        reportFormatId: value,
       });
     });
 
@@ -250,6 +251,7 @@ class Dialog extends React.Component {
         originalParamInfo,
         params,
         paramsUsingDefault,
+        reportFormatId: reportConfig.report_format.id,
       });
     }
   }
@@ -285,7 +287,8 @@ class Dialog extends React.Component {
         }
       : undefined;
 
-    const {originalParamInfo, params, paramsUsingDefault} = this.state;
+    const {reportFormatId, originalParamInfo, params, paramsUsingDefault} =
+      this.state;
 
     return (
       <SaveDialog
@@ -322,7 +325,7 @@ class Dialog extends React.Component {
                     grow="1"
                     items={formatItems}
                     name="reportFormat"
-                    value={state.reportFormat}
+                    value={reportFormatId}
                     onChange={this.handleReportFormatChange}
                   />
                 ) : (
