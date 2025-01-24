@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import ReportConfig from 'gmp/models/reportconfig';
 import {
   clickElement,
