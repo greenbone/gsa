@@ -167,18 +167,17 @@ class Dialog extends React.Component {
     gmp.reportformat.get({id: value}).then(response => {
       const originalParamInfo = response.data.params;
       const params = {};
-      const params_using_default = {};
+      const paramsUsingDefault = {};
 
       originalParamInfo.forEach(param => {
         params[param.name] = param.value;
-        params_using_default[param.name] = true;
+        paramsUsingDefault[param.name] = true;
       });
 
       this.setState({
         originalParamInfo,
         params,
-        params_using_default,
-        report_format_id: value,
+        paramsUsingDefault,
       });
     });
 
@@ -189,11 +188,11 @@ class Dialog extends React.Component {
 
   handlePrefChange(value, name) {
     const {onValueChange} = this.props;
-    const {params, params_using_default} = this.state;
+    const {params, paramsUsingDefault} = this.state;
 
     params[name] = value;
-    params_using_default[name] = false;
-    this.setState({params, params_using_default});
+    paramsUsingDefault[name] = false;
+    this.setState({params, paramsUsingDefault});
 
     if (onValueChange) {
       onValueChange(params, 'params');
@@ -202,35 +201,32 @@ class Dialog extends React.Component {
 
   handleParamUsingDefaultChange(value, name) {
     const {onValueChange} = this.props;
-    const {params_using_default} = this.state;
+    const {paramsUsingDefault} = this.state;
 
-    params_using_default[name] = value;
-    this.setState({params_using_default});
+    paramsUsingDefault[name] = value;
+    this.setState({paramsUsingDefault});
 
     if (onValueChange) {
-      onValueChange(params_using_default, 'params_using_default');
+      onValueChange(paramsUsingDefault, 'params_using_default');
     }
   }
 
   handleSave(data) {
     const {onSave} = this.props;
     if (isDefined(onSave)) {
-      const {
-        params,
-        params_using_default,
-        report_format_id,
-        originalParamInfo,
-      } = this.state;
-      const param_types = {};
-      originalParamInfo.forEach(param_item => {
-        param_types[param_item.name] = param_item.type;
+      const {params, paramsUsingDefault, reportFormatId, originalParamInfo} =
+        this.state;
+      const paramTypes = {};
+      originalParamInfo.forEach(paramItem => {
+        paramTypes[paramItem.name] = paramItem.type;
       });
+
       onSave({
         ...data,
         params,
-        params_using_default,
-        param_types,
-        report_format_id,
+        params_using_default: paramsUsingDefault,
+        param_types: paramTypes,
+        report_format_id: reportFormatId,
       });
     }
   }
@@ -240,20 +236,20 @@ class Dialog extends React.Component {
     if (isDefined(reportConfig)) {
       const originalParamInfo = reportConfig.params;
       const params = {};
-      const params_using_default = {};
+      const paramsUsingDefault = {};
 
       originalParamInfo.forEach(param => {
         params[param.name] = param.value;
-        params_using_default[param.name] = false;
+        paramsUsingDefault[param.name] = false;
         if (isDefined(param.value_using_default)) {
-          params_using_default[param.name] = param.value_using_default;
+          paramsUsingDefault[param.name] = param.value_using_default;
         }
       });
 
       this.setState({
         originalParamInfo,
         params,
-        params_using_default,
+        paramsUsingDefault,
       });
     }
   }
@@ -266,38 +262,35 @@ class Dialog extends React.Component {
       onClose,
     } = this.props;
 
-    const is_edit = isDefined(reportConfig);
+    const isEdit = isDefined(reportConfig);
 
-    const configurable_formats = isDefined(formats)
+    const configurableFormats = isDefined(formats)
       ? formats.filter(format => format.configurable)
       : [];
 
-    const format_items = configurable_formats.map(format => ({
+    const formatItems = configurableFormats.map(format => ({
       label: format.name,
       value: format.id,
     }));
 
-    const default_values = {
+    const defaultValues = {
       name: _('Unnamed'),
       comment: '',
     };
 
-    const report_config_values = isDefined(reportConfig)
+    const reportConfigValues = isDefined(reportConfig)
       ? {
           ...reportConfig,
-          report_format: reportConfig.report_format.id,
           comment: isDefined(reportConfig.comment) ? reportConfig.comment : '',
         }
       : undefined;
 
-    const {originalParamInfo, params, params_using_default} = this.state;
+    const {originalParamInfo, params, paramsUsingDefault} = this.state;
 
     return (
       <SaveDialog
         defaultValues={
-          isDefined(report_config_values)
-            ? report_config_values
-            : default_values
+          isDefined(reportConfigValues) ? reportConfigValues : defaultValues
         }
         title={title}
         onClose={onClose}
@@ -323,13 +316,13 @@ class Dialog extends React.Component {
               </FormGroup>
 
               <FormGroup title={_('Report Format')}>
-                {isDefined(format_items) && format_items.length > 0 ? (
+                {isDefined(formatItems) && formatItems.length > 0 ? (
                   <Select
-                    disabled={is_edit}
+                    disabled={isEdit}
                     grow="1"
-                    items={format_items}
-                    name="report_format"
-                    value={state.report_format}
+                    items={formatItems}
+                    name="reportFormat"
+                    value={state.reportFormat}
                     onChange={this.handleReportFormatChange}
                   />
                 ) : (
@@ -354,8 +347,8 @@ class Dialog extends React.Component {
                           key={param.name}
                           data={params}
                           formats={formats}
-                          isEdit={is_edit}
-                          usingDefaultData={params_using_default}
+                          isEdit={isEdit}
+                          usingDefaultData={paramsUsingDefault}
                           value={param}
                           onParamUsingDefaultChange={
                             this.handleParamUsingDefaultChange
