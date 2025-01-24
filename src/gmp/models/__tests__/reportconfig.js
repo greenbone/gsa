@@ -466,12 +466,12 @@ describe('Report Config model tests', () => {
 
       expect(reportConfig.params[0].type).toEqual('report_format_list');
       expect(reportConfig.params[0].value).toEqual(['42', '21']);
-      expect(reportConfig.params[0].value_labels).toEqual({
+      expect(reportConfig.params[0].valueLabels).toEqual({
         42: 'ABC',
         21: 'DEF',
       });
       expect(reportConfig.params[0].default).toEqual(['12', '34']);
-      expect(reportConfig.params[0].default_labels).toEqual({
+      expect(reportConfig.params[0].defaultLabels).toEqual({
         12: 'GHI',
         34: 'JKL',
       });
@@ -479,9 +479,9 @@ describe('Report Config model tests', () => {
 
       expect(reportConfig.params[1].type).toEqual('report_format_list');
       expect(reportConfig.params[1].value).toEqual(['123']);
-      expect(reportConfig.params[1].value_labels).toEqual({123: 'XYZ'});
+      expect(reportConfig.params[1].valueLabels).toEqual({123: 'XYZ'});
       expect(reportConfig.params[1].default).toEqual(['456']);
-      expect(reportConfig.params[1].default_labels).toEqual({456: 'UVW'});
+      expect(reportConfig.params[1].defaultLabels).toEqual({456: 'UVW'});
       expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
     });
   });

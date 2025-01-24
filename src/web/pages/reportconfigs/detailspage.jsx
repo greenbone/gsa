@@ -138,7 +138,7 @@ const Parameters = ({entity}) => {
                   <ReportConfigParamValue
                     param={param}
                     value={param.default}
-                    value_labels={param.default_labels}
+                    valueLabels={param.defaultLabels}
                   />
                 </TableData>
                 <TableData>{param.min}</TableData>
