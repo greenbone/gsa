@@ -21,13 +21,13 @@ import {renderYesNo} from 'web/utils/render';
 export const ReportConfigParamValue = ({
   param,
   value = param.value,
-  value_labels = param.value_labels,
+  valueLabels = param.valueLabels,
   links = true,
 }) => {
   if (param.type === 'report_format_list') {
     return map(value, reportFormatId => {
-      const label = isDefined(value_labels[reportFormatId])
-        ? value_labels[reportFormatId]
+      const label = isDefined(valueLabels[reportFormatId])
+        ? valueLabels[reportFormatId]
         : reportFormatId;
       return (
         <DetailsLink
@@ -65,7 +65,7 @@ ReportConfigParamValue.propTypes = {
   links: PropTypes.bool,
   param: PropTypes.any.isRequired,
   value: PropTypes.any,
-  value_labels: PropTypes.object,
+  valueLabels: PropTypes.object,
 };
 
 const ReportConfigDetails = ({entity, links = true}) => {

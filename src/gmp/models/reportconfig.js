@@ -34,13 +34,13 @@ class Param {
     if (this.type === 'report_format_list') {
       this.value = map(value.report_format, format => format._id);
       this.default = map(other.default.report_format, format => format._id);
-      this.value_labels = {};
-      this.default_labels = {};
+      this.valueLabels = {};
+      this.defaultLabels = {};
       forEach(value.report_format, format => {
-        this.value_labels[format._id] = format.name;
+        this.valueLabels[format._id] = format.name;
       });
       forEach(other.default.report_format, format => {
-        this.default_labels[format._id] = format.name;
+        this.defaultLabels[format._id] = format.name;
       });
     } else if (this.type === 'multi_selection') {
       this.value = JSON.parse(get_value(value));
