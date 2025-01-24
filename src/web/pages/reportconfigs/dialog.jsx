@@ -236,9 +236,9 @@ class Dialog extends React.Component {
   }
 
   componentDidMount() {
-    const {reportconfig} = this.props;
-    if (isDefined(reportconfig)) {
-      const originalParamInfo = reportconfig.params;
+    const {reportConfig} = this.props;
+    if (isDefined(reportConfig)) {
+      const originalParamInfo = reportConfig.params;
       const params = {};
       const params_using_default = {};
 
@@ -261,12 +261,12 @@ class Dialog extends React.Component {
   render() {
     const {
       formats,
-      reportconfig,
+      reportConfig,
       title = _('New Report Config'),
       onClose,
     } = this.props;
 
-    const is_edit = isDefined(reportconfig);
+    const is_edit = isDefined(reportConfig);
 
     const configurable_formats = isDefined(formats)
       ? formats.filter(format => format.configurable)
@@ -282,11 +282,11 @@ class Dialog extends React.Component {
       comment: '',
     };
 
-    const report_config_values = isDefined(reportconfig)
+    const report_config_values = isDefined(reportConfig)
       ? {
-          ...reportconfig,
-          report_format: reportconfig.report_format.id,
-          comment: isDefined(reportconfig.comment) ? reportconfig.comment : '',
+          ...reportConfig,
+          report_format: reportConfig.report_format.id,
+          comment: isDefined(reportConfig.comment) ? reportConfig.comment : '',
         }
       : undefined;
 
@@ -382,7 +382,7 @@ Dialog.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string,
   params: PropTypes.object,
-  reportconfig: PropTypes.model,
+  reportConfig: PropTypes.model,
   summary: PropTypes.string,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,

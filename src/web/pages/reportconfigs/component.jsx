@@ -148,7 +148,7 @@ class ReportConfigComponent extends React.Component {
               <ReportConfigDialog
                 formats={formats}
                 preferences={preferences}
-                reportconfig={reportconfig}
+                reportConfig={reportconfig}
                 title={title}
                 onClose={this.handleCloseReportConfigDialog}
                 onSave={this.handleSave}
