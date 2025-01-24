@@ -74,14 +74,14 @@ const Row = ({
   ...props
 }) => {
   const reportFormat = entity.orphan ? (
-    entity.report_format.id
+    entity.reportFormat.id
   ) : (
     <DetailsLink
-      id={entity.report_format.id}
+      id={entity.reportFormat.id}
       textOnly={!links}
       type="reportformat"
     >
-      {entity.report_format.name}
+      {entity.reportFormat.name}
     </DetailsLink>
   );
 

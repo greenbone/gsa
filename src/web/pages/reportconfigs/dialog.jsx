@@ -251,7 +251,7 @@ class Dialog extends React.Component {
         originalParamInfo,
         params,
         paramsUsingDefault,
-        reportFormatId: reportConfig.report_format.id,
+        reportFormatId: reportConfig.reportFormat.id,
       });
     }
   }

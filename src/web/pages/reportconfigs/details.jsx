@@ -25,14 +25,14 @@ export const ReportConfigParamValue = ({
   links = true,
 }) => {
   if (param.type === 'report_format_list') {
-    return map(value, report_format_id => {
-      const label = isDefined(value_labels[report_format_id])
-        ? value_labels[report_format_id]
-        : report_format_id;
+    return map(value, reportFormatId => {
+      const label = isDefined(value_labels[reportFormatId])
+        ? value_labels[reportFormatId]
+        : reportFormatId;
       return (
         <DetailsLink
-          key={param.name + '_' + report_format_id}
-          id={report_format_id}
+          key={param.name + '_' + reportFormatId}
+          id={reportFormatId}
           textOnly={!links}
           type="reportformat"
         >
@@ -69,13 +69,13 @@ ReportConfigParamValue.propTypes = {
 };
 
 const ReportConfigDetails = ({entity, links = true}) => {
-  const {orphan, report_format, params, alerts = []} = entity;
+  const {orphan, reportFormat, params, alerts = []} = entity;
 
   const reportFormatLink = orphan ? (
-    report_format.id
+    reportFormat.id
   ) : (
-    <DetailsLink id={report_format.id} textOnly={!links} type="reportformat">
-      {report_format.name}
+    <DetailsLink id={reportFormat.id} textOnly={!links} type="reportformat">
+      {reportFormat.name}
     </DetailsLink>
   );
   const paramRows = orphan ? (
