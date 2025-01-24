@@ -18,7 +18,7 @@ class Param {
     this.max = type.max;
     this.min = type.min;
     this.type = get_value(type);
-    this.value_using_default = parseBoolean(value?._using_default);
+    this.valueUsingDefault = parseBoolean(value?._using_default);
 
     if (isObject(options)) {
       this.options = map(options.option, opt => {

@@ -133,7 +133,7 @@ const Parameters = ({entity}) => {
                 <TableData>
                   <ReportConfigParamValue param={param} />
                 </TableData>
-                <TableData>{renderYesNo(param.value_using_default)}</TableData>
+                <TableData>{renderYesNo(param.valueUsingDefault)}</TableData>
                 <TableData>
                   <ReportConfigParamValue
                     param={param}
