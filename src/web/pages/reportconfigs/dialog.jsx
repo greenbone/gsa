@@ -133,7 +133,7 @@ const Param = ({
     <TableRow>
       <TableData>{name}</TableData>
       <TableData>{field}</TableData>
-      <TableData>{useDefaultCheck}</TableData>
+      <TableData align={['center', 'center']}>{useDefaultCheck}</TableData>
     </TableRow>
   );
 };
