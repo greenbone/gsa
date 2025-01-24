@@ -225,9 +225,9 @@ class Dialog extends React.Component {
       onSave({
         ...data,
         params,
-        params_using_default: paramsUsingDefault,
-        param_types: paramTypes,
-        report_format_id: reportFormatId,
+        paramsUsingDefault,
+        paramTypes,
+        reportFormatId,
       });
     }
   }

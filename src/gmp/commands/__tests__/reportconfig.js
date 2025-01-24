@@ -47,20 +47,20 @@ describe('ReportConfigCommand tests', () => {
       .create({
         name: 'foo',
         comment: 'bar',
-        report_format_id: 'baz',
+        reportFormatId: 'baz',
         params: {
           'param 1': 'value 1',
           'param 2': 'value 2',
           'param 3': ['report-format-1', 'report-format-2'],
           'param 4': ['option-1', 'option-2'],
         },
-        params_using_default: {
+        paramsUsingDefault: {
           'param 1': false,
           'param 2': true,
           'param 3': false,
           'param 4': false,
         },
-        param_types: {
+        paramTypes: {
           'param 1': 'string',
           'param 2': 'text',
           'param 3': 'report_format_list',
@@ -98,20 +98,20 @@ describe('ReportConfigCommand tests', () => {
       .save({
         name: 'foo',
         comment: 'bar',
-        report_format_id: 'should-be-ignored-in-save',
+        reportFormatId: 'should-be-ignored-in-save',
         params: {
           'param 1': 'value A',
           'param 2': 'value B',
           'param 3': ['report-format-A', 'report-format-B'],
           'param 4': ['option-1', 'option-2'],
         },
-        params_using_default: {
+        paramsUsingDefault: {
           'param 1': true,
           'param 2': false,
           'param 3': false,
           'param 4': false,
         },
-        param_types: {
+        paramTypes: {
           'param 1': 'string',
           'param 2': 'text',
           'param 3': 'report_format_list',

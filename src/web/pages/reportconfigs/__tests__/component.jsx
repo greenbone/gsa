@@ -119,24 +119,19 @@ describe('Report Config Component tests', () => {
     fireEvent.click(saveButton);
 
     expect(saveReportConfig).toHaveBeenCalledWith({
-      alerts: [],
       comment: '',
-      entityType: 'reportconfig',
       id: 'rc123',
       name: 'test report config',
-      param_types: {
+      paramTypes: {
         'test param': 'string',
       },
       params: {
         'test param': 'ABC',
       },
-      params_using_default: {
+      paramsUsingDefault: {
         'test param': false,
       },
-      report_format: 'rf456',
-      report_format_id: undefined,
-      userCapabilities: new Capabilities(),
-      userTags: [],
+      reportFormatId: 'rf456',
     });
   });
 
@@ -210,16 +205,16 @@ describe('Report Config Component tests', () => {
     expect(createReportConfig).toHaveBeenCalledWith({
       name: 'Unnamed',
       comment: '',
-      param_types: {
+      paramTypes: {
         'test param': 'string',
       },
       params: {
         'test param': 'ABC',
       },
-      params_using_default: {
+      paramsUsingDefault: {
         'test param': true,
       },
-      report_format_id: 'rf456',
+      reportFormatId: 'rf456',
     });
   });
 
