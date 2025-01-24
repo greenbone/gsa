@@ -24,13 +24,13 @@ class ReportConfigComponent extends React.Component {
     this.openReportConfigDialog = this.openReportConfigDialog.bind(this);
   }
 
-  openReportConfigDialog(reportconfig) {
+  openReportConfigDialog(reportConfig) {
     this.handleInteraction();
     const {gmp} = this.props;
 
-    if (isDefined(reportconfig)) {
+    if (isDefined(reportConfig)) {
       // (re-)load report config to get params
-      gmp.reportconfig.get(reportconfig).then(response => {
+      gmp.reportconfig.get(reportConfig).then(response => {
         const config = response.data;
         const preferences = {};
         const id_lists = {};
@@ -50,8 +50,8 @@ class ReportConfigComponent extends React.Component {
             formats,
             id_lists,
             preferences,
-            reportconfig: config,
-            originalParamInfo: reportconfig.params,
+            reportConfig: config,
+            originalParamInfo: reportConfig.params,
             title: _('Edit Report Config {{name}}', {name: config.name}),
           });
         });
@@ -63,7 +63,7 @@ class ReportConfigComponent extends React.Component {
         .then(formats => {
           this.setState({
             dialogVisible: true,
-            reportconfig: undefined,
+            reportConfig: undefined,
             formats,
             title: _('New Report Config'),
           });
@@ -121,7 +121,7 @@ class ReportConfigComponent extends React.Component {
       onInteraction,
     } = this.props;
 
-    const {dialogVisible, formats, reportconfig, title, preferences} =
+    const {dialogVisible, formats, reportConfig, title, preferences} =
       this.state;
 
     return (
@@ -148,7 +148,7 @@ class ReportConfigComponent extends React.Component {
               <ReportConfigDialog
                 formats={formats}
                 preferences={preferences}
-                reportConfig={reportconfig}
+                reportConfig={reportConfig}
                 title={title}
                 onClose={this.handleCloseReportConfigDialog}
                 onSave={this.handleSave}
