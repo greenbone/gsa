@@ -19,8 +19,8 @@ describe('Report Config model tests', () => {
     };
     const reportConfig = ReportConfig.fromElement(elem);
 
-    expect(reportConfig.report_format.id).toEqual('foo');
-    expect(reportConfig.report_format.name).toEqual('bar');
+    expect(reportConfig.reportFormat.id).toEqual('foo');
+    expect(reportConfig.reportFormat.name).toEqual('bar');
   });
 
   test('should parse alerts', () => {

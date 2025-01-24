@@ -65,13 +65,14 @@ class ReportConfig extends Model {
     const ret = super.parseElement(element);
 
     if (isDefined(ret.report_format)) {
-      ret.report_format = {
+      ret.reportFormat = {
         id: ret.report_format._id,
         name: ret.report_format.name,
       };
     } else {
-      ret.report_format = {};
+      ret.reportFormat = {};
     }
+    delete ret.report_format;
 
     ret.params = map(ret.param, param => {
       return new Param(param);
