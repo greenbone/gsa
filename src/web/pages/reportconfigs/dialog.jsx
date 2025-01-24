@@ -242,8 +242,8 @@ class Dialog extends React.Component {
       originalParamInfo.forEach(param => {
         params[param.name] = param.value;
         paramsUsingDefault[param.name] = false;
-        if (isDefined(param.value_using_default)) {
-          paramsUsingDefault[param.name] = param.value_using_default;
+        if (isDefined(param.valueUsingDefault)) {
+          paramsUsingDefault[param.name] = param.valueUsingDefault;
         }
       });
 

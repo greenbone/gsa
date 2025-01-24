@@ -164,7 +164,7 @@ describe('Report Config model tests', () => {
       expect(reportConfig.params[0].name).toEqual('foo');
     });
 
-    test('should parse param value_using_default', () => {
+    test('should parse param valueUsingDefault', () => {
       const elem = {
         param: [
           {
@@ -192,9 +192,9 @@ describe('Report Config model tests', () => {
 
       const reportConfig = ReportConfig.fromElement(elem);
       expect(reportConfig.params[0].name).toEqual('foo');
-      expect(reportConfig.params[0].value_using_default).toEqual(true);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(true);
       expect(reportConfig.params[1].name).toEqual('bar');
-      expect(reportConfig.params[1].value_using_default).toEqual(false);
+      expect(reportConfig.params[1].valueUsingDefault).toEqual(false);
     });
 
     test('should parse value, default and type in string params', () => {
@@ -229,12 +229,12 @@ describe('Report Config model tests', () => {
       expect(reportConfig.params[0].type).toEqual('string');
       expect(reportConfig.params[0].value).toEqual('foo');
       expect(reportConfig.params[0].default).toEqual('bar');
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
 
       expect(reportConfig.params[1].type).toEqual('string');
       expect(reportConfig.params[1].value).toEqual('baz');
       expect(reportConfig.params[1].default).toEqual('boo');
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
     });
 
     test('should parse value, default and type in text params', () => {
@@ -269,12 +269,12 @@ describe('Report Config model tests', () => {
       expect(reportConfig.params[0].type).toEqual('text');
       expect(reportConfig.params[0].value).toEqual('foo');
       expect(reportConfig.params[0].default).toEqual('bar');
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
 
       expect(reportConfig.params[1].type).toEqual('text');
       expect(reportConfig.params[1].value).toEqual('baz');
       expect(reportConfig.params[1].default).toEqual('boo');
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
     });
 
     test('should parse value, default and type in integer params', () => {
@@ -309,12 +309,12 @@ describe('Report Config model tests', () => {
       expect(reportConfig.params[0].type).toEqual('integer');
       expect(reportConfig.params[0].value).toEqual(123);
       expect(reportConfig.params[0].default).toEqual(234);
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
 
       expect(reportConfig.params[1].type).toEqual('integer');
       expect(reportConfig.params[1].value).toEqual(345);
       expect(reportConfig.params[1].default).toEqual(456);
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
     });
 
     test('should parse value, default and type in boolean params', () => {
@@ -349,12 +349,12 @@ describe('Report Config model tests', () => {
       expect(reportConfig.params[0].type).toEqual('boolean');
       expect(reportConfig.params[0].value).toEqual(false);
       expect(reportConfig.params[0].default).toEqual(true);
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
 
       expect(reportConfig.params[1].type).toEqual('boolean');
       expect(reportConfig.params[1].value).toEqual(true);
       expect(reportConfig.params[1].default).toEqual(true);
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
     });
 
     test('should parse options, value, default and type in selection params', () => {
@@ -475,14 +475,14 @@ describe('Report Config model tests', () => {
         12: 'GHI',
         34: 'JKL',
       });
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
 
       expect(reportConfig.params[1].type).toEqual('report_format_list');
       expect(reportConfig.params[1].value).toEqual(['123']);
       expect(reportConfig.params[1].value_labels).toEqual({123: 'XYZ'});
       expect(reportConfig.params[1].default).toEqual(['456']);
       expect(reportConfig.params[1].default_labels).toEqual({456: 'UVW'});
-      expect(reportConfig.params[0].value_using_default).toEqual(false);
+      expect(reportConfig.params[0].valueUsingDefault).toEqual(false);
     });
   });
 });
