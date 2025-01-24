@@ -23,35 +23,35 @@ export class ReportConfigCommand extends EntityCommand {
     const {
       comment,
       name,
-      report_format_id,
+      reportFormatId,
       params = {},
-      params_using_default = {},
-      param_types = {},
+      paramsUsingDefault = {},
+      paramTypes = {},
     } = args;
 
     const data = {
       cmd: 'create_report_config',
       name,
       comment,
-      report_format_id,
+      report_format_id: reportFormatId,
     };
 
-    for (const prefname in params) {
-      let value = params[prefname];
+    for (const prefName in params) {
+      let value = params[prefName];
       if (isArray(value)) {
-        if (param_types[prefname] === 'report_format_list') {
-          value = params[prefname].join(',');
+        if (paramTypes[prefName] === 'report_format_list') {
+          value = params[prefName].join(',');
         } else {
-          value = JSON.stringify(params[prefname]);
+          value = JSON.stringify(params[prefName]);
         }
       }
-      data['param:' + prefname] = value;
+      data['param:' + prefName] = value;
     }
 
-    for (const param_name in params_using_default) {
-      if (params_using_default[param_name]) {
+    for (const param_name in paramsUsingDefault) {
+      if (paramsUsingDefault[param_name]) {
         data['param_using_default:' + param_name] = convertBoolean(
-          params_using_default[param_name],
+          paramsUsingDefault[param_name],
         );
       }
     }
@@ -66,8 +66,8 @@ export class ReportConfigCommand extends EntityCommand {
       comment,
       name,
       params = {},
-      params_using_default = {},
-      param_types = {},
+      paramsUsingDefault = {},
+      paramTypes = {},
     } = args;
 
     const data = {
@@ -77,24 +77,24 @@ export class ReportConfigCommand extends EntityCommand {
       comment,
     };
 
-    for (const param_name in params_using_default) {
-      if (params_using_default[param_name]) {
-        data['param_using_default:' + param_name] = convertBoolean(
-          params_using_default[param_name],
+    for (const paramName in paramsUsingDefault) {
+      if (paramsUsingDefault[paramName]) {
+        data['param_using_default:' + paramName] = convertBoolean(
+          paramsUsingDefault[paramName],
         );
       }
     }
 
-    for (const prefname in params) {
-      let value = params[prefname];
-      if (isArray(params[prefname])) {
-        if (param_types[prefname] === 'report_format_list') {
-          value = params[prefname].join(',');
+    for (const prefName in params) {
+      let value = params[prefName];
+      if (isArray(params[prefName])) {
+        if (paramTypes[prefName] === 'report_format_list') {
+          value = params[prefName].join(',');
         } else {
-          value = JSON.stringify(params[prefname]);
+          value = JSON.stringify(params[prefName]);
         }
       }
-      data['param:' + prefname] = value;
+      data['param:' + prefName] = value;
     }
 
     log.debug('Saving report config', args, data);

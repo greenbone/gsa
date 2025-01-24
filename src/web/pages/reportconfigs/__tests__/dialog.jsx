@@ -86,8 +86,10 @@ describe('Edit Report Config Dialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      ...config,
-      param_types: {
+      id: '12345',
+      name: 'foo',
+      comment: 'bar',
+      paramTypes: {
         BooleanParam: 'boolean',
         IntegerParam: 'integer',
         ReportFormatListParam: 'report_format_list',
@@ -103,7 +105,7 @@ describe('Edit Report Config Dialog component tests', () => {
         StringParam: 'StringValue',
         TextParam: 'TextValue',
       },
-      params_using_default: {
+      paramsUsingDefault: {
         BooleanParam: false,
         IntegerParam: true,
         ReportFormatListParam: false,
@@ -111,8 +113,7 @@ describe('Edit Report Config Dialog component tests', () => {
         StringParam: true,
         TextParam: false,
       },
-      report_format: config.report_format.id,
-      report_format_id: undefined,
+      reportFormatId: '123456',
     });
   });
 
@@ -202,10 +203,10 @@ describe('Edit Report Config Dialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      ...config,
+      id: '12345',
       name: 'lorem',
       comment: 'ipsum',
-      param_types: {
+      paramTypes: {
         BooleanParam: 'boolean',
         IntegerParam: 'integer',
         ReportFormatListParam: 'report_format_list',
@@ -221,7 +222,7 @@ describe('Edit Report Config Dialog component tests', () => {
         SelectionParam: 'OptionA',
         TextParam: 'NewText',
       },
-      params_using_default: {
+      paramsUsingDefault: {
         BooleanParam: false,
         IntegerParam: false,
         StringParam: false,
@@ -229,8 +230,7 @@ describe('Edit Report Config Dialog component tests', () => {
         SelectionParam: false,
         TextParam: false,
       },
-      report_format: config.report_format.id,
-      report_format_id: undefined,
+      reportFormatId: '123456',
     });
   });
 
@@ -282,8 +282,10 @@ describe('Edit Report Config Dialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      ...config,
-      param_types: {
+      id: '12345',
+      name: 'foo',
+      comment: 'bar',
+      paramTypes: {
         BooleanParam: 'boolean',
         IntegerParam: 'integer',
         ReportFormatListParam: 'report_format_list',
@@ -300,7 +302,7 @@ describe('Edit Report Config Dialog component tests', () => {
         TextParam: 'TextValue',
       },
       // Should be reverse of "should save data" case
-      params_using_default: {
+      paramsUsingDefault: {
         BooleanParam: true,
         IntegerParam: false,
         ReportFormatListParam: true,
@@ -308,8 +310,7 @@ describe('Edit Report Config Dialog component tests', () => {
         StringParam: false,
         TextParam: true,
       },
-      report_format: config.report_format.id,
-      report_format_id: undefined,
+      reportFormatId: '123456',
     });
   });
 });
@@ -452,8 +453,8 @@ describe('New Report Config Dialog component tests', () => {
     expect(handleSave).toHaveBeenCalledWith({
       name: 'lorem',
       comment: 'ipsum',
-      report_format_id: '1234567',
-      param_types: {
+      reportFormatId: '1234567',
+      paramTypes: {
         Param1: 'string',
         Param2: 'string',
         ReportFormatListParam: 'report_format_list',
@@ -463,7 +464,7 @@ describe('New Report Config Dialog component tests', () => {
         Param2: 'XYZ',
         ReportFormatListParam: ['654321'],
       },
-      params_using_default: {
+      paramsUsingDefault: {
         Param1: true,
         Param2: false,
         ReportFormatListParam: false,
