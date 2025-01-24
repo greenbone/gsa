@@ -275,26 +275,23 @@ class Dialog extends React.Component {
       value: format.id,
     }));
 
-    const defaultValues = {
-      name: _('Unnamed'),
-      comment: '',
-    };
-
-    const reportConfigValues = isDefined(reportConfig)
+    const defaultValues = isDefined(reportConfig)
       ? {
-          ...reportConfig,
+          id: reportConfig.id,
+          name: reportConfig.name,
           comment: isDefined(reportConfig.comment) ? reportConfig.comment : '',
         }
-      : undefined;
+      : {
+          name: _('Unnamed'),
+          comment: '',
+        };
 
     const {reportFormatId, originalParamInfo, params, paramsUsingDefault} =
       this.state;
 
     return (
       <SaveDialog
-        defaultValues={
-          isDefined(reportConfigValues) ? reportConfigValues : defaultValues
-        }
+        defaultValues={defaultValues}
         title={title}
         onClose={onClose}
         onSave={this.handleSave}
