@@ -122,7 +122,7 @@ const Page = ({
   return (
     <PolicyComponent
       onCloneError={onError}
-      onCloned={goto_details('policies', props)}
+      onCloned={goto_details('policy', props)}
       onDeleteError={onError}
       onDeleted={goto_list('policies', props)}
       onDownloadError={onError}
