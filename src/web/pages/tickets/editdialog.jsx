@@ -6,7 +6,6 @@
 import {TICKET_STATUS, TICKET_STATUS_TRANSLATIONS} from 'gmp/models/ticket';
 import React, {useState} from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import useFormValidation from 'web/components/form/useFormValidation';
@@ -66,49 +65,47 @@ const EditTicketDialog = ({
     >
       {({values}) => (
         <>
-          <FormGroup title={_('Status')}>
-            <Select
-              items={STATUS_ITEMS}
-              name="status"
-              value={values.status}
-              onChange={handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Assigned User')}>
-            <Select
-              items={renderSelectItems(users)}
-              name="userId"
-              value={values.userId}
-              onChange={handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Note for Open')}>
-            <TextArea
-              errorContent={errors.openNote}
-              maxRows="5"
-              name="openNote"
-              value={values.openNote}
-              onChange={handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Note for Fixed')}>
-            <TextArea
-              errorContent={errors.fixedNote}
-              maxRows="5"
-              name="fixedNote"
-              value={values.fixedNote}
-              onChange={handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Note for Closed')}>
-            <TextArea
-              errorContent={errors.closedNote}
-              maxRows="5"
-              name="closedNote"
-              value={values.closedNote}
-              onChange={handleValueChange}
-            />
-          </FormGroup>
+          <Select
+            items={STATUS_ITEMS}
+            label={_('Status')}
+            name="status"
+            value={values.status}
+            onChange={handleValueChange}
+          />
+          <Select
+            items={renderSelectItems(users)}
+            label={_('Assign To User')}
+            name="userId"
+            value={values.userId}
+            onChange={handleValueChange}
+          />
+          <TextArea
+            errorContent={error && errors.openNote}
+            maxRows="5"
+            name="openNote"
+            required={values.status === TICKET_STATUS.open}
+            title={_('Note for Open')}
+            value={values.openNote}
+            onChange={handleValueChange}
+          />
+          <TextArea
+            errorContent={error && errors.fixedNote}
+            maxRows="5"
+            name="fixedNote"
+            required={values.status === TICKET_STATUS.fixed}
+            title={_('Note for Fixed')}
+            value={values.fixedNote}
+            onChange={handleValueChange}
+          />
+          <TextArea
+            errorContent={error && errors.closedNote}
+            maxRows="5"
+            name="closedNote"
+            required={values.status === TICKET_STATUS.closed}
+            title={_('Note for Closed')}
+            value={values.closedNote}
+            onChange={handleValueChange}
+          />
         </>
       )}
     </SaveDialog>
