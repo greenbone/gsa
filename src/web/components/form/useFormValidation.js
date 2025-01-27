@@ -77,7 +77,8 @@ const useFormValidation = (
 };
 
 // Some common validation rules
-export const shouldBeNonEmpty = (string = '') => string.trim().length > 0;
+export const shouldBeNonEmpty = (string = '') =>
+  String(string).trim().length > 0;
 export const shouldBeValidPassword = (password = '') => password.length > 5;
 export const shouldBeValidName = (string = '') =>
   string.match(/^[.#\-_ ,/a-z0-9äüöÄÜÖß]+$/i) !== null; // this is analogue to the
