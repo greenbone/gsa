@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import React from 'react';
 import DisableIcon from 'web/components/icon/disableicon';
@@ -22,7 +21,7 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -44,7 +43,6 @@ import withCapabilties from 'web/utils/withCapabilities';
 import TagComponent from './component';
 import TagDetails from './details';
 import ResourceList from './resourcelist';
-
 
 const ToolBarIcons = withCapabilties(
   ({
@@ -129,10 +127,10 @@ const Page = ({
   return (
     <TagComponent
       onCloneError={onError}
-      onCloned={goto_details('tag', props)}
-      onCreated={goto_details('tag', props)}
+      onCloned={goToDetails('tag', props)}
+      onCreated={goToDetails('tag', props)}
       onDeleteError={onError}
-      onDeleted={goto_list('tags', props)}
+      onDeleted={goToList('tags', props)}
       onDisableError={onError}
       onDisabled={onChanged}
       onDownloadError={onError}

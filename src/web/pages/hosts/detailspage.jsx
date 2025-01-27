@@ -30,7 +30,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CreateIcon from 'web/entity/icon/createicon';
 import DeleteIcon from 'web/entity/icon/deleteicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -244,11 +244,11 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
-  const goto_host = goto_details('host', props);
+  const goto_host = goToDetails('host', props);
   return (
     <HostComponent
       onCreated={goto_host}
-      onDeleted={goto_list('hosts', props)}
+      onDeleted={goToList('hosts', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onIdentifierDeleteError={onError}
@@ -256,7 +256,7 @@ const Page = ({
       onInteraction={onInteraction}
       onSaved={onChanged}
       onTargetCreateError={onError}
-      onTargetCreated={goto_details('target', props)}
+      onTargetCreated={goToDetails('target', props)}
     >
       {({create, delete: delete_func, deleteidentifier, download, edit}) => (
         <EntityPage

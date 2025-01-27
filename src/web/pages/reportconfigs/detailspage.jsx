@@ -24,7 +24,7 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 import Table from 'web/components/table/stripedtable';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -167,11 +167,11 @@ const Page = ({
 }) => (
   <ReportConfigComponent
     onCloneError={onError}
-    onCloned={goto_details('reportconfig', props)}
+    onCloned={goToDetails('reportconfig', props)}
     onCreateError={onError}
-    onCreated={goto_details('reportconfig', props)}
+    onCreated={goToDetails('reportconfig', props)}
     onDeleteError={onError}
-    onDeleted={goto_list('reportconfigs', props)}
+    onDeleted={goToList('reportconfigs', props)}
     onInteraction={onInteraction}
     onSaveError={onError}
     onSaved={onChanged}

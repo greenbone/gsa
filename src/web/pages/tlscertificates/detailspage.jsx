@@ -27,7 +27,7 @@ import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
-import {goto_list} from 'web/entity/component';
+import {goToList} from 'web/entity/component';
 import DeleteIcon from 'web/entity/icon/deleteicon';
 import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
@@ -198,7 +198,7 @@ const Page = ({
   return (
     <TlsCertificateComponent
       onDeleteError={onError}
-      onDeleted={goto_list('tlscertificates', props)}
+      onDeleted={goToList('tlscertificates', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onInteraction={onInteraction}

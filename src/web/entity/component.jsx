@@ -16,14 +16,14 @@ import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
 
-export const goto_details =
+export const goToDetails =
   (type, props) =>
   ({data}) => {
     const {navigate} = props;
     return navigate('/' + type + '/' + data.id);
   };
 
-export const goto_list = (type, props) => () => {
+export const goToList = (type, props) => () => {
   const {navigate} = props;
   return navigate('/' + type);
 };

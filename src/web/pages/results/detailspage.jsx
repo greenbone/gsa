@@ -41,7 +41,7 @@ import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
-import {goto_details} from 'web/entity/component';
+import {goToDetails} from 'web/entity/component';
 import Note from 'web/entity/note';
 import Override from 'web/entity/override';
 import EntityPage, {Col} from 'web/entity/page';
@@ -414,7 +414,7 @@ class Page extends React.Component {
           >
             {({create: createoverride}) => (
               <TicketComponent
-                onCreated={goto_details('ticket', this.props)}
+                onCreated={goToDetails('ticket', this.props)}
                 onInteraction={onInteraction}
               >
                 {({createFromResult: createticket}) => (

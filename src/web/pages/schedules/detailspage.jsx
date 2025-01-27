@@ -19,7 +19,7 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -92,10 +92,10 @@ const Page = ({
 }) => (
   <ScheduleComponent
     onCloneError={onError}
-    onCloned={goto_details('schedule', props)}
-    onCreated={goto_details('schedule', props)}
+    onCloned={goToDetails('schedule', props)}
+    onCreated={goToDetails('schedule', props)}
     onDeleteError={onError}
-    onDeleted={goto_list('schedules', props)}
+    onDeleted={goToList('schedules', props)}
     onDownloadError={onError}
     onDownloaded={onDownloaded}
     onInteraction={onInteraction}

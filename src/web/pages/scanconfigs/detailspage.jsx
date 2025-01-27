@@ -29,7 +29,7 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 import StripedTable from 'web/components/table/stripedtable';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -281,13 +281,13 @@ const Page = ({
   return (
     <ScanConfigComponent
       onCloneError={onError}
-      onCloned={goto_details('scanconfig', props)}
-      onCreated={goto_details('scanconfig', props)}
+      onCloned={goToDetails('scanconfig', props)}
+      onCreated={goToDetails('scanconfig', props)}
       onDeleteError={onError}
-      onDeleted={goto_list('scanconfigs', props)}
+      onDeleted={goToList('scanconfigs', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onImported={goto_details('scanconfig', props)}
+      onImported={goToDetails('scanconfig', props)}
       onInteraction={onInteraction}
       onSaved={onChanged}
     >

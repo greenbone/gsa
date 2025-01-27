@@ -28,7 +28,7 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 import Table from 'web/components/table/stripedtable';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
@@ -204,8 +204,8 @@ const Page = ({
 }) => (
   <ReportFormatComponent
     onDeleteError={onError}
-    onDeleted={goto_list('reportformats', props)}
-    onImported={goto_details('reportformat', props)}
+    onDeleted={goToList('reportformats', props)}
+    onImported={goToDetails('reportformat', props)}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >

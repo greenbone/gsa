@@ -39,7 +39,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
@@ -318,12 +318,12 @@ class Page extends React.Component {
     return (
       <TaskComponent
         onCloneError={onError}
-        onCloned={goto_details('task', props)}
-        onContainerCreated={goto_details('task', props)}
+        onCloned={goToDetails('task', props)}
+        onContainerCreated={goToDetails('task', props)}
         onContainerSaved={onChanged}
-        onCreated={goto_details('task', props)}
+        onCreated={goToDetails('task', props)}
         onDeleteError={onError}
-        onDeleted={goto_list('tasks', props)}
+        onDeleted={goToList('tasks', props)}
         onDownloadError={onError}
         onDownloaded={onDownloaded}
         onInteraction={onInteraction}
