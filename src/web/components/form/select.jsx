@@ -7,7 +7,7 @@ import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components-mant
 import {Loader} from '@mantine/core';
 import {_} from 'gmp/locale/lang';
 import {isDefined, isArray} from 'gmp/utils/identity';
-import {useCallback, forwardRef} from 'react';
+import {useState, useCallback} from 'react';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes, {mayRequire} from 'web/utils/proptypes';
 
@@ -55,25 +55,16 @@ const SelectValueValidator = (props, propName, componentName) => {
 
 const selectValue = mayRequire(SelectValueValidator);
 
-const renderLabel = props => {
-  const {label, deprecated} = props;
-
-  if (deprecated) {
+const renderSelectOption = ({option: {label, deprecated}}) => {
+  if (deprecated === '1') {
     return <s>{`${label} (${_('Deprecated')})`}</s>;
   }
 
-  return <span>{label}</span>;
+  return label;
 };
 
-export const SelectItem = forwardRef((props, ref) => {
-  return (
-    <div ref={ref} {...props}>
-      {renderLabel(props)}
-    </div>
-  );
-});
-
 const Select = ({
+  allowDeselect = false,
   disabled,
   dropdownPosition,
   errorContent,
@@ -90,12 +81,14 @@ const Select = ({
   ...props
 }) => {
   const [_] = useTranslation();
+  const [searchValue, setSearchValue] = useState('');
 
   const handleChange = useCallback(
     newValue => {
       if (isDefined(onChange)) {
         onChange(newValue, name);
       }
+      setSearchValue('');
     },
     [name, onChange],
   );
@@ -107,32 +100,37 @@ const Select = ({
     : items.map(item => ({
         value: String(item.value),
         label: item.label,
+        deprecated: item.deprecated,
       }));
   const selectedValue = isLoading ? undefined : String(value);
 
   return (
     <OpenSightSelect
       {...props}
+      allowDeselect={allowDeselect}
       data={selectableItems}
       data-testid={'form-select'}
       disabled={disabled || !items?.length}
       dropdownPosition={dropdownPosition}
       error={isDefined(errorContent) && `${errorContent}`}
-      itemComponent={SelectItem}
       label={label}
       name={name}
       placeholder={selectPlaceholder}
+      renderOption={renderSelectOption}
       rightSection={rightSection}
+      searchValue={searchValue}
       searchable={searchable}
       styles={{root: {flexGrow: grow}}}
       title={toolTipTitle}
       value={selectedValue}
       onChange={handleChange}
+      onSearchChange={setSearchValue}
     />
   );
 };
 
 Select.propTypes = {
+  allowDeselect: PropTypes.bool,
   disabled: PropTypes.bool,
   dropdownPosition: PropTypes.oneOf(['top', 'bottom']),
   errorContent: PropTypes.toString,
