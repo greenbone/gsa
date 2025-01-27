@@ -27,7 +27,7 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 import Table from 'web/components/table/stripedtable';
 import EntityNameTableData from 'web/entities/entitynametabledata';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -156,10 +156,10 @@ const Page = ({
 }) => (
   <RoleComponent
     onCloneError={onError}
-    onCloned={goto_details('role', props)}
-    onCreated={goto_details('role', props)}
+    onCloned={goToDetails('role', props)}
+    onCreated={goToDetails('role', props)}
     onDeleteError={onError}
-    onDeleted={goto_list('roles', props)}
+    onDeleted={goToList('roles', props)}
     onDownloadError={onError}
     onDownloaded={onDownloaded}
     onInteraction={onInteraction}

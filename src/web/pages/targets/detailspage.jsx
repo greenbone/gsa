@@ -25,7 +25,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -126,10 +126,10 @@ const Page = ({
   return (
     <TargetComponent
       onCloneError={onError}
-      onCloned={goto_details('target', props)}
-      onCreated={goto_details('target', props)}
+      onCloned={goToDetails('target', props)}
+      onCreated={goToDetails('target', props)}
       onDeleteError={onError}
-      onDeleted={goto_list('targets', props)}
+      onDeleted={goToList('targets', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onInteraction={onInteraction}

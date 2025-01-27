@@ -29,7 +29,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-import {goto_list} from 'web/entity/component';
+import {goToList} from 'web/entity/component';
 import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
@@ -190,7 +190,7 @@ const Page = ({
 }) => (
   <OsComponent
     onDeleteError={onError}
-    onDeleted={goto_list('operatingsystems', props)}
+    onDeleted={goToList('operatingsystems', props)}
     onDownloadError={onError}
     onDownloaded={onDownloaded}
     onInteraction={onInteraction}

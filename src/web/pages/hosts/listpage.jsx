@@ -14,7 +14,7 @@ import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import {goto_details} from 'web/entity/component';
+import {goToDetails} from 'web/entity/component';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -66,7 +66,7 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
     onTargetCreateError={onError}
-    onTargetCreated={goto_details('target', props)}
+    onTargetCreated={goToDetails('target', props)}
   >
     {({
       create,

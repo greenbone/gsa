@@ -19,7 +19,7 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
@@ -122,9 +122,9 @@ const Page = ({
   return (
     <PolicyComponent
       onCloneError={onError}
-      onCloned={goto_details('policy', props)}
+      onCloned={goToDetails('policy', props)}
       onDeleteError={onError}
-      onDeleted={goto_list('policies', props)}
+      onDeleted={goToList('policies', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onInteraction={onInteraction}

@@ -26,7 +26,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -161,10 +161,10 @@ const Page = ({
 }) => (
   <NoteComponent
     onCloneError={onError}
-    onCloned={goto_details('note', props)}
-    onCreated={goto_details('note', props)}
+    onCloned={goToDetails('note', props)}
+    onCreated={goToDetails('note', props)}
     onDeleteError={onError}
-    onDeleted={goto_list('notes', props)}
+    onDeleted={goToList('notes', props)}
     onDownloadError={onError}
     onDownloaded={onDownloaded}
     onInteraction={onInteraction}

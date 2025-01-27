@@ -30,7 +30,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
@@ -271,10 +271,10 @@ const Page = ({
 }) => (
   <AuditComponent
     onCloneError={onError}
-    onCloned={goto_details('audit', props)}
+    onCloned={goToDetails('audit', props)}
     onContainerSaved={onChanged}
     onDeleteError={onError}
-    onDeleted={goto_list('audits', props)}
+    onDeleted={goToList('audits', props)}
     onDownloadError={onError}
     onDownloaded={onDownloaded}
     onInteraction={onInteraction}

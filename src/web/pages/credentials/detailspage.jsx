@@ -30,7 +30,7 @@ import TableData from 'web/components/table/data';
 import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goToDetails, goToList} from 'web/entity/component';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -166,10 +166,10 @@ const Page = ({
   return (
     <CredentialComponent
       onCloneError={onError}
-      onCloned={goto_details('credential', props)}
-      onCreated={goto_details('credential', props)}
+      onCloned={goToDetails('credential', props)}
+      onCreated={goToDetails('credential', props)}
       onDeleteError={onError}
-      onDeleted={goto_list('credentials', props)}
+      onDeleted={goToList('credentials', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onInstallerDownloadError={onError}
