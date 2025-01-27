@@ -5,7 +5,6 @@
 
 import React, {useState} from 'react';
 import SaveDialog from 'web/components/dialog/savedialog';
-import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import useFormValidation from 'web/components/form/useFormValidation';
@@ -54,23 +53,22 @@ const CreateTicketDialog = ({
     >
       {({values}) => (
         <>
-          <FormGroup title={_('Assign To User')}>
-            <Select
-              items={renderSelectItems(users)}
-              name="userId"
-              value={values.userId}
-              onChange={onUserIdChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Note')}>
-            <TextArea
-              errorContent={errors.note}
-              minRows="5"
-              name="note"
-              value={values.note}
-              onChange={handleValueChange}
-            />
-          </FormGroup>
+          <Select
+            items={renderSelectItems(users)}
+            label={_('Assign To User')}
+            name="userId"
+            value={values.userId}
+            onChange={onUserIdChange}
+          />
+          <TextArea
+            required
+            errorContent={error && errors.note}
+            minRows="5"
+            name="note"
+            title={_('Note')}
+            value={values.note}
+            onChange={handleValueChange}
+          />
         </>
       )}
     </SaveDialog>
