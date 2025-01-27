@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import Select from 'web/components/form/select';
 import {
   getSelectElement,
   getSelectItemElements,
@@ -11,8 +12,6 @@ import {
   clickElement,
 } from 'web/components/testing';
 import {render, fireEvent, screen} from 'web/utils/testing';
-
-import Select, {SelectItem} from '../select';
 
 describe('Select component tests', () => {
   test('should render with items', async () => {
@@ -210,7 +209,8 @@ describe('Select component tests', () => {
 
     expect(getSelectItemElements().length).toEqual(1);
   });
-  describe('SelectItemRaw', () => {
+
+  describe('deprecated option rendering', () => {
     test.each([
       {
         label: 'Test Item',
@@ -219,16 +219,34 @@ describe('Select component tests', () => {
       },
       {
         label: 'Non-deprecated Item',
+        deprecated: '0',
+        expectedText: 'Non-deprecated Item',
+      },
+      {
+        label: 'Non-deprecated Item',
         deprecated: undefined,
         expectedText: 'Non-deprecated Item',
       },
     ])(
       'renders $label correctly with deprecated status $deprecated',
-      ({label, deprecated, expectedText}) => {
-        const {getByText} = render(
-          <SelectItem deprecated={deprecated} label={label} />,
-        );
-        expect(getByText(expectedText)).toBeInTheDocument();
+      async ({label, deprecated, expectedText}) => {
+        const items = [
+          {
+            value: 'bar',
+            label,
+            deprecated,
+          },
+        ];
+
+        render(<Select items={items} />);
+
+        const input = getSelectElement();
+
+        await openSelectElement(input);
+
+        const domItems = getSelectItemElements();
+
+        expect(domItems[0]).toHaveTextContent(expectedText);
       },
     );
   });
