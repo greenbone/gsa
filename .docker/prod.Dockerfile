@@ -26,6 +26,6 @@ WORKDIR /source
 
 RUN npm install && npm run build
 
-FROM greenbone/gsad:${VERSION}
+FROM registry.community.greenbone.net/community/gsad:${VERSION}
 
 COPY --from=builder /source/build /usr/local/share/gvm/gsad/web/
