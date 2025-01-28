@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -78,16 +77,18 @@ const DownloadReportDialog = ({
     <SaveDialog
       buttonTitle={_('OK')}
       defaultValues={unControlledValues}
-      title={audit 
-        ? _('Compose Content for Compliance Report')
-        : _('Compose Content for Scan Report')}
+      title={
+        audit
+          ? _('Compose Content for Compliance Report')
+          : _('Compose Content for Scan Report')
+      }
       onClose={onClose}
       onSave={handleSave}
     >
       {({values, onValueChange}) => {
         const filteredReportConfigs = isDefined(reportConfigs)
           ? reportConfigs.filter(
-              config => config.report_format.id === reportFormatIdInState,
+              config => config.reportFormat.id === reportFormatIdInState,
             )
           : [];
 
