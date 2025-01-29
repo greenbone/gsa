@@ -8,6 +8,8 @@ import Cpe from 'gmp/models/cpe';
 import {isDate} from 'gmp/models/date';
 import {testModel} from 'gmp/models/testing';
 
+/* eslint-disable camelcase */
+
 testModel(Cpe, 'cpe');
 
 describe('CPE model tests', () => {
@@ -88,17 +90,72 @@ describe('CPE model tests', () => {
     expect(isDate(cpe.updateTime)).toBe(true);
   });
 
-  test('should parse deprecatedBy', () => {
+  test('should parse deprecatedBy from raw data', () => {
     const cpe = Cpe.fromElement({
       raw_data: {'cpe-item': {_deprecated_by: 'foo:/bar'}},
     });
-
     expect(cpe.deprecatedBy).toEqual('foo:/bar');
+
+    const cpe2 = Cpe.fromElement({
+      deprecated: 0,
+      deprecated_by: {_cpe_id: 'foo:/bar'},
+      raw_data: {'cpe-item': {_deprecated_by: 'foo:/baz'}},
+    });
+    expect(cpe2.deprecatedBy).toEqual('foo:/baz');
+  });
+
+  test('should parse deprecated', () => {
+    const cpe = Cpe.fromElement({
+      deprecated: 1,
+    });
+    expect(cpe.deprecated).toBe(true);
+
+    const cpe2 = Cpe.fromElement({
+      deprecated: 0,
+    });
+    expect(cpe2.deprecated).toBe(false);
+
+    const cpe3 = Cpe.fromElement({});
+    expect(cpe3.deprecated).toBe(false);
+  });
+
+  test('should parse deprecatedBy', () => {
+    const cpe = Cpe.fromElement({
+      deprecated: 1,
+      deprecated_by: {_cpe_id: 'foo:/bar'},
+    });
+    expect(cpe.deprecatedBy).toEqual('foo:/bar');
+
+    const cpe2 = Cpe.fromElement({
+      deprecated: 1,
+      deprecated_by: {_cpe_id: 'foo:/bar'},
+      raw_data: {'cpe-item': {_deprecated_by: 'foo:/baz'}},
+    });
+
+    expect(cpe2.deprecatedBy).toEqual('foo:/bar');
   });
 
   test('should not parse deprecatedBy', () => {
     const cpe = Cpe.fromElement({raw_data: {'cpe-item': {}}});
 
     expect(cpe.deprecatedBy).toBeUndefined();
+  });
+
+  test('should parse old nvd_id', () => {
+    const cpe = Cpe.fromElement({nvd_id: 'ABC'});
+
+    expect(cpe.cpeNameId).toEqual('ABC');
+    expect(cpe.nvd_id).toBeUndefined();
+  });
+
+  test('should parse cpeNameId', () => {
+    const cpe = Cpe.fromElement({cpe_name_id: 'ABC'});
+    const cpe2 = Cpe.fromElement({cpe_name_id: 'ABC', nvd_id: 'DEF'});
+
+    expect(cpe.cpeNameId).toEqual('ABC');
+    expect(cpe.cpe_name_id).toBeUndefined();
+
+    expect(cpe2.cpeNameId).toEqual('ABC');
+    expect(cpe2.cpe_name_id).toBeUndefined();
   });
 });
