@@ -200,7 +200,7 @@ describe('ReportConfigsPage tests', () => {
       expect(icons[0]).toHaveAttribute('title', 'Help: Report Configs');
       expect(links[0]).toHaveAttribute(
         'href',
-        'test/en/reports.html#managing-report-configs',
+        'test/en/reports.html#customizing-report-formats-with-report-configurations',
       );
     });
 
