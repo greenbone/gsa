@@ -14,6 +14,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import Settings from 'web/pages/scanconfigs/settings';
 import PropTypes from 'web/utils/proptypes';
 import {na} from 'web/utils/render';
 
@@ -26,8 +27,16 @@ const ScanConfigActions = withEntitiesActions(
     onScanConfigDownloadClick,
     onScanConfigCloneClick,
     onScanConfigEditClick,
+    onScanConfigSettingsClick,
   }) => (
     <IconDivider grow align={['center', 'center']}>
+      <Settings
+        disabled={entity.predefined}
+        displayName={_('Scan Config')}
+        entity={entity}
+        name="config"
+        onClick={onScanConfigSettingsClick}
+      />
       <TrashIcon
         displayName={_('Scan Config')}
         entity={entity}
@@ -63,6 +72,7 @@ ScanConfigActions.propTypes = {
   onScanConfigDeleteClick: PropTypes.func.isRequired,
   onScanConfigDownloadClick: PropTypes.func.isRequired,
   onScanConfigEditClick: PropTypes.func.isRequired,
+  openEditNvtDetailsDialog: PropTypes.func.isRequired,
 };
 
 const ScanConfigRow = ({
@@ -70,6 +80,7 @@ const ScanConfigRow = ({
   entity,
   links = true,
   onToggleDetailsClick,
+  openEditNvtDetailsDialog,
   ...props
 }) => (
   <TableRow>
@@ -118,6 +129,7 @@ ScanConfigRow.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
+  openEditNvtDetailsDialog: PropTypes.func.isRequired,
 };
 
 export default ScanConfigRow;

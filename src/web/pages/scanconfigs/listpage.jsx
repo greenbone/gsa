@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -87,6 +86,7 @@ const ScanConfigsPage = ({
         download,
         edit,
         import: import_func,
+        settings,
       }) => (
         <>
           <PageTitle title={_('Scan Configs')} />
@@ -106,6 +106,7 @@ const ScanConfigsPage = ({
             onScanConfigDownloadClick={download}
             onScanConfigEditClick={edit}
             onScanConfigImportClick={import_func}
+            onScanConfigSettingsClick={settings}
           />
         </>
       )}
