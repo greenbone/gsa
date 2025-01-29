@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -46,15 +44,24 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="15px">
     <IconDivider>
-      <ManualIcon
-        anchor="reading-a-report"
-        page="reports"
-        title={_('Help: Reading Reports')}
-      />
       {audit ? (
-        <ListIcon page="auditreports" title={_('Audit Reports List')} />
+        <>
+          <ManualIcon
+            anchor="using-and-managing-audit-reports"
+            page="compliance-and-special-scans"
+            title={_('Help: Audit Reports')}
+          />
+          <ListIcon page="auditreports" title={_('Audit Reports List')} />
+        </>
       ) : (
-        <ListIcon page="reports" title={_('Reports List')} />
+        <>
+          <ManualIcon
+            anchor="reading-a-report"
+            page="reports"
+            title={_('Help: Reading Reports')}
+          />
+          <ListIcon page="reports" title={_('Reports List')} />
+        </>
       )}
     </IconDivider>
     {!isLoading && (
@@ -62,12 +69,12 @@ const ToolBarIcons = ({
         <IconDivider>
           {audit ? (
             <AddToAssetsIcon
-              title= {_('Add to Assets with QoD >= 70%')}
+              title={_('Add to Assets with QoD >= 70%')}
               onClick={onAddToAssetsClick}
             />
           ) : (
             <AddToAssetsIcon
-              title= {_('Add to Assets with QoD >= 70% and Overrides enabled')}
+              title={_('Add to Assets with QoD >= 70% and Overrides enabled')}
               onClick={onAddToAssetsClick}
             />
           )}
