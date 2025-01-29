@@ -68,6 +68,7 @@ class ScanConfigComponent extends React.Component {
     this.openImportDialog = this.openImportDialog.bind(this);
     this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
     this.handleSaveScanConfig = this.handleSaveScanConfig.bind(this);
+    this.openSettingsConfigDialog = this.openSettingsConfigDialog.bind(this);
   }
 
   openEditConfigDialog(config) {
@@ -404,6 +405,17 @@ class ScanConfigComponent extends React.Component {
     ]);
   }
 
+  async openSettingsConfigDialog(config) {
+    this.setState({
+      config,
+    });
+
+    await this.loadEditScanConfigSettings(config.id);
+
+    this.handleInteraction();
+    this.openEditConfigFamilyDialog('Settings');
+  }
+
   render() {
     const {
       children,
@@ -443,7 +455,6 @@ class ScanConfigComponent extends React.Component {
       scanners,
       title,
     } = this.state;
-
     return (
       <React.Fragment>
         <EntityComponent
@@ -460,52 +471,55 @@ class ScanConfigComponent extends React.Component {
           onSaveError={onSaveError}
           onSaved={onSaved}
         >
-          {({save, ...other}) => (
-            <React.Fragment>
-              {children({
-                ...other,
-                create: this.openCreateConfigDialog,
-                edit: this.openEditConfigDialog,
-                import: this.openImportDialog,
-              })}
-              {createConfigDialogVisible && (
-                <ScanConfigDialog
-                  isLoadingScanners={isLoadingScanners}
-                  scannerId={scannerId}
-                  scanners={scanners}
-                  onClose={this.handleCloseCreateConfigDialog}
-                  onSave={d => {
-                    this.handleInteraction();
-                    return save(d).then(() => this.closeCreateConfigDialog());
-                  }}
-                />
-              )}
-              {editConfigDialogVisible && (
-                <EditScanConfigDialog
-                  comment={config.comment}
-                  configFamilies={config.families}
-                  configId={config.id}
-                  configIsInUse={config.isInUse()}
-                  editNvtDetailsTitle={_('Edit Scan Config NVT Details')}
-                  editNvtFamiliesTitle={_('Edit Scan Config Family')}
-                  families={families}
-                  isLoadingConfig={isLoadingConfig}
-                  isLoadingFamilies={isLoadingFamilies}
-                  isLoadingScanners={isLoadingScanners}
-                  name={config.name}
-                  nvtPreferences={config.preferences.nvt}
-                  scannerId={scannerId}
-                  scannerPreferences={config.preferences.scanner}
-                  scanners={scanners}
-                  title={title}
-                  onClose={this.handleCloseEditConfigDialog}
-                  onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
-                  onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-                  onSave={this.handleSaveScanConfig}
-                />
-              )}
-            </React.Fragment>
-          )}
+          {({save, ...other}) => {
+            return (
+              <React.Fragment>
+                {children({
+                  ...other,
+                  create: this.openCreateConfigDialog,
+                  edit: this.openEditConfigDialog,
+                  import: this.openImportDialog,
+                  settings: this.openSettingsConfigDialog,
+                })}
+                {createConfigDialogVisible && (
+                  <ScanConfigDialog
+                    isLoadingScanners={isLoadingScanners}
+                    scannerId={scannerId}
+                    scanners={scanners}
+                    onClose={this.handleCloseCreateConfigDialog}
+                    onSave={d => {
+                      this.handleInteraction();
+                      return save(d).then(() => this.closeCreateConfigDialog());
+                    }}
+                  />
+                )}
+                {editConfigDialogVisible && (
+                  <EditScanConfigDialog
+                    comment={config.comment}
+                    configFamilies={config.families}
+                    configId={config.id}
+                    configIsInUse={config.isInUse()}
+                    editNvtDetailsTitle={_('Edit Scan Config NVT Details')}
+                    editNvtFamiliesTitle={_('Edit Scan Config Family')}
+                    families={families}
+                    isLoadingConfig={isLoadingConfig}
+                    isLoadingFamilies={isLoadingFamilies}
+                    isLoadingScanners={isLoadingScanners}
+                    name={config.name}
+                    nvtPreferences={config.preferences.nvt}
+                    scannerId={scannerId}
+                    scannerPreferences={config.preferences.scanner}
+                    scanners={scanners}
+                    title={title}
+                    onClose={this.handleCloseEditConfigDialog}
+                    onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
+                    onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
+                    onSave={this.handleSaveScanConfig}
+                  />
+                )}
+              </React.Fragment>
+            );
+          }}
         </EntityComponent>
         {importDialogVisible && (
           <ImportDialog

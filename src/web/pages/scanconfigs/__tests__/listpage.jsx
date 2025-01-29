@@ -122,7 +122,9 @@ describe('ScanConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    const {baseElement} = render(<ScanConfigsPage />);
+    const {baseElement} = render(
+      <ScanConfigsPage openEditNvtDetailsDialog={testing.fn()} />,
+    );
 
     await wait();
 
@@ -183,7 +185,7 @@ describe('ScanConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    render(<ScanConfigsPage />);
+    render(<ScanConfigsPage openEditNvtDetailsDialog={testing.fn()} />);
 
     await wait();
 
