@@ -4,27 +4,19 @@
  */
 
 import timezones from 'gmp/timezones';
-import {map} from 'gmp/utils/array';
 import React, {useMemo} from 'react';
-import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 
 import Select from './select';
 
 const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
-  const [_] = useTranslation();
   const timezoneItems = useMemo(
-    () => [
-      {
-        label: _('Coordinated Universal Time/UTC'),
-        value: 'UTC',
-      },
-      ...map(timezones, ({name}) => ({
+    () =>
+      timezones.map(name => ({
         label: name,
         value: name,
       })),
-    ],
-    [_],
+    [],
   );
 
   return <Select {...props} items={timezoneItems} value={value} />;
