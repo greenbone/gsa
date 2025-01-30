@@ -26,7 +26,7 @@ describe('TimezoneSelect tests', () => {
 
     await openSelectElement();
 
-    expect(getSelectItemElements().length).toEqual(timezones.length + 1);
+    expect(getSelectItemElements().length).toEqual(timezones.length);
   });
 
   test('should call onChange handler', async () => {
@@ -38,7 +38,7 @@ describe('TimezoneSelect tests', () => {
     const items = getSelectItemElements();
     await userEvent.click(items[1]);
 
-    expect(handler).toHaveBeenCalledWith(timezones[0].name, undefined);
+    expect(handler).toHaveBeenCalledWith(timezones[1], undefined);
   });
 
   test('should call onChange handler with name', async () => {
@@ -50,14 +50,14 @@ describe('TimezoneSelect tests', () => {
     const items = getSelectItemElements();
     await userEvent.click(items[1]);
 
-    expect(handler).toHaveBeenCalledWith(timezones[0].name, 'foo');
+    expect(handler).toHaveBeenCalledWith(timezones[1], 'foo');
   });
 
   test('should render selected value', () => {
-    const timezone = timezones[1];  
-    render(<TimezoneSelect value={timezone.name} />);
+    const timezone = timezones[1];
+    render(<TimezoneSelect value={timezone} />);
 
     const input = getSelectElement();
-    expect(input).toHaveValue(timezone.name);
+    expect(input).toHaveValue(timezone);
   });
 });
