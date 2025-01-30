@@ -9,6 +9,8 @@ const jsxLexer = [{lexer: 'JsxLexer', functions: ['_', '_l']}];
 export default {
   contextSeparator: null,
   defaultNamespace: 'gsa',
+  defaultValue: (locale, namespace, key, defaultValue) =>
+    locale === 'en' ? key : '',
   input: ['src/**/*.js', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.tsx'],
   keepRemoved: false,
   keySeparator: false,
