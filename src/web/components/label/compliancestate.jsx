@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {_l} from 'gmp/locale/lang';
 import createLabel from 'web/components/label/label';
 import Theme from 'web/utils/theme';
 
@@ -11,8 +12,7 @@ const YesLabel = createLabel(
   Theme.complianceYes,
   Theme.white,
   'compliance-state-yes',
-  // _('Yes')
-  'Yes',
+  _l('Yes'),
 );
 
 const NoLabel = createLabel(
@@ -20,24 +20,21 @@ const NoLabel = createLabel(
   Theme.complianceNo,
   Theme.white,
   'compliance-state-no',
-  // _('No')
-  'No',
+  _l('No'),
 );
 const IncompleteLabel = createLabel(
   Theme.complianceIncomplete,
   Theme.complianceIncomplete,
   Theme.white,
   'compliance-state-incomplete',
-  // _('Incomplete')
-  'Incomplete',
+  _l('Incomplete'),
 );
 const UndefinedLabel = createLabel(
   Theme.complianceUndefined,
   Theme.complianceUndefined,
   Theme.white,
   'compliance-state-undefined',
-  // _('Undefined')
-  'Undefined',
+  _l('Undefined'),
 );
 
 export const ComplianceStateLabels = {
