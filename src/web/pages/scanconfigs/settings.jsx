@@ -37,15 +37,15 @@ const EntitySettingsIcon = ({
 
   if (!isDefined(title)) {
     if (active) {
-      title = _('Edit Settings {{entity}}', {entity: displayName});
+      title = _('Edit {{entity}} settings', {entity: displayName});
     } else if (!entity.isWritable()) {
-      title = _('{{entity}} is not writable', {entity: displayName});
+      title = _('{{entity}} settings is not writable', {entity: displayName});
     } else if (!mayEditSettings) {
       title = _('Permission to edit {{entity}} settings denied', {
         entity: displayName,
       });
     } else {
-      title = _('Cannot modify {{entity}}', {entity: displayName});
+      title = _('Cannot modify {{entity}} settings', {entity: displayName});
     }
   }
   return (
