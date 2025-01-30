@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useTranslation} from 'react-i18next';
 import styled from 'styled-components';
 
 const Label = styled.div`
@@ -29,7 +28,6 @@ const Label = styled.div`
 
 const createLabel =
   (backgroundColor, borderColor, textColor, testId, text) => props => {
-    const [_] = useTranslation();
     return (
       <Label
         {...props}
@@ -38,7 +36,7 @@ const createLabel =
         $textColor={textColor}
         data-testid={testId}
       >
-        {_(text)}
+        {String(text)}
       </Label>
     );
   };
