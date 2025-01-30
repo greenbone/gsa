@@ -2,10 +2,13 @@ name: Build and Push to Container Image
 
 on:
   push:
-    branches: [main]
-    tags: ['v24*']
+    branches:
+      - main
+    tags:
+      - 'v24*'
   pull_request:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       ref-name:
