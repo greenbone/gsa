@@ -41,6 +41,7 @@ const I18N_OPTIONS = {
   },
   supportedLngs: whitelist,
   nonExplicitSupportedLngs: false,
+  returnEmptyString: false,
   interpolation: {
     skipOnVariables: false,
   },
