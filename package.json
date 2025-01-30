@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
@@ -25,7 +25,7 @@
     "build": "vite build",
     "lint": "eslint src --max-warnings 0",
     "preview": "vite preview",
-    "i18n-extract": "i18next && node scripts/update-gsa-en-json",
+    "i18n-extract": "i18next",
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "engines": {
