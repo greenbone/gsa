@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Schedule from 'gmp/models/schedule';
+import timezones from 'gmp/timezones';
 import {
   changeInputValue,
   clickElement,
@@ -108,7 +109,7 @@ describe('ScheduleDialog component tests', () => {
     expect(inputs[1]).toHaveValue('hello world'); // comment field
 
     const defaultTimezone = selects[0];
-    expect(defaultTimezone).toHaveValue('Coordinated Universal Time/UTC');
+    expect(defaultTimezone).toHaveValue('UTC');
 
     checkElementVisibilityAndContent(
       'Start Date',
@@ -190,13 +191,13 @@ describe('ScheduleDialog component tests', () => {
 
     let selectItems;
     const selects = queryAllSelectElements();
-    expect(selects[0]).toHaveValue('Coordinated Universal Time/UTC');
+    expect(selects[0]).toHaveValue('UTC');
     expect(selects[1]).toHaveValue('Weekly');
 
     selectItems = await getSelectItemElementsForSelect(selects[0]);
-    expect(selectItems.length).toBe(422);
+    expect(selectItems.length).toBe(timezones.length);
     await clickElement(selectItems[1]);
-    expect(selects[0]).toHaveValue('Africa/Abidjan');
+    expect(selects[0]).toHaveValue(timezones[1]);
 
     selectItems = await getSelectItemElementsForSelect(selects[1]);
     expect(selectItems.length).toBe(8);
