@@ -41,7 +41,8 @@ const renderSectionTitle = (counts, title) => {
 
   return _('{{title}} {{filtered}} of {{all}}', {
     title,
-    ...counts,
+    filtered: counts.filtered,
+    all: counts.all,
   });
 };
 
