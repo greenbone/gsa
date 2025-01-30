@@ -1484,6 +1484,7 @@
   "Save Super Admin User": "Super Admin Benutzer speichern",
   "Scan": "Scan",
   "Scan Config": "Scan-Konfiguration",
+  "Scan Config Default": "Scan-Konfiguration Standard",
   "Scan Config: {{name}}": "Scan-Konfiguration: {{name}}",
   "Scan Configs": "Scan-Konfigurationen",
   "Scan Configs Filter": "Scan-Konfigurationen-Filter",

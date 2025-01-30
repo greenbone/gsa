@@ -1484,6 +1484,7 @@
   "Save Super Admin User": "保存超级管理员用户",
   "Scan": "扫描",
   "Scan Config": "扫描配置",
+  "Scan Config Default": "",
   "Scan Config: {{name}}": "扫描配置: {{name}}",
   "Scan Configs": "扫描配置",
   "Scan Configs Filter": "扫描配置筛选",
