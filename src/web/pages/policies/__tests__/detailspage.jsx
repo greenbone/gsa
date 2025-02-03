@@ -8,11 +8,16 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
+import {vi} from 'vitest';
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, act, waitFor} from 'web/utils/testing';
+import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+
+vi.mock('web/pages/scanconfigs/editdialog', () => ({
+  default: () => null,
+}));
 
 const families = [
   {
@@ -521,7 +526,7 @@ describe('Policy Detailspage tests', () => {
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    waitFor(() => {
+    await act(async () => {
       fireEvent.click(icons[2]);
       expect(clone).toHaveBeenCalledWith(policy);
       expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
@@ -718,7 +723,7 @@ describe('Policy Detailspage tests', () => {
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    waitFor(() => {
+    await act(async () => {
       fireEvent.click(icons[2]);
       expect(clone).toHaveBeenCalledWith(policy3);
       expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
