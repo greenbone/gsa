@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, act, waitFor} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -574,7 +574,7 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    await act(async () => {
+    waitFor(() => {
       fireEvent.click(icons[3]);
       expect(clone).toHaveBeenCalledWith(config);
       expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
@@ -781,7 +781,7 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    await act(async () => {
+    waitFor(() => {
       fireEvent.click(icons[3]);
       expect(clone).toHaveBeenCalledWith(config3);
       expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
