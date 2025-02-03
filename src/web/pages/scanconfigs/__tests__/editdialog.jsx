@@ -19,9 +19,14 @@ import {
   getTableBody,
   getTextInputs,
 } from 'web/components/testing';
-import {rendererWith, fireEvent, getAllByTestId} from 'web/utils/testing';
+import {
+  rendererWith,
+  fireEvent,
+  getAllByTestId,
+  waitFor,
+} from 'web/utils/testing';
 
-import EditScanConfigDialog from '../editdialog';
+import EditScanConfigDialog, {handleSearchChange} from '../editdialog';
 
 const families = [
   {
@@ -537,5 +542,176 @@ describe('EditScanConfigDialog component tests', () => {
     expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith('1.2.1');
   });
 
+  test('should filter items based on search query', () => {
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
+
+    const {render} = rendererWith({capabilities: true, router: true});
+    const {getByPlaceholderText} = render(
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
+        families={families}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
+        scanners={scanners}
+        title="Edit Scan Config"
+        onClose={handleClose}
+        onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
+        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
+        onSave={handleSave}
+      />,
+    );
+
+    const searchBar = getByPlaceholderText(
+      'Search for families, preferences, or NVTs',
+    );
+    fireEvent.change(searchBar, {target: {value: 'family1'}});
+
+    expect(searchBar.value).toBe('family1');
+
+    const tableBody = getTableBody(getDialogContent());
+    const rows = tableBody.querySelectorAll('tr');
+
+    waitFor(() => {
+      expect(rows).toHaveLength(1);
+    });
+
+    const cell = rows[0].querySelector('td');
+    expect(cell).toHaveTextContent('family1');
+  });
+
+  test.each([
+    {
+      description: 'should calculate resultsCount correctly',
+      families,
+      scannerPreferences,
+      nvtPreferences,
+      isLoadingConfig: false,
+      isLoadingFamilies: false,
+      isLoadingScanners: false,
+      expectedResultsCount: 8,
+    },
+    {
+      description: 'should calculate resultsCount correctly when loading',
+      families,
+      scannerPreferences,
+      nvtPreferences,
+      isLoadingConfig: true,
+      isLoadingFamilies: true,
+      isLoadingScanners: true,
+      expectedResultsCount: 1,
+    },
+    {
+      description:
+        'should calculate resultsCount correctly when no items match',
+      families: [],
+      scannerPreferences: [],
+      nvtPreferences: [],
+      isLoadingConfig: false,
+      isLoadingFamilies: false,
+      isLoadingScanners: false,
+      expectedResultsCount: 0,
+    },
+  ])(
+    '$description',
+    ({
+      families,
+      scannerPreferences,
+      nvtPreferences,
+      isLoadingConfig,
+      isLoadingFamilies,
+      isLoadingScanners,
+      expectedResultsCount,
+    }) => {
+      const handleClose = testing.fn();
+      const handleSave = testing.fn();
+      const handleOpenEditConfigFamilyDialog = testing.fn();
+      const handleOpenEditNvtDetailsDialog = testing.fn();
+
+      const {render} = rendererWith({capabilities: true, router: true});
+      const {getByPlaceholderText} = render(
+        <EditScanConfigDialog
+          comment="bar"
+          configFamilies={configFamilies}
+          configId="c1"
+          configIsInUse={false}
+          editNvtDetailsTitle="Edit Scan Config NVT Details"
+          editNvtFamiliesTitle="Edit Scan Config Family"
+          families={families}
+          isLoadingConfig={isLoadingConfig}
+          isLoadingFamilies={isLoadingFamilies}
+          isLoadingScanners={isLoadingScanners}
+          name="Config"
+          nvtPreferences={nvtPreferences}
+          scannerPreferences={scannerPreferences}
+          scanners={scanners}
+          title="Edit Scan Config"
+          onClose={handleClose}
+          onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
+          onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
+          onSave={handleSave}
+        />,
+      );
+
+      const searchBar = getByPlaceholderText(
+        'Search for families, preferences, or NVTs',
+      );
+
+      fireEvent.change(searchBar, {target: {value: 'family1'}});
+      expect(searchBar.value).toBe('family1');
+
+      const resultsCount =
+        isLoadingConfig || isLoadingFamilies || isLoadingScanners
+          ? 1
+          : families.length + scannerPreferences.length + nvtPreferences.length;
+      expect(resultsCount).toBe(expectedResultsCount);
+    },
+  );
+
   // TODO: should allow to change scanner preferences
+});
+
+describe('handleSearchChange function tests', () => {
+  test('should filter items based on query', () => {
+    const items = [
+      {name: 'item1'},
+      {name: 'item2'},
+      {name: 'testItem'},
+      {name: 'anotherItem'},
+    ];
+    const setFilteredItems = testing.fn();
+
+    handleSearchChange('item', items, setFilteredItems, item => item.name);
+
+    expect(setFilteredItems).toHaveBeenCalledWith([
+      {name: 'item1'},
+      {name: 'item2'},
+      {name: 'testItem'},
+      {name: 'anotherItem'},
+    ]);
+
+    handleSearchChange('test', items, setFilteredItems, item => item.name);
+
+    expect(setFilteredItems).toHaveBeenCalledWith([{name: 'testItem'}]);
+
+    handleSearchChange(
+      'nonexistent',
+      items,
+      setFilteredItems,
+      item => item.name,
+    );
+
+    expect(setFilteredItems).toHaveBeenCalledWith([]);
+  });
 });
