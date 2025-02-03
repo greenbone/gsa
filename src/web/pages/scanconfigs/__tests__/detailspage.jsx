@@ -8,11 +8,16 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scanconfig';
+import {vi} from 'vitest';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, act, waitFor} from 'web/utils/testing';
+import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+
+vi.mock('web/pages/scanconfigs/editdialog', () => ({
+  default: () => null,
+}));
 
 const families = [
   {
@@ -574,7 +579,7 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    waitFor(() => {
+    await act(async () => {
       fireEvent.click(icons[3]);
       expect(clone).toHaveBeenCalledWith(config);
       expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
@@ -781,7 +786,7 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    waitFor(() => {
+    await act(async () => {
       fireEvent.click(icons[3]);
       expect(clone).toHaveBeenCalledWith(config3);
       expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
