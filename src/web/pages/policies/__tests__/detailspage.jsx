@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, act, waitFor} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -521,7 +521,7 @@ describe('Policy Detailspage tests', () => {
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    await act(async () => {
+    waitFor(() => {
       fireEvent.click(icons[2]);
       expect(clone).toHaveBeenCalledWith(policy);
       expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
@@ -718,7 +718,7 @@ describe('Policy Detailspage tests', () => {
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    await act(async () => {
+    waitFor(() => {
       fireEvent.click(icons[2]);
       expect(clone).toHaveBeenCalledWith(policy3);
       expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
