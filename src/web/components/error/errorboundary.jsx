@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as Sentry from '@sentry/react';
 import _ from 'gmp/locale';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
@@ -24,15 +22,6 @@ class ErrorBoundary extends React.Component {
       error,
       info,
     });
-
-    if (isDefined(error)) {
-      Sentry.withScope(scope => {
-        Object.keys(info).forEach(key => {
-          scope.setExtra(key, info[key]);
-        });
-        Sentry.captureException(error);
-      });
-    }
   }
 
   render() {
