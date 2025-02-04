@@ -30,7 +30,7 @@ const Radio = ({
       {...props}
       checked={checked}
       disabled={disabled}
-      label={String(title)}
+      label={title}
       name={name}
       value={value}
       onChange={handleChange}
