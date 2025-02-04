@@ -17,7 +17,7 @@ const StyledTextField = styled(TextField)`
   }
 `;
 
-const NoResultsMessage = styled.p`
+const NoMatchesMessage = styled.p`
   font-weight: bold;
   text-align: center;
   margin-top: 1rem;
@@ -27,7 +27,7 @@ const NoResultsMessage = styled.p`
   border-radius: 0.25rem;
 `;
 
-const SearchBar = ({placeholder, onSearch, resultsCount, ...props}) => {
+const SearchBar = ({placeholder, onSearch, matchesCount, ...props}) => {
   const [_] = useTranslation();
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState(query);
@@ -56,15 +56,15 @@ const SearchBar = ({placeholder, onSearch, resultsCount, ...props}) => {
         value={query}
         onChange={value => setQuery(value)}
       />
-      {resultsCount === 0 && (
-        <NoResultsMessage>{_('No results found.')}</NoResultsMessage>
+      {matchesCount === 0 && (
+        <NoMatchesMessage>{_('No matches found.')}</NoMatchesMessage>
       )}
     </>
   );
 };
 
 SearchBar.propTypes = {
-  resultsCount: PropTypes.number.isRequired,
+  matchesCount: PropTypes.number.isRequired,
   placeholder: PropTypes.string.isRequired,
   onSearch: PropTypes.func.isRequired,
 };

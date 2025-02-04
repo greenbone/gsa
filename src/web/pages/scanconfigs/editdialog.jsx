@@ -203,7 +203,7 @@ const EditScanConfigDialog = ({
   );
 
   const isLoading = isLoadingConfig || isLoadingFamilies || isLoadingScanners;
-  const resultsCount = isLoading
+  const matchesCount = isLoading
     ? 1
     : filteredFamilies.length +
       filteredScannerPreferences.length +
@@ -236,8 +236,8 @@ const EditScanConfigDialog = ({
           />
 
           <SearchBar
+            matchesCount={matchesCount}
             placeholder={_('Search for families, preferences, or NVTs')}
-            resultsCount={resultsCount}
             onSearch={handleSearchChangeCallback}
           />
           {configIsInUse ? (

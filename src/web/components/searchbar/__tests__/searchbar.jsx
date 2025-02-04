@@ -15,8 +15,8 @@ describe('SearchBar', () => {
   test('calls onSearch with debounced input value', async () => {
     render(
       <SearchBar
+        matchesCount={2}
         placeholder={placeholder}
-        resultsCount={2}
         onSearch={onSearch}
       />,
     );
@@ -32,8 +32,8 @@ describe('SearchBar', () => {
   test('shows no results message when resultsCount is zero', async () => {
     render(
       <SearchBar
+        matchesCount={0}
         placeholder={placeholder}
-        resultsCount={0}
         onSearch={onSearch}
       />,
     );
@@ -42,7 +42,7 @@ describe('SearchBar', () => {
     fireEvent.change(input, {target: {value: 'xyz'}});
 
     await waitFor(() => {
-      expect(screen.getByText('No results found.')).toBeVisible();
+      expect(screen.getByText('No matches found.')).toBeVisible();
     });
   });
 });
