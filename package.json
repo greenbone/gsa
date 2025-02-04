@@ -29,7 +29,7 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.0"
   },
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration": "^1.4.0",
