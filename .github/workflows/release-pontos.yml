@@ -52,12 +52,12 @@ jobs:
           release-type: ${{ steps.release-type.outputs.release-type }}
           release-version: ${{ inputs.release-version }}
           ref: ${{ steps.release-type.outputs.release-ref }}
-          versioning-scheme: "semver"
-          sign-release-files: "false"
+          versioning-scheme: 'semver'
+          sign-release-files: 'false'
 
   build-dist:
     name: Build JavaScript files
-    runs-on: "ubuntu-latest"
+    runs-on: 'ubuntu-latest'
     needs: release
     steps:
       - uses: actions/checkout@v4
@@ -66,8 +66,8 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '22'
+          cache: 'npm'
       - name: Install npm dependencies
         run: npm install
       - name: Build dist files
@@ -83,7 +83,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GREENBONE_BOT_TOKEN }}
 
   sign:
-    runs-on: "ubuntu-latest"
+    runs-on: 'ubuntu-latest'
     needs: [release, build-dist]
     steps:
       - name: Sign release files
