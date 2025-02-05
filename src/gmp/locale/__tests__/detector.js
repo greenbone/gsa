@@ -62,15 +62,17 @@ describe('LanguageDetector tests', () => {
 
   test('should return language from navigator', () => {
     const storage = {};
-    global.navigator = {language: 'en-US'};
-
     const languageUtils = {
       formatLanguageCode: testing.fn().mockImplementation(l => l),
       isSupportedCode: testing.fn().mockReturnValue(true),
     };
 
-    const detector = new LanguageDetector();
+    Object.defineProperty(global, 'navigator', {
+      value: {language: 'en-US'},
+      configurable: true,
+    });
 
+    const detector = new LanguageDetector();
     detector.init({languageUtils}, {storage}, {fallbackLng: 'bar'});
 
     expect(detector.detect()).toEqual('en-US');
@@ -78,8 +80,6 @@ describe('LanguageDetector tests', () => {
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('en-US');
     expect(languageUtils.isSupportedCode).toHaveBeenCalledTimes(1);
     expect(languageUtils.isSupportedCode).toHaveBeenCalledWith('en-US');
-
-    global.navigator = undefined;
   });
 
   test('should return languages from fake navigator', () => {
