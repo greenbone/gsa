@@ -79,7 +79,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-legacy": "^5.4.3",
+    "@vitejs/plugin-legacy": "^6.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "^3.0.5",
     "@vitest/eslint-plugin": "^1.1.25",
@@ -97,7 +97,7 @@
     "lint-staged": "^13.1.0",
     "prettier": "^3.4.2",
     "typescript": "^5.7.3",
-    "vite": "^5.4.14",
+    "vite": "^6.0.11",
     "vite-plugin-eslint2": "^5.0.3",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.0.5"
