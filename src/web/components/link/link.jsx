@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isDefined, isString} from 'gmp/utils/identity';
 import React from 'react';
 import {Link as RLink} from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 RLink.displayName = 'RouterLink';
 
@@ -76,6 +76,7 @@ LinkComponent.propTypes = {
 
 const Link = styled(withTextOnly(LinkComponent))`
   display: inline-flex;
+  font-size: ${Theme.Font.defaultSize};
 `;
 
 export default Link;
