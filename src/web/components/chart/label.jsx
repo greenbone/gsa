@@ -14,7 +14,7 @@ const Label = React.forwardRef(({x, y, children, ...props}, ref) => (
     className="pie-label"
     dy=".33em"
     fill={Theme.dialogGray} // to have labels a bit visible on white background
-    fontSize="12px"
+    fontSize={Theme.Font.default}
     fontWeight="bold"
     textAnchor="middle"
     x={x}
