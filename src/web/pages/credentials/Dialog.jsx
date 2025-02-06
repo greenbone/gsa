@@ -6,6 +6,7 @@
 import {
   ALL_CREDENTIAL_TYPES,
   getCredentialTypeName,
+  KRB5_CREDENTIAL_TYPE,
   PASSWORD_ONLY_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
   SMIME_CREDENTIAL_TYPE,
@@ -30,6 +31,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
+import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import useTranslation from 'web/hooks/useTranslation';
@@ -39,11 +41,6 @@ const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
 
 const CredentialsDialog = props => {
   const [_] = useTranslation();
-
-  const [credentialType, setCredentialType] = useState();
-  const [autogenerate, setAutogenerate] = useState();
-  const [publicKey, setPublicKey] = useState();
-  const [error, setError] = useState();
 
   const {
     credential,
@@ -65,14 +62,20 @@ const CredentialsDialog = props => {
     privacy_password = '',
     onClose,
     onSave,
+    autogenerate: pAutogenerate,
+    credential_type,
   } = props;
+
+  const [credentialType, setCredentialType] = useState();
+  const [autogenerate, setAutogenerate] = useState();
+  const [publicKey, setPublicKey] = useState();
+  const [error, setError] = useState();
 
   const isEdit = isDefined(credential);
 
   useEffect(() => {
-    const {autogenerate: pAutogenerate, credential_type} = props;
     setCredentialTypeAndAutoGenerate(credential_type, pAutogenerate);
-  }, [props]);
+  }, [credential_type, pAutogenerate]);
 
   const setCredentialTypeAndAutoGenerate = (type, autogenerate) => {
     if (
@@ -115,12 +118,12 @@ const CredentialsDialog = props => {
     setError(e.message);
   };
 
-  let cType = credentialType;
-
   const typeOptions = map(types, type => ({
     label: getCredentialTypeName(type),
     value: type,
   }));
+
+  let cType = credentialType;
 
   if (!isDefined(cType)) {
     if (types.includes(USERNAME_PASSWORD_CREDENTIAL_TYPE)) {
@@ -168,32 +171,29 @@ const CredentialsDialog = props => {
       {({values: state, onValueChange}) => {
         return (
           <>
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                value={state.name}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+            <TextField
+              name="name"
+              title={_('Name')}
+              value={state.name}
+              onChange={onValueChange}
+            />
 
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+            <TextField
+              name="comment"
+              title={_('Comment')}
+              value={state.comment}
+              onChange={onValueChange}
+            />
 
-            <FormGroup title={_('Type')}>
-              <Select
-                disabled={isEdit}
-                items={typeOptions}
-                value={state.credential_type}
-                onChange={value =>
-                  handleCredentialTypeChange(value, state.autogenerate)
-                }
-              />
-            </FormGroup>
+            <Select
+              disabled={isEdit}
+              items={typeOptions}
+              label={_('Type')}
+              value={state.credential_type}
+              onChange={value =>
+                handleCredentialTypeChange(value, state.autogenerate)
+              }
+            />
 
             <FormGroup title={_('Allow insecure use')}>
               <YesNoRadio
@@ -241,19 +241,20 @@ const CredentialsDialog = props => {
 
             {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
               state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-              state.credential_type === SNMP_CREDENTIAL_TYPE) && (
-              <FormGroup title={_('Username')}>
-                <TextField
-                  name="credential_login"
-                  value={state.credential_login}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+              state.credential_type === SNMP_CREDENTIAL_TYPE ||
+              state.credential_type === KRB5_CREDENTIAL_TYPE) && (
+              <TextField
+                name="credential_login"
+                title={_('Username')}
+                value={state.credential_login}
+                onChange={onValueChange}
+              />
             )}
 
             {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
               state.credential_type === SNMP_CREDENTIAL_TYPE ||
               state.credential_type === VFIRE_CREDENTIAL_TYPES ||
+              state.credential_type === KRB5_CREDENTIAL_TYPE ||
               state.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE) && (
               <FormGroup direction="row" title={_('Password')}>
                 {isEdit && (
@@ -281,124 +282,146 @@ const CredentialsDialog = props => {
             )}
 
             {state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
-              <FormGroup direction="row" title={_('Passphrase')}>
-                {isEdit && (
-                  <Checkbox
-                    checked={state.change_passphrase === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    name="change_passphrase"
-                    title={_('Replace existing passphrase with')}
-                    unCheckedValue={NO_VALUE}
+              <>
+                <FormGroup direction="row" title={_('Passphrase')}>
+                  {isEdit && (
+                    <Checkbox
+                      checked={state.change_passphrase === YES_VALUE}
+                      checkedValue={YES_VALUE}
+                      name="change_passphrase"
+                      title={_('Replace existing passphrase with')}
+                      unCheckedValue={NO_VALUE}
+                      onChange={onValueChange}
+                    />
+                  )}
+                  <PasswordField
+                    autoComplete="new-password"
+                    disabled={
+                      state.autogenerate === YES_VALUE ||
+                      (isEdit && state.change_passphrase !== YES_VALUE)
+                    }
+                    grow="1"
+                    name="passphrase"
+                    value={state.passphrase}
                     onChange={onValueChange}
                   />
-                )}
-                <PasswordField
-                  autoComplete="new-password"
-                  disabled={
-                    state.autogenerate === YES_VALUE ||
-                    (isEdit && state.change_passphrase !== YES_VALUE)
-                  }
-                  grow="1"
-                  name="passphrase"
-                  value={state.passphrase}
+                </FormGroup>
+
+                <FileField
+                  name="private_key"
+                  title={_('Private Key')}
                   onChange={onValueChange}
                 />
-              </FormGroup>
+              </>
             )}
 
             {state.credential_type === SNMP_CREDENTIAL_TYPE && (
-              <FormGroup direction="row" title={_('Privacy Password')}>
-                {isEdit && (
-                  <Checkbox
-                    checked={state.change_privacy_password === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    name="change_privacy_password"
-                    title={_('Replace existing privacy password with')}
-                    unCheckedValue={NO_VALUE}
+              <>
+                <FormGroup direction="row" title={_('Privacy Password')}>
+                  {isEdit && (
+                    <Checkbox
+                      checked={state.change_privacy_password === YES_VALUE}
+                      checkedValue={YES_VALUE}
+                      name="change_privacy_password"
+                      title={_('Replace existing privacy password with')}
+                      unCheckedValue={NO_VALUE}
+                      onChange={onValueChange}
+                    />
+                  )}
+                  <PasswordField
+                    autoComplete="new-password"
+                    disabled={
+                      state.autogenerate === YES_VALUE ||
+                      (isEdit && state.change_privacy_password !== YES_VALUE)
+                    }
+                    grow="1"
+                    name="privacy_password"
+                    value={state.privacy_password}
                     onChange={onValueChange}
                   />
-                )}
-                <PasswordField
-                  autoComplete="new-password"
-                  disabled={
-                    state.autogenerate === YES_VALUE ||
-                    (isEdit && state.change_privacy_password !== YES_VALUE)
-                  }
-                  grow="1"
-                  name="privacy_password"
-                  value={state.privacy_password}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-            )}
+                </FormGroup>
 
-            {state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
-              <FormGroup title={_('Private Key')}>
-                <FileField name="private_key" onChange={onValueChange} />
-              </FormGroup>
-            )}
+                <FormGroup direction="row" title={_('Auth Algorithm')}>
+                  <Radio
+                    checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_MD5}
+                    name="auth_algorithm"
+                    title="MD5"
+                    value={SNMP_AUTH_ALGORITHM_MD5}
+                    onChange={onValueChange}
+                  />
+                  <Radio
+                    checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_SHA1}
+                    name="auth_algorithm"
+                    title="SHA1"
+                    value={SNMP_AUTH_ALGORITHM_SHA1}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-            {state.credential_type === SNMP_CREDENTIAL_TYPE && (
-              <FormGroup direction="row" title={_('Auth Algorithm')}>
-                <Radio
-                  checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_MD5}
-                  name="auth_algorithm"
-                  title="MD5"
-                  value={SNMP_AUTH_ALGORITHM_MD5}
-                  onChange={onValueChange}
-                />
-                <Radio
-                  checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_SHA1}
-                  name="auth_algorithm"
-                  title="SHA1"
-                  value={SNMP_AUTH_ALGORITHM_SHA1}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-            )}
-
-            {state.credential_type === SNMP_CREDENTIAL_TYPE && (
-              <FormGroup direction="row" title={_('Privacy Algorithm')}>
-                <Radio
-                  checked={
-                    state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_AES
-                  }
-                  name="privacy_algorithm"
-                  title="AES"
-                  value={SNMP_PRIVACY_ALGORITHM_AES}
-                  onChange={onValueChange}
-                />
-                <Radio
-                  checked={
-                    state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_DES
-                  }
-                  name="privacy_algorithm"
-                  title="DES"
-                  value={SNMP_PRIVACY_ALGORITHM_DES}
-                  onChange={onValueChange}
-                />
-                <Radio
-                  checked={
-                    state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_NONE
-                  }
-                  name="privacy_algorithm"
-                  title={_('None')}
-                  value={SNMP_PRIVACY_ALGORITHM_NONE}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+                <FormGroup direction="row" title={_('Privacy Algorithm')}>
+                  <Radio
+                    checked={
+                      state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_AES
+                    }
+                    name="privacy_algorithm"
+                    title="AES"
+                    value={SNMP_PRIVACY_ALGORITHM_AES}
+                    onChange={onValueChange}
+                  />
+                  <Radio
+                    checked={
+                      state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_DES
+                    }
+                    name="privacy_algorithm"
+                    title="DES"
+                    value={SNMP_PRIVACY_ALGORITHM_DES}
+                    onChange={onValueChange}
+                  />
+                  <Radio
+                    checked={
+                      state.privacy_algorithm === SNMP_PRIVACY_ALGORITHM_NONE
+                    }
+                    name="privacy_algorithm"
+                    title={_('None')}
+                    value={SNMP_PRIVACY_ALGORITHM_NONE}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+              </>
             )}
 
             {state.credential_type === PGP_CREDENTIAL_TYPE && (
-              <FormGroup title={_('PGP Public Key')}>
-                <FileField name="public_key" onChange={handlePublicKeyChange} />
-              </FormGroup>
+              <FileField
+                name="public_key"
+                title={_('Public Key')}
+                onChange={handlePublicKeyChange}
+              />
             )}
 
             {state.credential_type === SMIME_CREDENTIAL_TYPE && (
-              <FormGroup title={_('S/MIME Certificate')}>
-                <FileField name="certificate" onChange={onValueChange} />
-              </FormGroup>
+              <FileField
+                name="certificate"
+                title={_('S/MIME Certificate')}
+                onChange={onValueChange}
+              />
+            )}
+
+            {state.credential_type === KRB5_CREDENTIAL_TYPE && (
+              <>
+                <TextField
+                  name="realm"
+                  title={_('Realm')}
+                  value={state.realm}
+                  onChange={onValueChange}
+                />
+                <TextArea
+                  name="kdc"
+                  placeholder={_('Comma separated list of KDCs')}
+                  title={_('KDCs')}
+                  value={state.kdc}
+                  onChange={onValueChange}
+                />
+              </>
             )}
           </>
         );

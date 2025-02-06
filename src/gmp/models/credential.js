@@ -15,6 +15,8 @@ export const SNMP_CREDENTIAL_TYPE = 'snmp';
 export const SMIME_CREDENTIAL_TYPE = 'smime';
 export const PGP_CREDENTIAL_TYPE = 'pgp';
 export const PASSWORD_ONLY_CREDENTIAL_TYPE = 'pw';
+export const CERTIFICATE_CREDENTIAL_TYPE = 'cc';
+export const KRB5_CREDENTIAL_TYPE = 'krb5';
 
 export const SSH_CREDENTIAL_TYPES = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -28,6 +30,8 @@ export const SMB_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 export const ESXI_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
 export const SNMP_CREDENTIAL_TYPES = [SNMP_CREDENTIAL_TYPE];
+
+export const KRB5_CREDENTIAL_TYPES = [KRB5_CREDENTIAL_TYPE];
 
 export const EMAIL_CREDENTIAL_TYPES = [
   SMIME_CREDENTIAL_TYPE,
@@ -43,6 +47,7 @@ export const ALL_CREDENTIAL_TYPES = [
   SMIME_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
   PASSWORD_ONLY_CREDENTIAL_TYPE,
+  KRB5_CREDENTIAL_TYPE,
 ];
 
 export const ssh_credential_filter = credential =>
@@ -57,6 +62,9 @@ export const esxi_credential_filter = credential =>
 
 export const snmp_credential_filter = credential =>
   credential.credential_type === SNMP_CREDENTIAL_TYPE;
+
+export const krb5CredentialFilter = credential =>
+  credential.credential_type === KRB5_CREDENTIAL_TYPE;
 
 export const email_credential_filter = credential =>
   credential.credential_type === SMIME_CREDENTIAL_TYPE ||
@@ -79,13 +87,14 @@ export const CERTIFICATE_STATUS_INACTIVE = 'inactive';
 export const CERTIFICATE_STATUS_EXPIRED = 'expired';
 
 const TYPE_NAMES = {
-  up: _l('Username + Password'),
-  usk: _l('Username + SSH Key'),
-  cc: _l('Client Certificate'),
-  snmp: _l('SNMP'),
-  pgp: _l('PGP Encryption Key'),
-  pw: _l('Password only'),
-  smime: _l('S/MIME Certificate'),
+  [USERNAME_PASSWORD_CREDENTIAL_TYPE]: _l('Username + Password'),
+  [USERNAME_SSH_KEY_CREDENTIAL_TYPE]: _l('Username + SSH Key'),
+  [CERTIFICATE_CREDENTIAL_TYPE]: _l('Client Certificate'),
+  [SNMP_CREDENTIAL_TYPE]: _l('SNMP'),
+  [PGP_CREDENTIAL_TYPE]: _l('PGP Encryption Key'),
+  [PASSWORD_ONLY_CREDENTIAL_TYPE]: _l('Password only'),
+  [SMIME_CREDENTIAL_TYPE]: _l('S/MIME Certificate'),
+  [KRB5_CREDENTIAL_TYPE]: _l('Kerberos'),
 };
 
 export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
