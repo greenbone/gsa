@@ -53,12 +53,12 @@ and the fingerprint is `8AE4 BE42 9B60 A59B 311C  2E73 9823 FAA6 0ED1 E580`.
 
 Prerequisites for GSA:
 
-- node.js >= 18.0
+- node.js >= 20.0
 
 To install nodejs the following commands can be used
 
 ```bash
-export VERSION=18
+export VERSION=20
 export KEYRING=/usr/share/keyrings/nodesource.gpg
 
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null

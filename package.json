@@ -29,11 +29,11 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.0"
   },
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration": "^1.4.0",
-    "@greenbone/opensight-ui-components-mantinev7": "^0.0.7",
+    "@greenbone/opensight-ui-components-mantinev7": "^0.2.0",
     "@mantine/core": "^7.15.3",
     "@reduxjs/toolkit": "^2.5.1",
     "@visx/axis": "^3.12.0",

@@ -19,8 +19,8 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 18
           - 20
+          - 22
     steps:
       - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
@@ -43,7 +43,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 18
+          - 22
     steps:
       - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
@@ -74,8 +74,8 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 18
           - 20
+          - 22
     steps:
       - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
