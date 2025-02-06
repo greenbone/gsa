@@ -35,6 +35,8 @@ class CredentialCommand extends EntityCommand {
       privacy_algorithm = 'aes',
       private_key,
       public_key,
+      realm,
+      kdc,
     } = args;
     log.debug('Creating new credential', args);
     return this.action({
@@ -54,6 +56,8 @@ class CredentialCommand extends EntityCommand {
       private_key,
       public_key,
       certificate,
+      realm,
+      kdc,
     });
   }
 
