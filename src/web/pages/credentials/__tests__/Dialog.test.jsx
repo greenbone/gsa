@@ -178,7 +178,7 @@ describe('CredentialsDialog component tests', () => {
     expect(select).toHaveValue('Username + Password');
 
     const selectItems = await getSelectItemElementsForSelect(select);
-    expect(selectItems.length).toEqual(6);
+    expect(selectItems.length).toEqual(7);
 
     // change to password only
     await clickElement(selectItems[5]);
@@ -339,6 +339,37 @@ describe('CredentialsDialog component tests', () => {
     const password = screen.getByTestId('password-input');
     expect(password).toHaveValue('');
     expect(password).toHaveAttribute('type', 'password');
+  });
+
+  test('should render form fields for KRB5', () => {
+    const {getByName} = render(
+      <CredentialsDialog
+        credential_type={'krb5'}
+        types={ALL_CREDENTIAL_TYPES}
+        onClose={handleClose}
+        onErrorClose={handleErrorClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const select = getSelectElement();
+    expect(select).toHaveValue('Kerberos');
+
+    const allowInsecure = getByName('allow_insecure');
+    expect(allowInsecure).toHaveAttribute('value', '1');
+
+    const username = getByName('credential_login');
+    expect(username).toHaveValue('');
+
+    const password = getByName('password');
+    expect(password).toHaveValue('');
+    expect(password).toHaveAttribute('type', 'password');
+
+    const realm = getByName('realm');
+    expect(realm).toHaveValue('');
+
+    const kdc = getByName('kdc');
+    expect(kdc).toHaveValue('');
   });
 
   test('should render CredentialsDialog and handle replace password interactions correctly', () => {

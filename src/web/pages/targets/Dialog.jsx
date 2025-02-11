@@ -12,6 +12,8 @@ import {
   SSH_CREDENTIAL_TYPES,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   SSH_ELEVATE_CREDENTIAL_TYPES,
+  KRB5_CREDENTIAL_TYPES,
+  krb5CredentialFilter,
 } from 'gmp/models/credential';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import React from 'react';
@@ -25,10 +27,10 @@ import YesNoRadio from 'web/components/form/YesNoRadio';
 import InfoIcon from 'web/components/icon/InfoIcon';
 import NewIcon from 'web/components/icon/NewIcon';
 import Row from 'web/components/layout/Row';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
-import withCapabilities from 'web/utils/withCapabilities';
 
 const DEFAULT_PORT = 22;
 
@@ -57,28 +59,28 @@ const ALIVE_TESTS = [
 ];
 
 const TargetDialog = ({
-  alive_tests = ALIVE_TESTS_DEFAULT,
+  aliveTests = ALIVE_TESTS_DEFAULT,
   allowSimultaneousIPs = YES_VALUE,
-  capabilities,
   comment = '',
   credentials = [],
-  esxi_credential_id = UNSET_VALUE,
-  exclude_hosts = '',
+  esxiCredentialId = UNSET_VALUE,
+  excludeHosts = '',
   hosts = '',
-  hosts_count,
-  in_use = false,
+  hostsCount,
+  inUse = false,
   name,
   port = DEFAULT_PORT,
-  port_list_id = DEFAULT_PORT_LIST_ID,
-  port_lists = DEFAULT_PORT_LISTS,
-  reverse_lookup_only = NO_VALUE,
-  reverse_lookup_unify = NO_VALUE,
-  smb_credential_id = UNSET_VALUE,
-  snmp_credential_id = UNSET_VALUE,
-  ssh_credential_id = UNSET_VALUE,
-  ssh_elevate_credential_id = UNSET_VALUE,
-  target_source = 'manual',
-  target_exclude_source = 'manual',
+  portListId = DEFAULT_PORT_LIST_ID,
+  portLists = DEFAULT_PORT_LISTS,
+  reverseLookupOnly = NO_VALUE,
+  reverseLookupUnify = NO_VALUE,
+  smbCredentialId = UNSET_VALUE,
+  snmpCredentialId = UNSET_VALUE,
+  sshCredentialId = UNSET_VALUE,
+  sshElevateCredentialId = UNSET_VALUE,
+  krb5CredentialId = UNSET_VALUE,
+  targetSource = 'manual',
+  targetExcludeSource = 'manual',
   title,
   onClose,
   onNewCredentialsClick,
@@ -88,11 +90,13 @@ const TargetDialog = ({
   onSshCredentialChange,
   onSmbCredentialChange,
   onEsxiCredentialChange,
+  onKrb5CredentialChange,
   onSnmpCredentialChange,
   onSshElevateCredentialChange,
   ...initial
 }) => {
   const [_] = useTranslation();
+  const capabilities = useCapabilities();
 
   name = name || _('Unnamed');
   title = title || _('New Target');
@@ -106,71 +110,81 @@ const TargetDialog = ({
   ];
 
   const NEW_SSH = {
-    id_field: 'ssh_credential_id',
+    idField: 'sshCredentialId',
     types: SSH_CREDENTIAL_TYPES,
     title: _('Create new SSH credential'),
   };
 
   const NEW_SSH_ELEVATE = {
-    id_field: 'ssh_elevate_credential_id',
+    idField: 'sshElevateCredentialId',
     types: SSH_ELEVATE_CREDENTIAL_TYPES,
     title: _('Create new SSH elevate credential'),
   };
 
   const NEW_SMB = {
-    id_field: 'smb_credential_id',
+    idField: 'smbCredentialId',
     title: _('Create new SMB credential'),
     types: SMB_CREDENTIAL_TYPES,
   };
 
   const NEW_ESXI = {
-    id_field: 'esxi_credential_id',
+    idField: 'esxiCredentialId',
     title: _('Create new ESXi credential'),
     types: ESXI_CREDENTIAL_TYPES,
   };
 
   const NEW_SNMP = {
-    id_field: 'snmp_credential_id',
+    idField: 'snmpCredentialId',
     title: _('Create new SNMP credential'),
     types: SNMP_CREDENTIAL_TYPES,
   };
 
-  const ssh_credentials = credentials.filter(
+  const NEW_KRB5 = {
+    idField: 'krb5CredentialId',
+    title: _('Create new Kerberos credential'),
+    types: KRB5_CREDENTIAL_TYPES,
+  };
+
+  const sshCredentials = credentials.filter(
     value =>
-      ssh_credential_filter(value) && value.id !== ssh_elevate_credential_id,
-  ); // filter out ssh_elevate_credential_id. If ssh_elevate_credential_id is UNSET_VALUE, this is ok. Because the Select will add back the UNSET_VALUE
-  const up_credentials = credentials.filter(
+      ssh_credential_filter(value) && value.id !== sshElevateCredentialId,
+  );
+  // filter out ssh_elevate_credential_id. If ssh_elevate_credential_id is UNSET_VALUE, this is ok. Because the Select will add back the UNSET_VALUE
+  const upCredentials = credentials.filter(
     value => value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
-  const elevateUpCredentials = up_credentials.filter(
-    value => value.id !== ssh_credential_id,
+  const elevateUpCredentials = upCredentials.filter(
+    value => value.id !== sshCredentialId,
   );
-  const snmp_credentials = credentials.filter(snmp_credential_filter);
+  const snmpCredentials = credentials.filter(snmp_credential_filter);
+
+  const krb5Credentials = credentials.filter(krb5CredentialFilter);
 
   const uncontrolledValues = {
     ...initial,
-    alive_tests,
+    aliveTests,
     comment,
     name,
     port,
-    exclude_hosts,
+    excludeHosts,
     hosts,
-    hosts_count,
-    in_use,
-    reverse_lookup_only,
-    reverse_lookup_unify,
-    target_source,
-    target_exclude_source,
+    hostsCount,
+    inUse,
+    reverseLookupOnly,
+    reverseLookupUnify,
+    targetSource,
+    targetExcludeSource,
     allowSimultaneousIPs,
   };
 
   const controlledValues = {
-    port_list_id,
-    esxi_credential_id,
-    smb_credential_id,
-    snmp_credential_id,
-    ssh_credential_id,
-    ssh_elevate_credential_id,
+    portListId,
+    esxiCredentialId,
+    smbCredentialId,
+    snmpCredentialId,
+    sshCredentialId,
+    sshElevateCredentialId,
+    krb5CredentialId,
   };
 
   return (
@@ -204,15 +218,15 @@ const TargetDialog = ({
             <FormGroup title={_('Hosts')}>
               <Row>
                 <Radio
-                  checked={state.target_source === 'manual'}
-                  disabled={in_use}
-                  name="target_source"
+                  checked={state.targetSource === 'manual'}
+                  disabled={inUse}
+                  name="targetSource"
                   title={_('Manual')}
                   value="manual"
                   onChange={onValueChange}
                 />
                 <TextField
-                  disabled={in_use || state.target_source !== 'manual'}
+                  disabled={inUse || state.targetSource !== 'manual'}
                   grow="1"
                   name="hosts"
                   value={state.hosts}
@@ -221,29 +235,29 @@ const TargetDialog = ({
               </Row>
               <Row>
                 <Radio
-                  checked={state.target_source === 'file'}
-                  disabled={in_use}
-                  name="target_source"
+                  checked={state.targetSource === 'file'}
+                  disabled={inUse}
+                  name="targetSource"
                   title={_('From file')}
                   value="file"
                   onChange={onValueChange}
                 />
                 <FileField
-                  disabled={in_use || state.target_source !== 'file'}
+                  disabled={inUse || state.targetSource !== 'file'}
                   grow="1"
                   name="file"
                   onChange={onValueChange}
                 />
 
-                {state.hosts_count && (
+                {state.hostsCount && (
                   <Radio
-                    checked={state.target_source === 'asset_hosts'}
-                    disabled={in_use}
-                    name="target_source"
+                    checked={state.targetSource === 'assetHosts'}
+                    disabled={inUse}
+                    name="targetSource"
                     title={_('From host assets ({{count}} hosts)', {
-                      count: state.hosts_count,
+                      count: state.hostsCount,
                     })}
-                    value="asset_hosts"
+                    value="assetHosts"
                     onChange={onValueChange}
                   />
                 )}
@@ -253,34 +267,34 @@ const TargetDialog = ({
             <FormGroup title={_('Exclude Hosts')}>
               <Row>
                 <Radio
-                  checked={state.target_exclude_source === 'manual'}
-                  disabled={in_use}
-                  name="target_exclude_source"
+                  checked={state.targetExcludeSource === 'manual'}
+                  disabled={inUse}
+                  name="targetExcludeSource"
                   title={_('Manual')}
                   value="manual"
                   onChange={onValueChange}
                 />
                 <TextField
-                  disabled={in_use || state.target_exclude_source !== 'manual'}
+                  disabled={inUse || state.targetExcludeSource !== 'manual'}
                   grow="1"
-                  name="exclude_hosts"
-                  value={state.exclude_hosts}
+                  name="excludeHosts"
+                  value={state.excludeHosts}
                   onChange={onValueChange}
                 />
               </Row>
               <Row>
                 <Radio
-                  checked={state.target_exclude_source === 'file'}
-                  disabled={in_use}
-                  name="target_exclude_source"
+                  checked={state.targetExcludeSource === 'file'}
+                  disabled={inUse}
+                  name="targetExcludeSource"
                   title={_('From file')}
                   value="file"
                   onChange={onValueChange}
                 />
                 <FileField
-                  disabled={in_use || state.target_exclude_source !== 'file'}
+                  disabled={inUse || state.targetExcludeSource !== 'file'}
                   grow="1"
-                  name="exclude_file"
+                  name="excludeFile"
                   onChange={onValueChange}
                 />
               </Row>
@@ -299,14 +313,14 @@ const TargetDialog = ({
             {capabilities.mayOp('get_port_lists') && (
               <FormGroup direction="row" title={_('Port List')}>
                 <Select
-                  disabled={in_use}
+                  disabled={inUse}
                   grow="1"
-                  items={renderSelectItems(port_lists)}
-                  name="port_list_id"
-                  value={state.port_list_id}
+                  items={renderSelectItems(portLists)}
+                  name="portListId"
+                  value={state.portListId}
                   onChange={onPortListChange}
                 />
-                {!in_use && (
+                {!inUse && (
                   <NewIcon
                     title={_('Create a new port list')}
                     onClick={onNewPortListClick}
@@ -318,8 +332,8 @@ const TargetDialog = ({
             <FormGroup title={_('Alive Test')}>
               <Select
                 items={ALIVE_TESTS_ITEMS}
-                name="alive_tests"
-                value={state.alive_tests}
+                name="aliveTests"
+                value={state.aliveTests}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -332,21 +346,21 @@ const TargetDialog = ({
               <FormGroup title={_('SSH')}>
                 <Row>
                   <Select
-                    disabled={in_use}
+                    disabled={inUse}
                     grow="1"
-                    items={renderSelectItems(ssh_credentials, UNSET_VALUE)}
-                    name="ssh_credential_id"
-                    value={state.ssh_credential_id}
+                    items={renderSelectItems(sshCredentials, UNSET_VALUE)}
+                    name="sshCredentialId"
+                    value={state.sshCredentialId}
                     onChange={onSshCredentialChange}
                   />
                   {_('on port')}
                   <TextField
-                    disabled={in_use}
+                    disabled={inUse}
                     name="port"
                     value={state.port}
                     onChange={onValueChange}
                   />
-                  {!in_use && (
+                  {!inUse && (
                     <NewIcon
                       title={_('Create a new credential')}
                       value={NEW_SSH}
@@ -354,7 +368,7 @@ const TargetDialog = ({
                     />
                   )}
                 </Row>
-                {state.ssh_credential_id !== UNSET_VALUE && (
+                {state.sshCredentialId !== UNSET_VALUE && (
                   <Row>
                     <InfoIcon
                       title={_(
@@ -364,17 +378,17 @@ const TargetDialog = ({
                     />
                     <span>{_('Elevate privileges')}</span>
                     <Select
-                      disabled={in_use}
+                      disabled={inUse}
                       grow="1"
                       items={renderSelectItems(
                         elevateUpCredentials,
                         UNSET_VALUE,
                       )}
-                      name="ssh_elevate_credential_id"
-                      value={state.ssh_elevate_credential_id}
+                      name="sshElevateCredentialId"
+                      value={state.sshElevateCredentialId}
                       onChange={onSshElevateCredentialChange}
                     />
-                    {!in_use && (
+                    {!inUse && (
                       <NewIcon
                         title={_('Create a new credential')}
                         value={NEW_SSH_ELEVATE}
@@ -389,14 +403,14 @@ const TargetDialog = ({
             {capabilities.mayOp('get_credentials') && (
               <FormGroup direction="row" title={_('SMB')}>
                 <Select
-                  disabled={in_use}
+                  disabled={inUse || state.krb5CredentialId !== UNSET_VALUE}
                   grow="1"
-                  items={renderSelectItems(up_credentials, UNSET_VALUE)}
-                  name="smb_credential_id"
-                  value={state.smb_credential_id}
+                  items={renderSelectItems(upCredentials, UNSET_VALUE)}
+                  name="smbCredentialId"
+                  value={state.smbCredentialId}
                   onChange={onSmbCredentialChange}
                 />
-                {!in_use && (
+                {!inUse && (
                   <NewIcon
                     title={_('Create a new credential')}
                     value={NEW_SMB}
@@ -409,14 +423,14 @@ const TargetDialog = ({
             {capabilities.mayOp('get_credentials') && (
               <FormGroup direction="row" title={_('ESXi')}>
                 <Select
-                  disabled={in_use}
+                  disabled={inUse}
                   grow="1"
-                  items={renderSelectItems(up_credentials, UNSET_VALUE)}
-                  name="esxi_credential_id"
-                  value={state.esxi_credential_id}
+                  items={renderSelectItems(upCredentials, UNSET_VALUE)}
+                  name="esxiCredentialId"
+                  value={state.esxiCredentialId}
                   onChange={onEsxiCredentialChange}
                 />
-                {!in_use && (
+                {!inUse && (
                   <NewIcon
                     title={_('Create a new credential')}
                     value={NEW_ESXI}
@@ -429,14 +443,14 @@ const TargetDialog = ({
             {capabilities.mayOp('get_credentials') && (
               <FormGroup direction="row" title={_('SNMP')}>
                 <Select
-                  disabled={in_use}
+                  disabled={inUse}
                   grow="1"
-                  items={renderSelectItems(snmp_credentials, UNSET_VALUE)}
-                  name="snmp_credential_id"
-                  value={state.snmp_credential_id}
+                  items={renderSelectItems(snmpCredentials, UNSET_VALUE)}
+                  name="snmpCredentialId"
+                  value={state.snmpCredentialId}
                   onChange={onSnmpCredentialChange}
                 />
-                {!in_use && (
+                {!inUse && (
                   <NewIcon
                     title={_('Create a new credential')}
                     value={NEW_SNMP}
@@ -446,20 +460,40 @@ const TargetDialog = ({
               </FormGroup>
             )}
 
+            {capabilities.mayOp('get_credentials') && (
+              <FormGroup direction="row" title={_('Kerberos')}>
+                <Select
+                  disabled={inUse || state.smbCredentialId !== UNSET_VALUE}
+                  grow="1"
+                  items={renderSelectItems(krb5Credentials, UNSET_VALUE)}
+                  name="krb5CredentialId"
+                  value={state.krb5CredentialId}
+                  onChange={onKrb5CredentialChange}
+                />
+                {!inUse && (
+                  <NewIcon
+                    title={_('Create a new credential')}
+                    value={NEW_KRB5}
+                    onClick={onNewCredentialsClick}
+                  />
+                )}
+              </FormGroup>
+            )}
+
             <FormGroup title={_('Reverse Lookup Only')}>
               <YesNoRadio
-                disabled={in_use}
-                name="reverse_lookup_only"
-                value={state.reverse_lookup_only}
+                disabled={inUse}
+                name="reverseLookupOnly"
+                value={state.reverseLookupOnly}
                 onChange={onValueChange}
               />
             </FormGroup>
 
             <FormGroup title={_('Reverse Lookup Unify')}>
               <YesNoRadio
-                disabled={in_use}
-                name="reverse_lookup_unify"
-                value={state.reverse_lookup_unify}
+                disabled={inUse}
+                name="reverseLookupUnify"
+                value={state.reverseLookupUnify}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -471,28 +505,28 @@ const TargetDialog = ({
 };
 
 TargetDialog.propTypes = {
-  alive_tests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
+  aliveTests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
   allowSimultaneousIPs: PropTypes.yesno,
-  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   credentials: PropTypes.array,
-  esxi_credential_id: PropTypes.idOrZero,
-  exclude_hosts: PropTypes.string,
+  esxiCredentialId: PropTypes.idOrZero,
+  excludeHosts: PropTypes.string,
   hosts: PropTypes.string,
-  hosts_count: PropTypes.number,
-  in_use: PropTypes.bool,
+  hostsCount: PropTypes.number,
+  inUse: PropTypes.bool,
   name: PropTypes.string,
   port: PropTypes.numberOrNumberString,
-  port_list_id: PropTypes.idOrZero,
-  port_lists: PropTypes.array,
-  reverse_lookup_only: PropTypes.yesno,
-  reverse_lookup_unify: PropTypes.yesno,
-  smb_credential_id: PropTypes.idOrZero,
-  snmp_credential_id: PropTypes.idOrZero,
-  ssh_credential_id: PropTypes.idOrZero,
-  ssh_elevate_credential_id: PropTypes.idOrZero,
-  target_exclude_source: PropTypes.oneOf(['manual', 'file']),
-  target_source: PropTypes.oneOf(['manual', 'file', 'asset_hosts']),
+  portListId: PropTypes.idOrZero,
+  portLists: PropTypes.array,
+  reverseLookupOnly: PropTypes.yesno,
+  reverseLookupUnify: PropTypes.yesno,
+  smbCredentialId: PropTypes.idOrZero,
+  snmpCredentialId: PropTypes.idOrZero,
+  sshCredentialId: PropTypes.idOrZero,
+  sshElevateCredentialId: PropTypes.idOrZero,
+  krb5CredentialId: PropTypes.idOrZero,
+  targetExcludeSource: PropTypes.oneOf(['manual', 'file']),
+  targetSource: PropTypes.oneOf(['manual', 'file', 'assetHosts']),
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onEsxiCredentialChange: PropTypes.func.isRequired,
@@ -504,6 +538,7 @@ TargetDialog.propTypes = {
   onSnmpCredentialChange: PropTypes.func.isRequired,
   onSshCredentialChange: PropTypes.func.isRequired,
   onSshElevateCredentialChange: PropTypes.func.isRequired,
+  onKrb5CredentialChange: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(TargetDialog);
+export default TargetDialog;

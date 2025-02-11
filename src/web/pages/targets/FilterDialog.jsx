@@ -62,6 +62,10 @@ const TargetsFilterDialog = ({
       name: 'snmp_credential',
       displayName: _('SNMP Credential'),
     },
+    {
+      name: 'krb5_credential',
+      displayName: _('Kerberos Credential'),
+    },
   ];
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>

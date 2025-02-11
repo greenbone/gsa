@@ -128,6 +128,7 @@ export const Row = ({
       <Cred cred={entity.smb_credential} links={links} title={'SMB'} />
       <Cred cred={entity.esxi_credential} links={links} title={'ESXi'} />
       <Cred cred={entity.snmp_credential} links={links} title={'SNMP'} />
+      <Cred cred={entity.krb5_credential} links={links} title={'Kerberos'} />
     </TableData>
     <ActionsComponent {...props} entity={entity} />
   </TableRow>

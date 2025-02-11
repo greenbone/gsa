@@ -81,12 +81,15 @@ const getRestorableDeletableForEntityType = {
     const snmp_cred = isDefined(entity.snmp_credential)
       ? !entity.snmp_credential.isInTrash()
       : true;
+    const krb5Cred = isDefined(entity.krb5_credential)
+      ? !entity.krb5_credential.isInTrash()
+      : true;
     const portlist = isDefined(entity.port_list)
       ? !entity.port_list.isInTrash()
       : true;
 
     const restorable =
-      ssh_cred && smb_cred && esxi_cred && snmp_cred && portlist;
+      ssh_cred && smb_cred && esxi_cred && snmp_cred && krb5Cred && portlist;
     return {restorable, deletable: !entity.isInUse()};
   },
   task: entity => {

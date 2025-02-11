@@ -3,417 +3,323 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
+import {useState, useRef} from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
 import PortListDialog from 'web/pages/portlists/Dialog';
 import TargetDialog from 'web/pages/targets/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
-import withGmp from 'web/utils/withGmp';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
-const id_or__ = value => {
-  return isDefined(value) ? value.id : UNSET_VALUE;
-};
+const getIdOrDefault = value => (isDefined(value) ? value.id : UNSET_VALUE);
 
-class TargetComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+function TargetComponent(props) {
+  const {
+    children,
+    onInteraction,
+    onCloned,
+    onCloneError,
+    onCreated,
+    onCreateError,
+    onDeleted,
+    onDeleteError,
+    onDownloaded,
+    onDownloadError,
+    onSaved,
+    onSaveError,
+  } = props;
+  const gmp = useGmp();
+  const [_] = useTranslation();
+  const idFieldRef = useRef(null);
 
-    this.state = {
-      credentialsDialogVisible: false,
-      portListDialogVisible: false,
-      targetDialogVisible: false,
-    };
+  const [state, setState] = useState({
+    credentialsDialogVisible: false,
+    portListDialogVisible: false,
+    targetDialogVisible: false,
+    portListId: DEFAULT_PORT_LIST_ID,
+  });
 
-    this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
-    this.handleCloseCredentialsDialog =
-      this.handleCloseCredentialsDialog.bind(this);
-    this.openPortListDialog = this.openPortListDialog.bind(this);
-    this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
-    this.openTargetDialog = this.openTargetDialog.bind(this);
-    this.handleCloseTargetDialog = this.handleCloseTargetDialog.bind(this);
-    this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
-    this.handleCreateCredential = this.handleCreateCredential.bind(this);
-    this.handleCreatePortList = this.handleCreatePortList.bind(this);
-    this.handlePortListChange = this.handlePortListChange.bind(this);
-    this.handleEsxiCredentialChange =
-      this.handleEsxiCredentialChange.bind(this);
-    this.handleSshCredentialChange = this.handleSshCredentialChange.bind(this);
-    this.handleSshElevateCredentialChange =
-      this.handleSshElevateCredentialChange.bind(this);
-    this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
-    this.handleSnmpCredentialChange =
-      this.handleSnmpCredentialChange.bind(this);
-  }
+  const updateState = upd => setState(prev => ({...prev, ...upd}));
 
-  openCredentialsDialog({id_field, types, title}) {
-    this.id_field = id_field;
+  const handleInteraction = () => {
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  };
 
-    this.setState({
+  const loadCredentials = async () => {
+    const response = await gmp.credentials.getAll();
+    return response.data;
+  };
+
+  const loadPortLists = async () => {
+    const response = await gmp.portlists.getAll();
+    return response.data;
+  };
+
+  const loadAll = async () => {
+    const [credentials, portLists] = await Promise.all([
+      loadCredentials(),
+      loadPortLists(),
+    ]);
+    updateState({credentials, portLists});
+  };
+
+  const openCredentialsDialog = ({idField, types, title}) => {
+    idFieldRef.current = idField;
+    updateState({
       credentialsDialogVisible: true,
       credentialTypes: types,
-      credentials_title: title,
+      credentialsTitle: title,
     });
+    handleInteraction();
+  };
 
-    this.handleInteraction();
-  }
+  const closeCredentialsDialog = () =>
+    updateState({credentialsDialogVisible: false});
 
-  closeCredentialsDialog() {
-    this.setState({credentialsDialogVisible: false});
-  }
+  const handleCloseCredentialsDialog = () => {
+    closeCredentialsDialog();
+    handleInteraction();
+  };
 
-  handleCloseCredentialsDialog() {
-    this.closeCredentialsDialog();
-    this.handleInteraction();
-  }
+  const openPortListDialog = () => {
+    updateState({
+      portListDialogVisible: true,
+      portListsTitle: _('New Port List'),
+    });
+    handleInteraction();
+  };
 
-  openTargetDialog(entity, initial = {}) {
+  const closePortListDialog = () => updateState({portListDialogVisible: false});
+
+  const handleClosePortListDialog = () => {
+    closePortListDialog();
+    handleInteraction();
+  };
+
+  const openTargetDialog = async (entity, initial = {}) => {
     if (isDefined(entity)) {
-      this.setState({
+      updateState({
         targetDialogVisible: true,
         id: entity.id,
         allowSimultaneousIPs: entity.allowSimultaneousIPs,
-        alive_tests: entity.alive_tests,
+        aliveTests: entity.alive_tests,
         comment: entity.comment,
-        esxi_credential_id: id_or__(entity.esxi_credential),
-        exclude_hosts: isDefined(entity.exclude_hosts)
+        esxiCredentialId: getIdOrDefault(entity.esxi_credential),
+        excludeHosts: isDefined(entity.exclude_hosts)
           ? entity.exclude_hosts.join(', ')
           : '',
         hosts: entity.hosts.join(', '),
-        in_use: entity.isInUse(),
+        inUse: entity.isInUse(),
         name: entity.name,
         port: isDefined(entity.ssh_credential)
           ? entity.ssh_credential.port
           : '22',
-        reverse_lookup_only: entity.reverse_lookup_only,
-        reverse_lookup_unify: entity.reverse_lookup_unify,
-        target_source: 'manual',
-        target_exclude_source: 'manual',
-        target_title: _('Edit Target {{name}}', entity),
+        reverseLookupOnly: entity.reverse_lookup_only,
+        reverseLookupUnify: entity.reverse_lookup_unify,
+        targetSource: 'manual',
+        targetExcludeSource: 'manual',
+        targetTitle: _('Edit Target {{name}}', entity),
       });
-
-      // set credential and port list ids after credentials and port lists have been loaded
-      this.loadAll().then(() => {
-        this.setState({
-          port_list_id: id_or__(entity.port_list),
-          smb_credential_id: id_or__(entity.smb_credential),
-          snmp_credential_id: id_or__(entity.snmp_credential),
-          ssh_credential_id: id_or__(entity.ssh_credential),
-          ssh_elevate_credential_id: id_or__(entity.ssh_elevate_credential),
-        });
+      await loadAll();
+      updateState({
+        krb5CredentialId: getIdOrDefault(entity.krb5_credential),
+        portListId: getIdOrDefault(entity.port_list),
+        smbCredentialId: getIdOrDefault(entity.smb_credential),
+        snmpCredentialId: getIdOrDefault(entity.snmp_credential),
+        sshCredentialId: getIdOrDefault(entity.ssh_credential),
+        sshElevateCredentialId: getIdOrDefault(entity.ssh_elevate_credential),
       });
     } else {
-      this.loadAll().then(() => {
-        this.setState({
-          port_list_id: DEFAULT_PORT_LIST_ID,
-        });
-      });
-
-      this.setState({
-        targetDialogVisible: true,
+      await loadAll();
+      updateState({
+        aliveTests: undefined,
         allowSimultaneousIPs: YES_VALUE,
-        alive_tests: undefined,
         comment: undefined,
-        esxi_credential_id: undefined,
-        exclude_hosts: undefined,
+        esxiCredentialId: undefined,
+        excludeHosts: undefined,
         hosts: undefined,
         id: undefined,
-        in_use: undefined,
+        inUse: undefined,
+        krb5CredentialId: undefined,
         name: undefined,
         port: undefined,
-        reverse_lookup_only: undefined,
-        reverse_lookup_unify: undefined,
-        smb_credential_id: undefined,
-        snmp_credential_id: undefined,
-        ssh_credential_id: undefined,
-        ssh_elevate_credential_id: undefined,
-        target_source: undefined,
-        target_exclude_source: undefined,
-        target_title: _('New Target'),
+        reverseLookupOnly: undefined,
+        reverseLookupUnify: undefined,
+        smbCredentialId: undefined,
+        snmpCredentialId: undefined,
+        sshCredentialId: undefined,
+        sshElevateCredentialId: undefined,
+        targetDialogVisible: true,
+        targetExcludeSource: undefined,
+        targetSource: undefined,
+        targetTitle: _('New Target'),
         ...initial,
       });
     }
+    handleInteraction();
+  };
 
-    this.handleInteraction();
-  }
+  const openCreateTargetDialog = (initial = {}) =>
+    openTargetDialog(undefined, initial);
 
-  openCreateTargetDialog(initial = {}) {
-    this.openTargetDialog(undefined, initial);
-  }
+  const closeTargetDialog = () => updateState({targetDialogVisible: false});
 
-  closeTargetDialog() {
-    this.setState({targetDialogVisible: false});
-  }
+  const handleCloseTargetDialog = () => {
+    closeTargetDialog();
+    handleInteraction();
+  };
 
-  handleCloseTargetDialog() {
-    this.closeTargetDialog();
-    this.handleInteraction();
-  }
+  const handleCreateCredential = async data => {
+    handleInteraction();
+    const response = await gmp.credential.create(data);
+    const {data: credential} = response;
+    const credentialId = credential.id;
+    closeCredentialsDialog();
+    const credentials = await loadCredentials();
+    updateState({[idFieldRef.current]: credentialId, credentials});
+  };
 
-  loadAll() {
-    return Promise.all([
-      this.loadCredentials().then(credentials => this.setState({credentials})),
-      this.loadPortLists().then(port_lists => this.setState({port_lists})),
-    ]);
-  }
+  const handleCreatePortList = async data => {
+    handleInteraction();
+    const response = await gmp.portlist.create(data);
+    const {data: portlist} = response;
+    const portListId = portlist.id;
+    closePortListDialog();
+    const portLists = await loadPortLists();
+    updateState({portLists, portListId});
+  };
 
-  loadCredentials() {
-    const {gmp} = this.props;
-    return gmp.credentials.getAll().then(response => response.data);
-  }
+  const handlePortListChange = portListId => updateState({portListId});
 
-  loadPortLists() {
-    const {gmp} = this.props;
-    return gmp.portlists.getAll().then(response => response.data);
-  }
+  const handleEsxiCredentialChange = esxiCredentialId =>
+    updateState({esxiCredentialId});
 
-  openPortListDialog() {
-    this.setState({
-      portListDialogVisible: true,
-      port_lists_title: _('New Port List'),
-    });
-    this.handleInteraction();
-  }
+  /**
+   * if ssh_credential_id is changed to UNSET_VALUE, elevate privileges option will not be rendered anymore.
+   * If we don't reset ssh_elevate_credential_id, then the previously set ssh_elevate_credential_id will never be available for the SSH dropdown again because it will still be set in the dialog state.
+   * ssh_elevate_credential_id should be available again if we ever unset ssh_credential_id
+   */
+  const handleSshCredentialChange = sshCredentialId => {
+    updateState({sshCredentialId});
 
-  closePortListDialog() {
-    this.setState({portListDialogVisible: false});
-  }
-
-  handleClosePortListDialog() {
-    this.closePortListDialog();
-    this.handleInteraction();
-  }
-
-  handleCreateCredential(data) {
-    const {gmp} = this.props;
-
-    let credential_id;
-
-    this.handleInteraction();
-
-    return gmp.credential
-      .create(data)
-      .then(response => {
-        const {data: credential} = response;
-
-        credential_id = credential.id;
-        this.closeCredentialsDialog();
-        return this.loadCredentials();
-      })
-      .then(credentials => {
-        this.setState({
-          [this.id_field]: credential_id,
-          credentials,
-        });
-      });
-  }
-
-  handleCreatePortList(data) {
-    const {gmp} = this.props;
-    let port_list_id;
-
-    this.handleInteraction();
-
-    return gmp.portlist
-      .create(data)
-      .then(response => {
-        const {data: portlist} = response;
-        port_list_id = portlist.id;
-        this.closePortListDialog();
-        return this.loadPortLists();
-      })
-      .then(port_lists => {
-        this.setState({
-          port_lists,
-          port_list_id,
-        });
-      });
-  }
-
-  handlePortListChange(port_list_id) {
-    this.setState({port_list_id});
-  }
-
-  handleEsxiCredentialChange(esxi_credential_id) {
-    this.setState({esxi_credential_id});
-  }
-
-  handleSshCredentialChange(ssh_credential_id) {
-    this.setState({ssh_credential_id});
-
-    if (ssh_credential_id === UNSET_VALUE) {
-      this.setState({ssh_elevate_credential_id: UNSET_VALUE}); // if ssh_credential_id is changed to UNSET_VALUE, elevate privileges option will not be rendered anymore. If we don't reset ssh_elevate_credential_id, then the previously set ssh_elevate_credential_id will never be available for the SSH dropdown again because it will still be set in the dialog state. ssh_elevate_credential_id should be available again if we ever unset ssh_credential_id
+    if (sshCredentialId === UNSET_VALUE) {
+      updateState({sshElevateCredentialId: UNSET_VALUE});
     }
-  }
+  };
 
-  handleSshElevateCredentialChange(ssh_elevate_credential_id) {
-    this.setState({ssh_elevate_credential_id});
-  }
+  const handleSshElevateCredentialChange = sshElevateCredentialId =>
+    updateState({sshElevateCredentialId});
 
-  handleSnmpCredentialChange(snmp_credential_id) {
-    this.setState({snmp_credential_id});
-  }
+  const handleSnmpCredentialChange = snmpCredentialId =>
+    updateState({snmpCredentialId});
 
-  handleSmbCredentialChange(smb_credential_id) {
-    this.setState({smb_credential_id});
-  }
+  const handleSmbCredentialChange = smbCredentialId =>
+    updateState({smbCredentialId});
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  }
+  const handleKrb5CredentialChange = krb5CredentialId =>
+    updateState({krb5CredentialId});
 
-  render() {
-    const {
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
-
-    const {
-      credentialsDialogVisible,
-      portListDialogVisible,
-      targetDialogVisible,
-      alive_tests,
-      comment,
-      credentials_title,
-      esxi_credential_id,
-      exclude_hosts,
-      credential,
-      credentials,
-      hosts,
-      hosts_count,
-      hosts_filter,
-      id,
-      in_use,
-      name,
-      port,
-      port_list_id,
-      port_lists,
-      port_lists_title,
-      allowSimultaneousIPs,
-      reverse_lookup_only,
-      reverse_lookup_unify,
-      smb_credential_id,
-      snmp_credential_id,
-      ssh_credential_id,
-      ssh_elevate_credential_id,
-      target_source,
-      target_exclude_source,
-      target_title,
-      credentialTypes = [],
-    } = this.state;
-    return (
-      <EntityComponent
-        name="target"
-        onCloneError={onCloneError}
-        onCloned={onCloned}
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onDownloadError={onDownloadError}
-        onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openCreateTargetDialog,
-              edit: this.openTargetDialog,
-            })}
-            {targetDialogVisible && (
-              <TargetDialog
-                alive_tests={alive_tests}
-                allowSimultaneousIPs={allowSimultaneousIPs}
-                comment={comment}
-                credential={credential}
-                credentials={credentials}
-                esxi_credential_id={esxi_credential_id}
-                exclude_hosts={exclude_hosts}
-                hosts={hosts}
-                hosts_count={hosts_count}
-                hosts_filter={hosts_filter}
-                id={id}
-                in_use={in_use}
-                name={name}
-                port={port}
-                port_list_id={port_list_id}
-                port_lists={port_lists}
-                reverse_lookup_only={reverse_lookup_only}
-                reverse_lookup_unify={reverse_lookup_unify}
-                smb_credential_id={smb_credential_id}
-                snmp_credential_id={snmp_credential_id}
-                ssh_credential_id={ssh_credential_id}
-                ssh_elevate_credential_id={ssh_elevate_credential_id}
-                target_exclude_source={target_exclude_source}
-                target_source={target_source}
-                title={target_title}
-                onClose={this.handleCloseTargetDialog}
-                onEsxiCredentialChange={this.handleEsxiCredentialChange}
-                onNewCredentialsClick={this.openCredentialsDialog}
-                onNewPortListClick={this.openPortListDialog}
-                onPortListChange={this.handlePortListChange}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d).then(() => this.closeTargetDialog());
-                }}
-                onSmbCredentialChange={this.handleSmbCredentialChange}
-                onSnmpCredentialChange={this.handleSnmpCredentialChange}
-                onSshCredentialChange={this.handleSshCredentialChange}
-                onSshElevateCredentialChange={
-                  this.handleSshElevateCredentialChange
-                }
-              />
-            )}
-            {credentialsDialogVisible && (
-              <CredentialsDialog
-                base={first(credentialTypes)}
-                title={`${credentials_title}`}
-                types={credentialTypes}
-                onClose={this.handleCloseCredentialsDialog}
-                onSave={this.handleCreateCredential}
-              />
-            )}
-            {portListDialogVisible && (
-              <PortListDialog
-                title={port_lists_title}
-                visible={portListDialogVisible}
-                onClose={this.handleClosePortListDialog}
-                onSave={this.handleCreatePortList}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
+  return (
+    <EntityComponent
+      name="target"
+      onCloneError={onCloneError}
+      onCloned={onCloned}
+      onCreateError={onCreateError}
+      onCreated={onCreated}
+      onDeleteError={onDeleteError}
+      onDeleted={onDeleted}
+      onDownloadError={onDownloadError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaveError={onSaveError}
+      onSaved={onSaved}
+    >
+      {({save, ...other}) => (
+        <>
+          {children({
+            ...other,
+            create: openCreateTargetDialog,
+            edit: openTargetDialog,
+          })}
+          {state.targetDialogVisible && (
+            <TargetDialog
+              aliveTests={state.aliveTests}
+              allowSimultaneousIPs={state.allowSimultaneousIPs}
+              comment={state.comment}
+              credential={state.credential}
+              credentials={state.credentials}
+              esxiCredentialId={state.esxiCredentialId}
+              excludeHosts={state.excludeHosts}
+              hosts={state.hosts}
+              hostsCount={state.hostsCount}
+              hostsFilter={state.hostsFilter}
+              id={state.id}
+              inUse={state.inUse}
+              krb5CredentialId={state.krb5CredentialId}
+              name={state.name}
+              port={state.port}
+              portListId={state.portListId}
+              portLists={state.portLists}
+              reverseLookupOnly={state.reverseLookupOnly}
+              reverseLookupUnify={state.reverseLookupUnify}
+              smbCredentialId={state.smbCredentialId}
+              snmpCredentialId={state.snmpCredentialId}
+              sshCredentialId={state.sshCredentialId}
+              sshElevateCredentialId={state.sshElevateCredentialId}
+              targetExcludeSource={state.targetExcludeSource}
+              targetSource={state.targetSource}
+              title={state.targetTitle}
+              onClose={handleCloseTargetDialog}
+              onEsxiCredentialChange={handleEsxiCredentialChange}
+              onKrb5CredentialChange={handleKrb5CredentialChange}
+              onNewCredentialsClick={openCredentialsDialog}
+              onNewPortListClick={openPortListDialog}
+              onPortListChange={handlePortListChange}
+              onSave={async d => {
+                handleInteraction();
+                await save(d);
+                closeTargetDialog();
+              }}
+              onSmbCredentialChange={handleSmbCredentialChange}
+              onSnmpCredentialChange={handleSnmpCredentialChange}
+              onSshCredentialChange={handleSshCredentialChange}
+              onSshElevateCredentialChange={handleSshElevateCredentialChange}
+            />
+          )}
+          {state.credentialsDialogVisible && (
+            <CredentialsDialog
+              base={first(state.credentialTypes)}
+              title={`${state.credentialsTitle}`}
+              types={state.credentialTypes}
+              onClose={handleCloseCredentialsDialog}
+              onSave={handleCreateCredential}
+            />
+          )}
+          {state.portListDialogVisible && (
+            <PortListDialog
+              title={state.portListsTitle}
+              visible={state.portListDialogVisible}
+              onClose={handleClosePortListDialog}
+              onSave={handleCreatePortList}
+            />
+          )}
+        </>
+      )}
+    </EntityComponent>
+  );
 }
 
 TargetComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -427,4 +333,4 @@ TargetComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(TargetComponent);
+export default TargetComponent;
