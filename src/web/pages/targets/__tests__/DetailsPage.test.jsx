@@ -69,6 +69,11 @@ const target = Target.fromElement({
   alive_tests: 'Scan Config Default',
   allow_simultaneous_ips: 1,
   port_range: '1-5',
+  krb5_credential: {
+    _id: 'krb5_id',
+    name: 'krb5',
+    trash: '0',
+  },
   ssh_credential: {
     _id: '1235',
     name: 'ssh',
@@ -239,8 +244,12 @@ describe('Target Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('smb_credential');
     expect(links[5]).toHaveAttribute('href', '/credential/4784');
 
+    expect(baseElement).toHaveTextContent('Kerberos');
+    expect(baseElement).toHaveTextContent('krb5');
+    expect(links[6]).toHaveAttribute('href', '/credential/krb5_id');
+
     expect(baseElement).toHaveTextContent('Tasks using this Target (1)');
-    expect(links[6]).toHaveAttribute('href', '/task/465');
+    expect(links[7]).toHaveAttribute('href', '/task/465');
     expect(baseElement).toHaveTextContent('foo');
   });
 

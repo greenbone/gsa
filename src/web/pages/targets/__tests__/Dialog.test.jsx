@@ -8,6 +8,7 @@ import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  KRB5_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import {
   changeInputValue,
@@ -20,7 +21,7 @@ import {
   queryTextInputs,
 } from 'web/components/testing';
 import TargetDialog from 'web/pages/targets/Dialog';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
 const cred1 = Credential.fromElement({
   _id: '5678',
@@ -46,7 +47,13 @@ const cred4 = Credential.fromElement({
   type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
 
-const credentials = [cred1, cred2, cred3, cred4];
+const cred5 = Credential.fromElement({
+  _id: '2345',
+  name: 'krb5_key',
+  type: KRB5_CREDENTIAL_TYPE,
+});
+
+const credentials = [cred1, cred2, cred3, cred4, cred5];
 
 const gmp = {settings: {enableGreenboneSensor: true}};
 
@@ -450,6 +457,68 @@ describe('TargetDialog component tests', () => {
 
     expect(selectItems[0]).toHaveTextContent('--'); // null option
     expect(selectItems[1]).toHaveTextContent('up2');
+  });
+
+  test.each([
+    [
+      'Kerberos credential should disable smb credential dropdown',
+      'krb5_key',
+      0,
+      1,
+    ],
+    [
+      'smb credential should disable kerberos credential dropdown',
+      'OpenVAS Default',
+      1,
+      0,
+    ],
+  ])('%s', async (_, credentialValue, selectIndex, disabledIndex) => {
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetDialog
+        aliveTests={'Scan Config Default'}
+        allowSimultaneousIPs={0}
+        comment={'hello world'}
+        credentials={credentials}
+        excludeHosts={''}
+        hosts={'123.455.67.434'}
+        id={'foo'}
+        inUse={false}
+        krb5CredentialId={'2345'}
+        name={'target'}
+        reverseLookupOnly={0}
+        reverseLookupUnify={0}
+        smbCredentialId={'5463'}
+        targetTitle={'Edit Target target'}
+        onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
+        onNewCredentialsClick={handleCreate}
+        onNewPortListClick={handleCreate}
+        onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
+        onSnmpCredentialChange={handleChange}
+        onSshCredentialChange={handleChange}
+        onSshElevateCredentialChange={handleChange}
+      />,
+    );
+
+    const selects = queryAllSelectElements();
+
+    fireEvent.change(selects[selectIndex], {target: {value: '--'}});
+    expect(selects[selectIndex]).toHaveValue('--');
+
+    fireEvent.change(selects[selectIndex], {target: {value: credentialValue}});
+    expect(selects[selectIndex]).toHaveValue(credentialValue);
+
+    await wait(() => expect(selects[disabledIndex]).toBeDisabled());
   });
 
   test('ssh credential dropdown should remove ssh elevate credential from list', async () => {
