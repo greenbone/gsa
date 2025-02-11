@@ -17,6 +17,7 @@ export const TARGET_CREDENTIAL_NAMES = [
   'ssh_credential',
   'esxi_credential',
   'ssh_elevate_credential',
+  'krb5_credential',
 ];
 
 class Target extends Model {
