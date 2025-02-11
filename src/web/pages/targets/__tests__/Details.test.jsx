@@ -81,6 +81,11 @@ const target_no_elevate = Target.fromElement({
     name: 'pl1',
     trash: '0',
   },
+  krb5_credential: {
+    _id: 'krb5_id',
+    name: 'krb5',
+    trash: '0',
+  },
   ssh_credential: {
     _id: '',
     name: '',
@@ -147,6 +152,10 @@ describe('Target Details tests', () => {
     expect(element).toHaveTextContent('SMB');
 
     expect(detailsLinks[1]).toHaveAttribute('href', '/credential/4784');
+
+    expect(element).toHaveTextContent('Kerberos');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/credential/krb5_id');
+    expect(detailsLinks[2]).toHaveTextContent('krb5');
   });
 
   test('should render full target details with elevate credentials and tasks', () => {
