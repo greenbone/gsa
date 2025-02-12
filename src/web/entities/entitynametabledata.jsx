@@ -48,7 +48,7 @@ const EntityNameTableData = ({
         {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
         {children}
       </div>
-      <Layout alignItems="center">
+      <Layout>
         <ObserverIcon
           displayName={displayName}
           entity={entity}
