@@ -289,6 +289,7 @@ const allowedSnakeCase = [
   'is_task_event',
   'key_code',
   'known_nvt_count',
+  'krb5_credential',
   'last_id',
   'last_report',
   'last_seen',
