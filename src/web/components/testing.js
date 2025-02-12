@@ -81,10 +81,8 @@ export const openSelectElement = async select => {
  * Click on an element/item/node
  */
 export const clickElement = async element => {
-  await act(async () => {
-    await userEvent.click(element, {
-      pointerEventsCheck: PointerEventsCheckLevel.Never,
-    });
+  await userEvent.click(element, {
+    pointerEventsCheck: PointerEventsCheckLevel.Never,
   });
 };
 
