@@ -92,6 +92,15 @@ const DownloadReportDialog = ({
             )
           : [];
 
+        const filteredReportFormats = isDefined(reportFormats)
+          ? (reportFormats.filter(
+               format => !isDefined(format.report_type)
+                 ? true
+                 : audit
+                     ? ['audit', 'all'].includes(format.report_type)
+                     : ['scan', 'all'].includes(format.report_type)))
+          : [];
+
         return (
           <>
             <ComposerContent
@@ -105,7 +114,7 @@ const DownloadReportDialog = ({
             <FormGroup title={_('Report Format')}>
               <Select
                 grow="1"
-                items={renderSelectItems(reportFormats)}
+                items={renderSelectItems(filteredReportFormats)}
                 name="reportFormatId"
                 value={reportFormatIdInState}
                 width="auto"
