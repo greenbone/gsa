@@ -24,6 +24,7 @@ const ReportFormatDetails = ({entity, links = true}) => {
     deprecated,
     extension,
     content_type,
+    report_type,
     trust = {},
     summary,
     description,
@@ -57,6 +58,13 @@ const ReportFormatDetails = ({entity, links = true}) => {
             <TableData>{_('Content Type')}</TableData>
             <TableData>{content_type}</TableData>
           </TableRow>
+
+          {report_type && (
+            <TableRow>
+              <TableData>{_('Report Type')}</TableData>
+              <TableData>{report_type}</TableData>
+            </TableRow>
+          )}
 
           <TableRow>
             <TableData>{_('Trust')}</TableData>
