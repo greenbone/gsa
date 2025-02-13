@@ -277,6 +277,15 @@ const ResultDetails = ({className, links = true, entity}) => {
                         </DetailsLink>
                       </span>
                     )}
+                  {isDefined(infoId) &&
+                    infoId.startsWith('CVE-') && (
+                      <span>
+                        <DetailsLink id={infoId} textOnly={!links} type="cve">
+                          {renderNvtName(infoId, information.name)}
+                          {' (OID: ' + infoId + ')'}
+                        </DetailsLink>
+                      </span>
+                    )}
                   {!isDefined(infoId) &&
                     _('No details available for this method.')}
                 </TableData>
