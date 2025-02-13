@@ -60,7 +60,7 @@ const ToolBarIcons = withCapabilities(
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          anchor="managing-report-configs"
+          anchor="customizing-report-formats-with-report-configurations"
           page="reports"
           title={_('Help: Report Configs')}
         />

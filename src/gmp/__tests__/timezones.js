@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, test, expect, expectTypeOf} from '@gsa/testing';
 
 import timezones from '../timezones';
 import {isArray} from '../utils/identity';
@@ -13,11 +13,13 @@ describe('timezones tests', () => {
     expect(isArray(timezones)).toEqual(true);
   });
 
-  test('should contain objects with name properties', () => {
-    expect(timezones.length).toBeGreaterThan(0);
+  test('should contain more then one timezone', () => {
+    expect(timezones.length).toBeGreaterThan(1);
+  });
 
+  test('should contain timezones as strings', () => {
     for (const zone of timezones) {
-      expect(zone.name).toBeDefined();
+      expectTypeOf(zone).toBeString();
     }
   });
 });

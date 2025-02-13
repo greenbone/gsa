@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseSeverity, parseDate} from 'gmp/parser';
+import {parseSeverity, parseDate, parseBoolean} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -31,7 +31,14 @@ class Cpe extends Info {
     }
 
     if (isDefined(ret.nvd_id)) {
-      ret.nvdId = ret.nvd_id;
+      // old ID from nvd just kept for backwards compatibility and should be removed in future
+      ret.cpeNameId = ret.nvd_id;
+      delete ret.nvd_id;
+    }
+
+    if (isDefined(ret.cpe_name_id)) {
+      ret.cpeNameId = ret.cpe_name_id;
+      delete ret.cpe_name_id;
     }
 
     if (isDefined(ret.update_time)) {
@@ -44,8 +51,15 @@ class Cpe extends Info {
      * Once `raw_data` is removed from the API, this backup check can be removed.
      */
 
-    if (ret.deprecated === 1 && isDefined(ret.deprecated_by)) {
+    if (isDefined(ret.deprecated)) {
+      ret.deprecated = parseBoolean(ret.deprecated);
+    } else {
+      ret.deprecated = false;
+    }
+
+    if (ret.deprecated === true && isDefined(ret.deprecated_by)) {
       ret.deprecatedBy = ret.deprecated_by._cpe_id;
+      delete ret.deprecated_by;
     } else if (isDefined(ret.raw_data?.['cpe-item']?._deprecated_by)) {
       ret.deprecatedBy = ret.raw_data['cpe-item']._deprecated_by;
     }

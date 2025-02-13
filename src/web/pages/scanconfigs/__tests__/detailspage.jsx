@@ -8,11 +8,16 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scanconfig';
+import {vi} from 'vitest';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+
+vi.mock('web/pages/scanconfigs/editdialog', () => ({
+  default: () => null,
+}));
 
 const families = [
   {

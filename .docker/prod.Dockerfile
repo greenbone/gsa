@@ -3,7 +3,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 FROM debian:stable-slim AS builder
 
-ENV NODE_VERSION=node_18.x
+ENV NODE_VERSION=node_20.x
 ENV NODE_KEYRING=/usr/share/keyrings/nodesource.gpg
 ENV DISTRIBUTION=bookworm
 
@@ -18,7 +18,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dear
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    nodejs npm && \
+    nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 COPY . /source

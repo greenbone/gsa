@@ -19,8 +19,8 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 18
           - 20
+          - 22
     steps:
       - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
@@ -43,7 +43,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 18
+          - 22
     steps:
       - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
@@ -74,8 +74,8 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 18
           - 20
+          - 22
     steps:
       - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
@@ -92,3 +92,22 @@ jobs:
         with:
           name: linting-report-${{ matrix.node-version }}
           path: ${{ env.REPORT_FILE }}
+
+  translations:
+    name: Check translations
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        node-version:
+          - 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Check if translations need an update
+        run: npm run i18n-extract -- --fail-on-update

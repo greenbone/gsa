@@ -26,7 +26,6 @@ import {
 } from 'web/store/entities/auditreports';
 import PropTypes from 'web/utils/proptypes';
 
-
 import AuditReportsDashboard, {
   AUDIT_REPORTS_DASHBOARD_ID,
 } from './auditdashboard';
@@ -38,6 +37,7 @@ const ToolBarIcons = () => {
   return (
     <IconDivider>
       <ManualIcon
+        anchor="using-and-managing-audit-reports"
         page="compliance-and-special-scans"
         title={_('Help: Audit Reports')}
       />

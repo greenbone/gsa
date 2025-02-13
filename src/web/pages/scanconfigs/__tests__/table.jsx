@@ -97,6 +97,7 @@ describe('Scan Config table tests', () => {
         entities={[config, config2, config3]}
         entitiesCounts={counts}
         filter={filter}
+        openEditNvtDetailsDialog={testing.fn()}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
@@ -140,6 +141,7 @@ describe('Scan Config table tests', () => {
         entities={[config, config2, config3]}
         entitiesCounts={counts}
         filter={filter}
+        openEditNvtDetailsDialog={testing.fn()}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
@@ -179,6 +181,7 @@ describe('Scan Config table tests', () => {
         entities={[config, config2, config3]}
         entitiesCounts={counts}
         filter={filter}
+        openEditNvtDetailsDialog={testing.fn()}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
@@ -188,20 +191,20 @@ describe('Scan Config table tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[7]);
-    expect(handleScanConfigDelete).toHaveBeenCalledWith(config);
-    expect(icons[7]).toHaveAttribute('title', 'Move Scan Config to trashcan');
-
     fireEvent.click(icons[8]);
-    expect(handleScanConfigEdit).toHaveBeenCalledWith(config);
-    expect(icons[8]).toHaveAttribute('title', 'Edit Scan Config');
+    expect(handleScanConfigDelete).toHaveBeenCalledWith(config);
+    expect(icons[8]).toHaveAttribute('title', 'Move Scan Config to trashcan');
 
     fireEvent.click(icons[9]);
-    expect(handleScanConfigClone).toHaveBeenCalledWith(config);
-    expect(icons[9]).toHaveAttribute('title', 'Clone Scan Config');
+    expect(handleScanConfigEdit).toHaveBeenCalledWith(config);
+    expect(icons[9]).toHaveAttribute('title', 'Edit Scan Config');
 
     fireEvent.click(icons[10]);
+    expect(handleScanConfigClone).toHaveBeenCalledWith(config);
+    expect(icons[10]).toHaveAttribute('title', 'Clone Scan Config');
+
+    fireEvent.click(icons[11]);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(config);
-    expect(icons[10]).toHaveAttribute('title', 'Export Scan Config');
+    expect(icons[11]).toHaveAttribute('title', 'Export Scan Config');
   });
 });

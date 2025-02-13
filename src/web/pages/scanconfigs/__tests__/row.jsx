@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-unused-vars */
- 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig, {
@@ -115,7 +113,7 @@ describe('Scan Config row tests', () => {
       store: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <Row
         entity={config}
         onScanConfigCloneClick={handleScanConfigClone}
@@ -185,6 +183,7 @@ describe('Scan Config row tests', () => {
     const handleScanConfigDelete = testing.fn();
     const handleScanConfigDownload = testing.fn();
     const handleScanConfigEdit = testing.fn();
+    const handleScanConfigSettings = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -199,6 +198,7 @@ describe('Scan Config row tests', () => {
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onScanConfigSettingsClick={handleScanConfigSettings}
         onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
@@ -210,20 +210,24 @@ describe('Scan Config row tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     fireEvent.click(icons[2]);
-    expect(handleScanConfigDelete).toHaveBeenCalledWith(entity);
-    expect(icons[2]).toHaveAttribute('title', 'Move Scan Config to trashcan');
+    expect(handleScanConfigSettings).toHaveBeenCalledWith(entity);
+    expect(icons[2]).toHaveAttribute('title', 'Edit Scan Config settings');
 
     fireEvent.click(icons[3]);
-    expect(handleScanConfigEdit).toHaveBeenCalledWith(entity);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Scan Config');
+    expect(handleScanConfigDelete).toHaveBeenCalledWith(entity);
+    expect(icons[3]).toHaveAttribute('title', 'Move Scan Config to trashcan');
 
     fireEvent.click(icons[4]);
-    expect(handleScanConfigClone).toHaveBeenCalledWith(entity);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Scan Config');
+    expect(handleScanConfigEdit).toHaveBeenCalledWith(entity);
+    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
     fireEvent.click(icons[5]);
+    expect(handleScanConfigClone).toHaveBeenCalledWith(entity);
+    expect(icons[5]).toHaveAttribute('title', 'Clone Scan Config');
+
+    fireEvent.click(icons[6]);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(entity);
-    expect(icons[5]).toHaveAttribute('title', 'Export Scan Config');
+    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config');
   });
 
   test('should not call click handlers without permissions', () => {
@@ -232,6 +236,7 @@ describe('Scan Config row tests', () => {
     const handleScanConfigDelete = testing.fn();
     const handleScanConfigDownload = testing.fn();
     const handleScanConfigEdit = testing.fn();
+    const handleScanConfigSettings = testing.fn();
 
     const config = ScanConfig.fromElement({
       _id: '1234',
@@ -262,6 +267,7 @@ describe('Scan Config row tests', () => {
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onScanConfigSettingsClick={handleScanConfigSettings}
         onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
@@ -273,29 +279,36 @@ describe('Scan Config row tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     fireEvent.click(icons[2]);
-    expect(handleScanConfigDelete).not.toHaveBeenCalled();
+    expect(handleScanConfigSettings).not.toHaveBeenCalledWith(entity);
     expect(icons[2]).toHaveAttribute(
+      'title',
+      'Permission to edit Scan Config settings denied',
+    );
+
+    fireEvent.click(icons[3]);
+    expect(handleScanConfigDelete).not.toHaveBeenCalled();
+    expect(icons[3]).toHaveAttribute(
       'title',
       'Permission to move Scan Config to trashcan denied',
     );
 
-    fireEvent.click(icons[3]);
+    fireEvent.click(icons[4]);
     expect(handleScanConfigEdit).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
+    expect(icons[4]).toHaveAttribute(
       'title',
       'Permission to edit Scan Config denied',
     );
 
-    fireEvent.click(icons[4]);
+    fireEvent.click(icons[5]);
     expect(handleScanConfigClone).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    expect(icons[5]).toHaveAttribute(
       'title',
       'Permission to clone Scan Config denied',
     );
 
-    fireEvent.click(icons[5]);
+    fireEvent.click(icons[6]);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(config);
-    expect(icons[5]).toHaveAttribute('title', 'Export Scan Config');
+    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config');
   });
 
   test('should (not) call click handlers if scan config is in use', () => {
@@ -304,6 +317,7 @@ describe('Scan Config row tests', () => {
     const handleScanConfigDelete = testing.fn();
     const handleScanConfigDownload = testing.fn();
     const handleScanConfigEdit = testing.fn();
+    const handleScanConfigSettings = testing.fn();
 
     const config = ScanConfig.fromElement({
       _id: '1234',
@@ -335,6 +349,7 @@ describe('Scan Config row tests', () => {
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
+        onScanConfigSettingsClick={handleScanConfigSettings}
         onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
@@ -346,20 +361,24 @@ describe('Scan Config row tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     fireEvent.click(icons[2]);
-    expect(handleScanConfigDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Scan Config is still in use');
+    expect(handleScanConfigSettings).not.toHaveBeenCalledWith(entity);
+    expect(icons[2]).toHaveAttribute('title', 'Edit Scan Config settings');
 
     fireEvent.click(icons[3]);
-    expect(handleScanConfigEdit).toHaveBeenCalledWith(config);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Scan Config');
+    expect(handleScanConfigDelete).not.toHaveBeenCalled();
+    expect(icons[3]).toHaveAttribute('title', 'Scan Config is still in use');
 
     fireEvent.click(icons[4]);
-    expect(handleScanConfigClone).toHaveBeenCalledWith(config);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Scan Config');
+    expect(handleScanConfigEdit).toHaveBeenCalledWith(config);
+    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
     fireEvent.click(icons[5]);
+    expect(handleScanConfigClone).toHaveBeenCalledWith(config);
+    expect(icons[5]).toHaveAttribute('title', 'Clone Scan Config');
+
+    fireEvent.click(icons[6]);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(config);
-    expect(icons[5]).toHaveAttribute('title', 'Export Scan Config');
+    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config');
   });
 
   test('should (not) call click handlers if scan config is not writable', () => {
@@ -368,6 +387,7 @@ describe('Scan Config row tests', () => {
     const handleScanConfigDelete = testing.fn();
     const handleScanConfigDownload = testing.fn();
     const handleScanConfigEdit = testing.fn();
+    const handleScanConfigSettings = testing.fn();
 
     const config = ScanConfig.fromElement({
       _id: '1234',
@@ -410,20 +430,27 @@ describe('Scan Config row tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     fireEvent.click(icons[2]);
-    expect(handleScanConfigDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Scan Config is not writable');
+    expect(handleScanConfigSettings).not.toHaveBeenCalledWith(entity);
+    expect(icons[2]).toHaveAttribute(
+      'title',
+      'Scan Config settings is not writable',
+    );
 
     fireEvent.click(icons[3]);
-    expect(handleScanConfigEdit).not.toHaveBeenCalled();
+    expect(handleScanConfigDelete).not.toHaveBeenCalled();
     expect(icons[3]).toHaveAttribute('title', 'Scan Config is not writable');
 
     fireEvent.click(icons[4]);
-    expect(handleScanConfigClone).toHaveBeenCalledWith(config);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Scan Config');
+    expect(handleScanConfigEdit).not.toHaveBeenCalled();
+    expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
 
     fireEvent.click(icons[5]);
+    expect(handleScanConfigClone).toHaveBeenCalledWith(config);
+    expect(icons[5]).toHaveAttribute('title', 'Clone Scan Config');
+
+    fireEvent.click(icons[6]);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(config);
-    expect(icons[5]).toHaveAttribute('title', 'Export Scan Config');
+    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config');
   });
 
   console.warn = consoleError;

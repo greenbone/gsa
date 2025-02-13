@@ -100,7 +100,7 @@ const TargetDialog = ({
   const ALIVE_TESTS_ITEMS = [
     {
       value: ALIVE_TESTS_DEFAULT,
-      label: _(ALIVE_TESTS_DEFAULT),
+      label: _('Scan Config Default'),
     },
     ...ALIVE_TESTS.map(value => ({value, label: value})),
   ];

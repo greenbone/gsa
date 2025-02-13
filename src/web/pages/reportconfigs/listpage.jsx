@@ -30,7 +30,7 @@ const ToolBarIcons = ({onReportConfigCreateClick}) => {
   return (
     <IconDivider>
       <ManualIcon
-        anchor="managing-report-configs"
+        anchor="customizing-report-formats-with-report-configurations"
         page="reports"
         title={_('Help: Report Configs')}
       />

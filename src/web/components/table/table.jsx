@@ -27,7 +27,6 @@ Table.propTypes = {
 export default styled(Table)`
   border: 0;
   border-spacing: 0px;
-  font-size: 12px;
   text-align: left;
   table-layout: ${props => (props.$fixed ? 'fixed' : 'auto')};
   ${props => {

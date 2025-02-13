@@ -118,7 +118,11 @@ describe('Link tests', () => {
 
     const {element} = render(<Link to="foo">Foo</Link>);
 
-    expect(element).toMatchSnapshot();
+    const style = window.getComputedStyle(element);
+
+    expect(style.display).toBe('inline-flex');
+    expect(style.fontSize).toBe('var(--mantine-font-size-md)');
+    expect(element).toHaveTextContent('Foo');
   });
 
   test('should render styles in text mode', () => {
@@ -130,6 +134,9 @@ describe('Link tests', () => {
       </Link>,
     );
 
-    expect(element).toMatchSnapshot();
+    const style = window.getComputedStyle(element);
+    expect(style.display).toBe('inline-flex');
+    expect(style.fontSize).toBe('var(--mantine-font-size-md)');
+    expect(element).toHaveTextContent('Foo');
   });
 });

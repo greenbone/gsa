@@ -6,12 +6,12 @@
 import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useReducer, useState, useEffect} from 'react';
+import {useReducer, useState, useEffect, useCallback} from 'react';
 import DialogInlineNotification from 'web/components/dialog/dialoginlinenotification';
 import SaveDialog from 'web/components/dialog/savedialog';
-import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import Loading from 'web/components/loading/loading';
+import SearchBar from 'web/components/searchbar/searchbar';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/proptypes';
 
@@ -57,36 +57,59 @@ const createScannerPreferenceValues = (preferences = []) => {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setValue':
+    case 'setValue': {
       const {newState} = action;
       return {
         ...state,
         ...newState,
       };
-    case 'setAll':
+    }
+    case 'setAll': {
       const {formValues} = action;
       return formValues;
+    }
     default:
       return state;
   }
 };
 
+/**
+ * Filters items based on the query and updates the filtered items state.
+ *
+ * @param {string} query - The search query.
+ * @param {Array} items - The list of items to filter.
+ * @param {Function} setFilteredItems - The function to update the filtered items state.
+ * @param {Function} getItemName - The function to get the name property from an item.
+ */
+export const handleSearchChange = (
+  query,
+  items,
+  setFilteredItems,
+  getItemName,
+) => {
+  const filtered = items.filter(item =>
+    getItemName(item).toLowerCase().includes(query.toLowerCase()),
+  );
+
+  setFilteredItems(filtered);
+};
+
 const EditScanConfigDialog = ({
   comment = '',
   configId,
-  configFamilies,
+  configFamilies = {},
   configIsInUse = false,
   editNvtDetailsTitle,
   editNvtFamiliesTitle,
-  families,
+  families = [],
   isLoadingConfig = true,
   isLoadingFamilies = true,
   isLoadingScanners = true,
   name,
-  nvtPreferences,
-  scannerPreferences,
+  nvtPreferences = [],
+  scannerPreferences = [],
   scannerId,
-  scanners,
+  scanners = [],
   title,
   usageType = 'scan',
   onClose,
@@ -101,6 +124,11 @@ const EditScanConfigDialog = ({
   );
   const [trendValues, setTrendValues] = useState();
   const [selectValues, setSelectValues] = useState();
+  const [filteredFamilies, setFilteredFamilies] = useState(families);
+  const [filteredScannerPreferences, setFilteredScannerPreferences] =
+    useState(scannerPreferences);
+  const [filteredNvtPreferences, setFilteredNvtPreferences] =
+    useState(nvtPreferences);
 
   useEffect(() => {
     dispatch({
@@ -108,6 +136,18 @@ const EditScanConfigDialog = ({
       formValues: createScannerPreferenceValues(scannerPreferences),
     });
   }, [scannerPreferences]);
+
+  useEffect(() => {
+    setFilteredFamilies(families);
+  }, [families]);
+
+  useEffect(() => {
+    setFilteredScannerPreferences(scannerPreferences);
+  }, [scannerPreferences]);
+
+  useEffect(() => {
+    setFilteredNvtPreferences(nvtPreferences);
+  }, [nvtPreferences]);
 
   // trend and select are created only once and only after the whole config is loaded
   if (!isDefined(trendValues) && !isDefined(selectValues) && !isLoadingConfig) {
@@ -138,45 +178,81 @@ const EditScanConfigDialog = ({
           'The scan config is currently in use by one or more tasks, therefore only name and comment can be modified.',
         );
 
+  const handleSearchChangeCallback = useCallback(
+    query => {
+      handleSearchChange(
+        query,
+        families,
+        setFilteredFamilies,
+        item => item.name,
+      );
+      handleSearchChange(
+        query,
+        scannerPreferences,
+        setFilteredScannerPreferences,
+        item => item.name,
+      );
+      handleSearchChange(
+        query,
+        nvtPreferences,
+        setFilteredNvtPreferences,
+        item => item.nvt.name,
+      );
+    },
+    [families, scannerPreferences, nvtPreferences],
+  );
+
+  const isLoading = isLoadingConfig || isLoadingFamilies || isLoadingScanners;
+  const matchesCount = isLoading
+    ? 1
+    : filteredFamilies.length +
+      filteredScannerPreferences.length +
+      filteredNvtPreferences.length;
+
   return (
     <SaveDialog
       defaultValues={uncontrolledData}
       loading={isLoadingConfig}
       title={title}
       values={controlledData}
+      width="900px"
       onClose={onClose}
       onSave={onSave}
     >
       {({values: state, onValueChange}) => (
         <>
-          <FormGroup title={_('Name')}>
-            <TextField
-              name="name"
-              value={state.name}
-              onChange={onValueChange}
-            />
-          </FormGroup>
+          <TextField
+            name="name"
+            title={_('Name')}
+            value={state.name}
+            onChange={onValueChange}
+          />
 
-          <FormGroup title={_('Comment')}>
-            <TextField
-              name="comment"
-              value={state.comment}
-              onChange={onValueChange}
-            />
-          </FormGroup>
+          <TextField
+            name="comment"
+            title={_('Comment')}
+            value={state.comment}
+            onChange={onValueChange}
+          />
+
+          <SearchBar
+            matchesCount={matchesCount}
+            placeholder={_('Search for families, preferences, or NVTs')}
+            onSearch={handleSearchChangeCallback}
+          />
           {configIsInUse ? (
             <DialogInlineNotification data-testid="inline-notification">
               {notification}
             </DialogInlineNotification>
           ) : (
-            <React.Fragment>
+            <>
               {isLoadingConfig || isLoadingFamilies ? (
                 <Loading />
               ) : (
                 <NvtFamilies
                   configFamilies={configFamilies}
                   editTitle={editNvtFamiliesTitle}
-                  families={families}
+                  families={filteredFamilies}
                   select={selectValues}
                   trend={trendValues}
                   onEditConfigFamilyClick={onEditConfigFamilyClick}
@@ -188,7 +264,7 @@ const EditScanConfigDialog = ({
                 <Loading />
               ) : (
                 <ScannerPreferences
-                  preferences={scannerPreferences}
+                  preferences={filteredScannerPreferences}
                   values={scannerPreferenceValues}
                   onValuesChange={dispatch}
                 />
@@ -199,11 +275,11 @@ const EditScanConfigDialog = ({
               ) : (
                 <NvtPreferences
                   editTitle={editNvtDetailsTitle}
-                  preferences={nvtPreferences}
+                  preferences={filteredNvtPreferences}
                   onEditNvtDetailsClick={onEditNvtDetailsClick}
                 />
               )}
-            </React.Fragment>
+            </>
           )}
         </>
       )}

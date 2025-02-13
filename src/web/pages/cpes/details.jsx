@@ -16,9 +16,18 @@ import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 
 const CpeDetails = ({entity, links = true}) => {
-  const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
+  const {
+    title,
+    cpeNameId,
+    deprecated,
+    deprecatedBy,
+    updateTime,
+    status,
+    severity,
+  } = entity;
   return (
     <Layout flex="column" grow="1">
       {!isDefined(title) && (
@@ -42,12 +51,16 @@ const CpeDetails = ({entity, links = true}) => {
               <TableData>{title}</TableData>
             </TableRow>
           )}
-          {isDefined(nvdId) && (
+          {isDefined(cpeNameId) && (
             <TableRow>
-              <TableData>{_('NVD ID')}</TableData>
-              <TableData>{nvdId}</TableData>
+              <TableData>{_('CPE Name ID')}</TableData>
+              <TableData>{cpeNameId}</TableData>
             </TableRow>
           )}
+          <TableRow>
+            <TableData>{_('Deprecated')}</TableData>
+            <TableData>{renderYesNo(deprecated)}</TableData>
+          </TableRow>
           {isDefined(deprecatedBy) && (
             <TableRow>
               <TableData>{_('Deprecated By')}</TableData>

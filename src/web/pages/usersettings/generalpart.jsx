@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {dateTimeFormatOptions, SYSTEM_DEFAULT} from 'gmp/locale/date';
+import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {useState} from 'react';
@@ -62,6 +62,9 @@ Notification.propTypes = {
   oldPassword: PropTypes.string,
 };
 
+const TIME = 'time';
+const LONG_DATE = 'longDate';
+
 const GeneralPart = ({
   timezone,
   userInterfaceDateFormat,
@@ -87,10 +90,20 @@ const GeneralPart = ({
     useState(undefined);
 
   const getSelectItems = category => {
-    return Object.entries(dateTimeFormatOptions[category].options).map(
-      ([value, {label}]) => ({
+    const dateTimeFormatOptions = {
+      [TIME]: {
+        12: _('12h'),
+        24: _('24h'),
+      },
+      [LONG_DATE]: {
+        wmdy: _('Weekday, Month, Day, Year'),
+        wdmy: _('Weekday, Day, Month, Year'),
+      },
+    };
+    return Object.entries(dateTimeFormatOptions[category]).map(
+      ([value, label]) => ({
         value: isNaN(value) ? value : Number(value),
-        label: _(label),
+        label,
       }),
     );
   };
@@ -143,7 +156,7 @@ const GeneralPart = ({
 
       <Select
         disabled={isUserInterfaceTimeDateDefault}
-        items={getSelectItems('time')}
+        items={getSelectItems(TIME)}
         label={_('Time Format')}
         name="userInterfaceTimeFormat"
         value={userInterfaceTimeFormat}
@@ -151,7 +164,7 @@ const GeneralPart = ({
       />
       <Select
         disabled={isUserInterfaceTimeDateDefault}
-        items={getSelectItems('longDate')}
+        items={getSelectItems(LONG_DATE)}
         label={_('Date Format')}
         name="userInterfaceDateFormat"
         value={userInterfaceDateFormat}
