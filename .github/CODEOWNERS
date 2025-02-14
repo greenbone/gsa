@@ -1,6 +1,6 @@
 # default reviewers
-*                 @greenbone/gsa-maintainers
+*                 @greenbone/gea
 
 # dev ops
-.github/          @greenbone/devops @greenbone/gsa-maintainers
-.docker/          @greenbone/devops @greenbone/gsa-maintainers
+.github/          @greenbone/devops @greenbone/gea
+.docker/          @greenbone/devops @greenbone/gea
