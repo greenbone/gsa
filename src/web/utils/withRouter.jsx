@@ -8,7 +8,7 @@ import {
   useNavigate,
   useParams,
   useSearchParams,
-} from 'react-router-dom';
+} from 'react-router';
 
 export const withRouter = Component => {
   function ComponentWithRouterProp(props) {

@@ -5,12 +5,7 @@
 
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router';
 import Loading from 'web/components/loading/loading';
 import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';

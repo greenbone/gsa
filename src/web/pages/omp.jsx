@@ -4,7 +4,7 @@
  */
 
 import {useEffect} from 'react';
-import {useNavigate, useSearchParams} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router';
 
 /**
  * Component to redirect old secinfo urls like

@@ -25,7 +25,7 @@ import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import {Provider} from 'react-redux';
-import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter} from 'react-router';
 import {StyleSheetManager} from 'styled-components';
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 import GmpContext from 'web/components/provider/gmpprovider';

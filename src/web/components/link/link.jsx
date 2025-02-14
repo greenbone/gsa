@@ -5,7 +5,7 @@
 
 import {isDefined, isString} from 'gmp/utils/identity';
 import React from 'react';
-import {Link as RLink} from 'react-router-dom';
+import {Link as RLink} from 'react-router';
 import styled from 'styled-components';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';

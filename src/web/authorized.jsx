@@ -5,7 +5,7 @@
 
 import {useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router';
 import useGmp from 'web/hooks/useGmp';
 import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/proptypes';

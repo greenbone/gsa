@@ -14,13 +14,13 @@ import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {useParams} from 'react-router-dom';
+import {useParams} from 'react-router';
 import withDownload from 'web/components/form/withDownload';
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';  
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
@@ -57,7 +57,6 @@ import {generateFilename} from 'web/utils/render';
 import Page from './deltadetailscontent';
 import FilterDialog from './detailsfilterdialog';
 import TargetComponent from '../targets/component';
-
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
@@ -275,7 +274,7 @@ const DeltaAuditReportDetails = props => {
 
   const handleReportDownload = state => {
     const {reportFilter, onDownload} = props;
-     
+
     const {includeNotes, includeOverrides, reportFormatId, storeAsDefault} =
       state;
 

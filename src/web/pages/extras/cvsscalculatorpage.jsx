@@ -13,7 +13,7 @@ import {
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState, useEffect} from 'react';
-import {useSearchParams} from 'react-router-dom';
+import {useSearchParams} from 'react-router';
 import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/severitybar';
 import FormGroup from 'web/components/form/formgroup';
