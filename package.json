@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "type": "module",
   "scripts": {
@@ -63,7 +63,7 @@
     "react-dom": "^18.3.1",
     "react-i18next": "^15.4.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^6.28.1",
+    "react-router": "^7.1.5",
     "redux": "^5.0.1",
     "redux-logger": "^3.0.6",
     "resize-observer-polyfill": "^1.5.1",
