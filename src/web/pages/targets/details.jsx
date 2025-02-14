@@ -35,6 +35,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     snmp_credential,
     ssh_credential,
     ssh_elevate_credential,
+    krb5_credential: krb5Credential,
     tasks,
     allowSimultaneousIPs,
   } = entity;
@@ -192,6 +193,19 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                       <span>
                         <DetailsLink id={snmp_credential.id} type="credential">
                           {snmp_credential.name}
+                        </DetailsLink>
+                      </span>
+                    </TableData>
+                  </TableRow>
+                )}
+
+                {isDefined(krb5Credential) && (
+                  <TableRow>
+                    <TableData>{_('Kerberos')}</TableData>
+                    <TableData>
+                      <span>
+                        <DetailsLink id={krb5Credential.id} type="credential">
+                          {krb5Credential.name}
                         </DetailsLink>
                       </span>
                     </TableData>

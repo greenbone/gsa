@@ -8,6 +8,7 @@ import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  KRB5_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import {
   changeInputValue,
@@ -20,7 +21,7 @@ import {
   getTextInputs,
 } from 'web/components/testing';
 import TargetDialog from 'web/pages/targets/dialog';
-import {rendererWith, fireEvent, screen} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 const cred1 = Credential.fromElement({
   _id: '5678',
@@ -46,7 +47,13 @@ const cred4 = Credential.fromElement({
   type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
 
-const credentials = [cred1, cred2, cred3, cred4];
+const cred5 = Credential.fromElement({
+  _id: '2345',
+  name: 'krb5_key',
+  type: KRB5_CREDENTIAL_TYPE,
+});
+
+const credentials = [cred1, cred2, cred3, cred4, cred5];
 
 const gmp = {settings: {enableGreenboneSensor: true}};
 
@@ -64,6 +71,7 @@ describe('TargetDialog component tests', () => {
         credentials={credentials}
         onClose={handleClose}
         onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
@@ -85,27 +93,27 @@ describe('TargetDialog component tests', () => {
     expect(inputs[1]).toHaveAttribute('name', 'comment');
     expect(inputs[1]).toHaveValue(''); // comment field
 
-    expect(radioInputs[0]).toHaveAttribute('name', 'target_source');
+    expect(radioInputs[0]).toHaveAttribute('name', 'targetSource');
     expect(radioInputs[0]).toHaveAttribute('value', 'manual');
     expect(radioInputs[0]).toBeChecked();
 
     expect(inputs[2]).toHaveAttribute('name', 'hosts');
     expect(inputs[2]).toHaveValue('');
 
-    expect(radioInputs[1]).toHaveAttribute('name', 'target_source');
+    expect(radioInputs[1]).toHaveAttribute('name', 'targetSource');
     expect(radioInputs[1]).toHaveAttribute('value', 'file');
     expect(radioInputs[1]).not.toBeChecked();
 
     expect(fileInputs[0]).toBeDisabled();
 
-    expect(radioInputs[2]).toHaveAttribute('name', 'target_exclude_source');
+    expect(radioInputs[2]).toHaveAttribute('name', 'targetExcludeSource');
     expect(radioInputs[2]).toHaveAttribute('value', 'manual');
     expect(radioInputs[2]).toBeChecked();
 
-    expect(inputs[3]).toHaveAttribute('name', 'exclude_hosts');
+    expect(inputs[3]).toHaveAttribute('name', 'excludeHosts');
     expect(inputs[3]).toHaveValue('');
 
-    expect(radioInputs[3]).toHaveAttribute('name', 'target_exclude_source');
+    expect(radioInputs[3]).toHaveAttribute('name', 'targetExcludeSource');
     expect(radioInputs[3]).toHaveAttribute('value', 'file');
     expect(radioInputs[3]).not.toBeChecked();
 
@@ -120,7 +128,7 @@ describe('TargetDialog component tests', () => {
 
     const selects = queryAllSelectElements();
 
-    expect(baseElement).not.toHaveTextContent('Elevate privileges'); // elevate privileges should not be rendered without valid ssh_credential_id
+    expect(baseElement).not.toHaveTextContent('Elevate privileges'); // elevate privileges should not be rendered without valid sshCredentialId
 
     expect(selects[0]).toHaveValue('OpenVAS Default');
     expect(
@@ -132,7 +140,7 @@ describe('TargetDialog component tests', () => {
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(8); // Each icon has both a span and an svg icon. There should be 4 total
+    expect(createCredentialIcons.length).toEqual(10); // Each icon has both a span and an svg icon. There should be 5 total
 
     expect(selects[2]).toHaveValue('--');
     expect(baseElement).toHaveTextContent('on port');
@@ -143,14 +151,14 @@ describe('TargetDialog component tests', () => {
     expect(radioInputs[6]).toHaveAttribute('value', '1');
     expect(radioInputs[6]).not.toBeChecked();
 
-    expect(radioInputs[7]).toHaveAttribute('name', 'reverse_lookup_only');
+    expect(radioInputs[7]).toHaveAttribute('name', 'reverseLookupOnly');
     expect(radioInputs[7]).toHaveAttribute('value', '0');
     expect(radioInputs[7]).toBeChecked();
 
     expect(radioInputs[8]).toHaveAttribute('value', '1');
     expect(radioInputs[8]).not.toBeChecked();
 
-    expect(radioInputs[9]).toHaveAttribute('name', 'reverse_lookup_unify');
+    expect(radioInputs[9]).toHaveAttribute('name', 'reverseLookupUnify');
     expect(radioInputs[9]).toHaveAttribute('value', '0');
     expect(radioInputs[9]).toBeChecked();
   });
@@ -165,21 +173,22 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement} = render(
       <TargetDialog
-        alive_tests={'Scan Config Default'}
+        aliveTests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
         credentials={credentials}
-        exclude_hosts={''}
+        excludeHosts={''}
         hosts={'123.455.67.434'}
         id={'foo'}
-        in_use={false}
+        inUse={false}
         name={'target'}
-        reverse_lookup_only={0}
-        reverse_lookup_unify={0}
-        smb_credential_id={'2345'}
-        target_title={'Edit Target target'}
+        reverseLookupOnly={0}
+        reverseLookupUnify={0}
+        smbCredentialId={'2345'}
+        targetTitle={'Edit Target target'}
         onClose={handleClose}
         onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
@@ -202,27 +211,27 @@ describe('TargetDialog component tests', () => {
     expect(inputs[1]).toHaveAttribute('name', 'comment');
     expect(inputs[1]).toHaveValue('hello world'); // comment field
 
-    expect(radioInputs[0]).toHaveAttribute('name', 'target_source');
+    expect(radioInputs[0]).toHaveAttribute('name', 'targetSource');
     expect(radioInputs[0]).toHaveAttribute('value', 'manual');
     expect(radioInputs[0]).toBeChecked();
 
     expect(inputs[2]).toHaveAttribute('name', 'hosts');
     expect(inputs[2]).toHaveAttribute('value', '123.455.67.434');
 
-    expect(radioInputs[1]).toHaveAttribute('name', 'target_source');
+    expect(radioInputs[1]).toHaveAttribute('name', 'targetSource');
     expect(radioInputs[1]).toHaveAttribute('value', 'file');
     expect(radioInputs[1]).not.toBeChecked();
 
     expect(fileInputs[0]).toHaveAttribute('disabled');
 
-    expect(radioInputs[2]).toHaveAttribute('name', 'target_exclude_source');
+    expect(radioInputs[2]).toHaveAttribute('name', 'targetExcludeSource');
     expect(radioInputs[2]).toHaveAttribute('value', 'manual');
     expect(radioInputs[2]).toBeChecked();
 
-    expect(inputs[3]).toHaveAttribute('name', 'exclude_hosts');
+    expect(inputs[3]).toHaveAttribute('name', 'excludeHosts');
     expect(inputs[3]).toHaveValue('');
 
-    expect(radioInputs[3]).toHaveAttribute('name', 'target_exclude_source');
+    expect(radioInputs[3]).toHaveAttribute('name', 'targetExcludeSource');
     expect(radioInputs[3]).toHaveAttribute('value', 'file');
     expect(radioInputs[3]).not.toBeChecked();
 
@@ -245,7 +254,7 @@ describe('TargetDialog component tests', () => {
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(8); // Each icon has both a span and an svg icon. There should be 4 total
+    expect(createCredentialIcons.length).toEqual(10); // Each icon has both a span and an svg icon. There should be 5 total
 
     expect(baseElement).toHaveTextContent('on port');
 
@@ -257,14 +266,14 @@ describe('TargetDialog component tests', () => {
     expect(radioInputs[6]).toHaveAttribute('value', '1');
     expect(radioInputs[6]).not.toBeChecked();
 
-    expect(radioInputs[7]).toHaveAttribute('name', 'reverse_lookup_only');
+    expect(radioInputs[7]).toHaveAttribute('name', 'reverseLookupOnly');
     expect(radioInputs[7]).toHaveAttribute('value', '0');
     expect(radioInputs[7]).toBeChecked();
 
     expect(radioInputs[8]).toHaveAttribute('value', '1');
     expect(radioInputs[8]).not.toBeChecked();
 
-    expect(radioInputs[9]).toHaveAttribute('name', 'reverse_lookup_unify');
+    expect(radioInputs[9]).toHaveAttribute('name', 'reverseLookupUnify');
     expect(radioInputs[9]).toHaveAttribute('value', '0');
     expect(radioInputs[9]).toBeChecked();
   });
@@ -279,21 +288,22 @@ describe('TargetDialog component tests', () => {
 
     const {getByName, getAllByName} = render(
       <TargetDialog
-        alive_tests={'Scan Config Default'}
+        aliveTests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
         credentials={credentials}
-        exclude_hosts={''}
+        excludeHosts={''}
         hosts={'123.455.67.434'}
         id={'foo'}
-        in_use={false}
+        inUse={false}
         name={'target'}
-        reverse_lookup_only={0}
-        reverse_lookup_unify={0}
-        smb_credential_id={'2345'}
-        target_title={'Edit Target target'}
+        reverseLookupOnly={0}
+        reverseLookupUnify={0}
+        smbCredentialId={'2345'}
+        targetTitle={'Edit Target target'}
         onClose={handleClose}
         onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
@@ -325,27 +335,28 @@ describe('TargetDialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      alive_tests: 'Scan Config Default',
+      aliveTests: 'Scan Config Default',
       allowSimultaneousIPs: 1,
       comment: 'hello world',
-      esxi_credential_id: '0',
-      exclude_hosts: '',
+      esxiCredentialId: '0',
+      excludeHosts: '',
       hosts: '123.455.67.434',
-      hosts_count: undefined,
+      hostsCount: undefined,
       id: 'foo',
-      in_use: false,
+      inUse: false,
       name: 'ross',
       port: 22,
-      port_list_id: 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5',
-      reverse_lookup_only: 0,
-      reverse_lookup_unify: 0,
-      smb_credential_id: '2345',
-      snmp_credential_id: '0',
-      ssh_credential_id: '0',
-      ssh_elevate_credential_id: '0',
-      target_exclude_source: 'manual',
-      target_source: 'manual',
-      target_title: 'Edit Target target',
+      portListId: 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5',
+      reverseLookupOnly: 0,
+      reverseLookupUnify: 0,
+      smbCredentialId: '2345',
+      snmpCredentialId: '0',
+      sshCredentialId: '0',
+      sshElevateCredentialId: '0',
+      krb5CredentialId: '0',
+      targetExcludeSource: 'manual',
+      targetSource: 'manual',
+      targetTitle: 'Edit Target target',
     });
   });
 
@@ -359,22 +370,23 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement} = render(
       <TargetDialog
-        alive_tests={'Scan Config Default'}
+        aliveTests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
         credentials={credentials}
-        exclude_hosts={''}
+        excludeHosts={''}
         hosts={'123.455.67.434'}
         id={'foo'}
-        in_use={false}
+        inUse={false}
         name={'target'}
-        reverse_lookup_only={0}
-        reverse_lookup_unify={0}
-        smb_credential_id={'2345'}
-        ssh_credential_id={'2345'}
-        target_title={'Edit Target target'}
+        reverseLookupOnly={0}
+        reverseLookupUnify={0}
+        smbCredentialId={'2345'}
+        sshCredentialId={'2345'}
+        targetTitle={'Edit Target target'}
         onClose={handleClose}
         onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
@@ -389,12 +401,12 @@ describe('TargetDialog component tests', () => {
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
     const selects = queryAllSelectElements();
-    expect(selects.length).toEqual(7); // Should have 7 selects
+    expect(selects.length).toEqual(8); // Should have 8 selects
 
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(10); // Each icon has both a span and an svg icon. There should be 5 total, including elevate privileges
+    expect(createCredentialIcons.length).toEqual(12); // Each icon has both a span and an svg icon. There should be 6 total, including elevate privileges
   });
 
   test('ssh elevate credential dropdown should only allow username + password options and remove ssh credential from list', async () => {
@@ -407,22 +419,23 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement} = render(
       <TargetDialog
-        alive_tests={'Scan Config Default'}
+        aliveTests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
         credentials={credentials}
-        exclude_hosts={''}
+        excludeHosts={''}
         hosts={'123.455.67.434'}
         id={'foo'}
-        in_use={false}
+        inUse={false}
         name={'target'}
-        reverse_lookup_only={0}
-        reverse_lookup_unify={0}
-        smb_credential_id={'5463'}
-        ssh_credential_id={'2345'}
-        target_title={'Edit Target target'}
+        reverseLookupOnly={0}
+        reverseLookupUnify={0}
+        smbCredentialId={'5463'}
+        sshCredentialId={'2345'}
+        targetTitle={'Edit Target target'}
         onClose={handleClose}
         onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
@@ -437,13 +450,75 @@ describe('TargetDialog component tests', () => {
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
     const selects = queryAllSelectElements();
-    expect(selects.length).toEqual(7); // Should have 7 selects
+    expect(selects.length).toEqual(8); // Should have 8 selects
 
     const selectItems = await getSelectItemElementsForSelect(selects[3]);
     expect(selectItems.length).toBe(2); // "original" ssh option removed
 
     expect(selectItems[0]).toHaveTextContent('--'); // null option
     expect(selectItems[1]).toHaveTextContent('up2');
+  });
+
+  test.each([
+    [
+      'Kerberos credential should disable smb credential dropdown',
+      'krb5_key',
+      0,
+      1,
+    ],
+    [
+      'smb credential should disable kerberos credential dropdown',
+      'OpenVAS Default',
+      1,
+      0,
+    ],
+  ])('%s', async (_, credentialValue, selectIndex, disabledIndex) => {
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetDialog
+        aliveTests={'Scan Config Default'}
+        allowSimultaneousIPs={0}
+        comment={'hello world'}
+        credentials={credentials}
+        excludeHosts={''}
+        hosts={'123.455.67.434'}
+        id={'foo'}
+        inUse={false}
+        krb5CredentialId={'2345'}
+        name={'target'}
+        reverseLookupOnly={0}
+        reverseLookupUnify={0}
+        smbCredentialId={'5463'}
+        targetTitle={'Edit Target target'}
+        onClose={handleClose}
+        onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
+        onNewCredentialsClick={handleCreate}
+        onNewPortListClick={handleCreate}
+        onPortListChange={handleChange}
+        onSave={handleSave}
+        onSmbCredentialChange={handleChange}
+        onSnmpCredentialChange={handleChange}
+        onSshCredentialChange={handleChange}
+        onSshElevateCredentialChange={handleChange}
+      />,
+    );
+
+    const selects = queryAllSelectElements();
+
+    fireEvent.change(selects[selectIndex], {target: {value: '--'}});
+    expect(selects[selectIndex]).toHaveValue('--');
+
+    fireEvent.change(selects[selectIndex], {target: {value: credentialValue}});
+    expect(selects[selectIndex]).toHaveValue(credentialValue);
+
+    await wait(() => expect(selects[disabledIndex]).toBeDisabled());
   });
 
   test('ssh credential dropdown should remove ssh elevate credential from list', async () => {
@@ -456,22 +531,23 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement} = render(
       <TargetDialog
-        alive_tests={'Scan Config Default'}
+        aliveTests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
         credentials={credentials}
-        exclude_hosts={''}
+        excludeHosts={''}
         hosts={'123.455.67.434'}
         id={'foo'}
-        in_use={false}
+        inUse={false}
         name={'target'}
-        reverse_lookup_only={0}
-        reverse_lookup_unify={0}
-        ssh_credential_id={'2345'}
-        ssh_elevate_credential_id={'5463'}
-        target_title={'Edit Target target'}
+        reverseLookupOnly={0}
+        reverseLookupUnify={0}
+        sshCredentialId={'2345'}
+        sshElevateCredentialId={'5463'}
+        targetTitle={'Edit Target target'}
         onClose={handleClose}
         onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
@@ -486,7 +562,7 @@ describe('TargetDialog component tests', () => {
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
     const selects = queryAllSelectElements();
-    expect(selects.length).toEqual(7); // Should have 7 selects
+    expect(selects.length).toEqual(8); // Should have 8 selects
 
     const selectItems = await getSelectItemElementsForSelect(selects[2]);
     expect(selectItems.length).toBe(3); // ssh elevate option removed
@@ -506,22 +582,23 @@ describe('TargetDialog component tests', () => {
 
     const {baseElement, queryAllByTitle} = render(
       <TargetDialog
-        alive_tests={'Scan Config Default'}
+        aliveTests={'Scan Config Default'}
         allowSimultaneousIPs={0}
         comment={'hello world'}
         credentials={credentials}
-        exclude_hosts={''}
+        excludeHosts={''}
         hosts={'123.455.67.434'}
         id={'foo'}
-        in_use={true}
+        inUse={true}
         name={'target'}
-        reverse_lookup_only={0}
-        reverse_lookup_unify={0}
-        ssh_credential_id={'2345'}
-        ssh_elevate_credential_id={'5463'}
-        target_title={'Edit Target target'}
+        reverseLookupOnly={0}
+        reverseLookupUnify={0}
+        sshCredentialId={'2345'}
+        sshElevateCredentialId={'5463'}
+        targetTitle={'Edit Target target'}
         onClose={handleClose}
         onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}
@@ -539,7 +616,7 @@ describe('TargetDialog component tests', () => {
     expect(newIcons.length).toBe(0); // no new credential can be created
 
     const selects = queryAllSelectElements();
-    expect(selects.length).toEqual(7); // Should have 7 selects
+    expect(selects.length).toEqual(8); // Should have 7 selects
 
     expect(selects[0]).toHaveValue('OpenVAS Default');
     expect(selects[0]).toBeDisabled();
@@ -573,6 +650,7 @@ describe('TargetDialog component tests', () => {
         credentials={credentials}
         onClose={handleClose}
         onEsxiCredentialChange={handleChange}
+        onKrb5CredentialChange={handleChange}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
         onPortListChange={handleChange}

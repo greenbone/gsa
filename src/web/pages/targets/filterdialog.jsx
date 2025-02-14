@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import DefaultFilterDialog from 'web/components/powerfilter/dialog';
 import FilterDialog from 'web/components/powerfilter/filterdialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
@@ -62,6 +61,10 @@ const TargetsFilterDialog = ({
     {
       name: 'snmp_credential',
       displayName: _('SNMP Credential'),
+    },
+    {
+      name: 'krb5_credential',
+      displayName: _('Kerberos Credential'),
     },
   ];
   return (

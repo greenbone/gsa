@@ -10,11 +10,13 @@ import Credential, {
   SNMP_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  KRB5_CREDENTIAL_TYPE,
   esxi_credential_filter,
   smb_credential_filter,
   snmp_credential_filter,
   ssh_credential_filter,
   email_credential_filter,
+  krb5CredentialFilter,
   SMIME_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
   getCredentialTypeName,
@@ -31,6 +33,7 @@ const USERNAME_SSH_KEY_CREDENTIAL = Credential.fromElement({
 const SNMP_CREDENTIAL = Credential.fromElement({type: SNMP_CREDENTIAL_TYPE});
 const PGP_CREDENTIAL = Credential.fromElement({type: PGP_CREDENTIAL_TYPE});
 const SMIME_CREDENTIAL = Credential.fromElement({type: SMIME_CREDENTIAL_TYPE});
+const KRB5_CREDENTIAL = Credential.fromElement({type: KRB5_CREDENTIAL_TYPE});
 
 const createAllCredentials = () => [
   USERNAME_PASSWORD_CREDENTIAL,
@@ -38,6 +41,7 @@ const createAllCredentials = () => [
   SNMP_CREDENTIAL,
   PGP_CREDENTIAL,
   SMIME_CREDENTIAL,
+  KRB5_CREDENTIAL,
 ];
 
 testModel(Credential, 'credential');
@@ -192,6 +196,13 @@ describe('Credential model function tests', () => {
       SMIME_CREDENTIAL,
     ]);
   });
+
+  test('should filter non krb5 credentials', () => {
+    const allCredentials = createAllCredentials();
+    expect(allCredentials.filter(krb5CredentialFilter)).toEqual([
+      KRB5_CREDENTIAL,
+    ]);
+  });
 });
 
 describe('getCredentialTypeName tests', () => {
@@ -211,5 +222,6 @@ describe('getCredentialTypeName tests', () => {
     expect(getCredentialTypeName(PGP_CREDENTIAL_TYPE)).toEqual(
       'PGP Encryption Key',
     );
+    expect(getCredentialTypeName(KRB5_CREDENTIAL_TYPE)).toEqual('Kerberos');
   });
 });
