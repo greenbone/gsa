@@ -12,7 +12,7 @@ import Filter, {
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {useSearchParams} from 'react-router-dom';
+import {useSearchParams} from 'react-router';
 import useGmp from 'web/hooks/useGmp';
 import {pageFilter as setPageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';

@@ -16,7 +16,7 @@ import {
   CircleHelp,
 } from 'lucide-react';
 import React from 'react';
-import {useMatch} from 'react-router-dom';
+import {useMatch} from "react-router";
 import Link from 'web/components/link/link';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';

@@ -4,7 +4,7 @@
  */
 
 import PropTypes from 'prop-types';
-import {Navigate} from 'react-router-dom';
+import {Navigate} from 'react-router';
 import useCapabilities from 'web/hooks/useCapabilities';
 
 const ConditionalRoute = ({component: Component, feature, ...rest}) => {

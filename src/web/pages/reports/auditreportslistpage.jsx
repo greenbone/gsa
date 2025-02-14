@@ -7,7 +7,7 @@ import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router';
 import DashboardControls from 'web/components/dashboard/controls';
 import ManualIcon from 'web/components/icon/manualicon';
 import ReportIcon from 'web/components/icon/reporticon';
