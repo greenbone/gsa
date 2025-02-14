@@ -99,7 +99,7 @@ const SvgIcon = ({
 
     if (isDefined(promise) && isDefined(promise.then)) {
       setLoading(true);
-       
+
       promise
         .then(() => {
           setLoading(false);
@@ -137,7 +137,11 @@ const SvgIcon = ({
 };
 
 SvgIcon.propTypes = {
-  children: PropTypes.func.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.func,
+  ]),
   color: PropTypes.string,
   active: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -146,7 +150,10 @@ SvgIcon.propTypes = {
   to: PropTypes.string,
   value: PropTypes.any,
   onClick: PropTypes.func,
-  size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
+  size: PropTypes.oneOfType([
+    PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
 };
 
 export default SvgIcon;

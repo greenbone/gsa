@@ -14,10 +14,10 @@ const SvgIconWrapper = ({component: Component, size, ...props}) => (
 );
 
 SvgIconWrapper.propTypes = {
-  component: PropTypes.node.isRequired,
+  component: PropTypes.elementType.isRequired,
   size: PropTypes.oneOfType([
     PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
-    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
   ]),
 };
 
