@@ -4,90 +4,142 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Model from 'gmp/model';
-import Credential from 'gmp/models/credential';
-import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
+import DefaultTransform from 'gmp/http/transform/default';
 
-describe('Credential Model tests', () => {
-  test('should parse certificate_info', () => {
-    const elem = {
-      certificate_info: {
-        activation_time: '2025-02-10T11:41:23.022Z',
-        expiration_time: '2025-10-10T11:41:23.022Z',
+import {CredentialCommand} from '../credentials';
+import {createHttp, createActionResultResponse} from '../testing';
+
+describe('CredentialCommand tests', () => {
+  test('should create credential', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new CredentialCommand(fakeHttp);
+    const resp = await cmd.create({name: 'test-credential'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_credential',
+        name: 'test-credential',
+        comment: '',
+        allow_insecure: 0,
+        autogenerate: 0,
+        community: '',
+        credential_login: '',
+        lsc_password: '',
+        passphrase: '',
+        privacy_password: '',
+        auth_algorithm: 'sha1',
+        privacy_algorithm: 'aes',
+        private_key: undefined,
+        public_key: undefined,
+        certificate: undefined,
+        realm: undefined,
+        kdc: undefined,
+        credential_type: undefined,
+      },
+    });
+
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
+  });
+
+  test('should save credential', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new CredentialCommand(fakeHttp);
+    const resp = await cmd.save({
+      id: '1',
+      name: 'updated-credential',
+      comment: 'updated comment',
+      allow_insecure: 1,
+      auth_algorithm: 'md5',
+      certificate: 'cert',
+      change_community: 1,
+      change_passphrase: 1,
+      change_password: 1,
+      change_privacy_password: 1,
+      community: 'community',
+      credential_login: 'login',
+      credential_type: 'type',
+      passphrase: 'passphrase',
+      password: 'password',
+      privacy_algorithm: 'des',
+      privacy_password: 'privacy_password',
+      private_key: 'private_key',
+      public_key: 'public_key',
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_credential',
+        credential_id: '1',
+        name: 'updated-credential',
+        comment: 'updated comment',
+        allow_insecure: 1,
+        auth_algorithm: 'md5',
+        certificate: 'cert',
+        change_community: 1,
+        change_passphrase: 1,
+        change_password: 1,
+        change_privacy_password: 1,
+        community: 'community',
+        credential_login: 'login',
+        credential_type: 'type',
+        passphrase: 'passphrase',
+        password: 'password',
+        privacy_algorithm: 'des',
+        privacy_password: 'privacy_password',
+        private_key: 'private_key',
+        public_key: 'public_key',
+      },
+    });
+
+    const {data} = resp;
+    expect(data.id).toEqual('foo');
+  });
+
+  test('should download credential', async () => {
+    const response = new ArrayBuffer(8);
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new CredentialCommand(fakeHttp);
+    const resp = await cmd.download({id: '1'}, 'pem');
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'download_credential',
+        package_format: 'pem',
+        credential_id: '1',
+      },
+      transform: DefaultTransform,
+      responseType: 'arraybuffer',
+    });
+
+    expect(resp).toEqual(response);
+  });
+
+  test('should get element from root', () => {
+    const root = {
+      // eslint-disable-next-line camelcase
+      get_credential: {
+        // eslint-disable-next-line camelcase
+        get_credentials_response: {
+          credential: {id: '1', name: 'test-credential'},
+        },
       },
     };
-    const credential = Credential.fromElement(elem);
 
-    expect(credential.certificate_info.activationTime).toEqual(
-      parseDate('2025-02-10T11:41:23.022Z'),
-    );
-    expect(credential.certificate_info.expirationTime).toEqual(
-      parseDate('2025-10-10T11:41:23.022Z'),
-    );
-    expect(credential.certificate_info.activation_time).toBeUndefined();
-    expect(credential.certificate_info.expiration_time).toBeUndefined();
-  });
+    const cmd = new CredentialCommand();
+    const element = cmd.getElementFromRoot(root);
 
-  test('should parse type', () => {
-    const credential = Credential.fromElement({type: 'foo'});
-
-    expect(credential.credential_type).toEqual('foo');
-  });
-
-  test('should parse allow_insecure as Yes/No', () => {
-    const elem1 = {allow_insecure: '1'};
-    const elem2 = {allow_insecure: '0'};
-    const cred1 = Credential.fromElement(elem1);
-    const cred2 = Credential.fromElement(elem2);
-
-    expect(cred1.allow_insecure).toEqual(YES_VALUE);
-    expect(cred2.allow_insecure).toEqual(NO_VALUE);
-  });
-
-  test('isAllowInsecure() should return correct true/false', () => {
-    const cred1 = Credential.fromElement({allow_insecure: '0'});
-    const cred2 = Credential.fromElement({allow_insecure: '1'});
-
-    expect(cred1.isAllowInsecure()).toBe(false);
-    expect(cred2.isAllowInsecure()).toBe(true);
-  });
-
-  test('should parse targets as array of instances of target model', () => {
-    const elem = {
-      targets: {
-        target: {_id: 't1'},
-      },
-    };
-    const credential = Credential.fromElement(elem);
-
-    expect(credential.targets.length).toEqual(1);
-
-    const [target] = credential.targets;
-    expect(target).toBeInstanceOf(Model);
-    expect(target.id).toEqual('t1');
-    expect(target.entityType).toEqual('target');
-  });
-
-  test('should return empty array if no targets are given', () => {
-    const credential = Credential.fromElement({});
-
-    expect(credential.targets.length).toEqual(0);
-    expect(credential.targets).toEqual([]);
-  });
-
-  test('should parse scanners as array of instances of scanner model', () => {
-    const elem = {
-      scanners: {
-        scanner: {_id: 's1'},
-      },
-    };
-    const credential = Credential.fromElement(elem);
-
-    expect(credential.scanners.length).toEqual(1);
-
-    const [scanner] = credential.scanners;
-    expect(scanner).toBeInstanceOf(Model);
-    expect(scanner.id).toEqual('s1');
-    expect(scanner.entityType).toEqual('scanner');
+    expect(element).toEqual({id: '1', name: 'test-credential'});
   });
 });

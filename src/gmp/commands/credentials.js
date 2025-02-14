@@ -13,7 +13,7 @@ import Credential from 'gmp/models/credential';
 
 const log = logger.getLogger('gmp.commands.credentials');
 
-class CredentialCommand extends EntityCommand {
+export class CredentialCommand extends EntityCommand {
   constructor(http) {
     super(http, 'credential', Credential);
   }
