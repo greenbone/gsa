@@ -215,6 +215,7 @@ const gsaPropTypes = {
   shape: ReactPropTypes.shape,
   symbol: ReactPropTypes.symbol,
   string: ReactPropTypes.string,
+  elementType: ReactPropTypes.elementType,
 
   capabilities,
   counts,
