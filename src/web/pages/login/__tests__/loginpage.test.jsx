@@ -5,13 +5,27 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Logger from 'gmp/log';
+import {beforeEach, vi} from 'vitest';
+import {setIsLoggedIn} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import LoginPage from '../loginpage';
 
 Logger.setDefaultLevel('silent');
+const mockUseNavigate = testing.fn();
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
 describe('LoginPage tests', () => {
+  beforeEach(() => {
+    testing.clearAllMocks();
+  });
   test('should render Loginpage', () => {
     const isLoggedIn = testing.fn().mockReturnValue(false);
     const clearToken = testing.fn();
@@ -135,28 +149,14 @@ describe('LoginPage tests', () => {
   });
 
   test('should redirect to main page if already logged in', () => {
-    const login = testing.fn().mockResolvedValue({
-      locale: 'locale',
-      username: 'username',
-      token: 'token',
-      timezone: 'timezone',
-    });
-    const isLoggedIn = testing.fn().mockReturnValue(true);
-    const clearToken = testing.fn();
-    const setLocale = testing.fn();
-    const setTimezone = testing.fn();
-    const gmp = {
-      setTimezone,
-      setLocale,
-      login,
-      isLoggedIn,
-      clearToken,
-      settings: {},
-    };
-    const {render} = rendererWith({gmp, router: true, store: true});
+    const gmp = {settings: {}};
+
+    const {render, store} = rendererWith({gmp, router: true, store: true});
+
+    store.dispatch(setIsLoggedIn(true));
 
     render(<LoginPage />);
-
-    expect(window.location.pathname).toMatch(/^\/dashboards$/);
+    expect(mockUseNavigate).toBeCalledTimes(1);
+    expect(mockUseNavigate).toBeCalledWith('/dashboards', {replace: true});
   });
 });

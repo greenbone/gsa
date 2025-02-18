@@ -4,51 +4,58 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {fireEvent, rendererWith} from 'web/utils/testing';
+import {fireEvent, rendererWith, screen} from 'web/utils/testing';
 
 import CveLink from '../cvelink';
 
 describe('CveLink tests', () => {
-  beforeEach(() => {
-    window.history.pushState({}, 'Test page', '/');
-  });
   test('should render CveLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CveLink id="foo" title="Foo" />);
+    render(<CveLink id="foo" title="Foo" />);
 
-    expect(element).toHaveTextContent('foo');
+    const element = screen.getByText('foo');
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', '/cve/foo');
   });
 
   test('should not override type', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CveLink id="foo" title="Foo" type="bar" />);
+    render(<CveLink id="foo" title="Foo" type="bar" />);
 
-    expect(element).toHaveTextContent('foo');
+    const element = screen.getByText('foo');
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', '/cve/foo');
   });
 
   test('should route to details', () => {
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CveLink id="foo" title="Foo" />);
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      showLocation: true,
+    });
+    render(<CveLink id="foo" title="Foo" />);
 
-    expect(window.location.pathname).toEqual('/');
+    const locationPathname = screen.getByTestId('location-pathname');
+    expect(locationPathname).toHaveTextContent('/');
 
-    fireEvent.click(element);
+    fireEvent.click(screen.getByTestId('details-link'));
 
-    expect(window.location.pathname).toEqual('/cve/foo');
+    expect(locationPathname).toHaveTextContent('/cve/foo');
   });
 
   test('should not route to details in text mode', () => {
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CveLink id="foo" textOnly={true} title="Foo" />);
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      showLocation: true,
+    });
+    render(<CveLink id="foo" textOnly={true} title="Foo" />);
 
-    expect(window.location.pathname).toEqual('/');
+    const locationPathname = screen.getByTestId('location-pathname');
+    expect(locationPathname).toHaveTextContent('/');
 
-    fireEvent.click(element);
+    fireEvent.click(screen.getByText('foo'));
 
-    expect(window.location.pathname).toEqual('/');
+    expect(locationPathname).toHaveTextContent('/');
   });
 });

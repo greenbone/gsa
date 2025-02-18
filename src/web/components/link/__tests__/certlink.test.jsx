@@ -4,20 +4,16 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {beforeEach} from 'vitest';
-import {fireEvent, rendererWith} from 'web/utils/testing';
+import {fireEvent, rendererWith, screen} from 'web/utils/testing';
 
 import CertLink from '../certlink';
 
 describe('CertLink tests', () => {
-  beforeEach(() => {
-    window.history.pushState({}, 'Test page', '/');
-  });
   test('should render CertLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CertLink id="foo" type="CERT-Bund" />);
+    render(<CertLink id="foo" type="CERT-Bund" />);
 
-    expect(element).toHaveTextContent('foo');
+    const element = screen.getByText('foo');
     expect(element).toHaveAttribute(
       'title',
       'View details of CERT-Bund Advisory foo',
@@ -26,53 +22,74 @@ describe('CertLink tests', () => {
 
   test('should render unknown type', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CertLink id="foo" type="foo" />);
+    render(<CertLink id="foo" type="foo" />);
 
-    expect(element.querySelector('b')).toHaveTextContent('?');
+    const element = screen.getByText('foo');
+    expect(screen.getByText('?')).toBeInTheDocument();
     expect(element).toHaveTextContent('foo');
   });
 
   test('should route to certbund details', () => {
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CertLink id="foo" type="CERT-Bund" />);
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      showLocation: true,
+    });
+    render(<CertLink id="foo" type="CERT-Bund" />);
 
-    expect(window.location.pathname).toEqual('/');
+    const locationPathname = screen.getByTestId('location-pathname');
+    expect(locationPathname).toHaveTextContent('/');
 
-    fireEvent.click(element);
+    fireEvent.click(screen.getByText('foo'));
 
-    expect(window.location.pathname).toEqual('/certbund/foo');
+    expect(locationPathname).toHaveTextContent('/certbund/foo');
   });
 
   test('should route to dfncert details', () => {
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CertLink id="foo" type="DFN-CERT" />);
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      showLocation: true,
+    });
+    render(<CertLink id="foo" type="DFN-CERT" />);
 
-    expect(window.location.pathname).toEqual('/');
+    const locationPathname = screen.getByTestId('location-pathname');
+    expect(locationPathname).toHaveTextContent('/');
 
-    fireEvent.click(element);
-    expect(window.location.pathname).toEqual('/dfncert/foo');
+    fireEvent.click(screen.getByText('foo'));
+
+    expect(locationPathname).toHaveTextContent('/dfncert/foo');
   });
 
   test('should not route to unknown type', () => {
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(<CertLink id="foo" type="foo" />);
-    expect(window.location.pathname).toEqual('/');
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      showLocation: true,
+    });
+    render(<CertLink id="foo" type="foo" />);
 
-    fireEvent.click(element);
+    const locationPathname = screen.getByTestId('location-pathname');
+    expect(locationPathname).toHaveTextContent('/');
 
-    expect(window.location.pathname).toEqual('/');
+    fireEvent.click(screen.getByText('foo'));
+
+    expect(locationPathname).toHaveTextContent('/');
   });
 
   test('should not route in text mode', () => {
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(
-      <CertLink id="foo" textOnly={true} type="DFN-CERT" />,
-    );
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      showLocation: true,
+    });
+    render(<CertLink id="foo" textOnly={true} type="DFN-CERT" />);
 
-    expect(window.location.pathname).toEqual('/');
+    const locationPathname = screen.getByTestId('location-pathname');
+    expect(locationPathname).toHaveTextContent('/');
 
-    fireEvent.click(element);
+    fireEvent.click(screen.getByText('foo'));
 
-    expect(window.location.pathname).toEqual('/');
+    expect(locationPathname).toHaveTextContent('/');
   });
 });
