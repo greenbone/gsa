@@ -10,7 +10,7 @@ import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
-import SelectionType from 'web/utils/selectiontype';
+import SelectionType from 'web/utils/SelectionType';
 import {
   screen,
   rendererWith,
@@ -19,7 +19,7 @@ import {
   getAllByTitle,
   wait,
   getByRole,
-} from 'web/utils/testing';
+} from 'web/utils/Testing';
 
 import BulkTags from '../BulkTags';
 

@@ -5,13 +5,13 @@
 
 import React from 'react';
 
-import {CpesCreatedDisplay, CpesCreatedTableDisplay} from './createddisplay';
-import {CpesCvssDisplay, CpesCvssTableDisplay} from './cvssdisplay';
+import {CpesCreatedDisplay, CpesCreatedTableDisplay} from './CreatedDisplay';
+import {CpesCvssDisplay, CpesCvssTableDisplay} from './CvssDisplay';
 import {
   CpesSeverityClassDisplay,
   CpesSeverityClassTableDisplay,
-} from './severityclassdisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './SeverityClassDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const CPES_DASHBOARD_ID = '9cff9b4d-b164-43ce-8687-f2360afc7500';
 

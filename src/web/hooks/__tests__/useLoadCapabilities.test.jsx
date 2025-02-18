@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, screen, wait} from 'web/utils/testing';
+import {rendererWith, screen, wait} from 'web/utils/Testing';
 
 import useLoadCapabilities from '../useLoadCapabilities';
 

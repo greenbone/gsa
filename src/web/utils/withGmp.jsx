@@ -6,8 +6,7 @@
 import hoistStatics from 'hoist-non-react-statics';
 import React from 'react';
 
-
-import GmpContext from '../components/provider/gmpprovider';
+import GmpContext from '../components/provider/GmpProvider';
 
 const withGmp = Component => {
   const GmpWrapper = props => (

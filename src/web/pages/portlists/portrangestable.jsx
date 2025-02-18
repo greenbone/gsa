@@ -5,15 +5,15 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import DeleteIcon from 'web/components/icon/deleteicon';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
-import Table from 'web/components/table/stripedtable';
+import DeleteIcon from 'web/components/icon/DeleteIcon';
+import TableBody from 'web/components/table/Body';
+import TableData from 'web/components/table/Data';
+import TableHead from 'web/components/table/Head';
+import TableHeader from 'web/components/table/Header';
+import TableRow from 'web/components/table/Row';
+import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from 'web/utils/PropTypes';
 
 const PortRangesTable = ({actions = true, portRanges, onDeleteClick}) => {
   const [_] = useTranslation();

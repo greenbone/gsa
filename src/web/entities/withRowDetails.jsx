@@ -7,13 +7,13 @@ import _ from 'gmp/locale';
 import {isFunction} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-import DetailsIcon from 'web/components/icon/detailsicon';
-import Layout from 'web/components/layout/layout';
-import DetailsLink from 'web/components/link/detailslink';
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import DetailsIcon from 'web/components/icon/DetailsIcon';
+import Layout from 'web/components/layout/Layout';
+import DetailsLink from 'web/components/link/DetailsLink';
+import TableData from 'web/components/table/Data';
+import TableRow from 'web/components/table/Row';
+import PropTypes from 'web/utils/PropTypes';
+import Theme from 'web/utils/Theme';
 
 const Indent = styled.div`
   display: flex;

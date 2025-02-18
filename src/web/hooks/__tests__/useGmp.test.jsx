@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/Testing';
 
 import useGmp from '../useGmp';
 

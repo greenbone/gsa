@@ -4,13 +4,13 @@
  */
 
 import React from 'react';
-import Dashboard from 'web/components/dashboard/dashboard';
+import Dashboard from 'web/components/dashboard/Dashboard';
 
 import {
   TlsCertificatesModifiedDisplay,
   TlsCertificatesModifiedTableDisplay,
-} from './modifieddisplay';
-import {TimeStatusDisplay, TimeStatusTableDisplay} from './timestatusdisplay';
+} from './ModifiedDisplay';
+import {TimeStatusDisplay, TimeStatusTableDisplay} from './TimeStatusDisplay';
 
 export const TLS_CERTIFICATES_DASHBOARD_ID =
   '9b62bf16-bf90-11e9-ad97-28d24461215b';

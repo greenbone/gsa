@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
- 
-
 import {describe, test, expect, testing} from '@gsa/testing';
-import {fireEvent, render, screen} from 'web/utils/testing';
+import {fireEvent, render, screen} from 'web/utils/Testing';
 
-import Download from '../download';
+import Download from '../Download';
 import useDownload from '../useDownload';
 
 const TestComponent = () => {

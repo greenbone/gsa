@@ -5,16 +5,16 @@
 
 import React from 'react';
 
-import {ReportsCvssDisplay, ReportsCvssTableDisplay} from './cvssdisplay';
+import {ReportsCvssDisplay, ReportsCvssTableDisplay} from './CvssDisplay';
 import {
   ReportsHighResultsDisplay,
   ReportsHighResultsTableDisplay,
-} from './highresultsdisplay';
+} from './HighResultsDisplay';
 import {
   ReportsSeverityDisplay,
   ReportsSeverityTableDisplay,
-} from './severityclassdisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './SeverityClassDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const REPORTS_DASHBOARD_ID = 'e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071';
 

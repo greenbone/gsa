@@ -5,25 +5,25 @@
 
 import React from 'react';
 
-import {TasksCvssDisplay, TasksCvssTableDisplay} from './cvssdisplay';
+import {TasksCvssDisplay, TasksCvssTableDisplay} from './CvssDisplay';
 import {
   TasksHighResultsDisplay,
   TasksHighResultsTableDisplay,
-} from './highresults';
+} from './HighResults';
 import {
   TasksMostHighResultsDisplay,
   TasksMostHighResultsTableDisplay,
-} from './mosthighresults';
+} from './MostHighResults';
 import {
   TasksSchedulesDisplay,
   TasksSchedulesTableDisplay,
-} from './schedulesdisplay';
+} from './SchedulesDisplay';
 import {
   TasksSeverityDisplay,
   TasksSeverityTableDisplay,
-} from './severityclassdisplay';
-import {TasksStatusDisplay, TasksStatusTableDisplay} from './statusdisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './SeverityClassDisplay';
+import {TasksStatusDisplay, TasksStatusTableDisplay} from './StatusDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
 

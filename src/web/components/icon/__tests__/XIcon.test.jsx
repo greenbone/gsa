@@ -4,7 +4,7 @@
  */
 
 import {describe} from '@gsa/testing';
-import {testIcon} from 'web/components/icon/testing';
+import {testIcon} from 'web/components/icon/Testing';
 
 import XIcon from '../XIcon';
 

@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {useState} from 'react';
-import {fireEvent, render, screen} from 'web/utils/testing';
+import {fireEvent, render, screen} from 'web/utils/Testing';
 
 import usePreviousValue from '../usePreviousValue';
 

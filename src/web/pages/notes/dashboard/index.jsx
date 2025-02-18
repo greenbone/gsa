@@ -8,13 +8,13 @@ import React from 'react';
 import {
   NotesActiveDaysDisplay,
   NotesActiveDaysTableDisplay,
-} from './activedaysdisplay';
-import {NotesCreatedDisplay, NotesCreatedTableDisplay} from './createddisplay';
+} from './ActiveDaysDisplay';
+import {NotesCreatedDisplay, NotesCreatedTableDisplay} from './CreatedDisplay';
 import {
   NotesWordCloudDisplay,
   NotesWordCloudTableDisplay,
-} from './wordclouddisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './WordCloudDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const NOTES_DASHBOARD_ID = 'ce7b121-c609-47b0-ab57-fd020a0336f4a';
 

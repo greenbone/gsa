@@ -7,7 +7,7 @@ import registerCommand from 'gmp/command';
 import logger from 'gmp/log';
 import Target from 'gmp/models/target';
 import {isString} from 'gmp/utils/identity';
-import {UNSET_VALUE} from 'web/utils/render';
+import {UNSET_VALUE} from 'web/utils/Render';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

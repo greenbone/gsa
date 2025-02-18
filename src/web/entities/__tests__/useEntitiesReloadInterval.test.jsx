@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
- 
-
 import {describe, test, expect} from '@gsa/testing';
-import {screen, rendererWith} from 'web/utils/testing';
+import {screen, rendererWith} from 'web/utils/Testing';
 
 import useEntitiesReloadInterval from '../useEntitiesReloadInterval';
 

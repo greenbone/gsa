@@ -7,7 +7,7 @@ import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {StyleSheetManager} from 'styled-components';
 
-import App from './web/app';
+import App from './web/App';
 
 const root = createRoot(document.getElementById('app'));
 root.render(

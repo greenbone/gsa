@@ -5,7 +5,7 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from 'web/utils/PropTypes';
 
 import withFilterSelection from './withFilterSelection';
 

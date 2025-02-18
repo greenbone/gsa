@@ -8,13 +8,13 @@ import React from 'react';
 import {
   CertBundCreatedDisplay,
   CertBundCreatedTableDisplay,
-} from './createddisplay';
-import {CertBundCvssDisplay, CertBundCvssTableDisplay} from './cvssdisplay';
+} from './CreatedDisplay';
+import {CertBundCvssDisplay, CertBundCvssTableDisplay} from './CvssDisplay';
 import {
   CertBundSeverityClassDisplay,
   CertBundSeverityClassTableDisplay,
-} from './severityclassdisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './SeverityClassDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const CERTBUND_DASHBOARD_ID = 'a6946f44-480f-4f37-8a73-28a4cd5310c4';
 

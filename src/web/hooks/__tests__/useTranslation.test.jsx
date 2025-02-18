@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {fireEvent, rendererWith, screen} from 'web/utils/testing';
+import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
 import useTranslation from '../useTranslation';
 

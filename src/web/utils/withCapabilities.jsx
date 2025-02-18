@@ -5,7 +5,7 @@
 
 import hoistStatics from 'hoist-non-react-statics';
 import React from 'react';
-import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
+import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 
 const withCapabilities = Component => {
   const CapabilitiesWrapper = props => (

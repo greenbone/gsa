@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
- 
-
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-import {fireEvent, render, screen} from 'web/utils/testing';
+import {fireEvent, render, screen} from 'web/utils/Testing';
 
 import useFilterSortBy from '../useFilterSortBy';
 

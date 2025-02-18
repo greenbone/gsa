@@ -11,15 +11,15 @@ import withDownload from 'web/components/form/withDownload';
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL,
-} from 'web/components/loading/reload';
+} from 'web/components/loading/Reload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/Compose';
+import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
-import EntityContainer from './container';
+import EntityContainer from './Container';
 
 const defaultEntityReloadIntervalFunc = ({entity}) =>
   isDefined(entity) ? USE_DEFAULT_RELOAD_INTERVAL : NO_RELOAD;

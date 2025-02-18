@@ -6,6 +6,10 @@
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import compose from 'web/utils/Compose';
+import PropTypes from 'web/utils/PropTypes';
+import withGmp from 'web/utils/withGmp';
+import withSubscription from 'web/utils/withSubscription';
 
 import {
   receivedDashboardData,
@@ -13,10 +17,6 @@ import {
   requestDashboardData,
 } from './actions';
 import getDashboardData from './selectors';
-import compose from '../../../utils/compose';
-import PropTypes from '../../../utils/proptypes';
-import withGmp from '../../../utils/withGmp';
-import withSubscription from '../../../utils/withSubscription';
 
 export const loaderPropTypes = {
   children: PropTypes.func,
