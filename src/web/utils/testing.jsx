@@ -25,7 +25,7 @@ import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import {Provider} from 'react-redux';
-import {BrowserRouter} from 'react-router';
+import {MemoryRouter, useLocation} from 'react-router';
 import {StyleSheetManager} from 'styled-components';
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 import GmpContext from 'web/components/provider/gmpprovider';
@@ -125,7 +125,15 @@ const TestingLicenseProvider = withProvider(
 )(LicenseProvider);
 
 export const rendererWith = (
-  {capabilities, gmp, license, store = true, router} = {
+  {
+    capabilities,
+    gmp,
+    license,
+    store = true,
+    router,
+    route = '/',
+    showLocation = false,
+  } = {
     store: true,
     router: true,
   },
@@ -138,23 +146,28 @@ export const rendererWith = (
     capabilities = new EverythingCapabilities();
   }
 
+  const LocationDisplay = () => {
+    const location = useLocation();
+
+    return (
+      <div>
+        <div data-testid="location-pathname">{location.pathname}</div>
+        <div data-testid="location-search">{location.search}</div>
+        <div data-testid="location-hash">{location.hash}</div>
+      </div>
+    );
+  };
+
   const Providers = ({children}) => (
     <TestingGmpProvider gmp={gmp}>
       <TestingCapabilitiesProvider capabilities={capabilities}>
         <TestingLicenseProvider license={license}>
           <TestingStoreProvider store={store}>
             {router ? (
-              <BrowserRouter
-                future={{
-                  // eslint-disable-next-line camelcase
-                  v7_startTransition: true,
-                  // eslint-disable-next-line camelcase
-                  v7_relativeSplatPath: false,
-                }}
-                initialEntries={['/']}
-              >
+              <MemoryRouter initialEntries={[route]}>
                 {children}
-              </BrowserRouter>
+                {showLocation && <LocationDisplay />}
+              </MemoryRouter>
             ) : (
               children
             )}

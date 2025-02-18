@@ -88,16 +88,11 @@ describe('CvssCalculator page tests', () => {
   });
 
   test('Should render userVector from url', async () => {
-    window.history.pushState(
-      {},
-      'Test Title',
-      `?cvssVector=AV:N/AC:L/Au:N/C:P/I:P/A:P`,
-    );
-
     const {render} = rendererWith({
       gmp,
       store: true,
       router: true,
+      route: '?cvssVector=AV:N/AC:L/Au:N/C:P/I:P/A:P',
     });
 
     const {element} = render(<CvssCalculator />);
@@ -188,16 +183,11 @@ describe('CvssCalculator page tests', () => {
   });
 
   test('Changing displayed select values should change userVector', async () => {
-    window.history.pushState(
-      {},
-      'Test Title',
-      `?cvssVector=AV:N/AC:L/Au:N/C:P/I:P/A:P`,
-    );
-
     const {render} = rendererWith({
       gmp,
       store: true,
       router: true,
+      route: '/?cvssVector=AV:N/AC:L/Au:N/C:P/I:P/A:P',
     });
 
     const {element} = render(<CvssCalculator />);

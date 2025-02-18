@@ -15,7 +15,6 @@ const Metrics = ({metrics, selectedOptions, handleOptionChange}) => {
           value: value,
         }))}
         label={`${_(metric.name)} (${metricShort})`}
-        menuPosition="adjust"
         name={metricShort}
         value={selectedOptions[metricShort]}
         onChange={handleOptionChange}

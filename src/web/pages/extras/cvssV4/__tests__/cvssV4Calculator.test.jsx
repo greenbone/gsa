@@ -7,7 +7,6 @@ import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 import {fireEvent, rendererWith, wait, userEvent} from 'web/utils/testing';
 
-
 const gmp = {
   user: {
     renewSession: testing.fn().mockResolvedValue({data: 123}),
@@ -42,12 +41,11 @@ describe('CvssV4Calculator page tests', () => {
     const cvssVector =
       'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/CR:M/MSC:H';
 
-    window.history.pushState({}, 'Test Title', `?cvssVector=${cvssVector}`);
-
     const {render} = rendererWith({
       gmp,
       store: true,
       router: true,
+      route: `?cvssVector=${cvssVector}`,
     });
 
     const {getByText, within} = render(<CvssV4Calculator />);
