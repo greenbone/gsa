@@ -224,3 +224,16 @@ export const parseBoolean = value => {
   }
   return value === true;
 };
+
+/**
+ * Parses the given value into a string if it is defined.
+ *
+ * @param {*} value - The value to be parsed into a string.
+ * @returns {string|undefined} The parsed string if the value is defined, otherwise undefined.
+ */
+export const parseToString = value => {
+  if (isDefined(value)) {
+    return String(value);
+  }
+  return undefined;
+};
