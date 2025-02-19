@@ -25,6 +25,7 @@ import {
   YES_VALUE,
   NO_VALUE,
   setProperties,
+  parseToString,
 } from '../parser';
 import {
   parseCvssV2BaseVector,
@@ -67,7 +68,7 @@ describe('parseInt tests', () => {
     expect(parseInt('5a')).toBeUndefined();
   });
 
-  test('should parse infintiy as undefined', () => {
+  test('should parse infinity as undefined', () => {
     expect(parseInt(Infinity)).toBeUndefined();
     expect(parseInt('Infinity')).toBeUndefined();
   });
@@ -1351,5 +1352,19 @@ describe('parseBoolean tests', () => {
   test('should parse boolean', () => {
     expect(parseBoolean(false)).toBe(false);
     expect(parseBoolean(true)).toBe(true);
+  });
+});
+
+describe('parseToString tests', () => {
+  test('should return undefined for undefined', () => {
+    expect(parseToString()).toBeUndefined();
+  });
+
+  test('should return string for string', () => {
+    expect(parseToString('foo')).toEqual('foo');
+  });
+
+  test('should return string for numbers', () => {
+    expect(parseToString(1)).toEqual('1');
   });
 });
