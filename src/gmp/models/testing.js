@@ -25,7 +25,11 @@ const testId = modelClass => {
   });
 };
 
-export const testModelFromElement = (modelClass, type) => {
+export const testModelFromElement = (
+  modelClass,
+  type,
+  {testName = true} = {},
+) => {
   test('should create instance of modelclass in fromElement', () => {
     const model = modelClass.fromElement();
     expect(model).toBeInstanceOf(modelClass);
@@ -152,6 +156,14 @@ export const testModelFromElement = (modelClass, type) => {
 
     expect(model.type).toBeUndefined();
   });
+
+  if (testName) {
+    test('should ensure name is parsed as string', () => {
+      const model = modelClass.fromElement({name: 1337});
+
+      expect(model.name).toEqual('1337');
+    });
+  }
 };
 
 export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
@@ -292,7 +304,7 @@ const testModelGetProperties = (modelClass, type) => {
 };
 
 export const testModel = (modelClass, type, options) => {
-  testModelFromElement(modelClass, type);
+  testModelFromElement(modelClass, type, options);
   testModelMethods(modelClass, options);
   testModelSetProperties(modelClass);
   testModelGetProperties(modelClass, type);

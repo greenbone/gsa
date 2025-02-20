@@ -10,7 +10,7 @@ import {parseDate} from 'gmp/parser';
 import TlsCertificate, {TIME_STATUS} from '../tlscertificate';
 
 describe('TlsCertificate Model tests', () => {
-  testModel(TlsCertificate, 'tlscertificate');
+  testModel(TlsCertificate, 'tlscertificate', {testName: false});
 
   test('should parse certificate', () => {
     const element = {

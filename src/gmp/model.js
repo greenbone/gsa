@@ -7,7 +7,7 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Capabilities from './capabilities/capabilities.js';
+import Capabilities from './capabilities/capabilities';
 import {
   parseProperties as parseDefaultProperties,
   parseYesNo,
@@ -17,7 +17,8 @@ import {
   setProperties,
   NO_VALUE,
   YES_VALUE,
-} from './parser.js';
+  parseToString,
+} from './parser';
 
 export const parseModelFromElement = (element, entityType) => {
   const m = new Model(entityType);
@@ -52,6 +53,10 @@ class Model {
 
   static parseElement(element = {}) {
     const copy = parseDefaultProperties(element);
+
+    if (isDefined(element.name)) {
+      copy.name = parseToString(element.name);
+    }
 
     if (isDefined(element.end_time)) {
       if (element.end_time.length > 0) {

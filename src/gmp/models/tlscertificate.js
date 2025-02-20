@@ -5,7 +5,7 @@
 
 import {_l} from 'gmp/locale/lang';
 import Model from 'gmp/model';
-import {parseBoolean, parseDate} from 'gmp/parser';
+import {parseBoolean, parseDate, parseToString} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -37,7 +37,7 @@ class TlsCertificate extends Model {
       : undefined;
 
     // Use subject DN as name
-    ret.name = ret.subject_dn;
+    ret.name = parseToString(ret.subject_dn);
 
     ret.subjectDn = element.subject_dn;
     delete ret.subject_dn;
