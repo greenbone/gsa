@@ -290,8 +290,18 @@ describe('TaskCommand tests', () => {
       get_feeds: {
         get_feeds_response: {
           feed: [
-            {type: 'NVT', currently_syncing: true, sync_not_available: false},
-            {type: 'SCAP', currently_syncing: false, sync_not_available: false},
+            {
+              type: 'NVT',
+              currently_syncing: true,
+              sync_not_available: false,
+              version: 202502170647,
+            },
+            {
+              type: 'SCAP',
+              currently_syncing: false,
+              sync_not_available: false,
+              version: 202502170647,
+            },
           ],
         },
       },
