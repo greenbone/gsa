@@ -81,7 +81,7 @@ const DisplayBox = styled.div`
   }
 `;
 
-const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
+const escapeCsv = value => '"' + `${value}`.replace(/"/g, '""') + '"';
 
 const renderIcons = props => <DataDisplayIcons {...props} />;
 
