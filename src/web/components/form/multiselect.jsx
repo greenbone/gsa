@@ -109,8 +109,8 @@ MultiSelect.propTypes = {
   isLoading: PropTypes.bool,
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.any.isRequired,
-      value: PropTypes.any.isRequired,
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
     }),
   ),
   label: PropTypes.string,
@@ -118,7 +118,7 @@ MultiSelect.propTypes = {
   placeholder: PropTypes.string,
   searchable: PropTypes.bool,
   title: PropTypes.string,
-  value: PropTypes.array,
+  value: PropTypes.arrayOf(PropTypes.string),
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
   height: PropTypes.number,
   onChange: PropTypes.func,
