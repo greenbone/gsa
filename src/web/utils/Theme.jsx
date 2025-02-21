@@ -39,6 +39,12 @@ const Theme = {
 
   severityWarnYellow: '#f0a519', // used by: progressbar
 
+  severityClassLog: '#DDDDDD',
+  severityClassLow: 'skyblue',
+  severityClassMedium: 'orange',
+  severityClassHigh: '#f51414',
+  severityClassCritical: '#bf0000',
+
   statusNewGreen: '#99be48', // used by: progressbar
   statusRunGreen: '#70c000', // used by: progressbar
 
