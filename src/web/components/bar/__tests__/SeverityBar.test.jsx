@@ -18,14 +18,26 @@ describe('SeverityBar tests', () => {
 
   test('should render text content', () => {
     const {element} = render(<SeverityBar severity="9.5" />);
-    expect(element).toHaveTextContent('9.5 (High)');
+    expect(element).toHaveTextContent('9.5 (Critical)');
+  });
+
+  test('should render text content with medium severity', () => {
+    const {element} = render(<SeverityBar severity="5" />);
+    expect(element).toHaveTextContent('5.0 (Medium)');
   });
 
   test('should render title', () => {
     const {getByTestId} = render(<SeverityBar severity="9.5" />);
     const progressbarBox = getByTestId('progressbar-box');
 
-    expect(progressbarBox).toHaveAttribute('title', 'High');
+    expect(progressbarBox).toHaveAttribute('title', 'Critical');
+  });
+
+  test('should render title with medium severity', () => {
+    const {getByTestId} = render(<SeverityBar severity="5" />);
+    const progressbarBox = getByTestId('progressbar-box');
+
+    expect(progressbarBox).toHaveAttribute('title', 'Medium');
   });
 
   test('should allow to overwrite title with toolTip', () => {
@@ -63,7 +75,17 @@ describe('SeverityBar tests', () => {
 
     expect(progress).toHaveStyleRule(
       'background',
-      `linear-gradient(90deg, ${Theme.errorRed} 0%, ${Theme.errorRed} 100%)`,
+      `linear-gradient(90deg, ${Theme.severityClassCritical} 0%, ${Theme.severityClassCritical} 100%)`,
+    );
+  });
+
+  test('should render background for medium severity', () => {
+    const {getByTestId} = render(<SeverityBar severity="5" />);
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.severityClassMedium} 0%, ${Theme.severityClassMedium} 100%)`,
     );
   });
 
@@ -73,7 +95,7 @@ describe('SeverityBar tests', () => {
 
     expect(progress).toHaveStyleRule(
       'background',
-      `linear-gradient(90deg, ${Theme.severityLowBlue} 0%, ${Theme.severityLowBlue} 100%)`,
+      `linear-gradient(90deg, ${Theme.severityClassLow} 0%, ${Theme.severityClassLow} 100%)`,
     );
     expect(progress).toHaveStyleRule('width', '0%');
   });

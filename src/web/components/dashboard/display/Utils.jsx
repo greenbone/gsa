@@ -17,6 +17,7 @@ import {
   HIGH,
   NA,
 } from 'web/utils/Severity';
+import Theme from 'web/utils/Theme';
 
 export const totalCount = (groups = []) => {
   if (groups.length === 0) {
@@ -56,10 +57,10 @@ export const riskFactorColorScale = scaleOrdinal()
     '#008080',
     '#808080',
     'silver',
-    '#DDDDDD',
-    'skyblue',
-    'orange',
-    '#D80000',
+    Theme.severityClassLog,
+    Theme.severityClassLow,
+    Theme.severityClassMedium,
+    Theme.severityClassHigh,
   ]);
 
 export const vulnsByHostsColorScale = scaleLinear()

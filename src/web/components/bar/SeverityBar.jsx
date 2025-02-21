@@ -15,9 +15,11 @@ import {
   LOG,
   MEDIUM,
   HIGH,
+  CRITICAL,
   translateRiskFactor,
   LOG_VALUE,
 } from 'web/utils/Severity';
+import Theme from 'web/utils/Theme';
 
 
 const SeverityBar = ({severity, toolTip}) => {
@@ -42,22 +44,24 @@ const SeverityBar = ({severity, toolTip}) => {
     text = severityFormat(cvss) + ' (' + title + ')';
   }
 
-  let type;
+  let background;
   if (threat === LOG) {
-    type = 'log';
+    background = Theme.severityClassLog;
   } else if (threat === MEDIUM) {
-    type = 'warn';
+    background = Theme.severityClassMedium;
   } else if (threat === HIGH) {
-    type = 'error';
+    background = Theme.severityClassHigh;
+  } else if (threat === CRITICAL) {
+    background = Theme.severityClassCritical;
   } else {
-    type = 'low';
+    background = Theme.severityClassLow;
   }
 
   const toolTipText = isDefined(toolTip) ? toolTip : title;
 
   return (
     <ProgressBar
-      background={type}
+      background={background}
       data-testid="severitybar"
       progress={fill}
       title={toolTipText}
