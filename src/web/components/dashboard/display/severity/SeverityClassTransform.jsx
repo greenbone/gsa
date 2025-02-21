@@ -22,7 +22,7 @@ import {
   LOG_VALUE,
   FALSE_POSITIVE_VALUE,
   ERROR_VALUE,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 
 
 export const severityClassDataRow = row => [row.label, row.value];

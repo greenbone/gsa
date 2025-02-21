@@ -16,7 +16,7 @@ import {
   MEDIUM,
   HIGH,
   NA,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
 export const totalCount = (groups = []) => {

@@ -39,7 +39,7 @@ import {
 import {
   LOG_VALUE,
   translatedResultSeverityRiskFactor,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 
 const NoteDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,

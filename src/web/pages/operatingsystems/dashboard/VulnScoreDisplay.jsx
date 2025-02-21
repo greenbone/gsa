@@ -18,7 +18,7 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {OsVulnScoreLoader} from 'web/pages/operatingsystems/dashboard/Loaders';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import {resultSeverityRiskFactor} from 'web/utils/Severity';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 import {withRouter} from 'web/utils/withRouter';
 

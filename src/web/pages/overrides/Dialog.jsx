@@ -48,7 +48,7 @@ import {
   _MEDIUM,
   _HIGH,
   translatedResultSeverityRiskFactor,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,

@@ -14,7 +14,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {
   LOG_VALUE,
   translatedResultSeverityRiskFactor,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 
 const OverrideBox = ({override, detailsLink = true}) => {
   let severity;
