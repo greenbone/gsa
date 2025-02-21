@@ -6,7 +6,6 @@ import globals from 'globals';
 import * as importPlugin from 'eslint-plugin-import';
 import vitest from '@vitest/eslint-plugin';
 import allowedSnakeCase from './allowedSnakeCase.js';
-
 pluginHeader.rules.header.meta.schema = false; // https://github.com/Stuk/eslint-plugin-header/issues/57
 
 const year = new Date().getFullYear();
@@ -127,6 +126,17 @@ export default [
             order: 'asc',
             caseInsensitive: true,
           },
+        },
+      ],
+      'no-restricted-imports': [
+        'warn',
+        {
+          patterns: [
+            {
+              group: ['./', '../'],
+              message: 'Relative imports are not allowed.',
+            },
+          ],
         },
       ],
     },
