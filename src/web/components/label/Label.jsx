@@ -26,6 +26,16 @@ const Label = styled.div`
   border-color: ${props => props.$borderColor};
 `;
 
+/**
+ * A higher-order component that creates a Label component with specified styles and properties.
+ *
+ * @param {string} backgroundColor - The background color of the label.
+ * @param {string} borderColor - The border color of the label.
+ * @param {string} textColor - The text color of the label.
+ * @param {string} testId - The test ID for the label, used for testing purposes.
+ * @param {string} text - The text content of the label.
+ * @returns {Function} A function that takes props and returns a Label component with the specified styles and properties.
+ */
 const createLabel =
   (backgroundColor, borderColor, textColor, testId, text) => props => {
     return (
