@@ -16,6 +16,7 @@ import {
   MEDIUM,
   HIGH,
   NA,
+  CRITICAL,
 } from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
@@ -51,7 +52,7 @@ export const activeDaysColorScale = scaleOrdinal()
   ]);
 
 export const riskFactorColorScale = scaleOrdinal()
-  .domain([ERROR, DEBUG, FALSE_POSITIVE, NA, LOG, LOW, MEDIUM, HIGH])
+  .domain([ERROR, DEBUG, FALSE_POSITIVE, NA, LOG, LOW, MEDIUM, HIGH, CRITICAL])
   .range([
     '#800000',
     '#008080',
@@ -61,6 +62,7 @@ export const riskFactorColorScale = scaleOrdinal()
     Theme.severityClassLow,
     Theme.severityClassMedium,
     Theme.severityClassHigh,
+    Theme.severityClassCritical,
   ]);
 
 export const vulnsByHostsColorScale = scaleLinear()
