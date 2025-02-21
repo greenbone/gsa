@@ -4,6 +4,7 @@
  */
 
 import {testing, beforeEach, expect} from '@gsa/testing';
+// eslint-disable-next-line no-restricted-imports
 import '../setupTests';
 // setup additional matchers for vitest
 import '@testing-library/jest-dom/vitest';

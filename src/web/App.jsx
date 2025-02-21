@@ -18,15 +18,14 @@ import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import GlobalStyles from 'web/components/layout/GlobalStyles';
 import LocaleObserver from 'web/components/observer/LocaleObserver';
 import GmpContext from 'web/components/provider/GmpProvider';
+import Routes from 'web/Routes';
+import configureStore from 'web/store';
+import {clearStore} from 'web/store/actions';
 import {
   setUsername,
   setTimezone,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
-
-import Routes from './Routes';
-import configureStore from './store';
-import {clearStore} from './store/actions';
 
 initLocale();
 

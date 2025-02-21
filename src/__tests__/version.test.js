@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {RELEASE_VERSION} from '../version';
+import {RELEASE_VERSION} from 'src/version';
 
 describe('Version tests', () => {
   test('release version should only contain major.minor', () => {
