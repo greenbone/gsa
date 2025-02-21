@@ -4,17 +4,16 @@
  */
 
 import React from 'react';
-
-import {ReportsCvssDisplay, ReportsCvssTableDisplay} from './CvssDisplay';
+import Dashboard from 'web/components/dashboard/Dashboard';
+import {ReportsCvssDisplay, ReportsCvssTableDisplay} from 'web/pages/reports/dashboard/CvssDisplay';
 import {
   ReportsHighResultsDisplay,
   ReportsHighResultsTableDisplay,
-} from './HighResultsDisplay';
+} from 'web/pages/reports/dashboard/HighResultsDisplay';
 import {
   ReportsSeverityDisplay,
   ReportsSeverityTableDisplay,
-} from './SeverityClassDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/reports/dashboard/SeverityClassDisplay';
 
 export const REPORTS_DASHBOARD_ID = 'e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071';
 

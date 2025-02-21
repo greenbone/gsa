@@ -18,13 +18,12 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import {Col} from 'web/entity/Page';
+import P from 'web/pages/nvts/Preformatted';
+import References from 'web/pages/nvts/References';
+import Solution from 'web/pages/nvts/Solution';
+import Diff, {Added, Removed} from 'web/pages/results/Diff';
 import PropTypes from 'web/utils/PropTypes';
 import {renderNvtName} from 'web/utils/Render';
-
-import Diff, {Added, Removed} from './Diff';
-import P from '../nvts/Preformatted';
-import References from '../nvts/References';
-import Solution from '../nvts/Solution';
 
 /*
  security and log messages from nvts are converted to results

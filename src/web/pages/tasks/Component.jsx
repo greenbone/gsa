@@ -19,6 +19,8 @@ import AlertComponent from 'web/pages/alerts/Component';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
 import ScheduleComponent from 'web/pages/schedules/Component';
 import TargetComponent from 'web/pages/targets/Component';
+import ContainerTaskDialog from 'web/pages/tasks/ContainerDialog';
+import TaskDialog from 'web/pages/tasks/Dialog';
 import {
   loadEntities as loadAlerts,
   selector as alertSelector,
@@ -59,8 +61,6 @@ import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
 
-import ContainerTaskDialog from './ContainerDialog';
-import TaskDialog from './Dialog';
 
 class TaskComponent extends React.Component {
   constructor(...args) {

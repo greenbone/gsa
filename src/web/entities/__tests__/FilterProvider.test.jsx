@@ -6,12 +6,12 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
 import {beforeEach, vi} from 'vitest';
+import FilterProvider from 'web/entities/FilterProvider';
 import {pageFilter} from 'web/store/pages/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, screen} from 'web/utils/Testing';
 
-import FilterProvider from '../FilterProvider';
 
 let mockSearchParams = {};
 const mockUseNavigate = vi.fn();

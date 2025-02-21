@@ -11,9 +11,9 @@ import {
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
+import CreatePolicyDialog from 'web/pages/policies/Dialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import CreatePolicyDialog from '../Dialog';
 
 describe('CreatePolicyDialog component tests', () => {
   test('should render dialog', () => {

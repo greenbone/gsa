@@ -33,6 +33,7 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/Table';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import SettingsDialog from 'web/pages/usersettings/Dialog';
 import {
   loadEntities as loadAlerts,
   loadEntity as loadAlert,
@@ -81,7 +82,6 @@ import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
-import SettingsDialog from './Dialog';
 
 const FIRST_COL_WIDTH = '250px';
 

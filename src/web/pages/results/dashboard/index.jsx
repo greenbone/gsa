@@ -4,21 +4,20 @@
  */
 
 import React from 'react';
-
-import {ResultsCvssDisplay, ResultsCvssTableDisplay} from './CvssDisplay';
+import Dashboard from 'web/components/dashboard/Dashboard';
+import {ResultsCvssDisplay, ResultsCvssTableDisplay} from 'web/pages/results/dashboard/CvssDisplay';
 import {
   ResultsDescriptionWordCloudDisplay,
   ResultsDescriptionWordCloudTableDisplay,
-} from './DescriptionWordCloudDisplay';
+} from 'web/pages/results/dashboard/DescriptionWordCloudDisplay';
 import {
   ResultsSeverityDisplay,
   ResultsSeverityTableDisplay,
-} from './SeverityClassDisplay';
+} from 'web/pages/results/dashboard/SeverityClassDisplay';
 import {
   ResultsWordCloudDisplay,
   ResultsWordCloudTableDisplay,
-} from './WordCloudDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/results/dashboard/WordCloudDisplay';
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
 

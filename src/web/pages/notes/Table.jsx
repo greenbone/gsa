@@ -12,10 +12,9 @@ import {createEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
+import NoteDetails from 'web/pages/notes/Details';
+import Row from 'web/pages/notes/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import NoteDetails from './Details';
-import Row from './Row';
 
 const Header = ({
   actionsColumn,

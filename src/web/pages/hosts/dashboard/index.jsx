@@ -4,26 +4,25 @@
  */
 
 import React from 'react';
-
-import {HostsCvssDisplay, HostsCvssTableDisplay} from './CvssDisplay';
+import Dashboard from 'web/components/dashboard/Dashboard';
+import {HostsCvssDisplay, HostsCvssTableDisplay} from 'web/pages/hosts/dashboard/CvssDisplay';
 import {
   HostsModifiedDisplay,
   HostsModifiedTableDisplay,
-} from './ModifiedDisplay';
+} from 'web/pages/hosts/dashboard/ModifiedDisplay';
 import {
   HostsModifiedHighDisplay,
   HostsModifiedHighTableDisplay,
-} from './ModifiedHighDisplay';
+} from 'web/pages/hosts/dashboard/ModifiedHighDisplay';
 import {
   HostsSeverityClassDisplay,
   HostsSeverityClassTableDisplay,
-} from './SeverityClassDisplay';
-import {HostsTopologyDisplay} from './TopologyDisplay';
+} from 'web/pages/hosts/dashboard/SeverityClassDisplay';
+import {HostsTopologyDisplay} from 'web/pages/hosts/dashboard/TopologyDisplay';
 import {
   HostsVulnScoreDisplay,
   HostsVulnScoreTableDisplay,
-} from './VulnScoreDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/hosts/dashboard/VulnScoreDisplay';
 
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 

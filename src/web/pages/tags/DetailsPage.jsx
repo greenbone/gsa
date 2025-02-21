@@ -32,6 +32,9 @@ import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import TagComponent from 'web/pages/tags/Component';
+import TagDetails from 'web/pages/tags/Details';
+import ResourceList from 'web/pages/tags/ResourceList';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -40,9 +43,6 @@ import {selector, loadEntity} from 'web/store/entities/tags';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilties from 'web/utils/withCapabilities';
 
-import TagComponent from './Component';
-import TagDetails from './Details';
-import ResourceList from './ResourceList';
 
 const ToolBarIcons = withCapabilties(
   ({

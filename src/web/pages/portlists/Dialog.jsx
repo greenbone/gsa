@@ -15,9 +15,9 @@ import NewIcon from 'web/components/icon/NewIcon';
 import Row from 'web/components/layout/Row';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
+import PortRangesTable from 'web/pages/portlists/portrangestable';
 import PropTypes from 'web/utils/PropTypes';
 
-import PortRangesTable from './portrangestable';
 
 const FROM_FILE = YES_VALUE;
 const NOT_FROM_FILE = NO_VALUE;

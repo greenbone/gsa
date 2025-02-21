@@ -5,10 +5,10 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import BlankLink from 'web/components/link/BlankLink';
 import useManualURL from 'web/hooks/useManualURL';
 import PropTypes from 'web/utils/PropTypes';
 
-import BlankLink from './BlankLink';
 
 const ManualLink = ({anchor, page, searchTerm, lang, highlight, ...props}) => {
   const manualURL = useManualURL(lang);

@@ -8,11 +8,11 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
+import Details from 'web/pages/audits/Details';
 import {entityLoadingActions as policyActions} from 'web/store/entities/policies';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
 import {rendererWith} from 'web/utils/Testing';
 
-import Details from '../Details';
 
 const policy = Policy.fromElement({
   _id: '314',

@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Icon from './svg/task.svg';
-import withSvgIcon from './withSvgIcon';
+import Icon from 'web/components/icon/svg/task.svg';
+import withSvgIcon from 'web/components/icon/withSvgIcon';
 
 const TaskIconComponent = withSvgIcon()(Icon);
 

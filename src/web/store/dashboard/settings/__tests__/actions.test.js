@@ -5,7 +5,6 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {isFunction} from 'gmp/utils/identity';
-
 import {
   DASHBOARD_SETTINGS_LOADING_ERROR,
   DASHBOARD_SETTINGS_LOADING_REQUEST,
@@ -30,7 +29,7 @@ import {
   resetDashboardSettingsRequest,
   resetDashboardSettingsSuccess,
   resetDashboardSettingsError,
-} from '../actions';
+} from 'web/store/dashboard/settings/actions';
 
 const createRootState = (state = {byId: {}}) => ({
   dashboardSettings: {

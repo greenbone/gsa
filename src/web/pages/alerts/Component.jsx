@@ -20,17 +20,7 @@ import {connect} from 'react-redux';
 import FootNote from 'web/components/footnote/Footnote';
 import Layout from 'web/components/layout/Layout';
 import EntityComponent from 'web/entity/Component';
-import {
-  loadReportComposerDefaults,
-  saveReportComposerDefaults,
-} from 'web/store/usersettings/actions';
-import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
-import compose from 'web/utils/Compose';
-import PropTypes from 'web/utils/PropTypes';
-import {UNSET_VALUE} from 'web/utils/Render';
-import withGmp from 'web/utils/withGmp';
-
-import ContentComposerDialog from './ContentComposerDialog';
+import ContentComposerDialog from 'web/pages/alerts/ContentComposerDialog';
 import AlertDialog, {
   ATTACH_MESSAGE_DEFAULT,
   ATTACH_MESSAGE_SECINFO,
@@ -49,8 +39,18 @@ import AlertDialog, {
   NOTICE_ATTACH,
   SECINFO_SUBJECT,
   TASK_SUBJECT,
-} from './Dialog';
-import CredentialsDialog from '../credentials/Dialog';
+} from 'web/pages/alerts/Dialog';
+import CredentialsDialog from 'web/pages/credentials/Dialog';
+import {
+  loadReportComposerDefaults,
+  saveReportComposerDefaults,
+} from 'web/store/usersettings/actions';
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
+import compose from 'web/utils/Compose';
+import PropTypes from 'web/utils/PropTypes';
+import {UNSET_VALUE} from 'web/utils/Render';
+import withGmp from 'web/utils/withGmp';
+
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {

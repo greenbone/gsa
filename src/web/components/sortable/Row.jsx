@@ -7,10 +7,10 @@ import {Droppable} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-m
 import {isDefined} from 'gmp/utils/identity';
 import {useCallback, useRef} from 'react';
 import styled from 'styled-components';
+import Resizer from 'web/components/sortable/Resizer';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import Resizer from './Resizer';
 
 const MIN_HEIGHT = 175;
 

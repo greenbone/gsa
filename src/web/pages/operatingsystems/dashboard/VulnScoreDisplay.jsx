@@ -15,13 +15,13 @@ import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay'
 import {riskFactorColorScale} from 'web/components/dashboard/display/Utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {OsVulnScoreLoader} from 'web/pages/operatingsystems/dashboard/Loaders';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/Severity';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 import {withRouter} from 'web/utils/withRouter';
 
-import {OsVulnScoreLoader} from './Loaders';
 
 const ToolTip = styled.div`
   font-weight: normal;

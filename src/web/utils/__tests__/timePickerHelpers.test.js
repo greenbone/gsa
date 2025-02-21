@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {formatSplitTime, formatTimeForTimePicker} from '../timePickerHelpers';
+import {formatSplitTime, formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
 describe('timePickerHelpers', () => {
   describe('formatSplitTime', () => {

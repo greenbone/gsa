@@ -13,15 +13,14 @@ import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import ResultsDashboard, {RESULTS_DASHBOARD_ID} from 'web/pages/results/dashboard';
+import ResultsFilterDialog from 'web/pages/results/FilterDialog';
+import ResultsTable from 'web/pages/results/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/results';
 import PropTypes from 'web/utils/PropTypes';
-
-import ResultsDashboard, {RESULTS_DASHBOARD_ID} from './dashboard';
-import ResultsFilterDialog from './FilterDialog';
-import ResultsTable from './Table';
 
 export const ToolBarIcons = () => (
   <Layout>

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as note from '../notes';
-import {testAll} from '../utils/testing';
+import * as note from 'web/store/entities/notes';
+import {testAll} from 'web/store/entities/utils/testing';
 
 testAll('note', note);

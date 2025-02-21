@@ -6,11 +6,11 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {ArcDataPropType} from 'web/components/chart/donut/PropTypes';
+import Group from 'web/components/chart/Group';
+import ToolTip from 'web/components/chart/Tooltip';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import Group from '../Group';
-import ToolTip from '../Tooltip';
 
 const Arc2d = ({data, path, x, y, onDataClick}) => {
   const {color = Theme.lightGray, toolTip} = data;

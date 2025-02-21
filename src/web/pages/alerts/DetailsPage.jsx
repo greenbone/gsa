@@ -31,6 +31,8 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import AlertComponent from 'web/pages/alerts/Component';
+import AlertDetails from 'web/pages/alerts/Details';
 import {selector, loadEntity} from 'web/store/entities/alerts';
 import {
   selector as permissionsSelector,
@@ -46,8 +48,6 @@ import {
 } from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
 
-import AlertComponent from './Component';
-import AlertDetails from './Details';
 
 export const ToolBarIcons = ({
   entity,

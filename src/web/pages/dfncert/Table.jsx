@@ -12,10 +12,9 @@ import {createEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
+import DfnCertAdvDetails from 'web/pages/dfncert/Details';
+import DfnCertAdvRow from 'web/pages/dfncert/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import DfnCertAdvDetails from './Details';
-import DfnCertAdvRow from './Row';
 
 const Header = ({
   actionsColumn,

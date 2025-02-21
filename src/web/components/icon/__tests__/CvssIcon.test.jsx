@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import CvssIcon from 'web/components/icon/CvssIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import CvssIcon from '../CvssIcon';
 
 describe('CvssIcon component tests', () => {
   testIcon(CvssIcon);

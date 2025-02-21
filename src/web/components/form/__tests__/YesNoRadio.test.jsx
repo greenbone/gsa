@@ -5,10 +5,10 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import YesNoRadio from 'web/components/form/YesNoRadio';
 import {getRadioInputs} from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import YesNoRadio from '../YesNoRadio';
 
 const getLabels = element => element.querySelectorAll('label');
 

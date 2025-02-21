@@ -5,8 +5,7 @@
 
 import {describe} from '@gsa/testing';
 import {testIcon} from 'web/components/icon/Testing';
-
-import ViewOtherIcon from '../ViewOtherIcon';
+import ViewOtherIcon from 'web/components/icon/ViewOtherIcon';
 
 describe('ViewOtherIcon component tests', () => {
   testIcon(ViewOtherIcon);

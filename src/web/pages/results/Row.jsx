@@ -24,9 +24,9 @@ import TableRow from 'web/components/table/Row';
 import EntitiesActions from 'web/entities/Actions';
 import {RowDetailsToggle} from 'web/entities/Row';
 import useGmp from 'web/hooks/useGmp';
+import ResultDelta from 'web/pages/results/Delta';
 import PropTypes from 'web/utils/PropTypes';
 
-import ResultDelta from './Delta';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,

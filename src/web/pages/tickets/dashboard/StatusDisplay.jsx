@@ -12,9 +12,9 @@ import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay'
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
 import {percent} from 'web/components/dashboard/display/Utils';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {TicketsListLoader} from 'web/pages/tickets/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-import {TicketsListLoader} from './Loaders';
 
 const ticketStatusColorScale = scaleOrdinal()
   .domain(Object.values(TICKET_STATUS).sort())

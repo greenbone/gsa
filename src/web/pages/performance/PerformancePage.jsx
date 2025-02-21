@@ -27,6 +27,7 @@ import MenuEntry from 'web/components/menu/MenuEntry';
 import Section from 'web/components/section/Section';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import StartEndTimeSelection from 'web/pages/performance/StartEndTimeSelection';
 import {
   loadEntities as loadScanners,
   selector as scannerSelector,
@@ -39,7 +40,6 @@ import {renderSelectItems} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
-import StartEndTimeSelection from './StartEndTimeSelection';
 
 const DURATION_HOUR = 60 * 60;
 const DURATION_DAY = DURATION_HOUR * 24;

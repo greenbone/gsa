@@ -12,6 +12,7 @@ import memoize from 'memoize-one';
 import React from 'react';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
+import {getDisplay} from 'web/components/dashboard/Registry';
 import {
   convertDefaultDisplays,
   convertDisplaysToGridItems,
@@ -20,6 +21,7 @@ import {
   getDisplaysById,
   removeDisplay,
 } from 'web/components/dashboard/Utils';
+import {getRows} from 'web/components/dashboard/Utils';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import Loading from 'web/components/loading/Loading';
 import Grid from 'web/components/sortable/Grid';
@@ -33,8 +35,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import {getDisplay} from './Registry';
-import {getRows} from './Utils';
 
 const log = Logger.getLogger('web.components.dashboard');
 

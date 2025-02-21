@@ -28,10 +28,10 @@ import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import DfnCertAdvDetails from 'web/pages/dfncert/Details';
 import {selector, loadEntity} from 'web/store/entities/dfncerts';
 import PropTypes from 'web/utils/PropTypes';
 
-import DfnCertAdvDetails from './Details';
 
 const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => (
   <Divider margin="10px">

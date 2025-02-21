@@ -34,10 +34,10 @@ import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import CertBundAdvDetails from 'web/pages/certbund/Details';
 import {selector, loadEntity} from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
 
-import CertBundAdvDetails from './Details';
 
 const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
   <Divider margin="10px">

@@ -8,11 +8,11 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import ErrorMessage from 'web/components/error/ErrorMessage';
 import Divider from 'web/components/layout/Divider';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import ErrorMessage from './ErrorMessage';
 
 const ErrorDetails = styled.div`
   margin-top: 10px;

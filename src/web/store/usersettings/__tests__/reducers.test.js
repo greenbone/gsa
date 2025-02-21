@@ -5,7 +5,6 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {CLEAR_STORE} from 'web/store/actions';
-
 import {
   getReportComposerDefaultsAction,
   setIsLoggedIn,
@@ -13,7 +12,7 @@ import {
   setSessionTimeout,
   setTimezone,
   setUsername,
-} from '../actions';
+} from 'web/store/usersettings/actions';
 import {
   isLoggedIn,
   locale,
@@ -21,7 +20,7 @@ import {
   sessionTimeout,
   timezone,
   username,
-} from '../reducers';
+} from 'web/store/usersettings/reducers';
 
 describe('settings reducers tests', () => {
   describe('timezone reducer tests', () => {

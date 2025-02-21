@@ -4,13 +4,13 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import {filterIdentifier} from 'web/store/utils';
-
 import {
   DASHBOARD_DATA_LOADING_SUCCESS,
   DASHBOARD_DATA_LOADING_ERROR,
   DASHBOARD_DATA_LOADING_REQUEST,
-} from './actions';
+} from 'web/store/dashboard/data/actions';
+import {filterIdentifier} from 'web/store/utils';
+
 
 const dashboardData = (state = {}, action) => {
   switch (action.type) {

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import useReload from 'web/hooks/useReload';
 import {act, fireEvent, render, screen} from 'web/utils/Testing';
 
-import useReload from '../useReload';
 
 const TestComponent = ({reload, timeout}) => {
   const [startTimer, clearTimer, isRunning] = useReload(reload, timeout);

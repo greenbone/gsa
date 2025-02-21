@@ -28,11 +28,11 @@ import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import PermissionComponent from 'web/pages/permissions/Component';
+import PermissionDetails from 'web/pages/permissions/Details';
 import {selector, loadEntity} from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 
-import PermissionComponent from './Component';
-import PermissionDetails from './Details';
 
 const ToolBarIcons = ({
   entity,

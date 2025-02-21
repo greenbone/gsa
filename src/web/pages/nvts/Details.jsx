@@ -18,12 +18,11 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import useGmp from 'web/hooks/useGmp';
+import Pre from 'web/pages/nvts/Preformatted';
+import References from 'web/pages/nvts/References';
+import Solution from 'web/pages/nvts/Solution';
 import PropTypes from 'web/utils/PropTypes';
 import {na, getTranslatableSeverityOrigin} from 'web/utils/Render';
-
-import Pre from './Preformatted';
-import References from './References';
-import Solution from './Solution';
 
 const NvtDetails = ({entity, links = true}) => {
   const {

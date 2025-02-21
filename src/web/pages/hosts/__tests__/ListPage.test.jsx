@@ -17,13 +17,13 @@ import {
   getTextInputs,
   testBulkDeleteDialog,
 } from 'web/components/testing';
+import HostPage, {ToolBarIcons} from 'web/pages/hosts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import HostPage, {ToolBarIcons} from '../ListPage';
 
 // setup
 

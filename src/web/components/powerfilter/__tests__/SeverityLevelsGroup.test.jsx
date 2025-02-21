@@ -5,9 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import SeverityLevelsFilterGroup from 'web/components/powerfilter/SeverityLevelsGroup';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import SeverityLevelsFilterGroup from '../SeverityLevelsGroup';
 
 describe('SeverityLevelsFilterGroup tests', () => {
   test('should render', () => {

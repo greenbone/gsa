@@ -7,9 +7,9 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import {pluralizeType} from 'gmp/utils/entitytype';
 import {isFunction} from 'gmp/utils/identity';
+import {types} from 'web/store/entities/utils/actions';
 import {filterIdentifier} from 'web/store/utils';
 
-import {types} from './actions';
 
 export const createRootState = stateData => ({
   entities: {

@@ -5,10 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import React, {useRef} from 'react';
+import TextField from 'web/components/form/TextField';
+import useFormValues from 'web/components/form/useFormValues';
 import {fireEvent, rendererWith, wait, screen} from 'web/utils/Testing';
-
-import TextField from '../TextField';
-import useFormValues from '../useFormValues';
 
 const UseFormValuesTestComponent = () => {
   const ref = useRef(0);

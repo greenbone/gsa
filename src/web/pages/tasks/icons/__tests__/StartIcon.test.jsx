@@ -8,10 +8,10 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Event from 'gmp/models/event';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import StartIcon from 'web/pages/tasks/icons/StartIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import StartIcon from '../StartIcon';
 
 describe('Task StartIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

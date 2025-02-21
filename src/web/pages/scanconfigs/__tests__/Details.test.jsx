@@ -7,9 +7,9 @@ import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig from 'gmp/models/scanconfig';
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
+import Details from 'web/pages/scanconfigs/Details';
 import {rendererWith} from 'web/utils/Testing';
 
-import Details from '../Details';
 
 describe('Scan Config Details tests', () => {
   test('should render full Details', () => {

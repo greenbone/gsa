@@ -4,12 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import TableBody from 'web/components/table/Body';
+import TableData from 'web/components/table/Data';
+import DetailsTable from 'web/components/table/DetailsTable';
+import TableRow from 'web/components/table/Row';
 import {render} from 'web/utils/Testing';
-
-import TableBody from '../Body';
-import TableData from '../Data';
-import DetailsTable from '../DetailsTable';
-import TableRow from '../Row';
 
 describe('DetailsTable tests', () => {
   test('should render', () => {

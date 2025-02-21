@@ -19,13 +19,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import SchedulePage, {ToolBarIcons} from 'web/pages/schedules/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/schedules';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import SchedulePage, {ToolBarIcons} from '../ListPage';
 
 const schedule = Schedule.fromElement({
   comment: 'hello world',

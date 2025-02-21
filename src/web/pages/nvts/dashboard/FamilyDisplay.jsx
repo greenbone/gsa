@@ -18,11 +18,11 @@ import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay'
 import {riskFactorColorScale} from 'web/components/dashboard/display/Utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {NvtsFamilyLoader} from 'web/pages/nvts/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import {severityFormat} from 'web/utils/Render';
 import {resultSeverityRiskFactor} from 'web/utils/Severity';
 
-import {NvtsFamilyLoader} from './Loaders';
 
 const transformFamilyData = (data = {}) => {
   const {groups = []} = data;

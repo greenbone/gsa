@@ -15,12 +15,12 @@ import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay'
 import {riskFactorColorScale} from 'web/components/dashboard/display/Utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {TasksHighResultsLoader} from 'web/pages/tasks/dashboard/Loaders';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/Severity';
 import {withRouter} from 'web/utils/withRouter';
 
-import {TasksHighResultsLoader} from './Loaders';
 
 const format = d3format('0.2f');
 

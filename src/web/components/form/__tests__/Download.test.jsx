@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import Download from 'web/components/form/Download';
 import {render} from 'web/utils/Testing';
 
-import Download from '../Download';
 
 describe('Download tests', () => {
   test('should render', () => {

@@ -36,14 +36,14 @@ import EntityPage, {Col} from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import TicketComponent from 'web/pages/tickets/Component';
+import TicketDetails from 'web/pages/tickets/Details';
 import {
   selector as ticketSelector,
   loadEntity as loadTicket,
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
 
-import TicketComponent from './Component';
-import TicketDetails from './Details';
 
 const ToolBarIcons = ({
   entity,

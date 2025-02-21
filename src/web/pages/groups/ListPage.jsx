@@ -14,15 +14,14 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import GroupComponent from 'web/pages/groups/Component';
+import GroupsFilterDialog from 'web/pages/groups/FilterDialog';
+import Table from 'web/pages/groups/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/groups';
 import PropTypes from 'web/utils/PropTypes';
-
-import GroupComponent from './Component';
-import GroupsFilterDialog from './FilterDialog';
-import Table from './Table';
 
 const ToolBarIcons = ({onGroupCreateClick}) => {
   const capabilities = useCapabilities();

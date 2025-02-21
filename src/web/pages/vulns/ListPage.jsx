@@ -13,15 +13,14 @@ import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from 'web/pages/vulns/dashboard';
+import VulnsFilterDialog from 'web/pages/vulns/FilterDialog';
+import VulnsTable from 'web/pages/vulns/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/vulns';
 import PropTypes from 'web/utils/PropTypes';
-
-import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from './dashboard';
-import VulnsFilterDialog from './FilterDialog';
-import VulnsTable from './Table';
 
 const ToolBarIcons = () => (
   <Layout>

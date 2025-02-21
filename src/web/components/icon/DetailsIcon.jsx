@@ -6,8 +6,7 @@
 import {ZoomIn as Icon} from 'lucide-react';
 import React from 'react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
-
-import SvgIcon from './SvgIcon';
+import SvgIcon from 'web/components/icon/SvgIcon';
 
 
 const DetailsIcon = props => (

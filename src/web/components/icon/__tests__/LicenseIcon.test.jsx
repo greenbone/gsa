@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import LicenseIcon from 'web/components/icon/LicenseIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import LicenseIcon from '../LicenseIcon';
 
 describe('LicenseIcon component tests', () => {
   testIcon(LicenseIcon);

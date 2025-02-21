@@ -15,9 +15,9 @@ import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import {Col} from 'web/entity/Page';
+import {renderDuration, renderRecurrence} from 'web/pages/schedules/Render';
 import PropTypes from 'web/utils/PropTypes';
 
-import {renderDuration, renderRecurrence} from './Render';
 
 const ScheduleDetails = ({entity, links = true}) => {
   const {comment, tasks = [], timezone, timezone_abbrev, event = {}} = entity;

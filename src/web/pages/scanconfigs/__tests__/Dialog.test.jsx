@@ -12,9 +12,9 @@ import {
   getDialogSaveButton,
   getRadioInputs,
 } from 'web/components/testing';
+import CreateScanConfigDialog from 'web/pages/scanconfigs/Dialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import CreateScanConfigDialog from '../Dialog';
 
 describe('CreateScanConfigDialog component tests', () => {
   test('should render dialog with base config as default', () => {

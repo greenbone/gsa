@@ -7,10 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-import ApplicationsTab from '../ApplicationsTab';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',

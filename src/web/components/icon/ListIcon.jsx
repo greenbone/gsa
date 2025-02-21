@@ -4,10 +4,10 @@
  */
 
 import React from 'react';
+import ListSvgIcon from 'web/components/icon/ListSvgIcon';
 import Link from 'web/components/link/Link';
 import PropTypes from 'web/utils/PropTypes';
 
-import ListSvgIcon from './ListSvgIcon';
 
 const ListIcon = ({page, filter, ...props}) => {
   return (

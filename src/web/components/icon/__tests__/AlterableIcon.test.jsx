@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import AlterableIcon from 'web/components/icon/AlterableIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import AlterableIcon from '../AlterableIcon';
 
 describe('AlterableIcon component tests', () => {
   testIcon(AlterableIcon);

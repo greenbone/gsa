@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import NewNoteIcon from 'web/components/icon/NewNoteIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import NewNoteIcon from '../NewNoteIcon';
 
 describe('NewNoteIcon component tests', () => {
   testIcon(NewNoteIcon);

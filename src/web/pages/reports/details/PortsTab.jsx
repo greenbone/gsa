@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import PortsTable from 'web/pages/reports/details/PortsTable';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import PropTypes from 'web/utils/PropTypes';
 import {
   makeCompareNumber,
@@ -11,8 +13,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-import PortsTable from './PortsTable';
-import ReportEntitiesContainer from './ReportEntitiesContainer';
 
 const portsSortFunctions = {
   name: makeCompareString('id'),

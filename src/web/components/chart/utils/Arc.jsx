@@ -4,8 +4,7 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-
-import path from './Path';
+import path from 'web/components/chart/utils/Path';
 
 const EPSILON = 1e-12; // 1 * 10^(-12)
 

@@ -9,9 +9,9 @@ import styled from 'styled-components';
 import {withFolding, withFoldToggle} from 'web/components/folding/Folding';
 import FoldIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
+import SectionHeader from 'web/components/section/Header';
 import PropTypes from 'web/utils/PropTypes';
 
-import SectionHeader from './Header';
 
 const FoldableLayout = withFolding(Layout);
 

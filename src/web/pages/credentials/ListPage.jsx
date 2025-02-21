@@ -14,15 +14,14 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import CredentialComponent from 'web/pages/credentials/Component';
+import CredentialsFilterDialog from 'web/pages/credentials/FilterDialog';
+import CredentialsTable from 'web/pages/credentials/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/credentials';
 import PropTypes from 'web/utils/PropTypes';
-
-import CredentialComponent from './Component';
-import CredentialsFilterDialog from './FilterDialog';
-import CredentialsTable from './Table';
 
 export const ToolBarIcons = ({onCredentialCreateClick}) => {
   const capabilities = useCapabilities();

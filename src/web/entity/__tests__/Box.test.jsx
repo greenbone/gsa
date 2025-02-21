@@ -5,10 +5,10 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Date from 'gmp/models/date';
+import EntityBox from 'web/entity/Box';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-import EntityBox from '../Box';
 
 const date1 = Date('2019-01-01T12:00:00Z');
 const date2 = Date('2019-02-02T12:00:00Z');

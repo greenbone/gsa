@@ -6,10 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {License} from 'gmp/models/license';
+import LicenseNotification from 'web/components/notification/LicenseNotification';
 import {rendererWith, wait} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import LicenseNotification from '../LicenseNotification';
 
 const dataNoLicense = License.fromElement({
   status: 'no_license',

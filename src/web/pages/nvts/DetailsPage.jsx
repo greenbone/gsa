@@ -33,6 +33,9 @@ import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import NvtComponent from 'web/pages/nvts/Component';
+import NvtDetails from 'web/pages/nvts/Details';
+import Preferences from 'web/pages/nvts/Preferences';
 import {
   selector as notesSelector,
   loadEntities as loadNotes,
@@ -45,9 +48,6 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import NvtComponent from './Component';
-import NvtDetails from './Details';
-import Preferences from './Preferences';
 
 export let ToolBarIcons = ({
   capabilities,

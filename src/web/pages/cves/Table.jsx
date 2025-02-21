@@ -14,10 +14,9 @@ import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
+import CveDetails from 'web/pages/cves/Details';
+import CveRow from 'web/pages/cves/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import CveDetails from './Details';
-import CveRow from './Row';
 
 const Header = ({
   actionsColumn,

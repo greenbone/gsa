@@ -20,6 +20,7 @@ import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/Component';
 import AlertComponent from 'web/pages/alerts/Component';
 import AuditDialog from 'web/pages/audits/Dialog';
+import PolicyDialog from 'web/pages/policies/Dialog';
 import {createSelectedNvts} from 'web/pages/scanconfigs/Component';
 import EditPolicyFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
 import EditPolicyDialog from 'web/pages/scanconfigs/EditDialog';
@@ -51,7 +52,6 @@ import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
-import PolicyDialog from './Dialog';
 
 class PolicyComponent extends React.Component {
   constructor(...args) {

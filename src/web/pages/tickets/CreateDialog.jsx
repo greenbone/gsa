@@ -10,10 +10,10 @@ import TextArea from 'web/components/form/TextArea';
 import useFormValidation from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
 import useTranslation from 'web/hooks/useTranslation';
+import {createTicketRules as validationRules} from 'web/pages/tickets/validationrules';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 
-import {createTicketRules as validationRules} from './validationrules';
 
 const fieldsToValidate = ['note'];
 

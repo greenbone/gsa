@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import Settings2 from 'web/components/icon/Settings2';
 import {testIcon} from 'web/components/icon/Testing';
 
-import Settings2 from '../Settings2';
 
 describe('Settings2 component tests', () => {
   testIcon(Settings2);

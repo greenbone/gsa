@@ -5,8 +5,7 @@
 
 import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/users';
 import {isDefined} from 'gmp/utils/identity';
-
-import {getUserSettingsDefaultFilter} from './selectors';
+import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
 export const USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS =
   'USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS';

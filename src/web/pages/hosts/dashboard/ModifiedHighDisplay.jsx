@@ -16,11 +16,11 @@ import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay'
 import {totalCount} from 'web/components/dashboard/display/Utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {HostsModifiedLoader} from 'web/pages/hosts/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-import {HostsModifiedLoader} from './Loaders';
 
 const transformModified = (data = {}) => {
   let {groups = []} = data;

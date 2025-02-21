@@ -6,10 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Logger from 'gmp/log';
 import {beforeEach, vi} from 'vitest';
+import LoginPage from 'web/pages/login/LoginPage';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
-import LoginPage from '../LoginPage';
 
 Logger.setDefaultLevel('silent');
 const mockUseNavigate = testing.fn();

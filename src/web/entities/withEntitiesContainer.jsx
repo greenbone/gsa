@@ -9,6 +9,7 @@ import withDownload from 'web/components/form/withDownload';
 import Reload from 'web/components/loading/Reload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import SubscriptionProvider from 'web/components/provider/SubscriptionProvider';
+import EntitiesContainer from 'web/entities/Container';
 import FilterProvider from 'web/entities/FilterProvider';
 import {pageFilter} from 'web/store/pages/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
@@ -16,7 +17,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import EntitiesContainer from './Container';
 
 const noop = () => {};
 

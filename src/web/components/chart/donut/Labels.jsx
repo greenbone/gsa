@@ -4,12 +4,11 @@
  */
 
 import React from 'react';
+import Pie from 'web/components/chart/donut/Pie';
+import {DataPropType} from 'web/components/chart/donut/PropTypes';
+import Label from 'web/components/chart/Label';
+import ToolTip from 'web/components/chart/Tooltip';
 import PropTypes from 'web/utils/PropTypes';
-
-import Label from '../Label';
-import ToolTip from '../Tooltip';
-import Pie from './Pie';
-import {DataPropType} from './PropTypes';
 
 const MIN_ANGLE_FOR_LABELS = 0.15;
 

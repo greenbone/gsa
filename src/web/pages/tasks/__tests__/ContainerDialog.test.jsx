@@ -11,9 +11,9 @@ import {
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
+import ContainerDialog from 'web/pages/tasks/ContainerDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import ContainerDialog from '../ContainerDialog';
 
 describe('ContainerDialog tests', () => {
   test('should render create dialog', () => {

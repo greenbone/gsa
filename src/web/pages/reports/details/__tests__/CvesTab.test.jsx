@@ -7,10 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
+import CvesTab from 'web/pages/reports/details/CvesTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-import CvesTab from '../CvesTab';
 
 const caps = new Capabilities(['everything']);
 

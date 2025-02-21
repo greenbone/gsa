@@ -6,10 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ReportConfig from 'gmp/models/reportconfig';
+import Row from 'web/pages/reportconfigs/Row';
 import {setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import Row from '../Row';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

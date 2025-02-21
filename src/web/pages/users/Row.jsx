@@ -17,9 +17,9 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
+import {convert_auth_method, convert_allow} from 'web/pages/users/Details';
 import PropTypes from 'web/utils/PropTypes';
 
-import {convert_auth_method, convert_allow} from './Details';
 
 const Actions = withEntitiesActions(
   ({

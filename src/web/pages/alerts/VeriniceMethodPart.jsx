@@ -13,9 +13,9 @@ import NewIcon from 'web/components/icon/NewIcon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 import withPrefix from 'web/utils/withPrefix';
 
-import {renderSelectItems, UNSET_VALUE} from '../../utils/Render';
 
 const VERINICE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 

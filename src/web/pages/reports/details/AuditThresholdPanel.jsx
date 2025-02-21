@@ -12,9 +12,9 @@ import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useTranslation from 'web/hooks/useTranslation';
+import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 
-import ReportPanel from './ReportPanel';
 
 const UpdatingDivider = styled(({isUpdating, ...props}) => (
   <Divider {...props} />

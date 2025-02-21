@@ -17,8 +17,7 @@ import {
   getRadioInputs,
 } from 'web/components/testing';
 import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
-
-import AdvancedTaskWizard from '../AdvancedTaskWizard';
+import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
 const scheduleCapabilities = new Capabilities([

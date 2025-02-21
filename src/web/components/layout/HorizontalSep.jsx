@@ -5,9 +5,9 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import styled from 'styled-components';
+import Divider from 'web/components/layout/Divider';
 import PropTypes from 'web/utils/PropTypes';
 
-import Divider from './Divider';
 
 const HorizontalSep = styled(Divider)`
   flex-wrap: ${props => (isDefined(props.$wrap) ? props.$wrap : null)};

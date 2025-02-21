@@ -13,8 +13,7 @@ import {
   getRadioInputs,
 } from 'web/components/testing';
 import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
-
-import ModifyTaskWizard from '../ModifyTaskWizard';
+import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
 const scheduleCapabilities = new Capabilities([

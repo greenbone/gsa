@@ -12,10 +12,9 @@ import {createEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
+import OverrideDetails from 'web/pages/overrides/Details';
+import Row from 'web/pages/overrides/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import OverrideDetails from './Details';
-import Row from './Row';
 
 const Header = ({
   links = true,

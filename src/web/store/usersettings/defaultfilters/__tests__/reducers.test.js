@@ -5,9 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-
-import {defaultFilterLoadingActions} from '../actions';
-import reducer from '../reducers';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import reducer from 'web/store/usersettings/defaultfilters/reducers';
 
 describe('default filters reducers tests', () => {
   test('should init state', () => {

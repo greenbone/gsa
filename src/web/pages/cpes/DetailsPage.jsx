@@ -37,10 +37,10 @@ import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
 
-import CpeDetails from './Details';
 
 export const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
   <Divider margin="10px">

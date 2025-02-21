@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Icon from './svg/dl_deb.svg';
-import withSvgIcon from './withSvgIcon';
+import Icon from 'web/components/icon/svg/dl_deb.svg';
+import withSvgIcon from 'web/components/icon/withSvgIcon';
 
 const DownloadDebIconComponent = withSvgIcon()(Icon);
 

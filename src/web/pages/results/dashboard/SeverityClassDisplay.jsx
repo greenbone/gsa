@@ -9,8 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-
-import {ResultsSeverityLoader} from './Loaders';
+import {ResultsSeverityLoader} from 'web/pages/results/dashboard/Loaders';
 
 export const ResultsSeverityDisplay = createDisplay({
   loaderComponent: ResultsSeverityLoader,

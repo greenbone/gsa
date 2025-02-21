@@ -4,9 +4,9 @@
  */
 
 import styled from 'styled-components';
+import DeleteIcon from 'web/components/icon/DeleteIcon';
 import Theme from 'web/utils/Theme';
 
-import DeleteIcon from './DeleteIcon';
 
 const TrashDeleteIcon = styled(DeleteIcon)`
   & svg:hover {

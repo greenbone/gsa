@@ -5,13 +5,12 @@
 
 import {combineReducers} from 'redux';
 import {CLEAR_STORE} from 'web/store/actions';
+import dashboardData from 'web/store/dashboard/data/reducers';
+import dashboardSettings from 'web/store/dashboard/settings/reducers';
+import entities from 'web/store/entities/reducers';
 import feedStatus from 'web/store/feedStatus/reducers';
-
-import dashboardData from './dashboard/data/reducers';
-import dashboardSettings from './dashboard/settings/reducers';
-import entities from './entities/reducers';
-import pages from './pages/reducers';
-import userSettings from './usersettings/reducers';
+import pages from 'web/store/pages/reducers';
+import userSettings from 'web/store/usersettings/reducers';
 
 const rootReducer = combineReducers({
   dashboardData,

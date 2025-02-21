@@ -11,10 +11,9 @@ import TableRow from 'web/components/table/Row';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
+import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
+import TlsCertificateRow from 'web/pages/tlscertificates/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import TlsCertificateDetails from './Details';
-import TlsCertificateRow from './Row';
 
 const Header = ({
   links = true,

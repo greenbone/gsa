@@ -5,7 +5,6 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {isFunction} from 'gmp/utils/identity';
-
 import {
   loadingActions,
   USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
@@ -13,7 +12,7 @@ import {
   USER_SETTINGS_DEFAULTS_LOADING_ERROR,
   loadUserSettingDefault,
   loadUserSettingDefaults,
-} from '../actions';
+} from 'web/store/usersettings/defaults/actions';
 
 describe('UserSettings Defaults action tests', () => {
   describe('action creator tests', () => {

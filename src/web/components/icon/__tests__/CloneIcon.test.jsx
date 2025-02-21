@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import CloneIcon from 'web/components/icon/CloneIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import CloneIcon from '../CloneIcon';
 
 describe('CloneIcon component tests', () => {
   testIcon(CloneIcon);

@@ -27,22 +27,21 @@ import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import EntityInfo from 'web/entity/Info';
 import EntityTags from 'web/entity/Tags';
+import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
+import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
+import CvesTab from 'web/pages/reports/details/CvesTab';
+import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
+import HostsTab from 'web/pages/reports/details/HostsTab';
+import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
+import PortsTab from 'web/pages/reports/details/PortsTab';
+import ResultsTab from 'web/pages/reports/details/ResultsTab';
+import Summary from 'web/pages/reports/details/Summary';
+import TabTitle from 'web/pages/reports/details/TabTitle';
+import ThresholdPanel from 'web/pages/reports/details/ThresholdPanel';
+import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
+import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
-import ApplicationsTab from './details/ApplicationsTab';
-import ClosedCvesTab from './details/ClosedCvesTab';
-import CvesTab from './details/CvesTab';
-import ErrorsTab from './details/ErrorsTab';
-import HostsTab from './details/HostsTab';
-import OperatingSystemsTab from './details/OperatingSystemsTab';
-import PortsTab from './details/PortsTab';
-import ResultsTab from './details/ResultsTab';
-import Summary from './details/Summary';
-import TabTitle from './details/TabTitle';
-import ThresholdPanel from './details/ThresholdPanel';
-import TLSCertificatesTab from './details/TlsCertificatesTab';
-import ToolBarIcons from './details/ToolbarIcons';
 
 const Span = styled.span`
   margin-top: 2px;

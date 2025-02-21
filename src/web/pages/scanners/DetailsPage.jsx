@@ -36,6 +36,8 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useGmp from 'web/hooks/useGmp';
+import ScannerComponent from 'web/pages/scanners/Component';
+import ScannerDetails from 'web/pages/scanners/Details';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -43,8 +45,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/scanners';
 import PropTypes from 'web/utils/PropTypes';
 
-import ScannerComponent from './Component';
-import ScannerDetails from './Details';
 
 const ToolBarIcons = ({
   entity,

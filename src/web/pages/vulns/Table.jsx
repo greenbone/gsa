@@ -11,9 +11,9 @@ import TableRow from 'web/components/table/Row';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
+import VulnsRow from 'web/pages/vulns/Row';
 import PropTypes from 'web/utils/PropTypes';
 
-import VulnsRow from './Row';
 
 const Header = ({
   links = true,

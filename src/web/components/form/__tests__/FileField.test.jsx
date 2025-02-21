@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import FileField from 'web/components/form/FileField';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import FileField from '../FileField';
 
 describe('FileField tests', () => {
   test('should render', () => {

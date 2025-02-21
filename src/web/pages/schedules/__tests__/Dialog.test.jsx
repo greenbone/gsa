@@ -15,9 +15,9 @@ import {
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
+import ScheduleDialog from 'web/pages/schedules/Dialog';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-import ScheduleDialog from '../Dialog';
 
 const checkElementVisibilityAndContent = (
   labelText,

@@ -16,13 +16,12 @@ import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import DefaultsPart from 'web/pages/usersettings/DefaultsPart';
+import FilterPart from 'web/pages/usersettings/FilterPart';
+import GeneralPart from 'web/pages/usersettings/GeneralPart';
+import SeverityPart from 'web/pages/usersettings/SeverityPart';
+import {userSettingsRules} from 'web/pages/usersettings/validationrules';
 import PropTypes from 'web/utils/PropTypes';
-
-import DefaultsPart from './DefaultsPart';
-import FilterPart from './FilterPart';
-import GeneralPart from './GeneralPart';
-import SeverityPart from './SeverityPart';
-import {userSettingsRules} from './validationrules';
 
 // necessary to stretch FormGroups to full width inside of Section
 const FormGroupSizer = styled(Column)`

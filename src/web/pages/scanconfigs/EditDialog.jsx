@@ -13,13 +13,12 @@ import TextField from 'web/components/form/TextField';
 import Loading from 'web/components/loading/Loading';
 import SearchBar from 'web/components/searchbar/SearchBar';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-
-import NvtFamilies from './NvtFamilies';
-import NvtPreferences, {NvtPreferencePropType} from './NvtPreferences';
+import NvtFamilies from 'web/pages/scanconfigs/NvtFamilies';
+import NvtPreferences, {NvtPreferencePropType} from 'web/pages/scanconfigs/NvtPreferences';
 import ScannerPreferences, {
   ScannerPreferencePropType,
-} from './ScannerPreferences';
+} from 'web/pages/scanconfigs/ScannerPreferences';
+import PropTypes from 'web/utils/PropTypes';
 
 const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
   const trend = {};

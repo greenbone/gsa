@@ -5,7 +5,6 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-
 import {
   DASHBOARD_DATA_LOADING_SUCCESS,
   DASHBOARD_DATA_LOADING_REQUEST,
@@ -13,7 +12,7 @@ import {
   receivedDashboardData,
   requestDashboardData,
   receivedDashboardError,
-} from '../actions';
+} from 'web/store/dashboard/data/actions';
 
 describe('action tests', () => {
   test('should create an action to request dashboard data', () => {

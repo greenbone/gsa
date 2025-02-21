@@ -20,12 +20,11 @@ import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import {Col} from 'web/entity/Page';
+import Condition from 'web/pages/alerts/Condition';
+import Event from 'web/pages/alerts/Event';
+import Method from 'web/pages/alerts/Method';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import Condition from './Condition';
-import Event from './Event';
-import Method from './Method';
 
 const AlertDetails = ({
   capabilities,

@@ -5,9 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {isFunction} from 'gmp/utils/identity';
-
-import {createAll} from '../main';
-import {createState} from '../testing';
+import {createAll} from 'web/store/entities/utils/main';
+import {createState} from 'web/store/entities/utils/testing';
 
 describe('createAll function tests', () => {
   test('should create all functions and objects', () => {

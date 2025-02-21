@@ -5,7 +5,6 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import moment from 'gmp/models/date';
-
 import {
   ipToNumber,
   getProperty,
@@ -16,7 +15,7 @@ import {
   makeCompareSeverity,
   makeCompareDate,
   makeComparePort,
-} from '../Sort';
+} from 'web/utils/Sort';
 
 describe('ipToNumber tests', () => {
   test('should convert ipv4 to number', () => {

@@ -19,13 +19,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import OverridesPage, {ToolBarIcons} from 'web/pages/overrides/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/overrides';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import OverridesPage, {ToolBarIcons} from '../ListPage';
 
 const override = Override.fromElement({
   _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',

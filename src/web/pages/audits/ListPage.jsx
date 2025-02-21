@@ -13,6 +13,9 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import AuditComponent from 'web/pages/audits/Component';
+import Table from 'web/pages/audits/Table';
+import {taskReloadInterval} from 'web/pages/tasks/ListPage';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -20,9 +23,6 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import AuditComponent from './Component';
-import Table from './Table';
-import {taskReloadInterval} from '../tasks/ListPage';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAuditCreateClick}) => (

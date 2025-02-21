@@ -20,17 +20,16 @@ import {
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import AuditReportsDashboard, {
+  AUDIT_REPORTS_DASHBOARD_ID,
+} from 'web/pages/reports/auditdashboard';
+import AuditFilterDialog from 'web/pages/reports/AuditFilterDialog';
+import AuditReportsTable from 'web/pages/reports/AuditReportsTable';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/auditreports';
 import PropTypes from 'web/utils/PropTypes';
-
-import AuditReportsDashboard, {
-  AUDIT_REPORTS_DASHBOARD_ID,
-} from './auditdashboard';
-import AuditFilterDialog from './AuditFilterDialog';
-import AuditReportsTable from './AuditReportsTable';
 
 const ToolBarIcons = () => {
   const [_] = useTranslation();

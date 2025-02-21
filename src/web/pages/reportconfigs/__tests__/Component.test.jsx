@@ -14,9 +14,9 @@ import {
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
+import ReportFormatComponent from 'web/pages/reportconfigs/Component';
 import {fireEvent, getByTestId, rendererWith, wait} from 'web/utils/Testing';
 
-import ReportFormatComponent from '../Component';
 
 describe('Report Config Component tests', () => {
   const mockReportConfig = ReportConfig.fromElement({

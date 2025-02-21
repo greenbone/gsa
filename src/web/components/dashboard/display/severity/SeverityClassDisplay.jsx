@@ -8,11 +8,10 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DonutChart from 'web/components/chart/Donut';
+import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';
+import transformSeverityData from 'web/components/dashboard/display/severity/SeverityClassTransform';
 import PropTypes from 'web/utils/PropTypes';
-
-import DataDisplay from '../DataDisplay';
-import {renderDonutChartIcons} from '../DataDisplayIcons';
-import transformSeverityData from './SeverityClassTransform';
 
 class SeverityClassDisplay extends React.Component {
   constructor(...args) {

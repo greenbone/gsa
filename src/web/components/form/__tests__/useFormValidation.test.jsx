@@ -5,12 +5,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import React, {useState} from 'react';
+import Button from 'web/components/form/Button';
+import TextField from 'web/components/form/TextField';
+import useFormValidation, {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
+import useFormValues from 'web/components/form/useFormValues';
 import {render, fireEvent, screen} from 'web/utils/Testing';
-
-import Button from '../Button';
-import TextField from '../TextField';
-import useFormValidation, {shouldBeNonEmpty} from '../useFormValidation';
-import useFormValues from '../useFormValues';
 
 /*
  * This suite only tests functions associated with useFormValidation.

@@ -15,10 +15,10 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import Settings from 'web/pages/scanconfigs/Settings';
+import Trend from 'web/pages/scanconfigs/Trend';
 import PropTypes from 'web/utils/PropTypes';
 import {na} from 'web/utils/Render';
 
-import Trend from './Trend';
 
 const ScanConfigActions = withEntitiesActions(
   ({

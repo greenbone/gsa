@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as credential from '../credentials';
-import {testAll} from '../utils/testing';
+import * as credential from 'web/store/entities/credentials';
+import {testAll} from 'web/store/entities/utils/testing';
 
 testAll('credential', credential);

@@ -7,10 +7,10 @@ import {Line as VxLine} from '@visx/shape';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import ToolTip from 'web/components/chart/Tooltip';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import ToolTip from './Tooltip';
 
 const DEFAULT_SHAPE_SIZE = 15;
 

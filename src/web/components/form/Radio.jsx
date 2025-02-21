@@ -5,9 +5,9 @@
 
 import {RadioButton as GreenboneRadio} from '@greenbone/opensight-ui-components-mantinev7';
 import React from 'react';
+import useValueChange from 'web/components/form/useValueChange';
 import PropTypes from 'web/utils/PropTypes';
 
-import useValueChange from './useValueChange';
 
 const Radio = ({
   checked,

@@ -19,6 +19,7 @@ import {
   getTableBody,
   getTextInputs,
 } from 'web/components/testing';
+import EditScanConfigDialog, {handleSearchChange} from 'web/pages/scanconfigs/EditDialog';
 import {
   rendererWith,
   fireEvent,
@@ -26,7 +27,6 @@ import {
   waitFor,
 } from 'web/utils/Testing';
 
-import EditScanConfigDialog, {handleSearchChange} from '../EditDialog';
 
 const families = [
   {

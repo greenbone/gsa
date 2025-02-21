@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import {
   clickElement,
   getRadioInputs,
@@ -14,7 +15,6 @@ import {
 } from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import SortByGroup from '../SortByGroup';
 
 describe('SortByGroup tests', () => {
   test('should render', () => {

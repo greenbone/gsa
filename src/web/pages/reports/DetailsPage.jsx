@@ -23,6 +23,8 @@ import Reload, {
 } from 'web/components/loading/Reload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import FilterProvider from 'web/entities/FilterProvider';
+import Page from 'web/pages/reports/DetailsContent';
+import ReportDetailsFilterDialog from 'web/pages/reports/DetailsFilterDialog';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import TargetComponent from 'web/pages/targets/Component';
 import {
@@ -60,8 +62,6 @@ import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
-import Page from './DetailsContent';
-import ReportDetailsFilterDialog from './DetailsFilterDialog';
 
 const log = logger.getLogger('web.pages.report./DetailsPage');
 

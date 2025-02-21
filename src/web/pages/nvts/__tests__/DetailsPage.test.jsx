@@ -10,11 +10,11 @@ import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 import NVT from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
+import Detailspage, {ToolBarIcons} from 'web/pages/nvts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import Detailspage, {ToolBarIcons} from '../DetailsPage';
 
 const caps = new Capabilities(['everything']);
 

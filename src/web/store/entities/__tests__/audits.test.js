@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as audits from '../audits';
-import {testAll} from '../utils/testing';
+import * as audits from 'web/store/entities/audits';
+import {testAll} from 'web/store/entities/utils/testing';
 
 testAll('audit', audits);

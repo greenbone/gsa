@@ -12,15 +12,14 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import CpesDashboard, {CPES_DASHBOARD_ID} from 'web/pages/cpes/dashboard';
+import CpeFilterDialog from 'web/pages/cpes/FilterDialog';
+import CpesTable from 'web/pages/cpes/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
-
-import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard';
-import CpeFilterDialog from './FilterDialog';
-import CpesTable from './Table';
 
 export const ToolBarIcons = props => (
   <ManualIcon anchor="cpe" page="managing-secinfo" title={_('Help: CPEs')} />

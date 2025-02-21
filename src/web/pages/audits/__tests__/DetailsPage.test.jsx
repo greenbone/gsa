@@ -11,11 +11,11 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {clickElement, getActionItems} from 'web/components/testing';
+import Detailspage, {ToolBarIcons} from 'web/pages/audits/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import Detailspage, {ToolBarIcons} from '../DetailsPage';
 
 const policy = Policy.fromElement({
   _id: '314',

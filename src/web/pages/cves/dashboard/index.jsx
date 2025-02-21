@@ -4,14 +4,13 @@
  */
 
 import React from 'react';
-
-import {CvesCreatedDisplay, CvesCreatedTableDisplay} from './CreatedDisplay';
-import {CvesCvssDisplay, CvesCvssTableDisplay} from './CvssDisplay';
+import Dashboard from 'web/components/dashboard/Dashboard';
+import {CvesCreatedDisplay, CvesCreatedTableDisplay} from 'web/pages/cves/dashboard/CreatedDisplay';
+import {CvesCvssDisplay, CvesCvssTableDisplay} from 'web/pages/cves/dashboard/CvssDisplay';
 import {
   CvesSeverityClassDisplay,
   CvesSeverityClassTableDisplay,
-} from './SeverityClassDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/cves/dashboard/SeverityClassDisplay';
 
 export const CVES_DASHBOARD_ID = '815ddd2e-8654-46c7-a05b-d73224102240';
 

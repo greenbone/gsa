@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import InfoPanel from 'web/components/panel/InfoPanel';
 import {render, userEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import InfoPanel from '../InfoPanel';
 
 describe('InfoPanel tests', () => {
   test('should render with children', () => {

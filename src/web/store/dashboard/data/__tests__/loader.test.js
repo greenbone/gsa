@@ -5,14 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-import {filterIdentifier} from 'web/store/utils';
-
 import {
   DASHBOARD_DATA_LOADING_REQUEST,
   DASHBOARD_DATA_LOADING_SUCCESS,
   DASHBOARD_DATA_LOADING_ERROR,
-} from '../actions';
-import {loadFunc} from '../loader';
+} from 'web/store/dashboard/data/actions';
+import {loadFunc} from 'web/store/dashboard/data/loader';
+import {filterIdentifier} from 'web/store/utils';
 
 const createState = state => ({
   dashboardData: {

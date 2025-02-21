@@ -20,6 +20,7 @@ import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
 import {connect} from 'react-redux';
 import SortBy from 'web/components/sortby/SortBy';
+import TagsDialog from 'web/entities/TagsDialog';
 import TagDialog from 'web/pages/tags/Dialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
@@ -32,7 +33,6 @@ import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 import {withRouter} from 'web/utils/withRouter';
 
-import TagsDialog from './TagsDialog';
 
 const log = logger.getLogger('web.entities.container');
 

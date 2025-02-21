@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
 import {
   clickElement,
   getElementOrDocument,
@@ -13,7 +14,6 @@ import {
 } from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import SeverityValuesGroup from '../SeverityValuesGroup';
 
 const getTitle = element => {
   element = getElementOrDocument(element);

@@ -16,10 +16,9 @@ import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
+import NvtDetails from 'web/pages/nvts/Details';
+import NvtRow from 'web/pages/nvts/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import NvtDetails from './Details';
-import NvtRow from './Row';
 
 const Header = ({
   actionsColumn,

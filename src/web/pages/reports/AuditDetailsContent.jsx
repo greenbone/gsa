@@ -28,17 +28,16 @@ import EntityInfo from 'web/entity/Info';
 import EntityTags from 'web/entity/Tags';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import AuditThresholdPanel from 'web/pages/reports/details/AuditThresholdPanel';
+import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
+import HostsTab from 'web/pages/reports/details/HostsTab';
+import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
+import ResultsTab from 'web/pages/reports/details/ResultsTab';
+import Summary from 'web/pages/reports/details/Summary';
+import TabTitle from 'web/pages/reports/details/TabTitle';
+import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
+import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
-
-import AuditThresholdPanel from './details/AuditThresholdPanel';
-import ErrorsTab from './details/ErrorsTab';
-import HostsTab from './details/HostsTab';
-import OperatingSystemsTab from './details/OperatingSystemsTab';
-import ResultsTab from './details/ResultsTab';
-import Summary from './details/Summary';
-import TabTitle from './details/TabTitle';
-import TLSCertificatesTab from './details/TlsCertificatesTab';
-import ToolBarIcons from './details/ToolbarIcons';
 
 const Span = styled.span`
   margin-top: 2px;

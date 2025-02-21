@@ -9,8 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvsStableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-
-import {CpesSeverityLoader} from './Loaders';
+import {CpesSeverityLoader} from 'web/pages/cpes/dashboard/Loaders';
 
 export const CpesCvssDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,

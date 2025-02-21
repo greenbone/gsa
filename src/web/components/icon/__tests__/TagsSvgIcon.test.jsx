@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import TagsSvgIcon from 'web/components/icon/TagsSvgIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import TagsSvgIcon from '../TagsSvgIcon';
 
 describe('TagsSvgIcon component tests', () => {
   testIcon(TagsSvgIcon);

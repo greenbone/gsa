@@ -4,10 +4,10 @@
  */
 
 import React from 'react';
+import BlankLink from 'web/components/link/BlankLink';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 
-import BlankLink from './BlankLink';
 
 const ProtocolDocLink = ({title}) => {
   const gmp = useGmp();

@@ -6,10 +6,9 @@
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import {isFunction} from 'gmp/utils/identity';
-
-import {reportActions} from '../actions';
-import {reportReducer} from '../reducers';
-import {reportIdentifier, simplifiedReportIdentifier} from '../selectors';
+import {reportActions} from 'web/store/entities/report/actions';
+import {reportReducer} from 'web/store/entities/report/reducers';
+import {reportIdentifier, simplifiedReportIdentifier} from 'web/store/entities/report/selectors';
 
 describe('report reducer tests', () => {
   test('should be a reducer function', () => {

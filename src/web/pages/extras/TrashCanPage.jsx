@@ -31,6 +31,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import AlertsTable from 'web/pages/alerts/Table';
 import CredentialsTable from 'web/pages/credentials/Table';
+import TrashActions from 'web/pages/extras/TrashActions';
 import FiltersTable from 'web/pages/filters/Table';
 import GroupsTable from 'web/pages/groups/Table';
 import NotesTable from 'web/pages/notes/Table';
@@ -50,7 +51,6 @@ import TasksTable from 'web/pages/tasks/Table';
 import TicketsTable from 'web/pages/tickets/Table';
 import PropTypes from 'web/utils/PropTypes';
 
-import TrashActions from './TrashActions';
 
 const Col = styled.col`
   width: 50%;

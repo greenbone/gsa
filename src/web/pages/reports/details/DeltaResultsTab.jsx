@@ -4,6 +4,9 @@
  */
 
 import React from 'react';
+import EmptyReport from 'web/pages/reports/details/EmptyReport';
+import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import ResultsTable from 'web/pages/results/Table';
 import PropTypes from 'web/utils/PropTypes';
 import {
@@ -14,9 +17,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-import EmptyReport from './EmptyReport';
-import EmptyResultsReport from './EmptyResultsReport';
-import ReportEntitiesContainer from './ReportEntitiesContainer';
 
 const resultsSortFunctions = {
   delta: makeCompareString(entity => entity.delta.delta_type),

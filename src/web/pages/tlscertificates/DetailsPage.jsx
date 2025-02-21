@@ -36,6 +36,8 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import TlsCertificateComponent from 'web/pages/tlscertificates/Component';
+import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -43,8 +45,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/tlscertificates';
 import PropTypes from 'web/utils/PropTypes';
 
-import TlsCertificateComponent from './Component';
-import TlsCertificateDetails from './Details';
 
 const ToolBarIcons = ({
   entity,

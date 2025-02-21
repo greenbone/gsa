@@ -14,7 +14,9 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import ScanConfigComponent from 'web/pages/scanconfigs/Component';
 import ScanConfigFilterDialog from 'web/pages/scanconfigs/FilterDialog';
+import Table from 'web/pages/scanconfigs/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -22,8 +24,6 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import ScanConfigComponent from './Component';
-import Table from './Table';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => {

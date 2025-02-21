@@ -5,8 +5,7 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-
-import PropTypes from './PropTypes';
+import PropTypes from 'web/utils/PropTypes';
 
 export const withPrefix = Component => {
   const ComponentPrefixWrapper = ({prefix, ...props}) => {

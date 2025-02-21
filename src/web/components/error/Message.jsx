@@ -5,12 +5,12 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import MessageContainer from 'web/components/error/MessageContainer';
 import StNonAvailableIcon from 'web/components/icon/StNonAvailableIcon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 
-import MessageContainer from './MessageContainer';
 
 const Message = ({
   message,

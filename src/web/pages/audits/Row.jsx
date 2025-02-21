@@ -20,11 +20,11 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import {RowDetailsToggle} from 'web/entities/Row';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
+import Actions from 'web/pages/audits/Actions';
 import AuditStatus from 'web/pages/tasks/Status';
 import PropTypes from 'web/utils/PropTypes';
 import withUserName from 'web/utils/withUserName';
 
-import Actions from './Actions';
 
 const renderAuditReport = (report, links) => {
   if (!isDefined(report)) {

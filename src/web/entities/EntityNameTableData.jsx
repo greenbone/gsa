@@ -11,11 +11,11 @@ import Comment from 'web/components/comment/Comment';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/Data';
+import {RowDetailsToggle} from 'web/entities/Row';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import PropTypes from 'web/utils/PropTypes';
 import withUsername from 'web/utils/withUserName';
 
-import {RowDetailsToggle} from './Row';
 
 const EntityNameTableData = ({
   entity,

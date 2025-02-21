@@ -8,10 +8,10 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {getActionItems} from 'web/components/testing';
+import Row from 'web/pages/audits/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {screen, rendererWith, fireEvent} from 'web/utils/Testing';
 
-import Row from '../Row';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

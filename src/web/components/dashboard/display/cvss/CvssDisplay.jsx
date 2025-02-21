@@ -9,10 +9,10 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import BarChart from 'web/components/chart/Bar';
+import transformCvssData from 'web/components/dashboard/display/cvss/CvssTransform';
+import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import PropTypes from 'web/utils/PropTypes';
 
-import DataDisplay from '../DataDisplay';
-import transformCvssData from './CvssTransform';
 
 class CvssDisplay extends React.Component {
   constructor(...args) {

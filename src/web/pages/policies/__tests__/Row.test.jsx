@@ -8,10 +8,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Policy from 'gmp/models/policy';
+import Row from 'web/pages/policies/Row';
 import {setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import Row from '../Row';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

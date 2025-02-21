@@ -4,11 +4,11 @@
  */
 
 import React from 'react';
+import OperatingSystemsTable from 'web/pages/reports/details/OperatingSystemsTable';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import PropTypes from 'web/utils/PropTypes';
 import {makeCompareNumber, makeCompareString} from 'web/utils/Sort';
 
-import OperatingSystemsTable from './OperatingSystemsTable';
-import ReportEntitiesContainer from './ReportEntitiesContainer';
 
 const operatingssystemsSortFunctions = {
   name: makeCompareString('name'),

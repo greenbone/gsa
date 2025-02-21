@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import ReportFormatIcon from 'web/components/icon/ReportFormatIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import ReportFormatIcon from '../ReportFormatIcon';
 
 describe('ReportFormatIcon component tests', () => {
   testIcon(ReportFormatIcon);

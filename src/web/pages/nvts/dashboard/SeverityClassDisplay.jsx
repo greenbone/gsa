@@ -9,8 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-
-import {NvtsSeverityLoader} from './Loaders';
+import {NvtsSeverityLoader} from 'web/pages/nvts/dashboard/Loaders';
 
 export const NvtsSeverityClassDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,

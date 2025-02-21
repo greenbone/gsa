@@ -6,9 +6,9 @@
 import _ from 'gmp/locale';
 import {isString} from 'gmp/utils/identity';
 import React from 'react';
+import DetailsLink from 'web/components/link/DetailsLink';
 import PropTypes from 'web/utils/PropTypes';
 
-import DetailsLink from './DetailsLink';
 
 const CertLink = ({id, textOnly = false, type}) => {
   const lcType = isString(type) ? type.toLowerCase() : undefined;

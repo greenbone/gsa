@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import useSelection from 'web/hooks/useSelection';
 import SelectionType from 'web/utils/SelectionType';
 import {fireEvent, render, screen} from 'web/utils/Testing';
 
-import useSelection from '../useSelection';
 
 const TestComponent = () => {
   const {selected, selectionType, select, deselect, changeSelectionType} =

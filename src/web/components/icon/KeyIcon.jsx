@@ -5,8 +5,7 @@
 
 import {Key as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
-
-import withSvgIcon from './withSvgIcon';
+import withSvgIcon from 'web/components/icon/withSvgIcon';
 
 const KeyIcon = withSvgIcon()(props => (
   <IconWithStrokeWidth IconComponent={Icon} {...props} data-testid="key-icon" />

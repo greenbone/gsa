@@ -13,8 +13,7 @@ import Filter from 'gmp/models/filter';
 import Settings from 'gmp/models/settings';
 import {isDefined} from 'gmp/utils/identity';
 import ReactPropTypes from 'prop-types';
-
-import warning from './Warning';
+import warning from 'web/utils/Warning';
 
 export const mayRequire = validator => {
   const wrapper = (...props) => {

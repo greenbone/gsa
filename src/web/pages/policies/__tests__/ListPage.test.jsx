@@ -9,13 +9,13 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {clickElement, testBulkTrashcanDialog} from 'web/components/testing';
+import PoliciesPage, {ToolBarIcons} from 'web/pages/policies/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import PoliciesPage, {ToolBarIcons} from '../ListPage';
 
 const policy = Policy.fromElement({
   _id: '12345',

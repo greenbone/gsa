@@ -11,10 +11,9 @@ import {
   USER_SETTINGS_SET_SESSION_TIMEOUT,
   USER_SETTINGS_SET_LOGGED_IN,
 } from 'web/store/usersettings/actions';
+import defaultFilters from 'web/store/usersettings/defaultfilters/reducers';
+import defaults from 'web/store/usersettings/defaults/reducers';
 import {combineReducers} from 'web/store/utils';
-
-import defaultFilters from './defaultfilters/reducers';
-import defaults from './defaults/reducers';
 
 export const reportComposerDefaults = (state = {}, action) => {
   switch (action.type) {

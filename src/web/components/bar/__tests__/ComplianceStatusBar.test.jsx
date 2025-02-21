@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import ComplianceStatusBar from 'web/components/bar/ComplianceStatusBar';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import ComplianceStatusBar from '../ComplianceStatusBar';
 
 describe('ComplianceStatusBar tests', () => {
   test('should render', () => {

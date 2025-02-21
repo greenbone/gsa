@@ -15,9 +15,9 @@ import Message from 'web/components/error/Message';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
+import EntityInfo from 'web/entity/Info';
 import PropTypes from 'web/utils/PropTypes';
 
-import EntityInfo from './Info';
 
 export const Col = styled.col`
   width: ${props => props.width};

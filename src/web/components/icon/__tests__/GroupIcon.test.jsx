@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import GroupIcon from 'web/components/icon/GroupIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import GroupIcon from '../GroupIcon';
 
 describe('GroupIcon component tests', () => {
   testIcon(GroupIcon);

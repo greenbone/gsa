@@ -14,6 +14,7 @@ import {
   testBulkDeleteDialog,
 } from 'web/components/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
+import AuditReportsPage from 'web/pages/reports/AuditReportsListPage';
 import {entitiesActions} from 'web/store/entities/auditreports';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -26,7 +27,6 @@ import {
   wait,
 } from 'web/utils/Testing';
 
-import AuditReportsPage from '../AuditReportsListPage';
 
 window.URL.createObjectURL = testing.fn();
 

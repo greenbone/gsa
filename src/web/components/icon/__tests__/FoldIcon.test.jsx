@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import FoldIcon from 'web/components/icon/FoldIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import FoldIcon from '../FoldIcon';
 
 describe('FoldIcon component tests', () => {
   testIcon(FoldIcon);

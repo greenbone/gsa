@@ -4,14 +4,13 @@
  */
 
 import React from 'react';
-
-import {OsCvssDisplay, OsCvssTableDisplay} from './CvssDisplay';
+import Dashboard from 'web/components/dashboard/Dashboard';
+import {OsCvssDisplay, OsCvssTableDisplay} from 'web/pages/operatingsystems/dashboard/CvssDisplay';
 import {
   OsSeverityClassDisplay,
   OsSeverityClassTableDisplay,
-} from './SeverityClassDisplay';
-import {OsVulnScoreDisplay, OsVulnScoreTableDisplay} from './VulnScoreDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/operatingsystems/dashboard/SeverityClassDisplay';
+import {OsVulnScoreDisplay, OsVulnScoreTableDisplay} from 'web/pages/operatingsystems/dashboard/VulnScoreDisplay';
 
 export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
 

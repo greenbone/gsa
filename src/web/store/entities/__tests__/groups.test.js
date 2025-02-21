@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as group from '../groups';
-import {testAll} from '../utils/testing';
+import * as group from 'web/store/entities/groups';
+import {testAll} from 'web/store/entities/utils/testing';
 
 testAll('group', group);

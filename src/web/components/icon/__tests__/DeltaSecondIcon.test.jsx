@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import DeltaSecondIcon from 'web/components/icon/DeltaSecondIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import DeltaSecondIcon from '../DeltaSecondIcon';
 
 describe('DeltaSecondIcon component tests', () => {
   testIcon(DeltaSecondIcon);

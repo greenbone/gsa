@@ -4,17 +4,16 @@
  */
 
 import React from 'react';
-
-import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './CreatedDisplay';
-import {NvtsCvssDisplay, NvtsCvssTableDisplay} from './CvssDisplay';
-import {NvtsFamilyDisplay, NvtsFamilyTableDisplay} from './FamilyDisplay';
-import {NvtsQodDisplay, NvtsQodTableDisplay} from './QodDisplay';
-import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from './QodTypeDisplay';
+import Dashboard from 'web/components/dashboard/Dashboard';
+import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from 'web/pages/nvts/dashboard/CreatedDisplay';
+import {NvtsCvssDisplay, NvtsCvssTableDisplay} from 'web/pages/nvts/dashboard/CvssDisplay';
+import {NvtsFamilyDisplay, NvtsFamilyTableDisplay} from 'web/pages/nvts/dashboard/FamilyDisplay';
+import {NvtsQodDisplay, NvtsQodTableDisplay} from 'web/pages/nvts/dashboard/QodDisplay';
+import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from 'web/pages/nvts/dashboard/QodTypeDisplay';
 import {
   NvtsSeverityClassDisplay,
   NvtsSeverityClassTableDisplay,
-} from './SeverityClassDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/nvts/dashboard/SeverityClassDisplay';
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
 

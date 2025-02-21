@@ -20,8 +20,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
-
-import {WizardContent, WizardIcon} from './TaskWizard';
+import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 
 const ModifyTaskWizard = ({
   alert_email = '',

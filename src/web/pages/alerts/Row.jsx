@@ -17,13 +17,13 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import Condition from 'web/pages/alerts/Condition';
+import Event from 'web/pages/alerts/Event';
+import Method from 'web/pages/alerts/Method';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Condition from './Condition';
-import Event from './Event';
-import Method from './Method';
 
 const Actions = withEntitiesActions(
   ({

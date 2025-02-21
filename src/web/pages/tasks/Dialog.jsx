@@ -33,12 +33,12 @@ import YesNoRadio from 'web/components/form/YesNoRadio';
 import NewIcon from 'web/components/icon/NewIcon';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
+import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
+import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import AddResultsToAssetsGroup from './AddResultsToAssetsGroup';
-import AutoDeleteReportsGroup from './AutoDeleteReportsGroup';
 
 const Title = styled.div`
   flex-grow: 1;

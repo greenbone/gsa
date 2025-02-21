@@ -5,8 +5,7 @@
 
 import {describe} from '@gsa/testing';
 import {testIcon} from 'web/components/icon/Testing';
-
-import TrendMoreIcon from '../TrendMoreIcon';
+import TrendMoreIcon from 'web/components/icon/TrendMoreIcon';
 
 describe('TrendMoreIcon component tests', () => {
   testIcon(TrendMoreIcon);

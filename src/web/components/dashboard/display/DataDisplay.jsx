@@ -9,14 +9,14 @@ import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
 import styled from 'styled-components';
+import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
+import Display, {DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH} from 'web/components/dashboard/display/Display';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import DataDisplayIcons from './DataDisplayIcons';
-import Display, {DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH} from './Display';
 
 const ownProps = [
   'title',

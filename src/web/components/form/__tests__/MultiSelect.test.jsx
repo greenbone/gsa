@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import MultiSelect from 'web/components/form/MultiSelect';
 import {
   clickElement,
   getMultiSelectElement,
@@ -12,7 +13,6 @@ import {
 } from 'web/components/testing';
 import {render, screen, userEvent, within} from 'web/utils/Testing';
 
-import MultiSelect from '../MultiSelect';
 
 describe('MultiSelect tests', () => {
   test('should render', () => {

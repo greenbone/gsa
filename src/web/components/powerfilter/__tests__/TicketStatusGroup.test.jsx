@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import TicketStatusGroup from 'web/components/powerfilter/TicketStatusGroup';
 import {
   clickElement,
   getElementOrDocument,
@@ -14,7 +15,6 @@ import {
 } from 'web/components/testing';
 import {render} from 'web/utils/Testing';
 
-import TicketStatusGroup from '../TicketStatusGroup';
 
 const getTitle = element => {
   element = getElementOrDocument(element);

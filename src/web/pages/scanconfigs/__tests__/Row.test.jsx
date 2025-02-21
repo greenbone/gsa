@@ -9,10 +9,10 @@ import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
+import Row from 'web/pages/scanconfigs/Row';
 import {setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import Row from '../Row';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

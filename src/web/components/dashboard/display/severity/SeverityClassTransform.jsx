@@ -6,6 +6,7 @@
 import {parseSeverity, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
+import {totalCount, percent, riskFactorColorScale} from 'web/components/dashboard/display/Utils';
 import {
   NA_VALUE,
   resultSeverityRiskFactor,
@@ -23,7 +24,6 @@ import {
   ERROR_VALUE,
 } from 'web/utils/Severity';
 
-import {totalCount, percent, riskFactorColorScale} from '../Utils';
 
 export const severityClassDataRow = row => [row.label, row.value];
 

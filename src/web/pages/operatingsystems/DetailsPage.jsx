@@ -37,6 +37,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import OsComponent from 'web/pages/operatingsystems/Component';
 import {
   selector as osSelector,
   loadEntity,
@@ -48,7 +49,6 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import OsComponent from './Component';
 
 let ToolBarIcons = ({
   capabilities,

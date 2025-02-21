@@ -16,13 +16,13 @@ import {
   getTable,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import ScanConfigsPage, {ToolBarIcons} from 'web/pages/scanconfigs/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/Testing';
 
-import ScanConfigsPage, {ToolBarIcons} from '../ListPage';
 
 const config = ScanConfig.fromElement({
   _id: '12345',

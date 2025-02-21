@@ -23,9 +23,9 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
+import Trend from 'web/pages/scanconfigs/Trend';
 import PropTypes from 'web/utils/PropTypes';
 
-import Trend from './Trend';
 
 const WHOLE_SELECTION_FAMILIES = [
   'AIX Local Security Checks',

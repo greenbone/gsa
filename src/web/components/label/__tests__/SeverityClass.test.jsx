@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import SeverityClassLabel from 'web/components/label/SeverityClass';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import SeverityClassLabel from '../SeverityClass';
 
 describe('SeverityClassLabel tests', () => {
   test('should render', () => {

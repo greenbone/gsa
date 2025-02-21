@@ -9,6 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/Component';
+import RoleDialog from 'web/pages/roles/Dialog';
 import {
   loadAllEntities as loadAllGroups,
   selector as groupSelector,
@@ -22,7 +23,6 @@ import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
-import RoleDialog from './Dialog';
 
 class RoleComponent extends React.Component {
   constructor(...args) {

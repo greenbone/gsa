@@ -4,8 +4,7 @@
  */
 
 import {forwardRef} from 'react';
-
-import NumberField from './NumberField';
+import NumberField from 'web/components/form/NumberField';
 
 const Spinner = forwardRef((props, ref) => {
   return <NumberField {...props} ref={ref} hideControls={false} />;

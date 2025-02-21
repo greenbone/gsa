@@ -5,8 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {pageFilter} from 'web/store/pages/actions';
-
-import reducer from '../reducers';
+import reducer from 'web/store/pages/reducers';
 
 describe('page reducers tests', () => {
   test('should create initial state', () => {

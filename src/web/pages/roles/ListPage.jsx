@@ -14,15 +14,14 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import RoleComponent from 'web/pages/roles/Component';
+import RolesFilterDialog from 'web/pages/roles/FilterDialog';
+import Table from 'web/pages/roles/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/roles';
 import PropTypes from 'web/utils/PropTypes';
-
-import RoleComponent from './Component';
-import RolesFilterDialog from './FilterDialog';
-import Table from './Table';
 
 const ToolBarIcons = ({onRoleCreateClick}) => {
   const capabilities = useCapabilities();

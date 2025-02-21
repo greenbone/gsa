@@ -14,17 +14,16 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import NoteComponent from 'web/pages/notes/Component';
+import NotesDashboard, {NOTES_DASHBOARD_ID} from 'web/pages/notes/dashboard';
+import FilterDialog from 'web/pages/notes/FilterDialog';
+import NotesTable from 'web/pages/notes/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/notes';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import NoteComponent from './Component';
-import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
-import FilterDialog from './FilterDialog';
-import NotesTable from './Table';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onNoteCreateClick}) => (

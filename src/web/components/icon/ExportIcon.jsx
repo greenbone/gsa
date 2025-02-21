@@ -7,10 +7,10 @@ import _ from 'gmp/locale';
 import {FileOutput as Icon} from 'lucide-react';
 import React from 'react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
+import withSvgIcon from 'web/components/icon/withSvgIcon';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 
-import withSvgIcon from './withSvgIcon';
 
 const ExportSvgIcon = withSvgIcon()(props => (
   <IconWithStrokeWidth IconComponent={Icon} {...props} />

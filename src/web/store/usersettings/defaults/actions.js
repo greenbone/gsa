@@ -5,8 +5,7 @@
 
 import {transformSettingName} from 'gmp/commands/users';
 import {isDefined} from 'gmp/utils/identity';
-
-import {getUserSettingsDefaults} from './selectors';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 export const USER_SETTINGS_DEFAULTS_LOADING_REQUEST =
   'USER_SETTINGS_DEFAULTS_LOADING_REQUEST';

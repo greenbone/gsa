@@ -12,10 +12,9 @@ import {createEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
+import CertBundDetails from 'web/pages/certbund/Details';
+import CertBundRow from 'web/pages/certbund/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import CertBundDetails from './Details';
-import CertBundRow from './Row';
 
 const Header = ({
   actionsColumn,

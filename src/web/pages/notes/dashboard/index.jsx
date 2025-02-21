@@ -4,17 +4,16 @@
  */
 
 import React from 'react';
-
+import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   NotesActiveDaysDisplay,
   NotesActiveDaysTableDisplay,
-} from './ActiveDaysDisplay';
-import {NotesCreatedDisplay, NotesCreatedTableDisplay} from './CreatedDisplay';
+} from 'web/pages/notes/dashboard/ActiveDaysDisplay';
+import {NotesCreatedDisplay, NotesCreatedTableDisplay} from 'web/pages/notes/dashboard/CreatedDisplay';
 import {
   NotesWordCloudDisplay,
   NotesWordCloudTableDisplay,
-} from './WordCloudDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/notes/dashboard/WordCloudDisplay';
 
 export const NOTES_DASHBOARD_ID = 'ce7b121-c609-47b0-ab57-fd020a0336f4a';
 

@@ -5,9 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import usePagination from 'web/hooks/usePagination';
 import {fireEvent, render, screen} from 'web/utils/Testing';
 
-import usePagination from '../usePagination';
 
 const TestComponent = ({filter, counts, changeFilter}) => {
   const [first, last, next, previous] = usePagination(

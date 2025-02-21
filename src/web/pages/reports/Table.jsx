@@ -12,9 +12,9 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';
+import ReportRow from 'web/pages/reports/Row';
 import PropTypes from 'web/utils/PropTypes';
 
-import ReportRow from './Row';
 
 const Header = ({
   actionsColumn,

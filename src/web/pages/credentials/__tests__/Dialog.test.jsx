@@ -16,9 +16,9 @@ import {
   getSelectElement,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
+import CredentialsDialog from 'web/pages/credentials/Dialog';
 import {rendererWith, fireEvent, screen, render} from 'web/utils/Testing';
 
-import CredentialsDialog from '../Dialog';
 
 let handleSave;
 let handleClose;

@@ -15,14 +15,14 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import PoliciesComponent from 'web/pages/policies/Component';
+import Table from 'web/pages/policies/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/policies';
 import PropTypes from 'web/utils/PropTypes';
 
-import PoliciesComponent from './Component';
-import Table from './Table';
 
 export const ToolBarIcons = ({onPolicyCreateClick, onPolicyImportClick}) => {
   const capabilities = useCapabilities();

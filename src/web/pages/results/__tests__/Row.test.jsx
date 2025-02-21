@@ -5,9 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Result from 'gmp/models/result';
+import Row from 'web/pages/results/Row';
 import {rendererWith} from 'web/utils/Testing';
 
-import Row from '../Row';
 
 const gmp = {settings: {enableEPSS: true}};
 

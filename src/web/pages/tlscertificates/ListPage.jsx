@@ -13,18 +13,17 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import TlsCertificateComponent from 'web/pages/tlscertificates/Component';
+import TlsCertificatesDashboard, {
+  TLS_CERTIFICATES_DASHBOARD_ID,
+} from 'web/pages/tlscertificates/dashboard';
+import TlsCertificatesFilterDialog from 'web/pages/tlscertificates/FilterDialog';
+import TlsCertificateTable from 'web/pages/tlscertificates/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tlscertificates';
 import PropTypes from 'web/utils/PropTypes';
-
-import TlsCertificateComponent from './Component';
-import TlsCertificatesDashboard, {
-  TLS_CERTIFICATES_DASHBOARD_ID,
-} from './dashboard';
-import TlsCertificatesFilterDialog from './FilterDialog';
-import TlsCertificateTable from './Table';
 
 const ToolBarIcons = () => {
   const [_] = useTranslation();

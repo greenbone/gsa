@@ -13,9 +13,9 @@ import TableRow from 'web/components/table/Row';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';
 import useTranslation from 'web/hooks/useTranslation';
+import AuditReportRow from 'web/pages/reports/AuditReportRow';
 import PropTypes from 'web/utils/PropTypes';
 
-import AuditReportRow from './AuditReportRow';
 
 const Header = ({
   actionsColumn,

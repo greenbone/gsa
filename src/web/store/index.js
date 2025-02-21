@@ -11,8 +11,7 @@ import Rejection from 'gmp/http/rejection';
 import {isDate} from 'gmp/models/date';
 import {isEvent} from 'gmp/models/event';
 import logger from 'redux-logger';
-
-import rootReducer from './reducers';
+import rootReducer from 'web/store/reducers';
 
 const isError = obj => obj instanceof Error || obj instanceof Rejection;
 

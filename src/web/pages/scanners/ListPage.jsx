@@ -15,15 +15,14 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import ScannerComponent from 'web/pages/scanners/Component';
+import ScannersFilterDialog from 'web/pages/scanners/FilterDialog';
+import ScannersTable from 'web/pages/scanners/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
 import PropTypes from 'web/utils/PropTypes';
-
-import ScannerComponent from './Component';
-import ScannersFilterDialog from './FilterDialog';
-import ScannersTable from './Table';
 
 const ToolBarIcons = ({onScannerCreateClick}) => {
   const gmp = useGmp();

@@ -11,11 +11,11 @@ import React from 'react';
 import EntityComponent from 'web/entity/Component';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
 import PortListDialog from 'web/pages/portlists/Dialog';
+import TargetDialog from 'web/pages/targets/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
-import TargetDialog from './Dialog';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 

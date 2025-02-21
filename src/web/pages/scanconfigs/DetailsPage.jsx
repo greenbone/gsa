@@ -41,6 +41,9 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import ScanConfigComponent from 'web/pages/scanconfigs/Component';
+import ScanConfigDetails from 'web/pages/scanconfigs/Details';
+import Trend from 'web/pages/scanconfigs/Trend';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -49,9 +52,6 @@ import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import ScanConfigComponent from './Component';
-import ScanConfigDetails from './Details';
-import Trend from './Trend';
 
 export const ToolBarIcons = withCapabilities(
   ({

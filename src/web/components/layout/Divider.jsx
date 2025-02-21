@@ -5,9 +5,9 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 
-import Layout from './Layout';
 
 const DEFAULT_MARGIN = '5px';
 

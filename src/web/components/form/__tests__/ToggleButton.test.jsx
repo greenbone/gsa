@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import ToggleButton from 'web/components/form/ToggleButton';
 import {render, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import ToggleButton from '../ToggleButton';
 
 describe('ToggleButton tests', () => {
   test('should render', () => {

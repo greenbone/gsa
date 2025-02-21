@@ -31,6 +31,8 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import ScheduleComponent from 'web/pages/schedules/Component';
+import ScheduleDetails from 'web/pages/schedules/Details';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -38,8 +40,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/schedules';
 import PropTypes from 'web/utils/PropTypes';
 
-import ScheduleComponent from './Component';
-import ScheduleDetails from './Details';
 
 export const ToolBarIcons = ({
   entity,

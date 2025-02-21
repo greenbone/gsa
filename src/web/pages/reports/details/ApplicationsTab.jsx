@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import ApplicationsTable from 'web/pages/reports/details/ApplicationsTable';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import PropTypes from 'web/utils/PropTypes';
 import {
   makeCompareNumber,
@@ -11,8 +13,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-import ApplicationsTable from './ApplicationsTable';
-import ReportEntitiesContainer from './ReportEntitiesContainer';
 
 const appsSortFunctions = {
   name: makeCompareString('name'),

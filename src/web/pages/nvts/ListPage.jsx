@@ -12,15 +12,14 @@ import NvtIcon from 'web/components/icon/NvtIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import NvtsDashboard, {NVTS_DASHBOARD_ID} from 'web/pages/nvts/dashboard';
+import NvtsFilterDialog from 'web/pages/nvts/FilterDialog';
+import NvtsTable from 'web/pages/nvts/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/nvts';
 import PropTypes from 'web/utils/PropTypes';
-
-import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard';
-import NvtsFilterDialog from './FilterDialog';
-import NvtsTable from './Table';
 
 export const ToolBarIcons = () => (
   <ManualIcon

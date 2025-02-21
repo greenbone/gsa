@@ -9,9 +9,9 @@ import {
   createLoadAllEntities,
   createLoadEntities,
   createLoadEntity,
-} from './actions';
-import {createReducer} from './reducers';
-import {createSelector} from './selectors';
+} from 'web/store/entities/utils/actions';
+import {createReducer} from 'web/store/entities/utils/reducers';
+import {createSelector} from 'web/store/entities/utils/selectors';
 
 export const createAll = entityType => {
   const selector = createSelector(entityType);

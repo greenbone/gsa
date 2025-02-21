@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import TagIcon from 'web/components/icon/TagIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import TagIcon from '../TagIcon';
 
 describe('TagIcon component tests', () => {
   testIcon(TagIcon);

@@ -8,11 +8,11 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
+import Detailspage, {ToolBarIcons} from 'web/pages/credentials/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/credentials';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, screen, fireEvent} from 'web/utils/Testing';
 
-import Detailspage, {ToolBarIcons} from '../DetailsPage';
 
 let getCredential;
 let getEntities;

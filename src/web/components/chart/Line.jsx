@@ -10,6 +10,10 @@ import {isDefined} from 'gmp/utils/identity';
 import memoize from 'memoize-one';
 import React from 'react';
 import styled from 'styled-components';
+import Axis from 'web/components/chart/Axis';
+import Group from 'web/components/chart/Group';
+import Legend, {Item, Label, Line as LegendLine} from 'web/components/chart/Legend';
+import Svg from 'web/components/chart/Svg';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
@@ -17,10 +21,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {setRef} from 'web/utils/Render';
 import Theme from 'web/utils/Theme';
 
-import Axis from './Axis';
-import Group from './Group';
-import Legend, {Item, Label, Line as LegendLine} from './Legend';
-import Svg from './Svg';
 
 const LEGEND_MARGIN = 20;
 

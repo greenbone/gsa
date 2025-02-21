@@ -5,9 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {setLocale} from 'gmp/locale/lang';
+import ManualLink from 'web/components/link/ManualLink';
 import {rendererWith} from 'web/utils/Testing';
 
-import ManualLink from '../ManualLink';
 
 const createGmp = (settings = {}) => ({
   settings: {

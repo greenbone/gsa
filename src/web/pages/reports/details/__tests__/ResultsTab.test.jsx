@@ -8,13 +8,13 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import React from 'react';
+import ResultsTab from 'web/pages/reports/details/ResultsTab';
 import {entitiesLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, wait} from 'web/utils/Testing';
 
-import ResultsTab from '../ResultsTab';
 
 const reloadInterval = 1;
 const manualUrl = 'test/';

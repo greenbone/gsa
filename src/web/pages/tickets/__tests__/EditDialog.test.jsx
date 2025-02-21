@@ -14,9 +14,9 @@ import {
   queryAllSelectElements,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
+import EditTicketDialog from 'web/pages/tickets/EditDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import EditTicketDialog from '../EditDialog';
 
 const u1 = User.fromElement({
   _id: 'u1',

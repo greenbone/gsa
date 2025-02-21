@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 import Toolbar from 'web/components/bar/Toolbar';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Layout from 'web/components/layout/Layout';
+import Loading from 'web/components/loading/Loading';
 import PowerFilter from 'web/components/powerfilter/PowerFilter';
 import Section from 'web/components/section/Section';
 import {loadAllEntities, selector} from 'web/store/entities/filters';
@@ -18,7 +19,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import Loading from '../components/loading/Loading';
 
 const exclude_props = [
   'children',

@@ -49,6 +49,10 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
+import NoteComponent from 'web/pages/notes/Component';
+import OverrideComponent from 'web/pages/overrides/Component';
+import ResultDetails from 'web/pages/results/Details';
+import TicketComponent from 'web/pages/tickets/Component';
 import {loadEntity, selector} from 'web/store/entities/results';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
@@ -58,10 +62,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 
-import ResultDetails from './Details';
-import NoteComponent from '../notes/Component';
-import OverrideComponent from '../overrides/Component';
-import TicketComponent from '../tickets/Component';
 
 export const ToolBarIcons = ({
   entity,

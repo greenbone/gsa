@@ -11,6 +11,8 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/Component';
+import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
+import EditTicketDialog from 'web/pages/tickets/EditDialog';
 import {
   loadEntities as loadUsers,
   selector as usersSelector,
@@ -19,8 +21,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import CreateTicketDialog from './CreateDialog';
-import EditTicketDialog from './EditDialog';
 
 class TicketComponent extends React.Component {
   constructor(...args) {

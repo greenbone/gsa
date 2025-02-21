@@ -7,10 +7,10 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import EntityComponent from 'web/entity/Component';
+import UserDialog from 'web/pages/users/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import UserDialog from './Dialog';
 
 class UserComponent extends React.Component {
   constructor(...args) {

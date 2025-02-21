@@ -5,10 +5,9 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import DataTable from 'web/components/dashboard/display/DataTable';
 import PropTypes from 'web/utils/PropTypes';
-
-import DataDisplay from './DataDisplay';
-import DataTable from './DataTable';
 
 const DataTableDisplay = ({children, dataRow, dataTitles, ...props}) => (
   <DataDisplay

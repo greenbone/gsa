@@ -7,10 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import Row from 'web/pages/tasks/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import Row from '../Row';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

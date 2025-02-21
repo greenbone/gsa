@@ -15,11 +15,11 @@ import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {ReportsHighResultsLoader} from 'web/pages/reports/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
-import {ReportsHighResultsLoader} from './Loaders';
 
 const transformHighResults = (data = {}) => {
   const {groups = []} = data;

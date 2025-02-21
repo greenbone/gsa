@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {shouldUpdate} from '../Update';
+import {shouldUpdate} from 'web/components/chart/utils/Update';
 
 describe('shouldUpdate tests', () => {
   test('should update if data identity has changed', () => {

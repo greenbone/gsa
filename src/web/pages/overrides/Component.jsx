@@ -21,6 +21,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/Component';
+import OverrideDialog from 'web/pages/overrides/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import {
   FALSE_POSITIVE_VALUE,
@@ -31,7 +32,6 @@ import {
 } from 'web/utils/Severity';
 import withGmp from 'web/utils/withGmp';
 
-import OverrideDialog from './Dialog';
 
 const SEVERITIES_LIST = [
   HIGH_VALUE,

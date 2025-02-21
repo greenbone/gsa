@@ -17,6 +17,10 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import UserComponent from 'web/pages/users/Component';
+import ConfirmDeleteDialog from 'web/pages/users/ConfirmDeleteDialog';
+import UsersFilterDialog from 'web/pages/users/FilterDialog';
+import UsersTable from 'web/pages/users/Table';
 import {
   loadEntities,
   loadAllEntities,
@@ -27,10 +31,6 @@ import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 import withGmp from 'web/utils/withGmp';
 
-import UserComponent from './Component';
-import ConfirmDeleteDialog from './ConfirmDeleteDialog';
-import UsersFilterDialog from './FilterDialog';
-import UsersTable from './Table';
 
 const ToolBarIcons = ({onUserCreateClick}) => {
   const capabilities = useCapabilities();

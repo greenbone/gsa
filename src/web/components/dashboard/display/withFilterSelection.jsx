@@ -5,9 +5,9 @@
 
 import hoistStatics from 'hoist-non-react-statics';
 import React from 'react';
+import FilterSelection from 'web/components/dashboard/display/FilterSelection';
 import PropTypes from 'web/utils/PropTypes';
 
-import FilterSelection from './FilterSelection';
 
 const withFilterSelection =
   ({filtersFilter}) =>

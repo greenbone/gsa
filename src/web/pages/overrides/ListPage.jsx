@@ -14,17 +14,16 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import OverrideComponent from 'web/pages/overrides/Component';
+import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from 'web/pages/overrides/dashboard';
+import FilterDialog from 'web/pages/overrides/FilterDialog';
+import OverridesTable from 'web/pages/overrides/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/overrides';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import OverrideComponent from './Component';
-import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard';
-import FilterDialog from './FilterDialog';
-import OverridesTable from './Table';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onOverrideCreateClick}) => (

@@ -4,10 +4,10 @@
  */
 
 import React from 'react';
+import HelpIcon from 'web/components/icon/HelpIcon';
 import ManualLink from 'web/components/link/ManualLink';
 import PropTypes from 'web/utils/PropTypes';
 
-import HelpIcon from './HelpIcon';
 
 const ManualIcon = ({anchor, page, searchTerm, ...props}) => {
   return (

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import Comment from 'web/components/comment/Comment';
 import {render} from 'web/utils/Testing';
 
-import Comment from '../Comment';
 
 describe('Comment tests', () => {
   test('should render children', () => {

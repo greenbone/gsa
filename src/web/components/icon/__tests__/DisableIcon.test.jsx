@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import DisableIcon from 'web/components/icon/DisableIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import DisableIcon from '../DisableIcon';
 
 describe('DisableIcon component tests', () => {
   testIcon(DisableIcon);

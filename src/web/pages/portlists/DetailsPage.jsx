@@ -31,6 +31,9 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import PortListComponent from 'web/pages/portlists/Component';
+import PortListDetails from 'web/pages/portlists/Details';
+import PortRangesTable from 'web/pages/portlists/portrangestable';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -38,9 +41,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/portlists';
 import PropTypes from 'web/utils/PropTypes';
 
-import PortListComponent from './Component';
-import PortListDetails from './Details';
-import PortRangesTable from './portrangestable';
 
 const ToolBarIcons = ({
   entity,

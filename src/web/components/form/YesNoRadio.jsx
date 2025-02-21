@@ -6,10 +6,10 @@
 import _ from 'gmp/locale';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import React from 'react';
+import Radio from 'web/components/form/Radio';
 import Row from 'web/components/layout/Row';
 import PropTypes from 'web/utils/PropTypes';
 
-import Radio from './Radio';
 
 const YesNoRadio = ({
   convert = parseYesNo,

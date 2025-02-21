@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {combineReducers} from 'web/store/utils';
-
 import {
   DASHBOARD_SETTINGS_LOADING_ERROR,
   DASHBOARD_SETTINGS_LOADING_REQUEST,
@@ -12,7 +10,9 @@ import {
   DASHBOARD_SETTINGS_SAVING_REQUEST,
   DASHBOARD_SETTINGS_SET_DEFAULTS,
   DASHBOARD_SETTINGS_RESET_REQUEST,
-} from './actions';
+} from 'web/store/dashboard/settings/actions';
+import {combineReducers} from 'web/store/utils';
+
 
 const defaults = (state = {}, action) => {
   switch (action.type) {

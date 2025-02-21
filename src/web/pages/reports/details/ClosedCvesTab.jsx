@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import ClosedCvesTable from 'web/pages/reports/details/ClosedCvesTable';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import PropTypes from 'web/utils/PropTypes';
 import {
   makeCompareIp,
@@ -11,8 +13,6 @@ import {
   makeCompareSeverity,
 } from 'web/utils/Sort';
 
-import ClosedCvesTable from './ClosedCvesTable';
-import ReportEntitiesContainer from './ReportEntitiesContainer';
 
 const closedCvesSortFunctions = {
   cve: makeCompareString('cveId'),

@@ -12,10 +12,9 @@ import TableRow from 'web/components/table/Row';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
+import PortListDetails from 'web/pages/portlists/Details';
+import Row from 'web/pages/portlists/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import PortListDetails from './Details';
-import Row from './Row';
 
 const Header = ({
   actionsColumn,

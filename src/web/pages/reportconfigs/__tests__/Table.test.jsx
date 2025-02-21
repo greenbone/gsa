@@ -7,10 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/reportconfig';
+import Table from 'web/pages/reportconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import Table from '../Table';
 
 const config = ReportConfig.fromElement({
   _id: '12345',

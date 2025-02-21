@@ -5,12 +5,11 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-
 import {
   TlsCertificatesModifiedDisplay,
   TlsCertificatesModifiedTableDisplay,
-} from './ModifiedDisplay';
-import {TimeStatusDisplay, TimeStatusTableDisplay} from './TimeStatusDisplay';
+} from 'web/pages/tlscertificates/dashboard/ModifiedDisplay';
+import {TimeStatusDisplay, TimeStatusTableDisplay} from 'web/pages/tlscertificates/dashboard/TimeStatusDisplay';
 
 export const TLS_CERTIFICATES_DASHBOARD_ID =
   '9b62bf16-bf90-11e9-ad97-28d24461215b';

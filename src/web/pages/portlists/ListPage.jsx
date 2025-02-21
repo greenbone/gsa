@@ -31,15 +31,15 @@ import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
+import PortListComponent from 'web/pages/portlists/Component';
+import PortListsFilterDialog from 'web/pages/portlists/FilterDialog';
+import PortListsTable from 'web/pages/portlists/Table';
 import {loadEntities, selector} from 'web/store/entities/portlists';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 
-import PortListComponent from './Component';
-import PortListsFilterDialog from './FilterDialog';
-import PortListsTable from './Table';
 
 const ToolBarIcons = ({onPortListCreateClick, onPortListImportClick}) => {
   const capabilities = useCapabilities();

@@ -21,9 +21,9 @@ import {
 } from 'web/components/dashboard/display/Utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {NvtsQodTypeLoader} from 'web/pages/nvts/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 
-import {NvtsQodTypeLoader} from './Loaders';
 
 const transformQodTypeData = (data = {}) => {
   const {groups = []} = data;

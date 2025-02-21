@@ -8,10 +8,10 @@ import React from 'react';
 import styled from 'styled-components';
 import XIcon from 'web/components/icon/XIcon';
 import Layout from 'web/components/layout/Layout';
+import Button from 'web/components/panel/Button';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import Button from './Button';
 
 const Panel = styled(Layout)`
   background-color: ${Theme.white};

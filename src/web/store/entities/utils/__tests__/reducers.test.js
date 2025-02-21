@@ -7,13 +7,12 @@ import {describe, test, expect} from '@gsa/testing';
 import Rejection from 'gmp/http/rejection';
 import Filter from 'gmp/models/filter';
 import {isFunction} from 'gmp/utils/identity';
-import {filterIdentifier} from 'web/store/utils';
-
 import {
   createEntitiesLoadingActions,
   createEntityLoadingActions,
-} from '../actions';
-import {createReducer} from '../reducers';
+} from 'web/store/entities/utils/actions';
+import {createReducer} from 'web/store/entities/utils/reducers';
+import {filterIdentifier} from 'web/store/utils';
 
 describe('entities reducers test', () => {
   test('should create a reducer function', () => {

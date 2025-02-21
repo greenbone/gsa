@@ -7,10 +7,10 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import EntityComponent from 'web/entity/Component';
+import GroupDialog from 'web/pages/groups/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import GroupDialog from './Dialog';
 
 class GroupComponent extends React.Component {
   constructor(...args) {

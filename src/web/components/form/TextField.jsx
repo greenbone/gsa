@@ -6,9 +6,9 @@
 import {Input} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useValueChange from 'web/components/form/useValueChange';
 import PropTypes from 'web/utils/PropTypes';
 
-import useValueChange from './useValueChange';
 
 const TextField = ({
   autoComplete,

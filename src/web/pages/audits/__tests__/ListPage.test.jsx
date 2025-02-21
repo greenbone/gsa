@@ -15,13 +15,13 @@ import {
   getTableBody,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import AuditPage, {ToolBarIcons} from 'web/pages/audits/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/Testing';
 
-import AuditPage, {ToolBarIcons} from '../ListPage';
 
 const lastReport = {
   report: {

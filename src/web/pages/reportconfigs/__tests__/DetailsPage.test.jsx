@@ -8,12 +8,12 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/reportconfig';
+import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
+import DetailsPage from 'web/pages/reportconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/reportconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import {mockReportConfig} from '../__mocks__/MockReportConfig';
-import DetailsPage from '../DetailsPage';
 
 const entityType = 'reportconfig';
 const reloadInterval = 1;

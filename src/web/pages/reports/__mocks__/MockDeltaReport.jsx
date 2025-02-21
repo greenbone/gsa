@@ -5,8 +5,7 @@
 
 import {setLocale} from 'gmp/locale/lang';
 import Report from 'gmp/models/report';
-
-import {host1, host2} from './MockReport';
+import {host1, host2} from 'web/pages/reports/__mocks__/MockReport';
 
 setLocale('en');
 
