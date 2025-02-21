@@ -37,6 +37,13 @@ export const FALSE_POSITIVE_VALUE = -1;
 export const DEBUG_VALUE = -2;
 export const ERROR_VALUE = -3;
 
+/**
+ * Determines the severity risk factor based on the given value.
+ *
+ * @param {number} value - The value to evaluate for severity risk.
+ * @returns {string} - The severity risk factor, which can be one of the following:
+ *                     LOG, LOW, MEDIUM, HIGH, CRITICAL, or NA.
+ */
 export const severityRiskFactor = value => {
   const {low, medium, high, critical} = getSeverityLevels();
 
