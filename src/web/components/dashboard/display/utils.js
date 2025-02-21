@@ -20,6 +20,12 @@ import {
 } from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
+/**
+ * Calculates the total count from an array of groups.
+ *
+ * @param {Array} groups - An array of group objects, each containing a `count` property.
+ * @returns {number} The total count of all groups. Returns 0 if the array is empty.
+ */
 export const totalCount = (groups = []) => {
   if (groups.length === 0) {
     return 0;
@@ -29,9 +35,21 @@ export const totalCount = (groups = []) => {
     .reduce((prev, cur) => prev + cur);
 };
 
+/**
+ * Calculates the percentage of a count relative to a sum.
+ *
+ * @param {number|string} count - The count value to be converted to a percentage.
+ * @param {number} sum - The total sum value.
+ * @returns {string} The percentage value as a string with one decimal place.
+ */
 export const percent = (count, sum) =>
   ((parseInt(count) / sum) * 100).toFixed(1);
 
+/**
+ * Generates a random hex color code.
+ *
+ * @returns {string} A random hex color code in the format '#RRGGBB'.
+ */
 export const randomColor = () => {
   return '#' + Math.floor(Math.random() * 0xffffff).toString(16);
 };
