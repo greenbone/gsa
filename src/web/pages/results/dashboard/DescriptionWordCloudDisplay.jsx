@@ -14,7 +14,7 @@ import WordCloudChart from 'web/components/chart/WordCloud';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
-import {randomColor} from 'web/components/dashboard/display/Utils';
+import {randomColor} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {ResultsDescriptionWordCountLoader} from 'web/pages/results/dashboard/Loaders';
