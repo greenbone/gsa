@@ -28,7 +28,7 @@ describe('split function tests', () => {
   });
 });
 
-describe('capatalizeFirstLetter function tests', () => {
+describe('capitalizeFirstLetter function tests', () => {
   test('should capitalize first letter', () => {
     expect(capitalizeFirstLetter('foo')).toEqual('Foo');
     expect(capitalizeFirstLetter('Foo')).toEqual('Foo');
