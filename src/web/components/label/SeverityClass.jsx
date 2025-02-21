@@ -8,29 +8,29 @@ import createLabel from 'web/components/label/Label';
 import Theme from 'web/utils/Theme';
 
 const HighLabel = createLabel(
-  Theme.errorRed,
-  Theme.errorRed,
+  Theme.severityClassHigh,
+  Theme.severityClassHigh,
   Theme.white,
   'severity-class-High',
   _l('High'),
 );
 const MediumLabel = createLabel(
-  Theme.severityWarnYellow,
-  Theme.severityWarnYellow,
+  Theme.severityClassMedium,
+  Theme.severityClassMedium,
   Theme.black,
   'severity-class-Medium',
   _l('Medium'),
 );
 const LowLabel = createLabel(
-  Theme.severityLowBlue,
-  Theme.severityLowBlue,
+  Theme.severityClassLow,
+  Theme.severityClassLow,
   Theme.white,
   'severity-class-Low',
   _l('Low'),
 );
 const LogLabel = createLabel(
-  Theme.mediumGray,
-  Theme.mediumGray,
+  Theme.severityClassLog,
+  Theme.severityClassLog,
   Theme.white,
   'severity-class-Log',
   _l('Log'),

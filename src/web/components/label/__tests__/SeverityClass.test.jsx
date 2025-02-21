@@ -19,8 +19,11 @@ describe('SeverityClassLabel tests', () => {
   test('should render HighLabel', () => {
     const {element} = render(<SeverityClassLabel.High />);
 
-    expect(element).toHaveStyleRule('background-color', Theme.errorRed);
-    expect(element).toHaveStyleRule('border-color', Theme.errorRed);
+    expect(element).toHaveStyleRule(
+      'background-color',
+      Theme.severityClassHigh,
+    );
+    expect(element).toHaveStyleRule('border-color', Theme.severityClassHigh);
     expect(element).toHaveStyleRule('color', Theme.white);
     expect(element).toHaveTextContent('High');
   });
@@ -30,9 +33,9 @@ describe('SeverityClassLabel tests', () => {
 
     expect(element).toHaveStyleRule(
       'background-color',
-      Theme.severityWarnYellow,
+      Theme.severityClassMedium,
     );
-    expect(element).toHaveStyleRule('border-color', Theme.severityWarnYellow);
+    expect(element).toHaveStyleRule('border-color', Theme.severityClassMedium);
     expect(element).toHaveStyleRule('color', Theme.black);
     expect(element).toHaveTextContent('Medium');
   });
@@ -40,8 +43,8 @@ describe('SeverityClassLabel tests', () => {
   test('should render LowLabel', () => {
     const {element} = render(<SeverityClassLabel.Low />);
 
-    expect(element).toHaveStyleRule('background-color', Theme.severityLowBlue);
-    expect(element).toHaveStyleRule('border-color', Theme.severityLowBlue);
+    expect(element).toHaveStyleRule('background-color', Theme.severityClassLow);
+    expect(element).toHaveStyleRule('border-color', Theme.severityClassLow);
     expect(element).toHaveStyleRule('color', Theme.white);
     expect(element).toHaveTextContent('Low');
   });
@@ -49,8 +52,8 @@ describe('SeverityClassLabel tests', () => {
   test('should render LogLabel', () => {
     const {element} = render(<SeverityClassLabel.Log />);
 
-    expect(element).toHaveStyleRule('background-color', Theme.mediumGray);
-    expect(element).toHaveStyleRule('border-color', Theme.mediumGray);
+    expect(element).toHaveStyleRule('background-color', Theme.severityClassLog);
+    expect(element).toHaveStyleRule('border-color', Theme.severityClassLog);
     expect(element).toHaveStyleRule('color', Theme.white);
     expect(element).toHaveTextContent('Log');
   });
