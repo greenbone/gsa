@@ -30,7 +30,7 @@ export const shorten = (text = '', length = 60) => {
     return text;
   }
 
-  return text.substr(0, length) + '...';
+  return text.substring(0, length) + '...';
 };
 
 /**
