@@ -18,7 +18,7 @@ import {
   percent,
   qodTypeColorScale,
   QOD_TYPES,
-} from 'web/components/dashboard/display/Utils';
+} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NvtsQodTypeLoader} from 'web/pages/nvts/dashboard/Loaders';

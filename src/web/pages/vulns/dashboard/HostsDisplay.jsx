@@ -17,7 +17,7 @@ import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay'
 import {
   vulnsByHostsColorScale,
   percent,
-} from 'web/components/dashboard/display/Utils';
+} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {VulnsHostsLoader} from 'web/pages/vulns/dashboard/Loaders';

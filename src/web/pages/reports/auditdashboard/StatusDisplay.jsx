@@ -14,7 +14,7 @@ import {
   complianceColorScale,
   totalCount,
   percent,
-} from 'web/components/dashboard/display/Utils';
+} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {ReportCompianceLoader} from 'web/pages/reports/auditdashboard/Loaders';
 

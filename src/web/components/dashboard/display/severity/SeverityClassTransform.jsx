@@ -6,7 +6,11 @@
 import {parseSeverity, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
-import {totalCount, percent, riskFactorColorScale} from 'web/components/dashboard/display/Utils';
+import {
+  totalCount,
+  percent,
+  riskFactorColorScale,
+} from 'web/components/dashboard/utils';
 import {
   NA_VALUE,
   resultSeverityRiskFactor,
@@ -22,8 +26,10 @@ import {
   LOG_VALUE,
   FALSE_POSITIVE_VALUE,
   ERROR_VALUE,
+  CRITICAL,
+  severityRiskFactorToValue,
+  CRITICAL_VALUE,
 } from 'web/utils/severity';
-
 
 export const severityClassDataRow = row => [row.label, row.value];
 
@@ -54,79 +60,93 @@ const transformSeverityData = (data = {}) => {
     return allSeverityClasses;
   }, {});
 
-  const {high, medium, low} = getSeverityLevels();
+  const {critical, high, medium, low} = getSeverityLevels();
 
-  const tdata = Object.values(severityClasses).map(severityClass => {
-    const {count, riskFactor} = severityClass;
-    const perc = percent(count, sum);
-    const label = translateRiskFactor(riskFactor);
+  const tdata = Object.values(severityClasses)
+    .toSorted(
+      (a, b) =>
+        severityRiskFactorToValue(a.riskFactor) -
+        severityRiskFactorToValue(b.riskFactor),
+    )
+    .map(severityClass => {
+      const {count, riskFactor} = severityClass;
+      const perc = percent(count, sum);
+      const label = translateRiskFactor(riskFactor);
 
-    let toolTip;
-    let limit;
-    let filterValue;
+      let toolTip;
+      let limit;
+      let filterValue;
 
-    switch (riskFactor) {
-      case HIGH:
-        toolTip = `${label} (${severityValue(high)} - 10.0)`;
-        filterValue = {
-          start: severityValue(high - 0.1),
-          end: 10,
-        };
-        break;
-      case MEDIUM:
-        limit = severityValue(high - 0.1);
-        toolTip = `${label} (${severityValue(medium)} - ${limit})`;
-        filterValue = {
-          start: severityValue(medium - 0.1),
-          end: high,
-        };
-        break;
-      case LOW:
-        limit = severityValue(medium - 0.1);
-        toolTip = `${label} (${severityValue(low)} - ${limit})`;
-        filterValue = {
-          start: low - 0.05, // to include 0.1 but exclude 0
-          end: medium,
-        };
-        break;
-      case LOG:
-        toolTip = `${label}`;
-        filterValue = {
-          start: LOG_VALUE,
-        };
-        break;
-      case FALSE_POSITIVE:
-        toolTip = `${label}`;
-        filterValue = {
-          start: FALSE_POSITIVE_VALUE,
-        };
-        break;
-      case ERROR:
-        toolTip = `${label}`;
-        filterValue = {
-          start: ERROR_VALUE,
-        };
-        break;
-      case NA:
-        toolTip = `${label}`;
-        filterValue = {
-          start: NA_VALUE,
-        };
-        break;
-      default:
-        break;
-    }
+      switch (riskFactor) {
+        case CRITICAL:
+          limit = severityValue(CRITICAL_VALUE);
+          toolTip = `${label} (${severityValue(critical)} - ${limit})`;
+          filterValue = {
+            start: severityValue(critical - 0.1),
+          };
+          break;
+        case HIGH:
+          limit = severityValue(critical - 0.1);
+          toolTip = `${label} (${severityValue(high)} - ${limit})`;
+          filterValue = {
+            start: severityValue(high - 0.1),
+            end: critical,
+          };
+          break;
+        case MEDIUM:
+          limit = severityValue(high - 0.1);
+          toolTip = `${label} (${severityValue(medium)} - ${limit})`;
+          filterValue = {
+            start: severityValue(medium - 0.1),
+            end: high,
+          };
+          break;
+        case LOW:
+          limit = severityValue(medium - 0.1);
+          toolTip = `${label} (${severityValue(low)} - ${limit})`;
+          filterValue = {
+            start: LOG_VALUE,
+            end: medium,
+          };
+          break;
+        case LOG:
+          toolTip = `${label}`;
+          filterValue = {
+            start: LOG_VALUE,
+          };
+          break;
+        case FALSE_POSITIVE:
+          toolTip = `${label}`;
+          filterValue = {
+            start: FALSE_POSITIVE_VALUE,
+          };
+          break;
+        case ERROR:
+          toolTip = `${label}`;
+          filterValue = {
+            start: ERROR_VALUE,
+          };
+          break;
+        case NA:
+          toolTip = `${label}`;
+          filterValue = {
+            start: NA_VALUE,
+          };
+          break;
+        default:
+          break;
+      }
 
-    toolTip = `${toolTip}: ${perc}% (${count})`;
+      toolTip = `${toolTip}: ${perc}% (${count})`;
 
-    return {
-      value: count,
-      label,
-      toolTip,
-      color: riskFactorColorScale(riskFactor),
-      filterValue,
-    };
-  });
+      return {
+        value: count,
+        label,
+        toolTip,
+        color: riskFactorColorScale(riskFactor),
+        filterValue,
+      };
+    });
 
   tdata.total = sum;
 

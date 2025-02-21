@@ -18,7 +18,7 @@ import {
   totalCount,
   percent,
   activeDaysColorScale,
-} from 'web/components/dashboard/display/Utils';
+} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {OverridesActiveDaysLoader} from 'web/pages/overrides/dashboard/Loaders';

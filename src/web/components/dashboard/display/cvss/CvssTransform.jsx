@@ -5,7 +5,11 @@
 
 import {parseInt, parseFloat, parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import {totalCount, percent, riskFactorColorScale} from 'web/components/dashboard/display/Utils';
+import {
+  totalCount,
+  percent,
+  riskFactorColorScale,
+} from 'web/components/dashboard/display/utils';
 import {
   NA_VALUE,
   LOG_VALUE,
@@ -18,7 +22,6 @@ import {
   resultSeverityRiskFactor,
   translateRiskFactor,
 } from 'web/utils/severity';
-
 
 export const cvssDataRow = row => [row.x, row.y];
 

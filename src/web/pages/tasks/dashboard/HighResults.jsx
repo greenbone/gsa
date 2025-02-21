@@ -13,7 +13,7 @@ import BubbleChart from 'web/components/chart/Bubble';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
-import {riskFactorColorScale} from 'web/components/dashboard/display/Utils';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TasksHighResultsLoader} from 'web/pages/tasks/dashboard/Loaders';
