@@ -14,9 +14,10 @@ export const _NONE = _l('None');
 export const _FALSE_POSITIVE = _l('False Positive');
 export const _ERROR = _l('Error');
 export const _DEBUG = _l('Debug');
-
+export const _CRITICAL = _l('Critical');
 export const _NA = _l('N/A');
 
+export const CRITICAL = 'Critical';
 export const HIGH = 'High';
 export const MEDIUM = 'Medium';
 export const LOW = 'Low';
@@ -27,7 +28,8 @@ export const ERROR = 'Error';
 export const DEBUG = 'Debug';
 
 export const NA_VALUE = -99;
-export const HIGH_VALUE = 10;
+export const CRITICAL_VALUE = 10;
+export const HIGH_VALUE = 9;
 export const MEDIUM_VALUE = 5;
 export const LOW_VALUE = 2;
 export const LOG_VALUE = 0;
@@ -36,7 +38,7 @@ export const DEBUG_VALUE = -2;
 export const ERROR_VALUE = -3;
 
 export const severityRiskFactor = value => {
-  const {low, medium, high} = getSeverityLevels();
+  const {low, medium, high, critical} = getSeverityLevels();
 
   if (value >= LOG_VALUE && isDefined(low) && value < low) {
     return LOG;
@@ -49,11 +51,32 @@ export const severityRiskFactor = value => {
     return MEDIUM;
   }
 
-  if (isDefined(high) && value >= high) {
+  if (value >= high && isDefined(critical) && value < critical) {
     return HIGH;
   }
 
+  if (isDefined(critical) && value >= critical) {
+    return CRITICAL;
+  }
+
   return NA;
+};
+
+export const severityRiskFactorToValue = factor => {
+  switch (factor) {
+    case CRITICAL:
+      return CRITICAL_VALUE;
+    case HIGH:
+      return HIGH_VALUE;
+    case MEDIUM:
+      return MEDIUM_VALUE;
+    case LOW:
+      return LOW_VALUE;
+    case LOG:
+      return LOG_VALUE;
+    case FALSE_POSITIVE:
+      return FALSE_POSITIVE_VALUE;
+  }
 };
 
 export const extraRiskFactor = (value = NA_VALUE) => {
@@ -82,6 +105,7 @@ export const resultSeverityRiskFactor = value => {
 };
 
 const TRANSLATED_RISK_FACTORS = {
+  [CRITICAL]: _CRITICAL,
   [HIGH]: _HIGH,
   [MEDIUM]: _MEDIUM,
   [LOW]: _LOW,
@@ -98,26 +122,27 @@ export const translateRiskFactor = factor =>
 export const translatedResultSeverityRiskFactor = value =>
   translateRiskFactor(resultSeverityRiskFactor(value));
 
-/*
- * The severity levels define the lower limit
+/**
+ * Returns an object representing different severity levels.
  *
- * The lower limit is included in the range. E.g.
- *
- * {
- *   high: 6.5,
- *   medium: 3.0,
- *   low: 1.0,
- * }
+ * The severity levels define the lower limit. The lower limit is included in the range.
  *
  * defines
  *  - log range from 0 to 1.0 including 0 and excluding 1.0 => [0, 1.0[
  *  - low range from 1.0 to 3.0 including 1.0 and excluding 3.0 => [1.0, 3.0[
  *  - medium range from 3.0 to 6.5 including 3.0 and excluding 6.5 => [3.0, 6.5[
- *  - high range from 6.5 to 10 [6.5, 10]
+ *  - high range from 6.5 to 8.9 including 6.5 and excluding 9 => [6.5, 9[
+ *  - critical range from 9.0 to 10.0 => [9, 10]
+ *
+ * @returns {Object} An object with severity levels as keys and their corresponding numeric values.
+ * @property {number} critical - The severity level for critical issues (10.0).
+ * @property {number} high - The severity level for high issues (7.0).
+ * @property {number} medium - The severity level for medium issues (4.0).
+ * @property {number} low - The severity level for low issues (0.1).
  */
-
 export const getSeverityLevels = () => {
   return {
+    critical: 9.0,
     high: 7.0,
     medium: 4.0,
     low: 0.1,
