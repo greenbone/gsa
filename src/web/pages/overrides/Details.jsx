@@ -20,7 +20,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {
   translatedResultSeverityRiskFactor,
   LOG_VALUE,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 
 const OverrideDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;

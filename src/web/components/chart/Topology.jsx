@@ -26,7 +26,7 @@ import {
   getSeverityLevelsOld as getSeverityLevels,
   FALSE_POSITIVE_VALUE,
   HIGH_VALUE,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
 

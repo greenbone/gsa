@@ -32,7 +32,7 @@ import {
   DEBUG_VALUE,
   ERROR_VALUE,
   NA_VALUE,
-} from '../Severity';
+} from '../severity';
 
 describe('Severity', () => {
   describe('severityRiskFactor', () => {

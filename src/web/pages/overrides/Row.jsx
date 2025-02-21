@@ -23,7 +23,7 @@ import {
   extraRiskFactor,
   translateRiskFactor,
   LOG_VALUE,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 
 const render_severity = severity => {
   if (isDefined(severity)) {

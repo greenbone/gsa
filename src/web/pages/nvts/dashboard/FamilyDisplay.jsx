@@ -21,7 +21,7 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NvtsFamilyLoader} from 'web/pages/nvts/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import {severityFormat} from 'web/utils/Render';
-import {resultSeverityRiskFactor} from 'web/utils/Severity';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
 
 
 const transformFamilyData = (data = {}) => {

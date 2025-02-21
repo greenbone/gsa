@@ -18,7 +18,7 @@ import {
   CRITICAL,
   translateRiskFactor,
   LOG_VALUE,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
 

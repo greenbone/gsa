@@ -29,7 +29,7 @@ import {
   HIGH_VALUE,
   MEDIUM_VALUE,
   LOW_VALUE,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 import withGmp from 'web/utils/withGmp';
 
 

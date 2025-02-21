@@ -17,7 +17,7 @@ import {
   _FALSE_POSITIVE,
   resultSeverityRiskFactor,
   translateRiskFactor,
-} from 'web/utils/Severity';
+} from 'web/utils/severity';
 
 
 export const cvssDataRow = row => [row.x, row.y];

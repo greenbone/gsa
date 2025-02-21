@@ -20,7 +20,7 @@ import {TasksHighResultsLoader} from 'web/pages/tasks/dashboard/Loaders';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {severityFormat} from 'web/utils/Render';
-import {resultSeverityRiskFactor, _NA} from 'web/utils/Severity';
+import {resultSeverityRiskFactor, _NA} from 'web/utils/severity';
 import {withRouter} from 'web/utils/withRouter';
 
 
