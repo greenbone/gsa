@@ -8,13 +8,13 @@ import React from 'react';
 import {
   DfnCertsCreatedDisplay,
   DfnCertsCreatedTableDisplay,
-} from './createddisplay';
-import {DfnCertCvssDisplay, DfnCertCvssTableDisplay} from './cvssdisplay';
+} from './CreatedDisplay';
+import {DfnCertCvssDisplay, DfnCertCvssTableDisplay} from './CvssDisplay';
 import {
   DfnCertSeverityClassDisplay,
   DfnCertSeverityClassTableDisplay,
-} from './severityclassdisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './SeverityClassDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const DFNCERT_DASHBOARD_ID = '9812ea49-682d-4f99-b3cc-eca051d1ce59';
 

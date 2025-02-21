@@ -15,7 +15,7 @@ import {
   getAllByTestId,
   getByTestId,
   queryAllByTestId,
-} from 'web/utils/testing';
+} from 'web/utils/Testing';
 
 export const getElementOrDocument = element =>
   isDefined(element) ? element : document.body;

@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {DatePickerInput} from '@greenbone/opensight-ui-components-mantinev7';
 import {getLocale} from 'gmp/locale/lang';
 import date from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback} from 'react';
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from 'web/utils/PropTypes';
 
 const DatePickerComponent = (
   {disabled, minDate = date(), name, value = date(), onChange, label = ''},

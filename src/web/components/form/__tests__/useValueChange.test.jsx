@@ -4,11 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {render, screen, fireEvent} from 'web/utils/testing';
+import {render, screen, fireEvent} from 'web/utils/Testing';
 
 import useValueChange from '../useValueChange';
 
- 
 const TestComponent = ({value, onChange, name, disabled}) => {
   const handleChange = useValueChange({onChange, name, disabled});
 

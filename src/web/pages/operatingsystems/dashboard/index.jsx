@@ -5,13 +5,13 @@
 
 import React from 'react';
 
-import {OsCvssDisplay, OsCvssTableDisplay} from './cvssdisplay';
+import {OsCvssDisplay, OsCvssTableDisplay} from './CvssDisplay';
 import {
   OsSeverityClassDisplay,
   OsSeverityClassTableDisplay,
-} from './severityclassdisplay';
-import {OsVulnScoreDisplay, OsVulnScoreTableDisplay} from './vulnscoredisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './SeverityClassDisplay';
+import {OsVulnScoreDisplay, OsVulnScoreTableDisplay} from './VulnScoreDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
 

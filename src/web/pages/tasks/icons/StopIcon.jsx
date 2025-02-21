@@ -1,0 +1,46 @@
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import _ from 'gmp/locale';
+import React from 'react';
+import StopIcon from 'web/components/icon/StopIcon';
+import PropTypes from 'web/utils/PropTypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+const TaskStopIcon = ({
+  capabilities,
+  size,
+  task,
+  usageType = _('task'),
+  onClick,
+}) => {
+  if ((task.isRunning() || task.isQueued()) && !task.isContainer()) {
+    if (
+      !capabilities.mayOp('stop_task') ||
+      !task.userCapabilities.mayOp('stop_task')
+    ) {
+      return (
+        <StopIcon
+          active={false}
+          title={_('Permission to stop {{usageType}} denied', {usageType})}
+        />
+      );
+    }
+    return (
+      <StopIcon size={size} title={_('Stop')} value={task} onClick={onClick} />
+    );
+  }
+  return null;
+};
+
+TaskStopIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
+  size: PropTypes.iconSize,
+  task: PropTypes.model.isRequired,
+  usageType: PropTypes.string,
+  onClick: PropTypes.func,
+};
+
+export default withCapabilities(TaskStopIcon);

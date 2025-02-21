@@ -4,7 +4,7 @@
  */
 
 import {useContext} from 'react';
-import {LicenseContext} from 'web/components/provider/licenseprovider';
+import {LicenseContext} from 'web/components/provider/LicenseProvider';
 
 const useLicense = () => useContext(LicenseContext);
 

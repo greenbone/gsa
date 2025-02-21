@@ -12,7 +12,6 @@ lerna-debug.log*
 dist/
 build/
 coverage/
-tags
 node_modules/
 
 public/config.js

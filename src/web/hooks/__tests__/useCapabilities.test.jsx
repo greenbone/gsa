@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import {rendererWith} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/Testing';
 
 import useCapabilities from '../useCapabilities';
 

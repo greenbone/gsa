@@ -5,16 +5,16 @@
 
 import React from 'react';
 
-import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './createddisplay';
-import {NvtsCvssDisplay, NvtsCvssTableDisplay} from './cvssdisplay';
-import {NvtsFamilyDisplay, NvtsFamilyTableDisplay} from './familydisplay';
-import {NvtsQodDisplay, NvtsQodTableDisplay} from './qoddisplay';
-import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from './qodtypedisplay';
+import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './CreatedDisplay';
+import {NvtsCvssDisplay, NvtsCvssTableDisplay} from './CvssDisplay';
+import {NvtsFamilyDisplay, NvtsFamilyTableDisplay} from './FamilyDisplay';
+import {NvtsQodDisplay, NvtsQodTableDisplay} from './QodDisplay';
+import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from './QodTypeDisplay';
 import {
   NvtsSeverityClassDisplay,
   NvtsSeverityClassTableDisplay,
-} from './severityclassdisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './SeverityClassDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
 

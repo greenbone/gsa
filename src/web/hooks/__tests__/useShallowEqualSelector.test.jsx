@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
- 
-
 import {describe, test, expect, testing} from '@gsa/testing';
 import {configureStore} from '@reduxjs/toolkit';
 import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {fireEvent, rendererWith, screen} from 'web/utils/testing';
+import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
 import useShallowEqualSelector from '../useShallowEqualSelector';
 

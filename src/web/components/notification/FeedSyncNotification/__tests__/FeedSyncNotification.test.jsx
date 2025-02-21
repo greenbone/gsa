@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import FeedSyncNotification from 'web/components/notification/FeedSyncNotification/FeedSyncNotification';
 import {setSyncStatus, setError} from 'web/store/feedStatus/actions';
-import {rendererWith, waitFor, screen} from 'web/utils/testing';
+import {rendererWith, waitFor, screen} from 'web/utils/Testing';
 
 const gmp = {settings: {manualUrl: 'http://localhost/manual'}};
 

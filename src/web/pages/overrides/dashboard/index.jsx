@@ -8,16 +8,16 @@ import React from 'react';
 import {
   OverridesActiveDaysDisplay,
   OverridesActiveDaysTableDisplay,
-} from './activedaysdisplay';
+} from './ActiveDaysDisplay';
 import {
   OverridesCreatedDisplay,
   OverridesCreatedTableDisplay,
-} from './createddisplay';
+} from './CreatedDisplay';
 import {
   OverridesWordCloudDisplay,
   OverridesWordCloudTableDisplay,
-} from './wordclouddisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './WordCloudDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const OVERRIDES_DASHBOARD_ID = '054862fe-0781-4527-b1aa-2113bcd16ce7';
 

@@ -5,20 +5,20 @@
 
 import React from 'react';
 
-import {ResultsCvssDisplay, ResultsCvssTableDisplay} from './cvssdisplay';
+import {ResultsCvssDisplay, ResultsCvssTableDisplay} from './CvssDisplay';
 import {
   ResultsDescriptionWordCloudDisplay,
   ResultsDescriptionWordCloudTableDisplay,
-} from './descriptionwordclouddisplay';
+} from './DescriptionWordCloudDisplay';
 import {
   ResultsSeverityDisplay,
   ResultsSeverityTableDisplay,
-} from './severityclassdisplay';
+} from './SeverityClassDisplay';
 import {
   ResultsWordCloudDisplay,
   ResultsWordCloudTableDisplay,
-} from './wordclouddisplay';
-import Dashboard from '../../../components/dashboard/dashboard';
+} from './WordCloudDisplay';
+import Dashboard from '../../../components/dashboard/Dashboard';
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
 

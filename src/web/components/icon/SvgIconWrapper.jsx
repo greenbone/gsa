@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from 'web/utils/PropTypes';
 
-import SvgIcon from './svgicon';
+import SvgIcon from './SvgIcon';
 
 const SvgIconWrapper = ({component: Component, size, ...props}) => (
   <SvgIcon size={size} {...props}>

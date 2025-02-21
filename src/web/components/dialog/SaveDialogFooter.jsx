@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import MultiStepFooter from 'web/components/dialog/multistepfooter';
-import DialogFooter from 'web/components/dialog/twobuttonfooter';
-import PropTypes from 'web/utils/proptypes';
+import MultiStepFooter from 'web/components/dialog/MultiStepFooter';
+import DialogFooter from 'web/components/dialog/TwoButtonFooter';
+import PropTypes from 'web/utils/PropTypes';
 
 const SaveDialogFooter = ({
   multiStep,

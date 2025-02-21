@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent} from 'web/utils/Testing';
 
 import withDownload from '../withDownload';
 

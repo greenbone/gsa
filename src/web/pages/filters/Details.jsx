@@ -1,0 +1,72 @@
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import _ from 'gmp/locale';
+import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import HorizontalSep from 'web/components/layout/HorizontalSep';
+import Layout from 'web/components/layout/Layout';
+import DetailsLink from 'web/components/link/DetailsLink';
+import TableBody from 'web/components/table/Body';
+import TableData from 'web/components/table/Data';
+import InfoTable from 'web/components/table/InfoTable';
+import TableRow from 'web/components/table/Row';
+import {Col} from 'web/entity/Page';
+import PropTypes from 'web/utils/PropTypes';
+
+const FilterDetails = ({entity}) => {
+  const {comment, filter_type, alerts = []} = entity;
+  return (
+    <Layout grow flex="column">
+      <InfoTable>
+        <colgroup>
+          <Col width="10%" />
+          <Col width="90%" />
+        </colgroup>
+        <TableBody>
+          {isDefined(comment) && (
+            <TableRow>
+              <TableData>{_('Comment')}</TableData>
+              <TableData>{comment}</TableData>
+            </TableRow>
+          )}
+
+          <TableRow>
+            <TableData>{_('Term')}</TableData>
+            <TableData>{entity.toFilterString()}</TableData>
+          </TableRow>
+
+          <TableRow>
+            <TableData>{_('Type')}</TableData>
+            <TableData>{filter_type}</TableData>
+          </TableRow>
+
+          {alerts.length > 0 && (
+            <TableRow>
+              <TableData>{_('Alerts using this Filter')}</TableData>
+              <TableData>
+                <HorizontalSep wrap>
+                  {alerts.map(alert => (
+                    <span key={alert.id}>
+                      <DetailsLink id={alert.id} type="alert">
+                        {alert.name}
+                      </DetailsLink>
+                    </span>
+                  ))}
+                </HorizontalSep>
+              </TableData>
+            </TableRow>
+          )}
+        </TableBody>
+      </InfoTable>
+    </Layout>
+  );
+};
+
+FilterDetails.propTypes = {
+  entity: PropTypes.model.isRequired,
+};
+
+export default FilterDetails;

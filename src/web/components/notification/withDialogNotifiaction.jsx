@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import DialogNotification from './dialognotification';
+import DialogNotification from './DialogNotification';
 import useDialogNotification from './useDialogNotification';
 
 const withDialogNotification = Component => {

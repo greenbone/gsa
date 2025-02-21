@@ -4,7 +4,7 @@
  */
 
 import {useContext} from 'react';
-import GmpContext from 'web/components/provider/gmpprovider';
+import GmpContext from 'web/components/provider/GmpProvider';
 
 const useGmp = () => useContext(GmpContext);
 

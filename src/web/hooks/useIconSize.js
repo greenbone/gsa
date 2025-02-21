@@ -4,7 +4,7 @@
  */
 
 import {useContext} from 'react';
-import IconSizeContext from 'web/components/provider/iconsizeprovider';
+import IconSizeContext from 'web/components/provider/IconSizeProvider';
 
 export const ICON_SIZE_LARGE_PIXELS = '50px';
 export const ICON_SIZE_MEDIUM_PIXELS = '24px';

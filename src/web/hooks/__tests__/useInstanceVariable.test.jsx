@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
- 
-
 import {describe, test, expect, testing} from '@gsa/testing';
 import {useCallback} from 'react';
-import {fireEvent, rendererWith, screen} from 'web/utils/testing';
+import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
 import useInstanceVariable from '../useInstanceVariable';
 

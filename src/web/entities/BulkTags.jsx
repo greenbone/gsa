@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
@@ -11,11 +10,11 @@ import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback, useEffect, useState} from 'react';
 import useGmp from 'web/hooks/useGmp';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
-import TagDialog from 'web/pages/tags/dialog';
-import PropTypes from 'web/utils/proptypes';
-import SelectionType from 'web/utils/selectiontype';
+import TagDialog from 'web/pages/tags/Dialog';
+import PropTypes from 'web/utils/PropTypes';
+import SelectionType from 'web/utils/SelectionType';
 
-import TagsDialog from './tagsdialog';
+import TagsDialog from './TagsDialog';
 
 const getEntityIds = (entityArray = []) => entityArray.map(entity => entity.id);
 

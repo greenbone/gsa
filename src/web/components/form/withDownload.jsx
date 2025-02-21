@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import Download from './download';
+import Download from './Download';
 
 const withDownload = Component => {
   class DownloadWrapper extends React.Component {

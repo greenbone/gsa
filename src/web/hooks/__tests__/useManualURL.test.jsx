@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {setLocale} from 'web/store/usersettings/actions';
-import {rendererWith} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/Testing';
 
 import useManualURL from '../useManualURL';
 

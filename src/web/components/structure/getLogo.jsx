@@ -4,8 +4,7 @@
  */
 
 import {applianceComponent} from 'web/utils/applianceData';
-import PropTypes from 'web/utils/proptypes';
-
+import PropTypes from 'web/utils/PropTypes';
 
 const getLogo = model => {
   const Component = applianceComponent[model];

@@ -4,7 +4,7 @@
  */
 
 import _ from 'gmp/locale';
-import Select from 'web/components/form/select';
+import Select from 'web/components/form/Select';
 
 const Metrics = ({metrics, selectedOptions, handleOptionChange}) => {
   return Object.entries(metrics).map(([metricShort, metric]) => (

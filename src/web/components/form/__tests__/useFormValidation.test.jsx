@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
- 
-
 import {describe, test, expect, testing} from '@gsa/testing';
 import React, {useState} from 'react';
-import {render, fireEvent, screen} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/Testing';
 
-import Button from '../button';
-import TextField from '../textfield';
+import Button from '../Button';
+import TextField from '../TextField';
 import useFormValidation, {shouldBeNonEmpty} from '../useFormValidation';
 import useFormValues from '../useFormValues';
 

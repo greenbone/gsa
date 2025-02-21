@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {SubscriptionContext} from 'web/components/provider/subscriptionprovider';
+import {SubscriptionContext} from 'web/components/provider/SubscriptionProvider';
 
 const withSubscription = Component => {
   const SubscriptionWrapper = props => (
