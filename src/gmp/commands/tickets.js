@@ -4,11 +4,11 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import Ticket from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
 
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 const convertNote = note => {
   if (!isDefined(note)) {

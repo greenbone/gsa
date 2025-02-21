@@ -4,15 +4,15 @@
  */
 
 import registerCommand from 'gmp/command';
+import {convertBoolean} from 'gmp/commands/convert';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import DefaultTransform from 'gmp/http/transform/default';
 import logger from 'gmp/log';
 import {ALL_FILTER} from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 import {isDefined} from 'gmp/utils/identity';
 
-import {convertBoolean} from './convert';
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.reports');
 

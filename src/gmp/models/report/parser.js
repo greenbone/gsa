@@ -9,19 +9,18 @@ import {
   parseFilter,
   parseReportResultEntities,
 } from 'gmp/collection/parser';
+import {getRefs, hasRefType} from 'gmp/models/nvt';
+import ReportApp from 'gmp/models/report/app';
+import ReportCve from 'gmp/models/report/cve';
+import ReportHost from 'gmp/models/report/host';
+import ReportOperatingSystem from 'gmp/models/report/os';
+import ReportPort from 'gmp/models/report/port';
+import ReportTLSCertificate from 'gmp/models/report/tlscertificate';
+import Result from 'gmp/models/result';
 import {parseBoolean, parseSeverity, parseDate} from 'gmp/parser';
 import {filter as filter_func, forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import ReportApp from './app';
-import ReportCve from './cve';
-import ReportHost from './host';
-import ReportOperatingSystem from './os';
-import ReportPort from './port';
-import ReportTLSCertificate from './tlscertificate';
-import {getRefs, hasRefType} from '../nvt';
-import Result from '../result';
 
 // reports with details=1 always have a results element
 // (that can be empty) whereas reports with details=0

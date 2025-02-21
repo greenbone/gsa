@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import ReportTask from '../task';
+import ReportTask from 'gmp/models/report/task';
 
 describe('ReportTask tests', () => {
   test('should parse id', () => {

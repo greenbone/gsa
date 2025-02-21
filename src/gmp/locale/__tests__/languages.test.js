@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import Languages, {getLanguageCodes} from 'gmp/locale/languages';
 import {isString} from 'gmp/utils/identity';
 
-import Languages, {getLanguageCodes} from '../languages';
 
 describe('Language tests', () => {
   test('should contain list of languagegs', () => {

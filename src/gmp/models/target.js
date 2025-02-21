@@ -4,12 +4,12 @@
  */
 
 import Model, {parseModelFromElement} from 'gmp/model';
+import PortList from 'gmp/models/portlist';
 import {parseInt, parseYesNo, parseCsv} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import PortList from './portlist';
 
 export const TARGET_CREDENTIAL_NAMES = [
   'smb_credential',

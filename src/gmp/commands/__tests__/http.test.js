@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import HttpCommand from '../http';
+import HttpCommand from 'gmp/commands/http';
 
 describe('HttpCommand tests', () => {
   test('should return itself from setting default param', () => {

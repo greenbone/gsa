@@ -4,10 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import Vulnerability from 'gmp/models/vulnerability';
-
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 class VulnerabilityCommand extends EntityCommand {
   constructor(http) {

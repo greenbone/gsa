@@ -4,12 +4,12 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import DefaultTransform from 'gmp/http/transform/default';
 import logger from 'gmp/log';
 import Credential from 'gmp/models/credential';
 
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.credentials');
 

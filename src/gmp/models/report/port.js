@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {setProperties, parseInt, parseSeverity} from '../../parser';
-import {isDefined} from '../../utils/identity';
+import {setProperties, parseInt, parseSeverity} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 class ReportPort {
   constructor() {

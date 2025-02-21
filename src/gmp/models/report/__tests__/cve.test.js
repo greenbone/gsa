@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import ReportCve from '../cve';
+import ReportCve from 'gmp/models/report/cve';
 
 describe('ReportCve tests', () => {
   test('should initialize hosts', () => {

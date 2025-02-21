@@ -10,8 +10,7 @@ import Audit, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUDIT_STATUS,
 } from 'gmp/models/audit';
-
-import {testModel} from '../testing';
+import {testModel} from 'gmp/models/testing';
 
 describe('Audit model tests', () => {
   testModel(Audit, 'audit', {testIsActive: false});

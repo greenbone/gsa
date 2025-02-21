@@ -4,13 +4,13 @@
  */
 
 import {parseCollectionList} from 'gmp/collection/parser';
+import GmpCommand, {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from 'gmp/commands/gmp';
 import DefaultTransform from 'gmp/http/transform/default';
 import logger from 'gmp/log';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {map, forEach} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 
-import GmpCommand, {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp';
 
 const log = logger.getLogger('gmp.commands.entities');
 

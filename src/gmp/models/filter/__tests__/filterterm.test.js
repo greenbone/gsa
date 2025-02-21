@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import FilterTerm from '../filterterm.js';
+import FilterTerm from 'gmp/models/filter/filterterm.js';
 
 describe('FilterTerm equals', () => {
   test('should not equal object', () => {

@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {isFunction} from '../../utils/identity';
-import LanguageDetector from '../detector';
+import LanguageDetector from 'gmp/locale/detector';
+import {isFunction} from 'gmp/utils/identity';
 
 describe('LanguageDetector tests', () => {
   test('should be a i18next language detector', () => {

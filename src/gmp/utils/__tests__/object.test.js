@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {exclude, excludeObjectProps} from '../object';
+import {exclude, excludeObjectProps} from 'gmp/utils/object';
 
 describe('exclude function test', () => {
   test('exclude object property', () => {

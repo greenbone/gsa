@@ -5,10 +5,10 @@
 
 import {_l} from 'gmp/locale/lang';
 import Model, {parseModelFromElement} from 'gmp/model';
+import AuditReportReport from 'gmp/models/report/auditreport';
 import {parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-import AuditReportReport from './report/auditreport';
 
 export const COMPLIANCE_STATES = {
   yes: _l('Yes'),

@@ -4,6 +4,7 @@
  */
 
 import registerCommand from 'gmp/command';
+import HttpCommand from 'gmp/commands/http';
 import Alert from 'gmp/models/alert';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
@@ -26,7 +27,6 @@ import {map} from 'gmp/utils/array';
 import {apiType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
-import HttpCommand from './http';
 
 class Trashcan extends HttpCommand {
   restore({id}) {

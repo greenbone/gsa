@@ -5,12 +5,12 @@
 
 import {_} from 'gmp/locale/lang';
 import Model, {parseModelFromElement} from 'gmp/model';
+import Credential from 'gmp/models/credential';
 import {parseInt, parseYesNo, parseDate} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Credential from './credential';
 
 export const OPENVAS_SCANNER_TYPE = 2;
 export const CVE_SCANNER_TYPE = 3;

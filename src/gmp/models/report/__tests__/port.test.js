@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import ReportPort from '../port';
+import ReportPort from 'gmp/models/report/port';
 
 describe('ReportPort tests', () => {
   test('should initialize hosts', () => {

@@ -4,10 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import EntitiesCommand from 'gmp/commands/entities';
+import {createEntitiesResponse, createHttp} from 'gmp/commands/testing';
 import Filter from 'gmp/models/filter';
-
-import EntitiesCommand from '../entities';
-import {createEntitiesResponse, createHttp} from '../testing';
 
 describe('EntitiesCommand tests', () => {
   test('should add filter parameter', () => {

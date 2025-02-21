@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {split, capitalizeFirstLetter, shorten, isEmpty} from '../string';
+import {split, capitalizeFirstLetter, shorten, isEmpty} from 'gmp/utils/string';
 
 describe('split function tests', () => {
   test('should split a string', () => {

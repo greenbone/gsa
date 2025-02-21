@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import Response from '../response';
+import Response from 'gmp/http/response';
 
 describe('Response tests', () => {
   test('should allow to get plain data', () => {

@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {arraysEqual, map, forEach, filter, first} from '../array';
+import {arraysEqual, map, forEach, filter, first} from 'gmp/utils/array';
 
 describe('arrayEquals function test', () => {
   test('should return true if arrays are equal', () => {

@@ -5,17 +5,16 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Model from 'gmp/model';
+import Report from 'gmp/models/report';
+import Scanner from 'gmp/models/scanner';
+import Schedule from 'gmp/models/schedule';
 import Task, {
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
   HOSTS_ORDERING_SEQUENTIAL,
   TASK_STATUS,
 } from 'gmp/models/task';
-
-import Report from '../report';
-import Scanner from '../scanner';
-import Schedule from '../schedule';
-import {testModel} from '../testing';
+import {testModel} from 'gmp/models/testing';
 
 describe('Task Model parse tests', () => {
   testModel(Task, 'task', {testIsActive: false});

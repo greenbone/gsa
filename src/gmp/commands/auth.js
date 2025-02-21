@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from '../command';
-import {convertBoolean} from './convert';
-import HttpCommand from './http';
+import registerCommand from 'gmp/command';
+import {convertBoolean} from 'gmp/commands/convert';
+import HttpCommand from 'gmp/commands/http';
 
 export class AuthenticationCommand extends HttpCommand {
   saveLdap({authdn, certificate, enable, ldaphost, ldapsOnly}) {

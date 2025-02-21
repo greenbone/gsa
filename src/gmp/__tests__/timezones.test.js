@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect, expectTypeOf} from '@gsa/testing';
-
-import timezones from '../timezones';
-import {isArray} from '../utils/identity';
+import timezones from 'gmp/timezones';
+import {isArray} from 'gmp/utils/identity';
 
 describe('timezones tests', () => {
   test('should be a list of timezone objects', () => {

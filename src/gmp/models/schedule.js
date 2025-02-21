@@ -5,10 +5,10 @@
 
 import logger from 'gmp/log';
 import Model, {parseModelFromElement} from 'gmp/model';
+import Event from 'gmp/models/event';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import Event from './event';
 
 const log = logger.getLogger('gmp.models.schedule');
 

@@ -4,11 +4,11 @@
  */
 
 import registerCommand from 'gmp/command';
+import GmpCommand from 'gmp/commands/gmp';
 import logger from 'gmp/log';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {v4 as uuid} from 'uuid';
 
-import GmpCommand from './gmp';
 
 const log = logger.getLogger('gmp.commands.dashboards');
 

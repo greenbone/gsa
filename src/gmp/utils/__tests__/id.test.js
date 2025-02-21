@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {includesId, selectSaveId, hasId} from '../id';
+import {includesId, selectSaveId, hasId} from 'gmp/utils/id';
 
 describe('includesId function tests', () => {
   test('should return true for found id', () => {

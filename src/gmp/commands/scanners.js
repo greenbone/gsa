@@ -4,11 +4,11 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Scanner from 'gmp/models/scanner';
 
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.scanners');
 

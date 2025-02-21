@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import Filter from '../../filter';
-import {filter_string} from '../utils';
+import Filter from 'gmp/models/filter';
+import {filter_string} from 'gmp/models/filter/utils';
 
 describe('filter_string function tests', () => {
   test('should return string for non Filter objects', () => {

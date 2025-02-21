@@ -4,6 +4,7 @@
  */
 
 import Model, {parseModelFromElement} from 'gmp/model';
+import Nvt from 'gmp/models/nvt';
 import {
   parseCsv,
   parseSeverity,
@@ -14,7 +15,6 @@ import {
 import {isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Nvt from './nvt';
 
 export const NOTE_ACTIVE_UNLIMITED_VALUE = -2;
 export const NOTE_INACTIVE_VALUE = -1;

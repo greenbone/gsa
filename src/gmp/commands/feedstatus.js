@@ -4,11 +4,11 @@
  */
 
 import registerCommand from 'gmp/command';
+import HttpCommand from 'gmp/commands/http';
 import date, {duration} from 'gmp/models/date';
 import {parseDate} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 
-import HttpCommand from './http';
 
 const convertVersion = version =>
   `${version}`.slice(0, 8) + 'T' + `${version}`.slice(8, 12);

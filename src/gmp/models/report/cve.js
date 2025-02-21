@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {setProperties, parseSeverity} from '../../parser';
-import {isDefined} from '../../utils/identity';
-import Nvt from '../nvt';
+import Nvt from 'gmp/models/nvt';
+import {setProperties, parseSeverity} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 class ReportCve {
   constructor() {

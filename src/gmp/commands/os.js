@@ -4,10 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import OperatingSystem from 'gmp/models/os';
-
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 class OperatingSystemCommand extends EntityCommand {
   constructor(http) {

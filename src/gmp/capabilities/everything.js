@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Capabilities from './capabilities.js';
+import Capabilities from 'gmp/capabilities/capabilities.js';
 
 class EverythingCapabilities extends Capabilities {
   constructor() {

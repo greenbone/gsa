@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Http from './http';
-import transform from './transform/fastxml';
-import {buildServerUrl} from './utils';
+import Http from 'gmp/http/http';
+import transform from 'gmp/http/transform/fastxml';
+import {buildServerUrl} from 'gmp/http/utils';
 
 class GmpHttp extends Http {
   constructor(settings) {

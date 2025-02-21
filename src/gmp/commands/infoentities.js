@@ -8,8 +8,7 @@ import {
   parseInfoEntities,
   parseInfoCounts,
 } from 'gmp/collection/parser';
-
-import EntitiesCommand from './entities';
+import EntitiesCommand from 'gmp/commands/entities';
 
 class InfoEntitiesCommand extends EntitiesCommand {
   constructor(http, name, clazz, entities_filter_func) {

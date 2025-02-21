@@ -5,6 +5,8 @@
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import moment from 'gmp/models/date';
 import Setting from 'gmp/models/setting';
@@ -19,8 +21,6 @@ import {forEach, map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.users');
 

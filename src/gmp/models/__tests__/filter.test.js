@@ -4,10 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {isArray} from '../../utils/identity';
-import Filter, {UNKNOWN_FILTER_ID} from '../filter';
-import FilterTerm from '../filter/filterterm';
+import Filter, {UNKNOWN_FILTER_ID} from 'gmp/models/filter';
+import FilterTerm from 'gmp/models/filter/filterterm';
+import {isArray} from 'gmp/utils/identity';
 
 describe('Filter parse filter terms from string', () => {
   test('should parse terms from string', () => {

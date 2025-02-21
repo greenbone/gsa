@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {hasValue, isDefined, isArray} from './identity';
+import {hasValue, isDefined, isArray} from 'gmp/utils/identity';
 
 export const forEach = (array, func) => {
   if (!hasValue(array) || !isDefined(func)) {

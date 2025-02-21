@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Info from 'gmp/models/info';
 import {
   parseDate,
   parseFloat,
@@ -15,7 +16,6 @@ import {map} from 'gmp/utils/array';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 
-import Info from './info';
 
 export const TAG_NA = 'N/A';
 

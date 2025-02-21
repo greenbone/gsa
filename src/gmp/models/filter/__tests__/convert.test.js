@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import convert from '../convert';
+import convert from 'gmp/models/filter/convert';
 
 describe('convert tests', () => {
   test('should convert apply_overrides keyword', () => {

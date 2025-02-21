@@ -4,14 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   calculateVector,
   expectedMetricOptionsOrdered,
   parseCvssV4MetricsFromVector,
   processVector,
   removeUnusedMetrics,
-} from '../cvssV4';
+} from 'gmp/parser/cvssV4';
 
 describe('CVSSV4 parser', () => {
   describe('calculateVector', () => {

@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import logger from '../log';
-import Model from '../model';
-import CollectionCounts from './collectioncounts';
-import Filter from '../models/filter';
-import {map} from '../utils/array';
-import {isArray, isDefined} from '../utils/identity';
+import CollectionCounts from 'gmp/collection/collectioncounts';
+import logger from 'gmp/log';
+import Model from 'gmp/model';
+import Filter from 'gmp/models/filter';
+import {map} from 'gmp/utils/array';
+import {isArray, isDefined} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.collection.parser');
 

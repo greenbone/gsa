@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import App from '../app';
+import App from 'gmp/models/report/app';
 
 describe('App tests', () => {
   test('should initialize hosts', () => {

@@ -4,9 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
+import HttpCommand from 'gmp/commands/http';
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-import HttpCommand from './http';
 
 class PerformanceCommand extends HttpCommand {
   constructor(http) {

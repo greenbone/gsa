@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {convertBoolean} from '../convert';
+import {convertBoolean} from 'gmp/commands/convert';
 
 describe('convertBoolean tests', () => {
   test('should convert true', () => {

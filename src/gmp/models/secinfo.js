@@ -4,9 +4,9 @@
  */
 
 import {_} from 'gmp/locale/lang';
+import Info from 'gmp/models/info';
 import {isDefined} from 'gmp/utils/identity';
 
-import Info from './info';
 
 export const secInfoTypeName = (type, unknown) => {
   if (!isDefined(unknown)) {

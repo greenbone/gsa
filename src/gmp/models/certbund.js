@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Info from 'gmp/models/info';
 import {parseSeverity, parseDate} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import Info from './info';
 
 class CertBundAdv extends Info {
   static entityType = 'certbund';

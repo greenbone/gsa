@@ -4,6 +4,23 @@
  */
 
 import Model, {parseModelFromElement} from 'gmp/model';
+import Report from 'gmp/models/report';
+import Scanner from 'gmp/models/scanner';
+import Schedule from 'gmp/models/schedule';
+import {
+  AUTO_DELETE_KEEP,
+  AUTO_DELETE_NO,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+  HOSTS_ORDERING_SEQUENTIAL,
+  HOSTS_ORDERING_RANDOM,
+  HOSTS_ORDERING_REVERSE,
+  DEFAULT_MAX_CHECKS,
+  DEFAULT_MAX_HOSTS,
+  DEFAULT_MIN_QOD,
+  TASK_STATUS as AUDIT_STATUS,
+  getTranslatableTaskStatus as getTranslatableAuditStatus,
+  isActive,
+} from 'gmp/models/task';
 import {
   parseInt,
   parseProgressElement,
@@ -19,23 +36,6 @@ import {normalizeType} from 'gmp/utils/entitytype';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Report from './report';
-import Scanner from './scanner';
-import Schedule from './schedule';
-import {
-  AUTO_DELETE_KEEP,
-  AUTO_DELETE_NO,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
-  HOSTS_ORDERING_RANDOM,
-  HOSTS_ORDERING_REVERSE,
-  DEFAULT_MAX_CHECKS,
-  DEFAULT_MAX_HOSTS,
-  DEFAULT_MIN_QOD,
-  TASK_STATUS as AUDIT_STATUS,
-  getTranslatableTaskStatus as getTranslatableAuditStatus,
-  isActive,
-} from './task';
 
 export {
   AUTO_DELETE_KEEP,

@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import transform from '../fastxml';
+import transform from 'gmp/http/transform/fastxml';
 
 const createEnvelopedXml = xmlStr =>
   `

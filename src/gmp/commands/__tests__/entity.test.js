@@ -4,10 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import EntityCommand from 'gmp/commands/entity';
+import {createEntityResponse, createHttp} from 'gmp/commands/testing';
 import Filter from 'gmp/models/filter';
-
-import EntityCommand from '../entity';
-import {createEntityResponse, createHttp} from '../testing';
 
 class TestEntityCommand extends EntityCommand {
   getModelFromResponse(response) {

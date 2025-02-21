@@ -5,6 +5,9 @@
 
 import {_l} from 'gmp/locale/lang';
 import Model, {parseModelFromElement} from 'gmp/model';
+import Report from 'gmp/models/report';
+import Scanner from 'gmp/models/scanner';
+import Schedule from 'gmp/models/schedule';
 import {
   parseInt,
   parseProgressElement,
@@ -20,9 +23,6 @@ import {normalizeType} from 'gmp/utils/entitytype';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Report from './report';
-import Scanner from './scanner';
-import Schedule from './schedule';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';

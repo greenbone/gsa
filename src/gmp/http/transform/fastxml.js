@@ -4,10 +4,10 @@
  */
 
 import {XMLParser} from 'fast-xml-parser';
+import {success, rejection} from 'gmp/http/transform/xml';
 import {parseEnvelopeMeta, parseXmlEncodedString} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-import {success, rejection} from './xml';
 
 const PARSER_OPTIONS = {
   attributeNamePrefix: '_',

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {parseModelFromElement} from '../../model';
-import {parseProgressElement} from '../../parser';
-import {isDefined} from '../../utils/identity';
-import {isEmpty} from '../../utils/string';
+import Model, {parseModelFromElement} from 'gmp/model';
+import {parseProgressElement} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 /*
  * Use own task model for reports to avoid cyclic dependencies

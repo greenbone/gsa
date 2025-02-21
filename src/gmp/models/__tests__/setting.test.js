@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import Setting from '../setting';
+import Setting from 'gmp/models/setting';
 
 describe('Setting tests', () => {
   test('should create setting from an element', () => {
