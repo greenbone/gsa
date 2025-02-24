@@ -62,7 +62,7 @@ const transformSeverityData = (data = {}) => {
 
   const {critical, high, medium, low} = getSeverityLevels();
 
-  const tdata = Object.values(severityClasses)
+  const transformedData = Object.values(severityClasses)
     .toSorted(
       (a, b) =>
         severityRiskFactorToValue(a.riskFactor) -
@@ -148,9 +148,9 @@ const transformSeverityData = (data = {}) => {
       };
     });
 
-  tdata.total = sum;
+  transformedData.total = sum;
 
-  return tdata;
+  return transformedData;
 };
 
 export default transformSeverityData;

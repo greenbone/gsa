@@ -84,7 +84,7 @@ const transformCvssData = (data = {}) => {
     cvssData[cvss] = currentCount + count;
   });
 
-  const tdata = Object.keys(cvssData)
+  const transformedData = Object.keys(cvssData)
     .sort((a, b) => {
       return a - b;
     })
@@ -133,9 +133,9 @@ const transformCvssData = (data = {}) => {
       };
     });
 
-  tdata.total = sum;
+  transformedData.total = sum;
 
-  return tdata;
+  return transformedData;
 };
 
 export default transformCvssData;
