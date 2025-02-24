@@ -69,22 +69,17 @@ export const severityRiskFactor = value => {
   return NA;
 };
 
-export const severityRiskFactorToValue = factor => {
-  switch (factor) {
-    case CRITICAL:
-      return CRITICAL_VALUE;
-    case HIGH:
-      return HIGH_VALUE;
-    case MEDIUM:
-      return MEDIUM_VALUE;
-    case LOW:
-      return LOW_VALUE;
-    case LOG:
-      return LOG_VALUE;
-    case FALSE_POSITIVE:
-      return FALSE_POSITIVE_VALUE;
-  }
+const severityRiskFactorValues = {
+  [CRITICAL]: CRITICAL_VALUE,
+  [HIGH]: HIGH_VALUE,
+  [MEDIUM]: MEDIUM_VALUE,
+  [LOW]: LOW_VALUE,
+  [LOG]: LOG_VALUE,
+  [FALSE_POSITIVE]: FALSE_POSITIVE_VALUE,
 };
+
+export const severityRiskFactorToValue = factor =>
+  severityRiskFactorValues[factor];
 
 export const extraRiskFactor = (value = NA_VALUE) => {
   switch (value) {
