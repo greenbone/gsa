@@ -240,16 +240,7 @@ const AppRoutes = () => {
   }
 
   return (
-    <Router
-      future={{
-        // eslint-disable-next-line camelcase
-        v7_startTransition: true,
-        // eslint-disable-next-line camelcase
-        v7_relativeSplatPath: false,
-      }}
-    >
-      {isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}
-    </Router>
+    <Router>{isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}</Router>
   );
 };
 
