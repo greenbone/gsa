@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {combineReducers} from 'web/store/utils';
-
 import {
   USER_SETTINGS_DEFAULTS_LOADING_ERROR,
   USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
   USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
-} from './actions';
+} from 'web/store/usersettings/defaults/actions';
+import {combineReducers} from 'web/store/utils';
+
 
 const isLoading = (state = false, action) => {
   switch (action.type) {

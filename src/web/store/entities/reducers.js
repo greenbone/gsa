@@ -4,43 +4,42 @@
  */
 
 import {combineReducers} from 'redux';
-
-import {reducer as alert} from './alerts';
+import {reducer as alert} from 'web/store/entities/alerts';
 import {
   reducer as auditreport,
   deltaAuditReducer as deltaAuditReport,
-} from './auditreports';
-import {reducer as audit} from './audits';
-import {reducer as certbund} from './certbund';
-import {reducer as cpe} from './cpes';
-import {reducer as credential} from './credentials';
-import {reducer as cve} from './cves';
-import {reducer as dfncert} from './dfncerts';
-import {reducer as filter} from './filters';
-import {reducer as group} from './groups';
-import {reducer as host} from './hosts';
-import {reducer as note} from './notes';
-import {reducer as nvt} from './nvts';
-import {reducer as operatingsystem} from './operatingsystems';
-import {reducer as override} from './overrides';
-import {reducer as permission} from './permissions';
-import {reducer as policy} from './policies';
-import {reducer as portlist} from './portlists';
-import {reducer as reportconfig} from './reportconfigs';
-import {reducer as reportformat} from './reportformats';
-import {reducer as report, deltaReducer as deltaReport} from './reports';
-import {reducer as result} from './results';
-import {reducer as role} from './roles';
-import {reducer as scanconfig} from './scanconfigs';
-import {reducer as scanner} from './scanners';
-import {reducer as schedule} from './schedules';
-import {reducer as tag} from './tags';
-import {reducer as target} from './targets';
-import {reducer as task} from './tasks';
-import {reducer as ticket} from './tickets';
-import {reducer as tlscertificate} from './tlscertificates';
-import {reducer as user} from './users';
-import {reducer as vuln} from './vulns';
+} from 'web/store/entities/auditreports';
+import {reducer as audit} from 'web/store/entities/audits';
+import {reducer as certbund} from 'web/store/entities/certbund';
+import {reducer as cpe} from 'web/store/entities/cpes';
+import {reducer as credential} from 'web/store/entities/credentials';
+import {reducer as cve} from 'web/store/entities/cves';
+import {reducer as dfncert} from 'web/store/entities/dfncerts';
+import {reducer as filter} from 'web/store/entities/filters';
+import {reducer as group} from 'web/store/entities/groups';
+import {reducer as host} from 'web/store/entities/hosts';
+import {reducer as note} from 'web/store/entities/notes';
+import {reducer as nvt} from 'web/store/entities/nvts';
+import {reducer as operatingsystem} from 'web/store/entities/operatingsystems';
+import {reducer as override} from 'web/store/entities/overrides';
+import {reducer as permission} from 'web/store/entities/permissions';
+import {reducer as policy} from 'web/store/entities/policies';
+import {reducer as portlist} from 'web/store/entities/portlists';
+import {reducer as reportconfig} from 'web/store/entities/reportconfigs';
+import {reducer as reportformat} from 'web/store/entities/reportformats';
+import {reducer as report, deltaReducer as deltaReport} from 'web/store/entities/reports';
+import {reducer as result} from 'web/store/entities/results';
+import {reducer as role} from 'web/store/entities/roles';
+import {reducer as scanconfig} from 'web/store/entities/scanconfigs';
+import {reducer as scanner} from 'web/store/entities/scanners';
+import {reducer as schedule} from 'web/store/entities/schedules';
+import {reducer as tag} from 'web/store/entities/tags';
+import {reducer as target} from 'web/store/entities/targets';
+import {reducer as task} from 'web/store/entities/tasks';
+import {reducer as ticket} from 'web/store/entities/tickets';
+import {reducer as tlscertificate} from 'web/store/entities/tlscertificates';
+import {reducer as user} from 'web/store/entities/users';
+import {reducer as vuln} from 'web/store/entities/vulns';
 
 const entitiesReducer = combineReducers({
   alert,

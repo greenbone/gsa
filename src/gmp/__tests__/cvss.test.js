@@ -4,13 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   parseCvssV2BaseFromVector,
   parseCvssV2BaseVector,
   parseCvssV3BaseFromVector,
   parseCvssV3BaseVector,
-} from '../parser/cvss';
+} from 'gmp/parser/cvss';
 
 const cvss_v2_entries = {
   entries: [

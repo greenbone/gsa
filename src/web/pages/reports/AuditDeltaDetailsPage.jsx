@@ -23,6 +23,8 @@ import Reload, {
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import Page from 'web/pages/reports/DeltaDetailsContent';
+import FilterDialog from 'web/pages/reports/DetailsFilterDialog';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import TargetComponent from 'web/pages/targets/Component';
 import {
@@ -55,8 +57,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 
-import Page from './DeltaDetailsContent';
-import FilterDialog from './DetailsFilterDialog';
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 

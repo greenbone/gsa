@@ -4,10 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import TlsCertificate from 'gmp/models/tlscertificate';
-
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 export class TlsCertificateCommand extends EntityCommand {
   constructor(http) {

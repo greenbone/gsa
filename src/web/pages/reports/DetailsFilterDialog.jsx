@@ -21,9 +21,9 @@ import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import DeltaResultsFilterGroup from 'web/pages/reports/DeltaResultsFilterGroup';
 import PropTypes from 'web/utils/PropTypes';
 
-import DeltaResultsFilterGroup from './DeltaResultsFilterGroup';
 
 const ReportDetailsFilterDialog = ({
   audit = false,

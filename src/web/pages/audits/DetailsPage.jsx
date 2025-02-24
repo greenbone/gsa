@@ -39,6 +39,8 @@ import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import AuditComponent from 'web/pages/audits/Component';
+import AuditDetails from 'web/pages/audits/Details';
 import {
   TaskPermissions as AuditPermissions,
   reloadInterval,
@@ -60,8 +62,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-import AuditComponent from './Component';
-import AuditDetails from './Details';
 
 export const ToolBarIcons = ({
   entity,

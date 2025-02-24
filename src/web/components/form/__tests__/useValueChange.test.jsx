@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import useValueChange from 'web/components/form/useValueChange';
 import {render, screen, fireEvent} from 'web/utils/Testing';
 
-import useValueChange from '../useValueChange';
 
 const TestComponent = ({value, onChange, name, disabled}) => {
   const handleChange = useValueChange({onChange, name, disabled});

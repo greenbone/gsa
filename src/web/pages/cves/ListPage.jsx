@@ -12,15 +12,14 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import CvesDashboard, {CVES_DASHBOARD_ID} from 'web/pages/cves/dashboard';
+import CveFilterDialog from 'web/pages/cves/FilterDialog';
+import CvesTable from 'web/pages/cves/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/cves';
 import PropTypes from 'web/utils/PropTypes';
-
-import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard';
-import CveFilterDialog from './FilterDialog';
-import CvesTable from './Table';
 
 export const ToolBarIcons = () => (
   <ManualIcon anchor="cve" page="managing-secinfo" title={_('Help: CVEs')} />

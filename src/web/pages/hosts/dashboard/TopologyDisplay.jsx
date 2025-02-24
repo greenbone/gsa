@@ -11,11 +11,11 @@ import TopologyChart from 'web/components/chart/Topology';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {HostsTopologyLoader} from 'web/pages/hosts/dashboard/Loaders';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {withRouter} from 'web/utils/withRouter';
 
-import {HostsTopologyLoader} from './Loaders';
 
 const transformTopologyData = (data = []) => {
   if (!hasValue(data)) {

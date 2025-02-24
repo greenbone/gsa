@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {pageFilter, CHANGE_PAGE_FILTER} from '../actions';
+import {pageFilter, CHANGE_PAGE_FILTER} from 'web/store/pages/actions';
 
 describe('page actions tests', () => {
   describe('changeFilter action tests', () => {

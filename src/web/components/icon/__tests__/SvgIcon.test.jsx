@@ -5,10 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import React, {useEffect} from 'react';
+import CloneIcon from 'web/components/icon/CloneIcon';
+import {useStateWithMountCheck, useIsMountedRef} from 'web/components/icon/SvgIcon';
 import {render, fireEvent, act} from 'web/utils/Testing';
-
-import CloneIcon from '../CloneIcon';
-import {useStateWithMountCheck, useIsMountedRef} from '../SvgIcon';
 
 const entity = {name: 'entity'};
 

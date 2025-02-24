@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from './identity';
+import {isDefined} from 'gmp/utils/identity';
 
 /**
  * Formats a Number to a fixed number of digits to appear after the decimal

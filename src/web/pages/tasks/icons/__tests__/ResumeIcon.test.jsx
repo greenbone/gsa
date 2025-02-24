@@ -7,10 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import ResumeIcon from 'web/pages/tasks/icons/ResumeIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import ResumeIcon from '../ResumeIcon';
 
 describe('Task ResumeIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

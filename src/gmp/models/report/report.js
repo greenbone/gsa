@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {parseFilter} from 'gmp/collection/parser';
+import Model from 'gmp/model';
 import {
   parseApps,
   parseClosedCves,
@@ -13,13 +15,11 @@ import {
   parsePorts,
   parseResults,
   parseTlsCertificates,
-} from './parser';
-import ReportTask from './task';
-import {parseFilter} from '../../collection/parser';
-import Model from '../../model';
-import {parseSeverity, parseDate} from '../../parser';
-import {isDefined} from '../../utils/identity';
-import {isEmpty} from '../../utils/string';
+} from 'gmp/models/report/parser';
+import ReportTask from 'gmp/models/report/task';
+import {parseSeverity, parseDate} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 class ReportReport extends Model {
   static entityType = 'report';

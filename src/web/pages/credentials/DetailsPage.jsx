@@ -42,6 +42,9 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import CredentialComponent from 'web/pages/credentials/Component';
+import CredentialDetails from 'web/pages/credentials/Details';
+import CredentialDownloadIcon from 'web/pages/credentials/DownloadIcon';
 import {selector, loadEntity} from 'web/store/entities/credentials';
 import {
   selector as permissionsSelector,
@@ -49,9 +52,6 @@ import {
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 
-import CredentialComponent from './Component';
-import CredentialDetails from './Details';
-import CredentialDownloadIcon from './DownloadIcon';
 
 export const ToolBarIcons = ({
   entity,

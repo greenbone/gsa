@@ -5,18 +5,18 @@
 
 import {parseFilter} from 'gmp/collection/parser';
 import Model from 'gmp/model';
-import {parseDate} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-
 import {
   parse_errors,
   parseHosts,
   parseOperatingSystems,
   parseResults,
   parseTlsCertificates,
-} from './parser';
-import ReportTask from './task';
+} from 'gmp/models/report/parser';
+import ReportTask from 'gmp/models/report/task';
+import {parseDate} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+
 
 class AuditReportReport extends Model {
   static entityType = 'auditreport';

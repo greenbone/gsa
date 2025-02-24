@@ -4,9 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
+import HttpCommand from 'gmp/commands/http';
 import {parseSeverity} from 'gmp/parser';
 
-import HttpCommand from './http';
 
 class CvssCalculator extends HttpCommand {
   constructor(http) {

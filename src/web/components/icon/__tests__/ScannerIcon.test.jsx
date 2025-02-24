@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import ScannerIcon from 'web/components/icon/ScannerIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import ScannerIcon from '../ScannerIcon';
 
 describe('ScannerIcon component tests', () => {
   testIcon(ScannerIcon);

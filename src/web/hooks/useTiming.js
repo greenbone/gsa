@@ -6,8 +6,7 @@
 import logger from 'gmp/log';
 import {hasValue, isFunction} from 'gmp/utils/identity';
 import {useEffect, useCallback, useState} from 'react';
-
-import useInstanceVariable from './useInstanceVariable';
+import useInstanceVariable from 'web/hooks/useInstanceVariable';
 
 const log = logger.getLogger('web.hooks.useTiming');
 

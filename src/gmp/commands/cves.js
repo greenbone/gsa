@@ -4,11 +4,11 @@
  */
 
 import registerCommand from 'gmp/command';
+import InfoEntitiesCommand from 'gmp/commands/infoentities';
+import InfoEntityCommand from 'gmp/commands/infoentity';
 import Cve from 'gmp/models/cve';
 import {isDefined} from 'gmp/utils/identity';
 
-import InfoEntitiesCommand from './infoentities';
-import InfoEntityCommand from './infoentity';
 
 const info_filter = info => isDefined(info.cve);
 

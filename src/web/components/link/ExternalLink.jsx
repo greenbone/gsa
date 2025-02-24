@@ -5,10 +5,10 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
+import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
+import {withTextOnly} from 'web/components/link/Link';
 import PropTypes from 'web/utils/PropTypes';
 
-import {withTextOnly} from './Link';
-import ConfirmationDialog from '../dialog/ConfirmationDialog';
 
 class ExternalLink extends React.Component {
   constructor() {

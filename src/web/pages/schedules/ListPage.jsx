@@ -14,15 +14,14 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import ScheduleComponent from 'web/pages/schedules/Component';
+import SchedulesFilterDialog from 'web/pages/schedules/FilterDialog';
+import SchedulesTable from 'web/pages/schedules/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/schedules';
 import PropTypes from 'web/utils/PropTypes';
-
-import ScheduleComponent from './Component';
-import SchedulesFilterDialog from './FilterDialog';
-import SchedulesTable from './Table';
 
 export const ToolBarIcons = ({onScheduleCreateClick}) => {
   const capabilities = useCapabilities();

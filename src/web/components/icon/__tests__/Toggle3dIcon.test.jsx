@@ -5,8 +5,7 @@
 
 import {describe} from '@gsa/testing';
 import {testIcon} from 'web/components/icon/Testing';
-
-import Toggle3dIcon from '../Toggle3dIcon';
+import Toggle3dIcon from 'web/components/icon/Toggle3dIcon';
 
 describe('Toggle3dIcon component tests', () => {
   testIcon(Toggle3dIcon);

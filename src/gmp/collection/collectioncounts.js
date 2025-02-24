@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseInt} from '../parser.js';
-import {isDefined} from '../utils/identity';
+import {parseInt} from 'gmp/parser.js';
+import {isDefined} from 'gmp/utils/identity';
 
 class CollectionCounts {
   /**

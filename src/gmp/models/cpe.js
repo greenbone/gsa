@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Info from 'gmp/models/info';
 import {parseSeverity, parseDate, parseBoolean} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Info from './info';
 
 class Cpe extends Info {
   static entityType = 'cpe';

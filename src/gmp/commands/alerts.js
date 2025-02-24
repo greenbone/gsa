@@ -4,6 +4,8 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import {parseModelFromElement} from 'gmp/model';
 import Alert from 'gmp/models/alert';
@@ -12,8 +14,6 @@ import Filter from 'gmp/models/filter';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.alerts');
 

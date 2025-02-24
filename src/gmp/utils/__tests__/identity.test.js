@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   isDefined,
   hasValue,
@@ -16,7 +15,7 @@ import {
   isFunction,
   isJsDate,
   isModelElement,
-} from '../identity';
+} from 'gmp/utils/identity';
 
 describe('isDefined function test', () => {
   test('should return false for undefined let variable', () => {

@@ -4,11 +4,10 @@
  */
 
 import React from 'react';
+import FilterDialog from 'web/components/powerfilter/FilterDialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 import PropTypes from 'web/utils/PropTypes';
-
-import FilterDialog from './FilterDialog';
-import useFilterDialog from './useFilterDialog';
-import useFilterDialogSave from './useFilterDialogSave';
 
 const FilterDialogWithHandlers = ({
   children,

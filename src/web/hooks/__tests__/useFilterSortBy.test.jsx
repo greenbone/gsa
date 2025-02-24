@@ -5,9 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import {fireEvent, render, screen} from 'web/utils/Testing';
 
-import useFilterSortBy from '../useFilterSortBy';
 
 const TestComponent = ({filter, changeFilter}) => {
   const [sortBy, sortDir, sortChange] = useFilterSortBy(filter, changeFilter);

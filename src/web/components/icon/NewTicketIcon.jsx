@@ -4,9 +4,8 @@
  */
 
 import React from 'react';
-
-import Icon from './svg/new_ticket.svg';
-import SvgIcon from './SvgIcon';
+import Icon from 'web/components/icon/svg/new_ticket.svg';
+import SvgIcon from 'web/components/icon/SvgIcon';
 
 
 const NewTicketIcon = props => (

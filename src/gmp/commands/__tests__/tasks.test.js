@@ -4,6 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {FeedStatus} from 'gmp/commands/feedstatus';
+import {TaskCommand} from 'gmp/commands/tasks';
+import {
+  createActionResultResponse,
+  createHttp,
+  createResponse,
+} from 'gmp/commands/testing';
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -13,14 +20,6 @@ import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_KEEP,
 } from 'gmp/models/task';
-
-import {FeedStatus} from '../feedstatus';
-import {TaskCommand} from '../tasks';
-import {
-  createActionResultResponse,
-  createHttp,
-  createResponse,
-} from '../testing';
 
 describe('TaskCommand tests', () => {
   test('should create new task', () => {

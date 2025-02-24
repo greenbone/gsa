@@ -5,17 +5,17 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import {
-  types,
-  createEntityLoadingActions,
-} from 'web/store/entities/utils/actions';
-
-import {
   auditReportSelector,
   reportSelector,
   deltaReportSelector,
   deltaAuditReportSelector,
   deltaReportIdentifier,
-} from './selectors';
+} from 'web/store/entities/report/selectors';
+import {
+  types,
+  createEntityLoadingActions,
+} from 'web/store/entities/utils/actions';
+
 
 export const reportActions = {
   request: (id, filter) => ({

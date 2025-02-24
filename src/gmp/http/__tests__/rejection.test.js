@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import Rejection from '../rejection';
+import Rejection from 'gmp/http/rejection';
 
 describe('Rejection tests', () => {
   test('should create error rejection by default', () => {

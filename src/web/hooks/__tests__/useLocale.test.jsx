@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import useLocale from 'web/hooks/useLocale';
 import {setLocale} from 'web/store/usersettings/actions';
 import {rendererWith, screen, fireEvent} from 'web/utils/Testing';
 
-import useLocale from '../useLocale';
 
 const TestComponent = () => {
   const [locale, setLocale] = useLocale();

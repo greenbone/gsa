@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {reportReducer} from 'web/store/entities/report/reducers';
+import {reportsReducer} from 'web/store/entities/reports/reducers';
 import {
   createEntitiesLoadingActions,
   createLoadAllEntities,
@@ -12,8 +14,6 @@ import {
 import {createReducer, initialState} from 'web/store/entities/utils/reducers';
 import {createEntitiesSelector} from 'web/store/entities/utils/selectors';
 
-import {reportReducer} from './report/reducers';
-import {reportsReducer} from './reports/reducers';
 
 const reportsSelector = createEntitiesSelector('report');
 const entitiesActions = createEntitiesLoadingActions('report');

@@ -4,9 +4,8 @@
  */
 
 import {_} from 'gmp/locale/lang';
-
-import Icon from './svg/dl_svg.svg';
-import withSvgIcon from './withSvgIcon';
+import Icon from 'web/components/icon/svg/dl_svg.svg';
+import withSvgIcon from 'web/components/icon/withSvgIcon';
 
 const DownloadSvgIconComponent = withSvgIcon({
   title: _('Download SVG'),

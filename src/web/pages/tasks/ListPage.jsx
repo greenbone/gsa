@@ -21,17 +21,16 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import TaskComponent from 'web/pages/tasks/Component';
+import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';
+import TaskFilterDialog from 'web/pages/tasks/FilterDialog';
+import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
+import Table from 'web/pages/tasks/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tasks';
 import PropTypes from 'web/utils/PropTypes';
-
-import TaskComponent from './Component';
-import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
-import TaskFilterDialog from './FilterDialog';
-import NewIconMenu from './icons/NewIconMenu';
-import Table from './Table';
 
 export const ToolBarIcons = ({
   onAdvancedTaskWizardClick,

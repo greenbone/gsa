@@ -4,14 +4,14 @@
  */
 
 import registerCommand from 'gmp/command';
+import {convertBoolean} from 'gmp/commands/convert';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import DefaultTransform from 'gmp/http/transform/default';
 import AuditReport from 'gmp/models/auditreport';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 
-import {convertBoolean} from './convert';
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 export class AuditReportsCommand extends EntitiesCommand {
   constructor(http) {

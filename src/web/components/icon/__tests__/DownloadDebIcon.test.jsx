@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import DownloadDebIcon from 'web/components/icon/DownloadDebIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import DownloadDebIcon from '../DownloadDebIcon';
 
 describe('DownloadDebIcon component tests', () => {
   testIcon(DownloadDebIcon);

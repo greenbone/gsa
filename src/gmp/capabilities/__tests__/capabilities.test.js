@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import Capabilities from '../capabilities';
+import Capabilities from 'gmp/capabilities/capabilities';
 
 describe('Capabilities tests', () => {
   test('should not have capabilities', () => {

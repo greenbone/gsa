@@ -6,10 +6,10 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import TableData from 'web/components/table/Data';
+import EntitySelection from 'web/entities/Selection';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 
-import EntitySelection from './Selection';
 
 const EntitiesActions = ({
   children,

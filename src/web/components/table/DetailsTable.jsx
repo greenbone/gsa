@@ -4,10 +4,10 @@
  */
 
 import React from 'react';
+import InfoTable from 'web/components/table/InfoTable';
 import {Col} from 'web/entity/Page';
 import PropTypes from 'web/utils/PropTypes';
 
-import InfoTable from './InfoTable';
 
 const DetailsTable = ({children, size = 'full', ...props}) => (
   <InfoTable {...props} size={size}>

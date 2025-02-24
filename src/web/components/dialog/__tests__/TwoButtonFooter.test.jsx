@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import DialogTwoButtonFooter from 'web/components/dialog/TwoButtonFooter';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-import DialogTwoButtonFooter from '../TwoButtonFooter';
 
 describe('DialogTwoButtonFooter tests', () => {
   test('should render', () => {

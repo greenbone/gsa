@@ -5,8 +5,7 @@
 
 import {describe} from '@gsa/testing';
 import {testIcon} from 'web/components/icon/Testing';
-
-import TrashIcon from '../TrashIcon';
+import TrashIcon from 'web/components/icon/TrashIcon';
 
 describe('TrashIcon component tests', () => {
   testIcon(TrashIcon);

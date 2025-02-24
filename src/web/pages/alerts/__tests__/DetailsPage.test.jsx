@@ -8,11 +8,11 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Alert from 'gmp/models/alert';
 import Filter from 'gmp/models/filter';
+import Detailspage, {ToolBarIcons} from 'web/pages/alerts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import Detailspage, {ToolBarIcons} from '../DetailsPage';
 
 const caps = new Capabilities(['everything']);
 

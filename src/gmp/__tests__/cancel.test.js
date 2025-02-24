@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import CancelToken from '../cancel.js';
+import CancelToken from 'gmp/cancel.js';
 
 describe('CancelToken tests', () => {
   test('new CancelToken resolve', () => {

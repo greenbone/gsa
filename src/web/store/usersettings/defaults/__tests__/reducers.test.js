@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {loadingActions} from '../actions';
-import reducer from '../reducers';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import reducer from 'web/store/usersettings/defaults/reducers';
 
 describe('UserSetting Defaults reducer tests', () => {
   test('should create the default state', () => {

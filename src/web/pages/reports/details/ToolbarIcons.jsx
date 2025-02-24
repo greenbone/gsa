@@ -20,9 +20,9 @@ import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
+import AlertActions from 'web/pages/reports/details/AlertActions';
 import PropTypes from 'web/utils/PropTypes';
 
-import AlertActions from './AlertActions';
 
 const ToolBarIcons = ({
   audit = false,

@@ -5,9 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import date from 'gmp/models/date';
+import Footer from 'web/components/structure/Footer';
 import {render} from 'web/utils/Testing';
 
-import Footer from '../Footer';
 
 describe('Footer tests', () => {
   test('should render footer with copyright', () => {

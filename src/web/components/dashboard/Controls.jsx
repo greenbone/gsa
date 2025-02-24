@@ -8,6 +8,12 @@ import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import {getDisplay} from 'web/components/dashboard/Registry';
+import {
+  addDisplayToSettings,
+  canAddDisplay,
+  getPermittedDisplayIds,
+} from 'web/components/dashboard/Utils';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
@@ -23,12 +29,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import {getDisplay} from './Registry';
-import {
-  addDisplayToSettings,
-  canAddDisplay,
-  getPermittedDisplayIds,
-} from './Utils';
 
 export class DashboardControls extends React.Component {
   constructor(...args) {

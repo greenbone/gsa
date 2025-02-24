@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import EverythingCapabilities from '../everything';
+import EverythingCapabilities from 'gmp/capabilities/everything';
 
 describe('EverythingCapabilities tests', () => {
   test('should allow everything', () => {

@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Icon from './svg/cert_bund_adv.svg';
-import withSvgIcon from './withSvgIcon';
+import Icon from 'web/components/icon/svg/cert_bund_adv.svg';
+import withSvgIcon from 'web/components/icon/withSvgIcon';
 
 const CertBundAdvIconComponent = withSvgIcon()(Icon);
 

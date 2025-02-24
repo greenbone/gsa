@@ -4,11 +4,10 @@
  */
 
 import Dashboard from 'web/components/dashboard/Dashboard';
-
 import {
   ReportComplianceDisplay,
   ReportComplianceTableDisplay,
-} from './StatusDisplay';
+} from 'web/pages/reports/auditdashboard/StatusDisplay';
 
 export const AUDIT_REPORTS_DASHBOARD_ID =
   '8083d77b-05bb-4b17-ab39-c81175cb512c';

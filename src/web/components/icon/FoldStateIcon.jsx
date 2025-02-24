@@ -6,10 +6,9 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import {FoldState} from 'web/components/folding/Folding';
+import FoldIcon from 'web/components/icon/FoldIcon';
+import UnfoldIcon from 'web/components/icon/UnfoldIcon';
 import PropTypes from 'web/utils/PropTypes';
-
-import FoldIcon from './FoldIcon';
-import UnfoldIcon from './UnfoldIcon';
 
 const FoldStateIcon = ({foldState, ...props}) => {
   const folded =

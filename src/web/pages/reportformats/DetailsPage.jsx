@@ -39,6 +39,8 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import ReportFormatComponent from 'web/pages/reportformats/Component';
+import ReportFormatDetails from 'web/pages/reportformats/Details';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -48,8 +50,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import ReportFormatComponent from './Component';
-import ReportFormatDetails from './Details';
 
 const ToolBarIcons = withCapabilities(
   ({

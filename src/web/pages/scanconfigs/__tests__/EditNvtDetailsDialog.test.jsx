@@ -14,10 +14,10 @@ import {
   getRadioInputs,
   getTextInputs,
 } from 'web/components/testing';
+import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import EditNvtDetailsDialog from '../EditNvtDetailsDialog';
 
 const preferences = [
   {name: 'pref 1', value: 'no', id: '1', type: 'checkbox'},

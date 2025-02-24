@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import ArrowIcon from 'web/components/icon/ArrowIcon';
 import {ICON_SIZE_SMALL_PIXELS} from 'web/hooks/useIconSize';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import ArrowIcon from '../ArrowIcon';
 
 describe('ArrowIcon component tests', () => {
   test('should render', () => {

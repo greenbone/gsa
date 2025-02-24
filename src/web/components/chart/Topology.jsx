@@ -18,6 +18,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import Group from 'web/components/chart/Group';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import {setRef} from 'web/utils/Render';
@@ -28,7 +29,6 @@ import {
 } from 'web/utils/Severity';
 import Theme from 'web/utils/Theme';
 
-import Group from './Group';
 
 export const MAX_HOSTS = 1000;
 

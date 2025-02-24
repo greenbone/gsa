@@ -9,8 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-
-import {CpesSeverityLoader} from './Loaders';
+import {CpesSeverityLoader} from 'web/pages/cpes/dashboard/Loaders';
 
 export const CpesSeverityClassDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,

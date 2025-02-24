@@ -7,16 +7,15 @@ import {scaleBand, scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import Axis from 'web/components/chart/Axis';
+import Group from 'web/components/chart/Group';
+import Legend from 'web/components/chart/Legend';
+import Svg from 'web/components/chart/Svg';
+import ToolTip from 'web/components/chart/Tooltip';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
-
-import Axis from './Axis';
-import Group from './Group';
-import Legend from './Legend';
-import Svg from './Svg';
-import ToolTip from './Tooltip';
 
 const StyledLayout = styled(Layout)`
   overflow: hidden;

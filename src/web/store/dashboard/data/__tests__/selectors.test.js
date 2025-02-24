@@ -5,9 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import getDashboardData from 'web/store/dashboard/data/selectors';
 import {filterIdentifier} from 'web/store/utils';
 
-import getDashboardData from '../selectors';
 
 const createState = state => ({
   dashboardData: {

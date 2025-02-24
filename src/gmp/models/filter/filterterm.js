@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import convert from './convert.js';
-import {isDefined} from '../../utils/identity';
+import convert from 'gmp/models/filter/convert.js';
+import {isDefined} from 'gmp/utils/identity';
 
 const RELATIONS = ['=', ':', '~', '>', '<'];
 

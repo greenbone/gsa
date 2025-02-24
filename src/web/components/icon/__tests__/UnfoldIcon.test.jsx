@@ -5,8 +5,7 @@
 
 import {describe} from '@gsa/testing';
 import {testIcon} from 'web/components/icon/Testing';
-
-import UnfoldIcon from '../UnfoldIcon';
+import UnfoldIcon from 'web/components/icon/UnfoldIcon';
 
 describe('UnfoldIcon component tests', () => {
   testIcon(UnfoldIcon);

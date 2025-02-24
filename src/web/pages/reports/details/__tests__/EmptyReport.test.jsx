@@ -5,9 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import EmptyReport from '../EmptyReport';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_reports']);

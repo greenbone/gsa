@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {createResponse, createHttp} from '../testing';
-import {UserCommand, transformSettingName} from '../users';
+import {createResponse, createHttp} from 'gmp/commands/testing';
+import {UserCommand, transformSettingName} from 'gmp/commands/users';
 
 describe('UserCommand tests', () => {
   test('should parse auth settinngs in currentAuthSettings', () => {

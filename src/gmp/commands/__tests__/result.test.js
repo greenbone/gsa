@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {ResultCommand} from '../results';
-import {createEntityResponse, createHttp} from '../testing';
+import {ResultCommand} from 'gmp/commands/results';
+import {createEntityResponse, createHttp} from 'gmp/commands/testing';
 
 describe('ResultCommand tests', () => {
   test('should return single result', () => {

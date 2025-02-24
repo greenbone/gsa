@@ -19,12 +19,12 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import CredentialPage, {ToolBarIcons} from 'web/pages/credentials/ListPage';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import CredentialPage, {ToolBarIcons} from '../ListPage';
 
 const credential = Credential.fromElement({
   _id: '6575',

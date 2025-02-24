@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as funcs from '../roles';
-import {testAll} from '../utils/testing';
+import * as funcs from 'web/store/entities/roles';
+import {testAll} from 'web/store/entities/utils/testing';
 
 testAll('role', funcs);

@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import NvtIcon from 'web/components/icon/NvtIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import NvtIcon from '../NvtIcon';
 
 describe('NvtIcon component tests', () => {
   testIcon(NvtIcon);

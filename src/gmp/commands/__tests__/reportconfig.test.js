@@ -4,13 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {ReportConfigCommand} from '../reportconfigs';
+import {ReportConfigCommand} from 'gmp/commands/reportconfigs';
 import {
   createHttp,
   createEntityResponse,
   createActionResultResponse,
-} from '../testing';
+} from 'gmp/commands/testing';
 
 describe('ReportConfigCommand tests', () => {
   test('should return single report config', () => {

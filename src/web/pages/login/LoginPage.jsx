@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import Img from 'web/components/img/Img';
 import Layout from 'web/components/layout/Layout';
 import Footer from 'web/components/structure/Footer';
+import LoginForm from 'web/pages/login/LoginForm';
 import {
   setSessionTimeout,
   setUsername,
@@ -27,7 +28,6 @@ import Theme from 'web/utils/Theme';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
-import LoginForm from './LoginForm';
 
 const log = logger.getLogger('web.login');
 

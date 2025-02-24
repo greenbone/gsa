@@ -5,10 +5,9 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React, {useEffect, useState} from 'react';
+import TabList from 'web/components/tab/TabList';
+import TabPanels from 'web/components/tab/TabPanels';
 import PropTypes from 'web/utils/PropTypes';
-
-import TabList from './TabList';
-import TabPanels from './TabPanels';
 
 /*
  * Tabs and its sub components are using the "compound components" pattern

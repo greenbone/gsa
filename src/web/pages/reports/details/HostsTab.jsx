@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import HostsTable from 'web/pages/reports/details/HostsTable';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import PropTypes from 'web/utils/PropTypes';
 import {
   makeCompareDate,
@@ -13,8 +15,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-import HostsTable from './HostsTable';
-import ReportEntitiesContainer from './ReportEntitiesContainer';
 
 const hostsSortFunctions = {
   ip: makeCompareIp('ip'),

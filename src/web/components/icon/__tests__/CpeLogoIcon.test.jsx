@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import CpeLogoIcon from 'web/components/icon/CpeLogoIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import CpeLogoIcon from '../CpeLogoIcon';
 
 describe('CpeLogoIcon component tests', () => {
   testIcon(CpeLogoIcon);

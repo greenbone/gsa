@@ -4,6 +4,8 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Note from 'gmp/models/note';
 import {
@@ -13,8 +15,6 @@ import {
   MANUAL,
 } from 'gmp/models/override';
 
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.notes');
 

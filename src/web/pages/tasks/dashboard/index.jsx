@@ -4,26 +4,25 @@
  */
 
 import React from 'react';
-
-import {TasksCvssDisplay, TasksCvssTableDisplay} from './CvssDisplay';
+import Dashboard from 'web/components/dashboard/Dashboard';
+import {TasksCvssDisplay, TasksCvssTableDisplay} from 'web/pages/tasks/dashboard/CvssDisplay';
 import {
   TasksHighResultsDisplay,
   TasksHighResultsTableDisplay,
-} from './HighResults';
+} from 'web/pages/tasks/dashboard/HighResults';
 import {
   TasksMostHighResultsDisplay,
   TasksMostHighResultsTableDisplay,
-} from './MostHighResults';
+} from 'web/pages/tasks/dashboard/MostHighResults';
 import {
   TasksSchedulesDisplay,
   TasksSchedulesTableDisplay,
-} from './SchedulesDisplay';
+} from 'web/pages/tasks/dashboard/SchedulesDisplay';
 import {
   TasksSeverityDisplay,
   TasksSeverityTableDisplay,
-} from './SeverityClassDisplay';
-import {TasksStatusDisplay, TasksStatusTableDisplay} from './StatusDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/tasks/dashboard/SeverityClassDisplay';
+import {TasksStatusDisplay, TasksStatusTableDisplay} from 'web/pages/tasks/dashboard/StatusDisplay';
 
 export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
 

@@ -7,10 +7,9 @@ import {_l} from 'gmp/locale/lang';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
-
-import UserDetails from './Details';
-import Header from './Header';
-import Row from './Row';
+import UserDetails from 'web/pages/users/Details';
+import Header from 'web/pages/users/Header';
+import Row from 'web/pages/users/Row';
 
 export const SORT_FIELDS = [
   {

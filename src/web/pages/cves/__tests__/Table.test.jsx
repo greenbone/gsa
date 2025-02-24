@@ -9,10 +9,10 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
+import CveTable from 'web/pages/cves/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import CveTable from '../Table';
 
 const caps = new Capabilities(['everything']);
 

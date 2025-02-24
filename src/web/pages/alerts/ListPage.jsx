@@ -14,7 +14,9 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import AlertComponent from 'web/pages/alerts/Component';
 import AlertsFilterDialog from 'web/pages/alerts/FilterDialog';
+import AlertTable from 'web/pages/alerts/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -22,8 +24,6 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import AlertComponent from './Component';
-import AlertTable from './Table';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (

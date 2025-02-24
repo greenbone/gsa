@@ -24,10 +24,9 @@ import TableRow from 'web/components/table/Row';
 import SimpleTable from 'web/components/table/SimpleTable';
 import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
+import NvtPreference from 'web/pages/nvts/NvtPreference';
+import Preformatted from 'web/pages/nvts/Preformatted';
 import PropTypes from 'web/utils/PropTypes';
-
-import NvtPreference from '../nvts/NvtPreference';
-import Preformatted from '../nvts/Preformatted';
 
 const createPrefValues = (preferences = []) => {
   const preferenceValues = {};

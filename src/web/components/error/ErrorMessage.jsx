@@ -6,12 +6,12 @@
 import {isDefined} from 'gmp/utils/identity';
 import {AlertCircle} from 'lucide-react';
 import React from 'react';
+import ErrorContainer from 'web/components/error/ErrorContainer';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import ErrorContainer from './ErrorContainer';
 
 const ErrorMessage = ({
   message,

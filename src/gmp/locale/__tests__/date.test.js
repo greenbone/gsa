@@ -4,15 +4,14 @@
  */
 
 import {describe, test, expect, beforeEach} from '@gsa/testing';
-
-import date, {setLocale as locale} from '../../models/date';
 import {
   setLocale,
   getLocale,
   shortDate,
   longDate,
   dateTimeWithTimeZone,
-} from '../date';
+} from 'gmp/locale/date';
+import date, {setLocale as locale} from 'gmp/models/date';
 
 describe('setLocale tests', () => {
   test('should change locale', () => {

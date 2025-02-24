@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import ReportTlsCertificate from '../tlscertificate';
+import ReportTlsCertificate from 'gmp/models/report/tlscertificate';
 
 describe('ReportTlsCertificate tests', () => {
   test('should init ports', () => {

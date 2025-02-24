@@ -17,9 +17,9 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import CredentialDownloadIcon from 'web/pages/credentials/DownloadIcon';
 import PropTypes from 'web/utils/PropTypes';
 
-import CredentialDownloadIcon from './DownloadIcon';
 
 const Actions = withEntitiesActions(
   ({

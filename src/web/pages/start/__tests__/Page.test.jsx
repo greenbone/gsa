@@ -6,10 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
+import StartPage from 'web/pages/start/Page';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, screen} from 'web/utils/Testing';
 
-import StartPage from '../Page';
 
 const manualUrl = 'test/';
 

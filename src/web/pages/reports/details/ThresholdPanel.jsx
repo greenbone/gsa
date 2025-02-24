@@ -12,9 +12,9 @@ import FilterIcon from 'web/components/icon/FilterIcon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
+import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 
-import ReportPanel from './ReportPanel';
 
 const UpdatingDivider = styled(({isUpdating, ...props}) => (
   <Divider {...props} />

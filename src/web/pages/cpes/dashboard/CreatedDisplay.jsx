@@ -10,9 +10,9 @@ import transformCreated from 'web/components/dashboard/display/created/CreatedTr
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {CpesCreatedLoader} from 'web/pages/cpes/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-import {CpesCreatedLoader} from './Loaders';
 
 export const CpesCreatedDisplay = createDisplay({
   loaderComponent: CpesCreatedLoader,

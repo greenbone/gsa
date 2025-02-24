@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import ResetIcon from 'web/components/icon/ResetIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import ResetIcon from '../ResetIcon';
 
 describe('ResetIcon component tests', () => {
   testIcon(ResetIcon);

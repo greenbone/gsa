@@ -4,8 +4,7 @@
  */
 
 import styled from 'styled-components';
-
-import SimpleTable from './SimpleTable';
+import SimpleTable from 'web/components/table/SimpleTable';
 
 const Table = styled(SimpleTable)`
   & td {

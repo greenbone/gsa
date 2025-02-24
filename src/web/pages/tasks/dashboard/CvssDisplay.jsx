@@ -9,8 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvsStableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-
-import {TasksSeverityLoader} from './Loaders';
+import {TasksSeverityLoader} from 'web/pages/tasks/dashboard/Loaders';
 
 export const TasksCvssDisplay = createDisplay({
   loaderComponent: TasksSeverityLoader,

@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import DfnCertAdvIcon from 'web/components/icon/DfnCertAdvIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import DfnCertAdvIcon from '../DfnCertAdvIcon';
 
 describe('DfnCertAdvIcon component tests', () => {
   testIcon(DfnCertAdvIcon);

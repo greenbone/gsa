@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import DeleteIcon from 'web/components/icon/DeleteIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import DeleteIcon from '../DeleteIcon';
 
 describe('DeleteIcon component tests', () => {
   testIcon(DeleteIcon);

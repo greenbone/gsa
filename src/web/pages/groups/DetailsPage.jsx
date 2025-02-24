@@ -31,6 +31,8 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
+import GroupComponent from 'web/pages/groups/Component';
+import GroupDetails from 'web/pages/groups/Details';
 import {selector, loadEntity} from 'web/store/entities/groups';
 import {
   selector as permissionsSelector,
@@ -38,8 +40,6 @@ import {
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 
-import GroupComponent from './Component';
-import GroupDetails from './Details';
 
 const ToolBarIcons = ({
   entity,

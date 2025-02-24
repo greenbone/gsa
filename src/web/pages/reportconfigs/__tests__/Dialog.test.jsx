@@ -22,6 +22,8 @@ import {
   getTableBody,
 } from 'web/components/testing';
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
+import {mockReportFormats} from 'web/pages/reportconfigs/__mocks__/MockReportFormats';
+import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
 import {
   rendererWith,
   fireEvent,
@@ -30,9 +32,6 @@ import {
   screen,
   within,
 } from 'web/utils/Testing';
-
-import {mockReportFormats} from '../__mocks__/MockReportFormats';
-import ReportConfigDialog from '../Dialog';
 
 const config = ReportConfig.fromElement(mockReportConfig);
 

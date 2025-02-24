@@ -20,10 +20,10 @@ import {isDefined, isArray} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/Component';
+import NoteDialog from 'web/pages/notes/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import NoteDialog from './Dialog';
 
 class NoteComponent extends React.Component {
   constructor(...args) {

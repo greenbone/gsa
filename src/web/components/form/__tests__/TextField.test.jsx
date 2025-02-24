@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import TextField from 'web/components/form/TextField';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-import TextField from '../TextField';
 
 describe('TextField tests', () => {
   test('should render', () => {

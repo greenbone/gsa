@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import Role from 'gmp/models/role';
 import {testModel} from 'gmp/models/testing';
 
-import Role from '../role';
 
 testModel(Role, 'role');
 

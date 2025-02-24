@@ -14,15 +14,15 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import PermissionComponent from 'web/pages/permissions/Component';
 import FilterDialog from 'web/pages/permissions/FilterDialog';
+import Table from 'web/pages/permissions/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 
-import PermissionComponent from './Component';
-import Table from './Table';
 
 const ToolBarIcons = ({onPermissionCreateClick}) => {
   const capabilities = useCapabilities();

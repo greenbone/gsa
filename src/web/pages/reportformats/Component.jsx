@@ -7,10 +7,10 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import EntityComponent from 'web/entity/Component';
+import ReportFormatDialog from 'web/pages/reportformats/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import ReportFormatDialog from './Dialog';
 
 class ReportFormatComponent extends React.Component {
   constructor(...args) {

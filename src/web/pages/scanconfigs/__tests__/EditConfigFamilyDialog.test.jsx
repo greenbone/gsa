@@ -11,9 +11,9 @@ import {
   getTableBody,
   getTableHeader,
 } from 'web/components/testing';
+import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
 import {rendererWith, fireEvent, within, screen} from 'web/utils/Testing';
 
-import EditConfigFamilyDialog from '../EditConfigFamilyDialog';
 
 const nvt = Nvt.fromElement({
   _oid: '1234',

@@ -8,24 +8,23 @@ import {DashboardControls} from 'web/components/dashboard/Controls';
 import {Dashboard} from 'web/components/dashboard/Dashboard';
 import {canAddDisplay} from 'web/components/dashboard/Utils';
 import Layout from 'web/components/layout/Layout';
+import {CERTBUND_DISPLAYS} from 'web/pages/certbund/dashboard';
+import {CPES_DISPLAYS} from 'web/pages/cpes/dashboard';
+import {CVES_DISPLAYS} from 'web/pages/cves/dashboard';
+import {DFNCERT_DISPLAYS} from 'web/pages/dfncert/dashboard';
+import {HOSTS_DISPLAYS} from 'web/pages/hosts/dashboard';
+import {NOTES_DISPLAYS} from 'web/pages/notes/dashboard';
+import {NVTS_DISPLAYS} from 'web/pages/nvts/dashboard';
+import {OS_DISPLAYS} from 'web/pages/operatingsystems/dashboard';
+import {OVERRIDES_DISPLAYS} from 'web/pages/overrides/dashboard';
+import {AUDIT_REPORTS_DISPLAYS} from 'web/pages/reports/auditdashboard';
+import {REPORTS_DISPLAYS} from 'web/pages/reports/dashboard';
+import {RESULTS_DISPLAYS} from 'web/pages/results/dashboard';
+import {DEFAULT_DISPLAYS} from 'web/pages/start/NewDashboardDialog';
+import {TASKS_DISPLAYS} from 'web/pages/tasks/dashboard';
+import {TICKETS_DISPLAYS} from 'web/pages/tickets/dashboard';
+import {VULNS_DISPLAYS} from 'web/pages/vulns/dashboard';
 import PropTypes from 'web/utils/PropTypes';
-
-import {DEFAULT_DISPLAYS} from './NewDashboardDialog';
-import {CERTBUND_DISPLAYS} from '../certbund/dashboard';
-import {CPES_DISPLAYS} from '../cpes/dashboard';
-import {CVES_DISPLAYS} from '../cves/dashboard';
-import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
-import {HOSTS_DISPLAYS} from '../hosts/dashboard';
-import {NOTES_DISPLAYS} from '../notes/dashboard';
-import {NVTS_DISPLAYS} from '../nvts/dashboard';
-import {OS_DISPLAYS} from '../operatingsystems/dashboard';
-import {OVERRIDES_DISPLAYS} from '../overrides/dashboard';
-import {AUDIT_REPORTS_DISPLAYS} from '../reports/auditdashboard';
-import {REPORTS_DISPLAYS} from '../reports/dashboard';
-import {RESULTS_DISPLAYS} from '../results/dashboard';
-import {TASKS_DISPLAYS} from '../tasks/dashboard';
-import {TICKETS_DISPLAYS} from '../tickets/dashboard';
-import {VULNS_DISPLAYS} from '../vulns/dashboard';
 
 const ALL_DISPLAYS = [
   ...TASKS_DISPLAYS,

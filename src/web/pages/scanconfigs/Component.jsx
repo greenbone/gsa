@@ -11,14 +11,13 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/Component';
+import ScanConfigDialog from 'web/pages/scanconfigs/Dialog';
+import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
+import EditScanConfigDialog from 'web/pages/scanconfigs/EditDialog';
+import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
+import ImportDialog from 'web/pages/scanconfigs/ImportDialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
-import ScanConfigDialog from './Dialog';
-import EditConfigFamilyDialog from './EditConfigFamilyDialog';
-import EditScanConfigDialog from './EditDialog';
-import EditNvtDetailsDialog from './EditNvtDetailsDialog';
-import ImportDialog from './ImportDialog';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};

@@ -29,6 +29,8 @@ import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import PolicyComponent from 'web/pages/policies/Component';
+import PolicyDetails from 'web/pages/policies/Details';
 import {
   NvtFamilies,
   ScannerPreferences,
@@ -42,8 +44,6 @@ import {selector, loadEntity} from 'web/store/entities/policies';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import PolicyComponent from './Component';
-import PolicyDetails from './Details';
 
 export const ToolBarIcons = withCapabilities(
   ({

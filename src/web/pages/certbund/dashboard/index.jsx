@@ -4,17 +4,16 @@
  */
 
 import React from 'react';
-
+import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   CertBundCreatedDisplay,
   CertBundCreatedTableDisplay,
-} from './CreatedDisplay';
-import {CertBundCvssDisplay, CertBundCvssTableDisplay} from './CvssDisplay';
+} from 'web/pages/certbund/dashboard/CreatedDisplay';
+import {CertBundCvssDisplay, CertBundCvssTableDisplay} from 'web/pages/certbund/dashboard/CvssDisplay';
 import {
   CertBundSeverityClassDisplay,
   CertBundSeverityClassTableDisplay,
-} from './SeverityClassDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/certbund/dashboard/SeverityClassDisplay';
 
 export const CERTBUND_DASHBOARD_ID = 'a6946f44-480f-4f37-8a73-28a4cd5310c4';
 

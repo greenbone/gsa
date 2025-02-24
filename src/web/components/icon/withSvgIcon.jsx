@@ -5,8 +5,7 @@
 
 import hoistStatics from 'hoist-non-react-statics';
 import React from 'react';
-
-import SvgIcon from './SvgIcon';
+import SvgIcon from 'web/components/icon/SvgIcon';
 
 const withSvgIcon =
   (defaults = {}) =>

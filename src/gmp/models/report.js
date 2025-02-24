@@ -4,10 +4,10 @@
  */
 
 import Model, {parseModelFromElement} from 'gmp/model';
+import ReportReport from 'gmp/models/report/report';
 import {parseSeverity, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-import ReportReport from './report/report';
 
 // FIXME the report xml structure is really ugly
 

@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import path from '../Path';
+import path from 'web/components/chart/utils/Path';
 
 describe('path tests', () => {
   test('should draw a move path', () => {

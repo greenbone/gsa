@@ -20,13 +20,13 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/SimpleTable';
 import {Col} from 'web/entity/Page';
+import LdapDialog from 'web/pages/ldap/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
-import LdapDialog from './Dialog';
 
 const ToolBarIcons = ({onOpenDialogClick}) => (
   <IconDivider>

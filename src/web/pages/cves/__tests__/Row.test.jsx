@@ -7,10 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Cve from 'gmp/models/cve';
 import {parseDate} from 'gmp/parser';
+import CveRow from 'web/pages/cves/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import CveRow from '../Row';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

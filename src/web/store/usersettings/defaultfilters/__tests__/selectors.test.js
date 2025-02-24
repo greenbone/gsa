@@ -5,8 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-
-import {getUserSettingsDefaultFilter} from '../selectors';
+import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
 describe('getUserSettingsDefaultFilter selector tests', () => {
   test('should return defaults', () => {

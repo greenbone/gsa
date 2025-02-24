@@ -6,10 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ReportFormat from 'gmp/models/reportformat';
+import VerifyIcon from 'web/entity/icon/VerifyIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import VerifyIcon from '../VerifyIcon';
 
 describe('Entity VerifyIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

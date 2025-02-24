@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Icon from './svg/remove_from_assets.svg';
-import withSvgIcon from './withSvgIcon';
+import Icon from 'web/components/icon/svg/remove_from_assets.svg';
+import withSvgIcon from 'web/components/icon/withSvgIcon';
 
 const RemoveFromAssetsIconComponent = withSvgIcon()(Icon);
 

@@ -10,11 +10,10 @@ import {useState} from 'react';
 import {v4 as uuid} from 'uuid';
 import AutoSize from 'web/components/layout/AutoSize';
 import Layout from 'web/components/layout/Layout';
+import EmptyRow from 'web/components/sortable/EmptyRow';
+import Item, {GRID_ITEM_MARGIN} from 'web/components/sortable/Item';
+import Row from 'web/components/sortable/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import EmptyRow from './EmptyRow';
-import Item, {GRID_ITEM_MARGIN} from './Item';
-import Row from './Row';
 
 const createNewRow = item => ({
   id: uuid(),

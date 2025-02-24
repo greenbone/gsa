@@ -5,7 +5,6 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
-
 import {
   addDisplayToSettings,
   canAddDisplay,
@@ -17,7 +16,7 @@ import {
   getPermittedDisplayIds,
   getRows,
   removeDisplay,
-} from '../Utils';
+} from 'web/components/dashboard/Utils';
 
 describe('getPermittedDisplayIds tests', () => {
   test('should return undefined for undefined', () => {

@@ -33,7 +33,10 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import ConfirmRemoveDialog from 'web/pages/start/ConfirmRemoveDialog';
 import Dashboard from 'web/pages/start/Dashboard';
+import EditDashboardDialog from 'web/pages/start/EditDashboardDialog';
+import NewDashboardDialog, {DEFAULT_DISPLAYS} from 'web/pages/start/NewDashboardDialog';
 import {
   loadSettings,
   saveSettings,
@@ -47,9 +50,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import ConfirmRemoveDialog from './ConfirmRemoveDialog';
-import EditDashboardDialog from './EditDashboardDialog';
-import NewDashboardDialog, {DEFAULT_DISPLAYS} from './NewDashboardDialog';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';

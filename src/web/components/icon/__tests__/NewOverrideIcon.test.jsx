@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import NewOverrideIcon from 'web/components/icon/NewOverrideIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import NewOverrideIcon from '../NewOverrideIcon';
 
 describe('NewOverrideIcon component tests', () => {
   testIcon(NewOverrideIcon);

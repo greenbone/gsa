@@ -14,9 +14,9 @@ import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTable from 'web/components/dashboard/display/DataTable';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {TasksSchedulesLoader} from 'web/pages/tasks/dashboard/Loaders';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
-import {TasksSchedulesLoader} from './Loaders';
 
 const today = date().startOf('day');
 const week = today.clone().add(7, 'days');

@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import CertBundAdvIcon from 'web/components/icon/CertBundAdvIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import CertBundAdvIcon from '../CertBundAdvIcon';
 
 describe('CertBundAdvIcon component tests', () => {
   testIcon(CertBundAdvIcon);

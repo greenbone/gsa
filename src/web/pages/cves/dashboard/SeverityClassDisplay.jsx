@@ -9,8 +9,7 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-
-import {CvesSeverityLoader} from './Loaders';
+import {CvesSeverityLoader} from 'web/pages/cves/dashboard/Loaders';
 
 export const CvesSeverityClassDisplay = createDisplay({
   loaderComponent: CvesSeverityLoader,

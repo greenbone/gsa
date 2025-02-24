@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import PreviousIcon from 'web/components/icon/PreviousIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import PreviousIcon from '../PreviousIcon';
 
 describe('PreviousIcon component tests', () => {
   testIcon(PreviousIcon);

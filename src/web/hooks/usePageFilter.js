@@ -14,6 +14,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useSearchParams} from 'react-router';
 import useGmp from 'web/hooks/useGmp';
+import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import {pageFilter as setPageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';
 import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
@@ -21,7 +22,6 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 import {loadUserSettingDefault} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
-import useShallowEqualSelector from './useShallowEqualSelector';
 
 /**
  * Hook to get the default filter of a page from the store

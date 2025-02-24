@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import getDashboardSettings from '../selectors';
+import getDashboardSettings from 'web/store/dashboard/settings/selectors';
 
 const createState = state => ({
   dashboardSettings: {

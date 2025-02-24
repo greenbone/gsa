@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import CalendarIcon from 'web/components/icon/CalendarIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import CalendarIcon from '../CalendarIcon';
 
 describe('CalendarIcon component tests', () => {
   testIcon(CalendarIcon);

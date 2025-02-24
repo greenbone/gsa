@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import KeyIcon from 'web/components/icon/KeyIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import KeyIcon from '../KeyIcon';
 
 describe('KeyIcon component tests', () => {
   testIcon(KeyIcon);

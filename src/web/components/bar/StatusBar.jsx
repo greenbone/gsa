@@ -7,9 +7,9 @@ import _ from 'gmp/locale';
 import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
 import styled from 'styled-components';
+import ProgressBar, {adjustProgress} from 'web/components/bar/ProgressBar';
 import PropTypes from 'web/utils/PropTypes';
 
-import ProgressBar, {adjustProgress} from './ProgressBar';
 
 const Span = styled.span`
   white-space: nowrap;

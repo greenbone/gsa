@@ -5,8 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {isDate} from 'gmp/models/date';
-
-import ReportHost from '../host';
+import ReportHost from 'gmp/models/report/host';
 
 describe('ReportHost tests', () => {
   test('should initialize result counts', () => {

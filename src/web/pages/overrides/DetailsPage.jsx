@@ -38,6 +38,8 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import OverrideComponent from 'web/pages/overrides/Component';
+import OverrideDetails from 'web/pages/overrides/Details';
 import {
   selector as overridesSelector,
   loadEntity,
@@ -51,8 +53,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
-import OverrideComponent from './Component';
-import OverrideDetails from './Details';
 
 export const ToolBarIcons = ({
   entity,

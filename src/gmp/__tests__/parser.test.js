@@ -5,7 +5,6 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {isDate, isDuration} from 'gmp/models/date';
-
 import {
   parseCsv,
   parseBoolean,
@@ -26,13 +25,13 @@ import {
   NO_VALUE,
   setProperties,
   parseToString,
-} from '../parser';
+} from 'gmp/parser';
 import {
   parseCvssV2BaseVector,
   parseCvssV3BaseVector,
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
-} from '../parser/cvss';
+} from 'gmp/parser/cvss';
 
 describe('parseInt tests', () => {
   test('should parse int number string', () => {

@@ -6,10 +6,10 @@
 import {getTranslatableReportCompliance} from 'gmp/models/auditreport';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import ProgressBar from 'web/components/bar/ProgressBar';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import ProgressBar from './ProgressBar';
 
 const ComplianceBar = ({compliance, toolTip}) => {
   const title = getTranslatableReportCompliance(compliance);

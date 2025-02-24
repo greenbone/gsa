@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import LogoutIcon from 'web/components/icon/LogoutIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import LogoutIcon from '../LogoutIcon';
 
 describe('LogoutIcon component tests', () => {
   testIcon(LogoutIcon);

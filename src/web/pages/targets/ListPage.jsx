@@ -14,15 +14,14 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import TargetComponent from 'web/pages/targets/Component';
+import TargetsFilterDialog from 'web/pages/targets/FilterDialog';
+import TargetsTable from 'web/pages/targets/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/targets';
 import PropTypes from 'web/utils/PropTypes';
-
-import TargetComponent from './Component';
-import TargetsFilterDialog from './FilterDialog';
-import TargetsTable from './Table';
 
 export const ToolBarIcons = ({onTargetCreateClick}) => {
   const [_] = useTranslation();

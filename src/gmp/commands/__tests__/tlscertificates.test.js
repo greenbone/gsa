@@ -4,19 +4,19 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import defaults from 'gmp/http/transform/default';
-import {ALL_FILTER} from 'gmp/models/filter';
-
 import {
   createActionResultResponse,
   createEntitiesResponse,
   createEntityResponse,
   createHttp,
-} from '../testing';
+} from 'gmp/commands/testing';
 import {
   TlsCertificateCommand,
   TlsCertificatesCommand,
-} from '../tlscertificates';
+} from 'gmp/commands/tlscertificates';
+import defaults from 'gmp/http/transform/default';
+import {ALL_FILTER} from 'gmp/models/filter';
+
 
 describe('TlsCertificateCommand tests', () => {
   test('should return a single TLS certificate', () => {

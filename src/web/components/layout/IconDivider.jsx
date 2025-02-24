@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Divider from 'web/components/layout/Divider';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
-import Divider from './Divider';
 
 const IconDivider = withComponentDefaults({margin: '5px'})(Divider);
 

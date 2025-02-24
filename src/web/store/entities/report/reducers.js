@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {reportIdentifier, simplifiedReportIdentifier} from 'web/store/entities/report/selectors';
 import {types} from 'web/store/entities/utils/actions';
 import {isError} from 'web/store/entities/utils/reducers';
 
-import {reportIdentifier, simplifiedReportIdentifier} from './selectors';
 
 /*
   Use the full filter string for identifying if a single report is loaded

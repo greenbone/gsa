@@ -7,15 +7,15 @@ import _ from 'gmp/locale';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import SaveDialog from 'web/components/dialog/SaveDialog';
+import FormGroup from 'web/components/form/FormGroup';
+import Select from 'web/components/form/Select';
 import {loadEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
-import SaveDialog from '../../dialog/SaveDialog';
-import FormGroup from '../../form/FormGroup';
-import Select from '../../form/Select';
 
 class FilterSelection extends React.Component {
   constructor(...args) {

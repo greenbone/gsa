@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import HttpCommand from 'gmp/commands/http';
 import _ from 'gmp/locale';
 import Login from 'gmp/models/login';
 
-import HttpCommand from './http';
 
 class LoginCommand extends HttpCommand {
   constructor(http) {

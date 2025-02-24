@@ -9,12 +9,11 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/Component';
+import PortListsDialog from 'web/pages/portlists/Dialog';
+import ImportPortListDialog from 'web/pages/portlists/ImportDialog';
+import PortRangeDialog from 'web/pages/portlists/PortRangeDialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
-import PortListsDialog from './Dialog';
-import ImportPortListDialog from './ImportDialog';
-import PortRangeDialog from './PortRangeDialog';
 
 class PortListComponent extends React.Component {
   constructor(...args) {

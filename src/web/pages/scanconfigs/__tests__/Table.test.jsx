@@ -10,10 +10,10 @@ import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
+import Table from 'web/pages/scanconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import Table from '../Table';
 
 const config = ScanConfig.fromElement({
   _id: '12345',

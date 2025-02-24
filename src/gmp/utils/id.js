@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {first} from './array';
-import {isDefined, isString} from './identity';
+import {first} from 'gmp/utils/array';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 export const hasId = model =>
   isDefined(model) && isString(model.id) && model.id.length > 0;

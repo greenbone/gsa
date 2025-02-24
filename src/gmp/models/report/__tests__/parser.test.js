@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   parseHosts,
   parsePorts,
@@ -14,7 +13,7 @@ import {
   parseCves,
   parse_errors,
   parseClosedCves,
-} from '../parser';
+} from 'gmp/models/report/parser';
 
 describe('report parser tests', () => {
   test('should parse hosts', () => {

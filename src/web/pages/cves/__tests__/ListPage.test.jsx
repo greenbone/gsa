@@ -18,13 +18,13 @@ import {
   getTableFooter,
   getTextInputs,
 } from 'web/components/testing';
+import CvesPage, {ToolBarIcons} from 'web/pages/cves/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, screen, wait} from 'web/utils/Testing';
 
-import CvesPage, {ToolBarIcons} from '../ListPage';
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',

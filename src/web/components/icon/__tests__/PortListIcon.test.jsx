@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import PortListIcon from 'web/components/icon/PortListIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import PortListIcon from '../PortListIcon';
 
 describe('PortListIcon component tests', () => {
   testIcon(PortListIcon);

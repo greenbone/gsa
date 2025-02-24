@@ -14,15 +14,14 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import TagComponent from 'web/pages/tags/Component';
+import TagsFilterDialog from 'web/pages/tags/FilterDialog';
+import TagsTable from 'web/pages/tags/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tags';
 import PropTypes from 'web/utils/PropTypes';
-
-import TagComponent from './Component';
-import TagsFilterDialog from './FilterDialog';
-import TagsTable from './Table';
 
 const ToolBarIcons = ({onTagCreateClick}) => {
   const [_] = useTranslation();

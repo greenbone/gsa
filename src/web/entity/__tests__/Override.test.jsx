@@ -6,10 +6,10 @@
 import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Override from 'gmp/models/override';
+import OverrideBox from 'web/entity/Override';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-import OverrideBox from '../Override';
 
 const caps = new Capabilities(['everything']);
 

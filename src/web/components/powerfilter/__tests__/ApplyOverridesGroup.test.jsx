@@ -5,10 +5,10 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import ApplyOverridesGroup from 'web/components/powerfilter/ApplyOverridesGroup';
 import {getRadioInputs} from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import ApplyOverridesGroup from '../ApplyOverridesGroup';
 
 describe('ApplyOverridesGroup tests', () => {
   test('should render', () => {

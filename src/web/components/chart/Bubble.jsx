@@ -6,12 +6,11 @@
 import {pack, hierarchy} from 'd3-hierarchy';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import Group from 'web/components/chart/Group';
+import Svg from 'web/components/chart/Svg';
+import ToolTip from 'web/components/chart/Tooltip';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
-
-import Group from './Group';
-import Svg from './Svg';
-import ToolTip from './Tooltip';
 
 const margin = {
   top: 5,

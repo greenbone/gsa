@@ -6,17 +6,17 @@
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import {
+  receivedDashboardData,
+  receivedDashboardError,
+  requestDashboardData,
+} from 'web/store/dashboard/data/actions';
+import getDashboardData from 'web/store/dashboard/data/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withSubscription from 'web/utils/withSubscription';
 
-import {
-  receivedDashboardData,
-  receivedDashboardError,
-  requestDashboardData,
-} from './actions';
-import getDashboardData from './selectors';
 
 export const loaderPropTypes = {
   children: PropTypes.func,

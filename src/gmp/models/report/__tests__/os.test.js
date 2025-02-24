@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import ReportOperatingSystem from '../os';
+import ReportOperatingSystem from 'gmp/models/report/os';
 
 describe('ReportOperatingSystem tests', () => {
   test('should initialize hosts', () => {

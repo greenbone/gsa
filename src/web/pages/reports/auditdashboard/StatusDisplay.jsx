@@ -16,8 +16,7 @@ import {
   percent,
 } from 'web/components/dashboard/display/Utils';
 import {registerDisplay} from 'web/components/dashboard/Registry';
-
-import {ReportCompianceLoader} from './Loaders';
+import {ReportCompianceLoader} from 'web/pages/reports/auditdashboard/Loaders';
 
 const transformStatusData = (data = {}) => {
   const {groups = []} = data;

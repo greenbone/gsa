@@ -6,8 +6,7 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
-
-import Img from './Img';
+import Img from 'web/components/img/Img';
 
 const Image = styled(Img)`
   display: flex;

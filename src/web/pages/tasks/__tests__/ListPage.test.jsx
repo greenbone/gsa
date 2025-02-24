@@ -15,13 +15,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import TaskPage, {ToolBarIcons} from 'web/pages/tasks/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/Testing';
 
-import TaskPage, {ToolBarIcons} from '../ListPage';
 
 const lastReport = {
   report: {

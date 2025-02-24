@@ -16,10 +16,9 @@ import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
+import ResultDetails from 'web/pages/results/Details';
+import ResultsRow from 'web/pages/results/Row';
 import PropTypes from 'web/utils/PropTypes';
-
-import ResultDetails from './Details';
-import ResultsRow from './Row';
 
 const Header = ({
   actionsColumn,

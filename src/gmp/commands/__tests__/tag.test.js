@@ -4,13 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {TagCommand} from '../tags';
+import {TagCommand} from 'gmp/commands/tags';
 import {
   createActionResultResponse,
   createEntityResponse,
   createHttp,
-} from '../testing';
+} from 'gmp/commands/testing';
 
 describe('TagCommand tests', () => {
   test('should create new tag with resources', () => {

@@ -7,11 +7,11 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import CloseButton from 'web/components/dialog/CloseButton';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import CloseButton from './CloseButton';
 
 const StyledLayout = styled(Layout)`
   padding: 15px;

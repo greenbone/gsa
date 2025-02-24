@@ -9,17 +9,17 @@ import _ from 'gmp/locale';
 import date from 'gmp/models/date';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
+import Axis from 'web/components/chart/Axis';
+import Group from 'web/components/chart/Group';
+import Svg from 'web/components/chart/Svg';
+import ToolTip from 'web/components/chart/Tooltip';
+import path from 'web/components/chart/utils/Path';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
-import Axis from './Axis';
-import Group from './Group';
-import Svg from './Svg';
-import ToolTip from './Tooltip';
-import path from './utils/Path';
 
 const ONE_DAY = 60 * 60 * 24;
 

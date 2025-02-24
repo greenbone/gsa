@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Asset from 'gmp/models/asset';
 import {
   parseBoolean,
   parseInt,
@@ -15,7 +16,6 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Asset from './asset';
 
 const get_identifier = (identifiers, name) =>
   identifiers.filter(identifier => identifier.name === name)[0];

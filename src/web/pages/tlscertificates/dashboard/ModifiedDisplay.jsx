@@ -16,11 +16,11 @@ import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay'
 import {totalCount} from 'web/components/dashboard/display/Utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {TlsCertificatesModifiedLoader} from 'web/pages/tlscertificates/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-import {TlsCertificatesModifiedLoader} from './Loaders';
 
 const transformModified = (data = {}) => {
   const {groups = []} = data;

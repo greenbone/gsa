@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import FormGroup from 'web/components/form/FormGroup';
 import {render, screen} from 'web/utils/Testing';
 
-import FormGroup from '../FormGroup';
 
 describe('FormGroup tests', () => {
   test('should render', () => {

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Info from 'gmp/models/info';
 import {parseDate, parseSeverity, setProperties} from 'gmp/parser';
 import {
   parseCvssV2BaseFromVector,
@@ -13,7 +14,6 @@ import {map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Info from './info';
 
 class Cve extends Info {
   static entityType = 'cve';

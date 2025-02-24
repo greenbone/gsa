@@ -14,9 +14,9 @@ import {
   getSelectElement,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
+import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import CreateTicketDialog from '../CreateDialog';
 
 const u1 = User.fromElement({
   _id: 'u1',

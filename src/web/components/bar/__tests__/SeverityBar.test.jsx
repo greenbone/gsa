@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import SeverityBar from 'web/components/bar/SeverityBar';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import SeverityBar from '../SeverityBar';
 
 describe('SeverityBar tests', () => {
   test('should render', () => {

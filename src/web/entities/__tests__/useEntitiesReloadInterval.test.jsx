@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import {screen, rendererWith} from 'web/utils/Testing';
 
-import useEntitiesReloadInterval from '../useEntitiesReloadInterval';
 
 const TestComponent = ({entities, useActive, isVisible = true}) => {
   const timeoutFunc = useEntitiesReloadInterval(entities, {useActive});

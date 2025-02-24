@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import arc from '../Arc';
+import arc from 'web/components/chart/utils/Arc';
 
 describe('arc class tests', () => {
   test('should throw if no outerRadiusX is set', () => {

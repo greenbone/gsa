@@ -4,17 +4,16 @@
  */
 
 import React from 'react';
-
+import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   DfnCertsCreatedDisplay,
   DfnCertsCreatedTableDisplay,
-} from './CreatedDisplay';
-import {DfnCertCvssDisplay, DfnCertCvssTableDisplay} from './CvssDisplay';
+} from 'web/pages/dfncert/dashboard/CreatedDisplay';
+import {DfnCertCvssDisplay, DfnCertCvssTableDisplay} from 'web/pages/dfncert/dashboard/CvssDisplay';
 import {
   DfnCertSeverityClassDisplay,
   DfnCertSeverityClassTableDisplay,
-} from './SeverityClassDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/dfncert/dashboard/SeverityClassDisplay';
 
 export const DFNCERT_DASHBOARD_ID = '9812ea49-682d-4f99-b3cc-eca051d1ce59';
 

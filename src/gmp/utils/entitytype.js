@@ -4,8 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-
-import {isDefined} from './identity';
+import {isDefined} from 'gmp/utils/identity';
 
 /**
  * Return the entity type of a Model object

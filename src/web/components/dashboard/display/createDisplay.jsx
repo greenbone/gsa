@@ -5,9 +5,9 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import PropTypes from 'web/utils/PropTypes';
 
-import withFilterSelection from './withFilterSelection';
 
 const createDisplay = ({
   chartComponent: Chart,

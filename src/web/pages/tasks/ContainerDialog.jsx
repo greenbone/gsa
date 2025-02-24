@@ -10,9 +10,9 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
+import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 import PropTypes from 'web/utils/PropTypes';
 
-import AddResultsToAssetsGroup from './AddResultsToAssetsGroup';
 
 const ContainerTaskDialog = ({
   comment = '',

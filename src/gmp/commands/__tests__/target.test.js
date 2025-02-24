@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {TargetCommand} from '../targets';
-import {createActionResultResponse, createHttp} from '../testing';
+import {TargetCommand} from 'gmp/commands/targets';
+import {createActionResultResponse, createHttp} from 'gmp/commands/testing';
 
 describe('TargetCommand tests', () => {
   test('should create target', () => {

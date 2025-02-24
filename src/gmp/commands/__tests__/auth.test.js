@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {AuthenticationCommand} from '../auth';
-import {createActionResultResponse, createHttp} from '../testing';
+import {AuthenticationCommand} from 'gmp/commands/auth';
+import {createActionResultResponse, createHttp} from 'gmp/commands/testing';
 
 describe('AuthenticationCommand tests', () => {
   test('should enable ldap', () => {

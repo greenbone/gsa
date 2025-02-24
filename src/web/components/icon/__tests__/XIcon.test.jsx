@@ -5,8 +5,7 @@
 
 import {describe} from '@gsa/testing';
 import {testIcon} from 'web/components/icon/Testing';
-
-import XIcon from '../XIcon';
+import XIcon from 'web/components/icon/XIcon';
 
 describe('XIcon component tests', () => {
   testIcon(XIcon);

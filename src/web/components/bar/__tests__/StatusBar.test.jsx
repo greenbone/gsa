@@ -5,10 +5,10 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {TASK_STATUS} from 'gmp/models/task';
+import StatusBar from 'web/components/bar/StatusBar';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-import StatusBar from '../StatusBar';
 
 describe('StatusBar tests', () => {
   test('should render', () => {

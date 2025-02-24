@@ -4,14 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {ALL_FILTER} from 'gmp/models/filter';
-
-import {ResultsCommand} from '../results';
+import {ResultsCommand} from 'gmp/commands/results';
 import {
   createHttp,
   createEntitiesResponse,
   createAggregatesResponse,
-} from '../testing';
+} from 'gmp/commands/testing';
+import {ALL_FILTER} from 'gmp/models/filter';
 
 describe('ResultsCommand tests', () => {
   test('should return all results', () => {

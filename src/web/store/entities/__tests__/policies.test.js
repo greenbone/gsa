@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as policy from '../policies';
-import {testAll} from '../utils/testing';
+import * as policy from 'web/store/entities/policies';
+import {testAll} from 'web/store/entities/utils/testing';
 
 testAll('policy', policy);

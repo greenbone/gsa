@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import FootNote from 'web/components/footnote/Footnote';
 import {render} from 'web/utils/Testing';
 
-import FootNote from '../Footnote';
 
 describe('Footnote tests', () => {
   test('should render footnote', () => {

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import Main from 'web/components/structure/Main';
 import {render} from 'web/utils/Testing';
 
-import Main from '../Main';
 
 describe('Main tests', () => {
   test('should render main', () => {

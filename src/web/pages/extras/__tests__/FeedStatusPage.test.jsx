@@ -6,9 +6,9 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {createFeed} from 'gmp/commands/feedstatus';
 import Response from 'gmp/http/response';
+import FeedStatus from 'web/pages/extras/FeedStatusPage';
 import {rendererWith, waitFor} from 'web/utils/Testing';
 
-import FeedStatus from '../FeedStatusPage';
 
 const mockDate = new Date(1595660400000); // Saturday July 25 090000
 

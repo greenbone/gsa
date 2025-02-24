@@ -5,9 +5,9 @@
 
 import timezones from 'gmp/timezones';
 import React, {useMemo} from 'react';
+import Select from 'web/components/form/Select';
 import PropTypes from 'web/utils/PropTypes';
 
-import Select from './Select';
 
 const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
   const timezoneItems = useMemo(

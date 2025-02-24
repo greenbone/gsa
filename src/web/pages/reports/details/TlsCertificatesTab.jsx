@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
+import TLSCertificatesTable from 'web/pages/reports/details/TlsCertificatesTable';
 import PropTypes from 'web/utils/PropTypes';
 import {
   makeCompareDate,
@@ -12,8 +14,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-import ReportEntitiesContainer from './ReportEntitiesContainer';
-import TLSCertificatesTable from './TlsCertificatesTable';
 
 const tlsCertificatesSortFunctions = {
   dn: makeCompareString('subjectDn'),

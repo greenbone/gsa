@@ -3,6 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_} from './lang';
+import {_} from 'gmp/locale/lang';
 
 export default _;

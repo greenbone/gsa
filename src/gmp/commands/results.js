@@ -4,10 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
 import Result from 'gmp/models/result';
-
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
 
 export class ResultsCommand extends EntitiesCommand {
   constructor(http) {

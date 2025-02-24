@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import HttpCommand from 'gmp/commands/http';
 import ActionResult from 'gmp/models/actionresult';
 import {filter_string} from 'gmp/models/filter/utils';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import HttpCommand from './http';
 
 export const BULK_SELECT_BY_IDS = 1;
 export const BULK_SELECT_BY_FILTER = 0;

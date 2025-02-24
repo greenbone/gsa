@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isString} from './identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 /**
  * Capitalizes the first letter of a given string.

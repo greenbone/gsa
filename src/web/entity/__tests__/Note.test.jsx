@@ -6,10 +6,10 @@
 import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
+import NoteBox from 'web/entity/Note';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-import NoteBox from '../Note';
 
 const caps = new Capabilities(['everything']);
 

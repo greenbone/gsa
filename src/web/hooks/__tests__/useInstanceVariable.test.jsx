@@ -5,9 +5,9 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {useCallback} from 'react';
+import useInstanceVariable from 'web/hooks/useInstanceVariable';
 import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
-import useInstanceVariable from '../useInstanceVariable';
 
 const TestComponent = ({callback}) => {
   const someVariable = useInstanceVariable({value: 1});

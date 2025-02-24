@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import PerformanceIcon from 'web/components/icon/PerformanceIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import PerformanceIcon from '../PerformanceIcon';
 
 describe('PerformanceIcon component tests', () => {
   testIcon(PerformanceIcon);

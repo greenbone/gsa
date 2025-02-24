@@ -5,9 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {testModel} from 'gmp/models/testing';
+import TlsCertificate, {TIME_STATUS} from 'gmp/models/tlscertificate';
 import {parseDate} from 'gmp/parser';
 
-import TlsCertificate, {TIME_STATUS} from '../tlscertificate';
 
 describe('TlsCertificate Model tests', () => {
   testModel(TlsCertificate, 'tlscertificate', {testName: false});

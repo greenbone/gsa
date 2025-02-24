@@ -15,9 +15,9 @@ import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay'
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
 import {percent} from 'web/components/dashboard/display/Utils';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {TlsCertificatesStatusLoader} from 'web/pages/tlscertificates/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-import {TlsCertificatesStatusLoader} from './Loaders';
 
 const timeStatusColorScale = scaleOrdinal()
   .domain(Object.values(TIME_STATUS).sort())

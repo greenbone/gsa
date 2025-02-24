@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {getUserSettingsDefaults} from '../selectors';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 const createRootState = state => ({
   userSettings: {

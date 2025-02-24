@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import SaveDialogFooter from 'web/components/dialog/SaveDialogFooter';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-import SaveDialogFooter from '../SaveDialogFooter';
 
 describe('SaveDialogFooter', () => {
   const defaultProps = {

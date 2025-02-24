@@ -6,6 +6,7 @@
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import ProgressBar from 'web/components/bar/ProgressBar';
 import PropTypes from 'web/utils/PropTypes';
 import {severityFormat} from 'web/utils/Render';
 import {
@@ -18,7 +19,6 @@ import {
   LOG_VALUE,
 } from 'web/utils/Severity';
 
-import ProgressBar from './ProgressBar';
 
 const SeverityBar = ({severity, toolTip}) => {
   let cvss;

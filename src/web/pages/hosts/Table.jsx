@@ -14,11 +14,11 @@ import EntitiesFooter, {withEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
+import HostDetails from 'web/pages/hosts/Details';
+import HostRow from 'web/pages/hosts/Row';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 
-import HostDetails from './Details';
-import HostRow from './Row';
 
 const Header = ({
   actionsColumn,

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {createAll} from './utils/main';
+import {createAll} from 'web/store/entities/utils/main';
 
 const {
   loadAllEntities,

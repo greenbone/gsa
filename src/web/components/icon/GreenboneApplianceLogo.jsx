@@ -15,8 +15,7 @@ import EnterpriseDecaSvg from 'web/components/icon/svg/Enterprise_DECA.svg';
 import EnterpriseExaSvg from 'web/components/icon/svg/Enterprise_EXA.svg';
 import EnterprisePetaSvg from 'web/components/icon/svg/Enterprise_PETA.svg';
 import EnterpriseTeraSvg from 'web/components/icon/svg/Enterprise_TERA.svg';
-
-import SvgIconWrapper from './SvgIconWrapper';
+import SvgIconWrapper from 'web/components/icon/SvgIconWrapper';
 
 const createEnterpriseComponent = Component => () => (
   <SvgIconWrapper component={Component} size={['150px', '150px']} />

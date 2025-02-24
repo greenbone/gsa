@@ -6,9 +6,6 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import {isFunction} from 'gmp/utils/identity';
-import {types} from 'web/store/entities/utils/actions';
-import {createState, testEntityActions} from 'web/store/entities/utils/testing';
-
 import {
   auditReportActions,
   deltaReportActions,
@@ -21,8 +18,11 @@ import {
   loadReportIfNeeded,
   loadReportWithThreshold,
   reportActions,
-} from '../actions';
-import {reportIdentifier} from '../selectors';
+} from 'web/store/entities/report/actions';
+import {reportIdentifier} from 'web/store/entities/report/selectors';
+import {types} from 'web/store/entities/utils/actions';
+import {createState, testEntityActions} from 'web/store/entities/utils/testing';
+
 
 testEntityActions('report', reportActions);
 testEntityActions('deltaReport', deltaReportActions);

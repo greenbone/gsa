@@ -12,16 +12,15 @@ import TicketIcon from 'web/components/icon/TicketIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import TicketComponent from 'web/pages/tickets/Component';
+import TicketsDashboard, {TICKETS_DASHBOARD_ID} from 'web/pages/tickets/dashboard';
+import TicketsFilterDialogComponent from 'web/pages/tickets/FilterDialog';
+import Table from 'web/pages/tickets/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
-
-import TicketComponent from './Component';
-import TicketsDashboard, {TICKETS_DASHBOARD_ID} from './dashboard';
-import TicketsFilterDialogComponent from './FilterDialog';
-import Table from './Table';
 
 const ToolBarIcons = () => (
   <ManualIcon

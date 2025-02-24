@@ -11,10 +11,10 @@ import TargetIcon from 'web/components/icon/TargetIcon';
 import TaskIcon from 'web/components/icon/TaskIcon';
 import Divider from 'web/components/layout/Divider';
 import InfoPanel from 'web/components/panel/InfoPanel';
+import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import ReportPanel from './ReportPanel';
 
 const EmptyReport = ({
   capabilities,

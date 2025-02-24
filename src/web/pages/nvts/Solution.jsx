@@ -9,9 +9,9 @@ import React from 'react';
 import SolutionTypeIcon from 'web/components/icon/SolutionTypeIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsBlock from 'web/entity/Block';
+import Pre from 'web/pages/nvts/Preformatted';
 import PropTypes from 'web/utils/PropTypes';
 
-import Pre from './Preformatted';
 
 const Solution = ({solutionDescription, solutionType}) => {
   const hasSolution = isDefined(solutionDescription) || isDefined(solutionType);

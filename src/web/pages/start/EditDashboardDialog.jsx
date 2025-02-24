@@ -8,9 +8,9 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
+import {MAX_TITLE_LENGTH} from 'web/pages/start/NewDashboardDialog';
 import PropTypes from 'web/utils/PropTypes';
 
-import {MAX_TITLE_LENGTH} from './NewDashboardDialog';
 
 const EditDashboardDialog = ({
   dashboardId,

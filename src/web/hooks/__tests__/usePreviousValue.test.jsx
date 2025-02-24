@@ -5,9 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {useState} from 'react';
+import usePreviousValue from 'web/hooks/usePreviousValue';
 import {fireEvent, render, screen} from 'web/utils/Testing';
 
-import usePreviousValue from '../usePreviousValue';
 
 const TestComponent = () => {
   const [value, setValue] = useState(0);

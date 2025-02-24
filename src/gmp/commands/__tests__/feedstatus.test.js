@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {FeedStatus} from '../feedstatus';
-import {createResponse, createHttp} from '../testing';
+import {FeedStatus} from 'gmp/commands/feedstatus';
+import {createResponse, createHttp} from 'gmp/commands/testing';
 
 describe('FeedStatusCommand tests', () => {
   test('should return feed information', () => {

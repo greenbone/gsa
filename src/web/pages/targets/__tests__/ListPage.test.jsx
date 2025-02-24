@@ -19,13 +19,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import TargetPage, {ToolBarIcons} from 'web/pages/targets/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import TargetPage, {ToolBarIcons} from '../ListPage';
 
 let currentSettings;
 let getSetting;

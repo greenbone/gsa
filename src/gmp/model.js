@@ -3,11 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-
-import Capabilities from './capabilities/capabilities';
+import Capabilities from 'gmp/capabilities/capabilities';
 import {
   parseProperties as parseDefaultProperties,
   parseYesNo,
@@ -18,7 +14,11 @@ import {
   NO_VALUE,
   YES_VALUE,
   parseToString,
-} from './parser';
+} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+
 
 export const parseModelFromElement = (element, entityType) => {
   const m = new Model(entityType);

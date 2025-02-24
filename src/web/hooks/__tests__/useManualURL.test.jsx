@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import useManualURL from 'web/hooks/useManualURL';
 import {setLocale} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-import useManualURL from '../useManualURL';
 
 const gmp = {settings: {manualUrl: 'http://localhost/manual'}};
 

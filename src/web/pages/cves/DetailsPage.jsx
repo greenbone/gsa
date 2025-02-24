@@ -36,10 +36,10 @@ import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import CveDetails from 'web/pages/cves/Details';
 import {selector, loadEntity} from 'web/store/entities/cves';
 import PropTypes from 'web/utils/PropTypes';
 
-import CveDetails from './Details';
 
 const ToolBarIcons = ({entity, onCveDownloadClick}) => (
   <Divider margin="10px">

@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {setLocale as setDateLocale} from 'gmp/locale/date';
+import Detector from 'gmp/locale/detector';
+import {getLanguageCodes} from 'gmp/locale/languages';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
@@ -10,9 +13,6 @@ import i18next from 'i18next';
 import HttpBackend from 'i18next-http-backend';
 import {initReactI18next} from 'react-i18next';
 
-import {setLocale as setDateLocale} from './date';
-import Detector from './detector';
-import {getLanguageCodes} from './languages';
 
 const log = logger.getLogger('gmp.locale.lang');
 

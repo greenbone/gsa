@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import ExternalLink from 'web/components/link/ExternalLink';
 import {
   fireEvent,
   getByRole,
@@ -12,7 +13,6 @@ import {
   rendererWith,
 } from 'web/utils/Testing';
 
-import ExternalLink from '../ExternalLink';
 
 describe('ExternalLink tests', () => {
   test('should render ExternalLink', () => {

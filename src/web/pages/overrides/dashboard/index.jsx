@@ -4,20 +4,19 @@
  */
 
 import React from 'react';
-
+import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   OverridesActiveDaysDisplay,
   OverridesActiveDaysTableDisplay,
-} from './ActiveDaysDisplay';
+} from 'web/pages/overrides/dashboard/ActiveDaysDisplay';
 import {
   OverridesCreatedDisplay,
   OverridesCreatedTableDisplay,
-} from './CreatedDisplay';
+} from 'web/pages/overrides/dashboard/CreatedDisplay';
 import {
   OverridesWordCloudDisplay,
   OverridesWordCloudTableDisplay,
-} from './WordCloudDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/overrides/dashboard/WordCloudDisplay';
 
 export const OVERRIDES_DASHBOARD_ID = '054862fe-0781-4527-b1aa-2113bcd16ce7';
 

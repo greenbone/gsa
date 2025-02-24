@@ -4,11 +4,11 @@
  */
 
 import React from 'react';
+import ErrorsTable from 'web/pages/reports/details/ErrorsTable';
+import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesContainer';
 import PropTypes from 'web/utils/PropTypes';
 import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
 
-import ErrorsTable from './ErrorsTable';
-import ReportEntitiesContainer from './ReportEntitiesContainer';
 
 export const errorsSortFunctions = {
   error: makeCompareString('description'),

@@ -8,9 +8,9 @@ import {
   parseResourceNamesEntities,
 } from 'gmp/collection/parser';
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
 import ResourceName from 'gmp/models/resourcename';
 
-import EntitiesCommand from './entities';
 
 export class ResourceNamesCommand extends EntitiesCommand {
   constructor(http) {

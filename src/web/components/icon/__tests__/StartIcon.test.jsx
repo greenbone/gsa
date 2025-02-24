@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import StartIcon from 'web/components/icon/StartIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import StartIcon from '../StartIcon';
 
 describe('StartIcon component tests', () => {
   testIcon(StartIcon);

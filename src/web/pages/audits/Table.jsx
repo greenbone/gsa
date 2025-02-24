@@ -13,9 +13,9 @@ import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
 import AuditDetails from 'web/pages/audits/Details';
+import Row from 'web/pages/audits/Row';
 import PropTypes from 'web/utils/PropTypes';
 
-import Row from './Row';
 
 const Header = ({
   actionsColumn,

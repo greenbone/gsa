@@ -4,14 +4,13 @@
  */
 
 import React from 'react';
+import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
+import DefaultFilterDialogPropTypes from 'web/components/powerfilter/DialogPropTypes';
+import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
+import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
+import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
+import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import useCapabilities from 'web/hooks/useCapabilities';
-
-import CreateNamedFilterGroup from './CreateNamedFilterGroup';
-import DefaultFilterDialogPropTypes from './DialogPropTypes';
-import FilterStringGroup from './FilterStringGroup';
-import FirstResultGroup from './FirstResultGroup';
-import ResultsPerPageGroup from './ResultsPerPageGroup';
-import SortByGroup from './SortByGroup';
 
 export const DefaultFilterDialog = ({
   filter,

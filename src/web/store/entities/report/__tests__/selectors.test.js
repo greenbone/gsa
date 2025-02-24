@@ -5,14 +5,14 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-import {createState, createRootState} from 'web/store/entities/utils/testing';
-
 import {
   reportIdentifier,
   simplifiedReportIdentifier,
   reportSelector,
   deltaReportSelector,
-} from '../selectors';
+} from 'web/store/entities/report/selectors';
+import {createState, createRootState} from 'web/store/entities/utils/testing';
+
 
 describe('reportIdentifier tests', () => {
   test('should create identifier without filter', () => {

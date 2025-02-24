@@ -5,9 +5,9 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
+import ErrorPanel from 'web/components/error/ErrorPanel';
 import PropTypes from 'web/utils/PropTypes';
 
-import ErrorPanel from './ErrorPanel';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {

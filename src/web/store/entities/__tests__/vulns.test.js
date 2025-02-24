@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {testAll} from '../utils/testing';
-import * as funcs from '../vulns';
+import {testAll} from 'web/store/entities/utils/testing';
+import * as funcs from 'web/store/entities/vulns';
 
 testAll('vuln', funcs);

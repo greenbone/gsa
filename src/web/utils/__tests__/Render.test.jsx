@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {generateFilename, renderSelectItems} from '../Render';
+import {generateFilename, renderSelectItems} from 'web/utils/Render';
 
 describe('render_select_items test', () => {
   test('should convert entities list', () => {

@@ -4,15 +4,15 @@
  */
 
 import Model, {parseModelFromElement} from 'gmp/model';
+import Cve from 'gmp/models/cve';
+import Note from 'gmp/models/note';
+import Nvt from 'gmp/models/nvt';
+import Override from 'gmp/models/override';
 import {parseSeverity, parseQod} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Cve from './cve';
-import Note from './note';
-import Nvt from './nvt';
-import Override from './override';
 
 export class Delta {
   static TYPE_NEW = 'new';

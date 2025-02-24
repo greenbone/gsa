@@ -4,14 +4,13 @@
  */
 
 import React from 'react';
-
-import {VulnsCvssDisplay, VulnsCvssTableDisplay} from './CvssDisplay';
-import {VulnsHostsDisplay, VulnsHostsTableDisplay} from './HostsDisplay';
+import Dashboard from 'web/components/dashboard/Dashboard';
+import {VulnsCvssDisplay, VulnsCvssTableDisplay} from 'web/pages/vulns/dashboard/CvssDisplay';
+import {VulnsHostsDisplay, VulnsHostsTableDisplay} from 'web/pages/vulns/dashboard/HostsDisplay';
 import {
   VulnsSeverityDisplay,
   VulnsSeverityTableDisplay,
-} from './SeverityClassDisplay';
-import Dashboard from '../../../components/dashboard/Dashboard';
+} from 'web/pages/vulns/dashboard/SeverityClassDisplay';
 
 export const VULNS_DASHBOARD_ID = '43690dcb-3174-4d84-aa88-58c1936c7f5c';
 

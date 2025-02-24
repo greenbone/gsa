@@ -14,15 +14,14 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import ReportFormatComponent from 'web/pages/reportformats/Component';
+import ReportFormatsFilterDialog from 'web/pages/reportformats/FilterDialog';
+import ReportFormatsTable from 'web/pages/reportformats/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
-
-import ReportFormatComponent from './Component';
-import ReportFormatsFilterDialog from './FilterDialog';
-import ReportFormatsTable from './Table';
 
 const ToolBarIcons = ({onReportFormatImportClick}) => {
   const capabilities = useCapabilities();

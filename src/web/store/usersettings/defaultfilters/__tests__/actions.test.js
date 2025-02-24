@@ -6,14 +6,13 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/users';
 import Filter from 'gmp/models/filter';
-
 import {
   defaultFilterLoadingActions,
   USER_SETTINGS_DEFAULT_FILTER_LOADING_REQUEST,
   USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS,
   USER_SETTINGS_DEFAULT_FILTER_LOADING_ERROR,
   loadUserSettingsDefaultFilter,
-} from '../actions';
+} from 'web/store/usersettings/defaultfilters/actions';
 
 describe('defaultFilterLoadingActions tests', () => {
   test('should create a request action', () => {

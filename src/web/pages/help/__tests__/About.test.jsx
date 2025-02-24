@@ -5,9 +5,9 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {clickElement, getDialogTitle} from 'web/components/testing';
+import AboutPage from 'web/pages/help/About';
 import {rendererWith} from 'web/utils/Testing';
 
-import AboutPage from '../About';
 
 describe('AboutPage tests', () => {
   test('should render about page', async () => {

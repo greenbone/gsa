@@ -17,13 +17,13 @@ import {
   getTableFooter,
   getTextInputs,
 } from 'web/components/testing';
+import NvtsPage, {ToolBarIcons} from 'web/pages/nvts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, screen, wait} from 'web/utils/Testing';
 
-import NvtsPage, {ToolBarIcons} from '../ListPage';
 
 const nvt = NVT.fromElement({
   _oid: '1.3.6.1.4.1.25623.1.0',

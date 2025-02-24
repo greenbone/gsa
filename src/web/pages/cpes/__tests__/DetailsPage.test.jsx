@@ -8,11 +8,11 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
+import CpePage, {ToolBarIcons} from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, wait, fireEvent} from 'web/utils/Testing';
 
-import CpePage, {ToolBarIcons} from '..//DetailsPage';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',

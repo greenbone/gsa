@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import RadiusIcon from 'web/components/icon/RadiusIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import RadiusIcon from '../RadiusIcon';
 
 describe('RadiusIcon component tests', () => {
   testIcon(RadiusIcon);

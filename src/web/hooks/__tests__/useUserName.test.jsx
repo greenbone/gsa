@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import useUserName from 'web/hooks/useUserName';
 import {setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-import useUserName from '../useUserName';
 
 const TestUserName = () => <span>{useUserName()[0]}</span>;
 

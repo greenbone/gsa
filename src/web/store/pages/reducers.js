@@ -4,9 +4,9 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
+import {CHANGE_PAGE_FILTER} from 'web/store/pages/actions';
 import {combineReducers} from 'web/store/utils';
 
-import {CHANGE_PAGE_FILTER} from './actions';
 
 const filter = (state, action) => {
   switch (action.type) {

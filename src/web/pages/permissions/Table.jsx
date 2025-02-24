@@ -8,9 +8,8 @@ import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
-
-import PermissionDetails from './Details';
-import Row from './Row';
+import PermissionDetails from 'web/pages/permissions/Details';
+import Row from 'web/pages/permissions/Row';
 
 export const SORT_FIELDS = [
   {

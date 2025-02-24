@@ -9,6 +9,7 @@ import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
+import BulkTags from 'web/entities/BulkTags';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
 import SelectionType from 'web/utils/SelectionType';
 import {
@@ -21,7 +22,6 @@ import {
   getByRole,
 } from 'web/utils/Testing';
 
-import BulkTags from '../BulkTags';
 
 const getDialog = () => {
   return screen.getByRole('dialog');

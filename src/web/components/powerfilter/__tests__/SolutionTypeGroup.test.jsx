@@ -5,10 +5,10 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import SolutionTypesFilterGroup from 'web/components/powerfilter/SolutionTypeGroup';
 import {getRadioInputs} from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import SolutionTypesFilterGroup from '../SolutionTypeGroup';
 
 describe('SolutionTypesFilterGroup tests', () => {
   test('should render', () => {

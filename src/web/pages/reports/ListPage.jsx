@@ -21,6 +21,10 @@ import {
 } from 'web/components/loading/Reload';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import ReportsDashboard, {REPORTS_DASHBOARD_ID} from 'web/pages/reports/dashboard';
+import ReportFilterDialog from 'web/pages/reports/FilterDialog';
+import ImportReportDialog from 'web/pages/reports/ImportDialog';
+import ReportsTable from 'web/pages/reports/Table';
 import ContainerTaskDialog from 'web/pages/tasks/ContainerDialog';
 import {
   loadEntities,
@@ -34,10 +38,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
-import ReportFilterDialog from './FilterDialog';
-import ImportReportDialog from './ImportDialog';
-import ReportsTable from './Table';
 
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 

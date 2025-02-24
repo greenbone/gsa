@@ -16,6 +16,8 @@ import Reload, {
   NO_RELOAD,
 } from 'web/components/loading/Reload';
 import SortBy from 'web/components/sortby/SortBy';
+import EmptyReport from 'web/pages/reports/details/EmptyReport';
+import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 import ResultsTable from 'web/pages/results/Table';
 import {
   loadEntities as loadResults,
@@ -27,8 +29,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-import EmptyReport from './EmptyReport';
-import EmptyResultsReport from './EmptyResultsReport';
 
 const filterWithReportId = (filter, reportId) =>
   isDefined(filter)

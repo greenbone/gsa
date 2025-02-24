@@ -20,9 +20,9 @@ import {
 } from 'web/components/dashboard/display/Utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import {VulnsHostsLoader} from 'web/pages/vulns/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 
-import {VulnsHostsLoader} from './Loaders';
 
 const format = d3format('0.1f');
 

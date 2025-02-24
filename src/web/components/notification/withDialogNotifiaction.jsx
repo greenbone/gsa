@@ -4,9 +4,8 @@
  */
 
 import React from 'react';
-
-import DialogNotification from './DialogNotification';
-import useDialogNotification from './useDialogNotification';
+import DialogNotification from 'web/components/notification/DialogNotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 const withDialogNotification = Component => {
   const DialogNotificationWrapper = props => {

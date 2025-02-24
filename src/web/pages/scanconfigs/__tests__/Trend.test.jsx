@@ -8,9 +8,9 @@ import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
+import Trend from 'web/pages/scanconfigs/Trend';
 import {render} from 'web/utils/Testing';
 
-import Trend from '../Trend';
 
 describe('Scan Config Trend tests', () => {
   test('should render', () => {

@@ -3,18 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
-import logger from 'gmp/log';
 
-import Rejection from './rejection';
-import Response from './response';
-import DefaultTransform from './transform/default';
+import Rejection from 'gmp/http/rejection';
+import Response from 'gmp/http/response';
+import DefaultTransform from 'gmp/http/transform/default';
 import {
   buildUrlParams,
   getFeedAccessStatusMessage,
   findActionInXMLString,
-} from './utils';
-import {isDefined, hasValue, isArray} from '../utils/identity';
+} from 'gmp/http/utils';
+import _ from 'gmp/locale';
+import logger from 'gmp/log';
+import {isDefined, hasValue, isArray} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.http');
 

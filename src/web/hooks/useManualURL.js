@@ -5,9 +5,8 @@
 
 import {DEFAULT_MANUAL_URL} from 'gmp/gmpsettings';
 import {isDefined} from 'gmp/utils/identity';
-
-import useGmp from './useGmp';
-import useLocale from './useLocale';
+import useGmp from 'web/hooks/useGmp';
+import useLocale from 'web/hooks/useLocale';
 
 const DEFAULT_LANGUAGE_MAPPING = {
   de: 'de',

@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {debounce, throttleAnimation} from '../event';
+import {debounce, throttleAnimation} from 'gmp/utils/event';
 
 // @vitest-environment jsdom
 

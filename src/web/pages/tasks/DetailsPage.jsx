@@ -50,7 +50,14 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import TaskComponent from 'web/pages/tasks/Component';
+import TaskDetails from 'web/pages/tasks/Details';
+import ImportReportIcon from 'web/pages/tasks/icons/ImportReportIcon';
+import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
+import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
+import StopIcon from 'web/pages/tasks/icons/StopIcon';
 import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
+import TaskStatus from 'web/pages/tasks/Status';
 import {
   selector as notesSelector,
   loadEntities as loadNotes,
@@ -72,13 +79,6 @@ import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
-import TaskComponent from './Component';
-import TaskDetails from './Details';
-import ImportReportIcon from './icons/ImportReportIcon';
-import NewIconMenu from './icons/NewIconMenu';
-import ScheduleIcon from './icons/ScheduleIcon';
-import StopIcon from './icons/StopIcon';
-import TaskStatus from './Status';
 
 export const ToolBarIcons = ({
   entity,

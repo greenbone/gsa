@@ -4,8 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-
-import {success, rejection} from '../xml';
+import {success, rejection} from 'gmp/http/transform/xml';
 
 describe('xml base transform tests', () => {
   test('should call transform function', () => {

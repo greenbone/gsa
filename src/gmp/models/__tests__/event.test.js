@@ -4,9 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import date from '../date';
-import Event, {isEvent} from '../event';
+import date from 'gmp/models/date';
+import Event, {isEvent} from 'gmp/models/event';
 
 const ICAL_FORMAT = 'YYYYMMDD[T]HHmmss[Z]';
 const ICAL_FORMAT_TZ = 'YYYYMMDD[T]HHmmss';

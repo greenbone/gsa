@@ -6,7 +6,6 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import {isFunction} from 'gmp/utils/identity';
-
 import {
   types,
   createEntitiesLoadingActions,
@@ -15,7 +14,7 @@ import {
   createEntityLoadingActions,
   createLoadEntity,
   createDeleteEntity,
-} from '../actions';
+} from 'web/store/entities/utils/actions';
 
 describe('entities loading actions tests', () => {
   describe('createEntitiesLoadingActions tests', () => {

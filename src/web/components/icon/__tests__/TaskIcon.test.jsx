@@ -4,9 +4,9 @@
  */
 
 import {describe} from '@gsa/testing';
+import TaskIcon from 'web/components/icon/StartIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-import TaskIcon from '../StartIcon';
 
 describe('TaskIcon component tests', () => {
   testIcon(TaskIcon);

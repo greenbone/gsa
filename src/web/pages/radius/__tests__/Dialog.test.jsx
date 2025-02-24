@@ -10,9 +10,9 @@ import {
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
+import Dialog from 'web/pages/radius/Dialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import Dialog from '../Dialog';
 
 describe('RADIUS dialog component tests', () => {
   test('should render dialog', () => {

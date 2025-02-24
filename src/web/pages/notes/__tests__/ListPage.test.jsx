@@ -19,13 +19,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import NotesPage, {ToolBarIcons} from 'web/pages/notes/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/notes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
-import NotesPage, {ToolBarIcons} from '../ListPage';
 
 const note = Note.fromElement({
   _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',

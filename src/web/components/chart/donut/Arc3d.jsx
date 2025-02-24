@@ -6,13 +6,13 @@
 import {color as d3color} from 'd3-color';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {PieOuterPath, PieTopPath, PieInnerPath} from 'web/components/chart/donut/Paths';
+import {ArcDataPropType} from 'web/components/chart/donut/PropTypes';
+import Group from 'web/components/chart/Group';
+import ToolTip from 'web/components/chart/Tooltip';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-import Group from '../Group';
-import ToolTip from '../Tooltip';
-import {PieOuterPath, PieTopPath, PieInnerPath} from './Paths';
-import {ArcDataPropType} from './PropTypes';
 
 const Arc3d = ({
   data,

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseInt, parseFloat} from '../../parser';
-import {isDefined, isNumberOrNumberString} from '../../utils/identity';
-import {isEmpty} from '../../utils/string';
+import {parseInt, parseFloat} from 'gmp/parser';
+import {isDefined, isNumberOrNumberString} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 const convertBooleanInt = (keyword, value, relation) => ({
   keyword,

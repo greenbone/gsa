@@ -5,8 +5,7 @@
 
 import {describe} from '@gsa/testing';
 import {testIcon} from 'web/components/icon/Testing';
-
-import UploadIcon from '../UploadIcon';
+import UploadIcon from 'web/components/icon/UploadIcon';
 
 describe('UploadIcon component tests', () => {
   testIcon(UploadIcon);

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import * as scanconfig from '../scanconfigs';
-import {testAll} from '../utils/testing';
+import * as scanconfig from 'web/store/entities/scanconfigs';
+import {testAll} from 'web/store/entities/utils/testing';
 
 testAll('scanconfig', scanconfig);

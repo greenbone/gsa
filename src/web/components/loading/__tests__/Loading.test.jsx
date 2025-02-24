@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import Loading from 'web/components/loading/Loading';
 import {render} from 'web/utils/Testing';
 
-import Loading from '../Loading';
 
 describe('Loading component tests', () => {
   test('should render', () => {

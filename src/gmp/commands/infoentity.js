@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import EntityCommand from './entity';
+import EntityCommand from 'gmp/commands/entity';
 
 class InfoEntityCommand extends EntityCommand {
   constructor(http, info_type, model) {

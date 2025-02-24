@@ -20,14 +20,13 @@ import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
+import DaySelect from 'web/pages/schedules/DaySelect';
+import MonthDaysSelect from 'web/pages/schedules/MonthDaysSelect';
+import {renderDuration} from 'web/pages/schedules/Render';
+import TimeUnitSelect from 'web/pages/schedules/TimeUnitSelect';
+import WeekDaySelect, {WeekDaysPropType} from 'web/pages/schedules/WeekdaySelect';
 import PropTypes from 'web/utils/PropTypes';
 import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
-
-import DaySelect from './DaySelect';
-import MonthDaysSelect from './MonthDaysSelect';
-import {renderDuration} from './Render';
-import TimeUnitSelect from './TimeUnitSelect';
-import WeekDaySelect, {WeekDaysPropType} from './WeekdaySelect';
 
 const RECURRENCE_ONCE = 'once';
 const RECURRENCE_HOURLY = ReccurenceFrequency.HOURLY;

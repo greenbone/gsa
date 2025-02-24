@@ -8,10 +8,10 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/Component';
+import ScheduleDialog from 'web/pages/schedules/Dialog';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 
-import ScheduleDialog from './Dialog';
 
 class ScheduleComponent extends React.Component {
   constructor(...args) {

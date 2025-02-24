@@ -4,6 +4,9 @@
  */
 
 import registerCommand from 'gmp/command';
+import EntitiesCommand from 'gmp/commands/entities';
+import EntityCommand from 'gmp/commands/entity';
+import {FeedStatus} from 'gmp/commands/feedstatus';
 import logger from 'gmp/log';
 import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
@@ -11,9 +14,6 @@ import Task, {
 } from 'gmp/models/task';
 import {NO_VALUE} from 'gmp/parser';
 
-import EntitiesCommand from './entities';
-import EntityCommand from './entity';
-import {FeedStatus} from './feedstatus';
 
 const log = logger.getLogger('gmp.commands.tasks');
 

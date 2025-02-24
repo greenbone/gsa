@@ -6,7 +6,6 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import moment from 'gmp/models/date';
 import {isFunction} from 'gmp/utils/identity';
-
 import {
   getReportComposerDefaultsAction,
   loadReportComposerDefaults,
@@ -24,7 +23,7 @@ import {
   USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_USERNAME,
   USER_SETTINGS_SET_LOGGED_IN,
-} from '../actions';
+} from 'web/store/usersettings/actions';
 
 describe('settings actions tests', () => {
   test('should create a setLocale action', () => {

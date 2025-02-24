@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import ErrorPanel from 'web/components/error/ErrorPanel';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import ErrorPanel from '../ErrorPanel';
 
 describe('ErrorPanel tests', () => {
   test('should render message', () => {

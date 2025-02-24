@@ -11,6 +11,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/Component';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
+import ScannerDialog from 'web/pages/scanners/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -20,7 +21,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
-import ScannerDialog from './Dialog';
 
 class ScannerComponent extends React.Component {
   constructor(...args) {

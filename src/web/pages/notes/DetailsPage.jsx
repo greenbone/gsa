@@ -38,6 +38,8 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import NoteComponent from 'web/pages/notes/Component';
+import NoteDetails from 'web/pages/notes/Details';
 import {selector as notesSelector, loadEntity} from 'web/store/entities/notes';
 import {
   selector as permissionsSelector,
@@ -48,8 +50,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
-import NoteComponent from './Component';
-import NoteDetails from './Details';
 
 export const ToolBarIcons = ({
   entity,

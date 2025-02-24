@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   getLocale,
   getReportComposerDefaults,
@@ -12,7 +11,7 @@ import {
   getTimezone,
   getUsername,
   isLoggedIn,
-} from '../selectors';
+} from 'web/store/usersettings/selectors';
 
 const createRootState = state => ({
   userSettings: state,

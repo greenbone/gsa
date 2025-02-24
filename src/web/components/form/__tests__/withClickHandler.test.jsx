@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import withClickHandler from 'web/components/form/withClickHandler';
 import {render, fireEvent} from 'web/utils/Testing';
 
-import withClickHandler from '../withClickHandler';
 
 const TestInput = ({value, ...props}) => <input {...props} type="text" />;
 

@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import GmpCommand, {BULK_SELECT_BY_IDS} from 'gmp/commands/gmp';
 import DefaultTransform from 'gmp/http/transform/default';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 
-import GmpCommand, {BULK_SELECT_BY_IDS} from './gmp';
 
 const log = logger.getLogger('gmp.commands.entity');
 

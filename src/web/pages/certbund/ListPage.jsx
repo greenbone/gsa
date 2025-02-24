@@ -12,15 +12,14 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from 'web/pages/certbund/dashboard';
+import CertBundFilterDialog from 'web/pages/certbund/FilterDialog';
+import CertBundTable from 'web/pages/certbund/Table';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
-
-import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard';
-import CertBundFilterDialog from './FilterDialog';
-import CertBundTable from './Table';
 
 const ToolBarIcons = props => (
   <ManualIcon
