@@ -10,7 +10,7 @@ import {
   totalCount,
   percent,
   riskFactorColorScale,
-} from 'web/components/dashboard/utils';
+} from 'web/components/dashboard/display/utils';
 import {
   NA_VALUE,
   resultSeverityRiskFactor,
