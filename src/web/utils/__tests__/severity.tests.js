@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
 import {
   severityRiskFactor,
   severityRiskFactorToValue,
@@ -32,7 +31,7 @@ import {
   DEBUG_VALUE,
   ERROR_VALUE,
   NA_VALUE,
-} from '../severity';
+} from 'web/utils/severity';
 
 describe('Severity', () => {
   describe('severityRiskFactor', () => {

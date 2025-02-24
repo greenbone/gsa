@@ -5,9 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import FilterTerm from 'gmp/models/filter/filterterm';
+import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 import {CRITICAL_VALUE, LOG_VALUE} from 'web/utils/severity';
-
-import {filterValueToFilterTerms} from '../utils';
 
 describe('filterValueToFilterTerms', () => {
   test('should return two filter terms when start and end are provided', () => {

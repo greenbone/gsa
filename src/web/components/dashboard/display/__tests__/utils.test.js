@@ -4,8 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-
-import {totalCount, percent, randomColor} from '../utils';
+import {
+  totalCount,
+  percent,
+  randomColor,
+} from 'web/components/dashboard/display/utils';
 
 describe('display utils', () => {
   describe('totalCount', () => {
