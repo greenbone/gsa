@@ -122,7 +122,7 @@ class Capabilities {
   }
 
   featureEnabled(feature) {
-    return this._featuresEnabled[feature.toUpperCase()] == true;
+    return this._featuresEnabled[feature.toUpperCase()] === true;
   }
 }
 

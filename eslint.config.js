@@ -78,6 +78,7 @@ export default [
           properties: 'always',
         },
       ],
+      eqeqeq: ['warn', 'always'],
       'react/display-name': 'off',
       'no-class-assign': 'off',
       'no-prototype-builtins': 'off',

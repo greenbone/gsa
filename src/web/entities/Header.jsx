@@ -40,7 +40,7 @@ const defaultactions = (
 export const withEntitiesHeader =
   (actions_column = defaultactions, options = {}) =>
   Component => {
-    if (actions_column === false) {
+    if (!actions_column) {
       actions_column = null;
     }
 
@@ -48,12 +48,8 @@ export const withEntitiesHeader =
       const {selectionType} = props;
       let column = actions_column;
 
-      if (actions_column == true) {
-        if (selectionType === SelectionType.SELECTION_USER) {
-          column = <TableHead width="6em">{_('Actions')}</TableHead>;
-        } else {
-          column = null;
-        }
+      if (actions_column && selectionType === SelectionType.SELECTION_USER) {
+        column = <TableHead width="6em">{_('Actions')}</TableHead>;
       }
       return <Component {...options} actionsColumn={column} {...props} />;
     };
