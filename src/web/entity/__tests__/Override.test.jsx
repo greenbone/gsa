@@ -40,7 +40,7 @@ describe('OverrideBox component tests', () => {
     const header = element.querySelector('h3');
 
     expect(header).toHaveTextContent(
-      'Override from Severity > 0.0 to 10: High',
+      'Override from Severity > 0.0 to 10: Critical',
     );
     expect(link).toBeDefined();
     expect(link.getAttribute('href')).toEqual('/override/123');

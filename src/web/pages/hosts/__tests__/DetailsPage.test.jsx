@@ -256,7 +256,7 @@ describe('Host Detailspage tests', () => {
     expect(table[0]).toHaveTextContent('123.456.789.10123.456.789.11');
 
     expect(table[0]).toHaveTextContent('Severity');
-    expect(table[0]).toHaveTextContent('10.0 (High)');
+    expect(table[0]).toHaveTextContent('10.0 (Critical)');
 
     // Identifier Table
     const header = baseElement.querySelectorAll('th');

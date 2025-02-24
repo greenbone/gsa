@@ -86,8 +86,8 @@ describe('Delta Results Tab tests', () => {
     // Row 1
     expect(rows[2]).toHaveTextContent('[ = ]');
     expect(rows[2]).toHaveTextContent('Result 1');
-    expect(bars[0]).toHaveAttribute('title', 'High');
-    expect(bars[0]).toHaveTextContent('10.0 (High)');
+    expect(bars[0]).toHaveAttribute('title', 'Critical');
+    expect(bars[0]).toHaveTextContent('10.0 (Critical)');
     expect(rows[2]).toHaveTextContent('80 %');
     expect(rows[2]).toHaveTextContent('123.456.78.910');
     expect(rows[2]).toHaveTextContent('80/tcp');

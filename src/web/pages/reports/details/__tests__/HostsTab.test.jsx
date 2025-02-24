@@ -87,8 +87,8 @@ describe('Report Hosts Tab tests', () => {
     expect(rows[1]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM CEST');
     expect(rows[1]).toHaveTextContent('Mon, Jun 3, 2019 1:15 PM CEST');
     expect(rows[1]).toHaveTextContent('143050150'); // 14 High, 30 Medium, 5 Low, 0 Log, 1 False Positive, 50 Total
-    expect(bars[0]).toHaveAttribute('title', 'High');
-    expect(bars[0]).toHaveTextContent('10.0 (High)');
+    expect(bars[0]).toHaveAttribute('title', 'Critical');
+    expect(bars[0]).toHaveTextContent('10.0 (Critical)');
 
     // Row 2
     expect(links[1]).toHaveAttribute(

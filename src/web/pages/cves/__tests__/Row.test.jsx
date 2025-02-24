@@ -68,8 +68,8 @@ describe('CVEv2 Row tests', () => {
 
     // Severity
     const bars = getAllByTestId('progressbar-box');
-    expect(bars[0]).toHaveAttribute('title', 'High');
-    expect(bars[0]).toHaveTextContent('9.3 (High)');
+    expect(bars[0]).toHaveAttribute('title', 'Critical');
+    expect(bars[0]).toHaveTextContent('9.3 (Critical)');
 
     // Description
     expect(baseElement).toHaveTextContent('foo bar baz');

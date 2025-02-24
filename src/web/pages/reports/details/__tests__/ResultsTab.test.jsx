@@ -341,7 +341,7 @@ describe('Report Results Tab tests', () => {
     expect(header[8]).toHaveTextContent('Name');
 
     expect(row[2]).toHaveTextContent('Result 1');
-    expect(row[2]).toHaveTextContent('10.0 (High)');
+    expect(row[2]).toHaveTextContent('10.0 (Critical)');
     expect(row[2]).toHaveTextContent('80 %');
     expect(row[2]).toHaveTextContent('123.456.78.910');
     expect(row[2]).toHaveTextContent('foo');
