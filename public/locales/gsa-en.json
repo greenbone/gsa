@@ -465,6 +465,7 @@
   "Credentials": "Credentials",
   "Credentials Filter": "Credentials Filter",
   "Credentials for authenticated checks": "Credentials for authenticated checks",
+  "Critical": "Critical",
   "Current": "Current",
   "Current Report for Audit {{- name}} from {{- date}}": "Current Report for Audit {{- name}} from {{- date}}",
   "Current Report for Task {{- name}} from {{- date}}": "Current Report for Task {{- name}} from {{- date}}",
