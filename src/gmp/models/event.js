@@ -10,7 +10,6 @@ import {isEmpty} from 'gmp/utils/string';
 import ical from 'ical.js';
 import {v4 as uuid} from 'uuid';
 
-
 const log = Logger.getLogger('gmp.models.event');
 
 const convertIcalDate = (idate, timezone) => {
@@ -420,8 +419,10 @@ class Event {
 export const isEvent = obj => {
   return (
     obj instanceof Event ||
-    (obj != null && obj.event != null && obj.timezone != null)
+    (obj !== null &&
+      isDefined(obj) &&
+      isDefined(obj.event) &&
+      isDefined(obj.timezone))
   );
 };
-
 export default Event;
