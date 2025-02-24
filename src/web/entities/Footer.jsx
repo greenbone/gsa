@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from '@greenbone/opensight-ui-components-mantinev7';
 import {useState} from 'react';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
@@ -48,9 +52,16 @@ export const EntitiesFooter = ({
 
   const onIconClick = (type, propOnAction) => {
     if (!isGenericBulkTrashcanDeleteDialog) {
-      propOnAction();
+      handleAction(propOnAction(), _('Action successful'), _('Action failed'));
       return;
     }
+
+    const handleAction = (promise, successMessage, errorMessage) => {
+      promise.then(
+        () => showSuccessNotification(_, successMessage),
+        () => showErrorNotification(_, errorMessage),
+      );
+    };
 
     const configMap = {
       [DIALOG_TYPES.DELETE]: {
@@ -59,7 +70,12 @@ export const EntitiesFooter = ({
         ),
         dialogTitle: _('Confirm Deletion'),
         dialogButtonTitle: _('Delete'),
-        dialogFunction: propOnAction,
+        dialogFunction: () =>
+          handleAction(
+            propOnAction(),
+            _('Deleted successfully'),
+            _('Deletion failed'),
+          ),
       },
       [DIALOG_TYPES.TRASH]: {
         dialogText: _(
@@ -67,7 +83,12 @@ export const EntitiesFooter = ({
         ),
         dialogTitle: _('Confirm Move to Trashcan'),
         dialogButtonTitle: _('Move to Trashcan'),
-        dialogFunction: propOnAction,
+        dialogFunction: () =>
+          handleAction(
+            propOnAction(),
+            _('Moved to trashcan successfully'),
+            _('Move to trashcan failed'),
+          ),
       },
     };
     setConfigDialog(configMap[type]);

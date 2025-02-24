@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {
+  showSuccessNotification,
+  showErrorNotification,
+} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import {useEffect, useState} from 'react';
 import DialogContent from 'web/components/dialog/Content';
@@ -58,12 +62,20 @@ const SaveDialog = ({
     }
   };
 
-  const handleSaveClick = state => {
+  const handleSaveClick = async state => {
     if (onSave && !isLoading) {
-      const promise = onSave(state);
-      if (isDefined(promise)) {
+      try {
         setIsLoading(true);
-        return promise.catch(error => setError(error));
+        await onSave(state);
+        showSuccessNotification(
+          `${_(buttonTitle)}`,
+          `${_(title)} ${_('was successful')}`,
+        );
+      } catch (error) {
+        setError(error);
+        showErrorNotification(`${buttonTitle}`, `${title} ${_('has failed')}`);
+      } finally {
+        setIsLoading(false);
       }
     }
   };

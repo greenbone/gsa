@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 import React from 'react';
 import {connect} from 'react-redux';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
@@ -12,6 +14,7 @@ import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
+import {handleActionNotification} from 'web/utils/handleActionNotification';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
@@ -47,7 +50,13 @@ class EntityComponent extends React.Component {
 
     this.handleInteraction();
 
-    return deleteEntity(entity.id).then(onDeleted, onDeleteError);
+    return handleActionNotification(
+      deleteEntity(entity.id),
+      onDeleted,
+      onDeleteError,
+      `${_(capitalizeFirstLetter(entity.entityType))} ${_('deleted successfully')}`,
+      `${_('Failed to delete')} ${_(capitalizeFirstLetter(entity.entityType))}`,
+    );
   }
 
   handleEntityClone(entity) {
@@ -56,7 +65,13 @@ class EntityComponent extends React.Component {
 
     this.handleInteraction();
 
-    return cmd.clone(entity).then(onCloned, onCloneError);
+    return handleActionNotification(
+      cmd.clone(entity),
+      onCloned,
+      onCloneError,
+      `${_(capitalizeFirstLetter(entity.entityType))} ${_('cloned successfully')}`,
+      `${_('Failed to clone')} ${_(capitalizeFirstLetter(entity.entityType))}`,
+    );
   }
 
   handleEntitySave(data) {
@@ -101,7 +116,13 @@ class EntityComponent extends React.Component {
       return {filename, data: response.data};
     });
 
-    return promise.then(onDownloaded, onDownloadError);
+    return handleActionNotification(
+      promise,
+      onDownloaded,
+      onDownloadError,
+      _('Downloaded successfully'),
+      _('Failed to download'),
+    );
   }
 
   handleInteraction() {

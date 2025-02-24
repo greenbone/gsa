@@ -53,6 +53,7 @@ import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
+import {handleActionNotification} from 'web/utils/handleActionNotification';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -60,7 +61,6 @@ import withGmp from 'web/utils/withGmp';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
-
 
 class TaskComponent extends React.Component {
   constructor(...args) {
@@ -152,7 +152,13 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return this.cmd.start(task).then(onStarted, onStartError);
+    return handleActionNotification(
+      this.cmd.start(task),
+      onStarted,
+      onStartError,
+      _('Task Started successfully'),
+      _('Task Failed to start'),
+    );
   }
 
   handleTaskStop(task) {
@@ -160,7 +166,13 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return this.cmd.stop(task).then(onStopped, onStopError);
+    return handleActionNotification(
+      this.cmd.stop(task),
+      onStopped,
+      onStopError,
+      _('Task stopped successfully'),
+      _('Failed to stop task'),
+    );
   }
 
   handleTaskResume(task) {
@@ -168,7 +180,13 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return this.cmd.resume(task).then(onResumed, onResumeError);
+    return handleActionNotification(
+      this.cmd.resume(task),
+      onResumed,
+      onResumeError,
+      _('Task resumed successfully'),
+      _('Failed to resume task'),
+    );
   }
 
   handleTaskWizardNewClick() {

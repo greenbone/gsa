@@ -28,11 +28,11 @@ import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
+import {handleActionNotification} from 'web/utils/handleActionNotification';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 import {withRouter} from 'web/utils/withRouter';
-
 
 const log = logger.getLogger('web.entities.container');
 
@@ -149,7 +149,13 @@ class EntitiesContainer extends React.Component {
   handleDelete(entity) {
     const {deleteEntity} = this.props;
 
-    return deleteEntity(entity.id).then(this.handleChanged, this.handleError);
+    return handleActionNotification(
+      deleteEntity(entity.id),
+      this.handleChanged,
+      this.handleError,
+      'Entity deleted successfully',
+      'Failed to delete entity',
+    );
   }
 
   handleChanged() {
