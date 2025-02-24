@@ -465,6 +465,7 @@
   "Credentials": "Anmeldedaten",
   "Credentials Filter": "Anmeldedaten-Filter",
   "Credentials for authenticated checks": "Anmeldedaten für authentifizierte Prüfungen",
+  "Critical": "Kritisch",
   "Current": "Aktuell",
   "Current Report for Audit {{- name}} from {{- date}}": "Aktueller Bericht für Audit {{- name}} vom {{- date}}",
   "Current Report for Task {{- name}} from {{- date}}": "Aktueller Bericht für Aufgabe {{- name}} vom {{- date}}",

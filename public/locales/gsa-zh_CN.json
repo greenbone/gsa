@@ -465,6 +465,7 @@
   "Credentials": "用户凭据",
   "Credentials Filter": "凭据筛选",
   "Credentials for authenticated checks": "",
+  "Critical": "",
   "Current": "最新",
   "Current Report for Audit {{- name}} from {{- date}}": "此审计在 {{- date}} 生成的报告",
   "Current Report for Task {{- name}} from {{- date}}": "当前报告来自{{- date}}的任务{{- name}}",
