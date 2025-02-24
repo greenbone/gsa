@@ -67,8 +67,8 @@ describe('Report Operating Systems Tab tests', () => {
       '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
     expect(links[1]).toHaveTextContent('cpe:/foo/bar');
-    expect(bars[0]).toHaveAttribute('title', 'High');
-    expect(bars[0]).toHaveTextContent('10.0 (High)');
+    expect(bars[0]).toHaveAttribute('title', 'Critical');
+    expect(bars[0]).toHaveTextContent('10.0 (Critical)');
 
     // Row 2
     expect(images[1]).toHaveAttribute('src', '/img/os_unknown.svg');

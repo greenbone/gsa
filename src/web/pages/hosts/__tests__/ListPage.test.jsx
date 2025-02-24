@@ -235,7 +235,7 @@ describe('Host listpage tests', () => {
     expect(row[1]).toHaveTextContent('bar');
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('123.456.789.10');
-    expect(row[1]).toHaveTextContent('10.0 (High)');
+    expect(row[1]).toHaveTextContent('10.0 (Critical)');
     expect(row[1]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM CEST');
 
     const osImage = baseElement.querySelector('img');

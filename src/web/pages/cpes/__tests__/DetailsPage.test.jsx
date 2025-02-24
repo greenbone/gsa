@@ -119,10 +119,10 @@ describe('CPE Detailspage tests', () => {
 
     // severity bar(s)
     const progressBars = getAllByTestId('progressbar-box');
-    expect(progressBars[0]).toHaveAttribute('title', 'High');
-    expect(progressBars[0]).toHaveTextContent('9.8 (High)');
-    expect(progressBars[1]).toHaveAttribute('title', 'High');
-    expect(progressBars[1]).toHaveTextContent('9.7 (High)');
+    expect(progressBars[0]).toHaveAttribute('title', 'Critical');
+    expect(progressBars[0]).toHaveTextContent('9.8 (Critical)');
+    expect(progressBars[1]).toHaveAttribute('title', 'Critical');
+    expect(progressBars[1]).toHaveTextContent('9.7 (Critical)');
     expect(progressBars[2]).toHaveAttribute('title', 'Medium');
     expect(progressBars[2]).toHaveTextContent('5.4 (Medium)');
     expect(progressBars[3]).toHaveAttribute('title', 'Low');

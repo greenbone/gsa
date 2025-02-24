@@ -63,8 +63,8 @@ describe('Report Closed CVEs Tab tests', () => {
     expect(links[1]).toHaveTextContent('123.456.78.910');
     expect(links[2]).toHaveAttribute('href', '/nvt/201');
     expect(links[2]).toHaveTextContent('This is a description');
-    expect(bars[0]).toHaveAttribute('title', 'High');
-    expect(bars[0]).toHaveTextContent('10.0 (High)');
+    expect(bars[0]).toHaveAttribute('title', 'Critical');
+    expect(bars[0]).toHaveTextContent('10.0 (Critical)');
 
     // Row 2
     expect(links[3]).toHaveAttribute('href', '/cve/CVE-2000-5678');

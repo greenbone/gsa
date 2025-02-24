@@ -54,8 +54,8 @@ describe('Report Ports Tab tests', () => {
 
     // Row 1
     expect(rows[1]).toHaveTextContent('123/tcp1'); // Port 123/tcp, Hosts 1
-    expect(bars[0]).toHaveAttribute('title', 'High');
-    expect(bars[0]).toHaveTextContent('10.0 (High)');
+    expect(bars[0]).toHaveAttribute('title', 'Critical');
+    expect(bars[0]).toHaveTextContent('10.0 (Critical)');
 
     // Row 2
     expect(rows[2]).toHaveTextContent('456/tcp1'); // Port 456/tcp, Hosts 1

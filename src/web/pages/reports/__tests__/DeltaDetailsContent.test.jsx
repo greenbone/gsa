@@ -346,8 +346,8 @@ describe('Delta Report Details Content tests', () => {
     // Row 1
     expect(rows[2]).toHaveTextContent('[ = ]');
     expect(rows[2]).toHaveTextContent('Result 1');
-    expect(bars[1]).toHaveAttribute('title', 'High');
-    expect(bars[1]).toHaveTextContent('10.0 (High)');
+    expect(bars[1]).toHaveAttribute('title', 'Critical');
+    expect(bars[1]).toHaveTextContent('10.0 (Critical)');
     expect(rows[2]).toHaveTextContent('80 %');
     expect(rows[2]).toHaveTextContent('123.456.78.910');
     expect(rows[2]).toHaveTextContent('80/tcp');
