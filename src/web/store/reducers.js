@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {portListsApi} from 'gmp/commands/portlists';
 import {combineReducers} from 'redux';
 import {CLEAR_STORE} from 'web/store/actions';
 import dashboardData from 'web/store/dashboard/data/reducers';
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   userSettings,
   pages,
   feedStatus,
+  [portListsApi.reducerPath]: portListsApi.reducer,
 });
 
 const clearStoreReducer = (state = {}, action) => {

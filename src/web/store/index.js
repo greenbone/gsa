@@ -4,9 +4,10 @@
  */
 
 import {
-  configureStore as reduxConfigureStore,
   isImmutableDefault,
+  configureStore as reduxConfigureStore,
 } from '@reduxjs/toolkit';
+import {portListsApi} from 'gmp/commands/portlists';
 import Rejection from 'gmp/http/rejection';
 import {isDate} from 'gmp/models/date';
 import {isEvent} from 'gmp/models/event';
@@ -30,7 +31,7 @@ const configureStore = ({debug = false, testing = false}) => {
         serializableCheck: false,
         // enable immutable check only in development. not in testing and production
         immutableCheck: testing ? false : {isImmutable, warnAfter: 200},
-      });
+      }).concat(portListsApi.middleware);
       if (debug) {
         middlewares = middlewares.concat(logger);
       }

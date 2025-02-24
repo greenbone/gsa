@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useGetPortListsQuery} from 'gmp/commands/portlists';
 import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -107,6 +108,11 @@ const PortListsPage = () => {
     showError,
   } = useDialogNotification();
 
+  const {data} = useGetPortListsQuery({
+    token: gmp.settings.token,
+  });
+
+  console.log('🚀 ~ fetchPortLists ~ data:', data);
   // fetch port lists
   const fetch = useCallback(
     withFilter => {

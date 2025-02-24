@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import GmpHttp from 'gmp/http/gmp';
@@ -47,7 +48,32 @@ interface PortListCommandDeletePortRangeParams {
 interface PortListCommandImportParams {
   xmlFile: string;
 }
+export const portListsApi = createApi({
+  reducerPath: 'portListsApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://127.0.0.1:9392',
+    credentials: 'include',
+    responseHandler: response => response.text(),
+    prepareHeaders: headers => {
+      return headers;
+    },
+  }),
+  endpoints: builder => ({
+    getPortLists: builder.query({
+      query: ({token}) => ({
+        url: '/gmp',
+        params: {
+          token,
+          cmd: 'get_port_lists',
+          filter: 'sort=name first=1 rows=20',
+        },
+      }),
+      transformResponse: response => response,
+    }),
+  }),
+});
 
+export const {useGetPortListsQuery} = portListsApi;
 export class PortListCommand extends EntityCommand<PortList, PortListElement> {
   constructor(http: GmpHttp) {
     super(http, 'port_list', PortList);
