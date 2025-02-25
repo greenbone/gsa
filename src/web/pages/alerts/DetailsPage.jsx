@@ -48,7 +48,6 @@ import {
 } from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
 
-
 export const ToolBarIcons = ({
   entity,
   onAlertCloneClick,

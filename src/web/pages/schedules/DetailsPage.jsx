@@ -40,7 +40,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/schedules';
 import PropTypes from 'web/utils/PropTypes';
 
-
 export const ToolBarIcons = ({
   entity,
   onScheduleCloneClick,

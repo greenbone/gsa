@@ -45,7 +45,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/scanners';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ToolBarIcons = ({
   entity,
   onScannerCertificateDownloadClick,

@@ -62,7 +62,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 
-
 export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,

@@ -33,7 +33,6 @@ import PermissionDetails from 'web/pages/permissions/Details';
 import {selector, loadEntity} from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ToolBarIcons = ({
   entity,
   onPermissionCloneClick,

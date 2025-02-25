@@ -79,7 +79,6 @@ import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
-
 export const ToolBarIcons = ({
   entity,
   links,

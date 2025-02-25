@@ -45,7 +45,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/tlscertificates';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ToolBarIcons = ({
   entity,
   onTlsCertificateDeleteClick,

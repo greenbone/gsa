@@ -47,7 +47,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-
 const ToolBarIcons = withCapabilities(
   ({
     capabilities,

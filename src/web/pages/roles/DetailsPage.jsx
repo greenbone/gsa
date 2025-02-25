@@ -49,7 +49,6 @@ import {selector, loadEntity} from 'web/store/entities/roles';
 import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
 
-
 const ToolBarIcons = ({
   entity,
   onRoleCloneClick,

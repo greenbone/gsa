@@ -43,7 +43,6 @@ import {selector, loadEntity} from 'web/store/entities/tags';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilties from 'web/utils/withCapabilities';
 
-
 const ToolBarIcons = withCapabilties(
   ({
     capabilities,
