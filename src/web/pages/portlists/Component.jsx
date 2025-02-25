@@ -12,6 +12,7 @@ import EntityComponent from 'web/entity/Component';
 import PortListsDialog from 'web/pages/portlists/Dialog';
 import ImportPortListDialog from 'web/pages/portlists/ImportDialog';
 import PortRangeDialog from 'web/pages/portlists/PortRangeDialog';
+import {handleActionNotification} from 'web/utils/handleActionNotification';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
@@ -120,10 +121,13 @@ class PortListComponent extends React.Component {
   handleDeletePortRange(range) {
     const {gmp} = this.props;
 
-    return gmp.portlist.deletePortRange(range).then(response => {
-      const {data} = response;
-      this.setState({port_list: data});
-    });
+    return handleActionNotification(
+      gmp.portlist.deletePortRange(range),
+      this.handleInteraction,
+      this.props.onDeleted,
+      _('Port range deleted successfully'),
+      _('Failed to delete port range'),
+    );
   }
 
   handleSavePortRange(data) {
