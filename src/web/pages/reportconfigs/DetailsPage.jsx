@@ -37,7 +37,9 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import ReportConfigComponent from 'web/pages/reportconfigs/Component';
-import ReportConfigDetails, {ReportConfigParamValue} from 'web/pages/reportconfigs/Details';
+import ReportConfigDetails, {
+  ReportConfigParamValue,
+} from 'web/pages/reportconfigs/Details';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
