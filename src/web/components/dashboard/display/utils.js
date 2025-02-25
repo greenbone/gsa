@@ -46,12 +46,13 @@ export const percent = (count, sum) =>
   ((parseInt(count) / sum) * 100).toFixed(1);
 
 /**
- * Generates a random hex color code.
+ * Generates a random RGB color code.
  *
  * @returns {string} A random hex color code in the format '#RRGGBB'.
  */
 export const randomColor = () => {
-  return '#' + Math.floor(Math.random() * 0xffffff).toString(16);
+  const color = Math.floor(Math.random() * 0xffffff).toString(16);
+  return '#' + color.padStart(6, '0');
 };
 
 export const activeDaysColorScale = scaleOrdinal()
