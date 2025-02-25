@@ -14,7 +14,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import {goToDetails} from 'web/entity/Component';
+import {goToDetails} from 'web/entity/navigation';
 import HostComponent from 'web/pages/hosts/Component';
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from 'web/pages/hosts/dashboard';
 import HostsFilterDialog from 'web/pages/hosts/FilterDialog';

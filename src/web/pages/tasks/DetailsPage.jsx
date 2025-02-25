@@ -39,10 +39,10 @@ import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
-import {goToDetails, goToList} from 'web/entity/Component';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityPage, {Col} from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
@@ -78,7 +78,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
-
 
 export const ToolBarIcons = ({
   entity,

@@ -27,8 +27,8 @@ import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
-import {goToList} from 'web/entity/Component';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
+import {goToList} from 'web/entity/navigation';
 import EntityPage, {Col} from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
@@ -44,7 +44,6 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/tlscertificates';
 import PropTypes from 'web/utils/PropTypes';
-
 
 const ToolBarIcons = ({
   entity,

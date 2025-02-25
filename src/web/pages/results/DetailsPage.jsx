@@ -40,7 +40,7 @@ import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
-import {goToDetails} from 'web/entity/Component';
+import {goToDetails} from 'web/entity/navigation';
 import Note from 'web/entity/Note';
 import Override from 'web/entity/Override';
 import EntityPage, {Col} from 'web/entity/Page';
@@ -61,7 +61,6 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
-
 
 export const ToolBarIcons = ({
   entity,
