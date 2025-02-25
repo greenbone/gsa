@@ -16,18 +16,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
-export const goToDetails =
-  (type, props) =>
-  ({data}) => {
-    const {navigate} = props;
-    return navigate('/' + type + '/' + data.id);
-  };
-
-export const goToList = (type, props) => () => {
-  const {navigate} = props;
-  return navigate('/' + type);
-};
-
 class EntityComponent extends React.Component {
   constructor(...args) {
     super(...args);
