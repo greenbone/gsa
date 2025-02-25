@@ -40,7 +40,6 @@ import {
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ToolBarIcons = ({
   entity,
   onGroupCloneClick,

@@ -53,7 +53,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
-
 export const ToolBarIcons = ({
   entity,
   onOverrideCloneClick,

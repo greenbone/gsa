@@ -44,7 +44,6 @@ import {selector, loadEntity} from 'web/store/entities/policies';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-
 export const ToolBarIcons = withCapabilities(
   ({
     capabilities,
