@@ -52,7 +52,6 @@ import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-
 export const ToolBarIcons = withCapabilities(
   ({
     capabilities,

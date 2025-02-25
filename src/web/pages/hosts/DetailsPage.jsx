@@ -50,7 +50,6 @@ import {
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 
-
 export const ToolBarIcons = ({
   entity,
   onHostCreateClick,

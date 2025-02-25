@@ -44,7 +44,6 @@ import {
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ToolBarIcons = ({
   entity,
   onTicketCloneClick,

@@ -41,7 +41,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/portlists';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ToolBarIcons = ({
   entity,
   onPortListCloneClick,

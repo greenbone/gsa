@@ -40,7 +40,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/users';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ToolBarIcons = ({
   entity,
   onUserCloneClick,

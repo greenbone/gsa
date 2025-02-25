@@ -47,7 +47,6 @@ import {selector, loadEntity} from 'web/store/entities/targets';
 import PropTypes from 'web/utils/PropTypes';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
-
 export const ToolBarIcons = ({
   entity,
   onTargetCloneClick,
