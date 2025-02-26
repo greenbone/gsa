@@ -16,10 +16,12 @@ const currentSettingsResponse = {
     },
   },
 };
-const currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse);
 
 describe('EntityComponent', () => {
   test('should render', () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const gmp = {foo: {}, user: {currentSettings}};
     const {render} = rendererWith({gmp});
     const {queryByTestId} = render(
@@ -45,6 +47,9 @@ describe('EntityComponent', () => {
   });
 
   test('should allow cloning an entity', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const clonedData = {id: '123'};
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
@@ -75,6 +80,9 @@ describe('EntityComponent', () => {
   });
 
   test('should call onCloneError when cloning an entity fails', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
@@ -105,6 +113,9 @@ describe('EntityComponent', () => {
   });
 
   test('should allow deleting an entity', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const deletedData = {id: '123'};
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
@@ -137,6 +148,9 @@ describe('EntityComponent', () => {
   });
 
   test('should call onDeleteError when deleting an entity fails', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
@@ -167,6 +181,9 @@ describe('EntityComponent', () => {
   });
 
   test('should allow saving an entity', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const savedData = {id: '123'};
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
@@ -199,6 +216,9 @@ describe('EntityComponent', () => {
   });
 
   test('should call onSaveError when saving an entity fails', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
@@ -229,6 +249,9 @@ describe('EntityComponent', () => {
   });
 
   test('should allow to create an entity', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const createdData = {id: '123'};
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
@@ -261,6 +284,9 @@ describe('EntityComponent', () => {
   });
 
   test('should call onCreateError when creating an entity fails', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
@@ -291,6 +317,9 @@ describe('EntityComponent', () => {
   });
 
   test('should allow to download an entity', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const entity = {
       id: '123',
       name: 'foo',
@@ -320,8 +349,8 @@ describe('EntityComponent', () => {
         )}
       </EntityComponent>,
     );
-
     await wait(); // wait for currentSettings to be resolved and put into the store
+    expect(currentSettings).toHaveBeenCalledOnce();
     queryByTestId('button').click();
     await wait();
     expect(onDownloaded).toHaveBeenCalledWith({
@@ -333,6 +362,9 @@ describe('EntityComponent', () => {
   });
 
   test('should call onDownloadError when downloading an entity fails', async () => {
+    const currentSettings = testing
+      .fn()
+      .mockResolvedValue(currentSettingsResponse);
     const error = new Error('error');
     const entity = {id: '123'};
     const onDownloaded = testing.fn();
