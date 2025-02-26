@@ -7,7 +7,6 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
@@ -150,7 +149,6 @@ const mapDispatchToProps = (dispatch, {name, gmp}) => {
   return {
     deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
     loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   };
 };
 
