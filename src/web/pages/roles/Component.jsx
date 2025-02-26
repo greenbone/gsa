@@ -19,10 +19,10 @@ import {
   selector as userSelector,
 } from 'web/store/entities/users';
 import compose from 'web/utils/Compose';
+import {handleActionNotification} from 'web/utils/handleActionNotification';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
 
 class RoleComponent extends React.Component {
   constructor(...args) {
@@ -125,9 +125,12 @@ class RoleComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.permission.delete({id: permissionId}).then(
+    return handleActionNotification(
+      gmp.permission.delete({id: permissionId}),
       () => this.loadSettings(roleId),
       error => this.setError(error),
+      _('Permission deleted successfully'),
+      _('Failed to delete permission'),
     );
   }
 
