@@ -4,155 +4,154 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import {connect} from 'react-redux';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import useGmp from 'web/hooks/useGmp';
+import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
-import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
-import withGmp from 'web/utils/withGmp';
 
-class EntityComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleEntityClone = this.handleEntityClone.bind(this);
-    this.handleEntityDelete = this.handleEntityDelete.bind(this);
-    this.handleEntityDownload = this.handleEntityDownload.bind(this);
-    this.handleEntitySave = this.handleEntitySave.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.loadSettings();
-  }
-
-  handleEntityDelete(entity) {
-    const {deleteEntity, onDeleted, onDeleteError} = this.props;
-
-    this.handleInteraction();
-
-    return deleteEntity(entity.id).then(onDeleted, onDeleteError);
-  }
-
-  handleEntityClone(entity) {
-    const {onCloned, onCloneError, gmp, name} = this.props;
-    const cmd = gmp[name];
-
-    this.handleInteraction();
-
-    return cmd.clone(entity).then(onCloned, onCloneError);
-  }
-
-  handleEntitySave(data) {
-    const {gmp, name} = this.props;
-    const cmd = gmp[name];
-
-    this.handleInteraction();
-
-    if (isDefined(data.id)) {
-      const {onSaved, onSaveError} = this.props;
-      return cmd.save(data).then(onSaved, onSaveError);
+/**
+ * Executes a promise and handles success and error callbacks.
+ *
+ * @param {Promise} promise - The promise to be executed.
+ * @param {Function} [onSuccess] - Optional callback function to be called on successful resolution of the promise.
+ * @param {Function} [onError] - Optional callback function to be called if the promise is rejected.
+ * @returns {Promise<*>} - The result of the onSuccess callback if provided, otherwise the resolved value of the promise.
+ *                         If the promise is rejected the result of the onError callback if provided.
+ *                         Otherwise the error from the rejected promise is thrown.
+ * @throws {*} - The error from the rejected promise if onError callback is not provided.
+ */
+const actionFunction = async (promise, onSuccess, onError) => {
+  try {
+    const response = await promise;
+    if (isDefined(onSuccess)) {
+      return onSuccess(response);
     }
-
-    const {onCreated, onCreateError} = this.props;
-    return cmd.create(data).then(onCreated, onCreateError);
-  }
-
-  handleEntityDownload(entity) {
-    const {
-      detailsExportFileName,
-      username,
-      gmp,
-      name,
-      onDownloaded,
-      onDownloadError,
-    } = this.props;
-    const cmd = gmp[name];
-
-    this.handleInteraction();
-
-    const promise = cmd.export(entity).then(response => {
-      const filename = generateFilename({
-        creationTime: entity.creationTime,
-        fileNameFormat: detailsExportFileName,
-        id: entity.id,
-        modificationTime: entity.modificationTime,
-        resourceName: entity.name,
-        resourceType: name,
-        username,
-      });
-
-      return {filename, data: response.data};
-    });
-
-    return promise.then(onDownloaded, onDownloadError);
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
+  } catch (error) {
+    if (isDefined(onError)) {
+      return onError(error);
     }
+    throw error;
   }
-
-  render() {
-    const {children} = this.props;
-
-    return children({
-      create: this.handleEntitySave,
-      clone: this.handleEntityClone,
-      delete: this.handleEntityDelete,
-      save: this.handleEntitySave,
-      download: this.handleEntityDownload,
-    });
-  }
-}
-
-EntityComponent.propTypes = {
-  children: PropTypes.func.isRequired,
-  deleteEntity: PropTypes.func.isRequired,
-  detailsExportFileName: PropTypes.string,
-  gmp: PropTypes.gmp.isRequired,
-  loadSettings: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
-  username: PropTypes.string,
-  onCloneError: PropTypes.func,
-  onCloned: PropTypes.func,
-  onCreateError: PropTypes.func,
-  onCreated: PropTypes.func,
-  onDeleteError: PropTypes.func,
-  onDeleted: PropTypes.func,
-  onDownloadError: PropTypes.func,
-  onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
-  onSaveError: PropTypes.func,
-  onSaved: PropTypes.func,
 };
 
-const mapStateToProps = rootState => {
-  const userDefaultsSelector = getUserSettingsDefaults(rootState);
-  const username = getUsername(rootState);
+const EntityComponent = ({
+  children,
+  name,
+  onInteraction,
+  onDownloaded,
+  onDownloadError,
+  onSaved,
+  onSaveError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onCloned,
+  onCloneError,
+}) => {
+  const gmp = useGmp();
+  const username = useSelector(getUsername);
+  const dispatch = useDispatch();
+  const cmd = gmp[name];
+  const deleteEntity = entity =>
+    dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id));
+  const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
   const detailsExportFileName = userDefaultsSelector.getValueByName(
     'detailsexportfilename',
   );
-  return {
-    detailsExportFileName,
-    username,
+
+  const handleInteraction = () => {
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   };
+
+  const handleEntityDownload = async entity => {
+    handleInteraction();
+
+    const filename = generateFilename({
+      creationTime: entity.creationTime,
+      fileNameFormat: detailsExportFileName,
+      id: entity.id,
+      modificationTime: entity.modificationTime,
+      resourceName: entity.name,
+      resourceType: name,
+      username,
+    });
+
+    try {
+      const response = await cmd.export(entity);
+
+      if (isDefined(onDownloaded)) {
+        return onDownloaded({filename, data: response.data});
+      }
+    } catch (error) {
+      if (isDefined(onDownloadError)) {
+        return onDownloadError(error);
+      }
+    }
+  };
+
+  const handleEntitySave = async data => {
+    handleInteraction();
+
+    if (isDefined(data.id)) {
+      return actionFunction(cmd.save(data), onSaved, onSaveError);
+    }
+
+    return actionFunction(cmd.create(data), onCreated, onCreateError);
+  };
+
+  const handleEntityDelete = async entity => {
+    handleInteraction();
+
+    return actionFunction(deleteEntity(entity), onDeleted, onDeleteError);
+  };
+
+  const handleEntityClone = async entity => {
+    handleInteraction();
+
+    return actionFunction(cmd.clone(entity), onCloned, onCloneError);
+  };
+
+  useEffect(() => {
+    const loadSettings = () => dispatch(loadUserSettingDefaults(gmp)());
+    if (
+      !userDefaultsSelector.isLoading() &&
+      !isDefined(detailsExportFileName) &&
+      !isDefined(userDefaultsSelector.getError())
+    ) {
+      loadSettings();
+    }
+  }, [detailsExportFileName, dispatch, gmp, userDefaultsSelector]);
+
+  return children({
+    create: handleEntitySave,
+    clone: handleEntityClone,
+    delete: handleEntityDelete,
+    save: handleEntitySave,
+    download: handleEntityDownload,
+  });
 };
 
-const mapDispatchToProps = (dispatch, {name, gmp}) => {
-  const deleteEntity = createDeleteEntity({entityType: name});
-  return {
-    deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
-    loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-  };
+EntityComponent.propTypes = {
+  children: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  onCloned: PropTypes.func,
+  onCloneError: PropTypes.func,
+  onCreated: PropTypes.func,
+  onCreateError: PropTypes.func,
+  onDeleted: PropTypes.func,
+  onDeleteError: PropTypes.func,
+  onDownloaded: PropTypes.func,
+  onDownloadError: PropTypes.func,
+  onInteraction: PropTypes.func,
 };
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(EntityComponent);
+export default EntityComponent;
