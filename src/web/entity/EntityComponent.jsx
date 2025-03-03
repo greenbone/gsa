@@ -4,16 +4,11 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useGmp from 'web/hooks/useGmp';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
-import {generateFilename} from 'web/utils/Render';
 
 /**
  * Executes a promise and handles success and error callbacks.
@@ -56,45 +51,14 @@ const EntityComponent = ({
   onCloneError,
 }) => {
   const gmp = useGmp();
-  const username = useSelector(getUsername);
   const dispatch = useDispatch();
   const cmd = gmp[name];
   const deleteEntity = entity =>
     dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id));
-  const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-  const detailsExportFileName = userDefaultsSelector.getValueByName(
-    'detailsexportfilename',
-  );
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
-    }
-  };
-
-  const handleEntityDownload = async entity => {
-    handleInteraction();
-
-    const filename = generateFilename({
-      creationTime: entity.creationTime,
-      fileNameFormat: detailsExportFileName,
-      id: entity.id,
-      modificationTime: entity.modificationTime,
-      resourceName: entity.name,
-      resourceType: name,
-      username,
-    });
-
-    try {
-      const response = await cmd.export(entity);
-
-      if (isDefined(onDownloaded)) {
-        return onDownloaded({filename, data: response.data});
-      }
-    } catch (error) {
-      if (isDefined(onDownloadError)) {
-        return onDownloadError(error);
-      }
     }
   };
 
@@ -120,16 +84,11 @@ const EntityComponent = ({
     return actionFunction(cmd.clone(entity), onCloned, onCloneError);
   };
 
-  useEffect(() => {
-    const loadSettings = () => dispatch(loadUserSettingDefaults(gmp)());
-    if (
-      !userDefaultsSelector.isLoading() &&
-      !isDefined(detailsExportFileName) &&
-      !isDefined(userDefaultsSelector.getError())
-    ) {
-      loadSettings();
-    }
-  }, [detailsExportFileName, dispatch, gmp, userDefaultsSelector]);
+  const handleEntityDownload = useEntityDownload(name, {
+    onDownloadError,
+    onDownloaded,
+    onInteraction,
+  });
 
   return children({
     create: handleEntitySave,
@@ -152,6 +111,8 @@ EntityComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onDownloadError: PropTypes.func,
   onInteraction: PropTypes.func,
+  onSaveError: PropTypes.func,
+  onSaved: PropTypes.func,
 };
 
 export default EntityComponent;
