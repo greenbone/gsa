@@ -87,14 +87,16 @@ const NvtPreferences = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {preferences.map(pref => (
-            <NvtPreferenceDisplay
-              key={pref.nvt.name + pref.name}
-              preference={pref}
-              title={editTitle}
-              onEditNvtDetailsClick={onEditNvtDetailsClick}
-            />
-          ))}
+          {preferences.map(pref => {
+            return (
+              <NvtPreferenceDisplay
+                key={`${pref.nvt.oid}-${pref.id}`}
+                preference={pref}
+                title={editTitle}
+                onEditNvtDetailsClick={onEditNvtDetailsClick}
+              />
+            );
+          })}
         </TableBody>
       </Table>
     </Section>
