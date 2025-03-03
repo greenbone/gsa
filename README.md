@@ -252,7 +252,7 @@ instantiated once for the [GSA application](./src/web/app.js#L53)
 | [severityRating](#severityrating)                 | `'CVSSv2'` or `'CVSSv3'`   | `'CVSSv2'`                                                                       | -                         | x                       |
 | [vendorVersion](#vendorversion)                   | String                     | undefined                                                                        | -                         | x                       |
 | [vendorLabel](#vendorlabel)                       | String                     | undefined                                                                        | -                         | x                       |
-
+| [title](#title)                                   | String                     | Greenbone Security Assistant                                                     | x                         | x                       |
 #### vendorVersion
 
 Allows to adjust the shown product version string at the Login and About pages.
@@ -262,6 +262,10 @@ Allows to adjust the shown product version string at the Login and About pages.
 Allows to adjust the product info image at the Login page. It must be a relative
 path e.g. `foo.png`. The path will be mapped to `$INSTALL_PREFIX/share/gvm/gsad/web/img/`
 on production (with [gsad]) and `gsa/public/img` for the [development server](#developing).
+
+#### title
+
+Allows to adjust the HTML title, i.e. the text shown in browser tabs which have GSA open.
 
 #### guestUsername and guestPassword
 
