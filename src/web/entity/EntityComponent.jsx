@@ -7,6 +7,7 @@ import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantin
 import {isDefined} from 'gmp/utils/identity';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
@@ -16,33 +17,6 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {getUsername} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
-
-/**
- * Executes a promise and handles success and error callbacks.
- *
- * @param {Promise} promise - The promise to be executed.
- * @param {Function} [onSuccess] - Optional callback function to be called on successful resolution of the promise.
- * @param {Function} [onError] - Optional callback function to be called if the promise is rejected.
- * @param {string} [successMessage] - Optional message to display if the action is successful.
- * @returns {Promise<*>} - The result of the onSuccess callback if provided, otherwise the resolved value of the promise.
- *                         If the promise is rejected the result of the onError callback if provided.
- *                         Otherwise the error from the rejected promise is thrown.
- * @throws {*} - The error from the rejected promise if onError callback is not provided.
- */
-const actionFunction = async (promise, onSuccess, onError, successMessage) => {
-  try {
-    const response = await promise;
-    if (isDefined(onSuccess)) {
-      onSuccess(response);
-      showSuccessNotification('', successMessage);
-    }
-  } catch (error) {
-    if (isDefined(onError)) {
-      return onError(error);
-    }
-    throw error;
-  }
-};
 
 const EntityComponent = ({
   children,
