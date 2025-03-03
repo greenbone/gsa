@@ -4,11 +4,10 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import {useDispatch} from 'react-redux';
+import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import {actionFunction} from 'web/entity/hooks/utils';
 import useGmp from 'web/hooks/useGmp';
-import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import PropTypes from 'web/utils/PropTypes';
 
 const EntityComponent = ({
@@ -27,10 +26,7 @@ const EntityComponent = ({
   onCloneError,
 }) => {
   const gmp = useGmp();
-  const dispatch = useDispatch();
   const cmd = gmp[name];
-  const deleteEntity = entity =>
-    dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id));
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -48,11 +44,11 @@ const EntityComponent = ({
     return actionFunction(cmd.create(data), onCreated, onCreateError);
   };
 
-  const handleEntityDelete = async entity => {
-    handleInteraction();
-
-    return actionFunction(deleteEntity(entity), onDeleted, onDeleteError);
-  };
+  const handleEntityDelete = useEntityDelete(name, {
+    onDeleteError,
+    onDeleted,
+    onInteraction,
+  });
 
   const handleEntityClone = async entity => {
     handleInteraction();
