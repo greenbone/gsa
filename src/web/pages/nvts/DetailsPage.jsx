@@ -48,7 +48,6 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-
 export let ToolBarIcons = ({
   capabilities,
   entity,

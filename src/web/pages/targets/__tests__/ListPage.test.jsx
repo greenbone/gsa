@@ -19,13 +19,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import TargetPage, {ToolBarIcons} from 'web/pages/targets/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 
 let currentSettings;
 let getSetting;
@@ -34,9 +34,9 @@ let getTargets;
 let renewSession;
 
 beforeEach(() => {
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
 
   getSetting = testing.fn().mockResolvedValue({
     filter: null,

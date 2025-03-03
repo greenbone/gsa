@@ -12,13 +12,13 @@ import {
   getSelectElement,
   getTextInputs,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import TlsCertificatePage from 'web/pages/tlscertificates/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, wait} from 'web/utils/Testing';
-
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -42,9 +42,9 @@ const tlsCertificate = TlsCertificate.fromElement({
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({

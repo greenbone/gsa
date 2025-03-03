@@ -21,13 +21,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import AlertPage, {ToolBarIcons} from 'web/pages/alerts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
@@ -88,9 +88,9 @@ beforeEach(() => {
     filter: null,
   });
 
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
 
   renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',

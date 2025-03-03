@@ -8,11 +8,11 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CpePage, {ToolBarIcons} from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, wait, fireEvent} from 'web/utils/Testing';
-
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -43,9 +43,9 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
 
   renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',

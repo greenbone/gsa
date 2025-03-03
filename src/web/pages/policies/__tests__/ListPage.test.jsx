@@ -9,13 +9,13 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {clickElement, testBulkTrashcanDialog} from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import PoliciesPage, {ToolBarIcons} from 'web/pages/policies/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 
 const policy = Policy.fromElement({
   _id: '12345',
@@ -43,7 +43,9 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({foo: 'bar'});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const getSetting = testing.fn().mockResolvedValue({filter: null});
 

@@ -15,13 +15,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import TaskPage, {ToolBarIcons} from 'web/pages/tasks/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/Testing';
-
 
 const lastReport = {
   report: {
@@ -50,9 +50,9 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({

@@ -19,12 +19,12 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CredentialPage, {ToolBarIcons} from 'web/pages/credentials/ListPage';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 
 const credential = Credential.fromElement({
   _id: '6575',
@@ -62,9 +62,9 @@ let getCredentials;
 let renewSession;
 
 beforeEach(() => {
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
   getSetting = testing.fn().mockResolvedValue({
     filter: null,
   });

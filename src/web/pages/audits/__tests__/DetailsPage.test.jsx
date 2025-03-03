@@ -11,11 +11,11 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {clickElement, getActionItems} from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import Detailspage, {ToolBarIcons} from 'web/pages/audits/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
-
 
 const policy = Policy.fromElement({
   _id: '314',
@@ -232,9 +232,9 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',

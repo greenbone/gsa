@@ -17,13 +17,13 @@ import {
   getTableFooter,
   getTextInputs,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import NvtsPage, {ToolBarIcons} from 'web/pages/nvts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, screen, wait} from 'web/utils/Testing';
-
 
 const nvt = NVT.fromElement({
   _oid: '1.3.6.1.4.1.25623.1.0',
@@ -66,9 +66,9 @@ const nvt = NVT.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const getSetting = testing.fn().mockResolvedValue({
   filter: null,

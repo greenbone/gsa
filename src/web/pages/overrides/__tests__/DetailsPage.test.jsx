@@ -8,11 +8,11 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import Detailspage, {ToolBarIcons} from 'web/pages/overrides/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/overrides';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 
 const caps = new Capabilities(['everything']);
 
@@ -98,9 +98,9 @@ const getEntities = testing.fn().mockResolvedValue({
   },
 });
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
