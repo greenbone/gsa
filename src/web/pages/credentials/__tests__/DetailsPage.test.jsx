@@ -8,11 +8,11 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import Detailspage, {ToolBarIcons} from 'web/pages/credentials/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/credentials';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, screen, fireEvent} from 'web/utils/Testing';
-
 
 let getCredential;
 let getEntities;
@@ -30,9 +30,9 @@ beforeEach(() => {
       counts: new CollectionCounts(),
     },
   });
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
   renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });

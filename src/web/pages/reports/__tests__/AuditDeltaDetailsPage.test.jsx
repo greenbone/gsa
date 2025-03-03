@@ -12,6 +12,7 @@ import {
   getSelectElement,
   getTextInputs,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/MockAuditDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -31,15 +32,15 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const getReportComposerDefaults = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe('Audit Detla Report Details Content tests', () => {
+describe('Audit Delta Report Details Content tests', () => {
   test('should render Audit Delta Report Details Content', () => {
     const onActivateTab = testing.fn();
     const onAddToAssetsClick = testing.fn();
@@ -138,7 +139,7 @@ describe('Audit Detla Report Details Content tests', () => {
     // Toolbar Icons
     expect(icons.length).toEqual(15);
 
-    // Powerilter
+    // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
 
     const input = within(select).getByTitle('Loaded filter');

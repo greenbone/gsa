@@ -19,13 +19,13 @@ import {
   getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import SchedulePage, {ToolBarIcons} from 'web/pages/schedules/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/schedules';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 
 const schedule = Schedule.fromElement({
   comment: 'hello world',
@@ -48,9 +48,9 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const getSetting = testing.fn().mockResolvedValue({
   filter: null,

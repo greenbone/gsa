@@ -9,11 +9,11 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {vi} from 'vitest';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import Detailspage, {ToolBarIcons} from 'web/pages/policies/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, act} from 'web/utils/Testing';
-
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
   default: () => null,
@@ -193,9 +193,9 @@ const entityType = 'policy';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',

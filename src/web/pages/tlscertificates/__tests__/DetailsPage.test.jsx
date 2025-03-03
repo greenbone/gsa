@@ -8,6 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tlscertificate';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import DetailsPage from 'web/pages/tlscertificates/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tlscertificates';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -39,9 +40,9 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const getEntities = testing.fn().mockResolvedValue({
   data: [],

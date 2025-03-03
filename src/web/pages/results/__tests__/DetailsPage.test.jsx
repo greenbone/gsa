@@ -8,11 +8,11 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import Detailspage, {ToolBarIcons} from 'web/pages/results/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 
 // setup
 
@@ -120,9 +120,9 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
 
   renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',

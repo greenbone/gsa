@@ -10,11 +10,11 @@ import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scanconfig';
 import Schedule from 'gmp/models/schedule';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import Detailspage, {ToolBarIcons} from 'web/pages/tasks/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, act} from 'web/utils/Testing';
-
 
 const config = ScanConfig.fromElement({
   _id: '314',
@@ -251,9 +251,9 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
+const currentSettings = testing
+  .fn()
+  .mockResolvedValue(currentSettingsDefaultResponse);
 
 const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',

@@ -10,11 +10,11 @@ import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 import NVT from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
-import Detailspage, {ToolBarIcons} from 'web/pages/nvts/DetailsPage';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import DetailsPage, {ToolBarIcons} from 'web/pages/nvts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 
 const caps = new Capabilities(['everything']);
 
@@ -234,17 +234,17 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
 
   renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
 
-describe('Nvt Detailspage tests', () => {
-  test('should render full Detailspage', async () => {
+describe('Nvt DetailsPage tests', () => {
+  test('should render full DetailsPage', async () => {
     const gmp = {
       nvt: {
         get: getNvt,
@@ -273,7 +273,7 @@ describe('Nvt Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
     await wait();
 
     expect(baseElement).toHaveTextContent('NVT: foo');
@@ -392,7 +392,7 @@ describe('Nvt Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[8]).toHaveTextContent('Preferences');
@@ -436,7 +436,7 @@ describe('Nvt Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[10]).toHaveTextContent('User Tags');

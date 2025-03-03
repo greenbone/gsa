@@ -19,13 +19,13 @@ import {
   getTableFooter,
   getTextInputs,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CpesPage, {ToolBarIcons} from 'web/pages/cpes/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, screen, wait} from 'web/utils/Testing';
-
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -97,9 +97,9 @@ beforeEach(() => {
     filter: null,
   });
 
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
 
   renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',

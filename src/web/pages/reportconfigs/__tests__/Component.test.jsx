@@ -14,9 +14,9 @@ import {
   getSelectItemElementsForSelect,
   getTextInputs,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ReportFormatComponent from 'web/pages/reportconfigs/Component';
 import {fireEvent, getByTestId, rendererWith, wait} from 'web/utils/Testing';
-
 
 describe('Report Config Component tests', () => {
   const mockReportConfig = ReportConfig.fromElement({
@@ -71,9 +71,9 @@ describe('Report Config Component tests', () => {
 
     const gmp = {
       user: {
-        currentSettings: testing.fn().mockResolvedValue({
-          data: {},
-        }),
+        currentSettings: testing
+          .fn()
+          .mockResolvedValue(currentSettingsDefaultResponse),
       },
       reportconfig: {
         get: getReportConfig,
@@ -152,9 +152,9 @@ describe('Report Config Component tests', () => {
 
     const gmp = {
       user: {
-        currentSettings: testing.fn().mockResolvedValue({
-          data: {},
-        }),
+        currentSettings: testing
+          .fn()
+          .mockResolvedValue(currentSettingsDefaultResponse),
       },
       reportconfig: {
         create: createReportConfig,
@@ -229,9 +229,9 @@ describe('Report Config Component tests', () => {
 
     const gmp = {
       user: {
-        currentSettings: testing.fn().mockResolvedValue({
-          data: {},
-        }),
+        currentSettings: testing
+          .fn()
+          .mockResolvedValue(currentSettingsDefaultResponse),
       },
       reportformats: {
         getAll: getAllReportFormats,

@@ -17,13 +17,13 @@ import {
   getTableFooter,
   getTextInputs,
 } from 'web/components/testing';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ResultsPage from 'web/pages/results/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, screen, wait} from 'web/utils/Testing';
-
 
 // setup
 
@@ -144,9 +144,9 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+  currentSettings = testing
+    .fn()
+    .mockResolvedValue(currentSettingsDefaultResponse);
 
   getSetting = testing.fn().mockResolvedValue({
     filter: null,
