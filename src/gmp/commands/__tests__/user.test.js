@@ -8,7 +8,7 @@ import {createResponse, createHttp} from 'gmp/commands/testing';
 import {UserCommand, transformSettingName} from 'gmp/commands/users';
 
 describe('UserCommand tests', () => {
-  test('should parse auth settinngs in currentAuthSettings', () => {
+  test('should parse auth settings in currentAuthSettings', () => {
     const response = createResponse({
       auth_settings: {
         describe_auth_response: {
