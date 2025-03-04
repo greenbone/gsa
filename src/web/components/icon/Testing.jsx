@@ -4,11 +4,12 @@
  */
 
 import {test, expect, testing} from '@gsa/testing';
+import {isDefined} from 'gmp/utils/identity';
 import {ICON_SIZE_SMALL_PIXELS} from 'web/hooks/useIconSize';
 import {render, fireEvent, act} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-export const testIcon = Icon => {
+export const testIcon = (Icon, {dataTestId, customDataTestId} = {}) => {
   test('should render with default width and height', () => {
     const {element} = render(<Icon />);
 
@@ -91,4 +92,20 @@ export const testIcon = Icon => {
     expect(element).toHaveAttribute('title', 'foo');
     expect(svgElement).toHaveAttribute('title', 'foo');
   });
+
+  if (isDefined(dataTestId)) {
+    test('should render with default data-testid', () => {
+      const {element} = render(<Icon />);
+
+      expect(element).toHaveAttribute('data-testid', dataTestId);
+    });
+  }
+
+  if (isDefined(customDataTestId)) {
+    test('should render with custom data-testid', () => {
+      const {element} = render(<Icon data-testid={customDataTestId} />);
+
+      expect(element).toHaveAttribute('data-testid', customDataTestId);
+    });
+  }
 };
