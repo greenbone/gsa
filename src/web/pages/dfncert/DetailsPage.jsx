@@ -23,7 +23,7 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import DetailsBlock from 'web/entity/Block';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -31,7 +31,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import DfnCertAdvDetails from 'web/pages/dfncert/Details';
 import {selector, loadEntity} from 'web/store/entities/dfncerts';
 import PropTypes from 'web/utils/PropTypes';
-
 
 const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => (
   <Divider margin="10px">

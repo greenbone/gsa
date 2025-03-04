@@ -10,7 +10,7 @@ import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
 import EditTicketDialog from 'web/pages/tickets/EditDialog';
 import {
@@ -20,7 +20,6 @@ import {
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 
 class TicketComponent extends React.Component {
   constructor(...args) {

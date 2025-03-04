@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import {rendererWith, wait} from 'web/utils/Testing';
 
 const currentSettingsResponse = {

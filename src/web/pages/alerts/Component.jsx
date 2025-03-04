@@ -19,7 +19,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import FootNote from 'web/components/footnote/Footnote';
 import Layout from 'web/components/layout/Layout';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import ContentComposerDialog from 'web/pages/alerts/ContentComposerDialog';
 import AlertDialog, {
   ATTACH_MESSAGE_DEFAULT,
@@ -50,7 +50,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
-
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {

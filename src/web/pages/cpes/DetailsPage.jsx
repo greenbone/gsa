@@ -31,7 +31,7 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import DetailsBlock from 'web/entity/Block';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import {InfoLayout} from 'web/entity/Info';
 import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
@@ -40,7 +40,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
-
 
 export const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
   <Divider margin="10px">

@@ -17,7 +17,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import {connect} from 'react-redux';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import AlertComponent from 'web/pages/alerts/Component';
 import AuditDialog from 'web/pages/audits/Dialog';
 import PolicyDialog from 'web/pages/policies/Dialog';
@@ -51,7 +51,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
 
 class PolicyComponent extends React.Component {
   constructor(...args) {

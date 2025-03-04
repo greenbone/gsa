@@ -8,7 +8,7 @@ import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import PortListsDialog from 'web/pages/portlists/Dialog';
 import ImportPortListDialog from 'web/pages/portlists/ImportDialog';
 import PortRangeDialog from 'web/pages/portlists/PortRangeDialog';
