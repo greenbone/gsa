@@ -20,7 +20,7 @@ import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import OverrideDialog from 'web/pages/overrides/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import {
@@ -31,7 +31,6 @@ import {
   LOW_VALUE,
 } from 'web/utils/severity';
 import withGmp from 'web/utils/withGmp';
-
 
 const SEVERITIES_LIST = [
   HIGH_VALUE,

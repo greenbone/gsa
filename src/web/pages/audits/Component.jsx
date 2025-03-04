@@ -18,7 +18,7 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import withDownload from 'web/components/form/withDownload';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import AlertComponent from 'web/pages/alerts/Component';
 import AuditDialog from 'web/pages/audits/Dialog';
 import ScheduleComponent from 'web/pages/schedules/Component';

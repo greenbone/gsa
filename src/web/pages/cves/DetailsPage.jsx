@@ -30,7 +30,7 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import DetailsBlock from 'web/entity/Block';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import {InfoLayout} from 'web/entity/Info';
 import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
@@ -39,7 +39,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import CveDetails from 'web/pages/cves/Details';
 import {selector, loadEntity} from 'web/store/entities/cves';
 import PropTypes from 'web/utils/PropTypes';
-
 
 const ToolBarIcons = ({entity, onCveDownloadClick}) => (
   <Divider margin="10px">

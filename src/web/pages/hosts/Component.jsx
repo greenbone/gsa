@@ -8,7 +8,7 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import HostDialog from 'web/pages/hosts/Dialog';
 import TargetComponent from 'web/pages/targets/Component';
 import PropTypes from 'web/utils/PropTypes';

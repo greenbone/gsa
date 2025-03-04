@@ -8,7 +8,7 @@ import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import RoleDialog from 'web/pages/roles/Dialog';
 import {
   loadAllEntities as loadAllGroups,
@@ -22,7 +22,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
 
 class RoleComponent extends React.Component {
   constructor(...args) {

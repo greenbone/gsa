@@ -29,7 +29,7 @@ import TableHeader from 'web/components/table/Header';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -37,7 +37,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import CertBundAdvDetails from 'web/pages/certbund/Details';
 import {selector, loadEntity} from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
-
 
 const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
   <Divider margin="10px">

@@ -10,7 +10,7 @@ import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import TagDialog from 'web/pages/tags/Dialog';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';

@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import {connect} from 'react-redux';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
 import ScannerDialog from 'web/pages/scanners/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
@@ -20,7 +20,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
-
 
 class ScannerComponent extends React.Component {
   constructor(...args) {

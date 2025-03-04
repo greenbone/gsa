@@ -10,7 +10,7 @@ import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
-import EntityComponent from 'web/entity/Component';
+import EntityComponent from 'web/entity/EntityComponent';
 import ScanConfigDialog from 'web/pages/scanconfigs/Dialog';
 import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
 import EditScanConfigDialog from 'web/pages/scanconfigs/EditDialog';
