@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import TextField from 'web/components/form/TextField';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-
 describe('TextField tests', () => {
   test('should render', () => {
     const {element} = render(<TextField />);
@@ -24,9 +23,9 @@ describe('TextField tests', () => {
   test('should call change handler with value', () => {
     const onChange = testing.fn();
 
-    render(<TextField data-testid="input" value="foo" onChange={onChange} />);
+    render(<TextField value="foo" onChange={onChange} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByTestId('form-input');
 
     fireEvent.change(element, {target: {value: 'bar'}});
 
@@ -36,16 +35,9 @@ describe('TextField tests', () => {
   test('should call change handler with value and name', () => {
     const onChange = testing.fn();
 
-    render(
-      <TextField
-        data-testid="input"
-        name="foo"
-        value="ipsum"
-        onChange={onChange}
-      />,
-    );
+    render(<TextField name="foo" value="ipsum" onChange={onChange} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByTestId('form-input');
 
     fireEvent.change(element, {target: {value: 'bar'}});
 
@@ -55,19 +47,25 @@ describe('TextField tests', () => {
   test('should not call change handler if disabled', () => {
     const onChange = testing.fn();
 
-    render(
-      <TextField
-        data-testid="input"
-        disabled={true}
-        value="foo"
-        onChange={onChange}
-      />,
-    );
+    render(<TextField disabled={true} value="foo" onChange={onChange} />);
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByTestId('form-input');
 
     fireEvent.change(element, {target: {value: 'bar'}});
 
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  test('should allow to set a convert function', () => {
+    const onChange = testing.fn();
+    const convert = value => value.toUpperCase();
+
+    render(<TextField convert={convert} value="foo" onChange={onChange} />);
+
+    const element = screen.getByTestId('form-input');
+
+    fireEvent.change(element, {target: {value: 'bar'}});
+
+    expect(onChange).toHaveBeenCalledWith('BAR', undefined);
   });
 });

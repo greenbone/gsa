@@ -9,9 +9,9 @@ import React from 'react';
 import useValueChange from 'web/components/form/useValueChange';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const TextField = ({
   autoComplete,
+  convert,
   disabled,
   errorContent,
   grow,
@@ -23,7 +23,7 @@ const TextField = ({
   onKeyDown,
   ...props
 }) => {
-  const handleChange = useValueChange({onChange, disabled, name});
+  const handleChange = useValueChange({onChange, disabled, name, convert});
   return (
     <Input
       data-testid="form-input"
@@ -44,6 +44,7 @@ const TextField = ({
 
 TextField.propTypes = {
   autoComplete: PropTypes.string,
+  convert: PropTypes.func,
   disabled: PropTypes.bool,
   errorContent: PropTypes.toString,
   grow: PropTypes.numberOrNumberString,
