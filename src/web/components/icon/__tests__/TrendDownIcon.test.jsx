@@ -8,5 +8,8 @@ import {testIcon} from 'web/components/icon/Testing';
 import TrendDownIcon from 'web/components/icon/TrendDownIcon';
 
 describe('TrendDownIcon component tests', () => {
-  testIcon(TrendDownIcon);
+  testIcon(TrendDownIcon, {
+    dataTestId: 'trend-down-icon',
+    customDataTestId: 'custom-trend-down-icon',
+  });
 });

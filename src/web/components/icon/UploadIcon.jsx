@@ -7,12 +7,12 @@ import {Upload as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 import withSvgIcon from 'web/components/icon/withSvgIcon';
 
-const UploadIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth
-    IconComponent={Icon}
-    {...props}
-    data-testid="upload-icon"
-  />
+const UploadIconComponent = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
 ));
+
+const UploadIcon = props => (
+  <UploadIconComponent data-testid="upload-icon" {...props} />
+);
 
 export default UploadIcon;

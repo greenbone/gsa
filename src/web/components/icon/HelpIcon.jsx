@@ -7,12 +7,12 @@ import {HelpCircle as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 import withSvgIcon from 'web/components/icon/withSvgIcon';
 
-const HelpIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth
-    IconComponent={Icon}
-    {...props}
-    data-testid="help-icon"
-  />
+const HelpIconComponent = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
 ));
+
+const HelpIcon = props => (
+  <HelpIconComponent data-testid="help-icon" {...props} />
+);
 
 export default HelpIcon;

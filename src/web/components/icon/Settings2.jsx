@@ -7,12 +7,12 @@ import {Settings2 as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 import withSvgIcon from 'web/components/icon/withSvgIcon';
 
-const Settings2 = withSvgIcon()(props => (
-  <IconWithStrokeWidth
-    {...props}
-    IconComponent={Icon}
-    data-testid="settings-2-icon"
-  />
+const Settings2Component = withSvgIcon()(props => (
+  <IconWithStrokeWidth {...props} IconComponent={Icon} />
 ));
+
+const Settings2 = props => (
+  <Settings2Component data-testid="settings-2-icon" {...props} />
+);
 
 export default Settings2;

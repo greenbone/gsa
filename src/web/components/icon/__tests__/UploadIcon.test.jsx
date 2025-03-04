@@ -8,5 +8,8 @@ import {testIcon} from 'web/components/icon/Testing';
 import UploadIcon from 'web/components/icon/UploadIcon';
 
 describe('UploadIcon component tests', () => {
-  testIcon(UploadIcon);
+  testIcon(UploadIcon, {
+    dataTestId: 'upload-icon',
+    customDataTestId: 'custom-upload-icon',
+  });
 });
