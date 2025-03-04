@@ -8,5 +8,8 @@ import {testIcon} from 'web/components/icon/Testing';
 import TrendNoChange from 'web/components/icon/TrendNoChangeIcon';
 
 describe('TrendNoChange component tests', () => {
-  testIcon(TrendNoChange);
+  testIcon(TrendNoChange, {
+    defaultTestId: 'trend-nochange-icon',
+    customDataTestId: 'custom-trend-nochange-icon',
+  });
 });

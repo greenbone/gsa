@@ -7,12 +7,12 @@ import {Filter as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 import withSvgIcon from 'web/components/icon/withSvgIcon';
 
-const FilterIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth
-    IconComponent={Icon}
-    {...props}
-    data-testid="filter-icon"
-  />
+const FilterIconComponent = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
 ));
+
+const FilterIcon = props => (
+  <FilterIconComponent data-testid="filter-icon" {...props} />
+);
 
 export default FilterIcon;

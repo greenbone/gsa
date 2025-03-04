@@ -7,12 +7,12 @@ import {Play as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 import withSvgIcon from 'web/components/icon/withSvgIcon';
 
-const StartIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth
-    IconComponent={Icon}
-    {...props}
-    data-testid="start-icon"
-  />
+const StartIconComponent = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
 ));
+
+const StartIcon = props => (
+  <StartIconComponent data-testid="start-icon" {...props} />
+);
 
 export default StartIcon;
