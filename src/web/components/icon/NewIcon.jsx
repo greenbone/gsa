@@ -8,6 +8,6 @@ import withSvgIcon from 'web/components/icon/withSvgIcon';
 
 const NewIconComponent = withSvgIcon()(Icon);
 
-const NewIcon = props => <NewIconComponent {...props} data-testid="new-icon" />;
+const NewIcon = props => <NewIconComponent data-testid="new-icon" {...props} />;
 
 export default NewIcon;

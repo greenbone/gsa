@@ -12,7 +12,6 @@ import withSvgIcon from 'web/components/icon/withSvgIcon';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 
-
 const DeleteSvgIcon = withSvgIcon()(props => (
   <IconWithStrokeWidth
     IconComponent={Icon}
@@ -31,7 +30,7 @@ const DeleteIcon = ({selectionType, title, ...props}) => {
       title = _('Delete all filtered');
     }
   }
-  return <DeleteSvgIcon {...props} title={title} />;
+  return <DeleteSvgIcon data-testid="delete-icon" {...props} title={title} />;
 };
 
 DeleteIcon.propTypes = {

@@ -8,5 +8,8 @@ import {testIcon} from 'web/components/icon/Testing';
 import TrashcanIcon from 'web/components/icon/TrashCanIcon';
 
 describe('TrashcanIcon component tests', () => {
-  testIcon(TrashcanIcon);
+  testIcon(TrashcanIcon, {
+    dataTestId: 'trashcan-icon',
+    customDataTestId: 'custom-trashcan-icon',
+  });
 });

@@ -87,6 +87,7 @@ const SvgIcon = ({
   onClick,
   size,
   color = Theme.black,
+  ['data-testid']: dataTestId = 'svg-icon',
   ...other
 }) => {
   const [loading, setLoading] = useStateWithMountCheck(false);
@@ -125,7 +126,7 @@ const SvgIcon = ({
       $isLoading={loading}
       $width={width}
       color={color}
-      data-testid="svg-icon"
+      data-testid={dataTestId}
       title={title}
       onClick={
         isDefined(onClick) && !disabled && !loading ? handleClick : undefined
