@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import {RESET_FILTER} from 'gmp/models/filter';
@@ -19,6 +20,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
 import {connect} from 'react-redux';
+import {handleNotificationForAction} from 'web/components/notification/handleNotificationForAction';
 import SortBy from 'web/components/sortby/SortBy';
 import TagsDialog from 'web/entities/TagsDialog';
 import TagDialog from 'web/pages/tags/Dialog';
@@ -32,7 +34,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 import {withRouter} from 'web/utils/withRouter';
-
 
 const log = logger.getLogger('web.entities.container');
 
@@ -149,7 +150,12 @@ class EntitiesContainer extends React.Component {
   handleDelete(entity) {
     const {deleteEntity} = this.props;
 
-    return deleteEntity(entity.id).then(this.handleChanged, this.handleError);
+    return handleNotificationForAction(
+      deleteEntity(entity.id),
+      this.handleChanged,
+      this.handleError,
+      `${entity.name} ${_('deleted successfully.')}`,
+    );
   }
 
   handleChanged() {
@@ -187,16 +193,22 @@ class EntitiesContainer extends React.Component {
     }
 
     this.handleInteraction();
+    showSuccessNotification('', _('Bulk download started.'));
 
-    return promise.then(response => {
-      const filename = generateFilename({
-        fileNameFormat: listExportFileName,
-        resourceType: pluralizeType(getEntityType(entities[0])),
-        username,
+    return promise
+      .then(response => {
+        const filename = generateFilename({
+          fileNameFormat: listExportFileName,
+          resourceType: pluralizeType(getEntityType(entities[0])),
+          username,
+        });
+        const {data} = response;
+        onDownload({filename, data});
+        showSuccessNotification('', _('Bulk download completed.'));
+      })
+      .catch(error => {
+        this.handleError(error);
       });
-      const {data} = response;
-      onDownload({filename, data});
-    }, this.handleError);
   }
 
   handleDeleteBulk() {
