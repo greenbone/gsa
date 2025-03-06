@@ -8,7 +8,6 @@ import MomentDate from 'gmp/models/date';
 import StartTimeSelection from 'web/pages/performance/StartEndTimeSelection';
 import {render, screen, fireEvent} from 'web/utils/Testing';
 
-
 const timezone = 'CET';
 const startDate = MomentDate('2019-01-01T12:00Z').tz(timezone);
 const endDate = MomentDate('2019-02-01T13:00Z').tz(timezone);
@@ -61,7 +60,7 @@ describe('StartTimeSelection tests', () => {
   });
 
   test('should display timezone', () => {
-    const {getByTestId} = render(
+    render(
       <StartTimeSelection
         endDate={endDate}
         startDate={startDate}
@@ -70,12 +69,12 @@ describe('StartTimeSelection tests', () => {
       />,
     );
 
-    const elem = getByTestId('timezone');
-
+    const elem = screen.getByTestId('timezone');
     expect(elem).toHaveTextContent(timezone);
   });
+
   test('Update button click event', () => {
-    const {getByTestId} = render(
+    render(
       <StartTimeSelection
         endDate={endDate}
         startDate={startDate}
@@ -84,9 +83,8 @@ describe('StartTimeSelection tests', () => {
       />,
     );
 
-    const updateButton = getByTestId('update-button');
+    const updateButton = screen.getByTestId('update-button');
     fireEvent.click(updateButton);
-
     expect(handleChange).toHaveBeenCalledTimes(1);
   });
 
@@ -125,7 +123,7 @@ describe('StartTimeSelection tests', () => {
       expectedStartDate,
       expectedEndDate,
     }) => {
-      const {rerender, getByLabelText} = render(
+      const {rerender} = render(
         <StartTimeSelection
           endDate={initialEndDate}
           startDate={initialStartDate}
@@ -134,10 +132,10 @@ describe('StartTimeSelection tests', () => {
         />,
       );
 
-      expect(getByLabelText('Start Time')).toHaveValue('13:00');
-      expect(getByLabelText('End Time')).toHaveValue('14:00');
-      expect(getByLabelText('Start Date')).toHaveValue('01/01/2019');
-      expect(getByLabelText('End Date')).toHaveValue('01/02/2019');
+      expect(screen.getByLabelText('Start Time')).toHaveValue('13:00');
+      expect(screen.getByLabelText('End Time')).toHaveValue('14:00');
+      expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2019');
+      expect(screen.getByLabelText('End Date')).toHaveValue('01/02/2019');
 
       rerender(
         <StartTimeSelection
@@ -148,10 +146,14 @@ describe('StartTimeSelection tests', () => {
         />,
       );
 
-      expect(getByLabelText('Start Time')).toHaveValue(expectedStartTime);
-      expect(getByLabelText('End Time')).toHaveValue(expectedEndTime);
-      expect(getByLabelText('Start Date')).toHaveValue(expectedStartDate);
-      expect(getByLabelText('End Date')).toHaveValue(expectedEndDate);
+      expect(screen.getByLabelText('Start Time')).toHaveValue(
+        expectedStartTime,
+      );
+      expect(screen.getByLabelText('End Time')).toHaveValue(expectedEndTime);
+      expect(screen.getByLabelText('Start Date')).toHaveValue(
+        expectedStartDate,
+      );
+      expect(screen.getByLabelText('End Date')).toHaveValue(expectedEndDate);
     },
   );
 });
