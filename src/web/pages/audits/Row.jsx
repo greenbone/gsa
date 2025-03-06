@@ -20,11 +20,10 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import {RowDetailsToggle} from 'web/entities/Row';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
+import useUserName from 'web/hooks/useUserName';
 import Actions from 'web/pages/audits/Actions';
 import AuditStatus from 'web/pages/tasks/Status';
 import PropTypes from 'web/utils/PropTypes';
-import withUserName from 'web/utils/withUserName';
-
 
 const renderAuditReport = (report, links) => {
   if (!isDefined(report)) {
@@ -65,10 +64,10 @@ const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
-  username,
   onToggleDetailsClick,
   ...props
 }) => {
+  const [username] = useUserName();
   const {scanner, observers} = entity;
   const obs = [];
 
@@ -148,8 +147,7 @@ Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  username: PropTypes.string.isRequired,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withUserName(Row);
+export default Row;

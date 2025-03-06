@@ -13,51 +13,52 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/Data';
 import {RowDetailsToggle} from 'web/entities/Row';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
+import useUserName from 'web/hooks/useUserName';
 import PropTypes from 'web/utils/PropTypes';
-import withUsername from 'web/utils/withUserName';
-
 
 const EntityNameTableData = ({
   entity,
   links = true,
   displayName,
-  username,
   type = getEntityType(entity),
   children,
   onToggleDetailsClick,
-}) => (
-  <TableData>
-    <Layout align={'space-between'} columns={2}>
-      <div>
-        {entity.isOrphan() && <b>{_('Orphan')}</b>}
-        {isDefined(onToggleDetailsClick) ? (
-          <span>
-            <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-              {entity.name}
-            </RowDetailsToggle>
-            {entity.deprecated && <b> ({_('Deprecated')})</b>}
-          </span>
-        ) : (
-          <span>
-            <DetailsLink id={entity.id} textOnly={!links} type={type}>
-              {entity.name}
-            </DetailsLink>
-            {entity.deprecated && <b> ({_('Deprecated')})</b>}
-          </span>
-        )}
-        {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
-        {children}
-      </div>
-      <Layout>
-        <ObserverIcon
-          displayName={displayName}
-          entity={entity}
-          userName={username}
-        />
+}) => {
+  const [username] = useUserName();
+  return (
+    <TableData>
+      <Layout align={'space-between'} columns={2}>
+        <div>
+          {entity.isOrphan() && <b>{_('Orphan')}</b>}
+          {isDefined(onToggleDetailsClick) ? (
+            <span>
+              <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+                {entity.name}
+              </RowDetailsToggle>
+              {entity.deprecated && <b> ({_('Deprecated')})</b>}
+            </span>
+          ) : (
+            <span>
+              <DetailsLink id={entity.id} textOnly={!links} type={type}>
+                {entity.name}
+              </DetailsLink>
+              {entity.deprecated && <b> ({_('Deprecated')})</b>}
+            </span>
+          )}
+          {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
+          {children}
+        </div>
+        <Layout>
+          <ObserverIcon
+            displayName={displayName}
+            entity={entity}
+            userName={username}
+          />
+        </Layout>
       </Layout>
-    </Layout>
-  </TableData>
-);
+    </TableData>
+  );
+};
 
 EntityNameTableData.propTypes = {
   children: PropTypes.node,
@@ -65,8 +66,7 @@ EntityNameTableData.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   type: PropTypes.string,
-  username: PropTypes.string.isRequired,
   onToggleDetailsClick: PropTypes.func,
 };
 
-export default withUsername(EntityNameTableData);
+export default EntityNameTableData;
