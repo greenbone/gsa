@@ -42,9 +42,9 @@ const DatePickerComponent = (
 
 DatePickerComponent.propTypes = {
   disabled: PropTypes.bool,
-  minDate: PropTypes.instanceOf(date),
+  minDate: PropTypes.oneOfType([PropTypes.date, PropTypes.oneOf([false])]),
   name: PropTypes.string.isRequired,
-  value: PropTypes.instanceOf(date),
+  value: PropTypes.date,
   onChange: PropTypes.func,
   label: PropTypes.string,
 };
