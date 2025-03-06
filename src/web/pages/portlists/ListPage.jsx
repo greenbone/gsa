@@ -40,7 +40,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 
-
 const ToolBarIcons = ({onPortListCreateClick, onPortListImportClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
@@ -149,10 +148,14 @@ const PortListsPage = () => {
 
   useEffect(() => {
     // load initial data
-    if (isDefined(filter) && !isLoadingFilter) {
+    if (
+      isDefined(filter) &&
+      !isLoadingFilter &&
+      !filter.equals(previousFilter)
+    ) {
       fetch(filter);
     }
-  }, [filter, isLoadingFilter, fetch]);
+  }, [filter, isLoadingFilter, fetch, previousFilter]);
 
   useEffect(() => {
     // reload if filter has changed
