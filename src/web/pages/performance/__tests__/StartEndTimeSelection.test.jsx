@@ -128,7 +128,7 @@ describe('StartTimeSelection tests', () => {
           endDate={initialEndDate}
           startDate={initialStartDate}
           timezone={timezone}
-          onChange={handleChange}
+          onChanged={handleChange}
         />,
       );
 
@@ -142,7 +142,7 @@ describe('StartTimeSelection tests', () => {
           endDate={newEndDate}
           startDate={newStartDate}
           timezone={timezone}
-          onChange={handleChange}
+          onChanged={handleChange}
         />,
       );
 
