@@ -17,25 +17,25 @@ const defaultActions = (
 
 /**
  * A higher order component to create table headers which support entity
- * selection
+ * selection.
  *
- * If a react element instance is passed via actions the element will be
- * forwarded as actions to Component.
+ * If a React element instance is passed via actionsColumn, the element will be
+ * forwarded as actionsColumn to the Component.
  *
- * If actions is undefined a default table head column will be passed as
- * actions to Component.
+ * If actionsColumn is undefined, a default table head column will be passed as
+ * actionsColumn to the Component.
  *
- * If actions is true a default table head column will be passed as actions to
- * Component if the current selectionType (passed via props) is SELECTION_USER.
+ * If actionsColumn is true, a default table head column will be passed as actionsColumn
+ * to the Component if the current selectionType (passed via props) is SELECTION_USER.
  *
- * If actions is false no actions (a null value in react) will be passed to
- * Component.
+ * If actionsColumn is false, no actions (a null value in React) will be passed to
+ * the Component.
  *
  * @param {Element}   actionsColumn   React element, undefined or boolean value.
  * @param {Object}    options         Default properties for Component.
  * @param {Component} Component       React component rendered as header
  *
- * @return A new EntitiesHeader component
+ * @return {React.Component} A new EntitiesHeader component.
  */
 export const withEntitiesHeader =
   (actionsColumn = defaultActions, options = {}) =>
