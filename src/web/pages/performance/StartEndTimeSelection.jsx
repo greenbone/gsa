@@ -14,14 +14,12 @@ import Row from 'web/components/layout/Row';
 import PropTypes from 'web/utils/PropTypes';
 import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
-const StartTimeSelection = props => {
-  const {
-    startDate: initialStartDate,
-    endDate: initialEndDate,
-    timezone,
-    onChanged,
-  } = props;
-
+const StartTimeSelection = ({
+  startDate: initialStartDate,
+  endDate: initialEndDate,
+  timezone,
+  onChanged,
+}) => {
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
   const [startTime, setStartTime] = useState(
