@@ -11,7 +11,7 @@ import TableRow from 'web/components/table/Row';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 
-const defaultactions = (
+const defaultActions = (
   <TableHead align="center" title={_l('Actions')} width="8%" />
 );
 
@@ -31,25 +31,27 @@ const defaultactions = (
  * If actions is false no actions (a null value in react) will be passed to
  * Component.
  *
- * @param {Element}   actions_column  React element, undefined or boolean value.
+ * @param {Element}   actionsColumn   React element, undefined or boolean value.
  * @param {Object}    options         Default properties for Component.
  * @param {Component} Component       React component rendered as header
  *
  * @return A new EntitiesHeader component
  */
 export const withEntitiesHeader =
-  (actions_column = defaultactions, options = {}) =>
+  (actionsColumn = defaultActions, options = {}) =>
   Component => {
-    if (!actions_column) {
-      actions_column = null;
+    if (!actionsColumn) {
+      actionsColumn = null;
     }
 
     const HeaderWrapper = props => {
       const {selectionType} = props;
-      let column = actions_column;
+      let column = actionsColumn;
 
-      if (actions_column && selectionType === SelectionType.SELECTION_USER) {
+      if (actionsColumn && selectionType === SelectionType.SELECTION_USER) {
         column = <TableHead width="6em">{_('Actions')}</TableHead>;
+      } else if (actionsColumn === true) {
+        column = null;
       }
       return <Component {...options} actionsColumn={column} {...props} />;
     };
@@ -78,12 +80,12 @@ export const withEntitiesHeader =
  *                             }, {
  *                               ...
  *                             }, ... ]
- * @param {Element} actions_column   React element, undefined or boolean value.
+ * @param {Element} actionsColumn   React element, undefined or boolean value.
  * @param {Object}  options   Default properties for Component.
  *
  * @return A new EntitiesHeader component
  */
-export const createEntitiesHeader = (columns, actions_column, options = {}) => {
+export const createEntitiesHeader = (columns, actionsColumn, options = {}) => {
   const Header = ({
     actionsColumn,
     links = true,
@@ -122,5 +124,5 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
     sort: PropTypes.bool,
     onSortChange: PropTypes.func,
   };
-  return withEntitiesHeader(actions_column, options)(Header);
+  return withEntitiesHeader(actionsColumn, options)(Header);
 };
