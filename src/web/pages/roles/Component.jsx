@@ -8,6 +8,7 @@ import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import {handleNotificationForAction} from 'web/components/notification/handleNotificationForAction';
 import EntityComponent from 'web/entity/EntityComponent';
 import RoleDialog from 'web/pages/roles/Dialog';
 import {
@@ -124,9 +125,11 @@ class RoleComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.permission.delete({id: permissionId}).then(
+    return handleNotificationForAction(
+      gmp.permission.delete({id: permissionId}),
       () => this.loadSettings(roleId),
       error => this.setError(error),
+      _('Permission deleted successfully.'),
     );
   }
 

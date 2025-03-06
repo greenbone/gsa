@@ -14,6 +14,7 @@ import {selectSaveId, hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import {handleNotificationForAction} from 'web/components/notification/handleNotificationForAction';
 import EntityComponent from 'web/entity/EntityComponent';
 import AlertComponent from 'web/pages/alerts/Component';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
@@ -151,7 +152,12 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return this.cmd.start(task).then(onStarted, onStartError);
+    return handleNotificationForAction(
+      this.cmd.start(task),
+      onStarted,
+      onStartError,
+      `${task.name} ${_('started successfully.')}`,
+    );
   }
 
   handleTaskStop(task) {
@@ -159,7 +165,12 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return this.cmd.stop(task).then(onStopped, onStopError);
+    return handleNotificationForAction(
+      this.cmd.stop(task),
+      onStopped,
+      onStopError,
+      `${task.name} ${_('stopped successfully.')}`,
+    );
   }
 
   handleTaskResume(task) {
@@ -167,7 +178,12 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return this.cmd.resume(task).then(onResumed, onResumeError);
+    return handleNotificationForAction(
+      this.cmd.resume(task),
+      onResumed,
+      onResumeError,
+      `${task.name} ${_('resumed successfully.')}`,
+    );
   }
 
   handleTaskWizardNewClick() {
@@ -681,6 +697,7 @@ class TaskComponent extends React.Component {
       taskWizardVisible,
       title = _('Edit Task {{name}}', task),
     } = this.state;
+
     return (
       <React.Fragment>
         <EntityComponent
