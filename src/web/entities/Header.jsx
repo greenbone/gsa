@@ -31,9 +31,9 @@ const defaultActions = (
  * If actionsColumn is false, no actions (a null value in React) will be passed to
  * the Component.
  *
- * @param {Element}   actionsColumn   React element, undefined or boolean value.
- * @param {Object}    options         Default properties for Component.
- * @param {Component} Component       React component rendered as header
+ * @param {React.Element|undefined|boolean} actionsColumn - React element, undefined, or boolean value.
+ * @param {Object} options - Default properties for the Component.
+ * @param {React.Component} Component - React component rendered as header.
  *
  * @return {React.Component} A new EntitiesHeader component.
  */
@@ -69,21 +69,21 @@ export const withEntitiesHeader =
 
 /**
  * A higher order component to create table headers from a column description
- * array
+ * array.
  *
- * @param {Array}   columns   An array in the form of
- *                            [{
- *                                name: 'foo',
- *                                displayName: _l('Foo'),
- *                                width: '20%',
- *                                align: ['center', 'center'],
- *                             }, {
- *                               ...
- *                             }, ... ]
- * @param {Element} actionsColumn   React element, undefined or boolean value.
- * @param {Object}  options   Default properties for Component.
+ * @param {Array<Object>} columns - An array of column description objects in the form of:
+ *                                  [{
+ *                                      name: 'foo',
+ *                                      displayName: _l('Foo'),
+ *                                      width: '20%',
+ *                                      align: ['center', 'center'],
+ *                                   }, {
+ *                                     ...
+ *                                   }, ... ]
+ * @param {React.Element|undefined|boolean} actionsColumn - React element, undefined, or boolean value.
+ * @param {Object} options - Default properties for the Component.
  *
- * @return A new EntitiesHeader component
+ * @return {React.Component} A new EntitiesHeader component.
  */
 export const createEntitiesHeader = (columns, actionsColumn, options = {}) => {
   const Header = ({
