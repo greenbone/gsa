@@ -15,7 +15,7 @@ const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
   const capabilities = useCapabilities();
   if (capabilities.mayCreate('task')) {
     return (
-      <IconMenu icon={<NewIcon />} onClick={onNewClick}>
+      <IconMenu icon={<NewIcon />}>
         <MenuEntry
           data-testid="new-task-menu"
           title={_('New Task')}
