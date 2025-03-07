@@ -4,41 +4,11 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import useEntityDelete from 'web/entity/hooks/useEntityDelete';
+import useEntityDownload from 'web/entity/hooks/useEntityDownload';
+import {actionFunction} from 'web/entity/hooks/utils';
 import useGmp from 'web/hooks/useGmp';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
-import {createDeleteEntity} from 'web/store/entities/utils/actions';
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
-import {generateFilename} from 'web/utils/Render';
-
-/**
- * Executes a promise and handles success and error callbacks.
- *
- * @param {Promise} promise - The promise to be executed.
- * @param {Function} [onSuccess] - Optional callback function to be called on successful resolution of the promise.
- * @param {Function} [onError] - Optional callback function to be called if the promise is rejected.
- * @returns {Promise<*>} - The result of the onSuccess callback if provided, otherwise the resolved value of the promise.
- *                         If the promise is rejected the result of the onError callback if provided.
- *                         Otherwise the error from the rejected promise is thrown.
- * @throws {*} - The error from the rejected promise if onError callback is not provided.
- */
-const actionFunction = async (promise, onSuccess, onError) => {
-  try {
-    const response = await promise;
-    if (isDefined(onSuccess)) {
-      return onSuccess(response);
-    }
-  } catch (error) {
-    if (isDefined(onError)) {
-      return onError(error);
-    }
-    throw error;
-  }
-};
 
 const EntityComponent = ({
   children,
@@ -56,45 +26,11 @@ const EntityComponent = ({
   onCloneError,
 }) => {
   const gmp = useGmp();
-  const username = useSelector(getUsername);
-  const dispatch = useDispatch();
   const cmd = gmp[name];
-  const deleteEntity = entity =>
-    dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id));
-  const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-  const detailsExportFileName = userDefaultsSelector.getValueByName(
-    'detailsexportfilename',
-  );
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
-    }
-  };
-
-  const handleEntityDownload = async entity => {
-    handleInteraction();
-
-    const filename = generateFilename({
-      creationTime: entity.creationTime,
-      fileNameFormat: detailsExportFileName,
-      id: entity.id,
-      modificationTime: entity.modificationTime,
-      resourceName: entity.name,
-      resourceType: name,
-      username,
-    });
-
-    try {
-      const response = await cmd.export(entity);
-
-      if (isDefined(onDownloaded)) {
-        return onDownloaded({filename, data: response.data});
-      }
-    } catch (error) {
-      if (isDefined(onDownloadError)) {
-        return onDownloadError(error);
-      }
     }
   };
 
@@ -108,11 +44,11 @@ const EntityComponent = ({
     return actionFunction(cmd.create(data), onCreated, onCreateError);
   };
 
-  const handleEntityDelete = async entity => {
-    handleInteraction();
-
-    return actionFunction(deleteEntity(entity), onDeleted, onDeleteError);
-  };
+  const handleEntityDelete = useEntityDelete(name, {
+    onDeleteError,
+    onDeleted,
+    onInteraction,
+  });
 
   const handleEntityClone = async entity => {
     handleInteraction();
@@ -120,16 +56,11 @@ const EntityComponent = ({
     return actionFunction(cmd.clone(entity), onCloned, onCloneError);
   };
 
-  useEffect(() => {
-    const loadSettings = () => dispatch(loadUserSettingDefaults(gmp)());
-    if (
-      !userDefaultsSelector.isLoading() &&
-      !isDefined(detailsExportFileName) &&
-      !isDefined(userDefaultsSelector.getError())
-    ) {
-      loadSettings();
-    }
-  }, [detailsExportFileName, dispatch, gmp, userDefaultsSelector]);
+  const handleEntityDownload = useEntityDownload(name, {
+    onDownloadError,
+    onDownloaded,
+    onInteraction,
+  });
 
   return children({
     create: handleEntitySave,
@@ -152,6 +83,8 @@ EntityComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onDownloadError: PropTypes.func,
   onInteraction: PropTypes.func,
+  onSaveError: PropTypes.func,
+  onSaved: PropTypes.func,
 };
 
 export default EntityComponent;
