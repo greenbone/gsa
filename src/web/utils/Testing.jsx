@@ -186,3 +186,31 @@ export const rendererWith = (
     renderHook: hook => rtlRenderHook(hook, {wrapper}),
   };
 };
+
+export const rendererWithTable = options => {
+  const {render, ...other} = rendererWith(options);
+  return {
+    ...other,
+    render: element =>
+      render(
+        <table>
+          <tbody>{element}</tbody>
+        </table>,
+      ),
+  };
+};
+
+export const rendererWithTableRow = options => {
+  const {render, ...other} = rendererWith(options);
+  return {
+    ...other,
+    render: element =>
+      render(
+        <table>
+          <tbody>
+            <tr>{element}</tr>
+          </tbody>
+        </table>,
+      ),
+  };
+};
