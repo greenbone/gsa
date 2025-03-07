@@ -19,14 +19,16 @@ import {
   getTableBody,
   getTextInputs,
 } from 'web/components/testing';
-import EditScanConfigDialog, {handleSearchChange} from 'web/pages/scanconfigs/EditDialog';
+import EditScanConfigDialog, {
+  handleSearchChange,
+} from 'web/pages/scanconfigs/EditDialog';
 import {
   rendererWith,
   fireEvent,
   getAllByTestId,
   waitFor,
+  screen,
 } from 'web/utils/Testing';
-
 
 const families = [
   {
@@ -183,7 +185,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {getByTestId} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -221,7 +223,7 @@ describe('EditScanConfigDialog component tests', () => {
     const scannerSelection = content.querySelector('[role=combobox]');
     expect(scannerSelection).toBeNull();
 
-    const inUseNotification = getByTestId('inline-notification');
+    const inUseNotification = screen.getByTestId('inline-notification');
     expect(inUseNotification).toHaveTextContent(
       'The scan config is currently in use by one or more tasks, therefore only name and comment can be modified.',
     );
@@ -234,7 +236,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {getByTestId} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -270,7 +272,7 @@ describe('EditScanConfigDialog component tests', () => {
       'Network Vulnerability Test Preferences',
     );
 
-    const inUseNotification = getByTestId('inline-notification');
+    const inUseNotification = screen.getByTestId('inline-notification');
     expect(inUseNotification).toHaveTextContent(
       'The policy is currently in use by one or more audits, therefore only name and comment can be modified.',
     );
@@ -330,7 +332,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {getByTestId} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -354,7 +356,7 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
+    const closeButton = screen.getByTestId('dialog-close-button');
 
     fireEvent.click(closeButton);
 
@@ -542,14 +544,14 @@ describe('EditScanConfigDialog component tests', () => {
     expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith('1.2.1');
   });
 
-  test('should filter items based on search query', () => {
+  test('should filter items based on search query', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditConfigFamilyDialog = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {getByPlaceholderText} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -573,22 +575,24 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const searchBar = getByPlaceholderText(
+    const searchBar = screen.getByPlaceholderText(
       'Search for families, preferences, or NVTs',
     );
-    fireEvent.change(searchBar, {target: {value: 'family1'}});
+    fireEvent.change(searchBar, {target: {value: 'family4'}});
 
-    expect(searchBar.value).toBe('family1');
+    expect(searchBar.value).toBe('family4');
 
-    const tableBody = getTableBody(getDialogContent());
-    const rows = tableBody.querySelectorAll('tr');
-
-    waitFor(() => {
-      expect(rows).toHaveLength(1);
+    await waitFor(() => {
+      const section = screen
+        .getByText('Edit Network Vulnerability Test Families (1)')
+        .closest('.section-header');
+      const rows = screen.getAllByRole('row', {container: section});
+      expect(rows).toHaveLength(2);
+      expect(rows[1]).toHaveTextContent('family4');
     });
 
-    const cell = rows[0].querySelector('td');
-    expect(cell).toHaveTextContent('family1');
+    const familyTwo = screen.queryByText('family2');
+    expect(familyTwo).not.toBeInTheDocument();
   });
 
   test.each([
@@ -640,7 +644,7 @@ describe('EditScanConfigDialog component tests', () => {
       const handleOpenEditNvtDetailsDialog = testing.fn();
 
       const {render} = rendererWith({capabilities: true, router: true});
-      const {getByPlaceholderText} = render(
+      render(
         <EditScanConfigDialog
           comment="bar"
           configFamilies={configFamilies}
@@ -664,7 +668,7 @@ describe('EditScanConfigDialog component tests', () => {
         />,
       );
 
-      const searchBar = getByPlaceholderText(
+      const searchBar = screen.getByPlaceholderText(
         'Search for families, preferences, or NVTs',
       );
 
