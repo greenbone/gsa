@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
@@ -50,7 +51,6 @@ import TargetsTable from 'web/pages/targets/Table';
 import TasksTable from 'web/pages/tasks/Table';
 import TicketsTable from 'web/pages/tickets/Table';
 import PropTypes from 'web/utils/PropTypes';
-
 
 const Col = styled.col`
   width: 50%;
@@ -327,18 +327,33 @@ const TrashCan = () => {
     );
   }, [gmp, showError]);
 
-  const handleRestore = entity => {
+  const handleRestore = async entity => {
     handleInteraction();
 
-    return gmp.trashcan.restore(entity).then(loadTrash).catch(showError);
+    try {
+      await gmp.trashcan.restore(entity);
+      loadTrash();
+      showSuccessNotification(
+        _('{{name}} restored successfully.', {name: entity.name}),
+      );
+    } catch (error) {
+      showError(error);
+    }
   };
 
-  const handleDelete = entity => {
+  const handleDelete = async entity => {
     handleInteraction();
 
-    return gmp.trashcan.delete(entity).then(loadTrash).catch(showError);
+    try {
+      await gmp.trashcan.delete(entity);
+      loadTrash();
+      showSuccessNotification(
+        _('{{name}} deleted successfully.', {name: entity.name}),
+      );
+    } catch (error) {
+      showError(error);
+    }
   };
-
   const handleEmpty = async () => {
     handleInteraction();
 
