@@ -12,7 +12,6 @@ import Layout from 'web/components/layout/Layout';
 import SectionHeader from 'web/components/section/Header';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const FoldableLayout = withFolding(Layout);
 
 const FoldLayout = styled(Layout)`
@@ -29,6 +28,7 @@ const Section = ({
   header,
   img,
   title,
+  ['data-testid']: dataTestId,
   onFoldToggle,
   onFoldStepEnd,
 }) => {
@@ -51,7 +51,7 @@ const Section = ({
     );
   }
   return (
-    <section className={className}>
+    <section className={className} data-testid={dataTestId}>
       {header}
       {foldable ? (
         <FoldableLayout
@@ -70,6 +70,7 @@ const Section = ({
 
 Section.propTypes = {
   className: PropTypes.string,
+  'data-testid': PropTypes.string,
   extra: PropTypes.element,
   foldState: PropTypes.string,
   foldable: PropTypes.bool,
