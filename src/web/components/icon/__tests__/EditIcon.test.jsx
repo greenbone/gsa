@@ -7,7 +7,9 @@ import {describe} from '@gsa/testing';
 import EditIcon from 'web/components/icon/EditIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-
 describe('EditIcon component tests', () => {
-  testIcon(EditIcon);
+  testIcon(EditIcon, {
+    dataTestId: 'edit-icon',
+    customDataTestId: 'custom-edit-icon',
+  });
 });

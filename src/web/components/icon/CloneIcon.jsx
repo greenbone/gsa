@@ -9,7 +9,7 @@ import withSvgIcon from 'web/components/icon/withSvgIcon';
 const CloneIconComponent = withSvgIcon()(Icon);
 
 const CloneIcon = props => (
-  <CloneIconComponent {...props} data-testid="clone-icon" />
+  <CloneIconComponent data-testid="clone-icon" {...props} />
 );
 
 export default CloneIcon;

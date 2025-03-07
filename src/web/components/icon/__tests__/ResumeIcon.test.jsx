@@ -7,7 +7,9 @@ import {describe} from '@gsa/testing';
 import ResumeIcon from 'web/components/icon/ResumeIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-
 describe('ResumeIcon component tests', () => {
-  testIcon(ResumeIcon);
+  testIcon(ResumeIcon, {
+    dataTestId: 'resume-icon',
+    customDataTestId: 'custom-resume-icon',
+  });
 });

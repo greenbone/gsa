@@ -11,7 +11,6 @@ import withSvgIcon from 'web/components/icon/withSvgIcon';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 
-
 const ExportSvgIcon = withSvgIcon()(props => (
   <IconWithStrokeWidth IconComponent={Icon} {...props} />
 ));
@@ -27,8 +26,8 @@ const ExportIcon = ({selectionType, title, ...other}) => {
   }
   return (
     <ExportSvgIcon
-      {...other}
       data-testid="export-icon"
+      {...other}
       title={download_title}
     />
   );

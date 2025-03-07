@@ -8,7 +8,6 @@ import Task from 'gmp/models/task';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import {render} from 'web/utils/Testing';
 
-
 describe('Entity ObserverIcon component tests', () => {
   test('should render if the owner is not the current user', () => {
     const entity = Task.fromElement({owner: {name: 'foo'}});
@@ -26,5 +25,27 @@ describe('Entity ObserverIcon component tests', () => {
     );
 
     expect(queryByTestId('observer-icon')).toEqual(null);
+  });
+
+  test('should render with default data-testid', () => {
+    const entity = Task.fromElement({owner: {name: 'foo'}});
+
+    const {element} = render(<ObserverIcon entity={entity} userName={'bar'} />);
+
+    expect(element).toHaveAttribute('data-testid', 'observer-icon');
+  });
+
+  test('should render with custom data-testid', () => {
+    const entity = Task.fromElement({owner: {name: 'foo'}});
+
+    const {element} = render(
+      <ObserverIcon
+        data-testid="custom-observer-icon"
+        entity={entity}
+        userName={'bar'}
+      />,
+    );
+
+    expect(element).toHaveAttribute('data-testid', 'custom-observer-icon');
   });
 });
