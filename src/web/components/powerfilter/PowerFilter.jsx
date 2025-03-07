@@ -189,7 +189,7 @@ class PowerFilter extends React.Component {
             </Layout>
             <IconDivider align={['start', 'center']}>
               <RefreshIcon
-                data-testid="powerfiler-refresh"
+                data-testid="powerfilter-refresh"
                 title={_('Update Filter')}
                 onClick={this.handleUpdateFilter}
               />
@@ -197,7 +197,7 @@ class PowerFilter extends React.Component {
               {onRemoveClick && (
                 <DeleteIcon
                   active={isDefined(filter)}
-                  data-testid="powefilter-delete"
+                  data-testid="powerfilter-delete"
                   title={_('Remove Filter')}
                   onClick={
                     isDefined(filter) ? this.handleRemoveClick : undefined
