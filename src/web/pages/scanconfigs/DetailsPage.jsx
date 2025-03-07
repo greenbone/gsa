@@ -41,6 +41,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
 import ScanConfigComponent from 'web/pages/scanconfigs/Component';
 import ScanConfigDetails from 'web/pages/scanconfigs/Details';
 import Trend from 'web/pages/scanconfigs/Trend';
@@ -50,19 +51,18 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
-export const ToolBarIcons = withCapabilities(
-  ({
-    capabilities,
-    entity,
-    onScanConfigCloneClick,
-    onScanConfigCreateClick,
-    onScanConfigDeleteClick,
-    onScanConfigDownloadClick,
-    onScanConfigEditClick,
-    onScanConfigImportClick,
-  }) => (
+export const ToolBarIcons = ({
+  entity,
+  onScanConfigCloneClick,
+  onScanConfigCreateClick,
+  onScanConfigDeleteClick,
+  onScanConfigDownloadClick,
+  onScanConfigEditClick,
+  onScanConfigImportClick,
+}) => {
+  const capabilities = useCapabilities();
+  return (
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
@@ -94,8 +94,8 @@ export const ToolBarIcons = withCapabilities(
         )}
       </IconDivider>
     </Divider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,

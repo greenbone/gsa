@@ -8,10 +8,12 @@ import React from 'react';
 import NewIcon from 'web/components/icon/NewIcon';
 import IconMenu from 'web/components/menu/IconMenu';
 import MenuEntry from 'web/components/menu/MenuEntry';
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-const NewIconMenu = ({capabilities, onNewClick, onNewContainerClick}) => {
+const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
+  const capabilities = useCapabilities();
   if (capabilities.mayCreate('task')) {
     return (
       <IconMenu icon={<NewIcon />} onClick={onNewClick}>
@@ -27,7 +29,6 @@ const NewIconMenu = ({capabilities, onNewClick, onNewContainerClick}) => {
 };
 
 NewIconMenu.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   onNewClick: PropTypes.func,
   onNewContainerClick: PropTypes.func,
 };

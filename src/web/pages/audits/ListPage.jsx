@@ -13,6 +13,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
 import AuditComponent from 'web/pages/audits/Component';
 import Table from 'web/pages/audits/Table';
 import {taskReloadInterval} from 'web/pages/tasks/ListPage';
@@ -21,11 +22,10 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/audits';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
-
-export const ToolBarIcons = withCapabilities(
-  ({capabilities, onAuditCreateClick}) => (
+export const ToolBarIcons = ({onAuditCreateClick}) => {
+  const capabilities = useCapabilities();
+  return (
     <IconDivider>
       <ManualIcon
         anchor="configuring-and-managing-audits"
@@ -36,8 +36,8 @@ export const ToolBarIcons = withCapabilities(
         <NewIcon title={_('New Audit')} onClick={onAuditCreateClick} />
       )}
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   onAuditCreateClick: PropTypes.func.isRequired,

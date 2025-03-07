@@ -8,15 +8,11 @@ import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import React from 'react';
 import ResumeIcon from 'web/components/icon/ResumeIcon';
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
-const TaskResumeIcon = ({
-  capabilities,
-  task,
-  usageType = _('task'),
-  onClick,
-}) => {
+const TaskResumeIcon = ({task, usageType = _('task'), onClick}) => {
+  const capabilities = useCapabilities();
   if (task.isQueued()) {
     return null;
   }
@@ -73,10 +69,9 @@ const TaskResumeIcon = ({
 };
 
 TaskResumeIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
   usageType: PropTypes.string,
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(TaskResumeIcon);
+export default TaskResumeIcon;

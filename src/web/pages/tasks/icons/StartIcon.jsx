@@ -8,15 +8,12 @@ import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import React from 'react';
 import StartIcon from 'web/components/icon/StartIcon';
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
-const TaskStartIcon = ({
-  capabilities,
-  task,
-  usageType = _('task'),
-  onClick,
-}) => {
+const TaskStartIcon = ({task, usageType = _('task'), onClick}) => {
+  const capabilities = useCapabilities();
+
   if (task.isRunning() || task.isContainer()) {
     return null;
   }
@@ -65,10 +62,9 @@ const TaskStartIcon = ({
 };
 
 TaskStartIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
   usageType: PropTypes.string,
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(TaskStartIcon);
+export default TaskStartIcon;
