@@ -154,7 +154,7 @@ class EntitiesContainer extends React.Component {
       deleteEntity(entity.id),
       this.handleChanged,
       this.handleError,
-      `${entity.name} ${_('deleted successfully.')}`,
+      _('{{name}} deleted successfully.', {name: entity.name}),
     );
   }
 

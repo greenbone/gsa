@@ -97,7 +97,7 @@ const EntityComponent = ({
         onDownloaded({filename, data: response.data});
         showSuccessNotification(
           '',
-          `${entity.name} ${_('downloaded successfully.')}`,
+          _('{{name}} downloaded successfully.', {name: entity.name}),
         );
       }
     } catch (error) {
@@ -124,7 +124,7 @@ const EntityComponent = ({
       deleteEntity(entity),
       onDeleted,
       onDeleteError,
-      `${entity.name} ${_('deleted successfully.')}`,
+      _('{{name}} deleted successfully.', {name: entity.name}),
     );
   };
 
@@ -135,7 +135,7 @@ const EntityComponent = ({
       cmd.clone(entity),
       onCloned,
       onCloneError,
-      `${entity.name} ${_('cloned successfully.')}`,
+      _('{{name}} cloned successfully.', {name: entity.name}),
     );
   };
 

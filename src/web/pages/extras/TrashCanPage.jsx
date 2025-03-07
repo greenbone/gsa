@@ -333,7 +333,9 @@ const TrashCan = () => {
     try {
       await gmp.trashcan.restore(entity);
       loadTrash();
-      showSuccessNotification(`${entity.name} ${_('restored successfully.')}`);
+      showSuccessNotification(
+        _('{{name}} restored successfully.', {name: entity.name}),
+      );
     } catch (error) {
       showError(error);
     }
@@ -345,7 +347,9 @@ const TrashCan = () => {
     try {
       await gmp.trashcan.delete(entity);
       loadTrash();
-      showSuccessNotification(`${entity.name} ${_('deleted successfully.')}`);
+      showSuccessNotification(
+        _('{{name}} deleted successfully.', {name: entity.name}),
+      );
     } catch (error) {
       showError(error);
     }
