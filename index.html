@@ -15,17 +15,17 @@
       window.addEventListener('DOMContentLoaded', () => {
         try {
           const vendorLabel = config.vendorLabel;
+          const title = config.title
 
-          const match = vendorLabel.match(/gsm-(\w+)_label\.svg/);
+          const match = vendorLabel?.match(/gsm-(\w+)_label\.svg/);
           if (match) {
             let labelPart = match[1];
             if (isNaN(labelPart)) {
               labelPart = labelPart.toUpperCase();
             }
-            const pageTitle = `Greenbone - ${labelPart}`;
-            document.title = pageTitle;
+            document.title = `${title} - ${labelPart}`;
           } else {
-            document.title = 'Greenbone Security Assistant';
+            document.title = title;
           }
         } catch (error) {}
       });
