@@ -156,7 +156,7 @@ class TaskComponent extends React.Component {
       this.cmd.start(task),
       onStarted,
       onStartError,
-      `${task.name} ${_('started successfully.')}`,
+      _('Task {{name}} started successfully.', {name: task.name}),
     );
   }
 
@@ -169,7 +169,7 @@ class TaskComponent extends React.Component {
       this.cmd.stop(task),
       onStopped,
       onStopError,
-      `${task.name} ${_('stopped successfully.')}`,
+      _('Task {{name}} stopped successfully.', {name: task.name}),
     );
   }
 
@@ -182,7 +182,7 @@ class TaskComponent extends React.Component {
       this.cmd.resume(task),
       onResumed,
       onResumeError,
-      `${task.name} ${_('resumed successfully.')}`,
+      _('Task {{name}} resumed successfully.', {name: task.name}),
     );
   }
 
