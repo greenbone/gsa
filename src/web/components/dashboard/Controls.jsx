@@ -29,7 +29,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-
 export class DashboardControls extends React.Component {
   constructor(...args) {
     super(...args);
@@ -113,6 +112,7 @@ export class DashboardControls extends React.Component {
             onClick={canAdd ? this.handleNewClick : undefined}
           />
           <ResetIcon
+            data-testid="reset-dashboard"
             title={_('Reset to Defaults')}
             onClick={this.handleResetClick}
           />
