@@ -15,6 +15,7 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {goToDetails} from 'web/entity/navigation';
+import useCapabilities from 'web/hooks/useCapabilities';
 import HostComponent from 'web/pages/hosts/Component';
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from 'web/pages/hosts/dashboard';
 import HostsFilterDialog from 'web/pages/hosts/FilterDialog';
@@ -24,10 +25,10 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/hosts';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
-export const ToolBarIcons = withCapabilities(
-  ({capabilities, onHostCreateClick}) => (
+export const ToolBarIcons = ({onHostCreateClick}) => {
+  const capabilities = useCapabilities();
+  return (
     <IconDivider>
       <ManualIcon
         anchor="managing-hosts"
@@ -38,11 +39,10 @@ export const ToolBarIcons = withCapabilities(
         <NewIcon title={_('New Host')} onClick={onHostCreateClick} />
       )}
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   onHostCreateClick: PropTypes.func.isRequired,
 };
 

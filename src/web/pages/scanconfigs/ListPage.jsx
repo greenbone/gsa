@@ -13,6 +13,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import ScanConfigComponent from 'web/pages/scanconfigs/Component';
 import ScanConfigFilterDialog from 'web/pages/scanconfigs/FilterDialog';
@@ -22,35 +23,35 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
-
-export const ToolBarIcons = withCapabilities(
-  ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => {
-    const [_] = useTranslation();
-    return (
-      <IconDivider>
-        <ManualIcon
-          anchor="managing-scan-configurations"
-          page="scanning"
-          title={_('Help: Scan Configs')}
+export const ToolBarIcons = ({
+  onScanConfigCreateClick,
+  onScanConfigImportClick,
+}) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  return (
+    <IconDivider>
+      <ManualIcon
+        anchor="managing-scan-configurations"
+        page="scanning"
+        title={_('Help: Scan Configs')}
+      />
+      {capabilities.mayCreate('config') && (
+        <NewIcon
+          title={_('New Scan Config')}
+          onClick={onScanConfigCreateClick}
         />
-        {capabilities.mayCreate('config') && (
-          <NewIcon
-            title={_('New Scan Config')}
-            onClick={onScanConfigCreateClick}
-          />
-        )}
-        {capabilities.mayCreate('config') && (
-          <UploadIcon
-            title={_('Import Scan Config')}
-            onClick={onScanConfigImportClick}
-          />
-        )}
-      </IconDivider>
-    );
-  },
-);
+      )}
+      {capabilities.mayCreate('config') && (
+        <UploadIcon
+          title={_('Import Scan Config')}
+          onClick={onScanConfigImportClick}
+        />
+      )}
+    </IconDivider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   onScanConfigCreateClick: PropTypes.func.isRequired,
