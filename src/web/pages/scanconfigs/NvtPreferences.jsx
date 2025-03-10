@@ -70,6 +70,7 @@ const NvtPreferences = ({
   return (
     <Section
       foldable
+      data-testid="nvt-preferences-section"
       initialFoldState={FoldState.FOLDED}
       title={_('Network Vulnerability Test Preferences ({{counts}})', {
         counts: preferences.length,

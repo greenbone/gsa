@@ -26,7 +26,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import Trend from 'web/pages/scanconfigs/Trend';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const WHOLE_SELECTION_FAMILIES = [
   'AIX Local Security Checks',
   'AlmaLinux Local Security Checks',
@@ -161,6 +160,7 @@ const NvtFamilies = ({
   return (
     <Section
       foldable
+      data-testid="nvt-families-section"
       title={_('Edit Network Vulnerability Test Families ({{counts}})', {
         counts: families.length,
       })}
