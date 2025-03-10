@@ -21,7 +21,7 @@ const StyledSpan = styled.span`
   }
 `;
 
-export const RowDetailsToggle = ({name, onClick, ...props}) => {
+const RowDetailsToggle = ({name, onClick, ...props}) => {
   const handleClick = useClickHandler({
     onClick,
     name,
