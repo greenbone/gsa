@@ -54,16 +54,22 @@ export const ToolBarIcons = ({
       {capabilities.mayOp('run_wizard') && (
         <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
           {capabilities.mayCreate('task') && (
-            <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
+            <MenuEntry
+              data-testid="task-wizard-menu"
+              title={_('Task Wizard')}
+              onClick={onTaskWizardClick}
+            />
           )}
           {capabilities.mayCreate('task') && (
             <MenuEntry
+              data-testid="advanced-task-wizard-menu"
               title={_('Advanced Task Wizard')}
               onClick={onAdvancedTaskWizardClick}
             />
           )}
           {mayUseModifyTaskWizard && (
             <MenuEntry
+              data-testid="modify-task-wizard-menu"
               title={_('Modify Task Wizard')}
               onClick={onModifyTaskWizardClick}
             />
