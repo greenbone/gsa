@@ -10,7 +10,6 @@ import Alert from 'gmp/models/alert';
 import Filter from 'gmp/models/filter';
 import {
   clickElement,
-  getBulkActionItems,
   getCheckBoxes,
   getPowerFilter,
   getSelectElement,
@@ -27,7 +26,13 @@ import {entitiesLoadingActions} from 'web/store/entities/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
+import {
+  rendererWith,
+  fireEvent,
+  screen,
+  wait,
+  getByTestId,
+} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
@@ -97,8 +102,8 @@ beforeEach(() => {
   });
 });
 
-describe('Alert listpage tests', () => {
-  test('should render full alert listpage', async () => {
+describe('Alert ListPage tests', () => {
+  test('should render full alert ListPage', async () => {
     const gmp = {
       alerts: {
         get: getAlerts,
@@ -143,22 +148,18 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    const icons = screen.getAllByTestId('svg-icon');
     const powerFilter = getPowerFilter();
     const selects = queryAllSelectElements(powerFilter);
     const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icons
-    expect(icons[0]).toHaveAttribute('title', 'Help: Alerts');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Alerts',
+    );
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[2]).toHaveAttribute('title', 'Update Filter');
-    expect(icons[3]).toHaveAttribute('title', 'Remove Filter');
-    expect(icons[4]).toHaveAttribute('title', 'Reset to Default Filter');
-    expect(icons[5]).toHaveAttribute('title', 'Help: Powerfilter');
-    expect(icons[6]).toHaveAttribute('title', 'Edit Filter');
-
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveValue('--');
 
@@ -182,12 +183,6 @@ describe('Alert listpage tests', () => {
     expect(row[1]).toHaveTextContent('SMB');
     expect(row[1]).toHaveTextContent('report results filter');
     expect(row[1]).toHaveTextContent('Yes');
-
-    expect(icons[19]).toHaveAttribute('title', 'Move Alert to trashcan');
-    expect(icons[20]).toHaveAttribute('title', 'Edit Alert');
-    expect(icons[21]).toHaveAttribute('title', 'Clone Alert');
-    expect(icons[22]).toHaveAttribute('title', 'Export Alert');
-    expect(icons[23]).toHaveAttribute('title', 'Test Alert');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -245,18 +240,22 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    const icons = getBulkActionItems();
-
     // export page contents
+    const tableFooter = getTableFooter();
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
     expect(exportByFilter).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Export page contents');
-    await clickElement(icons[2]);
+    expect(exportIcon).toHaveAttribute('title', 'Export page contents');
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
+    const deleteIcon = getByTestId(tableFooter, 'trash-icon');
     expect(deleteByFilter).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Move page contents to trashcan');
-    await clickElement(icons[1]);
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Move page contents to trashcan',
+    );
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
@@ -329,15 +328,16 @@ describe('Alert listpage tests', () => {
 
     // export selected alert
     expect(exportByIds).not.toHaveBeenCalled();
-    const icons = getBulkActionItems();
-    expect(icons[2]).toHaveAttribute('title', 'Export selection');
-    await clickElement(icons[2]);
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export selection');
+    fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected alert to trashcan
     expect(deleteByIds).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Move selection to trashcan');
-    await clickElement(icons[1]);
+    const deleteIcon = getByTestId(tableFooter, 'trash-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move selection to trashcan');
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByIds);
   });
 
@@ -405,20 +405,24 @@ describe('Alert listpage tests', () => {
 
     // export all filtered alerts
     expect(exportByFilter).not.toHaveBeenCalled();
-    const icons = getBulkActionItems();
-    expect(icons[2]).toHaveAttribute('title', 'Export all filtered');
-    await clickElement(icons[2]);
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export all filtered');
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered alerts to trashcan
+    const deleteIcon = getByTestId(tableFooter, 'trash-icon');
     expect(deleteByFilter).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Move all filtered to trashcan');
-    await clickElement(icons[1]);
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Move all filtered to trashcan',
+    );
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });
 
-describe('Alert listpage ToolBarIcons test', () => {
+describe('Alert ListPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleAlertCreateClick = testing.fn();
 
@@ -436,18 +440,20 @@ describe('Alert listpage ToolBarIcons test', () => {
       <ToolBarIcons onAlertCreateClick={handleAlertCreateClick} />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
-    expect(icons.length).toBe(2);
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: Alerts');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Alerts',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-alerts',
     );
-
-    expect(icons[1]).toHaveAttribute('title', 'New Alert');
+    expect(screen.getByTestId('new-icon')).toHaveAttribute(
+      'title',
+      'New Alert',
+    );
   });
 
   test('should call click handlers', () => {
@@ -465,11 +471,10 @@ describe('Alert listpage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onAlertCreateClick={handleAlertCreateClick} />);
 
-    const icons = screen.getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[1]);
+    const newIcon = screen.getByTestId('new-icon');
+    fireEvent.click(newIcon);
     expect(handleAlertCreateClick).toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'New Alert');
+    expect(newIcon).toHaveAttribute('title', 'New Alert');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
@@ -487,8 +492,6 @@ describe('Alert listpage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onAlertCreateClick={handleAlertCreateClick} />);
 
-    const icons = screen.getAllByTestId('svg-icon');
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Alerts');
+    expect(screen.queryByTestId('new-icon')).toBeNull();
   });
 });

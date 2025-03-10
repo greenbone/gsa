@@ -470,7 +470,10 @@ describe('OverridesPage ToolBarIcons test', () => {
 
     const links = element.querySelectorAll('a');
 
-    expect(screen.getAllByTitle('Help: Overrides')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Overrides',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/reports.html#managing-overrides',
@@ -492,11 +495,9 @@ describe('OverridesPage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onOverrideCreateClick={handleOverrideCreateClick} />);
 
-    const newIcon = screen.getAllByTitle('New Override');
-
-    expect(newIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(newIcon[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'New Override');
+    fireEvent.click(newIcon);
     expect(handleOverrideCreateClick).toHaveBeenCalled();
   });
 
@@ -513,12 +514,9 @@ describe('OverridesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
-      <ToolBarIcons onOverrideCreateClick={handleOverrideCreateClick} />,
-    );
+    render(<ToolBarIcons onOverrideCreateClick={handleOverrideCreateClick} />);
 
-    const icons = queryAllByTestId('svg-icon'); // this test is probably appropriate to keep in the old format
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Overrides');
+    const newIcon = screen.queryByTestId('new-icon');
+    expect(newIcon).toBeNull();
   });
 });

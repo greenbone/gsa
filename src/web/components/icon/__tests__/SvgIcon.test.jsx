@@ -6,7 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import React, {useEffect} from 'react';
 import CloneIcon from 'web/components/icon/CloneIcon';
-import {useStateWithMountCheck, useIsMountedRef} from 'web/components/icon/SvgIcon';
+import SvgIcon, {
+  useStateWithMountCheck,
+  useIsMountedRef,
+} from 'web/components/icon/SvgIcon';
 import {render, fireEvent, act} from 'web/utils/Testing';
 
 const entity = {name: 'entity'};
@@ -54,6 +57,22 @@ describe('SVG icon component tests', () => {
 
     expect(element).toHaveAttribute('title', 'Clone Entity');
   });
+
+  test('should render with default data-testid', () => {
+    const {element} = render(<SvgIcon active={true}>{() => null}</SvgIcon>);
+
+    expect(element).toHaveAttribute('data-testid', 'svg-icon');
+  });
+
+  test('should render with custom data-testid', () => {
+    const {element} = render(
+      <SvgIcon active={true} data-testid="foo">
+        {() => null}
+      </SvgIcon>,
+    );
+
+    expect(element).toHaveAttribute('data-testid', 'foo');
+  });
 });
 
 describe('useStateWithMountCheck() hook tests', () => {
@@ -76,6 +95,7 @@ describe('useStateWithMountCheck() hook tests', () => {
     expect(element).toHaveTextContent('false');
   });
 });
+
 describe('useIsMountedRef() hook tests', () => {
   test('should return false after component is unmounted', () => {
     const callback = testing.fn();

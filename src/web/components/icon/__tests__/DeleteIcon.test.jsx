@@ -7,7 +7,9 @@ import {describe} from '@gsa/testing';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-
 describe('DeleteIcon component tests', () => {
-  testIcon(DeleteIcon);
+  testIcon(DeleteIcon, {
+    dataTestId: 'delete-icon',
+    customDataTestId: 'custom-delete-icon',
+  });
 });

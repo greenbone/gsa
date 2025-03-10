@@ -27,7 +27,6 @@ import {
   wait,
 } from 'web/utils/Testing';
 
-
 window.URL.createObjectURL = testing.fn();
 
 const {entity} = getMockAuditReport();
@@ -124,10 +123,10 @@ describe('AuditReportsPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('auditreport', defaultSettingfilter),
+      defaultFilterLoadingActions.success('auditreport', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -143,33 +142,42 @@ describe('AuditReportsPage tests', () => {
       entitiesActions.success([entity], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId, within} = render(<AuditReportsPage />);
+    const {baseElement, within} = render(<AuditReportsPage />);
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
-    const display = getAllByTestId('grid-item');
-    const icons = getAllByTestId('svg-icon');
+    const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
     const powerFilter = getPowerFilter();
     const select = getSelectElement(powerFilter);
     const inputs = getTextInputs(powerFilter);
+
     // Toolbar Icons
-    expect(icons[0]).toHaveAttribute('title', 'Help: Audit Reports');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Audit Reports',
+    );
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[1]).toHaveAttribute('title', 'Update Filter');
-    expect(icons[2]).toHaveAttribute('title', 'Remove Filter');
-    expect(icons[3]).toHaveAttribute('title', 'Reset to Default Filter');
-    expect(icons[4]).toHaveAttribute('title', 'Help: Powerfilter');
-    expect(icons[5]).toHaveAttribute('title', 'Edit Filter');
+    screen.getAllByTitle('Update Filter');
+    screen.getAllByTitle('Remove Filter');
+    screen.getAllByTitle('Reset to Default Filter');
+    screen.getAllByTitle('Help: Powerfilter');
+    screen.getAllByTitle('Edit Filter');
     const input = within(select).getByTitle('Loaded filter');
     expect(input).toHaveValue('--');
 
-    // // Dashboard
-    expect(icons[7]).toHaveAttribute('title', 'Add new Dashboard Display');
-    expect(icons[8]).toHaveAttribute('title', 'Reset to Defaults');
+    // Dashboard
+    expect(screen.getByTestId('add-dashboard-display')).toHaveAttribute(
+      'title',
+      'Add new Dashboard Display',
+    );
+    expect(screen.getByTestId('reset-dashboard')).toHaveAttribute(
+      'title',
+      'Reset to Defaults',
+    );
     expect(display[0]).toHaveTextContent(
       'Audit Reports by Compliance (Total: 0)',
     );
@@ -256,11 +264,11 @@ describe('AuditReportsPage tests', () => {
       entitiesActions.success([entity], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getByTestId} = render(<AuditReportsPage />);
+    const {baseElement} = render(<AuditReportsPage />);
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
-    const icon = getByTestId('tags-icon');
+    const icon = screen.getByTestId('tags-icon');
     expect(icon).toHaveAttribute('title', 'Add tag to page contents');
     fireEvent.click(icon);
     expect(getAll).toHaveBeenCalled();

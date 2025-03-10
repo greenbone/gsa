@@ -12,7 +12,6 @@ import {
   clickElement,
   getPowerFilter,
   getSelectElement,
-  getTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -21,7 +20,13 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/Testing';
+import {
+  rendererWith,
+  fireEvent,
+  wait,
+  screen,
+  getByTestId,
+} from 'web/utils/Testing';
 
 const lastReport = {
   report: {
@@ -156,34 +161,57 @@ describe('TaskPage tests', () => {
       entitiesLoadingActions.success([task], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<TaskPage />);
+    const {baseElement} = render(<TaskPage />);
 
     await wait();
 
-    const display = getAllByTestId('grid-item');
-    const icons = getAllByTestId('svg-icon');
+    const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');
-    const row = baseElement.querySelectorAll('tr');
+    const row = baseElement.querySelectorAll('tbody tr')[0];
     const powerFilter = getPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icons
-    expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
+    const helpIcon = screen.getByTestId('help-icon');
+    expect(helpIcon).toHaveAttribute('title', 'Help: Tasks');
 
     // Powerfilter
-    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[3]).toHaveAttribute('title', 'Update Filter');
-    expect(icons[4]).toHaveAttribute('title', 'Remove Filter');
-    expect(icons[5]).toHaveAttribute('title', 'Reset to Default Filter');
-    expect(icons[6]).toHaveAttribute('title', 'Help: Powerfilter');
-    expect(icons[7]).toHaveAttribute('title', 'Edit Filter');
+    expect(screen.getByTestId('powerfilter-text')).toHaveAttribute(
+      'name',
+      'userFilterString',
+    );
+    expect(screen.getByTestId('powerfilter-refresh')).toHaveAttribute(
+      'title',
+      'Update Filter',
+    );
+    expect(screen.getByTestId('powerfilter-delete')).toHaveAttribute(
+      'title',
+      'Remove Filter',
+    );
+    expect(screen.getByTestId('powerfilter-reset')).toHaveAttribute(
+      'title',
+      'Reset to Default Filter',
+    );
+    expect(screen.getByTestId('powerfilter-help')).toHaveAttribute(
+      'title',
+      'Help: Powerfilter',
+    );
+    expect(screen.getByTestId('powerfilter-edit')).toHaveAttribute(
+      'title',
+      'Edit Filter',
+    );
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
     // Dashboard
-    expect(icons[9]).toHaveAttribute('title', 'Add new Dashboard Display');
-    expect(icons[10]).toHaveAttribute('title', 'Reset to Defaults');
+    expect(screen.getByTestId('add-dashboard-display')).toHaveAttribute(
+      'title',
+      'Add new Dashboard Display',
+    );
+    expect(screen.getByTestId('reset-dashboard')).toHaveAttribute(
+      'title',
+      'Reset to Defaults',
+    );
     expect(display[0]).toHaveTextContent('Tasks by Severity Class (Total: 0)');
     expect(display[1]).toHaveTextContent(
       'Tasks with most High Results per Host',
@@ -199,18 +227,22 @@ describe('TaskPage tests', () => {
     expect(header[5]).toHaveTextContent('Trend');
     expect(header[6]).toHaveTextContent('Actions');
 
-    expect(row[1]).toHaveTextContent('foo');
-    expect(row[1]).toHaveTextContent('(bar)');
-    expect(row[1]).toHaveTextContent('Done');
-    expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 2:51 PM CEST');
-    expect(row[1]).toHaveTextContent('5.0 (Medium)');
+    expect(row).toHaveTextContent('foo');
+    expect(row).toHaveTextContent('(bar)');
+    expect(row).toHaveTextContent('Done');
+    expect(row).toHaveTextContent('Sat, Aug 10, 2019 2:51 PM CEST');
+    expect(row).toHaveTextContent('5.0 (Medium)');
 
-    expect(icons[30]).toHaveAttribute('title', 'Start');
-    expect(icons[31]).toHaveAttribute('title', 'Task is not stopped');
-    expect(icons[32]).toHaveAttribute('title', 'Move Task to trashcan');
-    expect(icons[33]).toHaveAttribute('title', 'Edit Task');
-    expect(icons[34]).toHaveAttribute('title', 'Clone Task');
-    expect(icons[35]).toHaveAttribute('title', 'Export Task');
+    const startIcon = getByTestId(row, 'start-icon');
+    expect(startIcon).toHaveAttribute('title', 'Start');
+    const trashcanIcon = getByTestId(row, 'trashcan-icon');
+    expect(trashcanIcon).toHaveAttribute('title', 'Move Task to trashcan');
+    const editIcon = getByTestId(row, 'edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Task');
+    const cloneIcon = getByTestId(row, 'clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
+    const exportIcon = getByTestId(row, 'export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call commands for bulk actions', async () => {
@@ -310,7 +342,7 @@ describe('TaskPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
         onContainerTaskCreateClick={handleContainerTaskCreateClick}
@@ -322,9 +354,10 @@ describe('TaskPage ToolBarIcons test', () => {
     expect(element).toBeVisible();
 
     const links = element.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Tasks',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-tasks',
@@ -348,7 +381,7 @@ describe('TaskPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {baseElement} = render(
+    render(
       <ToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
         onContainerTaskCreateClick={handleContainerTaskCreateClick}
@@ -358,27 +391,32 @@ describe('TaskPage ToolBarIcons test', () => {
       />,
     );
 
-    const divs = baseElement.querySelectorAll('div');
-
-    fireEvent.click(divs[5]);
+    const taskWizardMenu = screen.getByTestId('task-wizard-menu');
+    expect(taskWizardMenu).toHaveTextContent('Task Wizard');
+    fireEvent.click(taskWizardMenu);
     expect(handleTaskWizardClick).toHaveBeenCalled();
-    expect(divs[5]).toHaveTextContent('Task Wizard');
 
-    fireEvent.click(divs[6]);
+    const advancedTaskWizardMenu = screen.getByTestId(
+      'advanced-task-wizard-menu',
+    );
+    expect(advancedTaskWizardMenu).toHaveTextContent('Advanced Task Wizard');
+    fireEvent.click(advancedTaskWizardMenu);
     expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
-    expect(divs[6]).toHaveTextContent('Advanced Task Wizard');
 
-    fireEvent.click(divs[7]);
+    const modifyTaskWizardMenu = screen.getByTestId('modify-task-wizard-menu');
+    expect(modifyTaskWizardMenu).toHaveTextContent('Modify Task Wizard');
+    fireEvent.click(modifyTaskWizardMenu);
     expect(handleModifyTaskWizardClick).toHaveBeenCalled();
-    expect(divs[7]).toHaveTextContent('Modify Task Wizard');
 
-    fireEvent.click(divs[9]);
+    const newTaskMenu = screen.getByTestId('new-task-menu');
+    expect(newTaskMenu).toHaveTextContent('New Task');
+    fireEvent.click(newTaskMenu);
     expect(handleTaskCreateClick).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
 
-    fireEvent.click(divs[10]);
+    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
+    expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
+    fireEvent.click(newContainerTaskMenu);
     expect(handleContainerTaskCreateClick).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
@@ -397,7 +435,7 @@ describe('TaskPage ToolBarIcons test', () => {
       capabilities: wrongCaps,
       router: true,
     });
-    const {queryAllByTestId} = render(
+    render(
       <ToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
         onContainerTaskCreateClick={handleContainerTaskCreateClick}
@@ -407,8 +445,25 @@ describe('TaskPage ToolBarIcons test', () => {
       />,
     );
 
-    const icons = queryAllByTestId('svg-icon');
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
+    const taskWizardMenu = screen.queryByTestId('task-wizard-menu');
+    expect(taskWizardMenu).toBeNull();
+
+    const advancedTaskWizardMenu = screen.queryByTestId(
+      'advanced-task-wizard-menu',
+    );
+    expect(advancedTaskWizardMenu).toBeNull();
+
+    const modifyTaskWizardMenu = screen.queryByTestId(
+      'modify-task-wizard-menu',
+    );
+    expect(modifyTaskWizardMenu).toBeNull();
+
+    const newTaskMenu = screen.queryByTestId('new-task-menu');
+    expect(newTaskMenu).toBeNull();
+
+    const newContainerTaskMenu = screen.queryByTestId(
+      'new-container-task-menu',
+    );
+    expect(newContainerTaskMenu).toBeNull();
   });
 });

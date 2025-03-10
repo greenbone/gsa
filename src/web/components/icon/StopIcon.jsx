@@ -7,12 +7,12 @@ import {Square as Icon} from 'lucide-react';
 import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
 import withSvgIcon from 'web/components/icon/withSvgIcon';
 
-const StopIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth
-    IconComponent={Icon}
-    {...props}
-    data-testid="stop-icon"
-  />
+const StopIconComponent = withSvgIcon()(props => (
+  <IconWithStrokeWidth IconComponent={Icon} {...props} />
 ));
+
+const StopIcon = props => (
+  <StopIconComponent data-testid="stop-icon" {...props} />
+);
 
 export default StopIcon;

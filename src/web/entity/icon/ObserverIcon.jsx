@@ -9,7 +9,12 @@ import React from 'react';
 import ViewOtherIcon from 'web/components/icon/ViewOtherIcon';
 import PropTypes from 'web/utils/PropTypes';
 
-const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
+const ObserverIcon = ({
+  entity,
+  userName,
+  displayName = _('Entity'),
+  ['data-testid']: dataTestId = 'observer-icon',
+}) => {
   const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
 
   if (owner === userName) {
@@ -22,13 +27,14 @@ const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
   } else {
     title = _('Global {{type}}', {type: displayName});
   }
-  return <ViewOtherIcon alt={title} title={title} />;
+  return <ViewOtherIcon alt={title} data-testid={dataTestId} title={title} />;
 };
 
 ObserverIcon.propTypes = {
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   userName: PropTypes.string.isRequired,
+  'data-testid': PropTypes.string,
 };
 
 export default ObserverIcon;

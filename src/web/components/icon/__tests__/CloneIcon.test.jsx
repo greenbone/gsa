@@ -7,7 +7,9 @@ import {describe} from '@gsa/testing';
 import CloneIcon from 'web/components/icon/CloneIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-
 describe('CloneIcon component tests', () => {
-  testIcon(CloneIcon);
+  testIcon(CloneIcon, {
+    dataTestId: 'clone-icon',
+    customDataTestId: 'custom-clone-icon',
+  });
 });

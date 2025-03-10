@@ -7,7 +7,9 @@ import {describe} from '@gsa/testing';
 import StartIcon from 'web/components/icon/StartIcon';
 import {testIcon} from 'web/components/icon/Testing';
 
-
 describe('StartIcon component tests', () => {
-  testIcon(StartIcon);
+  testIcon(StartIcon, {
+    dataTestId: 'start-icon',
+    customDataTestId: 'custom-start-icon',
+  });
 });

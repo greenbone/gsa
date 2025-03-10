@@ -10,7 +10,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import CvePage from 'web/pages/cves/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith, screen} from 'web/utils/Testing';
 
 const entity_v2 = Cve.fromElement({
   _id: 'CVE-2020-9997',
@@ -124,8 +124,8 @@ const renewSession = testing.fn().mockResolvedValue({
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-describe('CVE Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('CVE DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const getCve = testing.fn().mockResolvedValue({
       data: entity_v2,
     });
@@ -157,26 +157,31 @@ describe('CVE Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('CVE-2020-9997', entity_v2));
 
-    const {baseElement, getAllByTestId} = render(
-      <CvePage id="CVE-2020-9997" />,
-    );
+    const {baseElement} = render(<CvePage id="CVE-2020-9997" />);
 
     expect(baseElement).toHaveTextContent('Score0.50000');
     expect(baseElement).toHaveTextContent('Percentage75.000%');
 
     const links = baseElement.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: CVEs');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: CVEs',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-secinfo.html#cve',
     );
 
-    expect(icons[1]).toHaveAttribute('title', 'CVE List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'CVE List',
+    );
     expect(links[1]).toHaveAttribute('href', '/cves');
 
-    expect(icons[2]).toHaveAttribute('title', 'Export CVE');
+    expect(screen.getByTestId('export-icon')).toHaveAttribute(
+      'title',
+      'Export CVE',
+    );
 
     expect(baseElement).toHaveTextContent('CVE: CVE-2020-9997');
 
@@ -199,7 +204,7 @@ describe('CVE Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Confidentiality ImpactHigh');
     expect(baseElement).toHaveTextContent('Integrity ImpactNone');
     expect(baseElement).toHaveTextContent('Availability ImpactNone');
-    const progressBars = getAllByTestId('progressbar-box');
+    const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.5 (Medium)');
     expect(baseElement).toHaveTextContent('References');

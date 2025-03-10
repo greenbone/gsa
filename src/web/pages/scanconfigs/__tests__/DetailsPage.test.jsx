@@ -10,10 +10,10 @@ import Filter from 'gmp/models/filter';
 import ScanConfig from 'gmp/models/scanconfig';
 import {vi} from 'vitest';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/scanconfigs/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/scanconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, act} from 'web/utils/Testing';
+import {rendererWith, fireEvent, act, wait, screen} from 'web/utils/Testing';
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
   default: () => null,
@@ -210,8 +210,8 @@ const getPermissions = testing.fn().mockResolvedValue({
   },
 });
 
-describe('Scan Config Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('Scan Config DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const getConfig = testing.fn().mockResolvedValue({
       data: config,
     });
@@ -242,23 +242,28 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     expect(baseElement).toBeVisible();
     expect(baseElement).toHaveTextContent('Scan Config: foo');
 
     const links = baseElement.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-scan-configurations',
     );
 
     expect(links[1]).toHaveAttribute('href', '/scanconfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
 
     expect(baseElement).toHaveTextContent('12345');
     expect(baseElement).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
@@ -308,7 +313,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[12]);
@@ -321,8 +326,6 @@ describe('Scan Config Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('0 of 2');
 
     const links = baseElement.querySelectorAll('a');
-
-    const icons = getAllByTestId('svg-icon');
 
     expect(links[2]).toHaveAttribute(
       'href',
@@ -340,19 +343,19 @@ describe('Scan Config Detailspage tests', () => {
     );
     expect(links[4]).toHaveAttribute('title', 'NVTs of family family3');
 
-    expect(icons[9]).toHaveAttribute(
+    expect(screen.getAllByTestId('trend-more-icon')[0]).toHaveAttribute(
       'title',
       'The families selection is DYNAMIC. New families will automatically be added and considered.',
     );
-    expect(icons[10]).toHaveAttribute(
+    expect(screen.getAllByTestId('trend-more-icon')[1]).toHaveAttribute(
       'title',
       'The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.',
     );
-    expect(icons[11]).toHaveAttribute(
+    expect(screen.getAllByTestId('trend-nochange-icon')[0]).toHaveAttribute(
       'title',
       'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
     );
-    expect(icons[12]).toHaveAttribute(
+    expect(screen.getAllByTestId('trend-nochange-icon')[1]).toHaveAttribute(
       'title',
       'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
     );
@@ -390,7 +393,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
+    const {baseElement, getAllByTestId} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
@@ -456,7 +459,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
@@ -496,7 +499,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[18]);
@@ -505,36 +508,24 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getConfig = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: config,
-      }),
-    );
-    const clone = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
-    const getNvtFamilies = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const getAllScanners = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: scanners,
-      }),
-    );
-    const deleteFunc = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const getConfig = testing.fn().mockResolvedValue({
+      data: config,
+    });
+    const clone = testing.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+    const getNvtFamilies = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+    const getAllScanners = testing.fn().mockResolvedValue({
+      data: scanners,
+    });
+    const deleteFunc = testing.fn().mockRejectedValue({
+      foo: 'bar',
+    });
+    const exportFunc = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       [entityType]: {
@@ -571,68 +562,74 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
+    expect(screen.getByTestId('new-icon')).toHaveAttribute(
+      'title',
+      'Create new Scan Config',
+    );
+    expect(screen.getByTestId('upload-icon')).toHaveAttribute(
+      'title',
+      'Import Scan Config',
+    );
 
-    expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
+    expect(clone).toHaveBeenCalledWith(config);
+    await wait();
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Scan Config');
 
-    await act(async () => {
-      fireEvent.click(icons[3]);
-      expect(clone).toHaveBeenCalledWith(config);
-      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(getAllScanners).toHaveBeenCalled();
+    await wait();
+    expect(editIcon).toHaveAttribute('title', 'Edit Scan Config');
 
-      fireEvent.click(icons[4]);
-      expect(getNvtFamilies).toHaveBeenCalled();
-      expect(getAllScanners).toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
+    await wait();
+    expect(exportFunc).toHaveBeenCalledWith(config);
+    expect(exportIcon).toHaveAttribute('title', 'Export Scan Config as XML');
 
-      fireEvent.click(icons[5]);
+    act(() => {
+      const trashcanIcon = screen.getByTestId('trashcan-icon');
+      fireEvent.click(trashcanIcon);
       expect(deleteFunc).toHaveBeenCalledWith(configId);
-      expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
-
-      fireEvent.click(icons[6]);
-      expect(exportFunc).toHaveBeenCalledWith(config);
-      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+      expect(trashcanIcon).toHaveAttribute(
+        'title',
+        'Move Scan Config to trashcan',
+      );
     });
-
-    expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });
 
   test('should not call commands without permission', async () => {
-    const getConfig = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: config2,
-      }),
-    );
-
-    const clone = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
-    const getNvtFamilies = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const getAllScanners = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: scanners,
-      }),
-    );
-    const deleteFunc = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const getConfig = testing.fn().mockResolvedValue({
+      data: config2,
+    });
+    const clone = testing.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+    const getNvtFamilies = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+    const getAllScanners = testing.fn().mockResolvedValue({
+      data: scanners,
+    });
+    const deleteFunc = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+    const exportFunc = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       [entityType]: {
@@ -669,78 +666,77 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config2));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
+    expect(screen.getByTestId('new-icon')).toHaveAttribute(
+      'title',
+      'Create new Scan Config',
+    );
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
+    expect(clone).not.toHaveBeenCalled();
+    expect(cloneIcon).toHaveAttribute(
+      'title',
+      'Permission to clone Scan Config denied',
+    );
 
-    expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
+    expect(getNvtFamilies).not.toHaveBeenCalled();
+    expect(getAllScanners).not.toHaveBeenCalled();
+    expect(editIcon).toHaveAttribute(
+      'title',
+      'Permission to edit Scan Config denied',
+    );
 
-    await act(async () => {
-      fireEvent.click(icons[3]);
-      expect(clone).not.toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute(
-        'title',
-        'Permission to clone Scan Config denied',
-      );
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
+    expect(exportFunc).toHaveBeenCalledWith(config2);
+    await wait();
+    expect(exportIcon).toHaveAttribute('title', 'Export Scan Config as XML');
 
-      fireEvent.click(icons[4]);
-      expect(getNvtFamilies).not.toHaveBeenCalled();
-      expect(getAllScanners).not.toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute(
-        'title',
-        'Permission to edit Scan Config denied',
-      );
+    expect(screen.getByTestId('upload-icon')).toHaveAttribute(
+      'title',
+      'Import Scan Config',
+    );
 
-      fireEvent.click(icons[5]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[5]).toHaveAttribute(
-        'title',
-        'Permission to move Scan Config to trashcan denied',
-      );
-
-      fireEvent.click(icons[6]);
-      expect(exportFunc).toHaveBeenCalledWith(config2);
-      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
-    });
-
-    expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
+    expect(deleteFunc).not.toHaveBeenCalled();
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Permission to move Scan Config to trashcan denied',
+    );
   });
 
   test('should (not) call commands if config is in use', async () => {
-    const getConfig = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: config3,
-      }),
-    );
-
-    const clone = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
-    const getNvtFamilies = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const getAllScanners = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: scanners,
-      }),
-    );
-    const deleteFunc = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const getConfig = testing.fn().mockResolvedValue({
+      data: config3,
+    });
+    const clone = testing.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+    const getNvtFamilies = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+    const getAllScanners = testing.fn().mockResolvedValue({
+      data: scanners,
+    });
+    const deleteFunc = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+    const exportFunc = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       [entityType]: {
@@ -777,69 +773,69 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config3));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
+    expect(screen.getByTestId('new-icon')).toHaveAttribute(
+      'title',
+      'Create new Scan Config',
+    );
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
+    expect(clone).toHaveBeenCalledWith(config3);
+    await wait();
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Scan Config');
 
-    expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(getAllScanners).toHaveBeenCalled();
+    expect(editIcon).toHaveAttribute('title', 'Edit Scan Config');
 
-    await act(async () => {
-      fireEvent.click(icons[3]);
-      expect(clone).toHaveBeenCalledWith(config3);
-      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
+    expect(deleteFunc).not.toHaveBeenCalled();
+    expect(deleteIcon).toHaveAttribute('title', 'Scan Config is still in use');
 
-      fireEvent.click(icons[4]);
-      expect(getNvtFamilies).toHaveBeenCalled();
-      expect(getAllScanners).toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
+    expect(exportFunc).toHaveBeenCalledWith(config3);
+    await wait();
+    expect(exportIcon).toHaveAttribute('title', 'Export Scan Config as XML');
 
-      fireEvent.click(icons[5]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
-
-      fireEvent.click(icons[6]);
-      expect(exportFunc).toHaveBeenCalledWith(config3);
-      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
-    });
-
-    expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
+    expect(screen.getByTestId('upload-icon')).toHaveAttribute(
+      'title',
+      'Import Scan Config',
+    );
   });
 
   test('should (not) call commands if config is not writable', async () => {
-    const getConfig = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: config4,
-      }),
-    );
-
-    const clone = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
-    const getNvtFamilies = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const getAllScanners = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: scanners,
-      }),
-    );
-    const deleteFunc = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = testing.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const getConfig = testing.fn().mockResolvedValue({
+      data: config4,
+    });
+    const clone = testing.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+    const getNvtFamilies = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+    const getAllScanners = testing.fn().mockResolvedValue({
+      data: scanners,
+    });
+    const deleteFunc = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+    const exportFunc = testing.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       [entityType]: {
@@ -876,38 +872,49 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config4));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
+    expect(screen.getByTestId('new-icon')).toHaveAttribute(
+      'title',
+      'Create new Scan Config',
+    );
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
+    expect(clone).toHaveBeenCalledWith(config4);
+    await wait();
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Scan Config');
 
-    expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
+    expect(getNvtFamilies).not.toHaveBeenCalled();
+    expect(getAllScanners).not.toHaveBeenCalled();
+    expect(editIcon).toHaveAttribute('title', 'Scan Config is not writable');
 
-    await act(async () => {
-      fireEvent.click(icons[3]);
-      expect(clone).toHaveBeenCalledWith(config4);
-      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
+    expect(deleteFunc).not.toHaveBeenCalled();
+    expect(deleteIcon).toHaveAttribute('title', 'Scan Config is not writable');
 
-      fireEvent.click(icons[4]);
-      expect(getNvtFamilies).not.toHaveBeenCalled();
-      expect(getAllScanners).not.toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
+    expect(exportFunc).toHaveBeenCalledWith(config4);
+    await wait();
+    expect(exportIcon).toHaveAttribute('title', 'Export Scan Config as XML');
 
-      fireEvent.click(icons[5]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[5]).toHaveAttribute('title', 'Scan Config is not writable');
-
-      fireEvent.click(icons[6]);
-      expect(exportFunc).toHaveBeenCalledWith(config4);
-      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
-    });
-
-    expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
+    expect(screen.getByTestId('upload-icon')).toHaveAttribute(
+      'title',
+      'Import Scan Config',
+    );
   });
-
-  // TODO: should render scanner preferences tab
 });
 
 describe('Scan Config ToolBarIcons tests', () => {
@@ -925,7 +932,7 @@ describe('Scan Config ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons
         entity={config}
         onScanConfigCloneClick={handleScanConfigClone}
@@ -940,16 +947,20 @@ describe('Scan Config ToolBarIcons tests', () => {
     expect(element).toBeVisible();
 
     const links = element.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-scan-configurations',
     );
 
     expect(links[1]).toHaveAttribute('href', '/scanconfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
   });
 
   test('should call click handlers', () => {
@@ -966,7 +977,7 @@ describe('Scan Config ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={config}
         onScanConfigCloneClick={handleScanConfigClone}
@@ -978,34 +989,44 @@ describe('Scan Config ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
-
-    fireEvent.click(icons[2]);
+    const createIcon = screen.getByTestId('new-icon');
+    fireEvent.click(createIcon);
     expect(handleScanConfigCreate).toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
+    expect(createIcon).toHaveAttribute('title', 'Create new Scan Config');
 
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleScanConfigClone).toHaveBeenCalledWith(config);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Scan Config');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleScanConfigEdit).toHaveBeenCalledWith(config);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+    expect(editIcon).toHaveAttribute('title', 'Edit Scan Config');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleScanConfigDelete).toHaveBeenCalledWith(config);
-    expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Scan Config to trashcan');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(config);
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    expect(exportIcon).toHaveAttribute('title', 'Export Scan Config as XML');
 
-    fireEvent.click(icons[7]);
+    const uploadIcon = screen.getByTestId('upload-icon');
+    fireEvent.click(uploadIcon);
     expect(handleScanConfigImport).toHaveBeenCalled();
-    expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
+    expect(uploadIcon).toHaveAttribute('title', 'Import Scan Config');
   });
 
   test('should not call click handlers without permission', () => {
@@ -1022,7 +1043,7 @@ describe('Scan Config ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={config2}
         onScanConfigCloneClick={handleScanConfigClone}
@@ -1034,38 +1055,43 @@ describe('Scan Config ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
 
-    expect(icons.length).toBe(6);
-    // because create icon and import icon are not rendered
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
-
-    fireEvent.click(icons[2]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleScanConfigClone).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Scan Config denied',
     );
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleScanConfigEdit).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Scan Config denied',
     );
 
-    fireEvent.click(icons[4]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleScanConfigDelete).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Scan Config to trashcan denied',
     );
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(config2);
-    expect(icons[5]).toHaveAttribute('title', 'Export Scan Config as XML');
+    expect(exportIcon).toHaveAttribute('title', 'Export Scan Config as XML');
   });
 
   test('should (not) call click handlers if config is in use', () => {
@@ -1082,7 +1108,7 @@ describe('Scan Config ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={config3}
         onScanConfigCloneClick={handleScanConfigClone}
@@ -1094,34 +1120,44 @@ describe('Scan Config ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
-
-    fireEvent.click(icons[2]);
+    const newIcon = screen.getByTestId('new-icon');
+    fireEvent.click(newIcon);
     expect(handleScanConfigCreate).toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
+    expect(newIcon).toHaveAttribute('title', 'Create new Scan Config');
 
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleScanConfigClone).toHaveBeenCalledWith(config3);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Scan Config');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleScanConfigEdit).toHaveBeenCalledWith(config3);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+    expect(editIcon).toHaveAttribute('title', 'Edit Scan Config');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleScanConfigDelete).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
+    expect(deleteIcon).toHaveAttribute('title', 'Scan Config is still in use');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(config3);
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    expect(exportIcon).toHaveAttribute('title', 'Export Scan Config as XML');
 
-    fireEvent.click(icons[7]);
+    const uploadIcon = screen.getByTestId('upload-icon');
+    fireEvent.click(uploadIcon);
     expect(handleScanConfigImport).toHaveBeenCalled();
-    expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
+    expect(uploadIcon).toHaveAttribute('title', 'Import Scan Config');
   });
 
   test('should (not) call click handlers if config is not writable', () => {
@@ -1138,7 +1174,7 @@ describe('Scan Config ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={config4}
         onScanConfigCloneClick={handleScanConfigClone}
@@ -1150,33 +1186,43 @@ describe('Scan Config ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: ScanConfigs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'ScanConfig List',
+    );
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
-    expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
-
-    fireEvent.click(icons[2]);
+    const newIcon = screen.getByTestId('new-icon');
+    fireEvent.click(newIcon);
     expect(handleScanConfigCreate).toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
+    expect(newIcon).toHaveAttribute('title', 'Create new Scan Config');
 
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleScanConfigClone).toHaveBeenCalledWith(config4);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Scan Config');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleScanConfigEdit).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
+    expect(editIcon).toHaveAttribute('title', 'Scan Config is not writable');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleScanConfigDelete).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute('title', 'Scan Config is not writable');
+    expect(deleteIcon).toHaveAttribute('title', 'Scan Config is not writable');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleScanConfigDownload).toHaveBeenCalledWith(config4);
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    expect(exportIcon).toHaveAttribute('title', 'Export Scan Config as XML');
 
-    fireEvent.click(icons[7]);
+    const uploadIcon = screen.getByTestId('upload-icon');
+    fireEvent.click(uploadIcon);
     expect(handleScanConfigImport).toHaveBeenCalled();
-    expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
+    expect(uploadIcon).toHaveAttribute('title', 'Import Scan Config');
   });
 });

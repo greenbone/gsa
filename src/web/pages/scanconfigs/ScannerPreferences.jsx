@@ -92,6 +92,7 @@ const ScannerPreferences = ({
   return (
     <Section
       foldable
+      data-testid="scanner-preferences-section"
       initialFoldState={FoldState.FOLDED}
       title={_('Edit Scanner Preferences ({{counts}})', {
         counts: preferences.length,

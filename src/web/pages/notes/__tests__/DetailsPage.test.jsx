@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/notes/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/notes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/notes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
@@ -104,7 +104,7 @@ const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe('Note detailspage tests', () => {
+describe('Note DetailsPage tests', () => {
   test('should render full /DetailsPage', () => {
     const gmp = {
       note: {
@@ -137,7 +137,7 @@ describe('Note detailspage tests', () => {
     );
 
     const {baseElement} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
     );
 
     expect(baseElement).toHaveTextContent('note text');
@@ -232,7 +232,7 @@ describe('Note detailspage tests', () => {
     );
 
     const {baseElement} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -275,7 +275,7 @@ describe('Note detailspage tests', () => {
     );
 
     const {baseElement} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -332,35 +332,23 @@ describe('Note detailspage tests', () => {
       ),
     );
 
-    render(<Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />);
+    render(<DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />);
 
     await wait();
 
-    const cloneIcon = screen.getAllByTitle('Clone Note');
-    expect(cloneIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(cloneIcon[0]);
-
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     await wait();
-
     expect(clone).toHaveBeenCalledWith(note);
 
-    const exportIcon = screen.getAllByTitle('Export Note as XML');
-    expect(exportIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(exportIcon[0]);
-
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     await wait();
-
     expect(exportFunc).toHaveBeenCalledWith(note);
 
-    const deleteIcon = screen.getAllByTitle('Move Note to trashcan');
-    expect(deleteIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(deleteIcon[0]);
-
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     await wait();
-
     expect(deleteFunc).toHaveBeenCalledWith({id: note.id});
   });
 });
@@ -398,10 +386,16 @@ describe('Note ToolBarIcons tests', () => {
       'href',
       'test/en/reports.html#managing-notes',
     );
-    expect(screen.getAllByTitle('Help: Notes')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Notes',
+    );
 
     expect(links[1]).toHaveAttribute('href', '/notes');
-    expect(screen.getAllByTitle('Note List')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Note List',
+    );
   });
 
   test('should call click handlers', () => {
@@ -430,25 +424,21 @@ describe('Note ToolBarIcons tests', () => {
       />,
     );
 
-    const cloneIcon = screen.getAllByTitle('Clone Note');
-    const editIcon = screen.getAllByTitle('Edit Note');
-    const deleteIcon = screen.getAllByTitle('Move Note to trashcan');
-    const exportIcon = screen.getAllByTitle('Export Note as XML');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    const editIcon = screen.getByTestId('edit-icon');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    const exportIcon = screen.getByTestId('export-icon');
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
+    fireEvent.click(cloneIcon);
     expect(handleNoteCloneClick).toHaveBeenCalledWith(note);
 
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
+    fireEvent.click(editIcon);
     expect(handleNoteEditClick).toHaveBeenCalledWith(note);
 
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
+    fireEvent.click(deleteIcon);
     expect(handleNoteDeleteClick).toHaveBeenCalledWith(note);
 
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(exportIcon);
     expect(handleNoteDownloadClick).toHaveBeenCalledWith(note);
   });
 
@@ -478,31 +468,21 @@ describe('Note ToolBarIcons tests', () => {
       />,
     );
 
-    const cloneIcon = screen.getAllByTitle('Clone Note');
-    const editIcon = screen.getAllByTitle('Permission to edit Note denied');
-    const deleteIcon = screen.getAllByTitle(
-      'Permission to move Note to trashcan denied',
-    );
-    const exportIcon = screen.getAllByTitle('Export Note as XML');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    const editIcon = screen.getByTestId('edit-icon');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    const exportIcon = screen.getByTestId('export-icon');
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
+    fireEvent.click(cloneIcon);
     expect(handleNoteCloneClick).toHaveBeenCalledWith(noPermNote);
 
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-
+    fireEvent.click(editIcon);
     expect(handleNoteEditClick).not.toHaveBeenCalled();
 
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
+    fireEvent.click(deleteIcon);
     expect(handleNoteDeleteClick).not.toHaveBeenCalled();
 
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
+    fireEvent.click(exportIcon);
     expect(handleNoteDownloadClick).toHaveBeenCalledWith(noPermNote);
   });
 
@@ -531,28 +511,21 @@ describe('Note ToolBarIcons tests', () => {
         onNoteEditClick={handleNoteEditClick}
       />,
     );
-    const cloneIcon = screen.getAllByTitle('Clone Note');
-    const editIcon = screen.getAllByTitle('Edit Note');
-    const deleteIcon = screen.getAllByTitle('Note is still in use');
-    const exportIcon = screen.getAllByTitle('Export Note as XML');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    const editIcon = screen.getByTestId('edit-icon');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    const exportIcon = screen.getByTestId('export-icon');
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
+    fireEvent.click(cloneIcon);
     expect(handleNoteCloneClick).toHaveBeenCalledWith(noteInUse);
 
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-
+    fireEvent.click(editIcon);
     expect(handleNoteEditClick).toHaveBeenCalled();
 
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
+    fireEvent.click(deleteIcon);
     expect(handleNoteDeleteClick).not.toHaveBeenCalled();
 
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
+    fireEvent.click(exportIcon);
     expect(handleNoteDownloadClick).toHaveBeenCalledWith(noteInUse);
   });
 });
