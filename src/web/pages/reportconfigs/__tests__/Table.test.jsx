@@ -9,8 +9,7 @@ import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/reportconfig';
 import Table from 'web/pages/reportconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 const config = ReportConfig.fromElement({
   _id: '12345',
@@ -115,7 +114,7 @@ describe('Scan Config table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <Table
         entities={[config, config2, config3]}
         entitiesCounts={counts}
@@ -129,9 +128,9 @@ describe('Scan Config table tests', () => {
 
     expect(element).not.toHaveTextContent('Parameters');
 
-    const icons = getAllByTestId('svg-icon');
-    fireEvent.click(icons[0]);
-    expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
+    const unfoldIcon = screen.getByTestId('fold-state-icon-unfold');
+    expect(unfoldIcon).toHaveAttribute('title', 'Unfold all details');
+    fireEvent.click(unfoldIcon);
     expect(element).toHaveTextContent('Parameters');
   });
 
@@ -154,7 +153,7 @@ describe('Scan Config table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId} = render(
+    render(
       <Table
         entities={[config, config2, config3]}
         entitiesCounts={counts}
@@ -166,22 +165,27 @@ describe('Scan Config table tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[5]).toHaveAttribute('title', 'Move Report Config to trashcan');
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getAllByTestId('trashcan-icon')[0];
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Move Report Config to trashcan',
+    );
+    fireEvent.click(deleteIcon);
     expect(handleReportConfigDelete).toHaveBeenCalledWith(config);
 
-    expect(icons[6]).toHaveAttribute('title', 'Edit Report Config');
-    fireEvent.click(icons[6]);
+    const editIcon = screen.getAllByTestId('edit-icon')[0];
+    expect(editIcon).toHaveAttribute('title', 'Edit Report Config');
+    fireEvent.click(editIcon);
     expect(handleReportConfigEdit).toHaveBeenCalledWith(config);
 
-    expect(icons[7]).toHaveAttribute('title', 'Clone Report Config');
-    fireEvent.click(icons[7]);
+    const cloneIcon = screen.getAllByTestId('clone-icon')[0];
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Report Config');
+    fireEvent.click(cloneIcon);
     expect(handleReportConfigClone).toHaveBeenCalledWith(config);
 
-    expect(icons[8]).toHaveAttribute('title', 'Export Report Config');
-    fireEvent.click(icons[8]);
+    const exportIcon = screen.getAllByTestId('export-icon')[0];
+    expect(exportIcon).toHaveAttribute('title', 'Export Report Config');
+    fireEvent.click(exportIcon);
     expect(handleReportConfigDownload).toHaveBeenCalledWith(config);
   });
 });

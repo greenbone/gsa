@@ -9,7 +9,6 @@ import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
 import {
   clickElement,
-  getBulkActionItems,
   getCheckBoxes,
   getPowerFilter,
   getSelectElement,
@@ -25,7 +24,7 @@ import {entitiesLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, screen, wait} from 'web/utils/Testing';
+import {getByTestId, rendererWith, screen, wait} from 'web/utils/Testing';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -267,8 +266,8 @@ describe('CpesPage tests', () => {
     await wait();
 
     // export page contents
-    const bulkActions = getBulkActionItems();
-    const exportIcon = bulkActions[1];
+    const tableFooter = getTableFooter();
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
     await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
@@ -347,8 +346,7 @@ describe('CpesPage tests', () => {
     await clickElement(inputs[1]);
 
     // export selected cpe
-    const bulkActions = getBulkActionItems();
-    const exportIcon = bulkActions[1];
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
     await clickElement(exportIcon);
 
     expect(exportByIds).toHaveBeenCalled();
@@ -423,8 +421,7 @@ describe('CpesPage tests', () => {
     expect(selectElement).toHaveValue('Apply to all filtered');
 
     // export all filtered cpes
-    const bulkActions = getBulkActionItems();
-    const exportIcon = bulkActions[1];
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
     await clickElement(exportIcon);
 
     expect(exportByFilter).toHaveBeenCalled();

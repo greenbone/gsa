@@ -9,8 +9,7 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Table from 'web/pages/policies/Table';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 const policy = Policy.fromElement({
   _id: '12345',
@@ -105,7 +104,7 @@ describe('Policies table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <Table
         entities={[policy, policy2, policy3]}
         entitiesCounts={counts}
@@ -120,9 +119,9 @@ describe('Policies table tests', () => {
 
     expect(element).not.toHaveTextContent('Comment');
 
-    const icons = getAllByTestId('svg-icon');
-    fireEvent.click(icons[0]);
-    expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
+    const unfoldIcon = screen.getByTestId('fold-state-icon-unfold');
+    expect(unfoldIcon).toHaveAttribute('title', 'Unfold all details');
+    fireEvent.click(unfoldIcon);
     expect(element).toHaveTextContent('Comment');
   });
 
@@ -146,7 +145,7 @@ describe('Policies table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId} = render(
+    render(
       <Table
         entities={[policy, policy2, policy3]}
         entitiesCounts={counts}
@@ -159,26 +158,29 @@ describe('Policies table tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getAllByTestId('trashcan-icon')[0];
+    expect(deleteIcon).toHaveAttribute('title', 'Move Policy to trashcan');
+    fireEvent.click(deleteIcon);
     expect(handlePolicyDeleteClick).toHaveBeenCalledWith(policy);
-    expect(icons[5]).toHaveAttribute('title', 'Move Policy to trashcan');
 
-    fireEvent.click(icons[6]);
+    const editIcon = screen.getAllByTestId('edit-icon')[0];
+    expect(editIcon).toHaveAttribute('title', 'Edit Policy');
+    fireEvent.click(editIcon);
     expect(handlePolicyEditClick).toHaveBeenCalledWith(policy);
-    expect(icons[6]).toHaveAttribute('title', 'Edit Policy');
 
-    fireEvent.click(icons[7]);
+    const cloneIcon = screen.getAllByTestId('clone-icon')[0];
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(cloneIcon);
     expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy);
-    expect(icons[7]).toHaveAttribute('title', 'Clone Policy');
 
-    fireEvent.click(icons[8]);
+    const newIcon = screen.getAllByTestId('new-icon')[0];
+    expect(newIcon).toHaveAttribute('title', 'Create Audit from Policy');
+    fireEvent.click(newIcon);
     expect(handleCreateAuditClick).toHaveBeenCalledWith(policy);
-    expect(icons[8]).toHaveAttribute('title', 'Create Audit from Policy');
 
-    fireEvent.click(icons[9]);
+    const exportIcon = screen.getAllByTestId('export-icon')[0];
+    expect(exportIcon).toHaveAttribute('title', 'Export Policy');
+    fireEvent.click(exportIcon);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy);
-    expect(icons[9]).toHaveAttribute('title', 'Export Policy');
   });
 });

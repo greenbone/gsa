@@ -7,8 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {createFeed} from 'gmp/commands/feedstatus';
 import Response from 'gmp/http/response';
 import FeedStatus from 'web/pages/extras/FeedStatusPage';
-import {rendererWith, waitFor} from 'web/utils/Testing';
-
+import {rendererWith, screen, waitFor} from 'web/utils/Testing';
 
 const mockDate = new Date(1595660400000); // Saturday July 25 090000
 
@@ -65,16 +64,14 @@ const gmp = {
 describe('Feed status page tests', () => {
   test('should render', async () => {
     const {render} = rendererWith({gmp, router: true});
-    const {element, getAllByTestId} = render(<FeedStatus />);
+    const {element} = render(<FeedStatus />);
 
     await waitFor(() => element.querySelectorAll('table'));
 
-    // Should render all icons
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons.length).toEqual(11);
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: Feed Status');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Feed Status',
+    );
 
     // Should render all links
     const links = element.querySelectorAll('a');
@@ -136,7 +133,7 @@ describe('Feed status page tests', () => {
     // Feed Status
 
     const ageText = element.querySelectorAll('strong');
-    const updateMsgs = getAllByTestId('update-msg');
+    const updateMsgs = screen.getAllByTestId('update-msg');
 
     expect(ageText.length).toEqual(4);
     expect(updateMsgs.length).toEqual(4);

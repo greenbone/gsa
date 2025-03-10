@@ -14,7 +14,6 @@ import {createEntitiesTable} from 'web/entities/Table';
 import VulnsRow from 'web/pages/vulns/Row';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const Header = ({
   links = true,
   sort = true,

@@ -9,10 +9,8 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
 import {
-  clickElement,
-  getActionItems,
-  getBulkActionItems,
   getTableBody,
+  getTableFooter,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -21,7 +19,13 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/Testing';
+import {
+  rendererWith,
+  fireEvent,
+  wait,
+  screen,
+  getByTestId,
+} from 'web/utils/Testing';
 
 const lastReport = {
   report: {
@@ -201,21 +205,21 @@ describe('AuditPage tests', () => {
 
     await wait();
 
-    const icons = getBulkActionItems();
-
+    const tableFooter = getTableFooter();
+    const deleteIcon = getByTestId(tableFooter, 'trash-icon');
     expect(deleteByFilter).not.toHaveBeenCalled();
-    const deleteIcon = icons[1];
     expect(deleteIcon).toHaveAttribute(
       'title',
       'Move page contents to trashcan',
     );
-    await clickElement(deleteIcon);
+    fireEvent.click(deleteIcon);
 
     testBulkTrashcanDialog(screen, deleteByFilter);
 
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
     expect(exportByFilter).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Export page contents');
-    await clickElement(icons[2]);
+    expect(exportIcon).toHaveAttribute('title', 'Export page contents');
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 });
@@ -239,10 +243,12 @@ describe('AuditPage ToolBarIcons test', () => {
     );
     expect(element).toBeVisible();
 
-    const icons = getActionItems();
     const links = element.querySelectorAll('a');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Audits',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-audits',
@@ -264,11 +270,10 @@ describe('AuditPage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />);
 
-    const icons = getActionItems();
-
-    fireEvent.click(icons[1]);
+    const newIcon = screen.getByTestId('new-icon');
+    fireEvent.click(newIcon);
     expect(handleAuditCreateClick).toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'New Audit');
+    expect(newIcon).toHaveAttribute('title', 'New Audit');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
@@ -286,8 +291,10 @@ describe('AuditPage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />);
 
-    const icons = getActionItems();
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
+    expect(screen.queryByTestId('new-icon')).toBeNull();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Audits',
+    );
   });
 });

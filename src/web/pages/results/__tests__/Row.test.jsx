@@ -6,13 +6,12 @@
 import {describe, test, expect} from '@gsa/testing';
 import Result from 'gmp/models/result';
 import Row from 'web/pages/results/Row';
-import {rendererWith} from 'web/utils/Testing';
-
+import {rendererWithTable, screen} from 'web/utils/Testing';
 
 const gmp = {settings: {enableEPSS: true}};
 
 describe('Should render EPSS fields', () => {
-  const {render} = rendererWith({gmp, store: true});
+  const {render} = rendererWithTable({gmp, store: true});
 
   test('should render EPSS columns', () => {
     const entity = Result.fromElement({
@@ -47,13 +46,7 @@ describe('Should render EPSS fields', () => {
       },
     });
 
-    const {element} = render(
-      <table>
-        <tbody>
-          <Row entity={entity} />
-        </tbody>
-      </table>,
-    );
+    const {element} = render(<Row entity={entity} />);
 
     expect(element).toHaveTextContent('0.87650');
     expect(element).toHaveTextContent('80.000%');
@@ -61,7 +54,7 @@ describe('Should render EPSS fields', () => {
 });
 
 describe('Delta reports V2 with changed severity, qod and hostname', () => {
-  const {render} = rendererWith({gmp, store: true});
+  const {render} = rendererWithTable({gmp, store: true});
 
   test('should render Delta Difference icon', () => {
     const entity = Result.fromElement({
@@ -86,24 +79,25 @@ describe('Delta reports V2 with changed severity, qod and hostname', () => {
       },
     });
 
-    const {getAllByTestId} = render(
-      <table>
-        <tbody>
-          <Row entity={entity} />
-        </tbody>
-      </table>,
-    );
-    const icons = getAllByTestId('svg-icon');
+    render(<Row entity={entity} />);
 
-    expect(icons.length).toEqual(3);
-    expect(icons[0]).toHaveAttribute('title', 'Severity is changed from 2.6.');
-    expect(icons[1]).toHaveAttribute('title', 'QoD is changed from 70.');
-    expect(icons[2]).toHaveAttribute('title', 'Hostname is changed from bar.');
+    expect(screen.getAllByTestId('delta-difference-icon')[0]).toHaveAttribute(
+      'title',
+      'Severity is changed from 2.6.',
+    );
+    expect(screen.getAllByTestId('delta-difference-icon')[1]).toHaveAttribute(
+      'title',
+      'QoD is changed from 70.',
+    );
+    expect(screen.getAllByTestId('delta-difference-icon')[2]).toHaveAttribute(
+      'title',
+      'Hostname is changed from bar.',
+    );
   });
 });
 
 describe('Delta reports V2 with same severity, qod and hostname', () => {
-  const {render} = rendererWith({gmp, store: true});
+  const {render} = rendererWithTable({gmp, store: true});
 
   test('should not render Delta Difference icon', () => {
     const entity = Result.fromElement({
@@ -128,21 +122,15 @@ describe('Delta reports V2 with same severity, qod and hostname', () => {
       },
     });
 
-    const {queryAllByTestId} = render(
-      <table>
-        <tbody>
-          <Row entity={entity} />
-        </tbody>
-      </table>,
-    );
-    const icons = queryAllByTestId('svg-icon');
+    render(<Row entity={entity} />);
 
+    const icons = screen.queryAllByTestId('svg-icon');
     expect(icons.length).toBe(0);
   });
 });
 
 describe('Audit reports with compliance', () => {
-  const {render} = rendererWith({gmp, store: true});
+  const {render} = rendererWithTable({gmp, store: true});
 
   test('should render Audit report with compliance yes', () => {
     const entity = Result.fromElement({
@@ -158,14 +146,8 @@ describe('Audit reports with compliance', () => {
       compliance: 'yes',
     });
 
-    const {getAllByTestId} = render(
-      <table>
-        <tbody>
-          <Row audit={true} entity={entity} />
-        </tbody>
-      </table>,
-    );
-    const bars = getAllByTestId('progressbar-box');
+    render(<Row audit={true} entity={entity} />);
+    const bars = screen.getAllByTestId('progressbar-box');
 
     expect(bars[0]).toHaveAttribute('title', 'Yes');
     expect(bars[0]).toHaveTextContent('Yes');
@@ -185,14 +167,8 @@ describe('Audit reports with compliance', () => {
       compliance: 'no',
     });
 
-    const {getAllByTestId} = render(
-      <table>
-        <tbody>
-          <Row audit={true} entity={entity} />
-        </tbody>
-      </table>,
-    );
-    const bars = getAllByTestId('progressbar-box');
+    render(<Row audit={true} entity={entity} />);
+    const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', 'No');
     expect(bars[0]).toHaveTextContent('No');
   });
@@ -211,14 +187,8 @@ describe('Audit reports with compliance', () => {
       compliance: 'incomplete',
     });
 
-    const {getAllByTestId} = render(
-      <table>
-        <tbody>
-          <Row audit={true} entity={entity} />
-        </tbody>
-      </table>,
-    );
-    const bars = getAllByTestId('progressbar-box');
+    render(<Row audit={true} entity={entity} />);
+    const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', 'Incomplete');
     expect(bars[0]).toHaveTextContent('Incomplete');
   });
@@ -237,14 +207,8 @@ describe('Audit reports with compliance', () => {
       compliance: 'undefined',
     });
 
-    const {getAllByTestId} = render(
-      <table>
-        <tbody>
-          <Row audit={true} entity={entity} />
-        </tbody>
-      </table>,
-    );
-    const bars = getAllByTestId('progressbar-box');
+    render(<Row audit={true} entity={entity} />);
+    const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', 'Undefined');
     expect(bars[0]).toHaveTextContent('Undefined');
   });
@@ -269,14 +233,8 @@ describe('Audit reports with compliance', () => {
       },
     });
 
-    const {getAllByTestId} = render(
-      <table>
-        <tbody>
-          <Row audit={true} entity={entity} />
-        </tbody>
-      </table>,
-    );
-    const icons = getAllByTestId('svg-icon');
+    render(<Row audit={true} entity={entity} />);
+    const icons = screen.getAllByTestId('delta-difference-icon');
     expect(icons.length).toEqual(1);
     expect(icons[0]).toHaveAttribute(
       'title',

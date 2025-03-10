@@ -14,7 +14,6 @@ import {
 import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
 import {rendererWith, fireEvent, within, screen} from 'web/utils/Testing';
 
-
 const nvt = Nvt.fromElement({
   _oid: '1234',
   name: 'nvt',
@@ -80,7 +79,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <EditConfigFamilyDialog
         configId="c1"
         configName="foo"
@@ -98,7 +97,7 @@ describe('EditConfigFamilyDialog component tests', () => {
 
     expect(baseElement).toBeVisible();
 
-    expect(getByTestId('loading')).toBeInTheDocument();
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
 
     expect(baseElement).not.toHaveTextContent('Config');
     expect(baseElement).not.toHaveTextContent('foo');
@@ -142,7 +141,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {getByTestId} = render(
+    render(
       <EditConfigFamilyDialog
         configId="c1"
         configName="foo"
@@ -158,7 +157,7 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
+    const closeButton = screen.getByTestId('dialog-close-button');
 
     fireEvent.click(closeButton);
 
@@ -172,7 +171,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <EditConfigFamilyDialog
         configId="c1"
         configName="foo"
@@ -191,7 +190,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const inputs = baseElement.querySelectorAll('input');
     fireEvent.click(inputs[0]);
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = screen.getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
 
     const newSelected = {

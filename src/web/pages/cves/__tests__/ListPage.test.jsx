@@ -432,7 +432,10 @@ describe('CvesPage ToolBarIcons test', () => {
     const {baseElement} = render(<ToolBarIcons />);
 
     const links = baseElement.querySelectorAll('a');
-    expect(screen.getAllByTitle('Help: CVEs')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: CVEs',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-secinfo.html#cve',

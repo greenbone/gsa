@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/results/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/results/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
@@ -154,7 +154,7 @@ describe('Result Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', result));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     // Toolbar Icons
     const links = baseElement.querySelectorAll('a');
@@ -288,7 +288,7 @@ describe('Result Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', result));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[12]).toHaveTextContent('User Tags');
@@ -337,7 +337,7 @@ describe('Result Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', result));
 
-    render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
     await wait();
 
@@ -385,17 +385,20 @@ describe('Result ToolBarIcons tests', () => {
     );
 
     const links = element.querySelectorAll('a');
-    const icons = screen.getAllByTestId('svg-icon');
 
-    expect(icons.length).toBe(9);
-
-    expect(screen.getAllByTitle('Help: Results')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Results',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/reports.html#displaying-all-existing-results',
     );
 
-    expect(screen.getAllByTitle('Results List')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Results List',
+    );
     expect(links[1]).toHaveAttribute('href', '/results');
 
     expect(screen.getAllByTitle('Export Result as XML')[0]).toBeInTheDocument();
@@ -435,16 +438,23 @@ describe('Result ToolBarIcons tests', () => {
       />,
     );
 
-    fireEvent.click(screen.getAllByTitle('Export Result as XML')[0]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Result as XML');
+    fireEvent.click(exportIcon);
     expect(handleResultDownloadClick).toHaveBeenCalledWith(result);
 
-    fireEvent.click(screen.getAllByTitle('Add new Note')[0]);
-    expect(handleNoteCreateClick).toHaveBeenCalledWith(result);
+    const newNoteIcon = screen.getByTestId('new-note-icon');
+    expect(newNoteIcon).toHaveAttribute('title', 'Add new Note');
+    fireEvent.click(newNoteIcon);
 
-    fireEvent.click(screen.getAllByTitle('Add new Override')[0]);
+    const newOverrideIcon = screen.getByTestId('new-override-icon');
+    expect(newOverrideIcon).toHaveAttribute('title', 'Add new Override');
+    fireEvent.click(newOverrideIcon);
     expect(handleOverrideCreateClick).toHaveBeenCalledWith(result);
 
-    fireEvent.click(screen.getAllByTitle('Create new Ticket')[0]);
+    const newTicketIcon = screen.getByTestId('new-ticket-icon');
+    expect(newTicketIcon).toHaveAttribute('title', 'Create new Ticket');
+    fireEvent.click(newTicketIcon);
     expect(handleTicketCreateClick).toHaveBeenCalledWith(result);
   });
 
@@ -475,20 +485,23 @@ describe('Result ToolBarIcons tests', () => {
     );
 
     const links = element.querySelectorAll('a');
-    const icons = screen.getAllByTestId('svg-icon');
 
-    expect(icons.length).toBe(3);
-
-    expect(screen.getAllByTitle('Help: Results')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Results',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/reports.html#displaying-all-existing-results',
     );
 
-    expect(screen.getAllByTitle('Results List')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Results List',
+    );
     expect(links[1]).toHaveAttribute('href', '/results');
 
-    expect(screen.getAllByTitle('Export Result as XML')[0]).toBeInTheDocument();
+    screen.getAllByTitle('Export Result as XML');
     expect(screen.queryByTitle('Add new Note')).not.toBeInTheDocument();
     expect(screen.queryByTitle('Add new Override')).not.toBeInTheDocument();
     expect(screen.queryByTitle('Create new Ticket')).not.toBeInTheDocument();

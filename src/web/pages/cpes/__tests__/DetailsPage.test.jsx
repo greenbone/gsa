@@ -12,7 +12,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import CpePage, {ToolBarIcons} from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, wait, fireEvent} from 'web/utils/Testing';
+import {rendererWith, wait, fireEvent, screen} from 'web/utils/Testing';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -52,8 +52,8 @@ beforeEach(() => {
   });
 });
 
-describe('CPE Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('CPE DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const getCpe = testing.fn().mockResolvedValue({
       data: cpe,
     });
@@ -81,23 +81,27 @@ describe('CPE Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 
-    const {baseElement, getAllByTestId} = render(<CpePage id="cpe:/a:foo" />);
+    const {baseElement} = render(<CpePage id="cpe:/a:foo" />);
 
     const links = baseElement.querySelectorAll('a');
-
-    // test icon bar
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: CPEs',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-secinfo.html#cpe',
     );
 
-    expect(icons[1]).toHaveAttribute('title', 'CPE List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'CPE List',
+    );
     expect(links[1]).toHaveAttribute('href', '/cpes');
-
-    expect(icons[2]).toHaveAttribute('title', 'Export CPE');
+    expect(screen.getByTestId('export-icon')).toHaveAttribute(
+      'title',
+      'Export CPE',
+    );
 
     // test title bar
     expect(baseElement).toHaveTextContent('CPE: foo');
@@ -118,7 +122,7 @@ describe('CPE Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('StatusFINAL');
 
     // severity bar(s)
-    const progressBars = getAllByTestId('progressbar-box');
+    const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Critical');
     expect(progressBars[0]).toHaveTextContent('9.8 (Critical)');
     expect(progressBars[1]).toHaveAttribute('title', 'Critical');
@@ -188,11 +192,9 @@ describe('CPE Detailspage tests', () => {
       foo: 'bar',
     });
 
-    const getCpe = testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: cpe,
-      }),
-    );
+    const getCpe = testing.fn().mockResolvedValue({
+      data: cpe,
+    });
 
     const gmp = {
       cpe: {
@@ -217,17 +219,20 @@ describe('CPE Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
 
-    const {getAllByTestId} = render(<CpePage id="cpe:/a:foo" />);
-    const icons = getAllByTestId('svg-icon');
+    render(<CpePage id="cpe:/a:foo" />);
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: CPEs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'CPE List',
+    );
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
-    expect(icons[1]).toHaveAttribute('title', 'CPE List');
-
-    expect(icons[2]).toHaveAttribute('title', 'Export CPE');
-    fireEvent.click(icons[2]);
-
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export CPE');
+    fireEvent.click(exportIcon);
     await wait();
-
     expect(exportFunc).toHaveBeenCalledWith(cpe);
   });
 });
@@ -242,21 +247,25 @@ describe('CPEs ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons entity={cpe} onCpeDownloadClick={handleCpeDownload} />,
     );
 
     const links = element.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: CPEs',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-secinfo.html#cpe',
     );
 
     expect(links[1]).toHaveAttribute('href', '/cpes');
-    expect(icons[1]).toHaveAttribute('title', 'CPE List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'CPE List',
+    );
   });
 
   test('should call click handlers', () => {
@@ -268,17 +277,22 @@ describe('CPEs ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons entity={cpe} onCpeDownloadClick={handleCpeDownload} />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: CPEs',
+    );
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'CPE List',
+    );
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
-    expect(icons[1]).toHaveAttribute('title', 'CPE List');
-
-    fireEvent.click(icons[2]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleCpeDownload).toHaveBeenCalledWith(cpe);
-    expect(icons[2]).toHaveAttribute('title', 'Export CPE');
+    expect(exportIcon).toHaveAttribute('title', 'Export CPE');
   });
 });

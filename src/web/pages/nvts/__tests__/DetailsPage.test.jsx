@@ -517,20 +517,17 @@ describe('Nvt ToolBarIcons tests', () => {
       />,
     );
 
-    const exportIcon = screen.getAllByTitle('Export NVT');
-    const addNewNoteIcon = screen.getAllByTitle('Add new Note');
-    const addNewOverrideIcon = screen.getAllByTitle('Add new Override');
+    const exportIcon = screen.getAllByTitle('Export NVT')[0];
+    const addNewNoteIcon = screen.getAllByTitle('Add new Note')[0];
+    const addNewOverrideIcon = screen.getAllByTitle('Add new Override')[0];
 
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(exportIcon);
     expect(handleNvtDownloadClick).toHaveBeenCalledWith(nvt);
 
-    expect(addNewNoteIcon[0]).toBeInTheDocument();
-    fireEvent.click(addNewNoteIcon[0]);
+    fireEvent.click(addNewNoteIcon);
     expect(handleOnNoteCreateClick).toHaveBeenCalledWith(nvt);
 
-    expect(addNewOverrideIcon[0]).toBeInTheDocument();
-    fireEvent.click(addNewOverrideIcon[0]);
+    fireEvent.click(addNewOverrideIcon);
     expect(handleOnOverrideCreateClick).toHaveBeenCalledWith(nvt);
   });
 });

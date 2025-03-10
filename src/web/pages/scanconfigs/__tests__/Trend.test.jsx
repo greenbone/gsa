@@ -9,8 +9,7 @@ import {
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
 import Trend from 'web/pages/scanconfigs/Trend';
-import {render} from 'web/utils/Testing';
-
+import {render, screen} from 'web/utils/Testing';
 
 describe('Scan Config Trend tests', () => {
   test('should render', () => {
@@ -26,7 +25,7 @@ describe('Scan Config Trend tests', () => {
   });
 
   test('should render static title', () => {
-    const {getByTestId} = render(
+    render(
       <Trend
         titleDynamic="Dynamic"
         titleStatic="Static"
@@ -34,13 +33,12 @@ describe('Scan Config Trend tests', () => {
       />,
     );
 
-    const trendIcon = getByTestId('svg-icon');
-
+    const trendIcon = screen.getByTestId('trend-nochange-icon');
     expect(trendIcon).toHaveAttribute('title', 'Static');
   });
 
   test('should render dynamic title', () => {
-    const {getByTestId} = render(
+    render(
       <Trend
         titleDynamic="Dynamic"
         titleStatic="Static"
@@ -48,8 +46,7 @@ describe('Scan Config Trend tests', () => {
       />,
     );
 
-    const trendIcon = getByTestId('svg-icon');
-
+    const trendIcon = screen.getByTestId('trend-more-icon');
     expect(trendIcon).toHaveAttribute('title', 'Dynamic');
   });
 

@@ -191,17 +191,23 @@ describe('ReportConfigsPage tests', () => {
         router: true,
       });
 
-      const {element, getAllByTestId} = render(
+      const {element} = render(
         <ToolBarIcons
           onReportConfigCreateClick={handleReportConfigCreateClick}
         />,
       );
       expect(element).toBeVisible();
 
-      const icons = getAllByTestId('svg-icon');
       const links = element.querySelectorAll('a');
 
-      expect(icons[0]).toHaveAttribute('title', 'Help: Report Configs');
+      expect(screen.getByTestId('help-icon')).toHaveAttribute(
+        'title',
+        'Help: Report Configs',
+      );
+      expect(screen.getByTestId('new-icon')).toHaveAttribute(
+        'title',
+        'New Report Config',
+      );
       expect(links[0]).toHaveAttribute(
         'href',
         'test/en/reports.html#customizing-report-formats-with-report-configurations',
@@ -221,17 +227,16 @@ describe('ReportConfigsPage tests', () => {
         router: true,
       });
 
-      const {getAllByTestId} = render(
+      render(
         <ToolBarIcons
           onReportConfigCreateClick={handleReportConfigCreateClick}
         />,
       );
 
-      const icons = getAllByTestId('svg-icon');
-
-      fireEvent.click(icons[1]);
+      const newIcon = screen.getByTestId('new-icon');
+      expect(newIcon).toHaveAttribute('title', 'New Report Config');
+      fireEvent.click(newIcon);
       expect(handleReportConfigCreateClick).toHaveBeenCalled();
-      expect(icons[1]).toHaveAttribute('title', 'New Report Config');
     });
 
     test('should not show icons if user does not have the right permissions', () => {
@@ -245,15 +250,14 @@ describe('ReportConfigsPage tests', () => {
         router: true,
       });
 
-      const {queryAllByTestId} = render(
+      render(
         <ToolBarIcons
           onReportConfigCreateClick={handleReportConfigCreateClick}
         />,
       );
 
-      const icons = queryAllByTestId('svg-icon');
-      expect(icons.length).toBe(1);
-      expect(icons[0]).toHaveAttribute('title', 'Help: Report Configs');
+      const newIcon = screen.queryByTestId('new-icon');
+      expect(newIcon).toBeNull();
     });
   });
 });

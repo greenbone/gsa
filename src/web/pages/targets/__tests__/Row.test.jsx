@@ -8,8 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Target from 'gmp/models/target';
 import Row from 'web/pages/targets/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
-
+import {rendererWithTable, fireEvent, screen} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -162,11 +161,6 @@ const target_no_elevate = Target.fromElement({
 });
 
 describe('Target row tests', () => {
-  // deactivate console.error for tests
-  // to make it possible to test a row without a table
-  const consoleError = console.error;
-  console.error = () => {};
-
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
     const handleTargetCloneClick = testing.fn();
@@ -174,7 +168,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       router: true,
@@ -227,7 +221,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       router: true,
@@ -277,7 +271,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       router: true,
@@ -315,13 +309,14 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       store: true,
       capabilities: caps,
       router: true,
     });
 
+    store.dispatch(setUsername('admin'));
     store.dispatch(setTimezone('UTC'));
 
     const {baseElement} = render(
@@ -357,6 +352,4 @@ describe('Target row tests', () => {
     fireEvent.click(exportIcon[0]);
     expect(handleTargetDownloadClick).toHaveBeenCalledWith(target_no_elevate);
   });
-
-  console.warn = consoleError;
 });
