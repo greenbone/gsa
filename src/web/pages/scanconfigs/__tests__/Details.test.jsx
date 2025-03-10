@@ -8,8 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig from 'gmp/models/scanconfig';
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 import Details from 'web/pages/scanconfigs/Details';
-import {rendererWith} from 'web/utils/Testing';
-
+import {rendererWith, screen} from 'web/utils/Testing';
 
 describe('Scan Config Details tests', () => {
   test('should render full Details', () => {
@@ -28,11 +27,11 @@ describe('Scan Config Details tests', () => {
 
     const {render} = rendererWith({capabilities: caps, router: true});
 
-    const {element, getAllByTestId} = render(<Details entity={config} />);
+    const {element} = render(<Details entity={config} />);
 
     expect(element).toHaveTextContent('bar');
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(element).toHaveTextContent('task1');
     expect(detailsLinks[0]).toHaveAttribute('href', '/task/1234');

@@ -11,8 +11,7 @@ import Schedule from 'gmp/models/schedule';
 import Details from 'web/pages/audits/Details';
 import {entityLoadingActions as policyActions} from 'web/store/entities/policies';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
-import {rendererWith} from 'web/utils/Testing';
-
+import {rendererWith, screen} from 'web/utils/Testing';
 
 const policy = Policy.fromElement({
   _id: '314',
@@ -105,10 +104,10 @@ describe('Audit Details tests', () => {
     store.dispatch(policyActions.success('314', policy));
     store.dispatch(scheduleActions.success('121314', schedule));
 
-    const {element, getAllByTestId} = render(<Details entity={audit} />);
+    const {element} = render(<Details entity={audit} />);
 
     const headings = element.querySelectorAll('h2');
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(headings[0]).toHaveTextContent('Target');
     expect(detailsLinks[0]).toHaveAttribute('href', '/target/5678');

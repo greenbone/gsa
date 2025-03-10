@@ -68,7 +68,7 @@ beforeEach(() => {
 const target = Target.fromElement({
   _id: '46264',
   name: 'target 1',
-  commen: 'hello world',
+  comment: 'hello world',
   creation_time: '2020-12-23T14:14:11Z',
   modification_time: '2021-01-04T11:54:12Z',
   in_use: 0,
@@ -381,10 +381,10 @@ describe('TargetPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('target', defaultSettingfilter),
+      defaultFilterLoadingActions.success('target', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -465,11 +465,9 @@ describe('TargetPage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onTargetCreateClick={handleTargetCreateClick} />);
 
-    const newIcon = screen.getAllByTitle('New Target');
-
-    expect(newIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(newIcon[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'New Target');
+    fireEvent.click(newIcon);
     expect(handleTargetCreateClick).toHaveBeenCalled();
   });
 
@@ -486,12 +484,9 @@ describe('TargetPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
-      <ToolBarIcons onTargetCreateClick={handleTargetCreateClick} />,
-    );
+    render(<ToolBarIcons onTargetCreateClick={handleTargetCreateClick} />);
 
-    const icons = queryAllByTestId('svg-icon'); // this test is probably approppriate to keep in the old format
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Targets');
+    const newIcon = screen.queryByTestId('new-icon');
+    expect(newIcon).toBeNull();
   });
 });

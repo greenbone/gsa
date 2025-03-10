@@ -8,8 +8,7 @@ import React from 'react';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import AuditRow from 'web/pages/reports/AuditReportRow';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {rendererWith} from 'web/utils/Testing';
-
+import {rendererWithTable, screen} from 'web/utils/Testing';
 
 describe('Audit report row', () => {
   test('should render row for Audit report', () => {
@@ -17,7 +16,7 @@ describe('Audit report row', () => {
     const onReportDeleteClick = testing.fn();
     const onReportDeltaSelect = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       capabilities: true,
       store: true,
       router: true,
@@ -25,19 +24,15 @@ describe('Audit report row', () => {
 
     store.dispatch(setTimezone('CET'));
 
-    const {baseElement, getAllByTestId} = render(
-      <table>
-        <tbody>
-          <AuditRow
-            entity={entity}
-            onReportDeleteClick={onReportDeleteClick}
-            onReportDeltaSelect={onReportDeltaSelect}
-          />
-        </tbody>
-      </table>,
+    const {baseElement} = render(
+      <AuditRow
+        entity={entity}
+        onReportDeleteClick={onReportDeleteClick}
+        onReportDeltaSelect={onReportDeltaSelect}
+      />,
     );
 
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
     const links = baseElement.querySelectorAll('a');
     const rows = baseElement.querySelectorAll('tr');
 

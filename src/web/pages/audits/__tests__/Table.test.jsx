@@ -10,8 +10,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
 import Table from 'web/pages/audits/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 
@@ -157,7 +156,7 @@ describe('Audits table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <Table
         entities={[audit, audit2, audit3]}
         entitiesCounts={counts}
@@ -176,9 +175,9 @@ describe('Audits table tests', () => {
     expect(element).not.toHaveTextContent('target1');
     expect(element).not.toHaveTextContent('target2');
 
-    const icons = getAllByTestId('svg-icon');
-    fireEvent.click(icons[0]);
-    expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
+    const foldIcon = screen.getByTestId('fold-state-icon-unfold');
+    fireEvent.click(foldIcon);
+    expect(foldIcon).toHaveAttribute('title', 'Unfold all details');
     expect(element).toHaveTextContent('target1');
     expect(element).toHaveTextContent('target2');
   });
@@ -206,7 +205,7 @@ describe('Audits table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId} = render(
+    render(
       <Table
         entities={[audit, audit2, audit3]}
         entitiesCounts={counts}
@@ -223,35 +222,40 @@ describe('Audits table tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[5]);
+    const startIcon = screen.getAllByTestId('start-icon')[0];
+    fireEvent.click(startIcon);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Start');
+    expect(startIcon).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[6]);
+    const resumeIcon = screen.getAllByTestId('resume-icon')[0];
+    fireEvent.click(resumeIcon);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[7]);
+    const deleteIcon = screen.getAllByTestId('trashcan-icon')[0];
+    fireEvent.click(deleteIcon);
     expect(handleAuditDeleteClick).toHaveBeenCalledWith(audit);
-    expect(icons[7]).toHaveAttribute('title', 'Move Audit to trashcan');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[8]);
+    const editIcon = screen.getAllByTestId('edit-icon')[0];
+    fireEvent.click(editIcon);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit);
-    expect(icons[8]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[9]);
+    const cloneIcon = screen.getAllByTestId('clone-icon')[0];
+    fireEvent.click(cloneIcon);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit);
-    expect(icons[9]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[10]);
+    const exportIcon = screen.getAllByTestId('export-icon')[0];
+    fireEvent.click(exportIcon);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit);
-    expect(icons[10]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[11]);
+    const downloadIcon = screen.getAllByTestId('download-icon')[0];
+    fireEvent.click(downloadIcon);
     expect(handleReportDownloadClick).toHaveBeenCalledWith(audit);
-    expect(icons[11]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );

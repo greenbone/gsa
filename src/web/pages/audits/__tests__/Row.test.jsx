@@ -7,11 +7,9 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-import {getActionItems} from 'web/components/testing';
 import Row from 'web/pages/audits/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {screen, rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {screen, rendererWithTable, fireEvent} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -32,11 +30,6 @@ const currentReport = {
 };
 
 describe('Audit Row tests', () => {
-  // deactivate console.error for tests
-  // to make it possible to test a row without a table
-  const consoleError = console.error;
-  console.error = () => {};
-
   test('should render', () => {
     const audit = Audit.fromElement({
       _id: '314',
@@ -61,7 +54,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -114,15 +107,28 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getActionItems();
-
-    expect(icons[0]).toHaveAttribute('title', 'Start');
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
-    expect(icons[6]).toHaveAttribute(
+    expect(screen.getByTestId('start-icon')).toHaveAttribute('title', 'Start');
+    expect(screen.getByTestId('resume-icon')).toHaveAttribute(
+      'title',
+      'Audit is not stopped',
+    );
+    expect(screen.getByTestId('trashcan-icon')).toHaveAttribute(
+      'title',
+      'Move Audit to trashcan',
+    );
+    expect(screen.getByTestId('edit-icon')).toHaveAttribute(
+      'title',
+      'Edit Audit',
+    );
+    expect(screen.getByTestId('clone-icon')).toHaveAttribute(
+      'title',
+      'Clone Audit',
+    );
+    expect(screen.getByTestId('export-icon')).toHaveAttribute(
+      'title',
+      'Export Audit',
+    );
+    expect(screen.getByTestId('download-icon')).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
@@ -161,7 +167,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -187,15 +193,15 @@ describe('Audit Row tests', () => {
         onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
-
-    const icons = getActionItems();
-
-    expect(icons[0]).toHaveAttribute('title', 'Audit is alterable');
-    expect(icons[1]).toHaveAttribute(
+    expect(screen.getByTestId('alterable-icon')).toHaveAttribute(
+      'title',
+      'Audit is alterable',
+    );
+    expect(screen.getByTestId('sensor-icon')).toHaveAttribute(
       'title',
       'Audit is configured to run on sensor scanner',
     );
-    expect(icons[2]).toHaveAttribute(
+    expect(screen.getByTestId('provide-view-icon')).toHaveAttribute(
       'title',
       'Audit made visible for:\nUsers anon, nymous\nRoles lorem\nGroups ipsum, dolor',
     );
@@ -224,7 +230,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -234,7 +240,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId, queryAllByTestId} = render(
+    render(
       <Row
         entity={audit}
         gcrFormatDefined={true}
@@ -251,18 +257,16 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    // Name
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[0]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.new);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.new);
 
-    const detailsLinks = queryAllByTestId('details-link');
+    const detailsLinks = screen.queryAllByTestId('details-link');
     expect(detailsLinks.length).toBe(0);
     // because there are no reports yet
 
@@ -271,35 +275,43 @@ describe('Audit Row tests', () => {
     // because there is no compliance status bar yet
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
+    expect(startIcon).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).toHaveBeenCalledWith(audit);
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Report download not available');
+    expect(downloadIcon).toHaveAttribute(
+      'title',
+      'Report download not available',
+    );
   });
 
   test('should call click handlers for running audit', () => {
@@ -327,7 +339,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -337,7 +349,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={audit}
         gcrFormatDefined={true}
@@ -354,18 +366,16 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    // Name
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[0]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.running);
     expect(bars[0]).toHaveTextContent('0 %');
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('0 %');
     expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/5678');
@@ -379,35 +389,43 @@ describe('Audit Row tests', () => {
     // because there is no compliance status bar yet
 
     // Actions
-    const icons = getActionItems();
-
-    fireEvent.click(icons[0]);
+    const stopIcon = screen.getByTestId('stop-icon');
+    fireEvent.click(stopIcon);
     expect(handleAuditStart).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute('title', 'Stop');
+    expect(stopIcon).toHaveAttribute('title', 'Stop');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Audit is still in use');
+    expect(deleteIcon).toHaveAttribute('title', 'Audit is still in use');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Report download not available');
+    expect(downloadIcon).toHaveAttribute(
+      'title',
+      'Report download not available',
+    );
   });
 
   test('should call click handlers for stopped audit', () => {
@@ -435,7 +453,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -445,7 +463,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={audit}
         gcrFormatDefined={true}
@@ -462,18 +480,16 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    // Name
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[0]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.stopped);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.stopped);
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Stopped');
     expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/5678');
@@ -487,35 +503,40 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getActionItems();
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
+    expect(startIcon).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).toHaveBeenCalledWith(audit);
-    expect(icons[1]).toHaveAttribute('title', 'Resume');
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).toHaveBeenCalledWith(audit);
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
@@ -545,7 +566,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -555,7 +576,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={audit}
         gcrFormatDefined={true}
@@ -572,18 +593,16 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    // Name
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[0]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.done);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.done);
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
@@ -597,35 +616,40 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getActionItems();
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
+    expect(startIcon).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).toHaveBeenCalledWith(audit);
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
@@ -655,7 +679,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -665,7 +689,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={audit}
         gcrFormatDefined={true}
@@ -683,20 +707,21 @@ describe('Audit Row tests', () => {
     );
 
     // Name
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[0]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
-    const icons = getActionItems();
-    expect(icons[0]).toHaveAttribute('title', 'Audit owned by user');
+    expect(screen.getByTestId('observer-icon')).toHaveAttribute(
+      'title',
+      'Audit owned by user',
+    );
 
     // Status
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.done);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.done);
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
@@ -709,47 +734,51 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveAttribute('title', '50%');
     expect(bars[1]).toHaveTextContent('50%');
 
-    // Actions
-    fireEvent.click(icons[1]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStart).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute(
+    expect(startIcon).toHaveAttribute(
       'title',
       'Permission to start audit denied',
     );
 
-    fireEvent.click(icons[2]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[3]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Audit to trashcan denied',
     );
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Audit denied',
     );
 
-    fireEvent.click(icons[5]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[7]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[7]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
   });
-
-  console.warn = consoleError;
 });

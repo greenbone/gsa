@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable no-unused-vars */
-
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 import Filter from 'gmp/models/filter.js';
 import NVT from 'gmp/models/nvt';
 import Row from 'web/pages/nvts/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWithTable, fireEvent, screen} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -57,16 +53,11 @@ const entity = NVT.fromElement({
 });
 
 describe('NVT row tests', () => {
-  // deactivate console.error for tests
-  // to make it possible to test a row without a table
-  const consoleError = console.error;
-  console.error = () => {};
-
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
     const handleFilterChanged = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       router: true,
@@ -76,7 +67,7 @@ describe('NVT row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <Row
         entity={entity}
         onFilterChanged={handleFilterChanged}
@@ -84,7 +75,7 @@ describe('NVT row tests', () => {
       />,
     );
 
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
     const links = baseElement.querySelectorAll('a');
 
     expect(baseElement).toHaveTextContent('foo');
@@ -113,7 +104,7 @@ describe('NVT row tests', () => {
 
     const filter = Filter.fromString('family="bar"');
 
-    const {render} = rendererWith({
+    const {render} = rendererWithTable({
       gmp,
       capabilities: true,
       router: true,
@@ -139,6 +130,4 @@ describe('NVT row tests', () => {
     fireEvent.click(links[0]);
     expect(handleFilterChanged).toHaveBeenCalledWith(filter);
   });
-
-  console.warn = consoleError;
 });

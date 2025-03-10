@@ -463,7 +463,10 @@ describe('NotesPage ToolBarIcons test', () => {
 
     const links = element.querySelectorAll('a');
 
-    expect(screen.getAllByTitle('Help: Notes')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Notes',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/reports.html#managing-notes',
@@ -485,11 +488,9 @@ describe('NotesPage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onNoteCreateClick={handleNoteCreateClick} />);
 
-    const newIcon = screen.getAllByTitle('New Note');
-
-    expect(newIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(newIcon[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'New Note');
+    fireEvent.click(newIcon);
     expect(handleNoteCreateClick).toHaveBeenCalled();
   });
 
@@ -506,12 +507,12 @@ describe('NotesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
-      <ToolBarIcons onNoteCreateClick={handleNoteCreateClick} />,
-    );
+    render(<ToolBarIcons onNoteCreateClick={handleNoteCreateClick} />);
 
-    const icons = queryAllByTestId('svg-icon'); // this test is probably appropriate to keep in the old format
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Notes');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Notes',
+    );
+    expect(screen.queryByTestId('new-icon')).toBeNull();
   });
 });

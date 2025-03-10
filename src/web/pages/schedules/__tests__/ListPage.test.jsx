@@ -410,7 +410,10 @@ describe('SchedulePage ToolBarIcons test', () => {
 
     const links = element.querySelectorAll('a');
 
-    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Schedules',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-schedules',
@@ -432,11 +435,9 @@ describe('SchedulePage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />);
 
-    const newIcon = screen.getAllByTitle('New Schedule');
-
-    expect(newIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(newIcon[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'New Schedule');
+    fireEvent.click(newIcon);
     expect(handleScheduleCreateClick).toHaveBeenCalled();
   });
 
@@ -453,12 +454,9 @@ describe('SchedulePage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
-      <ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />,
-    );
+    render(<ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />);
 
-    const icons = queryAllByTestId('svg-icon'); // this test is probably appropriate to keep in the old format
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
+    const newIcon = screen.queryByTestId('new-icon');
+    expect(newIcon).not.toBeInTheDocument();
   });
 });

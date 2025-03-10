@@ -10,10 +10,10 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {vi} from 'vitest';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/policies/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/policies/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, act} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
   default: () => null,
@@ -209,8 +209,8 @@ const getPermissions = testing.fn().mockResolvedValue({
   },
 });
 
-describe('Policy Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('Policy DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const getPolicy = testing.fn().mockResolvedValue({
       data: policy,
     });
@@ -241,22 +241,23 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     expect(baseElement).toBeVisible();
     expect(baseElement).toHaveTextContent('Policy: foo');
 
     const links = baseElement.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    const helpIcon = screen.getByTestId('help-icon');
+    expect(helpIcon).toHaveAttribute('title', 'Help: Policies');
+    const listIcon = screen.getByTestId('list-icon');
+    expect(listIcon).toHaveAttribute('title', 'Policies List');
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
     );
 
     expect(links[1]).toHaveAttribute('href', '/policies');
-    expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
     expect(baseElement).toHaveTextContent('12345');
     expect(baseElement).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
@@ -268,8 +269,7 @@ describe('Policy Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('audit2');
     expect(baseElement).not.toHaveTextContent('scanner');
 
-    const detailsLinks = getAllByTestId('details-link');
-
+    const detailsLinks = screen.getAllByTestId('details-link');
     expect(detailsLinks[0]).toHaveAttribute('href', '/audit/1234');
     expect(detailsLinks[1]).toHaveAttribute('href', '/audit/5678');
   });
@@ -306,7 +306,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[10]);
@@ -319,8 +319,6 @@ describe('Policy Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('0 of 2');
 
     const links = baseElement.querySelectorAll('a');
-
-    const icons = getAllByTestId('svg-icon');
 
     expect(links[2]).toHaveAttribute(
       'href',
@@ -340,19 +338,21 @@ describe('Policy Detailspage tests', () => {
     );
     expect(links[4]).toHaveAttribute('title', 'NVTs of family family3');
 
-    expect(icons[7]).toHaveAttribute(
+    const dynamicIcons = screen.getAllByTestId('trend-more-icon');
+    expect(dynamicIcons[0]).toHaveAttribute(
       'title',
       'The families selection is DYNAMIC. New families will automatically be added and considered.',
     );
-    expect(icons[8]).toHaveAttribute(
+    expect(dynamicIcons[1]).toHaveAttribute(
       'title',
       'The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.',
     );
-    expect(icons[9]).toHaveAttribute(
+    const staticIcons = screen.getAllByTestId('trend-nochange-icon');
+    expect(staticIcons[0]).toHaveAttribute(
       'title',
       'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
     );
-    expect(icons[10]).toHaveAttribute(
+    expect(staticIcons[1]).toHaveAttribute(
       'title',
       'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
     );
@@ -390,12 +390,12 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[12]);
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveAttribute('href', '/nvt/0');
     expect(detailsLinks[0]).toHaveTextContent('nvt0');
@@ -445,7 +445,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
@@ -520,30 +520,31 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    const listIcon = screen.getByTestId('list-icon');
+    expect(listIcon).toHaveAttribute('title', 'Policies List');
 
-    expect(icons[1]).toHaveAttribute('title', 'Policies List');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(cloneIcon);
+    expect(clone).toHaveBeenCalledWith(policy);
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).toHaveBeenCalledWith(policy);
-      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Policy');
+    fireEvent.click(editIcon);
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(getAllScanners).toHaveBeenCalled();
 
-      fireEvent.click(icons[3]);
-      expect(getNvtFamilies).toHaveBeenCalled();
-      expect(getAllScanners).toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Policy to trashcan');
+    fireEvent.click(deleteIcon);
+    expect(deleteFunc).toHaveBeenCalledWith(policyId);
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).toHaveBeenCalledWith(policyId);
-      expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
-
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(policy);
-      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
-    });
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Policy as XML');
+    fireEvent.click(exportIcon);
+    expect(exportFunc).toHaveBeenCalledWith(policy);
   });
 
   test('should not call commands without permission', async () => {
@@ -614,39 +615,40 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy2));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    const listIcon = screen.getByTestId('list-icon');
+    expect(listIcon).toHaveAttribute('title', 'Policies List');
 
-    expect(icons[1]).toHaveAttribute('title', 'Policies List');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute(
+      'title',
+      'Permission to clone Policy denied',
+    );
+    fireEvent.click(cloneIcon);
+    expect(clone).not.toHaveBeenCalled();
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).not.toHaveBeenCalled();
-      expect(icons[2]).toHaveAttribute(
-        'title',
-        'Permission to clone Policy denied',
-      );
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute(
+      'title',
+      'Permission to edit Policy denied',
+    );
+    fireEvent.click(editIcon);
+    expect(getNvtFamilies).not.toHaveBeenCalled();
+    expect(getAllScanners).not.toHaveBeenCalled();
 
-      fireEvent.click(icons[3]);
-      expect(getNvtFamilies).not.toHaveBeenCalled();
-      expect(getAllScanners).not.toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute(
-        'title',
-        'Permission to edit Policy denied',
-      );
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Permission to move Policy to trashcan denied',
+    );
+    fireEvent.click(deleteIcon);
+    expect(deleteFunc).not.toHaveBeenCalled();
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute(
-        'title',
-        'Permission to move Policy to trashcan denied',
-      );
-
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(policy2);
-      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
-    });
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Policy as XML');
+    fireEvent.click(exportIcon);
+    expect(exportFunc).toHaveBeenCalledWith(policy2);
   });
 
   test('should (not) call commands if policy is in use', async () => {
@@ -717,30 +719,31 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy3));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    const listIcon = screen.getByTestId('list-icon');
+    expect(listIcon).toHaveAttribute('title', 'Policies List');
 
-    expect(icons[1]).toHaveAttribute('title', 'Policies List');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(cloneIcon);
+    expect(clone).toHaveBeenCalledWith(policy3);
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).toHaveBeenCalledWith(policy3);
-      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Policy');
+    fireEvent.click(editIcon);
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(getAllScanners).toHaveBeenCalled();
 
-      fireEvent.click(icons[3]);
-      expect(getNvtFamilies).toHaveBeenCalled();
-      expect(getAllScanners).toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Policy is still in use');
+    fireEvent.click(deleteIcon);
+    expect(deleteFunc).not.toHaveBeenCalled();
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
-
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(policy3);
-      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
-    });
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Policy as XML');
+    fireEvent.click(exportIcon);
+    expect(exportFunc).toHaveBeenCalledWith(policy3);
   });
 
   test('should (not) call commands if policy is not writable', async () => {
@@ -811,30 +814,31 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy4));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    const listIcon = screen.getByTestId('list-icon');
+    expect(listIcon).toHaveAttribute('title', 'Policies List');
 
-    expect(icons[1]).toHaveAttribute('title', 'Policies List');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(cloneIcon);
+    expect(clone).toHaveBeenCalledWith(policy4);
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).toHaveBeenCalledWith(policy4);
-      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Policy is not writable');
+    fireEvent.click(editIcon);
+    expect(getNvtFamilies).not.toHaveBeenCalled();
+    expect(getAllScanners).not.toHaveBeenCalled();
 
-      fireEvent.click(icons[3]);
-      expect(getNvtFamilies).not.toHaveBeenCalled();
-      expect(getAllScanners).not.toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Policy is not writable');
+    fireEvent.click(deleteIcon);
+    expect(deleteFunc).not.toHaveBeenCalled();
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
-
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(policy4);
-      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
-    });
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Policy as XML');
+    fireEvent.click(exportIcon);
+    expect(exportFunc).toHaveBeenCalledWith(policy4);
   });
 
   // TODO: should render scanner preferences tab
@@ -855,7 +859,7 @@ describe('Policy ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons
         entity={policy}
         onPolicyCloneClick={handlePolicyCloneClick}
@@ -868,16 +872,16 @@ describe('Policy ToolBarIcons tests', () => {
     expect(element).toBeVisible();
 
     const links = element.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    const helpIcon = screen.getByTestId('help-icon');
+    const listIcon = screen.getByTestId('list-icon');
+    expect(helpIcon).toHaveAttribute('title', 'Help: Policies');
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
     );
-
+    expect(listIcon).toHaveAttribute('title', 'Policies List');
     expect(links[1]).toHaveAttribute('href', '/policies');
-    expect(icons[1]).toHaveAttribute('title', 'Policies List');
   });
 
   test('should call click handlers', () => {
@@ -894,7 +898,7 @@ describe('Policy ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={policy}
         onPolicyCloneClick={handlePolicyCloneClick}
@@ -904,23 +908,25 @@ describe('Policy ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[2]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(cloneIcon);
     expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Policy');
+    fireEvent.click(editIcon);
     expect(handlePolicyEditClick).toHaveBeenCalledWith(policy);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
-    fireEvent.click(icons[4]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Policy to trashcan');
+    fireEvent.click(deleteIcon);
     expect(handlePolicyDeleteClick).toHaveBeenCalledWith(policy);
-    expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
 
-    fireEvent.click(icons[5]);
+    const downloadIcon = screen.getByTestId('export-icon');
+    expect(downloadIcon).toHaveAttribute('title', 'Export Policy as XML');
+    fireEvent.click(downloadIcon);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy);
-    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should not call click handlers without permission', () => {
@@ -937,7 +943,7 @@ describe('Policy ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={policy2}
         onPolicyCloneClick={handlePolicyCloneClick}
@@ -947,32 +953,34 @@ describe('Policy ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[2]);
-    expect(handlePolicyCloneClick).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Policy denied',
     );
+    fireEvent.click(cloneIcon);
+    expect(handlePolicyCloneClick).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[3]);
-    expect(handlePolicyEditClick).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Policy denied',
     );
+    fireEvent.click(editIcon);
+    expect(handlePolicyEditClick).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[4]);
-    expect(handlePolicyDeleteClick).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Policy to trashcan denied',
     );
+    fireEvent.click(deleteIcon);
+    expect(handlePolicyDeleteClick).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[5]);
+    const downloadIcon = screen.getByTestId('export-icon');
+    expect(downloadIcon).toHaveAttribute('title', 'Export Policy as XML');
+    fireEvent.click(downloadIcon);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy2);
-    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should (not) call click handlers if policy is in use', () => {
@@ -989,7 +997,7 @@ describe('Policy ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={policy3}
         onPolicyCloneClick={handlePolicyCloneClick}
@@ -999,23 +1007,25 @@ describe('Policy ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[2]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(cloneIcon);
     expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy3);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Policy');
+    fireEvent.click(editIcon);
     expect(handlePolicyEditClick).toHaveBeenCalledWith(policy3);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
-    fireEvent.click(icons[4]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Policy is still in use');
+    fireEvent.click(deleteIcon);
     expect(handlePolicyDeleteClick).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
 
-    fireEvent.click(icons[5]);
+    const downloadIcon = screen.getByTestId('export-icon');
+    expect(downloadIcon).toHaveAttribute('title', 'Export Policy as XML');
+    fireEvent.click(downloadIcon);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy3);
-    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should (not) call click handlers if policy is not writable', () => {
@@ -1032,7 +1042,7 @@ describe('Policy ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={policy4}
         onPolicyCloneClick={handlePolicyCloneClick}
@@ -1042,22 +1052,24 @@ describe('Policy ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[2]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(cloneIcon);
     expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy4);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Policy is not writable');
+    fireEvent.click(editIcon);
     expect(handlePolicyEditClick).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
 
-    fireEvent.click(icons[4]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Policy is not writable');
+    fireEvent.click(deleteIcon);
     expect(handlePolicyDeleteClick).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
 
-    fireEvent.click(icons[5]);
+    const downloadIcon = screen.getByTestId('export-icon');
+    expect(downloadIcon).toHaveAttribute('title', 'Export Policy as XML');
+    fireEvent.click(downloadIcon);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy4);
-    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 });

@@ -133,8 +133,8 @@ beforeEach(() => {
   });
 });
 
-describe('Host listpage tests', () => {
-  test('should render full host listpage', async () => {
+describe('Host ListPage tests', () => {
+  test('should render full host ListPage', async () => {
     const gmp = {
       hosts: {
         get: getHosts,
@@ -321,16 +321,12 @@ describe('Host listpage tests', () => {
 
     // export page contents
     fireEvent.click(screen.getAllByTitle('Export page contents')[0]);
-
     await wait();
-
     expect(exportByFilter).toHaveBeenCalled();
 
     // delete page contents
     fireEvent.click(screen.getAllByTitle('Delete page contents')[0]);
-
     await wait();
-
     testBulkDeleteDialog(screen, deleteByFilter);
   });
 
@@ -485,7 +481,7 @@ describe('Host listpage tests', () => {
   });
 });
 
-describe('Host listpage ToolBarIcons test', () => {
+describe('Host ListPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleCreateHostClick = testing.fn();
 
@@ -503,18 +499,18 @@ describe('Host listpage ToolBarIcons test', () => {
       <ToolBarIcons onHostCreateClick={handleCreateHostClick} />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
-    expect(icons.length).toBe(2);
-
-    expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Hosts',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-assets.html#managing-hosts',
     );
 
-    expect(screen.getAllByTitle('New Host')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('new-icon')).toHaveAttribute('title', 'New Host');
   });
 
   test('should call click handlers', () => {
@@ -550,10 +546,6 @@ describe('Host listpage ToolBarIcons test', () => {
     });
 
     render(<ToolBarIcons onHostCreateClick={handleCreateHostClick} />);
-
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons.length).toBe(1);
 
     expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
     expect(screen.queryByTitle('New Host')).not.toBeInTheDocument();

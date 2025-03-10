@@ -495,7 +495,10 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditConfigFamilyDialog = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+    });
     render(
       <EditScanConfigDialog
         comment="bar"
@@ -520,27 +523,26 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const content = getDialogContent();
-    const sections = content.querySelectorAll('section');
+    const editNvtFamiliesSection = screen.getByTestId('nvt-families-section');
+    const editFamilyIcons = getAllByTestId(editNvtFamiliesSection, 'edit-icon');
+    fireEvent.click(editFamilyIcons[0]);
 
-    const editFamilyIcons = getAllByTestId(sections[0], 'svg-icon');
-    fireEvent.click(editFamilyIcons[3]);
-
-    expect(editFamilyIcons[3]).toHaveAttribute(
+    expect(editFamilyIcons[0]).toHaveAttribute(
       'title',
       'Edit Scan Config Family',
     );
+    expect(handleOpenEditConfigFamilyDialog).toHaveBeenCalledWith('family1');
 
-    const editNvtIcons = getAllByTestId(sections[2], 'svg-icon');
-    fireEvent.click(editNvtIcons[1]);
+    const editNvtPreferencesSection = screen.getByTestId(
+      'nvt-preferences-section',
+    );
+    const editNvtIcons = getAllByTestId(editNvtPreferencesSection, 'edit-icon');
+    fireEvent.click(editNvtIcons[0]);
 
     expect(editNvtIcons[1]).toHaveAttribute(
       'title',
       'Edit Scan Config NVT Details',
     );
-
-    expect(handleOpenEditConfigFamilyDialog).toHaveBeenCalledWith('family1');
-
     expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith('1.2.1');
   });
 
