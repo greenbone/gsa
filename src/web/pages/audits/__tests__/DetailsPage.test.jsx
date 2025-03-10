@@ -10,12 +10,11 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
-import {clickElement, getActionItems} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/audits/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/audits/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 const policy = Policy.fromElement({
   _id: '314',
@@ -256,8 +255,8 @@ const getEntities = testing.fn().mockResolvedValue({
   },
 });
 
-describe('Audit Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('Audit DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const getAudit = testing.fn().mockResolvedValue({
       data: audit,
     });
@@ -297,22 +296,26 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     expect(baseElement).toBeVisible();
-
     expect(baseElement).toHaveTextContent('Audit: foo');
 
     const links = baseElement.querySelectorAll('a');
-    const icons = getActionItems();
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Audits',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-audits',
     );
 
-    expect(icons[1]).toHaveAttribute('title', 'Audit List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Audit List',
+    );
     expect(links[1]).toHaveAttribute('href', '/audits');
 
     expect(baseElement).toHaveTextContent('12345');
@@ -323,12 +326,12 @@ describe('Audit Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('bar');
 
-    const progressBars = getAllByTestId('progressbar-box');
+    const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Done');
     expect(progressBars[0]).toHaveTextContent('Done');
 
     const headings = baseElement.querySelectorAll('h2');
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(headings[1]).toHaveTextContent('Target');
     expect(detailsLinks[2]).toHaveAttribute('href', '/target/5678');
@@ -393,7 +396,7 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit2));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
 
@@ -466,34 +469,37 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit5));
 
-    render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = getActionItems();
-
+    const cloneIcon = screen.getByTestId('clone-icon');
     expect(clone).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
-    await clickElement(icons[2]);
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
+    fireEvent.click(cloneIcon);
     expect(clone).toHaveBeenCalledWith(audit5);
 
-    expect(deleteFunc).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
-    await clickElement(icons[4]);
-    expect(deleteFunc).toHaveBeenCalledWith(audit5Id);
-
+    const exportIcon = screen.getByTestId('export-icon');
     expect(exportFunc).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
-    await clickElement(icons[5]);
-    // expect(exportFunc).toHaveBeenCalled(audit5);
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit as XML');
+    fireEvent.click(exportIcon);
+    expect(exportFunc).toHaveBeenCalled(audit5);
 
+    const startIcon = screen.getByTestId('start-icon');
     expect(start).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Start');
-    await clickElement(icons[6]);
-    // expect(start).toHaveBeenCalledWith(audit5);
+    expect(startIcon).toHaveAttribute('title', 'Start');
+    fireEvent.click(startIcon);
+    expect(start).toHaveBeenCalledWith(audit5);
 
+    const resumeIcon = screen.getByTestId('resume-icon');
     expect(resume).not.toHaveBeenCalledWith(audit5);
-    expect(icons[7]).toHaveAttribute('title', 'Resume');
-    await clickElement(icons[7]);
-    // expect(resume).toHaveBeenCalledWith(audit5);
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
+    fireEvent.click(resumeIcon);
+    expect(resume).toHaveBeenCalledWith(audit5);
+
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteFunc).not.toHaveBeenCalled();
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
+    fireEvent.click(deleteIcon);
+    expect(deleteFunc).toHaveBeenCalledWith(audit5Id);
   });
 });
 
@@ -530,17 +536,21 @@ describe('Audit ToolBarIcons tests', () => {
 
     expect(element).toBeVisible();
 
-    const icons = getActionItems();
     const links = element.querySelectorAll('a');
 
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-audits',
     );
-    expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
-
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Audits',
+    );
     expect(links[1]).toHaveAttribute('href', '/audits');
-    expect(icons[1]).toHaveAttribute('title', 'Audit List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Audit List',
+    );
   });
 
   test('should call click handlers for new audit', () => {
@@ -560,7 +570,7 @@ describe('Audit ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={audit3}
         onAuditCloneClick={handleAuditCloneClick}
@@ -573,33 +583,38 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getActionItems();
-    const badgeIcons = getAllByTestId('badge-icon');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    fireEvent.click(icons[2]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit3);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit3);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDeleteClick).toHaveBeenCalledWith(audit3);
-    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit3);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit as XML');
 
-    fireEvent.click(icons[6]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit3);
-    expect(icons[6]).toHaveAttribute('title', 'Start');
+    expect(startIcon).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[7]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
-    expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
     expect(links[2]).toHaveAttribute(
       'href',
@@ -630,7 +645,7 @@ describe('Audit ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={audit4}
         onAuditCloneClick={handleAuditCloneClick}
@@ -643,37 +658,42 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getActionItems();
-    const badgeIcons = getAllByTestId('badge-icon');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
+    const cloneIcon = screen.getByTestId('clone-icon');
     expect(handleAuditCloneClick).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
-    fireEvent.click(icons[2]);
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
+    fireEvent.click(cloneIcon);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit4);
 
+    const editIcon = screen.getByTestId('edit-icon');
     expect(handleAuditEditClick).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
-    fireEvent.click(icons[3]);
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
+    fireEvent.click(editIcon);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit4);
 
-    expect(icons[4]).toHaveAttribute('title', 'Audit is still in use');
-    fireEvent.click(icons[4]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Audit is still in use');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDeleteClick).not.toHaveBeenCalled();
 
+    const exportIcon = screen.getByTestId('export-icon');
     expect(handleAuditDownloadClick).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
-    fireEvent.click(icons[5]);
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit as XML');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit4);
 
-    expect(icons[6]).toHaveAttribute('title', 'Stop');
+    const stopIcon = screen.getByTestId('stop-icon');
+    expect(stopIcon).toHaveAttribute('title', 'Stop');
     expect(handleAuditStopClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[6]);
+    fireEvent.click(stopIcon);
     expect(handleAuditStartClick).not.toHaveBeenCalled();
     expect(handleAuditStopClick).toHaveBeenCalledWith(audit4);
 
-    expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
-    fireEvent.click(icons[7]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
 
     expect(links[2]).toHaveAttribute('href', '/report/12342');
@@ -711,7 +731,7 @@ describe('Audit ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={audit5}
         onAuditCloneClick={handleAuditCloneClick}
@@ -724,38 +744,43 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getActionItems();
-    const badgeIcons = getAllByTestId('badge-icon');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
     expect(handleAuditCloneClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[2]);
+    fireEvent.click(cloneIcon);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit5);
 
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
     expect(handleAuditEditClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[3]);
+    fireEvent.click(editIcon);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit5);
 
-    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
     expect(handleAuditDeleteClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[4]);
+    fireEvent.click(deleteIcon);
     expect(handleAuditDeleteClick).toHaveBeenCalledWith(audit5);
 
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit as XML');
     expect(handleAuditDownloadClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[5]);
+    fireEvent.click(exportIcon);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit5);
 
-    expect(icons[6]).toHaveAttribute('title', 'Start');
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute('title', 'Start');
     expect(handleAuditStartClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[6]);
+    fireEvent.click(startIcon);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit5);
 
-    expect(icons[7]).toHaveAttribute('title', 'Resume');
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[7]);
+    fireEvent.click(resumeIcon);
     expect(handleAuditResumeClick).toHaveBeenCalledWith(audit5);
 
     expect(links[2]).toHaveAttribute('href', '/report/12342');
@@ -793,7 +818,7 @@ describe('Audit ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={audit2}
         onAuditCloneClick={handleAuditCloneClick}
@@ -806,36 +831,41 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getActionItems();
-    const badgeIcons = getAllByTestId('badge-icon');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
     expect(handleAuditCloneClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[2]);
+    fireEvent.click(cloneIcon);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit2);
 
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
     expect(handleAuditEditClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[3]);
+    fireEvent.click(editIcon);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit2);
 
-    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
-    fireEvent.click(icons[4]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDeleteClick).toHaveBeenCalled();
 
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit as XML');
     expect(handleAuditDownloadClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[5]);
+    fireEvent.click(exportIcon);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit2);
 
-    expect(icons[6]).toHaveAttribute('title', 'Start');
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute('title', 'Start');
     expect(handleAuditStartClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[6]);
+    fireEvent.click(startIcon);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit2);
 
-    expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
-    fireEvent.click(icons[7]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
 
     expect(links[2]).toHaveAttribute('href', '/auditreport/1234');
@@ -873,7 +903,7 @@ describe('Audit ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={audit6}
         onAuditCloneClick={handleAuditCloneClick}
@@ -886,43 +916,48 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getActionItems();
-    const badgeIcons = getAllByTestId('badge-icon');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
     expect(handleAuditCloneClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[2]);
+    fireEvent.click(cloneIcon);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit6);
 
-    expect(icons[3]).toHaveAttribute(
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Audit denied',
     );
-    fireEvent.click(icons[3]);
+    fireEvent.click(editIcon);
     expect(handleAuditEditClick).not.toHaveBeenCalled();
 
-    expect(icons[4]).toHaveAttribute(
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Audit to trashcan denied',
     );
-    fireEvent.click(icons[4]);
+    fireEvent.click(deleteIcon);
     expect(handleAuditDeleteClick).not.toHaveBeenCalled();
 
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit as XML');
     expect(handleAuditDownloadClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[5]);
+    fireEvent.click(exportIcon);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit6);
 
-    expect(icons[6]).toHaveAttribute(
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute(
       'title',
       'Permission to start audit denied',
     );
-    fireEvent.click(icons[6]);
+    fireEvent.click(startIcon);
     expect(handleAuditStartClick).not.toHaveBeenCalled();
 
-    expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
-    fireEvent.click(icons[7]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
 
     expect(links[2]).toHaveAttribute('href', '/auditreport/1234');
@@ -961,7 +996,7 @@ describe('Audit ToolBarIcons tests', () => {
       store: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={audit7}
         onAuditCloneClick={handleAuditCloneClick}
@@ -974,8 +1009,7 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getActionItems();
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveAttribute('href', '/schedule/121314');
     expect(detailsLinks[0]).toHaveAttribute(
@@ -983,13 +1017,15 @@ describe('Audit ToolBarIcons tests', () => {
       'View Details of Schedule schedule1 (Next due: over)',
     );
 
-    expect(icons[7]).toHaveAttribute('title', 'Start');
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute('title', 'Start');
     expect(handleAuditStartClick).not.toHaveBeenCalled();
-    fireEvent.click(icons[7]);
+    fireEvent.click(startIcon);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit7);
 
-    expect(icons[8]).toHaveAttribute('title', 'Audit is scheduled');
-    fireEvent.click(icons[8]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is scheduled');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
   });
 });

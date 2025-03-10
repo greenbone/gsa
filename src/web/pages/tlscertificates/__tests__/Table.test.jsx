@@ -10,8 +10,7 @@ import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tlscertificate';
 import Table from 'web/pages/tlscertificates/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 
@@ -102,7 +101,7 @@ describe('TlsCertificates table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <Table
         entities={[tlsCertificate]}
         entitiesCounts={counts}
@@ -118,9 +117,10 @@ describe('TlsCertificates table tests', () => {
     expect(element).not.toHaveTextContent('SHA-256 Fingerprint');
     expect(element).not.toHaveTextContent('MD5 Fingerprint');
 
-    const icons = getAllByTestId('svg-icon');
-    fireEvent.click(icons[0]);
-    expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
+    const unfoldIcon = screen.getByTestId('fold-state-icon-unfold');
+    fireEvent.click(unfoldIcon);
+    expect(unfoldIcon).toHaveAttribute('title', 'Unfold all details');
+
     expect(element).toHaveTextContent('Valid');
     expect(element).toHaveTextContent('SHA-256 Fingerprint');
     expect(element).toHaveTextContent('MD5 Fingerprint');
@@ -145,7 +145,7 @@ describe('TlsCertificates table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId} = render(
+    render(
       <Table
         entities={[tlsCertificate]}
         entitiesCounts={counts}
@@ -157,18 +157,22 @@ describe('TlsCertificates table tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[5]);
-    expect(icons[5]).toHaveAttribute('title', 'Delete TLS Certificate');
+    const deleteIcon = screen.getAllByTestId('delete-icon')[0];
+    fireEvent.click(deleteIcon);
+    expect(deleteIcon).toHaveAttribute('title', 'Delete TLS Certificate');
     expect(handleTlsCertificateDelete).toHaveBeenCalledWith(tlsCertificate);
 
-    fireEvent.click(icons[6]);
-    expect(icons[6]).toHaveAttribute('title', 'Download TLS Certificate');
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
+    expect(downloadIcon).toHaveAttribute('title', 'Download TLS Certificate');
     expect(handleTlsCertificateDownload).toHaveBeenCalledWith(tlsCertificate);
 
-    fireEvent.click(icons[7]);
-    expect(icons[7]).toHaveAttribute('title', 'Export TLS Certificate as XML');
+    const exportIcon = screen.getAllByTestId('export-icon')[0];
+    fireEvent.click(exportIcon);
+    expect(exportIcon).toHaveAttribute(
+      'title',
+      'Export TLS Certificate as XML',
+    );
     expect(handleTlsCertificateDownload).toHaveBeenCalledWith(tlsCertificate);
   });
 });

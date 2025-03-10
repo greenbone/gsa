@@ -8,8 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import ReportConfig from 'gmp/models/reportconfig';
 import Row from 'web/pages/reportconfigs/Row';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWithTable, fireEvent, screen} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -39,11 +38,6 @@ const orphanEntity = ReportConfig.fromElement({
 });
 
 describe('Report Config row tests', () => {
-  // deactivate console.error for tests
-  // to make it possible to test a row without a table
-  const consoleError = console.error;
-  console.error = () => {};
-
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
     const handleReportConfigClone = testing.fn();
@@ -51,12 +45,13 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
       router: true,
     });
+    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
       <Row
@@ -82,12 +77,13 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
       router: true,
     });
+    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
       <Row
@@ -130,7 +126,7 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -139,7 +135,7 @@ describe('Report Config row tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId} = render(
+    render(
       <Row
         entity={config}
         onReportConfigCloneClick={handleReportConfigClone}
@@ -150,8 +146,11 @@ describe('Report Config row tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    expect(icons[0]).toHaveAttribute('title', 'Report Config owned by user');
+    const observerIcon = screen.getByTestId('observer-icon');
+    expect(observerIcon).toHaveAttribute(
+      'title',
+      'Report Config owned by user',
+    );
   });
 
   test('should call click handlers', () => {
@@ -161,14 +160,15 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: true,
       store: true,
       router: true,
     });
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={entity}
         onReportConfigCloneClick={handleReportConfigClone}
@@ -179,26 +179,30 @@ describe('Report Config row tests', () => {
       />,
     );
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
 
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[1]).toHaveAttribute('title', 'Move Report Config to trashcan');
-    fireEvent.click(icons[1]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Move Report Config to trashcan',
+    );
+    fireEvent.click(deleteIcon);
     expect(handleReportConfigDelete).toHaveBeenCalledWith(entity);
 
-    expect(icons[2]).toHaveAttribute('title', 'Edit Report Config');
-    fireEvent.click(icons[2]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Report Config');
+    fireEvent.click(editIcon);
     expect(handleReportConfigEdit).toHaveBeenCalledWith(entity);
 
-    expect(icons[3]).toHaveAttribute('title', 'Clone Report Config');
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Report Config');
+    fireEvent.click(cloneIcon);
     expect(handleReportConfigClone).toHaveBeenCalledWith(entity);
 
-    expect(icons[4]).toHaveAttribute('title', 'Export Report Config');
-    fireEvent.click(icons[4]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Report Config');
+    fireEvent.click(exportIcon);
     expect(handleReportConfigDownload).toHaveBeenCalledWith(entity);
   });
 
@@ -221,14 +225,15 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
       router: true,
     });
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={config}
         onReportConfigCloneClick={handleReportConfigClone}
@@ -239,36 +244,37 @@ describe('Report Config row tests', () => {
       />,
     );
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
-    expect(handleReportConfigDelete).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute(
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Report Config to trashcan denied',
     );
+    fireEvent.click(deleteIcon);
+    expect(handleReportConfigDelete).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[1]);
-    expect(handleReportConfigEdit).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute(
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Report Config denied',
     );
+    fireEvent.click(editIcon);
+    expect(handleReportConfigEdit).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[2]);
-    expect(handleReportConfigClone).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Report Config denied',
     );
+    fireEvent.click(cloneIcon);
+    expect(handleReportConfigClone).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[3]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Report Config');
+    fireEvent.click(exportIcon);
     expect(handleReportConfigDownload).toHaveBeenCalledWith(config);
-    expect(icons[3]).toHaveAttribute('title', 'Export Report Config');
   });
 
   test('should (not) call click handlers if scan config is in use', () => {
@@ -291,14 +297,15 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: true,
       store: true,
       router: true,
     });
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={config}
         onReportConfigCloneClick={handleReportConfigClone}
@@ -309,27 +316,31 @@ describe('Report Config row tests', () => {
       />,
     );
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Report Config is still in use',
+    );
+    fireEvent.click(deleteIcon);
     expect(handleReportConfigDelete).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute('title', 'Report Config is still in use');
 
-    fireEvent.click(icons[1]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Report Config');
+    fireEvent.click(editIcon);
     expect(handleReportConfigEdit).toHaveBeenCalledWith(config);
-    expect(icons[1]).toHaveAttribute('title', 'Edit Report Config');
 
-    fireEvent.click(icons[2]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Report Config');
+    fireEvent.click(cloneIcon);
     expect(handleReportConfigClone).toHaveBeenCalledWith(config);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Report Config');
 
-    fireEvent.click(icons[3]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Report Config');
+    fireEvent.click(exportIcon);
     expect(handleReportConfigDownload).toHaveBeenCalledWith(config);
-    expect(icons[3]).toHaveAttribute('title', 'Export Report Config');
   });
 
   test('should (not) call click handlers if scan config is not writable', () => {
@@ -352,14 +363,15 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: true,
       store: true,
       router: true,
     });
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={config}
         onReportConfigCloneClick={handleReportConfigClone}
@@ -370,24 +382,30 @@ describe('Report Config row tests', () => {
       />,
     );
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[1]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Report Config is not writable',
+    );
+    fireEvent.click(deleteIcon);
     expect(handleReportConfigDelete).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Report Config is not writable');
 
-    fireEvent.click(icons[2]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Report Config');
+    fireEvent.click(cloneIcon);
     expect(handleReportConfigClone).toHaveBeenCalledWith(config);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Report Config');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Report Config is not writable');
+    fireEvent.click(editIcon);
+    expect(handleReportConfigEdit).not.toHaveBeenCalled();
+
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Report Config');
+    fireEvent.click(exportIcon);
     expect(handleReportConfigDownload).toHaveBeenCalledWith(config);
-    expect(icons[3]).toHaveAttribute('title', 'Export Report Config');
   });
-
-  console.warn = consoleError;
 });

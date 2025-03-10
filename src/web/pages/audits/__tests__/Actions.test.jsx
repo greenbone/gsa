@@ -7,9 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Actions from 'web/pages/audits/Actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-import Theme from 'web/utils/Theme';
-
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_task']);
@@ -79,7 +77,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={audit}
         gcrFormatDefined={true}
@@ -95,35 +93,40 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
+    expect(startIcon).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).toHaveBeenCalledWith(audit);
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
@@ -149,7 +152,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = testing.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={audit}
         gcrFormatDefined={true}
@@ -165,47 +168,52 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStart).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute(
+    expect(startIcon).toHaveAttribute(
       'title',
       'Permission to start audit denied',
     );
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Audit to trashcan denied',
     );
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Audit denied',
     );
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Audit denied',
     );
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
@@ -231,7 +239,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = testing.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={audit}
         gcrFormatDefined={true}
@@ -247,50 +255,55 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStart).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute(
+    expect(startIcon).toHaveAttribute(
       'title',
       'Permission to start audit denied',
     );
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute(
+    expect(resumeIcon).toHaveAttribute(
       'title',
       'Permission to resume audit denied',
     );
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Audit to trashcan denied',
     );
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Audit denied',
     );
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Audit denied',
     );
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
@@ -316,7 +329,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = testing.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={audit}
         gcrFormatDefined={true}
@@ -332,47 +345,52 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const stopIcon = screen.getByTestId('stop-icon');
+    fireEvent.click(stopIcon);
     expect(handleAuditStop).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute(
+    expect(stopIcon).toHaveAttribute(
       'title',
       'Permission to stop audit denied',
     );
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Audit to trashcan denied',
     );
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Audit denied',
     );
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Audit denied',
     );
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
@@ -398,7 +416,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={audit}
         gcrFormatDefined={true}
@@ -414,36 +432,44 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const stopIcon = screen.getByTestId('stop-icon');
+    fireEvent.click(stopIcon);
     expect(handleAuditStop).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Stop');
+    expect(stopIcon).toHaveAttribute('title', 'Stop');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Audit is still in use');
+    expect(deleteIcon).toHaveAttribute('title', 'Audit is still in use');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
     // should not be called because the audit does not have a report yet
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Report download not available');
+    expect(downloadIcon).toHaveAttribute(
+      'title',
+      'Report download not available',
+    );
   });
 
   test('should call click handlers for stopped audit', () => {
@@ -466,7 +492,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={audit}
         gcrFormatDefined={true}
@@ -482,35 +508,40 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    fireEvent.click(startIcon);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
+    expect(startIcon).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).toHaveBeenCalledWith(audit);
-    expect(icons[1]).toHaveAttribute('title', 'Resume');
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    fireEvent.click(deleteIcon);
     expect(handleAuditDelete).toHaveBeenCalledWith(audit);
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    fireEvent.click(editIcon);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
+    expect(editIcon).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    fireEvent.click(cloneIcon);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+    expect(exportIcon).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
+    expect(downloadIcon).toHaveAttribute(
       'title',
       'Download Greenbone Compliance Report',
     );
@@ -536,7 +567,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={audit}
         gcrFormatDefined={false}
@@ -552,14 +583,13 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[6]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleReportDownload).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Report download not available');
-    expect(icons[6]).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(downloadIcon).toHaveAttribute(
+      'title',
+      'Report download not available',
+    );
   });
 
   test('should render schedule icon if task is scheduled', () => {
@@ -591,7 +621,7 @@ describe('Audit Actions tests', () => {
       store: true,
       router: true,
     });
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={audit}
         gcrFormatDefined={false}
@@ -607,8 +637,7 @@ describe('Audit Actions tests', () => {
       />,
     );
 
-    const detailsLinks = getAllByTestId('details-link');
-    const icons = getAllByTestId('svg-icon');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     fireEvent.click(detailsLinks[0]);
     expect(detailsLinks[0]).toHaveAttribute(
@@ -616,9 +645,10 @@ describe('Audit Actions tests', () => {
       'View Details of Schedule schedule1 (Next due: over)',
     );
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    fireEvent.click(resumeIcon);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is scheduled');
+    expect(resumeIcon).toHaveAttribute('title', 'Audit is scheduled');
   });
 
   console.warn = consoleError;

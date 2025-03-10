@@ -12,7 +12,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage from 'web/pages/tlscertificates/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tlscertificates';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith, screen} from 'web/utils/Testing';
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -52,8 +52,8 @@ const getEntities = testing.fn().mockResolvedValue({
   },
 });
 
-describe('TLS Certificate Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('TLS Certificate DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const getTlsCertificate = testing.fn().mockResolvedValue({
       data: tlsCertificate,
     });
@@ -84,24 +84,26 @@ describe('TLS Certificate Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('1234', tlsCertificate));
 
-    const {baseElement, container, getAllByTestId} = render(
-      <DetailsPage id="1234" />,
-    );
+    const {baseElement, container} = render(<DetailsPage id="1234" />);
 
     expect(container).toHaveTextContent(
       'TLS Certificate: CN=LoremIpsumSubject C=Dolor',
     );
 
     const links = baseElement.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: TLS Certificate Assets');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: TLS Certificate Assets',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-assets.html#managing-tls-certificates',
     );
-
-    expect(icons[1]).toHaveAttribute('title', 'TLS Certificates List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'TLS Certificates List',
+    );
     expect(links[1]).toHaveAttribute('href', '/tlscertificates');
 
     expect(container).toHaveTextContent('1234');

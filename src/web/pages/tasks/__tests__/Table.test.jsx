@@ -10,8 +10,7 @@ import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Table from 'web/pages/tasks/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 
@@ -164,7 +163,7 @@ describe('Tasks table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <Table
         entities={[task, task2, task3]}
         entitiesCounts={counts}
@@ -184,9 +183,8 @@ describe('Tasks table tests', () => {
     expect(element).not.toHaveTextContent('target1');
     expect(element).not.toHaveTextContent('target2');
 
-    const icons = getAllByTestId('svg-icon');
-    fireEvent.click(icons[0]);
-    expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
+    const unfoldIcon = screen.getByTestId('fold-state-icon-unfold');
+    fireEvent.click(unfoldIcon);
     expect(element).toHaveTextContent('target1');
     expect(element).toHaveTextContent('target2');
   });
@@ -215,7 +213,7 @@ describe('Tasks table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId} = render(
+    render(
       <Table
         entities={[task, task2, task3]}
         entitiesCounts={counts}
@@ -232,30 +230,34 @@ describe('Tasks table tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[5]);
+    const startIcon = screen.getAllByTestId('start-icon')[0];
+    expect(startIcon).toHaveAttribute('title', 'Start');
+    fireEvent.click(startIcon);
     expect(handleTaskStart).toHaveBeenCalledWith(task);
-    expect(icons[5]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[6]);
+    const resumeIcon = screen.getAllByTestId('resume-icon')[0];
+    expect(resumeIcon).toHaveAttribute('title', 'Task is not stopped');
+    fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(icons[7]);
+    const deleteIcon = screen.getAllByTestId('trashcan-icon')[0];
+    expect(deleteIcon).toHaveAttribute('title', 'Move Task to trashcan');
+    fireEvent.click(deleteIcon);
     expect(handleTaskDelete).toHaveBeenCalledWith(task);
-    expect(icons[7]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[8]);
+    const editIcon = screen.getAllByTestId('edit-icon')[0];
+    expect(editIcon).toHaveAttribute('title', 'Edit Task');
+    fireEvent.click(editIcon);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(icons[8]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[9]);
+    const cloneIcon = screen.getAllByTestId('clone-icon')[0];
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
+    fireEvent.click(cloneIcon);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(icons[9]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[10]);
+    const exportIcon = screen.getAllByTestId('export-icon')[0];
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(icons[10]).toHaveAttribute('title', 'Export Task');
   });
 });

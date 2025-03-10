@@ -15,7 +15,6 @@ import {
 import CreateScanConfigDialog from 'web/pages/scanconfigs/Dialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('CreateScanConfigDialog component tests', () => {
   test('should render dialog with base config as default', () => {
     const handleClose = testing.fn();

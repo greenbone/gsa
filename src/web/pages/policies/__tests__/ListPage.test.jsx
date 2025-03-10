@@ -199,7 +199,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
@@ -207,10 +207,10 @@ describe('PoliciesPage ToolBarIcons test', () => {
     );
     expect(element).toBeVisible();
 
-    const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    const helpIcon = screen.getByTestId('help-icon');
+    expect(helpIcon).toHaveAttribute('title', 'Help: Policies');
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
@@ -231,22 +231,22 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[1]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'New Policy');
+    fireEvent.click(newIcon);
     expect(handlePolicyCreateClick).toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'New Policy');
 
-    fireEvent.click(icons[2]);
+    const importIcon = screen.getByTestId('upload-icon');
+    expect(importIcon).toHaveAttribute('title', 'Import Policy');
+    fireEvent.click(importIcon);
     expect(handlePolicyImportClick).toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Import Policy');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
@@ -261,15 +261,16 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
+    render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
 
-    const icons = queryAllByTestId('svg-icon');
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    const newIcon = screen.queryByTestId('new-icon');
+    expect(newIcon).toBeNull();
+    const importIcon = screen.queryByTestId('upload-icon');
+    expect(importIcon).toBeNull();
   });
 });

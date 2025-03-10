@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Alert from 'gmp/models/alert';
 import Filter from 'gmp/models/filter';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/alerts/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/alerts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
@@ -89,8 +89,8 @@ beforeEach(() => {
   });
 });
 
-describe('Alert Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('Alert DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const gmp = {
       alert: {
         get: getAlert,
@@ -122,20 +122,24 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     expect(baseElement).toHaveTextContent('Alert: foo');
 
     const links = baseElement.querySelectorAll('a');
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: Alerts');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Alerts',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-alerts',
     );
 
-    expect(icons[1]).toHaveAttribute('title', 'Alerts List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Alerts List',
+    );
     expect(links[1]).toHaveAttribute('href', '/alerts');
 
     expect(baseElement).toHaveTextContent('ID:1234');
@@ -194,7 +198,7 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
 
@@ -237,7 +241,7 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
 
@@ -295,29 +299,24 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', alert));
 
-    render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
-    fireEvent.click(icons[3]);
-
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Alert');
+    fireEvent.click(cloneIcon);
     await wait();
-
     expect(clone).toHaveBeenCalledWith(alert);
 
-    expect(icons[5]).toHaveAttribute('title', 'Move Alert to trashcan');
-    fireEvent.click(icons[5]);
-
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Alert to trashcan');
+    fireEvent.click(deleteIcon);
     await wait();
-
     expect(deleteFunc).toHaveBeenCalledWith({id: alert.id});
 
-    expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
-    fireEvent.click(icons[6]);
-
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Alert as XML');
+    fireEvent.click(exportIcon);
     await wait();
-
     expect(exportFunc).toHaveBeenCalledWith(alert);
   });
 });
@@ -349,17 +348,21 @@ describe('Alert ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-alerts',
     );
-    expect(icons[0]).toHaveAttribute('title', 'Help: Alerts');
-
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Alerts',
+    );
     expect(links[1]).toHaveAttribute('href', '/alerts');
-    expect(icons[1]).toHaveAttribute('title', 'Alerts List');
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Alerts List',
+    );
   });
 
   test('should call click handlers', () => {
@@ -388,23 +391,25 @@ describe('Alert ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Alert');
+    fireEvent.click(cloneIcon);
     expect(handleAlertCloneClick).toHaveBeenCalledWith(alert);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Alert');
+    fireEvent.click(editIcon);
     expect(handleAlertEditClick).toHaveBeenCalledWith(alert);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Alert');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Alert to trashcan');
+    fireEvent.click(deleteIcon);
     expect(handleAlertDeleteClick).toHaveBeenCalledWith(alert);
-    expect(icons[5]).toHaveAttribute('title', 'Move Alert to trashcan');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Alert as XML');
+    fireEvent.click(exportIcon);
     expect(handleAlertDownloadClick).toHaveBeenCalledWith(alert);
-    expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 
   test('should not call click handlers without permission', () => {
@@ -433,30 +438,31 @@ describe('Alert ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Alert');
+    fireEvent.click(cloneIcon);
     expect(handleAlertCloneClick).toHaveBeenCalledWith(observedAlert);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
-    expect(icons[4]).toHaveAttribute(
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute(
       'title',
       'Permission to edit Alert denied',
     );
-    fireEvent.click(icons[4]);
+    fireEvent.click(editIcon);
     expect(handleAlertEditClick).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[5]);
-    expect(handleAlertDeleteClick).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute(
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Alert to trashcan denied',
     );
+    fireEvent.click(deleteIcon);
+    expect(handleAlertDeleteClick).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Alert as XML');
+    fireEvent.click(exportIcon);
     expect(handleAlertDownloadClick).toHaveBeenCalledWith(observedAlert);
-    expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 
   test('should (not) call click handlers for alert in use', () => {
@@ -485,23 +491,24 @@ describe('Alert ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Alert');
+    fireEvent.click(cloneIcon);
     expect(handleAlertCloneClick).toHaveBeenCalledWith(alertInUse);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
-    expect(icons[4]).toHaveAttribute('title', 'Edit Alert');
-    fireEvent.click(icons[4]);
-    expect(handleAlertEditClick).toHaveBeenCalled();
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Alert');
+    fireEvent.click(editIcon);
+    expect(handleAlertEditClick).toHaveBeenCalledWith(alertInUse);
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Alert is still in use');
+    fireEvent.click(deleteIcon);
     expect(handleAlertDeleteClick).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute('title', 'Alert is still in use');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Alert as XML');
+    fireEvent.click(exportIcon);
     expect(handleAlertDownloadClick).toHaveBeenCalledWith(alertInUse);
-    expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 });

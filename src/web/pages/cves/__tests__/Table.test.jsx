@@ -13,7 +13,6 @@ import CveTable from 'web/pages/cves/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-
 const caps = new Capabilities(['everything']);
 
 const entity = Cve.fromElement({
@@ -112,7 +111,7 @@ describe('Cve table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element, getAllByTestId} = render(
+    const {element, getByTestId} = render(
       <CveTable
         entities={[entity, entity2, entity3, entity_v3]}
         entitiesCounts={counts}
@@ -124,9 +123,9 @@ describe('Cve table tests', () => {
     expect(element).not.toHaveTextContent('Confidentiality ImpactPartial');
     expect(element).not.toHaveTextContent('Attack VectorLocal');
 
-    const icons = getAllByTestId('svg-icon');
-    fireEvent.click(icons[0]);
-    expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
+    const unfoldIcon = getByTestId('fold-state-icon-unfold');
+    fireEvent.click(unfoldIcon);
+    expect(unfoldIcon).toHaveAttribute('title', 'Unfold all details');
     expect(element).toHaveTextContent('Availability ImpactComplete');
     expect(element).toHaveTextContent('Confidentiality ImpactPartial');
     expect(element).toHaveTextContent('Attack VectorLocal');

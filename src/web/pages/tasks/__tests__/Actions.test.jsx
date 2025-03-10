@@ -7,18 +7,12 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Actions from 'web/pages/tasks/Actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWithTableRow, fireEvent, screen} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_task']);
 
 describe('Task Actions tests', () => {
-  // deactivate console.error for tests
-  // to make it possible to test actions without a table
-  const consoleError = console.error;
-  console.error = () => {};
-
   test('should render', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.new,
@@ -36,7 +30,7 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps, store: true});
+    const {render} = rendererWithTableRow({capabilities: caps, store: true});
     const {element} = render(
       <Actions
         entity={task}
@@ -73,8 +67,8 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps, store: true});
-    const {getAllByTestId} = render(
+    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    render(
       <Actions
         entity={task}
         links={true}
@@ -89,31 +83,35 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute('title', 'Start');
+    fireEvent.click(startIcon);
     expect(handleTaskStart).toHaveBeenCalledWith(task);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Task is not stopped');
+    fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Task to trashcan');
+    fireEvent.click(deleteIcon);
     expect(handleTaskDelete).toHaveBeenCalledWith(task);
-    expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Task');
+    fireEvent.click(editIcon);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
+    fireEvent.click(cloneIcon);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should not call click handlers without permissions', () => {
@@ -134,8 +132,11 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps, store: true});
-    const {getAllByTestId} = render(
+    const {render} = rendererWithTableRow({
+      capabilities: wrongCaps,
+      store: true,
+    });
+    render(
       <Actions
         entity={task}
         links={true}
@@ -150,40 +151,44 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
-    expect(handleTaskStart).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute(
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute(
       'title',
       'Permission to start task denied',
     );
+    fireEvent.click(startIcon);
+    expect(handleTaskStart).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Task is not stopped');
+    fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(icons[2]);
-    expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Task to trashcan denied',
     );
+    fireEvent.click(deleteIcon);
+    expect(handleTaskDelete).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Permission to edit Task denied');
+    fireEvent.click(editIcon);
     expect(handleTaskEdit).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute('title', 'Permission to edit Task denied');
 
-    fireEvent.click(icons[4]);
-    expect(handleTaskClone).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Task denied',
     );
+    fireEvent.click(cloneIcon);
+    expect(handleTaskClone).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should not call click handlers for stopped task without permissions', () => {
@@ -204,8 +209,11 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps, store: true});
-    const {getAllByTestId} = render(
+    const {render} = rendererWithTableRow({
+      capabilities: wrongCaps,
+      store: true,
+    });
+    render(
       <Actions
         entity={task}
         links={true}
@@ -220,43 +228,47 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
-    expect(handleTaskStart).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute(
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute(
       'title',
       'Permission to start task denied',
     );
+    fireEvent.click(startIcon);
+    expect(handleTaskStart).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[1]);
-    expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute(
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute(
       'title',
       'Permission to resume task denied',
     );
+    fireEvent.click(resumeIcon);
+    expect(handleTaskResume).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[2]);
-    expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Task to trashcan denied',
     );
+    fireEvent.click(deleteIcon);
+    expect(handleTaskDelete).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Permission to edit Task denied');
+    fireEvent.click(editIcon);
     expect(handleTaskEdit).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute('title', 'Permission to edit Task denied');
 
-    fireEvent.click(icons[4]);
-    expect(handleTaskClone).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Task denied',
     );
+    fireEvent.click(cloneIcon);
+    expect(handleTaskClone).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should not call click handlers for running task without permissions', () => {
@@ -277,8 +289,11 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: wrongCaps, store: true});
-    const {getAllByTestId} = render(
+    const {render} = rendererWithTableRow({
+      capabilities: wrongCaps,
+      store: true,
+    });
+    render(
       <Actions
         entity={task}
         links={true}
@@ -293,37 +308,41 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    const stopIcon = screen.getByTestId('stop-icon');
+    expect(stopIcon).toHaveAttribute('title', 'Permission to stop task denied');
+    fireEvent.click(stopIcon);
+    expect(handleTaskStart).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[0]);
-    expect(handleTaskStop).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute('title', 'Permission to stop task denied');
-
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Task is not stopped');
+    fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(icons[2]);
-    expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute(
       'title',
       'Permission to move Task to trashcan denied',
     );
+    fireEvent.click(deleteIcon);
+    expect(handleTaskDelete).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Permission to edit Task denied');
+    fireEvent.click(editIcon);
     expect(handleTaskEdit).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute('title', 'Permission to edit Task denied');
 
-    fireEvent.click(icons[4]);
-    expect(handleTaskClone).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute(
       'title',
       'Permission to clone Task denied',
     );
+    fireEvent.click(cloneIcon);
+    expect(handleTaskClone).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call click handlers for running task', () => {
@@ -344,8 +363,8 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps, store: true});
-    const {getAllByTestId} = render(
+    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    render(
       <Actions
         entity={task}
         links={true}
@@ -360,31 +379,35 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const stopIcon = screen.getByTestId('stop-icon');
+    expect(stopIcon).toHaveAttribute('title', 'Stop');
+    fireEvent.click(stopIcon);
     expect(handleTaskStop).toHaveBeenCalledWith(task);
-    expect(icons[0]).toHaveAttribute('title', 'Stop');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Task is not stopped');
+    fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Task is still in use');
+    fireEvent.click(deleteIcon);
     expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Task is still in use');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Task');
+    fireEvent.click(editIcon);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
+    fireEvent.click(cloneIcon);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call click handlers for stopped task', () => {
@@ -405,8 +428,8 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps, store: true});
-    const {getAllByTestId} = render(
+    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    render(
       <Actions
         entity={task}
         links={true}
@@ -421,31 +444,35 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute('title', 'Start');
+    fireEvent.click(startIcon);
     expect(handleTaskStart).toHaveBeenCalledWith(task);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Resume');
+    fireEvent.click(resumeIcon);
     expect(handleTaskResume).toHaveBeenCalledWith(task);
-    expect(icons[1]).toHaveAttribute('title', 'Resume');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Task to trashcan');
+    fireEvent.click(deleteIcon);
     expect(handleTaskDelete).toHaveBeenCalledWith(task);
-    expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Task');
+    fireEvent.click(editIcon);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
+    fireEvent.click(cloneIcon);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should render schedule icon if task is scheduled', () => {
@@ -471,12 +498,12 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({
+    const {render} = rendererWithTableRow({
       capabilities: caps,
       store: true,
       router: true,
     });
-    const {getAllByTestId} = render(
+    render(
       <Actions
         entity={task}
         links={true}
@@ -491,19 +518,42 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    const detailslinks = getAllByTestId('details-link');
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(detailslinks[0]);
-    expect(detailslinks[0]).toHaveAttribute(
+    const detailsLinks = screen.getAllByTestId('details-link');
+    fireEvent.click(detailsLinks[0]);
+    expect(detailsLinks[0]).toHaveAttribute(
       'title',
       'View Details of Schedule schedule1 (Next due: over)',
     );
 
-    fireEvent.click(icons[2]);
+    const startIcon = screen.getByTestId('start-icon');
+    expect(startIcon).toHaveAttribute('title', 'Start');
+    fireEvent.click(startIcon);
+    expect(handleTaskStart).toHaveBeenCalledWith(task);
+
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Task is scheduled');
+    fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Start');
-    expect(icons[2]).toHaveAttribute('title', 'Task is scheduled');
+
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Task to trashcan');
+    fireEvent.click(deleteIcon);
+    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Task');
+    fireEvent.click(editIcon);
+    expect(handleTaskEdit).toHaveBeenCalledWith(task);
+
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
+    fireEvent.click(cloneIcon);
+    expect(handleTaskClone).toHaveBeenCalledWith(task);
+
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
+    expect(handleTaskDownload).toHaveBeenCalledWith;
   });
 
   test('should call click handlers for container task', () => {
@@ -520,8 +570,8 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps, store: true});
-    const {getAllByTestId} = render(
+    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    render(
       <Actions
         entity={task}
         links={true}
@@ -536,33 +586,34 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const importIcon = screen.getByTestId('import-icon');
+    expect(importIcon).toHaveAttribute('title', 'Import Report');
+    fireEvent.click(importIcon);
     expect(handleReportImport).toHaveBeenCalledWith(task);
-    expect(handleTaskStart).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute('title', 'Import Report');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getByTestId('resume-icon');
+    expect(resumeIcon).toHaveAttribute('title', 'Task is a container');
+    fireEvent.click(resumeIcon);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Task is a container');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getByTestId('trashcan-icon');
+    expect(deleteIcon).toHaveAttribute('title', 'Move Task to trashcan');
+    fireEvent.click(deleteIcon);
     expect(handleTaskDelete).toHaveBeenCalledWith(task);
-    expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Task');
+    fireEvent.click(editIcon);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getByTestId('clone-icon');
+    expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
+    fireEvent.click(cloneIcon);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task');
+    fireEvent.click(exportIcon);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
-
-  console.warn = consoleError;
 });

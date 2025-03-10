@@ -218,7 +218,7 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons
         onScanConfigCreateClick={handleScanConfigCreateClick}
         onScanConfigImportClick={handleScanConfigImportClick}
@@ -226,10 +226,10 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
     );
     expect(element).toBeVisible();
 
-    const icons = getAllByTestId('svg-icon');
+    const helpIcon = screen.getByTestId('help-icon');
     const links = element.querySelectorAll('a');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Scan Configs');
+    expect(helpIcon).toHaveAttribute('title', 'Help: Scan Configs');
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-scan-configurations',
@@ -250,22 +250,22 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         onScanConfigCreateClick={handleScanConfigCreateClick}
         onScanConfigImportClick={handleScanConfigImportClick}
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[1]);
+    const newIcon = screen.getByTestId('new-icon');
+    fireEvent.click(newIcon);
     expect(handleScanConfigCreateClick).toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'New Scan Config');
+    expect(newIcon).toHaveAttribute('title', 'New Scan Config');
 
-    fireEvent.click(icons[2]);
+    const uploadIcon = screen.getByTestId('upload-icon');
+    fireEvent.click(uploadIcon);
     expect(handleScanConfigImportClick).toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Import Scan Config');
+    expect(uploadIcon).toHaveAttribute('title', 'Import Scan Config');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
@@ -280,15 +280,21 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
+    render(
       <ToolBarIcons
         onScanConfigCreateClick={handleScanConfigCreateClick}
         onScanConfigImportClick={handleScanConfigImportClick}
       />,
     );
 
-    const icons = queryAllByTestId('svg-icon');
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Scan Configs');
+    const newIcon = screen.queryByTestId('new-icon');
+    expect(newIcon).toBeNull();
+    const uploadIcon = screen.queryByTestId('upload-icon');
+    expect(uploadIcon).toBeNull();
+
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Scan Configs',
+    );
   });
 });
