@@ -7,6 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
+import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
@@ -39,18 +40,16 @@ const EntityComponent = ({
   const handleEntityDownload = useEntityDownload(name, {
     onDownloadError,
     onDownloaded,
-    onInteraction: handleInteraction,
+    onInteraction,
   });
 
-  const handleEntitySave = async data => {
-    handleInteraction();
-
-    if (isDefined(data.id)) {
-      return actionFunction(cmd.save(data), onSaved, onSaveError);
-    }
-
-    return actionFunction(cmd.create(data), onCreated, onCreateError);
-  };
+  const handleEntitySave = useEntitySave(name, {
+    onSaveError,
+    onSaved,
+    onCreated,
+    onCreateError,
+    onInteraction,
+  });
 
   const handleEntityDelete = useEntityDelete(name, {
     onDeleteError,
