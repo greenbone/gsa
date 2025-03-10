@@ -35,7 +35,14 @@ const Trend = ({name}) => {
     return <span />;
   }
 
-  return <IconComponent alt={title} size="small" title={title} />;
+  return (
+    <IconComponent
+      alt={title}
+      data-testid="trend-icon"
+      size="small"
+      title={title}
+    />
+  );
 };
 
 Trend.propTypes = {
