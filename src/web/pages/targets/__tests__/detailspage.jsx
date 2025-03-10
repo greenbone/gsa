@@ -244,14 +244,48 @@ describe('Target Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('smb_credential');
     expect(links[5]).toHaveAttribute('href', '/credential/4784');
 
-    expect(baseElement).toHaveTextContent('Kerberos');
-    expect(baseElement).toHaveTextContent('krb5');
-    expect(links[6]).toHaveAttribute('href', '/credential/krb5_id');
-
     expect(baseElement).toHaveTextContent('Tasks using this Target (1)');
-    expect(links[7]).toHaveAttribute('href', '/task/465');
+    expect(links[6]).toHaveAttribute('href', '/task/465');
     expect(baseElement).toHaveTextContent('foo');
   });
+
+  test('should render full Detailspage with Kerberos, when KRB5 is enabled', () => {
+    const gmp = {
+      target: {
+        get: getTarget,
+      },
+      permissions: {
+        get: getEntities,
+      },
+      settings: {
+        manualUrl, 
+        reloadInterval,
+        enableKrb5: true
+      },
+      user: {
+        currentSettings,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('46264', target));
+
+    const {baseElement} = render(<Detailspage id="46264" />);
+    const kerberosLink = baseElement.querySelectorAll('a')[6];
+
+    expect(baseElement).toHaveTextContent('Kerberos');
+    expect(baseElement).toHaveTextContent('krb5');
+    expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
+  })
 
   test('should render user tags tab', () => {
     const gmp = {

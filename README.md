@@ -233,6 +233,7 @@ instantiated once for the [GSA application](./src/web/app.js#L53)
 | enableGreenboneSensor                             | Boolean                    | false                                                                            | -                         | x                       |
 | [disableLoginForm](#disableloginform)             | Boolean                    | false                                                                            | -                         | x                       |
 | [enableEPSS](#enableepss)                         | Boolean                    | false                                                                            | x                         | x                       |
+| [enableKrb5](#enablekrb5)                         | Boolean                    | false                                                                            | x                         | x                       |
 | [enableStoreDebugLog](#enablestoredebuglog)       | Boolean                    | false                                                                            | x                         | x                       |
 | [guestUsername](#guestusername-and-guestpassword) | String                     | undefined                                                                        | -                         | x                       |
 | [guestPassword](#guestusername-and-guestpassword) | String                     | undefined                                                                        | -                         | x                       |
@@ -277,6 +278,10 @@ It can be used to deactivate login for _normal_ users.
 Enables the display of EPSS scores and percentiles in CVEs and NVTs.
 
 The data required for this is not available in the feed yet, so this is disabled by default.
+
+#### enableKrb5
+
+Enable the ability to add Kerberos credentials.
 
 #### enableStoreDebugLog
 

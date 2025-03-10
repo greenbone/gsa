@@ -16,9 +16,15 @@ import {
   getSelectElement,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
-import {rendererWith, fireEvent, screen, render} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import CredentialsDialog from '../dialog';
+
+const gmp = {
+  settings: {
+    enableKrb5: false
+  }
+}
 
 let handleSave;
 let handleClose;
@@ -49,6 +55,10 @@ const credentialMock = Credential.fromElement({
 
 describe('CredentialsDialog component tests', () => {
   test('should render', () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     const {getByName} = render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
@@ -87,6 +97,7 @@ describe('CredentialsDialog component tests', () => {
 
   test('should render with default values', () => {
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
     });
 
@@ -121,6 +132,10 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should allow to change text field', () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     const {getByName} = render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
@@ -166,6 +181,10 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should allow changing select values', async () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
@@ -179,7 +198,7 @@ describe('CredentialsDialog component tests', () => {
     expect(select).toHaveValue('Username + Password');
 
     const selectItems = await getSelectItemElementsForSelect(select);
-    expect(selectItems.length).toEqual(7);
+    expect(selectItems.length).toEqual(6);
 
     // change to password only
     await clickElement(selectItems[5]);
@@ -211,6 +230,10 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
@@ -225,6 +248,10 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for Username + SSH', () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     const {getByName} = render(
       <CredentialsDialog
         credential_type={'usk'}
@@ -247,6 +274,10 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for SNMP', () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     const {getByName, getAllByName} = render(
       <CredentialsDialog
         credential_type="snmp"
@@ -287,6 +318,10 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for S/MIME Certificate', () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     const {getByName} = render(
       <CredentialsDialog
         credential_type="smime"
@@ -306,6 +341,10 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for PGP Encryption Key', () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     const {getByName} = render(
       <CredentialsDialog
         credential_type={'pgp'}
@@ -324,6 +363,10 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for Password Only', () => {
+    const {render} = rendererWith({
+      gmp
+    });
+
     render(
       <CredentialsDialog
         credential_type={'pw'}
@@ -343,6 +386,12 @@ describe('CredentialsDialog component tests', () => {
   });
 
   test('should render form fields for KRB5', () => {
+    gmp.settings.enableKrb5 = true
+
+    const {render} = rendererWith({
+      gmp
+    });
+
     const {getByName} = render(
       <CredentialsDialog
         credential_type={'krb5'}
@@ -389,6 +438,10 @@ describe('CredentialsDialog component tests', () => {
       permissions: {permission: {name: 'Everything'}},
       type: 'up',
       writable: 1,
+    });
+
+    const {render} = rendererWith({
+      gmp
     });
 
     render(

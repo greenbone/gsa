@@ -55,7 +55,10 @@ const cred5 = Credential.fromElement({
 
 const credentials = [cred1, cred2, cred3, cred4, cred5];
 
-const gmp = {settings: {enableGreenboneSensor: true}};
+const gmp = {settings: {
+  enableGreenboneSensor: true,
+  enableKrb5: false,
+}};
 
 describe('TargetDialog component tests', () => {
   test('should render with default values', () => {
@@ -140,7 +143,7 @@ describe('TargetDialog component tests', () => {
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(10); // Each icon has both a span and an svg icon. There should be 5 total
+    expect(createCredentialIcons.length).toEqual(8); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
 
     expect(selects[2]).toHaveValue('--');
     expect(baseElement).toHaveTextContent('on port');
@@ -254,7 +257,7 @@ describe('TargetDialog component tests', () => {
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(10); // Each icon has both a span and an svg icon. There should be 5 total
+    expect(createCredentialIcons.length).toEqual(8); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
 
     expect(baseElement).toHaveTextContent('on port');
 
@@ -401,12 +404,12 @@ describe('TargetDialog component tests', () => {
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
     const selects = queryAllSelectElements();
-    expect(selects.length).toEqual(8); // Should have 8 selects
+    expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(12); // Each icon has both a span and an svg icon. There should be 6 total, including elevate privileges
+    expect(createCredentialIcons.length).toEqual(10); // Each icon has both a span and an svg icon. There should be 5 total, including elevate privileges (Kerberos is disabled by default)
   });
 
   test('ssh elevate credential dropdown should only allow username + password options and remove ssh credential from list', async () => {
@@ -450,7 +453,7 @@ describe('TargetDialog component tests', () => {
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
     const selects = queryAllSelectElements();
-    expect(selects.length).toEqual(8); // Should have 8 selects
+    expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
     const selectItems = await getSelectItemElementsForSelect(selects[3]);
     expect(selectItems.length).toBe(2); // "original" ssh option removed
@@ -562,7 +565,7 @@ describe('TargetDialog component tests', () => {
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
     const selects = queryAllSelectElements();
-    expect(selects.length).toEqual(8); // Should have 8 selects
+    expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
     const selectItems = await getSelectItemElementsForSelect(selects[2]);
     expect(selectItems.length).toBe(3); // ssh elevate option removed
@@ -616,7 +619,7 @@ describe('TargetDialog component tests', () => {
     expect(newIcons.length).toBe(0); // no new credential can be created
 
     const selects = queryAllSelectElements();
-    expect(selects.length).toEqual(8); // Should have 7 selects
+    expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
     expect(selects[0]).toHaveValue('OpenVAS Default');
     expect(selects[0]).toBeDisabled();

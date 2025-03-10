@@ -43,6 +43,7 @@ class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
       enableEPSS = true,
+      enableKrb5 = false,
       enableGreenboneSensor = false,
       disableLoginForm = false,
       enableStoreDebugLog,
@@ -110,6 +111,7 @@ class GmpSettings {
     setAndFreeze(this, 'apiServer', apiServer);
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
     setAndFreeze(this, 'enableEPSS', enableEPSS);
+    setAndFreeze(this, 'enableKrb5', enableKrb5);
     setAndFreeze(this, 'enableGreenboneSensor', enableGreenboneSensor);
     setAndFreeze(this, 'guestUsername', guestUsername);
     setAndFreeze(this, 'guestPassword', guestPassword);
