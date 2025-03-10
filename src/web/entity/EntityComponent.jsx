@@ -90,6 +90,8 @@ EntityComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onDownloadError: PropTypes.func,
   onInteraction: PropTypes.func,
+  onSaveError: PropTypes.func,
+  onSaved: PropTypes.func,
 };
 
 export default EntityComponent;
