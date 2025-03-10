@@ -3,13 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-import actionFunction from 'web/entity/hooks/actionFunction';
+import useEntityClone from 'web/entity/hooks/useEntityClone';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
-import useGmp from 'web/hooks/useGmp';
-import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const EntityComponent = ({
@@ -27,16 +24,6 @@ const EntityComponent = ({
   onCloned,
   onCloneError,
 }) => {
-  const gmp = useGmp();
-  const [_] = useTranslation();
-  const cmd = gmp[name];
-
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleEntityDownload = useEntityDownload(name, {
     onDownloadError,
     onDownloaded,
@@ -57,16 +44,11 @@ const EntityComponent = ({
     onInteraction,
   });
 
-  const handleEntityClone = async entity => {
-    handleInteraction();
-
-    return actionFunction(
-      cmd.clone(entity),
-      onCloned,
-      onCloneError,
-      _('{{name}} cloned successfully.', {name: entity.name}),
-    );
-  };
+  const handleEntityClone = useEntityClone(name, {
+    onCloneError,
+    onCloned,
+    onInteraction,
+  });
 
   return children({
     create: handleEntitySave,
