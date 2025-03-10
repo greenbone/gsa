@@ -16,7 +16,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {withRouter} from 'web/utils/withRouter';
 
-
 const transformTopologyData = (data = []) => {
   if (!hasValue(data)) {
     return {};
@@ -144,7 +143,7 @@ export class HostsTopologyDisplay extends React.Component {
 
 HostsTopologyDisplay.propTypes = {
   filter: PropTypes.filter,
-  navigate: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
 const DISPLAY_ID = 'host-by-topology';
