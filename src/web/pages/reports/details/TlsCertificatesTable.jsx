@@ -13,7 +13,7 @@ import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
-import {RowDetailsToggle} from 'web/entities/Row';
+import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
