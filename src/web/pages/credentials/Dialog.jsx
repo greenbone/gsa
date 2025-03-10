@@ -34,6 +34,7 @@ import Select from 'web/components/form/Select';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -118,7 +119,16 @@ const CredentialsDialog = props => {
     setError(e.message);
   };
 
-  const typeOptions = map(types, type => ({
+  const gmp = useGmp();
+  const enabledTypes = types.filter(type => {
+    if (!gmp.settings.enableKrb5 && type === KRB5_CREDENTIAL_TYPE) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const typeOptions = map(enabledTypes, type => ({
     label: getCredentialTypeName(type),
     value: type,
   }));

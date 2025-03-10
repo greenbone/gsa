@@ -18,6 +18,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 
 const Actions = withEntitiesActions(
@@ -94,45 +95,55 @@ export const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      displayName={_('Target')}
-      entity={entity}
-      link={links}
-      type="target"
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
-    <TableData>{entity.max_hosts}</TableData>
-    <TableData>
-      {isDefined(entity.port_list) && (
-        <span>
-          <DetailsLink
-            id={entity.port_list.id}
-            textOnly={!links}
-            type="portlist"
-          >
-            {entity.port_list.name}
-          </DetailsLink>
-        </span>
-      )}
-    </TableData>
-    <TableData align="center" flex="column">
-      <Cred cred={entity.ssh_credential} links={links} title={'SSH'} />
-      <Cred
-        cred={entity.ssh_elevate_credential}
-        links={links}
-        title={_('SSH Elevate')}
+}) => {
+  const gmp = useGmp();
+
+  return (
+    <TableRow>
+      <EntityNameTableData
+        displayName={_('Target')}
+        entity={entity}
+        link={links}
+        type="target"
+        onToggleDetailsClick={onToggleDetailsClick}
       />
-      <Cred cred={entity.smb_credential} links={links} title={'SMB'} />
-      <Cred cred={entity.esxi_credential} links={links} title={'ESXi'} />
-      <Cred cred={entity.snmp_credential} links={links} title={'SNMP'} />
-      <Cred cred={entity.krb5_credential} links={links} title={'Kerberos'} />
-    </TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+      <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
+      <TableData>{entity.max_hosts}</TableData>
+      <TableData>
+        {isDefined(entity.port_list) && (
+          <span>
+            <DetailsLink
+              id={entity.port_list.id}
+              textOnly={!links}
+              type="portlist"
+            >
+              {entity.port_list.name}
+            </DetailsLink>
+          </span>
+        )}
+      </TableData>
+      <TableData align="center" flex="column">
+        <Cred cred={entity.ssh_credential} links={links} title={'SSH'} />
+        <Cred
+          cred={entity.ssh_elevate_credential}
+          links={links}
+          title={_('SSH Elevate')}
+        />
+        <Cred cred={entity.smb_credential} links={links} title={'SMB'} />
+        <Cred cred={entity.esxi_credential} links={links} title={'ESXi'} />
+        <Cred cred={entity.snmp_credential} links={links} title={'SNMP'} />
+        {gmp.settings.enableKrb5 && (
+          <Cred
+            cred={entity.krb5_credential}
+            links={links}
+            title={'Kerberos'}
+          />
+        )}
+      </TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

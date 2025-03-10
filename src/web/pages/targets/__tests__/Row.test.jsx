@@ -206,15 +206,46 @@ describe('Target row tests', () => {
     const smbLink = screen.getByText('smb_credential');
     expect(smbLink).toHaveAttribute('href', '/credential/4784');
 
-    expect(screen.getByText(/Kerberos/)).toBeVisible();
-    const kerberosLink = screen.getByText('krb5');
-    expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
-
     expect(screen.getAllByTitle('Move Target to trashcan')[0]).toBeVisible();
     expect(screen.getAllByTitle('Edit Target')[0]).toBeVisible();
     expect(screen.getAllByTitle('Clone Target')[0]).toBeVisible();
     expect(screen.getAllByTitle('Export Target')[0]).toBeVisible();
   });
+
+  test('should render Kerberos credentials, when KRB5 is enabled', () => {
+    const handleToggleDetailsClick = testing.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
+
+    gmp.settings.enableKrb5 = true
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: caps,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    render(
+      <Row
+        entity={target_no_elevate}
+        onTargetCloneClick={handleTargetCloneClick}
+        onTargetDeleteClick={handleTargetDeleteClick}
+        onTargetDownloadClick={handleTargetDownloadClick}
+        onTargetEditClick={handleTargetEditClick}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
+    );
+
+    expect(screen.getByText(/Kerberos/)).toBeVisible();
+    const kerberosLink = screen.getByText('krb5');
+    expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
+  })
 
   test('should render ssh elevate credential', () => {
     const handleToggleDetailsClick = testing.fn();

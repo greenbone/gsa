@@ -15,6 +15,7 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import {Col} from 'web/entity/Page';
+import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -39,6 +40,8 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     tasks,
     allowSimultaneousIPs,
   } = entity;
+
+  const gmp = useGmp();
 
   const hostsListing = hosts
     .slice(0, MAX_HOSTS_LISTINGS)
@@ -199,7 +202,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                   </TableRow>
                 )}
 
-                {isDefined(krb5Credential) && (
+                {gmp.settings.enableKrb5 && isDefined(krb5Credential) && (
                   <TableRow>
                     <TableData>{_('Kerberos')}</TableData>
                     <TableData>
