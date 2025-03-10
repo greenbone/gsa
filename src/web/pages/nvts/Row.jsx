@@ -17,7 +17,7 @@ import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import EntitiesActions from 'web/entities/Actions';
-import {RowDetailsToggle} from 'web/entities/Row';
+import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 
