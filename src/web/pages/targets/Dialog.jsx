@@ -28,6 +28,7 @@ import InfoIcon from 'web/components/icon/InfoIcon';
 import NewIcon from 'web/components/icon/NewIcon';
 import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
@@ -186,6 +187,8 @@ const TargetDialog = ({
     sshElevateCredentialId,
     krb5CredentialId,
   };
+
+  const gmp = useGmp()
 
   return (
     <SaveDialog
@@ -460,7 +463,7 @@ const TargetDialog = ({
               </FormGroup>
             )}
 
-            {capabilities.mayOp('get_credentials') && (
+            {gmp.settings.enableKrb5 && capabilities.mayOp('get_credentials') && (
               <FormGroup direction="row" title={_('Kerberos')}>
                 <Select
                   disabled={inUse || state.smbCredentialId !== UNSET_VALUE}

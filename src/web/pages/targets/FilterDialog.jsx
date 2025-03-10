@@ -7,6 +7,7 @@ import DefaultFilterDialog from 'web/components/powerfilter/Dialog';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -29,7 +30,7 @@ const TargetsFilterDialog = ({
     },
     filterDialogProps,
   );
-  const SORT_FIELDS = [
+  let SORT_FIELDS = [
     {
       name: 'name',
       displayName: _('Name'),
@@ -62,11 +63,21 @@ const TargetsFilterDialog = ({
       name: 'snmp_credential',
       displayName: _('SNMP Credential'),
     },
-    {
-      name: 'krb5_credential',
-      displayName: _('Kerberos Credential'),
-    },
   ];
+  
+  const gmp = useGmp()
+
+  if (gmp.settings.enableKrb5) {
+    SORT_FIELDS = [
+      ...SORT_FIELDS,
+      {
+        name: 'krb5_credential',
+        displayName: _('Kerberos Credential'),
+      },
+    ]
+  }
+
+
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <DefaultFilterDialog
