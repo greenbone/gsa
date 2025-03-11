@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import useLocale from 'web/hooks/useLocale';
 import Theme from 'web/utils/Theme';
 
 const Link = styled.a`
@@ -24,14 +24,17 @@ const Footer = styled.footer`
 `;
 
 const GreenboneFooter = () => {
+  const [language] = useLocale();
+
+  const linkHref =
+    language === 'de'
+      ? 'https://www.greenbone.net'
+      : 'https://www.greenbone.net/en';
+
   return (
     <Footer>
       Copyright © 2009-2025 by Greenbone AG,&nbsp;
-      <Link
-        href="https://www.greenbone.net"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
+      <Link href={linkHref} rel="noopener noreferrer" target="_blank">
         www.greenbone.net
       </Link>
     </Footer>
