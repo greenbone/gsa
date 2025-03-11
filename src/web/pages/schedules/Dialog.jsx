@@ -212,13 +212,17 @@ const ScheduleDialog = ({
     const [hour, minute] = selectedTime.split(':').map(Number);
 
     if (type === 'startTime') {
-      const newStartDate = startDate.clone().hours(hour).minutes(minute);
-      setStartDate(newStartDate);
-      setStartTime(selectedTime);
+      const newStartDate = startDate.clone().hour(hour).minute(minute);
+      if (newStartDate.isValid()) {
+        setStartDate(newStartDate);
+        setStartTime(selectedTime);
+      }
     } else if (type === 'endTime') {
-      const newEndDate = endDate.clone().hours(hour).minutes(minute);
-      setEndDate(newEndDate);
-      setEndTime(selectedTime);
+      const newEndDate = endDate.clone().hour(hour).minute(minute);
+      if (newEndDate.isValid()) {
+        setEndDate(newEndDate);
+        setEndTime(selectedTime);
+      }
     }
   };
 
