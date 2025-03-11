@@ -217,4 +217,36 @@ describe('ScheduleDialog component tests', () => {
 
     expect(handleSave).toHaveBeenCalled();
   });
+
+  test('should allow changing start and end times', async () => {
+    handleSave.mockResolvedValue({});
+
+    const {getByName} = render(
+      <ScheduleDialog
+        comment={scheduleComment}
+        duration={scheduleDuration}
+        freq={scheduleFrequency}
+        id={scheduleId}
+        interval={scheduleInterval}
+        monthdays={scheduleMonthDays}
+        name={scheduleName}
+        startDate={scheduleStartDate}
+        timezone={scheduleTimezone}
+        title={`Edit Schedule ${scheduleName}`}
+        weekdays={scheduleWeekDays}
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const startTimeInput = getByName('startDate')
+    expect(startTimeInput).toHaveValue('15:00')
+    changeInputValue(startTimeInput, '12:00')
+    expect(startTimeInput).toHaveValue('12:00')
+
+    const endTimeInput = getByName('endTime')
+    expect(endTimeInput).toHaveValue('19:45')
+    changeInputValue(endTimeInput, '13:00')
+    expect(endTimeInput).toHaveValue('13:00')
+  })
 });
