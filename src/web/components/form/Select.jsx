@@ -77,6 +77,8 @@ const Select = ({
   searchable = true,
   toolTipTitle,
   value,
+  withScrollArea = true,
+  scrollAreaProps = {type: 'hover', scrollbarSize: 12},
   onChange,
   ...props
 }) => {
@@ -118,6 +120,7 @@ const Select = ({
       placeholder={selectPlaceholder}
       renderOption={renderSelectOption}
       rightSection={rightSection}
+      scrollAreaProps={scrollAreaProps}
       searchValue={searchValue}
       searchable={searchable}
       styles={{root: {flexGrow: grow}}}
@@ -149,6 +152,11 @@ Select.propTypes = {
   toolTipTitle: PropTypes.string,
   value: selectValue,
   width: PropTypes.string,
+  withScrollArea: PropTypes.bool,
+  scrollAreaProps: PropTypes.shape({
+    type: PropTypes.oneOf(['auto', 'scroll', 'always', 'hover', 'never']),
+    scrollbarSize: PropTypes.number,
+  }),
   onChange: PropTypes.func,
 };
 
