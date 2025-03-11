@@ -1,4 +1,4 @@
-name: Release GSA with pontos
+name: Release GSA
 
 on:
   pull_request:
