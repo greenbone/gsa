@@ -13,11 +13,11 @@ import {
   changeInputValue,
   getDialogCloseButton,
   getDialogSaveButton,
-  getFileInputs,
+  queryFileInputs,
   getRadioInputs,
   queryAllSelectElements,
   getSelectItemElementsForSelect,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import TargetDialog from 'web/pages/targets/Dialog';
 import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
@@ -75,8 +75,8 @@ describe('TargetDialog component tests', () => {
       />,
     );
 
-    const inputs = getTextInputs();
-    const fileInputs = getFileInputs();
+    const inputs = queryTextInputs();
+    const fileInputs = queryFileInputs();
     const radioInputs = getRadioInputs();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
@@ -191,9 +191,9 @@ describe('TargetDialog component tests', () => {
       />,
     );
 
-    const inputs = getTextInputs();
+    const inputs = queryTextInputs();
     const radioInputs = getRadioInputs();
-    const fileInputs = getFileInputs();
+    const fileInputs = queryFileInputs();
     const selects = queryAllSelectElements();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');

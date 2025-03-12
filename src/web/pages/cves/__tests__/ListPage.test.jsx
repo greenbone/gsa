@@ -10,13 +10,13 @@ import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CvesPage, {ToolBarIcons} from 'web/pages/cves/ListPage';
@@ -151,8 +151,8 @@ describe('CvesPage tests', () => {
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const powerFilter = getPowerFilter();
-    const inputs = getTextInputs(powerFilter);
+    const powerFilter = queryPowerFilter();
+    const inputs = queryTextInputs(powerFilter);
     const select = getSelectElement(powerFilter);
 
     // Toolbar Icons
@@ -327,15 +327,15 @@ describe('CvesPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a cve
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected cve
@@ -405,7 +405,7 @@ describe('CvesPage tests', () => {
 
     await wait();
 
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);

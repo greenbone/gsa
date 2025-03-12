@@ -8,9 +8,9 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import React from 'react';
 import {
-  getPowerFilter,
+  queryPowerFilter,
   getSelectElement,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/MockAuditDeltaReport';
@@ -131,8 +131,8 @@ describe('Audit Delta Report Details Content tests', () => {
     const icons = baseElement.querySelectorAll('svg');
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const powerFilter = getPowerFilter();
-    const inputs = getTextInputs(powerFilter);
+    const powerFilter = queryPowerFilter();
+    const inputs = queryTextInputs(powerFilter);
     const select = getSelectElement(powerFilter);
     const bars = getAllByTestId('progressbar-box');
 
@@ -307,8 +307,8 @@ describe('Audit Delta Report Details Content tests', () => {
     const icons = baseElement.querySelectorAll('svg');
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
-    const powerFilter = getPowerFilter();
-    const inputs = getTextInputs(powerFilter);
+    const powerFilter = queryPowerFilter();
+    const inputs = queryTextInputs(powerFilter);
     const select = getSelectElement(powerFilter);
 
     // PowerFilter

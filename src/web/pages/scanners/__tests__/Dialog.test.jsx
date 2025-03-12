@@ -15,7 +15,7 @@ import {
   getDialogCloseButton,
   getDialogSaveButton,
   getSelectElement,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import ScannerDialog from 'web/pages/scanners/Dialog';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
@@ -102,7 +102,7 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    const inputs = getTextInputs();
+    const inputs = queryTextInputs();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveValue('Unnamed'); // name field
@@ -144,7 +144,7 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    const inputs = getTextInputs();
+    const inputs = queryTextInputs();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveAttribute('value', 'john');
@@ -230,7 +230,7 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    const inputs = getTextInputs();
+    const inputs = queryTextInputs();
 
     expect(inputs[0]).toHaveValue('john');
     expect(inputs[1]).toHaveValue('lorem ipsum');

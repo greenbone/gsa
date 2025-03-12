@@ -13,11 +13,10 @@ import {
   getDialogSaveButton,
   queryAllSelectElements,
   getSelectItemElementsForSelect,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import ScheduleDialog from 'web/pages/schedules/Dialog';
 import {render, fireEvent, screen} from 'web/utils/Testing';
-
 
 const checkElementVisibilityAndContent = (
   labelText,
@@ -99,7 +98,7 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const inputs = getTextInputs();
+    const inputs = queryTextInputs();
     const selects = queryAllSelectElements();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
