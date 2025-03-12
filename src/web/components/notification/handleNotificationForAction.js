@@ -28,9 +28,11 @@ export const handleNotificationForAction = async (
       onSuccess(result);
     }
     showSuccessNotification('', successMessage);
+    return result;
   } catch (error) {
     if (isDefined(onError)) {
-      onError(error);
+      return onError(error);
     }
+    throw error;
   }
 };

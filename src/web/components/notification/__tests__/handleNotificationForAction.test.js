@@ -22,7 +22,7 @@ describe('handleNotificationForAction', () => {
     const onError = testing.fn();
     const successMessage = 'Action was successful';
 
-    await handleNotificationForAction(
+    const result = await handleNotificationForAction(
       promise,
       onSuccess,
       onError,
@@ -32,6 +32,7 @@ describe('handleNotificationForAction', () => {
     expect(onSuccess).toHaveBeenCalledWith('success');
     expect(showSuccessNotification).toHaveBeenCalledWith('', successMessage);
     expect(onError).not.toHaveBeenCalled();
+    expect(result).toEqual('success');
   });
 
   test('should not require onSuccess to be provided if promise resolves successfully', async () => {
@@ -39,7 +40,7 @@ describe('handleNotificationForAction', () => {
     const successMessage = 'Action was successful';
     const onError = testing.fn();
 
-    await handleNotificationForAction(
+    const result = await handleNotificationForAction(
       promise,
       undefined,
       onError,
@@ -47,6 +48,7 @@ describe('handleNotificationForAction', () => {
     );
 
     expect(showSuccessNotification).toHaveBeenCalledWith('', successMessage);
+    expect(result).toEqual('success');
     expect(onError).not.toHaveBeenCalled();
   });
 
@@ -68,6 +70,23 @@ describe('handleNotificationForAction', () => {
     expect(onError).toHaveBeenCalledWith(error);
     expect(showSuccessNotification).not.toHaveBeenCalled();
     expect(result).toBeUndefined();
+  });
+
+  test("should reject if onError isn't provided and action promise rejects", async () => {
+    const error = new Error('Action failed');
+    const promise = Promise.reject(error);
+    const successMessage = 'Action was successful';
+
+    await expect(
+      handleNotificationForAction(
+        promise,
+        undefined,
+        undefined,
+        successMessage,
+      ),
+    ).rejects.toEqual(error);
+
+    expect(showSuccessNotification).not.toHaveBeenCalled();
   });
 
   test("should resolve with onError's return value if onError is provided and action promise rejects", async () => {
