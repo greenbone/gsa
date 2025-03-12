@@ -13,7 +13,7 @@ import {
   queryDialogs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import PortListComponent from 'web/pages/portlists/Component';
+import PortListComponent from 'web/pages/portlists/PortListComponent';
 import {
   rendererWith,
   wait,

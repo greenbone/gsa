@@ -31,8 +31,8 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-import PortListComponent from 'web/pages/portlists/Component';
 import PortListDetails from 'web/pages/portlists/Details';
+import PortListComponent from 'web/pages/portlists/PortListComponent';
 import PortRangesTable from 'web/pages/portlists/portrangestable';
 import {
   selector as permissionsSelector,
