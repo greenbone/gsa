@@ -42,6 +42,7 @@ class PortListComponent extends React.Component {
     this.handleSavePortRange = this.handleSavePortRange.bind(this);
     this.handleTmpAddPortRange = this.handleTmpAddPortRange.bind(this);
     this.handleTmpDeletePortRange = this.handleTmpDeletePortRange.bind(this);
+    this.handleInteraction = this.handleInteraction.bind(this);
   }
 
   openPortListDialog(entity) {
