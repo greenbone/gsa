@@ -9,8 +9,8 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
 import {
-  getTableBody,
-  getTableFooter,
+  queryTableBody,
+  queryTableFooter,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -142,7 +142,7 @@ describe('AuditPage tests', () => {
     await wait();
 
     expect(baseElement).toBeVisible();
-    const tableBody = getTableBody();
+    const tableBody = queryTableBody();
     expect(tableBody.querySelectorAll('tr').length).toEqual(1);
   });
 
@@ -205,7 +205,7 @@ describe('AuditPage tests', () => {
 
     await wait();
 
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const deleteIcon = getByTestId(tableFooter, 'trash-icon');
     expect(deleteByFilter).not.toHaveBeenCalled();
     expect(deleteIcon).toHaveAttribute(

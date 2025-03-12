@@ -10,13 +10,13 @@ import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -124,9 +124,9 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
@@ -294,15 +294,15 @@ describe('SchedulePage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select an schedule
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected schedule
@@ -372,7 +372,7 @@ describe('SchedulePage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);

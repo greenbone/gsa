@@ -11,13 +11,13 @@ import {
 import {
   changeInputValue,
   clickElement,
-  getCheckBoxes,
-  getDialogContent,
+  queryCheckBoxes,
+  queryDialogContent,
   getDialogSaveButton,
-  getDialogTitle,
+  queryDialogTitle,
   getRadioInputs,
-  getTableBody,
-  getTextInputs,
+  queryTableBody,
+  queryTextInputs,
 } from 'web/components/testing';
 import EditScanConfigDialog, {
   handleSearchChange,
@@ -165,9 +165,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -209,9 +209,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -261,9 +261,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Policy');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Policy');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -395,8 +395,8 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const content = getDialogContent();
-    const inputs = getTextInputs(content);
+    const content = queryDialogContent();
+    const inputs = queryTextInputs(content);
 
     changeInputValue(inputs[0], 'lorem');
     changeInputValue(inputs[1], 'ipsum');
@@ -448,15 +448,15 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const dialogContent = getDialogContent();
-    const tableBody = getTableBody(dialogContent);
+    const dialogContent = queryDialogContent();
+    const tableBody = queryTableBody(dialogContent);
 
     const rows = tableBody.querySelectorAll('tr');
 
     const family1Inputs = getRadioInputs(rows[0]);
     await clickElement(family1Inputs[1]);
 
-    const family2Checkboxes = getCheckBoxes(rows[1]);
+    const family2Checkboxes = queryCheckBoxes(rows[1]);
     await clickElement(family2Checkboxes[0]);
 
     const saveButton = getDialogSaveButton();

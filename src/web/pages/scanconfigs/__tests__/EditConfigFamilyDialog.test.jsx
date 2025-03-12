@@ -8,8 +8,8 @@ import Nvt from 'gmp/models/nvt';
 import {
   getDialog,
   getDialogSaveButton,
-  getTableBody,
-  getTableHeader,
+  queryTableBody,
+  queryTableHeader,
 } from 'web/components/testing';
 import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
 import {rendererWith, fireEvent, within, screen} from 'web/utils/Testing';
@@ -273,8 +273,8 @@ describe('EditConfigFamilyDialog component tests', () => {
       const getOidColumn = row => row.querySelectorAll('td')[1];
 
       const dialog = getDialog();
-      const tableHeader = getTableHeader(dialog);
-      const tableBody = getTableBody(dialog);
+      const tableHeader = queryTableHeader(dialog);
+      const tableBody = queryTableBody(dialog);
       let rows = tableBody.querySelectorAll('tr');
       const columns = within(tableHeader).getAllByRole('columnheader');
       expect(columns).toHaveLength(7);

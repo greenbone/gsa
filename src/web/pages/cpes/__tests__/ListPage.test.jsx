@@ -9,14 +9,14 @@ import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTable,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTable,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CpesPage, {ToolBarIcons} from 'web/pages/cpes/ListPage';
@@ -157,8 +157,8 @@ describe('CpesPage tests', () => {
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const powerFilter = getPowerFilter();
-    const inputs = getTextInputs(powerFilter);
+    const powerFilter = queryPowerFilter();
+    const inputs = queryTextInputs(powerFilter);
     const select = getSelectElement(powerFilter);
 
     // Toolbar Icons
@@ -186,7 +186,7 @@ describe('CpesPage tests', () => {
     expect(display[2]).toHaveTextContent('CPEs by CVSS (Total: 0)');
 
     // Table
-    const table = getTable();
+    const table = queryTable();
     const header = table.querySelectorAll('th');
 
     expect(header[0]).toHaveTextContent('Name');
@@ -266,7 +266,7 @@ describe('CpesPage tests', () => {
     await wait();
 
     // export page contents
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const exportIcon = getByTestId(tableFooter, 'export-icon');
     await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
@@ -334,15 +334,15 @@ describe('CpesPage tests', () => {
     await wait();
 
     // change bulk action to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const selectElement = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(selectElement);
     await clickElement(selectItems[1]);
     expect(selectElement).toHaveValue('Apply to selection');
 
     // select a cpe
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected cpe
@@ -414,7 +414,7 @@ describe('CpesPage tests', () => {
     await wait();
 
     // change bulk action to apply to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const selectElement = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(selectElement);
     await clickElement(selectItems[2]);
