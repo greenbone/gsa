@@ -15,6 +15,7 @@ import {
   getAllByTestId,
   getByTestId,
   queryAllByTestId,
+  queryAllByRole,
 } from 'web/utils/Testing';
 
 export const getElementOrDocument = element =>
@@ -139,6 +140,17 @@ export const changeSelectInput = (value, input) => {
     input = getSelectElement();
   }
   changeInputValue(input, value);
+};
+
+/**
+ * Queries all dialog elements within the specified element or document.
+ *
+ * @param {HTMLElement} [element] - The element or document to query within. If not provided, the document will be used.
+ * @returns {NodeListOf<HTMLElement>} A list of dialogs.
+ */
+export const queryDialogs = element => {
+  element = getElementOrDocument(element);
+  return queryAllByRole(element, 'dialog');
 };
 
 /**
