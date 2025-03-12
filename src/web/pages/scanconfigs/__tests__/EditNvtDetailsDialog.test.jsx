@@ -8,16 +8,15 @@ import date from 'gmp/models/date';
 import {
   changeInputValue,
   getDialogCloseButton,
-  getDialogContent,
+  queryDialogContent,
   getDialogSaveButton,
-  getDialogTitle,
+  queryDialogTitle,
   getRadioInputs,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
-
 
 const preferences = [
   {name: 'pref 1', value: 'no', id: '1', type: 'checkbox'},
@@ -61,9 +60,9 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).toHaveTextContent('Config');
     expect(content).toHaveTextContent('foo');
   });
@@ -101,9 +100,9 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).not.toHaveTextContent('Config');
     expect(content).not.toHaveTextContent('foo');
   });
@@ -240,7 +239,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     fireEvent.click(radios[2]);
     fireEvent.click(radios[5]);
 
-    const inputs = getTextInputs(baseElement);
+    const inputs = queryTextInputs(baseElement);
 
     changeInputValue(inputs[1], 'bar');
     const saveButton = getDialogSaveButton();

@@ -9,13 +9,13 @@ import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import NvtsPage, {ToolBarIcons} from 'web/pages/nvts/ListPage';
@@ -165,9 +165,9 @@ describe('NvtsPage tests', () => {
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
@@ -349,15 +349,15 @@ describe('NvtsPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a nvt
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected nvt
@@ -428,7 +428,7 @@ describe('NvtsPage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);

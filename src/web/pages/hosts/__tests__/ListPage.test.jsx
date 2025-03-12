@@ -10,11 +10,11 @@ import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
 import {
   clickElement,
-  getPowerFilter,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableFooter,
-  getTextInputs,
+  queryTableFooter,
+  queryTextInputs,
   testBulkDeleteDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -184,9 +184,9 @@ describe('Host ListPage tests', () => {
 
     await wait();
 
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
@@ -391,7 +391,7 @@ describe('Host ListPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
@@ -466,7 +466,7 @@ describe('Host ListPage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);

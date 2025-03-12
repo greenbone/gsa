@@ -9,17 +9,17 @@ import ReportFormat from 'gmp/models/reportformat';
 import {
   changeInputValue,
   clickElement,
-  getCheckBoxes,
+  queryCheckBoxes,
   getDialogCloseButton,
-  getDialogContent,
+  queryDialogContent,
   getDialogSaveButton,
-  getDialogTitle,
+  queryDialogTitle,
   getMultiSelectElements,
   queryAllSelectElements,
   getSelectItemElementsForMultiSelect,
   getSelectItemElementsForSelect,
   getSelectedItems,
-  getTableBody,
+  queryTableBody,
 } from 'web/components/testing';
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
 import {mockReportFormats} from 'web/pages/reportconfigs/__mocks__/MockReportFormats';
@@ -55,9 +55,9 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Report Config');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Report Config');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     const selects = queryAllSelectElements(content);
     expect(selects[0]).toHaveValue('example-configurable-1');
     expect(selects[0]).toBeDisabled();
@@ -161,7 +161,7 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
 
     // Set name and comment
     const nameInput = getByName(content, 'name');
@@ -253,27 +253,27 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = getDialogContent();
-    const tableBody = getTableBody(content);
+    const content = queryDialogContent();
+    const tableBody = queryTableBody(content);
     const tableRows = tableBody.querySelectorAll('tr');
 
     const stringParamRow = tableRows[0];
-    await clickElement(getCheckBoxes(stringParamRow)[0]);
+    await clickElement(queryCheckBoxes(stringParamRow)[0]);
 
     const textParamRow = tableRows[1];
-    await clickElement(getCheckBoxes(textParamRow)[0]);
+    await clickElement(queryCheckBoxes(textParamRow)[0]);
 
     const integerParamRow = tableRows[2];
-    await clickElement(getCheckBoxes(integerParamRow)[0]);
+    await clickElement(queryCheckBoxes(integerParamRow)[0]);
 
     const booleanParaRow = tableRows[3];
-    await clickElement(getCheckBoxes(booleanParaRow)[0]);
+    await clickElement(queryCheckBoxes(booleanParaRow)[0]);
 
     const selectionParamRow = tableRows[4];
-    await clickElement(getCheckBoxes(selectionParamRow)[0]);
+    await clickElement(queryCheckBoxes(selectionParamRow)[0]);
 
     const reportFormatListParamRow = tableRows[5];
-    await clickElement(getCheckBoxes(reportFormatListParamRow)[0]);
+    await clickElement(queryCheckBoxes(reportFormatListParamRow)[0]);
 
     expect(handleValueChange).toHaveBeenCalledTimes(6);
 
@@ -333,7 +333,7 @@ describe('New Report Config Dialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('New Report Config');
+    expect(queryDialogTitle()).toHaveTextContent('New Report Config');
 
     expect(baseElement).not.toHaveTextContent('Param');
   });
@@ -414,7 +414,7 @@ describe('New Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     const nameInput = getByName(content, 'name');
     changeInputValue(nameInput, 'lorem');
 

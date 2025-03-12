@@ -13,7 +13,7 @@ import ScanConfig, {
 } from 'gmp/models/scanconfig';
 import {
   clickElement,
-  getTable,
+  queryTable,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -131,7 +131,7 @@ describe('ScanConfigsPage tests', () => {
     await wait();
 
     expect(baseElement).toBeInTheDocument();
-    getTable();
+    queryTable();
   });
 
   test('should call commands for bulk actions', async () => {

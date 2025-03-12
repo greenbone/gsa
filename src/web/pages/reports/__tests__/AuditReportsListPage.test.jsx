@@ -8,8 +8,8 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import React from 'react';
 import {
-  getPowerFilter,
-  getTextInputs,
+  queryPowerFilter,
+  queryTextInputs,
   getSelectElement,
   testBulkDeleteDialog,
 } from 'web/components/testing';
@@ -149,9 +149,9 @@ describe('AuditReportsPage tests', () => {
     const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getByTestId('help-icon')).toHaveAttribute(

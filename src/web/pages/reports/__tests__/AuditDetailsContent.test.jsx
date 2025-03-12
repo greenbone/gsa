@@ -8,8 +8,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import React from 'react';
 import {
-  getPowerFilter,
-  getTextInputs,
+  queryPowerFilter,
+  queryTextInputs,
   getSelectElement,
 } from 'web/components/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
@@ -144,7 +144,7 @@ describe('Audit Report Details Content tests', () => {
     const inputs = baseElement.querySelectorAll('input');
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
 
     const select = getSelectElement(powerFilter);
     const bars = getAllByTestId('progressbar-box');
@@ -309,8 +309,8 @@ describe('Audit Report Details Content tests', () => {
     );
 
     const icons = baseElement.querySelectorAll('svg');
-    const powerFilter = getPowerFilter();
-    const inputs = getTextInputs(powerFilter);
+    const powerFilter = queryPowerFilter();
+    const inputs = queryTextInputs(powerFilter);
     const select = getSelectElement(powerFilter);
     const bars = getAllByTestId('progressbar-box');
 

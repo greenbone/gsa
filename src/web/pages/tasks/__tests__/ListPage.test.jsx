@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {
   clickElement,
-  getPowerFilter,
+  queryPowerFilter,
   getSelectElement,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
@@ -168,7 +168,7 @@ describe('TaskPage tests', () => {
     const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tbody tr')[0];
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
 
     // Toolbar Icons

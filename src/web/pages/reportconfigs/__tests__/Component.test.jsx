@@ -7,12 +7,12 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import ReportConfig from 'gmp/models/reportconfig';
 import {
   clickElement,
-  getDialogContent,
+  queryDialogContent,
   getDialogSaveButton,
-  getDialogTitle,
+  queryDialogTitle,
   queryAllSelectElements,
   getSelectItemElementsForSelect,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ReportFormatComponent from 'web/pages/reportconfigs/Component';
@@ -104,11 +104,11 @@ describe('Report Config Component tests', () => {
     });
     expect(getAllReportFormats).toHaveBeenCalledWith();
 
-    expect(getDialogTitle()).toHaveTextContent(
+    expect(queryDialogTitle()).toHaveTextContent(
       'Edit Report Config test report config',
     );
-    const content = getDialogContent();
-    const inputs = getTextInputs(content);
+    const content = queryDialogContent();
+    const inputs = queryTextInputs(content);
     expect(inputs[0]).toHaveValue('test report config');
 
     const select = queryAllSelectElements(content);
@@ -184,8 +184,8 @@ describe('Report Config Component tests', () => {
 
     expect(getAllReportFormats).toHaveBeenCalledWith();
 
-    expect(getDialogTitle()).toHaveTextContent('New Report Config');
-    const content = getDialogContent();
+    expect(queryDialogTitle()).toHaveTextContent('New Report Config');
+    const content = queryDialogContent();
 
     const selects = queryAllSelectElements(content);
 

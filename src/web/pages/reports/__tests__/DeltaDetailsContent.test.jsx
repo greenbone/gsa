@@ -7,15 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {
-  getPowerFilter,
+  queryPowerFilter,
   getSelectElement,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
-
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -132,9 +131,9 @@ describe('Delta Report Details Content tests', () => {
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
     const bars = getAllByTestId('progressbar-box');
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -302,9 +301,9 @@ describe('Delta Report Details Content tests', () => {
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
     const bars = getAllByTestId('progressbar-box');
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

@@ -8,16 +8,15 @@ import Filter from 'gmp/models/filter';
 import TicketStatusGroup from 'web/components/powerfilter/TicketStatusGroup';
 import {
   clickElement,
-  getElementOrDocument,
+  getElementOrReturnDocument,
   getSelectElement,
   getSelectItemElements,
   openSelectElement,
 } from 'web/components/testing';
 import {render} from 'web/utils/Testing';
 
-
 const getTitle = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelector('.mantine-Text-root');
 };
 

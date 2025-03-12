@@ -12,13 +12,12 @@ import {
   getDialog,
   getDialogCloseButton,
   getDialogSaveButton,
-  getDialogTitle,
+  queryDialogTitle,
   getSelectElement,
   getSelectItemElementsForSelect,
 } from 'web/components/testing';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
 import {rendererWith, fireEvent, screen, render} from 'web/utils/Testing';
-
 
 let handleSave;
 let handleClose;
@@ -59,7 +58,7 @@ describe('CredentialsDialog component tests', () => {
     );
 
     const dialog = getDialog();
-    const dialogTitle = getDialogTitle(dialog);
+    const dialogTitle = queryDialogTitle(dialog);
 
     const select = getSelectElement(dialog);
     const cancelButton = getDialogCloseButton();
