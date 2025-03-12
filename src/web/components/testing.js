@@ -12,7 +12,6 @@ import {
   fireEvent,
   queryByRole,
   getByRole,
-  getAllByTestId,
   getByTestId,
   queryAllByTestId,
   queryAllByRole,
@@ -256,22 +255,6 @@ export const getTableFooter = element => {
 export const getTableHeader = element => {
   element = getElementOrDocument(element);
   return element.querySelector('thead');
-};
-
-/**
- * Get action items
- */
-export const getActionItems = element => {
-  element = getElementOrDocument(element);
-  return getAllByTestId(element, 'svg-icon');
-};
-
-/**
- * Get the bulk action items of a page
- */
-export const getBulkActionItems = element => {
-  const tableFooter = getTableFooter(element);
-  return getActionItems(tableFooter);
 };
 
 /**
