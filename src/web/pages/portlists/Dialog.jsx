@@ -18,7 +18,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import PortRangesTable from 'web/pages/portlists/portrangestable';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const FROM_FILE = YES_VALUE;
 const NOT_FROM_FILE = NO_VALUE;
 
@@ -44,6 +43,7 @@ const PortListsDialog = ({
   const newRangeIcon = (
     <div>
       <NewIcon
+        data-testid="new-port-range"
         title={_('Add Port Range')}
         value={port_list}
         onClick={onNewPortRangeClick}
