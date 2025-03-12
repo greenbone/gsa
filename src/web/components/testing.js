@@ -8,7 +8,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {expect} from 'vitest';
 import {
   userEvent,
-  act,
   fireEvent,
   queryByRole,
   getByRole,
@@ -99,10 +98,8 @@ export const queryAllSelectElements = element => {
  * @returns {Promise<void>} A promise that resolves when the select element has been opened.
  */
 export const openSelectElement = async select => {
-  await act(async () => {
-    select = select || getSelectElement();
-    await clickElement(select);
-  });
+  select = select || getSelectElement();
+  await clickElement(select);
 };
 
 /**
