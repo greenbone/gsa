@@ -18,8 +18,8 @@ describe('handleNotificationForAction', () => {
 
   test('should call onSuccess and showSuccessNotification when promise resolves', async () => {
     const promise = Promise.resolve('success');
-    const onSuccess = vi.fn();
-    const onError = vi.fn();
+    const onSuccess = testing.fn();
+    const onError = testing.fn();
     const successMessage = 'Action was successful';
 
     await handleNotificationForAction(
@@ -34,14 +34,30 @@ describe('handleNotificationForAction', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
+  test('should not require onSuccess to be provided if promise resolves successfully', async () => {
+    const promise = Promise.resolve('success');
+    const successMessage = 'Action was successful';
+    const onError = testing.fn();
+
+    await handleNotificationForAction(
+      promise,
+      undefined,
+      onError,
+      successMessage,
+    );
+
+    expect(showSuccessNotification).toHaveBeenCalledWith('', successMessage);
+    expect(onError).not.toHaveBeenCalled();
+  });
+
   test('should call onError when promise rejects', async () => {
     const error = new Error('Action failed');
     const promise = Promise.reject(error);
-    const onSuccess = vi.fn();
-    const onError = vi.fn();
+    const onSuccess = testing.fn();
+    const onError = testing.fn();
     const successMessage = 'Action was successful';
 
-    await handleNotificationForAction(
+    const result = await handleNotificationForAction(
       promise,
       onSuccess,
       onError,
@@ -50,6 +66,24 @@ describe('handleNotificationForAction', () => {
 
     expect(onSuccess).not.toHaveBeenCalled();
     expect(onError).toHaveBeenCalledWith(error);
+    expect(showSuccessNotification).not.toHaveBeenCalled();
+    expect(result).toBeUndefined();
+  });
+
+  test("should resolve with onError's return value if onError is provided and action promise rejects", async () => {
+    const error = new Error('Action failed');
+    const promise = Promise.reject(error);
+    const onError = testing.fn(() => 'error handled');
+    const successMessage = 'Action was successful';
+
+    const result = await handleNotificationForAction(
+      promise,
+      undefined,
+      onError,
+      successMessage,
+    );
+
+    expect(result).toEqual('error handled');
     expect(showSuccessNotification).not.toHaveBeenCalled();
   });
 });

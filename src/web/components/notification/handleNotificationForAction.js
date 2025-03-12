@@ -4,13 +4,14 @@
  */
 
 import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {isDefined} from 'gmp/utils/identity';
 
 /**
  * Handles notifications by displaying success messages based on the result of a promise.
  *
  * @param {Promise} action - The action representing the action to be performed.
- * @param {Function} onSuccess - The callback function to be called if the promise resolves successfully.
- * @param {Function} onError - The callback function to be called if the promise is rejected.
+ * @param {Function} [onSuccess] - The callback function to be called if the promise resolves successfully.
+ * @param {Function} [onError] - The callback function to be called if the promise is rejected.
  * @param {string} successMessage - The message to display if the action is successful.
  * @returns {Promise} The original promise with success and error handlers attached.
  */
@@ -23,9 +24,13 @@ export const handleNotificationForAction = async (
 ) => {
   try {
     const result = await action;
-    onSuccess(result);
+    if (isDefined(onSuccess)) {
+      onSuccess(result);
+    }
     showSuccessNotification('', successMessage);
   } catch (error) {
-    onError(error);
+    if (isDefined(onError)) {
+      onError(error);
+    }
   }
 };
