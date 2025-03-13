@@ -8,7 +8,12 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Target from 'gmp/models/target';
 import Row from 'web/pages/targets/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWithTable, fireEvent, screen} from 'web/utils/Testing';
+import {
+  rendererWithTable,
+  fireEvent,
+  screen,
+  rendererWith,
+} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -219,7 +224,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    gmp.settings.enableKrb5 = true
+    gmp.settings.enableKrb5 = true;
 
     const {render, store} = rendererWith({
       gmp,
@@ -245,7 +250,7 @@ describe('Target row tests', () => {
     expect(screen.getByText(/Kerberos/)).toBeVisible();
     const kerberosLink = screen.getByText('krb5');
     expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
-  })
+  });
 
   test('should render ssh elevate credential', () => {
     const handleToggleDetailsClick = testing.fn();
