@@ -71,6 +71,7 @@ commit_parsers = [
   { message = "^[c|C]hange", group = "<!-- 2 -->:construction_worker: Changed" },
   { message = "^[f|F]ix", group = "<!-- 3 -->:bug: Bug Fixes" },
   { message = "^[r|R]emove", group = "<!-- 4 -->:fire: Removed" },
+  { message = "^[d|D]rop", group = "<!-- 4 -->:fire: Removed" },
   { message = "^[d|D]oc", group = "<!-- 5 -->:books: Documentation" },
   { message = "^[t|T]est", group = "<!-- 6 -->:white_check_mark: Testing" },
   { message = "^[c|C]hore", group = "<!-- 7 -->:wrench: Miscellaneous" },
