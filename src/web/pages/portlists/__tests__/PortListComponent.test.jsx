@@ -159,6 +159,7 @@ describe('Port List Component tests', () => {
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
+
     expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
     expect(onCreated).toHaveBeenCalledWith(newPortList);
     expect(onCreateError).not.toHaveBeenCalled();
@@ -324,7 +325,7 @@ describe('Port List Component tests', () => {
     const savePortListButton = getDialogSaveButton(portListDialog);
     fireEvent.click(savePortListButton);
     await wait();
-    expect(createPortRange).toHaveBeenCalledWith({
+    expect(createPortRange).toHaveBeenCalledExactlyOnceWith({
       end: 20,
       entityType: 'portrange',
       id: '123',
@@ -335,7 +336,7 @@ describe('Port List Component tests', () => {
       port_type: 'tcp',
       protocol_type: 'tcp',
     });
-    expect(save).toHaveBeenCalledWith({
+    expect(save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
       from_file: 0,
       id: '123',
@@ -352,7 +353,7 @@ describe('Port List Component tests', () => {
         },
       ],
     });
-    expect(onSaved).toHaveBeenCalledWith(portList);
+    expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
     expect(onSaveError).not.toHaveBeenCalled();
     expect(onInteraction).toHaveBeenCalled();
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
@@ -410,10 +411,12 @@ describe('Port List Component tests', () => {
     const savePortListButton = getDialogSaveButton();
     fireEvent.click(savePortListButton);
     await wait();
-    expect(deletePortRange).toHaveBeenCalledWith(portList.port_ranges[0]);
-    expect(onSaveError).not.toHaveBeenCalled();
 
-    expect(save).toHaveBeenCalledWith({
+    expect(deletePortRange).toHaveBeenCalledExactlyOnceWith(
+      portList.port_ranges[0],
+    );
+    expect(onSaveError).not.toHaveBeenCalled();
+    expect(save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
       from_file: 0,
       id: '123',
@@ -421,7 +424,7 @@ describe('Port List Component tests', () => {
       port_range: 'T:1-5,7,9,U:1-3,5,7,9',
       port_ranges: [],
     });
-    expect(onSaved).toHaveBeenCalledWith(portList);
+    expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
     expect(onInteraction).toHaveBeenCalled();
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
   });
@@ -460,9 +463,10 @@ describe('Port List Component tests', () => {
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
+
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
     expect(onSaved).not.toHaveBeenCalled();
-    expect(onSaveError).toHaveBeenCalledWith(error);
+    expect(onSaveError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onInteraction).toHaveBeenCalled();
   });
 
@@ -528,7 +532,7 @@ describe('Port List Component tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onCloned).toHaveBeenCalledWith(cloned);
+    expect(onCloned).toHaveBeenCalledExactlyOnceWith(cloned);
     expect(onCloneError).not.toHaveBeenCalled();
     expect(onInteraction).toHaveBeenCalledOnce();
   });
@@ -559,7 +563,7 @@ describe('Port List Component tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onCloneError).toHaveBeenCalledWith(error);
+    expect(onCloneError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onCloned).not.toHaveBeenCalled();
     expect(onInteraction).toHaveBeenCalledOnce();
   });
@@ -619,7 +623,7 @@ describe('Port List Component tests', () => {
 
     fireEvent.click(screen.getByTestId('button'));
     await wait();
-    expect(onDeleteError).toHaveBeenCalledWith(error);
+    expect(onDeleteError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onDeleted).not.toHaveBeenCalled();
     expect(onInteraction).toHaveBeenCalledOnce();
   });
