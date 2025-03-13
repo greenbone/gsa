@@ -200,6 +200,36 @@ describe('Port List Component tests', () => {
     expect(onInteraction).toHaveBeenCalled();
   });
 
+  test('should show error in dialog if creating a new port list fails', async () => {
+    const error = new Error('some error');
+    const gmp = {
+      portlist: {
+        create: testing.fn().mockRejectedValue(error),
+      },
+      user: {currentSettings},
+    };
+    const onInteraction = testing.fn();
+    const onCreated = testing.fn();
+    const {render} = rendererWith({gmp});
+    render(
+      <PortListComponent onCreated={onCreated} onInteraction={onInteraction}>
+        {({create}) => <Button data-testid="open" onClick={create} />}
+      </PortListComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await wait();
+    expect(screen.getByText('New Port List')).toBeInTheDocument();
+
+    const saveButton = getDialogSaveButton();
+    fireEvent.click(saveButton);
+    await wait();
+    screen.getByText('New Port List');
+    screen.getByText('some error');
+    expect(onCreated).not.toHaveBeenCalled();
+    expect(onInteraction).toHaveBeenCalled();
+  });
+
   test('should allow editing a port list', async () => {
     const portList = PortList.fromElement({id: '123', name: 'foo'});
     const portListResponse = {data: portList};
@@ -433,6 +463,42 @@ describe('Port List Component tests', () => {
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
     expect(onSaved).not.toHaveBeenCalled();
     expect(onSaveError).toHaveBeenCalledWith(error);
+    expect(onInteraction).toHaveBeenCalled();
+  });
+
+  test('should show error in dialog if saving a port list fails', async () => {
+    const portList = PortList.fromElement({id: '123', name: 'foo'});
+    const portListResponse = {data: portList};
+    const error = new Error('some error');
+    const gmp = {
+      portlist: {
+        get: testing.fn().mockResolvedValue(portListResponse),
+        save: testing.fn().mockRejectedValue(error),
+      },
+      user: {currentSettings},
+    };
+    const onInteraction = testing.fn();
+    const onSaved = testing.fn();
+    const {render} = rendererWith({gmp});
+    render(
+      <PortListComponent onInteraction={onInteraction} onSaved={onSaved}>
+        {({edit}) => (
+          <Button data-testid="open" onClick={() => edit({id: 123})} />
+        )}
+      </PortListComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await wait();
+    screen.getByText('Edit Port List foo');
+
+    const saveButton = getDialogSaveButton();
+    fireEvent.click(saveButton);
+    await wait();
+
+    screen.getByText('Edit Port List foo');
+    screen.getByText('some error');
+    expect(onSaved).not.toHaveBeenCalled();
     expect(onInteraction).toHaveBeenCalled();
   });
 
