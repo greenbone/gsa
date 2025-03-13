@@ -4,10 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {CredentialCommand} from 'gmp/commands/credentials.js';
+import {createHttp, createActionResultResponse} from 'gmp/commands/testing.js';
 import DefaultTransform from 'gmp/http/transform/default';
-
-import {CredentialCommand} from '../credentials';
-import {createHttp, createActionResultResponse} from '../testing';
 
 describe('CredentialCommand tests', () => {
   test('should create credential', async () => {
