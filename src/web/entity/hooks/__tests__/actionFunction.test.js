@@ -24,7 +24,7 @@ describe('actionFunction', () => {
     await actionFunction(promise, onSuccess, onError, successMessage);
 
     expect(onSuccess).toHaveBeenCalledWith('response');
-    expect(showSuccessNotification).toHaveBeenCalledWith(successMessage);
+    expect(showSuccessNotification).toHaveBeenCalledWith('', successMessage);
   });
 
   test('should call onSuccess with response and not show success notification if successMessage is not defined', async () => {
