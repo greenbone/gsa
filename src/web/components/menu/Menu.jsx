@@ -16,18 +16,16 @@ import {
   CircleHelp,
 } from 'lucide-react';
 import React from 'react';
-import {useMatch} from "react-router";
+import {useMatch} from 'react-router';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
-import useManualURL from 'web/hooks/useManualURL';
 import useTranslation from 'web/hooks/useTranslation';
 
 const Menu = () => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const gmp = useGmp();
-  const manualURL = useManualURL();
 
   function checkCapabilities(capabilitiesList) {
     return capabilitiesList.reduce(
@@ -355,11 +353,6 @@ const Menu = () => {
         key: 'help',
         icon: CircleHelp,
         subNav: [
-          {
-            label: _('User Manual'),
-            to: manualURL,
-            isExternal: true,
-          },
           {
             label: _('CVSS Calculator'),
             to: '/cvsscalculator',

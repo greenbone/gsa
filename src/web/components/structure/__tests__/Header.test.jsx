@@ -5,7 +5,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Header from 'web/components/structure/Header';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {
+  setTimezone,
+  setUsername,
+  setIsLoggedIn,
+} from 'web/store/usersettings/actions';
 import {rendererWith, screen, userEvent, waitFor} from 'web/utils/Testing';
 
 const gmp = {
@@ -24,6 +28,7 @@ describe('Header', () => {
     });
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('testUser'));
+    store.dispatch(setIsLoggedIn(true));
 
     render(<Header />);
 
@@ -50,6 +55,9 @@ describe('Header', () => {
 
     const logo = screen.getByTestId('Enterprise150');
     expect(logo).toBeVisible();
+
+    const manualLink = screen.getByTestId('manual-link');
+    expect(manualLink).toBeVisible();
   });
 
   test('opens user menu, checks items and logs out user', async () => {
@@ -59,6 +67,7 @@ describe('Header', () => {
       store: true,
     });
     store.dispatch(setUsername('testUser'));
+    store.dispatch(setIsLoggedIn(true));
 
     render(<Header />);
 
