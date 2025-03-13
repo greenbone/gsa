@@ -183,7 +183,14 @@ class PortListComponent extends React.Component {
     return Promise.all(promises)
       .then(() => save(data))
       .then(() => this.closePortListDialog())
-      .catch(error => this.props.onSaveError(error));
+      .catch(error => {
+        if (data?.id && isDefined(this.props.onSaveError)) {
+          return this.props.onSaveError(error);
+        } else if (!data?.id && isDefined(this.props.onCreateError)) {
+          return this.props.onCreateError(error);
+        }
+        return Promise.reject(error);
+      });
   }
 
   handleTmpAddPortRange(values) {
