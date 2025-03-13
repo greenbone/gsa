@@ -213,10 +213,18 @@ const ScheduleDialog = ({
 
     if (type === 'startTime') {
       const newStartDate = startDate.clone().hours(hour).minutes(minute);
+      if (!newStartDate.isValid) {
+        return
+      }
+
       setStartDate(newStartDate);
       setStartTime(selectedTime);
     } else if (type === 'endTime') {
       const newEndDate = endDate.clone().hours(hour).minutes(minute);
+      if (!newEndDate.isValid) {
+        return
+      }
+
       setEndDate(newEndDate);
       setEndTime(selectedTime);
     }
