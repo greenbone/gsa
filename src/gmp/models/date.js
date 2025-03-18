@@ -3,22 +3,40 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import durationPlugin from 'dayjs/plugin/duration';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import localeDataPlugin from 'dayjs/plugin/localeData';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import relativeTime from 'dayjs/plugin/relativeTime'; // ES 2015
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 
-import 'moment/dist/locale/ar';
-import 'moment/dist/locale/de';
-import 'moment/dist/locale/fr';
-import 'moment/dist/locale/pt-br.js';
-import 'moment/dist/locale/ru.js';
-import 'moment/dist/locale/tr.js';
-import 'moment/dist/locale/zh-cn.js';
+import 'dayjs/locale/af';
+import 'dayjs/locale/ar';
+import 'dayjs/locale/de';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/pt-br';
+import 'dayjs/locale/ru';
+import 'dayjs/locale/tr';
+import 'dayjs/locale/zh-cn';
 
-export const {
-  isDuration,
-  isMoment: isDate,
-  locale: setLocale,
-  duration,
-  localeData: _localeData,
-} = moment;
+dayjs.extend(relativeTime);
+dayjs.extend(advancedFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(durationPlugin);
+dayjs.extend(localeDataPlugin);
+dayjs.extend(localizedFormat);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 
-export default moment;
+export const isDuration = dayjs.isDuration;
+export const isDate = dayjs.isDayjs;
+export const setLocaleDayjs = dayjs.locale;
+export const _localeData = dayjs.localeData;
+export const duration = dayjs.duration;
+
+export default dayjs;

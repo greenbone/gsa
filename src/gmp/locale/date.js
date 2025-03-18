@@ -4,7 +4,7 @@
  */
 
 import logger from 'gmp/log';
-import {setLocale as setMomentLocale, isDate} from 'gmp/models/date';
+import dayjs, {setLocaleDayjs, isDate} from 'gmp/models/date';
 import {parseDate} from 'gmp/parser';
 import {isDefined, isString, isJsDate} from 'gmp/utils/identity';
 
@@ -36,12 +36,12 @@ export const dateTimeFormatOptions = {
   },
 };
 
-export const setLocale = lang => {
+export const setDateLocale = lang => {
   log.debug('Setting date locale to', lang);
-  setMomentLocale(lang);
+  setLocaleDayjs(lang);
 };
 
-export const getLocale = () => setMomentLocale();
+export const getDateLocale = () => setLocaleDayjs();
 
 export const ensureDate = date => {
   if (!isDefined(date)) {
@@ -64,12 +64,13 @@ export const getFormattedDate = (date, format, tz) => {
   }
 
   if (isDefined(tz)) {
-    date.tz(tz);
+    date = dayjs(date).tz(tz);
+  } else {
+    date = dayjs(date);
   }
 
   return date.format(format);
 };
-
 /**
  * Retrieves the format string based on the category and key.
  *
@@ -140,7 +141,7 @@ export const longDate = (
  * Formats a date with a given time zone and user setting formats.
  *
  * @param {Date} date - The date to format.
- * @param {string} tz - The time zone.
+ * @param {string} [tz] - The time zone.
  * @param {string} [userInterfaceTimeFormat=SYSTEM_DEFAULT] - The user setting time format.
  * @param {string} [userInterfaceDateFormat=SYSTEM_DEFAULT] - The user setting date format.
  * @returns {string} - The formatted date string with time zone.
@@ -161,8 +162,8 @@ export const dateTimeWithTimeZone = (
     (!isDefined(dateFormatString) && !isDefined(timeFormatString));
 
   const formatString = useDefaultFormat
-    ? 'llll z'
-    : `${dateFormatString} ${timeFormatString} z`;
+    ? 'llll zzz'
+    : `${dateFormatString} ${timeFormatString} zzz`;
 
   return getFormattedDate(date, formatString, tz);
 };
