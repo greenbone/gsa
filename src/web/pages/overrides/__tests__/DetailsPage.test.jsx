@@ -159,10 +159,10 @@ describe('Override DetailsPage tests', () => {
       'ID:6d00d22f-551b-4fbe-8215-d8615eff73ea',
     );
     expect(baseElement).toHaveTextContent(
-      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+      'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+      'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 

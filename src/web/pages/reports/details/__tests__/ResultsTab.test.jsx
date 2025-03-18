@@ -15,7 +15,6 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, wait} from 'web/utils/Testing';
 
-
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
@@ -234,14 +233,18 @@ describe('Report Results Tab tests', () => {
     expect(row[2]).toHaveTextContent('123.456.78.910');
     expect(row[2]).toHaveTextContent('foo');
     expect(row[2]).toHaveTextContent('80/tcp');
-    expect(row[2]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[2]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     expect(row[3]).toHaveTextContent('Result 2');
     expect(row[3]).toHaveTextContent('No');
     expect(row[3]).toHaveTextContent('70 %');
     expect(row[3]).toHaveTextContent('109.876.54.321');
     expect(row[3]).toHaveTextContent('80/tcp');
-    expect(row[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[3]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     expect(row[4]).toHaveTextContent('Result 3');
     expect(row[4]).toHaveTextContent('Incomplete');
@@ -249,7 +252,9 @@ describe('Report Results Tab tests', () => {
     expect(row[4]).toHaveTextContent('109.876.54.321');
     expect(row[4]).toHaveTextContent('bar');
     expect(row[4]).toHaveTextContent('80/tcp');
-    expect(row[4]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[4]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
   });
 
   test('should render Results Tab with compliance information', async () => {
@@ -346,14 +351,18 @@ describe('Report Results Tab tests', () => {
     expect(row[2]).toHaveTextContent('123.456.78.910');
     expect(row[2]).toHaveTextContent('foo');
     expect(row[2]).toHaveTextContent('80/tcp');
-    expect(row[2]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[2]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     expect(row[3]).toHaveTextContent('Result 2');
     expect(row[3]).toHaveTextContent('5.0 (Medium)');
     expect(row[3]).toHaveTextContent('70 %');
     expect(row[3]).toHaveTextContent('109.876.54.321');
     expect(row[3]).toHaveTextContent('80/tcp');
-    expect(row[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[3]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     expect(row[4]).toHaveTextContent('Result 3');
     expect(row[4]).toHaveTextContent('5.0 (Medium)');
@@ -361,6 +370,8 @@ describe('Report Results Tab tests', () => {
     expect(row[4]).toHaveTextContent('109.876.54.321');
     expect(row[4]).toHaveTextContent('bar');
     expect(row[4]).toHaveTextContent('80/tcp');
-    expect(row[4]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[4]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
   });
 });

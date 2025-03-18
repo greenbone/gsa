@@ -99,7 +99,9 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
 
     // Compliance Status
@@ -495,7 +497,9 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/5678');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
 
     // Compliance Status
@@ -608,7 +612,9 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
 
     // Compliance Status
@@ -727,7 +733,9 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/auditreport/1234');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/auditreport/1234');
 
     // Compliance Status

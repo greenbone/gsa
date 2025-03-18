@@ -107,7 +107,9 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
@@ -494,7 +496,9 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
@@ -609,7 +613,9 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
@@ -728,7 +734,9 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
@@ -846,7 +854,9 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent(
+      'Wed, Jul 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity

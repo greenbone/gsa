@@ -10,7 +10,6 @@ import EntityInfo from 'web/entity/Info';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const date = Date('2019-01-01T12:00:00Z');
 const date2 = Date('2019-02-02T12:00:00Z');
 
@@ -37,8 +36,12 @@ describe('EntityInfo component tests', () => {
     expect(divs.length).toEqual(7);
     expect(span.length).toEqual(1);
     expect(element).toHaveTextContent('ID:123');
-    expect(element).toHaveTextContent('Created:Tue, Jan 1, 2019 12:00 PM UTC');
-    expect(element).toHaveTextContent('Modified:Sat, Feb 2, 2019 12:00 PM UTC');
+    expect(element).toHaveTextContent(
+      'Created:Tue, Jan 1, 2019 12:00 PM Coordinated Universal Time',
+    );
+    expect(element).toHaveTextContent(
+      'Modified:Sat, Feb 2, 2019 12:00 PM Coordinated Universal Time',
+    );
     expect(element).toHaveTextContent('Owner:owner');
   });
 
@@ -63,8 +66,12 @@ describe('EntityInfo component tests', () => {
     expect(span.length).toEqual(0);
     expect(italic.length).toEqual(1);
     expect(element).toHaveTextContent('ID:123');
-    expect(element).toHaveTextContent('Created:Tue, Jan 1, 2019 12:00 PM UTC');
-    expect(element).toHaveTextContent('Modified:Sat, Feb 2, 2019 12:00 PM UTC');
+    expect(element).toHaveTextContent(
+      'Created:Tue, Jan 1, 2019 12:00 PM Coordinated Universal Time',
+    );
+    expect(element).toHaveTextContent(
+      'Modified:Sat, Feb 2, 2019 12:00 PM Coordinated Universal Time',
+    );
     expect(element).toHaveTextContent('Owner:(Global Object)');
   });
 });

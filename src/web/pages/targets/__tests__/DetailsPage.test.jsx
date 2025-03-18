@@ -195,10 +195,10 @@ describe('Target Detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('ID:46264');
     expect(baseElement).toHaveTextContent(
-      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+      'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+      'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 

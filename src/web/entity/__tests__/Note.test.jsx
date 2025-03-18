@@ -10,7 +10,6 @@ import NoteBox from 'web/entity/Note';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const caps = new Capabilities(['everything']);
 
 const note = Note.fromElement({
@@ -45,9 +44,11 @@ describe('NoteBox component tests', () => {
 
     expect(link).toBeDefined();
     expect(header).toHaveTextContent('Note');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
     expect(element).toHaveTextContent(
-      'Active untilTue, Jan 1, 2019 1:00 PM CET',
+      'ModifiedSat, Feb 2, 2019 1:00 PM Central European Standard',
+    );
+    expect(element).toHaveTextContent(
+      'Active untilTue, Jan 1, 2019 1:00 PM Central European Standard',
     );
     expect(element).toHaveTextContent('foo');
   });
@@ -68,9 +69,11 @@ describe('NoteBox component tests', () => {
     expect(link).toEqual(null);
     expect(element).toHaveTextContent('foo');
     expect(element).not.toHaveTextContent('details.svg');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
     expect(element).toHaveTextContent(
-      'Active untilTue, Jan 1, 2019 1:00 PM CET',
+      'ModifiedSat, Feb 2, 2019 1:00 PM Central European Standard',
+    );
+    expect(element).toHaveTextContent(
+      'Active untilTue, Jan 1, 2019 1:00 PM Central European Standard',
     );
   });
 });
