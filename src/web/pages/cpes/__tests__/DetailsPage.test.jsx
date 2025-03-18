@@ -108,14 +108,14 @@ describe('CPE DetailsPage tests', () => {
 
     expect(baseElement).toHaveTextContent('cpe:/a:foo');
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 24, 2019 10:12 AM UTC',
+      'Modified:Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Created:Mon, Jun 24, 2019 11:55 AM UTC',
+      'Created:Mon, Jun 24, 2019 11:55 AM Coordinated Universal Time',
     );
 
     expect(baseElement).toHaveTextContent(
-      'Last updated:Mon, Jun 24, 2019 10:12 AM UTC',
+      'Last updated:Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
     );
 
     // test page content

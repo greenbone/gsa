@@ -10,7 +10,6 @@ import OverrideBox from 'web/entity/Override';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const caps = new Capabilities(['everything']);
 
 const override = Override.fromElement({
@@ -44,9 +43,11 @@ describe('OverrideBox component tests', () => {
     );
     expect(link).toBeDefined();
     expect(link.getAttribute('href')).toEqual('/override/123');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
     expect(element).toHaveTextContent(
-      'Active untilTue, Jan 1, 2019 1:00 PM CET',
+      'ModifiedSat, Feb 2, 2019 1:00 PM Central European Standard',
+    );
+    expect(element).toHaveTextContent(
+      'Active untilTue, Jan 1, 2019 1:00 PM Central European Standard',
     );
     expect(element).toHaveTextContent('foo');
   });
@@ -68,9 +69,11 @@ describe('OverrideBox component tests', () => {
     expect(link).toEqual(null);
     expect(element).toHaveTextContent('foo');
     expect(element).not.toHaveTextContent('details.svg');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
     expect(element).toHaveTextContent(
-      'Active untilTue, Jan 1, 2019 1:00 PM CET',
+      'ModifiedSat, Feb 2, 2019 1:00 PM Central European Standard',
+    );
+    expect(element).toHaveTextContent(
+      'Active untilTue, Jan 1, 2019 1:00 PM Central European Standard',
     );
   });
 });

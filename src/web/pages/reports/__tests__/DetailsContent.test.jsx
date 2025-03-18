@@ -156,15 +156,15 @@ describe('Report Details Content tests', () => {
 
     // Header
     expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(baseElement).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM CEST',
+      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -191,7 +191,7 @@ describe('Report Details Content tests', () => {
 
     expect(tableData[4]).toHaveTextContent('Scan Time');
     expect(tableData[5]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM CEST - Mon, Jun 3, 2019 1:31 PM CEST',
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time - Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
 
     expect(tableData[6]).toHaveTextContent('Scan Duration');
@@ -326,15 +326,15 @@ describe('Report Details Content tests', () => {
 
     // Header
     expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(baseElement).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM CEST',
+      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 

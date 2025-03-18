@@ -58,7 +58,9 @@ describe('CVEv2 Row tests', () => {
     expect(links[0]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
 
     // Published
-    expect(baseElement).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CEST');
+    expect(baseElement).toHaveTextContent(
+      'Thu, Oct 22, 2020 9:15 PM Central European Summer Time',
+    );
 
     // Severity
     const bars = screen.getAllByTestId('progressbar-box');
@@ -141,7 +143,9 @@ describe('CVEv3 Row tests', () => {
     );
 
     // Published
-    expect(baseElement).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CEST');
+    expect(baseElement).toHaveTextContent(
+      'Thu, Oct 22, 2020 9:15 PM Central European Summer Time',
+    );
 
     // Severity
     const bars = screen.getAllByTestId('progressbar-box');

@@ -54,7 +54,7 @@ const smbCredential = '91011';
 const esxiCredential = '121314';
 const startMinute = 10;
 const startHour = 12;
-const startTimezone = 'UTC';
+const startTimezone = 'Coordinated Universal Time';
 
 const getFormGroupTitles = element => {
   element = getElementOrReturnDocument(element);

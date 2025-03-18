@@ -9,7 +9,6 @@ import EntityBox from 'web/entity/Box';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const date1 = Date('2019-01-01T12:00:00Z');
 const date2 = Date('2019-02-02T12:00:00Z');
 
@@ -49,9 +48,11 @@ describe('EntityBox component tests', () => {
     expect(element).toHaveTextContent('foo');
     expect(element).toHaveTextContent('child');
     expect(element).toHaveTextContent(
-      'Active untilTue, Jan 1, 2019 1:00 PM CET',
+      'Active untilTue, Jan 1, 2019 1:00 PM Central European Standard',
     );
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
+    expect(element).toHaveTextContent(
+      'ModifiedSat, Feb 2, 2019 1:00 PM Central European Standard',
+    );
     expect(element).toHaveStyleRule('width', '400px');
   });
 });

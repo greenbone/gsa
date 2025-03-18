@@ -12,7 +12,6 @@ import Summary from 'web/pages/reports/details/Summary';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
@@ -54,7 +53,7 @@ describe('Report Summary tests', () => {
 
     expect(tableData[4]).toHaveTextContent('Scan Time');
     expect(tableData[5]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM CEST - Mon, Jun 3, 2019 1:31 PM CEST',
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time - Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
 
     expect(tableData[6]).toHaveTextContent('Scan Duration');
@@ -108,7 +107,7 @@ describe('Report Summary tests', () => {
 
     expect(tableData[6]).toHaveTextContent('Scan Time Report 1');
     expect(tableData[7]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM CEST - Mon, Jun 3, 2019 1:31 PM CEST',
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time - Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
 
     expect(tableData[8]).toHaveTextContent('Scan Duration Report 1');
@@ -123,7 +122,7 @@ describe('Report Summary tests', () => {
 
     expect(tableData[14]).toHaveTextContent('Scan Time Report 2');
     expect(tableData[15]).toHaveTextContent(
-      'Mon, May 20, 2019 2:00 PM CEST - Mon, May 20, 2019 2:30 PM CEST',
+      'Mon, May 20, 2019 2:00 PM Central European Summer Time - Mon, May 20, 2019 2:30 PM Central European Summer Time',
     );
 
     expect(tableData[16]).toHaveTextContent('Scan Duration Report 2');

@@ -184,10 +184,10 @@ describe('Result Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Result: foo');
     expect(baseElement).toHaveTextContent('ID:12345');
     expect(baseElement).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM CEST',
+      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 

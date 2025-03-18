@@ -107,8 +107,12 @@ describe('TLS Certificate DetailsPage tests', () => {
     expect(links[1]).toHaveAttribute('href', '/tlscertificates');
 
     expect(container).toHaveTextContent('1234');
-    expect(container).toHaveTextContent('Wed, Jul 10, 2019 12:51 PM UTC');
-    expect(container).toHaveTextContent('Tue, Dec 10, 2019 12:51 PM UTC');
+    expect(container).toHaveTextContent(
+      'Wed, Jul 10, 2019 12:51 PM Coordinated Universal Time',
+    );
+    expect(container).toHaveTextContent(
+      'Tue, Dec 10, 2019 12:51 PM Coordinated Universal Time',
+    );
     expect(container).toHaveTextContent('admin');
 
     expect(container).toHaveTextContent(
@@ -117,10 +121,10 @@ describe('TLS Certificate DetailsPage tests', () => {
     expect(container).toHaveTextContent('Issuer DNCN=LoremIpsumIssuer C=Dolor');
     expect(container).toHaveTextContent('ValidNo');
     expect(container).toHaveTextContent(
-      'ActivatesSat, Aug 10, 2019 12:51 PM UTC',
+      'ActivatesSat, Aug 10, 2019 12:51 PM Coordinated Universal Time',
     );
     expect(container).toHaveTextContent(
-      'ExpiresTue, Sep 10, 2019 12:51 PM UTC',
+      'ExpiresTue, Sep 10, 2019 12:51 PM Coordinated Universal Time',
     );
     expect(container).toHaveTextContent('SHA-256 Fingerprint2142');
     expect(container).toHaveTextContent('MD5 Fingerprint4221');

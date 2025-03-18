@@ -83,8 +83,12 @@ describe('NVT row tests', () => {
     expect(links[0]).toHaveAttribute('href', '/nvts?filter=family%3D%22bar%22');
     expect(links[0]).toHaveTextContent('bar');
 
-    expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 1:55 PM CEST');
-    expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
+    expect(baseElement).toHaveTextContent(
+      'Mon, Jun 24, 2019 1:55 PM Central European Summer Time',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Mon, Jun 24, 2019 12:12 PM Central European Summer Time',
+    );
 
     expect(links[1]).toHaveAttribute('href', '/cve/CVE-2020-1234');
     expect(links[1]).toHaveTextContent('CVE-2020-1234');

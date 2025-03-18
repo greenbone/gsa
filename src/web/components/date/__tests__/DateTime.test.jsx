@@ -17,7 +17,6 @@ import {setTimezone} from 'web/store/usersettings/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const getSetting = testing.fn().mockResolvedValue({});
 
 const gmp = {
@@ -116,7 +115,7 @@ describe('DateTime render tests', () => {
         userinterfacetimeformat: {value: undefined},
         userinterfacedateformat: {value: undefined},
       },
-      'Tue, Jan 1, 2019 1:00 PM CET',
+      'Tue, Jan 1, 2019 1:00 PM Central European Standard Time',
     ],
     [
       'should render with 24 h and WeekDay, Month, Day, Year formatter',
@@ -124,7 +123,7 @@ describe('DateTime render tests', () => {
         userinterfacetimeformat: {value: 24},
         userinterfacedateformat: {value: 'wmdy'},
       },
-      'Tue, Jan 1, 2019 13:00 CET',
+      'Tue, Jan 1, 2019 13:00 Central European Standard Time',
     ],
     [
       'should render with 12 h and WeekDay, Day, Month, Year formatter',
@@ -132,7 +131,7 @@ describe('DateTime render tests', () => {
         userinterfacetimeformat: {value: 12},
         userinterfacedateformat: {value: 'wdmy'},
       },
-      'Tue, 1 Jan 2019 1:00 PM CET',
+      'Tue, 1 Jan 2019 1:00 PM Central European Standard Time',
     ],
   ])('%s', (_, settings, expectedText) => {
     const {render, store} = rendererWith({gmp, store: true});

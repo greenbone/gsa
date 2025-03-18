@@ -24,7 +24,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 // setup
 
 const capabilities = new Capabilities(['everything']);
@@ -236,7 +235,9 @@ describe('Host ListPage tests', () => {
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('123.456.789.10');
     expect(row[1]).toHaveTextContent('10.0 (Critical)');
-    expect(row[1]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM CEST');
+    expect(row[1]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    );
 
     const osImage = baseElement.querySelector('img');
     expect(osImage).toHaveAttribute('src', '/img/os_linux.svg');

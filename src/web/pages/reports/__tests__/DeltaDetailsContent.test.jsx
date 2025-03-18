@@ -142,15 +142,15 @@ describe('Delta Report Details Content tests', () => {
 
     // Header
     expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(baseElement).toHaveTextContent(
-      'Created:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Created:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -173,7 +173,7 @@ describe('Delta Report Details Content tests', () => {
 
     expect(tableData[6]).toHaveTextContent('Scan Time Report 1');
     expect(tableData[7]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM CEST - Mon, Jun 3, 2019 1:31 PM CEST',
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time - Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
 
     expect(tableData[8]).toHaveTextContent('Scan Duration Report 1');
@@ -188,7 +188,7 @@ describe('Delta Report Details Content tests', () => {
 
     expect(tableData[14]).toHaveTextContent('Scan Time Report 2');
     expect(tableData[15]).toHaveTextContent(
-      'Mon, May 20, 2019 2:00 PM CEST - Mon, May 20, 2019 2:30 PM CEST',
+      'Mon, May 20, 2019 2:00 PM Central European Summer Time - Mon, May 20, 2019 2:30 PM Central European Summer Time',
     );
 
     expect(tableData[16]).toHaveTextContent('Scan Duration Report 2');
@@ -312,15 +312,15 @@ describe('Delta Report Details Content tests', () => {
 
     // Header
     expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(baseElement).toHaveTextContent(
-      'Created:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Created:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -350,7 +350,9 @@ describe('Delta Report Details Content tests', () => {
     expect(rows[2]).toHaveTextContent('80 %');
     expect(rows[2]).toHaveTextContent('123.456.78.910');
     expect(rows[2]).toHaveTextContent('80/tcp');
-    expect(rows[2]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(rows[2]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Row 2
     expect(rows[3]).toHaveTextContent('[ = ]');
@@ -360,7 +362,9 @@ describe('Delta Report Details Content tests', () => {
     expect(rows[3]).toHaveTextContent('70 %');
     expect(rows[3]).toHaveTextContent('109.876.54.321');
     expect(rows[3]).toHaveTextContent('80/tcp');
-    expect(rows[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(rows[3]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Filter
     expect(baseElement).toHaveTextContent(

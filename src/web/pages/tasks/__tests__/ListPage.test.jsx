@@ -230,7 +230,9 @@ describe('TaskPage tests', () => {
     expect(row).toHaveTextContent('foo');
     expect(row).toHaveTextContent('(bar)');
     expect(row).toHaveTextContent('Done');
-    expect(row).toHaveTextContent('Sat, Aug 10, 2019 2:51 PM CEST');
+    expect(row).toHaveTextContent(
+      'Sat, Aug 10, 2019 2:51 PM Central European Summer Time',
+    );
     expect(row).toHaveTextContent('5.0 (Medium)');
 
     const startIcon = getByTestId(row, 'start-icon');
