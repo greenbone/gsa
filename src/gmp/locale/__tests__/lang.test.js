@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {getLocale as getDateLocale} from 'gmp/locale/date';
+import {getDateLocale} from 'gmp/locale/date';
 import {_, setLocale, getLocale, onLanguageChange, _l} from 'gmp/locale/lang';
 import {isFunction} from 'gmp/utils/identity';
 

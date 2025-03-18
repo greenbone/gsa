@@ -5,35 +5,35 @@
 
 import {describe, test, expect, beforeEach} from '@gsa/testing';
 import {
-  setLocale,
-  getLocale,
+  setDateLocale,
+  getDateLocale,
   shortDate,
   longDate,
   dateTimeWithTimeZone,
 } from 'gmp/locale/date';
-import date, {setLocale as locale} from 'gmp/models/date';
+import date, {setLocaleDayjs} from 'gmp/models/date';
 
 describe('setLocale tests', () => {
   test('should change locale', () => {
-    setLocale('en');
+    setDateLocale('en');
     let d = date('2018-01-01');
-    expect(locale()).toEqual('en');
+    expect(setLocaleDayjs()).toEqual('en');
     expect(d.format('l')).toEqual('1/1/2018');
 
-    setLocale('de');
+    setDateLocale('de');
     d = date('2018-01-01');
-    expect(locale()).toEqual('de');
+    expect(setLocaleDayjs()).toEqual('de');
     expect(d.format('l')).toEqual('1.1.2018');
   });
 });
 
-describe('getLocale tests', () => {
+describe('getDateLocale tests', () => {
   test('should return current locale', () => {
-    setLocale('en');
-    expect(getLocale()).toEqual('en');
+    setDateLocale('en');
+    expect(getDateLocale()).toEqual('en');
 
-    setLocale('de');
-    expect(getLocale()).toEqual('de');
+    setDateLocale('de');
+    expect(getDateLocale()).toEqual('de');
   });
 });
 
@@ -48,13 +48,13 @@ describe('shortDate tests', () => {
   });
 
   test('should format date', () => {
-    setLocale('en');
+    setDateLocale('en');
     const d = date('2018-01-01');
     expect(shortDate(d)).toEqual('01/01/2018');
   });
 
   test('should format date locale', () => {
-    setLocale('de');
+    setDateLocale('de');
     expect(
       shortDate(date('2018-11-24T15:30:00Z'), 'UTC', 'system_default'),
     ).toEqual('24.11.2018');
@@ -62,7 +62,7 @@ describe('shortDate tests', () => {
 
   describe('shortDate tests', () => {
     beforeEach(() => {
-      setLocale('en');
+      setDateLocale('en');
     });
 
     test.each([
@@ -91,13 +91,13 @@ describe('longDate tests', () => {
   });
 
   test('should format date', () => {
-    setLocale('en');
+    setDateLocale('en');
     const d = date('2018-01-01');
     expect(longDate(d)).toEqual('Mon, Jan 1, 2018 12:00 AM');
   });
 
   test('should format date locale', () => {
-    setLocale('de');
+    setDateLocale('de');
     expect(
       longDate(
         date('2018-11-24T15:30:00Z'),
@@ -110,7 +110,7 @@ describe('longDate tests', () => {
 
   describe('longDate tests', () => {
     beforeEach(() => {
-      setLocale('en');
+      setDateLocale('en');
     });
 
     test.each([
@@ -165,13 +165,15 @@ describe('dateTimeWithTimeZone tests', () => {
   });
 
   test('should format date', () => {
-    setLocale('en');
+    setDateLocale('en');
     const d = date('2018-01-01T00:00:00+01:00').tz('CET');
-    expect(dateTimeWithTimeZone(d)).toEqual('Mon, Jan 1, 2018 12:00 AM CET');
+    expect(dateTimeWithTimeZone(d)).toEqual(
+      'Mon, Jan 1, 2018 12:00 AM Central European Standard Time',
+    );
   });
 
   test('should format date locale', () => {
-    setLocale('de');
+    setDateLocale('de');
     expect(
       dateTimeWithTimeZone(
         date('2018-11-24T15:30:00Z'),
@@ -179,12 +181,12 @@ describe('dateTimeWithTimeZone tests', () => {
         'system_default',
         'system_default',
       ),
-    ).toEqual('Sa., 24. Nov. 2018 15:30 UTC');
+    ).toEqual('Sa., 24. Nov. 2018 15:30 Coordinated Universal Time');
   });
 
   describe('dateTimeWithTimeZone tests', () => {
     beforeEach(() => {
-      setLocale('en');
+      setDateLocale('en');
     });
 
     test.each([
@@ -193,28 +195,28 @@ describe('dateTimeWithTimeZone tests', () => {
         undefined,
         undefined,
         undefined,
-        'Fri, Nov 23, 2018 12:00 AM ',
+        'Fri, Nov 23, 2018 12:00 AM',
       ],
       [
         '2018-11-24T15:30:00Z',
         'UTC',
         12,
         'wdmy',
-        'Sat, 24 Nov 2018 3:30 PM UTC',
+        'Sat, 24 Nov 2018 3:30 PM Coordinated Universal Time',
       ],
       [
         '2018-11-24T15:30:00Z',
         'UTC',
         24,
         'wmdy',
-        'Sat, Nov 24, 2018 15:30 UTC',
+        'Sat, Nov 24, 2018 15:30 Coordinated Universal Time',
       ],
       [
         '2018-11-24T15:30:00Z',
         'UTC',
         'system_default',
         'system_default',
-        'Sat, Nov 24, 2018 3:30 PM UTC',
+        'Sat, Nov 24, 2018 3:30 PM Coordinated Universal Time',
       ],
     ])(
       'should format date %p with tz %p, userInterfaceTimeFormat %p, and userInterfaceDateFormat %p to %p',
