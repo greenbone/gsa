@@ -518,23 +518,23 @@ export const generateFilename = ({
   }
 
   const percentC = getFormattedDate(cTime, 'YYYYMMDD');
-  const percentc = getFormattedDate(cTime, 'HHMMSS');
+  const percentc = getFormattedDate(cTime, 'HHMMss'); // Updated format
   const percentD = getFormattedDate(currentTime, 'YYYYMMDD');
-  const percentt = getFormattedDate(currentTime, 'HHMMSS');
+  const percentt = getFormattedDate(currentTime, 'HHMMss'); // Updated format
   const percentM = getFormattedDate(mTime, 'YYYYMMDD');
-  const percentm = getFormattedDate(mTime, 'HHMMSS');
+  const percentm = getFormattedDate(mTime, 'HHMMss'); // Updated format
   const percentN = isDefined(resourceName) ? resourceName : resourceType;
 
   const fileNameMap = {
     '%C': percentC, // The creation date in the format YYYYMMDD. Changed to the current date if a creation date is not available.
-    '%c': percentc, // The creation time in the format HHMMSS. Changed to the current time if a creation time is not available.
+    '%c': percentc, // The creation time in the format HHMMss. Changed to the current time if a creation time is not available.
     '%D': percentD, // The current date in the format YYYYMMDD.
     '%F': reportFormat, // The name of the format plug-in used (XML for lists and types other than reports).
     '%M': percentM, // The modification date in the format YYYYMMDD. Changed to the creation date or to the current date if a modification date is not available.
-    '%m': percentm, // The modification time in the format HHMMSS. Changed to the creation time or to the current time if a modification time is not available.
+    '%m': percentm, // The modification time in the format HHMMss. Changed to the creation time or to the current time if a modification time is not available.
     '%N': percentN, // The name for the resource or the associated task for reports. Lists and types without a name will use the type (see %T).
     '%T': resourceType, // The resource type, e.g. “task”, “port_list”. Pluralized for list pages.
-    '%t': percentt, // The current time in the format HHMMSS.
+    '%t': percentt, // The current time in the format HHMMss.
     '%U': id, // The unique ID of the resource or “list” for lists of multiple resources.
     '%u': username, // The name for the currently logged in user.
     '%%': '%',
