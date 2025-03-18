@@ -229,10 +229,10 @@ describe('Host DetailsPage tests', () => {
     expect(baseElement).toHaveTextContent('Host: Foo');
     expect(baseElement).toHaveTextContent('ID:12345');
     expect(baseElement).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM CEST',
+      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -278,17 +278,23 @@ describe('Host DetailsPage tests', () => {
 
     expect(row[1]).toHaveTextContent('hostname');
     expect(row[1]).toHaveTextContent('foo');
-    expect(row[1]).toHaveTextContent('Sun, Jun 2, 2019 2:00 PM CEST');
+    expect(row[1]).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    );
     expect(row[1]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
 
     expect(row[2]).toHaveTextContent('ip');
     expect(row[2]).toHaveTextContent('123.456.789.10');
-    expect(row[2]).toHaveTextContent('Sun, Jun 2, 2019 2:00 PM CEST');
+    expect(row[2]).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    );
     expect(row[2]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
 
     expect(row[3]).toHaveTextContent('OS');
     expect(row[3]).toHaveTextContent('cpe:/o:linux:kernel');
-    expect(row[3]).toHaveTextContent('Sun, Jun 2, 2019 2:00 PM CEST');
+    expect(row[3]).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    );
     expect(row[3]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
   });
 

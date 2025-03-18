@@ -128,10 +128,10 @@ describe('Schedule Detailspage tests', () => {
 
     expect(container).toHaveTextContent('ID:1234');
     expect(container).toHaveTextContent(
-      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+      'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
     );
     expect(container).toHaveTextContent(
-      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+      'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
     );
     expect(container).toHaveTextContent('Owner:admin');
 
@@ -143,13 +143,15 @@ describe('Schedule Detailspage tests', () => {
     expect(container).toHaveTextContent('hello world');
 
     expect(container).toHaveTextContent('First Run');
-    expect(container).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
+    expect(container).toHaveTextContent(
+      'Mon, Jan 4, 2021 11:54 AM Coordinated Universal Time',
+    );
 
     expect(container).toHaveTextContent('Next Run');
     expect(container).toHaveTextContent('-');
 
     expect(container).toHaveTextContent('Timezone');
-    expect(container).toHaveTextContent('UTC');
+    expect(container).toHaveTextContent('Coordinated Universal Time');
 
     expect(container).toHaveTextContent('Recurrence');
     expect(container).toHaveTextContent('Once');

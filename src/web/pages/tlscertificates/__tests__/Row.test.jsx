@@ -63,9 +63,15 @@ describe('Tls Certificate Row tests', () => {
     // Info
     expect(baseElement).toHaveTextContent('CN=LoremIpsumSubject C=Dolor');
     expect(baseElement).toHaveTextContent('123');
-    expect(baseElement).toHaveTextContent('Sat, Aug 10, 2019 12:51 PM UTC');
-    expect(baseElement).toHaveTextContent('Tue, Sep 10, 2019 12:51 PM UTC');
-    expect(baseElement).toHaveTextContent('Thu, Oct 10, 2019 12:51 PM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Sat, Aug 10, 2019 12:51 PM Coordinated Universal Time',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Tue, Sep 10, 2019 12:51 PM Coordinated Universal Time',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Thu, Oct 10, 2019 12:51 PM Coordinated Universal Time',
+    );
 
     // Actions
     screen.getAllByTestId('delete-icon');

@@ -211,8 +211,12 @@ describe('NvtsPage tests', () => {
 
     expect(row[2]).toHaveTextContent('foo');
     expect(row[2]).toHaveTextContent('bar');
-    expect(row[2]).toHaveTextContent('Mon, Jun 24, 2019 1:55 PM CEST');
-    expect(row[2]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
+    expect(row[2]).toHaveTextContent(
+      'Mon, Jun 24, 2019 1:55 PM Central European Summer Time',
+    );
+    expect(row[2]).toHaveTextContent(
+      'Mon, Jun 24, 2019 12:12 PM Central European Summer Time',
+    );
     expect(row[2]).toHaveTextContent('CVE-2020-1234');
     expect(row[2]).toHaveTextContent('CVE-2020-5678');
     expect(row[2]).toHaveTextContent('80 %');

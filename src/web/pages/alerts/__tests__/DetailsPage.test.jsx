@@ -144,10 +144,10 @@ describe('Alert DetailsPage tests', () => {
 
     expect(baseElement).toHaveTextContent('ID:1234');
     expect(baseElement).toHaveTextContent(
-      'Created:Tue, Jul 16, 2019 8:31 AM CEST',
+      'Created:Tue, Jul 16, 2019 8:31 AM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Tue, Jul 16, 2019 8:44 AM CEST',
+      'Modified:Tue, Jul 16, 2019 8:44 AM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 

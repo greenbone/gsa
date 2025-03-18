@@ -3,13 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  describe,
+  test,
+  expect,
+  testing,
+  beforeEach,
+  afterEach,
+} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {License} from 'gmp/models/license';
 import LicenseNotification from 'web/components/notification/LicenseNotification';
 import {rendererWith, wait} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
-
 
 const dataNoLicense = License.fromElement({
   status: 'no_license',
@@ -112,11 +118,14 @@ const mockDate = new Date('2021-08-09T07:05:21Z');
 const capsAdmin = new Capabilities(['everything']);
 const capsUser = new Capabilities(['get_license']);
 
-beforeEach(() => {
-  testing.spyOn(global.Date, 'now').mockImplementation(() => mockDate);
-});
-
 describe('LicenseNotification tests', () => {
+  beforeEach(() => {
+    testing.setSystemTime(mockDate);
+  });
+  afterEach(() => {
+    testing.useRealTimers();
+  });
+
   test('should render if <=30 days active for Admin user', async () => {
     const handler = testing.fn();
     const gmp = {

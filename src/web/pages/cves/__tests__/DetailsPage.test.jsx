@@ -187,13 +187,13 @@ describe('CVE DetailsPage tests', () => {
 
     expect(baseElement).toHaveTextContent('CVE-2020-9997');
     expect(baseElement).toHaveTextContent(
-      'Published:Thu, Oct 22, 2020 7:15 PM UTC',
+      'Published:Thu, Oct 22, 2020 7:15 PM Coordinated Universal Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Fri, Oct 30, 2020 11:44 AM UTC',
+      'Modified:Fri, Oct 30, 2020 11:44 AM Coordinated Universal Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Last updated:Mon, Oct 26, 2020 8:27 PM UTC',
+      'Last updated:Mon, Oct 26, 2020 8:27 PM Coordinated Universal Time',
     );
 
     expect(baseElement).toHaveTextContent('Attack VectorLocal');

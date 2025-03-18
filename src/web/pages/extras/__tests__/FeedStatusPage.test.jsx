@@ -9,13 +9,7 @@ import Response from 'gmp/http/response';
 import FeedStatus from 'web/pages/extras/FeedStatusPage';
 import {rendererWith, screen, waitFor} from 'web/utils/Testing';
 
-const mockDate = new Date(1595660400000); // Saturday July 25 090000
-
-// store global.Date.now to restore later
-const _now = global.Date.now;
-
-// set mockDate so the feed ages don't keep changing
-global.Date.now = testing.fn(() => mockDate);
+testing.setSystemTime(new Date('2020-07-25T07:00:00Z'));
 
 const nvtFeed = createFeed({
   name: 'Greenbone Community Feed',
@@ -157,5 +151,4 @@ describe('Feed status page tests', () => {
   });
 });
 
-// restore overwritten method
-global.Date.now = _now;
+testing.useRealTimers();

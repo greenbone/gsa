@@ -191,7 +191,9 @@ describe('CvesPage tests', () => {
 
     expect(row[2]).toHaveTextContent('CVE-2020-9992');
     expect(row[2]).toHaveTextContent('foo bar baz');
-    expect(row[2]).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CESTA');
+    expect(row[2]).toHaveTextContent(
+      'Thu, Oct 22, 2020 9:15 PM Central European Summer TimeA',
+    );
     expect(row[2]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
     expect(row[2]).toHaveTextContent('9.3 (Critical)');
     expect(row[2]).toHaveTextContent('0.50000');
