@@ -14,7 +14,9 @@ import Loading from 'web/components/loading/Loading';
 import SearchBar from 'web/components/searchbar/SearchBar';
 import useTranslation from 'web/hooks/useTranslation';
 import NvtFamilies from 'web/pages/scanconfigs/NvtFamilies';
-import NvtPreferences, {NvtPreferencePropType} from 'web/pages/scanconfigs/NvtPreferences';
+import NvtPreferences, {
+  NvtPreferencePropType,
+} from 'web/pages/scanconfigs/NvtPreferences';
 import ScannerPreferences, {
   ScannerPreferencePropType,
 } from 'web/pages/scanconfigs/ScannerPreferences';
@@ -108,7 +110,6 @@ const EditScanConfigDialog = ({
   nvtPreferences = [],
   scannerPreferences = [],
   scannerId,
-  scanners = [],
   title,
   usageType = 'scan',
   onClose,
@@ -306,8 +307,6 @@ EditScanConfigDialog.propTypes = {
   nvtPreferences: PropTypes.arrayOf(NvtPreferencePropType),
   scannerId: PropTypes.id,
   scannerPreferences: PropTypes.arrayOf(ScannerPreferencePropType),
-  scanners: PropTypes.array,
-  select: PropTypes.object,
   title: PropTypes.string.isRequired,
   usageType: PropTypes.string,
   onClose: PropTypes.func.isRequired,

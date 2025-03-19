@@ -89,7 +89,7 @@ ToolBarIcons.propTypes = {
   onRoleEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, general_permissions = [], links}) => {
+const Details = ({entity, links}) => {
   return (
     <Layout flex="column">
       <RoleDetails entity={entity} links={links} />
@@ -99,7 +99,6 @@ const Details = ({entity, general_permissions = [], links}) => {
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
-  general_permissions: PropTypes.object,
   links: PropTypes.bool,
 };
 

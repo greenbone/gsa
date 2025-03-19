@@ -52,7 +52,7 @@ const ReportConfigsPage = ({
   onDownloaded,
   onError,
   onInteraction,
-  showSuccess,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -99,7 +99,6 @@ const ReportConfigsPage = ({
 };
 
 ReportConfigsPage.propTypes = {
-  showSuccess: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

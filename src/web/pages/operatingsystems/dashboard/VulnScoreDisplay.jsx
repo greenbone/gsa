@@ -22,7 +22,6 @@ import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 import {withRouter} from 'web/utils/withRouter';
 
-
 const ToolTip = styled.div`
   font-weight: normal;
   text-align: center;
@@ -137,7 +136,7 @@ export const OsVulnScoreTableDisplay = createDisplay({
   dataTitles: [_l('Operating System Name'), _l('Max. Average Severity Score')],
   dataRow: row => [row.x, row.y],
   dataTransform: transformVulnScoreData,
-  title: ({data: tdata}) => _('Most Vulnerable Operating Systems'),
+  title: () => _('Most Vulnerable Operating Systems'),
   displayId: 'os-by-most-vulnerable-table',
   displayName: 'OsVulnScoreTableDisplay',
   filtersFilter: OS_FILTER_FILTER,

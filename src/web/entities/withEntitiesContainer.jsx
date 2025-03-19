@@ -17,7 +17,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-
 const noop = () => {};
 
 const withEntitiesContainer =
@@ -32,7 +31,6 @@ const withEntitiesContainer =
   ) =>
   Component => {
     let EntitiesContainerWrapper = ({
-      children,
       filter,
       loadEntities,
       notify,
