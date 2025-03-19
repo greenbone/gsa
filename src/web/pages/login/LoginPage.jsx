@@ -28,7 +28,6 @@ import Theme from 'web/utils/Theme';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
-
 const log = logger.getLogger('web.login');
 
 const StyledLayout = styled(Layout)`
@@ -194,7 +193,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   setIsLoggedIn: value => dispatch(setIsLoggedIn(value)),
 });
 
-const mapStateToProp = (rootState, ownProps) => ({
+const mapStateToProp = rootState => ({
   isLoggedIn: isLoggedIn(rootState),
 });
 

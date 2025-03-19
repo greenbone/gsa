@@ -136,7 +136,7 @@ describe('Report Config Component tests', () => {
 
   test('should open create dialog and call GMP create', async () => {
     let createClick;
-    const children = testing.fn(({edit, create}) => {
+    const children = testing.fn(({create}) => {
       createClick = create;
     });
     const handleInteraction = testing.fn();
@@ -219,7 +219,7 @@ describe('Report Config Component tests', () => {
 
   test('should open and close create dialog', async () => {
     let createClick;
-    const children = testing.fn(({edit, create}) => {
+    const children = testing.fn(({create}) => {
       createClick = create;
     });
     const handleInteraction = testing.fn();

@@ -20,7 +20,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NotesWordCountLoader} from 'web/pages/notes/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const transformWordCountData = (data = {}) => {
   const {groups = []} = data;
   const tdata = groups.map(group => {
@@ -117,7 +116,7 @@ export const NotesWordCloudTableDisplay = createDisplay({
   dataTransform: transformWordCountData,
   dataRow: row => [row.label, row.value],
   dataTitles: [_l('Text'), _l('Count')],
-  title: ({data: tdata}) => _('Notes Text Word Cloud'),
+  title: () => _('Notes Text Word Cloud'),
   displayId: 'note-by-text-words-table',
   displayName: 'NotesWordCloudTableDisplay',
   filtersFilter: NOTES_FILTER_FILTER,

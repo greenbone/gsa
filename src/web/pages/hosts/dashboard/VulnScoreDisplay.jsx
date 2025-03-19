@@ -22,14 +22,13 @@ import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 import {withRouter} from 'web/utils/withRouter';
 
-
 const ToolTip = styled.div`
   font-weight: normal;
   text-align: center;
   line-height: 1.2em;
 `;
 
-const transformVulnScoreData = (data = {}, {severityClass}) => {
+const transformVulnScoreData = (data = {}) => {
   const {groups = []} = data;
   const tdata = groups
     .filter(group => {

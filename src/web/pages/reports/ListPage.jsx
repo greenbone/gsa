@@ -21,7 +21,9 @@ import {
 } from 'web/components/loading/Reload';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import ReportsDashboard, {REPORTS_DASHBOARD_ID} from 'web/pages/reports/dashboard';
+import ReportsDashboard, {
+  REPORTS_DASHBOARD_ID,
+} from 'web/pages/reports/dashboard';
 import ReportFilterDialog from 'web/pages/reports/FilterDialog';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
 import ReportsTable from 'web/pages/reports/Table';
@@ -37,7 +39,6 @@ import {
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 
@@ -96,7 +97,7 @@ class Page extends React.Component {
     this.setState({containerTaskDialogVisible: true});
   }
 
-  openImportDialog(task_id) {
+  openImportDialog() {
     this.props.loadTasks().then(() => {
       this.setState({
         importDialogVisible: true,

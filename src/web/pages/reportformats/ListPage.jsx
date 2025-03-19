@@ -47,13 +47,7 @@ ToolBarIcons.propTypes = {
   onReportFormatImportClick: PropTypes.func.isRequired,
 };
 
-const ReportFormatsPage = ({
-  onChanged,
-  onError,
-  onInteraction,
-  showSuccess,
-  ...props
-}) => {
+const ReportFormatsPage = ({onChanged, onError, onInteraction, ...props}) => {
   const [_] = useTranslation();
   return (
     <ReportFormatComponent
