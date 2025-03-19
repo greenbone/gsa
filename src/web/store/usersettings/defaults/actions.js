@@ -70,5 +70,3 @@ export const loadUserSettingDefault = gmp => id => (dispatch, getState) => {
       }
     });
 };
-
-// vim: set ts=2 sw=2 two=80:
