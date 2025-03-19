@@ -42,7 +42,7 @@ const ToolBarIcons = () => (
 
 /* CVSS v2 .... */
 
-const CvssV2Calculator = props => {
+const CvssV2Calculator = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [searchParams] = useSearchParams();
 
@@ -332,7 +332,7 @@ const CvssV2Calculator = props => {
 
 /* CVSS v3 .... */
 
-const CvssV3Calculator = props => {
+const CvssV3Calculator = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [searchParams] = useSearchParams();
 

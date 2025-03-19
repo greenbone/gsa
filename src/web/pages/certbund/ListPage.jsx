@@ -12,7 +12,9 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from 'web/pages/certbund/dashboard';
+import CertBundDashboard, {
+  CERTBUND_DASHBOARD_ID,
+} from 'web/pages/certbund/dashboard';
 import CertBundFilterDialog from 'web/pages/certbund/FilterDialog';
 import CertBundTable from 'web/pages/certbund/Table';
 import {
@@ -21,7 +23,7 @@ import {
 } from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
 
-const ToolBarIcons = props => (
+const ToolBarIcons = () => (
   <ManualIcon
     anchor="cert-bund-advisories"
     page="managing-secinfo"

@@ -98,7 +98,7 @@ ToolBarIcons.propTypes = {
   onCredentialInstallerDownloadClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, links = true, ...props}) => {
+const Details = ({entity, links = true}) => {
   const {certificate_info: cert} = entity;
   return (
     <Layout flex="column">

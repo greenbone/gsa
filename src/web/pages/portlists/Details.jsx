@@ -14,7 +14,7 @@ import TableRow from 'web/components/table/Row';
 import {Col} from 'web/entity/Page';
 import PropTypes from 'web/utils/PropTypes';
 
-const PortListDetails = ({entity, ...props}) => {
+const PortListDetails = ({entity}) => {
   const {
     comment,
     deprecated,
