@@ -18,7 +18,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-const ReportFormatDetails = ({entity, links = true}) => {
+const ReportFormatDetails = ({entity}) => {
   const {
     configurable,
     deprecated,
@@ -152,7 +152,6 @@ const ReportFormatDetails = ({entity, links = true}) => {
 
 ReportFormatDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default ReportFormatDetails;

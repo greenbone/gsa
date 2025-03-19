@@ -14,7 +14,7 @@ import TableRow from 'web/components/table/Row';
 import {Col} from 'web/entity/Page';
 import PropTypes from 'web/utils/PropTypes';
 
-const GroupDetails = ({entity, isSpecial, links}) => {
+const GroupDetails = ({entity, isSpecial}) => {
   const {users = [], comment} = entity;
   return (
     <Layout grow flex="column">
@@ -54,7 +54,6 @@ const GroupDetails = ({entity, isSpecial, links}) => {
 GroupDetails.propTypes = {
   entity: PropTypes.model.isRequired,
   isSpecial: PropTypes.bool,
-  links: PropTypes.bool,
 };
 
 export default GroupDetails;

@@ -88,7 +88,6 @@ export const withEntitiesHeader =
 export const createEntitiesHeader = (columns, actionsColumn, options = {}) => {
   const Header = ({
     actionsColumn,
-    links = true,
     currentSortBy,
     currentSortDir,
     sort = true,
@@ -120,7 +119,6 @@ export const createEntitiesHeader = (columns, actionsColumn, options = {}) => {
     actionsColumn: PropTypes.element,
     currentSortBy: PropTypes.string,
     currentSortDir: PropTypes.string,
-    links: PropTypes.bool,
     sort: PropTypes.bool,
     onSortChange: PropTypes.func,
   };

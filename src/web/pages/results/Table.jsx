@@ -24,7 +24,6 @@ const Header = ({
   actionsColumn,
   audit = false,
   delta = false,
-  links = true,
   sort = true,
   currentSortBy,
   currentSortDir,
@@ -167,7 +166,6 @@ Header.propTypes = {
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
   delta: PropTypes.bool,
-  links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };

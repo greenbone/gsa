@@ -55,7 +55,7 @@ ToolBarIcons.propTypes = {
   onDfnCertAdvDownloadClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, links = true}) => {
+const Details = ({entity}) => {
   const {cves, summary, additionalLinks} = entity;
   return (
     <Layout flex="column">
@@ -98,7 +98,6 @@ const Details = ({entity, links = true}) => {
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 const DfnCertAdvPage = ({

@@ -15,7 +15,6 @@ import VulnsRow from 'web/pages/vulns/Row';
 import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({
-  links = true,
   sort = true,
   currentSortBy,
   currentSortDir,
@@ -97,7 +96,6 @@ Header.propTypes = {
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
   hideColumns: PropTypes.object,
-  links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };

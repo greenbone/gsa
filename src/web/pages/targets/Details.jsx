@@ -22,7 +22,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 const MAX_HOSTS_LISTINGS = 70;
 
-const TargetDetails = ({capabilities, entity, links = true}) => {
+const TargetDetails = ({capabilities, entity}) => {
   const {
     alive_tests,
     esxi_credential,
@@ -242,7 +242,6 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 TargetDetails.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default withCapabilities(TargetDetails);

@@ -18,8 +18,7 @@ import {Col} from 'web/entity/Page';
 import {renderDuration, renderRecurrence} from 'web/pages/schedules/Render';
 import PropTypes from 'web/utils/PropTypes';
 
-
-const ScheduleDetails = ({entity, links = true}) => {
+const ScheduleDetails = ({entity}) => {
   const {comment, tasks = [], timezone, timezone_abbrev, event = {}} = entity;
   const {startDate, nextDate, duration, recurrence} = event;
   return (
@@ -107,7 +106,6 @@ const ScheduleDetails = ({entity, links = true}) => {
 
 ScheduleDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default ScheduleDetails;
