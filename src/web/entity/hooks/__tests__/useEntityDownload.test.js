@@ -39,7 +39,7 @@ describe('useEntityDownload', () => {
     );
     await wait(); // wait for currentSettings to be resolved and put into the store
     expect(currentSettings).toHaveBeenCalledOnce();
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(onDownloaded).toHaveBeenCalledWith({

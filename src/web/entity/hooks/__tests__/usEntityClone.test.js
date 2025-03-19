@@ -26,7 +26,7 @@ describe('useEntityClone', () => {
         onInteraction,
       }),
     );
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(cloneEntity).toHaveBeenCalledWith(entity);
@@ -53,7 +53,7 @@ describe('useEntityClone', () => {
         onInteraction,
       }),
     );
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(cloneEntity).toHaveBeenCalledWith(entity);

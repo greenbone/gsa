@@ -22,7 +22,9 @@ const actionFunction = async (promise, onSuccess, onError, successMessage) => {
   try {
     const response = await promise;
     if (isDefined(onSuccess)) {
-      isDefined(successMessage) && showSuccessNotification('', successMessage);
+      if (isDefined(successMessage)) {
+        showSuccessNotification('', successMessage);
+      }
       return onSuccess(response);
     }
   } catch (error) {

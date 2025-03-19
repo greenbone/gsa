@@ -25,7 +25,7 @@ describe('useEntityDelete', () => {
         onInteraction,
       }),
     );
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(deleteEntity).toHaveBeenCalledWith(entity);
@@ -51,7 +51,7 @@ describe('useEntityDelete', () => {
         onInteraction,
       }),
     );
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(deleteEntity).toHaveBeenCalledWith(entity);
