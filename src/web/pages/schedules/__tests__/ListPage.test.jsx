@@ -158,7 +158,9 @@ describe('SchedulePage tests', () => {
 
     expect(row[1]).toHaveTextContent('schedule 1');
     expect(row[1]).toHaveTextContent('(hello world)');
-    expect(row[1]).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
+    expect(row[1]).toHaveTextContent(
+      'Mon, Jan 4, 2021 11:54 AM Coordinated Universal Time',
+    );
     expect(row[1]).toHaveTextContent('-');
     expect(row[1]).toHaveTextContent('Entire Operation');
 

@@ -266,8 +266,12 @@ describe('Scan Config DetailsPage tests', () => {
     );
 
     expect(baseElement).toHaveTextContent('12345');
-    expect(baseElement).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
-    expect(baseElement).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
+    expect(baseElement).toHaveTextContent(
+      'Tue, Jul 16, 2019 8:31 AM Central European Summer Time',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Tue, Jul 16, 2019 8:44 AM Central European Summer Time',
+    );
     expect(baseElement).toHaveTextContent('admin');
 
     expect(baseElement).toHaveTextContent('bar');

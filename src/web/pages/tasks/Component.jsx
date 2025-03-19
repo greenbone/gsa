@@ -61,7 +61,6 @@ import withGmp from 'web/utils/withGmp';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
-
 class TaskComponent extends React.Component {
   constructor(...args) {
     super(...args);
@@ -519,8 +518,8 @@ class TaskComponent extends React.Component {
         esxi_credential: defaultEsxiCredential,
         scanner_id: defaultScannerId,
         start_date: now,
-        start_minute: now.minutes(),
-        start_hour: now.hours(),
+        start_minute: now.minute(),
+        start_hour: now.hour(),
         start_timezone: timezone,
       });
     });
@@ -561,8 +560,8 @@ class TaskComponent extends React.Component {
         reschedule: NO_VALUE,
         task_id: selectSaveId(settings.tasks),
         start_date: now,
-        start_minute: now.minutes(),
-        start_hour: now.hours(),
+        start_minute: now.minute(),
+        start_hour: now.hour(),
         start_timezone: timezone,
       });
     });

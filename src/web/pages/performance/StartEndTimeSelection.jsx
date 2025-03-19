@@ -41,11 +41,11 @@ const StartTimeSelection = ({
     const [hour, minute] = selectedTime.split(':').map(Number);
 
     if (type === 'startTime') {
-      const newStartDate = startDate.clone().hours(hour).minutes(minute);
+      const newStartDate = startDate.clone().hour(hour).minute(minute);
       setStartDate(newStartDate);
       setStartTime(selectedTime);
     } else if (type === 'endTime') {
-      const newEndDate = endDate.clone().hours(hour).minutes(minute);
+      const newEndDate = endDate.clone().hour(hour).minute(minute);
       setEndDate(newEndDate);
       setEndTime(selectedTime);
     }

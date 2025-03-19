@@ -199,7 +199,9 @@ describe('CpesPage tests', () => {
 
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('bar');
-    expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
+    expect(row[1]).toHaveTextContent(
+      'Mon, Jun 24, 2019 12:12 PM Central European Summer Time',
+    );
     expect(row[1]).toHaveTextContent('3');
     expect(row[1]).toHaveTextContent('9.8 (Critical)');
   });

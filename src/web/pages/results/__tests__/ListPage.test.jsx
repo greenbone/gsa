@@ -260,7 +260,9 @@ describe('Results listpage tests', () => {
     expect(row[2]).toHaveTextContent('123.456.78.910');
     expect(row[2]).toHaveTextContent('foo');
     expect(row[2]).toHaveTextContent('80/tcp');
-    expect(row[2]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[2]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Row 2
     expect(row[3]).toHaveTextContent('Result 2');
@@ -268,7 +270,9 @@ describe('Results listpage tests', () => {
     expect(row[3]).toHaveTextContent('70 %');
     expect(row[3]).toHaveTextContent('109.876.54.321');
     expect(row[3]).toHaveTextContent('80/tcp');
-    expect(row[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[3]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Row 3
     expect(row[4]).toHaveTextContent('Result 3');
@@ -277,7 +281,9 @@ describe('Results listpage tests', () => {
     expect(row[4]).toHaveTextContent('109.876.54.321');
     expect(row[4]).toHaveTextContent('bar');
     expect(row[4]).toHaveTextContent('80/tcp');
-    expect(row[4]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[4]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Footer
     expect(

@@ -191,9 +191,9 @@ describe('TlsCertificatePage tests', () => {
     // the serial but not the issuerDn or timestamps
 
     // expect(row[1]).toHaveTextContent('CN=LoremIpsum C=Dolor');
-    // expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 12:51 PM UTC');
-    // expect(row[1]).toHaveTextContent('Tue, Sep 10, 2019 12:51 PM UTC');
-    // expect(row[1]).toHaveTextContent('Thu, Oct 10, 2019 12:51 PM UTC');
+    // expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 12:51 PM Coordinated Universal Time');
+    // expect(row[1]).toHaveTextContent('Tue, Sep 10, 2019 12:51 PM Coordinated Universal Time');
+    // expect(row[1]).toHaveTextContent('Thu, Oct 10, 2019 12:51 PM Coordinated Universal Time');
 
     screen.getAllByTitle('Delete TLS Certificate');
     screen.getAllByTitle('Download TLS Certificate');

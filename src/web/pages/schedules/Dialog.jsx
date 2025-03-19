@@ -24,7 +24,9 @@ import DaySelect from 'web/pages/schedules/DaySelect';
 import MonthDaysSelect from 'web/pages/schedules/MonthDaysSelect';
 import {renderDuration} from 'web/pages/schedules/Render';
 import TimeUnitSelect from 'web/pages/schedules/TimeUnitSelect';
-import WeekDaySelect, {WeekDaysPropType} from 'web/pages/schedules/WeekdaySelect';
+import WeekDaySelect, {
+  WeekDaysPropType,
+} from 'web/pages/schedules/WeekdaySelect';
 import PropTypes from 'web/utils/PropTypes';
 import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
@@ -212,11 +214,11 @@ const ScheduleDialog = ({
     const [hour, minute] = selectedTime.split(':').map(Number);
 
     if (type === 'startTime') {
-      const newStartDate = startDate.clone().hours(hour).minutes(minute);
+      const newStartDate = startDate.clone().hour(hour).minute(minute);
       setStartDate(newStartDate);
       setStartTime(selectedTime);
     } else if (type === 'endTime') {
-      const newEndDate = endDate.clone().hours(hour).minutes(minute);
+      const newEndDate = endDate.clone().hour(hour).minute(minute);
       setEndDate(newEndDate);
       setEndTime(selectedTime);
     }
@@ -243,10 +245,10 @@ const ScheduleDialog = ({
       return Promise.resolve();
     }
 
-    startDate = date(startDate).seconds(0);
+    startDate = date(startDate).set('seconds', 0);
 
     if (!endOpen) {
-      endDate = date(endDate).seconds(0);
+      endDate = date(endDate).set('seconds', 0);
 
       if (endDate.isSameOrBefore(startDate)) {
         return Promise.reject(
