@@ -30,7 +30,7 @@ describe('useEntitySave', () => {
         onInteraction,
       }),
     );
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(saveEntity).toHaveBeenCalledWith(entity);
@@ -61,7 +61,7 @@ describe('useEntitySave', () => {
         onInteraction,
       }),
     );
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(saveEntity).toHaveBeenCalledWith(entity);
@@ -92,7 +92,7 @@ describe('useEntitySave', () => {
         onInteraction,
       }),
     );
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(createEntity).toHaveBeenCalledWith(entity);
@@ -123,7 +123,7 @@ describe('useEntitySave', () => {
         onInteraction,
       }),
     );
-    expect(result.current).toBeDefined;
+    expect(result.current).toBeDefined();
     result.current(entity);
     await wait();
     expect(createEntity).toHaveBeenCalledWith(entity);
