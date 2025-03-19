@@ -30,7 +30,6 @@ const TableHead = ({
   sort = true,
   sortBy,
   title,
-  width,
   onSortChange,
   ...other
 }) => {

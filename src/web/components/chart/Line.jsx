@@ -12,7 +12,11 @@ import React from 'react';
 import styled from 'styled-components';
 import Axis from 'web/components/chart/Axis';
 import Group from 'web/components/chart/Group';
-import Legend, {Item, Label, Line as LegendLine} from 'web/components/chart/Legend';
+import Legend, {
+  Item,
+  Label,
+  Line as LegendLine,
+} from 'web/components/chart/Legend';
 import Svg from 'web/components/chart/Svg';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import {shouldUpdate} from 'web/components/chart/utils/Update';
@@ -20,7 +24,6 @@ import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import {setRef} from 'web/utils/Render';
 import Theme from 'web/utils/Theme';
-
 
 const LEGEND_MARGIN = 20;
 
@@ -160,7 +163,7 @@ const Cross = ({x, y, color, dashArray, lineWidth = 1}) => (
 
 Cross.propTypes = crossPropTypes;
 
-const CrossY2 = ({x, y, color, dashArray, lineWidth = 1}) => (
+const CrossY2 = ({x, y, color, lineWidth = 1}) => (
   <Group>
     <Line
       from={{x: x - 6, y}}
@@ -226,7 +229,7 @@ class LineChart extends React.Component {
     this.setState({displayInfo: false});
   }
 
-  showInfo(event) {
+  showInfo() {
     this.setState({displayInfo: true});
   }
 
@@ -252,7 +255,7 @@ class LineChart extends React.Component {
     this.setState({rangeX: this.getXValueForPixel(mouseX)});
   }
 
-  endRangeSelection(event) {
+  endRangeSelection() {
     const {rangeX, infoX} = this.state;
     const {onRangeSelected, timeline = false, data} = this.props;
 

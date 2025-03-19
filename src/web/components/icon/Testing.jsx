@@ -54,7 +54,7 @@ export const testIcon = (Icon, {dataTestId, customDataTestId} = {}) => {
 
   test('should render loading state', async () => {
     let resolve;
-    const promise = new Promise((res, rej) => {
+    const promise = new Promise(res => {
       resolve = res;
     });
 
