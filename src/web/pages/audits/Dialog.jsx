@@ -158,6 +158,7 @@ const AuditDialog = ({
     name,
     scannerId,
     scannerType,
+    schedulePeriods,
     audit,
   };
 
