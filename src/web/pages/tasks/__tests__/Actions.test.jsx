@@ -553,7 +553,7 @@ describe('Task Actions tests', () => {
     const exportIcon = screen.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export Task');
     fireEvent.click(exportIcon);
-    expect(handleTaskDownload).toHaveBeenCalledWith;
+    expect(handleTaskDownload).toHaveBeenCalledWith(task);
   });
 
   test('should call click handlers for container task', () => {
