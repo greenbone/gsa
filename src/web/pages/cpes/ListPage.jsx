@@ -21,7 +21,7 @@ import {
 } from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
 
-export const ToolBarIcons = props => (
+export const ToolBarIcons = () => (
   <ManualIcon anchor="cpe" page="managing-secinfo" title={_('Help: CPEs')} />
 );
 
