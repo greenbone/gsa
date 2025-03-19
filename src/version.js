@@ -4,8 +4,7 @@
  */
 
 const getMajorMinorVersion = () => {
-  // eslint-disable-next-line no-unused-vars
-  let [major, minor, ...rest] = VERSION.split('.');
+  let [major, minor] = VERSION.split('.');
   minor = parseInt(minor);
   if (minor < 10) {
     // add a leading zero for the links
