@@ -17,7 +17,6 @@ import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withSubscription from 'web/utils/withSubscription';
 
-
 export const loaderPropTypes = {
   children: PropTypes.func,
   filter: PropTypes.filter,
@@ -57,7 +56,7 @@ class Loader extends React.Component {
     this.load = this.load.bind(this);
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props) {
     const {data} = props;
     if (isDefined(data)) {
       // Only update data if data is set and keep latest set data in state.
