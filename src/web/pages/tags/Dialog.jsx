@@ -128,7 +128,7 @@ class TagDialog extends React.Component {
     });
   }
 
-  handleIdChangeByText(id, onValueChange) {
+  handleIdChangeByText(id) {
     const {gmp} = this.props;
     const {resourceIdsSelected, resourceType} = this.state;
 
