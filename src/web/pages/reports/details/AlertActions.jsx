@@ -95,7 +95,7 @@ class AlertActions extends React.Component {
         filter: newFilter.simple(),
       })
       .then(
-        response => {
+        () => {
           showSuccessMessage(_('Running the alert was successful'));
           this.setState({
             alertId: undefined,
