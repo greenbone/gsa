@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",
+    "paths": {
+      "gmp/*": ["src/gmp/*"],
+      "web/*": ["src/web/*"],
+      "version": ["src/version.js"],
+      "@gsa/testing": ["src/testing.js"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "build", "coverage"]
+}
