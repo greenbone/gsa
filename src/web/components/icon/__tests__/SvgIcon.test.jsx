@@ -31,7 +31,7 @@ describe('SVG icon component tests', () => {
 
   test('should render loading state', async () => {
     let res;
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise(resolve => {
       res = resolve;
     });
 

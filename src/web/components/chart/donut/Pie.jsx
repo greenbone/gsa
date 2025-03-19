@@ -21,11 +21,7 @@ const Pie = ({
   outerRadiusX,
   innerRadiusY,
   outerRadiusY,
-  cornerRadius,
-  startAngle = 0,
-  endAngle,
   padAngle,
-  padRadius,
   pieSort,
   pieValue,
   arcsSort = sortArcsByStartAngle,
@@ -45,14 +41,6 @@ const Pie = ({
   if (isDefined(outerRadiusY)) {
     arcPath.outerRadiusY(outerRadiusY);
   }
-
-  // if (is_defined(cornerRadius)) {
-  //   path.cornerRadius(cornerRadius);
-  // }
-
-  // if (is_defined(padRadius)) {
-  //   path.padRadius(padRadius);
-  // }
 
   const pie = d3pie();
 
@@ -97,19 +85,15 @@ Pie.propTypes = {
   arcsSort: PropTypes.func,
   children: PropTypes.func.isRequired,
   className: PropTypes.string,
-  cornerRadius: PropTypes.number,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  endAngle: PropTypes.number,
   innerRadiusX: PropTypes.number,
   innerRadiusY: PropTypes.number,
   left: PropTypes.number,
   outerRadiusX: PropTypes.number.isRequired,
   outerRadiusY: PropTypes.number,
   padAngle: PropTypes.number,
-  padRadius: PropTypes.number,
   pieSort: PropTypes.func,
   pieValue: PropTypes.func,
-  startAngle: PropTypes.number,
   top: PropTypes.number,
 };
 

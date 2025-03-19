@@ -29,7 +29,6 @@ import {
 } from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
-
 export const MAX_HOSTS = 1000;
 
 const SCANNER_RADIUS = 8;
@@ -45,7 +44,6 @@ const Svg = styled.svg`
 const Circle = styled.circle`
   cursor: pointer;
 `;
-
 const severityColorsGradientScale = type => {
   const severity_levels = getSeverityLevels();
   return scaleLinear()
@@ -338,7 +336,11 @@ class HostsTopologyChart extends React.Component {
     // event.deltaY returns nagative values for mouse wheel up and positive values for mouse wheel down
     const isZoomOut = Math.sign(event.deltaY) === 1;
 
-    isZoomOut ? this.zoomOut(x, y) : this.zoomIn(x, y);
+    if (isZoomOut) {
+      this.zoomOut(x, y);
+    } else {
+      this.zoomIn(x, y);
+    }
   }
 
   handleMouseDown(event) {
@@ -350,7 +352,7 @@ class HostsTopologyChart extends React.Component {
     this.setState({dragging: true});
   }
 
-  handleMousUp(event) {
+  handleMousUp() {
     if (isDefined(this.draggingHost)) {
       this.state.simulation.alphaTarget(0);
 

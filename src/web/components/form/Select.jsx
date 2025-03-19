@@ -77,7 +77,6 @@ const Select = ({
   searchable = true,
   toolTipTitle,
   value,
-  withScrollArea = true,
   scrollAreaProps = {type: 'hover', scrollbarSize: 12},
   onChange,
   ...props
@@ -152,7 +151,6 @@ Select.propTypes = {
   toolTipTitle: PropTypes.string,
   value: selectValue,
   width: PropTypes.string,
-  withScrollArea: PropTypes.bool,
   scrollAreaProps: PropTypes.shape({
     type: PropTypes.oneOf(['auto', 'scroll', 'always', 'hover', 'never']),
     scrollbarSize: PropTypes.number,
