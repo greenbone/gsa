@@ -26,13 +26,7 @@ import Method from 'web/pages/alerts/Method';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-const AlertDetails = ({
-  capabilities,
-  entity,
-  links = true,
-  reportFormats,
-  reportConfigs,
-}) => {
+const AlertDetails = ({capabilities, entity, reportFormats, reportConfigs}) => {
   const {comment, condition, event, method, tasks = [], filter} = entity;
   return (
     <Layout grow flex="column">
@@ -156,7 +150,6 @@ const AlertDetails = ({
 AlertDetails.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
   reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
 };

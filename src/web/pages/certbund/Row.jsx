@@ -17,7 +17,6 @@ import {na} from 'web/utils/Render';
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   entity,
-  links = true,
   onToggleDetailsClick,
   ...props
 }) => (
@@ -45,7 +44,6 @@ const Row = ({
 Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model,
-  links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 

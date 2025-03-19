@@ -23,7 +23,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
-const TlsCertificateDetails = ({entity, links = true}) => {
+const TlsCertificateDetails = ({entity}) => {
   return (
     <Layout flex="column" grow="1">
       <InfoTable>
@@ -86,7 +86,6 @@ const TlsCertificateDetails = ({entity, links = true}) => {
 
 TlsCertificateDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {

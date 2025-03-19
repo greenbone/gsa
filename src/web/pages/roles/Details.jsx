@@ -14,7 +14,7 @@ import TableRow from 'web/components/table/Row';
 import {Col} from 'web/entity/Page';
 import PropTypes from 'web/utils/PropTypes';
 
-const RoleDetails = ({entity, links = true}) => {
+const RoleDetails = ({entity}) => {
   const {users = [], comment} = entity;
   return (
     <Layout grow flex="column">
@@ -47,7 +47,6 @@ const RoleDetails = ({entity, links = true}) => {
 
 RoleDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default RoleDetails;

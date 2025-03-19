@@ -16,7 +16,7 @@ import TableRow from 'web/components/table/Row';
 import {Col} from 'web/entity/Page';
 import PropTypes from 'web/utils/PropTypes';
 
-const DfnCertAdvDetails = ({entity, links = true}) => {
+const DfnCertAdvDetails = ({entity}) => {
   const {title, severity, advisoryLink} = entity;
   return (
     <Layout grow flex="column">
@@ -58,7 +58,6 @@ const DfnCertAdvDetails = ({entity, links = true}) => {
 
 DfnCertAdvDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default DfnCertAdvDetails;
