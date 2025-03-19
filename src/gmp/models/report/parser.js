@@ -407,7 +407,7 @@ const parse_report_report_counts = elem => {
   return new CollectionCounts(counts);
 };
 
-export const parseResults = (report, filter) => {
+export const parseResults = report => {
   const {results, result_count, compliance_count} = report;
 
   if (

@@ -147,7 +147,7 @@ describe('ReportConfigCommand tests', () => {
       .delete({
         id: 'foo',
       })
-      .then(resp => {
+      .then(() => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'delete_report_config',

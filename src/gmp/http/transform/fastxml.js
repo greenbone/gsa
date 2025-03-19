@@ -8,15 +8,13 @@ import {success, rejection} from 'gmp/http/transform/xml';
 import {parseEnvelopeMeta, parseXmlEncodedString} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-
 const PARSER_OPTIONS = {
   attributeNamePrefix: '_',
   ignoreAttributes: false,
   removeNSPrefix: true,
   textNodeName: '__text',
-  attributeValueProcessor: (name, value, jPath) => parseXmlEncodedString(value),
-  tagValueProcessor: (name, value, jPath, hasAttributes, isLeafNode) =>
-    parseXmlEncodedString(value),
+  attributeValueProcessor: (_name, value) => parseXmlEncodedString(value),
+  tagValueProcessor: (_name, value) => parseXmlEncodedString(value),
 };
 
 const xmlParser = new XMLParser(PARSER_OPTIONS);
