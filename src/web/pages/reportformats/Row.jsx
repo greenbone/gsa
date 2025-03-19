@@ -22,30 +22,23 @@ import withCapabilities from 'web/utils/withCapabilities';
 const Actions = compose(
   withCapabilities,
   withEntitiesActions,
-)(
-  ({
-    capabilities,
-    entity,
-    onReportFormatDeleteClick,
-    onReportFormatEditClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Report Format')}
-        entity={entity}
-        name="report_format"
-        onClick={onReportFormatDeleteClick}
-      />
-      <EditIcon
-        disabled={entity.predefined}
-        displayName={_('Report Format')}
-        entity={entity}
-        name="report_format"
-        onClick={onReportFormatEditClick}
-      />
-    </IconDivider>
-  ),
-);
+)(({entity, onReportFormatDeleteClick, onReportFormatEditClick}) => (
+  <IconDivider grow align={['center', 'center']}>
+    <TrashIcon
+      displayName={_('Report Format')}
+      entity={entity}
+      name="report_format"
+      onClick={onReportFormatDeleteClick}
+    />
+    <EditIcon
+      disabled={entity.predefined}
+      displayName={_('Report Format')}
+      entity={entity}
+      name="report_format"
+      onClick={onReportFormatEditClick}
+    />
+  </IconDivider>
+));
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
