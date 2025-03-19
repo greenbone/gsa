@@ -51,7 +51,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 const ToolBarIcons = withCapabilities(
   ({
-    capabilities,
     entity,
     onReportConfigCloneClick,
     onReportConfigCreateClick,

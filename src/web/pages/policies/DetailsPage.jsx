@@ -46,7 +46,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 export const ToolBarIcons = withCapabilities(
   ({
-    capabilities,
     entity,
     onPolicyCloneClick,
     onPolicyDeleteClick,

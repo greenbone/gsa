@@ -23,7 +23,6 @@ const Actions = compose(
   withCapabilities,
   withEntitiesActions,
 )(({
-  capabilities,
   entity,
   onReportConfigDeleteClick,
   onReportConfigEditClick,
