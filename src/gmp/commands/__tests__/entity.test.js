@@ -23,7 +23,7 @@ describe('EntityCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TestEntityCommand(fakeHttp, 'foo');
-    return cmd.get({id: 'foo'}, {filter}).then(resp => {
+    return cmd.get({id: 'foo'}, {filter}).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_foo',
@@ -42,7 +42,7 @@ describe('EntityCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TestEntityCommand(fakeHttp, 'foo');
-    return cmd.get({id: 'foo'}, {filter}).then(resp => {
+    return cmd.get({id: 'foo'}, {filter}).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_foo',
@@ -68,7 +68,7 @@ describe('EntityCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TestEntityCommand(fakeHttp, 'foo');
-    return cmd.get({id: 'foo'}, {filter}).then(resp => {
+    return cmd.get({id: 'foo'}, {filter}).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_foo',

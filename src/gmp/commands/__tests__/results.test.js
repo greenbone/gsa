@@ -83,7 +83,7 @@ describe('ResultsCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new ResultsCommand(fakeHttp);
-    return cmd.get({details: 0}).then(resp => {
+    return cmd.get({details: 0}).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_results',
@@ -100,7 +100,7 @@ describe('ResultsCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new ResultsCommand(fakeHttp);
-    return cmd.getDescriptionWordCountsAggregates().then(resp => {
+    return cmd.getDescriptionWordCountsAggregates().then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_aggregate',
@@ -120,7 +120,7 @@ describe('ResultsCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new ResultsCommand(fakeHttp);
-    return cmd.getWordCountsAggregates().then(resp => {
+    return cmd.getWordCountsAggregates().then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_aggregate',
@@ -140,7 +140,7 @@ describe('ResultsCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new ResultsCommand(fakeHttp);
-    return cmd.getSeverityAggregates().then(resp => {
+    return cmd.getSeverityAggregates().then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_aggregate',

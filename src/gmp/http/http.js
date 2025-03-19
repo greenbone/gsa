@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import Rejection from 'gmp/http/rejection';
 import Response from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';

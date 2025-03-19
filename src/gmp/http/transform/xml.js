@@ -26,7 +26,7 @@ export const success =
     }
   };
 
-export const rejection = transform => (rej, options) => {
+export const rejection = transform => rej => {
   if (rej.isError && rej.isError()) {
     const data = transform(rej);
     if (!isDefined(data)) {

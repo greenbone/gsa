@@ -12,7 +12,6 @@ import {
 } from 'gmp/commands/testing';
 import {ALL_FILTER} from 'gmp/models/filter';
 
-
 describe('AuditReportsCommand tests', () => {
   test('should return all audit reports', () => {
     const response = createEntitiesResponse('report', [
@@ -78,7 +77,7 @@ describe('AuditReportsCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new AuditReportsCommand(fakeHttp);
-    return cmd.getComplianceAggregates().then(resp => {
+    return cmd.getComplianceAggregates().then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_aggregate',

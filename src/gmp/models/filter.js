@@ -11,7 +11,6 @@ import {setProperties} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
 
-
 export const UNKNOWN_FILTER_ID = '0';
 
 /**
@@ -239,7 +238,9 @@ class Filter extends Model {
       filter.forEach(term => {
         const {keyword: key} = term;
         if (isDefined(key)) {
-          !this.has(key) && this._addTerm(term);
+          if (!this.has(key)) {
+            this._addTerm(term);
+          }
         }
       });
     }

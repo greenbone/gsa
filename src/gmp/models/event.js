@@ -300,7 +300,7 @@ class Event {
   }
 
   get duration() {
-    const {weeks, ...durationWithoutWeeks} = this.event.duration;
+    const {...durationWithoutWeeks} = this.event.duration;
     return createDuration(durationWithoutWeeks);
   }
 
