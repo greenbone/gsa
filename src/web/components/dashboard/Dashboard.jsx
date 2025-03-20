@@ -20,8 +20,8 @@ import {
   filterDisplays,
   getDisplaysById,
   removeDisplay,
+  getRows,
 } from 'web/components/dashboard/Utils';
-import {getRows} from 'web/components/dashboard/Utils';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import Loading from 'web/components/loading/Loading';
 import Grid from 'web/components/sortable/Grid';
@@ -34,7 +34,6 @@ import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 
 const log = Logger.getLogger('web.components.dashboard');
 
