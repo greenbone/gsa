@@ -35,10 +35,10 @@ const getRestorableDeletableForEntityType = {
   group: entity => {
     return {restorable: true, deletable: !entity.isInUse()};
   },
-  note: entity => {
+  note: () => {
     return {restorable: true, deletable: true};
   },
-  override: entity => {
+  override: () => {
     return {restorable: true, deletable: true};
   },
   permission: entity => {
@@ -108,7 +108,7 @@ const getRestorableDeletableForEntityType = {
     const restorable = schedule && target && config && scanner && alerts;
     return {restorable, deletable: true};
   },
-  ticket: entity => {
+  ticket: () => {
     return {restorable: true, deletable: true};
   },
 };

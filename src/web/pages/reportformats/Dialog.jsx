@@ -236,13 +236,11 @@ const Dialog = ({
   }
   return (
     <SaveDialog title={title} onClose={onClose} onSave={onSave}>
-      {({values: state, onValueChange}) => {
+      {({values: onValueChange}) => {
         return (
-          <>
-            <FormGroup title={_('Import XML Report Format')}>
-              <FileField name="xml_file" onChange={onValueChange} />
-            </FormGroup>
-          </>
+          <FormGroup title={_('Import XML Report Format')}>
+            <FileField name="xml_file" onChange={onValueChange} />
+          </FormGroup>
         );
       }}
     </SaveDialog>

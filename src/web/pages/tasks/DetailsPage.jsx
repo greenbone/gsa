@@ -297,8 +297,7 @@ Details.propTypes = {
 
 class Page extends React.Component {
   componentDidUpdate() {
-    // eslint-disable-next-line no-unused-vars
-    const {entity, navigate, ...props} = this.props;
+    const {entity, navigate} = this.props;
     if (isDefined(entity) && entity.usageType === 'audit') {
       return navigate('/audit/' + entity.id, {replace: true});
     }
@@ -436,11 +435,11 @@ Page.propTypes = {
 
 export const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
-    ({entity, gmp}) =>
+    ({entity}) =>
       isDefined(entity.alerts)
         ? Promise.resolve([...entity.alerts])
         : Promise.resolve([]),
-    ({entity, gmp}) => {
+    ({entity}) => {
       const resources = [];
       const names = ['config', 'scanner', 'schedule'];
 
