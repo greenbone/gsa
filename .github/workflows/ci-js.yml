@@ -93,6 +93,26 @@ jobs:
           name: linting-report-${{ matrix.node-version }}
           path: ${{ env.REPORT_FILE }}
 
+  typecheck:
+    name: Typecheck
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        node-version:
+          - 20
+          - 22
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run TypeScript typecheck
+        run: npm run type-check
+
   translations:
     name: Check translations
     runs-on: 'ubuntu-latest'
