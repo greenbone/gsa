@@ -29,7 +29,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
-
 const filterWithReportId = (filter, reportId) =>
   isDefined(filter)
     ? filter.copy().set('_and_report_id', reportId)
@@ -49,7 +48,7 @@ class ResultsTab extends React.Component {
     this.handleSortChange = this.handleSortChange.bind(this);
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props) {
     if (isDefined(props.results)) {
       // update only if new results are available to avoid having no results
       // when the filter changes
