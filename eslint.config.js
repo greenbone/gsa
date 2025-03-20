@@ -83,6 +83,7 @@ export default [
       'no-class-assign': 'off',
       'no-prototype-builtins': 'off',
       'no-case-declarations': 'off',
+      'no-duplicate-imports': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
       'no-console': [
         'warn',
