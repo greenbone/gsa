@@ -5,7 +5,13 @@
 
 import styled from 'styled-components';
 
-const Label = styled.div`
+interface StyledLabelProps {
+  $backgroundColor: string;
+  $borderColor: string;
+  $textColor: string;
+}
+
+const Label = styled.div<StyledLabelProps>`
   box-sizing: border-box;
   position: relative;
   font-weight: normal;
@@ -36,19 +42,25 @@ const Label = styled.div`
  * @param {string} text - The text content of the label.
  * @returns {Function} A function that takes props and returns a Label component with the specified styles and properties.
  */
-const createLabel =
-  (backgroundColor, borderColor, textColor, testId, text) => props => {
-    return (
-      <Label
-        {...props}
-        $backgroundColor={backgroundColor}
-        $borderColor={borderColor}
-        $textColor={textColor}
-        data-testid={testId}
-      >
-        {String(text)}
-      </Label>
-    );
-  };
+
+const createLabel = (
+  backgroundColor: string,
+  borderColor: string,
+  textColor: string,
+  testId: string,
+  text: string,
+): React.FC<React.HTMLAttributes<HTMLDivElement>> => {
+  return (props: React.HTMLAttributes<HTMLDivElement>) => (
+    <Label
+      {...props}
+      $backgroundColor={backgroundColor}
+      $borderColor={borderColor}
+      $textColor={textColor}
+      data-testid={testId}
+    >
+      {String(text)}
+    </Label>
+  );
+};
 
 export default createLabel;

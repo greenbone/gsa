@@ -5,22 +5,22 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import styled from 'styled-components';
+// @ts-expect-error not typed
 import Divider from 'web/components/layout/Divider';
-import PropTypes from 'web/utils/PropTypes';
 
+interface HorizontalSepProps {
+  $separator?: string;
+  $spacing?: string;
+  $wrap?: boolean;
+  children: React.ReactNode;
+}
 
-const HorizontalSep = styled(Divider)`
-  flex-wrap: ${props => (isDefined(props.$wrap) ? props.$wrap : null)};
+const HorizontalSep = styled(Divider)<HorizontalSepProps>`
+  flex-wrap: ${({$wrap}) => (isDefined($wrap) ? $wrap : null)};
   & > *:not(:last-child)::after {
     content: ${({$separator = '•'}) => `'${$separator}'`};
     margin-left: ${({$spacing = '5px'}) => $spacing};
   }
 `;
-
-HorizontalSep.propTypes = {
-  separator: PropTypes.string,
-  spacing: PropTypes.string,
-  wrap: PropTypes.oneOf([true, 'wrap', 'nowrap']),
-};
 
 export default HorizontalSep;

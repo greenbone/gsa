@@ -6,9 +6,17 @@
 import {isDefined} from 'gmp/utils/identity';
 import {useCallback} from 'react';
 
+interface UseValueChangeParams<T> {
+  disabled?: boolean;
+  name?: string;
+  onChange?: (value: T, name?: string) => void;
+  convert?: (value: unknown) => T;
+  valueFunc?: (event: React.ChangeEvent<HTMLInputElement>) => unknown;
+}
 
-const eventTargetValue = event => event.target.value;
-const noOpConvert = value => value;
+const eventTargetValue = (event: React.ChangeEvent<HTMLInputElement>) =>
+  event.target.value;
+const noOpConvert = <T,>(value: unknown): T => value as T;
 /**
  * A hook that handles the change of a value of an input field.
  *
@@ -23,15 +31,15 @@ const noOpConvert = value => value;
  *  - valueFunc: A function that gets the value from the event. Defaults to event.target.value.
  * @returns A function as a callback that handles the change of a value in an input field.
  */
-const useValueChange = ({
-  disabled,
+const useValueChange = <T,>({
+  disabled = false, // Default to false
   name,
   onChange,
   convert = noOpConvert,
   valueFunc = eventTargetValue,
-}) => {
+}: UseValueChangeParams<T>) => {
   const notifyChange = useCallback(
-    value => {
+    (value: T) => {
       if (isDefined(onChange) && !disabled) {
         onChange(value, name);
       }
@@ -40,7 +48,7 @@ const useValueChange = ({
   );
 
   const handleChange = useCallback(
-    event => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       notifyChange(convert(valueFunc(event)));
     },
     [notifyChange, convert, valueFunc],

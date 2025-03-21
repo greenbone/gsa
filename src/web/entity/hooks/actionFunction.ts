@@ -18,7 +18,13 @@ import {isDefined} from 'gmp/utils/identity';
  *                         Otherwise the error from the rejected promise is thrown.
  * @throws {*} - The error from the rejected promise if onError callback is not provided.
  */
-const actionFunction = async (promise, onSuccess, onError, successMessage) => {
+
+const actionFunction = async <ResponseType, ReturnType>(
+  promise: Promise<ResponseType>,
+  onSuccess?: (response: ResponseType) => ReturnType,
+  onError?: (error: unknown) => ReturnType,
+  successMessage?: string,
+): Promise<ReturnType | ResponseType> => {
   try {
     const response = await promise;
     if (isDefined(onSuccess)) {
@@ -27,6 +33,7 @@ const actionFunction = async (promise, onSuccess, onError, successMessage) => {
       }
       return onSuccess(response);
     }
+    return response;
   } catch (error) {
     if (isDefined(onError)) {
       return onError(error);

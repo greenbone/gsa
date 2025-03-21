@@ -5,6 +5,6 @@
 
 import React from 'react';
 
-const GmpContext = React.createContext();
+const GmpContext = React.createContext(undefined);
 
 export default GmpContext;

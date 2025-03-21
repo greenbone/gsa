@@ -3,8 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+// @ts-expect-error gmp/locale is not typed
 import _ from 'gmp/locale';
 import i18next from 'i18next';
+
+type TranslationHook = {
+  t: typeof _;
+  i18n: typeof i18next;
+  ready: boolean;
+} & [typeof _, typeof i18next, boolean];
 
 /**
  * Hook to get the translation function, an i18next instance and a boolean
@@ -23,10 +30,10 @@ import i18next from 'i18next';
  *
  * @returns Array|Object with the translation function, i18next instance and ready status
  */
-const useTranslation = () => {
+const useTranslation = (): TranslationHook => {
   // provide same interface as useTranslation from i18next
   // this will allow to use react-i18next in future if required
-  const ret = [_, i18next, true];
+  const ret = [_, i18next, true] as TranslationHook;
   ret.t = _;
   ret.i18n = i18next;
   ret.ready = true;
