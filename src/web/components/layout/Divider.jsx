@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const DEFAULT_MARGIN = '5px';
 
 const DividerComponent = styled(Layout)`

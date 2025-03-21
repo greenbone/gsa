@@ -6,7 +6,7 @@
 import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
-import useTranslation from 'web/hooks/useTranslation';
+import useTransition from 'web/hooks/useTranslation';
 
 /**
  * Custom hook to handle the cloning of an entity.
@@ -18,10 +18,26 @@ import useTranslation from 'web/hooks/useTranslation';
  * @param {Function} [callbacks.onInteraction] - Callback function to be called on interaction.
  * @returns {Function} - A function that takes an entity and handles its cloning.
  */
-const useEntityClone = (name, {onCloneError, onCloned, onInteraction} = {}) => {
+const useEntityClone = (
+  name: string,
+  {
+    onCloneError,
+    onCloned,
+    onInteraction,
+  }: {
+    onCloneError?: (error: unknown) => void;
+    onCloned?: (response: unknown) => void;
+    onInteraction?: () => void;
+  } = {},
+): ((entity: {name: string}) => Promise<unknown>) => {
   const gmp = useGmp();
-  const cmd = gmp[name];
-  const [_] = useTranslation();
+  if (!gmp) {
+    throw new Error('GMP instance is not available.');
+  }
+  const cmd = gmp[name] as {
+    clone: (entity: {name: string}) => Promise<unknown>;
+  };
+  const [_] = useTransition();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -29,7 +45,7 @@ const useEntityClone = (name, {onCloneError, onCloned, onInteraction} = {}) => {
     }
   };
 
-  const handleEntityClone = async entity => {
+  const handleEntityClone = async (entity: {name: string}) => {
     handleInteraction();
 
     return actionFunction(

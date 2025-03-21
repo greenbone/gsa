@@ -3,7 +3,63 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const Theme = {
+interface ThemeLayer {
+  menu: number;
+  aboveAll: number;
+  onTop: number;
+  belowAll: number;
+  higher: number;
+  default: number;
+}
+
+interface ThemeFont {
+  default: string;
+  dialog: string;
+  defaultSize: string;
+}
+
+interface ThemeInterface {
+  lightGreen: string;
+  green: string;
+  lightGray: string;
+  mediumDarkGray: string;
+  mediumGray: string;
+  darkGray: string;
+  white: string;
+  dialogGray: string;
+  inputBorderGray: string;
+  black: string;
+  loginButtonGray: string;
+  loginButtonHover: string;
+  lightRed: string;
+  mediumLightRed: string;
+  warningRed: string;
+  darkRed: string;
+  errorRed: string;
+  complianceYes: string;
+  complianceNo: string;
+  complianceIncomplete: string;
+  complianceUndefined: string;
+  lightBlue: string;
+  mediumBlue: string;
+  blue: string;
+  severityLowBlue: string;
+  severityWarnYellow: string;
+  severityClassLog: string;
+  severityClassLow: string;
+  severityClassMedium: string;
+  severityClassHigh: string;
+  severityClassCritical: string;
+  statusNewGreen: string;
+  statusRunGreen: string;
+  paleGreen: string;
+  darkGreen: string;
+  darkGreenTransparent: string;
+  Layers: ThemeLayer;
+  Font: ThemeFont;
+}
+
+const Theme: ThemeInterface = {
   /* source styleguide */
   lightGreen: '#A1DDBA',
   green: '#11ab51',

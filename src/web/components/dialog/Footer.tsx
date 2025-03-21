@@ -7,7 +7,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from 'web/components/form/Button';
 import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
 
 export const DialogFooterLayout = styled(Layout)`
   margin-top: 15px;
@@ -15,7 +14,15 @@ export const DialogFooterLayout = styled(Layout)`
   gap: 10px;
 `;
 
-const DialogFooter = ({
+interface DialogFooterProps {
+  title: string;
+  onClick?: () => void;
+  loading?: boolean;
+  isLoading?: boolean;
+  'data-testid'?: string;
+}
+
+const DialogFooter: React.FC<DialogFooterProps> = ({
   title,
   onClick,
   loading = false,
@@ -32,13 +39,5 @@ const DialogFooter = ({
     </Button>
   </DialogFooterLayout>
 );
-
-DialogFooter.propTypes = {
-  'data-testid': PropTypes.string,
-  isLoading: PropTypes.bool,
-  loading: PropTypes.bool,
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-};
 
 export default DialogFooter;
