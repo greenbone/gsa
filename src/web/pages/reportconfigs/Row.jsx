@@ -17,12 +17,8 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
-const Actions = compose(
-  withCapabilities,
-  withEntitiesActions,
-)(({
+const Actions = compose(withEntitiesActions)(({
   entity,
   onReportConfigDeleteClick,
   onReportConfigEditClick,
