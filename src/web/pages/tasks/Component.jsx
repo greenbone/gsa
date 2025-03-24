@@ -14,8 +14,8 @@ import {selectSaveId, hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import {handleNotificationForAction} from 'web/components/notification/handleNotificationForAction';
 import EntityComponent from 'web/entity/EntityComponent';
+import actionFunction from 'web/entity/hooks/actionFunction';
 import AlertComponent from 'web/pages/alerts/Component';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
 import ScheduleComponent from 'web/pages/schedules/Component';
@@ -151,7 +151,7 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return handleNotificationForAction(
+    return actionFunction(
       this.cmd.start(task),
       onStarted,
       onStartError,
@@ -164,7 +164,7 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return handleNotificationForAction(
+    return actionFunction(
       this.cmd.stop(task),
       onStopped,
       onStopError,
@@ -177,7 +177,7 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return handleNotificationForAction(
+    return actionFunction(
       this.cmd.resume(task),
       onResumed,
       onResumeError,

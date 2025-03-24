@@ -20,9 +20,9 @@ import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
 import {connect} from 'react-redux';
-import {handleNotificationForAction} from 'web/components/notification/handleNotificationForAction';
 import SortBy from 'web/components/sortby/SortBy';
 import TagsDialog from 'web/entities/TagsDialog';
+import actionFunction from 'web/entity/hooks/actionFunction';
 import TagDialog from 'web/pages/tags/Dialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
@@ -150,7 +150,7 @@ class EntitiesContainer extends React.Component {
   handleDelete(entity) {
     const {deleteEntity} = this.props;
 
-    return handleNotificationForAction(
+    return actionFunction(
       deleteEntity(entity.id),
       this.handleChanged,
       this.handleError,
