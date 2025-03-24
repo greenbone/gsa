@@ -48,44 +48,41 @@ import {
 import {selector, loadEntity} from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-import withCapabilities from 'web/utils/withCapabilities';
 
-const ToolBarIcons = withCapabilities(
-  ({
-    entity,
-    onReportFormatImportClick,
-    onReportFormatDeleteClick,
-    onReportFormatEditClick,
-  }) => (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="managing-report-formats"
-          page="reports"
-          title={_('Help: Report Formats')}
-        />
-        <ListIcon page="reportformats" title={_('Report Formats List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon
-          displayName={_('Report Format')}
-          entity={entity}
-          onClick={onReportFormatImportClick}
-        />
-        <EditIcon
-          disabled={entity.predefined}
-          displayName={_('Report Format')}
-          entity={entity}
-          onClick={onReportFormatEditClick}
-        />
-        <TrashIcon
-          displayName={_('Report Format')}
-          entity={entity}
-          onClick={onReportFormatDeleteClick}
-        />
-      </IconDivider>
-    </Divider>
-  ),
+const ToolBarIcons = ({
+  entity,
+  onReportFormatImportClick,
+  onReportFormatDeleteClick,
+  onReportFormatEditClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        anchor="managing-report-formats"
+        page="reports"
+        title={_('Help: Report Formats')}
+      />
+      <ListIcon page="reportformats" title={_('Report Formats List')} />
+    </IconDivider>
+    <IconDivider>
+      <CreateIcon
+        displayName={_('Report Format')}
+        entity={entity}
+        onClick={onReportFormatImportClick}
+      />
+      <EditIcon
+        disabled={entity.predefined}
+        displayName={_('Report Format')}
+        entity={entity}
+        onClick={onReportFormatEditClick}
+      />
+      <TrashIcon
+        displayName={_('Report Format')}
+        entity={entity}
+        onClick={onReportFormatDeleteClick}
+      />
+    </IconDivider>
+  </Divider>
 );
 
 ToolBarIcons.propTypes = {

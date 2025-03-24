@@ -6,7 +6,7 @@
 import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
-import useTransition from 'web/hooks/useTranslation';
+import useTranslation from 'web/hooks/useTranslation';
 
 /**
  * Custom hook to handle the cloning of an entity.
@@ -37,7 +37,7 @@ const useEntityClone = (
   const cmd = gmp[name] as {
     clone: (entity: {name: string}) => Promise<unknown>;
   };
-  const [_] = useTransition();
+  const [_] = useTranslation();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {

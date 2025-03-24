@@ -47,50 +47,48 @@ import {
 import {selector, loadEntity} from 'web/store/entities/reportconfigs';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-import withCapabilities from 'web/utils/withCapabilities';
 
-const ToolBarIcons = withCapabilities(
-  ({
-    entity,
-    onReportConfigCloneClick,
-    onReportConfigCreateClick,
-    onReportConfigDeleteClick,
-    onReportConfigEditClick,
-  }) => (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="customizing-report-formats-with-report-configurations"
-          page="reports"
-          title={_('Help: Report Configs')}
-        />
-        <ListIcon page="reportconfigs" title={_('Report Configs List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon
-          displayName={_('Report Config')}
-          entity={entity}
-          onClick={onReportConfigCreateClick}
-        />
-        <CloneIcon entity={entity} onClick={onReportConfigCloneClick} />
-        <EditIcon
-          disabled={entity.predefined}
-          displayName={_('Report Config')}
-          entity={entity}
-          onClick={onReportConfigEditClick}
-        />
-        <TrashIcon
-          displayName={_('Report Config')}
-          entity={entity}
-          onClick={onReportConfigDeleteClick}
-        />
-      </IconDivider>
-    </Divider>
-  ),
+const ToolBarIcons = ({
+  entity,
+  onReportConfigCloneClick,
+  onReportConfigCreateClick,
+  onReportConfigDeleteClick,
+  onReportConfigEditClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        anchor="customizing-report-formats-with-report-configurations"
+        page="reports"
+        title={_('Help: Report Configs')}
+      />
+      <ListIcon page="reportconfigs" title={_('Report Configs List')} />
+    </IconDivider>
+    <IconDivider>
+      <CreateIcon
+        displayName={_('Report Config')}
+        entity={entity}
+        onClick={onReportConfigCreateClick}
+      />
+      <CloneIcon entity={entity} onClick={onReportConfigCloneClick} />
+      <EditIcon
+        disabled={entity.predefined}
+        displayName={_('Report Config')}
+        entity={entity}
+        onClick={onReportConfigEditClick}
+      />
+      <TrashIcon
+        displayName={_('Report Config')}
+        entity={entity}
+        onClick={onReportConfigDeleteClick}
+      />
+    </IconDivider>
+  </Divider>
 );
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
+  onReportConfigCloneClick: PropTypes.func.isRequired,
   onReportConfigCreateClick: PropTypes.func.isRequired,
   onReportConfigDeleteClick: PropTypes.func.isRequired,
   onReportConfigEditClick: PropTypes.func.isRequired,
