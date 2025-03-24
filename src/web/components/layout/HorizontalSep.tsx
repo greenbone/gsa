@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import styled from 'styled-components';
-// @ts-expect-error not typed
 import Divider from 'web/components/layout/Divider';
 
 interface HorizontalSepProps {
@@ -16,7 +15,7 @@ interface HorizontalSepProps {
 }
 
 const HorizontalSep = styled(Divider)<HorizontalSepProps>`
-  flex-wrap: ${({$wrap}) => (isDefined($wrap) ? $wrap : null)};
+  flex-wrap: ${({$wrap}) => ($wrap ? 'wrap' : 'nowrap')};
   & > *:not(:last-child)::after {
     content: ${({$separator = '•'}) => `'${$separator}'`};
     margin-left: ${({$spacing = '5px'}) => $spacing};
