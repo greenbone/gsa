@@ -8,6 +8,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "checkJs": false,
+    "noImplicitAny": false,
+    "noEmit": true,
     "baseUrl": "./",
     "paths": {
       "gmp/*": ["src/gmp/*"],

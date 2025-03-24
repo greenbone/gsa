@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-// @ts-expect-error not typed
 import withLayout from 'web/components/layout/withLayout';
 
 interface LayoutProps {

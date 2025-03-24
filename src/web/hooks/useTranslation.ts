@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-// @ts-expect-error gmp/locale is not typed
 import _ from 'gmp/locale';
 import i18next from 'i18next';
 
