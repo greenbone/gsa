@@ -5,7 +5,8 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Layout, {LayoutProps} from 'web/components/layout/Layout';
+import Layout from 'web/components/layout/Layout';
+import {LayoutProps} from 'web/components/layout/withLayout';
 
 interface TableDataProps extends LayoutProps {
   children?: React.ReactNode;
