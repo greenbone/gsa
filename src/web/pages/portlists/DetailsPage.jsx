@@ -33,7 +33,7 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 import PortListDetails from 'web/pages/portlists/Details';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
-import PortRangesTable from 'web/pages/portlists/portrangestable';
+import PortRangesTable from 'web/pages/portlists/PortRangesTable';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
