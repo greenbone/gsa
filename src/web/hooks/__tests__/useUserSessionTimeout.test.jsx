@@ -24,7 +24,7 @@ const TestUserSessionTimeout = () => {
 
 describe('useUserSessionTimeout tests', () => {
   test('should return the users session timeout', () => {
-    const {render, store} = rendererWith({store: true});
+    const {render, store} = rendererWith({store: true, gmp: {}});
 
     const timeout = date('2019-10-10');
 
