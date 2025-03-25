@@ -8,14 +8,21 @@ import {isDefined, isFunction} from 'gmp/utils/identity';
 import React, {useEffect, useState, useRef} from 'react';
 import styled from 'styled-components';
 import useIconSize from 'web/hooks/useIconSize';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
 const Anchor = styled.a`
   display: flex;
 `;
 
-const Styled = styled.span`
+interface StyledSpanProps {
+  $active: boolean;
+  $height: string;
+  $isLoading: boolean;
+  $width: string;
+  color: string;
+}
+
+const StyledSpan = styled.span<StyledSpanProps>`
   cursor: ${props => (props.onClick ? 'pointer' : undefined)};
   width: ${props => props.$width};
   height: ${props => props.$height};
@@ -49,7 +56,7 @@ const Styled = styled.span`
 `;
 
 export const useIsMountedRef = () => {
-  const ref = useRef();
+  const ref = useRef<boolean | undefined>();
   ref.current = true;
   // if the ref changes, which is the case when the component unmounts
   // set the ref.current to false in order to prevent state updates in
@@ -65,18 +72,45 @@ export const useIsMountedRef = () => {
 
 // only update state if the component is mounted
 // use useIsMountedRef() to track mounted status across renders
-export const useStateWithMountCheck = (...args) => {
+export const useStateWithMountCheck = <T,>(
+  initialState: T,
+): [T, (arg: T) => void] => {
   const isMountedRef = useIsMountedRef();
-  const [nativeState, setNativeState] = useState(...args);
-  const setState = (...arg) => {
+  const [nativeState, setNativeState] = useState<T>(initialState);
+  const setState = (arg: T) => {
     if (isMountedRef.current) {
-      setNativeState(...arg);
+      setNativeState(arg);
     }
   };
   return [nativeState, setState];
 };
 
-const SvgIcon = ({
+export interface SvgIconProps<T> {
+  color?: string;
+  active?: boolean;
+  disabled?: boolean;
+  loadingTitle?: string;
+  title?: string;
+  to?: string;
+  value?: T;
+  onClick?: (value: T) => void | Promise<void>;
+  size?: 'tiny' | 'small' | 'medium' | 'large';
+  ['data-testid']?: string;
+  [key: string]: unknown;
+}
+
+export interface SvgIconRenderProps {
+  title: string;
+}
+
+interface SvgIconPropsWithChildren<T> extends SvgIconProps<T> {
+  children:
+    | React.ReactNode
+    | React.ReactNode[]
+    | ((props: SvgIconRenderProps) => React.ReactNode);
+}
+
+const SvgIcon = <T,>({
   disabled = false,
   active = !disabled,
   children,
@@ -89,16 +123,23 @@ const SvgIcon = ({
   color = Theme.black,
   ['data-testid']: dataTestId = 'svg-icon',
   ...other
-}) => {
+}: SvgIconPropsWithChildren<T>) => {
   const [loading, setLoading] = useStateWithMountCheck(false);
   const {width, height} = useIconSize(size);
 
-  const handleClick = event => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+  ): void => {
     event.preventDefault();
     event.stopPropagation();
-    const promise = onClick(value);
 
-    if (isDefined(promise) && isDefined(promise.then)) {
+    if (!isDefined(onClick)) {
+      return;
+    }
+
+    const promise = onClick(value as T);
+
+    if (isDefined(promise?.then)) {
       setLoading(true);
 
       promise
@@ -115,11 +156,12 @@ const SvgIcon = ({
   title = loading ? loadingTitle : title;
 
   if (isFunction(children)) {
+    // @ts-expect-error
     children = children({title});
   }
 
   return (
-    <Styled
+    <StyledSpan
       {...other}
       $active={active && !loading}
       $height={height}
@@ -132,29 +174,10 @@ const SvgIcon = ({
         isDefined(onClick) && !disabled && !loading ? handleClick : undefined
       }
     >
+      {/* @ts-expect-error */}
       {isDefined(to) ? <Anchor href={to}>{children}</Anchor> : children}
-    </Styled>
+    </StyledSpan>
   );
-};
-
-SvgIcon.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-    PropTypes.func,
-  ]),
-  color: PropTypes.string,
-  active: PropTypes.bool,
-  disabled: PropTypes.bool,
-  loadingTitle: PropTypes.string,
-  title: PropTypes.string,
-  to: PropTypes.string,
-  value: PropTypes.any,
-  onClick: PropTypes.func,
-  size: PropTypes.oneOfType([
-    PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
 };
 
 export default SvgIcon;
