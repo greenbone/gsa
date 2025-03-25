@@ -8,6 +8,11 @@ import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
+interface EntityClone {
+  id: string;
+  name: string;
+}
+
 /**
  * Custom hook to handle the cloning of an entity.
  *
@@ -29,13 +34,10 @@ const useEntityClone = (
     onCloned?: (response: unknown) => void;
     onInteraction?: () => void;
   } = {},
-): ((entity: {name: string}) => Promise<unknown>) => {
+): ((entity: EntityClone) => Promise<unknown>) => {
   const gmp = useGmp();
-  if (!gmp) {
-    throw new Error('GMP instance is not available.');
-  }
   const cmd = gmp[name] as {
-    clone: (entity: {name: string}) => Promise<unknown>;
+    clone: (entity: EntityClone) => Promise<unknown>;
   };
   const [_] = useTranslation();
 
@@ -45,7 +47,7 @@ const useEntityClone = (
     }
   };
 
-  const handleEntityClone = async (entity: {name: string}) => {
+  const handleEntityClone = async (entity: EntityClone) => {
     handleInteraction();
 
     return actionFunction(
