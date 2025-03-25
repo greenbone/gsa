@@ -5,9 +5,20 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'web/utils/PropTypes';
 
-const Table = ({children, className, footer, header}) => {
+interface TableProps {
+  children: React.ReactNode;
+  className?: string;
+  footer?: React.ReactNode;
+  header?: React.ReactNode;
+}
+
+const Table: React.FC<TableProps> = ({
+  children,
+  className,
+  footer,
+  header,
+}: TableProps) => {
   return (
     <table className={className}>
       {header}
@@ -17,17 +28,16 @@ const Table = ({children, className, footer, header}) => {
   );
 };
 
-Table.propTypes = {
-  className: PropTypes.string,
-  fixed: PropTypes.bool,
-  footer: PropTypes.element,
-  header: PropTypes.element,
-};
+interface StyledTableProps {
+  $fixed?: boolean;
+  $size?: string;
+}
 
-export default styled(Table)`
+export default styled(Table)<StyledTableProps>`
   border: 0;
   border-spacing: 0px;
   text-align: left;
+
   table-layout: ${props => (props.$fixed ? 'fixed' : 'auto')};
   ${props => {
     const size = props.$size || 'full';

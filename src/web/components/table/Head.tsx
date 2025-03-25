@@ -11,8 +11,7 @@ import ArrowDown from 'web/components/icon/ArrowDown';
 import ArrowUp from 'web/components/icon/ArrowUp';
 import ArrowUpDown from 'web/components/icon/ArrowUpDown';
 import Layout from 'web/components/layout/Layout';
-import Sort from 'web/components/sortby/SortBy';
-import PropTypes from 'web/utils/PropTypes';
+import Sort, {ByType, DESC} from 'web/components/sortby/SortBy';
 import Theme from 'web/utils/Theme';
 
 const SortSymbol = styled.span`
@@ -20,7 +19,21 @@ const SortSymbol = styled.span`
   align-items: center;
 `;
 
-const TableHead = ({
+interface TableHeadProps {
+  children?: React.ReactNode;
+  className?: string;
+  colSpan?: number;
+  currentSortBy?: ByType;
+  currentSortDir?: string;
+  rowSpan?: number;
+  sort?: boolean;
+  sortBy?: ByType;
+  title?: string;
+  width?: string;
+  onSortChange?: (sortBy: ByType) => void;
+}
+
+const TableHead: React.FC<TableHeadProps> = ({
   children,
   className,
   colSpan,
@@ -32,7 +45,7 @@ const TableHead = ({
   title,
   onSortChange,
   ...other
-}) => {
+}: TableHeadProps) => {
   const getSortSymbol = () => {
     if (!isDefined(sortBy) || currentSortBy !== sortBy) {
       return (
@@ -43,10 +56,10 @@ const TableHead = ({
       );
     }
     const titleText =
-      currentSortDir === Sort.DESC
+      currentSortDir === DESC
         ? _('Sorted In Descending Order By {{sortBy}}', {sortBy: `${title}`})
         : _('Sorted In Ascending Order By {{sortBy}}', {sortBy: `${title}`});
-    const Icon = currentSortDir === Sort.DESC ? ArrowDown : ArrowUp;
+    const Icon = currentSortDir === DESC ? ArrowDown : ArrowUp;
     return (
       <SortSymbol title={titleText}>
         &nbsp;
@@ -73,20 +86,6 @@ const TableHead = ({
       )}
     </th>
   );
-};
-
-TableHead.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  colSpan: PropTypes.numberString,
-  currentSortBy: PropTypes.string,
-  currentSortDir: PropTypes.string,
-  rowSpan: PropTypes.numberString,
-  sort: PropTypes.bool,
-  sortBy: PropTypes.stringOrFalse,
-  title: PropTypes.toString,
-  width: PropTypes.string,
-  onSortChange: PropTypes.func,
 };
 
 export default styled(TableHead)`
