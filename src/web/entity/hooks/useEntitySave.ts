@@ -7,11 +7,27 @@ import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 
+interface EntitySave {
+  id?: string;
+}
+
+interface EntitySaved {
+  id: string;
+}
+
+interface SaveCallbacks {
+  onSaveError?: (error: unknown) => void;
+  onSaved?: (entity: EntitySaved) => void;
+  onCreated?: (entity: EntitySaved) => void;
+  onCreateError?: (error: unknown) => void;
+  onInteraction?: () => void;
+}
+
 /**
  * Custom hook to handle saving or creating an entity.
  *
  * @param {string} name - The name of the entity.
- * @param {Object} [callbacks={}] - Optional callbacks for various save events.
+ * @param {SaveCallbacks} [callbacks={}] - Optional callbacks for various save events.
  * @param {Function} [callbacks.onSaveError] - Callback function to be called on save error.
  * @param {Function} [callbacks.onSaved] - Callback function to be called when the entity is saved.
  * @param {Function} [callbacks.onCreated] - Callback function to be called when the entity is created.
@@ -21,8 +37,14 @@ import useGmp from 'web/hooks/useGmp';
  *                       If the entity has an id, it will be saved, otherwise it will be created.
  */
 const useEntitySave = (
-  name,
-  {onSaveError, onSaved, onCreated, onCreateError, onInteraction} = {},
+  name: string,
+  {
+    onSaveError,
+    onSaved,
+    onCreated,
+    onCreateError,
+    onInteraction,
+  }: SaveCallbacks = {},
 ) => {
   const gmp = useGmp();
   const cmd = gmp[name];
@@ -33,7 +55,7 @@ const useEntitySave = (
     }
   };
 
-  const handleEntitySave = async data => {
+  const handleEntitySave = async (data: EntitySave) => {
     handleInteraction();
 
     if (isDefined(data.id)) {
