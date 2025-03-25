@@ -19,7 +19,7 @@ const convertAlign = (align: string): string => {
 };
 
 export interface LayoutProps {
-  align?: string[];
+  align?: string | [string, string];
   children?: React.ReactNode;
   flex?: true | string;
   basis?: string;
@@ -48,7 +48,10 @@ const withLayout =
         shrink === true ? 1 : shrink};
       ${({flex = defaults.flex, align = defaults.align}) => {
         if (isDefined(align)) {
-          align = map(align, (al: string) => convertAlign(al)) as string[];
+          align = map(align, (al: string) => convertAlign(al)) as [
+            string,
+            string,
+          ];
         } else {
           // use sane defaults for alignment
           align =
