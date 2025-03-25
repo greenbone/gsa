@@ -43,12 +43,16 @@ const Label = styled.div<StyledLabelProps>`
  * @returns {Function} A function that takes props and returns a Label component with the specified styles and properties.
  */
 
+interface ToString {
+  toString(): string;
+}
+
 const createLabel = (
   backgroundColor: string,
   borderColor: string,
   textColor: string,
   testId: string,
-  text: string,
+  text: string | ToString,
 ): React.FC<React.HTMLAttributes<HTMLDivElement>> => {
   return (props: React.HTMLAttributes<HTMLDivElement>) => (
     <Label
