@@ -15,10 +15,51 @@ import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import PortListsDialog from 'web/pages/portlists/Dialog';
 import ImportPortListDialog from 'web/pages/portlists/ImportDialog';
-import PortRangeDialog from 'web/pages/portlists/PortRangeDialog';
-import PropTypes from 'web/utils/PropTypes';
+import PortRangeDialog, {
+  PortRangeDialogData,
+} from 'web/pages/portlists/PortRangeDialog';
 
-const PortListComponent = ({
+interface PortList {
+  id: string;
+  name: string;
+  comment: string;
+  port_ranges: PortRange[];
+}
+
+interface PortRange {
+  end: string;
+  entityType: string;
+  id: string;
+  protocol_type: string;
+  start: string;
+  isTmp: boolean;
+}
+
+interface PortListComponentProps {
+  children: (props: {
+    clone: (entity: PortList) => void;
+    download: (entity: PortList) => void;
+    delete: (entity: PortList) => void;
+    create: () => void;
+    edit: (entity: PortList) => void;
+    import: () => void;
+  }) => React.ReactNode;
+  onCloneError?: (error: unknown) => void;
+  onCloned?: (newEntity: unknown) => void;
+  onCreateError?: (error: unknown) => void;
+  onCreated?: (response: unknown) => void;
+  onDeleteError?: (error: unknown) => void;
+  onDeleted?: () => void;
+  onDownloadError?: (error: unknown) => void;
+  onDownloaded?: (response: unknown) => void;
+  onImportError?: (error: unknown) => void;
+  onImported?: (response: unknown) => void;
+  onInteraction?: () => void;
+  onSaveError?: (error: unknown) => void;
+  onSaved?: (response: unknown) => void;
+}
+
+const PortListComponent: React.FC<PortListComponentProps> = ({
   children,
   onCloned,
   onCloneError,
@@ -38,11 +79,13 @@ const PortListComponent = ({
   const [importDialogVisible, setImportDialogVisible] = useState(false);
   const [portListDialogVisible, setPortListDialogVisible] = useState(false);
   const [portRangeDialogVisible, setPortRangeDialogVisible] = useState(false);
-  const [portListDialogTitle, setPortListDialogTitle] = useState();
-  const [portList, setPortList] = useState();
-  const [portRanges, setPortRanges] = useState([]);
-  const [createdPortRanges, setCreatedPortRanges] = useState([]);
-  const [deletedPortRanges, setDeletedPortRanges] = useState([]);
+  const [portListDialogTitle, setPortListDialogTitle] = useState<
+    string | undefined
+  >();
+  const [portList, setPortList] = useState<PortList | undefined>();
+  const [portRanges, setPortRanges] = useState<PortRange[]>([]);
+  const [createdPortRanges, setCreatedPortRanges] = useState<PortRange[]>([]);
+  const [deletedPortRanges, setDeletedPortRanges] = useState<PortRange[]>([]);
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -73,11 +116,12 @@ const PortListComponent = ({
     onInteraction,
   });
 
-  const openPortListDialog = async entity => {
+  const openPortListDialog = async (entity?: PortList) => {
     if (entity) {
       // edit
+      // @ts-expect-error
       const response = await gmp.portlist.get(entity);
-      const portList = response.data;
+      const portList: PortList = response.data;
       setCreatedPortRanges([]);
       setDeletedPortRanges([]);
       setPortListDialogTitle(
@@ -136,54 +180,65 @@ const PortListComponent = ({
     handleInteraction();
   };
 
-  const handleDeletePortRange = async range => {
+  const handleDeletePortRange = async (range: PortRange) => {
+    // @ts-expect-error
     await gmp.portlist.deletePortRange(range);
   };
 
-  const handleSavePortRange = async data => {
+  const handleSavePortRange = async (data: unknown) => {
+    // @ts-expect-error
     const response = await gmp.portlist.createPortRange(data);
     return response.data.id;
   };
 
-  const handleImportPortList = async data => {
+  const handleImportPortList = async (data: unknown) => {
     handleInteraction();
     try {
+      // @ts-expect-error
       const response = await gmp.portlist.import(data);
-      onImported(response);
+      if (isDefined(onImported)) {
+        onImported(response);
+      }
       closeImportDialog();
     } catch (error) {
-      onImportError(error);
+      if (isDefined(onImportError)) {
+        onImportError(error);
+      }
     }
   };
 
-  const handleSavePortList = async data => {
+  const handleSavePortList = async (data: {id?: string}) => {
     handleInteraction();
 
     try {
-      const createdPromises = createdPortRanges.map(async range => {
-        // save temporary port ranges in the backend
-        const id = await handleSavePortRange({
-          ...range,
-          port_range_start: parseInt(range.start),
-          port_range_end: parseInt(range.end),
-          port_type: range.protocol_type,
-        });
-        range.isTmp = false;
-        range.id = id;
-        // the range has been saved in the backend
-        // if something fails the state contains the still to be saved ranges
-        setCreatedPortRanges(createdPortRanges =>
-          createdPortRanges.filter(pRange => pRange !== range),
-        );
-      });
-      const deletedPromises = deletedPortRanges.map(async range => {
-        await handleDeletePortRange(range);
-        // the range has been deleted from the backend
-        // if something fails the state contains the still to be deleted ranges
-        setDeletedPortRanges(deletedPortRanges =>
-          deletedPortRanges.filter(pRange => pRange !== range),
-        );
-      });
+      const createdPromises = createdPortRanges.map(
+        async (range: PortRange) => {
+          // save temporary port ranges in the backend
+          const id = await handleSavePortRange({
+            ...range,
+            port_range_start: parseInt(range.start),
+            port_range_end: parseInt(range.end),
+            port_type: range.protocol_type,
+          });
+          range.isTmp = false;
+          range.id = id;
+          // the range has been saved in the backend
+          // if something fails the state contains the still to be saved ranges
+          setCreatedPortRanges(createdPortRanges =>
+            createdPortRanges.filter(pRange => pRange !== range),
+          );
+        },
+      );
+      const deletedPromises = deletedPortRanges.map(
+        async (range: PortRange) => {
+          await handleDeletePortRange(range);
+          // the range has been deleted from the backend
+          // if something fails the state contains the still to be deleted ranges
+          setDeletedPortRanges(deletedPortRanges =>
+            deletedPortRanges.filter(pRange => pRange !== range),
+          );
+        },
+      );
 
       const promises = [...createdPromises, ...deletedPromises];
       await Promise.all(promises);
@@ -199,23 +254,24 @@ const PortListComponent = ({
     closePortListDialog();
   };
 
-  const handleTmpAddPortRange = values => {
+  const handleTmpAddPortRange = (values: PortRangeDialogData) => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     let {port_range_end, port_range_start, port_type} = values;
 
-    port_range_end = parseInt(port_range_end);
-    port_range_start = parseInt(port_range_start);
+    const portRangeEnd = parseInt(port_range_end);
+    const portRangeStart = parseInt(port_range_start);
 
     handleInteraction();
 
     // reject port ranges with missing values
-    if (!port_range_start || !port_range_end) {
+    if (!portRangeStart || !portRangeEnd) {
       throw new Error(
         _('The port range needs numerical values for start and end!'),
       );
     }
 
     // reject port ranges with start value lower than end value
-    if (port_range_start > port_range_end) {
+    if (portRangeStart > portRangeEnd) {
       throw new Error(
         _('The end of the port range can not be below its start!'),
       );
@@ -226,15 +282,19 @@ const PortListComponent = ({
     for (const range of portRanges) {
       const start = parseInt(range.start);
       const end = parseInt(range.end);
+      if (!start || !end) {
+        continue;
+      }
+
       if (
         range.protocol_type === port_type &&
-        (port_range_start === start ||
-          port_range_start === end ||
-          (port_range_start > start && port_range_start < end) ||
-          port_range_end === start ||
-          port_range_end === end ||
-          (port_range_end > start && port_range_end < end) ||
-          (port_range_start < start && port_range_end > end))
+        (portRangeStart === start ||
+          portRangeStart === end ||
+          (portRangeStart > start && portRangeStart < end) ||
+          portRangeEnd === start ||
+          portRangeEnd === end ||
+          (portRangeEnd > start && portRangeEnd < end) ||
+          (portRangeStart < start && portRangeEnd > end))
       ) {
         throw new Error(_('New port range overlaps with an existing one!'));
       }
@@ -254,7 +314,7 @@ const PortListComponent = ({
     closeNewPortRangeDialog();
   };
 
-  const handleTmpDeletePortRange = portRange => {
+  const handleTmpDeletePortRange = (portRange: PortRange) => {
     if (portRange.isTmp) {
       // it hasn't been saved yet
       setCreatedPortRanges(createdPortRanges =>
@@ -291,7 +351,9 @@ const PortListComponent = ({
           comment={comment}
           id={id}
           name={name}
+          // @ts-expect-error
           port_list={portList}
+          // @ts-expect-error
           port_ranges={portRanges}
           title={portListDialogTitle}
           onClose={handleClosePortListDialog}
@@ -306,7 +368,7 @@ const PortListComponent = ({
           onSave={handleImportPortList}
         />
       )}
-      {portRangeDialogVisible && (
+      {portRangeDialogVisible && id && (
         <PortRangeDialog
           id={id}
           onClose={handleCloseNewPortRangeDialog}
@@ -315,23 +377,6 @@ const PortListComponent = ({
       )}
     </>
   );
-};
-
-PortListComponent.propTypes = {
-  children: PropTypes.func.isRequired,
-  onCloneError: PropTypes.func,
-  onCloned: PropTypes.func,
-  onCreateError: PropTypes.func,
-  onCreated: PropTypes.func,
-  onDeleteError: PropTypes.func,
-  onDeleted: PropTypes.func,
-  onDownloadError: PropTypes.func,
-  onDownloaded: PropTypes.func,
-  onImportError: PropTypes.func,
-  onImported: PropTypes.func,
-  onInteraction: PropTypes.func,
-  onSaveError: PropTypes.func,
-  onSaved: PropTypes.func,
 };
 
 export default PortListComponent;
