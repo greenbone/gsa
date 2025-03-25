@@ -180,7 +180,13 @@ export const rendererWith = (
   const wrapper = ({children}) => <Providers>{children}</Providers>;
 
   return {
-    render: ui => render(<Providers>{ui}</Providers>),
+    render: ui => {
+      const {rerender, ...other} = render(<Providers>{ui}</Providers>);
+      return {
+        ...other,
+        rerender: updatedUi => rerender(<Providers>{updatedUi}</Providers>),
+      };
+    },
     gmp,
     store,
     renderHook: hook => rtlRenderHook(hook, {wrapper}),
