@@ -6,6 +6,10 @@
 import {_l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
+export interface EntityType {
+  entityType?: string;
+}
+
 /**
  * Return the entity type of a Model object
  *
@@ -13,7 +17,8 @@ import {isDefined} from 'gmp/utils/identity';
  *
  * @returns {String} The GSA entity type of a model
  */
-export const getEntityType = (model = {}) => model.entityType;
+export const getEntityType = (model: EntityType = {}): string | undefined =>
+  model.entityType;
 
 /**
  * Convert a type into its pluralized form
@@ -22,7 +27,7 @@ export const getEntityType = (model = {}) => model.entityType;
  *
  * @returns {String} The pluralized entity type
  */
-export const pluralizeType = type => {
+export const pluralizeType = (type: string): string => {
   if (type[type.length - 1] === 's' || type === 'info') {
     return type;
   } else if (type === 'policy') {
@@ -32,6 +37,7 @@ export const pluralizeType = type => {
   }
   return type + 's';
 };
+
 const TYPES = {
   audit_report: 'auditreport',
   config: 'scanconfig',
@@ -44,18 +50,18 @@ const TYPES = {
   report_format: 'reportformat',
   tls_certificate: 'tlscertificate',
   vuln: 'vulnerability',
-};
+} as const;
 
 /**
  * Convert a type to the GSA type name
  *
- * @param {String} type An entity type e.g. from a request
+ * @param {String} [type] An entity type e.g. from a request
  *
  * @returns {String} Entity type name used in GSA
  */
-export const normalizeType = type => {
-  const ctype = TYPES[type];
-  return isDefined(ctype) ? ctype : type;
+export const normalizeType = (type?: string): string | undefined => {
+  const cType = TYPES[type as keyof typeof TYPES];
+  return isDefined(cType) ? cType : type;
 };
 
 const ENTITY_TYPES = {
@@ -95,18 +101,20 @@ const ENTITY_TYPES = {
   tlscertificate: _l('TLS Certificate'),
   user: _l('User'),
   vulnerability: _l('Vulnerability'),
-};
+} as const;
 
 /**
- * Get the translateable name for an entity type
+ * Get the translatable name for an entity type
  *
- * @param {String} type A entity type. Either an external or GSA entity type.
+ * @param {String} [type] A entity type. Either an external or GSA entity type.
  *
  * @returns {String} A translated entity type name
  */
-export const typeName = type => {
+export const typeName = (type?: string): string | undefined => {
   type = normalizeType(type);
-  const name = ENTITY_TYPES[type];
+  const name = type
+    ? ENTITY_TYPES[type as keyof typeof ENTITY_TYPES]
+    : undefined;
   return isDefined(name) ? `${name}` : type;
 };
 
@@ -122,7 +130,7 @@ const CMD_TYPES = {
   reportformat: 'report_format',
   tlscertificate: 'tls_certificate',
   vulnerability: 'vuln',
-};
+} as const;
 
 /**
  * Convert a GSA entity type into a API type
@@ -131,7 +139,7 @@ const CMD_TYPES = {
  *
  * @returns {String} API type
  */
-export const apiType = type => {
-  const name = CMD_TYPES[type];
+export const apiType = (type?: string): string | undefined => {
+  const name = type ? CMD_TYPES[type as keyof typeof CMD_TYPES] : undefined;
   return isDefined(name) ? name : type;
 };
