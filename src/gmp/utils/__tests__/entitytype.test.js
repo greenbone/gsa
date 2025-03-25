@@ -89,6 +89,10 @@ describe('normalizeType function tests', () => {
   test('should pass through unknown types', () => {
     expect(normalizeType('foo')).toEqual('foo');
   });
+
+  test('should pass through undefined', () => {
+    expect(normalizeType()).toBeUndefined();
+  });
 });
 
 describe('apiType function tests', () => {
@@ -114,6 +118,10 @@ describe('apiType function tests', () => {
   test('should pass through unknown types', () => {
     expect(apiType('foo')).toEqual('foo');
   });
+
+  test('should pass through undefined', () => {
+    expect(apiType()).toBeUndefined();
+  });
 });
 
 describe('typeName function tests', () => {
@@ -133,5 +141,9 @@ describe('typeName function tests', () => {
     expect(typeName('scanconfig')).toEqual('Scan Config');
     expect(typeName('config')).toEqual('Scan Config');
     expect(typeName('vulnerability')).toEqual('Vulnerability');
+  });
+
+  test('should pass through undefined', () => {
+    expect(typeName()).toBeUndefined();
   });
 });
