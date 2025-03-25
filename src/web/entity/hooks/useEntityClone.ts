@@ -31,7 +31,7 @@ const useEntityClone = (
     onInteraction,
   }: {
     onCloneError?: (error: unknown) => void;
-    onCloned?: (response: unknown) => void;
+    onCloned?: (newEntity: unknown) => void;
     onInteraction?: () => void;
   } = {},
 ): ((entity: EntityClone) => Promise<unknown>) => {
