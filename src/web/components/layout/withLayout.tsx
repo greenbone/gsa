@@ -7,9 +7,8 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'web/utils/PropTypes';
 
-const convertAlign = align => {
+const convertAlign = (align: string): string => {
   switch (align) {
     case 'end':
     case 'start':
@@ -19,11 +18,23 @@ const convertAlign = align => {
   }
 };
 
+export interface LayoutProps {
+  align?: string[];
+  children?: React.ReactNode;
+  flex?: true | string;
+  basis?: string;
+  grow?: true | string;
+  wrap?: true | string;
+  shrink?: true | string;
+  'data-testid'?: string;
+  [key: string]: unknown;
+}
+
 const withLayout =
-  (defaults = {}) =>
-  Component => {
+  (defaults: LayoutProps = {}) =>
+  (Component: React.ComponentType | string) => {
     const LayoutComponent = styled(
-      ({align, basis, flex, grow, shrink, wrap, ...props}) => (
+      ({align, basis, flex, grow, shrink, wrap, ...props}: LayoutProps) => (
         <Component {...props} />
       ),
     )`
@@ -37,7 +48,7 @@ const withLayout =
         shrink === true ? 1 : shrink};
       ${({flex = defaults.flex, align = defaults.align}) => {
         if (isDefined(align)) {
-          align = map(align, al => convertAlign(al));
+          align = map(align, (al: string) => convertAlign(al)) as string[];
         } else {
           // use sane defaults for alignment
           align =
@@ -50,21 +61,7 @@ const withLayout =
       }}
     `;
 
-    LayoutComponent.displayName = `withLayout(${Component.displayName})`;
-
-    LayoutComponent.propTypes = {
-      basis: PropTypes.string,
-      flex: PropTypes.oneOf([true, 'column', 'row']),
-      grow: PropTypes.oneOfType([
-        PropTypes.oneOf([true]),
-        PropTypes.numberOrNumberString,
-      ]),
-      shrink: PropTypes.oneOfType([
-        PropTypes.oneOf([true]),
-        PropTypes.numberOrNumberString,
-      ]),
-      wrap: PropTypes.oneOf([true, 'wrap', 'nowrap']),
-    };
+    LayoutComponent.displayName = `withLayout(${typeof Component === 'string' ? Component : Component.displayName || 'Component'})`;
 
     return LayoutComponent;
   };
