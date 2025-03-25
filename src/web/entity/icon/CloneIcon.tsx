@@ -4,15 +4,27 @@
  */
 
 import _ from 'gmp/locale';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {getEntityType, typeName, EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import CloneIcon from 'web/components/icon/CloneIcon';
-import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import useCapabilities from 'web/hooks/useCapabilities';
+
+interface EntityClone extends EntityType {
+  userCapabilities: {
+    mayAccess: (name?: string) => boolean;
+  };
+}
+
+interface EntityCloneIconProps {
+  displayName?: string;
+  entity: EntityClone;
+  mayClone?: boolean;
+  name?: string;
+  title?: string;
+  onClick?: () => void;
+}
 
 const EntityCloneIcon = ({
-  capabilities,
   displayName,
   entity,
   mayClone = true,
@@ -20,7 +32,8 @@ const EntityCloneIcon = ({
   title,
   onClick,
   ...props
-}) => {
+}: EntityCloneIconProps) => {
+  const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -31,7 +44,7 @@ const EntityCloneIcon = ({
 
   const active =
     mayClone &&
-    capabilities.mayClone(name) &&
+    capabilities?.mayClone(name) &&
     entity.userCapabilities.mayAccess(name);
   if (!isDefined(title)) {
     if (active) {
@@ -53,14 +66,4 @@ const EntityCloneIcon = ({
   );
 };
 
-EntityCloneIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  displayName: PropTypes.string,
-  entity: PropTypes.model.isRequired,
-  mayClone: PropTypes.bool,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onClick: PropTypes.func,
-};
-
-export default withCapabilities(EntityCloneIcon);
+export default EntityCloneIcon;
