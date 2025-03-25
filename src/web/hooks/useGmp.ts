@@ -6,6 +6,12 @@
 import {useContext} from 'react';
 import GmpContext from 'web/components/provider/GmpProvider';
 
-const useGmp = () => useContext(GmpContext);
+const useGmp = () => {
+  const gmp = useContext(GmpContext);
+  if (!gmp) {
+    throw new Error('GMP instance is not available.');
+  }
+  return gmp;
+};
 
 export default useGmp;
