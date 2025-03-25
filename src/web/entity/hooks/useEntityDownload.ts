@@ -15,19 +15,27 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {getUsername} from 'web/store/usersettings/selectors';
 import {generateFilename} from 'web/utils/Render';
 
+interface EntityDownload {
+  filename: string;
+  data: string;
+}
+
+interface DownloadCallbacks {
+  onDownloadError?: (error: unknown) => void;
+  onDownloaded?: (data: EntityDownload) => void;
+  onInteraction?: () => void;
+}
+
 /**
  * Custom hook to handle the download of an entity.
  *
  * @param {string} name - The name of the entity to download.
- * @param {Object} options - Options for handling download events.
- * @param {Function} [options.onDownloadError] - Callback function to handle download errors.
- * @param {Function} [options.onDownloaded] - Callback function to handle successful downloads.
- * @param {Function} [options.onInteraction] - Callback function to handle interactions before download.
+ * @param {DownloadCallbacks} options - Options for handling download events.
  * @returns {Function} - Function to handle the entity download.
  */
 const useEntityDownload = (
-  name,
-  {onDownloadError, onDownloaded, onInteraction} = {},
+  name: string,
+  {onDownloadError, onDownloaded, onInteraction}: DownloadCallbacks = {},
 ) => {
   const [_] = useTranslation();
   const username = useSelector(getUsername);
@@ -41,6 +49,7 @@ const useEntityDownload = (
       'detailsexportfilename',
     );
     const loadSettings = () => {
+      // @ts-expect-error
       dispatch(loadUserSettingDefaults(gmp)());
     };
     if (
