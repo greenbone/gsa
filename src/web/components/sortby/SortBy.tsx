@@ -5,7 +5,6 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'web/utils/PropTypes';
 
 const SortButton = styled.button`
   cursor: pointer;
@@ -15,7 +14,19 @@ const SortButton = styled.button`
   font: inherit;
 `;
 
-const SortBy = ({by, children, className, onClick}) => {
+export const ASC = 'asc';
+export const DESC = 'desc';
+
+export type ByType = typeof ASC | typeof DESC;
+
+interface SortByProps {
+  by: ByType;
+  children?: React.ReactNode;
+  className?: string;
+  onClick?: (by: ByType) => void;
+}
+
+const SortBy = ({by, children, className, onClick}: SortByProps) => {
   const handleClick = () => {
     if (onClick) {
       onClick(by);
@@ -29,14 +40,7 @@ const SortBy = ({by, children, className, onClick}) => {
   );
 };
 
-SortBy.ASC = 'asc';
-SortBy.DESC = 'desc';
-
-SortBy.propTypes = {
-  children: PropTypes.node,
-  by: PropTypes.string,
-  className: PropTypes.string,
-  onClick: PropTypes.func,
-};
+SortBy.ASC = ASC;
+SortBy.DESC = DESC;
 
 export default SortBy;
