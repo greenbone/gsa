@@ -5,23 +5,28 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
+import Layout, {LayoutProps} from 'web/components/layout/Layout';
 
-const TableData = ({children, className, colSpan, rowSpan, ...other}) => (
+interface TableDataProps extends LayoutProps {
+  children?: React.ReactNode;
+  className?: string;
+  colSpan?: number;
+  rowSpan?: number;
+}
+
+const TableData: React.FC<TableDataProps> = ({
+  children,
+  className,
+  colSpan,
+  rowSpan,
+  ...other
+}: TableDataProps) => (
   <td className={className} colSpan={colSpan} rowSpan={rowSpan}>
     <StyledLayout flex="column" {...other}>
       {children}
     </StyledLayout>
   </td>
 );
-
-TableData.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  colSpan: PropTypes.numberOrNumberString,
-  rowSpan: PropTypes.numberOrNumberString,
-};
 
 const StyledLayout = styled(Layout)`
   padding-top: 8px;
