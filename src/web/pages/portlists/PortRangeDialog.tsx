@@ -4,17 +4,38 @@
  */
 
 import {parseInt} from 'gmp/parser';
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const convertPort = value => (value === '' ? value : parseInt(value));
+const convertPort = (value: string | number | undefined) =>
+  value === '' ? value : parseInt(value);
 
-const PortRangeDialog = ({id, port_type = 'tcp', title, onClose, onSave}) => {
+export interface PortRangeDialogData {
+  id: string;
+  port_range_start: string;
+  port_range_end: string;
+  port_type: string;
+}
+
+interface PortRangeDialogProps {
+  id: string;
+  port_type?: string;
+  title?: string;
+  onClose: () => void;
+  onSave: (data: PortRangeDialogData) => void;
+}
+
+const PortRangeDialog: React.FC<PortRangeDialogProps> = ({
+  id,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  port_type = 'tcp',
+  title,
+  onClose,
+  onSave,
+}: PortRangeDialogProps) => {
   const [_] = useTranslation();
 
   title = title || _('New Port Range');
@@ -37,6 +58,7 @@ const PortRangeDialog = ({id, port_type = 'tcp', title, onClose, onSave}) => {
         return (
           <>
             <FormGroup title={_('Start')}>
+              {/* @ts-expect-error */}
               <TextField
                 convert={convertPort}
                 name="port_range_start"
@@ -46,6 +68,7 @@ const PortRangeDialog = ({id, port_type = 'tcp', title, onClose, onSave}) => {
             </FormGroup>
 
             <FormGroup title={_('End')}>
+              {/* @ts-expect-error */}
               <TextField
                 convert={convertPort}
                 name="port_range_end"
@@ -55,6 +78,7 @@ const PortRangeDialog = ({id, port_type = 'tcp', title, onClose, onSave}) => {
             </FormGroup>
 
             <FormGroup direction="row" title={_('Protocol')}>
+              {/* @ts-expect-error */}
               <Radio
                 checked={state.port_type === 'tcp'}
                 name="port_type"
@@ -62,6 +86,7 @@ const PortRangeDialog = ({id, port_type = 'tcp', title, onClose, onSave}) => {
                 value="tcp"
                 onChange={onValueChange}
               />
+              {/* @ts-expect-error */}
               <Radio
                 checked={state.port_type === 'udp'}
                 name="port_type"
@@ -75,15 +100,6 @@ const PortRangeDialog = ({id, port_type = 'tcp', title, onClose, onSave}) => {
       }}
     </SaveDialog>
   );
-};
-
-PortRangeDialog.propTypes = {
-  id: PropTypes.id.isRequired,
-  port_list: PropTypes.model,
-  port_type: PropTypes.string,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default PortRangeDialog;
