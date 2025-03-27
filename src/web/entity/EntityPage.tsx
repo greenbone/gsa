@@ -16,7 +16,62 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import EntityInfo from 'web/entity/EntityInfo';
-import PropTypes from 'web/utils/PropTypes';
+
+interface EntityPageRenderProps {
+  activeTab: number;
+  onActivateTab: (index: number) => void;
+}
+
+export interface Entity {
+  id: string;
+  name: string;
+  [key: string]: unknown;
+}
+
+interface InfoComponentProps {
+  entity: Entity;
+  [key: string]: unknown;
+}
+
+interface ToolBarIconsComponentProps {
+  entity: Entity;
+  [key: string]: unknown;
+}
+
+interface SectionComponentProps {
+  className: string;
+  children: React.ReactNode;
+  extra: React.ReactNode;
+  img: string;
+  title: string;
+}
+
+interface EntityError {
+  status: number;
+  message: string;
+}
+
+interface EntityPageProps {
+  children: (props: EntityPageRenderProps) => React.ReactNode;
+  entity: Entity;
+  entityError?: EntityError;
+  entityType: string;
+  infoComponent?: React.ComponentType<InfoComponentProps> | false;
+  isLoading: boolean;
+  sectionComponent: React.ComponentType<SectionComponentProps> | false;
+  sectionIcon: string;
+  title: string;
+  toolBarIcons: React.ComponentType<ToolBarIconsComponentProps>;
+  onInteraction: () => void;
+}
+
+interface EntityPageState {
+  activeTab: number;
+}
+
+export const Col = styled.col`
+  width: ${props => props.width};
+`;
 
 const ErrorContent = styled.div`
   white-space: pre;
@@ -26,9 +81,9 @@ const MessageContent = styled.div`
   white-space: pre;
 `;
 
-class EntityPage extends React.Component {
-  constructor(...args) {
-    super(...args);
+class EntityPage extends React.Component<EntityPageProps, EntityPageState> {
+  constructor(props: EntityPageProps) {
+    super(props);
     this.state = {activeTab: 0};
 
     this.handleActivateTab = this.handleActivateTab.bind(this);
@@ -44,7 +99,7 @@ class EntityPage extends React.Component {
     return <ToolBarIconsComponent entity={entity} {...other} />;
   }
 
-  handleActivateTab(index) {
+  handleActivateTab(index: number) {
     const {onInteraction} = this.props;
 
     this.setState({activeTab: index});
@@ -69,9 +124,9 @@ class EntityPage extends React.Component {
       return null;
     }
 
-    let section_title = title;
+    let sectionTitle = title;
     if (isDefined(entity)) {
-      section_title = title + ': ' + shorten(entity.name, 80);
+      sectionTitle = title + ': ' + shorten(entity.name, 80);
     }
 
     return (
@@ -79,7 +134,7 @@ class EntityPage extends React.Component {
         className="entity-section"
         extra={this.renderInfo()}
         img={sectionIcon}
-        title={section_title}
+        title={sectionTitle}
       >
         {children({
           activeTab,
@@ -98,11 +153,13 @@ class EntityPage extends React.Component {
     }
 
     if (!isDefined(InfoComponent)) {
+      // @ts-expect-error
       InfoComponent = EntityInfo;
     }
 
     return (
       <Layout align="start">
+        {/* @ts-expect-error */}
         <InfoComponent entity={entity} />
       </Layout>
     );
@@ -116,7 +173,7 @@ class EntityPage extends React.Component {
         return <Loading />;
       }
       if (isDefined(entityError)) {
-        if (entityError.status === 404) {
+        if (entityError?.status === 404) {
           let content = _(
             '\nYou might have followed an incorrect link and the {{entity}} ' +
               'does not exist.',
@@ -188,18 +245,5 @@ class EntityPage extends React.Component {
     );
   }
 }
-
-EntityPage.propTypes = {
-  entity: PropTypes.model,
-  entityError: PropTypes.object,
-  entityType: PropTypes.string.isRequired,
-  infoComponent: PropTypes.componentOrFalse,
-  isLoading: PropTypes.bool,
-  sectionComponent: PropTypes.componentOrFalse,
-  sectionIcon: PropTypes.icon,
-  title: PropTypes.string,
-  toolBarIcons: PropTypes.component,
-  onInteraction: PropTypes.func.isRequired,
-};
 
 export default EntityPage;
