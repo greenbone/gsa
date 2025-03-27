@@ -4,9 +4,15 @@
  */
 
 import React from 'react';
-import PropTypes from 'web/utils/PropTypes';
 
-class Download extends React.Component {
+interface DownloadProps {
+  filename?: string;
+}
+
+class Download extends React.Component<DownloadProps> {
+  obj_url: string | undefined;
+  anchor: HTMLAnchorElement | null = null;
+
   componentWillUnmount() {
     this.release();
   }
@@ -17,21 +23,33 @@ class Download extends React.Component {
     }
   }
 
-  setFilename(name) {
+  setFilename(name: string) {
+    if (!this.anchor) {
+      throw new Error('Anchor element not referenced');
+    }
+
     this.anchor.download = name;
   }
 
-  setData(data, mimetype = 'application/octet-stream') {
+  setData(data: string, mimetype: string = 'application/octet-stream') {
     const blob = new Blob([data], {type: mimetype});
 
     this.release();
 
     this.obj_url = window.URL.createObjectURL(blob);
 
+    if (!this.anchor) {
+      throw new Error('Anchor element not referenced');
+    }
+
     this.anchor.href = this.obj_url;
   }
 
   download() {
+    if (!this.anchor) {
+      throw new Error('Anchor element not referenced');
+    }
+
     this.anchor.click();
   }
 
@@ -49,9 +67,5 @@ class Download extends React.Component {
     );
   }
 }
-
-Download.propTypes = {
-  filename: PropTypes.string,
-};
 
 export default Download;
