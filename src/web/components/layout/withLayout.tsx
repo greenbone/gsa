@@ -23,7 +23,7 @@ export interface LayoutProps {
   children?: React.ReactNode;
   flex?: true | string;
   basis?: string;
-  grow?: true | string;
+  grow?: true | string | number;
   wrap?: true | string;
   shrink?: true | string;
   'data-testid'?: string;
