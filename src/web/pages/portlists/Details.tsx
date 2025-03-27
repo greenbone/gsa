@@ -8,10 +8,10 @@ import React from 'react';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
-import {Col} from 'web/entity/Page';
 
 interface Target {
   id: string;
