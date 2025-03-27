@@ -8,18 +8,23 @@ import {AlertCircle} from 'lucide-react';
 import React from 'react';
 import ErrorContainer from 'web/components/error/ErrorContainer';
 import Divider from 'web/components/layout/Divider';
-import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
+import Layout, {LayoutProps} from 'web/components/layout/Layout';
 import Theme from 'web/utils/Theme';
 
+interface ErrorMessageProps extends LayoutProps {
+  children?: React.ReactNode;
+  'data-testid'?: string;
+  details?: string;
+  message: string;
+}
 
-const ErrorMessage = ({
+const ErrorMessage: React.FC<ErrorMessageProps> = ({
   message,
   details,
   children,
   'data-testid': dataTestId,
   ...props
-}) => (
+}: ErrorMessageProps) => (
   <ErrorContainer data-testid={dataTestId}>
     <Divider grow align={['center', 'center']} flex="column" margin="20px">
       <AlertCircle color={Theme.darkRed} size="24" />
@@ -37,11 +42,5 @@ const ErrorMessage = ({
     </Divider>
   </ErrorContainer>
 );
-
-ErrorMessage.propTypes = {
-  'data-testid': PropTypes.string,
-  details: PropTypes.string,
-  message: PropTypes.string,
-};
 
 export default ErrorMessage;
