@@ -25,7 +25,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
-import EntityInfo from 'web/entity/Info';
+import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
 import Summary from 'web/pages/reports/details/Summary';

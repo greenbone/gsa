@@ -4,19 +4,24 @@
  */
 
 import _ from 'gmp/locale';
+import {Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-const OwnerInfo = ({owner}) =>
+interface Owner {
+  name: string;
+}
+
+interface OwnerInfoProps {
+  owner: Owner;
+}
+
+const OwnerInfo: React.FC<OwnerInfoProps> = ({owner}: OwnerInfoProps) =>
   isDefined(owner) ? <span>{owner.name}</span> : <i>{_('(Global Object)')}</i>;
-OwnerInfo.propTypes = {
-  owner: PropTypes.object,
-};
 
 export const InfoLayout = styled(Layout)`
   border-spacing: 0px;
@@ -31,7 +36,18 @@ export const InfoLayout = styled(Layout)`
   }
 `;
 
-const EntityInfo = ({entity}) => {
+interface Entity {
+  id: string;
+  owner: Owner;
+  creationTime: Date;
+  modificationTime: Date;
+}
+
+interface EntityInfoProps {
+  entity: Entity;
+}
+
+const EntityInfo: React.FC<EntityInfoProps> = ({entity}: EntityInfoProps) => {
   const {id, owner, creationTime, modificationTime} = entity;
   return (
     <InfoLayout>
@@ -49,11 +65,6 @@ const EntityInfo = ({entity}) => {
       <OwnerInfo owner={owner} />
     </InfoLayout>
   );
-};
-
-EntityInfo.propTypes = {
-  className: PropTypes.string,
-  entity: PropTypes.model.isRequired,
 };
 
 export default EntityInfo;
