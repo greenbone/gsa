@@ -8,17 +8,22 @@ import React from 'react';
 import MessageContainer from 'web/components/error/MessageContainer';
 import StNonAvailableIcon from 'web/components/icon/StNonAvailableIcon';
 import Divider from 'web/components/layout/Divider';
-import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
+import Layout, {LayoutProps} from 'web/components/layout/Layout';
 
+interface MessageProps extends LayoutProps {
+  children?: React.ReactNode;
+  'data-testid'?: string;
+  details?: string;
+  message: string;
+}
 
-const Message = ({
+const Message: React.FC<MessageProps> = ({
   message,
   details,
   children,
   'data-testid': dataTestId,
   ...props
-}) => (
+}: MessageProps) => (
   <MessageContainer data-testid={dataTestId}>
     <Divider align={['start', 'start']} margin="15px">
       <StNonAvailableIcon size="medium" />
@@ -34,11 +39,5 @@ const Message = ({
     </Divider>
   </MessageContainer>
 );
-
-Message.propTypes = {
-  'data-testid': PropTypes.string,
-  details: PropTypes.string,
-  message: PropTypes.string,
-};
 
 export default Message;
