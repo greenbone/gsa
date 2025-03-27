@@ -40,5 +40,6 @@ export const isDate = dayjs.isDayjs;
 export const setLocaleDayjs = dayjs.locale;
 export const _localeData = dayjs.localeData;
 export const duration = dayjs.duration;
+export type Date = dayjs.Dayjs;
 
 export default dayjs;
