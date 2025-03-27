@@ -12,8 +12,7 @@ import {
   testing,
 } from '@gsa/testing';
 import {RootLogger, DEFAULT_LOG_LEVEL, LogLevels} from 'gmp/log.js';
-import {isFunction} from 'util';
-
+import {isFunction} from 'gmp/utils/identity';
 
 let origConsole;
 let testConsole;
