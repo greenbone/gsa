@@ -31,7 +31,7 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import DetailsBlock from 'web/entity/Block';
 import EntityComponent from 'web/entity/EntityComponent';
-import {InfoLayout} from 'web/entity/Info';
+import {InfoLayout} from 'web/entity/EntityInfo';
 import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';

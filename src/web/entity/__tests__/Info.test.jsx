@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import Model from 'gmp/model';
 import Date from 'gmp/models/date';
-import EntityInfo from 'web/entity/Info';
+import EntityInfo from 'web/entity/EntityInfo';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
