@@ -4,7 +4,11 @@
  */
 
 import logger from 'gmp/log';
-import dayjs, {setLocaleDayjs, isDate} from 'gmp/models/date';
+import createDate, {
+  Date as GmpDate,
+  setLocaleDayjs,
+  isDate,
+} from 'gmp/models/date';
 import {parseDate} from 'gmp/parser';
 import {isDefined, isString, isJsDate} from 'gmp/utils/identity';
 
@@ -16,7 +20,7 @@ const SHORT_DATE = 'shortDate';
 const TIME = 'time';
 
 type DateTimeFormat = typeof LONG_DATE | typeof SHORT_DATE | typeof TIME;
-type DateInput = undefined | Date | dayjs.Dayjs | string;
+type DateInput = undefined | Date | GmpDate | string;
 
 export const dateTimeFormatOptions = {
   [TIME]: {
@@ -47,8 +51,8 @@ export const setDateLocale = (lang: string): void => {
 export const getDateLocale = () => setLocaleDayjs();
 
 export const ensureDate = (
-  date: dayjs.Dayjs | string | undefined | Date,
-): undefined | dayjs.Dayjs => {
+  date: GmpDate | string | undefined | Date,
+): undefined | GmpDate => {
   if (!isDefined(date)) {
     return undefined;
   }
@@ -73,9 +77,9 @@ export const getFormattedDate = (
   }
 
   if (isDefined(tz)) {
-    date = dayjs(date).tz(tz);
+    date = createDate(date).tz(tz);
   } else {
-    date = dayjs(date);
+    date = createDate(date);
   }
 
   return date.format(format);
