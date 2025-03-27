@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import Icon from 'web/components/icon/Icon';
 import Layout from 'web/components/layout/Layout';
 import withLayout from 'web/components/layout/withLayout';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
 const HeaderLayout = styled(Layout)`
@@ -29,17 +28,24 @@ const HeaderIconLayout = styled(Layout)`
   margin-right: 5px;
 `;
 
-const WordbreakLayout = styled(Layout)`
+const WordBreakLayout = styled(Layout)`
   word-break: break-all;
   min-width: 100px;
 `;
 
-const SectionHeader = ({
+interface SectionHeaderProps {
+  align?: string | [string, string];
+  children?: React.ReactNode;
+  img?: string | React.ReactNode;
+  title?: string | React.ReactNode;
+}
+
+const SectionHeader: React.FC<SectionHeaderProps> = ({
   children,
   align = ['space-between', 'end'],
   title,
   img,
-}) => {
+}: SectionHeaderProps) => {
   return (
     <HeaderLayout flex align={align} className="section-header">
       <HeaderHeading align={['start', 'stretch']}>
@@ -49,18 +55,12 @@ const SectionHeader = ({
           </HeaderIconLayout>
         )}
         {isDefined(title) && (
-          <WordbreakLayout align={['start', 'end']}>{title}</WordbreakLayout>
+          <WordBreakLayout align={['start', 'end']}>{title}</WordBreakLayout>
         )}
       </HeaderHeading>
       {children}
     </HeaderLayout>
   );
-};
-
-SectionHeader.propTypes = {
-  align: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  img: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default SectionHeader;
