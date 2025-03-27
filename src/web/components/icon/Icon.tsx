@@ -8,15 +8,30 @@ import {useState, useEffect, useRef, useCallback} from 'react';
 import 'whatwg-fetch';
 import styled from 'styled-components';
 import useIconSize from 'web/hooks/useIconSize';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {get_img_url} from 'web/utils/Urls';
+
+interface StyledIconProps {
+  $height: string;
+  $lineHeight: string;
+  $width: string;
+}
+
+interface IconProps<T> {
+  className?: string;
+  to?: string;
+  value?: T;
+  onClick?: (value: T | undefined) => void;
+  img: string;
+  size?: 'tiny' | 'small' | 'medium' | 'large';
+  active?: boolean;
+}
 
 const Anchor = styled.a`
   display: flex;
 `;
 
-const StyledIcon = styled.span`
+const StyledIcon = styled.span<StyledIconProps>`
   cursor: ${props => (isDefined(props.onClick) ? 'pointer' : undefined)};
   width: ${props => props.$width};
   height: ${props => props.$height};
@@ -32,7 +47,7 @@ const StyledIcon = styled.span`
   }
 `;
 
-const IconComponent = ({
+const IconComponent = <T,>({
   className,
   to,
   value,
@@ -40,9 +55,9 @@ const IconComponent = ({
   img,
   size,
   ...other
-}) => {
-  const [svgComponent, setSvgComponent] = useState(null);
-  const svgRef = useRef(null);
+}: IconProps<T>) => {
+  const [svgComponent, setSvgComponent] = useState<null | HTMLElement>(null);
+  const svgRef = useRef<HTMLInputElement | null>(null);
   const {width, height} = useIconSize(size);
 
   const loadImage = useCallback(async () => {
@@ -63,7 +78,7 @@ const IconComponent = ({
   }, [img]);
 
   useEffect(() => {
-    loadImage();
+    void loadImage();
   }, [loadImage]);
 
   useEffect(() => {
@@ -113,14 +128,5 @@ const StyledIconComponent = styled(IconComponent)`
     }};
   }
 `;
-
-IconComponent.propTypes = {
-  to: PropTypes.string,
-  value: PropTypes.any,
-  onClick: PropTypes.func,
-  img: PropTypes.string.isRequired,
-  className: PropTypes.string,
-  size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
-};
 
 export default StyledIconComponent;
