@@ -28,7 +28,7 @@ import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
-import EntityPage from 'web/entity/Page';
+import EntityPage from 'web/entity/EntityPage';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import {goToList} from 'web/entity/navigation';
 import EntityPermissions from 'web/entity/Permissions';

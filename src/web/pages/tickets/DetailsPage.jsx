@@ -29,7 +29,7 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
-import EntityPage from 'web/entity/Page';
+import EntityPage from 'web/entity/EntityPage';
 import EntityCloneIcon from 'web/entity/icon/CloneIcon';
 import EntityEditIcon from 'web/entity/icon/EditIcon';
 import EntityTrashIcon from 'web/entity/icon/TrashIcon';

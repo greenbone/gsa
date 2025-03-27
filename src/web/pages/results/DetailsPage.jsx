@@ -41,7 +41,7 @@ import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
-import EntityPage from 'web/entity/Page';
+import EntityPage from 'web/entity/EntityPage';
 import {goToDetails} from 'web/entity/navigation';
 import Note from 'web/entity/Note';
 import Override from 'web/entity/Override';
