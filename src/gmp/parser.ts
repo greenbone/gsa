@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Dayjs, {duration} from 'gmp/models/date';
+import createDate, {Date as GmpDate, duration} from 'gmp/models/date';
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
@@ -164,8 +164,8 @@ export const parseXmlEncodedString = (value: string) =>
 
 interface ObjectWithParsedProperties {
   id?: string;
-  creationTime?: Dayjs.Dayjs;
-  modificationTime?: Dayjs.Dayjs;
+  creationTime?: GmpDate;
+  modificationTime?: GmpDate;
   _type?: string;
   [key: string]: unknown;
 }
@@ -232,8 +232,8 @@ export const setProperties = (
  * @returns {date} A date instance (Not a js Date!)
  */
 export const parseDate = (
-  value: string | Date | undefined,
-): Dayjs.Dayjs | undefined => (isDefined(value) ? Dayjs(value) : undefined);
+  value: string | GmpDate | Date | undefined,
+): GmpDate | undefined => (isDefined(value) ? createDate(value) : undefined);
 
 /**
  * Parse duration from string or integer
