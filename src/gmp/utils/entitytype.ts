@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_l} from 'gmp/locale/lang';
+import {_l, _} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 export interface EntityType {
@@ -110,12 +110,12 @@ const ENTITY_TYPES = {
  *
  * @returns {String} A translated entity type name
  */
-export const typeName = (type?: string): string | undefined => {
+export const typeName = (type?: string): string => {
   type = normalizeType(type);
   const name = type
     ? ENTITY_TYPES[type as keyof typeof ENTITY_TYPES]
     : undefined;
-  return isDefined(name) ? `${name}` : type;
+  return isDefined(name) ? String(name) : _('Unknown');
 };
 
 const CMD_TYPES = {
