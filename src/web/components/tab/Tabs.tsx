@@ -7,7 +7,6 @@ import {isDefined} from 'gmp/utils/identity';
 import React, {useEffect, useState} from 'react';
 import TabList from 'web/components/tab/TabList';
 import TabPanels from 'web/components/tab/TabPanels';
-import PropTypes from 'web/utils/PropTypes';
 
 /*
  * Tabs and its sub components are using the "compound components" pattern
@@ -16,7 +15,12 @@ import PropTypes from 'web/utils/PropTypes';
  * https://www.youtube.com/watch?v=hEGg-3pIHlE
  */
 
-const Tabs = props => {
+interface TabProps {
+  children: React.ReactNode;
+  active?: number;
+}
+
+const Tabs = (props: TabProps) => {
   const [active, setActive] = useState(
     isDefined(props.active) ? props.active : 0,
   );
@@ -29,26 +33,24 @@ const Tabs = props => {
     setActiveTab(props.active);
   }, [props.active]);
 
-  const handleActivateTab = index => {
+  const handleActivateTab = (index: number) => {
     setActiveTab(index);
   };
 
   const children = React.Children.map(props.children, child => {
-    if (child.type === TabPanels) {
-      return React.cloneElement(child, {active});
-    } else if (child.type === TabList) {
-      return React.cloneElement(child, {
-        active,
-        onActivateTab: handleActivateTab,
-      });
+    if (child && typeof child === 'object' && 'type' in child) {
+      if (child.type === TabPanels) {
+        return React.cloneElement(child, {active});
+      } else if (child.type === TabList) {
+        return React.cloneElement(child, {
+          active,
+          onActivateTab: handleActivateTab,
+        });
+      }
     }
     return child;
   });
-  return <React.Fragment>{children}</React.Fragment>;
-};
-
-Tabs.propTypes = {
-  active: PropTypes.number,
+  return <>{children}</>;
 };
 
 export default Tabs;
