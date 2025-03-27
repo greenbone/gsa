@@ -12,12 +12,34 @@ import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import {Col} from 'web/entity/Page';
-import PropTypes from 'web/utils/PropTypes';
 
-const PortListDetails = ({entity}) => {
+interface Target {
+  id: string;
+  name: string;
+}
+
+interface PortListDetailsEntity {
+  comment: string;
+  deprecated: boolean;
+  port_count: {
+    all: number;
+    tcp: number;
+    udp: number;
+  };
+  targets: Target[];
+}
+
+interface PortListDetailsProps {
+  entity: PortListDetailsEntity;
+}
+
+const PortListDetails: React.FC<PortListDetailsProps> = ({
+  entity,
+}: PortListDetailsProps) => {
   const {
     comment,
     deprecated,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     port_count = {
       all: 0,
       tcp: 0,
@@ -80,10 +102,6 @@ const PortListDetails = ({entity}) => {
       </InfoTable>
     </Layout>
   );
-};
-
-PortListDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
 };
 
 export default PortListDetails;
