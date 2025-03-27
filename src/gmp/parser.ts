@@ -52,12 +52,18 @@ export const parseTextElement = (text: string | object = {}) => {
   };
 };
 
-export const parseInt = (value: string): undefined | number => {
-  if (!/^(-|\+)?([0-9.]+)$/.test(value)) {
+export const parseInt = (
+  value: string | number | undefined,
+): undefined | number => {
+  if (!isDefined(value)) {
     return undefined;
   }
 
-  const val = global.parseInt(value, 10);
+  if (!/^(-|\+)?([0-9.]+)$/.test(value as string)) {
+    return undefined;
+  }
+
+  const val = global.parseInt(value as string, 10);
 
   if (isNaN(val)) {
     return undefined;
@@ -66,16 +72,18 @@ export const parseInt = (value: string): undefined | number => {
   return val;
 };
 
-export const parseFloat = (value: string | undefined): undefined | number => {
+export const parseFloat = (
+  value: string | number | undefined,
+): undefined | number => {
   if (!isDefined(value)) {
     return undefined;
   }
 
-  if (!/^(-|\+)?([0-9.]+)$/.test(value)) {
+  if (!/^(-|\+)?([0-9.]+)$/.test(value as string)) {
     return undefined;
   }
 
-  const val = global.parseFloat(value);
+  const val = global.parseFloat(value as string);
 
   if (isNaN(val)) {
     return undefined;
