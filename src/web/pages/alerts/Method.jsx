@@ -26,10 +26,10 @@ import CertInfo from 'web/components/certinfo/CertInfo';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import SimpleTable from 'web/components/table/SimpleTable';
-import {Col} from 'web/entity/Page';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
