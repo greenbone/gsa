@@ -3,19 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import date, {duration} from 'gmp/models/date';
+import Dayjs, {duration} from 'gmp/models/date';
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export const parseSeverity = value =>
+export const parseSeverity = (value: undefined | string) =>
   isEmpty(value) ? undefined : parseFloat(value);
 
-export const parseProgressElement = value => {
+interface Text {
+  __text: string;
+  __excerpt: string;
+}
+
+const isText = (value: unknown): value is Text =>
+  typeof value === 'object' && value !== null && '__text' in value;
+
+export const parseProgressElement = (value: string | undefined | Text) => {
   if (!isDefined(value)) {
     return 0;
   }
 
-  if (isDefined(value.__text)) {
+  if (isText(value)) {
     value = value.__text;
   }
 
@@ -23,15 +31,15 @@ export const parseProgressElement = value => {
   return isDefined(progress) ? progress : 0;
 };
 
-export const parseText = text => {
-  if (isDefined(text) && isDefined(text.__text)) {
+export const parseText = (text: Text | string): string => {
+  if (isText(text)) {
     text = text.__text;
   }
   return text;
 };
 
-export const parseTextElement = (text = {}) => {
-  if (isDefined(text.__text)) {
+export const parseTextElement = (text: string | object = {}) => {
+  if (isText(text)) {
     return {
       text: text.__text,
       textExcerpt: text.__excerpt,
@@ -44,7 +52,7 @@ export const parseTextElement = (text = {}) => {
   };
 };
 
-export const parseInt = value => {
+export const parseInt = (value: string): undefined | number => {
   if (!/^(-|\+)?([0-9.]+)$/.test(value)) {
     return undefined;
   }
@@ -58,7 +66,11 @@ export const parseInt = value => {
   return val;
 };
 
-export const parseFloat = value => {
+export const parseFloat = (value: string | undefined): undefined | number => {
+  if (!isDefined(value)) {
+    return undefined;
+  }
+
   if (!/^(-|\+)?([0-9.]+)$/.test(value)) {
     return undefined;
   }
@@ -72,19 +84,22 @@ export const parseFloat = value => {
   return val;
 };
 
-export const parseIntoArray = value => (isArray(value) ? value : [value]);
+export const parseIntoArray = <T>(value: T | Array<T>): Array<T> =>
+  isArray(value) ? value : [value];
 
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
-export const parseYesNo = value =>
+type YesNo = typeof YES_VALUE | typeof NO_VALUE;
+
+export const parseYesNo = (value: string | number): YesNo =>
   value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
 
-export function parseYes(value) {
+export const parseYes = (value: string): YesNo => {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
-}
+};
 
-export const parseCsv = (value = '') => {
+export const parseCsv = (value: string = ''): string[] => {
   if (!isString(value)) {
     value = `${value}`;
   }
@@ -92,7 +107,12 @@ export const parseCsv = (value = '') => {
   return isEmpty(value.trim()) ? [] : value.split(',').map(val => val.trim());
 };
 
-export const parseQod = qod => ({
+interface QoD {
+  type: string;
+  value: number | undefined;
+}
+
+export const parseQod = (qod: {type: string; value: string}): QoD => ({
   type: qod.type,
   value: parseFloat(qod.value),
 });
@@ -104,15 +124,25 @@ const ENVELOPE_PROPS = [
   ['i18n', 'i18n'],
   ['time', 'time'],
   ['timezone', 'timezone'],
-];
+] as const;
 
-export const parseEnvelopeMeta = envelope => {
+interface Meta {
+  version: string | undefined;
+  backendOperation: string | undefined;
+  vendorVersion: string | undefined;
+  i18n: string | undefined;
+  time: string | undefined;
+  timezone: string | undefined;
+}
+
+export const parseEnvelopeMeta = (envelope: object): Meta => {
   const meta = {};
 
   for (const [name, to] of ENVELOPE_PROPS) {
     meta[to] = envelope[name];
     delete envelope[name];
   }
+  // @ts-expect-error
   return meta;
 };
 
@@ -124,33 +154,50 @@ const esc2xml = {
   '&gt;': `>`,
   '&#x2F;': `/`,
   '&#x5C;': `\\`,
-};
+} as const;
 
-export const parseXmlEncodedString = string =>
-  string.replace(
+export const parseXmlEncodedString = (value: string) =>
+  value.replace(
     /(&quot;|&lt;|&gt;|&amp;|&apos;|&#x2F;|&#x5C;)/g,
     (str, symbol) => esc2xml[symbol],
   );
 
-export const parseProperties = (element = {}, object = {}) => {
+interface ObjectWithParsedProperties {
+  id?: string;
+  creationTime?: Dayjs.Dayjs;
+  modificationTime?: Dayjs.Dayjs;
+  _type?: string;
+  [key: string]: unknown;
+}
+
+export const parseProperties = (
+  element = {},
+  object = {},
+): ObjectWithParsedProperties => {
   const copy = {...object, ...element}; // create shallow copy
 
-  if (isString(element._id) && element._id.length > 0) {
+  if ('_id' in element && isString(element._id) && element._id.length > 0) {
     // only set id if it id defined
+    // @ts-expect-error
     copy.id = element._id;
   }
 
-  if (isDefined(element.creation_time)) {
+  if ('creation_time' in element && isDefined(element.creation_time)) {
+    // @ts-expect-error
     copy.creationTime = parseDate(element.creation_time);
+    // @ts-expect-error
     delete copy.creation_time;
   }
-  if (isDefined(element.modification_time)) {
+  if ('modification_time' in element && isDefined(element.modification_time)) {
+    // @ts-expect-error
     copy.modificationTime = parseDate(element.modification_time);
+    // @ts-expect-error
     delete copy.modification_time;
   }
 
-  if (isDefined(copy.type)) {
+  if ('type' in copy && isDefined(copy.type)) {
     // type should not be used directly
+    // @ts-expect-error
     copy._type = copy.type;
     delete copy.type;
   }
@@ -159,8 +206,8 @@ export const parseProperties = (element = {}, object = {}) => {
 };
 
 export const setProperties = (
-  properties,
-  object = {},
+  properties: object | undefined,
+  object: object = {},
   {writable = false} = {},
 ) => {
   if (isDefined(properties)) {
@@ -184,16 +231,18 @@ export const setProperties = (
  *
  * @returns {date} A date instance (Not a js Date!)
  */
-export const parseDate = value => (isDefined(value) ? date(value) : undefined);
+export const parseDate = (
+  value: string | Date | undefined,
+): Dayjs.Dayjs | undefined => (isDefined(value) ? Dayjs(value) : undefined);
 
 /**
  * Parse duration from string or integer
  *
- * @param {String|int} value Duration as string or int in seconds.
+ * @param {string|int} value Duration as string or int in seconds.
  *
  * @returns duration A duration instance
  */
-export const parseDuration = value => {
+export const parseDuration = (value: string | number | undefined) => {
   if (isString(value)) {
     value = parseInt(value);
   }
@@ -210,11 +259,11 @@ export const parseDuration = value => {
  * A Number is considered true if the value is not equal zero.
  * All other values are compared against true.
  *
- * @param {String, Number, Boolean} value Value to convert to boolean
+ * @param {string|number|boolean} value Value to convert to boolean
  *
  * @returns true if value is considered true else false
  */
-export const parseBoolean = value => {
+export const parseBoolean = (value: string | number | undefined): boolean => {
   if (isString(value)) {
     if (value.trim().toLowerCase() === 'true') return true;
     value = parseInt(value);
@@ -231,7 +280,7 @@ export const parseBoolean = value => {
  * @param {*} value - The value to be parsed into a string.
  * @returns {string|undefined} The parsed string if the value is defined, otherwise undefined.
  */
-export const parseToString = value => {
+export const parseToString = (value: unknown): string | undefined => {
   if (isDefined(value)) {
     return String(value);
   }
