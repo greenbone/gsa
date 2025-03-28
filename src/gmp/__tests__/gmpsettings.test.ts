@@ -22,22 +22,27 @@ import GmpSettings, {
   DEFAULT_REPORT_RESULTS_THRESHOLD,
 } from 'gmp/gmpsettings';
 
-const createStorage = state => {
+const createStorage = (state?: Record<string, string>) => {
   const store = {
-    ...state,
-    setItem: testing.fn((name, value) => (store[name] = '' + value)),
-    removeItem: testing.fn(name => delete store[name]),
+    state: {...state},
+    getItem: testing.fn(name => store.state[name] || null),
+    setItem: testing.fn((name, value) => (store.state[name] = String(value))),
+    removeItem: testing.fn(name => delete store.state[name]),
   };
   return store;
 };
 
+let origLocation: Location;
+
 describe('GmpSettings tests', () => {
   beforeAll(() => {
+    origLocation = global.location;
+    // @ts-expect-error
     global.location = {protocol: 'http:', host: 'localhost:9392'};
   });
 
   afterAll(() => {
-    global.location = undefined;
+    global.location = origLocation;
   });
 
   test('should init with defaults', () => {
@@ -47,7 +52,7 @@ describe('GmpSettings tests', () => {
     expect(settings.apiProtocol).toEqual('http:');
     expect(settings.apiServer).toEqual('localhost:9392');
     expect(settings.disableLoginForm).toEqual(false);
-    expect(settings.enableStoreDebugLog).toBeUndefined();
+    expect(settings.enableStoreDebugLog).toEqual(false);
     expect(settings.enableAssetManagement).toEqual(false);
     expect(settings.guestUsername).toBeUndefined();
     expect(settings.guestPassword).toBeUndefined();
@@ -88,7 +93,6 @@ describe('GmpSettings tests', () => {
       enableAssetManagement: true,
       guestUsername: 'guest',
       guestPassword: 'pass',
-      locale: 'en',
       logLevel: 'error',
       manualUrl: 'http://manual',
       manualLanguageMapping: {
@@ -99,10 +103,7 @@ describe('GmpSettings tests', () => {
       reloadIntervalActive: 5,
       reloadIntervalInactive: 60,
       reportResultsThreshold: 10000,
-      token: 'atoken',
       timeout: 30000,
-      timezone: 'cet',
-      username: 'foo',
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
     });
@@ -149,7 +150,6 @@ describe('GmpSettings tests', () => {
       token: 'atoken',
       username: 'foo',
     });
-
     const settings = new GmpSettings(storage, {
       // pass server and protocol. location defaults may not reliable on
       // different test environments
@@ -193,25 +193,22 @@ describe('GmpSettings tests', () => {
       locale: 'de',
       logLevel: 'error',
       manualUrl: 'http://ipsum',
-      manualLanguageMapping: {lorem: 'ipsum'},
       protocolDocUrl: 'http://lorem',
-      reloadInterval: 20,
-      reloadIntervalActive: 20,
-      reloadIntervalInactive: 20,
-      reportResultsThreshold: 500,
+      reloadInterval: '20',
+      reloadIntervalActive: '20',
+      reloadIntervalInactive: '20',
+      reportResultsThreshold: '500',
       token: 'btoken',
-      timeout: 10000,
+      timeout: '10000',
       timezone: 'cest',
       username: 'bar',
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
     });
-
     const settings = new GmpSettings(storage, {
       apiProtocol: 'http',
       apiServer: 'localhost',
       enableStoreDebugLog: true,
-      locale: 'en',
       logLevel: 'debug',
       manualUrl: 'http://manual',
       manualLanguageMapping: {foo: 'bar'},
@@ -220,10 +217,7 @@ describe('GmpSettings tests', () => {
       reloadIntervalActive: 5,
       reloadIntervalInactive: 60,
       reportResultsThreshold: 10000,
-      token: 'atoken',
       timeout: 30000,
-      timezone: 'cet',
-      username: 'foo',
       vendorVersion: 'bar',
       vendorLabel: 'bar.foo',
     });
@@ -265,7 +259,6 @@ describe('GmpSettings tests', () => {
       timezone: 'cet',
       username: 'foo',
     });
-
     const settings = new GmpSettings(storage, {});
 
     expect(settings.enableStoreDebugLog).toEqual(true);
@@ -307,65 +300,73 @@ describe('GmpSettings tests', () => {
       enableGreenboneSensor: true,
       guestUsername: 'guest',
       guestPassword: 'pass',
-      locale: 'en',
       logLevel: 'error',
       manualUrl: 'http://manual',
       manualLanguageMapping: {foo: 'bar'},
       protocolDocUrl: 'http://protocol',
       reloadInterval: 10,
-      token: 'atoken',
       timeout: 30000,
-      timezone: 'cet',
-      username: 'foo',
       vendorVersion: 'foobar',
       vendorLabel: 'foo.bar',
     });
 
     expect(() => {
+      // @ts-expect-error
       settings.apiServer = 'foo';
     }).toThrow();
     expect(settings.apiServer).toEqual('localhost');
     expect(() => {
+      // @ts-expect-error
       settings.apiProtocol = 'foo';
     }).toThrow();
     expect(settings.apiProtocol).toEqual('http');
     expect(() => {
+      // @ts-expect-error
       settings.disableLoginForm = false;
     }).toThrow();
     expect(settings.disableLoginForm).toEqual(true);
     expect(() => {
+      // @ts-expect-error
       settings.enableAssetManagement = false;
     }).toThrow();
     expect(settings.enableAssetManagement).toEqual(true);
     expect(() => {
+      // @ts-expect-error
       settings.enableGreenboneSensor = false;
     }).toThrow();
     expect(settings.enableGreenboneSensor).toEqual(true);
     expect(() => {
+      // @ts-expect-error
       settings.guestUsername = 'foo';
     }).toThrow();
     expect(settings.guestUsername).toEqual('guest');
     expect(() => {
+      // @ts-expect-error
       settings.guestPassword = 'foo';
     }).toThrow();
     expect(settings.guestPassword).toEqual('pass');
     expect(() => {
+      // @ts-expect-error
       settings.manualUrl = 'foo';
     }).toThrow();
     expect(settings.manualUrl).toEqual('http://manual');
     expect(() => {
+      // @ts-expect-error
       settings.manualLanguageMapping = {lorem: 'ipsum'};
     }).toThrow();
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(() => {
+      // @ts-expect-error
       settings.protocolDocUrl = 'foo';
     }).toThrow();
     expect(settings.protocolDocUrl).toEqual('http://protocol');
     expect(() => {
+      // @ts-expect-error
       settings.vendorVersion = 'barfoo';
     }).toThrow();
     expect(settings.vendorVersion).toEqual('foobar');
     expect(() => {
+      // @ts-expect-error
       settings.vendorLabel = 'bar.foo';
     }).toThrow();
     expect(settings.vendorLabel).toEqual('foo.bar');
