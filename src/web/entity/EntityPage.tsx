@@ -8,6 +8,7 @@ import {typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
+import * as ReactIs from 'react-is';
 import styled from 'styled-components';
 import Toolbar from 'web/components/bar/Toolbar';
 import ErrorMessage from 'web/components/error/ErrorMessage';
@@ -56,12 +57,17 @@ interface EntityPageProps {
   entity: Entity;
   entityError?: EntityError;
   entityType: string;
-  infoComponent?: React.ComponentType<InfoComponentProps> | false;
+  infoComponent?:
+    | React.ComponentType<InfoComponentProps>
+    | React.ReactElement
+    | false;
   isLoading: boolean;
   sectionComponent: React.ComponentType<SectionComponentProps> | false;
   sectionIcon: string;
   title: string;
-  toolBarIcons: React.ComponentType<ToolBarIconsComponentProps>;
+  toolBarIcons:
+    | React.ComponentType<ToolBarIconsComponentProps>
+    | React.ReactElement;
   onInteraction: () => void;
 }
 
@@ -94,6 +100,10 @@ class EntityPage extends React.Component<EntityPageProps, EntityPageState> {
 
     if (!isDefined(ToolBarIconsComponent)) {
       return null;
+    }
+
+    if (ReactIs.isElement(ToolBarIconsComponent)) {
+      return ToolBarIconsComponent;
     }
 
     return <ToolBarIconsComponent entity={entity} {...other} />;
@@ -150,6 +160,10 @@ class EntityPage extends React.Component<EntityPageProps, EntityPageState> {
 
     if (InfoComponent === false) {
       return null;
+    }
+
+    if (ReactIs.isElement(InfoComponent)) {
+      return InfoComponent;
     }
 
     if (!isDefined(InfoComponent)) {
