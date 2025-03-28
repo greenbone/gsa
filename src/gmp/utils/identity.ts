@@ -27,7 +27,7 @@ export const isNumberOrNumberString = <T>(
   parseFunc: (value: T) => number,
 ): boolean => !isNaN(parseFunc(value));
 
-export const isFunction = <T>(value: T): value is T & Function =>
+export const isFunction = <T, F = Function>(value: T): value is T & F =>
   typeof value === 'function';
 
 export const isJsDate = <T>(value: T): value is T & Date =>
