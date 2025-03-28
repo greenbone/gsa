@@ -43,7 +43,7 @@ interface SectionComponentProps {
   className: string;
   children: React.ReactNode;
   extra: React.ReactNode;
-  img: string;
+  img: React.ReactElement;
   title: string;
 }
 
@@ -62,8 +62,8 @@ interface EntityPageProps {
     | React.ReactElement
     | false;
   isLoading: boolean;
-  sectionComponent: React.ComponentType<SectionComponentProps> | false;
-  sectionIcon: string;
+  sectionComponent?: React.ComponentType<SectionComponentProps> | false;
+  sectionIcon: React.ReactElement;
   title: string;
   toolBarIcons:
     | React.ComponentType<ToolBarIconsComponentProps>
