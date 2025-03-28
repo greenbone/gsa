@@ -8,7 +8,7 @@ interface LazyTranslate {
 }
 
 interface TranslateOptions {
-  [key: string]: string;
+  [key: string]: string | number;
 }
 
 declare module 'gmp/locale/lang' {
