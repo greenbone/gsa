@@ -8,11 +8,11 @@ import {isDefined, isString} from 'gmp/utils/identity';
 /**
  * Capitalizes the first letter of a given string.
  *
- * @param {string} string - The string to capitalize.
+ * @param {string} value - The string to capitalize.
  * @returns {string} The string with the first letter capitalized.
  */
-export const capitalizeFirstLetter = string =>
-  string.charAt(0).toUpperCase() + string.slice(1);
+export const capitalizeFirstLetter = (value: string): string =>
+  value.charAt(0).toUpperCase() + value.slice(1);
 
 /**
  * Shortens a given text to a specified length, appending '...' if the text exceeds the length.
@@ -21,7 +21,7 @@ export const capitalizeFirstLetter = string =>
  * @param {number} [length=60] - The maximum length of the shortened text.
  * @returns {string} - The shortened text.
  */
-export const shorten = (text = '', length = 60) => {
+export const shorten = (text: string = '', length: number = 60): string => {
   if (!isString(text)) {
     text = `${text}`;
   }
@@ -44,7 +44,11 @@ export const shorten = (text = '', length = 60) => {
  *
  * @returns {Array} Split String as an array
  */
-export const split = (string, separator, limit) => {
+export const split = (
+  string: string,
+  separator: string,
+  limit: number,
+): string[] => {
   if (isDefined(limit) && limit <= 0) {
     return [string];
   }
@@ -64,7 +68,8 @@ export const split = (string, separator, limit) => {
  *
  * A string is considered empty if it is either undefined or has a length of 0.
  *
- * @param {string} string - The string to check.
+ * @param {string} value - The string to check.
  * @returns {boolean} - Returns true if the string is empty, otherwise false.
  */
-export const isEmpty = string => !isDefined(string) || string.length === 0;
+export const isEmpty = (value: string | undefined): boolean =>
+  !isDefined(value) || value.length === 0;

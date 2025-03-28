@@ -4,31 +4,30 @@
  */
 
 import {ensureDate} from 'gmp/locale/date';
+import {Date} from 'gmp/models/date';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import useUserTimezone from 'web/hooks/useUserTimezone';
-import PropTypes from 'web/utils/PropTypes';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
-const DateTime = ({
+interface DateTimeProps {
+  date?: Date | string;
+  formatter?: (date: Date, timezone: string) => string | undefined;
+  timezone?: string;
+}
+
+const DateTime: React.FC<DateTimeProps> = ({
   formatter = formattedUserSettingDateTimeWithTimeZone,
   timezone,
   date,
-}) => {
-  date = ensureDate(date);
-
+}: DateTimeProps) => {
   const [userTimezone] = useUserTimezone();
 
+  date = ensureDate(date);
   if (!hasValue(timezone)) {
     timezone = userTimezone;
   }
 
   return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
-};
-
-DateTime.propTypes = {
-  date: PropTypes.date,
-  formatter: PropTypes.func,
-  timezone: PropTypes.string,
 };
 
 export default DateTime;

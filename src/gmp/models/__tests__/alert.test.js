@@ -94,7 +94,7 @@ describe('Alert Model tests', () => {
   });
 
   test('should return given filter as instance of filter model', () => {
-    const elem = {filter: 'rows=1337'};
+    const elem = {filter: {id: 1, term: 'rows=1337'}};
     const alert = Alert.fromElement(elem);
 
     expect(alert.filter).toBeInstanceOf(Model);

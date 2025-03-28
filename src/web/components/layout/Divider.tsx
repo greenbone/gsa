@@ -5,12 +5,21 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Layout from 'web/components/layout/Layout';
-import PropTypes from 'web/utils/PropTypes';
+import Layout, {LayoutProps} from 'web/components/layout/Layout';
 
 const DEFAULT_MARGIN = '5px';
 
-const DividerComponent = styled(Layout)`
+interface DividerComponentProps {
+  flex?: string;
+  $margin: string;
+}
+
+interface DividerProps extends LayoutProps {
+  flex?: string;
+  margin?: string;
+}
+
+const DividerComponent = styled(Layout)<DividerComponentProps>`
   & > * {
     display: inline-flex;
   }
@@ -36,18 +45,18 @@ const DividerContainer = styled(Layout)`
 
 DividerContainer.displayName = 'DividerContainer';
 
-const Divider = ({margin = DEFAULT_MARGIN, grow, ...props}) => {
+const Divider: React.FC<DividerProps> = ({
+  margin = DEFAULT_MARGIN,
+  grow,
+  flex,
+  ...props
+}: DividerProps) => {
   // put Divider into a container div to allow dividers in dividers
   return (
     <DividerContainer grow={grow}>
-      <DividerComponent $margin={margin} grow={grow} {...props} />
+      <DividerComponent $margin={margin} flex={flex} grow={grow} {...props} />
     </DividerContainer>
   );
-};
-
-Divider.propTypes = {
-  grow: PropTypes.oneOfType([PropTypes.bool, PropTypes.numberOrNumberString]),
-  margin: PropTypes.string,
 };
 
 export default Divider;

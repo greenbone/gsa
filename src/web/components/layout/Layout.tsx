@@ -9,4 +9,6 @@ const Layout: React.FC<LayoutProps> = withLayout()('div');
 
 Layout.displayName = 'Layout';
 
+export type {LayoutProps};
+
 export default Layout;

@@ -10,7 +10,6 @@ import {withFolding, withFoldToggle} from 'web/components/folding/Folding';
 import FoldIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
 import SectionHeader from 'web/components/section/Header';
-import PropTypes from 'web/utils/PropTypes';
 
 const FoldableLayout = withFolding(Layout);
 
@@ -18,6 +17,20 @@ const FoldLayout = styled(Layout)`
   margin-left: 3px;
   margin-top: -2px;
 `;
+
+interface SectionProps {
+  children: React.ReactNode;
+  className?: string;
+  'data-testid'?: string;
+  extra?: React.ReactNode;
+  foldState?: string;
+  foldable?: boolean;
+  header?: React.ReactNode;
+  img?: string;
+  title?: string;
+  onFoldStepEnd?: () => void;
+  onFoldToggle?: () => void;
+}
 
 const Section = ({
   children,
@@ -31,7 +44,7 @@ const Section = ({
   ['data-testid']: dataTestId,
   onFoldToggle,
   onFoldStepEnd,
-}) => {
+}: SectionProps) => {
   if (!isDefined(header)) {
     header = (
       <SectionHeader img={img} title={title}>
@@ -66,19 +79,6 @@ const Section = ({
       )}
     </section>
   );
-};
-
-Section.propTypes = {
-  className: PropTypes.string,
-  'data-testid': PropTypes.string,
-  extra: PropTypes.element,
-  foldState: PropTypes.string,
-  foldable: PropTypes.bool,
-  header: PropTypes.element,
-  img: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  title: PropTypes.string,
-  onFoldStepEnd: PropTypes.func,
-  onFoldToggle: PropTypes.func,
 };
 
 export default withFoldToggle(Section);

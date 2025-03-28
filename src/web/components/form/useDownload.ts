@@ -5,9 +5,16 @@
 
 import logger from 'gmp/log';
 import {hasValue} from 'gmp/utils/identity';
-import {useRef, useCallback} from 'react';
+import React, {useRef, useCallback} from 'react';
+import Download from 'web/components/form/Download';
 
 const log = logger.getLogger('web.components.form.useDownload');
+
+type DownloadFunc = (params: {
+  filename: string;
+  data: string;
+  mimetype: string;
+}) => void;
 
 /**
  * Hook to download a file
@@ -16,8 +23,11 @@ const log = logger.getLogger('web.components.form.useDownload');
  *
  * @returns Array of downloadRef and download function
  */
-const useDownload = () => {
-  const downloadRef = useRef(null);
+const useDownload = (): [
+  React.MutableRefObject<Download | null>,
+  DownloadFunc,
+] => {
+  const downloadRef = useRef<Download | null>(null);
 
   const download = useCallback(({filename, data, mimetype}) => {
     if (!hasValue(downloadRef.current)) {

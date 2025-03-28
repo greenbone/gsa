@@ -4,7 +4,11 @@
  */
 
 import logger from 'gmp/log';
-import dayjs, {setLocaleDayjs, isDate} from 'gmp/models/date';
+import createDate, {
+  Date as GmpDate,
+  setLocaleDayjs,
+  isDate,
+} from 'gmp/models/date';
 import {parseDate} from 'gmp/parser';
 import {isDefined, isString, isJsDate} from 'gmp/utils/identity';
 
@@ -14,6 +18,9 @@ export const SYSTEM_DEFAULT = 'system_default';
 const LONG_DATE = 'longDate';
 const SHORT_DATE = 'shortDate';
 const TIME = 'time';
+
+type DateTimeFormat = typeof LONG_DATE | typeof SHORT_DATE | typeof TIME;
+type DateInput = undefined | Date | GmpDate | string;
 
 export const dateTimeFormatOptions = {
   [TIME]: {
@@ -34,16 +41,18 @@ export const dateTimeFormatOptions = {
       wdmy: {format: 'ddd, D MMM YYYY', label: 'Weekday, Day, Month, Year'},
     },
   },
-};
+} as const;
 
-export const setDateLocale = lang => {
+export const setDateLocale = (lang: string): void => {
   log.debug('Setting date locale to', lang);
   setLocaleDayjs(lang);
 };
 
 export const getDateLocale = () => setLocaleDayjs();
 
-export const ensureDate = date => {
+export const ensureDate = (
+  date: GmpDate | string | undefined | Date,
+): undefined | GmpDate => {
   if (!isDefined(date)) {
     return undefined;
   }
@@ -57,20 +66,25 @@ export const ensureDate = date => {
   return date;
 };
 
-export const getFormattedDate = (date, format, tz) => {
+export const getFormattedDate = (
+  date: DateInput,
+  format: string,
+  tz?: string,
+): undefined | string => {
   date = ensureDate(date);
   if (!isDefined(date)) {
     return undefined;
   }
 
   if (isDefined(tz)) {
-    date = dayjs(date).tz(tz);
+    date = createDate(date).tz(tz);
   } else {
-    date = dayjs(date);
+    date = createDate(date);
   }
 
   return date.format(format);
 };
+
 /**
  * Retrieves the format string based on the category and key.
  *
@@ -78,8 +92,10 @@ export const getFormattedDate = (date, format, tz) => {
  * @param {string} key - The key for the specific format.
  * @returns {string|undefined} - The format string if found, otherwise undefined.
  */
-
-export const getFormatString = (category, key) => {
+export const getFormatString = (
+  category: DateTimeFormat,
+  key: string,
+): string | undefined => {
   return dateTimeFormatOptions[category].options[key]?.format;
 };
 
@@ -89,13 +105,13 @@ export const getFormatString = (category, key) => {
  * @param {Date} date - The date to format.
  * @param {string} tz - The time zone.
  * @param {string} [userInterfaceDateFormat=SYSTEM_DEFAULT] - The user setting date format.
- * @returns {string} - The formatted date string.
+ * @returns {string|undefined} - The formatted date string.
  */
 export const shortDate = (
-  date,
-  tz,
-  userInterfaceDateFormat = SYSTEM_DEFAULT,
-) => {
+  date: DateInput,
+  tz: string,
+  userInterfaceDateFormat: string = SYSTEM_DEFAULT,
+): string | undefined => {
   const dateFormatString = getFormatString(SHORT_DATE, userInterfaceDateFormat);
 
   const formatString =
@@ -113,15 +129,15 @@ export const shortDate = (
  * @param {string} tz - The time zone.
  * @param {string} [userInterfaceTimeFormat=SYSTEM_DEFAULT] - The user setting time format.
  * @param {string} [userInterfaceDateFormat=SYSTEM_DEFAULT] - The user setting date format.
- * @returns {string} - The formatted date string.
+ * @returns {string|undefined} - The formatted date string.
  */
 
 export const longDate = (
-  date,
-  tz,
-  userInterfaceTimeFormat = SYSTEM_DEFAULT,
-  userInterfaceDateFormat = SYSTEM_DEFAULT,
-) => {
+  date: DateInput,
+  tz: string,
+  userInterfaceTimeFormat: string = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: string = SYSTEM_DEFAULT,
+): string | undefined => {
   const dateFormatString = getFormatString(LONG_DATE, userInterfaceDateFormat);
   const timeFormatString = getFormatString(TIME, userInterfaceTimeFormat);
 
@@ -144,14 +160,14 @@ export const longDate = (
  * @param {string} [tz] - The time zone identifier (e.g., 'CET', 'UTC'). Optional if date already has timezone.
  * @param {string} [userInterfaceTimeFormat=SYSTEM_DEFAULT] - The user setting time format ('12' or '24').
  * @param {string} [userInterfaceDateFormat=SYSTEM_DEFAULT] - The user setting date format ('wmdy' or 'wdmy').
- * @returns {string} - The formatted date string with the full timezone name.
+ * @returns {string|undefined} - The formatted date string with the full timezone name.
  */
 export const dateTimeWithTimeZone = (
-  date,
-  tz,
-  userInterfaceTimeFormat = SYSTEM_DEFAULT,
-  userInterfaceDateFormat = SYSTEM_DEFAULT,
-) => {
+  date: DateInput,
+  tz: string,
+  userInterfaceTimeFormat: string = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: string = SYSTEM_DEFAULT,
+): string | undefined => {
   const dateObj = ensureDate(date);
   if (!isDefined(dateObj)) {
     return undefined;
@@ -178,6 +194,7 @@ export const dateTimeWithTimeZone = (
   if (tz) {
     // If a timezone is provided, use it
     tzDisplay = dateObj.tz(tz).format('zzz');
+    // @ts-expect-error
   } else if (dateObj.$x?.$timezone) {
     // Otherwise use the timezone from the date object if available
     tzDisplay = dateObj.format('zzz');
