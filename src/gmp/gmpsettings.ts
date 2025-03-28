@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
@@ -14,7 +14,48 @@ export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
 export const DEFAULT_TIMEOUT = 300000; // 5 minutes
 
-const set = (storage, name, value) => {
+interface GmpSettingsOptions {
+  apiProtocol?: string;
+  apiServer?: string;
+  enableEPSS?: boolean;
+  enableKrb5?: boolean;
+  enableGreenboneSensor?: boolean;
+  disableLoginForm?: boolean;
+  enableStoreDebugLog?: boolean;
+  enableAssetManagement?: boolean;
+  guestUsername?: string;
+  guestPassword?: string;
+  loglevel?: string;
+  logLevel?: string;
+  manualUrl?: string;
+  manualLanguageMapping?: LanguageMapping;
+  protocol?: string;
+  protocolDocUrl?: string;
+  reloadInterval?: number;
+  reloadIntervalActive?: number;
+  reloadIntervalInactive?: number;
+  reportResultsThreshold?: number;
+  server?: string;
+  timeout?: number;
+  vendorVersion?: string;
+  vendorLabel?: string;
+}
+
+interface GmpSettingsStorage {
+  setItem(name: string, value: string): void;
+  getItem(name: string): string | null;
+  removeItem(name: string): void;
+}
+
+interface LanguageMapping {
+  [key: string]: string;
+}
+
+const set = (
+  storage: GmpSettingsStorage,
+  name: string,
+  value: string | undefined,
+) => {
   if (isDefined(value)) {
     storage.setItem(name, value);
   } else {
@@ -22,14 +63,18 @@ const set = (storage, name, value) => {
   }
 };
 
-const setAndFreeze = (obj, name, value) => {
+const setAndFreeze = (
+  obj: object,
+  name: string,
+  value: string | number | boolean | object | undefined,
+) => {
   Object.defineProperty(obj, name, {
     value: value,
     writable: false,
   });
 };
 
-const warnDeprecatedSetting = (oldName, newName) => {
+const warnDeprecatedSetting = (oldName: string, newName: string) => {
   console.warn(
     'A deprecated setting',
     oldName,
@@ -40,7 +85,31 @@ const warnDeprecatedSetting = (oldName, newName) => {
 };
 
 class GmpSettings {
-  constructor(storage = global.localStorage, options = {}) {
+  storage: GmpSettingsStorage;
+  reloadInterval: number;
+  reloadIntervalActive: number;
+  reloadIntervalInactive: number;
+  reportResultsThreshold: number;
+  timeout: number;
+  readonly apiProtocol!: string;
+  readonly apiServer!: string;
+  readonly disableLoginForm!: boolean;
+  readonly enableEPSS!: boolean;
+  readonly enableKrb5!: boolean;
+  readonly enableGreenboneSensor!: boolean;
+  readonly guestUsername!: string;
+  readonly guestPassword!: string;
+  readonly manualUrl!: string;
+  readonly manualLanguageMapping!: LanguageMapping;
+  readonly protocolDocUrl!: string;
+  readonly vendorVersion!: string;
+  readonly vendorLabel!: string;
+  readonly enableAssetManagement!: boolean;
+
+  constructor(
+    storage: GmpSettingsStorage = global.localStorage,
+    options: GmpSettingsOptions = {},
+  ) {
     const {
       enableEPSS = true,
       enableKrb5 = false,
@@ -87,9 +156,10 @@ class GmpSettings {
     }
 
     if (!isDefined(logLevel)) {
-      logLevel = storage.logLevel;
+      // @ts-expect-error
+      logLevel = storage.getItem('logLevel');
     }
-    if (!isDefined(logLevel)) {
+    if (!hasValue(logLevel)) {
       logLevel = DEFAULT_LOG_LEVEL;
     }
 
@@ -123,56 +193,53 @@ class GmpSettings {
     setAndFreeze(this, 'enableAssetManagement', enableAssetManagement);
   }
 
-  set token(value) {
+  set token(value: string | undefined) {
     set(this.storage, 'token', value);
   }
 
-  get token() {
-    return this.storage.token;
+  get token(): string | undefined {
+    return this.storage.getItem('token') || undefined;
   }
 
-  set timezone(value) {
+  set timezone(value: string | undefined) {
     set(this.storage, 'timezone', value);
   }
 
-  get timezone() {
-    return this.storage.timezone;
+  get timezone(): string | undefined {
+    return this.storage.getItem('timezone') || undefined;
   }
 
-  set username(value) {
+  set username(value: string | undefined) {
     set(this.storage, 'username', value);
   }
 
-  get username() {
-    return this.storage.username;
+  get username(): string | undefined {
+    return this.storage.getItem('username') || undefined;
   }
 
-  set locale(value) {
+  set locale(value: string | undefined) {
     set(this.storage, 'locale', value);
   }
 
-  get locale() {
-    return this.storage.locale;
+  get locale(): string | undefined {
+    return this.storage.getItem('locale') || undefined;
   }
 
-  get logLevel() {
-    return this.storage.logLevel;
+  get logLevel(): string {
+    return this.storage.getItem('logLevel') as string;
   }
 
-  set logLevel(value) {
+  set logLevel(value: string | undefined) {
     set(this.storage, 'logLevel', value);
   }
 
-  get enableStoreDebugLog() {
-    const enabled = this.storage.enableStoreDebugLog;
-    if (isDefined(enabled)) {
-      return enabled === '1';
-    }
-    return enabled;
+  get enableStoreDebugLog(): boolean {
+    const enabled = this.storage.getItem('enableStoreDebugLog');
+    return enabled === '1';
   }
 
-  set enableStoreDebugLog(value) {
-    let storeValue;
+  set enableStoreDebugLog(value: boolean | undefined) {
+    let storeValue: string | undefined;
     if (isDefined(value)) {
       storeValue = value ? '1' : '0';
     }
