@@ -5,15 +5,18 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import PropTypes from 'web/utils/PropTypes';
 
-const TabPanels = ({active = 0, children}) => {
+interface TabPanelsProps {
+  active?: number;
+  children: React.ReactNode;
+}
+
+const TabPanels: React.FC<TabPanelsProps> = ({
+  active = 0,
+  children,
+}: TabPanelsProps) => {
   const child = React.Children.toArray(children)[active];
   return isDefined(child) ? child : null;
-};
-
-TabPanels.propTypes = {
-  active: PropTypes.number,
 };
 
 export default TabPanels;
