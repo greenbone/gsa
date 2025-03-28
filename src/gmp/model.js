@@ -19,7 +19,6 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 export const parseModelFromElement = (element, entityType) => {
   const m = new Model(entityType);
   const props = Model.parseElement(element);

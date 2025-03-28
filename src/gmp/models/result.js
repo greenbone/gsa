@@ -13,7 +13,6 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 export class Delta {
   static TYPE_NEW = 'new';
   static TYPE_SAME = 'same';

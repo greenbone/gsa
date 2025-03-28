@@ -118,14 +118,14 @@ describe('Result model tests', () => {
   });
 
   test('should parse report', () => {
-    const result = Result.fromElement({report: 'foo'});
+    const result = Result.fromElement({report: {id: 'foo'}});
 
     expect(result.report).toBeInstanceOf(Model);
     expect(result.report.entityType).toEqual('report');
   });
 
   test('should parse task', () => {
-    const result = Result.fromElement({task: 'foo'});
+    const result = Result.fromElement({task: {id: 'foo'}});
 
     expect(result.task).toBeInstanceOf(Model);
     expect(result.task.entityType).toEqual('task');
@@ -229,7 +229,15 @@ describe('Result model tests', () => {
   test('should parse notes', () => {
     const elem = {
       notes: {
-        note: ['foo', 'bar'],
+        note: [
+          {
+            id: 'foo',
+          },
+
+          {
+            id: 'bar',
+          },
+        ],
       },
     };
     const result = Result.fromElement(elem);
@@ -249,7 +257,7 @@ describe('Result model tests', () => {
   test('should parse overrides', () => {
     const elem = {
       overrides: {
-        override: ['foo', 'bar'],
+        override: [{id: 'foo'}, {id: 'bar'}],
       },
     };
     const result = Result.fromElement(elem);
