@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import {typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import React from 'react';
+import React, {useState} from 'react';
 import * as ReactIs from 'react-is';
 import styled from 'styled-components';
 import Toolbar from 'web/components/bar/Toolbar';
@@ -69,10 +69,7 @@ interface EntityPageProps {
     | React.ComponentType<ToolBarIconsComponentProps>
     | React.ReactElement;
   onInteraction: () => void;
-}
-
-interface EntityPageState {
-  activeTab: number;
+  [key: string]: unknown;
 }
 
 export const Col = styled.col`
@@ -87,49 +84,67 @@ const MessageContent = styled.div`
   white-space: pre;
 `;
 
-class EntityPage extends React.Component<EntityPageProps, EntityPageState> {
-  constructor(props: EntityPageProps) {
-    super(props);
-    this.state = {activeTab: 0};
+const EntityPage: React.FC<EntityPageProps> = ({
+  children,
+  infoComponent: InfoComponent,
+  sectionIcon,
+  sectionComponent: SectionComponent,
+  entity,
+  entityError,
+  entityType,
+  isLoading = true,
+  title,
+  toolBarIcons: ToolBarIconsComponent,
+  onInteraction,
+  ...props
+}: EntityPageProps) => {
+  const [activeTab, setActiveTab] = useState(0);
 
-    this.handleActivateTab = this.handleActivateTab.bind(this);
-  }
+  const handleActivateTab = (index: number) => {
+    setActiveTab(index);
 
-  renderToolbarIcons() {
-    const {toolBarIcons: ToolBarIconsComponent, entity, ...other} = this.props;
-
-    if (!isDefined(ToolBarIconsComponent)) {
-      return null;
+    if (index !== activeTab && isDefined(onInteraction)) {
+      onInteraction();
     }
-
+  };
+  const renderToolbarIcons = () => {
     if (ReactIs.isElement(ToolBarIconsComponent)) {
       return ToolBarIconsComponent;
     }
 
-    return <ToolBarIconsComponent entity={entity} {...other} />;
-  }
-
-  handleActivateTab(index: number) {
-    const {onInteraction} = this.props;
-
-    this.setState({activeTab: index});
-
-    if (index !== this.state.activeTab && isDefined(onInteraction)) {
-      onInteraction();
+    if (ReactIs.isValidElementType(ToolBarIconsComponent)) {
+      return <ToolBarIconsComponent entity={entity} {...props} />;
     }
-  }
 
-  renderSection() {
-    const {
-      children,
-      entity,
-      sectionIcon,
-      sectionComponent: SectionComponent = Section,
-      title,
-    } = this.props;
+    return null;
+  };
 
-    const {activeTab} = this.state;
+  const renderInfo = () => {
+    if (!isDefined(InfoComponent)) {
+      // @ts-expect-error
+      InfoComponent = EntityInfo;
+    }
 
+    if (ReactIs.isElement(InfoComponent)) {
+      return <Layout align="start">{InfoComponent}</Layout>;
+    }
+
+    if (ReactIs.isValidElementType(InfoComponent)) {
+      return (
+        <Layout align="start">
+          <InfoComponent entity={entity} />
+        </Layout>
+      );
+    }
+
+    return null;
+  };
+
+  const renderSection = () => {
+    if (!isDefined(SectionComponent)) {
+      // @ts-expect-error
+      SectionComponent = Section;
+    }
     if (SectionComponent === false) {
       return null;
     }
@@ -140,99 +155,57 @@ class EntityPage extends React.Component<EntityPageProps, EntityPageState> {
     }
 
     return (
+      // @ts-expect-error
       <SectionComponent
         className="entity-section"
-        extra={this.renderInfo()}
+        extra={renderInfo()}
         img={sectionIcon}
         title={sectionTitle}
       >
         {children({
           activeTab,
-          onActivateTab: this.handleActivateTab,
+          onActivateTab: handleActivateTab,
         })}
       </SectionComponent>
     );
-  }
+  };
 
-  renderInfo() {
-    const {entity} = this.props;
-    let {infoComponent: InfoComponent} = this.props;
-
-    if (InfoComponent === false) {
-      return null;
+  if (!isDefined(entity)) {
+    if (isLoading) {
+      return <Loading />;
     }
+    if (isDefined(entityError)) {
+      if (entityError.status === 404) {
+        let content = _(
+          '\nYou might have followed an incorrect link and the {{entity}} ' +
+            'does not exist.',
+          {entity: typeName(entityType)},
+        );
 
-    if (ReactIs.isElement(InfoComponent)) {
-      return InfoComponent;
-    }
-
-    if (!isDefined(InfoComponent)) {
-      // @ts-expect-error
-      InfoComponent = EntityInfo;
-    }
-
-    return (
-      <Layout align="start">
-        {/* @ts-expect-error */}
-        <InfoComponent entity={entity} />
-      </Layout>
-    );
-  }
-
-  render() {
-    const {entity, entityError, entityType, isLoading = true} = this.props;
-
-    if (!isDefined(entity)) {
-      if (isLoading) {
-        return <Loading />;
-      }
-      if (isDefined(entityError)) {
-        if (entityError?.status === 404) {
-          let content = _(
-            '\nYou might have followed an incorrect link and the {{entity}} ' +
-              'does not exist.',
-            {entity: typeName(entityType)},
+        if (entityType === 'cpe') {
+          content = _(
+            '\nThis could have the following reasons:\n' +
+              '1. The CPE might not be included in the official NVD CPE dictionary ' +
+              'yet, and no additional information is available.\n' +
+              '2. You might have followed an incorrect link and the CPE does ' +
+              'not exist.',
           );
+        }
 
-          if (entityType === 'cpe') {
-            content = _(
-              '\nThis could have the following reasons:\n' +
-                '1. The CPE might not be included in the official NVD CPE dictionary ' +
-                'yet, and no additional information is available.\n' +
-                '2. You might have followed an incorrect link and the CPE does ' +
-                'not exist.',
-            );
-          }
+        if (entityType === 'cve') {
+          content = _(
+            '\nThis could have the following reasons:\n' +
+              '1. The CVE might not be included in the SCAP database yet. ' +
+              'For new CVEs it can take a month or more until they become ' +
+              'available.\n' +
+              '2. You might have followed an incorrect link and the CVE does ' +
+              'not exist.',
+          );
+        }
 
-          if (entityType === 'cve') {
-            content = _(
-              '\nThis could have the following reasons:\n' +
-                '1. The CVE might not be included in the SCAP database yet. ' +
-                'For new CVEs it can take a month or more until they become ' +
-                'available.\n' +
-                '2. You might have followed an incorrect link and the CVE does ' +
-                'not exist.',
-            );
-          }
-
-          if (entityType === 'cpe' || entityType === 'cve') {
-            return (
-              <Message
-                flex="column"
-                message={_(
-                  'The {{entity}} you were looking for could not be found.',
-                  {
-                    entity: typeName(entityType),
-                  },
-                )}
-              >
-                <MessageContent>{content}</MessageContent>
-              </Message>
-            );
-          }
-
+        if (entityType === 'cpe' || entityType === 'cve') {
           return (
-            <ErrorMessage
+            <Message
               flex="column"
               message={_(
                 'The {{entity}} you were looking for could not be found.',
@@ -241,23 +214,37 @@ class EntityPage extends React.Component<EntityPageProps, EntityPageState> {
                 },
               )}
             >
-              <ErrorContent>{content}</ErrorContent>
-            </ErrorMessage>
+              <MessageContent>{content}</MessageContent>
+            </Message>
           );
         }
 
-        return <ErrorMessage message={entityError.message} />;
+        return (
+          <ErrorMessage
+            flex="column"
+            message={_(
+              'The {{entity}} you were looking for could not be found.',
+              {
+                entity: typeName(entityType),
+              },
+            )}
+          >
+            <ErrorContent>{content}</ErrorContent>
+          </ErrorMessage>
+        );
       }
-      return null;
-    }
 
-    return (
-      <Layout align="start" flex="column" grow="1">
-        <Toolbar>{this.renderToolbarIcons()}</Toolbar>
-        {this.renderSection()}
-      </Layout>
-    );
+      return <ErrorMessage message={entityError.message} />;
+    }
+    return null;
   }
-}
+
+  return (
+    <Layout align="start" flex="column" grow="1">
+      <Toolbar>{renderToolbarIcons()}</Toolbar>
+      {renderSection()}
+    </Layout>
+  );
+};
 
 export default EntityPage;
