@@ -158,7 +158,7 @@ export class ScanConfigCommand extends EntityCommand {
       timeout: isDefined(timeout) ? 1 : 0,
     };
 
-    data['preference:scanner:0:scanner:timeout.' + oid] = isDefined(timeout)
+    data['preference:' + oid + ':0:entry:timeout'] = isDefined(timeout)
       ? timeout
       : '';
 

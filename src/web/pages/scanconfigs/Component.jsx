@@ -149,6 +149,10 @@ class ScanConfigComponent extends React.Component {
   openEditConfigFamilyDialog(familyName) {
     this.handleInteraction();
 
+    this.setState(({hasSelection}) => ({
+        hasSelection : false,
+    }));
+
     this.setState({
       editConfigFamilyDialogVisible: true,
       editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
@@ -168,6 +172,10 @@ class ScanConfigComponent extends React.Component {
       isLoadingFamily: silent ? isLoadingFamily : true,
     }));
 
+    this.setState(({hasSelection}) => ({
+        hasSelection : hasSelection,
+    }));
+
     return gmp.scanconfig
       .editScanConfigFamilySettings({
         id: config.id,
@@ -180,11 +188,19 @@ class ScanConfigComponent extends React.Component {
         const configFamily = config.families[familyName];
         const selected = createSelectedNvts(configFamily, nvts);
 
-        this.setState({
-          familyNvts: data.nvts,
-          familySelectedNvts: selected,
-          isLoadingFamily: false,
-        });
+        if (this.state.hasSelection) {
+          this.setState({
+            familyNvts: data.nvts,
+            isLoadingFamily: false,
+          });
+        } else {
+          this.setState({
+            familyNvts: data.nvts,
+            familySelectedNvts: selected,
+            hasSelection: true,
+            isLoadingFamily: false,
+          });
+        }
       })
       .catch(error => {
         this.setState({
@@ -443,6 +459,7 @@ class ScanConfigComponent extends React.Component {
       familyName,
       familyNvts,
       familySelectedNvts,
+      hasSelection,
       importDialogVisible,
       isLoadingConfig,
       isLoadingFamilies,
@@ -534,6 +551,7 @@ class ScanConfigComponent extends React.Component {
             configName={config.name}
             configNameLabel={_('Config')}
             familyName={familyName}
+            hasSelection={hasSelection}
             isLoadingFamily={isLoadingFamily}
             nvts={familyNvts}
             selected={familySelectedNvts}
