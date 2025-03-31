@@ -5,7 +5,10 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-import {HostsCvssDisplay, HostsCvssTableDisplay} from 'web/pages/hosts/dashboard/CvssDisplay';
+import {
+  HostsCvssDisplay,
+  HostsCvssTableDisplay,
+} from 'web/pages/hosts/dashboard/CvssDisplay';
 import {
   HostsModifiedDisplay,
   HostsModifiedTableDisplay,
@@ -18,7 +21,7 @@ import {
   HostsSeverityClassDisplay,
   HostsSeverityClassTableDisplay,
 } from 'web/pages/hosts/dashboard/SeverityClassDisplay';
-import {HostsTopologyDisplay} from 'web/pages/hosts/dashboard/TopologyDisplay';
+import {HostsTopologyDisplay} from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
 import {
   HostsVulnScoreDisplay,
   HostsVulnScoreTableDisplay,
