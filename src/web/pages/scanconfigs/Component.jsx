@@ -172,9 +172,6 @@ class ScanConfigComponent extends React.Component {
       isLoadingFamily: silent ? isLoadingFamily : true,
     }));
 
-    this.setState(({hasSelection}) => ({
-        hasSelection : hasSelection,
-    }));
 
     return gmp.scanconfig
       .editScanConfigFamilySettings({
@@ -188,19 +185,15 @@ class ScanConfigComponent extends React.Component {
         const configFamily = config.families[familyName];
         const selected = createSelectedNvts(configFamily, nvts);
 
-        if (this.state.hasSelection) {
-          this.setState({
-            familyNvts: data.nvts,
-            isLoadingFamily: false,
-          });
-        } else {
-          this.setState({
-            familyNvts: data.nvts,
-            familySelectedNvts: selected,
-            hasSelection: true,
-            isLoadingFamily: false,
-          });
-        }
+        this.setState(({prevHasSelection}) => prevHasSelection ? {
+          familyNvts: data.nvts,
+          isLoadingFamily: false,
+        } : {
+          familyNvts: data.nvts,
+          familySelectedNvts: selected,
+          hasSelection: true,
+          isLoadingFamily: false,
+       });
       })
       .catch(error => {
         this.setState({
