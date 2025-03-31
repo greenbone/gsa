@@ -149,9 +149,9 @@ class ScanConfigComponent extends React.Component {
   openEditConfigFamilyDialog(familyName) {
     this.handleInteraction();
 
-    this.setState(({hasSelection}) => ({
+    this.setState({
         hasSelection : false,
-    }));
+    });
 
     this.setState({
       editConfigFamilyDialogVisible: true,
