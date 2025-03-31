@@ -185,7 +185,7 @@ class ScanConfigComponent extends React.Component {
         const configFamily = config.families[familyName];
         const selected = createSelectedNvts(configFamily, nvts);
 
-        this.setState(({prevHasSelection}) => prevHasSelection ? {
+        this.setState(({hasSelection}) => hasSelection ? {
           familyNvts: data.nvts,
           isLoadingFamily: false,
         } : {
