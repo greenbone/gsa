@@ -23,7 +23,7 @@ import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import {setRef} from 'web/utils/Render';
 import {
-  getSeverityLevelsOld as getSeverityLevels,
+  getSeverityLevelBoundaries,
   FALSE_POSITIVE_VALUE,
   HIGH_VALUE,
 } from 'web/utils/severity';
@@ -45,19 +45,19 @@ const Circle = styled.circle`
   cursor: pointer;
 `;
 const severityColorsGradientScale = type => {
-  const severity_levels = getSeverityLevels();
+  const boundaries = getSeverityLevelBoundaries();
   return scaleLinear()
     .domain([
       FALSE_POSITIVE_VALUE,
-      severity_levels.max_log,
-      severity_levels.min_low,
-      (severity_levels.min_low + severity_levels.max_low) / 2,
-      severity_levels.max_low,
-      severity_levels.min_medium,
-      (severity_levels.min_medium + severity_levels.max_medium) / 2,
-      severity_levels.max_medium,
-      severity_levels.min_high,
-      (severity_levels.min_high + HIGH_VALUE) / 2,
+      boundaries.maxLog,
+      boundaries.minLow,
+      (boundaries.minLow + boundaries.maxLow) / 2,
+      boundaries.maxLow,
+      boundaries.minMedium,
+      (boundaries.minMedium + boundaries.maxMedium) / 2,
+      boundaries.maxMedium,
+      boundaries.minHigh,
+      (boundaries.minHigh + HIGH_VALUE) / 2,
       HIGH_VALUE,
     ])
     .range([
