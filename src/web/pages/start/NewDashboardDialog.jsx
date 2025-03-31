@@ -13,7 +13,7 @@ import {CertBundCvssDisplay} from 'web/pages/certbund/dashboard/CvssDisplay';
 import {CvesCreatedDisplay} from 'web/pages/cves/dashboard/CreatedDisplay';
 import {CvesSeverityClassDisplay} from 'web/pages/cves/dashboard/SeverityClassDisplay';
 import {HostsModifiedDisplay} from 'web/pages/hosts/dashboard/ModifiedDisplay';
-import {HostsTopologyDisplay} from 'web/pages/hosts/dashboard/TopologyDisplay';
+import {HostsTopologyDisplay} from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
 import {HostsVulnScoreDisplay} from 'web/pages/hosts/dashboard/VulnScoreDisplay';
 import {NvtsSeverityClassDisplay} from 'web/pages/nvts/dashboard/SeverityClassDisplay';
 import {OsSeverityClassDisplay} from 'web/pages/operatingsystems/dashboard/SeverityClassDisplay';

@@ -7,7 +7,7 @@ import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import React from 'react';
-import TopologyChart from 'web/components/chart/Topology';
+import HostsTopologyChart from 'web/components/chart/HostsTopologyChart';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
@@ -126,7 +126,7 @@ export class HostsTopologyDisplay extends React.Component {
             title={() => _('Hosts Topology')}
           >
             {({width, height, data: tdata, svgRef}) => (
-              <TopologyChart
+              <HostsTopologyChart
                 data={tdata}
                 height={height}
                 svgRef={svgRef}
