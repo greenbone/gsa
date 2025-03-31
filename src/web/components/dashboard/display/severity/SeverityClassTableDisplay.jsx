@@ -4,9 +4,9 @@
  */
 
 import DataTableDisplay from 'web/components/dashboard/display/DataDisplay';
-import transformSeverityClassData, {
-  severityClassDataRow,
-} from 'web/components/dashboard/display/severity/SeverityClassTransform';
+import transformSeverityClassData from 'web/components/dashboard/display/severity/severityClassTransform';
+
+const severityClassDataRow = row => [row.label, row.value];
 
 const SeverityClassTableDisplay = props => (
   <DataTableDisplay
