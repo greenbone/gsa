@@ -18,7 +18,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import equal from 'fast-deep-equal';
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
-import {SEVERITY_RATING_CVSS_3, SeverityRating} from 'gmp/utils/severity';
+import {DEFAULT_SEVERITY_RATING, SeverityRating} from 'gmp/utils/severity';
 import React from 'react';
 import styled from 'styled-components';
 import Group from 'web/components/chart/Group';
@@ -105,7 +105,7 @@ const Circle = styled.circle`
 `;
 
 const severityColorsGradientScale = (
-  severityRating: SeverityRating = SEVERITY_RATING_CVSS_3,
+  severityRating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ) => {
   const boundaries = getSeverityLevelBoundaries(severityRating);
   const domain = [

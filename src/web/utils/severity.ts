@@ -6,6 +6,7 @@
 import {_l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import {
+  DEFAULT_SEVERITY_RATING,
   SEVERITY_RATING_CVSS_2,
   SEVERITY_RATING_CVSS_3,
   SeverityRating,
@@ -129,7 +130,7 @@ interface SeverityLevelBoundaries {
  */
 export const severityRiskFactor = (
   value: number,
-  rating: SeverityRating = SEVERITY_RATING_CVSS_3,
+  rating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ): RiskFactor | typeof NA => {
   const {low, medium, high, critical} = getSeverityLevels(rating);
 
@@ -178,7 +179,7 @@ export const extraRiskFactor = (value = NA_VALUE): ExtraRiskFactor => {
 
 export const resultSeverityRiskFactor = (
   value: number,
-  rating: SeverityRating = SEVERITY_RATING_CVSS_3,
+  rating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ): ResultSeverityRiskFactor => {
   if (value >= LOG_VALUE) {
     return severityRiskFactor(value, rating);
@@ -204,7 +205,7 @@ export const translateRiskFactor = (factor: ResultSeverityRiskFactor) =>
 
 export const translatedResultSeverityRiskFactor = (
   value: number,
-  rating: SeverityRating = SEVERITY_RATING_CVSS_3,
+  rating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ) => translateRiskFactor(resultSeverityRiskFactor(value, rating));
 
 /**
@@ -213,9 +214,9 @@ export const translatedResultSeverityRiskFactor = (
  * The severity levels define the lower limit. The lower limit is included in the range.
  */
 export const getSeverityLevels = (
-  rating: SeverityRating = SEVERITY_RATING_CVSS_3,
+  rating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ): SeverityLevels => SEVERITY_LEVELS[rating];
 
 export const getSeverityLevelBoundaries = (
-  rating: SeverityRating = SEVERITY_RATING_CVSS_2,
+  rating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ): SeverityLevelBoundaries => SEVERITY_LEVEL_BOUNDARIES[rating];
