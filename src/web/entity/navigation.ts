@@ -19,13 +19,8 @@ interface GotoDetailsObj {
   };
 }
 
-interface GotoDetailsFunc {
-  ({data}: GotoDetailsObj): void;
-}
-
-interface GotoListFunc {
-  (): void;
-}
+type GotoDetailsFunc = ({data}: GotoDetailsObj) => void;
+type GotoListFunc = () => void;
 
 /**
  * Navigates to the details page of a given type and data.
