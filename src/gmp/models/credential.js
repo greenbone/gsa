@@ -94,7 +94,7 @@ const TYPE_NAMES = {
   [PGP_CREDENTIAL_TYPE]: _l('PGP Encryption Key'),
   [PASSWORD_ONLY_CREDENTIAL_TYPE]: _l('Password only'),
   [SMIME_CREDENTIAL_TYPE]: _l('S/MIME Certificate'),
-  [KRB5_CREDENTIAL_TYPE]: _l('Kerberos'),
+  [KRB5_CREDENTIAL_TYPE]: _l('SMB (Kerberos)'),
 };
 
 export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;

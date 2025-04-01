@@ -402,7 +402,7 @@ describe('CredentialsDialog component tests', () => {
     );
 
     const select = getSelectElement();
-    expect(select).toHaveValue('Kerberos');
+    expect(select).toHaveValue('SMB (Kerberos)');
 
     const allowInsecure = getByName('allow_insecure');
     expect(allowInsecure).toHaveAttribute('value', '1');

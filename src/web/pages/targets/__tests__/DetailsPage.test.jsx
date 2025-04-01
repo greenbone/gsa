@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Target from 'gmp/models/target';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/targets/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/targets/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
@@ -151,8 +151,8 @@ const noPermTarget = Target.fromElement({
   port_range: '1-5',
 });
 
-describe('Target Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('Target DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const gmp = {
       target: {
         get: getTarget,
@@ -178,7 +178,7 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement} = render(<Detailspage id="46264" />);
+    const {baseElement} = render(<DetailsPage id="46264" />);
 
     expect(baseElement).toHaveTextContent('Target: target 1');
 
@@ -240,7 +240,7 @@ describe('Target Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('ssh_elevate');
     expect(links[4]).toHaveAttribute('href', '/credential/3456');
 
-    expect(baseElement).toHaveTextContent('SMB');
+    expect(baseElement).toHaveTextContent('SMB (NTLM)');
     expect(baseElement).toHaveTextContent('smb_credential');
     expect(links[5]).toHaveAttribute('href', '/credential/4784');
 
@@ -249,7 +249,7 @@ describe('Target Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('foo');
   });
 
-  test('should render full Detailspage with Kerberos, when KRB5 is enabled', () => {
+  test('should render full DetailsPage with Kerberos, when KRB5 is enabled', () => {
     const gmp = {
       target: {
         get: getTarget,
@@ -258,9 +258,9 @@ describe('Target Detailspage tests', () => {
         get: getEntities,
       },
       settings: {
-        manualUrl, 
+        manualUrl,
         reloadInterval,
-        enableKrb5: true
+        enableKrb5: true,
       },
       user: {
         currentSettings,
@@ -279,13 +279,13 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement} = render(<Detailspage id="46264" />);
-    const kerberosLink = baseElement.querySelectorAll('a')[6];
+    const {baseElement} = render(<DetailsPage id="46264" />);
+    const kerberosLink = baseElement.querySelectorAll('a')[5];
 
-    expect(baseElement).toHaveTextContent('Kerberos');
+    expect(baseElement).toHaveTextContent('SMB (Kerberos)');
     expect(baseElement).toHaveTextContent('krb5');
     expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
-  })
+  });
 
   test('should render user tags tab', () => {
     const gmp = {
@@ -314,7 +314,7 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', target));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[9]).toHaveTextContent('User Tags');
@@ -351,7 +351,7 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement} = render(<Detailspage id="46264" />);
+    const {baseElement} = render(<DetailsPage id="46264" />);
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[11]).toHaveTextContent('Permissions');
@@ -403,7 +403,7 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    render(<Detailspage id="46264" />);
+    render(<DetailsPage id="46264" />);
 
     await wait();
 

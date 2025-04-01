@@ -188,7 +188,7 @@ const TargetDialog = ({
     krb5CredentialId,
   };
 
-  const gmp = useGmp()
+  const gmp = useGmp();
 
   return (
     <SaveDialog
@@ -403,8 +403,29 @@ const TargetDialog = ({
               </FormGroup>
             )}
 
+            {gmp.settings.enableKrb5 &&
+              capabilities.mayOp('get_credentials') && (
+                <FormGroup direction="row" title={_('SMB (Kerberos)')}>
+                  <Select
+                    disabled={inUse || state.smbCredentialId !== UNSET_VALUE}
+                    grow="1"
+                    items={renderSelectItems(krb5Credentials, UNSET_VALUE)}
+                    name="krb5CredentialId"
+                    value={state.krb5CredentialId}
+                    onChange={onKrb5CredentialChange}
+                  />
+                  {!inUse && (
+                    <NewIcon
+                      title={_('Create a new credential')}
+                      value={NEW_KRB5}
+                      onClick={onNewCredentialsClick}
+                    />
+                  )}
+                </FormGroup>
+              )}
+
             {capabilities.mayOp('get_credentials') && (
-              <FormGroup direction="row" title={_('SMB')}>
+              <FormGroup direction="row" title={_('SMB (NTLM)')}>
                 <Select
                   disabled={inUse || state.krb5CredentialId !== UNSET_VALUE}
                   grow="1"
@@ -457,26 +478,6 @@ const TargetDialog = ({
                   <NewIcon
                     title={_('Create a new credential')}
                     value={NEW_SNMP}
-                    onClick={onNewCredentialsClick}
-                  />
-                )}
-              </FormGroup>
-            )}
-
-            {gmp.settings.enableKrb5 && capabilities.mayOp('get_credentials') && (
-              <FormGroup direction="row" title={_('Kerberos')}>
-                <Select
-                  disabled={inUse || state.smbCredentialId !== UNSET_VALUE}
-                  grow="1"
-                  items={renderSelectItems(krb5Credentials, UNSET_VALUE)}
-                  name="krb5CredentialId"
-                  value={state.krb5CredentialId}
-                  onChange={onKrb5CredentialChange}
-                />
-                {!inUse && (
-                  <NewIcon
-                    title={_('Create a new credential')}
-                    value={NEW_KRB5}
                     onClick={onNewCredentialsClick}
                   />
                 )}

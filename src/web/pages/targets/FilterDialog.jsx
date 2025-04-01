@@ -20,7 +20,9 @@ const TargetsFilterDialog = ({
   ...props
 }) => {
   const [_] = useTranslation();
+  const gmp = useGmp();
   const filterDialogProps = useFilterDialog(filter);
+
   const [handleSave] = useFilterDialogSave(
     'target',
     {
@@ -30,7 +32,8 @@ const TargetsFilterDialog = ({
     },
     filterDialogProps,
   );
-  let SORT_FIELDS = [
+
+  const SORT_FIELDS = [
     {
       name: 'name',
       displayName: _('Name'),
@@ -51,10 +54,19 @@ const TargetsFilterDialog = ({
       name: 'ssh_credential',
       displayName: _('SSH Credential'),
     },
+    ...(gmp.settings.enableKrb5
+      ? [
+          {
+            name: 'krb5_credential',
+            displayName: _('SMB (Kerberos) Credential'),
+          },
+        ]
+      : []),
     {
       name: 'smb_credential',
-      displayName: _('SMB Credential'),
+      displayName: _('SMB (NTLM) Credential'),
     },
+
     {
       name: 'esxi_credential',
       displayName: _('ESXi Credential'),
@@ -64,19 +76,6 @@ const TargetsFilterDialog = ({
       displayName: _('SNMP Credential'),
     },
   ];
-  
-  const gmp = useGmp()
-
-  if (gmp.settings.enableKrb5) {
-    SORT_FIELDS = [
-      ...SORT_FIELDS,
-      {
-        name: 'krb5_credential',
-        displayName: _('Kerberos Credential'),
-      },
-    ]
-  }
-
 
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>

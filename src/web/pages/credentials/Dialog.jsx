@@ -121,11 +121,7 @@ const CredentialsDialog = props => {
 
   const gmp = useGmp();
   const enabledTypes = types.filter(type => {
-    if (!gmp.settings.enableKrb5 && type === KRB5_CREDENTIAL_TYPE) {
-      return false;
-    }
-
-    return true;
+    return !(type === KRB5_CREDENTIAL_TYPE && !gmp.settings.enableKrb5);
   });
 
   const typeOptions = map(enabledTypes, type => ({
