@@ -7,13 +7,35 @@ import createDate, {Date as GmpDate, duration} from 'gmp/models/date';
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export const parseSeverity = (value: undefined | string) =>
-  isEmpty(value) ? undefined : parseFloat(value);
-
 interface Text {
   __text: string;
   __excerpt: string;
 }
+
+interface QoD {
+  type: string;
+  value: number | undefined;
+}
+
+interface Meta {
+  version: string | undefined;
+  backendOperation: string | undefined;
+  vendorVersion: string | undefined;
+  i18n: string | undefined;
+  time: string | undefined;
+  timezone: string | undefined;
+}
+
+interface ObjectWithParsedProperties {
+  id?: string;
+  creationTime?: GmpDate;
+  modificationTime?: GmpDate;
+  _type?: string;
+  [key: string]: unknown;
+}
+
+export const parseSeverity = (value: undefined | string) =>
+  isEmpty(value) ? undefined : parseFloat(value);
 
 const isText = (value: unknown): value is Text =>
   typeof value === 'object' && value !== null && '__text' in value;
@@ -115,11 +137,6 @@ export const parseCsv = (value: string = ''): string[] => {
   return isEmpty(value.trim()) ? [] : value.split(',').map(val => val.trim());
 };
 
-interface QoD {
-  type: string;
-  value: number | undefined;
-}
-
 export const parseQod = (qod: {type: string; value: string}): QoD => ({
   type: qod.type,
   value: parseFloat(qod.value),
@@ -133,15 +150,6 @@ const ENVELOPE_PROPS = [
   ['time', 'time'],
   ['timezone', 'timezone'],
 ] as const;
-
-interface Meta {
-  version: string | undefined;
-  backendOperation: string | undefined;
-  vendorVersion: string | undefined;
-  i18n: string | undefined;
-  time: string | undefined;
-  timezone: string | undefined;
-}
 
 export const parseEnvelopeMeta = (envelope: object): Meta => {
   const meta = {};
@@ -169,14 +177,6 @@ export const parseXmlEncodedString = (value: string) =>
     /(&quot;|&lt;|&gt;|&amp;|&apos;|&#x2F;|&#x5C;)/g,
     (str, symbol) => esc2xml[symbol],
   );
-
-interface ObjectWithParsedProperties {
-  id?: string;
-  creationTime?: GmpDate;
-  modificationTime?: GmpDate;
-  _type?: string;
-  [key: string]: unknown;
-}
 
 export const parseProperties = (
   element = {},
