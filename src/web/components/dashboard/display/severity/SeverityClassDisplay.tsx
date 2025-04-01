@@ -5,6 +5,7 @@
 
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
+import {SeverityRating} from 'gmp/utils/severity';
 import DonutChart from 'web/components/chart/Donut';
 import DataDisplay, {
   DataDisplayProps,
@@ -16,7 +17,6 @@ import transformSeverityData, {
   TransformSeverityDataProps,
 } from 'web/components/dashboard/display/severity/severityClassTransform';
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
-import {SeverityRating} from 'web/utils/severity';
 
 interface SeverityClassDisplayProps
   extends DataDisplayProps<

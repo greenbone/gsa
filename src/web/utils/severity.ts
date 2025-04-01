@@ -5,6 +5,11 @@
 
 import {_l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
+import {
+  SEVERITY_RATING_CVSS_2,
+  SEVERITY_RATING_CVSS_3,
+  SeverityRating,
+} from 'gmp/utils/severity';
 
 export const _LOG = _l('Log');
 export const _LOW = _l('Low');
@@ -36,9 +41,6 @@ export const LOG_VALUE = 0;
 export const FALSE_POSITIVE_VALUE = -1;
 export const DEBUG_VALUE = -2;
 export const ERROR_VALUE = -3;
-
-export const SEVERITY_RATING_CVSS_2 = 'CVSSv2';
-export const SEVERITY_RATING_CVSS_3 = 'CVSSv3';
 
 const severityRiskFactorValues = {
   [CRITICAL]: CRITICAL_VALUE,
@@ -116,8 +118,6 @@ interface SeverityLevelBoundaries {
   minLow: number;
   maxLog: number;
 }
-
-export type SeverityRating = keyof typeof SEVERITY_LEVELS;
 
 /**
  * Determines the severity risk factor based on the given value.

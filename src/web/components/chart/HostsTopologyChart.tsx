@@ -18,6 +18,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import equal from 'fast-deep-equal';
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
+import {SEVERITY_RATING_CVSS_3, SeverityRating} from 'gmp/utils/severity';
 import React from 'react';
 import styled from 'styled-components';
 import Group from 'web/components/chart/Group';
@@ -26,8 +27,6 @@ import {setRef} from 'web/utils/Render';
 import {
   getSeverityLevelBoundaries,
   FALSE_POSITIVE_VALUE,
-  SEVERITY_RATING_CVSS_3,
-  SeverityRating,
 } from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
