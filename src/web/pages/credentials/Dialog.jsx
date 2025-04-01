@@ -155,6 +155,8 @@ const CredentialsDialog = props => {
     privacy_algorithm,
     privacy_password,
     id: isDefined(credential) ? credential.id : undefined,
+    kdc: credential?.kdc,
+    realm: credential?.realm,
   };
 
   const values = {
