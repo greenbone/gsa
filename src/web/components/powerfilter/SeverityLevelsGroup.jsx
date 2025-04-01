@@ -4,16 +4,19 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import React, {useCallback} from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import SeverityClassLabel from 'web/components/label/SeverityClass';
 import IconDivider from 'web/components/layout/IconDivider';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
   const [_] = useTranslation();
+  const gmp = useGmp();
 
   const handleLevelChange = useCallback(
     (value, level) => {
@@ -44,12 +47,25 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
   if (!isDefined(levels)) {
     levels = '';
   }
+
+  const useCritical = gmp.settings.severityRating === SEVERITY_RATING_CVSS_3;
   return (
     <FormGroup
       data-testid="severity-levels-filter-group"
       title={_('Severity (Class)')}
     >
       <IconDivider>
+        {useCritical && (
+          <>
+            <Checkbox
+              checked={levels.includes('c')}
+              data-testid="severity-filter-critical"
+              name="c"
+              onChange={handleLevelChange}
+            />
+            <SeverityClassLabel.Critical />
+          </>
+        )}
         <Checkbox
           checked={levels.includes('h')}
           data-testid="severity-filter-high"
