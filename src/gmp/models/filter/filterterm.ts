@@ -8,6 +8,12 @@ import {isDefined} from 'gmp/utils/identity';
 
 const RELATIONS = ['=', ':', '~', '>', '<'];
 
+interface FilterTermParams {
+  keyword?: string;
+  value?: string;
+  relation?: string;
+}
+
 /**
  * Represents a filter term
  *
@@ -19,12 +25,16 @@ const RELATIONS = ['=', ':', '~', '>', '<'];
  * value or relation after creation. This can lead to unexpected behaviour.
  */
 class FilterTerm {
+  keyword?: string;
+  value?: string;
+  relation?: string;
+
   /**
-   * @param {String} keyword  Filter keyword
-   * @param {String} value    Value of the filter term
-   * @param {String} relation Relation between keyword and filter, =,<,>,...
+   * @param keyword  Filter keyword
+   * @param value    Value of the filter term
+   * @param relation Relation between keyword and filter, =,<,>,...
    */
-  constructor({keyword, value, relation}) {
+  constructor({keyword, value, relation}: FilterTermParams) {
     this.keyword = isDefined(keyword) ? String(keyword).toLowerCase() : keyword;
     this.value = value;
     this.relation = relation;
@@ -33,27 +43,27 @@ class FilterTerm {
   /**
    * Checks if this FilterTerm has a keyword
    *
-   * @returns {bool} True if this FilterTerm has a keyword
+   * @returns True if this FilterTerm has a keyword
    */
-  hasKeyword() {
+  hasKeyword(): boolean {
     return isDefined(this.keyword);
   }
 
   /**
    * Checks if this FilterTerm has a relation
    *
-   * @returns {bool} True if this FilterTerm has a relation
+   * @returns True if this FilterTerm has a relation
    */
-  hasRelation() {
+  hasRelation(): boolean {
     return isDefined(this.relation);
   }
 
   /**
    * Checks if this FilterTerm has a value
    *
-   * @returns {bool} True if this FilterTerm has a value
+   * @returns True if this FilterTerm has a value
    */
-  hasValue() {
+  hasValue(): boolean {
     return isDefined(this.value);
   }
 
@@ -62,13 +72,14 @@ class FilterTerm {
    *
    * The format is {keyword}{relation}{value}
    *
-   * @return {String} filter term as a String
+   * @return filter term as a String
    */
-  toString() {
+  toString(): string {
     const relation = this.hasRelation() ? this.relation : '';
     const value = this.hasValue() ? this.value : '';
     const keyword = this.hasKeyword() ? this.keyword : '';
 
+    // @ts-expect-error
     return keyword + relation + value;
   }
 
@@ -77,9 +88,9 @@ class FilterTerm {
    *
    * @param {FilterTerm} term  other FilterTerm to compare to
    *
-   * @return {bool} true if this and the other term equal
+   * @return {boolean} true if this and the other term equal
    */
-  equals(term) {
+  equals(term: FilterTerm): boolean {
     return (
       term instanceof FilterTerm &&
       isDefined(term) &&
@@ -92,23 +103,23 @@ class FilterTerm {
   /**
    * Creates a new FilterTerm from a string representation
    *
-   * @param {String} termstring  String to parse FilterTerm from
-   * @return {String} a new FilterTerm created from termstring
+   * @param {string} termString  String to parse FilterTerm from
+   * @return {FilterTerm} a new FilterTerm created from termString
    */
-  static fromString(termstring) {
+  static fromString(termString: string): FilterTerm {
     // use placeholder to ignore content in double quotes
-    const modifiedTermString = termstring.replace(/".+?"/g, '####');
+    const modifiedTermString = termString.replace(/".+?"/g, '####');
 
     for (const rel of RELATIONS) {
       if (modifiedTermString.includes(rel)) {
-        const index = termstring.indexOf(rel);
-        const key = termstring.slice(0, index);
-        const value = termstring.slice(index + 1);
+        const index = termString.indexOf(rel);
+        const key = termString.slice(0, index);
+        const value = termString.slice(index + 1);
         const converted = convert(key, value, rel);
         return new FilterTerm(converted);
       }
     }
-    const converted = convert(undefined, termstring, undefined);
+    const converted = convert(undefined, termString, undefined);
     return new FilterTerm(converted);
   }
 }
