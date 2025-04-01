@@ -33,7 +33,7 @@ interface SeverityDataGroup {
   count: number;
 }
 
-interface SeverityData {
+export interface SeverityData {
   groups?: SeverityDataGroup[];
 }
 
@@ -49,7 +49,7 @@ interface FilterValue {
   end?: string;
 }
 
-interface SeverityClassData {
+export interface SeverityClassData {
   value: number;
   label: string;
   toolTip: string;
@@ -57,15 +57,17 @@ interface SeverityClassData {
   filterValue: FilterValue;
 }
 
-interface TransformedData extends Array<SeverityClassData> {
+interface TransformedSeverityClassData extends Array<SeverityClassData> {
   total: number;
+}
+
+export interface TransformSeverityDataProps {
+  severityRating?: SeverityRating;
 }
 
 const transformSeverityData = (
   data: SeverityData = {},
-  {
-    severityRating = SEVERITY_RATING_CVSS_3,
-  }: {severityRating?: SeverityRating} = {},
+  {severityRating = SEVERITY_RATING_CVSS_3}: TransformSeverityDataProps = {},
 ) => {
   const {groups = []} = data;
   const sum = totalCount(groups);
@@ -98,7 +100,9 @@ const transformSeverityData = (
   const boundaries = getSeverityLevelBoundaries(severityRating);
 
   // @ts-expect-error
-  const transformedData: TransformedData = Object.values(severityClasses)
+  const transformedData: TransformedSeverityClassData = Object.values(
+    severityClasses,
+  )
     .toSorted(
       (a, b) =>
         severityRiskFactorToValue(a.riskFactor) -
