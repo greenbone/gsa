@@ -5,18 +5,90 @@
 
 import equal from 'fast-deep-equal';
 import _ from 'gmp/locale';
+import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
 import styled from 'styled-components';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
-import Display, {DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH} from 'web/components/dashboard/display/Display';
+import Display, {
+  DISPLAY_HEADER_HEIGHT,
+  DISPLAY_BORDER_WIDTH,
+} from 'web/components/dashboard/display/Display';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
+export interface State {
+  showLegend?: boolean;
+}
+
+type StateFunc<T extends State> = (state: T) => T;
+type TitleFunc<T> = ({
+  data,
+  id,
+  isLoading,
+}: {
+  data: T[];
+  id: string;
+  isLoading?: boolean;
+}) => string;
+
+interface IconsRenderProps<S extends State> {
+  state: S;
+  setState: (func: StateFunc<S>) => S;
+  showFilterSelection: boolean;
+  showCsvDownload: boolean;
+  showSvgDownload: boolean;
+  showToggleLegend: boolean;
+  onDownloadCsvClick: () => void;
+  onDownloadSvgClick: () => void;
+  onSelectFilterClick: () => void;
+}
+
+interface DataDisplayRenderProps<TD, S extends State> {
+  id: string;
+  width: number;
+  height: number;
+  svgRef: React.RefObject<SVGSVGElement>;
+  data: TD[];
+  state: S;
+  setState: (func: StateFunc<S>) => S;
+}
+
+type TransformFunc<D, TD, TP = object> = (data: D, props: TP) => TD[];
+
+export interface DataDisplayProps<D, S extends State, TD = D, TP = object> {
+  data: D;
+  dataRow: (data: TD) => string[];
+  dataTitles: string[];
+  dataTransform: TransformFunc<D, TD, TP>;
+  filter?: Filter;
+  height: number;
+  icons: (props: IconsRenderProps<S>) => React.ReactNode;
+  children: (props: DataDisplayRenderProps<TD, S>) => React.ReactNode;
+  id: string;
+  initialState: S;
+  isLoading: boolean;
+  onRemoveClick: () => void;
+  onSelectFilterClick: () => void;
+  setState: (func: StateFunc<S>) => S;
+  showCsvDownload: boolean;
+  showFilterSelection: boolean;
+  showFilterString: boolean;
+  showSvgDownload: boolean;
+  showToggleLegend: boolean;
+  state: S;
+  title: TitleFunc<TD>;
+  width: number;
+}
+
+interface DataDisplayState<D, TD> {
+  data: TD[];
+  originalData: D;
+  title: string;
+}
 
 const ownProps = [
   'title',
@@ -81,13 +153,26 @@ const DisplayBox = styled.div`
   }
 `;
 
-const escapeCsv = value => '"' + `${value}`.replace(/"/g, '""') + '"';
+const escapeCsv = (value: string) => '"' + `${value}`.replace(/"/g, '""') + '"';
 
 const renderIcons = props => <DataDisplayIcons {...props} />;
 
-class DataDisplay extends React.Component {
-  constructor(...args) {
-    super(...args);
+class DataDisplay<
+  D,
+  S extends State,
+  TD,
+  TP extends object,
+> extends React.Component<
+  DataDisplayProps<D, S, TD, TP>,
+  DataDisplayState<D, TD>
+> {
+  svgRef: React.RefObject<SVGSVGElement>;
+  downloadRef: React.RefObject<HTMLAnchorElement>;
+  downloadSvgUrl?: string;
+  downloadCsvUrl?: string;
+
+  constructor(props: DataDisplayProps<D, S, TD, TP>) {
+    super(props);
 
     this.svgRef = React.createRef();
     this.downloadRef = React.createRef();
@@ -104,7 +189,10 @@ class DataDisplay extends React.Component {
     this.handleSetState = this.handleSetState.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps<D, TD, TP = object>(
+    nextProps: DataDisplayProps<D, State, TD, TP>,
+    prevState: DataDisplayState<D, TD>,
+  ) {
     if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
       const data = DataDisplay.getTransformedData(nextProps);
@@ -121,19 +209,24 @@ class DataDisplay extends React.Component {
     return null;
   }
 
-  static getTransformedData(props) {
+  static getTransformedData<D, S extends State, TD, TP = object>(
+    props: Readonly<DataDisplayProps<D, S, TD, TP>>,
+  ) {
     const {data, dataTransform, ...other} = props;
 
-    const tprops = excludeObjectProps(other, ownProps);
+    const transformProps = excludeObjectProps(other, ownProps) as TP;
 
-    return isDefined(dataTransform) ? dataTransform(data, tprops) : data;
+    return dataTransform(data, transformProps);
   }
 
   componentWillUnmount() {
     this.cleanupDownloadSvg();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(
+    nextProps: DataDisplayProps<D, S, TD, TP>,
+    nextState: DataDisplayState<D, TD>,
+  ) {
     return (
       nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
@@ -144,7 +237,7 @@ class DataDisplay extends React.Component {
     );
   }
 
-  hasFilterChanged(nextProps) {
+  hasFilterChanged(nextProps: DataDisplayProps<D, S, TD, TP>): boolean {
     if (isDefined(this.props.filter)) {
       return this.props.filter.equals(nextProps.filter);
     }
@@ -156,17 +249,17 @@ class DataDisplay extends React.Component {
     const {current: svg} = this.svgRef;
     const {height, width} = this.props;
 
-    const svg_data = `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+    const svgData = `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
      "http://www.w3.org/TR/SVG/DTD/svg10.dtd">
       <svg
        xmlns="http://www.w3.org/2000/svg"
        xmlns:xlink="http://www.w3.org/1999/xlink"
        viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
-        ${svg.innerHTML}
+        ${svg ? svg.innerHTML : ''}
       </svg>`;
 
-    const svg_blob = new Blob([svg_data], {type: 'image/svg+xml'});
-    return URL.createObjectURL(svg_blob);
+    const svgBlob = new Blob([svgData], {type: 'image/svg+xml'});
+    return URL.createObjectURL(svgBlob);
   }
 
   cleanupDownloadSvg() {
@@ -183,7 +276,7 @@ class DataDisplay extends React.Component {
     }
   }
 
-  getCurrentState(state = this.props.state) {
+  getCurrentState(state: S = this.props.state): S {
     return {
       showLegend: true,
       ...this.props.initialState,
@@ -217,7 +310,7 @@ class DataDisplay extends React.Component {
 
     this.cleanupDownloadCsv();
 
-    const csv_data = [
+    const csvData = [
       escapeCsv(title),
       dataTitles.map(t => escapeCsv(t)).join(','),
       ...data.map(row =>
@@ -227,16 +320,20 @@ class DataDisplay extends React.Component {
       ),
     ].join('\n');
 
-    const csv_blob = new Blob([csv_data], {type: 'text/csv'});
-    this.downloadCsvUrl = URL.createObjectURL(csv_blob);
+    const csvBlob = new Blob([csvData], {type: 'text/csv'});
+    this.downloadCsvUrl = URL.createObjectURL(csvBlob);
 
-    download.setAttribute('href', this.downloadCsvUrl);
-    download.setAttribute('download', 'data.csv');
-    download.click();
+    if (download) {
+      download.setAttribute('href', this.downloadCsvUrl);
+      download.setAttribute('download', 'data.csv');
+      download.click();
+    }
   }
 
-  handleSetState(stateFunc) {
-    return this.props.setState(state => stateFunc(this.getCurrentState(state)));
+  handleSetState(stateFunc: StateFunc<S>): S {
+    return this.props.setState((state: S) =>
+      stateFunc(this.getCurrentState(state)),
+    );
   }
 
   render() {
@@ -286,7 +383,7 @@ class DataDisplay extends React.Component {
               <Loading />
             ) : (
               showContent && (
-                <React.Fragment>
+                <>
                   {children({
                     id,
                     data: transformedData,
@@ -296,7 +393,7 @@ class DataDisplay extends React.Component {
                     state,
                     setState: this.handleSetState,
                   })}
-                </React.Fragment>
+                </>
               )
             )}
             <IconBar>
@@ -315,9 +412,10 @@ class DataDisplay extends React.Component {
                   })}
               </IconDivider>
             </IconBar>
-            {showFilterString && (
+            {showFilterString && isDefined(filter) && (
               <FilterString>
                 ({_('Applied filter: ')}
+                {/* @ts-ignore-error */}
                 <b>{filter.name}</b>&nbsp;
                 <i>{filter.simple().toFilterString()}</i>)
               </FilterString>
@@ -329,29 +427,5 @@ class DataDisplay extends React.Component {
     );
   }
 }
-
-DataDisplay.propTypes = {
-  children: PropTypes.func.isRequired,
-  data: PropTypes.any,
-  dataRow: PropTypes.func,
-  dataTitles: PropTypes.arrayOf(PropTypes.toString),
-  dataTransform: PropTypes.func,
-  filter: PropTypes.filter,
-  height: PropTypes.number.isRequired,
-  icons: PropTypes.func,
-  id: PropTypes.string.isRequired,
-  initialState: PropTypes.object,
-  isLoading: PropTypes.bool,
-  setState: PropTypes.func,
-  showFilterSelection: PropTypes.bool,
-  showFilterString: PropTypes.bool,
-  showSvgDownload: PropTypes.bool,
-  showToggleLegend: PropTypes.bool,
-  state: PropTypes.object,
-  title: PropTypes.func.isRequired,
-  width: PropTypes.number.isRequired,
-  onRemoveClick: PropTypes.func.isRequired,
-  onSelectFilterClick: PropTypes.func,
-};
 
 export default DataDisplay;
