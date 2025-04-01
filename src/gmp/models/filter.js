@@ -336,7 +336,7 @@ class Filter extends Model {
   /**
    * Check if a filter term is included in this filter
    *
-   * @param {FilterTerm} term  FilterTerm to find in the filter
+   * @param {FilterTerm|undefined} term  FilterTerm to find in the filter
    *
    * @return {Boolean}
    */
@@ -448,7 +448,7 @@ class Filter extends Model {
   /**
    * Compare this filter with another filter
    *
-   * @param {Filter} filter  Other filter to compare to.
+   * @param {Filter|undefined|null} filter  Other filter to compare to.
    *
    * @return {bool} Returns true if this filter equals to the other filter
    */
@@ -754,7 +754,7 @@ class Filter extends Model {
   /**
    * Creates a new Filter from FilterTerms
    *
-   * @param {FilterTerm} term  FilterTerms to set for the new Filter
+   * @param {FilterTerm[]} term  FilterTerms to set for the new Filter
    *
    * @returns {Filter} The new Filter
    */
