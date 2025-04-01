@@ -150,6 +150,10 @@ class ScanConfigComponent extends React.Component {
     this.handleInteraction();
 
     this.setState({
+        hasSelection : false,
+    });
+
+    this.setState({
       editConfigFamilyDialogVisible: true,
       editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
         name: shorten(familyName),
@@ -168,6 +172,7 @@ class ScanConfigComponent extends React.Component {
       isLoadingFamily: silent ? isLoadingFamily : true,
     }));
 
+
     return gmp.scanconfig
       .editScanConfigFamilySettings({
         id: config.id,
@@ -180,11 +185,15 @@ class ScanConfigComponent extends React.Component {
         const configFamily = config.families[familyName];
         const selected = createSelectedNvts(configFamily, nvts);
 
-        this.setState({
+        this.setState(({hasSelection}) => hasSelection ? {
+          familyNvts: data.nvts,
+          isLoadingFamily: false,
+        } : {
           familyNvts: data.nvts,
           familySelectedNvts: selected,
+          hasSelection: true,
           isLoadingFamily: false,
-        });
+       });
       })
       .catch(error => {
         this.setState({
@@ -443,6 +452,7 @@ class ScanConfigComponent extends React.Component {
       familyName,
       familyNvts,
       familySelectedNvts,
+      hasSelection,
       importDialogVisible,
       isLoadingConfig,
       isLoadingFamilies,
@@ -534,6 +544,7 @@ class ScanConfigComponent extends React.Component {
             configName={config.name}
             configNameLabel={_('Config')}
             familyName={familyName}
+            hasSelection={hasSelection}
             isLoadingFamily={isLoadingFamily}
             nvts={familyNvts}
             selected={familySelectedNvts}

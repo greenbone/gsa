@@ -263,7 +263,7 @@ describe('ScanConfigCommand tests', () => {
             config_id: 'c1',
             oid: '1.2.3',
             'password:1.2.3:2:password:Bar': 'yes',
-            'preference:scanner:0:scanner:timeout.1.2.3': 123,
+            'preference:1.2.3:0:entry:timeout': 123,
             'preference:1.2.3:1:entry:Foo': 'bar',
             'preference:1.2.3:2:password:Bar': 'foo',
             timeout: 1,
