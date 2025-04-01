@@ -422,8 +422,10 @@ const CredentialsDialog = props => {
                 />
                 <TextArea
                   name="kdc"
-                  placeholder={_('Comma separated list of KDCs')}
-                  title={_('KDCs')}
+                  placeholder={_(
+                    'Comma separated list of Key Distribution Center',
+                  )}
+                  title={_('Key Distribution Center')}
                   value={state.kdc}
                   onChange={onValueChange}
                 />
