@@ -7,15 +7,14 @@ import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import React from 'react';
+import {useNavigate} from 'react-router';
 import HostsTopologyChart from 'web/components/chart/HostsTopologyChart';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
+import useGmp from 'web/hooks/useGmp';
 import {HostsTopologyLoader} from 'web/pages/hosts/dashboard/Loaders';
-import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import withGmp from 'web/utils/withGmp';
-import {withRouter} from 'web/utils/withRouter';
 
 const transformTopologyData = (data = []) => {
   if (!hasValue(data)) {
@@ -100,66 +99,53 @@ const transformTopologyData = (data = []) => {
   return {hosts, links};
 };
 
-export class HostsTopologyDisplay extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleDataClick = this.handleDataClick.bind(this);
-  }
-
-  handleDataClick(data) {
-    const {navigate} = this.props;
-
+let HostsTopologyDisplay = ({filter, ...props}) => {
+  const gmp = useGmp();
+  const navigate = useNavigate();
+  const severityRating = gmp.settings.severityRating;
+  const handleDataClick = data => {
     navigate(`/host/${data.id}`);
-  }
-
-  render() {
-    const {filter, gmp, ...props} = this.props;
-    return (
-      <HostsTopologyLoader filter={filter}>
-        {loaderProps => (
-          <DataDisplay
-            {...props}
-            {...loaderProps}
-            dataTransform={transformTopologyData}
-            filter={filter}
-            showToggleLegend={false}
-            title={() => _('Hosts Topology')}
-          >
-            {({width, height, data: tdata, svgRef}) => (
-              <HostsTopologyChart
-                data={tdata}
-                height={height}
-                severityRating={gmp.settings.severityRating}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={this.handleDataClick}
-              />
-            )}
-          </DataDisplay>
-        )}
-      </HostsTopologyLoader>
-    );
-  }
-}
+  };
+  return (
+    <HostsTopologyLoader filter={filter}>
+      {loaderProps => (
+        <DataDisplay
+          {...props}
+          {...loaderProps}
+          dataTransform={transformTopologyData}
+          filter={filter}
+          showToggleLegend={false}
+          title={() => _('Hosts Topology')}
+        >
+          {({width, height, data: tdata, svgRef}) => (
+            <HostsTopologyChart
+              data={tdata}
+              height={height}
+              severityRating={severityRating}
+              svgRef={svgRef}
+              width={width}
+              onDataClick={handleDataClick}
+            />
+          )}
+        </DataDisplay>
+      )}
+    </HostsTopologyLoader>
+  );
+};
 
 HostsTopologyDisplay.propTypes = {
   filter: PropTypes.filter,
-  gmp: PropTypes.gmp.isRequired,
-  navigate: PropTypes.func.isRequired,
 };
 
 const DISPLAY_ID = 'host-by-topology';
 
-HostsTopologyDisplay = compose(
-  withRouter,
-  withGmp,
-  withFilterSelection({
-    filtersFilter: HOSTS_FILTER_FILTER,
-  }),
-)(HostsTopologyDisplay);
+HostsTopologyDisplay = withFilterSelection({
+  filtersFilter: HOSTS_FILTER_FILTER,
+})(HostsTopologyDisplay);
 
 HostsTopologyDisplay.displayId = DISPLAY_ID;
+
+export default HostsTopologyDisplay;
 
 registerDisplay(DISPLAY_ID, HostsTopologyDisplay, {
   title: _l('Chart: Hosts Topology'),

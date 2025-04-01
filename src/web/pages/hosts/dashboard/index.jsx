@@ -9,7 +9,7 @@ import {
   HostsCvssDisplay,
   HostsCvssTableDisplay,
 } from 'web/pages/hosts/dashboard/CvssDisplay';
-import {HostsTopologyDisplay} from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
+import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
 import {
   HostsVulnScoreDisplay,
   HostsVulnScoreTableDisplay,
