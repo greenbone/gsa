@@ -12,6 +12,11 @@ interface Text {
   __excerpt: string;
 }
 
+interface QoDParam {
+  type: string;
+  value: string;
+}
+
 interface QoD {
   type: string;
   value: number | undefined;
@@ -33,6 +38,10 @@ interface ObjectWithParsedProperties {
   _type?: string;
   [key: string]: unknown;
 }
+
+type NumberValue = string | number | undefined;
+type NumberReturn = undefined | number;
+type BooleanValue = NumberValue | boolean;
 
 export const parseSeverity = (value: undefined | string) =>
   isEmpty(value) ? undefined : parseFloat(value);
@@ -74,9 +83,7 @@ export const parseTextElement = (text: string | object = {}) => {
   };
 };
 
-export const parseInt = (
-  value: string | number | undefined,
-): undefined | number => {
+export const parseInt = (value: NumberValue): NumberReturn => {
   if (!isDefined(value)) {
     return undefined;
   }
@@ -94,9 +101,7 @@ export const parseInt = (
   return val;
 };
 
-export const parseFloat = (
-  value: string | number | undefined,
-): undefined | number => {
+export const parseFloat = (value: NumberValue): NumberReturn => {
   if (!isDefined(value)) {
     return undefined;
   }
@@ -137,7 +142,7 @@ export const parseCsv = (value: string = ''): string[] => {
   return isEmpty(value.trim()) ? [] : value.split(',').map(val => val.trim());
 };
 
-export const parseQod = (qod: {type: string; value: string}): QoD => ({
+export const parseQod = (qod: QoDParam): QoD => ({
   type: qod.type,
   value: parseFloat(qod.value),
 });
@@ -250,7 +255,7 @@ export const parseDate = (
  *
  * @returns duration A duration instance
  */
-export const parseDuration = (value: string | number | undefined) => {
+export const parseDuration = (value: NumberValue) => {
   if (isString(value)) {
     value = parseInt(value);
   }
@@ -271,7 +276,7 @@ export const parseDuration = (value: string | number | undefined) => {
  *
  * @returns true if value is considered true else false
  */
-export const parseBoolean = (value: string | number | undefined): boolean => {
+export const parseBoolean = (value: BooleanValue): boolean => {
   if (isString(value)) {
     if (value.trim().toLowerCase() === 'true') return true;
     value = parseInt(value);
