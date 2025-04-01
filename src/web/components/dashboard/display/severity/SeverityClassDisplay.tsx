@@ -5,24 +5,54 @@
 
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import DonutChart from 'web/components/chart/Donut';
-import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import DataDisplay, {
+  DataDisplayProps,
+} from 'web/components/dashboard/display/DataDisplay';
 import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';
-import transformSeverityData from 'web/components/dashboard/display/severity/severityClassTransform';
+import transformSeverityData, {
+  SeverityClassData,
+  SeverityData,
+  TransformSeverityDataProps,
+} from 'web/components/dashboard/display/severity/severityClassTransform';
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
-import PropTypes from 'web/utils/PropTypes';
+import {SeverityRating} from 'web/utils/severity';
 
-const SeverityClassDisplay = ({onFilterChanged, filter, ...props}) => {
-  const handleDataClick = data => {
+interface SeverityClassDisplayProps
+  extends DataDisplayProps<
+    SeverityData,
+    SeverityClassDisplayState,
+    SeverityClassData,
+    TransformSeverityDataProps
+  > {
+  filter?: Filter;
+  severityRating?: SeverityRating;
+  onFilterChanged?: (filter: Filter) => void;
+}
+
+interface SeverityClassDisplayState {
+  show3d: boolean;
+  showLegend?: boolean;
+}
+
+const SeverityClassDisplay = ({
+  onFilterChanged,
+  filter,
+  ...props
+}: SeverityClassDisplayProps) => {
+  const handleDataClick = (data: SeverityClassData) => {
     const {filterValue} = data;
 
-    let severityFilter;
     if (!isDefined(onFilterChanged)) {
       return;
     }
 
+    let severityFilter: Filter;
     const [startTerm, endTerm] = filterValueToFilterTerms(filterValue);
+    if (!isDefined(startTerm)) {
+      return;
+    }
+
     if (isDefined(endTerm)) {
       if (
         isDefined(filter) &&
@@ -48,7 +78,12 @@ const SeverityClassDisplay = ({onFilterChanged, filter, ...props}) => {
     onFilterChanged(newFilter);
   };
   return (
-    <DataDisplay
+    <DataDisplay<
+      SeverityData,
+      SeverityClassDisplayState,
+      SeverityClassData,
+      TransformSeverityDataProps
+    >
       {...props}
       dataTransform={transformSeverityData}
       filter={filter}
@@ -73,13 +108,6 @@ const SeverityClassDisplay = ({onFilterChanged, filter, ...props}) => {
       )}
     </DataDisplay>
   );
-};
-
-SeverityClassDisplay.propTypes = {
-  filter: PropTypes.filter,
-  severityClass: PropTypes.severityClass,
-  title: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func,
 };
 
 export default SeverityClassDisplay;
