@@ -8,7 +8,6 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import ProgressBar from 'web/components/bar/ProgressBar';
 import useGmp from 'web/hooks/useGmp';
-import PropTypes from 'web/utils/PropTypes';
 import {severityFormat} from 'web/utils/Render';
 import {
   resultSeverityRiskFactor,
@@ -19,18 +18,25 @@ import {
   CRITICAL,
   translateRiskFactor,
   LOG_VALUE,
+  ResultSeverityRiskFactor,
 } from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
-const SeverityBar = ({severity, toolTip}) => {
+interface SeverityBarProps {
+  severity?: number | string;
+  toolTip?: string;
+}
+
+const SeverityBar = ({severity, toolTip}: SeverityBarProps) => {
   const gmp = useGmp();
   const severityRating = gmp.settings.severityRating;
-  let cvss;
-  let threat;
-  let title;
+  let cvss: number | undefined;
+  let threat: ResultSeverityRiskFactor | undefined;
+  let title: string;
 
   if (isDefined(severity)) {
     cvss = parseFloat(severity);
+    // @ts-expect-error
     threat = resultSeverityRiskFactor(cvss, severityRating);
     title = translateRiskFactor(threat);
   } else {
@@ -46,7 +52,7 @@ const SeverityBar = ({severity, toolTip}) => {
     text = severityFormat(cvss) + ' (' + title + ')';
   }
 
-  let background;
+  let background: string;
   if (threat === LOG) {
     background = Theme.severityClassLog;
   } else if (threat === MEDIUM) {
@@ -71,11 +77,6 @@ const SeverityBar = ({severity, toolTip}) => {
       {text}
     </ProgressBar>
   );
-};
-
-SeverityBar.propTypes = {
-  severity: PropTypes.numberOrNumberString,
-  toolTip: PropTypes.string,
 };
 
 export default SeverityBar;
