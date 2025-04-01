@@ -21,6 +21,11 @@ import GmpSettings, {
   DEFAULT_TIMEOUT,
   DEFAULT_REPORT_RESULTS_THRESHOLD,
 } from 'gmp/gmpsettings';
+import {
+  DEFAULT_SEVERITY_RATING,
+  SEVERITY_RATING_CVSS_2,
+  SEVERITY_RATING_CVSS_3,
+} from 'gmp/utils/severity';
 
 const createStorage = (state?: Record<string, string>) => {
   const store = {
@@ -71,6 +76,7 @@ describe('GmpSettings tests', () => {
     expect(settings.reportResultsThreshold).toEqual(
       DEFAULT_REPORT_RESULTS_THRESHOLD,
     );
+    expect(settings.severityRating).toEqual(DEFAULT_SEVERITY_RATING);
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
     expect(settings.timezone).toBeUndefined();
@@ -103,6 +109,7 @@ describe('GmpSettings tests', () => {
       reloadIntervalActive: 5,
       reloadIntervalInactive: 60,
       reportResultsThreshold: 10000,
+      severityRating: SEVERITY_RATING_CVSS_3,
       timeout: 30000,
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
@@ -125,6 +132,7 @@ describe('GmpSettings tests', () => {
     expect(settings.reloadIntervalActive).toEqual(5);
     expect(settings.reloadIntervalInactive).toEqual(60);
     expect(settings.reportResultsThreshold).toEqual(10000);
+    expect(settings.severityRating).toEqual(SEVERITY_RATING_CVSS_3);
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(30000);
     expect(settings.timezone).toBeUndefined();
@@ -176,6 +184,7 @@ describe('GmpSettings tests', () => {
     expect(settings.reportResultsThreshold).toEqual(
       DEFAULT_REPORT_RESULTS_THRESHOLD,
     );
+    expect(settings.severityRating).toEqual(DEFAULT_SEVERITY_RATING);
     expect(settings.token).toEqual('atoken');
     expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
     expect(settings.timezone).toEqual('cet');
@@ -234,6 +243,7 @@ describe('GmpSettings tests', () => {
     expect(settings.reloadIntervalActive).toEqual(5);
     expect(settings.reloadIntervalInactive).toEqual(60);
     expect(settings.reportResultsThreshold).toEqual(10000);
+    expect(settings.severityRating).toEqual(DEFAULT_SEVERITY_RATING);
     expect(settings.token).toEqual('btoken');
     expect(settings.timeout).toEqual(30000);
     expect(settings.timezone).toEqual('cest');
@@ -305,6 +315,7 @@ describe('GmpSettings tests', () => {
       manualLanguageMapping: {foo: 'bar'},
       protocolDocUrl: 'http://protocol',
       reloadInterval: 10,
+      severityRating: SEVERITY_RATING_CVSS_2,
       timeout: 30000,
       vendorVersion: 'foobar',
       vendorLabel: 'foo.bar',
@@ -359,6 +370,11 @@ describe('GmpSettings tests', () => {
       // @ts-expect-error
       settings.protocolDocUrl = 'foo';
     }).toThrow();
+    expect(settings.severityRating).toEqual(SEVERITY_RATING_CVSS_2);
+    expect(() => {
+      // @ts-expect-error
+      settings.severityRating = 'foo';
+    }).toThrow();
     expect(settings.protocolDocUrl).toEqual('http://protocol');
     expect(() => {
       // @ts-expect-error
@@ -370,5 +386,24 @@ describe('GmpSettings tests', () => {
       settings.vendorLabel = 'bar.foo';
     }).toThrow();
     expect(settings.vendorLabel).toEqual('foo.bar');
+  });
+
+  test('should only allow setting severity rating to CVSS 2 or 3', () => {
+    const storage = createStorage();
+    let settings = new GmpSettings(storage, {
+      // @ts-expect-error
+      severityRating: 'foo',
+    });
+    expect(settings.severityRating).toEqual(DEFAULT_SEVERITY_RATING);
+
+    settings = new GmpSettings(storage, {
+      severityRating: SEVERITY_RATING_CVSS_2,
+    });
+    expect(settings.severityRating).toEqual(SEVERITY_RATING_CVSS_2);
+
+    settings = new GmpSettings(storage, {
+      severityRating: SEVERITY_RATING_CVSS_3,
+    });
+    expect(settings.severityRating).toEqual(SEVERITY_RATING_CVSS_3);
   });
 });
