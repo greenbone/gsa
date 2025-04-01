@@ -4,6 +4,12 @@
  */
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
+import {
+  SEVERITY_RATING_CVSS_2,
+  SEVERITY_RATING_CVSS_3,
+  DEFAULT_SEVERITY_RATING,
+  SeverityRating,
+} from 'gmp/utils/severity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
@@ -36,6 +42,7 @@ interface GmpSettingsOptions {
   reloadIntervalInactive?: number;
   reportResultsThreshold?: number;
   server?: string;
+  severityRating?: SeverityRating;
   timeout?: number;
   vendorVersion?: string;
   vendorLabel?: string;
@@ -94,17 +101,18 @@ class GmpSettings {
   readonly apiProtocol!: string;
   readonly apiServer!: string;
   readonly disableLoginForm!: boolean;
-  readonly enableEPSS!: boolean;
-  readonly enableKrb5!: boolean;
-  readonly enableGreenboneSensor!: boolean;
-  readonly guestUsername!: string;
-  readonly guestPassword!: string;
-  readonly manualUrl!: string;
-  readonly manualLanguageMapping!: LanguageMapping;
-  readonly protocolDocUrl!: string;
-  readonly vendorVersion!: string;
-  readonly vendorLabel!: string;
   readonly enableAssetManagement!: boolean;
+  readonly enableEPSS!: boolean;
+  readonly enableGreenboneSensor!: boolean;
+  readonly enableKrb5!: boolean;
+  readonly guestPassword!: string;
+  readonly guestUsername!: string;
+  readonly manualLanguageMapping!: LanguageMapping;
+  readonly manualUrl!: string;
+  readonly protocolDocUrl!: string;
+  readonly severityRating!: SeverityRating;
+  readonly vendorLabel!: string;
+  readonly vendorVersion!: string;
 
   constructor(
     storage: GmpSettingsStorage = global.localStorage,
@@ -137,6 +145,7 @@ class GmpSettings {
       apiProtocol = protocol,
       apiServer = server,
       logLevel = loglevel,
+      severityRating = DEFAULT_SEVERITY_RATING,
     } = options;
 
     this.storage = storage;
@@ -169,6 +178,12 @@ class GmpSettings {
     if (!isDefined(apiServer)) {
       apiServer = global.location.host;
     }
+    if (
+      severityRating !== SEVERITY_RATING_CVSS_3 &&
+      severityRating !== SEVERITY_RATING_CVSS_2
+    ) {
+      severityRating = DEFAULT_SEVERITY_RATING;
+    }
 
     this.logLevel = logLevel;
     this.reloadInterval = reloadInterval;
@@ -180,17 +195,18 @@ class GmpSettings {
     setAndFreeze(this, 'apiProtocol', apiProtocol);
     setAndFreeze(this, 'apiServer', apiServer);
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
-    setAndFreeze(this, 'enableEPSS', enableEPSS);
-    setAndFreeze(this, 'enableKrb5', enableKrb5);
-    setAndFreeze(this, 'enableGreenboneSensor', enableGreenboneSensor);
-    setAndFreeze(this, 'guestUsername', guestUsername);
-    setAndFreeze(this, 'guestPassword', guestPassword);
-    setAndFreeze(this, 'manualUrl', manualUrl);
-    setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
-    setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);
-    setAndFreeze(this, 'vendorVersion', vendorVersion);
-    setAndFreeze(this, 'vendorLabel', vendorLabel);
     setAndFreeze(this, 'enableAssetManagement', enableAssetManagement);
+    setAndFreeze(this, 'enableEPSS', enableEPSS);
+    setAndFreeze(this, 'enableGreenboneSensor', enableGreenboneSensor);
+    setAndFreeze(this, 'enableKrb5', enableKrb5);
+    setAndFreeze(this, 'guestPassword', guestPassword);
+    setAndFreeze(this, 'guestUsername', guestUsername);
+    setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
+    setAndFreeze(this, 'manualUrl', manualUrl);
+    setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);
+    setAndFreeze(this, 'severityRating', severityRating);
+    setAndFreeze(this, 'vendorLabel', vendorLabel);
+    setAndFreeze(this, 'vendorVersion', vendorVersion);
   }
 
   set token(value: string | undefined) {
