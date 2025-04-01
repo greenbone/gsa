@@ -17,11 +17,11 @@ interface StyledIconProps {
   $width: string;
 }
 
-interface IconProps<T> {
+interface IconProps<TValue> {
   className?: string;
   to?: string;
-  value?: T;
-  onClick?: (value: T | undefined) => void;
+  value?: TValue;
+  onClick?: (value: TValue | undefined) => void;
   img: string;
   size?: 'tiny' | 'small' | 'medium' | 'large';
   active?: boolean;
@@ -47,7 +47,7 @@ const StyledIcon = styled.span<StyledIconProps>`
   }
 `;
 
-const IconComponent = <T,>({
+const IconComponent = <TValue,>({
   className,
   to,
   value,
@@ -55,7 +55,7 @@ const IconComponent = <T,>({
   img,
   size,
   ...other
-}: IconProps<T>) => {
+}: IconProps<TValue>) => {
   const [svgComponent, setSvgComponent] = useState<null | HTMLElement>(null);
   const svgRef = useRef<HTMLInputElement | null>(null);
   const {width, height} = useIconSize(size);
