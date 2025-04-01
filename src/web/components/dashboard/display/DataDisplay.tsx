@@ -24,20 +24,21 @@ export interface State {
   showLegend?: boolean;
 }
 
-type StateFunc<T extends State> = (state: T) => T;
-type TitleFunc<T> = ({
+type StateFunc<TState extends State> = (state: TState) => TState;
+type SetStateFunc<TState extends State> = (func: StateFunc<TState>) => TState;
+type TitleFunc<TData> = ({
   data,
   id,
   isLoading,
 }: {
-  data: T[];
+  data: TData[];
   id: string;
   isLoading?: boolean;
 }) => string;
 
-interface IconsRenderProps<S extends State> {
-  state: S;
-  setState: (func: StateFunc<S>) => S;
+interface IconsRenderProps<TState extends State> {
+  state: TState;
+  setState: SetStateFunc<TState>;
   showFilterSelection: boolean;
   showCsvDownload: boolean;
   showSvgDownload: boolean;
@@ -47,46 +48,56 @@ interface IconsRenderProps<S extends State> {
   onSelectFilterClick: () => void;
 }
 
-interface DataDisplayRenderProps<TD, S extends State> {
+interface DataDisplayRenderProps<TData, TState extends State> {
   id: string;
   width: number;
   height: number;
   svgRef: React.RefObject<SVGSVGElement>;
-  data: TD[];
-  state: S;
-  setState: (func: StateFunc<S>) => S;
+  data: TData[];
+  state: TState;
+  setState: SetStateFunc<TState>;
 }
 
-type TransformFunc<D, TD, TP = object> = (data: D, props: TP) => TD[];
+type TransformFunc<TData, TTransformedData, TTransformProps = object> = (
+  data: TData,
+  props: TTransformProps,
+) => TTransformedData[];
 
-export interface DataDisplayProps<D, S extends State, TD = D, TP = object> {
-  data: D;
-  dataRow: (data: TD) => string[];
+export interface DataDisplayProps<
+  TData,
+  TState extends State,
+  TTransformedData = TData,
+  TTransformProps = object,
+> {
+  data: TData;
+  dataRow: (data: TTransformedData) => string[];
   dataTitles: string[];
-  dataTransform: TransformFunc<D, TD, TP>;
+  dataTransform: TransformFunc<TData, TTransformedData, TTransformProps>;
   filter?: Filter;
   height: number;
-  icons: (props: IconsRenderProps<S>) => React.ReactNode;
-  children: (props: DataDisplayRenderProps<TD, S>) => React.ReactNode;
+  icons: (props: IconsRenderProps<TState>) => React.ReactNode;
+  children: (
+    props: DataDisplayRenderProps<TTransformedData, TState>,
+  ) => React.ReactNode;
   id: string;
-  initialState: S;
+  initialState: TState;
   isLoading: boolean;
   onRemoveClick: () => void;
   onSelectFilterClick: () => void;
-  setState: (func: StateFunc<S>) => S;
+  setState: SetStateFunc<TState>;
   showCsvDownload: boolean;
   showFilterSelection: boolean;
   showFilterString: boolean;
   showSvgDownload: boolean;
   showToggleLegend: boolean;
-  state: S;
-  title: TitleFunc<TD>;
+  state: TState;
+  title: TitleFunc<TTransformedData>;
   width: number;
 }
 
-interface DataDisplayState<D, TD> {
-  data: TD[];
-  originalData: D;
+interface DataDisplayState<TData, TTransformedData> {
+  data: TTransformedData[];
+  originalData: TData;
   title: string;
 }
 
@@ -158,24 +169,35 @@ const escapeCsv = (value: string) => '"' + `${value}`.replace(/"/g, '""') + '"';
 const renderIcons = props => <DataDisplayIcons {...props} />;
 
 class DataDisplay<
-  D,
-  P extends DataDisplayProps<D, S, TD, TP>,
-  S extends State,
-  TD,
-  TP extends object,
-> extends React.Component<P, DataDisplayState<D, TD>> {
+  TData,
+  TProps extends DataDisplayProps<
+    TData,
+    TState,
+    TTransformedData,
+    TTransformProps
+  >,
+  TState extends State,
+  TTransformedData,
+  TTransformProps extends object,
+> extends React.Component<TProps, DataDisplayState<TData, TTransformedData>> {
   svgRef: React.RefObject<SVGSVGElement>;
   downloadRef: React.RefObject<HTMLAnchorElement>;
   downloadSvgUrl?: string;
   downloadCsvUrl?: string;
 
-  constructor(props: P) {
+  constructor(props: TProps) {
     super(props);
 
     this.svgRef = React.createRef();
     this.downloadRef = React.createRef();
 
-    const data = DataDisplay.getTransformedData<D, P, S, TD, TP>(this.props);
+    const data = DataDisplay.getTransformedData<
+      TData,
+      TProps,
+      TState,
+      TTransformedData,
+      TTransformProps
+    >(this.props);
     this.state = {
       data,
       originalData: this.props.data,
@@ -188,15 +210,26 @@ class DataDisplay<
   }
 
   static getDerivedStateFromProps<
-    D,
-    P extends DataDisplayProps<D, S, TD, TP>,
-    S extends State,
-    TD,
-    TP = object,
-  >(nextProps: P, prevState: DataDisplayState<D, TD>) {
+    TData,
+    TProps extends DataDisplayProps<
+      TData,
+      TState,
+      TTransformedData,
+      TTransformProps
+    >,
+    TState extends State,
+    TTransformedData,
+    TTransformProps = object,
+  >(nextProps: TProps, prevState: DataDisplayState<TData, TTransformedData>) {
     if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
-      const data = DataDisplay.getTransformedData<D, P, S, TD, TP>(nextProps);
+      const data = DataDisplay.getTransformedData<
+        TData,
+        TProps,
+        TState,
+        TTransformedData,
+        TTransformProps
+      >(nextProps);
       return {
         data,
         originalData: nextProps.data,
@@ -211,15 +244,23 @@ class DataDisplay<
   }
 
   static getTransformedData<
-    D,
-    P extends DataDisplayProps<D, S, TD, TP>,
-    S extends State,
-    TD,
-    TP = object,
-  >(props: Readonly<P>) {
+    TData,
+    TProps extends DataDisplayProps<
+      TData,
+      TState,
+      TTransformedData,
+      TTransformProps
+    >,
+    TState extends State,
+    TTransformedData,
+    TTransformProps = object,
+  >(props: Readonly<TProps>) {
     const {data, dataTransform, ...other} = props;
 
-    const transformProps = excludeObjectProps(other, ownProps) as TP;
+    const transformProps = excludeObjectProps(
+      other,
+      ownProps,
+    ) as TTransformProps;
 
     return dataTransform(data, transformProps);
   }
@@ -229,8 +270,13 @@ class DataDisplay<
   }
 
   shouldComponentUpdate(
-    nextProps: DataDisplayProps<D, S, TD, TP>,
-    nextState: DataDisplayState<D, TD>,
+    nextProps: DataDisplayProps<
+      TData,
+      TState,
+      TTransformedData,
+      TTransformProps
+    >,
+    nextState: DataDisplayState<TData, TTransformedData>,
   ) {
     return (
       nextProps.height !== this.props.height ||
@@ -242,7 +288,14 @@ class DataDisplay<
     );
   }
 
-  hasFilterChanged(nextProps: DataDisplayProps<D, S, TD, TP>): boolean {
+  hasFilterChanged(
+    nextProps: DataDisplayProps<
+      TData,
+      TState,
+      TTransformedData,
+      TTransformProps
+    >,
+  ): boolean {
     if (isDefined(this.props.filter)) {
       // @ts-ignore-error
       return this.props.filter.equals(nextProps.filter);
@@ -282,7 +335,7 @@ class DataDisplay<
     }
   }
 
-  getCurrentState(state: S = this.props.state): S {
+  getCurrentState(state: TState = this.props.state): TState {
     return {
       showLegend: true,
       ...this.props.initialState,
@@ -336,8 +389,8 @@ class DataDisplay<
     }
   }
 
-  handleSetState(stateFunc: StateFunc<S>): S {
-    return this.props.setState((state: S) =>
+  handleSetState(stateFunc: StateFunc<TState>): TState {
+    return this.props.setState((state: TState) =>
       stateFunc(this.getCurrentState(state)),
     );
   }
