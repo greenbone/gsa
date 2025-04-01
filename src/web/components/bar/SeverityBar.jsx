@@ -7,6 +7,7 @@ import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import ProgressBar from 'web/components/bar/ProgressBar';
+import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 import {severityFormat} from 'web/utils/Render';
 import {
@@ -21,15 +22,16 @@ import {
 } from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
 
-
 const SeverityBar = ({severity, toolTip}) => {
+  const gmp = useGmp();
+  const severityRating = gmp.settings.severityRating;
   let cvss;
   let threat;
   let title;
 
   if (isDefined(severity)) {
     cvss = parseFloat(severity);
-    threat = resultSeverityRiskFactor(cvss);
+    threat = resultSeverityRiskFactor(cvss, severityRating);
     title = translateRiskFactor(threat);
   } else {
     title = `${_NA}`;
