@@ -4,12 +4,13 @@
  */
 
 import FilterTerm from 'gmp/models/filter/filterterm';
+import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {LOG_VALUE} from 'web/utils/severity';
 
 interface FilterValueToFilterTermsParams {
-  start?: number;
-  end?: number;
+  start?: string;
+  end?: string;
 }
 
 type FilterValueToFilterTermsReturnType = [FilterTerm?, FilterTerm?];
@@ -34,7 +35,8 @@ export const filterValueToFilterTerms = ({
     const endTerm = FilterTerm.fromString(`severity<${end}`);
     return [startTerm, endTerm];
   }
-  if (start > LOG_VALUE) {
+  const startAsNumber = parseFloat(start);
+  if (isDefined(startAsNumber) && startAsNumber > LOG_VALUE) {
     return [FilterTerm.fromString(`severity>${start}`)];
   }
   return [FilterTerm.fromString(`severity=${start}`)];
