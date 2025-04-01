@@ -8,6 +8,7 @@ import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import {isEmpty} from 'gmp/utils/string';
 import React from 'react';
 import BubbleChart from 'web/components/chart/Bubble';
@@ -19,12 +20,16 @@ import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NvtsFamilyLoader} from 'web/pages/nvts/dashboard/Loaders';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {severityFormat} from 'web/utils/Render';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
+import withGmp from 'web/utils/withGmp';
 
-
-const transformFamilyData = (data = {}) => {
+const transformFamilyData = (
+  data = {},
+  {severityRating = DEFAULT_SEVERITY_RATING} = {},
+) => {
   const {groups = []} = data;
   const totalNvts = groups.reduce(
     (prev, current) => prev + parseFloat(current.count),
@@ -34,7 +39,7 @@ const transformFamilyData = (data = {}) => {
   const tdata = groups.map(family => {
     const {count, value} = family;
     const severity = parseSeverity(family.stats.severity.mean);
-    const riskFactor = resultSeverityRiskFactor(severity);
+    const riskFactor = resultSeverityRiskFactor(severity, severityRating);
     const formattedSeverity = severityFormat(severity);
     const toolTip = _('{{value}}: {{count}} (severity: {{severity}})', {
       value: value,
@@ -91,7 +96,8 @@ export class NvtsFamilyDisplay extends React.Component {
   }
 
   render() {
-    const {filter, onFilterChanged, ...props} = this.props;
+    const {filter, gmp, onFilterChanged, ...props} = this.props;
+    const severityRating = gmp.settings.severityRating;
 
     return (
       <NvtsFamilyLoader filter={filter}>
@@ -101,6 +107,7 @@ export class NvtsFamilyDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformFamilyData}
             filter={filter}
+            severityRating={severityRating}
             showToggleLegend={false}
             title={({data: tdata}) =>
               _('NVTs by Family (Total: {{count}})', {count: tdata.total})
@@ -126,12 +133,16 @@ export class NvtsFamilyDisplay extends React.Component {
 
 NvtsFamilyDisplay.propTypes = {
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   onFilterChanged: PropTypes.func,
 };
 
-NvtsFamilyDisplay = withFilterSelection({
-  filtersFilter: NVTS_FILTER_FILTER,
-})(NvtsFamilyDisplay);
+NvtsFamilyDisplay = compose(
+  withGmp,
+  withFilterSelection({
+    filtersFilter: NVTS_FILTER_FILTER,
+  }),
+)(NvtsFamilyDisplay);
 
 NvtsFamilyDisplay.displayId = 'nvt-by-family';
 

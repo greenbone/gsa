@@ -6,6 +6,7 @@
 import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import React from 'react';
 import styled from 'styled-components';
 import BarChart from 'web/components/chart/Bar';
@@ -20,6 +21,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
+import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
 const ToolTip = styled.div`
@@ -28,7 +30,10 @@ const ToolTip = styled.div`
   line-height: 1.2em;
 `;
 
-const transformVulnScoreData = (data = {}) => {
+const transformVulnScoreData = (
+  data = {},
+  {severityRating = DEFAULT_SEVERITY_RATING},
+) => {
   const {groups = []} = data;
   const tdata = groups
     .filter(group => {
@@ -41,7 +46,10 @@ const transformVulnScoreData = (data = {}) => {
       const {modified, name} = text;
       const {severity} = stats;
       const averageSeverity = parseSeverity(severity.mean);
-      const riskFactor = resultSeverityRiskFactor(averageSeverity);
+      const riskFactor = resultSeverityRiskFactor(
+        averageSeverity,
+        severityRating,
+      );
       const modifiedDate = formattedUserSettingLongDate(modified);
       const toolTip = (
         <ToolTip>
@@ -84,6 +92,8 @@ export class HostsVulnScoreDisplay extends React.Component {
 
   render() {
     const {filter, ...props} = this.props;
+    const {gmp} = props;
+    const severityRating = gmp.settings.severityRating;
     return (
       <HostsVulnScoreLoader filter={filter}>
         {loaderProps => (
@@ -92,6 +102,7 @@ export class HostsVulnScoreDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformVulnScoreData}
             filter={filter}
+            severityRating={severityRating}
             showToggleLegend={false}
             title={() => _('Most Vulnerable Hosts')}
           >
@@ -116,10 +127,12 @@ export class HostsVulnScoreDisplay extends React.Component {
 
 HostsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   navigate: PropTypes.func.isRequired,
 };
 
 HostsVulnScoreDisplay = compose(
+  withGmp,
   withRouter,
   withFilterSelection({
     filtersFilter: HOSTS_FILTER_FILTER,

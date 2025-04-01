@@ -8,6 +8,7 @@ import {_, _l} from 'gmp/locale/lang';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import React from 'react';
 import BubbleChart from 'web/components/chart/Bubble';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
@@ -21,12 +22,15 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {severityFormat} from 'web/utils/Render';
 import {resultSeverityRiskFactor, _NA} from 'web/utils/severity';
+import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
-
 
 const format = d3format('0.2f');
 
-const transformHighResultsData = (data = {}) => {
+const transformHighResultsData = (
+  data = {},
+  {severityRating = DEFAULT_SEVERITY_RATING} = {},
+) => {
   const {groups = []} = data;
 
   return groups
@@ -40,7 +44,7 @@ const transformHighResultsData = (data = {}) => {
       const {name} = text;
       const high_per_host = parseFloat(text.high_per_host);
       const severity = parseSeverity(text.severity);
-      const riskFactor = resultSeverityRiskFactor(severity);
+      const riskFactor = resultSeverityRiskFactor(severity, severityRating);
       const displaySeverity = isDefined(severity)
         ? severityFormat(severity)
         : `${_NA}`;
@@ -70,7 +74,8 @@ export class TasksHighResultsDisplay extends React.Component {
   }
 
   render() {
-    const {filter, ...props} = this.props;
+    const {filter, gmp, ...props} = this.props;
+    const severityRating = gmp.settings.severityRating;
     return (
       <TasksHighResultsLoader filter={filter}>
         {loaderProps => (
@@ -79,6 +84,7 @@ export class TasksHighResultsDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformHighResultsData}
             filter={filter}
+            severityRating={severityRating}
             showToggleLegend={false}
             title={() => _('Tasks by High Results per Host')}
           >
@@ -100,10 +106,12 @@ export class TasksHighResultsDisplay extends React.Component {
 
 TasksHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   navigate: PropTypes.func.isRequired,
 };
 
 TasksHighResultsDisplay = compose(
+  withGmp,
   withRouter,
   withFilterSelection({
     filtersFilter: TASKS_FILTER_FILTER,

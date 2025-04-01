@@ -5,6 +5,7 @@
 
 import {parseInt, parseFloat, parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import {
   totalCount,
   percent,
@@ -42,7 +43,10 @@ const getSeverityClassLabel = value => {
   }
 };
 
-const transformCvssData = (data = {}) => {
+const transformCvssData = (
+  data = {},
+  {severityRating = DEFAULT_SEVERITY_RATING} = {},
+) => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);
@@ -94,7 +98,7 @@ const transformCvssData = (data = {}) => {
 
       const value = parseFloat(key);
 
-      const riskFactor = resultSeverityRiskFactor(value);
+      const riskFactor = resultSeverityRiskFactor(value, severityRating);
       const label = translateRiskFactor(riskFactor);
 
       let toolTip;
