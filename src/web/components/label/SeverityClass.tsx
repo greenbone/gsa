@@ -7,6 +7,13 @@ import {_l} from 'gmp/locale/lang';
 import createLabel from 'web/components/label/Label';
 import Theme from 'web/utils/Theme';
 
+const CriticalLabel = createLabel(
+  Theme.severityClassCritical,
+  Theme.severityClassCritical,
+  Theme.white,
+  'severity-class-Critical',
+  _l('Critical'),
+);
 const HighLabel = createLabel(
   Theme.severityClassHigh,
   Theme.severityClassHigh,
@@ -44,6 +51,7 @@ const FalsePositiveLabel = createLabel(
 );
 
 export const SeverityClassLabels = {
+  Critical: CriticalLabel,
   High: HighLabel,
   Medium: MediumLabel,
   Low: LowLabel,
