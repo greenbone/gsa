@@ -11,6 +11,10 @@ import {
 } from 'web/pages/hosts/dashboard/CvssDisplay';
 import {HostsTopologyDisplay} from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
 import {
+  HostsVulnScoreDisplay,
+  HostsVulnScoreTableDisplay,
+} from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
+import {
   HostsModifiedDisplay,
   HostsModifiedTableDisplay,
 } from 'web/pages/hosts/dashboard/ModifiedDisplay';
@@ -22,10 +26,6 @@ import {
   HostsSeverityClassDisplay,
   HostsSeverityClassTableDisplay,
 } from 'web/pages/hosts/dashboard/SeverityClassDisplay';
-import {
-  HostsVulnScoreDisplay,
-  HostsVulnScoreTableDisplay,
-} from 'web/pages/hosts/dashboard/VulnScoreDisplay';
 
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 
