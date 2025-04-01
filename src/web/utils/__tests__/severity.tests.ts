@@ -5,6 +5,10 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {
+  SEVERITY_RATING_CVSS_2,
+  SEVERITY_RATING_CVSS_3,
+} from 'gmp/utils/severity';
+import {
   severityRiskFactor,
   severityRiskFactorToValue,
   extraRiskFactor,
@@ -31,8 +35,6 @@ import {
   DEBUG_VALUE,
   ERROR_VALUE,
   NA_VALUE,
-  SEVERITY_RATING_CVSS_2,
-  SEVERITY_RATING_CVSS_3,
 } from 'web/utils/severity';
 
 describe('Severity', () => {
