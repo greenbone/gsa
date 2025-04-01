@@ -14,6 +14,7 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {HostsTopologyLoader} from 'web/pages/hosts/dashboard/Loaders';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
+import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
 const transformTopologyData = (data = []) => {
@@ -113,7 +114,7 @@ export class HostsTopologyDisplay extends React.Component {
   }
 
   render() {
-    const {filter, ...props} = this.props;
+    const {filter, gmp, ...props} = this.props;
     return (
       <HostsTopologyLoader filter={filter}>
         {loaderProps => (
@@ -129,6 +130,7 @@ export class HostsTopologyDisplay extends React.Component {
               <HostsTopologyChart
                 data={tdata}
                 height={height}
+                severityRating={gmp.settings.severityRating}
                 svgRef={svgRef}
                 width={width}
                 onDataClick={this.handleDataClick}
@@ -143,6 +145,7 @@ export class HostsTopologyDisplay extends React.Component {
 
 HostsTopologyDisplay.propTypes = {
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   navigate: PropTypes.func.isRequired,
 };
 
@@ -150,6 +153,7 @@ const DISPLAY_ID = 'host-by-topology';
 
 HostsTopologyDisplay = compose(
   withRouter,
+  withGmp,
   withFilterSelection({
     filtersFilter: HOSTS_FILTER_FILTER,
   }),
