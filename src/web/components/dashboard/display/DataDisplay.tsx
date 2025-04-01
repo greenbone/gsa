@@ -159,25 +159,23 @@ const renderIcons = props => <DataDisplayIcons {...props} />;
 
 class DataDisplay<
   D,
+  P extends DataDisplayProps<D, S, TD, TP>,
   S extends State,
   TD,
   TP extends object,
-> extends React.Component<
-  DataDisplayProps<D, S, TD, TP>,
-  DataDisplayState<D, TD>
-> {
+> extends React.Component<P, DataDisplayState<D, TD>> {
   svgRef: React.RefObject<SVGSVGElement>;
   downloadRef: React.RefObject<HTMLAnchorElement>;
   downloadSvgUrl?: string;
   downloadCsvUrl?: string;
 
-  constructor(props: DataDisplayProps<D, S, TD, TP>) {
+  constructor(props: P) {
     super(props);
 
     this.svgRef = React.createRef();
     this.downloadRef = React.createRef();
 
-    const data = DataDisplay.getTransformedData(this.props);
+    const data = DataDisplay.getTransformedData<D, P, S, TD, TP>(this.props);
     this.state = {
       data,
       originalData: this.props.data,
@@ -189,13 +187,16 @@ class DataDisplay<
     this.handleSetState = this.handleSetState.bind(this);
   }
 
-  static getDerivedStateFromProps<D, TD, TP = object>(
-    nextProps: DataDisplayProps<D, State, TD, TP>,
-    prevState: DataDisplayState<D, TD>,
-  ) {
+  static getDerivedStateFromProps<
+    D,
+    P extends DataDisplayProps<D, S, TD, TP>,
+    S extends State,
+    TD,
+    TP = object,
+  >(nextProps: P, prevState: DataDisplayState<D, TD>) {
     if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
-      const data = DataDisplay.getTransformedData(nextProps);
+      const data = DataDisplay.getTransformedData<D, P, S, TD, TP>(nextProps);
       return {
         data,
         originalData: nextProps.data,
@@ -209,9 +210,13 @@ class DataDisplay<
     return null;
   }
 
-  static getTransformedData<D, S extends State, TD, TP = object>(
-    props: Readonly<DataDisplayProps<D, S, TD, TP>>,
-  ) {
+  static getTransformedData<
+    D,
+    P extends DataDisplayProps<D, S, TD, TP>,
+    S extends State,
+    TD,
+    TP = object,
+  >(props: Readonly<P>) {
     const {data, dataTransform, ...other} = props;
 
     const transformProps = excludeObjectProps(other, ownProps) as TP;
@@ -239,6 +244,7 @@ class DataDisplay<
 
   hasFilterChanged(nextProps: DataDisplayProps<D, S, TD, TP>): boolean {
     if (isDefined(this.props.filter)) {
+      // @ts-ignore-error
       return this.props.filter.equals(nextProps.filter);
     }
 
@@ -417,6 +423,7 @@ class DataDisplay<
                 ({_('Applied filter: ')}
                 {/* @ts-ignore-error */}
                 <b>{filter.name}</b>&nbsp;
+                {/* @ts-ignore-error */}
                 <i>{filter.simple().toFilterString()}</i>)
               </FilterString>
             )}
