@@ -151,12 +151,20 @@ export default [
           format: ['camelCase'],
           leadingUnderscore: 'allow',
           trailingUnderscore: 'allow',
+          filter: {
+            regex: `^(${allowedSnakeCase.join('|')})$`,
+            match: false,
+          },
         },
         {
           selector: 'variable',
           format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
           leadingUnderscore: 'allow',
           trailingUnderscore: 'allow',
+          filter: {
+            regex: `^(${allowedSnakeCase.join('|')})$`,
+            match: false,
+          },
         },
         {
           selector: 'parameter',
