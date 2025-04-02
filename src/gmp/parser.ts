@@ -31,12 +31,13 @@ interface Meta {
   timezone: string | undefined;
 }
 
-interface ObjectWithParsedProperties {
+export type Properties = Record<string, unknown>;
+
+export interface ParsedProperties {
   id?: string;
   creationTime?: GmpDate;
   modificationTime?: GmpDate;
   _type?: string;
-  [key: string]: unknown;
 }
 
 type NumberValue = string | number | undefined;
@@ -62,7 +63,9 @@ export const parseProgressElement = (value: string | undefined | Text) => {
   return isDefined(progress) ? progress : 0;
 };
 
-export const parseText = (text: Text | string): string => {
+export const parseText = (
+  text: Text | string | undefined,
+): string | undefined => {
   if (isText(text)) {
     text = text.__text;
   }
@@ -125,7 +128,7 @@ export const parseIntoArray = <T>(value: T | Array<T>): Array<T> =>
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
-type YesNo = typeof YES_VALUE | typeof NO_VALUE;
+export type YesNo = typeof YES_VALUE | typeof NO_VALUE;
 
 export const parseYesNo = (value: string | number): YesNo =>
   value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
@@ -183,46 +186,55 @@ export const parseXmlEncodedString = (value: string) =>
     (str, symbol) => esc2xml[symbol],
   );
 
+export interface ElementProperties {
+  _id?: string;
+  _type?: string;
+  creation_time?: string;
+  modification_time?: string;
+  type?: string;
+}
+
 export const parseProperties = (
-  element = {},
-  object = {},
-): ObjectWithParsedProperties => {
-  const copy = {...object, ...element}; // create shallow copy
+  element: ElementProperties = {},
+  object: Properties = {},
+): ParsedProperties => {
+  // in future the function should only return known properties
+  // and not the whole object
+  // for now we need to return the whole object
+  // to not break existing code
+  const copy: ParsedProperties = {...object, ...element}; // create shallow copy
 
   if ('_id' in element && isString(element._id) && element._id.length > 0) {
     // only set id if it id defined
-    // @ts-expect-error
     copy.id = element._id;
   }
 
   if ('creation_time' in element && isDefined(element.creation_time)) {
-    // @ts-expect-error
     copy.creationTime = parseDate(element.creation_time);
     // @ts-expect-error
     delete copy.creation_time;
   }
   if ('modification_time' in element && isDefined(element.modification_time)) {
-    // @ts-expect-error
     copy.modificationTime = parseDate(element.modification_time);
     // @ts-expect-error
     delete copy.modification_time;
   }
 
-  if ('type' in copy && isDefined(copy.type)) {
+  if ('type' in element && isDefined(element.type)) {
     // type should not be used directly
+    copy._type = element.type;
     // @ts-expect-error
-    copy._type = copy.type;
     delete copy.type;
   }
 
   return copy;
 };
 
-export const setProperties = (
-  properties: object | undefined,
-  object: object = {},
+export const setProperties = <T>(
+  properties?: Properties,
+  object: T = {} as T,
   {writable = false} = {},
-) => {
+): T => {
   if (isDefined(properties)) {
     for (const [key, value] of Object.entries(properties)) {
       if (!key.startsWith('_')) {
