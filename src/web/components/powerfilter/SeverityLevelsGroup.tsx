@@ -3,23 +3,33 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import React, {useCallback} from 'react';
+import {useCallback} from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import SeverityClassLabel from 'web/components/label/SeverityClass';
 import IconDivider from 'web/components/layout/IconDivider';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
+interface SeverityLevelsFilterGroupProps {
+  filter: Filter;
+  onChange: (value: string, field: string) => void;
+  onRemove: () => void;
+}
+
+const SeverityLevelsFilterGroup = ({
+  filter,
+  onChange,
+  onRemove,
+}: SeverityLevelsFilterGroupProps) => {
   const [_] = useTranslation();
   const gmp = useGmp();
 
   const handleLevelChange = useCallback(
-    (value, level) => {
+    (value: string, level: string) => {
       let levels = filter.get('levels');
 
       if (!isDefined(levels)) {
@@ -57,6 +67,7 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
       <IconDivider>
         {useCritical && (
           <>
+            {/* @ts-expect-error */}
             <Checkbox
               checked={levels.includes('c')}
               data-testid="severity-filter-critical"
@@ -66,6 +77,7 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
             <SeverityClassLabel.Critical />
           </>
         )}
+        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('h')}
           data-testid="severity-filter-high"
@@ -73,6 +85,7 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.High />
+        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('m')}
           data-testid="severity-filter-medium"
@@ -80,6 +93,7 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.Medium />
+        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('l')}
           data-testid="severity-filter-low"
@@ -87,6 +101,7 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.Low />
+        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('g')}
           data-testid="severity-filter-log"
@@ -94,6 +109,7 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.Log />
+        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('f')}
           data-testid="severity-filter-false-positive"
@@ -104,12 +120,6 @@ const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
       </IconDivider>
     </FormGroup>
   );
-};
-
-SeverityLevelsFilterGroup.propTypes = {
-  filter: PropTypes.filter.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
 };
 
 export default SeverityLevelsFilterGroup;
