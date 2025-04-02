@@ -22,10 +22,12 @@ import {
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
 import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
+import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import {Provider} from 'react-redux';
 import {MemoryRouter, useLocation} from 'react-router';
+import {Store} from 'redux';
 import {StyleSheetManager} from 'styled-components';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import GmpContext from 'web/components/provider/GmpProvider';
@@ -37,7 +39,17 @@ export {userEvent};
 
 afterEach(cleanup);
 
-export async function wait(ms = 0) {
+interface RendererOptions {
+  capabilities?: Capabilities | true;
+  gmp?: Record<string, unknown>;
+  store?: Store | boolean;
+  license?: Record<string, unknown>;
+  router?: boolean;
+  route?: string;
+  showLocation?: boolean;
+}
+
+export async function wait(ms: number = 0) {
   await act(
     () =>
       new Promise(resolve => {
@@ -46,10 +58,10 @@ export async function wait(ms = 0) {
   );
 }
 
-export const queryAllByName = (container, name) =>
+export const queryAllByName = (container: HTMLElement, name: string) =>
   queryAllByAttribute('name', container, name);
 
-export const queryByName = (container, name) => {
+export const queryByName = (container: HTMLElement, name: string) => {
   const elements = queryAllByName(container, name);
   if (!elements.length) {
     return null;
@@ -57,7 +69,7 @@ export const queryByName = (container, name) => {
   return elements[0];
 };
 
-export const getAllByName = (container, name) => {
+export const getAllByName = (container: HTMLElement, name: string) => {
   const elements = queryAllByName(container, name);
   if (!elements.length) {
     throw getElementError(
@@ -68,20 +80,21 @@ export const getAllByName = (container, name) => {
   return elements;
 };
 
-export const getByName = (container, name) => {
+export const getByName = (container: HTMLElement, name: string) => {
   const elements = getAllByName(container, name);
   return elements[0];
 };
 
-const Main = ({children}) => {
+const Main = ({children}: {children: React.ReactNode}) => {
   return (
+    // @ts-expect-error
     <ThemeProvider theme={{...theme, colorScheme: 'light'}}>
       <StyleSheetManager enableVendorPrefixes>{children}</StyleSheetManager>
     </ThemeProvider>
   );
 };
 
-export const render = ui => {
+export const render = (ui: React.ReactNode) => {
   const {container, baseElement, rerender, ...other} = reactTestingRender(
     <Main>{ui}</Main>,
   );
@@ -93,20 +106,21 @@ export const render = ui => {
     baseElement,
     container,
     element: hasValue(container) ? container.lastChild : undefined,
-    getAllByName: name => getAllByName(baseElement, name),
-    getByName: name => getByName(baseElement, name),
-    queryByName: name => queryByName(baseElement, name),
-    queryAllByName: name => queryAllByName(baseElement, name),
+    getAllByName: (name: string) => getAllByName(baseElement, name),
+    getByName: (name: string) => getByName(baseElement, name),
+    queryByName: (name: string) => queryByName(baseElement, name),
+    queryAllByName: (name: string) => queryAllByName(baseElement, name),
     within: () => within(baseElement),
-    rerender: component => rerender(<Main>{component}</Main>),
+    rerender: (component: React.ReactNode) =>
+      rerender(<Main>{component}</Main>),
     ...other,
   };
 };
 
 const withProvider =
-  (name, key = name) =>
-  Component =>
-  ({children, ...props}) =>
+  (name: string, key: string = name) =>
+  (Component: React.ElementType) =>
+  ({children, ...props}: {children: React.ReactNode; [key: string]: unknown}) =>
     isDefined(props[name]) ? (
       <Component {...{[key]: props[name]}}>{children}</Component>
     ) : (
@@ -133,7 +147,7 @@ export const rendererWith = (
     router,
     route = '/',
     showLocation = false,
-  } = {
+  }: RendererOptions = {
     store: true,
     router: true,
   },
@@ -177,27 +191,31 @@ export const rendererWith = (
     </TestingGmpProvider>
   );
 
-  const wrapper = ({children}) => <Providers>{children}</Providers>;
+  const wrapper = ({children}: {children: React.ReactNode}) => (
+    <Providers>{children}</Providers>
+  );
 
   return {
-    render: ui => {
+    render: (ui: React.ReactNode) => {
       const {rerender, ...other} = render(<Providers>{ui}</Providers>);
       return {
         ...other,
-        rerender: updatedUi => rerender(<Providers>{updatedUi}</Providers>),
+        rerender: (updatedUi: React.ReactNode) =>
+          rerender(<Providers>{updatedUi}</Providers>),
       };
     },
     gmp,
     store,
-    renderHook: hook => rtlRenderHook(hook, {wrapper}),
+    renderHook: <Result, Props>(hook: (initialProps: Props) => Result) =>
+      rtlRenderHook<Result, Props>(hook, {wrapper}),
   };
 };
 
-export const rendererWithTable = options => {
+export const rendererWithTable = (options: RendererOptions) => {
   const {render, ...other} = rendererWith(options);
   return {
     ...other,
-    render: element =>
+    render: (element: React.ReactNode) =>
       render(
         <table>
           <tbody>{element}</tbody>
@@ -206,11 +224,11 @@ export const rendererWithTable = options => {
   };
 };
 
-export const rendererWithTableRow = options => {
+export const rendererWithTableRow = (options: RendererOptions) => {
   const {render, ...other} = rendererWith(options);
   return {
     ...other,
-    render: element =>
+    render: (element: React.ReactNode) =>
       render(
         <table>
           <tbody>
