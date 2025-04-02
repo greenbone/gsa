@@ -36,7 +36,9 @@ const SeverityBar = ({severity, toolTip}: SeverityBarProps) => {
 
   if (isDefined(severity)) {
     cvss = parseFloat(severity);
-    // @ts-expect-error
+  }
+
+  if (isDefined(cvss)) {
     threat = resultSeverityRiskFactor(cvss, severityRating);
     title = translateRiskFactor(threat);
   } else {
@@ -45,7 +47,7 @@ const SeverityBar = ({severity, toolTip}: SeverityBarProps) => {
 
   const fill = isDefined(cvss) && cvss > 0 ? cvss * 10 : 0;
 
-  let text;
+  let text: string;
   if (!isDefined(cvss) || cvss < LOG_VALUE) {
     text = title;
   } else {
