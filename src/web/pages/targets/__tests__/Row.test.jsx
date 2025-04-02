@@ -207,7 +207,7 @@ describe('Target row tests', () => {
 
     expect(screen.getByText('127.0.0.1, 192.168.0.1')).toBeVisible();
 
-    expect(screen.getByText(/SMB/)).toBeVisible();
+    expect(screen.getByText(/SMB \(NTLM\)/)).toBeVisible();
     const smbLink = screen.getByText('smb_credential');
     expect(smbLink).toHaveAttribute('href', '/credential/4784');
 
@@ -247,7 +247,7 @@ describe('Target row tests', () => {
       />,
     );
 
-    expect(screen.getByText(/Kerberos/)).toBeVisible();
+    expect(screen.getByText(/SMB \(Kerberos\)/)).toBeVisible();
     const kerberosLink = screen.getByText('krb5');
     expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
   });
@@ -295,7 +295,7 @@ describe('Target row tests', () => {
     const sshElevateLink = screen.getByText('ssh_elevate');
     expect(sshElevateLink).toHaveAttribute('href', '/credential/3456');
 
-    expect(screen.getByText(/SMB/)).toBeVisible();
+    expect(screen.getByText(/SMB \(NTLM\)/)).toBeVisible();
     const smbLink = screen.getByText('smb_credential');
     expect(smbLink).toHaveAttribute('href', '/credential/4784');
   });

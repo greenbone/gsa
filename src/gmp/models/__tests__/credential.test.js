@@ -222,6 +222,8 @@ describe('getCredentialTypeName tests', () => {
     expect(getCredentialTypeName(PGP_CREDENTIAL_TYPE)).toEqual(
       'PGP Encryption Key',
     );
-    expect(getCredentialTypeName(KRB5_CREDENTIAL_TYPE)).toEqual('Kerberos');
+    expect(getCredentialTypeName(KRB5_CREDENTIAL_TYPE)).toEqual(
+      'SMB (Kerberos)',
+    );
   });
 });

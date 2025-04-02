@@ -129,16 +129,16 @@ export const Row = ({
           links={links}
           title={_('SSH Elevate')}
         />
-        <Cred cred={entity.smb_credential} links={links} title={'SMB'} />
-        <Cred cred={entity.esxi_credential} links={links} title={'ESXi'} />
-        <Cred cred={entity.snmp_credential} links={links} title={'SNMP'} />
         {gmp.settings.enableKrb5 && (
           <Cred
             cred={entity.krb5_credential}
             links={links}
-            title={'Kerberos'}
+            title={'SMB (Kerberos)'}
           />
         )}
+        <Cred cred={entity.smb_credential} links={links} title={'SMB (NTLM)'} />
+        <Cred cred={entity.esxi_credential} links={links} title={'ESXi'} />
+        <Cred cred={entity.snmp_credential} links={links} title={'SNMP'} />
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

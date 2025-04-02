@@ -10,7 +10,6 @@ import DefaultTransform from 'gmp/http/transform/default';
 import logger from 'gmp/log';
 import Credential from 'gmp/models/credential';
 
-
 const log = logger.getLogger('gmp.commands.credentials');
 
 export class CredentialCommand extends EntityCommand {
@@ -82,6 +81,8 @@ export class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
+      kdc,
+      realm,
     } = args;
     log.debug('Saving credential', args);
     return this.action({
@@ -105,6 +106,8 @@ export class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
+      kdc,
+      realm,
     });
   }
 

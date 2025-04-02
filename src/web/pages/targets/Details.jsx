@@ -163,9 +163,22 @@ const TargetDetails = ({capabilities, entity}) => {
                     </TableRow>
                   )}
 
+                {gmp.settings.enableKrb5 && isDefined(krb5Credential) && (
+                  <TableRow>
+                    <TableData>{_('SMB (Kerberos)')}</TableData>
+                    <TableData>
+                      <span>
+                        <DetailsLink id={krb5Credential.id} type="credential">
+                          {krb5Credential.name}
+                        </DetailsLink>
+                      </span>
+                    </TableData>
+                  </TableRow>
+                )}
+
                 {isDefined(smb_credential) && (
                   <TableRow>
-                    <TableData>{_('SMB')}</TableData>
+                    <TableData>{_('SMB (NTLM)')}</TableData>
                     <TableData>
                       <span>
                         <DetailsLink id={smb_credential.id} type="credential">
@@ -196,19 +209,6 @@ const TargetDetails = ({capabilities, entity}) => {
                       <span>
                         <DetailsLink id={snmp_credential.id} type="credential">
                           {snmp_credential.name}
-                        </DetailsLink>
-                      </span>
-                    </TableData>
-                  </TableRow>
-                )}
-
-                {gmp.settings.enableKrb5 && isDefined(krb5Credential) && (
-                  <TableRow>
-                    <TableData>{_('Kerberos')}</TableData>
-                    <TableData>
-                      <span>
-                        <DetailsLink id={krb5Credential.id} type="credential">
-                          {krb5Credential.name}
                         </DetailsLink>
                       </span>
                     </TableData>

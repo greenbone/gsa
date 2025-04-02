@@ -121,11 +121,7 @@ const CredentialsDialog = props => {
 
   const gmp = useGmp();
   const enabledTypes = types.filter(type => {
-    if (!gmp.settings.enableKrb5 && type === KRB5_CREDENTIAL_TYPE) {
-      return false;
-    }
-
-    return true;
+    return !(type === KRB5_CREDENTIAL_TYPE && !gmp.settings.enableKrb5);
   });
 
   const typeOptions = map(enabledTypes, type => ({
@@ -159,6 +155,8 @@ const CredentialsDialog = props => {
     privacy_algorithm,
     privacy_password,
     id: isDefined(credential) ? credential.id : undefined,
+    kdc: credential?.kdc,
+    realm: credential?.realm,
   };
 
   const values = {
@@ -426,8 +424,10 @@ const CredentialsDialog = props => {
                 />
                 <TextArea
                   name="kdc"
-                  placeholder={_('Comma separated list of KDCs')}
-                  title={_('KDCs')}
+                  placeholder={_(
+                    'Comma separated list of Key Distribution Center',
+                  )}
+                  title={_('Key Distribution Center')}
                   value={state.kdc}
                   onChange={onValueChange}
                 />

@@ -72,6 +72,8 @@ describe('CredentialCommand tests', () => {
       privacy_password: 'privacy_password',
       private_key: 'private_key',
       public_key: 'public_key',
+      realm: 'kerberos_realm',
+      kdc: 'kerberos_kdc',
     });
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -96,6 +98,8 @@ describe('CredentialCommand tests', () => {
         privacy_password: 'privacy_password',
         private_key: 'private_key',
         public_key: 'public_key',
+        realm: 'kerberos_realm',
+        kdc: 'kerberos_kdc',
       },
     });
 
