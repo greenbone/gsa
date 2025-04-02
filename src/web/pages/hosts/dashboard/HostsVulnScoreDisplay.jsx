@@ -76,7 +76,9 @@ const transformVulnScoreData = (
   return tdata.reverse();
 };
 
-let HostsVulnScoreDisplay = ({filter, ...props}) => {
+const HostsVulnScoreDisplay = withFilterSelection({
+  filtersFilter: HOSTS_FILTER_FILTER,
+})(({filter, ...props}) => {
   const gmp = useGmp();
   const navigate = useNavigate();
   const handleDataClick = data => {
@@ -111,15 +113,11 @@ let HostsVulnScoreDisplay = ({filter, ...props}) => {
       )}
     </HostsVulnScoreLoader>
   );
-};
+});
 
 HostsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
 };
-
-HostsVulnScoreDisplay = withFilterSelection({
-  filtersFilter: HOSTS_FILTER_FILTER,
-})(HostsVulnScoreDisplay);
 
 HostsVulnScoreDisplay.displayId = 'host-by-most-vulnerable';
 
