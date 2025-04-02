@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useRef} from 'react';
+import {useCallback, useRef} from 'react';
+
+type SetInstanceVariable<T> = (value: T) => void;
 
 /**
  * A hook to store an instance variable for a function component.
@@ -18,9 +20,14 @@ import {useRef} from 'react';
  *                         object. Most of the time it should be initialized
  *                         with an empty object.
  */
-const useInstanceVariable = initialValue => {
-  const ref = useRef(initialValue);
-  return ref.current;
+const useInstanceVariable = <T>(
+  initialValue: T,
+): [T, SetInstanceVariable<T>] => {
+  const ref = useRef<T>(initialValue);
+  const setInstanceVariable = useCallback((value: T) => {
+    ref.current = value;
+  }, []);
+  return [ref.current, setInstanceVariable];
 };
 
 export default useInstanceVariable;
