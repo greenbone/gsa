@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {
   queryPowerFilter,
   getSelectElement,
@@ -249,7 +250,11 @@ describe('Delta Report Details Content tests', () => {
     const filters = [filterWithName];
 
     const gmp = {
-      settings: {manualUrl, reportResultsThreshold: 10},
+      settings: {
+        manualUrl,
+        reportResultsThreshold: 10,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings, getReportComposerDefaults},
     };
 

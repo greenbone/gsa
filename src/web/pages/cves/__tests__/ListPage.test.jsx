@@ -8,6 +8,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {
   clickElement,
   queryCheckBoxes,
@@ -113,7 +114,12 @@ describe('CvesPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval, enableEPSS: true},
+      settings: {
+        manualUrl,
+        reloadInterval,
+        enableEPSS: true,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings, getSetting},
     };
 

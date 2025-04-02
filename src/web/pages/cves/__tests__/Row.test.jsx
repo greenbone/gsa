@@ -7,11 +7,12 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Cve from 'gmp/models/cve';
 import {parseDate} from 'gmp/parser';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CveRow from 'web/pages/cves/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWithTable, fireEvent, screen} from 'web/utils/Testing';
 
-const gmp = {settings: {}};
+const gmp = {settings: {severityRating: SEVERITY_RATING_CVSS_3}};
 const caps = new Capabilities(['everything']);
 
 const entity = Cve.fromElement({

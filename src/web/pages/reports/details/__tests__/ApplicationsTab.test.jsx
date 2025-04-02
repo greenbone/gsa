@@ -6,17 +6,22 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
-
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
 const caps = new Capabilities(['everything']);
+const gmp = {
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
+};
 
 describe('Report Applications Tab tests', () => {
   test('should render Report Applications Tab', () => {
@@ -26,6 +31,7 @@ describe('Report Applications Tab tests', () => {
     const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
       store: true,

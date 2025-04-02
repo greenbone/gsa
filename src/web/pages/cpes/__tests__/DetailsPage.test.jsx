@@ -8,6 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CpePage, {ToolBarIcons} from 'web/pages/cpes/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cpes';
@@ -63,7 +64,7 @@ describe('CPE DetailsPage tests', () => {
         get: getCpe,
       },
       reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, severityRating: SEVERITY_RATING_CVSS_3},
       user: {
         currentSettings,
       },

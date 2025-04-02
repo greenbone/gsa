@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {
   clickElement,
   queryCheckBoxes,
@@ -171,7 +172,11 @@ describe('Results listpage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {
+        manualUrl,
+        reloadInterval,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings},
     };
 
