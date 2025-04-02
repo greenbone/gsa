@@ -39,7 +39,6 @@ const PortListDetails: React.FC<PortListDetailsProps> = ({
   const {
     comment,
     deprecated,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     port_count = {
       all: 0,
       tcp: 0,

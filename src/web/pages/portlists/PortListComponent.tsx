@@ -255,7 +255,6 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
   };
 
   const handleTmpAddPortRange = (values: PortRangeDialogData) => {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     let {port_range_end, port_range_start, port_type} = values;
 
     const portRangeEnd = parseInt(port_range_end);
