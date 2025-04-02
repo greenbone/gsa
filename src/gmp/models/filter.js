@@ -200,7 +200,7 @@ class Filter extends Model {
    *
    * @private
    *
-   * @param {Filter} filter  Use extra params terms filter to be merged.
+   * @param {Filter} [filter]  Use extra params terms filter to be merged.
    *
    * @return {Filter} This filter with merged terms.
    */
@@ -736,16 +736,16 @@ class Filter extends Model {
   /**
    * Creates a new Filter from filterstring
    *
-   * @param {String} filterstring  String to parse FilterTerms from.
-   * @param {Filter} filter        Use extra terms from filter if not already
-   *                               parsed from filterstring.
+   * @param {String} [filterString]  String to parse FilterTerms from.
+   * @param {Filter} [filter]        Use extra terms from filter if not already
+   *                                 parsed from filterString.
    *
-   * @return {Filter} New Filter with FilterTerms parsed from filterstring.
+   * @return {Filter} New Filter with FilterTerms parsed from filterString.
    */
-  static fromString(filterstring, filter) {
+  static fromString(filterString, filter) {
     const f = new Filter();
 
-    f._setTerms(parseFilterTermsFromString(filterstring));
+    f._setTerms(parseFilterTermsFromString(filterString));
     f._mergeExtraKeywords(filter);
 
     return f;
