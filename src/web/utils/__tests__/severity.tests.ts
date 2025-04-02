@@ -44,8 +44,8 @@ describe('Severity', () => {
       expect(severityRiskFactor(1)).toBe(LOW);
       expect(severityRiskFactor(4)).toBe(MEDIUM);
       expect(severityRiskFactor(7)).toBe(HIGH);
-      expect(severityRiskFactor(9)).toBe(CRITICAL);
-      expect(severityRiskFactor(10)).toBe(CRITICAL);
+      expect(severityRiskFactor(9)).toBe(HIGH);
+      expect(severityRiskFactor(10)).toBe(HIGH);
       expect(severityRiskFactor(-1)).toBe(NA);
     });
 
@@ -97,7 +97,7 @@ describe('Severity', () => {
       expect(resultSeverityRiskFactor(1)).toBe(LOW);
       expect(resultSeverityRiskFactor(4)).toBe(MEDIUM);
       expect(resultSeverityRiskFactor(7)).toBe(HIGH);
-      expect(resultSeverityRiskFactor(9)).toBe(CRITICAL);
+      expect(resultSeverityRiskFactor(9)).toBe(HIGH);
       expect(resultSeverityRiskFactor(-1)).toBe(FALSE_POSITIVE);
       expect(resultSeverityRiskFactor(-2)).toBe(DEBUG);
       expect(resultSeverityRiskFactor(-3)).toBe(ERROR);
@@ -155,8 +155,8 @@ describe('Severity', () => {
       expect(translatedResultSeverityRiskFactor(1)).toBe('Low');
       expect(translatedResultSeverityRiskFactor(4)).toBe('Medium');
       expect(translatedResultSeverityRiskFactor(7)).toBe('High');
-      expect(translatedResultSeverityRiskFactor(9)).toBe('Critical');
-      expect(translatedResultSeverityRiskFactor(10)).toBe('Critical');
+      expect(translatedResultSeverityRiskFactor(9)).toBe('High');
+      expect(translatedResultSeverityRiskFactor(10)).toBe('High');
       expect(translatedResultSeverityRiskFactor(-1)).toBe('False Positive');
       expect(translatedResultSeverityRiskFactor(-2)).toBe('Debug');
       expect(translatedResultSeverityRiskFactor(-3)).toBe('Error');
@@ -234,7 +234,6 @@ describe('Severity', () => {
     test('should return the default severity levels', () => {
       const levels = getSeverityLevels();
       expect(levels).toEqual({
-        critical: 9.0,
         high: 7.0,
         medium: 4.0,
         low: 0.1,

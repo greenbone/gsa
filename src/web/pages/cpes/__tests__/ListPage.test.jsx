@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {
   clickElement,
   queryCheckBoxes,
@@ -119,7 +120,11 @@ describe('CpesPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {
+        manualUrl,
+        reloadInterval,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings, getSetting},
     };
 

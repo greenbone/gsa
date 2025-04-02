@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import date from 'gmp/models/date';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import {
   changeInputValue,
   getDialogCloseButton,
@@ -23,8 +24,12 @@ const preferences = [
   {name: 'pref 2', value: '1', id: '2', type: 'radio', alt: ['2', '3']},
   {name: 'pref 3', value: 'foo', id: '3', type: 'entry'},
 ];
-
 const modified = date('2019-09-09T12:00:00Z');
+const gmp = {
+  settings: {
+    severityRating: DEFAULT_SEVERITY_RATING,
+  },
+};
 
 describe('EditNvtDetailsDialog component tests', () => {
   test('should render dialog', () => {
@@ -32,6 +37,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render, store} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -72,6 +78,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render, store} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -112,6 +119,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -171,6 +179,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -209,6 +218,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -265,6 +275,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,

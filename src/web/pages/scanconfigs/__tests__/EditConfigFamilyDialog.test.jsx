@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Nvt from 'gmp/models/nvt';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import {
   getDialog,
   getDialogSaveButton,
@@ -44,13 +45,19 @@ const selected = {
   5678: 0,
 };
 
+const gmp = {
+  settings: {
+    severityRating: DEFAULT_SEVERITY_RATING,
+  },
+};
+
 describe('EditConfigFamilyDialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp});
     const {baseElement} = render(
       <EditConfigFamilyDialog
         configId="c1"
@@ -78,7 +85,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp});
     const {baseElement} = render(
       <EditConfigFamilyDialog
         configId="c1"
@@ -108,7 +115,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp});
     render(
       <EditConfigFamilyDialog
         configId="c1"
@@ -140,7 +147,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp});
     render(
       <EditConfigFamilyDialog
         configId="c1"
@@ -170,7 +177,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp});
     const {baseElement} = render(
       <EditConfigFamilyDialog
         configId="c1"
@@ -210,7 +217,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp});
     const {getAllByTestId} = render(
       <EditConfigFamilyDialog
         configId="c1"
@@ -253,7 +260,7 @@ describe('EditConfigFamilyDialog component tests', () => {
         2345: 0,
       };
 
-      const {render} = rendererWith({capabilities: true});
+      const {render} = rendererWith({capabilities: true, gmp});
       render(
         <EditConfigFamilyDialog
           configId="c1"
@@ -293,12 +300,13 @@ describe('EditConfigFamilyDialog component tests', () => {
       });
     },
   );
+
   test('should allow selecting an NVT', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp});
     const {getAllByRole} = render(
       <EditConfigFamilyDialog
         configId="c1"

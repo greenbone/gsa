@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/hosts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/hosts';
@@ -178,7 +179,11 @@ describe('Host DetailsPage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {
+        manualUrl,
+        reloadInterval,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings, renewSession},
     };
 
