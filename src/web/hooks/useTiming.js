@@ -18,7 +18,7 @@ const log = logger.getLogger('web.hooks.useTiming');
  * @returns Array of startTimer function, clearTimer function and boolean isRunning
  */
 const useTiming = (doFunc, timeout) => {
-  const timer = useInstanceVariable({});
+  const [timer] = useInstanceVariable({});
   const [timerId, setTimerId] = useState(); // store timerId in state too to trigger re-render if it changes
   const isRunning = Boolean(timerId);
   timer.doFunc = doFunc; // always use the latest version of the function
