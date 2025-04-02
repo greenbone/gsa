@@ -99,7 +99,9 @@ const transformTopologyData = (data = []) => {
   return {hosts, links};
 };
 
-let HostsTopologyDisplay = ({filter, ...props}) => {
+const HostsTopologyDisplay = withFilterSelection({
+  filtersFilter: HOSTS_FILTER_FILTER,
+})(({filter, ...props}) => {
   const gmp = useGmp();
   const navigate = useNavigate();
   const severityRating = gmp.settings.severityRating;
@@ -131,17 +133,13 @@ let HostsTopologyDisplay = ({filter, ...props}) => {
       )}
     </HostsTopologyLoader>
   );
-};
+});
 
 HostsTopologyDisplay.propTypes = {
   filter: PropTypes.filter,
 };
 
 const DISPLAY_ID = 'host-by-topology';
-
-HostsTopologyDisplay = withFilterSelection({
-  filtersFilter: HOSTS_FILTER_FILTER,
-})(HostsTopologyDisplay);
 
 HostsTopologyDisplay.displayId = DISPLAY_ID;
 
