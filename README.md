@@ -38,7 +38,7 @@ written in [React](https://reactjs.org/).
     - [reloadIntervalActive](#reloadintervalactive)
     - [reloadIntervalInactive](#reloadintervalinactive)
     - [reportResultsThreshold](#reportresultsthreshold)
-- [severityRating](#severityrating)
+    - [severityRating](#severityrating)
 - [Support](#support)
 - [Maintainer](#maintainer)
 - [Contributing](#contributing)
@@ -366,7 +366,7 @@ Certificates tabs to prompt the user for lowering the number of results by
 additional filtering. This setting can be used to improve the responsiveness of
 the report details page.
 
-## severityRating
+#### severityRating
 
 Defines which Severity Rating should be used for the severity classes. Currently
 the values `CVSSv2` and `CVSSv3` are allowed. CVSS version 3 introduces a new
