@@ -3,25 +3,65 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {
+  ModelElement,
+  ModelProperties,
+  parseModelFromElement,
+} from 'gmp/model';
 import convert from 'gmp/models/filter/convert';
 import FilterTerm, {AND} from 'gmp/models/filter/filterterm';
 import {EXTRA_KEYWORDS} from 'gmp/models/filter/keywords';
-import {setProperties} from 'gmp/parser';
-import {forEach, map} from 'gmp/utils/array';
+import {parseInt, setProperties} from 'gmp/parser';
+import {map} from 'gmp/utils/array';
 import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
 
 export const UNKNOWN_FILTER_ID = '0';
+const SORT_ORDER_ASC = 'sort';
+const SORT_ORDER_DESC = 'sort-reverse';
+
+interface FilterKeyword {
+  column: string;
+  relation: string;
+  value: string;
+}
+
+interface FilterModelProperties extends ModelProperties {
+  _term?: string;
+  alerts?: ModelElement[];
+  filter_type?: string;
+  terms: FilterTerm[];
+}
+
+interface FilterModelElement extends ModelElement {
+  alerts?: {
+    alert: ModelProperties[];
+  };
+  filter_type?: string;
+  keywords?: {
+    keyword: FilterKeyword[];
+  };
+  term?: string;
+}
+
+type SortOrder = typeof SORT_ORDER_ASC | typeof SORT_ORDER_DESC;
+
+type FilterForEachFunc = (
+  value: FilterTerm,
+  index: number,
+  array: FilterTerm[],
+) => void;
 
 /**
- * Parses FilterTerms from filterstring
+ * Parses FilterTerms from filterString
  *
- * @param {String} filterString  Filter representation as a string
+ * @param filterString  Filter representation as a string
  *
- * @return {Array} Array of parsed FilterTerms
+ * @return Array of parsed FilterTerms
  */
-const parseFilterTermsFromString = filterString => {
-  const terms = [];
+const parseFilterTermsFromString = (
+  filterString: string | undefined,
+): FilterTerm[] => {
+  const terms: FilterTerm[] = [];
   if (isString(filterString)) {
     // replace whitespace between double quotes with placeholders
     let modifiedFilterString = filterString;
@@ -61,6 +101,9 @@ const parseFilterTermsFromString = filterString => {
  */
 class Filter extends Model {
   static entityType = 'filter';
+  terms: FilterTerm[];
+  filter_type!: string;
+  alerts?: ModelElement[];
 
   constructor() {
     super();
@@ -72,49 +115,50 @@ class Filter extends Model {
     return this.terms.length;
   }
 
-  setProperties({id, ...properties}) {
+  setProperties({id, ...properties}: FilterModelProperties) {
     // override setProperties to allow changing the id
     setProperties(properties, this);
     this.id = id;
+    return this;
   }
 
   /**
    * Parse properties from the passed element object
    *
-   * @param {Object} element  Element object to parse properties from.
+   * @param element  Element object to parse properties from.
    *
-   * @return {Object} An object with properties for the new Filter model
+   * @return An object with properties for the new Filter model
    */
-  static parseElement(element) {
-    const ret = super.parseElement(element);
+  static parseElement(element: FilterModelElement = {}): FilterModelProperties {
+    const ret = super.parseElement(element) as FilterModelProperties;
 
     ret.filter_type = ret._type;
 
     if (ret.id === UNKNOWN_FILTER_ID) {
       ret.id = undefined;
     }
-    ret.terms = [];
-
-    if (isDefined(ret.keywords)) {
-      forEach(ret.keywords.keyword, keyword => {
-        const {relation, value, column: key} = keyword;
-
-        const converted = convert(key, value, relation);
-
-        ret.terms.push(new FilterTerm(converted));
-      });
+    if (isDefined(element.keywords)) {
+      ret.terms = map(
+        element.keywords.keyword,
+        ({relation, value, column: key}: FilterKeyword) =>
+          new FilterTerm(convert(key, value, relation)),
+      );
+      // @ts-expect-error
       delete ret.keywords;
-    } else if (isDefined(ret.term)) {
-      ret.terms = parseFilterTermsFromString(ret.term);
+    } else if (isDefined(element.term)) {
+      ret.terms = parseFilterTermsFromString(element.term);
 
       // ret.term should not be part of the public api
       // but it's helpful for debug purposes
-      ret._term = ret.term;
+      ret._term = element.term;
+      // @ts-expect-error
       delete ret.term;
+    } else {
+      ret.terms = [];
     }
 
-    if (isDefined(ret.alerts)) {
-      ret.alerts = map(ret.alerts.alert, alert =>
+    if (isDefined(element.alerts?.alert)) {
+      ret.alerts = map(element.alerts.alert, (alert: ModelElement) =>
         parseModelFromElement(alert, 'alert'),
       );
     }
@@ -125,11 +169,11 @@ class Filter extends Model {
   /**
    * @private
    *
-   * @param {FilterTerm} term  FilterTerm to set
+   * @param term  FilterTerm to set
    *
-   * @return {Filter} This filter
+   * @return This filter
    */
-  _setTerm(term) {
+  _setTerm(term: FilterTerm) {
     const key = term.keyword;
 
     // special handling of sort. should be put into a more generic solution in
@@ -155,15 +199,15 @@ class Filter extends Model {
   /**
    * Add FilterTerm to this Filter
    *
-   * Adds the passed FilterTerm to the list of filtertems in this Filter.
+   * Adds the passed FilterTerm to the list of filter terms in this Filter.
    *
    * @private
    *
-   * @param {FilterTerm} term  FilterTerm to add.
+   * @param terms FilterTerm to add.
    *
-   * @return {Filter} This filter
+   * @return This filter
    */
-  _addTerm(...terms) {
+  _addTerm(...terms: FilterTerm[]) {
     this.terms.push(...terms);
     return this;
   }
@@ -173,11 +217,11 @@ class Filter extends Model {
    *
    * @private
    *
-   * @param {Array} terms  Array of FilterTerms to set.
+   * @param terms Array of FilterTerms to set.
    *
-   * @return {Filter} This filter
+   * @return This filter
    */
-  _setTerms(terms) {
+  _setTerms(terms: FilterTerm[]) {
     this.terms = terms;
     return this;
   }
@@ -185,11 +229,11 @@ class Filter extends Model {
   /**
    * Get the first index of the FilterTerm with key as keyword
    *
-   * @param {String} key FilterTerm keyword to search for
+   * @param key FilterTerm keyword to search for
    *
-   * @returns {Integer} Index of the key in the FilterTerms array
+   * @returns Index of the key in the FilterTerms array
    */
-  _getIndex(key) {
+  _getIndex(key: string): number {
     return this.terms.findIndex(term => term.keyword === key);
   }
 
@@ -200,12 +244,12 @@ class Filter extends Model {
    *
    * @private
    *
-   * @param {Filter} [filter]  Use extra params terms filter to be merged.
+   * @param filter Use extra params terms filter to be merged.
    *
-   * @return {Filter} This filter with merged terms.
+   * @return This filter with merged terms.
    */
 
-  _mergeExtraKeywords(filter) {
+  _mergeExtraKeywords(filter: Filter | undefined | null) {
     if (hasValue(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
@@ -229,11 +273,11 @@ class Filter extends Model {
    *
    * @private
    *
-   * @param {Filter} filter  Use extra params terms filter to be merged.
+   * @param filter  Use extra params terms filter to be merged.
    *
-   * @return {Filter} This filter with merged terms.
+   * @return This filter with merged terms.
    */
-  _mergeNewKeywords(filter) {
+  _mergeNewKeywords(filter: Filter | undefined) {
     if (hasValue(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
@@ -252,7 +296,7 @@ class Filter extends Model {
    *
    * @private
    *
-   * @return {Filter} This filter.
+   * @return This filter.
    */
   _resetFilterId() {
     this.id = undefined;
@@ -264,21 +308,17 @@ class Filter extends Model {
    *
    * @param {function} func  Function to call for each FilterTerm.
    */
-  forEach(func) {
+  forEach(func: FilterForEachFunc) {
     this.terms.forEach(func);
   }
 
   /**
    * Returns a full string representation of this Filter
    *
-   * @return {String} String which represents this filter.
+   * @return String which represents this filter.
    */
-  toFilterString() {
-    let fstring = '';
-    this.forEach(term => {
-      fstring += term.toString() + ' ';
-    });
-    return fstring.trim();
+  toFilterString(): string {
+    return this.terms.map(term => term.toString()).join(' ');
   }
 
   /**
@@ -286,17 +326,17 @@ class Filter extends Model {
    *
    * Converts each non extra keyword FilterTerm to a string representation.
    *
-   * @return {String} The filter criteria terms as string
+   * @return The filter criteria terms as string
    */
-  toFilterCriteriaString() {
-    let fstring = '';
+  toFilterCriteriaString(): string {
+    let filterString = '';
     this.forEach(term => {
       const key = term.keyword;
       if (!isDefined(key) || !EXTRA_KEYWORDS.includes(key)) {
-        fstring += term.toString() + ' ';
+        filterString += term.toString() + ' ';
       }
     });
-    return fstring.trim();
+    return filterString.trim();
   }
 
   /**
@@ -304,29 +344,29 @@ class Filter extends Model {
    *
    * Converts each extra keyword FilterTerm to a string representation.
    *
-   * @return {String} The filter extra keyword terms as a string
+   * @return The filter extra keyword terms as a string
    */
-  toFilterExtraString() {
-    let fstring = '';
+  toFilterExtraString(): string {
+    let filterString = '';
     this.forEach(term => {
       const key = term.keyword;
       if (isDefined(key) && EXTRA_KEYWORDS.includes(key)) {
-        fstring += term.toString() + ' ';
+        filterString += term.toString() + ' ';
       }
     });
-    return fstring.trim();
+    return filterString.trim();
   }
 
   /**
    * Get the first FilterTerm for a keyword
    *
-   * @param {String} key  FilterTerm keyword to search for
+   * @param key  FilterTerm keyword to search for
    *
-   * @return {String} Returns the first FilterTerm for the passed keyword
-   *                  or undefined of not FilterTerm for the keyword exists in
-   *                  this Filter.
+   * @return Returns the first FilterTerm for the passed keyword
+   *         or undefined of not FilterTerm for the keyword exists in
+   *         this Filter.
    */
-  getTerm(key) {
+  getTerm(key: string | undefined): FilterTerm | undefined {
     if (!isDefined(key)) {
       return undefined;
     }
@@ -336,11 +376,14 @@ class Filter extends Model {
   /**
    * Check if a filter term is included in this filter
    *
-   * @param {FilterTerm|undefined} term  FilterTerm to find in the filter
+   * @param term FilterTerm to find in the filter
    *
-   * @return {Boolean}
+   * @return True if the filter term is included in this filter
    */
-  hasTerm(term) {
+  hasTerm(term: FilterTerm | undefined): boolean {
+    if (!isDefined(term)) {
+      return false;
+    }
     const terms = this.getTerms(term.keyword);
     return terms.findIndex(cterm => cterm.equals(term)) !== -1;
   }
@@ -348,18 +391,18 @@ class Filter extends Model {
   /**
    * Get all FilterTerms for a keyword
    *
-   * @param {String} key FilterTerm keyword to search for
+   * @param key FilterTerm keyword to search for
    *
-   * @returns {Array} Returns all FilterTerms in an Array found for
-   *                  the passed keyword or an empty Array if not FilterTerm
-   *                  has been found.
+   * @returns Returns all FilterTerms in an Array found for
+   *          the passed keyword or an empty Array if not FilterTerm
+   *          has been found.
    */
-  getTerms(key) {
+  getTerms(key: string | undefined): FilterTerm[] {
     if (!isDefined(key)) {
       return [];
     }
 
-    return this.terms.reduce((terms, term) => {
+    return this.terms.reduce((terms: FilterTerm[], term: FilterTerm) => {
       if (term.keyword === key) {
         terms.push(term);
       }
@@ -370,29 +413,25 @@ class Filter extends Model {
   /**
    * Get all FilterTerms
    *
-   * @returns {Array} Returns the array of all FilterTerms in this filter
+   * @returns Returns the array of all FilterTerms in this filter
    */
-  getAllTerms() {
+  getAllTerms(): FilterTerm[] {
     return this.terms;
   }
 
   /**
    * Get the value of a FilterTerm
    *
-   * @param {String} key  FilterTerm keyword to search for
-   * @param {String} def  Value returned if no FilterTerm for key could be
-   *                      found. Defaults to undefined.
+   * @param key  FilterTerm keyword to search for
+   * @param def  Value returned if no FilterTerm for key could be
+   *             found. Defaults to undefined.
    *
-   * @return {String} Returns the first FilterTerm value for the passed keyword
-   *                  or def if no FilterTerm for the keyword exists in this
-   *                  Filter.
+   * @return Returns the first FilterTerm value for the passed keyword
+   *         or def if no FilterTerm for the keyword exists in this Filter.
    */
-  get(key, def = undefined) {
+  get(key: string, def: string | undefined = undefined): string | undefined {
     const term = this.getTerm(key);
-    if (isDefined(term)) {
-      return term.value;
-    }
-    return def;
+    return isDefined(term) ? term.value : def;
   }
 
   /**
@@ -400,13 +439,13 @@ class Filter extends Model {
    *
    * Creates a new FilterTerm from key, value and relation.
    *
-   * @param {String} keyword   FilterTerm keyword
-   * @param {String} value     FilterTerm value
-   * @param {String} relation  FilterTerm relation (Default: '=').
+   * @param keyword   FilterTerm keyword
+   * @param value     FilterTerm value
+   * @param relation  FilterTerm relation (Default: '=').
    *
-   * @return {Filter} This filter
+   * @return This filter
    */
-  set(keyword, value, relation = '=') {
+  set(keyword: string, value?: string, relation: string = '=') {
     this._resetFilterId(); // reset id because the filter has changed
     const converted = convert(keyword, value, relation);
     this._setTerm(new FilterTerm(converted));
@@ -416,27 +455,25 @@ class Filter extends Model {
   /**
    * Check whether this Filter contains a FilterTerm with the passed keyword
    *
-   * @param {String} key  Keyword to search for
+   * @param key  Keyword to search for
    *
-   * @return {bool} Returns true if a FilterTerm with this keyword exists in
-   *                this Filter.
+   * @return Returns true if a FilterTerm with this keyword exists in this Filter.
    */
-  has(key) {
+  has(key: string): boolean {
     if (!isDefined(key)) {
       return false;
     }
-    const index = this._getIndex(key);
-    return index !== -1;
+    return this._getIndex(key) !== -1;
   }
 
   /**
    * Remove all FilterTerms with this key
    *
-   * @param {String} key Filter term key to remove
+   * @param key Filter term key to remove
    *
-   * @return {Filter} This filter
+   * @return This filter
    */
-  delete(key) {
+  delete(key: string) {
     const index = this._getIndex(key);
     if (index !== -1) {
       this.terms.splice(index, 1);
@@ -452,7 +489,7 @@ class Filter extends Model {
    *
    * @return {bool} Returns true if this filter equals to the other filter
    */
-  equals(filter) {
+  equals(filter: Filter | undefined | null): boolean {
     if (!hasValue(filter)) {
       return false;
     }
@@ -467,14 +504,14 @@ class Filter extends Model {
     for (let i = 0; i < ours.length; i++) {
       const our = ours[i];
       if (our.hasKeyword()) {
-        const otherterms = filter.getTerms(our.keyword);
-        const ourterms = this.getTerms(our.keyword);
+        const otherTerms = filter.getTerms(our.keyword as string);
+        const ourTerms = this.getTerms(our.keyword as string);
 
-        if (otherterms.length !== ourterms.length) {
+        if (otherTerms.length !== ourTerms.length) {
           return false;
         }
 
-        const equals = otherterms.reduce(
+        const equals = otherTerms.reduce(
           (prev, term) => prev || term.equals(our),
           false,
         );
@@ -497,9 +534,9 @@ class Filter extends Model {
    * The returned copy is only a shallow copy of this filter.
    * FilterTerms are copied only by reference.
    *
-   * @return {Filter} A shallow copy of this filter.
+   * @return A shallow copy of this filter.
    */
-  copy() {
+  copy(): Filter {
     const f = new Filter();
 
     // copy public properties
@@ -513,12 +550,12 @@ class Filter extends Model {
   /**
    * Returns a new filter pointing to the next items
    *
-   * @return {Filter} Copy of this filter but pointing to the next items.
+   * @return Copy of this filter but pointing to the next items.
    */
-  next() {
+  next(): Filter {
     const filter = this.copy();
-    let first = filter.get('first');
-    let rows = filter.get('rows');
+    let first = parseInt(filter.get('first'));
+    let rows = parseInt(filter.get('rows'));
 
     if (!isDefined(rows)) {
       rows = 10;
@@ -530,8 +567,8 @@ class Filter extends Model {
       first = 1;
     }
 
-    filter.set('first', first, '=');
-    filter.set('rows', rows, '=');
+    filter.set('first', String(first), '=');
+    filter.set('rows', String(rows), '=');
 
     return filter;
   }
@@ -539,12 +576,12 @@ class Filter extends Model {
   /**
    * Returns a new filter pointing to the previous items
    *
-   * @return {Filter} Copy of this filter but pointing to the previous items.
+   * @return Copy of this filter but pointing to the previous items.
    */
-  previous() {
+  previous(): Filter {
     const filter = this.copy();
-    let first = filter.get('first');
-    let rows = filter.get('rows');
+    let first = parseInt(filter.get('first'));
+    let rows = parseInt(filter.get('rows'));
 
     if (!isDefined(rows)) {
       rows = 10;
@@ -560,8 +597,8 @@ class Filter extends Model {
       first = 1;
     }
 
-    filter.set('first', first, '=');
-    filter.set('rows', rows, '=');
+    filter.set('first', String(first), '=');
+    filter.set('rows', String(rows), '=');
 
     return filter;
   }
@@ -569,15 +606,15 @@ class Filter extends Model {
   /**
    * Returns a new filter pointing to the first items
    *
-   * @param {Number} first  Number of the first item to receive with this filter
-   *                        applied. Is 1 per default.
+   * @param first  Number of the first item to receive with this filter
+   *               applied. Is 1 per default.
    *
-   * @return {Filter} Copy of this filter but pointing to the first items.
+   * @return Copy of this filter but pointing to the first items.
    */
-  first(first = 1) {
+  first(first: number = 1): Filter {
     const filter = this.copy();
 
-    filter.set('first', first, '=');
+    filter.set('first', String(first), '=');
 
     return filter;
   }
@@ -587,14 +624,13 @@ class Filter extends Model {
    *
    * Removes a filter restriction from the copy of this filter.
    *
-   * @return {Filter} Copy of this filter but removing the item count (rows)
-   *                  restriction.
+   * @return Copy of this filter but removing the item count (rows) restriction.
    */
-  all() {
+  all(): Filter {
     const filter = this.copy();
 
-    filter.set('first', 1, '=');
-    filter.set('rows', -1, '=');
+    filter.set('first', '1', '=');
+    filter.set('rows', '-1', '=');
 
     return filter;
   }
@@ -602,10 +638,9 @@ class Filter extends Model {
   /**
    * Returns a simplified filter without first, rows and sort/sort-reverse terms
    *
-   * @return {Filter} Copy of this filter but without first, rows and
-   *                  sort/sort-reverse terms.
+   * @return Copy of this filter but without first, rows and sort/sort-reverse terms.
    */
-  simple() {
+  simple(): Filter {
     const filter = this.copy();
 
     filter.delete('first');
@@ -618,17 +653,17 @@ class Filter extends Model {
   /**
    * Merge other filter with an and operation
    *
-   * @param {Filter} filter  Filter to be merged with and operation
+   * @param filter  Filter to be merged with and operation
    *
-   * @return {Filter} This filter
+   * @return This filter
    */
-  and(filter) {
+  and(filter: Filter | undefined | null): Filter {
     if (!hasValue(filter)) {
       return this;
     }
 
     const nonExtraTerms = this.getAllTerms().filter(
-      term => !EXTRA_KEYWORDS.includes(term.keyword),
+      term => isDefined(term.keyword) && !EXTRA_KEYWORDS.includes(term.keyword),
     );
 
     if (nonExtraTerms.length > 0) {
@@ -644,16 +679,16 @@ class Filter extends Model {
    *
    * @return {String} The sort order. 'sort' or 'sort-reverse'.
    */
-  getSortOrder() {
-    return this.has('sort-reverse') ? 'sort-reverse' : 'sort';
+  getSortOrder(): SortOrder {
+    return this.has(SORT_ORDER_DESC) ? SORT_ORDER_DESC : SORT_ORDER_ASC;
   }
 
   /**
    * Returns the sort by field name of the current filter
    *
-   * @return {String} The sort order. 'sort' or 'sort-reverse'.
+   * @return The sort order. 'sort' or 'sort-reverse'.
    */
-  getSortBy() {
+  getSortBy(): string | undefined {
     const order = this.getSortOrder();
     return this.get(order);
   }
@@ -661,13 +696,13 @@ class Filter extends Model {
   /**
    * Set the current sort order
    *
-   * @param {String} value  New sort order. 'sort' or 'sort-reverse'.
+   * @param value  New sort order. 'sort' or 'sort-reverse'.
    *
-   * @return {Filter} This filter.
+   * @return This filter.
    */
-  setSortOrder(value) {
+  setSortOrder(value: SortOrder) {
     const sortby = this.getSortBy();
-    value = value === 'sort-reverse' ? 'sort-reverse' : 'sort';
+    value = value === SORT_ORDER_DESC ? SORT_ORDER_DESC : SORT_ORDER_ASC;
     this.set(value, sortby);
     return this;
   }
@@ -675,11 +710,11 @@ class Filter extends Model {
   /**
    * Set the current sort field
    *
-   * @param {String} value  New sort field
+   * @param value  New sort field
    *
-   * @return {Filter} This filter.
+   * @return This filter.
    */
-  setSortBy(value) {
+  setSortBy(value: string) {
     const order = this.getSortOrder();
     this.set(order, value);
     return this;
@@ -688,11 +723,11 @@ class Filter extends Model {
   /**
    * Merges all terms from filter into this Filter
    *
-   * @param {Filter} filter  Terms from filter to be merged.
+   * @param filter Terms from filter to be merged.
    *
-   * @return {Filter} This filter with merged terms.
+   * @return This filter with merged terms.
    */
-  merge(filter) {
+  merge(filter: Filter | undefined | null) {
     if (hasValue(filter)) {
       this._addTerm(...filter.getAllTerms());
     }
@@ -702,12 +737,12 @@ class Filter extends Model {
   /**
    * Merges all new terms from filter into Filter
    *
-   * @param {Filter} filter  Terms from filter to be merged.
+   * @param filter Terms from filter to be merged.
    *
-   * @return {Filter} This filter with merged terms.
+   * @return This filter with merged terms.
    */
 
-  mergeKeywords(filter) {
+  mergeKeywords(filter: Filter | undefined | null) {
     if (hasValue(filter)) {
       this._resetFilterId();
 
@@ -723,26 +758,26 @@ class Filter extends Model {
    * created and returned. Only extra keywords not included in this filter will
    * be merged.
    *
-   * @param {Filter} filter  Use extra params terms filter to be merged.
+   * @param filter  Use extra params terms filter to be merged.
    *
-   * @return {Filter} A new filter with merged terms.
+   * @return A new filter with merged terms.
    */
-  mergeExtraKeywords(filter) {
+  mergeExtraKeywords(filter: Filter): Filter {
     const f = this.copy();
     f._resetFilterId();
     return f._mergeExtraKeywords(filter);
   }
 
   /**
-   * Creates a new Filter from filterstring
+   * Creates a new Filter from filterString
    *
-   * @param {String} [filterString]  String to parse FilterTerms from.
-   * @param {Filter} [filter]        Use extra terms from filter if not already
-   *                                 parsed from filterString.
+   * @param [filterString] String to parse FilterTerms from.
+   * @param [filter]       Use extra terms from filter if not already
+   *                       parsed from filterString.
    *
-   * @return {Filter} New Filter with FilterTerms parsed from filterString.
+   * @return New Filter with FilterTerms parsed from filterString.
    */
-  static fromString(filterString, filter) {
+  static fromString(filterString?: string, filter?: Filter): Filter {
     const f = new Filter();
 
     f._setTerms(parseFilterTermsFromString(filterString));
@@ -754,11 +789,11 @@ class Filter extends Model {
   /**
    * Creates a new Filter from FilterTerms
    *
-   * @param {FilterTerm[]} term  FilterTerms to set for the new Filter
+   * @param term FilterTerms to set for the new Filter
    *
-   * @returns {Filter} The new Filter
+   * @returns The new Filter
    */
-  static fromTerm(...term) {
+  static fromTerm(...term: FilterTerm[]): Filter {
     const f = new Filter();
     return f._addTerm(...term);
   }
