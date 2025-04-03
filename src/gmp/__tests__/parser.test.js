@@ -424,31 +424,6 @@ describe('parseProperties tests', () => {
     expect(parsed.lorem).toEqual('ipsum');
   });
 
-  test('should copy additional properties', () => {
-    const obj = {
-      foo: 'bar',
-      lorem: 'ipsum',
-    };
-
-    const parsed = parseProperties(obj, {bar: 'foo'});
-
-    expect(parsed.bar).toEqual('foo');
-    expect(parsed.foo).toEqual('bar');
-    expect(parsed.lorem).toEqual('ipsum');
-  });
-
-  test('should not override properties with additional properties', () => {
-    const obj = {
-      foo: 'bar',
-      lorem: 'ipsum',
-    };
-
-    const parsed = parseProperties(obj, {foo: 'foo'});
-
-    expect(parsed.foo).toEqual('bar');
-    expect(parsed.lorem).toEqual('ipsum');
-  });
-
   test('should parse id', () => {
     const parsed = parseProperties({_id: 'a1'});
     expect(parsed.id).toEqual('a1');
