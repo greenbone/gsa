@@ -58,16 +58,17 @@ interface DataDisplayRenderProps<TData, TState extends State> {
   setState: SetStateFunc<TState>;
 }
 
-type TransformFunc<TData, TTransformedData, TTransformProps = object> = (
-  data: TData,
-  props: TTransformProps,
-) => TTransformedData[];
+type TransformFunc<
+  TData,
+  TTransformedData,
+  TTransformProps = Record<string, unknown>,
+> = (data: TData, props: TTransformProps) => TTransformedData[];
 
 export interface DataDisplayProps<
   TData,
   TState extends State,
   TTransformedData = TData,
-  TTransformProps = object,
+  TTransformProps = Record<string, unknown>,
 > {
   data: TData;
   dataRow: (data: TTransformedData) => string[];
@@ -178,7 +179,7 @@ class DataDisplay<
   >,
   TState extends State,
   TTransformedData,
-  TTransformProps extends object,
+  TTransformProps = Record<string, unknown>,
 > extends React.Component<TProps, DataDisplayState<TData, TTransformedData>> {
   svgRef: React.RefObject<SVGSVGElement>;
   downloadRef: React.RefObject<HTMLAnchorElement>;
@@ -219,7 +220,7 @@ class DataDisplay<
     >,
     TState extends State,
     TTransformedData,
-    TTransformProps = object,
+    TTransformProps = Record<string, unknown>,
   >(nextProps: TProps, prevState: DataDisplayState<TData, TTransformedData>) {
     if (!equal(prevState.originalData, nextProps.data)) {
       // data has changed update transformed data
@@ -253,7 +254,7 @@ class DataDisplay<
     >,
     TState extends State,
     TTransformedData,
-    TTransformProps = object,
+    TTransformProps = Record<string, unknown>,
   >(props: Readonly<TProps>) {
     const {data, dataTransform, ...other} = props;
 
