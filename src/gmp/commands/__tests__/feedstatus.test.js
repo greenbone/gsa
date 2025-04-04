@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {FeedStatus} from 'gmp/commands/feedstatus';
+import {FeedStatus, NVT_FEED, FEED_COMMUNITY} from 'gmp/commands/feedstatus';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 
 describe('FeedStatusCommand tests', () => {
@@ -169,6 +169,81 @@ describe('FeedStatusCommand tests', () => {
 
       expect(console.error).toHaveBeenCalledWith(
         'Error checking if feed is syncing:',
+        expect.any(Error),
+      );
+    });
+  });
+
+  describe('isCommunityFeed', () => {
+    test('should return true if NVT feed is the community feed', async () => {
+      const response = createResponse({
+        get_feeds: {
+          get_feeds_response: {
+            feed: [
+              {
+                type: NVT_FEED,
+                name: FEED_COMMUNITY,
+                version: 202502170647,
+              },
+              {
+                type: 'SCAP',
+                name: 'Some Other Feed',
+                version: 202502170647,
+              },
+            ],
+          },
+        },
+      });
+
+      const fakeHttp = createHttp(response);
+      const feedStatus = new FeedStatus(fakeHttp);
+
+      const result = await feedStatus.isCommunityFeed();
+
+      expect(result).toBe(true);
+    });
+
+    test('should return false if NVT feed is not the community feed', async () => {
+      const response = createResponse({
+        get_feeds: {
+          get_feeds_response: {
+            feed: [
+              {
+                type: NVT_FEED,
+                name: 'Some Other Feed',
+                version: 202502170647,
+              },
+              {
+                type: 'SCAP',
+                name: FEED_COMMUNITY,
+                version: 202502170647,
+              },
+            ],
+          },
+        },
+      });
+
+      const fakeHttp = createHttp(response);
+      const feedStatus = new FeedStatus(fakeHttp);
+
+      const result = await feedStatus.isCommunityFeed();
+
+      expect(result).toBe(false);
+    });
+
+    test('should return undefined and log an error if an exception occurs', async () => {
+      const fakeHttp = createHttp(Promise.reject(new Error('Network error')));
+      const cmd = new FeedStatus(fakeHttp);
+
+      const consoleErrorSpy = testing.fn();
+      console.error = consoleErrorSpy;
+
+      const result = await cmd.isCommunityFeed();
+
+      expect(result).toBeUndefined();
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error checking if feed is community:',
         expect.any(Error),
       );
     });
