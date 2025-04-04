@@ -18,6 +18,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginForm from 'web/pages/login/LoginForm';
+import CommunityFeedUsageNotification from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 import {
   setSessionTimeout,
   setUsername,
@@ -60,7 +61,7 @@ const isIE11 = () => {
   return match ? +match[1] >= 7 : false;
 };
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const gmp = useGmp();
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,6 +69,22 @@ const LoginPage = () => {
   const [isLoggedIn] = useUserIsLoggedIn();
   const [error, setError] = useState<ErrorType>();
   const [_] = useTranslation();
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      // redirect user to main page if he is already logged in
+
+      if (isLoggedIn) {
+        try {
+          await navigate('/dashboards', {replace: true});
+        } catch (error) {
+          log.error(error);
+        }
+      }
+    };
+
+    void checkLoginStatus();
+  }, [isLoggedIn, navigate]);
 
   const login = async (username: string, password: string) => {
     try {
@@ -79,6 +96,8 @@ const LoginPage = () => {
       gmp.setLocale(locale);
       dispatch(setSessionTimeout(sessionTimeout));
       dispatch(setUsername(username));
+      // must be set before changing the location
+
       dispatch(setIsLoggedIn(true));
 
       if (location?.state?.next && location.state.next !== location.pathname) {
@@ -103,32 +122,25 @@ const LoginPage = () => {
         'userInterfaceDateFormat',
         userSettings.data.userinterfacedateformat.value,
       );
+
+      // @ts-expect-error
+      const isCommunityFeed: boolean = await gmp.feedstatus.isCommunityFeed();
+
+      if (isCommunityFeed) {
+        CommunityFeedUsageNotification();
+      }
     } catch (error) {
       log.error(error);
     }
   };
 
-  const handleSubmit = async (username, password) => {
+  const handleSubmit = async (username: string, password: string) => {
     await login(username, password);
   };
 
   const handleGuestLogin = async () => {
     await login(gmp.settings.guestUsername, gmp.settings.guestPassword);
   };
-
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      if (isLoggedIn) {
-        try {
-          await navigate('/dashboards', {replace: true});
-        } catch (error) {
-          log.error(error);
-        }
-      }
-    };
-
-    void checkLoginStatus();
-  }, [isLoggedIn, navigate]);
 
   let message: string | undefined;
 

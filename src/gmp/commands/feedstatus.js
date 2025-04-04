@@ -9,14 +9,15 @@ import date, {duration} from 'gmp/models/date';
 import {parseDate} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 
-
-const convertVersion = version =>
-  `${version}`.slice(0, 8) + 'T' + `${version}`.slice(8, 12);
-
 export const NVT_FEED = 'NVT';
 export const CERT_FEED = 'CERT';
 export const SCAP_FEED = 'SCAP';
 export const GVMD_DATA_FEED = 'GVMD_DATA';
+
+export const FEED_COMMUNITY = 'Greenbone Community Feed';
+
+const convertVersion = version =>
+  `${version}`.slice(0, 8) + 'T' + `${version}`.slice(8, 12);
 
 export function createFeed(feed) {
   const versionDate = convertVersion(feed.version);
@@ -111,6 +112,18 @@ export class FeedStatus extends HttpCommand {
     } catch (error) {
       console.error('Error checking feed owner and permissions:', error);
       throw error;
+    }
+  }
+
+  async isCommunityFeed() {
+    try {
+      const {data} = await this.readFeedInformation();
+
+      const nvtFeed = data.find(feed => feed.feedType === NVT_FEED);
+
+      return nvtFeed && nvtFeed.name === FEED_COMMUNITY;
+    } catch (error) {
+      console.error('Error checking if feed is community:', error);
     }
   }
 }
