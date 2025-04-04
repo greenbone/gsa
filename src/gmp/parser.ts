@@ -196,13 +196,12 @@ export interface ElementProperties {
 
 export const parseProperties = (
   element: ElementProperties = {},
-  object: Properties = {},
 ): ParsedProperties => {
   // in future the function should only return known properties
   // and not the whole object
   // for now we need to return the whole object
   // to not break existing code
-  const copy: ParsedProperties = {...object, ...element}; // create shallow copy
+  const copy: ParsedProperties = {...element}; // create shallow copy
 
   if ('_id' in element && isString(element._id) && element._id.length > 0) {
     // only set id if it id defined
