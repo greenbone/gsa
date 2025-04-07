@@ -16,12 +16,10 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 const get_identifier = (identifiers, name) =>
   identifiers.filter(identifier => identifier.name === name)[0];
 
-const newProperties = (properties, object = {}) =>
-  setProperties(parseProperties(properties, object));
+const newProperties = properties => setProperties(parseProperties(properties));
 
 class Identifier {
   constructor(element) {
