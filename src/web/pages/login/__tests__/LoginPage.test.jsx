@@ -233,7 +233,7 @@ describe('LoginPage tests', () => {
       expect(gmp.feedstatus.isCommunityFeed).toBeCalledTimes(1);
 
       const notificationTextKey = screen.queryByText(
-        'You are currently using the free OpenVAS Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.',
+        'You are currently using the free Greenbone Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.',
       );
       expect(notificationTextKey).not.toBeInTheDocument();
 
@@ -270,7 +270,7 @@ describe('LoginPage tests', () => {
       expect(gmp.feedstatus.isCommunityFeed).toBeCalledTimes(1);
 
       const notificationTextKey = await screen.findByText(
-        'You are currently using the free OpenVAS Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.',
+        'You are currently using the free Greenbone Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.',
       );
       expect(notificationTextKey).toBeVisible();
 
