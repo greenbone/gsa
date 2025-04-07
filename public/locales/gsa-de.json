@@ -2025,7 +2025,7 @@
   "yes, always": "ja, immer",
   "yes, for the next": "ja, für die nächsten",
   "yes, until": "ja, bis",
-  "You are currently using the free OpenVAS Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.": "Sie nutzen derzeit den freien OpenVAS Community Feed – dieser zeigt nur wenige Schwachstellen für geschäftskritische Unternehmenssoftware wie MS Exchange, Cisco, VMware, Citrix, und viele mehr. Über 60\u202f% aller relevanten Exploits bleiben so verborgen.",
+  "You are currently using the free Greenbone Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.": "Sie nutzen derzeit den freien Greenbone Community Feed – dieser zeigt nur wenige Schwachstellen für geschäftskritische Unternehmenssoftware wie MS Exchange, Cisco, VMware, Citrix, und viele mehr. Über 60\u202f% aller relevanten Exploits bleiben so verborgen.",
   "You are leaving GSA": "Sie verlassen den Greenbone Security Assistant.",
   "You are using Internet Explorer 11. This browser is not supported anymore. Please use an up-to-date alternative or contact your system administrator.": "Sie benutzen den Internet Explorer 11. Dieser Browser wird nicht mehr unterstützt. Bitte nutzen Sie eine aktuelle Alternative oder kontaktieren Sie Ihren Systemadministrator.",
   "You are using keywords setting a minimum limit on severity.": "Sie benutzen Filterbefehle, die eine Minimalgrenze für den Schweregrad setzen.",
