@@ -104,45 +104,45 @@ export const handleSearchChange = (
   setFilteredItems(filtered);
 };
 
-const BasicFieldsContainer = memo(({initialName, initialComment, onSave}) => {
-  const [_] = useTranslation();
-  const [name, setName] = useState(initialName);
-  const [comment, setComment] = useState(initialComment);
+const BasicFieldsContainer = memo(
+  ({initialName, initialComment, syncDataRef}) => {
+    const [_] = useTranslation();
+    const [name, setName] = useState(initialName);
+    const [comment, setComment] = useState(initialComment);
 
-  const valuesRef = useRef({name, comment});
+    const valuesRef = useRef({name, comment});
 
-  useEffect(() => {
-    valuesRef.current = {name, comment};
-  }, [name, comment]);
+    useEffect(() => {
+      valuesRef.current = {name, comment};
+    }, [name, comment]);
 
-  useEffect(() => {
-    if (onSave) {
-      onSave(valuesRef);
-    }
-  }, [onSave]);
+    useEffect(() => {
+      syncDataRef(valuesRef);
+    }, [syncDataRef]);
 
-  return (
-    <>
-      <TextField
-        name="name"
-        title={_('Name')}
-        value={name}
-        onChange={value => setName(value)}
-      />
-      <TextField
-        name="comment"
-        title={_('Comment')}
-        value={comment}
-        onChange={value => setComment(value)}
-      />
-    </>
-  );
-});
+    return (
+      <>
+        <TextField
+          name="name"
+          title={_('Name')}
+          value={name}
+          onChange={value => setName(value)}
+        />
+        <TextField
+          name="comment"
+          title={_('Comment')}
+          value={comment}
+          onChange={value => setComment(value)}
+        />
+      </>
+    );
+  },
+);
 
 BasicFieldsContainer.propTypes = {
   initialName: PropTypes.string,
   initialComment: PropTypes.string,
-  onSave: PropTypes.func,
+  syncDataRef: PropTypes.func,
 };
 
 const EditScanConfigDialog = ({
@@ -179,6 +179,7 @@ const EditScanConfigDialog = ({
     useState(scannerPreferences);
   const [filteredNvtPreferences, setFilteredNvtPreferences] =
     useState(nvtPreferences);
+  const basicFieldsRef = useRef(null);
 
   useEffect(() => {
     dispatch({
@@ -205,8 +206,6 @@ const EditScanConfigDialog = ({
     setTrendValues(trend);
     setSelectValues(select);
   }
-
-  const basicFieldsRef = useRef(null);
 
   const uncontrolledData = {
     scannerId,
@@ -273,6 +272,10 @@ const EditScanConfigDialog = ({
     onSave(allValues);
   };
 
+  const syncDataRef = useCallback(ref => {
+    basicFieldsRef.current = ref;
+  }, []);
+
   return (
     <SaveDialog
       defaultValues={uncontrolledData}
@@ -288,9 +291,7 @@ const EditScanConfigDialog = ({
           <BasicFieldsContainer
             initialComment={comment}
             initialName={name}
-            onSave={ref => {
-              basicFieldsRef.current = ref;
-            }}
+            syncDataRef={syncDataRef}
           />
 
           <SearchBar
