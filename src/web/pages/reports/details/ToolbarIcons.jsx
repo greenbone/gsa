@@ -23,7 +23,6 @@ import Link from 'web/components/link/Link';
 import AlertActions from 'web/pages/reports/details/AlertActions';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ToolBarIcons = ({
   audit = false,
   delta = false,
@@ -121,10 +120,10 @@ const ToolBarIcons = ({
             <Link
               query={{
                 start: isDefined(report.scan_start)
-                  ? report.scan_start.toISOString()
+                  ? report.scan_start.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
                   : undefined,
                 end: isDefined(report.scan_end)
-                  ? report.scan_end.toISOString()
+                  ? report.scan_end.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
                   : undefined,
                 ...(isDefined(report.slave) && {scanner: report.slave.id}),
               }}
