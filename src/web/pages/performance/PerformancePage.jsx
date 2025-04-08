@@ -40,7 +40,6 @@ import {renderSelectItems} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
 
-
 const DURATION_HOUR = 60 * 60;
 const DURATION_DAY = DURATION_HOUR * 24;
 const DURATION_WEEK = DURATION_DAY * 7;
@@ -110,8 +109,8 @@ const ReportImage = ({name, duration, scannerId, endDate, startDate}) => {
   if (isDefined(duration)) {
     params.duration = DURATIONS[duration];
   } else {
-    params.start_time = startDate.toISOString();
-    params.end_time = endDate.toISOString();
+    params.start_time = startDate.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    params.end_time = endDate.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
   }
   const url = gmp.buildUrl('system_report/' + name + '/report.', params);
   return <img alt="" src={url} />;
