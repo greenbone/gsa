@@ -77,7 +77,11 @@ const Select = ({
   searchable = true,
   toolTipTitle,
   value,
-  scrollAreaProps = {type: 'hover', scrollbarSize: 12},
+  scrollAreaProps = {
+    type: 'hover',
+    scrollbarSize: 12,
+    offsetScrollbars: 'present',
+  },
   onChange,
   ...props
 }) => {
