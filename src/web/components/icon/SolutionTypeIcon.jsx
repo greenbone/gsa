@@ -5,15 +5,16 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import StMitigateIcon from 'web/components/icon/StMitigateIcon';
-import StNonAvailableIcon from 'web/components/icon/StNonAvailableIcon';
-import StUnknownIcon from 'web/components/icon/StUnknownIcon';
-import StVendorFixIcon from 'web/components/icon/StVendorFixIcon';
-import StWillNotFixIcon from 'web/components/icon/StWillNotFixIcon';
-import StWorkaroundIcon from 'web/components/icon/StWorkaroundIcon';
+import {
+  StMitigateIcon,
+  StUnknownIcon,
+  StWorkaroundIcon,
+  StNonAvailableIcon,
+  StVendorFixIcon,
+  StWillNotFixIcon,
+} from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import PropTypes from 'web/utils/PropTypes';
-
 const SolutionType = ({type, displayTitleText = false}) => {
   let IconComponent;
   let title;

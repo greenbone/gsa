@@ -5,9 +5,9 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
+import {ReportConfigIcon} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ReportConfigIcon from 'web/components/icon/ReportConfigIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -47,7 +47,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/reportconfigs';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-
 const ToolBarIcons = ({
   entity,
   onReportConfigCloneClick,

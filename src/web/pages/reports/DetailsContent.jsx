@@ -12,7 +12,7 @@ import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';
-import ReportIcon from 'web/components/icon/ReportIcon';
+import { ReportIcon } from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
@@ -42,7 +42,6 @@ import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 const Span = styled.span`
   margin-top: 2px;
 `;

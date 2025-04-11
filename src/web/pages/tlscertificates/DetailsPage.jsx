@@ -5,11 +5,10 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import DownloadIcon from 'web/components/icon/DownloadIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import {DownloadIcon, TlsCertificateIcon} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import TlsCertificateIcon from 'web/components/icon/TlsCertificateIcon';
 import Divider from 'web/components/layout/Divider';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -45,7 +44,6 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/tlscertificates';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   entity,
   onTlsCertificateDeleteClick,

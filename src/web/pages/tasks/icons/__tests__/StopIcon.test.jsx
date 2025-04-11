@@ -9,8 +9,6 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import StopIcon from 'web/pages/tasks/icons/StopIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
-import Theme from 'web/utils/Theme';
-
 
 describe('Task StopIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
@@ -33,9 +31,8 @@ describe('Task StopIcon component tests', () => {
 
     expect(clickHandler).toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Stop');
-    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).not.toHaveAttribute('disabled');
+    expect(element).not.toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in active state with correct permissions if task queued', () => {
@@ -58,9 +55,8 @@ describe('Task StopIcon component tests', () => {
 
     expect(clickHandler).toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Stop');
-    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).not.toHaveAttribute('disabled');
+    expect(element).not.toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if wrong command level permissions are given', () => {
@@ -82,9 +78,8 @@ describe('Task StopIcon component tests', () => {
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Permission to stop task denied');
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if wrong command level permissions are given for audit', () => {
@@ -108,9 +103,8 @@ describe('Task StopIcon component tests', () => {
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Permission to stop audit denied');
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should not be rendered if task is not running', () => {

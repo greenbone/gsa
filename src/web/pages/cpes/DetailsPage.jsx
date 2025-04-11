@@ -8,8 +8,8 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
-import CpeLogoIcon from 'web/components/icon/CpeLogoIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { CpeLogoIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
@@ -40,7 +40,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>

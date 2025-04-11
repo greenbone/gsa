@@ -10,11 +10,13 @@ import React from 'react';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
-import DeltaDifferenceIcon from 'web/components/icon/DeltaDifferenceIcon';
-import NoteIcon from 'web/components/icon/NoteIcon';
-import OverrideIcon from 'web/components/icon/OverrideIcon';
+import {
+  DeltaDifferenceIcon,
+  NoteIcon,
+  OverrideIcon,
+  TicketIcon,
+} from 'web/components/icon/icons';
 import SolutionTypeIcon from 'web/components/icon/SolutionTypeIcon';
-import TicketIcon from 'web/components/icon/TicketIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -26,7 +28,6 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
 import ResultDelta from 'web/pages/results/Delta';
 import PropTypes from 'web/utils/PropTypes';
-
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   audit = false,

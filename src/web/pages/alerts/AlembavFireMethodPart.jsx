@@ -11,13 +11,12 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
-import NewIcon from 'web/components/icon/NewIcon';
+import { NewIcon } from 'web/components/icon/icons';
 import useTranslation from 'web/hooks/useTranslation';
 import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import withPrefix from 'web/utils/withPrefix';
-
 const VFIRE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
 const AlembaVfireMethodPart = ({

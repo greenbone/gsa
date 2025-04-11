@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import Filter, {CPES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
-import CpeLogoIcon from 'web/components/icon/CpeLogoIcon';
+import { CpeLogoIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -20,7 +20,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = () => (
   <ManualIcon anchor="cpe" page="managing-secinfo" title={_('Help: CPEs')} />
 );

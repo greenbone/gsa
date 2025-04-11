@@ -9,13 +9,9 @@ import {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import React from 'react';
-import DownloadDebIcon from 'web/components/icon/DownloadDebIcon';
-import DownloadExeIcon from 'web/components/icon/DownloadExeIcon';
-import DownloadKeyIcon from 'web/components/icon/DownloadKeyIcon';
-import DownloadRpmIcon from 'web/components/icon/DownloadRpmIcon';
+import { DownloadDebIcon,DownloadExeIcon,DownloadKeyIcon,DownloadRpmIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import PropTypes from 'web/utils/PropTypes';
-
 const CredentialDownloadIcon = ({credential, onDownload}) => {
   const type = credential.credential_type;
   return (

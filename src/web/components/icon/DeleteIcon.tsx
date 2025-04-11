@@ -6,34 +6,19 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {CircleX as Icon} from 'lucide-react';
-import React from 'react';
-import IconWithStrokeWidth from 'web/components/icon/IconWithStrokeWidth';
-import {SvgIconProps} from 'web/components/icon/SvgIcon';
-import withSvgIcon from 'web/components/icon/withSvgIcon';
+import {DynamicIcon, DynamicIconProps} from 'web/components/icon/DynamicIcon';
 import SelectionType from 'web/utils/SelectionType';
 
-const DeleteSvgIcon = withSvgIcon()(props => (
-  <IconWithStrokeWidth
-    IconComponent={Icon}
-    {...props}
-    data-testid="delete-icon"
-  />
-));
-
-interface DeleteIconProps<T> extends SvgIconProps<T> {
-  selectionType?:
-    | typeof SelectionType.SELECTION_FILTER
-    | typeof SelectionType.SELECTION_PAGE_CONTENTS
-    | typeof SelectionType.SELECTION_USER;
+interface DeleteIconProps extends Omit<DynamicIconProps, 'icon'> {
+  selectionType?: keyof typeof SelectionType;
   title?: string;
-  [key: string]: unknown;
 }
 
-const DeleteIcon = <T,>({
+const DeleteIcon: React.FC<DeleteIconProps> = ({
   selectionType,
   title,
   ...props
-}: DeleteIconProps<T>) => {
+}) => {
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = _('Delete page contents');
@@ -43,7 +28,14 @@ const DeleteIcon = <T,>({
       title = _('Delete all filtered');
     }
   }
-  return <DeleteSvgIcon data-testid="delete-icon" {...props} title={title} />;
+  return (
+    <DynamicIcon
+      dataTestId="delete-icon"
+      icon={Icon}
+      title={title}
+      {...props}
+    />
+  );
 };
 
 export default DeleteIcon;

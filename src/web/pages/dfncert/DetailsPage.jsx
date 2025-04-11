@@ -6,8 +6,8 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import DfnCertAdvIcon from 'web/components/icon/DfnCertAdvIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { DfnCertAdvIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
@@ -31,7 +31,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import DfnCertAdvDetails from 'web/pages/dfncert/Details';
 import {selector, loadEntity} from 'web/store/entities/dfncerts';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>

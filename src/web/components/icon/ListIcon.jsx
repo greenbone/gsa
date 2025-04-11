@@ -4,11 +4,9 @@
  */
 
 import React from 'react';
-import ListSvgIcon from 'web/components/icon/ListSvgIcon';
+import { ListSvgIcon } from 'web/components/icon/icons';
 import Link from 'web/components/link/Link';
 import PropTypes from 'web/utils/PropTypes';
-
-
 const ListIcon = ({page, filter, ...props}) => {
   return (
     <Link data-testid="list-link-icon" filter={filter} to={page}>

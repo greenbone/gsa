@@ -6,11 +6,10 @@
 import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import TextField from 'web/components/form/TextField';
-import SearchIcon from 'web/components/icon/SearchIcon';
+import { SearchIcon } from 'web/components/icon/icons';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
-
 const StyledTextField = styled(TextField)`
   .mantine-Input-input {
     padding-left: 2.5rem;

@@ -10,9 +10,7 @@ import React from 'react';
 import ComplianceStatusBar from 'web/components/bar/ComplianceStatusBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
-import AlterableIcon from 'web/components/icon/AlterableIcon';
-import ProvideViewIcon from 'web/components/icon/ProvideViewIcon';
-import SensorIcon from 'web/components/icon/SensorIcon';
+import { AlterableIcon,ProvideViewIcon,SensorIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -24,7 +22,6 @@ import useUserName from 'web/hooks/useUserName';
 import Actions from 'web/pages/audits/Actions';
 import AuditStatus from 'web/pages/tasks/Status';
 import PropTypes from 'web/utils/PropTypes';
-
 const renderAuditReport = (report, links) => {
   if (!isDefined(report)) {
     return null;

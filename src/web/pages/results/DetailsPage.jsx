@@ -11,16 +11,18 @@ import {connect} from 'react-redux';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import {
+  NewNoteIcon,
+  NewTicketIcon,
+  OverrideIcon,
+  ReportIcon,
+  ResultIcon,
+  TaskIcon,
+  TicketIcon,
+  NewOverrideIcon,
+} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewNoteIcon from 'web/components/icon/NewNoteIcon';
-import NewOverrideIcon from 'web/components/icon/NewOverrideIcon';
-import NewTicketIcon from 'web/components/icon/NewTicketIcon';
-import OverrideIcon from 'web/components/icon/OverrideIcon';
-import ReportIcon from 'web/components/icon/ReportIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
-import TaskIcon from 'web/components/icon/TaskIcon';
-import TicketIcon from 'web/components/icon/TicketIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -62,7 +64,6 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
-
 export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,

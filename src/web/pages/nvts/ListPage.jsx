@@ -7,8 +7,8 @@ import _ from 'gmp/locale';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
+import { NvtIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NvtIcon from 'web/components/icon/NvtIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -20,7 +20,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/nvts';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = () => (
   <ManualIcon
     anchor="vulnerability-tests-vt"

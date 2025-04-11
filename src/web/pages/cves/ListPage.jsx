@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import Filter, {CVES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
-import CveIcon from 'web/components/icon/CveIcon';
+import { CveIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -20,7 +20,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cves';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = () => (
   <ManualIcon anchor="cve" page="managing-secinfo" title={_('Help: CVEs')} />
 );

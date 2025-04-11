@@ -12,9 +12,8 @@ import {YES_VALUE, NO_VALUE, parseYesNo} from 'gmp/parser';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import EditIcon from 'web/components/icon/EditIcon';
+import { EditIcon,MySettingsIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import MySettingsIcon from 'web/components/icon/MySettingsIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -81,8 +80,6 @@ import Languages, {BROWSER_LANGUAGE} from 'web/utils/Languages';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
-
 const FIRST_COL_WIDTH = '250px';
 
 const getLangNameByCode = code => {

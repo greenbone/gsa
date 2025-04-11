@@ -20,7 +20,6 @@ import EntitiesActions from 'web/entities/Actions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
-
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   entity,

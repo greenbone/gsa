@@ -5,10 +5,8 @@
 
 import {RESET_FILTER, SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import { NewIcon,PolicyIcon,UploadIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
-import PolicyIcon from 'web/components/icon/PolicyIcon';
-import UploadIcon from 'web/components/icon/UploadIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -22,8 +20,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/policies';
 import PropTypes from 'web/utils/PropTypes';
-
-
 export const ToolBarIcons = ({onPolicyCreateClick, onPolicyImportClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

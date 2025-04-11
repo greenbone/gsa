@@ -15,11 +15,8 @@ import {
   canAddDisplay,
   convertDefaultDisplays,
 } from 'web/components/dashboard/Utils';
-import DashboardIcon from 'web/components/icon/DashboardIcon';
-import DeleteIcon from 'web/components/icon/DeleteIcon';
-import EditIcon from 'web/components/icon/EditIcon';
+import { DashboardIcon,DeleteIcon,EditIcon,NewIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -51,7 +48,6 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
 const DEFAULT_OVERVIEW_DISPLAYS = convertDefaultDisplays(DEFAULT_DISPLAYS);

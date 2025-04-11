@@ -55,10 +55,12 @@ const cred5 = Credential.fromElement({
 
 const credentials = [cred1, cred2, cred3, cred4, cred5];
 
-const gmp = {settings: {
-  enableGreenboneSensor: true,
-  enableKrb5: false,
-}};
+const gmp = {
+  settings: {
+    enableGreenboneSensor: true,
+    enableKrb5: false,
+  },
+};
 
 describe('TargetDialog component tests', () => {
   test('should render with default values', () => {
@@ -143,7 +145,7 @@ describe('TargetDialog component tests', () => {
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(8); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
+    expect(createCredentialIcons.length).toEqual(4); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
 
     expect(selects[2]).toHaveValue('--');
     expect(baseElement).toHaveTextContent('on port');
@@ -257,7 +259,7 @@ describe('TargetDialog component tests', () => {
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(8); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
+    expect(createCredentialIcons.length).toEqual(4); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
 
     expect(baseElement).toHaveTextContent('on port');
 
@@ -409,7 +411,7 @@ describe('TargetDialog component tests', () => {
     const createCredentialIcons = screen.getAllByTitle(
       'Create a new credential',
     );
-    expect(createCredentialIcons.length).toEqual(10); // Each icon has both a span and an svg icon. There should be 5 total, including elevate privileges (Kerberos is disabled by default)
+    expect(createCredentialIcons.length).toEqual(5); // Each icon has both a span and an svg icon. There should be 5 total, including elevate privileges (Kerberos is disabled by default)
   });
 
   test('ssh elevate credential dropdown should only allow username + password options and remove ssh credential from list', async () => {

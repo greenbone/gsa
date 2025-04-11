@@ -8,13 +8,15 @@ import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import {
+  NewNoteIcon,
+  NvtIcon,
+  ResultIcon,
+  VulnerabilityIcon,
+  NewOverrideIcon,
+} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewNoteIcon from 'web/components/icon/NewNoteIcon';
-import NewOverrideIcon from 'web/components/icon/NewOverrideIcon';
-import NvtIcon from 'web/components/icon/NvtIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
-import VulnerabilityIcon from 'web/components/icon/VulnerabilityIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -47,7 +49,6 @@ import {
 } from 'web/store/entities/overrides';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 export let ToolBarIcons = ({
   capabilities,
   entity,

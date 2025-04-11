@@ -9,8 +9,8 @@ import {isDefined} from 'gmp/utils/identity';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 import DashboardControls from 'web/components/dashboard/Controls';
+import { ReportIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ReportIcon from 'web/components/icon/ReportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
@@ -30,7 +30,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/auditreports';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = () => {
   const [_] = useTranslation();
   return (

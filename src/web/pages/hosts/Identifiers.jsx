@@ -19,7 +19,6 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import DetailsBlock from 'web/entity/Block';
 import PropTypes from 'web/utils/PropTypes';
-
 const Action = styled.a`
   cursor: pointer;
 `;

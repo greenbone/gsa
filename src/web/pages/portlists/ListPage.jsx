@@ -9,10 +9,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
+import { NewIcon,PortListIcon,UploadIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
-import PortListIcon from 'web/components/icon/PortListIcon';
-import UploadIcon from 'web/components/icon/UploadIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
@@ -39,7 +37,6 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
-
 const ToolBarIcons = ({onPortListCreateClick, onPortListImportClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

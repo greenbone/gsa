@@ -9,10 +9,10 @@ import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { TicketIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import SolutionType from 'web/components/icon/SolutionTypeIcon';
-import TicketIcon from 'web/components/icon/TicketIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -44,7 +44,6 @@ import {
   loadEntity as loadTicket,
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   entity,
   onTicketCloneClick,

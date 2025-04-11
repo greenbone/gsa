@@ -6,12 +6,11 @@
 import {ActionIcon} from '@mantine/core';
 import date from 'gmp/models/date';
 import {useEffect, useState} from 'react';
-import RefreshIcon from 'web/components/icon/RefreshIcon';
+import { RefreshIcon } from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import Theme from 'web/utils/Theme';
-
 const SessionTimer = () => {
   const [sessionTimeout, renewSession] = useUserSessionTimeout();
   const [timeLeft, setTimeLeft] = useState('');
