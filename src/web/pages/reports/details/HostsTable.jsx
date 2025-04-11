@@ -9,9 +9,8 @@ import React from 'react';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
+import { VerifyIcon,VerifyNoIcon } from 'web/components/icon/icons';
 import OsIcon from 'web/components/icon/OsIcon';
-import VerifyIcon from 'web/components/icon/VerifyIcon';
-import VerifyNoIcon from 'web/components/icon/VerifyNoIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
@@ -21,7 +20,6 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import {createEntitiesTable} from 'web/entities/Table';
 import PropTypes from 'web/utils/PropTypes';
-
 const Header = ({
   audit = false,
   currentSortBy,

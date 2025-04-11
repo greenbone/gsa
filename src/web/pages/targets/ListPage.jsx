@@ -5,9 +5,8 @@
 
 import {TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import { NewIcon,TargetIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
-import TargetIcon from 'web/components/icon/TargetIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -22,7 +21,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/targets';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({onTargetCreateClick}) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();

@@ -9,7 +9,6 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
 import {setSyncStatus} from 'web/store/feedStatus/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
-import Theme from 'web/utils/Theme';
 
 describe('TaskIconWithSync component tests', () => {
   const testCases = [
@@ -69,9 +68,11 @@ describe('TaskIconWithSync component tests', () => {
 
       expect(element).toHaveAttribute('title', expectedTitle);
       if (expectedFill) {
-        expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
+        expect(element).toHaveAttribute('disabled');
+        expect(element).toHaveAttribute('data-disabled', 'true');
       } else {
-        expect(element).toHaveStyleRule('color', Theme.black);
+        expect(element).not.toHaveAttribute('disabled');
+        expect(element).not.toHaveAttribute('data-disabled', 'true');
       }
     },
   );

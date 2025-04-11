@@ -6,7 +6,7 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import MessageContainer from 'web/components/error/MessageContainer';
-import StNonAvailableIcon from 'web/components/icon/StNonAvailableIcon';
+import {StNonAvailableIcon} from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import Layout, {LayoutProps} from 'web/components/layout/Layout';
 

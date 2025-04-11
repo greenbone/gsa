@@ -6,15 +6,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import FootNote from 'web/components/footnote/Footnote';
-import EditIcon from 'web/components/icon/EditIcon';
-import FilterIcon from 'web/components/icon/FilterIcon';
+import { EditIcon,FilterIcon } from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
-
 const UpdatingDivider = styled(({...props}) => <Divider {...props} />)`
   opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
 `;

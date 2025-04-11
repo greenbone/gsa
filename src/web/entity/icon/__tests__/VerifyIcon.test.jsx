@@ -10,7 +10,6 @@ import VerifyIcon from 'web/entity/icon/VerifyIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('Entity VerifyIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
@@ -25,10 +24,8 @@ describe('Entity VerifyIcon component tests', () => {
       <VerifyIcon entity={entity} onClick={clickHandler} />,
     );
 
-    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).not.toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).not.toHaveAttribute('disabled');
+    expect(element).not.toHaveAttribute('data-disabled', 'true');
 
     expect(entity.userCapabilities.mayOp('verify_report_format')).toEqual(true);
 
@@ -83,10 +80,8 @@ describe('Entity VerifyIcon component tests', () => {
 
     fireEvent.click(element);
     expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should deactivate if wrong resource level permissions are given', () => {
@@ -109,9 +104,7 @@ describe('Entity VerifyIcon component tests', () => {
     fireEvent.click(element);
 
     expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 });

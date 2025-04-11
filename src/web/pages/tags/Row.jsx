@@ -7,9 +7,8 @@ import _ from 'gmp/locale';
 import {typeName} from 'gmp/utils/entitytype';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
-import DisableIcon from 'web/components/icon/DisableIcon';
-import EnableIcon from 'web/components/icon/EnableIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { DisableIcon,EnableIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
@@ -22,7 +21,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
-
 const Actions = compose(
   withCapabilities,
   withEntitiesActions,

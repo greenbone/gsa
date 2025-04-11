@@ -7,13 +7,15 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import Badge from 'web/components/badge/Badge';
-import AlterableIcon from 'web/components/icon/AlterableIcon';
-import AuditIcon from 'web/components/icon/AuditIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import {
+  AlterableIcon,
+  ReportIcon,
+  ResultIcon,
+  AuditIcon,
+} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ReportIcon from 'web/components/icon/ReportIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -62,7 +64,6 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
-
 export const ToolBarIcons = ({
   entity,
   links,

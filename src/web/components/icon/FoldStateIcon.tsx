@@ -4,13 +4,20 @@
  */
 
 import _ from 'gmp/locale';
-import React from 'react';
 import {FoldState} from 'web/components/folding/Folding';
-import FoldIcon from 'web/components/icon/FoldIcon';
-import UnfoldIcon from 'web/components/icon/UnfoldIcon';
-import PropTypes from 'web/utils/PropTypes';
+import {FoldIcon, UnfoldIcon} from 'web/components/icon/icons';
 
-const FoldStateIcon = ({foldState, ...props}) => {
+interface FoldStateIconProps {
+  foldState: keyof typeof FoldState;
+  title?: string;
+  [key: string]: unknown;
+}
+
+const FoldStateIcon: React.FC<FoldStateIconProps> = ({
+  foldState,
+  title,
+  ...props
+}) => {
   const folded =
     foldState === FoldState.FOLDED ||
     foldState === FoldState.FOLDING ||
@@ -19,25 +26,20 @@ const FoldStateIcon = ({foldState, ...props}) => {
   if (folded) {
     return (
       <FoldIcon
-        title={_('Unfold')}
         {...props}
-        data-testid="fold-state-icon-unfold"
+        dataTestId="fold-state-icon-unfold"
+        title={title || _('Unfold')}
       />
     );
   }
 
   return (
     <UnfoldIcon
-      title={_('Fold')}
       {...props}
-      data-testid="fold-state-icon-fold"
+      dataTestId="fold-state-icon-fold"
+      title={title || _('Fold')}
     />
   );
-};
-
-FoldStateIcon.propTypes = {
-  foldState: PropTypes.string,
-  title: PropTypes.string,
 };
 
 export default FoldStateIcon;

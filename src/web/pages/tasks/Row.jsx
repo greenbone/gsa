@@ -10,9 +10,11 @@ import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
-import AlterableIcon from 'web/components/icon/AlterableIcon';
-import ProvideViewIcon from 'web/components/icon/ProvideViewIcon';
-import SensorIcon from 'web/components/icon/SensorIcon';
+import {
+  AlterableIcon,
+  ProvideViewIcon,
+  SensorIcon,
+} from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -26,7 +28,6 @@ import Actions from 'web/pages/tasks/Actions';
 import TaskStatus from 'web/pages/tasks/Status';
 import Trend from 'web/pages/tasks/Trend';
 import PropTypes from 'web/utils/PropTypes';
-
 export const renderReport = (report, links) => {
   if (!isDefined(report)) {
     return null;

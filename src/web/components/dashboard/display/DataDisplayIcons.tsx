@@ -5,12 +5,13 @@
 
 import {_} from 'gmp/locale/lang';
 import React from 'react';
-import DownloadCsvIcon from 'web/components/icon/DownloadCsvIcon';
-import DownloadSvgIcon from 'web/components/icon/DownloadSvgIcon';
-import FilterIcon from 'web/components/icon/FilterIcon';
-import LegendIcon from 'web/components/icon/LegendIcon';
-import Toggle3dIcon from 'web/components/icon/Toggle3dIcon';
-
+import {
+  DownloadSvgIcon,
+  DownloadCsvIcon,
+  FilterIcon,
+  LegendIcon,
+  Toggle3dIcon,
+} from 'web/components/icon/icons';
 interface DataDisplayIconsState {
   showLegend?: boolean;
 }
@@ -40,7 +41,9 @@ export const renderDonutChartIcons = <S extends DonutChartState>({
     <DataDisplayIcons {...iconsProps} setState={setState} />
     <Toggle3dIcon
       title={_('Toggle 2D/3D view')}
-      onClick={() => setState(({show3d}: S) => ({show3d: !show3d}) as S)}
+      onClick={() => {
+        setState(({show3d}: S) => ({show3d: !show3d}) as S);
+      }}
     />
   </>
 );
@@ -59,14 +62,18 @@ const DataDisplayIcons = <S extends DataDisplayIconsState>({
     {showFilterSelection && (
       <FilterIcon title={_('Select Filter')} onClick={onSelectFilterClick} />
     )}
-    {showSvgDownload && <DownloadSvgIcon onClick={onDownloadSvgClick} />}
-    {showCsvDownload && <DownloadCsvIcon onClick={onDownloadCsvClick} />}
+    {showSvgDownload && (
+      <DownloadSvgIcon title={_('Download SVG')} onClick={onDownloadSvgClick} />
+    )}
+    {showCsvDownload && (
+      <DownloadCsvIcon title={_('Download CSV')} onClick={onDownloadCsvClick} />
+    )}
     {showToggleLegend && (
       <LegendIcon
         title={_('Toggle Legend')}
-        onClick={() =>
-          setState(({showLegend}: S) => ({showLegend: !showLegend}) as S)
-        }
+        onClick={() => {
+          setState(({showLegend}: S) => ({showLegend: !showLegend}) as S);
+        }}
       />
     )}
   </React.Fragment>

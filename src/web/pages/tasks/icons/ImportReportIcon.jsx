@@ -5,10 +5,9 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import ImportIcon from 'web/components/icon/ImportIcon';
+import { ImportIcon } from 'web/components/icon/icons';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 const ImportReportIcon = ({capabilities, size, task, onClick}) => {
   if (!task.isContainer() || !capabilities.mayCreate('report')) {
     return null;

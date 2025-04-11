@@ -4,13 +4,11 @@
  */
 
 import {useSelector} from 'react-redux';
-import ResumeIcon from 'web/components/icon/ResumeIcon';
-import StartIcon from 'web/components/icon/StartIcon';
+import { ResumeIcon,StartIcon } from 'web/components/icon/icons';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskResumeIconBase from 'web/pages/tasks/icons/ResumeIcon';
 import TaskStartIconBase from 'web/pages/tasks/icons/StartIcon';
 import PropTypes from 'web/utils/PropTypes';
-
 const TaskIconWithSync = ({type, ...props}) => {
   const [_] = useTranslation();
 

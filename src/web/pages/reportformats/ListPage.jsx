@@ -5,9 +5,8 @@
 
 import {REPORT_FORMATS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import ImportIcon from 'web/components/icon/ImportIcon';
+import { ImportIcon,ReportFormatIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ReportFormatIcon from 'web/components/icon/ReportFormatIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -22,7 +21,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({onReportFormatImportClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

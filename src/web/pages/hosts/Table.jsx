@@ -6,7 +6,7 @@
 import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import NewIcon from 'web/components/icon/NewIcon';
+import { NewIcon } from 'web/components/icon/icons';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
@@ -18,7 +18,6 @@ import HostDetails from 'web/pages/hosts/Details';
 import HostRow from 'web/pages/hosts/Row';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
-
 const Header = ({
   actionsColumn,
   sort = true,

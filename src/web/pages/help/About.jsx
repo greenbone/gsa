@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 import GSA_VERSION from 'version';
-import HelpIcon from 'web/components/icon/HelpIcon';
+import { HelpIcon } from 'web/components/icon/icons';
 import Img from 'web/components/img/Img';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -17,7 +17,6 @@ import ProtocolDocLink from 'web/components/link/ProtocolDocLink';
 import Section from 'web/components/section/Section';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
   max-width: 680px;

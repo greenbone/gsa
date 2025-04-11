@@ -13,17 +13,19 @@ import _ from 'gmp/locale';
 import {parseInt} from 'gmp/parser';
 import {hasValue} from 'gmp/utils/identity';
 import React, {useState} from 'react';
-import CertBundAdvIcon from 'web/components/icon/CertBundAdvIcon';
-import CpeLogoIcon from 'web/components/icon/CpeLogoIcon';
-import CveIcon from 'web/components/icon/CveIcon';
-import DfnCertAdvIcon from 'web/components/icon/DfnCertAdvIcon';
-import FeedIcon from 'web/components/icon/FeedIcon';
+import {
+  CertBundAdvIcon,
+  CpeLogoIcon,
+  CveIcon,
+  DfnCertAdvIcon,
+  FeedIcon,
+  NvtIcon,
+  PolicyIcon,
+  PortListIcon,
+  ReportFormatIcon,
+  ScanConfigIcon,
+} from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NvtIcon from 'web/components/icon/NvtIcon';
-import PolicyIcon from 'web/components/icon/PolicyIcon';
-import PortListIcon from 'web/components/icon/PortListIcon';
-import ReportFormatIcon from 'web/components/icon/ReportFormatIcon';
-import ScanConfigIcon from 'web/components/icon/ScanConfigIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';

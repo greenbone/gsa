@@ -7,7 +7,7 @@ import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
-import DownloadIcon from 'web/components/icon/DownloadIcon';
+import { DownloadIcon } from 'web/components/icon/icons';
 import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
@@ -19,7 +19,6 @@ import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
 import PropTypes from 'web/utils/PropTypes';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
-
 const Header = ({
   actions = true,
   currentSortDir,

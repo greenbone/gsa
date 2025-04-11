@@ -17,7 +17,6 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import PropTypes from 'web/utils/PropTypes';
-
 const Actions = withEntitiesActions(
   ({entity, onOsDeleteClick, onOsDownloadClick}) => (
     <IconDivider grow align={['center', 'center']}>
