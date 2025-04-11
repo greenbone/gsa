@@ -4,19 +4,24 @@
  */
 
 import {useContext} from 'react';
-import IconSizeContext from 'web/components/provider/IconSizeProvider';
+import {IconSizeContext} from 'web/components/provider/IconSizeProvider';
 
 export const ICON_SIZE_LARGE_PIXELS = '50px';
 export const ICON_SIZE_MEDIUM_PIXELS = '24px';
 export const ICON_SIZE_SMALL_PIXELS = '20px';
 export const ICON_SIZE_TINY_PIXELS = '11px';
 
-const useIconSize = (initialSize = 'small') => {
+export type IconSizeType = 'small' | 'medium' | 'large' | 'tiny';
+export type IconSizeParameter = IconSizeType | [string, string];
+
+const useIconSize = (
+  initialSize: IconSizeParameter = 'small',
+): {height: string; width: string} => {
   const iconSize = useContext(IconSizeContext);
   const size = iconSize ?? initialSize;
 
-  let width;
-  let height;
+  let width: string = ICON_SIZE_SMALL_PIXELS;
+  let height: string = ICON_SIZE_SMALL_PIXELS;
 
   switch (size) {
     case 'small':
