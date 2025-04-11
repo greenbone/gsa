@@ -117,8 +117,7 @@ import TrendUp from 'web/components/icon/svg/trend_up.svg?react';
 import Vulnerability from 'web/components/icon/svg/vulnerability.svg?react';
 import Wizard from 'web/components/icon/svg/wizard.svg?react';
 
-interface ExtendedDynamicIconProps
-  extends Omit<DynamicIconProps<string>, 'icon'> {
+interface ExtendedDynamicIconProps extends Omit<DynamicIconProps, 'icon'> {
   'data-testid'?: string;
 }
 
