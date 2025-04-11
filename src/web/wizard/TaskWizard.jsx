@@ -8,12 +8,10 @@ import React from 'react';
 import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import TextField from 'web/components/form/TextField';
-import NewIcon from 'web/components/icon/NewIcon';
-import {default as WizIcon} from 'web/components/icon/WizardIcon';
+import {NewIcon, WizardIcon as WizIcon} from 'web/components/icon/icons';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import PropTypes from 'web/utils/PropTypes';
-
 export const WizardContent = styled.div`
   margin: 0 20px;
 `;

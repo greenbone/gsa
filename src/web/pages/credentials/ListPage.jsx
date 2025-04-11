@@ -5,9 +5,8 @@
 
 import {CREDENTIALS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import CredentialIcon from 'web/components/icon/CredentialIcon';
+import { CredentialIcon,NewIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -22,7 +21,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/credentials';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({onCredentialCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

@@ -7,9 +7,11 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-import ArrowDown from 'web/components/icon/ArrowDown';
-import ArrowUp from 'web/components/icon/ArrowUp';
-import ArrowUpDown from 'web/components/icon/ArrowUpDown';
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ArrowUpDownIcon,
+} from 'web/components/icon/icons';
 import Layout from 'web/components/layout/Layout';
 import Sort, {ByType, DESC} from 'web/components/sortby/SortBy';
 import Theme from 'web/utils/Theme';
@@ -51,7 +53,7 @@ const TableHead: React.FC<TableHeadProps> = ({
       return (
         <SortSymbol title={_('Not Sorted')}>
           &nbsp;
-          <ArrowUpDown />
+          <ArrowUpDownIcon />
         </SortSymbol>
       );
     }
@@ -59,7 +61,7 @@ const TableHead: React.FC<TableHeadProps> = ({
       currentSortDir === DESC
         ? _('Sorted In Descending Order By {{sortBy}}', {sortBy: `${title}`})
         : _('Sorted In Ascending Order By {{sortBy}}', {sortBy: `${title}`});
-    const Icon = currentSortDir === DESC ? ArrowDown : ArrowUp;
+    const Icon = currentSortDir === DESC ? ArrowDownIcon : ArrowUpIcon;
     return (
       <SortSymbol title={titleText}>
         &nbsp;

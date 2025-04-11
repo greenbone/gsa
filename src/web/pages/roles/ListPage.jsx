@@ -5,9 +5,8 @@
 
 import {ROLES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import { NewIcon,RoleIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
-import RoleIcon from 'web/components/icon/RoleIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -22,7 +21,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/roles';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({onRoleCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

@@ -6,13 +6,10 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-import XIcon from 'web/components/icon/XIcon';
+import {XIcon} from 'web/components/icon/icons';
 import Layout from 'web/components/layout/Layout';
-import Button from 'web/components/panel/Button';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
-
-
 const Panel = styled(Layout)`
   background-color: ${Theme.white};
   border: 1px solid
@@ -66,9 +63,13 @@ const InfoPanel = ({
         <Heading $isWarning={isWarning} data-testid="infopanel-heading">
           {heading}
           {isDefined(onCloseClick) && (
-            <Button data-testid="panel-close-button" onClick={onCloseClick}>
-              <XIcon />
-            </Button>
+            <XIcon
+              color={Theme.darkGray}
+              data-testid="panel-close-button"
+              size="medium"
+              variant="filled"
+              onClick={onCloseClick}
+            />
           )}
         </Heading>
       )}

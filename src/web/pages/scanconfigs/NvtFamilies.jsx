@@ -13,7 +13,7 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import Radio from 'web/components/form/Radio';
-import EditIcon from 'web/components/icon/EditIcon';
+import { EditIcon } from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import Section from 'web/components/section/Section';
 import TableBody from 'web/components/table/Body';
@@ -25,7 +25,6 @@ import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
 import Trend from 'web/pages/scanconfigs/Trend';
 import PropTypes from 'web/utils/PropTypes';
-
 const WHOLE_SELECTION_FAMILIES = [
   'AIX Local Security Checks',
   'AlmaLinux Local Security Checks',

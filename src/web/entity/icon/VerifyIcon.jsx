@@ -7,10 +7,9 @@ import _ from 'gmp/locale';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import VerifyIcon from 'web/components/icon/VerifyIcon';
+import { VerifyIcon } from 'web/components/icon/icons';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 const EntityVerifyIcon = ({
   capabilities,
   displayName,

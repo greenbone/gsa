@@ -7,10 +7,9 @@ import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import {UploadIcon, ScanConfigIcon} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ScanConfigIcon from 'web/components/icon/ScanConfigIcon';
-import UploadIcon from 'web/components/icon/UploadIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -51,7 +50,6 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   entity,
   onScanConfigCloneClick,

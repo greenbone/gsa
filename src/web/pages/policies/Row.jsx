@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import NewIcon from 'web/components/icon/NewIcon';
+import { NewIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableRow from 'web/components/table/Row';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
@@ -17,7 +17,6 @@ import TrashIcon from 'web/entity/icon/TrashIcon';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 const PoliciesActions = compose(
   withEntitiesActions,
   withCapabilities,

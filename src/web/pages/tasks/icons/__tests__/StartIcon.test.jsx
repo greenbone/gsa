@@ -10,8 +10,6 @@ import Event from 'gmp/models/event';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import StartIcon from 'web/pages/tasks/icons/StartIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
-import Theme from 'web/utils/Theme';
-
 
 describe('Task StartIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
@@ -34,9 +32,8 @@ describe('Task StartIcon component tests', () => {
 
     expect(clickHandler).toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Start');
-    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).not.toHaveAttribute('disabled');
+    expect(element).not.toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if wrong command level permissions are given', () => {
@@ -59,9 +56,8 @@ describe('Task StartIcon component tests', () => {
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Permission to start task denied');
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if wrong command level permissions for audit are given', () => {
@@ -88,9 +84,8 @@ describe('Task StartIcon component tests', () => {
       'title',
       'Permission to start audit denied',
     );
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is scheduled with a duration limit', () => {
@@ -132,9 +127,8 @@ END:VCALENDAR
       'title',
       'Task cannot be started manually because the assigned schedule has a duration limit',
     );
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is already active', () => {
@@ -157,9 +151,8 @@ END:VCALENDAR
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is already active');
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is queued', () => {
@@ -182,9 +175,8 @@ END:VCALENDAR
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is already active');
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should not be rendered if task is running', () => {

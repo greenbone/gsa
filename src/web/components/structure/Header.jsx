@@ -7,8 +7,7 @@ import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
 import {useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
-import LogoutIcon from 'web/components/icon/LogoutIcon';
-import MySettingsIcon from 'web/components/icon/MySettingsIcon';
+import { LogoutIcon,MySettingsIcon } from 'web/components/icon/icons';
 import SessionTimer from 'web/components/sessionTimer/SessionTimer';
 import getLogo from 'web/components/structure/getLogo';
 import LanguageSwitch from 'web/components/structure/LanguageSwitch';
@@ -17,7 +16,6 @@ import useManualURL from 'web/hooks/useManualURL';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
-
 const Header = () => {
   const [_] = useTranslation();
 

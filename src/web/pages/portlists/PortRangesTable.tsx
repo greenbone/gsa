@@ -12,7 +12,6 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
-
 interface PortRange {
   start: number;
   end: number;

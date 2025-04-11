@@ -7,12 +7,11 @@ import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import RestoreIcon from 'web/components/icon/RestoreIcon';
+import {RestoreIcon} from 'web/components/icon/icons';
 import TrashDeleteIcon from 'web/components/icon/TrashDeleteIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
 import PropTypes from 'web/utils/PropTypes';
-
 const getRestorableDeletableForEntityType = {
   alert: entity => {
     const restorable = isDefined(entity.filter)

@@ -12,10 +12,8 @@ import styled from 'styled-components';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
-import EditIcon from 'web/components/icon/EditIcon';
+import {EditIcon, RefreshIcon, ResetIcon} from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import RefreshIcon from 'web/components/icon/RefreshIcon';
-import ResetIcon from 'web/components/icon/ResetIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -24,7 +22,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
 const DEFAULT_FILTER_ID = '0';
 
 const Label = styled.label`

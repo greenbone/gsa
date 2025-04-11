@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {FoldState} from 'web/components/folding/Folding';
-import EditIcon from 'web/components/icon/EditIcon';
+import { EditIcon } from 'web/components/icon/icons';
 import Section from 'web/components/section/Section';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
@@ -16,7 +16,6 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-
 const StyledTableData = styled(TableData)`
   overflow-wrap: break-word;
   white-space: normal;

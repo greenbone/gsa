@@ -17,7 +17,6 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/Table';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-
 const StyledLayout = styled(Layout)`
   flex-grow: 0;
 `;

@@ -7,12 +7,10 @@ import _ from 'gmp/locale';
 import {CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import DownloadKeyIcon from 'web/components/icon/DownloadKeyIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { DownloadKeyIcon,ScannerIcon,VerifyIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ScannerIcon from 'web/components/icon/ScannerIcon';
-import VerifyIcon from 'web/components/icon/VerifyIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -44,7 +42,6 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/scanners';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   entity,
   onScannerCertificateDownloadClick,

@@ -14,12 +14,11 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import CheckBox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
-import NewIcon from 'web/components/icon/NewIcon';
+import { NewIcon } from 'web/components/icon/icons';
 import useTranslation from 'web/hooks/useTranslation';
 import ThresholdMessage from 'web/pages/reports/ThresholdMessage';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
-
 const TriggerAlertDialog = ({
   alertId,
   alerts = [],

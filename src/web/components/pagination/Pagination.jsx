@@ -7,14 +7,10 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-import FirstIcon from 'web/components/icon/FirstIcon';
-import LastIcon from 'web/components/icon/LastIcon';
-import NextIcon from 'web/components/icon/NextIcon';
-import PreviousIcon from 'web/components/icon/PreviousIcon';
+import { FirstIcon,LastIcon,NextIcon,PreviousIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
-
 const PaginationText = styled.span`
   margin: 0 3px;
 `;

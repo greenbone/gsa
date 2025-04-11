@@ -5,8 +5,8 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import AlertIcon from 'web/components/icon/AlertIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { AlertIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
@@ -47,7 +47,6 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   entity,
   onAlertCloneClick,

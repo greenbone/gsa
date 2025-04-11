@@ -6,11 +6,14 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-import {withFolding, withFoldToggle} from 'web/components/folding/Folding';
-import FoldIcon from 'web/components/icon/FoldStateIcon';
+import {
+  withFolding,
+  withFoldToggle,
+  FoldState,
+} from 'web/components/folding/Folding';
+import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
 import SectionHeader from 'web/components/section/Header';
-
 const FoldableLayout = withFolding(Layout);
 
 const FoldLayout = styled(Layout)`
@@ -23,7 +26,7 @@ interface SectionProps {
   className?: string;
   'data-testid'?: string;
   extra?: React.ReactNode;
-  foldState?: string;
+  foldState: keyof typeof FoldState;
   foldable?: boolean;
   header?: React.ReactNode;
   img?: string;
@@ -52,7 +55,7 @@ const Section = ({
           {extra}
           {foldable && (
             <FoldLayout>
-              <FoldIcon
+              <FoldStateIcon
                 className="section-fold-icon"
                 foldState={foldState}
                 onClick={onFoldToggle}

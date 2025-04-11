@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import CreateIcon from 'web/components/icon/NewIcon';
+import {NewIcon} from 'web/components/icon/icons';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -47,7 +47,7 @@ const EntityCreateIcon = ({
     }
   }
   return (
-    <CreateIcon
+    <NewIcon
       {...props}
       active={active}
       title={title}

@@ -9,8 +9,8 @@ import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import { NewIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PermissionComponent from 'web/pages/permissions/Component';
@@ -22,7 +22,6 @@ import PermissionsTable from 'web/pages/permissions/Table';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
 const SectionElementDivider = styled(IconDivider)`
   margin-bottom: 3px;
 `;

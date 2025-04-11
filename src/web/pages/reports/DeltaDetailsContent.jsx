@@ -12,7 +12,7 @@ import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorMessage from 'web/components/error/ErrorMessage';
-import ReportIcon from 'web/components/icon/ReportIcon';
+import { ReportIcon } from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
@@ -32,7 +32,6 @@ import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
-
 const Span = styled.span`
   margin-top: 2px;
 `;

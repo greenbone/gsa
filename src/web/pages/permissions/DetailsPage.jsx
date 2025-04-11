@@ -6,9 +6,9 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { PermissionIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import PermissionIcon from 'web/components/icon/PermissionIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -32,7 +32,6 @@ import PermissionComponent from 'web/pages/permissions/Component';
 import PermissionDetails from 'web/pages/permissions/Details';
 import {selector, loadEntity} from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   entity,
   onPermissionCloneClick,

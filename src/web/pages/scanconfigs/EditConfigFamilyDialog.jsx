@@ -10,7 +10,7 @@ import React, {useState, useEffect} from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
-import EditIcon from 'web/components/icon/EditIcon';
+import { EditIcon } from 'web/components/icon/icons';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import SortBy from 'web/components/sortby/SortBy';
@@ -23,7 +23,6 @@ import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {makeCompareSeverity, makeCompareString} from 'web/utils/Sort';
-
 const EDIT_CONFIG_COLUMNS_SORT = {
   name: 'name',
   oid: 'oid',

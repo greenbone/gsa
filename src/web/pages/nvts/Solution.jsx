@@ -11,8 +11,6 @@ import IconDivider from 'web/components/layout/IconDivider';
 import DetailsBlock from 'web/entity/Block';
 import Pre from 'web/pages/nvts/Preformatted';
 import PropTypes from 'web/utils/PropTypes';
-
-
 const Solution = ({solutionDescription, solutionType}) => {
   const hasSolution = isDefined(solutionDescription) || isDefined(solutionType);
 

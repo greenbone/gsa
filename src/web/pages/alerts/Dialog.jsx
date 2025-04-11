@@ -37,7 +37,7 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
-import ReportIcon from 'web/components/icon/ReportIcon';
+import { ReportIcon } from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import Row from 'web/components/layout/Row';
 import AlembaVfireMethodPart from 'web/pages/alerts/AlembavFireMethodPart';
@@ -61,7 +61,6 @@ import VeriniceMethodPart from 'web/pages/alerts/VeriniceMethodPart';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
-
 export const DEFAULT_DEFENSE_CENTER_PORT = '8307';
 export const DEFAULT_DIRECTION = 'changed';
 export const DEFAULT_EVENT_STATUS = 'Done';

@@ -5,13 +5,14 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import TrendDownIcon from 'web/components/icon/TrendDownIcon';
-import TrendLessIcon from 'web/components/icon/TrendLessIcon';
-import TrendMoreIcon from 'web/components/icon/TrendMoreIcon';
-import TrendNoChangeIcon from 'web/components/icon/TrendNoChangeIcon';
-import TrendUpIcon from 'web/components/icon/TrendUpIcon';
+import {
+  TrendDownIcon,
+  TrendLessIcon,
+  TrendMoreIcon,
+  TrendUpIcon,
+  TrendNoChangeIcon,
+} from 'web/components/icon/icons';
 import PropTypes from 'web/utils/PropTypes';
-
 const Trend = ({name}) => {
   let title;
   let IconComponent;

@@ -10,10 +10,9 @@ import SeverityBar from 'web/components/bar/SeverityBar';
 import CpeIcon from 'web/components/icon/CpeIcon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import HostIcon from 'web/components/icon/HostIcon';
+import {HostIcon, OsSvgIcon} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import OsSvgIcon from 'web/components/icon/OsSvgIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -49,7 +48,6 @@ import {
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 let ToolBarIcons = ({
   capabilities,
   entity,
