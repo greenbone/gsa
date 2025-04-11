@@ -10,9 +10,8 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import DashboardControls from 'web/components/dashboard/Controls';
+import { ReportIcon,UploadIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ReportIcon from 'web/components/icon/ReportIcon';
-import UploadIcon from 'web/components/icon/UploadIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
@@ -39,7 +38,6 @@ import {
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 
 const ToolBarIcons = ({onUploadReportClick}) => (

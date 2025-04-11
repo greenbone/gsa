@@ -5,10 +5,8 @@
 
 import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import { NewIcon,ScanConfigIcon,UploadIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
-import ScanConfigIcon from 'web/components/icon/ScanConfigIcon';
-import UploadIcon from 'web/components/icon/UploadIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -23,7 +21,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   onScanConfigCreateClick,
   onScanConfigImportClick,

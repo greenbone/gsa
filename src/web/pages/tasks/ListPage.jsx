@@ -6,9 +6,8 @@
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
+import { TaskIcon,WizardIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import TaskIcon from 'web/components/icon/TaskIcon';
-import WizardIcon from 'web/components/icon/WizardIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
@@ -31,7 +30,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tasks';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   onAdvancedTaskWizardClick,
   onModifyTaskWizardClick,

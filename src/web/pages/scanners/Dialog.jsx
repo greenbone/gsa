@@ -15,12 +15,11 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
-import NewIcon from 'web/components/icon/NewIcon';
+import { NewIcon } from 'web/components/icon/icons';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
-
 const AVAILABLE_SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
 
 const ScannerDialog = ({

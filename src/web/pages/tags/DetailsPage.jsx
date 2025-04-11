@@ -5,12 +5,10 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import DisableIcon from 'web/components/icon/DisableIcon';
-import EnableIcon from 'web/components/icon/EnableIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { DisableIcon,EnableIcon,TagIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import TagIcon from 'web/components/icon/TagIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -42,7 +40,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/tags';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilties from 'web/utils/withCapabilities';
-
 const ToolBarIcons = withCapabilties(
   ({
     capabilities,

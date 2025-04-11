@@ -9,12 +9,14 @@ import React from 'react';
 import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import HostIcon from 'web/components/icon/HostIcon';
+import {
+  HostIcon,
+  ResultIcon,
+  TlsCertificateIcon,
+} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import OsIcon from 'web/components/icon/OsIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
-import TlsCertificateIcon from 'web/components/icon/TlsCertificateIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -50,7 +52,6 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   entity,
   onHostCreateClick,

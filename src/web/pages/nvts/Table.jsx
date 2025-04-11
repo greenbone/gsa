@@ -5,7 +5,7 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
-import SolutionTypeSvgIcon from 'web/components/icon/SolutionTypeSvgIcon';
+import {SolutionTypeSvgIcon} from 'web/components/icon/icons';
 import Layout from 'web/components/layout/Layout';
 import Sort from 'web/components/sortby/SortBy';
 import TableHead from 'web/components/table/Head';

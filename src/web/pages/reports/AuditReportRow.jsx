@@ -9,9 +9,7 @@ import React from 'react';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
-import DeleteIcon from 'web/components/icon/DeleteIcon';
-import DeltaIcon from 'web/components/icon/DeltaIcon';
-import DeltaSecondIcon from 'web/components/icon/DeltaSecondIcon';
+import { DeleteIcon,DeltaIcon,DeltaSecondIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/Data';
@@ -19,7 +17,6 @@ import TableRow from 'web/components/table/Row';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-
 const Actions = withEntitiesActions(
   ({entity, selectedDeltaReport, onReportDeleteClick, onReportDeltaSelect}) => {
     const {report} = entity;

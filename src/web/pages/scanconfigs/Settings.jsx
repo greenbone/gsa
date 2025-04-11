@@ -5,7 +5,7 @@
 
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import Settings2 from 'web/components/icon/Settings2';
+import {Settings2Icon} from 'web/components/icon/icons';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
@@ -49,7 +49,7 @@ const EntitySettingsIcon = ({
     }
   }
   return (
-    <Settings2
+    <Settings2Icon
       {...props}
       active={active}
       title={title}

@@ -9,10 +9,8 @@ import {
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
 import React from 'react';
-import TrendMoreIcon from 'web/components/icon/TrendMoreIcon';
-import TrendNoChangeIcon from 'web/components/icon/TrendNoChangeIcon';
+import {TrendMoreIcon, TrendNoChangeIcon} from 'web/components/icon/icons';
 import PropTypes from 'web/utils/PropTypes';
-
 const Trend = ({trend, titleDynamic, titleStatic, ...props}) => {
   if (trend === SCANCONFIG_TREND_DYNAMIC) {
     return <TrendMoreIcon alt={_('Dynamic')} title={titleDynamic} {...props} />;

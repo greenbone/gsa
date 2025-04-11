@@ -9,7 +9,7 @@ import {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import StartIcon from 'web/components/icon/StartIcon';
+import { StartIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import AlertComponent from 'web/pages/alerts/Component';
 import TriggerAlertDialog from 'web/pages/reports/TriggerAlertDialog';
@@ -27,7 +27,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
 const log = logger.getLogger('web.report.alertactions');
 
 class AlertActions extends React.Component {

@@ -7,11 +7,8 @@ import _ from 'gmp/locale';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import React from 'react';
 import styled from 'styled-components';
-import DeleteIcon from 'web/components/icon/DeleteIcon';
-import DisableIcon from 'web/components/icon/DisableIcon';
-import EditIcon from 'web/components/icon/EditIcon';
+import { DeleteIcon,DisableIcon,EditIcon,NewIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -25,7 +22,6 @@ import Table from 'web/components/table/StripedTable';
 import TagComponent from 'web/pages/tags/Component';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 const SectionElementDivider = styled(Divider)`
   margin-bottom: 3px;
 `;

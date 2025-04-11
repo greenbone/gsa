@@ -11,7 +11,6 @@ import ResumeIcon from 'web/pages/tasks/icons/ResumeIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('Task ResumeIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
@@ -61,9 +60,8 @@ describe('Task ResumeIcon component tests', () => {
       'title',
       'Permission to resume task denied',
     );
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is not stopped', () => {
@@ -86,9 +84,8 @@ describe('Task ResumeIcon component tests', () => {
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is not stopped');
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if wrong command level permissions are given for audit', () => {
@@ -115,10 +112,8 @@ describe('Task ResumeIcon component tests', () => {
       'title',
       'Permission to resume audit denied',
     );
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is scheduled', () => {
@@ -145,10 +140,8 @@ describe('Task ResumeIcon component tests', () => {
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is scheduled');
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should render in inactive state if task is a container', () => {
@@ -171,10 +164,8 @@ describe('Task ResumeIcon component tests', () => {
 
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('title', 'Task is a container');
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should not be rendered if task is queued', () => {

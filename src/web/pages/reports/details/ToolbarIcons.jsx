@@ -6,23 +6,24 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import AddToAssetsIcon from 'web/components/icon/AddToAssetsIcon';
-import DownloadIcon from 'web/components/icon/DownloadIcon';
+import {
+  AddToAssetsIcon,
+  DownloadIcon,
+  PerformanceIcon,
+  RemoveFromAssetsIcon,
+  ResultIcon,
+  TaskIcon,
+  VulnerabilityIcon,
+  TlsCertificateIcon,
+} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import PerformanceIcon from 'web/components/icon/PerformanceIcon';
-import RemoveFromAssetsIcon from 'web/components/icon/RemoveFromAssetsIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
-import TaskIcon from 'web/components/icon/TaskIcon';
-import TlsCertificateIcon from 'web/components/icon/TlsCertificateIcon';
-import VulnerabilityIcon from 'web/components/icon/VulnerabilityIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import AlertActions from 'web/pages/reports/details/AlertActions';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   audit = false,
   delta = false,

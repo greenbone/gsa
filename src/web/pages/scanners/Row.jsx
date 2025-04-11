@@ -11,9 +11,8 @@ import {
 } from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import DownloadKeyIcon from 'web/components/icon/DownloadKeyIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import VerifyIcon from 'web/components/icon/VerifyIcon';
+import { DownloadKeyIcon,VerifyIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
@@ -25,7 +24,6 @@ import TrashIcon from 'web/entity/icon/TrashIcon';
 import EntityLink from 'web/entity/Link';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
-
 const Actions = withEntitiesActions(
   ({
     entity,

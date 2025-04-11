@@ -6,9 +6,8 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import ViewOtherIcon from 'web/components/icon/ViewOtherIcon';
+import { ViewOtherIcon } from 'web/components/icon/icons';
 import PropTypes from 'web/utils/PropTypes';
-
 const ObserverIcon = ({
   entity,
   userName,

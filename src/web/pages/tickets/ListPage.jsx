@@ -7,8 +7,8 @@ import _ from 'gmp/locale';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
+import { TicketIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import TicketIcon from 'web/components/icon/TicketIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -21,7 +21,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = () => (
   <ManualIcon
     anchor="managing-tickets"

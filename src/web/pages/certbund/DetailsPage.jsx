@@ -6,8 +6,8 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
-import CertBundAdvIcon from 'web/components/icon/CertBundAdvIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
+import { CertBundAdvIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
@@ -37,7 +37,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import CertBundAdvDetails from 'web/pages/certbund/Details';
 import {selector, loadEntity} from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>

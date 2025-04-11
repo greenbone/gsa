@@ -7,10 +7,9 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import React from 'react';
-import StartIcon from 'web/components/icon/StartIcon';
+import { StartIcon } from 'web/components/icon/icons';
 import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-
 const TaskStartIcon = ({task, usageType = _('task'), onClick}) => {
   const capabilities = useCapabilities();
 

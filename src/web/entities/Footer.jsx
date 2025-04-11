@@ -19,7 +19,6 @@ import TableRow from 'web/components/table/Row';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
-
 const DIALOG_TYPES = {
   TRASH: 'trash',
   DELETE: 'delete',

@@ -6,10 +6,9 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import TrashcanIcon from 'web/components/icon/TrashCanIcon';
+import {TrashcanIcon} from 'web/components/icon/icons';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
-
 const TrashIcon = ({selectionType, title, ...other}) => {
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {

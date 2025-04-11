@@ -10,7 +10,6 @@ import React from 'react';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 const EntityDeleteIcon = ({
   capabilities,
   displayName,

@@ -7,9 +7,8 @@ import _ from 'gmp/locale';
 import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import AlertIcon from 'web/components/icon/AlertIcon';
+import { AlertIcon,NewIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -23,8 +22,6 @@ import {
 } from 'web/store/entities/alerts';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
     <IconDivider>

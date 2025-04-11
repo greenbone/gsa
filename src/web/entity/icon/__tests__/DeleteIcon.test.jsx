@@ -8,8 +8,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Task from 'gmp/models/task';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
-import Theme from 'web/utils/Theme';
-
 
 describe('Entity DeleteIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
@@ -31,10 +29,8 @@ describe('Entity DeleteIcon component tests', () => {
     fireEvent.click(element);
 
     expect(clickHandler).toHaveBeenCalled();
-    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).not.toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).not.toHaveAttribute('disabled');
+    expect(element).not.toHaveAttribute('data-disabled', 'true');
   });
 
   test('should deactivate if wrong command level permissions are given', () => {
@@ -55,10 +51,8 @@ describe('Entity DeleteIcon component tests', () => {
 
     fireEvent.click(element);
     expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 
   test('should deactivate if wrong resource level permissions are given', () => {
@@ -80,9 +74,7 @@ describe('Entity DeleteIcon component tests', () => {
     fireEvent.click(element);
 
     expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
-      modifier: 'svg path.gui_icon_class',
-    });
-    expect(element).toHaveStyleRule('color', Theme.inputBorderGray);
+    expect(element).toHaveAttribute('disabled');
+    expect(element).toHaveAttribute('data-disabled', 'true');
   });
 });

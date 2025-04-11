@@ -11,14 +11,13 @@ import React from 'react';
 import styled from 'styled-components';
 import {FoldState} from 'web/components/folding/Folding';
 import FootNote from 'web/components/footnote/Footnote';
-import FoldIcon from 'web/components/icon/FoldStateIcon';
+import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
 import Pagination from 'web/components/pagination/Pagination';
 import TableBody from 'web/components/table/Body';
 import StripedTable from 'web/components/table/StripedTable';
 import PropTypes from 'web/utils/PropTypes';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
-
 const exclude_props = [
   'row',
   'header',
@@ -32,7 +31,7 @@ const UpdatingStripedTable = styled(StripedTable)`
   opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
 `;
 
-const DetailsIcon = styled(FoldIcon)`
+const DetailsIcon = styled(FoldStateIcon)`
   margin-top: 2px;
   margin-left: 2px;
 `;

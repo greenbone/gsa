@@ -7,9 +7,8 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import EditIcon from 'web/components/icon/EditIcon';
+import { EditIcon,RadiusIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import RadiusIcon from 'web/components/icon/RadiusIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -26,7 +25,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
-
 const ToolBarIcons = ({onOpenDialogClick}) => (
   <IconDivider>
     <ManualIcon

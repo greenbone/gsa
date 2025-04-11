@@ -5,9 +5,8 @@
 
 import {SCANNERS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import { NewIcon,ScannerIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
-import ScannerIcon from 'web/components/icon/ScannerIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -23,7 +22,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({onScannerCreateClick}) => {
   const gmp = useGmp();
   const capabilities = useCapabilities();

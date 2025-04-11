@@ -10,8 +10,8 @@ import styled from 'styled-components';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
 import Button from 'web/components/form/Button';
+import {TrashcanIcon} from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import TrashcanIcon from 'web/components/icon/TrashCanIcon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import InnerLink from 'web/components/link/InnerLink';
@@ -51,7 +51,6 @@ import TargetsTable from 'web/pages/targets/Table';
 import TasksTable from 'web/pages/tasks/Table';
 import TicketsTable from 'web/pages/tickets/Table';
 import PropTypes from 'web/utils/PropTypes';
-
 const Col = styled.col`
   width: 50%;
 `;

@@ -14,14 +14,12 @@ import Select from 'web/components/form/Select';
 import Spinner from 'web/components/form/Spinner';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
-import NewIcon from 'web/components/icon/NewIcon';
+import { NewIcon } from 'web/components/icon/icons';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 import withPrefix from 'web/utils/withPrefix';
-
-
 const ScpMethodPart = ({
   prefix,
   credentials = [],

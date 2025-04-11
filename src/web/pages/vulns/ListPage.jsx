@@ -7,8 +7,8 @@ import _ from 'gmp/locale';
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
+import { VulnerabilityIcon } from 'web/components/icon/icons';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import VulnerabilityIcon from 'web/components/icon/VulnerabilityIcon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
@@ -21,7 +21,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/vulns';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = () => (
   <Layout>
     <ManualIcon

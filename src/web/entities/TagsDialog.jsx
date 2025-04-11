@@ -9,11 +9,10 @@ import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
-import NewIcon from 'web/components/icon/NewIcon';
+import { NewIcon } from 'web/components/icon/icons';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
-
 const ENTITIES_THRESHOLD = 50000;
 
 const Notification = styled(Layout)`

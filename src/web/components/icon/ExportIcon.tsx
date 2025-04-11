@@ -4,8 +4,8 @@
  */
 
 import _ from 'gmp/locale';
-import {isDefined} from 'gmp/utils/identity';
-import {CircleX as Icon} from 'lucide-react';
+import {FileOutput as Icon} from 'lucide-react';
+import React from 'react';
 import {DynamicIcon, DynamicIconProps} from 'web/components/icon/DynamicIcon';
 import SelectionType from 'web/utils/SelectionType';
 
@@ -14,28 +14,29 @@ interface DeleteIconProps extends Omit<DynamicIconProps, 'icon'> {
   title?: string;
 }
 
-const DeleteIcon: React.FC<DeleteIconProps> = ({
+const ExportIcon: React.FC<DeleteIconProps> = ({
   selectionType,
   title,
   ...props
 }) => {
-  if (!isDefined(title)) {
+  let downloadTitle = title;
+  if (!downloadTitle) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      title = _('Delete page contents');
+      downloadTitle = _('Export page contents');
     } else if (selectionType === SelectionType.SELECTION_USER) {
-      title = _('Delete selection');
+      downloadTitle = _('Export selection');
     } else if (selectionType === SelectionType.SELECTION_FILTER) {
-      title = _('Delete all filtered');
+      downloadTitle = _('Export all filtered');
     }
   }
   return (
     <DynamicIcon
-      dataTestId="delete-icon"
+      dataTestId="export-icon"
       icon={Icon}
-      title={title}
+      title={downloadTitle}
       {...props}
     />
   );
 };
 
-export default DeleteIcon;
+export default ExportIcon;

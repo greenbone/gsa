@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import FilterIcon from 'web/components/icon/FilterIcon';
+import { FilterIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
@@ -39,7 +39,6 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   entity,
   onFilterCloneClick,

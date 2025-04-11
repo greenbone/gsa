@@ -6,10 +6,9 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import TagsSvgIcon from 'web/components/icon/TagsSvgIcon';
+import {TagsIcon as TagsSvgIcon} from 'web/components/icon/icons';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
-
 
 const TagsIcon = ({active = true, selectionType, title, ...other}) => {
   if (!isDefined(title)) {

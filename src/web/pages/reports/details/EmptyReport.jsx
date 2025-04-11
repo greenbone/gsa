@@ -6,16 +6,12 @@
 import _ from 'gmp/locale';
 import {isActive, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
-import RefreshIcon from 'web/components/icon/RefreshIcon';
-import TargetIcon from 'web/components/icon/TargetIcon';
-import TaskIcon from 'web/components/icon/TaskIcon';
+import { RefreshIcon,TargetIcon,TaskIcon } from 'web/components/icon/icons';
 import Divider from 'web/components/layout/Divider';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
-
 const EmptyReport = ({
   capabilities,
   hasTarget = false,
