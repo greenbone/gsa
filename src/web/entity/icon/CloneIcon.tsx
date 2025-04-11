@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import {getEntityType, typeName, EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import { CloneIcon } from 'web/components/icon/icons';
+import {CloneIcon} from 'web/components/icon/icons';
 import useCapabilities from 'web/hooks/useCapabilities';
 interface EntityClone extends EntityType {
   userCapabilities: {
