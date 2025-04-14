@@ -25,9 +25,9 @@ export interface DynamicIconProps<TValue = string>
   loadingTitle?: string;
   value?: TValue;
   strokeWidth?: number;
-  onClick?: (value?: TValue) => void | Promise<void>;
   dataTestId?: string;
   forceStatic?: boolean;
+  onClick?: (value?: TValue) => void | Promise<void>;
 }
 
 export function DynamicIcon<TValue = string>({

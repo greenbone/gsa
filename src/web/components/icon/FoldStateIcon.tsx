@@ -10,7 +10,8 @@ import {FoldIcon, UnfoldIcon} from 'web/components/icon';
 interface FoldStateIconProps {
   foldState: keyof typeof FoldState;
   title?: string;
-  [key: string]: unknown;
+  className?: string;
+  onClick?: () => void;
 }
 
 const FoldStateIcon: React.FC<FoldStateIconProps> = ({
