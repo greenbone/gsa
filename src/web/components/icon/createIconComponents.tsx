@@ -4,7 +4,6 @@
  */
 
 import {LucideIcon} from 'lucide-react';
-import React, {JSX} from 'react';
 import DynamicIcon, {DynamicIconProps} from 'web/components/icon/DynamicIcon';
 
 export interface ExtendedDynamicIconProps<TValue = string>
@@ -14,7 +13,7 @@ export interface ExtendedDynamicIconProps<TValue = string>
 
 export interface IconComponentsType {
   [key: string]: {
-    <T = string>(props: ExtendedDynamicIconProps<T>): JSX.Element;
+    <TValue = string>(props: ExtendedDynamicIconProps<TValue>): React.ReactNode;
     displayName?: string;
   };
 }
