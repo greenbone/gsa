@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Badge from 'web/components/badge/Badge';
-import { ReportIcon } from 'web/components/icon/icons';
+import {ReportIcon} from 'web/components/icon';
 import {render} from 'web/utils/Testing';
 describe('Badge tests', () => {
   test('should render badge', () => {

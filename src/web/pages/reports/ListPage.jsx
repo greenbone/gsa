@@ -10,7 +10,7 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import DashboardControls from 'web/components/dashboard/Controls';
-import { ReportIcon,UploadIcon } from 'web/components/icon/icons';
+import {ReportIcon, UploadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';

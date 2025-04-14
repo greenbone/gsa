@@ -9,7 +9,7 @@ import {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import { StartIcon } from 'web/components/icon/icons';
+import {StartIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import AlertComponent from 'web/pages/alerts/Component';
 import TriggerAlertDialog from 'web/pages/reports/TriggerAlertDialog';

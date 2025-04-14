@@ -37,7 +37,7 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
-import { ReportIcon } from 'web/components/icon/icons';
+import {ReportIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Row from 'web/components/layout/Row';
 import AlembaVfireMethodPart from 'web/pages/alerts/AlembavFireMethodPart';

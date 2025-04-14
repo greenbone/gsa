@@ -11,7 +11,7 @@ import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
 import TextField from 'web/components/form/TextField';
-import { NewIcon } from 'web/components/icon/icons';
+import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';

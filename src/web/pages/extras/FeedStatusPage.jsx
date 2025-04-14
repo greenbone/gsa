@@ -24,7 +24,7 @@ import {
   PortListIcon,
   ReportFormatIcon,
   ScanConfigIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';

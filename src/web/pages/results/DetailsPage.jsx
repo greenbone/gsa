@@ -10,7 +10,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
-import ExportIcon from 'web/components/icon/ExportIcon';
 import {
   NewNoteIcon,
   NewTicketIcon,
@@ -20,7 +19,8 @@ import {
   TaskIcon,
   TicketIcon,
   NewOverrideIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
+import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';

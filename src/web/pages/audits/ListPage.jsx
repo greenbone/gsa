@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import {RESET_FILTER, TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import {NewIcon, AuditIcon} from 'web/components/icon/icons';
+import {NewIcon, AuditIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';

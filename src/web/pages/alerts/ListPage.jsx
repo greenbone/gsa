@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import { AlertIcon,NewIcon } from 'web/components/icon/icons';
+import {AlertIcon, NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';

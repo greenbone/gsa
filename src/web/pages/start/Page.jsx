@@ -15,7 +15,12 @@ import {
   canAddDisplay,
   convertDefaultDisplays,
 } from 'web/components/dashboard/Utils';
-import { DashboardIcon,DeleteIcon,EditIcon,NewIcon } from 'web/components/icon/icons';
+import {
+  DashboardIcon,
+  DeleteIcon,
+  EditIcon,
+  NewIcon,
+} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';

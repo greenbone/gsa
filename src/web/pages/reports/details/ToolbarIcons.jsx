@@ -15,7 +15,7 @@ import {
   TaskIcon,
   VulnerabilityIcon,
   TlsCertificateIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';

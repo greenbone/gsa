@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
-import { NewIcon } from 'web/components/icon/icons';
+import {NewIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';

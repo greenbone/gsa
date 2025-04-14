@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
-import { NewIcon,NoteIcon } from 'web/components/icon/icons';
+import {NewIcon, NoteIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';

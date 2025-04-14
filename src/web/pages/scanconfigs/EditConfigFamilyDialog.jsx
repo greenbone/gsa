@@ -10,7 +10,7 @@ import React, {useState, useEffect} from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
-import { EditIcon } from 'web/components/icon/icons';
+import {EditIcon} from 'web/components/icon';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import SortBy from 'web/components/sortby/SortBy';

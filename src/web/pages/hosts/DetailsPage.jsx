@@ -8,12 +8,8 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
+import {HostIcon, ResultIcon, TlsCertificateIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import {
-  HostIcon,
-  ResultIcon,
-  TlsCertificateIcon,
-} from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import OsIcon from 'web/components/icon/OsIcon';

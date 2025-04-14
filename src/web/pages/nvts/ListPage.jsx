@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
-import { NvtIcon } from 'web/components/icon/icons';
+import {NvtIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';

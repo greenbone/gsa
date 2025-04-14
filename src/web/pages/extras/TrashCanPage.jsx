@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
 import Button from 'web/components/form/Button';
-import {TrashcanIcon} from 'web/components/icon/icons';
+import {TrashcanIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';

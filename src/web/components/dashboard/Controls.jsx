@@ -17,7 +17,7 @@ import {
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
-import {NewIcon, ResetIcon} from 'web/components/icon/icons';
+import {NewIcon, ResetIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import {
   resetSettings,

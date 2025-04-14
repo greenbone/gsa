@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import {isActive, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
-import { RefreshIcon,TargetIcon,TaskIcon } from 'web/components/icon/icons';
+import {RefreshIcon, TargetIcon, TaskIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';

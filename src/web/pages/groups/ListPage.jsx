@@ -5,7 +5,7 @@
 
 import {GROUPS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import { GroupIcon,NewIcon } from 'web/components/icon/icons';
+import {GroupIcon, NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';

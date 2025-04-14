@@ -13,7 +13,7 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import Radio from 'web/components/form/Radio';
-import { EditIcon } from 'web/components/icon/icons';
+import {EditIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Section from 'web/components/section/Section';
 import TableBody from 'web/components/table/Body';

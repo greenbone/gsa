@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FootNote from 'web/components/footnote/Footnote';
-import { EditIcon,FilterIcon } from 'web/components/icon/icons';
+import {EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';

@@ -15,7 +15,7 @@ import {
   NoteIcon,
   OverrideIcon,
   TicketIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
 import SolutionTypeIcon from 'web/components/icon/SolutionTypeIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';

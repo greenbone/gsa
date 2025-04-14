@@ -5,7 +5,7 @@
 
 import _ from 'gmp/locale';
 import {FoldState} from 'web/components/folding/Folding';
-import {FoldIcon, UnfoldIcon} from 'web/components/icon/icons';
+import {FoldIcon, UnfoldIcon} from 'web/components/icon';
 
 interface FoldStateIconProps {
   foldState: keyof typeof FoldState;

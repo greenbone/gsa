@@ -7,13 +7,13 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import Badge from 'web/components/badge/Badge';
-import ExportIcon from 'web/components/icon/ExportIcon';
 import {
   AlterableIcon,
   ReportIcon,
   ResultIcon,
   AuditIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
+import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';

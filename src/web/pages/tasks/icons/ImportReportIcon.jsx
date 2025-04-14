@@ -5,7 +5,7 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import { ImportIcon } from 'web/components/icon/icons';
+import {ImportIcon} from 'web/components/icon';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 const ImportReportIcon = ({capabilities, size, task, onClick}) => {

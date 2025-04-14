@@ -6,7 +6,7 @@
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
-import { TaskIcon,WizardIcon } from 'web/components/icon/icons';
+import {TaskIcon, WizardIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';

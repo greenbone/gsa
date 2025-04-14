@@ -7,14 +7,14 @@ import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import ExportIcon from 'web/components/icon/ExportIcon';
 import {
   NewNoteIcon,
   NvtIcon,
   ResultIcon,
   VulnerabilityIcon,
   NewOverrideIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
+import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';

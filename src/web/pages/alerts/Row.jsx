@@ -6,8 +6,8 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {StartIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import { StartIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/Data';

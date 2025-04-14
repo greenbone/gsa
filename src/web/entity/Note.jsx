@@ -5,7 +5,7 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import { DetailsIcon } from 'web/components/icon/icons';
+import {DetailsIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import EntityBox from 'web/entity/Box';

@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import {NewIcon} from 'web/components/icon/icons';
+import {NewIcon} from 'web/components/icon';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 

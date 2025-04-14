@@ -10,7 +10,7 @@ import React from 'react';
 import ComplianceStatusBar from 'web/components/bar/ComplianceStatusBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
-import { AlterableIcon,ProvideViewIcon,SensorIcon } from 'web/components/icon/icons';
+import {AlterableIcon, ProvideViewIcon, SensorIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';

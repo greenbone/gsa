@@ -6,7 +6,7 @@
 import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import TextField from 'web/components/form/TextField';
-import { SearchIcon } from 'web/components/icon/icons';
+import {SearchIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';

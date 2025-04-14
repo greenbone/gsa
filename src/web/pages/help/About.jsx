@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 import GSA_VERSION from 'version';
-import { HelpIcon } from 'web/components/icon/icons';
+import {HelpIcon} from 'web/components/icon';
 import Img from 'web/components/img/Img';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';

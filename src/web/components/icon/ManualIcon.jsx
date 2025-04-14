@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { HelpIcon } from 'web/components/icon/icons';
+import {HelpIcon} from 'web/components/icon';
 import ManualLink from 'web/components/link/ManualLink';
 import PropTypes from 'web/utils/PropTypes';
 const ManualIcon = ({anchor, page, searchTerm, ...props}) => {

@@ -14,7 +14,7 @@ import Select from 'web/components/form/Select';
 import Spinner from 'web/components/form/Spinner';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
-import { NewIcon } from 'web/components/icon/icons';
+import {NewIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';

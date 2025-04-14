@@ -11,7 +11,7 @@ import {
   TrendMoreIcon,
   TrendUpIcon,
   TrendNoChangeIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
 import PropTypes from 'web/utils/PropTypes';
 const Trend = ({name}) => {
   let title;

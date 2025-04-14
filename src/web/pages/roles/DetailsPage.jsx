@@ -6,8 +6,8 @@
 import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import React from 'react';
+import {RoleIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import { RoleIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
