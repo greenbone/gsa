@@ -13,6 +13,7 @@ const Spinner = forwardRef<
   <NumberField
     {...props}
     ref={ref}
+    allowEmpty={false}
     fixedDecimalScale={true}
     hideControls={false}
   />
