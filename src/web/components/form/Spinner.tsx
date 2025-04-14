@@ -15,13 +15,14 @@ interface SpinnerProps
 }
 
 const Spinner = forwardRef<HTMLInputElement, SpinnerProps>(
-  ({onChange, ...props}, ref) => (
+  ({onChange, type = 'int', ...props}, ref) => (
     <NumberField
       {...props}
       ref={ref}
       allowEmpty={false}
       fixedDecimalScale={true}
       hideControls={false}
+      type={type}
       /* @ts-expect-error */
       onChange={onChange}
     />
