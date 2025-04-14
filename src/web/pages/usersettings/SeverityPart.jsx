@@ -28,6 +28,7 @@ const SeverityPart = ({defaultSeverity, dynamicSeverity, onChange}) => {
           max="10"
           min="0"
           name="defaultSeverity"
+          precision={1}
           step="0.1"
           type="float"
           value={defaultSeverity}
