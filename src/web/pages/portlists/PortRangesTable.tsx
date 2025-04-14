@@ -21,7 +21,7 @@ interface PortRange {
 interface PortRangesTableProps {
   actions?: boolean;
   portRanges?: PortRange[];
-  onDeleteClick?: (value: PortRange) => Promise<void>;
+  onDeleteClick?: (value?: PortRange) => void | Promise<void>;
 }
 
 const PortRangesTable: React.FC<PortRangesTableProps> = ({
@@ -54,7 +54,7 @@ const PortRangesTable: React.FC<PortRangesTableProps> = ({
                 <DeleteIcon<PortRange>
                   title={_('Delete Port Range')}
                   value={range}
-                  onClick={range => range && onDeleteClick?.(range)}
+                  onClick={onDeleteClick}
                 />
               </TableData>
             )}
