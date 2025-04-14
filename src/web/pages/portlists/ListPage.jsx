@@ -9,7 +9,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
-import { NewIcon,PortListIcon,UploadIcon } from 'web/components/icon/icons';
+import {NewIcon, PortListIcon, UploadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';

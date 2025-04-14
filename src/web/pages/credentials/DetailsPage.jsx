@@ -11,8 +11,8 @@ import {
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
+import {CredentialIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import { CredentialIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';

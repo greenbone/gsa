@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import React from 'react';
 import styled from 'styled-components';
-import { DeleteIcon,DisableIcon,EditIcon,NewIcon } from 'web/components/icon/icons';
+import {DeleteIcon, DisableIcon, EditIcon, NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';

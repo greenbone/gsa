@@ -24,7 +24,7 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
-import { InfoIcon,NewIcon } from 'web/components/icon/icons';
+import {InfoIcon, NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';

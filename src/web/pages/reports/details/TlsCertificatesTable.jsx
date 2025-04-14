@@ -7,7 +7,7 @@ import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
-import { DownloadIcon } from 'web/components/icon/icons';
+import {DownloadIcon} from 'web/components/icon';
 import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';

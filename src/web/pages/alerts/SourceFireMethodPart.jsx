@@ -13,7 +13,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import Spinner from 'web/components/form/Spinner';
 import TextField from 'web/components/form/TextField';
-import { NewIcon } from 'web/components/icon/icons';
+import {NewIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';

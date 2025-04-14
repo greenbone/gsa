@@ -6,8 +6,8 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {DownloadIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import { DownloadIcon } from 'web/components/icon/icons';
 import IconDivider from 'web/components/layout/IconDivider';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';

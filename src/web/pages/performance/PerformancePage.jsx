@@ -15,7 +15,7 @@ import styled from 'styled-components';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import withClickHandler from 'web/components/form/withClickHandler';
-import {PerformanceIcon, WizardIcon} from 'web/components/icon/icons';
+import {PerformanceIcon, WizardIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Column from 'web/components/layout/Column';
 import IconDivider from 'web/components/layout/IconDivider';

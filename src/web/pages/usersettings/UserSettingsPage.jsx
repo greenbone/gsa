@@ -12,7 +12,7 @@ import {YES_VALUE, NO_VALUE, parseYesNo} from 'gmp/parser';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import { EditIcon,MySettingsIcon } from 'web/components/icon/icons';
+import {EditIcon, MySettingsIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -246,7 +246,7 @@ class UserSettings extends React.Component {
     } catch (error) {
       console.error(error);
 
-      throw error
+      throw error;
     }
   }
 

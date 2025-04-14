@@ -7,13 +7,15 @@ import _ from 'gmp/locale';
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
-import { VulnerabilityIcon } from 'web/components/icon/icons';
+import {VulnerabilityIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from 'web/pages/vulns/dashboard';
+import VulnerabilitiesDashboard, {
+  VULNS_DASHBOARD_ID,
+} from 'web/pages/vulns/dashboard';
 import VulnsFilterDialog from 'web/pages/vulns/FilterDialog';
 import VulnsTable from 'web/pages/vulns/Table';
 import {

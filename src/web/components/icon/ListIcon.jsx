@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { ListSvgIcon } from 'web/components/icon/icons';
+import {ListSvgIcon} from 'web/components/icon';
 import Link from 'web/components/link/Link';
 import PropTypes from 'web/utils/PropTypes';
 const ListIcon = ({page, filter, ...props}) => {

@@ -7,13 +7,15 @@ import _ from 'gmp/locale';
 import Filter, {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
-import { DfnCertAdvIcon } from 'web/components/icon/icons';
+import {DfnCertAdvIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import FilterDialog from 'web/pages/certbund/FilterDialog';
-import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from 'web/pages/dfncert/dashboard';
+import DfnCertDashboard, {
+  DFNCERT_DASHBOARD_ID,
+} from 'web/pages/dfncert/dashboard';
 import DfnCertTable from 'web/pages/dfncert/Table';
 import {
   loadEntities,
@@ -21,7 +23,6 @@ import {
 } from 'web/store/entities/dfncerts';
 import PropTypes from 'web/utils/PropTypes';
 // DFN-CERT uses same filter dialog as CERT-Bund
-
 
 const ToolBarIcons = () => (
   <ManualIcon

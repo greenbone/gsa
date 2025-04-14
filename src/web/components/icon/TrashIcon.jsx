@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import {TrashcanIcon} from 'web/components/icon/icons';
+import {TrashcanIcon} from 'web/components/icon';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 const TrashIcon = ({selectionType, title, ...other}) => {

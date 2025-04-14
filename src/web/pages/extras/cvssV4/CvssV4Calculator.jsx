@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
-import { CvssIcon } from 'web/components/icon/icons';
+import {CvssIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';

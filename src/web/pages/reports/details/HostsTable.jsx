@@ -9,7 +9,7 @@ import React from 'react';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
-import { VerifyIcon,VerifyNoIcon } from 'web/components/icon/icons';
+import {VerifyIcon, VerifyNoIcon} from 'web/components/icon';
 import OsIcon from 'web/components/icon/OsIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';

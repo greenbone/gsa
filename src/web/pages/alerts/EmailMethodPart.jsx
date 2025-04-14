@@ -21,7 +21,7 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
-import { NewIcon } from 'web/components/icon/icons';
+import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';

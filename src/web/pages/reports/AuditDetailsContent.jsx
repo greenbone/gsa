@@ -11,7 +11,7 @@ import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';
-import { ReportIcon } from 'web/components/icon/icons';
+import {ReportIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';

@@ -10,7 +10,7 @@ import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
-import { DeleteIcon,DeltaIcon,DeltaSecondIcon } from 'web/components/icon/icons';
+import {DeleteIcon, DeltaIcon, DeltaSecondIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/Data';

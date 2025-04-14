@@ -7,11 +7,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  ArrowUpDownIcon,
-} from 'web/components/icon/icons';
+import {ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Sort, {ByType, DESC} from 'web/components/sortby/SortBy';
 import Theme from 'web/utils/Theme';

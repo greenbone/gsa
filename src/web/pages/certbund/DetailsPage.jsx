@@ -6,8 +6,8 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
+import {CertBundAdvIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import { CertBundAdvIcon } from 'web/components/icon/icons';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';

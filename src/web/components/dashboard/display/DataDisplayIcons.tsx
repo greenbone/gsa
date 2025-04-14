@@ -11,7 +11,7 @@ import {
   FilterIcon,
   LegendIcon,
   Toggle3dIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
 interface DataDisplayIconsState {
   showLegend?: boolean;
 }

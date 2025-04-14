@@ -14,7 +14,7 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import CheckBox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
-import { NewIcon } from 'web/components/icon/icons';
+import {NewIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 import ThresholdMessage from 'web/pages/reports/ThresholdMessage';
 import PropTypes from 'web/utils/PropTypes';

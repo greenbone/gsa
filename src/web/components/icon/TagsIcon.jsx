@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import {TagsIcon as TagsSvgIcon} from 'web/components/icon/icons';
+import {TagsIcon as TagsSvgIcon} from 'web/components/icon';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 

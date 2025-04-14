@@ -12,7 +12,7 @@ import {
   StNonAvailableIcon,
   StVendorFixIcon,
   StWillNotFixIcon,
-} from 'web/components/icon/icons';
+} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import PropTypes from 'web/utils/PropTypes';
 const SolutionType = ({type, displayTitleText = false}) => {

@@ -7,13 +7,15 @@ import _ from 'gmp/locale';
 import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
-import { ResultIcon } from 'web/components/icon/icons';
+import {ResultIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import ResultsDashboard, {RESULTS_DASHBOARD_ID} from 'web/pages/results/dashboard';
+import ResultsDashboard, {
+  RESULTS_DASHBOARD_ID,
+} from 'web/pages/results/dashboard';
 import ResultsFilterDialog from 'web/pages/results/FilterDialog';
 import ResultsTable from 'web/pages/results/Table';
 import {

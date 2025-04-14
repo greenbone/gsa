@@ -5,7 +5,7 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import {ReportConfigIcon} from 'web/components/icon/icons';
+import {ReportConfigIcon} from 'web/components/icon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';

@@ -4,7 +4,7 @@
  */
 
 import {useSelector} from 'react-redux';
-import { ResumeIcon,StartIcon } from 'web/components/icon/icons';
+import {ResumeIcon, StartIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskResumeIconBase from 'web/pages/tasks/icons/ResumeIcon';
 import TaskStartIconBase from 'web/pages/tasks/icons/StartIcon';

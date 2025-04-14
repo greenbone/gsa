@@ -11,7 +11,7 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
-import { NewIcon } from 'web/components/icon/icons';
+import {NewIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
 import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/Dialog';
 import PropTypes from 'web/utils/PropTypes';

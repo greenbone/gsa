@@ -5,7 +5,7 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import { StopIcon } from 'web/components/icon/icons';
+import {StopIcon} from 'web/components/icon';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 const TaskStopIcon = ({
