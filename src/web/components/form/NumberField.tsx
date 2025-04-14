@@ -48,6 +48,7 @@ const StyledNumberInput = styled(NumberInput)<StyledNumberInputProps>`
 
 export interface NumberFieldProps
   extends Omit<MantineNumberInputProps, 'type'> {
+  allowEmpty?: boolean;
   errorContent?: string;
   onChange?: (value: number | string, name?: string) => void;
   precision?: number | string;
@@ -58,6 +59,7 @@ export interface NumberFieldProps
 const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
   (
     {
+      allowEmpty = true,
       disabled,
       errorContent,
       hideControls = true,
@@ -93,6 +95,9 @@ const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
       [onChange, disabled, name],
     );
 
+    const isAllowed = (value: NumberFormatValues): boolean =>
+      allowEmpty || isDefined(value.floatValue);
+
     return (
       <StyledNumberInput
         data-testid="number-input"
@@ -104,6 +109,7 @@ const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
         error={isDefined(errorContent) && `${errorContent}`}
         errorContent={errorContent}
         hideControls={hideControls}
+        isAllowed={isAllowed}
         label={title}
         max={parseInt(max)}
         min={parseInt(min)}
