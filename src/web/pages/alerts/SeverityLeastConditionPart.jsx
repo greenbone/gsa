@@ -32,6 +32,7 @@ const SeverityLeastConditionPart = ({
       <Spinner
         min="0"
         name={prefix + 'severity'}
+        precision={1}
         type="float"
         value={severity}
         onChange={onChange}
