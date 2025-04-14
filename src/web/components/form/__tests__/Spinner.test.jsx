@@ -8,7 +8,6 @@ import {KeyCode} from 'gmp/utils/event';
 import Spinner from 'web/components/form/Spinner';
 import {render, fireEvent, screen, userEvent} from 'web/utils/Testing';
 
-
 const getInput = element =>
   element.querySelector('input.mantine-NumberInput-input');
 
@@ -44,7 +43,7 @@ describe('Spinner tests', () => {
     expect(element).toHaveAttribute('value', '2');
   });
 
-  test('should call change handler for characters with empty string', () => {
+  test('should not call change handler for characters', () => {
     const onChange = testing.fn();
     render(<Spinner data-testid="input" value={1} onChange={onChange} />);
 
@@ -52,11 +51,11 @@ describe('Spinner tests', () => {
 
     fireEvent.change(element, {target: {value: 'ABC'}});
 
-    expect(onChange).toHaveBeenCalledWith('', undefined);
-    expect(element).toHaveAttribute('value', '');
+    expect(onChange).not.toHaveBeenCalled();
+    expect(element).toHaveAttribute('value', '1');
   });
 
-  test('should allow to clear input', () => {
+  test('should not call change handler for cleaned input', () => {
     const onChange = testing.fn();
     render(<Spinner data-testid="input" value={1} onChange={onChange} />);
 
@@ -64,8 +63,8 @@ describe('Spinner tests', () => {
 
     fireEvent.change(element, {target: {value: ''}});
 
-    expect(onChange).toHaveBeenCalledWith('', undefined);
-    expect(element).toHaveAttribute('value', '');
+    expect(onChange).not.toHaveBeenCalled();
+    expect(element).toHaveAttribute('value', '1');
   });
 
   test('should call change handler with value and name', () => {
