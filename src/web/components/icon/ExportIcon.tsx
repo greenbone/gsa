@@ -4,23 +4,24 @@
  */
 
 import _ from 'gmp/locale';
+import {isDefined} from 'gmp/utils/identity';
 import {FileOutput as Icon} from 'lucide-react';
-import React from 'react';
 import {DynamicIcon, DynamicIconProps} from 'web/components/icon/DynamicIcon';
 import SelectionType from 'web/utils/SelectionType';
 
-interface DeleteIconProps extends Omit<DynamicIconProps, 'icon'> {
+export interface ExportIconProps<TValue = string>
+  extends Omit<DynamicIconProps<TValue>, 'icon'> {
   selectionType?: keyof typeof SelectionType;
   title?: string;
 }
 
-const ExportIcon: React.FC<DeleteIconProps> = ({
+function ExportIcon<TValue = string>({
   selectionType,
   title,
   ...props
-}) => {
+}: Readonly<ExportIconProps<TValue>>): React.ReactNode {
   let downloadTitle = title;
-  if (!downloadTitle) {
+  if (!isDefined(downloadTitle)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       downloadTitle = _('Export page contents');
     } else if (selectionType === SelectionType.SELECTION_USER) {
@@ -30,13 +31,13 @@ const ExportIcon: React.FC<DeleteIconProps> = ({
     }
   }
   return (
-    <DynamicIcon
+    <DynamicIcon<TValue>
       dataTestId="export-icon"
       icon={Icon}
       title={downloadTitle}
       {...props}
     />
   );
-};
+}
 
 export default ExportIcon;

@@ -59,7 +59,10 @@ import {
   X,
 } from 'lucide-react';
 import React from 'react';
-import DynamicIcon, {DynamicIconProps} from 'web/components/icon/DynamicIcon';
+import {
+  createIconComponents,
+  IconComponentsType,
+} from 'web/components/icon/createIconComponents';
 import AddToAssets from 'web/components/icon/svg/add_to_assets.svg?react';
 import CertBundAdv from 'web/components/icon/svg/cert_bund_adv.svg?react';
 import Clone from 'web/components/icon/svg/clone.svg?react';
@@ -117,16 +120,7 @@ import TrendUp from 'web/components/icon/svg/trend_up.svg?react';
 import Vulnerability from 'web/components/icon/svg/vulnerability.svg?react';
 import Wizard from 'web/components/icon/svg/wizard.svg?react';
 
-interface ExtendedDynamicIconProps extends Omit<DynamicIconProps, 'icon'> {
-  'data-testid'?: string;
-}
-
-interface IconComponentsType {
-  [key: string]: React.FC<ExtendedDynamicIconProps> & {
-    displayName?: string;
-  };
-}
-interface IconDefinition {
+export interface IconDefinition {
   name: string;
   component: LucideIcon | React.FC<React.SVGProps<SVGSVGElement>>;
   dataTestId: string;
@@ -911,29 +905,7 @@ export const icons: IconDefinition[] = [
   },
 ];
 
-const IconComponents: IconComponentsType = icons.reduce(
-  (acc, {name, component, dataTestId, ariaLabel, isLucide}) => {
-    acc[name] = (props: ExtendedDynamicIconProps) => {
-      const {'data-testid': dataTestIdFromProps, ...otherProps} = props;
-      const finalDataTestId = dataTestIdFromProps ?? dataTestId;
-
-      return (
-        <DynamicIcon
-          ariaLabel={ariaLabel}
-          dataTestId={finalDataTestId}
-          icon={component}
-          strokeWidth={isLucide ? 1.5 : undefined}
-          {...otherProps}
-        />
-      );
-    };
-
-    acc[name].displayName = `${name}Icon`;
-
-    return acc;
-  },
-  {} as IconComponentsType,
-);
+const IconComponents: IconComponentsType = createIconComponents(icons);
 
 export const {
   AddToAssets: AddToAssetsIcon,
