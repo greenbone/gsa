@@ -6,16 +6,25 @@
 import {forwardRef} from 'react';
 import NumberField, {NumberFieldProps} from 'web/components/form/NumberField';
 
-const Spinner = forwardRef<
-  HTMLInputElement,
-  Omit<NumberFieldProps, 'fixedDecimalScale' | 'hideControls'>
->((props, ref) => (
-  <NumberField
-    {...props}
-    ref={ref}
-    allowEmpty={false}
-    fixedDecimalScale={true}
-    hideControls={false}
-  />
-));
+interface SpinnerProps
+  extends Omit<
+    NumberFieldProps,
+    'fixedDecimalScale' | 'hideControls' | 'onChange'
+  > {
+  onChange: (value: number, name?: string) => void;
+}
+
+const Spinner = forwardRef<HTMLInputElement, SpinnerProps>(
+  ({onChange, ...props}, ref) => (
+    <NumberField
+      {...props}
+      ref={ref}
+      allowEmpty={false}
+      fixedDecimalScale={true}
+      hideControls={false}
+      /* @ts-expect-error */
+      onChange={onChange}
+    />
+  ),
+);
 export default Spinner;
