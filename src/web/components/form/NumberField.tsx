@@ -3,27 +3,35 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {NumberInput} from '@mantine/core';
+import {
+  NumberInput,
+  NumberInputProps as MantineNumberInputProps,
+} from '@mantine/core';
 import {parseFloat, parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useCallback, forwardRef} from 'react';
+import {useCallback, forwardRef} from 'react';
+import {NumberFormatValues} from 'react-number-format';
 import styled from 'styled-components';
-import PropTypes from 'web/utils/PropTypes';
 
-const getSize = size => (size === 'lg' ? '40px' : '32px');
+interface StyledNumberInputProps {
+  size: string;
+  errorContent?: string;
+}
 
-const getFontSize = size =>
+const getSize = (size: string) => (size === 'lg' ? '40px' : '32px');
+
+const getFontSize = (size: string) =>
   size === 'lg' ? 'var(--mantine-font-size-lg)' : 'var(--mantine-font-size-md)';
 
-const getBorderColor = errorContent =>
+const getBorderColor = (errorContent: string | undefined) =>
   isDefined(errorContent)
     ? 'var(--input-error-border-color)'
     : 'var(--input-border-color)';
 
-const getColor = errorContent =>
+const getColor = (errorContent: string | undefined) =>
   isDefined(errorContent) ? 'var(--mantine-color-red-5)' : 'var(--input-color)';
 
-const StyledNumberInput = styled(NumberInput)`
+const StyledNumberInput = styled(NumberInput)<StyledNumberInputProps>`
   input,
   .mantine-NumberInput-controls {
     height: ${({size}) => getSize(size)};
@@ -38,7 +46,16 @@ const StyledNumberInput = styled(NumberInput)`
   }
 `;
 
-const NumberField = forwardRef(
+export interface NumberFieldProps
+  extends Omit<MantineNumberInputProps, 'type'> {
+  errorContent?: string;
+  onChange?: (value: number | string, name?: string) => void;
+  precision?: number | string;
+  type: 'int' | 'float';
+  size: 'sm' | 'md' | 'lg';
+}
+
+const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
   (
     {
       disabled,
@@ -68,7 +85,7 @@ const NumberField = forwardRef(
     }
 
     const handleChange = useCallback(
-      newValue => {
+      (newValue: string | number) => {
         if (!disabled && onChange) {
           onChange(newValue, name);
         }
@@ -82,6 +99,7 @@ const NumberField = forwardRef(
         {...props}
         ref={ref}
         allowDecimal={type === 'float'}
+        decimalScale={parseFloat(precision)}
         disabled={disabled}
         error={isDefined(errorContent) && `${errorContent}`}
         errorContent={errorContent}
@@ -90,35 +108,16 @@ const NumberField = forwardRef(
         max={parseInt(max)}
         min={parseInt(min)}
         name={name}
-        precision={parseFloat(precision)}
         prefix={prefix}
         size={size}
         step={parseFloat(step)}
         suffix={suffix}
+        type="text"
         value={value}
         onChange={handleChange}
       />
     );
   },
 );
-
-NumberField.propTypes = {
-  disabled: PropTypes.bool,
-  errorContent: PropTypes.toString,
-  hideControls: PropTypes.bool,
-  max: PropTypes.numberOrNumberString,
-  min: PropTypes.numberOrNumberString,
-  name: PropTypes.string,
-  precision: PropTypes.numberOrNumberString,
-  prefix: PropTypes.string,
-  step: PropTypes.numberOrNumberString,
-  suffix: PropTypes.string,
-  title: PropTypes.string,
-  type: PropTypes.oneOf(['int', 'float']),
-  value: PropTypes.number,
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
-  height: PropTypes.number,
-  onChange: PropTypes.func,
-};
 
 export default NumberField;
