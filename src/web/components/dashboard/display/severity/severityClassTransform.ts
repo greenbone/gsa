@@ -119,16 +119,16 @@ const transformSeverityData = (
 
       switch (riskFactor) {
         case CRITICAL:
-          end = severityValue(boundaries.maxCritical as number);
-          start = severityValue(boundaries.minCritical as number);
+          end = severityValue(boundaries.maxCritical as number) as string;
+          start = severityValue(boundaries.minCritical as number) as string;
           toolTip = `${label} (${start} - ${end})`;
           filterValue = {
             start,
           };
           break;
         case HIGH:
-          end = severityValue(boundaries.maxHigh);
-          start = severityValue(boundaries.minHigh);
+          end = severityValue(boundaries.maxHigh) as string;
+          start = severityValue(boundaries.minHigh) as string;
           toolTip = `${label} (${start} - ${end})`;
           filterValue = {
             start,
@@ -136,8 +136,8 @@ const transformSeverityData = (
           };
           break;
         case MEDIUM:
-          end = severityValue(boundaries.maxMedium);
-          start = severityValue(boundaries.minMedium);
+          end = severityValue(boundaries.maxMedium) as string;
+          start = severityValue(boundaries.minMedium) as string;
           toolTip = `${label} (${start} - ${end})`;
           filterValue = {
             start,
@@ -145,8 +145,8 @@ const transformSeverityData = (
           };
           break;
         case LOW:
-          end = severityValue(boundaries.maxLow);
-          start = severityValue(boundaries.minLow);
+          end = severityValue(boundaries.maxLow) as string;
+          start = severityValue(boundaries.minLow) as string;
           toolTip = `${label} (${start} - ${end})`;
           filterValue = {
             start,
