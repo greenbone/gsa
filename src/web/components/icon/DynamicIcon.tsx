@@ -13,7 +13,7 @@ import Theme from 'web/utils/Theme';
 
 export type ExtendedIconSize = IconSizeType | [string, string];
 
-export interface DynamicIconProps<TValue = unknown>
+export interface DynamicIconProps<TValue = string>
   extends Omit<ActionIconProps, 'size' | 'children'> {
   icon: LucideIcon | React.ComponentType<React.SVGProps<SVGSVGElement>>;
   ariaLabel?: string;
@@ -30,7 +30,7 @@ export interface DynamicIconProps<TValue = unknown>
   forceStatic?: boolean;
 }
 
-export const DynamicIcon = ({
+export function DynamicIcon<TValue = string>({
   icon: Icon,
   ariaLabel,
   size = 'small',
@@ -45,7 +45,7 @@ export const DynamicIcon = ({
   forceStatic = false,
   onClick,
   ...restProps
-}: DynamicIconProps) => {
+}: Readonly<DynamicIconProps<TValue>>) {
   const [_] = useTranslation();
   const [loading, setLoading] = useState(false);
   const {width, height} = useIconSize(size);
@@ -96,7 +96,7 @@ export const DynamicIcon = ({
       loaderProps={{
         type: 'bars',
         color: Theme.darkGray,
-        size: typeof width === 'string' ? width : undefined,
+        size: width,
       }}
       loading={loading}
       size={mantineSize}
@@ -108,8 +108,7 @@ export const DynamicIcon = ({
       <Icon height={height} strokeWidth={strokeWidth} width={width} />
     </ActionIcon>
   );
-};
-
+}
 export default DynamicIcon;
 
 DynamicIcon.displayName = 'DynamicIcon';

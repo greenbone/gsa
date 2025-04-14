@@ -59,7 +59,7 @@ const EntityCloneIcon = ({
     }
   }
   return (
-    <CloneIcon
+    <CloneIcon<EntityClone>
       {...props}
       active={active}
       title={title}

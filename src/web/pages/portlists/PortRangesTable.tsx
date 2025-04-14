@@ -51,10 +51,10 @@ const PortRangesTable: React.FC<PortRangesTableProps> = ({
             <TableData>{range.protocol_type}</TableData>
             {actions && (
               <TableData align={['center', 'center']}>
-                <DeleteIcon
+                <DeleteIcon<PortRange>
                   title={_('Delete Port Range')}
                   value={range}
-                  onClick={value => onDeleteClick?.(value as PortRange)}
+                  onClick={range => range && onDeleteClick?.(range)}
                 />
               </TableData>
             )}

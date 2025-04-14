@@ -167,6 +167,11 @@ export default [
           },
         },
         {
+          selector: 'function',
+          format: ['camelCase', 'PascalCase'],
+          leadingUnderscore: 'allow',
+        },
+        {
           selector: 'parameter',
           format: ['camelCase', 'PascalCase'],
           leadingUnderscore: 'allow',
