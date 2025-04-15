@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {ViewOtherIcon} from 'web/components/icon';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -28,6 +28,7 @@ const ObserverIcon = <TEntity extends ObserverEntity>({
   displayName = _('Entity'),
   ['data-testid']: dataTestId = 'observer-icon',
 }: ObserverIconProps<TEntity>) => {
+  const [_] = useTranslation();
   const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
 
   if (owner === userName) {

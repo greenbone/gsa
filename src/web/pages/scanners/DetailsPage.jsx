@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {DownloadKeyIcon, ScannerIcon, VerifyIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -53,6 +53,7 @@ const ToolBarIcons = ({
   onScannerEditClick,
   onScannerVerifyClick,
 }) => {
+  const [_] = useTranslation();
   const gmp = useGmp();
   return (
     <Divider margin="10px">
@@ -118,118 +119,124 @@ ToolBarIcons.propTypes = {
   onScannerVerifyClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  showSuccess,
-  ...props
-}) => (
-  <ScannerComponent
-    onCertificateDownloadError={onError}
-    onCertificateDownloaded={onDownloaded}
-    onCloneError={onError}
-    onCloned={goToDetails('scanner', props)}
-    onCreated={goToDetails('scanner', props)}
-    onCredentialDownloadError={onError}
-    onCredentialDownloaded={onDownloaded}
-    onDeleteError={onError}
-    onDeleted={goToList('scanners', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-    onVerified={() => {
-      onChanged();
-      showSuccess(_('Scanner Verified'));
-    }}
-    onVerifyError={onError}
-  >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      downloadcertificate,
-      downloadcredential,
-      edit,
-      save,
-      verify,
-    }) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<ScannerIcon size="large" />}
-        title={_('Scanner')}
-        toolBarIcons={ToolBarIcons}
-        onInteraction={onInteraction}
-        onScannerCertificateDownloadClick={downloadcertificate}
-        onScannerCloneClick={clone}
-        onScannerCreateClick={create}
-        onScannerCredentialDownloadClick={downloadcredential}
-        onScannerDeleteClick={delete_func}
-        onScannerDownloadClick={download}
-        onScannerEditClick={edit}
-        onScannerSaveClick={save}
-        onScannerVerifyClick={verify}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Scanner: {{name}}', {name: entity.name})} />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const Page = (
+  {
+    entity,
+    permissions = [],
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    showSuccess,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <ScannerDetails entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </ScannerComponent>
-);
+  return (
+    <ScannerComponent
+      onCertificateDownloadError={onError}
+      onCertificateDownloaded={onDownloaded}
+      onCloneError={onError}
+      onCloned={goToDetails('scanner', props)}
+      onCreated={goToDetails('scanner', props)}
+      onCredentialDownloadError={onError}
+      onCredentialDownloaded={onDownloaded}
+      onDeleteError={onError}
+      onDeleted={goToList('scanners', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+      onVerified={() => {
+        onChanged();
+        showSuccess(_('Scanner Verified'));
+      }}
+      onVerifyError={onError}
+    >
+      {({
+        clone,
+        create,
+        delete: delete_func,
+        download,
+        downloadcertificate,
+        downloadcredential,
+        edit,
+        save,
+        verify,
+      }) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<ScannerIcon size="large" />}
+          title={_('Scanner')}
+          toolBarIcons={ToolBarIcons}
+          onInteraction={onInteraction}
+          onScannerCertificateDownloadClick={downloadcertificate}
+          onScannerCloneClick={clone}
+          onScannerCreateClick={create}
+          onScannerCredentialDownloadClick={downloadcredential}
+          onScannerDeleteClick={delete_func}
+          onScannerDownloadClick={download}
+          onScannerEditClick={edit}
+          onScannerSaveClick={save}
+          onScannerVerifyClick={verify}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Scanner: {{name}}', {name: entity.name})} />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <ScannerDetails entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </ScannerComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

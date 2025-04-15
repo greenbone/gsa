@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_RADIUS,
@@ -11,6 +10,7 @@ import {
   ACCESS_DENY_ALL,
 } from 'gmp/models/user';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -52,6 +52,7 @@ export const convert_allow = ({addresses, allow}) => {
 };
 
 const UserDetails = ({entity, links = true}) => {
+  const [_] = useTranslation();
   const {authMethod, comment, groups = [], hosts = {}, roles = []} = entity;
   return (
     <Layout grow flex="column">
@@ -70,13 +71,17 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>{_('Roles')}</TableData>
             <TableData>
               <HorizontalSep>
-                {roles.map(role => (
-                  <span key={role.id}>
-                    <DetailsLink id={role.id} textOnly={!links} type="role">
-                      {role.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {roles.map(role => {
+                  const [_] = useTranslation();
+
+                  return (
+                    <span key={role.id}>
+                      <DetailsLink id={role.id} textOnly={!links} type="role">
+                        {role.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
               </HorizontalSep>
             </TableData>
           </TableRow>
@@ -85,18 +90,22 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>{_('Groups')}</TableData>
             <TableData>
               <HorizontalSep>
-                {groups.map(group => (
-                  <span key={group.id}>
-                    <DetailsLink
-                      key={group.id}
-                      id={group.id}
-                      textOnly={!links}
-                      type="group"
-                    >
-                      {group.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {groups.map(group => {
+                  const [_] = useTranslation();
+
+                  return (
+                    <span key={group.id}>
+                      <DetailsLink
+                        key={group.id}
+                        id={group.id}
+                        textOnly={!links}
+                        type="group"
+                      >
+                        {group.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
               </HorizontalSep>
             </TableData>
           </TableRow>

@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {
   DownloadDebIcon,
   DownloadExeIcon,
@@ -18,6 +18,7 @@ import {
 import IconDivider from 'web/components/layout/IconDivider';
 import PropTypes from 'web/utils/PropTypes';
 const CredentialDownloadIcon = ({credential, onDownload}) => {
+  const [_] = useTranslation();
   const type = credential.credential_type;
   return (
     <IconDivider align={['center', 'center']}>

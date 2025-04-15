@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   CERTIFICATE_STATUS_INACTIVE,
   CERTIFICATE_STATUS_EXPIRED,
 } from 'gmp/models/credential';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import {CredentialIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -51,41 +51,47 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = ({
-  entity,
-  onCredentialCloneClick,
-  onCredentialCreateClick,
-  onCredentialDeleteClick,
-  onCredentialDownloadClick,
-  onCredentialEditClick,
-  onCredentialInstallerDownloadClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-credentials"
-        page="scanning"
-        title={_('Help: Credentials')}
+export const ToolBarIcons = (
+  {
+    entity,
+    onCredentialCloneClick,
+    onCredentialCreateClick,
+    onCredentialDeleteClick,
+    onCredentialDownloadClick,
+    onCredentialEditClick,
+    onCredentialInstallerDownloadClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-credentials"
+          page="scanning"
+          title={_('Help: Credentials')}
+        />
+        <ListIcon page="credentials" title={_('Credential List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onCredentialCreateClick} />
+        <CloneIcon entity={entity} onClick={onCredentialCloneClick} />
+        <EditIcon entity={entity} onClick={onCredentialEditClick} />
+        <TrashIcon entity={entity} onClick={onCredentialDeleteClick} />
+        <ExportIcon
+          title={_('Export Credential as XML')}
+          value={entity}
+          onClick={onCredentialDownloadClick}
+        />
+      </IconDivider>
+      <CredentialDownloadIcon
+        credential={entity}
+        onDownload={onCredentialInstallerDownloadClick}
       />
-      <ListIcon page="credentials" title={_('Credential List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onCredentialCreateClick} />
-      <CloneIcon entity={entity} onClick={onCredentialCloneClick} />
-      <EditIcon entity={entity} onClick={onCredentialEditClick} />
-      <TrashIcon entity={entity} onClick={onCredentialDeleteClick} />
-      <ExportIcon
-        title={_('Export Credential as XML')}
-        value={entity}
-        onClick={onCredentialDownloadClick}
-      />
-    </IconDivider>
-    <CredentialDownloadIcon
-      credential={entity}
-      onDownload={onCredentialInstallerDownloadClick}
-    />
-  </Divider>
-);
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -98,6 +104,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
+  const [_] = useTranslation();
   const {certificate_info: cert} = entity;
   return (
     <Layout flex="column">
@@ -161,6 +168,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <CredentialComponent
       onCloneError={onError}

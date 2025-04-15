@@ -3,14 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {NewIcon} from 'web/components/icon';
 import IconMenu from 'web/components/menu/IconMenu';
 import MenuEntry from 'web/components/menu/MenuEntry';
 import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
 const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (capabilities.mayCreate('task')) {
     return (

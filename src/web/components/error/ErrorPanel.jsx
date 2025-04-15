@@ -4,9 +4,9 @@
  */
 
 import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState} from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Divider from 'web/components/layout/Divider';
@@ -28,6 +28,7 @@ const StyledPre = styled.pre`
 `;
 
 const ErrorPanel = ({error, message, info}) => {
+  const [_] = useTranslation();
   const [showDetails, setShowDetails] = useState(false);
 
   const handleToggleDetails = () => {

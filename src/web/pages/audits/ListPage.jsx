@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {RESET_FILTER, TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {NewIcon, AuditIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -22,6 +22,7 @@ import {
 } from 'web/store/entities/audits';
 import PropTypes from 'web/utils/PropTypes';
 export const ToolBarIcons = ({onAuditCreateClick}) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   return (
     <IconDivider>
@@ -41,62 +42,66 @@ ToolBarIcons.propTypes = {
   onAuditCreateClick: PropTypes.func.isRequired,
 };
 
-const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
-  <AuditComponent
-    onCloneError={onError}
-    onCloned={onChanged}
-    onCreated={onChanged}
-    onDeleteError={onError}
-    onDeleted={onChanged}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onResumeError={onError}
-    onResumed={onChanged}
-    onSaved={onChanged}
-    onStartError={onError}
-    onStarted={onChanged}
-    onStopError={onError}
-    onStopped={onChanged}
-  >
-    {({
-      clone,
-      create,
-      delete: deleteFunc,
-      download,
-      edit,
-      start,
-      stop,
-      resume,
-      reportDownload,
-      gcrFormatDefined,
-    }) => (
-      <React.Fragment>
-        <PageTitle title={_('Audits')} />
-        <EntitiesPage
-          {...props}
-          filtersFilter={TASKS_FILTER_FILTER}
-          gcrFormatDefined={gcrFormatDefined}
-          sectionIcon={<AuditIcon size="large" />}
-          table={Table}
-          title={_('Audits')}
-          toolBarIcons={ToolBarIcons}
-          onAuditCloneClick={clone}
-          onAuditCreateClick={create}
-          onAuditDeleteClick={deleteFunc}
-          onAuditDownloadClick={download}
-          onAuditEditClick={edit}
-          onAuditResumeClick={resume}
-          onAuditStartClick={start}
-          onAuditStopClick={stop}
-          onError={onError}
-          onInteraction={onInteraction}
-          onReportDownloadClick={reportDownload}
-        />
-      </React.Fragment>
-    )}
-  </AuditComponent>
-);
+const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => {
+  const [_] = useTranslation();
+
+  return (
+    <AuditComponent
+      onCloneError={onError}
+      onCloned={onChanged}
+      onCreated={onChanged}
+      onDeleteError={onError}
+      onDeleted={onChanged}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onResumeError={onError}
+      onResumed={onChanged}
+      onSaved={onChanged}
+      onStartError={onError}
+      onStarted={onChanged}
+      onStopError={onError}
+      onStopped={onChanged}
+    >
+      {({
+        clone,
+        create,
+        delete: deleteFunc,
+        download,
+        edit,
+        start,
+        stop,
+        resume,
+        reportDownload,
+        gcrFormatDefined,
+      }) => (
+        <React.Fragment>
+          <PageTitle title={_('Audits')} />
+          <EntitiesPage
+            {...props}
+            filtersFilter={TASKS_FILTER_FILTER}
+            gcrFormatDefined={gcrFormatDefined}
+            sectionIcon={<AuditIcon size="large" />}
+            table={Table}
+            title={_('Audits')}
+            toolBarIcons={ToolBarIcons}
+            onAuditCloneClick={clone}
+            onAuditCreateClick={create}
+            onAuditDeleteClick={deleteFunc}
+            onAuditDownloadClick={download}
+            onAuditEditClick={edit}
+            onAuditResumeClick={resume}
+            onAuditStartClick={start}
+            onAuditStopClick={stop}
+            onError={onError}
+            onInteraction={onInteraction}
+            onReportDownloadClick={reportDownload}
+          />
+        </React.Fragment>
+      )}
+    </AuditComponent>
+  );
+};
 
 Page.propTypes = {
   onChanged: PropTypes.func.isRequired,

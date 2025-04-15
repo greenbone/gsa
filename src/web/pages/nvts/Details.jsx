@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {TAG_NA} from 'gmp/models/nvt';
 import {isDefined, isNumber} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Severitybar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
@@ -25,6 +25,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {na, getTranslatableSeverityOrigin} from 'web/utils/Render';
 
 const NvtDetails = ({entity, links = true}) => {
+  const [_] = useTranslation();
   const {
     epss,
     tags = {},

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
@@ -15,6 +15,7 @@ import Table from 'web/components/table/StripedTable';
 import PropTypes from 'web/utils/PropTypes';
 
 const Preferences = ({preferences = [], defaultTimeout}) => {
+  const [_] = useTranslation();
   return (
     <Table>
       <TableHeader>
@@ -30,12 +31,16 @@ const Preferences = ({preferences = [], defaultTimeout}) => {
             {isDefined(defaultTimeout) ? defaultTimeout : _('default')}
           </TableData>
         </TableRow>
-        {preferences.map(pref => (
-          <TableRow key={pref.name}>
-            <TableData>{pref.hr_name}</TableData>
-            <TableData>{pref.default}</TableData>
-          </TableRow>
-        ))}
+        {preferences.map(pref => {
+          const [_] = useTranslation();
+
+          return (
+            <TableRow key={pref.name}>
+              <TableData>{pref.hr_name}</TableData>
+              <TableData>{pref.default}</TableData>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

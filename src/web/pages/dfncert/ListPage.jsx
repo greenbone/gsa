@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {DfnCertAdvIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -24,45 +24,53 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 // DFN-CERT uses same filter dialog as CERT-Bund
 
-const ToolBarIcons = () => (
-  <ManualIcon
-    anchor="dfn-cert-advisories"
-    page="managing-secinfo"
-    title={_('Help: DFN-CERT Advisories')}
-  />
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <React.Fragment>
-    <PageTitle title={_('DFN-CERT Advisories')} />
-    <EntitiesPage
-      {...props}
-      createFilterType="info"
-      dashboard={() => (
-        <DfnCertDashboard
-          filter={filter}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-        />
-      )}
-      dashboardControls={() => (
-        <DashboardControls
-          dashboardId={DFNCERT_DASHBOARD_ID}
-          onInteraction={onInteraction}
-        />
-      )}
-      filter={filter}
-      filterEditDialog={FilterDialog}
-      filtersFilter={DFNCERT_FILTER_FILTER}
-      sectionIcon={<DfnCertAdvIcon size="large" />}
-      table={DfnCertTable}
-      title={_('DFN-CERT Advisories')}
-      toolBarIcons={ToolBarIcons}
-      onFilterChanged={onFilterChanged}
-      onInteraction={onInteraction}
+  return (
+    <ManualIcon
+      anchor="dfn-cert-advisories"
+      page="managing-secinfo"
+      title={_('Help: DFN-CERT Advisories')}
     />
-  </React.Fragment>
-);
+  );
+};
+
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+  const [_] = useTranslation();
+
+  return (
+    <React.Fragment>
+      <PageTitle title={_('DFN-CERT Advisories')} />
+      <EntitiesPage
+        {...props}
+        createFilterType="info"
+        dashboard={() => (
+          <DfnCertDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={DFNCERT_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
+        filterEditDialog={FilterDialog}
+        filtersFilter={DFNCERT_FILTER_FILTER}
+        sectionIcon={<DfnCertAdvIcon size="large" />}
+        table={DfnCertTable}
+        title={_('DFN-CERT Advisories')}
+        toolBarIcons={ToolBarIcons}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
+    </React.Fragment>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

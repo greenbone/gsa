@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -24,8 +24,10 @@ export const ReportConfigParamValue = ({
   valueLabels = param.valueLabels,
   links = true,
 }) => {
+  const [_] = useTranslation();
   if (param.type === 'report_format_list') {
     return map(value, reportFormatId => {
+      const [_] = useTranslation();
       const label = isDefined(valueLabels[reportFormatId])
         ? valueLabels[reportFormatId]
         : reportFormatId;
@@ -47,9 +49,10 @@ export const ReportConfigParamValue = ({
     `;
     return (
       <OptionsList>
-        {value.map(option => (
-          <li key={param.name + '=' + option}>{option}</li>
-        ))}
+        {value.map(option => {
+          const [_] = useTranslation();
+          return (<li key={param.name + '=' + option}>{option}</li>);
+        })}
       </OptionsList>
     );
   } else if (param.type === 'text') {
@@ -69,6 +72,7 @@ ReportConfigParamValue.propTypes = {
 };
 
 const ReportConfigDetails = ({entity, links = true}) => {
+  const [_] = useTranslation();
   const {orphan, reportFormat, params, alerts = []} = entity;
 
   const reportFormatLink = orphan ? (
@@ -129,13 +133,17 @@ const ReportConfigDetails = ({entity, links = true}) => {
                 {_('Alerts using this Report Config')}
               </TableDataAlignTop>
               <TableData>
-                {alerts.map(alert => (
-                  <span key={alert.id}>
-                    <DetailsLink id={alert.id} type="alert">
-                      {alert.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {alerts.map(alert => {
+                  const [_] = useTranslation();
+
+                  return (
+                    <span key={alert.id}>
+                      <DetailsLink id={alert.id} type="alert">
+                        {alert.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
               </TableData>
             </TableRow>
           )}

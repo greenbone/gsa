@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -19,6 +19,7 @@ import EntityLink from 'web/entity/Link';
 import PropTypes from 'web/utils/PropTypes';
 
 const TicketDetails = ({entity, links = true}) => {
+  const [_] = useTranslation();
   const {task = {}} = entity;
   const taskIsInTrash = isDefined(task.isInTrash) ? task.isInTrash() : false;
   return (

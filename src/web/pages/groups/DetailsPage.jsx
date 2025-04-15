@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {GroupIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -39,36 +39,42 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({
-  entity,
-  onGroupCloneClick,
-  onGroupCreateClick,
-  onGroupDeleteClick,
-  onGroupDownloadClick,
-  onGroupEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-groups"
-        page="web-interface-access"
-        title={_('Help: Groups')}
-      />
-      <ListIcon page="groups" title={_('Groups List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onGroupCreateClick} />
-      <CloneIcon entity={entity} onClick={onGroupCloneClick} />
-      <EditIcon entity={entity} onClick={onGroupEditClick} />
-      <TrashIcon entity={entity} onClick={onGroupDeleteClick} />
-      <ExportIcon
-        title={_('Export Group as XML')}
-        value={entity}
-        onClick={onGroupDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+const ToolBarIcons = (
+  {
+    entity,
+    onGroupCloneClick,
+    onGroupCreateClick,
+    onGroupDeleteClick,
+    onGroupDownloadClick,
+    onGroupEditClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-groups"
+          page="web-interface-access"
+          title={_('Help: Groups')}
+        />
+        <ListIcon page="groups" title={_('Groups List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onGroupCreateClick} />
+        <CloneIcon entity={entity} onClick={onGroupCloneClick} />
+        <EditIcon entity={entity} onClick={onGroupEditClick} />
+        <TrashIcon entity={entity} onClick={onGroupDeleteClick} />
+        <ExportIcon
+          title={_('Export Group as XML')}
+          value={entity}
+          onClick={onGroupDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -88,6 +94,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   const isSpecial =
     permissions.filter(permission => permission.name === 'Super').length > 0;
 

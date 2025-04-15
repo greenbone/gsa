@@ -9,10 +9,10 @@ import {
   CERT_FEED,
   GVMD_DATA_FEED,
 } from 'gmp/commands/feedstatus';
-import _ from 'gmp/locale';
 import {parseInt} from 'gmp/parser';
 import {hasValue} from 'gmp/utils/identity';
 import React, {useState} from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {
   CertBundAdvIcon,
   CpeLogoIcon,
@@ -44,14 +44,18 @@ import Table from 'web/components/table/StripedTable';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 
-const ToolBarIcons = () => (
-  <ManualIcon
-    anchor="displaying-the-feed-status"
-    page="web-interface"
-    size="small"
-    title={_('Help: Feed Status')}
-  />
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
+
+  return (
+    <ManualIcon
+      anchor="displaying-the-feed-status"
+      page="web-interface"
+      size="small"
+      title={_('Help: Feed Status')}
+    />
+  );
+};
 
 const renderCheck = feed => {
   const age = feed.age.asDays();
@@ -85,6 +89,7 @@ const renderFeedStatus = feed => {
 };
 
 const FeedStatus = ({feeds}) => {
+  const [_] = useTranslation();
   return (
     <React.Fragment>
       <PageTitle title={_('Feed Status')} />
@@ -105,91 +110,95 @@ const FeedStatus = ({feeds}) => {
               <TableHead>{_('Status')}</TableHead>
             </TableRow>
 
-            {feeds.map(feed => (
-              <TableRow key={feed.feedType}>
-                <TableData>{feed.feedType}</TableData>
-                <TableData>
-                  {feed.feedType === NVT_FEED && (
-                    <IconDivider>
-                      <Link to="nvts">
-                        <IconDivider align={['start', 'center']}>
-                          <NvtIcon size="medium" />
-                          <span>{_('NVTs')}</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                  {feed.feedType === SCAP_FEED && (
-                    <IconDivider>
-                      <Link to="cves">
-                        <IconDivider align={['start', 'center']}>
-                          <CveIcon size="medium" />
-                          <span>{_('CVEs')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="cpes">
-                        <IconDivider align={['start', 'center']}>
-                          <CpeLogoIcon size="medium" />
-                          <span>{_('CPEs')}</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                  {feed.feedType === CERT_FEED && (
-                    <IconDivider>
-                      <Link to="certbunds">
-                        <IconDivider align={['start', 'center']}>
-                          <CertBundAdvIcon size="medium" />
-                          <span>{_('CERT-Bund Advisories')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="dfncerts">
-                        <IconDivider align={['start', 'center']}>
-                          <DfnCertAdvIcon size="medium" />
-                          <span>{_('DFN-CERT Advisories')}</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                  {feed.feedType === GVMD_DATA_FEED && (
-                    <IconDivider>
-                      <Link filter="predefined=1" to="policies">
-                        <IconDivider align={['start', 'center']}>
-                          <PolicyIcon size="medium" />
-                          <span>{_('Compliance Policies')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link filter="predefined=1" to="portlists">
-                        <IconDivider align={['start', 'center']}>
-                          <PortListIcon size="medium" />
-                          <span>{_('Port Lists')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link filter="predefined=1" to="reportformats">
-                        <IconDivider align={['start', 'center']}>
-                          <ReportFormatIcon size="medium" />
-                          <span>{_('Report Formats')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link filter="predefined=1" to="scanconfigs">
-                        <IconDivider align={['start', 'center']}>
-                          <ScanConfigIcon size="medium" />
-                          <span>{_('Scan Configs')}</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                </TableData>
-                <TableData>{feed.name}</TableData>
-                <TableData>{feed.version}</TableData>
-                <TableData>
-                  <Divider wrap>
-                    <strong>{renderFeedStatus(feed)}</strong>
-                    <span data-testid="update-msg">{renderCheck(feed)}</span>
-                  </Divider>
-                </TableData>
-              </TableRow>
-            ))}
+            {feeds.map(feed => {
+              const [_] = useTranslation();
+
+              return (
+                <TableRow key={feed.feedType}>
+                  <TableData>{feed.feedType}</TableData>
+                  <TableData>
+                    {feed.feedType === NVT_FEED && (
+                      <IconDivider>
+                        <Link to="nvts">
+                          <IconDivider align={['start', 'center']}>
+                            <NvtIcon size="medium" />
+                            <span>{_('NVTs')}</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    )}
+                    {feed.feedType === SCAP_FEED && (
+                      <IconDivider>
+                        <Link to="cves">
+                          <IconDivider align={['start', 'center']}>
+                            <CveIcon size="medium" />
+                            <span>{_('CVEs')}</span>
+                          </IconDivider>
+                        </Link>
+                        <Link to="cpes">
+                          <IconDivider align={['start', 'center']}>
+                            <CpeLogoIcon size="medium" />
+                            <span>{_('CPEs')}</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    )}
+                    {feed.feedType === CERT_FEED && (
+                      <IconDivider>
+                        <Link to="certbunds">
+                          <IconDivider align={['start', 'center']}>
+                            <CertBundAdvIcon size="medium" />
+                            <span>{_('CERT-Bund Advisories')}</span>
+                          </IconDivider>
+                        </Link>
+                        <Link to="dfncerts">
+                          <IconDivider align={['start', 'center']}>
+                            <DfnCertAdvIcon size="medium" />
+                            <span>{_('DFN-CERT Advisories')}</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    )}
+                    {feed.feedType === GVMD_DATA_FEED && (
+                      <IconDivider>
+                        <Link filter="predefined=1" to="policies">
+                          <IconDivider align={['start', 'center']}>
+                            <PolicyIcon size="medium" />
+                            <span>{_('Compliance Policies')}</span>
+                          </IconDivider>
+                        </Link>
+                        <Link filter="predefined=1" to="portlists">
+                          <IconDivider align={['start', 'center']}>
+                            <PortListIcon size="medium" />
+                            <span>{_('Port Lists')}</span>
+                          </IconDivider>
+                        </Link>
+                        <Link filter="predefined=1" to="reportformats">
+                          <IconDivider align={['start', 'center']}>
+                            <ReportFormatIcon size="medium" />
+                            <span>{_('Report Formats')}</span>
+                          </IconDivider>
+                        </Link>
+                        <Link filter="predefined=1" to="scanconfigs">
+                          <IconDivider align={['start', 'center']}>
+                            <ScanConfigIcon size="medium" />
+                            <span>{_('Scan Configs')}</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    )}
+                  </TableData>
+                  <TableData>{feed.name}</TableData>
+                  <TableData>{feed.version}</TableData>
+                  <TableData>
+                    <Divider wrap>
+                      <strong>{renderFeedStatus(feed)}</strong>
+                      <span data-testid="update-msg">{renderCheck(feed)}</span>
+                    </Divider>
+                  </TableData>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </Layout>
@@ -202,6 +211,7 @@ FeedStatus.propTypes = {
 };
 
 const FeedStatusWrapper = () => {
+  const [_] = useTranslation();
   const gmp = useGmp();
   const [feeds, setFeeds] = useState([]);
 

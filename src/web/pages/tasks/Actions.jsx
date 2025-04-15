@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
@@ -18,40 +18,42 @@ import StopIcon from 'web/pages/tasks/icons/StopIcon';
 import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
 import PropTypes from 'web/utils/PropTypes';
 
-const Actions = ({
-  entity,
-  links,
-  onReportImportClick,
-  onTaskCloneClick,
-  onTaskDeleteClick,
-  onTaskDownloadClick,
-  onTaskEditClick,
-  onTaskResumeClick,
-  onTaskStartClick,
-  onTaskStopClick,
-}) => (
-  <IconDivider grow align={['center', 'center']}>
-    {isDefined(entity.schedule) && (
-      <ScheduleIcon links={links} schedule={entity.schedule} />
-    )}
-    <TaskIconWithSync task={entity} type="start" onClick={onTaskStartClick} />
+const Actions = (
+  {
+    entity,
+    links,
+    onReportImportClick,
+    onTaskCloneClick,
+    onTaskDeleteClick,
+    onTaskDownloadClick,
+    onTaskEditClick,
+    onTaskResumeClick,
+    onTaskStartClick,
+    onTaskStopClick,
+  }
+) => {
+  const [_] = useTranslation();
 
-    <ImportReportIcon task={entity} onClick={onReportImportClick} />
-
-    <StopIcon task={entity} onClick={onTaskStopClick} />
-
-    <TaskIconWithSync task={entity} type="resume" onClick={onTaskResumeClick} />
-
-    <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
-    <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-    <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
-    <ExportIcon
-      title={_('Export Task')}
-      value={entity}
-      onClick={onTaskDownloadClick}
-    />
-  </IconDivider>
-);
+  return (
+    <IconDivider grow align={['center', 'center']}>
+      {isDefined(entity.schedule) && (
+        <ScheduleIcon links={links} schedule={entity.schedule} />
+      )}
+      <TaskIconWithSync task={entity} type="start" onClick={onTaskStartClick} />
+      <ImportReportIcon task={entity} onClick={onReportImportClick} />
+      <StopIcon task={entity} onClick={onTaskStopClick} />
+      <TaskIconWithSync task={entity} type="resume" onClick={onTaskResumeClick} />
+      <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
+      <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
+      <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
+      <ExportIcon
+        title={_('Export Task')}
+        value={entity}
+        onClick={onTaskDownloadClick}
+      />
+    </IconDivider>
+  );
+};
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {duration as createDuration} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState, useEffect} from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
@@ -62,6 +62,7 @@ const Summary = ({
   reportId,
   reportError,
 }) => {
+  const [_] = useTranslation();
   const {
     delta_report,
     hosts,

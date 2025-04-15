@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
@@ -69,6 +69,7 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
+  const [_] = useTranslation();
   const {report = {}} = entity || {};
 
   const {userTags = {}} = report;
