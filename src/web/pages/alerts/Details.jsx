@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
@@ -12,6 +11,7 @@ import {
 } from 'gmp/models/alert';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -27,6 +27,7 @@ import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 const AlertDetails = ({capabilities, entity, reportFormats, reportConfigs}) => {
+  const [_] = useTranslation();
   const {comment, condition, event, method, tasks = [], filter} = entity;
   return (
     <Layout grow flex="column">
@@ -130,13 +131,17 @@ const AlertDetails = ({capabilities, entity, reportFormats, reportConfigs}) => {
               <TableData>{_('Tasks using this Alert')}</TableData>
               <TableData>
                 <HorizontalSep $wrap>
-                  {tasks.map(task => (
-                    <span key={task.id}>
-                      <DetailsLink id={task.id} type="task">
-                        {task.name}
-                      </DetailsLink>
-                    </span>
-                  ))}
+                  {tasks.map(task => {
+                    const [_] = useTranslation();
+
+                    return (
+                      <span key={task.id}>
+                        <DetailsLink id={task.id} type="task">
+                          {task.name}
+                        </DetailsLink>
+                      </span>
+                    );
+                  })}
                 </HorizontalSep>
               </TableData>
             </TableRow>

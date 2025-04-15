@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import {CpeLogoIcon} from 'web/components/icon';
@@ -40,23 +40,27 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="cpe"
-        page="managing-secinfo"
-        title={_('Help: CPEs')}
+export const ToolBarIcons = ({entity, onCpeDownloadClick}) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="cpe"
+          page="managing-secinfo"
+          title={_('Help: CPEs')}
+        />
+        <ListIcon page="cpes" title={_('CPE List')} />
+      </IconDivider>
+      <ExportIcon
+        title={_('Export CPE')}
+        value={entity}
+        onClick={onCpeDownloadClick}
       />
-      <ListIcon page="cpes" title={_('CPE List')} />
-    </IconDivider>
-    <ExportIcon
-      title={_('Export CPE')}
-      value={entity}
-      onClick={onCpeDownloadClick}
-    />
-  </Divider>
-);
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -64,6 +68,7 @@ ToolBarIcons.propTypes = {
 };
 
 const EntityInfo = ({entity}) => {
+  const [_] = useTranslation();
   const {id, modificationTime, creationTime, updateTime} = entity;
   return (
     <InfoLayout>
@@ -94,6 +99,7 @@ EntityInfo.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
+  const [_] = useTranslation();
   const {cves, cve_refs} = entity;
   return (
     <Layout flex="column">
@@ -108,20 +114,24 @@ const Details = ({entity, links = true}) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {cves.map(cve => (
-                <TableRow key={cve.id}>
-                  <TableData>
-                    <span>
-                      <DetailsLink id={cve.id} textOnly={!links} type="cve">
-                        {cve.id}
-                      </DetailsLink>
-                    </span>
-                  </TableData>
-                  <TableData>
-                    <SeverityBar severity={cve.severity} />
-                  </TableData>
-                </TableRow>
-              ))}
+              {cves.map(cve => {
+                const [_] = useTranslation();
+
+                return (
+                  <TableRow key={cve.id}>
+                    <TableData>
+                      <span>
+                        <DetailsLink id={cve.id} textOnly={!links} type="cve">
+                          {cve.id}
+                        </DetailsLink>
+                      </span>
+                    </TableData>
+                    <TableData>
+                      <SeverityBar severity={cve.severity} />
+                    </TableData>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         ) : cve_refs === 0 ? (
@@ -139,72 +149,78 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const CpePage = ({
-  entity,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <EntityComponent
-    name="cpe"
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-  >
-    {({download}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        infoComponent={EntityInfo}
-        sectionIcon={<CpeLogoIcon size="large" />}
-        title={_('CPE')}
-        toolBarIcons={ToolBarIcons}
-        onCpeDownloadClick={download}
-        onInteraction={onInteraction}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('CPE: {{title}}', {title: entity.title})} />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const CpePage = (
+  {
+    entity,
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </EntityComponent>
-);
+  return (
+    <EntityComponent
+      name="cpe"
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+    >
+      {({download}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          infoComponent={EntityInfo}
+          sectionIcon={<CpeLogoIcon size="large" />}
+          title={_('CPE')}
+          toolBarIcons={ToolBarIcons}
+          onCpeDownloadClick={download}
+          onInteraction={onInteraction}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('CPE: {{title}}', {title: entity.title})} />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </EntityComponent>
+  );
+};
 
 CpePage.propTypes = {
   entity: PropTypes.model,

@@ -1,13 +1,13 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
 import CloseButton from 'web/components/dialog/CloseButton';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
@@ -81,6 +81,7 @@ const DisplayTitle = styled.div`
 `;
 
 const Display = ({children, dragHandleProps, title, onRemoveClick}) => {
+  const [_] = useTranslation();
   return (
     <DisplayView>
       <HeaderContainer {...dragHandleProps}>

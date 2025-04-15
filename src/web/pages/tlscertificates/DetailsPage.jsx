@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {DownloadIcon, TlsCertificateIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -50,6 +50,7 @@ const ToolBarIcons = ({
   onTlsCertificateDownloadClick,
   onTlsCertificateExportClick,
 }) => {
+  const [_] = useTranslation();
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -85,6 +86,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, ...props}) => {
+  const [_] = useTranslation();
   const showSourceBlock =
     entity.sourceReports.length > 0 || entity.sourceHosts.length > 0;
   return (
@@ -101,9 +103,7 @@ const Details = ({entity, ...props}) => {
           </TableRow>
         </TableBody>
       </InfoTable>
-
       <TlsCertificateDetails entity={entity} {...props} />
-
       {showSourceBlock && (
         <DetailsBlock title={_('Sources')}>
           {entity.sourceReports.length > 0 && (
@@ -117,15 +117,17 @@ const Details = ({entity, ...props}) => {
                   <TableDataAlignTop>{_('Reports')}</TableDataAlignTop>
                   <TableData>
                     <HorizontalSep>
-                      {entity.sourceReports.map(report => (
-                        <DetailsLink
-                          key={report.id}
-                          id={report.id}
-                          type="report"
-                        >
-                          {report.timestamp}
-                        </DetailsLink>
-                      ))}
+                      {entity.sourceReports.map(report => {
+                        return (
+                          <DetailsLink
+                            key={report.id}
+                            id={report.id}
+                            type="report"
+                          >
+                            {report.timestamp}
+                          </DetailsLink>
+                        );
+                      })}
                     </HorizontalSep>
                   </TableData>
                 </TableRow>
@@ -143,11 +145,13 @@ const Details = ({entity, ...props}) => {
                   <TableDataAlignTop>{_('Hosts')}</TableDataAlignTop>
                   <TableData>
                     <HorizontalSep>
-                      {entity.sourceHosts.map(host => (
-                        <DetailsLink key={host.id} id={host.id} type="host">
-                          {host.ip}
-                        </DetailsLink>
-                      ))}
+                      {entity.sourceHosts.map(host => {
+                        return (
+                          <DetailsLink key={host.id} id={host.id} type="host">
+                            {host.ip}
+                          </DetailsLink>
+                        );
+                      })}
                     </HorizontalSep>
                   </TableData>
                 </TableRow>
@@ -165,9 +169,9 @@ const Details = ({entity, ...props}) => {
                   <TableDataAlignTop>{_('Ports')}</TableDataAlignTop>
                   <TableData>
                     <HorizontalSep>
-                      {entity.sourcePorts.map(port => (
-                        <span key={port}>{port}</span>
-                      ))}
+                      {entity.sourcePorts.map(port => {
+                        return <span key={port}>{port}</span>;
+                      })}
                     </HorizontalSep>
                   </TableData>
                 </TableRow>
@@ -193,6 +197,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <TlsCertificateComponent
       onDeleteError={onError}

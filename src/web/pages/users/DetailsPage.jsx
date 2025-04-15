@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {UserIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -39,40 +39,46 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/users';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({
-  entity,
-  onUserCloneClick,
-  onUserCreateClick,
-  onUserDeleteClick,
-  onUserDownloadClick,
-  onUserEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-users"
-        page="web-interface-access"
-        title={_('Help: Users')}
-      />
-      <ListIcon page="users" title={_('Users List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onUserCreateClick} />
-      <CloneIcon
-        entity={entity}
-        mayClone={!entity.isSuperAdmin()}
-        onClick={onUserCloneClick}
-      />
-      <EditIcon entity={entity} onClick={onUserEditClick} />
-      <DeleteIcon entity={entity} onClick={onUserDeleteClick} />
-      <ExportIcon
-        title={_('Export User as XML')}
-        value={entity}
-        onClick={onUserDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+const ToolBarIcons = (
+  {
+    entity,
+    onUserCloneClick,
+    onUserCreateClick,
+    onUserDeleteClick,
+    onUserDownloadClick,
+    onUserEditClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-users"
+          page="web-interface-access"
+          title={_('Help: Users')}
+        />
+        <ListIcon page="users" title={_('Users List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onUserCreateClick} />
+        <CloneIcon
+          entity={entity}
+          mayClone={!entity.isSuperAdmin()}
+          onClick={onUserCloneClick}
+        />
+        <EditIcon entity={entity} onClick={onUserEditClick} />
+        <DeleteIcon entity={entity} onClick={onUserDeleteClick} />
+        <ExportIcon
+          title={_('Export User as XML')}
+          value={entity}
+          onClick={onUserDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -83,95 +89,101 @@ ToolBarIcons.propTypes = {
   onUserEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <UserComponent
-    onCloneError={onError}
-    onCloned={goToDetails('user', props)}
-    onCreated={goToDetails('user', props)}
-    onDeleteError={onError}
-    onDeleted={goToList('users', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<UserIcon size="large" />}
-        title={_('User')}
-        toolBarIcons={ToolBarIcons}
-        onInteraction={onInteraction}
-        onUserCloneClick={clone}
-        onUserCreateClick={create}
-        onUserDeleteClick={delete_func}
-        onUserDownloadClick={download}
-        onUserEditClick={edit}
-        onUserSaveClick={save}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('User: {{name}}', {name: entity.name})} />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const Page = (
+  {
+    entity,
+    permissions = [],
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <UserDetails entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </UserComponent>
-);
+  return (
+    <UserComponent
+      onCloneError={onError}
+      onCloned={goToDetails('user', props)}
+      onCreated={goToDetails('user', props)}
+      onDeleteError={onError}
+      onDeleted={goToList('users', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<UserIcon size="large" />}
+          title={_('User')}
+          toolBarIcons={ToolBarIcons}
+          onInteraction={onInteraction}
+          onUserCloneClick={clone}
+          onUserCreateClick={create}
+          onUserDeleteClick={delete_func}
+          onUserDownloadClick={download}
+          onUserEditClick={edit}
+          onUserSaveClick={save}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('User: {{name}}', {name: entity.name})} />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <UserDetails entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </UserComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

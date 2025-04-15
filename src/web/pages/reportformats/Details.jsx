@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -19,6 +19,7 @@ import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
 const ReportFormatDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {
     configurable,
     deprecated,
@@ -99,13 +100,17 @@ const ReportFormatDetails = ({entity}) => {
                 {_('Alerts using this Report Format')}
               </TableDataAlignTop>
               <TableData>
-                {alerts.map(alert => (
-                  <span key={alert.id}>
-                    <DetailsLink id={alert.id} type="alert">
-                      {alert.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {alerts.map(alert => {
+                  const [_] = useTranslation();
+
+                  return (
+                    <span key={alert.id}>
+                      <DetailsLink id={alert.id} type="alert">
+                        {alert.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
                 {invisible_alerts > 0 && (
                   <span>
                     {_('{{count}} alert(s) only visible to other users', {
@@ -123,13 +128,17 @@ const ReportFormatDetails = ({entity}) => {
                 {_('Report Configs using this Report Format')}
               </TableDataAlignTop>
               <TableData>
-                {report_configs.map(report_config => (
-                  <span key={report_config.id}>
-                    <DetailsLink id={report_config.id} type="reportconfig">
-                      {report_config.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {report_configs.map(report_config => {
+                  const [_] = useTranslation();
+
+                  return (
+                    <span key={report_config.id}>
+                      <DetailsLink id={report_config.id} type="reportconfig">
+                        {report_config.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
                 {invisible_report_configs > 0 && (
                   <span>
                     {_(
@@ -143,7 +152,6 @@ const ReportFormatDetails = ({entity}) => {
           )}
         </TableBody>
       </InfoTable>
-
       <h2>{_('Description')}</h2>
       <pre>{description}</pre>
     </Layout>

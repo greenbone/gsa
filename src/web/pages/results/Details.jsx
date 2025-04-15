@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {TAG_NA} from 'gmp/models/nvt';
 import {DEFAULT_OID_VALUE} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -40,6 +40,7 @@ const GrowDiv = styled.div`
 `;
 
 const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
+  const [_] = useTranslation();
   let Component;
   let lines;
   let prefix;
@@ -61,6 +62,7 @@ const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
   return (
     <React.Fragment>
       {lines.map((line, i) => {
+        const [_] = useTranslation();
         const lineWithPrefix = prefix + line;
         return <Component key={i}>{lineWithPrefix}</Component>;
       })}
@@ -75,6 +77,7 @@ DerivedDiff.propTypes = {
 };
 
 const ResultDetails = ({className, links = true, entity}) => {
+  const [_] = useTranslation();
   const result = entity;
 
   const {information} = result;

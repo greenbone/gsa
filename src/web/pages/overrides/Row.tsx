@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Model from 'gmp/model';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -61,61 +61,73 @@ const renderSeverity = (severity: number): string => {
 };
 
 const Actions = withEntitiesActions(
-  ({
-    entity,
-    onOverrideDeleteClick,
-    onOverrideDownloadClick,
-    onOverrideCloneClick,
-    onOverrideEditClick,
-  }: ActionsProps) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon<Override>
-        entity={entity}
-        name="override"
-        onClick={onOverrideDeleteClick}
-      />
-      <EditIcon entity={entity} name="override" onClick={onOverrideEditClick} />
-      <CloneIcon<Override>
-        entity={entity}
-        name="override"
-        onClick={onOverrideCloneClick}
-      />
-      <ExportIcon<Override>
-        title={_('Export Override')}
-        value={entity}
-        /* @ts-expect-error */
-        onClick={onOverrideDownloadClick}
-      />
-    </IconDivider>
-  ),
+  (
+    {
+      entity,
+      onOverrideDeleteClick,
+      onOverrideDownloadClick,
+      onOverrideCloneClick,
+      onOverrideEditClick,
+    }: ActionsProps
+  ) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <TrashIcon<Override>
+          entity={entity}
+          name="override"
+          onClick={onOverrideDeleteClick}
+        />
+        <EditIcon entity={entity} name="override" onClick={onOverrideEditClick} />
+        <CloneIcon<Override>
+          entity={entity}
+          name="override"
+          onClick={onOverrideCloneClick}
+        />
+        <ExportIcon<Override>
+          title={_('Export Override')}
+          value={entity}
+          /* @ts-expect-error */
+          onClick={onOverrideDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
-const Row = ({
-  actionsComponent: ActionsComponent = Actions,
-  entity,
-  onToggleDetailsClick,
-  ...props
-}: OverrideRowProps) => (
-  <TableRow>
-    <TableData>
-      <span>
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {shorten(entity.text)}
-        </RowDetailsToggle>
-      </span>
-    </TableData>
-    <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
-    <TableData title={entity.hosts}>
-      {shorten(entity.hosts.join(', '))}
-    </TableData>
-    <TableData title={entity.port}>{shorten(entity.port)}</TableData>
-    <TableData>{renderSeverity(entity.severity)}</TableData>
-    <TableData>
-      <SeverityBar severity={entity.newSeverity} />
-    </TableData>
-    <TableData>{entity.isActive() ? _('yes') : _('no')}</TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+const Row = (
+  {
+    actionsComponent: ActionsComponent = Actions,
+    entity,
+    onToggleDetailsClick,
+    ...props
+  }: OverrideRowProps
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <TableRow>
+      <TableData>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {shorten(entity.text)}
+          </RowDetailsToggle>
+        </span>
+      </TableData>
+      <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
+      <TableData title={entity.hosts}>
+        {shorten(entity.hosts.join(', '))}
+      </TableData>
+      <TableData title={entity.port}>{shorten(entity.port)}</TableData>
+      <TableData>{renderSeverity(entity.severity)}</TableData>
+      <TableData>
+        <SeverityBar severity={entity.newSeverity} />
+      </TableData>
+      <TableData>{entity.isActive() ? _('yes') : _('no')}</TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 export default Row;
