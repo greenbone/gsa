@@ -30,4 +30,25 @@ declare module 'gmp/locale/lang' {
    * @returns The localized string.
    */
   export function _(key: string, options?: TranslateOptions): string;
+
+  /**
+   * Gets the current locale.
+   * @returns The current locale as a string.
+   */
+  export function getLocale(): string;
+
+  /**
+   * Subscribes to language change events.
+   * @param listener - A callback function to handle language changes.
+   * @returns A function to unsubscribe from the events.
+   */
+  export function onLanguageChange(
+    listener: (newLang: string) => void,
+  ): () => void;
+
+  /**
+   * Sets the current locale.
+   * @param lang - The language code to set as the current locale.
+   */
+  export function setLocale(lang: string): void;
 }

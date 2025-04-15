@@ -11,8 +11,6 @@ export const getReportComposerDefaults = rootState => {
 
 export const getTimezone = rootState => rootState.userSettings.timezone;
 
-export const getLocale = rootState => rootState.userSettings.locale;
-
 export const getSessionTimeout = rootState =>
   rootState.userSettings.sessionTimeout;
 

@@ -6,7 +6,7 @@
 import {DEFAULT_MANUAL_URL} from 'gmp/gmpsettings';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
-import useLocale from 'web/hooks/useLocale';
+import useLanguage from 'web/hooks/useLanguage';
 
 const DEFAULT_LANGUAGE_MAPPING = {
   de: 'de',
@@ -26,7 +26,7 @@ const getLanguagePath = (locale, languageMapping) => {
 };
 
 const useManualURL = locale => {
-  const [userLocale] = useLocale();
+  const [language] = useLanguage();
   const gmp = useGmp();
   const {
     manualUrl = DEFAULT_MANUAL_URL,
@@ -35,7 +35,7 @@ const useManualURL = locale => {
 
   const baseUrl = manualUrl.endsWith('/') ? manualUrl : `${manualUrl}/`;
   const languagePath = getLanguagePath(
-    locale || userLocale,
+    locale || language,
     manualLanguageMapping,
   );
 
