@@ -4,14 +4,36 @@
  */
 
 import _ from 'gmp/locale';
-import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
+import {
+  apiType,
+  EntityType,
+  getEntityType,
+  typeName,
+} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import {VerifyIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
-import PropTypes from 'web/utils/PropTypes';
 
-const EntityVerifyIcon = ({
+interface EntityVerify extends EntityType {
+  userCapabilities: {
+    mayOp: (name?: string) => boolean;
+  };
+}
+
+interface EntityVerifyIconProps<TEntity extends EntityVerify>
+  extends Omit<
+    React.ComponentProps<typeof VerifyIcon>,
+    'onClick' | 'value' | 'active'
+  > {
+  displayName?: string;
+  entity: TEntity;
+  mayVerify?: boolean;
+  name?: string;
+  title?: string;
+  onClick?: (value: TEntity) => void | Promise<void>;
+}
+
+const EntityVerifyIcon = <TEntity extends EntityVerify>({
   displayName,
   entity,
   mayVerify = true,
@@ -19,7 +41,7 @@ const EntityVerifyIcon = ({
   title,
   onClick,
   ...props
-}) => {
+}: EntityVerifyIconProps<TEntity>) => {
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = apiType(getEntityType(entity));
@@ -49,18 +71,10 @@ const EntityVerifyIcon = ({
       active={active}
       title={title}
       value={entity}
+      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );
-};
-
-EntityVerifyIcon.propTypes = {
-  displayName: PropTypes.string,
-  entity: PropTypes.model.isRequired,
-  mayVerify: PropTypes.bool,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default EntityVerifyIcon;
