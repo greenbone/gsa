@@ -7,23 +7,29 @@ import _ from 'gmp/locale';
 import {getEntityType, typeName, EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {CloneIcon} from 'web/components/icon';
+import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
+
 interface EntityClone extends EntityType {
   userCapabilities: {
     mayAccess: (name?: string) => boolean;
   };
 }
 
-interface EntityCloneIconProps {
+interface EntityCloneIconProps<TEntity extends EntityClone>
+  extends Omit<
+    ExtendedDynamicIconProps<TEntity>,
+    'onClick' | 'value' | 'active'
+  > {
   displayName?: string;
-  entity: EntityClone;
+  entity: TEntity;
   mayClone?: boolean;
   name?: string;
   title?: string;
-  onClick?: () => void;
+  onClick?: (value: TEntity) => void | Promise<void>;
 }
 
-const EntityCloneIcon = ({
+const EntityCloneIcon = <TEntity extends EntityClone>({
   displayName,
   entity,
   mayClone = true,
@@ -31,7 +37,7 @@ const EntityCloneIcon = ({
   title,
   onClick,
   ...props
-}: EntityCloneIconProps) => {
+}: EntityCloneIconProps<TEntity>) => {
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
@@ -59,11 +65,12 @@ const EntityCloneIcon = ({
     }
   }
   return (
-    <CloneIcon<EntityClone>
+    <CloneIcon<TEntity>
       {...props}
       active={active}
       title={title}
       value={entity}
+      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );
