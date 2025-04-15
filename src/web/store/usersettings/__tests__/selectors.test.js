@@ -5,7 +5,6 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {
-  getLocale,
   getReportComposerDefaults,
   getSessionTimeout,
   getTimezone,
@@ -27,18 +26,6 @@ describe('settings selectors tests', () => {
     test('should return timezone', () => {
       const state = createRootState({timezone: 'cet'});
       expect(getTimezone(state)).toEqual('cet');
-    });
-  });
-
-  describe('getLocale tests', () => {
-    test('should return undefined locale for empty state', () => {
-      const state = createRootState({});
-      expect(getLocale(state)).toBeUndefined();
-    });
-
-    test('should return locale', () => {
-      const state = createRootState({locale: 'de'});
-      expect(getLocale(state)).toEqual('de');
     });
   });
 

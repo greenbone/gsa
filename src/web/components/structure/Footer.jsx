@@ -4,7 +4,7 @@
  */
 
 import styled from 'styled-components';
-import useLocale from 'web/hooks/useLocale';
+import useLanguage from 'web/hooks/useLanguage';
 import Theme from 'web/utils/Theme';
 
 const Link = styled.a`
@@ -24,7 +24,7 @@ const Footer = styled.footer`
 `;
 
 const GreenboneFooter = () => {
-  const [language] = useLocale();
+  const [language] = useLanguage();
 
   const linkHref =
     language === 'de'
