@@ -4,14 +4,33 @@
  */
 
 import _ from 'gmp/locale';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import {EditIcon} from 'web/components/icon';
+import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
-import PropTypes from 'web/utils/PropTypes';
 
-const EntityEditIcon = ({
+interface EntityEdit extends EntityType {
+  userCapabilities: {
+    mayEdit: (name?: string) => boolean;
+  };
+  isWritable: () => boolean;
+}
+
+interface EntityEditIconProps<TEntity extends EntityEdit>
+  extends Omit<
+    ExtendedDynamicIconProps<TEntity>,
+    'onClick' | 'value' | 'active'
+  > {
+  disabled?: boolean;
+  displayName?: string;
+  entity: TEntity;
+  name?: string;
+  title?: string;
+  onClick?: (value: TEntity) => void | Promise<void>;
+}
+
+const EntityEditIcon = <TEntity extends EntityEdit>({
   disabled,
   displayName,
   entity,
@@ -19,7 +38,7 @@ const EntityEditIcon = ({
   title,
   onClick,
   ...props
-}) => {
+}: EntityEditIconProps<TEntity>) => {
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
@@ -51,18 +70,10 @@ const EntityEditIcon = ({
       active={active}
       title={title}
       value={entity}
+      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );
-};
-
-EntityEditIcon.propTypes = {
-  disabled: PropTypes.bool,
-  displayName: PropTypes.string,
-  entity: PropTypes.model.isRequired,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default EntityEditIcon;
