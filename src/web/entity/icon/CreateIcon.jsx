@@ -8,11 +8,10 @@ import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {NewIcon} from 'web/components/icon';
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 const EntityCreateIcon = ({
-  capabilities,
   display = false,
   displayName,
   entity,
@@ -22,6 +21,7 @@ const EntityCreateIcon = ({
   onClick,
   ...props
 }) => {
+  const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -67,4 +67,4 @@ EntityCreateIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(EntityCreateIcon);
+export default EntityCreateIcon;
