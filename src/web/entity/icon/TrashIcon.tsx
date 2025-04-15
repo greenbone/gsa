@@ -4,21 +4,40 @@
  */
 
 import _ from 'gmp/locale';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import {TrashcanIcon} from 'web/components/icon';
+import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
-import PropTypes from 'web/utils/PropTypes';
 
-const EntityTrashIcon = ({
+interface EntityTrash extends EntityType {
+  userCapabilities: {
+    mayDelete: (name?: string) => boolean;
+  };
+  isWritable: () => boolean;
+  isInUse: () => boolean;
+}
+
+interface EntityTrashIconProps<TEntity extends EntityTrash>
+  extends Omit<
+    ExtendedDynamicIconProps<TEntity>,
+    'onClick' | 'value' | 'active'
+  > {
+  displayName?: string;
+  entity: TEntity;
+  name?: string;
+  title?: string;
+  onClick?: (value: TEntity) => void | Promise<void>;
+}
+
+const EntityTrashIcon = <TEntity extends EntityTrash>({
   displayName,
   entity,
   name,
   title,
   onClick,
   ...props
-}) => {
+}: EntityTrashIconProps<TEntity>) => {
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
@@ -53,17 +72,10 @@ const EntityTrashIcon = ({
       active={active}
       title={title}
       value={entity}
+      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );
-};
-
-EntityTrashIcon.propTypes = {
-  displayName: PropTypes.string,
-  entity: PropTypes.model.isRequired,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default EntityTrashIcon;
