@@ -8,10 +8,10 @@ import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
+
 const EntityDeleteIcon = ({
-  capabilities,
   displayName,
   entity,
   name,
@@ -19,6 +19,7 @@ const EntityDeleteIcon = ({
   onClick,
   ...props
 }) => {
+  const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -28,7 +29,7 @@ const EntityDeleteIcon = ({
   }
 
   const mayDelete =
-    capabilities.mayDelete(name) && entity.userCapabilities.mayDelete(name);
+    capabilities?.mayDelete(name) && entity.userCapabilities.mayDelete(name);
 
   const active = mayDelete && entity.isWritable() && !entity.isInUse();
   if (!isDefined(title)) {
@@ -58,7 +59,6 @@ const EntityDeleteIcon = ({
 };
 
 EntityDeleteIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,
@@ -66,4 +66,4 @@ EntityDeleteIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(EntityDeleteIcon);
+export default EntityDeleteIcon;
