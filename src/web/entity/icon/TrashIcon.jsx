@@ -8,10 +8,10 @@ import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {TrashcanIcon} from 'web/components/icon';
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
+
 const EntityTrashIcon = ({
-  capabilities,
   displayName,
   entity,
   name,
@@ -19,6 +19,7 @@ const EntityTrashIcon = ({
   onClick,
   ...props
 }) => {
+  const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -28,7 +29,7 @@ const EntityTrashIcon = ({
   }
 
   const mayDelete =
-    capabilities.mayDelete(name) && entity.userCapabilities.mayDelete(name);
+    capabilities?.mayDelete(name) && entity.userCapabilities.mayDelete(name);
 
   const active = mayDelete && entity.isWritable() && !entity.isInUse();
   if (!isDefined(title)) {
@@ -58,7 +59,6 @@ const EntityTrashIcon = ({
 };
 
 EntityTrashIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,
@@ -66,4 +66,4 @@ EntityTrashIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(EntityTrashIcon);
+export default EntityTrashIcon;
