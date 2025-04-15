@@ -8,10 +8,10 @@ import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {VerifyIcon} from 'web/components/icon';
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
+
 const EntityVerifyIcon = ({
-  capabilities,
   displayName,
   entity,
   mayVerify = true,
@@ -20,6 +20,7 @@ const EntityVerifyIcon = ({
   onClick,
   ...props
 }) => {
+  const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = apiType(getEntityType(entity));
   }
@@ -29,7 +30,7 @@ const EntityVerifyIcon = ({
   }
   const active =
     mayVerify &&
-    capabilities.mayOp('verify_' + name) &&
+    capabilities?.mayOp('verify_' + name) &&
     entity.userCapabilities.mayOp('verify_' + name);
   if (!isDefined(title)) {
     if (active) {
@@ -54,7 +55,6 @@ const EntityVerifyIcon = ({
 };
 
 EntityVerifyIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   mayVerify: PropTypes.bool,
@@ -63,4 +63,4 @@ EntityVerifyIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(EntityVerifyIcon);
+export default EntityVerifyIcon;
