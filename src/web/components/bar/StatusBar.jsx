@@ -1,21 +1,21 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
 import styled from 'styled-components';
 import ProgressBar, {adjustProgress} from 'web/components/bar/ProgressBar';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-
 
 const Span = styled.span`
   white-space: nowrap;
 `;
 
 const StatusBar = ({status = 'Unknown', progress = '0'}) => {
+  const [_] = useTranslation();
   progress = adjustProgress(progress);
 
   let text = getTranslatableTaskStatus(status);

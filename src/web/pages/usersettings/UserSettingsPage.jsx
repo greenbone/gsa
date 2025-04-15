@@ -33,6 +33,7 @@ import Table from 'web/components/table/Table';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import SettingsDialog from 'web/pages/usersettings/Dialog';
+import withLanguageUpdates from 'web/pages/usersettings/withLanguageUpdates';
 import {
   loadEntities as loadAlerts,
   loadEntity as loadAlert,
@@ -1140,4 +1141,5 @@ export default compose(
   withGmp,
   withCapabilities,
   connect(mapStateToProps, mapDispatchToProps),
+  withLanguageUpdates, // Add this HOC to the composition
 )(UserSettings);

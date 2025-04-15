@@ -1,9 +1,8 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
@@ -12,9 +11,11 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const CertInfo = ({info}) => {
+  const [_] = useTranslation();
   const {activationTime, expirationTime, issuer, md5_fingerprint} = info;
   return (
     <InfoTable data-testid="cert-info-table">
