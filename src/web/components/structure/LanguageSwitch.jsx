@@ -9,7 +9,7 @@ import {
 } from '@greenbone/opensight-ui-components-mantinev7';
 import {ActionIcon} from '@mantine/core';
 import useGmp from 'web/hooks/useGmp';
-import useLocale from 'web/hooks/useLocale';
+import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
 
 const LANGUAGES = {
@@ -23,7 +23,7 @@ const getNextLanguage = language =>
   language === LANGUAGES.EN ? LANGUAGES.DE : LANGUAGES.EN;
 
 const LanguageSwitch = () => {
-  const [language, changeLanguage] = useLocale();
+  const [language, setLanguage] = useLanguage();
   const [_] = useTranslation();
   const gmp = useGmp();
 
@@ -35,7 +35,7 @@ const LanguageSwitch = () => {
 
   const handleLanguageChange = async () => {
     try {
-      changeLanguage(nextLanguage);
+      setLanguage(nextLanguage);
 
       await gmp.user.saveSetting(SETTING_ID_LOCALE, nextLanguage);
 
