@@ -16,8 +16,8 @@ import React from 'react';
 import {Provider as StoreProvider} from 'react-redux';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import GlobalStyles from 'web/components/layout/GlobalStyles';
-import LocaleObserver from 'web/components/observer/LocaleObserver';
 import GmpContext from 'web/components/provider/GmpProvider';
+import LanguageProvider from 'web/components/provider/LanguageProvider';
 import Routes from 'web/Routes';
 import configureStore from 'web/store';
 import {clearStore} from 'web/store/actions';
@@ -83,9 +83,9 @@ class App extends React.Component {
         <ErrorBoundary message={_('An error occurred on this page')}>
           <GmpContext.Provider value={gmp}>
             <StoreProvider store={store}>
-              <LocaleObserver>
+              <LanguageProvider>
                 <Routes />
-              </LocaleObserver>
+              </LanguageProvider>
             </StoreProvider>
           </GmpContext.Provider>
         </ErrorBoundary>

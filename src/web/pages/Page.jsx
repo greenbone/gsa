@@ -16,6 +16,7 @@ import Header from 'web/components/structure/Header';
 import Main from 'web/components/structure/Main';
 import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import CommunityFeedUsageNotification from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 import PropTypes from 'web/utils/PropTypes';
 
 const StyledLayout = styled(Layout)`
@@ -47,6 +48,7 @@ const Page = ({children}) => {
 
   return (
     <CapabilitiesContext.Provider value={capabilities}>
+      <CommunityFeedUsageNotification />
       <Header />
       <StyledLayout align={['start', 'stretch']} flex="row">
         <ScrollableMenuContainer>
