@@ -63,6 +63,9 @@ const Menu = () => {
 
   const useIsActive = path => Boolean(useMatch(path));
 
+  const conditionalSubNavConfig = (feature, label, to, activeCondition) =>
+        capabilities.mayAccess(feature) && { label, to, activeCondition };
+
   const isUserActive = useIsActive('/users');
   const isGroupsActive = useIsActive('/groups');
   const isRolesActive = useIsActive('/roles');
@@ -127,27 +130,31 @@ const Menu = () => {
       },
     ],
     resilience: [
-      {
-        label: _('Remediation Tickets'),
-        to: '/tickets',
-        activeCondition: useIsActive('/tickets'),
-      },
-      {
-        label: _('Compliance Policies'),
-        to: '/policies',
-        activeCondition: useIsActive('/policies'),
-      },
-      {
-        label: _('Compliance Audits'),
-        to: '/audits',
-        activeCondition: useIsActive('/audits'),
-      },
-      {
-        label: _('Compliance Audit Reports'),
-        to: '/auditreports',
-        activeCondition: useIsActive('/auditreports'),
-      },
-    ],
+      conditionalSubNavConfig(
+        'tickets',
+        _('Remediation Tickets'),
+        '/tickets',
+        useIsActive('/tickets'),
+      ),
+      conditionalSubNavConfig(
+        'policies',
+        _('Compliance Policies'),
+        '/policies',
+        useIsActive('/policies'),
+      ),
+      conditionalSubNavConfig(
+        'audits',
+        _('Compliance Audits'),
+        '/audits',
+        useIsActive('/audits'),
+      ),
+      conditionalSubNavConfig(
+        'auditreports',
+        _('Compliance Audit Reports'),
+        '/auditreports',
+        useIsActive('/auditreports'),
+      ),
+    ].filter(Boolean),
     secInfo: [
       {
         label: _('NVTs'),
