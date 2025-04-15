@@ -1,12 +1,12 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
 import useIconSize from 'web/hooks/useIconSize';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
@@ -35,6 +35,7 @@ const StyledCloseButton = styled.div`
 `;
 
 const CloseButton = ({title = _('Close'), size = 'medium', ...props}) => {
+  const [_] = useTranslation();
   const {width, height} = useIconSize(size);
 
   return (

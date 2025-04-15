@@ -1,12 +1,12 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
@@ -20,8 +20,10 @@ interface OwnerInfoProps {
   owner: Owner;
 }
 
-const OwnerInfo: React.FC<OwnerInfoProps> = ({owner}: OwnerInfoProps) =>
-  isDefined(owner) ? <span>{owner.name}</span> : <i>{_('(Global Object)')}</i>;
+const OwnerInfo: React.FC<OwnerInfoProps> = ({owner}: OwnerInfoProps) => {
+  const [_] = useTranslation();
+  return isDefined(owner) ? <span>{owner.name}</span> : <i>{_('(Global Object)')}</i>;
+};
 
 export const InfoLayout = styled(Layout)`
   border-spacing: 0px;
@@ -48,6 +50,7 @@ interface EntityInfoProps {
 }
 
 const EntityInfo: React.FC<EntityInfoProps> = ({entity}: EntityInfoProps) => {
+  const [_] = useTranslation();
   const {id, owner, creationTime, modificationTime} = entity;
   return (
     <InfoLayout>

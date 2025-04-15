@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -19,26 +18,31 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/SimpleTable';
+import useTranslation from 'web/hooks/useTranslation';
+import {withTranslation} from 'web/hooks/withTranslation';
 import LdapDialog from 'web/pages/ldap/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
-const ToolBarIcons = ({onOpenDialogClick}) => (
-  <IconDivider>
-    <ManualIcon
-      anchor="ldap"
-      page="web-interface-access"
-      size="small"
-      title={_('Help: LDAP per-User Authentication')}
-    />
-    <EditIcon
-      title={_('Edit LDAP per-User Authentication')}
-      onClick={onOpenDialogClick}
-    />
-  </IconDivider>
-);
+const ToolBarIcons = ({onOpenDialogClick}) => {
+  const [_] = useTranslation();
+  return (
+    <IconDivider>
+      <ManualIcon
+        anchor="ldap"
+        page="web-interface-access"
+        size="small"
+        title={_('Help: LDAP per-User Authentication')}
+      />
+      <EditIcon
+        title={_('Edit LDAP per-User Authentication')}
+        onClick={onOpenDialogClick}
+      />
+    </IconDivider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   onOpenDialogClick: PropTypes.func,
@@ -66,6 +70,7 @@ class LdapAuthentication extends React.Component {
 
   loadLdapAuthSettings() {
     const {gmp} = this.props;
+    const {_} = this.props;
 
     this.setState({loading: true});
 
@@ -136,6 +141,7 @@ class LdapAuthentication extends React.Component {
       ldaphost,
       ldapsOnly,
     } = this.state;
+    const {_} = this.props;
 
     return (
       <React.Fragment>
@@ -220,5 +226,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
+  withTranslation,
   connect(undefined, mapDispatchToProps),
 )(LdapAuthentication);
