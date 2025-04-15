@@ -8,10 +8,10 @@ import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {EditIcon} from 'web/components/icon';
+import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
+
 const EntityEditIcon = ({
-  capabilities,
   disabled,
   displayName,
   entity,
@@ -20,6 +20,7 @@ const EntityEditIcon = ({
   onClick,
   ...props
 }) => {
+  const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -29,7 +30,7 @@ const EntityEditIcon = ({
   }
 
   const mayEdit =
-    capabilities.mayEdit(name) && entity.userCapabilities.mayEdit(name);
+    capabilities?.mayEdit(name) && entity.userCapabilities.mayEdit(name);
 
   const active = mayEdit && entity.isWritable() && !disabled;
 
@@ -56,7 +57,6 @@ const EntityEditIcon = ({
 };
 
 EntityEditIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   disabled: PropTypes.bool,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
@@ -65,4 +65,4 @@ EntityEditIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(EntityEditIcon);
+export default EntityEditIcon;
