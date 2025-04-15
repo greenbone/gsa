@@ -4,14 +4,27 @@
  */
 
 import _ from 'gmp/locale';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import {NewIcon} from 'web/components/icon';
+import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
-import PropTypes from 'web/utils/PropTypes';
 
-const EntityCreateIcon = ({
+interface EntityCreateIconProps<TEntity extends EntityType>
+  extends Omit<
+    ExtendedDynamicIconProps<TEntity>,
+    'onClick' | 'value' | 'active' | 'display'
+  > {
+  display?: boolean;
+  displayName?: string;
+  entity: TEntity;
+  mayCreate?: boolean;
+  name?: string;
+  title?: string;
+  onClick?: (value: TEntity) => void | Promise<void>;
+}
+
+const EntityCreateIcon = <TEntity extends EntityType>({
   display = false,
   displayName,
   entity,
@@ -20,13 +33,13 @@ const EntityCreateIcon = ({
   title,
   onClick,
   ...props
-}) => {
+}: EntityCreateIconProps<TEntity>) => {
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
 
-  const active = mayCreate && capabilities.mayCreate(name);
+  const active = mayCreate && capabilities?.mayCreate(name);
   if (!display && !active) {
     return null;
   }
@@ -51,20 +64,10 @@ const EntityCreateIcon = ({
       {...props}
       active={active}
       title={title}
+      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );
-};
-
-EntityCreateIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  display: PropTypes.bool,
-  displayName: PropTypes.string,
-  entity: PropTypes.model.isRequired,
-  mayCreate: PropTypes.bool,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default EntityCreateIcon;
