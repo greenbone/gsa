@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {RestoreIcon} from 'web/components/icon';
 import TrashDeleteIcon from 'web/components/icon/TrashDeleteIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -152,6 +152,7 @@ const getRestoreDeleteProps = (entity, onEntityRestore, onEntityDelete) => {
 };
 
 const TrashActions = ({entity, onEntityDelete, onEntityRestore}) => {
+  const [_] = useTranslation();
   const {restoreprops, deleteprops} = getRestoreDeleteProps(
     entity,
     onEntityRestore,

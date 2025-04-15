@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {DfnCertAdvIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -31,23 +31,27 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import DfnCertAdvDetails from 'web/pages/dfncert/Details';
 import {selector, loadEntity} from 'web/store/entities/dfncerts';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="dfn-cert-advisories"
-        page="managing-secinfo"
-        title={_('Help: DFN-CERT Advisories')}
+const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="dfn-cert-advisories"
+          page="managing-secinfo"
+          title={_('Help: DFN-CERT Advisories')}
+        />
+        <ListIcon page="dfncerts" title={_('DFN-CERT Advisories')} />
+      </IconDivider>
+      <ExportIcon
+        title={_('Export DFN-CERT Advisory')}
+        value={entity}
+        onClick={onDfnCertAdvDownloadClick}
       />
-      <ListIcon page="dfncerts" title={_('DFN-CERT Advisories')} />
-    </IconDivider>
-    <ExportIcon
-      title={_('Export DFN-CERT Advisory')}
-      value={entity}
-      onClick={onDfnCertAdvDownloadClick}
-    />
-  </Divider>
-);
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -55,37 +59,43 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity}) => {
+  const [_] = useTranslation();
   const {cves, summary, additionalLinks} = entity;
   return (
     <Layout flex="column">
       <DfnCertAdvDetails entity={entity} />
-
       <DetailsBlock title={_('Summary')}>
         {isDefined(summary) ? <p>{summary}</p> : _('None')}
       </DetailsBlock>
-
       {additionalLinks.length > 0 && (
         <DetailsBlock title={_('Other Links')}>
           <ul>
-            {additionalLinks.map(link => (
-              <li key={link}>
-                <ExternalLink to={link}>{link}</ExternalLink>
-              </li>
-            ))}
+            {additionalLinks.map(link => {
+              const [_] = useTranslation();
+
+              return (
+                <li key={link}>
+                  <ExternalLink to={link}>{link}</ExternalLink>
+                </li>
+              );
+            })}
           </ul>
         </DetailsBlock>
       )}
-
       <DetailsBlock title={_('Referenced CVEs')}>
         {cves.length > 0 ? (
           <ul>
-            {cves.map(cve => (
-              <li key={cve}>
-                <DetailsLink id={cve} type="cve">
-                  {cve}
-                </DetailsLink>
-              </li>
-            ))}
+            {cves.map(cve => {
+              const [_] = useTranslation();
+
+              return (
+                <li key={cve}>
+                  <DetailsLink id={cve} type="cve">
+                    {cve}
+                  </DetailsLink>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           _('None')
@@ -99,73 +109,79 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const DfnCertAdvPage = ({
-  entity,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <EntityComponent
-    name="dfncert"
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-  >
-    {({download}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<DfnCertAdvIcon size="large" />}
-        title={_('DFN-CERT Advisory')}
-        toolBarIcons={ToolBarIcons}
-        onDfnCertAdvDownloadClick={download}
-        onInteraction={onInteraction}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle
-                title={_('DFN-CERT Advisory: {{title}}', {title: entity.title})}
-              />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const DfnCertAdvPage = (
+  {
+    entity,
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </EntityComponent>
-);
+  return (
+    <EntityComponent
+      name="dfncert"
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+    >
+      {({download}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<DfnCertAdvIcon size="large" />}
+          title={_('DFN-CERT Advisory')}
+          toolBarIcons={ToolBarIcons}
+          onDfnCertAdvDownloadClick={download}
+          onInteraction={onInteraction}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle
+                  title={_('DFN-CERT Advisory: {{title}}', {title: entity.title})}
+                />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </EntityComponent>
+  );
+};
 
 DfnCertAdvPage.propTypes = {
   entity: PropTypes.model,

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   SNMP_CREDENTIAL_TYPE,
   SNMP_PRIVACY_ALGORITHM_NONE,
   getCredentialTypeName,
 } from 'gmp/models/credential';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Footnote from 'web/components/footnote/Footnote';
 import Divider from 'web/components/layout/Divider';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
@@ -23,6 +23,7 @@ import TableRow from 'web/components/table/Row';
 import PropTypes from 'web/utils/PropTypes';
 
 const CredentialDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {
     comment,
     credential_type,
@@ -90,13 +91,17 @@ const CredentialDetails = ({entity}) => {
               <TableData>{_('Targets using this Credential')}</TableData>
               <TableData>
                 <HorizontalSep $wrap>
-                  {targets.map(target => (
-                    <span key={target.id}>
-                      <DetailsLink id={target.id} type="target">
-                        {target.name}
-                      </DetailsLink>
-                    </span>
-                  ))}
+                  {targets.map(target => {
+                    const [_] = useTranslation();
+
+                    return (
+                      <span key={target.id}>
+                        <DetailsLink id={target.id} type="target">
+                          {target.name}
+                        </DetailsLink>
+                      </span>
+                    );
+                  })}
                 </HorizontalSep>
               </TableData>
             </TableRow>
@@ -107,13 +112,17 @@ const CredentialDetails = ({entity}) => {
               <TableData>{_('Scanners using this Credential')}</TableData>
               <TableData>
                 <HorizontalSep $wrap>
-                  {scanners.map(scanner => (
-                    <span key={scanner.id}>
-                      <DetailsLink id={scanner.id} type="scanner">
-                        {scanner.name}
-                      </DetailsLink>
-                    </span>
-                  ))}
+                  {scanners.map(scanner => {
+                    const [_] = useTranslation();
+
+                    return (
+                      <span key={scanner.id}>
+                        <DetailsLink id={scanner.id} type="scanner">
+                          {scanner.name}
+                        </DetailsLink>
+                      </span>
+                    );
+                  })}
                 </HorizontalSep>
               </TableData>
             </TableRow>

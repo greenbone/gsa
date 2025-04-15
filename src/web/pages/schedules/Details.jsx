@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
@@ -19,6 +19,7 @@ import {renderDuration, renderRecurrence} from 'web/pages/schedules/Render';
 import PropTypes from 'web/utils/PropTypes';
 
 const ScheduleDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {comment, tasks = [], timezone, timezone_abbrev, event = {}} = entity;
   const {startDate, nextDate, duration, recurrence} = event;
   return (
@@ -88,13 +89,15 @@ const ScheduleDetails = ({entity}) => {
                 {_('Tasks using this Schedule')}
               </TableDataAlignTop>
               <TableData>
-                {tasks.map(task => (
-                  <span key={task.id}>
-                    <DetailsLink id={task.id} type="task">
-                      {task.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {tasks.map(task => {
+                  return (
+                    <span key={task.id}>
+                      <DetailsLink id={task.id} type="task">
+                        {task.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
               </TableData>
             </TableRow>
           )}

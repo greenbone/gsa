@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import HorizontalSeparator from 'web/components/layout/HorizontalSep';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -20,7 +20,6 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import {convert_auth_method, convert_allow} from 'web/pages/users/Details';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const Actions = withEntitiesActions(
   ({
     entity,
@@ -28,36 +27,40 @@ const Actions = withEntitiesActions(
     onUserEditClick,
     onUserDeleteClick,
     onUserDownloadClick,
-  }) => (
-    <IconDivider grow align="center">
-      <DeleteIcon
-        displayName={_('User')}
-        entity={entity}
-        name="user"
-        onClick={onUserDeleteClick}
-      />
-      <EditIcon
-        displayName={_('User')}
-        entity={entity}
-        name="user"
-        onClick={onUserEditClick}
-      />
-      <CloneIcon
-        displayName={_('User')}
-        entity={entity}
-        mayClone={!entity.isSuperAdmin()}
-        name="user"
-        title={_('Clone User')}
-        value={entity}
-        onClick={onUserCloneClick}
-      />
-      <ExportIcon
-        title={_('Export User')}
-        value={entity}
-        onClick={onUserDownloadClick}
-      />
-    </IconDivider>
-  ),
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align="center">
+        <DeleteIcon
+          displayName={_('User')}
+          entity={entity}
+          name="user"
+          onClick={onUserDeleteClick}
+        />
+        <EditIcon
+          displayName={_('User')}
+          entity={entity}
+          name="user"
+          onClick={onUserEditClick}
+        />
+        <CloneIcon
+          displayName={_('User')}
+          entity={entity}
+          mayClone={!entity.isSuperAdmin()}
+          name="user"
+          title={_('Clone User')}
+          value={entity}
+          onClick={onUserCloneClick}
+        />
+        <ExportIcon
+          title={_('Export User')}
+          value={entity}
+          onClick={onUserDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -75,6 +78,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const roles = map(entity.roles, role => (
     <DetailsLink key={role.id} id={role.id} textOnly={!links} type="role">
       {role.name}

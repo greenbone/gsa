@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {NewIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -34,6 +34,7 @@ const EntityCreateIcon = <TEntity extends EntityType>({
   onClick,
   ...props
 }: EntityCreateIconProps<TEntity>) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);

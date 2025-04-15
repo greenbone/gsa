@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {RoleIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -48,36 +48,42 @@ import {
 import {selector, loadEntity} from 'web/store/entities/roles';
 import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
-const ToolBarIcons = ({
-  entity,
-  onRoleCloneClick,
-  onRoleCreateClick,
-  onRoleDeleteClick,
-  onRoleDownloadClick,
-  onRoleEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-roles"
-        page="web-interface-access"
-        title={_('Help: Roles')}
-      />
-      <ListIcon page="roles" title={_('Roles List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onRoleCreateClick} />
-      <CloneIcon entity={entity} onClick={onRoleCloneClick} />
-      <EditIcon entity={entity} onClick={onRoleEditClick} />
-      <TrashIcon entity={entity} onClick={onRoleDeleteClick} />
-      <ExportIcon
-        title={_('Export Role as XML')}
-        value={entity}
-        onClick={onRoleDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+const ToolBarIcons = (
+  {
+    entity,
+    onRoleCloneClick,
+    onRoleCreateClick,
+    onRoleDeleteClick,
+    onRoleDownloadClick,
+    onRoleEditClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-roles"
+          page="web-interface-access"
+          title={_('Help: Roles')}
+        />
+        <ListIcon page="roles" title={_('Roles List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onRoleCreateClick} />
+        <CloneIcon entity={entity} onClick={onRoleCloneClick} />
+        <EditIcon entity={entity} onClick={onRoleEditClick} />
+        <TrashIcon entity={entity} onClick={onRoleDeleteClick} />
+        <ExportIcon
+          title={_('Export Role as XML')}
+          value={entity}
+          onClick={onRoleDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -89,6 +95,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links}) => {
+  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <RoleDetails entity={entity} links={links} />
@@ -102,6 +109,7 @@ Details.propTypes = {
 };
 
 const GeneralPermissions = ({permissions = [], links}) => {
+  const [_] = useTranslation();
   return (
     <Layout title={_('General Command Permissions')}>
       {permissions.length > 0 ? (
@@ -113,19 +121,23 @@ const GeneralPermissions = ({permissions = [], links}) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {permissions.map(perm => (
-              <TableRow key={perm.id}>
-                <EntityNameTableData
-                  displayName={_('Permission')}
-                  entity={perm}
-                  links={links}
-                  type="permission"
-                />
-                <TableData>
-                  {permissionDescription(perm.name, perm.resource)}
-                </TableData>
-              </TableRow>
-            ))}
+            {permissions.map(perm => {
+              const [_] = useTranslation();
+
+              return (
+                <TableRow key={perm.id}>
+                  <EntityNameTableData
+                    displayName={_('Permission')}
+                    entity={perm}
+                    links={links}
+                    type="permission"
+                  />
+                  <TableData>
+                    {permissionDescription(perm.name, perm.resource)}
+                  </TableData>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       ) : (
@@ -140,103 +152,109 @@ GeneralPermissions.propTypes = {
   permissions: PropTypes.array,
 };
 
-const Page = ({
-  entity,
-  generalPermissions = [],
-  links = true,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <RoleComponent
-    onCloneError={onError}
-    onCloned={goToDetails('role', props)}
-    onCreated={goToDetails('role', props)}
-    onDeleteError={onError}
-    onDeleted={goToList('roles', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<RoleIcon size="large" />}
-        title={_('Role')}
-        toolBarIcons={ToolBarIcons}
-        onInteraction={onInteraction}
-        onRoleCloneClick={clone}
-        onRoleCreateClick={create}
-        onRoleDeleteClick={delete_func}
-        onRoleDownloadClick={download}
-        onRoleEditClick={edit}
-        onRoleSaveClick={save}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Role: {{name}}', {name: entity.name})} />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={generalPermissions}>
-                      {_('General Command Permissions')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const Page = (
+  {
+    entity,
+    generalPermissions = [],
+    links = true,
+    permissions = [],
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} links={links} />
-                    </TabPanel>
-                    <TabPanel>
-                      <GeneralPermissions permissions={generalPermissions} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </RoleComponent>
-);
+  return (
+    <RoleComponent
+      onCloneError={onError}
+      onCloned={goToDetails('role', props)}
+      onCreated={goToDetails('role', props)}
+      onDeleteError={onError}
+      onDeleted={goToList('roles', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<RoleIcon size="large" />}
+          title={_('Role')}
+          toolBarIcons={ToolBarIcons}
+          onInteraction={onInteraction}
+          onRoleCloneClick={clone}
+          onRoleCreateClick={create}
+          onRoleDeleteClick={delete_func}
+          onRoleDownloadClick={download}
+          onRoleEditClick={edit}
+          onRoleSaveClick={save}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Role: {{name}}', {name: entity.name})} />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={generalPermissions}>
+                        {_('General Command Permissions')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} links={links} />
+                      </TabPanel>
+                      <TabPanel>
+                        <GeneralPermissions permissions={generalPermissions} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </RoleComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

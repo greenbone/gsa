@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {PortListIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -40,40 +40,46 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/portlists';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({
-  entity,
-  onPortListCloneClick,
-  onPortListCreateClick,
-  onPortListDeleteClick,
-  onPortListDownloadClick,
-  onPortListEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="creating-and-managing-port-lists"
-        page="scanning"
-        title={_('Help: Port Lists')}
-      />
-      <ListIcon page="portlists" title={_('PortList List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onPortListCreateClick} />
-      <CloneIcon entity={entity} onClick={onPortListCloneClick} />
-      <EditIcon
-        disabled={entity.predefined}
-        entity={entity}
-        onClick={onPortListEditClick}
-      />
-      <TrashIcon entity={entity} onClick={onPortListDeleteClick} />
-      <ExportIcon
-        title={_('Export PortList as XML')}
-        value={entity}
-        onClick={onPortListDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+const ToolBarIcons = (
+  {
+    entity,
+    onPortListCloneClick,
+    onPortListCreateClick,
+    onPortListDeleteClick,
+    onPortListDownloadClick,
+    onPortListEditClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="creating-and-managing-port-lists"
+          page="scanning"
+          title={_('Help: Port Lists')}
+        />
+        <ListIcon page="portlists" title={_('PortList List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onPortListCreateClick} />
+        <CloneIcon entity={entity} onClick={onPortListCloneClick} />
+        <EditIcon
+          disabled={entity.predefined}
+          entity={entity}
+          onClick={onPortListEditClick}
+        />
+        <TrashIcon entity={entity} onClick={onPortListDeleteClick} />
+        <ExportIcon
+          title={_('Export PortList as XML')}
+          value={entity}
+          onClick={onPortListDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -85,6 +91,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
+  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <PortListDetails entity={entity} links={links} />
@@ -98,6 +105,7 @@ Details.propTypes = {
 };
 
 const PortRanges = ({entity}) => {
+  const [_] = useTranslation();
   const {port_ranges = []} = entity;
 
   return (
@@ -114,107 +122,113 @@ PortRanges.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  links = true,
-  permissions = [],
-  onError,
-  onChanged,
-  onDownloaded,
-  onInteraction,
-  ...props
-}) => (
-  <PortListComponent
-    onCloneError={onError}
-    onCloned={goToDetails('portlist', props)}
-    onCreated={goToDetails('portlist', props)}
-    onDeleteError={onError}
-    onDeleted={goToList('portlists', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<PortListIcon size="large" />}
-        title={_('Port List')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onInteraction={onInteraction}
-        onPortListCloneClick={clone}
-        onPortListCreateClick={create}
-        onPortListDeleteClick={delete_func}
-        onPortListDownloadClick={download}
-        onPortListEditClick={edit}
-        onPortListSaveClick={save}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle
-                title={_('Port List: {{name}}', {name: entity.name})}
-              />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.port_ranges}>
-                      {_('Port Ranges')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const Page = (
+  {
+    entity,
+    links = true,
+    permissions = [],
+    onError,
+    onChanged,
+    onDownloaded,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <PortListDetails entity={entity} links={links} />
-                    </TabPanel>
-                    <TabPanel>
-                      <PortRanges entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </PortListComponent>
-);
+  return (
+    <PortListComponent
+      onCloneError={onError}
+      onCloned={goToDetails('portlist', props)}
+      onCreated={goToDetails('portlist', props)}
+      onDeleteError={onError}
+      onDeleted={goToList('portlists', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<PortListIcon size="large" />}
+          title={_('Port List')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+          onPortListCloneClick={clone}
+          onPortListCreateClick={create}
+          onPortListDeleteClick={delete_func}
+          onPortListDownloadClick={download}
+          onPortListEditClick={edit}
+          onPortListSaveClick={save}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle
+                  title={_('Port List: {{name}}', {name: entity.name})}
+                />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.port_ranges}>
+                        {_('Port Ranges')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <PortListDetails entity={entity} links={links} />
+                      </TabPanel>
+                      <TabPanel>
+                        <PortRanges entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </PortListComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

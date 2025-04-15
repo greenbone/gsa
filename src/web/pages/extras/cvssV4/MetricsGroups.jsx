@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import PropTypes from 'prop-types';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Metrics from 'web/pages/extras/cvssV4/Metrics';
 
 const MetricsGroups = ({
@@ -12,9 +12,11 @@ const MetricsGroups = ({
   selectedOptions,
   handleOptionChange,
 }) => {
+  const [_] = useTranslation();
   let lastMetricType = null;
   return Object.entries(cvssConfigData).flatMap(
     ([metricType, metricGroups]) => {
+      const [_] = useTranslation();
       const metricGroupElements = Object.entries(metricGroups).map(
         ([metricGroupName, metrics]) => {
           const isDifferentMetricType = lastMetricType !== metricType;

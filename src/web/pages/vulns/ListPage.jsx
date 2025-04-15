@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {VulnerabilityIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -23,47 +23,55 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/vulns';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = () => (
-  <Layout>
-    <ManualIcon
-      anchor="displaying-all-existing-vulnerabilities"
-      page="reports"
-      title={_('Vulnerabilities')}
-    />
-  </Layout>
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <React.Fragment>
-    <PageTitle title={_('Vulnerabilities')} />
-    <EntitiesPage
-      {...props}
-      dashboard={() => (
-        <VulnerabilitiesDashboard
-          filter={filter}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-        />
-      )}
-      dashboardControls={() => (
-        <DashboardControls
-          dashboardId={VULNS_DASHBOARD_ID}
-          onInteraction={onInteraction}
-        />
-      )}
-      filter={filter}
-      filterEditDialog={VulnsFilterDialog}
-      filtersFilter={VULNS_FILTER_FILTER}
-      sectionIcon={<VulnerabilityIcon size="large" />}
-      table={VulnsTable}
-      tags={false}
-      title={_('Vulnerabilities')}
-      toolBarIcons={ToolBarIcons}
-      onFilterChanged={onFilterChanged}
-      onInteraction={onInteraction}
-    />
-  </React.Fragment>
-);
+  return (
+    <Layout>
+      <ManualIcon
+        anchor="displaying-all-existing-vulnerabilities"
+        page="reports"
+        title={_('Vulnerabilities')}
+      />
+    </Layout>
+  );
+};
+
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+  const [_] = useTranslation();
+
+  return (
+    <React.Fragment>
+      <PageTitle title={_('Vulnerabilities')} />
+      <EntitiesPage
+        {...props}
+        dashboard={() => (
+          <VulnerabilitiesDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={VULNS_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
+        filterEditDialog={VulnsFilterDialog}
+        filtersFilter={VULNS_FILTER_FILTER}
+        sectionIcon={<VulnerabilityIcon size="large" />}
+        table={VulnsTable}
+        tags={false}
+        title={_('Vulnerabilities')}
+        toolBarIcons={ToolBarIcons}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
+    </React.Fragment>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

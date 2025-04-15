@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {DisableIcon, EnableIcon, TagIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -52,6 +52,7 @@ const ToolBarIcons = withCapabilties(
     onTagEditClick,
     onTagEnableClick,
   }) => {
+    const [_] = useTranslation();
     let endisableable = null;
 
     if (capabilities.mayEdit('tag')) {
@@ -120,6 +121,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <TagComponent
       onCloneError={onError}

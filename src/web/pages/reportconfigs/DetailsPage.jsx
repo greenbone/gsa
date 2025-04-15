@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {ReportConfigIcon} from 'web/components/icon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -47,43 +47,49 @@ import {
 import {selector, loadEntity} from 'web/store/entities/reportconfigs';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-const ToolBarIcons = ({
-  entity,
-  onReportConfigCloneClick,
-  onReportConfigCreateClick,
-  onReportConfigDeleteClick,
-  onReportConfigEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="customizing-report-formats-with-report-configurations"
-        page="reports"
-        title={_('Help: Report Configs')}
-      />
-      <ListIcon page="reportconfigs" title={_('Report Configs List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon
-        displayName={_('Report Config')}
-        entity={entity}
-        onClick={onReportConfigCreateClick}
-      />
-      <CloneIcon entity={entity} onClick={onReportConfigCloneClick} />
-      <EditIcon
-        disabled={entity.predefined}
-        displayName={_('Report Config')}
-        entity={entity}
-        onClick={onReportConfigEditClick}
-      />
-      <TrashIcon
-        displayName={_('Report Config')}
-        entity={entity}
-        onClick={onReportConfigDeleteClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+const ToolBarIcons = (
+  {
+    entity,
+    onReportConfigCloneClick,
+    onReportConfigCreateClick,
+    onReportConfigDeleteClick,
+    onReportConfigEditClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="customizing-report-formats-with-report-configurations"
+          page="reports"
+          title={_('Help: Report Configs')}
+        />
+        <ListIcon page="reportconfigs" title={_('Report Configs List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon
+          displayName={_('Report Config')}
+          entity={entity}
+          onClick={onReportConfigCreateClick}
+        />
+        <CloneIcon entity={entity} onClick={onReportConfigCloneClick} />
+        <EditIcon
+          disabled={entity.predefined}
+          displayName={_('Report Config')}
+          entity={entity}
+          onClick={onReportConfigEditClick}
+        />
+        <TrashIcon
+          displayName={_('Report Config')}
+          entity={entity}
+          onClick={onReportConfigDeleteClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -94,6 +100,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
+  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <ReportConfigDetails entity={entity} links={links} />
@@ -107,6 +114,7 @@ Details.propTypes = {
 };
 
 const Parameters = ({entity}) => {
+  const [_] = useTranslation();
   const {params = []} = entity;
   return (
     <Layout>
@@ -124,24 +132,28 @@ const Parameters = ({entity}) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {params.map(param => (
-              <TableRow key={param.name}>
-                <TableData>{param.name}</TableData>
-                <TableData>
-                  <ReportConfigParamValue param={param} />
-                </TableData>
-                <TableData>{renderYesNo(param.valueUsingDefault)}</TableData>
-                <TableData>
-                  <ReportConfigParamValue
-                    param={param}
-                    value={param.default}
-                    valueLabels={param.defaultLabels}
-                  />
-                </TableData>
-                <TableData>{param.min}</TableData>
-                <TableData>{param.max}</TableData>
-              </TableRow>
-            ))}
+            {params.map(param => {
+              const [_] = useTranslation();
+
+              return (
+                <TableRow key={param.name}>
+                  <TableData>{param.name}</TableData>
+                  <TableData>
+                    <ReportConfigParamValue param={param} />
+                  </TableData>
+                  <TableData>{renderYesNo(param.valueUsingDefault)}</TableData>
+                  <TableData>
+                    <ReportConfigParamValue
+                      param={param}
+                      value={param.default}
+                      valueLabels={param.defaultLabels}
+                    />
+                  </TableData>
+                  <TableData>{param.min}</TableData>
+                  <TableData>{param.max}</TableData>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       )}
@@ -153,101 +165,107 @@ Parameters.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  links = true,
-  permissions = [],
-  onChanged,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <ReportConfigComponent
-    onCloneError={onError}
-    onCloned={goToDetails('reportconfig', props)}
-    onCreateError={onError}
-    onCreated={goToDetails('reportconfig', props)}
-    onDeleteError={onError}
-    onDeleted={goToList('reportconfigs', props)}
-    onInteraction={onInteraction}
-    onSaveError={onError}
-    onSaved={onChanged}
-  >
-    {({clone, delete: delete_func, edit, create: create_func, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<ReportConfigIcon size="large" />}
-        title={_('Report Config')}
-        toolBarIcons={ToolBarIcons}
-        onInteraction={onInteraction}
-        onReportConfigCloneClick={clone}
-        onReportConfigCreateClick={create_func}
-        onReportConfigDeleteClick={delete_func}
-        onReportConfigEditClick={edit}
-        onReportConfigSaveClick={save}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle
-                title={_('Report Config: {{name}}', {name: entity.name})}
-              />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.params}>
-                      {_('Parameter Details')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const Page = (
+  {
+    entity,
+    links = true,
+    permissions = [],
+    onChanged,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} links={links} />
-                    </TabPanel>
-                    <TabPanel>
-                      <Parameters entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </ReportConfigComponent>
-);
+  return (
+    <ReportConfigComponent
+      onCloneError={onError}
+      onCloned={goToDetails('reportconfig', props)}
+      onCreateError={onError}
+      onCreated={goToDetails('reportconfig', props)}
+      onDeleteError={onError}
+      onDeleted={goToList('reportconfigs', props)}
+      onInteraction={onInteraction}
+      onSaveError={onError}
+      onSaved={onChanged}
+    >
+      {({clone, delete: delete_func, edit, create: create_func, save}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<ReportConfigIcon size="large" />}
+          title={_('Report Config')}
+          toolBarIcons={ToolBarIcons}
+          onInteraction={onInteraction}
+          onReportConfigCloneClick={clone}
+          onReportConfigCreateClick={create_func}
+          onReportConfigDeleteClick={delete_func}
+          onReportConfigEditClick={edit}
+          onReportConfigSaveClick={save}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle
+                  title={_('Report Config: {{name}}', {name: entity.name})}
+                />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.params}>
+                        {_('Parameter Details')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} links={links} />
+                      </TabPanel>
+                      <TabPanel>
+                        <Parameters entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </ReportConfigComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

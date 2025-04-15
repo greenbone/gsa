@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import {UploadIcon, ScanConfigIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -59,6 +59,7 @@ export const ToolBarIcons = ({
   onScanConfigEditClick,
   onScanConfigImportClick,
 }) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   return (
     <Divider margin="10px">
@@ -106,6 +107,7 @@ ToolBarIcons.propTypes = {
 };
 
 export const NvtFamilies = ({entity}) => {
+  const [_] = useTranslation();
   const {family_list = [], families} = entity;
   return (
     <Layout>
@@ -134,37 +136,41 @@ export const NvtFamilies = ({entity}) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {family_list.map(family => (
-              <TableRow key={family.name}>
-                <TableData>
-                  <span>
-                    <Link
-                      filter={'family="' + family.name + '"'}
-                      title={_('NVTs of family {{name}}', {name: family.name})}
-                      to="nvts"
-                    >
-                      {family.name}
-                    </Link>
-                  </span>
-                </TableData>
-                <TableData align={['center', 'start']}>
-                  <Layout>{_('{{count}} of {{max}}', family.nvts)}</Layout>
-                </TableData>
-                <TableData align={['center', 'center']}>
-                  <Trend
-                    titleDynamic={_(
-                      'The NVT selection is DYNAMIC. New ' +
-                        'NVTs will automatically be added and considered.',
-                    )}
-                    titleStatic={_(
-                      'The NVT selection is STATIC. New ' +
-                        'NVTs will NOT automatically be added and considered.',
-                    )}
-                    trend={family.trend}
-                  />
-                </TableData>
-              </TableRow>
-            ))}
+            {family_list.map(family => {
+              const [_] = useTranslation();
+
+              return (
+                <TableRow key={family.name}>
+                  <TableData>
+                    <span>
+                      <Link
+                        filter={'family="' + family.name + '"'}
+                        title={_('NVTs of family {{name}}', {name: family.name})}
+                        to="nvts"
+                      >
+                        {family.name}
+                      </Link>
+                    </span>
+                  </TableData>
+                  <TableData align={['center', 'start']}>
+                    <Layout>{_('{{count}} of {{max}}', family.nvts)}</Layout>
+                  </TableData>
+                  <TableData align={['center', 'center']}>
+                    <Trend
+                      titleDynamic={_(
+                        'The NVT selection is DYNAMIC. New ' +
+                          'NVTs will automatically be added and considered.',
+                      )}
+                      titleStatic={_(
+                        'The NVT selection is STATIC. New ' +
+                          'NVTs will NOT automatically be added and considered.',
+                      )}
+                      trend={family.trend}
+                    />
+                  </TableData>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </StripedTable>
       )}
@@ -177,6 +183,7 @@ NvtFamilies.propTypes = {
 };
 
 export const ScannerPreferences = ({entity}) => {
+  const [_] = useTranslation();
   const {preferences} = entity;
 
   return (
@@ -191,13 +198,17 @@ export const ScannerPreferences = ({entity}) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {preferences.scanner.map(pref => (
-              <TableRow key={pref.name}>
-                <TableData>{pref.name}</TableData>
-                <TableData>{pref.value}</TableData>
-                <TableData>{pref.default}</TableData>
-              </TableRow>
-            ))}
+            {preferences.scanner.map(pref => {
+              const [_] = useTranslation();
+
+              return (
+                <TableRow key={pref.name}>
+                  <TableData>{pref.name}</TableData>
+                  <TableData>{pref.value}</TableData>
+                  <TableData>{pref.default}</TableData>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </StripedTable>
       )}
@@ -214,6 +225,7 @@ const StyledTableData = styled(TableData)`
 `;
 
 export const NvtPreferences = ({entity}) => {
+  const [_] = useTranslation();
   const {preferences} = entity;
 
   return (
@@ -229,20 +241,24 @@ export const NvtPreferences = ({entity}) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {preferences.nvt.map(pref => (
-              <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
-                <TableData>
-                  <span>
-                    <DetailsLink id={pref.nvt.oid} type="nvt">
-                      {pref.nvt.name}
-                    </DetailsLink>
-                  </span>
-                </TableData>
-                <TableData>{pref.name}</TableData>
-                <StyledTableData>{pref.value}</StyledTableData>
-                <StyledTableData>{pref.default}</StyledTableData>
-              </TableRow>
-            ))}
+            {preferences.nvt.map(pref => {
+              const [_] = useTranslation();
+
+              return (
+                <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
+                  <TableData>
+                    <span>
+                      <DetailsLink id={pref.nvt.oid} type="nvt">
+                        {pref.nvt.name}
+                      </DetailsLink>
+                    </span>
+                  </TableData>
+                  <TableData>{pref.name}</TableData>
+                  <StyledTableData>{pref.value}</StyledTableData>
+                  <StyledTableData>{pref.default}</StyledTableData>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </StripedTable>
       )}
@@ -255,6 +271,7 @@ NvtPreferences.propTypes = {
 };
 
 const Details = ({entity, ...props}) => {
+  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <ScanConfigDetails entity={entity} {...props} />
@@ -275,6 +292,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <ScanConfigComponent
       onCloneError={onError}

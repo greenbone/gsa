@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import {CveIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -39,23 +39,27 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import CveDetails from 'web/pages/cves/Details';
 import {selector, loadEntity} from 'web/store/entities/cves';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({entity, onCveDownloadClick}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="cve"
-        page="managing-secinfo"
-        title={_('Help: CVEs')}
+const ToolBarIcons = ({entity, onCveDownloadClick}) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="cve"
+          page="managing-secinfo"
+          title={_('Help: CVEs')}
+        />
+        <ListIcon page="cves" title={_('CVE List')} />
+      </IconDivider>
+      <ExportIcon
+        title={_('Export CVE')}
+        value={entity}
+        onClick={onCveDownloadClick}
       />
-      <ListIcon page="cves" title={_('CVE List')} />
-    </IconDivider>
-    <ExportIcon
-      title={_('Export CVE')}
-      value={entity}
-      onClick={onCveDownloadClick}
-    />
-  </Divider>
-);
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -63,13 +67,13 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
+  const [_] = useTranslation();
   const {certs = [], nvts = []} = entity;
   let {products} = entity;
   products = products.sort();
   return (
     <Layout flex="column">
       <CveDetails entity={entity} />
-
       {certs.length > 0 && (
         <DetailsBlock title={_('CERT Advisories referencing this CVE')}>
           <Table>
@@ -80,49 +84,59 @@ const Details = ({entity, links = true}) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {certs.map(cert => (
-                <TableRow key={cert.name}>
-                  <TableData>
-                    <span>
-                      <CertLink
-                        id={cert.name}
-                        textOnly={!links}
-                        type={cert.cert_type}
-                      />
-                    </span>
-                  </TableData>
-                  <TableData>{cert.title}</TableData>
-                </TableRow>
-              ))}
+              {certs.map(cert => {
+                const [_] = useTranslation();
+
+                return (
+                  <TableRow key={cert.name}>
+                    <TableData>
+                      <span>
+                        <CertLink
+                          id={cert.name}
+                          textOnly={!links}
+                          type={cert.cert_type}
+                        />
+                      </span>
+                    </TableData>
+                    <TableData>{cert.title}</TableData>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </DetailsBlock>
       )}
-
       {products.length > 0 && (
         <DetailsBlock title={_('Vulnerable Products')}>
           <Layout flex="column">
-            {products.map(product => (
-              <span key={product}>
-                <DetailsLink id={product} type="cpe">
-                  {product}
-                </DetailsLink>
-              </span>
-            ))}
+            {products.map(product => {
+              const [_] = useTranslation();
+
+              return (
+                <span key={product}>
+                  <DetailsLink id={product} type="cpe">
+                    {product}
+                  </DetailsLink>
+                </span>
+              );
+            })}
           </Layout>
         </DetailsBlock>
       )}
-
       {nvts.length > 0 && (
         <DetailsBlock title={_('NVTs addressing this CVE')}>
           <Layout flex="column">
-            {nvts.map(nvt => (
-              <span key={nvt.id}>
-                <DetailsLink id={nvt.id} type="nvt">
-                  {nvt.name}
-                </DetailsLink>
-              </span>
-            ))}
+            {nvts.map(nvt => {
+              const [_] = useTranslation();
+
+              return (
+                <span key={nvt.id}>
+                  <DetailsLink id={nvt.id} type="nvt">
+                    {nvt.name}
+                  </DetailsLink>
+                </span>
+              );
+            })}
           </Layout>
         </DetailsBlock>
       )}
@@ -136,6 +150,7 @@ Details.propTypes = {
 };
 
 const EntityInfo = ({entity}) => {
+  const [_] = useTranslation();
   const {id, publishedTime, lastModifiedTime, updateTime} = entity;
   return (
     <InfoLayout>
@@ -169,72 +184,78 @@ EntityInfo.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const CvePage = ({
-  entity,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <EntityComponent
-    name="cve"
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-  >
-    {({download}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        infoComponent={EntityInfo}
-        sectionIcon={<CveIcon size="large" />}
-        title={_('CVE')}
-        toolBarIcons={ToolBarIcons}
-        onCveDownloadClick={download}
-        onInteraction={onInteraction}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('CVE: {{name}}', {name: entity.name})} />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const CvePage = (
+  {
+    entity,
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </EntityComponent>
-);
+  return (
+    <EntityComponent
+      name="cve"
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+    >
+      {({download}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          infoComponent={EntityInfo}
+          sectionIcon={<CveIcon size="large" />}
+          title={_('CVE')}
+          toolBarIcons={ToolBarIcons}
+          onCveDownloadClick={download}
+          onInteraction={onInteraction}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('CVE: {{name}}', {name: entity.name})} />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </EntityComponent>
+  );
+};
 
 CvePage.propTypes = {
   entity: PropTypes.model,

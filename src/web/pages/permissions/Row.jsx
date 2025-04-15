@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
@@ -21,42 +21,48 @@ import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
 
 const Actions = withEntitiesActions(
-  ({
-    entity,
-    onPermissionDeleteClick,
-    onPermissionDownloadClick,
-    onPermissionCloneClick,
-    onPermissionEditClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Permission')}
-        entity={entity}
-        name="permission"
-        onClick={onPermissionDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Permission')}
-        entity={entity}
-        name="permission"
-        onClick={onPermissionEditClick}
-      />
-      <CloneIcon
-        displayName={_('Permission')}
-        entity={entity}
-        mayClone={entity.isWritable()}
-        name="permission"
-        title={_('Clone Permission')}
-        value={entity}
-        onClick={onPermissionCloneClick}
-      />
-      <ExportIcon
-        title={_('Export Permission')}
-        value={entity}
-        onClick={onPermissionDownloadClick}
-      />
-    </IconDivider>
-  ),
+  (
+    {
+      entity,
+      onPermissionDeleteClick,
+      onPermissionDownloadClick,
+      onPermissionCloneClick,
+      onPermissionEditClick,
+    }
+  ) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <TrashIcon
+          displayName={_('Permission')}
+          entity={entity}
+          name="permission"
+          onClick={onPermissionDeleteClick}
+        />
+        <EditIcon
+          displayName={_('Permission')}
+          entity={entity}
+          name="permission"
+          onClick={onPermissionEditClick}
+        />
+        <CloneIcon
+          displayName={_('Permission')}
+          entity={entity}
+          mayClone={entity.isWritable()}
+          name="permission"
+          title={_('Clone Permission')}
+          value={entity}
+          onClick={onPermissionCloneClick}
+        />
+        <ExportIcon
+          title={_('Export Permission')}
+          value={entity}
+          onClick={onPermissionDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -67,47 +73,53 @@ Actions.propTypes = {
   onPermissionEditClick: PropTypes.func.isRequired,
 };
 
-const Row = ({
-  actionsComponent: ActionsComponent = Actions,
-  entity,
-  links = true,
-  onToggleDetailsClick,
-  ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      displayName={_('Permission')}
-      entity={entity}
-      link={links}
-      type="permission"
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData>
-      {permissionDescription(entity.name, entity.resource, entity.subject)}
-    </TableData>
-    <TableData>
-      {isDefined(entity.resource) && typeName(getEntityType(entity.resource))}
-    </TableData>
-    <TableData>
-      {isDefined(entity.resource) && (
-        <span>
-          <EntityLink entity={entity.resource} />
-        </span>
-      )}
-    </TableData>
-    <TableData>
-      {isDefined(entity.subject) && typeName(getEntityType(entity.subject))}
-    </TableData>
-    <TableData>
-      {isDefined(entity.subject) && (
-        <span>
-          <EntityLink entity={entity.subject} />
-        </span>
-      )}
-    </TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+const Row = (
+  {
+    actionsComponent: ActionsComponent = Actions,
+    entity,
+    links = true,
+    onToggleDetailsClick,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <TableRow>
+      <EntityNameTableData
+        displayName={_('Permission')}
+        entity={entity}
+        link={links}
+        type="permission"
+        onToggleDetailsClick={onToggleDetailsClick}
+      />
+      <TableData>
+        {permissionDescription(entity.name, entity.resource, entity.subject)}
+      </TableData>
+      <TableData>
+        {isDefined(entity.resource) && typeName(getEntityType(entity.resource))}
+      </TableData>
+      <TableData>
+        {isDefined(entity.resource) && (
+          <span>
+            <EntityLink entity={entity.resource} />
+          </span>
+        )}
+      </TableData>
+      <TableData>
+        {isDefined(entity.subject) && typeName(getEntityType(entity.subject))}
+      </TableData>
+      <TableData>
+        {isDefined(entity.subject) && (
+          <span>
+            <EntityLink entity={entity.subject} />
+          </span>
+        )}
+      </TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

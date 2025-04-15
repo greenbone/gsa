@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {HostIcon, ResultIcon, TlsCertificateIcon} from 'web/components/icon';
@@ -55,6 +55,7 @@ export const ToolBarIcons = ({
   onHostDownloadClick,
   onHostEditClick,
 }) => {
+  const [_] = useTranslation();
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -134,6 +135,7 @@ const Hop = styled.div`
 `;
 
 const Details = ({entity, ...props}) => {
+  const [_] = useTranslation();
   const {details = {}, identifiers = [], routes = [], severity} = entity;
 
   const os_cpe = isDefined(details.best_os_cpe)
@@ -194,21 +196,29 @@ const Details = ({entity, ...props}) => {
               <TableData>{_('Route')}</TableData>
               <TableData>
                 <RouteList>
-                  {routes.map((route, idx) => (
-                    <li key={idx}>
-                      {route.map(host => (
-                        <Hop key={host.ip}>
-                          <DetailsLink
-                            id={host.id}
-                            textOnly={!isDefined(host.id)}
-                            type="host"
-                          >
-                            {host.ip}
-                          </DetailsLink>
-                        </Hop>
-                      ))}
-                    </li>
-                  ))}
+                  {routes.map((route, idx) => {
+                    const [_] = useTranslation();
+
+                    return (
+                      <li key={idx}>
+                        {route.map(host => {
+                          const [_] = useTranslation();
+
+                          return (
+                            <Hop key={host.ip}>
+                              <DetailsLink
+                                id={host.id}
+                                textOnly={!isDefined(host.id)}
+                                type="host"
+                              >
+                                {host.ip}
+                              </DetailsLink>
+                            </Hop>
+                          );
+                        })}
+                      </li>
+                    );
+                  })}
                 </RouteList>
               </TableData>
             </TableRow>
@@ -222,7 +232,6 @@ const Details = ({entity, ...props}) => {
           </TableRow>
         </TableBody>
       </InfoTable>
-
       <HostDetails entity={entity} {...props} />
     </Layout>
   );
@@ -241,6 +250,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   const goto_host = goToDetails('host', props);
   return (
     <HostComponent

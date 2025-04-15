@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {ScheduleIcon} from 'web/components/icon';
 import DetailsLink from 'web/components/link/DetailsLink';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 const TaskScheduleIcon = ({size, links = true, schedule, timezone}) => {
+  const [_] = useTranslation();
   if (
     schedule.userCapabilities.areDefined() &&
     schedule.userCapabilities.length === 0

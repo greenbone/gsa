@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {AlertIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -47,36 +47,42 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = ({
-  entity,
-  onAlertCloneClick,
-  onAlertCreateClick,
-  onAlertDeleteClick,
-  onAlertDownloadClick,
-  onAlertEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-alerts"
-        page="scanning"
-        title={_('Help: Alerts')}
-      />
-      <ListIcon page="alerts" title={_('Alerts List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onAlertCreateClick} />
-      <CloneIcon entity={entity} onClick={onAlertCloneClick} />
-      <EditIcon entity={entity} onClick={onAlertEditClick} />
-      <TrashIcon entity={entity} onClick={onAlertDeleteClick} />
-      <ExportIcon
-        title={_('Export Alert as XML')}
-        value={entity}
-        onClick={onAlertDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+export const ToolBarIcons = (
+  {
+    entity,
+    onAlertCloneClick,
+    onAlertCreateClick,
+    onAlertDeleteClick,
+    onAlertDownloadClick,
+    onAlertEditClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-alerts"
+          page="scanning"
+          title={_('Help: Alerts')}
+        />
+        <ListIcon page="alerts" title={_('Alerts List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onAlertCreateClick} />
+        <CloneIcon entity={entity} onClick={onAlertCloneClick} />
+        <EditIcon entity={entity} onClick={onAlertEditClick} />
+        <TrashIcon entity={entity} onClick={onAlertDeleteClick} />
+        <ExportIcon
+          title={_('Export Alert as XML')}
+          value={entity}
+          onClick={onAlertDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -87,100 +93,106 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  reportConfigs,
-  reportFormats,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <AlertComponent
-    onCloneError={onError}
-    onCloned={goToDetails('alert', props)}
-    onCreated={goToDetails('alert', props)}
-    onDeleteError={onError}
-    onDeleted={goToList('alerts', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<AlertIcon size="large" />}
-        title={_('Alert')}
-        toolBarIcons={ToolBarIcons}
-        onAlertCloneClick={clone}
-        onAlertCreateClick={create}
-        onAlertDeleteClick={delete_func}
-        onAlertDownloadClick={download}
-        onAlertEditClick={edit}
-        onAlertSaveClick={save}
-        onInteraction={onInteraction}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Alert: {{name}}', {name: entity.name})} />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <AlertDetails
-                        entity={entity}
-                        reportConfigs={reportConfigs}
-                        reportFormats={reportFormats}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </AlertComponent>
-);
+const Page = (
+  {
+    entity,
+    permissions = [],
+    reportConfigs,
+    reportFormats,
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <AlertComponent
+      onCloneError={onError}
+      onCloned={goToDetails('alert', props)}
+      onCreated={goToDetails('alert', props)}
+      onDeleteError={onError}
+      onDeleted={goToList('alerts', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<AlertIcon size="large" />}
+          title={_('Alert')}
+          toolBarIcons={ToolBarIcons}
+          onAlertCloneClick={clone}
+          onAlertCreateClick={create}
+          onAlertDeleteClick={delete_func}
+          onAlertDownloadClick={download}
+          onAlertEditClick={edit}
+          onAlertSaveClick={save}
+          onInteraction={onInteraction}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Alert: {{name}}', {name: entity.name})} />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <AlertDetails
+                          entity={entity}
+                          reportConfigs={reportConfigs}
+                          reportFormats={reportFormats}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </AlertComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

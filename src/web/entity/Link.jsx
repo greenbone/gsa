@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getEntityType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
+  const [_] = useTranslation();
   const {id, name, userCapabilities, deleted} = entity;
   const type = normalizeType(getEntityType(entity));
 

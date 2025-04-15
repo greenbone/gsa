@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {CPES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {CpeLogoIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -20,40 +20,45 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = () => (
-  <ManualIcon anchor="cpe" page="managing-secinfo" title={_('Help: CPEs')} />
-);
+export const ToolBarIcons = () => {
+  const [_] = useTranslation();
+  return (<ManualIcon anchor="cpe" page="managing-secinfo" title={_('Help: CPEs')} />);
+};
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <React.Fragment>
-    <PageTitle title={_('CPEs')} />
-    <EntitiesPage
-      {...props}
-      dashboard={() => (
-        <CpesDashboard
-          filter={filter}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-        />
-      )}
-      dashboardControls={() => (
-        <DashboardControls
-          dashboardId={CPES_DASHBOARD_ID}
-          onInteraction={onInteraction}
-        />
-      )}
-      filter={filter}
-      filterEditDialog={CpeFilterDialog}
-      filtersFilter={CPES_FILTER_FILTER}
-      sectionIcon={<CpeLogoIcon size="large" />}
-      table={CpesTable}
-      title={_('CPEs')}
-      toolBarIcons={ToolBarIcons}
-      onFilterChanged={onFilterChanged}
-      onInteraction={onInteraction}
-    />
-  </React.Fragment>
-);
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+  const [_] = useTranslation();
+
+  return (
+    <React.Fragment>
+      <PageTitle title={_('CPEs')} />
+      <EntitiesPage
+        {...props}
+        dashboard={() => (
+          <CpesDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={CPES_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
+        filterEditDialog={CpeFilterDialog}
+        filtersFilter={CPES_FILTER_FILTER}
+        sectionIcon={<CpeLogoIcon size="large" />}
+        table={CpesTable}
+        title={_('CPEs')}
+        toolBarIcons={ToolBarIcons}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
+    </React.Fragment>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

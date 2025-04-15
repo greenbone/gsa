@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -17,6 +17,7 @@ import TableRow from 'web/components/table/Row';
 import PropTypes from 'web/utils/PropTypes';
 
 const ScanConfigDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {comment, deprecated, tasks = []} = entity;
   return (
     <Layout grow flex="column">
@@ -44,6 +45,7 @@ const ScanConfigDetails = ({entity}) => {
               <TableData>
                 <Divider wrap>
                   {tasks.map((task, index) => {
+                    const [_] = useTranslation();
                     return (
                       <React.Fragment key={task.id}>
                         <DetailsLink id={task.id} type="task">

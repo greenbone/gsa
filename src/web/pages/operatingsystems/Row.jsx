@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import CpeIcon from 'web/components/icon/CpeIcon';
@@ -18,24 +18,28 @@ import TableRow from 'web/components/table/Row';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import PropTypes from 'web/utils/PropTypes';
 const Actions = withEntitiesActions(
-  ({entity, onOsDeleteClick, onOsDownloadClick}) => (
-    <IconDivider grow align={['center', 'center']}>
-      {entity.isInUse() ? (
-        <DeleteIcon active={false} title={_('Operating System is in use')} />
-      ) : (
-        <DeleteIcon
-          title={_('Delete')}
+  ({entity, onOsDeleteClick, onOsDownloadClick}) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        {entity.isInUse() ? (
+          <DeleteIcon active={false} title={_('Operating System is in use')} />
+        ) : (
+          <DeleteIcon
+            title={_('Delete')}
+            value={entity}
+            onClick={onOsDeleteClick}
+          />
+        )}
+        <ExportIcon
+          title={_('Export Operating System')}
           value={entity}
-          onClick={onOsDeleteClick}
+          onClick={onOsDownloadClick}
         />
-      )}
-      <ExportIcon
-        title={_('Export Operating System')}
-        value={entity}
-        onClick={onOsDownloadClick}
-      />
-    </IconDivider>
-  ),
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -44,59 +48,65 @@ Actions.propTypes = {
   onOsDownloadClick: PropTypes.func.isRequired,
 };
 
-const Row = ({
-  actionsComponent: ActionsComponent = Actions,
-  entity,
-  links = true,
-  ...props
-}) => (
-  <TableRow>
-    <TableData>
-      <IconDivider align={['start', 'center']}>
-        <CpeIcon name={entity.name} />
-        <DetailsLink id={entity.id} textOnly={!links} type={entity.entityType}>
-          {entity.name}
-        </DetailsLink>
-      </IconDivider>
-    </TableData>
-    <TableData>{entity.title}</TableData>
-    <TableData>
-      <SeverityBar severity={entity.latestSeverity} />
-    </TableData>
-    <TableData>
-      <SeverityBar severity={entity.highestSeverity} />
-    </TableData>
-    <TableData>
-      <SeverityBar severity={entity.averageSeverity} />
-    </TableData>
-    <TableData>
-      <span>
-        <Link
-          filter={'os_id="' + entity.id + '"'}
-          textOnly={!links}
-          to={'hosts'}
-        >
-          {entity.allHosts.length}
-        </Link>
-      </span>
-    </TableData>
-    <TableData>
-      <span>
-        <Link
-          filter={'best_os_cpe="' + entity.name + '"'}
-          textOnly={!links}
-          to={'hosts'}
-        >
-          {entity.hosts.length}
-        </Link>
-      </span>
-    </TableData>
-    <TableData>
-      <DateTime date={entity.modificationTime} />
-    </TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+const Row = (
+  {
+    actionsComponent: ActionsComponent = Actions,
+    entity,
+    links = true,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <TableRow>
+      <TableData>
+        <IconDivider align={['start', 'center']}>
+          <CpeIcon name={entity.name} />
+          <DetailsLink id={entity.id} textOnly={!links} type={entity.entityType}>
+            {entity.name}
+          </DetailsLink>
+        </IconDivider>
+      </TableData>
+      <TableData>{entity.title}</TableData>
+      <TableData>
+        <SeverityBar severity={entity.latestSeverity} />
+      </TableData>
+      <TableData>
+        <SeverityBar severity={entity.highestSeverity} />
+      </TableData>
+      <TableData>
+        <SeverityBar severity={entity.averageSeverity} />
+      </TableData>
+      <TableData>
+        <span>
+          <Link
+            filter={'os_id="' + entity.id + '"'}
+            textOnly={!links}
+            to={'hosts'}
+          >
+            {entity.allHosts.length}
+          </Link>
+        </span>
+      </TableData>
+      <TableData>
+        <span>
+          <Link
+            filter={'best_os_cpe="' + entity.name + '"'}
+            textOnly={!links}
+            to={'hosts'}
+          >
+            {entity.hosts.length}
+          </Link>
+        </span>
+      </TableData>
+      <TableData>
+        <DateTime date={entity.modificationTime} />
+      </TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState, useEffect} from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
@@ -39,6 +39,7 @@ const filter_identifiers = (identifiers, latest = true) => {
 };
 
 const Source = ({source}) => {
+  const [_] = useTranslation();
   const {source_type, deleted, id, data, name} = source;
 
   if (source_type === 'Report Host Detail') {
@@ -95,6 +96,7 @@ Source.propTypes = {
 };
 
 const Identifiers = props => {
+  const [_] = useTranslation();
   const {identifiers} = props;
   const filtered = filter_identifiers(identifiers, true);
   const equal = filtered.length === identifiers.length;
@@ -161,37 +163,41 @@ const Identifiers = props => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {ids.map(identifier => (
-            <TableRow key={identifier.id}>
-              <TableData>{identifier.name}</TableData>
-              <TableData>
-                <span>
-                  <DetailsLink
-                    id={isDefined(identifier.os) ? identifier.os.id : ''}
-                    textOnly={identifier.name !== 'OS'}
-                    type="operatingsystem"
-                  >
-                    <Div>{identifier.value}</Div>
-                  </DetailsLink>
-                </span>
-              </TableData>
-              <TableData>
-                <DateTime date={identifier.creationTime} />
-              </TableData>
-              <TableData>
-                <Source source={identifier.source} />
-              </TableData>
-              {displayActions && (
-                <TableData align={['center', 'center']}>
-                  <DeleteIcon
-                    title={_('Delete Identifier')}
-                    value={identifier}
-                    onClick={onDelete}
-                  />
+          {ids.map(identifier => {
+            const [_] = useTranslation();
+
+            return (
+              <TableRow key={identifier.id}>
+                <TableData>{identifier.name}</TableData>
+                <TableData>
+                  <span>
+                    <DetailsLink
+                      id={isDefined(identifier.os) ? identifier.os.id : ''}
+                      textOnly={identifier.name !== 'OS'}
+                      type="operatingsystem"
+                    >
+                      <Div>{identifier.value}</Div>
+                    </DetailsLink>
+                  </span>
                 </TableData>
-              )}
-            </TableRow>
-          ))}
+                <TableData>
+                  <DateTime date={identifier.creationTime} />
+                </TableData>
+                <TableData>
+                  <Source source={identifier.source} />
+                </TableData>
+                {displayActions && (
+                  <TableData align={['center', 'center']}>
+                    <DeleteIcon
+                      title={_('Delete Identifier')}
+                      value={identifier}
+                      onClick={onDelete}
+                    />
+                  </TableData>
+                )}
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </DetailsBlock>

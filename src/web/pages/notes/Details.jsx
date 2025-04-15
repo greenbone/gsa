@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
@@ -23,6 +23,7 @@ import {
 } from 'web/utils/severity';
 
 const NoteDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {hosts, port, result, severity, task} = entity;
   return (
     <Layout flex="column" grow="1">
@@ -38,9 +39,10 @@ const NoteDetails = ({entity}) => {
               <TableData>
                 {hosts.length > 0 ? (
                   <HorizontalSep>
-                    {hosts.map(host => (
-                      <span key={host}>{host}</span>
-                    ))}
+                    {hosts.map(host => {
+                      const [_] = useTranslation();
+                      return (<span key={host}>{host}</span>);
+                    })}
                   </HorizontalSep>
                 ) : (
                   _('Any')
@@ -96,7 +98,6 @@ const NoteDetails = ({entity}) => {
           </TableBody>
         </InfoTable>
       </DetailsBlock>
-
       <DetailsBlock
         title={
           entity.isActive() ? _('Appearance') : _('Appearance when active')

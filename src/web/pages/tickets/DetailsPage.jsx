@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getTranslatableTicketStatus} from 'gmp/models/ticket';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import {TicketIcon} from 'web/components/icon';
@@ -44,44 +44,50 @@ import {
   loadEntity as loadTicket,
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({
-  entity,
-  onTicketCloneClick,
-  onTicketDeleteClick,
-  onTicketDownloadClick,
-  onTicketEditClick,
-}) => (
-  <Divider margin="10px">
-    <ManualIcon
-      anchor="managing-tickets"
-      page="reports"
-      title={_('Help: Remediation Tickets')}
-    />
-    <ListIcon page="tickets" title={_('Ticket List')} />
-    <IconDivider>
-      <EntityCloneIcon
-        entity={entity}
-        name="ticket"
-        onClick={onTicketCloneClick}
+const ToolBarIcons = (
+  {
+    entity,
+    onTicketCloneClick,
+    onTicketDeleteClick,
+    onTicketDownloadClick,
+    onTicketEditClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <ManualIcon
+        anchor="managing-tickets"
+        page="reports"
+        title={_('Help: Remediation Tickets')}
       />
-      <EntityEditIcon
-        entity={entity}
-        name="ticket"
-        onClick={onTicketEditClick}
-      />
-      <EntityTrashIcon
-        entity={entity}
-        name="ticket"
-        onClick={onTicketDeleteClick}
-      />
-      <ExportIcon
-        title={_('Export Ticket as XML')}
-        value={entity}
-        onClick={onTicketDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+      <ListIcon page="tickets" title={_('Ticket List')} />
+      <IconDivider>
+        <EntityCloneIcon
+          entity={entity}
+          name="ticket"
+          onClick={onTicketCloneClick}
+        />
+        <EntityEditIcon
+          entity={entity}
+          name="ticket"
+          onClick={onTicketEditClick}
+        />
+        <EntityTrashIcon
+          entity={entity}
+          name="ticket"
+          onClick={onTicketDeleteClick}
+        />
+        <ExportIcon
+          title={_('Export Ticket as XML')}
+          value={entity}
+          onClick={onTicketDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -91,142 +97,152 @@ ToolBarIcons.propTypes = {
   onTicketEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity}) => (
-  <Layout flex="column">
-    <InfoTable>
-      <colgroup>
-        <Col width="10%" />
-        <Col width="90%" />
-      </colgroup>
-      <TableBody>
-        <TableRow>
-          <TableData>{_('Name')}</TableData>
-          <TableData>{entity.name}</TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            <Comment>{_('Comment')}</Comment>
-          </TableData>
-          <TableData>{entity.comment}</TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>{_('Severity')}</TableData>
-          <TableData>
-            <SeverityBar severity={entity.severity} />
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>{_('Status')}</TableData>
-          <TableData>{getTranslatableTicketStatus(entity.status)}</TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>{_('Assigned To')}</TableData>
-          <TableData>
-            <span>
-              <DetailsLink id={entity.assignedTo.user.id} type="user">
-                {entity.assignedTo.user.name}
-              </DetailsLink>
-            </span>
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>{_('Solution Type')}</TableData>
-          <TableData>
-            <SolutionType displayTitleText type={entity.solutionType} />
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>{_('Host')}</TableData>
-          <TableData>{entity.host}</TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>{_('Location')}</TableData>
-          <TableData>{entity.location}</TableData>
-        </TableRow>
-      </TableBody>
-    </InfoTable>
-    <TicketDetails entity={entity} />
-  </Layout>
-);
+const Details = ({entity}) => {
+  const [_] = useTranslation();
+
+  return (
+    <Layout flex="column">
+      <InfoTable>
+        <colgroup>
+          <Col width="10%" />
+          <Col width="90%" />
+        </colgroup>
+        <TableBody>
+          <TableRow>
+            <TableData>{_('Name')}</TableData>
+            <TableData>{entity.name}</TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>
+              <Comment>{_('Comment')}</Comment>
+            </TableData>
+            <TableData>{entity.comment}</TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>{_('Severity')}</TableData>
+            <TableData>
+              <SeverityBar severity={entity.severity} />
+            </TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>{_('Status')}</TableData>
+            <TableData>{getTranslatableTicketStatus(entity.status)}</TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>{_('Assigned To')}</TableData>
+            <TableData>
+              <span>
+                <DetailsLink id={entity.assignedTo.user.id} type="user">
+                  {entity.assignedTo.user.name}
+                </DetailsLink>
+              </span>
+            </TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>{_('Solution Type')}</TableData>
+            <TableData>
+              <SolutionType displayTitleText type={entity.solutionType} />
+            </TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>{_('Host')}</TableData>
+            <TableData>{entity.host}</TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>{_('Location')}</TableData>
+            <TableData>{entity.location}</TableData>
+          </TableRow>
+        </TableBody>
+      </InfoTable>
+      <TicketDetails entity={entity} />
+    </Layout>
+  );
+};
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <TicketComponent
-    onCloneError={onError}
-    onCloned={goToDetails('ticket', props)}
-    onDeleteError={onError}
-    onDeleted={goToList('tickets', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, close, delete: deleteFunc, download, edit, solve}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<TicketIcon size="large" />}
-        title={_('Ticket')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onError={onError}
-        onInteraction={onInteraction}
-        onTicketCloneClick={clone}
-        onTicketCloseClick={close}
-        onTicketDeleteClick={deleteFunc}
-        onTicketDownloadClick={download}
-        onTicketEditClick={edit}
-        onTicketSolveClick={solve}
-      >
-        {({activeTab = 0, onActivateTab}) => (
-          <React.Fragment>
-            <PageTitle title={_('Ticket: {{name}}', {name: entity.name})} />
-            <Layout flex="column" grow="1">
-              <TabLayout align={['start', 'end']} grow="1">
-                <TabList
-                  active={activeTab}
-                  align={['start', 'stretch']}
-                  onActivateTab={onActivateTab}
-                >
-                  <Tab>{_('Information')}</Tab>
-                  <EntitiesTab entities={entity.userTags}>
-                    {_('User Tags')}
-                  </EntitiesTab>
-                </TabList>
-              </TabLayout>
+const Page = (
+  {
+    entity,
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-              <Tabs active={activeTab}>
-                <TabPanels>
-                  <TabPanel>
-                    <Details entity={entity} />
-                  </TabPanel>
-                  <TabPanel>
-                    <EntityTags
-                      entity={entity}
-                      onChanged={onChanged}
-                      onError={onError}
-                      onInteraction={onInteraction}
-                    />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Layout>
-          </React.Fragment>
-        )}
-      </EntityPage>
-    )}
-  </TicketComponent>
-);
+  return (
+    <TicketComponent
+      onCloneError={onError}
+      onCloned={goToDetails('ticket', props)}
+      onDeleteError={onError}
+      onDeleted={goToList('tickets', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, close, delete: deleteFunc, download, edit, solve}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<TicketIcon size="large" />}
+          title={_('Ticket')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onError={onError}
+          onInteraction={onInteraction}
+          onTicketCloneClick={clone}
+          onTicketCloseClick={close}
+          onTicketDeleteClick={deleteFunc}
+          onTicketDownloadClick={download}
+          onTicketEditClick={edit}
+          onTicketSolveClick={solve}
+        >
+          {({activeTab = 0, onActivateTab}) => (
+            <React.Fragment>
+              <PageTitle title={_('Ticket: {{name}}', {name: entity.name})} />
+              <Layout flex="column" grow="1">
+                <TabLayout align={['start', 'end']} grow="1">
+                  <TabList
+                    active={activeTab}
+                    align={['start', 'stretch']}
+                    onActivateTab={onActivateTab}
+                  >
+                    <Tab>{_('Information')}</Tab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
+                  </TabList>
+                </TabLayout>
+
+                <Tabs active={activeTab}>
+                  <TabPanels>
+                    <TabPanel>
+                      <Details entity={entity} />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityTags
+                        entity={entity}
+                        onChanged={onChanged}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </Layout>
+            </React.Fragment>
+          )}
+        </EntityPage>
+      )}
+    </TicketComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

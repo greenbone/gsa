@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback, useEffect, useState} from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import TagsDialog from 'web/entities/TagsDialog';
 import useGmp from 'web/hooks/useGmp';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
@@ -46,6 +46,7 @@ const BulkTags = ({
   entitiesCounts,
   onClose,
 }) => {
+  const [_] = useTranslation();
   const gmp = useGmp();
   const [, renewSession] = useUserSessionTimeout();
   const [tag, setTag] = useState({});

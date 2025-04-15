@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
 import {useState} from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Checkbox from 'web/components/form/Checkbox';
 import FileField from 'web/components/form/FileField';
@@ -29,6 +29,7 @@ const StyledTableData = styled(TableData)`
 const noopConvert = value => value;
 
 const NvtPreference = ({preference, value = '', onChange}) => {
+  const [_] = useTranslation();
   const [checked, setChecked] = useState(false);
 
   const onPreferenceChange = value => {
@@ -97,6 +98,7 @@ const NvtPreference = ({preference, value = '', onChange}) => {
           onChange={() => onPreferenceChange(preference.value)}
         />
         {map(preference.alt, alt => {
+          const [_] = useTranslation();
           return (
             <Radio
               key={alt}

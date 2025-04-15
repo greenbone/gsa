@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
@@ -19,6 +19,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import PropTypes from 'web/utils/PropTypes';
 const Actions = withEntitiesActions(
   ({entity, selectedDeltaReport, onReportDeleteClick, onReportDeltaSelect}) => {
+    const [_] = useTranslation();
     const {report} = entity;
     const scanActive = isActive(report.scan_run_status);
 
@@ -70,6 +71,7 @@ const Row = ({
   links = true,
   ...props
 }) => {
+  const [_] = useTranslation();
   const {report} = entity;
   const {scan_run_status, task} = report;
 

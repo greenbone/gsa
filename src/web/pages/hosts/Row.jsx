@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
@@ -33,6 +33,7 @@ const Actions = compose(
   onHostDeleteClick,
   onHostDownloadClick,
 }) => {
+  const [_] = useTranslation();
   let new_title;
   const can_create_target = capabilities.mayCreate('target');
   if (can_create_target) {
@@ -83,6 +84,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const {details = {}, os} = entity;
   const os_cpe = os;
   const os_txt = isDefined(details.best_os_txt)

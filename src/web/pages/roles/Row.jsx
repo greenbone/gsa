@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableRow from 'web/components/table/Row';
@@ -16,41 +16,47 @@ import TrashIcon from 'web/entity/icon/TrashIcon';
 import PropTypes from 'web/utils/PropTypes';
 
 const Actions = withEntitiesActions(
-  ({
-    entity,
-    onRoleCloneClick,
-    onRoleDeleteClick,
-    onRoleDownloadClick,
-    onRoleEditClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Role')}
-        entity={entity}
-        name="role"
-        onClick={onRoleDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Role')}
-        entity={entity}
-        name="role"
-        onClick={onRoleEditClick}
-      />
-      <CloneIcon
-        displayName={_('Role')}
-        entity={entity}
-        name="role"
-        title={_('Clone Role')}
-        value={entity}
-        onClick={onRoleCloneClick}
-      />
-      <ExportIcon
-        title={_('Export Role')}
-        value={entity}
-        onClick={onRoleDownloadClick}
-      />
-    </IconDivider>
-  ),
+  (
+    {
+      entity,
+      onRoleCloneClick,
+      onRoleDeleteClick,
+      onRoleDownloadClick,
+      onRoleEditClick,
+    }
+  ) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <TrashIcon
+          displayName={_('Role')}
+          entity={entity}
+          name="role"
+          onClick={onRoleDeleteClick}
+        />
+        <EditIcon
+          displayName={_('Role')}
+          entity={entity}
+          name="role"
+          onClick={onRoleEditClick}
+        />
+        <CloneIcon
+          displayName={_('Role')}
+          entity={entity}
+          name="role"
+          title={_('Clone Role')}
+          value={entity}
+          onClick={onRoleCloneClick}
+        />
+        <ExportIcon
+          title={_('Export Role')}
+          value={entity}
+          onClick={onRoleDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -61,24 +67,30 @@ Actions.propTypes = {
   onRoleEditClick: PropTypes.func,
 };
 
-const Row = ({
-  actionsComponent: ActionsComponent = Actions,
-  entity,
-  links = true,
-  onToggleDetailsClick,
-  ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      displayName={_('Role')}
-      entity={entity}
-      link={links}
-      type="role"
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+const Row = (
+  {
+    actionsComponent: ActionsComponent = Actions,
+    entity,
+    links = true,
+    onToggleDetailsClick,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <TableRow>
+      <EntityNameTableData
+        displayName={_('Role')}
+        entity={entity}
+        link={links}
+        type="role"
+        onToggleDetailsClick={onToggleDetailsClick}
+      />
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

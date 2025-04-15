@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import FootNote from 'web/components/footnote/Footnote';
 import {EditIcon, FilterIcon} from 'web/components/icon';
@@ -13,9 +13,10 @@ import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
-const UpdatingDivider = styled(({isUpdating, ...props}) => (
-  <Divider {...props} />
-))`
+const UpdatingDivider = styled(({isUpdating, ...props}) => {
+  const [_] = useTranslation();
+  return (<Divider {...props} />);
+})`
   opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
 `;
 
@@ -27,6 +28,7 @@ const ThresholdPanel = ({
   onFilterChanged,
   onFilterEditClick,
 }) => {
+  const [_] = useTranslation();
   const levels = filter.get('levels', '');
   const severity = filter.get('severity', 0);
 

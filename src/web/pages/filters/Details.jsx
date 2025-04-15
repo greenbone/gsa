@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -17,6 +17,7 @@ import TableRow from 'web/components/table/Row';
 import PropTypes from 'web/utils/PropTypes';
 
 const FilterDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {comment, filter_type, alerts = []} = entity;
   return (
     <Layout grow flex="column">
@@ -48,13 +49,17 @@ const FilterDetails = ({entity}) => {
               <TableData>{_('Alerts using this Filter')}</TableData>
               <TableData>
                 <HorizontalSep wrap>
-                  {alerts.map(alert => (
-                    <span key={alert.id}>
-                      <DetailsLink id={alert.id} type="alert">
-                        {alert.name}
-                      </DetailsLink>
-                    </span>
-                  ))}
+                  {alerts.map(alert => {
+                    const [_] = useTranslation();
+
+                    return (
+                      <span key={alert.id}>
+                        <DetailsLink id={alert.id} type="alert">
+                          {alert.name}
+                        </DetailsLink>
+                      </span>
+                    );
+                  })}
                 </HorizontalSep>
               </TableData>
             </TableRow>

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {NewIcon, OverrideIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -26,86 +26,95 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 export const ToolBarIcons = withCapabilities(
-  ({capabilities, onOverrideCreateClick}) => (
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-overrides"
-        page="reports"
-        title={_('Help: Overrides')}
-      />
+  ({capabilities, onOverrideCreateClick}) => {
+    const [_] = useTranslation();
 
-      {capabilities.mayCreate('override') && (
-        <NewIcon title={_('New Override')} onClick={onOverrideCreateClick} />
-      )}
-    </IconDivider>
-  ),
+    return (
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-overrides"
+          page="reports"
+          title={_('Help: Overrides')}
+        />
+        {capabilities.mayCreate('override') && (
+          <NewIcon title={_('New Override')} onClick={onOverrideCreateClick} />
+        )}
+      </IconDivider>
+    );
+  },
 );
 
 ToolBarIcons.propTypes = {
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  filter,
-  onChanged,
-  onDownloaded,
-  onError,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
-  <OverrideComponent
-    onCloneError={onError}
-    onCloned={onChanged}
-    onCreated={onChanged}
-    onDeleteError={onError}
-    onDeleted={onChanged}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <React.Fragment>
-        <PageTitle title={_('Overrides')} />
-        <EntitiesPage
-          {...props}
-          dashboard={() => (
-            <OverridesDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={OVERRIDES_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          filter={filter}
-          filterEditDialog={FilterDialog}
-          filtersFilter={OVERRIDES_FILTER_FILTER}
-          sectionIcon={<OverrideIcon size="large" />}
-          table={OverridesTable}
-          title={_('Overrides')}
-          toolBarIcons={ToolBarIcons}
-          onChanged={onChanged}
-          onDownloaded={onDownloaded}
-          onError={onError}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-          onOverrideCloneClick={clone}
-          onOverrideCreateClick={create}
-          onOverrideDeleteClick={delete_func}
-          onOverrideDownloadClick={download}
-          onOverrideEditClick={edit}
-          onOverrideSaveClick={save}
-        />
-      </React.Fragment>
-    )}
-  </OverrideComponent>
-);
+const Page = (
+  {
+    filter,
+    onChanged,
+    onDownloaded,
+    onError,
+    onFilterChanged,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <OverrideComponent
+      onCloneError={onError}
+      onCloned={onChanged}
+      onCreated={onChanged}
+      onDeleteError={onError}
+      onDeleted={onChanged}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <React.Fragment>
+          <PageTitle title={_('Overrides')} />
+          <EntitiesPage
+            {...props}
+            dashboard={() => (
+              <OverridesDashboard
+                filter={filter}
+                onFilterChanged={onFilterChanged}
+                onInteraction={onInteraction}
+              />
+            )}
+            dashboardControls={() => (
+              <DashboardControls
+                dashboardId={OVERRIDES_DASHBOARD_ID}
+                onInteraction={onInteraction}
+              />
+            )}
+            filter={filter}
+            filterEditDialog={FilterDialog}
+            filtersFilter={OVERRIDES_FILTER_FILTER}
+            sectionIcon={<OverrideIcon size="large" />}
+            table={OverridesTable}
+            title={_('Overrides')}
+            toolBarIcons={ToolBarIcons}
+            onChanged={onChanged}
+            onDownloaded={onDownloaded}
+            onError={onError}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+            onOverrideCloneClick={clone}
+            onOverrideCreateClick={create}
+            onOverrideDeleteClick={delete_func}
+            onOverrideDownloadClick={download}
+            onOverrideEditClick={edit}
+            onOverrideSaveClick={save}
+          />
+        </React.Fragment>
+      )}
+    </OverrideComponent>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {OS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {OsSvgIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -24,75 +24,85 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/operatingsystems';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = () => (
-  <Layout>
-    <ManualIcon
-      anchor="managing-operating-systems"
-      page="managing-assets"
-      title={_('Help: Operating Systems')}
-    />
-  </Layout>
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
 
-const Page = ({
-  filter,
-  onChanged,
-  onDownloaded,
-  onError,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
-  <OsComponent
-    onCloneError={onError}
-    onCloned={onChanged}
-    onCreated={onChanged}
-    onDeleteError={onError}
-    onDeleted={onChanged}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit}) => (
-      <React.Fragment>
-        <PageTitle title={_('Operating Systems')} />
-        <EntitiesPage
-          {...props}
-          createFilterType="os"
-          dashboard={() => (
-            <OsDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={OS_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          filter={filter}
-          filterEditDialog={OsFilterDialog}
-          filtersFilter={OS_FILTER_FILTER}
-          sectionIcon={<OsSvgIcon size="large" />}
-          table={OsTable}
-          title={_('Operating Systems')}
-          toolBarIcons={ToolBarIcons}
-          onError={onError}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-          onOsCloneClick={clone}
-          onOsCreateClick={create}
-          onOsDeleteClick={delete_func}
-          onOsDownloadClick={download}
-          onOsEditClick={edit}
-        />
-      </React.Fragment>
-    )}
-  </OsComponent>
-);
+  return (
+    <Layout>
+      <ManualIcon
+        anchor="managing-operating-systems"
+        page="managing-assets"
+        title={_('Help: Operating Systems')}
+      />
+    </Layout>
+  );
+};
+
+const Page = (
+  {
+    filter,
+    onChanged,
+    onDownloaded,
+    onError,
+    onFilterChanged,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <OsComponent
+      onCloneError={onError}
+      onCloned={onChanged}
+      onCreated={onChanged}
+      onDeleteError={onError}
+      onDeleted={onChanged}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: delete_func, download, edit}) => (
+        <React.Fragment>
+          <PageTitle title={_('Operating Systems')} />
+          <EntitiesPage
+            {...props}
+            createFilterType="os"
+            dashboard={() => (
+              <OsDashboard
+                filter={filter}
+                onFilterChanged={onFilterChanged}
+                onInteraction={onInteraction}
+              />
+            )}
+            dashboardControls={() => (
+              <DashboardControls
+                dashboardId={OS_DASHBOARD_ID}
+                onInteraction={onInteraction}
+              />
+            )}
+            filter={filter}
+            filterEditDialog={OsFilterDialog}
+            filtersFilter={OS_FILTER_FILTER}
+            sectionIcon={<OsSvgIcon size="large" />}
+            table={OsTable}
+            title={_('Operating Systems')}
+            toolBarIcons={ToolBarIcons}
+            onError={onError}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+            onOsCloneClick={clone}
+            onOsCreateClick={create}
+            onOsDeleteClick={delete_func}
+            onOsDownloadClick={download}
+            onOsEditClick={edit}
+          />
+        </React.Fragment>
+      )}
+    </OsComponent>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

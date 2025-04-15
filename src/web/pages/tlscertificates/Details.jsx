@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
@@ -24,6 +24,7 @@ import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
 const TlsCertificateDetails = ({entity}) => {
+  const [_] = useTranslation();
   return (
     <Layout flex="column" grow="1">
       <InfoTable>

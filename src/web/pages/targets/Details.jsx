@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -23,6 +23,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 const MAX_HOSTS_LISTINGS = 70;
 
 const TargetDetails = ({capabilities, entity}) => {
+  const [_] = useTranslation();
   const {
     alive_tests,
     esxi_credential,
@@ -122,7 +123,6 @@ const TargetDetails = ({capabilities, entity}) => {
           </TableBody>
         </InfoTable>
       </DetailsBlock>
-
       {capabilities.mayAccess('credentials') &&
         (isDefined(ssh_credential) ||
           isDefined(snmp_credential) ||
@@ -147,7 +147,7 @@ const TargetDetails = ({capabilities, entity}) => {
 
                 {isDefined(ssh_credential) &&
                   isDefined(ssh_elevate_credential) && ( // Skip one column, because there is no way to fit a variation of the word "elevate" without leaving lots of white space on other rows
-                    <TableRow>
+                    (<TableRow>
                       <TableData>{''}</TableData>
                       <TableData>
                         <span>
@@ -160,7 +160,7 @@ const TargetDetails = ({capabilities, entity}) => {
                           </DetailsLink>
                         </span>
                       </TableData>
-                    </TableRow>
+                    </TableRow>)
                   )}
 
                 {gmp.settings.enableKrb5 && isDefined(krb5Credential) && (
@@ -225,13 +225,17 @@ const TargetDetails = ({capabilities, entity}) => {
           })}
         >
           <HorizontalSep>
-            {tasks.map(task => (
-              <span key={task.id}>
-                <DetailsLink id={task.id} type="task">
-                  {task.name}
-                </DetailsLink>
-              </span>
-            ))}
+            {tasks.map(task => {
+              const [_] = useTranslation();
+
+              return (
+                <span key={task.id}>
+                  <DetailsLink id={task.id} type="task">
+                    {task.name}
+                  </DetailsLink>
+                </span>
+              );
+            })}
           </HorizontalSep>
         </DetailsBlock>
       )}

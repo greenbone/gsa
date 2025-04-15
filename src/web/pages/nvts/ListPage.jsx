@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {NvtIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -20,45 +20,53 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/nvts';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = () => (
-  <ManualIcon
-    anchor="vulnerability-tests-vt"
-    page="managing-secinfo"
-    title={_('Help: NVTs')}
-  />
-);
+export const ToolBarIcons = () => {
+  const [_] = useTranslation();
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <React.Fragment>
-    <PageTitle title={_('NVTs')} />
-    <EntitiesPage
-      {...props}
-      createFilterType="info"
-      dashboard={() => (
-        <NvtsDashboard
-          filter={filter}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-        />
-      )}
-      dashboardControls={() => (
-        <DashboardControls
-          dashboardId={NVTS_DASHBOARD_ID}
-          onInteraction={onInteraction}
-        />
-      )}
-      filter={filter}
-      filterEditDialog={NvtsFilterDialog}
-      filtersFilter={NVTS_FILTER_FILTER}
-      sectionIcon={<NvtIcon size="large" />}
-      table={NvtsTable}
-      title={_('NVTs')}
-      toolBarIcons={ToolBarIcons}
-      onFilterChanged={onFilterChanged}
-      onInteraction={onInteraction}
+  return (
+    <ManualIcon
+      anchor="vulnerability-tests-vt"
+      page="managing-secinfo"
+      title={_('Help: NVTs')}
     />
-  </React.Fragment>
-);
+  );
+};
+
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+  const [_] = useTranslation();
+
+  return (
+    <React.Fragment>
+      <PageTitle title={_('NVTs')} />
+      <EntitiesPage
+        {...props}
+        createFilterType="info"
+        dashboard={() => (
+          <NvtsDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={NVTS_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
+        filterEditDialog={NvtsFilterDialog}
+        filtersFilter={NVTS_FILTER_FILTER}
+        sectionIcon={<NvtIcon size="large" />}
+        table={NvtsTable}
+        title={_('NVTs')}
+        toolBarIcons={ToolBarIcons}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
+    </React.Fragment>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

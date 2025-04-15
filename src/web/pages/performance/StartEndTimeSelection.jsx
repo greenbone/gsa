@@ -4,8 +4,8 @@
  */
 
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
-import _ from 'gmp/locale';
 import {useState, useEffect} from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Button from 'web/components/form/Button';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
@@ -20,6 +20,7 @@ const StartTimeSelection = ({
   timezone,
   onChanged,
 }) => {
+  const [_] = useTranslation();
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
   const [startTime, setStartTime] = useState(

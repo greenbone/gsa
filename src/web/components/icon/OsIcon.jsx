@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined, isString} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Img from 'web/components/img/Img';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
@@ -19,6 +19,7 @@ const OsIcon = ({
   osCpe,
   ...props
 }) => {
+  const [_] = useTranslation();
   const os = isString(osCpe) ? OperatingSystems.find(osCpe) : undefined;
 
   let title;

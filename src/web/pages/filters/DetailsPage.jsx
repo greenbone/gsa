@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {FilterIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -39,36 +39,42 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = ({
-  entity,
-  onFilterCloneClick,
-  onFilterCreateClick,
-  onFilterDeleteClick,
-  onFilterDownloadClick,
-  onFilterEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-powerfilters"
-        page="web-interface"
-        title={_('Help: Filters')}
-      />
-      <ListIcon page="filters" title={_('Filter List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onFilterCreateClick} />
-      <CloneIcon entity={entity} onClick={onFilterCloneClick} />
-      <EditIcon entity={entity} onClick={onFilterEditClick} />
-      <TrashIcon entity={entity} onClick={onFilterDeleteClick} />
-      <ExportIcon
-        title={_('Export Filter as XML')}
-        value={entity}
-        onClick={onFilterDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+const ToolBarIcons = (
+  {
+    entity,
+    onFilterCloneClick,
+    onFilterCreateClick,
+    onFilterDeleteClick,
+    onFilterDownloadClick,
+    onFilterEditClick,
+  }
+) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-powerfilters"
+          page="web-interface"
+          title={_('Help: Filters')}
+        />
+        <ListIcon page="filters" title={_('Filter List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onFilterCreateClick} />
+        <CloneIcon entity={entity} onClick={onFilterCloneClick} />
+        <EditIcon entity={entity} onClick={onFilterEditClick} />
+        <TrashIcon entity={entity} onClick={onFilterDeleteClick} />
+        <ExportIcon
+          title={_('Export Filter as XML')}
+          value={entity}
+          onClick={onFilterDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -88,6 +94,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <FilterComponent
       onCloneError={onError}
