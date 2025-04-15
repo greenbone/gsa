@@ -1,9 +1,9 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {FoldState} from 'web/components/folding/Folding';
 import {FoldIcon, UnfoldIcon} from 'web/components/icon';
 
@@ -19,6 +19,7 @@ const FoldStateIcon: React.FC<FoldStateIconProps> = ({
   title,
   ...props
 }) => {
+  const [_] = useTranslation();
   const folded =
     foldState === FoldState.FOLDED ||
     foldState === FoldState.FOLDING ||

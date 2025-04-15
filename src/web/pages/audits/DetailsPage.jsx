@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Badge from 'web/components/badge/Badge';
 import {
   AlterableIcon,
@@ -75,6 +75,7 @@ export const ToolBarIcons = ({
   onAuditStopClick,
   onAuditResumeClick,
 }) => {
+  const [_] = useTranslation();
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
@@ -220,6 +221,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, ...props}) => {
+  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <InfoTable>
@@ -261,93 +263,99 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <AuditComponent
-    onCloneError={onError}
-    onCloned={goToDetails('audit', props)}
-    onContainerSaved={onChanged}
-    onDeleteError={onError}
-    onDeleted={goToList('audits', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onResumeError={onError}
-    onResumed={onChanged}
-    onSaved={onChanged}
-    onStartError={onError}
-    onStarted={onChanged}
-    onStopError={onError}
-    onStopped={onChanged}
-  >
-    {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<AuditIcon size="large" />}
-        title={_('Audit')}
-        toolBarIcons={ToolBarIcons}
-        onAuditCloneClick={clone}
-        onAuditDeleteClick={deleteFunc}
-        onAuditDownloadClick={download}
-        onAuditEditClick={edit}
-        onAuditResumeClick={resume}
-        onAuditStartClick={start}
-        onAuditStopClick={stop}
-        onChanged={onChanged}
-        onError={onError}
-        onInteraction={onInteraction}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Audit: {{name}}', {name: entity.name})} />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const Page = (
+  {
+    entity,
+    permissions = [],
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+    ...props
+  }
+) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <AuditPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </AuditComponent>
-);
+  return (
+    <AuditComponent
+      onCloneError={onError}
+      onCloned={goToDetails('audit', props)}
+      onContainerSaved={onChanged}
+      onDeleteError={onError}
+      onDeleted={goToList('audits', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onResumeError={onError}
+      onResumed={onChanged}
+      onSaved={onChanged}
+      onStartError={onError}
+      onStarted={onChanged}
+      onStopError={onError}
+      onStopped={onChanged}
+    >
+      {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<AuditIcon size="large" />}
+          title={_('Audit')}
+          toolBarIcons={ToolBarIcons}
+          onAuditCloneClick={clone}
+          onAuditDeleteClick={deleteFunc}
+          onAuditDownloadClick={download}
+          onAuditEditClick={edit}
+          onAuditResumeClick={resume}
+          onAuditStartClick={start}
+          onAuditStopClick={stop}
+          onChanged={onChanged}
+          onError={onError}
+          onInteraction={onInteraction}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Audit: {{name}}', {name: entity.name})} />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <AuditPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </AuditComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

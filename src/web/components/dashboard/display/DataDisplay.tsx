@@ -4,11 +4,11 @@
  */
 
 import equal from 'fast-deep-equal';
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import Display, {
@@ -167,7 +167,10 @@ const DisplayBox = styled.div`
 
 const escapeCsv = (value: string) => '"' + `${value}`.replace(/"/g, '""') + '"';
 
-const renderIcons = props => <DataDisplayIcons {...props} />;
+const renderIcons = props => {
+  const [_] = useTranslation();
+  return <DataDisplayIcons {...props} />;
+};
 
 class DataDisplay<
   TData,

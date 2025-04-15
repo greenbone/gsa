@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {TargetIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -54,6 +54,7 @@ export const ToolBarIcons = ({
   onTargetDownloadClick,
   onTargetEditClick,
 }) => {
+  const [_] = useTranslation();
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -88,25 +89,28 @@ ToolBarIcons.propTypes = {
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, ...props}) => (
-  <Layout flex="column">
-    <InfoTable>
-      <TableBody>
-        <TableRow>
-          <TableData>{_('Name')}</TableData>
-          <TableData>{entity.name}</TableData>
-        </TableRow>
+const Details = ({entity, ...props}) => {
+  const [_] = useTranslation();
 
-        <TableRow>
-          <TableData>{_('Comment')}</TableData>
-          <TableData>{entity.comment}</TableData>
-        </TableRow>
-      </TableBody>
-    </InfoTable>
+  return (
+    <Layout flex="column">
+      <InfoTable>
+        <TableBody>
+          <TableRow>
+            <TableData>{_('Name')}</TableData>
+            <TableData>{entity.name}</TableData>
+          </TableRow>
 
-    <TargetDetails entity={entity} {...props} />
-  </Layout>
-);
+          <TableRow>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{entity.comment}</TableData>
+          </TableRow>
+        </TableBody>
+      </InfoTable>
+      <TargetDetails entity={entity} {...props} />
+    </Layout>
+  );
+};
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -121,6 +125,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <TargetComponent
       onCloneError={onError}

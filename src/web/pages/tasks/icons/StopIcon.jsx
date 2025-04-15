@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {StopIcon} from 'web/components/icon';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -15,6 +15,7 @@ const TaskStopIcon = ({
   usageType = _('task'),
   onClick,
 }) => {
+  const [_] = useTranslation();
   if ((task.isRunning() || task.isQueued()) && !task.isContainer()) {
     if (
       !capabilities.mayOp('stop_task') ||

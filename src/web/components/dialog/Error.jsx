@@ -1,14 +1,14 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 import CloseButton from 'web/components/dialog/CloseButton';
 import Layout from 'web/components/layout/Layout';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
@@ -32,6 +32,7 @@ const DialogCloseButton = styled(CloseButton)`
 `;
 
 const DialogError = ({error, onCloseClick}) => {
+  const [_] = useTranslation();
   if (!isDefined(error)) {
     return null;
   }

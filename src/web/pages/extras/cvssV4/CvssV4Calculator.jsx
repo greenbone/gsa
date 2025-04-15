@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   expectedMetricOptionsOrdered,
   processVector,
@@ -12,6 +11,7 @@ import {
 } from 'gmp/parser/cvssV4';
 import {useState, useEffect, useMemo} from 'react';
 import {useSearchParams} from 'react-router';
+import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import FormGroup from 'web/components/form/FormGroup';
@@ -29,6 +29,7 @@ const StyledTextField = styled(TextField)`
 const cvssV4Prefix = 'CVSS:4.0/';
 
 const CvssV4Calculator = () => {
+  const [_] = useTranslation();
   const [searchParams] = useSearchParams();
 
   const initialState = useMemo(() => {

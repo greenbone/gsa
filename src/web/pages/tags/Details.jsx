@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
 import Col from 'web/components/table/Col';
@@ -17,6 +17,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 
 const TagDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {comment, value, resourceType, resources} = entity;
   return (
     <Layout grow flex="column">

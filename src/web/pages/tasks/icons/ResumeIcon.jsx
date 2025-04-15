@@ -3,14 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {ResumeIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
 const TaskResumeIcon = ({task, usageType = _('task'), onClick}) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (task.isQueued()) {
     return null;

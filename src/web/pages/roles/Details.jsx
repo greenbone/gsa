@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
@@ -15,6 +15,7 @@ import TableRow from 'web/components/table/Row';
 import PropTypes from 'web/utils/PropTypes';
 
 const RoleDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {users = [], comment} = entity;
   return (
     <Layout grow flex="column">
@@ -33,9 +34,10 @@ const RoleDetails = ({entity}) => {
             <TableData>{_('Users')}</TableData>
             <TableData>
               <HorizontalSep>
-                {users.map(user => (
-                  <span key={user}>{user}</span>
-                ))}
+                {users.map(user => {
+                  const [_] = useTranslation();
+                  return (<span key={user}>{user}</span>);
+                })}
               </HorizontalSep>
             </TableData>
           </TableRow>

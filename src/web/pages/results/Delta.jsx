@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {Delta} from 'gmp/models/result';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const ResultDelta = ({delta}) => {
+  const [_] = useTranslation();
   switch (delta.delta_type) {
     case Delta.TYPE_NEW:
       return <span title={_('New')}>[ + ]</span>;

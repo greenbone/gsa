@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {ResultIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -23,46 +23,54 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/results';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = () => (
-  <Layout>
-    <ManualIcon
-      anchor="displaying-all-existing-results"
-      page="reports"
-      title={_('Help: Results')}
-    />
-  </Layout>
-);
+export const ToolBarIcons = () => {
+  const [_] = useTranslation();
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <React.Fragment>
-    <PageTitle title={_('Results')} />
-    <EntitiesPage
-      {...props}
-      dashboard={() => (
-        <ResultsDashboard
-          filter={filter}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-        />
-      )}
-      dashboardControls={() => (
-        <DashboardControls
-          dashboardId={RESULTS_DASHBOARD_ID}
-          onInteraction={onInteraction}
-        />
-      )}
-      filter={filter}
-      filterEditDialog={ResultsFilterDialog}
-      filtersFilter={RESULTS_FILTER_FILTER}
-      sectionIcon={<ResultIcon size="large" />}
-      table={ResultsTable}
-      title={_('Results')}
-      toolBarIcons={ToolBarIcons}
-      onFilterChanged={onFilterChanged}
-      onInteraction={onInteraction}
-    />
-  </React.Fragment>
-);
+  return (
+    <Layout>
+      <ManualIcon
+        anchor="displaying-all-existing-results"
+        page="reports"
+        title={_('Help: Results')}
+      />
+    </Layout>
+  );
+};
+
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+  const [_] = useTranslation();
+
+  return (
+    <React.Fragment>
+      <PageTitle title={_('Results')} />
+      <EntitiesPage
+        {...props}
+        dashboard={() => (
+          <ResultsDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={RESULTS_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
+        filterEditDialog={ResultsFilterDialog}
+        filtersFilter={RESULTS_FILTER_FILTER}
+        sectionIcon={<ResultIcon size="large" />}
+        table={ResultsTable}
+        title={_('Results')}
+        toolBarIcons={ToolBarIcons}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
+    </React.Fragment>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

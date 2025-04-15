@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {CertBundAdvIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -22,44 +22,52 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = () => (
-  <ManualIcon
-    anchor="cert-bund-advisories"
-    page="managing-secinfo"
-    title={_('Help: CERT-Bund Advisories')}
-  />
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <React.Fragment>
-    <PageTitle title={_('CERT-Bund Advisories')} />
-    <EntitiesPage
-      {...props}
-      dashboard={() => (
-        <CertBundDashboard
-          filter={filter}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-        />
-      )}
-      dashboardControls={() => (
-        <DashboardControls
-          dashboardId={CERTBUND_DASHBOARD_ID}
-          onInteraction={onInteraction}
-        />
-      )}
-      filter={filter}
-      filterEditDialog={CertBundFilterDialog}
-      filtersFilter={CERTBUND_FILTER_FILTER}
-      sectionIcon={<CertBundAdvIcon size="large" />}
-      table={CertBundTable}
-      title={_('CERT-Bund Advisories')}
-      toolBarIcons={ToolBarIcons}
-      onFilterChanged={onFilterChanged}
-      onInteraction={onInteraction}
+  return (
+    <ManualIcon
+      anchor="cert-bund-advisories"
+      page="managing-secinfo"
+      title={_('Help: CERT-Bund Advisories')}
     />
-  </React.Fragment>
-);
+  );
+};
+
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+  const [_] = useTranslation();
+
+  return (
+    <React.Fragment>
+      <PageTitle title={_('CERT-Bund Advisories')} />
+      <EntitiesPage
+        {...props}
+        dashboard={() => (
+          <CertBundDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={CERTBUND_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
+        filterEditDialog={CertBundFilterDialog}
+        filtersFilter={CERTBUND_FILTER_FILTER}
+        sectionIcon={<CertBundAdvIcon size="large" />}
+        table={CertBundTable}
+        title={_('CERT-Bund Advisories')}
+        toolBarIcons={ToolBarIcons}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
+    </React.Fragment>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

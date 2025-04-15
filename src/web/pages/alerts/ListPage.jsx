@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -23,18 +23,22 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 export const ToolBarIcons = withCapabilities(
-  ({capabilities, onAlertCreateClick}) => (
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-alerts"
-        page="scanning"
-        title={_('Help: Alerts')}
-      />
-      {capabilities.mayCreate('alert') && (
-        <NewIcon title={_('New Alert')} onClick={onAlertCreateClick} />
-      )}
-    </IconDivider>
-  ),
+  ({capabilities, onAlertCreateClick}) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-alerts"
+          page="scanning"
+          title={_('Help: Alerts')}
+        />
+        {capabilities.mayCreate('alert') && (
+          <NewIcon title={_('New Alert')} onClick={onAlertCreateClick} />
+        )}
+      </IconDivider>
+    );
+  },
 );
 
 ToolBarIcons.propTypes = {

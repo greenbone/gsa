@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import useTranslation from 'src/web/hooks/useTranslation';
 import {
   NewNoteIcon,
   NvtIcon,
@@ -56,6 +56,7 @@ export let ToolBarIcons = ({
   onNvtDownloadClick,
   onOverrideCreateClick,
 }) => {
+  const [_] = useTranslation();
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -117,29 +118,30 @@ ToolBarIcons.propTypes = {
 ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({entity, notes = [], overrides = []}) => {
+  const [_] = useTranslation();
   overrides = overrides.filter(override => override.isActive());
   notes = notes.filter(note => note.isActive());
 
   return (
     <Layout flex="column">
       <NvtDetails entity={entity} />
-
       {overrides.length > 0 && (
         <DetailsBlock id="overrides" title={_('Overrides')}>
           <Divider wrap align={['start', 'stretch']} width="15px">
-            {overrides.map(override => (
-              <Override key={override.id} override={override} />
-            ))}
+            {overrides.map(override => {
+              const [_] = useTranslation();
+              return (<Override key={override.id} override={override} />);
+            })}
           </Divider>
         </DetailsBlock>
       )}
-
       {notes.length > 0 && (
         <DetailsBlock id="notes" title={_('Notes')}>
           <Divider wrap align={['start', 'stretch']} width="15px">
-            {notes.map(note => (
-              <Note key={note.id} note={note} />
-            ))}
+            {notes.map(note => {
+              const [_] = useTranslation();
+              return (<Note key={note.id} note={note} />);
+            })}
           </Divider>
         </DetailsBlock>
       )}
@@ -171,6 +173,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   const defaultTimeout = isDefined(entity) ? entity.defaultTimeout : undefined;
   const preferences = isDefined(entity) ? entity.preferences : [];
   const userTags = isDefined(entity) ? entity.userTags : undefined;
