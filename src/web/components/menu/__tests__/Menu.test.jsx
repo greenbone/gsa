@@ -96,7 +96,7 @@ describe('Menu rendering', () => {
     'CVSS Calculator',
     'About',
   ])('should render sub-menu: %s', async label => {
-    await renderMenuWith({
+    renderMenuWith({
       capabilities: {
         mayAccess: () => true,
         mayOp: () => true,
