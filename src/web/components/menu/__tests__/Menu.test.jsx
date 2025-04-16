@@ -8,10 +8,6 @@ import React from 'react';
 import {rendererWith, screen} from 'web/utils/Testing';
 import Menu from 'web/components/menu/Menu';
 
-testing.mock('web/hooks/useTranslation', () => ({
-  default: () => [key => key],
-}));
-
 afterEach(() => {
   testing.clearAllMocks();
 });
@@ -164,7 +160,7 @@ describe('Menu rendering', () => {
   });
 
   test('should not render Asset menu when enableAssetManagement is false', async () => {
-    const {queryByText} = await renderMenuWith({
+    const {queryByText} = renderMenuWith({
       capabilities: {
         mayAccess: () => false,
         mayOp: () => false,
