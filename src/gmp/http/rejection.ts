@@ -12,11 +12,18 @@ class Rejection {
   static REASON_CANCEL = 'cancel';
   static REASON_UNAUTHORIZED = 'unauthorized';
 
+  name: 'Rejection';
+  message: string;
+  reason: string;
+  error?: Error;
+  stack?: string;
+  _xhr: XMLHttpRequest;
+
   constructor(
-    xhr,
-    reason = Rejection.REASON_ERROR,
-    message = _('Unknown Error'),
-    error,
+    xhr: XMLHttpRequest,
+    reason: string = Rejection.REASON_ERROR,
+    message: string = _('Unknown Error'),
+    error?: Error | undefined,
   ) {
     this.name = 'Rejection';
     this.message = message;
@@ -32,7 +39,9 @@ class Rejection {
     this.stack = error.stack;
   }
 
-  plainData(type = '') {
+  plainData(
+    type: 'xml' | 'text' | undefined,
+  ): Document | string | ArrayBuffer | null {
     if (type === 'xml') {
       return this._xhr.responseXML;
     }
@@ -46,7 +55,7 @@ class Rejection {
     return this.reason === Rejection.REASON_ERROR;
   }
 
-  setMessage(message) {
+  setMessage(message: string) {
     this.message = message;
     return this;
   }
