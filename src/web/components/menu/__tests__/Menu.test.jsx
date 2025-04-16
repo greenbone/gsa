@@ -156,7 +156,7 @@ describe('Menu rendering', () => {
   });
 
   test('should not render Asset menu when enableAssetManagement is false', async () => {
-    const {queryByText} = renderMenuWith({
+    renderMenuWith({
       capabilities: {
         mayAccess: () => false,
         mayOp: () => false,
