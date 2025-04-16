@@ -16,7 +16,7 @@ afterEach(() => {
   testing.clearAllMocks();
 });
 
-const renderMenuWith = async ({capabilities, gmpSettings}) => {
+const renderMenuWith = ({capabilities, gmpSettings}) => {
   const gmp = {
     settings: gmpSettings,
   };
