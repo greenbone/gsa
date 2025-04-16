@@ -8,10 +8,6 @@ import React from 'react';
 import {rendererWith, screen} from 'web/utils/Testing';
 import Menu from 'web/components/menu/Menu';
 
-afterEach(() => {
-  testing.clearAllMocks();
-});
-
 const renderMenuWith = ({capabilities, gmpSettings}) => {
   const gmp = {
     settings: gmpSettings,
