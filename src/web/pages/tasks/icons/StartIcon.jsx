@@ -6,12 +6,13 @@
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {StartIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-const TaskStartIcon = ({task, usageType = _('task'), onClick}) => {
+const TaskStartIcon = ({task, usageType = 'task', onClick}) => {
   const [_] = useTranslation();
+  usageType = _(usageType);
   const capabilities = useCapabilities();
 
   if (task.isRunning() || task.isContainer()) {

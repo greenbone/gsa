@@ -3,16 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import useTranslation from 'src/web/hooks/useTranslation';
 import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {AlertIcon, NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import AlertComponent from 'web/pages/alerts/Component';
 import AlertsFilterDialog from 'web/pages/alerts/FilterDialog';
 import AlertTable from 'web/pages/alerts/Table';

@@ -5,7 +5,6 @@
 
 import {LinearGradient} from '@visx/gradient';
 import {scaleBand, scaleUtc} from 'd3-scale';
-import _ from 'gmp/locale';
 import date from 'gmp/models/date';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
@@ -19,7 +18,7 @@ import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
-
+import withTranslation from 'web/utils/withTranslation';
 
 const ONE_DAY = 60 * 60 * 24;
 
@@ -39,7 +38,7 @@ const tickFormat = val => {
 
 const STROKE_GRADIENT_ID = 'green_stroke_gradient';
 
-const getFutureRunLabel = runs => {
+const getFutureRunLabel = (runs, _) => {
   if (runs === Number.POSITIVE_INFINITY) {
     return _('More runs not shown');
   }
@@ -49,7 +48,7 @@ const getFutureRunLabel = runs => {
   return _('{{num}} more runs not shown', {num: runs});
 };
 
-const cloneSchedule = (d, start) => {
+const cloneSchedule = (d, start, _) => {
   const {duration = 0} = d;
   const toolTip =
     duration === 0
@@ -142,6 +141,8 @@ class ScheduleChart extends React.Component {
       endDate = startDate.clone().add(7, 'days'),
     } = this.props;
 
+    const {_} = this.props;
+
     const yValues = data.map(d => d.label);
 
     const maxLabelLength = Math.max(
@@ -172,7 +173,10 @@ class ScheduleChart extends React.Component {
     for (const d of data) {
       const {label, isInfinite = false, starts} = d;
 
-      schedules = [...schedules, ...starts.map(next => cloneSchedule(d, next))];
+      schedules = [
+        ...schedules,
+        ...starts.map(next => cloneSchedule(d, next, _)),
+      ];
 
       const futureRun = isInfinite ? Number.POSITIVE_INFINITY : starts.length;
 
@@ -256,7 +260,7 @@ class ScheduleChart extends React.Component {
               <Triangle
                 key={i}
                 height={bandwidth}
-                toolTip={getFutureRunLabel(run.futureRun)}
+                toolTip={getFutureRunLabel(run.futureRun, _)}
                 y={yScale(run.label)}
               />
             ))}
@@ -283,6 +287,7 @@ ScheduleChart.propTypes = {
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   yAxisLabel: PropTypes.string,
+  _: PropTypes.func,
 };
 
-export default ScheduleChart;
+export default withTranslation(ScheduleChart);

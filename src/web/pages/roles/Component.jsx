@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -23,6 +22,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class RoleComponent extends React.Component {
   constructor(...args) {
@@ -45,6 +45,7 @@ class RoleComponent extends React.Component {
 
   openRoleDialog(role) {
     this.handleInteraction();
+    const {_} = this.props;
 
     this.props.loadAllUsers();
 
@@ -122,6 +123,7 @@ class RoleComponent extends React.Component {
 
   handleDeletePermission({roleId, permissionId}) {
     const {gmp} = this.props;
+    const {_} = this.props;
 
     this.handleInteraction();
 
@@ -290,6 +292,7 @@ RoleComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -310,4 +313,4 @@ export default compose(
   withGmp,
   withCapabilities,
   connect(mapStateToProps, mapDispatchToProp),
-)(RoleComponent);
+)(withTranslation(RoleComponent));

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -27,8 +26,9 @@ import getDashboardSettings from 'web/store/dashboard/settings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
-export class DashboardControls extends React.Component {
+class DashboardControls extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -87,6 +87,8 @@ export class DashboardControls extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {showNewDialog} = this.state;
     const {canAdd, displayIds = []} = this.props;
 
@@ -146,6 +148,8 @@ export class DashboardControls extends React.Component {
   }
 }
 
+export const TranslatedDashboardControls = withTranslation(DashboardControls);
+
 DashboardControls.propTypes = {
   canAdd: PropTypes.bool.isRequired,
   dashboardId: PropTypes.id.isRequired,
@@ -154,6 +158,7 @@ DashboardControls.propTypes = {
   onInteraction: PropTypes.func,
   onNewDisplay: PropTypes.func.isRequired,
   onResetClick: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (rootState, {dashboardId}) => {
@@ -180,4 +185,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
-)(DashboardControls);
+)(withTranslation(DashboardControls));

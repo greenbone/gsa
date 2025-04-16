@@ -7,14 +7,13 @@ import {YES_VALUE} from 'gmp/parser';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback, useEffect, useState} from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import TagsDialog from 'web/entities/TagsDialog';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import TagDialog from 'web/pages/tags/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
-
 
 const getEntityIds = (entityArray = []) => entityArray.map(entity => entity.id);
 

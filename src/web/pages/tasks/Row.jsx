@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import _ from 'gmp/locale';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
@@ -24,6 +24,7 @@ import Actions from 'web/pages/tasks/Actions';
 import TaskStatus from 'web/pages/tasks/Status';
 import Trend from 'web/pages/tasks/Trend';
 import PropTypes from 'web/utils/PropTypes';
+
 export const renderReport = (report, links) => {
   if (!isDefined(report)) {
     return null;
@@ -37,28 +38,6 @@ export const renderReport = (report, links) => {
   );
 };
 
-const renderReportTotal = (entity, links) => {
-  if (entity.report_count.total <= 0) {
-    return null;
-  }
-  return (
-    <Layout>
-      <Link
-        filter={'task_id=' + entity.id + ' sort-reverse=date'}
-        textOnly={!links || entity.report_count.total === 0}
-        title={_(
-          'View list of all reports for Task {{name}},' +
-            ' including unfinished ones',
-          {name: entity.name},
-        )}
-        to={'reports'}
-      >
-        {entity.report_count.total}
-      </Link>
-    </Layout>
-  );
-};
-
 const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
@@ -66,11 +45,32 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const [_] = useTranslation();
   const [username] = useUserName();
   const {scanner, observers} = entity;
 
   const obs = [];
+
+  const renderReportTotal = (entity, links) => {
+    if (entity.report_count.total <= 0) {
+      return null;
+    }
+    return (
+      <Layout>
+        <Link
+          filter={'task_id=' + entity.id + ' sort-reverse=date'}
+          textOnly={!links || entity.report_count.total === 0}
+          title={_(
+            'View list of all reports for Task {{name}},' +
+              ' including unfinished ones',
+            {name: entity.name},
+          )}
+          to={'reports'}
+        >
+          {entity.report_count.total}
+        </Link>
+      </Layout>
+    );
+  };
 
   if (isDefined(observers)) {
     if (isDefined(observers.user)) {

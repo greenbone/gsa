@@ -6,7 +6,6 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {OverrideIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -39,6 +38,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import OverrideComponent from 'web/pages/overrides/Component';
 import OverrideDetails from 'web/pages/overrides/Details';
 import {
@@ -53,16 +53,14 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
-export const ToolBarIcons = (
-  {
-    entity,
-    onOverrideCloneClick,
-    onOverrideCreateClick,
-    onOverrideDeleteClick,
-    onOverrideDownloadClick,
-    onOverrideEditClick,
-  }
-) => {
+export const ToolBarIcons = ({
+  entity,
+  onOverrideCloneClick,
+  onOverrideCreateClick,
+  onOverrideDeleteClick,
+  onOverrideDownloadClick,
+  onOverrideEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -159,17 +157,15 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    permissions = [],
-    onError,
-    onChanged,
-    onDownloaded,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  permissions = [],
+  onError,
+  onChanged,
+  onDownloaded,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

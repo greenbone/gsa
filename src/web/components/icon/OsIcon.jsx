@@ -5,10 +5,10 @@
 
 import {isDefined, isString} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Img from 'web/components/img/Img';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
+import useTranslation from 'web/hooks/useTranslation';
 import OperatingSystems from 'web/utils/Os';
 import PropTypes from 'web/utils/PropTypes';
 

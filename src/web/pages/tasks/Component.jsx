@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import date from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
@@ -58,6 +57,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
@@ -148,6 +148,7 @@ class TaskComponent extends React.Component {
 
   handleTaskStart(task) {
     const {onStarted, onStartError} = this.props;
+    const {_} = this.props;
 
     this.handleInteraction();
 
@@ -161,6 +162,7 @@ class TaskComponent extends React.Component {
 
   handleTaskStop(task) {
     const {onStopped, onStopError} = this.props;
+    const {_} = this.props;
 
     this.handleInteraction();
 
@@ -174,6 +176,7 @@ class TaskComponent extends React.Component {
 
   handleTaskResume(task) {
     const {onResumed, onResumeError} = this.props;
+    const {_} = this.props;
 
     this.handleInteraction();
 
@@ -215,6 +218,8 @@ class TaskComponent extends React.Component {
   }
 
   openContainerTaskDialog(task) {
+    const {_} = this.props;
+
     this.setState({
       containerTaskDialogVisible: true,
       task,
@@ -373,6 +378,7 @@ class TaskComponent extends React.Component {
     this.props.loadSchedules();
     this.props.loadTargets();
     this.props.loadTags();
+    const {_} = this.props;
 
     if (isDefined(task)) {
       this.setState({
@@ -497,6 +503,7 @@ class TaskComponent extends React.Component {
       defaultSshCredential,
       defaultSmbCredential,
     } = this.props;
+    const {_} = this.props;
 
     this.props.loadCredentials();
     this.props.loadScanConfigs();
@@ -626,6 +633,8 @@ class TaskComponent extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       alerts,
       credentials,
@@ -944,6 +953,7 @@ TaskComponent.propTypes = {
   onStopped: PropTypes.func,
   onTaskWizardError: PropTypes.func,
   onTaskWizardSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
@@ -1001,4 +1011,4 @@ export default compose(
   withGmp,
   withCapabilities,
   connect(mapStateToProps, mapDispatchToProp),
-)(TaskComponent);
+)(withTranslation(TaskComponent));

@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -16,6 +15,7 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import EntityLink from 'web/entity/Link';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const TicketDetails = ({entity, links = true}) => {

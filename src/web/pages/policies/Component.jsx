@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {
@@ -51,6 +50,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class PolicyComponent extends React.Component {
   constructor(...args) {
@@ -125,6 +125,8 @@ class PolicyComponent extends React.Component {
   }
 
   openEditPolicyDialog(policy) {
+    const {_} = this.props;
+
     this.setState({
       policy, // put policy from list with reduced data in state
       editPolicyDialogVisible: true,
@@ -203,6 +205,7 @@ class PolicyComponent extends React.Component {
     this.props.loadScanners();
     this.props.loadSchedules();
     this.props.loadTargets();
+    const {_} = this.props;
 
     const {defaultAlertId, defaultScheduleId, defaultTargetId} = this.props;
 
@@ -299,6 +302,7 @@ class PolicyComponent extends React.Component {
 
   openEditPolicyFamilyDialog(familyName) {
     this.handleInteraction();
+    const {_} = this.props;
 
     this.setState({
       editPolicyFamilyDialogVisible: true,
@@ -360,6 +364,8 @@ class PolicyComponent extends React.Component {
   }
 
   openEditNvtDetailsDialog(nvtOid) {
+    const {_} = this.props;
+
     this.handleInteraction();
 
     this.setState({
@@ -373,6 +379,7 @@ class PolicyComponent extends React.Component {
   loadNvt(nvtOid) {
     const {gmp} = this.props;
     const {policy} = this.state;
+    const {_} = this.props;
 
     this.setState({
       isLoadingNvt: true,
@@ -560,6 +567,8 @@ class PolicyComponent extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       alerts,
       children,
@@ -818,6 +827,7 @@ PolicyComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -866,4 +876,4 @@ export default compose(
   withGmp,
   withCapabilities,
   connect(mapStateToProps, mapDispatchToProp),
-)(PolicyComponent);
+)(withTranslation(PolicyComponent));

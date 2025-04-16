@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
 import {DownloadIcon} from 'web/components/icon';
@@ -15,6 +14,7 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Div = styled.div`
   word-break: break-all;

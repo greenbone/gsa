@@ -4,7 +4,6 @@
  */
 
 import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
-import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import {RESET_FILTER} from 'gmp/models/filter';
 import {YES_VALUE} from 'gmp/parser';
@@ -34,6 +33,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 import {withRouter} from 'web/utils/withRouter';
+import withTranslation from 'web/utils/withTranslation';
 
 const log = logger.getLogger('web.entities.container');
 
@@ -148,6 +148,8 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDelete(entity) {
+    const {_} = this.props;
+
     const {deleteEntity} = this.props;
 
     return actionFunction(
@@ -178,6 +180,8 @@ class EntitiesContainer extends React.Component {
   }
 
   handleDownloadBulk() {
+    const {_} = this.props;
+
     const {entitiesCommand} = this;
     const {entities = [], loadedFilter, selected, selectionType} = this.state;
     const {listExportFileName, username, onDownload} = this.props;
@@ -458,6 +462,8 @@ class EntitiesContainer extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       entities,
       entitiesCounts,
@@ -603,6 +609,7 @@ EntitiesContainer.propTypes = {
   username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -628,4 +635,4 @@ const mapDispatchToProps = (dispatch, {gmpname, gmp}) => {
 export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-)(EntitiesContainer);
+)(withTranslation(EntitiesContainer));

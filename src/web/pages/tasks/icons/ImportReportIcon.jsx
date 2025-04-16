@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {ImportIcon} from 'web/components/icon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 const ImportReportIcon = ({capabilities, size, task, onClick}) => {

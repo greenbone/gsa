@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
@@ -27,6 +26,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 const log = logger.getLogger('web.report.alertactions');
 
 class AlertActions extends React.Component {
@@ -62,6 +62,8 @@ class AlertActions extends React.Component {
   }
 
   handleTriggerAlert(state) {
+    const {_} = this.props;
+
     const {alertId, includeNotes, includeOverrides, storeAsDefault} = state;
     const {
       filter,
@@ -130,6 +132,8 @@ class AlertActions extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       alerts,
       audit = false,
@@ -201,6 +205,7 @@ AlertActions.propTypes = {
   showThresholdMessage: PropTypes.bool,
   threshold: PropTypes.number,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => {
@@ -225,4 +230,4 @@ export default compose(
   withGmp,
   withCapabilities,
   connect(mapStateToProps, mapDispatchToProps),
-)(AlertActions);
+)(withTranslation(AlertActions));

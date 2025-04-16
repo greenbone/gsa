@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
@@ -15,6 +14,7 @@ import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import {renderDuration, renderRecurrence} from 'web/pages/schedules/Render';
 import PropTypes from 'web/utils/PropTypes';
 

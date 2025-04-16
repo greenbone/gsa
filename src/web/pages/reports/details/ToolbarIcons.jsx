@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {
   AddToAssetsIcon,
   DownloadIcon,
@@ -22,28 +21,27 @@ import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
+import useTranslation from 'web/hooks/useTranslation';
 import AlertActions from 'web/pages/reports/details/AlertActions';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = (
-  {
-    audit = false,
-    delta = false,
-    filter,
-    isLoading,
-    report,
-    reportId,
-    showThresholdMessage,
-    task,
-    threshold,
-    onAddToAssetsClick,
-    onRemoveFromAssetsClick,
-    onReportDownloadClick,
-    showError,
-    showErrorMessage,
-    showSuccessMessage,
-    onInteraction,
-  }
-) => {
+const ToolBarIcons = ({
+  audit = false,
+  delta = false,
+  filter,
+  isLoading,
+  report,
+  reportId,
+  showThresholdMessage,
+  task,
+  threshold,
+  onAddToAssetsClick,
+  onRemoveFromAssetsClick,
+  onReportDownloadClick,
+  showError,
+  showErrorMessage,
+  showSuccessMessage,
+  onInteraction,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -126,7 +124,9 @@ const ToolBarIcons = (
               <Link
                 query={{
                   start: isDefined(report.scan_start)
-                    ? report.scan_start.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+                    ? report.scan_start
+                        .utc()
+                        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
                     : undefined,
                   end: isDefined(report.scan_end)
                     ? report.scan_end.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')

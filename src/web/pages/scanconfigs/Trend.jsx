@@ -8,8 +8,8 @@ import {
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {TrendMoreIcon, TrendNoChangeIcon} from 'web/components/icon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Trend = ({trend, titleDynamic, titleStatic, ...props}) => {
   const [_] = useTranslation();

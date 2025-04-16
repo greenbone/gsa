@@ -13,7 +13,6 @@ import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState, useEffect} from 'react';
 import {useSearchParams} from 'react-router';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import FormGroup from 'web/components/form/FormGroup';
@@ -24,6 +23,7 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
+import useTranslation from 'web/hooks/useTranslation';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 const StyledTextField = styled(TextField)`
@@ -671,15 +671,19 @@ const CvssV3Calculator = () => {
 };
 
 const CvssCalculator = props => {
-  const [_] = useTranslation();
-
   return (
     <Layout flex="column">
       <span>
         {/* span prevents Toolbar from growing */}
         <ToolBarIcons />
       </span>
-      <Divider grow wrap align={['flex-start', 'start']} flex="row" margin="20px">
+      <Divider
+        grow
+        wrap
+        align={['flex-start', 'start']}
+        flex="row"
+        margin="20px"
+      >
         <Layout grow flex="1">
           <CvssV2Calculator {...props} />
         </Layout>

@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {FilterIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -31,6 +30,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import FilterComponent from 'web/pages/filters/Component';
 import FilterDetails from 'web/pages/filters/Details';
 import {selector, loadEntity} from 'web/store/entities/filters';
@@ -39,16 +39,14 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = (
-  {
-    entity,
-    onFilterCloneClick,
-    onFilterCreateClick,
-    onFilterDeleteClick,
-    onFilterDownloadClick,
-    onFilterEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onFilterCloneClick,
+  onFilterCreateClick,
+  onFilterDeleteClick,
+  onFilterDownloadClick,
+  onFilterEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (

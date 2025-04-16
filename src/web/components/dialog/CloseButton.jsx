@@ -34,8 +34,9 @@ const StyledCloseButton = styled.div`
   }
 `;
 
-const CloseButton = ({title = _('Close'), size = 'medium', ...props}) => {
+const CloseButton = props => {
   const [_] = useTranslation();
+  const {title = _('Close'), size = 'medium'} = props;
   const {width, height} = useIconSize(size);
 
   return (

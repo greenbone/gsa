@@ -4,7 +4,6 @@
  */
 
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
-import _ from 'gmp/locale';
 import Logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
@@ -34,6 +33,7 @@ import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 const log = Logger.getLogger('web.components.dashboard');
 
@@ -62,7 +62,7 @@ const RowPlaceHolder = styled.div`
   margin: 15px 0;
 `;
 
-export class Dashboard extends React.Component {
+class Dashboard extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -107,7 +107,6 @@ export class Dashboard extends React.Component {
     this.props.setDefaultSettings(id, defaultDashboardSettings);
     this.props.loadSettings(id, defaults);
   }
-
   handleItemsChange(gridItems = []) {
     const rows = this.getRows();
 
@@ -219,6 +218,8 @@ export class Dashboard extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       error,
       isLoading,
@@ -298,6 +299,8 @@ export class Dashboard extends React.Component {
   }
 }
 
+export const TranslatedDashboard = withTranslation(Dashboard);
+
 const itemPropType = PropTypes.shape({
   id: PropTypes.id.isRequired,
   displayId: PropTypes.string.isRequired,
@@ -326,6 +329,7 @@ Dashboard.propTypes = {
   }),
   onFilterChanged: PropTypes.func,
   onInteraction: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (rootState, {id}) => {
@@ -350,4 +354,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
-)(Dashboard);
+)(withTranslation(Dashboard));

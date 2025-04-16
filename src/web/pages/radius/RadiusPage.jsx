@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -19,26 +18,31 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/SimpleTable';
+import useTranslation from 'web/hooks/useTranslation';
 import RadiusDialog from 'web/pages/radius/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
-const ToolBarIcons = ({onOpenDialogClick}) => (
-  <IconDivider>
-    <ManualIcon
-      anchor="radius"
-      page="web-interface-access"
-      size="small"
-      title={_('Help: RADIUS Authentication')}
-    />
-    <EditIcon
-      title={_('Edit RADIUS Authentication')}
-      onClick={onOpenDialogClick}
-    />
-  </IconDivider>
-);
+import withTranslation from 'web/utils/withTranslation';
+const ToolBarIcons = ({onOpenDialogClick}) => {
+  const [_] = useTranslation();
+  return (
+    <IconDivider>
+      <ManualIcon
+        anchor="radius"
+        page="web-interface-access"
+        size="small"
+        title={_('Help: RADIUS Authentication')}
+      />
+      <EditIcon
+        title={_('Edit RADIUS Authentication')}
+        onClick={onOpenDialogClick}
+      />
+    </IconDivider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   onOpenDialogClick: PropTypes.func,
@@ -118,6 +122,8 @@ class RadiusAuthentication extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {loading} = this.state;
     if (loading) {
       return <Loading />;
@@ -178,6 +184,7 @@ class RadiusAuthentication extends React.Component {
 RadiusAuthentication.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
@@ -187,4 +194,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   connect(undefined, mapDispatchToProps),
-)(RadiusAuthentication);
+)(withTranslation(RadiusAuthentication));

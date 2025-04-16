@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
@@ -53,6 +52,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import TaskComponent from 'web/pages/tasks/Component';
 import TaskDetails from 'web/pages/tasks/Details';
 import ImportReportIcon from 'web/pages/tasks/icons/ImportReportIcon';
@@ -81,6 +81,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
+import withTranslation from 'web/utils/withTranslation';
 export const ToolBarIcons = ({
   entity,
   links,
@@ -97,6 +98,7 @@ export const ToolBarIcons = ({
   onTaskStopClick,
   onTaskResumeClick,
 }) => {
+  const [_] = useTranslation();
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
@@ -256,6 +258,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, ...props}) => {
+  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <InfoTable>
@@ -306,6 +309,8 @@ class Page extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       entity,
       permissions = [],
@@ -433,6 +438,7 @@ Page.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 export const TaskPermissions = withComponentDefaults({
@@ -513,4 +519,4 @@ export default withEntityContainer('task', {
   entitySelector: taskSelector,
   mapStateToProps,
   reloadInterval,
-})(Page);
+})(withTranslation(Page));

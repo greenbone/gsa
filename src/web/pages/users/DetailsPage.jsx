@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {UserIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -31,6 +30,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import UserComponent from 'web/pages/users/Component';
 import UserDetails from 'web/pages/users/Details';
 import {
@@ -39,16 +39,14 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/users';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = (
-  {
-    entity,
-    onUserCloneClick,
-    onUserCreateClick,
-    onUserDeleteClick,
-    onUserDownloadClick,
-    onUserEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onUserCloneClick,
+  onUserCreateClick,
+  onUserDeleteClick,
+  onUserDownloadClick,
+  onUserEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -89,17 +87,15 @@ ToolBarIcons.propTypes = {
   onUserEditClick: PropTypes.func.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    permissions = [],
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

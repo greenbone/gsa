@@ -5,7 +5,6 @@
 
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {NewIcon, OverrideIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -13,6 +12,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import OverrideComponent from 'web/pages/overrides/Component';
 import OverridesDashboard, {
   OVERRIDES_DASHBOARD_ID,
@@ -48,17 +48,15 @@ ToolBarIcons.propTypes = {
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
-const Page = (
-  {
-    filter,
-    onChanged,
-    onDownloaded,
-    onError,
-    onFilterChanged,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  filter,
+  onChanged,
+  onDownloaded,
+  onError,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

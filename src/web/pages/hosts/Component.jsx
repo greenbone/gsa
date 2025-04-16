@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -14,6 +13,7 @@ import TargetComponent from 'web/pages/targets/Component';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class HostComponent extends React.Component {
   constructor(...args) {
@@ -40,6 +40,8 @@ class HostComponent extends React.Component {
   }
 
   openHostDialog(host) {
+    const {_} = this.props;
+
     let title;
 
     if (isDefined(host)) {
@@ -179,9 +181,10 @@ HostComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-HostComponent = withGmp(HostComponent);
+HostComponent = withGmp(withTranslation(HostComponent));
 
 const HostWithTargetComponent = ({
   onInteraction,
