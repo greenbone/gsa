@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {afterEach, describe, expect, test, testing} from '@gsa/testing';
+import {describe, expect, test} from '@gsa/testing';
 import React from 'react';
 import {rendererWith, screen} from 'web/utils/Testing';
 import Menu from 'web/components/menu/Menu';
@@ -120,7 +120,7 @@ describe('Menu rendering', () => {
       },
     });
 
-    expect(queryByText('Remediation Tickets')).not.toBeInTheDocument();
+    expect(screen.queryByText('Remediation Tickets')).not.toBeInTheDocument();
   });
 
   test('should not render Configuration menu when none of its mayAccess permissions are true', async () => {
