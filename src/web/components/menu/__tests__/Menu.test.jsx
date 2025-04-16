@@ -106,7 +106,7 @@ describe('Menu rendering', () => {
   });
 
   test('should not render Remediation Tickets when mayAccess returns false', async () => {
-    const {queryByText} = renderMenuWith({
+    renderMenuWith({
       capabilities: {
         mayAccess: feature => feature !== 'tickets',
         mayOp: () => true,
