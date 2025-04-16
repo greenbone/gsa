@@ -7,13 +7,15 @@ import {FeedStatus} from 'gmp/commands/feedstatus';
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
-export const buildUrlParams = params => {
-  let argcount = 0;
+type Params = Record<string, string | number | boolean | undefined>;
+
+export const buildUrlParams = (params: Params) => {
+  let argCount = 0;
   let uri = '';
 
   for (const [key, value] of Object.entries(params)) {
     if (isDefined(value)) {
-      if (argcount++) {
+      if (argCount++) {
         uri += '&';
       }
       uri += encodeURIComponent(key) + '=' + encodeURIComponent(value);
@@ -22,7 +24,11 @@ export const buildUrlParams = params => {
   return uri;
 };
 
-export const buildServerUrl = (server, path = '', protocol) => {
+export const buildServerUrl = (
+  server: string,
+  path: string = '',
+  protocol?: string,
+) => {
   if (isDefined(protocol)) {
     if (!protocol.endsWith(':')) {
       protocol += ':';
@@ -50,9 +56,9 @@ export async function getFeedAccessStatusMessage(context) {
   return '';
 }
 
-export const findActionInXMLString = (string, actions) => {
+export const findActionInXMLString = (value: string, actions: string[]) => {
   const regex = /<action>(.*?)<\/action>/g;
-  const matches = string.match(regex) || [];
+  const matches = value.match(regex) || [];
   return matches.some(match =>
     actions.includes(match.replace(/<\/?action>/g, '')),
   );
