@@ -5,70 +5,42 @@
 
 import {afterEach, describe, expect, test, testing} from '@gsa/testing';
 import React from 'react';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith, screen} from 'web/utils/Testing';
+import Menu from 'web/components/menu/Menu';
 
 testing.mock('web/hooks/useTranslation', () => ({
   default: () => [key => key],
-}));
-
-testing.mock('@greenbone/opensight-ui-components-mantinev7', () => ({
-  AppNavigation: ({menuPoints}) => {
-    return (
-      <ul>
-        {menuPoints?.flat().map((item, index) =>
-          item ? (
-            <li key={index}>
-              {item.label}
-              {item.subNav?.map((subItem, i) => (
-                <ul key={i}>
-                  <li>{subItem.label}</li>
-                </ul>
-              ))}
-            </li>
-          ) : null,
-        )}
-      </ul>
-    );
-  },
 }));
 
 afterEach(() => {
   testing.clearAllMocks();
 });
 
-/**
- * Dynamically import the Menu module to bust the cache between tests
- */
-const importFreshMenu = async () => {
-  const {default: Menu} = await import(
-    /* @vite-ignore */ `web/components/menu/Menu?cacheBust=${Date.now()}`
-  );
-  return Menu;
-};
-
 const renderMenuWith = async ({capabilities, gmpSettings}) => {
-  testing.mock('web/hooks/useCapabilities', () => {
-    return {
-      default: () => {
-        return capabilities;
-      },
-    };
+  const gmp = {
+    settings: gmpSettings,
+  };
+
+  const {render} = rendererWith({
+    capabilities,
+    gmp,
+    router: true,
   });
-
-  testing.mock('web/hooks/useGmp', () => ({
-    default: () => ({
-      settings: gmpSettings,
-    }),
-  }));
-
-  const Menu = await importFreshMenu();
-  const {render} = rendererWith();
   return render(<Menu />);
 };
 
 describe('Menu rendering', () => {
-  test('should render full menu with mocked capabilities', async () => {
-    const {getByText} = await renderMenuWith({
+  test.each([
+    'Dashboards',
+    'Scans',
+    'Assets',
+    'Resilience',
+    'Security Information',
+    'Configuration',
+    'Administration',
+    'Help',
+  ])('should render top-level menu: %s', async label => {
+    await renderMenuWith({
       capabilities: {
         mayAccess: () => true,
         mayOp: () => true,
@@ -82,72 +54,69 @@ describe('Menu rendering', () => {
       },
     });
 
-    const topLevelMenus = [
-      'Dashboards',
-      'Scans',
-      'Assets',
-      'Resilience',
-      'Security Information',
-      'Configuration',
-      'Administration',
-      'Help',
-    ];
+    expect(screen.getByText(label)).toBeInTheDocument();
+  });
 
-    const subMenus = [
-      'Tasks',
-      'Reports',
-      'Results',
-      'Vulnerabilities',
-      'Notes',
-      'Overrides',
-      'Remediation Tickets',
-      'Compliance Policies',
-      'Compliance Audits',
-      'Compliance Audit Reports',
-      'NVTs',
-      'CVEs',
-      'CPEs',
-      'CERT-Bund Advisories',
-      'DFN-CERT Advisories',
-      'Targets',
-      'Port Lists',
-      'Credentials',
-      'Scan Configs',
-      'Alerts',
-      'Schedules',
-      'Report Configs',
-      'Report Formats',
-      'Scanners',
-      'Filters',
-      'Tags',
-      'Users',
-      'Groups',
-      'Roles',
-      'Permissions',
-      'Performance',
-      'Trashcan',
-      'Feed Status',
-      'LDAP',
-      'RADIUS',
-      'CVSS Calculator',
-      'About',
-    ];
-
-    topLevelMenus.forEach(label => {
-      expect(getByText(label)).toBeInTheDocument();
+  test.each([
+    'Tasks',
+    'Reports',
+    'Results',
+    'Vulnerabilities',
+    'Notes',
+    'Overrides',
+    'Remediation Tickets',
+    'Compliance Policies',
+    'Compliance Audits',
+    'Compliance Audit Reports',
+    'NVTs',
+    'CVEs',
+    'CPEs',
+    'CERT-Bund Advisories',
+    'DFN-CERT Advisories',
+    'Targets',
+    'Port Lists',
+    'Credentials',
+    'Scan Configs',
+    'Alerts',
+    'Schedules',
+    'Report Configs',
+    'Report Formats',
+    'Scanners',
+    'Filters',
+    'Tags',
+    'Users',
+    'Groups',
+    'Roles',
+    'Permissions',
+    'Performance',
+    'Trashcan',
+    'Feed Status',
+    'LDAP',
+    'RADIUS',
+    'CVSS Calculator',
+    'About',
+  ])('should render sub-menu: %s', async label => {
+    await renderMenuWith({
+      capabilities: {
+        mayAccess: () => true,
+        mayOp: () => true,
+        featureEnabled: () => true,
+      },
+      gmpSettings: {
+        enableAssetManagement: false,
+        reloadInterval: 5000,
+        reloadIntervalActive: 5000,
+        reloadIntervalInactive: 5000,
+      },
     });
 
-    subMenus.forEach(label => {
-      expect(getByText(label)).toBeInTheDocument();
-    });
+    expect(screen.getByText(label)).toBeInTheDocument();
   });
 
   test('should not render Remediation Tickets when mayAccess returns false', async () => {
     const {queryByText} = await renderMenuWith({
       capabilities: {
-        mayAccess: feature => {
-          return feature !== 'tickets';
-        },
+        mayAccess: feature => feature !== 'tickets',
         mayOp: () => true,
         featureEnabled: () => true,
       },
@@ -179,9 +148,7 @@ describe('Menu rendering', () => {
 
     const {queryByText} = await renderMenuWith({
       capabilities: {
-        mayAccess: feature => {
-          return !configFeatures.includes(feature);
-        },
+        mayAccess: feature => !configFeatures.includes(feature),
         mayOp: () => true,
         featureEnabled: () => true,
       },

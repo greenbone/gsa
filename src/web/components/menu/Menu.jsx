@@ -262,6 +262,7 @@ const Menu = () => {
       {
         label: _('Dashboards'),
         to: '/dashboards',
+        key: 'dashboards',
         icon: BarChart3,
       },
     ],
