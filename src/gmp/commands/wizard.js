@@ -4,13 +4,13 @@
  */
 
 import registerCommand from 'gmp/command';
+import {feedStatusRejection} from 'gmp/commands/feedstatus';
 import HttpCommand from 'gmp/commands/http';
 import {parseModelFromElement} from 'gmp/model';
 import Credential from 'gmp/models/credential';
 import Settings from 'gmp/models/settings';
 import Task from 'gmp/models/task';
 import {forEach, map} from 'gmp/utils/array';
-
 
 function convert_data(prefix, data, fields) {
   const converted = {};
@@ -159,15 +159,19 @@ class WizardCommand extends HttpCommand {
     });
   }
 
-  runQuickFirstScan(args) {
-    return this.httpPost({
-      ...convert_data('event_data', args, event_data_quick_first_scan_fields),
-      cmd: 'run_wizard',
-      name: 'quick_first_scan',
-    });
+  async runQuickFirstScan(args) {
+    try {
+      return await this.httpPost({
+        ...convert_data('event_data', args, event_data_quick_first_scan_fields),
+        cmd: 'run_wizard',
+        name: 'quick_first_scan',
+      });
+    } catch (rejection) {
+      await feedStatusRejection(this.http, rejection);
+    }
   }
 
-  runQuickTask(args) {
+  async runQuickTask(args) {
     const {start_date, ...other} = args;
     const event_data = convert_data(
       'event_data',
@@ -179,11 +183,15 @@ class WizardCommand extends HttpCommand {
     event_data['event_data:start_month'] = start_date.month() + 1;
     event_data['event_data:start_year'] = start_date.year();
 
-    return this.httpPost({
-      ...event_data,
-      cmd: 'run_wizard',
-      name: 'quick_task',
-    });
+    try {
+      return await this.httpPost({
+        ...event_data,
+        cmd: 'run_wizard',
+        name: 'quick_task',
+      });
+    } catch (rejection) {
+      await feedStatusRejection(this.http, rejection);
+    }
   }
 
   runModifyTask(args) {
