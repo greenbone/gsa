@@ -752,6 +752,8 @@
   "Export User": "Benutzer exportieren",
   "Export User as XML": "Benutzer als XML exportieren",
   "Extension": "Dateiendung",
+  "Failed to create a new Target because the default Port List is not available.": "Ein neues Ziel konnte nicht erstellt werden, da die Standard-Portliste nicht verfügbar ist.",
+  "Failed to create a new Task because the default Scan Config is not available.": "Ein neue Aufgabe konnte nicht erstellt werden, da die Standard-Scan-Konfiguration nicht verfügbar ist.",
   "Failed to run alert.": "Ausführung der Benachrichtigung ist fehlgeschlagen.",
   "False Pos.": "Falsch-Positiv",
   "False Positive": "Falsch-Positiv",
