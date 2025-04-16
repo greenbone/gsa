@@ -22,15 +22,6 @@ interface QoD {
   value: number | undefined;
 }
 
-interface Meta {
-  version: string | undefined;
-  backendOperation: string | undefined;
-  vendorVersion: string | undefined;
-  i18n: string | undefined;
-  time: string | undefined;
-  timezone: string | undefined;
-}
-
 export type Properties = Record<string, unknown>;
 
 export interface ParsedProperties {
@@ -149,26 +140,6 @@ export const parseQod = (qod: QoDParam): QoD => ({
   type: qod.type,
   value: parseFloat(qod.value),
 });
-
-const ENVELOPE_PROPS = [
-  ['version', 'version'],
-  ['backend_operation', 'backendOperation'],
-  ['vendor_version', 'vendorVersion'],
-  ['i18n', 'i18n'],
-  ['time', 'time'],
-  ['timezone', 'timezone'],
-] as const;
-
-export const parseEnvelopeMeta = (envelope: object): Meta => {
-  const meta = {};
-
-  for (const [name, to] of ENVELOPE_PROPS) {
-    meta[to] = envelope[name];
-    delete envelope[name];
-  }
-  // @ts-expect-error
-  return meta;
-};
 
 const esc2xml = {
   '&quot;': `"`,
