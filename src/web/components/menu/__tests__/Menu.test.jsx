@@ -152,7 +152,7 @@ describe('Menu rendering', () => {
       },
     });
 
-    expect(queryByText('Configuration')).not.toBeInTheDocument();
+    expect(screen.queryByText('Configuration')).not.toBeInTheDocument();
   });
 
   test('should not render Asset menu when enableAssetManagement is false', async () => {
