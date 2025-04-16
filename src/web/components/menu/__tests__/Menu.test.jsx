@@ -146,7 +146,7 @@ describe('Menu rendering', () => {
       'tags',
     ];
 
-    const {queryByText} = await renderMenuWith({
+    const {queryByText} = renderMenuWith({
       capabilities: {
         mayAccess: feature => !configFeatures.includes(feature),
         mayOp: () => true,
