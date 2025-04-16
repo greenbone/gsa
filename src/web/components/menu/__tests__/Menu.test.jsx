@@ -142,7 +142,7 @@ describe('Menu rendering', () => {
       'tags',
     ];
 
-    const {queryByText} = renderMenuWith({
+    renderMenuWith({
       capabilities: {
         mayAccess: feature => !configFeatures.includes(feature),
         mayOp: () => true,
