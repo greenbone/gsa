@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const noop = arg => arg;
+const noop = <T>(arg: T): T => arg;
 
 const noopObject = {
   success: noop,
