@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   email_credential_filter,
   password_only_credential_filter,
@@ -50,6 +49,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
@@ -183,6 +183,8 @@ class AlertComponent extends React.Component {
   }
 
   openCredentialDialog({type, types}) {
+    const {_} = this.props;
+
     this.credentialType = type;
 
     this.setState({
@@ -289,6 +291,7 @@ class AlertComponent extends React.Component {
 
   openAlertDialog(alert) {
     const {gmp} = this.props;
+    const {_} = this.props;
 
     this.handleInteraction();
 
@@ -828,6 +831,8 @@ class AlertComponent extends React.Component {
   }
 
   handleTestAlert(alert) {
+    const {_} = this.props;
+
     const {gmp} = this.props;
     const {onTestSuccess, onTestError} = this.props;
 
@@ -934,6 +939,8 @@ class AlertComponent extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       children,
       onError,
@@ -1293,6 +1300,7 @@ AlertComponent.propTypes = {
   onSaved: PropTypes.func,
   onTestError: PropTypes.func,
   onTestSuccess: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => {
@@ -1310,7 +1318,4 @@ const mapStateToProps = rootState => {
   };
 };
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(AlertComponent);
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(AlertComponent);

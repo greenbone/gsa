@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class ReportConfigComponent extends React.Component {
   constructor(...args) {
@@ -26,6 +26,7 @@ class ReportConfigComponent extends React.Component {
   openReportConfigDialog(reportConfig) {
     this.handleInteraction();
     const {gmp} = this.props;
+    const {_} = this.props;
 
     if (isDefined(reportConfig)) {
       // (re-)load report config to get params
@@ -174,6 +175,7 @@ ReportConfigComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(ReportConfigComponent);
+export default withGmp(withTranslation(ReportConfigComponent));

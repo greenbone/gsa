@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
@@ -13,6 +12,8 @@ import {NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import PermissionComponent from 'web/pages/permissions/Component';
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,
@@ -20,14 +21,16 @@ import MultiplePermissionDialog, {
 } from 'web/pages/permissions/MultipleDialog';
 import PermissionsTable from 'web/pages/permissions/Table';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 const SectionElementDivider = styled(IconDivider)`
   margin-bottom: 3px;
 `;
 
-const SectionElements = withCapabilities(
-  ({capabilities, onPermissionCreateClick}) => (
+const SectionElements = ({onPermissionCreateClick}) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  return (
     <Layout grow align="end">
       <SectionElementDivider>
         {capabilities.mayCreate('permission') && (
@@ -43,14 +46,14 @@ const SectionElements = withCapabilities(
         />
       </SectionElementDivider>
     </Layout>
-  ),
-);
+  );
+};
 
 SectionElements.propTypes = {
   onPermissionCreateClick: PropTypes.func.isRequired,
 };
 
-class Permissions extends React.Component {
+class PermissionsBase extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -76,6 +79,8 @@ class Permissions extends React.Component {
   }
 
   openMultiplePermissionDialog() {
+    const {_} = this.props;
+
     const {gmp, relatedResourcesLoaders = [], entity} = this.props;
 
     const entityType = getEntityType(entity);
@@ -159,6 +164,8 @@ class Permissions extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {entity, permissions, ...props} = this.props;
 
     const {
@@ -225,7 +232,7 @@ class Permissions extends React.Component {
   }
 }
 
-Permissions.propTypes = {
+PermissionsBase.propTypes = {
   entity: PropTypes.model.isRequired,
   gmp: PropTypes.gmp.isRequired,
   permissions: PropTypes.array,
@@ -236,9 +243,10 @@ Permissions.propTypes = {
   onPermissionDeleteClick: PropTypes.func.isRequired,
   onPermissionDownloadClick: PropTypes.func.isRequired,
   onPermissionEditClick: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
-Permissions = withGmp(Permissions);
+const Permissions = withGmp(withTranslation(PermissionsBase));
 
 const EntityPermissions = ({
   entity,

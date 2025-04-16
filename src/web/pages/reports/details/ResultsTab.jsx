@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined, hasValue} from 'gmp/utils/identity';
@@ -28,6 +27,7 @@ import getPage from 'web/store/pages/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 const filterWithReportId = (filter, reportId) =>
   isDefined(filter)
@@ -133,6 +133,8 @@ class ResultsTab extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {isUpdating, results, resultsCounts} = this.state;
     const {
       audit = false,
@@ -254,6 +256,7 @@ ResultsTab.propTypes = {
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func,
   onTargetEditClick: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const reloadInterval = status =>
@@ -362,7 +365,4 @@ const mapDispatchToProps = (dispatch, {reportId, gmp}) => {
   };
 };
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(ResultsTabWrapper);
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(ResultsTabWrapper);

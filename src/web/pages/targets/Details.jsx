@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -16,6 +15,7 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -147,7 +147,7 @@ const TargetDetails = ({capabilities, entity}) => {
 
                 {isDefined(ssh_credential) &&
                   isDefined(ssh_elevate_credential) && ( // Skip one column, because there is no way to fit a variation of the word "elevate" without leaving lots of white space on other rows
-                    (<TableRow>
+                    <TableRow>
                       <TableData>{''}</TableData>
                       <TableData>
                         <span>
@@ -160,7 +160,7 @@ const TargetDetails = ({capabilities, entity}) => {
                           </DetailsLink>
                         </span>
                       </TableData>
-                    </TableRow>)
+                    </TableRow>
                   )}
 
                 {gmp.settings.enableKrb5 && isDefined(krb5Credential) && (
@@ -226,8 +226,6 @@ const TargetDetails = ({capabilities, entity}) => {
         >
           <HorizontalSep>
             {tasks.map(task => {
-              const [_] = useTranslation();
-
               return (
                 <span key={task.id}>
                   <DetailsLink id={task.id} type="task">

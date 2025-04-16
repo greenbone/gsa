@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
@@ -57,7 +56,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
-
+import withTranslation from 'web/utils/withTranslation';
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
@@ -235,6 +234,8 @@ class DeltaReportDetails extends React.Component {
   }
 
   handleAddToAssets() {
+    const {_} = this.props;
+
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
     this.handleInteraction();
@@ -250,6 +251,8 @@ class DeltaReportDetails extends React.Component {
   }
 
   handleRemoveFromAssets() {
+    const {_} = this.props;
+
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
     this.handleInteraction();
@@ -561,6 +564,7 @@ DeltaReportDetails.propTypes = {
   username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => {
@@ -660,6 +664,8 @@ const load =
     );
   };
 
+const TranslatedDeltaReportDetails = withTranslation(DeltaReportDetails);
+
 const DeltaReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
   <Reload
     load={load({...props, defaultFilter})}
@@ -668,7 +674,7 @@ const DeltaReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
     reloadInterval={() => reloadInterval(props.entity)}
   >
     {({reload}) => (
-      <DeltaReportDetails
+      <TranslatedDeltaReportDetails
         {...props}
         defaultFilter={defaultFilter}
         reload={reload}
@@ -683,6 +689,7 @@ DeltaReportDetailsWrapper.propTypes = {
   entity: PropTypes.model,
   gmp: PropTypes.gmp.isRequired,
   reportFilter: PropTypes.filter,
+  _: PropTypes.func.isRequired,
 };
 
 export default compose(

@@ -16,7 +16,6 @@ import {
 } from 'd3-force';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import equal from 'fast-deep-equal';
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, SeverityRating} from 'gmp/utils/severity';
 import React from 'react';
@@ -29,6 +28,7 @@ import {
   FALSE_POSITIVE_VALUE,
 } from 'web/utils/severity';
 import Theme from 'web/utils/Theme';
+import withTranslation from 'web/utils/withTranslation';
 
 export const MAX_HOSTS = 1000;
 
@@ -91,6 +91,7 @@ interface HostsTopologyChartProps {
   width: number;
   data: HostsTopologyChartData;
   svgRef: React.Ref<SVGSVGElement>;
+  _: (text: string, ...args: unknown[]) => string;
 }
 
 const Svg = styled.svg<SvgProps>`
@@ -493,6 +494,8 @@ class HostsTopologyChart extends React.Component<
   }
 
   render() {
+    const {_} = this.props;
+
     const {width, height, svgRef} = this.props;
     const {
       hosts = [],
@@ -582,4 +585,4 @@ class HostsTopologyChart extends React.Component<
   }
 }
 
-export default HostsTopologyChart;
+export default withTranslation(HostsTopologyChart);

@@ -5,7 +5,6 @@
 
 import {typeName} from 'gmp/utils/entitytype';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
@@ -15,18 +14,17 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const Actions = withEntitiesActions(
-  (
-    {
-      entity,
-      onFilterDeleteClick,
-      onFilterDownloadClick,
-      onFilterCloneClick,
-      onFilterEditClick,
-    }
-  ) => {
+  ({
+    entity,
+    onFilterDeleteClick,
+    onFilterDownloadClick,
+    onFilterCloneClick,
+    onFilterEditClick,
+  }) => {
     const [_] = useTranslation();
 
     return (
@@ -69,15 +67,13 @@ Actions.propTypes = {
   onFilterEditClick: PropTypes.func.isRequired,
 };
 
-const Row = (
-  {
-    actionsComponent: ActionsComponent = Actions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...props
-  }
-) => {
+const Row = ({
+  actionsComponent: ActionsComponent = Actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

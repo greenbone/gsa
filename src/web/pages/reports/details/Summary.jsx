@@ -6,7 +6,6 @@
 import {duration as createDuration} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState, useEffect} from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
@@ -18,40 +17,12 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import Table from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const UpdatingTable = styled(Table)`
   opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
 `;
-
-const scanDuration = (start, end) => {
-  const dur = createDuration(end.diff(start));
-  const hours = dur.hours();
-  const days = dur.days();
-
-  let minutes = dur.minutes();
-  if (minutes < 10) {
-    minutes = '0' + minutes;
-  }
-
-  if (days === 0) {
-    return _('{{hours}}:{{minutes}} h', {hours, minutes});
-  }
-
-  if (days === 1) {
-    return _('{{days}} day {{hours}}:{{minutes}} h', {
-      days,
-      hours,
-      minutes,
-    });
-  }
-
-  return _('{{days}} days {{hours}}:{{minutes}} h', {
-    days,
-    hours,
-    minutes,
-  });
-};
 
 const Summary = ({
   audit = false,
@@ -78,6 +49,35 @@ const Summary = ({
   const {id, name, comment, progress} = task;
 
   const [hostsCount, setHostsCount] = useState(0);
+
+  const scanDuration = (start, end) => {
+    const dur = createDuration(end.diff(start));
+    const hours = dur.hours();
+    const days = dur.days();
+
+    let minutes = dur.minutes();
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+
+    if (days === 0) {
+      return _('{{hours}}:{{minutes}} h', {hours, minutes});
+    }
+
+    if (days === 1) {
+      return _('{{days}} day {{hours}}:{{minutes}} h', {
+        days,
+        hours,
+        minutes,
+      });
+    }
+
+    return _('{{days}} days {{hours}}:{{minutes}} h', {
+      days,
+      hours,
+      minutes,
+    });
+  };
 
   useEffect(() => {
     if (isDefined(hosts?.counts?.all)) {

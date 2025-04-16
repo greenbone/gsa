@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -20,6 +19,7 @@ import {
 } from 'web/components/loading/Reload';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportsDashboard, {
   REPORTS_DASHBOARD_ID,
 } from 'web/pages/reports/dashboard';
@@ -38,18 +38,22 @@ import {
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 
-const ToolBarIcons = ({onUploadReportClick}) => (
-  <IconDivider>
-    <ManualIcon
-      anchor="using-and-managing-reports"
-      page="reports"
-      title={_('Help: Reports')}
-    />
-    <UploadIcon title={_('Upload report')} onClick={onUploadReportClick} />
-  </IconDivider>
-);
+const ToolBarIcons = ({onUploadReportClick}) => {
+  const [_] = useTranslation();
+  return (
+    <IconDivider>
+      <ManualIcon
+        anchor="using-and-managing-reports"
+        page="reports"
+        title={_('Help: Reports')}
+      />
+      <UploadIcon title={_('Upload report')} onClick={onUploadReportClick} />
+    </IconDivider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   onUploadReportClick: PropTypes.func,
@@ -176,6 +180,8 @@ class Page extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {filter, onFilterChanged, onInteraction, tasks} = this.props;
     const {containerTaskDialogVisible, importDialogVisible, task_id} =
       this.state;
@@ -242,6 +248,7 @@ Page.propTypes = {
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const reportsReloadInterval = ({entities = []}) =>
@@ -265,6 +272,7 @@ const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
 );
 
 export default compose(
+  withTranslation,
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
   withEntitiesContainer('report', {
@@ -272,5 +280,5 @@ export default compose(
     entitiesSelector,
     loadEntities,
     reloadInterval: reportsReloadInterval,
-  }),
+  })
 )(Page);

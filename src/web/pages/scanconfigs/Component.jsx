@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
@@ -18,6 +17,7 @@ import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import ImportDialog from 'web/pages/scanconfigs/ImportDialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -71,6 +71,8 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditConfigDialog(config) {
+    const {_} = this.props;
+
     this.setState({
       config, // put config from list with reduced data in state
       editConfigDialogVisible: true,
@@ -147,10 +149,12 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditConfigFamilyDialog(familyName) {
+    const {_} = this.props;
+
     this.handleInteraction();
 
     this.setState({
-        hasSelection : false,
+      hasSelection: false,
     });
 
     this.setState({
@@ -172,7 +176,6 @@ class ScanConfigComponent extends React.Component {
       isLoadingFamily: silent ? isLoadingFamily : true,
     }));
 
-
     return gmp.scanconfig
       .editScanConfigFamilySettings({
         id: config.id,
@@ -185,15 +188,19 @@ class ScanConfigComponent extends React.Component {
         const configFamily = config.families[familyName];
         const selected = createSelectedNvts(configFamily, nvts);
 
-        this.setState(({hasSelection}) => hasSelection ? {
-          familyNvts: data.nvts,
-          isLoadingFamily: false,
-        } : {
-          familyNvts: data.nvts,
-          familySelectedNvts: selected,
-          hasSelection: true,
-          isLoadingFamily: false,
-       });
+        this.setState(({hasSelection}) =>
+          hasSelection
+            ? {
+                familyNvts: data.nvts,
+                isLoadingFamily: false,
+              }
+            : {
+                familyNvts: data.nvts,
+                familySelectedNvts: selected,
+                hasSelection: true,
+                isLoadingFamily: false,
+              },
+        );
       })
       .catch(error => {
         this.setState({
@@ -218,6 +225,8 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditNvtDetailsDialog(nvtOid) {
+    const {_} = this.props;
+
     this.handleInteraction();
 
     this.setState({
@@ -231,6 +240,7 @@ class ScanConfigComponent extends React.Component {
   loadNvt(nvtOid) {
     const {gmp} = this.props;
     const {config} = this.state;
+    const {_} = this.props;
 
     this.setState({
       isLoadingNvt: true,
@@ -425,6 +435,8 @@ class ScanConfigComponent extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       children,
       onCloned,
@@ -599,6 +611,7 @@ ScanConfigComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(ScanConfigComponent);
+export default withGmp(withTranslation(ScanConfigComponent));

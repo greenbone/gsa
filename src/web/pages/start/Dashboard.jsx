@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import {DashboardControls} from 'web/components/dashboard/Controls';
-import {Dashboard} from 'web/components/dashboard/Dashboard';
+import {TranslatedDashboardControls as DashboardControls} from 'web/components/dashboard/Controls';
+import {TranslatedDashboard as Dashboard} from 'web/components/dashboard/Dashboard';
 import {canAddDisplay} from 'web/components/dashboard/Utils';
 import Layout from 'web/components/layout/Layout';
 import {CERTBUND_DISPLAYS} from 'web/pages/certbund/dashboard';

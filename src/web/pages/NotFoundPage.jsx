@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Logo from 'web/components/img/Greenbone';
+import useTranslation from 'web/hooks/useTranslation';
 
 const StyledLogo = styled(Logo)`
   width: 300px;
@@ -30,7 +30,9 @@ const PageNotFound = () => {
     <CenteredDiv>
       <h1>{_('Page Not Found.')}</h1>
       <StyledLogo />
-      <p>{_('We are sorry. The page you have requested could not be found.')}</p>
+      <p>
+        {_('We are sorry. The page you have requested could not be found.')}
+      </p>
     </CenteredDiv>
   );
 };

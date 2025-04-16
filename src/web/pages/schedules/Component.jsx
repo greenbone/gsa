@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -11,6 +10,7 @@ import EntityComponent from 'web/entity/EntityComponent';
 import ScheduleDialog from 'web/pages/schedules/Dialog';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
+import withTranslation from 'web/utils/withTranslation';
 
 class ScheduleComponent extends React.Component {
   constructor(...args) {
@@ -24,6 +24,7 @@ class ScheduleComponent extends React.Component {
 
   openScheduleDialog(schedule) {
     const {timezone} = this.props;
+    const {_} = this.props;
 
     if (isDefined(schedule)) {
       const {event} = schedule;
@@ -152,8 +153,9 @@ ScheduleComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 export default connect(rootState => ({
   timezone: getTimezone(rootState),
-}))(ScheduleComponent);
+}))(withTranslation(ScheduleComponent));

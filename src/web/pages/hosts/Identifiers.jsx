@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState, useEffect} from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
@@ -18,6 +17,7 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import DetailsBlock from 'web/entity/Block';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Action = styled.a`
   cursor: pointer;
@@ -164,8 +164,6 @@ const Identifiers = props => {
         </TableHeader>
         <TableBody>
           {ids.map(identifier => {
-            const [_] = useTranslation();
-
             return (
               <TableRow key={identifier.id}>
                 <TableData>{identifier.name}</TableData>

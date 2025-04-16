@@ -12,7 +12,6 @@ import {
 import {parseInt} from 'gmp/parser';
 import {hasValue} from 'gmp/utils/identity';
 import React, {useState} from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {
   CertBundAdvIcon,
   CpeLogoIcon,
@@ -42,6 +41,7 @@ import TableHead from 'web/components/table/Head';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const ToolBarIcons = () => {
@@ -57,35 +57,52 @@ const ToolBarIcons = () => {
   );
 };
 
-const renderCheck = feed => {
+const FeedCheck = ({feed}) => {
+  const [_] = useTranslation();
   const age = feed.age.asDays();
 
-  return age >= 30 && !hasValue(feed.currentlySyncing)
-    ? _('Please check the automatic synchronization of your system.')
-    : '';
+  if (age >= 30 && !hasValue(feed.currentlySyncing)) {
+    return (
+      <span>
+        {_('Please check the automatic synchronization of your system.')}
+      </span>
+    );
+  }
+
+  return null;
 };
 
-const renderFeedStatus = feed => {
+FeedCheck.propTypes = {
+  feed: PropTypes.object.isRequired,
+};
+
+const FeedStatusDisplay = ({feed}) => {
+  const [_] = useTranslation();
+
   if (hasValue(feed.currentlySyncing)) {
-    return _('Update in progress...');
+    return <span>{_('Update in progress...')}</span>;
   }
 
   if (hasValue(feed.syncNotAvailable)) {
     const {error} = feed.syncNotAvailable;
-    return _('Synchronization issue: {{error}}', {error});
+    return <span>{_('Synchronization issue: {{error}}', {error})}</span>;
   }
 
   const age = parseInt(feed.age.asDays());
 
   if (age >= 30) {
-    return _('Too old ({{age}} days)', {age});
+    return <span>{_('Too old ({{age}} days)', {age})}</span>;
   }
 
   if (age >= 2) {
-    return _('{{age}} days old', {age});
+    return <span>{_('{{age}} days old', {age})}</span>;
   }
 
-  return _('Current');
+  return <span>{_('Current')}</span>;
+};
+
+FeedStatusDisplay.propTypes = {
+  feed: PropTypes.object.isRequired,
 };
 
 const FeedStatus = ({feeds}) => {
@@ -111,8 +128,6 @@ const FeedStatus = ({feeds}) => {
             </TableRow>
 
             {feeds.map(feed => {
-              const [_] = useTranslation();
-
               return (
                 <TableRow key={feed.feedType}>
                   <TableData>{feed.feedType}</TableData>
@@ -192,8 +207,12 @@ const FeedStatus = ({feeds}) => {
                   <TableData>{feed.version}</TableData>
                   <TableData>
                     <Divider wrap>
-                      <strong>{renderFeedStatus(feed)}</strong>
-                      <span data-testid="update-msg">{renderCheck(feed)}</span>
+                      <strong>
+                        <FeedStatusDisplay feed={feed} />
+                      </strong>
+                      <span data-testid="update-msg">
+                        <FeedCheck feed={feed} />
+                      </span>
                     </Divider>
                   </TableData>
                 </TableRow>
@@ -211,7 +230,6 @@ FeedStatus.propTypes = {
 };
 
 const FeedStatusWrapper = () => {
-  const [_] = useTranslation();
   const gmp = useGmp();
   const [feeds, setFeeds] = useState([]);
 

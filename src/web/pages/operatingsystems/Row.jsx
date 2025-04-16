@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import CpeIcon from 'web/components/icon/CpeIcon';
@@ -16,6 +15,7 @@ import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Actions = withEntitiesActions(
   ({entity, onOsDeleteClick, onOsDownloadClick}) => {
@@ -48,22 +48,22 @@ Actions.propTypes = {
   onOsDownloadClick: PropTypes.func.isRequired,
 };
 
-const Row = (
-  {
-    actionsComponent: ActionsComponent = Actions,
-    entity,
-    links = true,
-    ...props
-  }
-) => {
-  const [_] = useTranslation();
-
+const Row = ({
+  actionsComponent: ActionsComponent = Actions,
+  entity,
+  links = true,
+  ...props
+}) => {
   return (
     <TableRow>
       <TableData>
         <IconDivider align={['start', 'center']}>
           <CpeIcon name={entity.name} />
-          <DetailsLink id={entity.id} textOnly={!links} type={entity.entityType}>
+          <DetailsLink
+            id={entity.id}
+            textOnly={!links}
+            type={entity.entityType}
+          >
             {entity.name}
           </DetailsLink>
         </IconDivider>

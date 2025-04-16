@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   ANY,
   MANUAL,
@@ -31,6 +30,7 @@ import {
   LOW_VALUE,
 } from 'web/utils/severity';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 const SEVERITIES_LIST = [
   HIGH_VALUE,
@@ -52,6 +52,8 @@ class OverrideComponent extends React.Component {
   }
 
   openOverrideDialog(override, initial) {
+    const {_} = this.props;
+
     if (isDefined(override)) {
       let active = ACTIVE_NO_VALUE;
       if (override.isActive()) {
@@ -272,6 +274,7 @@ OverrideComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(OverrideComponent);
+export default withGmp(withTranslation(OverrideComponent));

@@ -5,10 +5,10 @@
 
 import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {EditIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityEdit extends EntityType {
   userCapabilities: {

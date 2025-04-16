@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {DownloadIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -13,26 +12,25 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import ResumeIcon from 'web/pages/tasks/icons/ResumeIcon';
 import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
 import StartIcon from 'web/pages/tasks/icons/StartIcon';
 import StopIcon from 'web/pages/tasks/icons/StopIcon';
 import PropTypes from 'web/utils/PropTypes';
-const Actions = (
-  {
-    entity,
-    links,
-    gcrFormatDefined,
-    onReportDownloadClick,
-    onAuditCloneClick,
-    onAuditDeleteClick,
-    onAuditDownloadClick,
-    onAuditEditClick,
-    onAuditResumeClick,
-    onAuditStartClick,
-    onAuditStopClick,
-  }
-) => {
+const Actions = ({
+  entity,
+  links,
+  gcrFormatDefined,
+  onReportDownloadClick,
+  onAuditCloneClick,
+  onAuditDeleteClick,
+  onAuditDownloadClick,
+  onAuditEditClick,
+  onAuditResumeClick,
+  onAuditStartClick,
+  onAuditStopClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -46,7 +44,11 @@ const Actions = (
           onClick={onAuditStartClick}
         />
       )}
-      <StopIcon task={entity} usageType={_('audit')} onClick={onAuditStopClick} />
+      <StopIcon
+        task={entity}
+        usageType={_('audit')}
+        onClick={onAuditStopClick}
+      />
       <ResumeIcon
         task={entity}
         usageType={_('audit')}

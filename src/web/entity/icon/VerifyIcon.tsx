@@ -10,9 +10,9 @@ import {
   typeName,
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {VerifyIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityVerify extends EntityType {
   userCapabilities: {

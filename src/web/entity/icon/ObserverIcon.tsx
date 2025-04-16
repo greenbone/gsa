@@ -5,8 +5,8 @@
 
 import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {ViewOtherIcon} from 'web/components/icon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 interface ObserverEntity extends EntityType {
@@ -25,10 +25,13 @@ interface ObserverIconProps<TEntity extends ObserverEntity> {
 const ObserverIcon = <TEntity extends ObserverEntity>({
   entity,
   userName,
-  displayName = _('Entity'),
+  displayName,
   ['data-testid']: dataTestId = 'observer-icon',
 }: ObserverIconProps<TEntity>) => {
   const [_] = useTranslation();
+  const defaultDisplayName = _('Entity');
+  displayName = displayName ? _(displayName) : defaultDisplayName;
+
   const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
 
   if (owner === userName) {

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import ReportFormatDialog from 'web/pages/reportformats/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class ReportFormatComponent extends React.Component {
   constructor(...args) {
@@ -28,6 +28,7 @@ class ReportFormatComponent extends React.Component {
 
     if (isDefined(reportformat)) {
       const {gmp} = this.props;
+      const {_} = this.props;
 
       // (re-)load report format to get params
       gmp.reportformat.get(reportformat).then(response => {
@@ -63,6 +64,8 @@ class ReportFormatComponent extends React.Component {
         });
       });
     } else {
+      const {_} = this.props;
+
       this.setState({
         dialogVisible: true,
         reportformat: undefined,
@@ -152,6 +155,7 @@ ReportFormatComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(ReportFormatComponent);
+export default withGmp(withTranslation(ReportFormatComponent));

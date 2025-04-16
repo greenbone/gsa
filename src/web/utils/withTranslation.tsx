@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
 
 /**
@@ -16,13 +15,12 @@ import useTranslation from 'web/hooks/useTranslation';
 const withTranslation = WrappedComponent => {
   const WithTranslation = props => {
     const [_, i18n, ready] = useTranslation();
-    const [language] = useLanguage();
 
-    // Using language as a key forces re-render of the component when language changes
+    // Using i18n.language as a key forces re-render of the component when language changes
     return (
       <WrappedComponent
         {...props}
-        key={`translation-wrapper-${language}`}
+        key={`translation-wrapper-${i18n.language}`}
         _={_}
         i18n={i18n}
         ready={ready}

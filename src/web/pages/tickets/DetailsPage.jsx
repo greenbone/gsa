@@ -5,7 +5,6 @@
 
 import {getTranslatableTicketStatus} from 'gmp/models/ticket';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import {TicketIcon} from 'web/components/icon';
@@ -37,6 +36,7 @@ import {goToDetails, goToList} from 'web/entity/navigation';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import TicketComponent from 'web/pages/tickets/Component';
 import TicketDetails from 'web/pages/tickets/Details';
 import {
@@ -44,15 +44,13 @@ import {
   loadEntity as loadTicket,
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = (
-  {
-    entity,
-    onTicketCloneClick,
-    onTicketDeleteClick,
-    onTicketDownloadClick,
-    onTicketEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onTicketCloneClick,
+  onTicketDeleteClick,
+  onTicketDownloadClick,
+  onTicketEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -163,16 +161,14 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

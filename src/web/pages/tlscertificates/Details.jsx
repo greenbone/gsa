@@ -6,7 +6,6 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
@@ -14,6 +13,7 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntity as loadTlsCertificate,
   selector as tlsCertificateSelector,

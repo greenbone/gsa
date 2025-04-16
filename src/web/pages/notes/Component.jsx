@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   ACTIVE_NO_VALUE,
   ACTIVE_YES_ALWAYS_VALUE,
@@ -23,6 +22,7 @@ import EntityComponent from 'web/entity/EntityComponent';
 import NoteDialog from 'web/pages/notes/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class NoteComponent extends React.Component {
   constructor(...args) {
@@ -36,6 +36,8 @@ class NoteComponent extends React.Component {
   }
 
   openNoteDialog(note, initial) {
+    const {_} = this.props;
+
     if (isDefined(note)) {
       let active = ACTIVE_NO_VALUE;
       if (note.isActive()) {
@@ -230,6 +232,7 @@ NoteComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(NoteComponent);
+export default withGmp(withTranslation(NoteComponent));

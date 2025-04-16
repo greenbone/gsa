@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -14,6 +13,7 @@ import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
@@ -101,8 +101,6 @@ const ReportFormatDetails = ({entity}) => {
               </TableDataAlignTop>
               <TableData>
                 {alerts.map(alert => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={alert.id}>
                       <DetailsLink id={alert.id} type="alert">
@@ -129,8 +127,6 @@ const ReportFormatDetails = ({entity}) => {
               </TableDataAlignTop>
               <TableData>
                 {report_configs.map(report_config => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={report_config.id}>
                       <DetailsLink id={report_config.id} type="reportconfig">

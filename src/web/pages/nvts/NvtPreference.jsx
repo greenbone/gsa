@@ -6,7 +6,6 @@
 import {map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
 import {useState} from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Checkbox from 'web/components/form/Checkbox';
 import FileField from 'web/components/form/FileField';
@@ -18,6 +17,7 @@ import Column from 'web/components/layout/Column';
 import Divider from 'web/components/layout/Divider';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const StyledTableData = styled(TableData)`
@@ -98,7 +98,6 @@ const NvtPreference = ({preference, value = '', onChange}) => {
           onChange={() => onPreferenceChange(preference.value)}
         />
         {map(preference.alt, alt => {
-          const [_] = useTranslation();
           return (
             <Radio
               key={alt}

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import GroupDialog from 'web/pages/groups/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class GroupComponent extends React.Component {
   constructor(...args) {
@@ -23,6 +23,7 @@ class GroupComponent extends React.Component {
 
   openGroupDialog(group) {
     const {gmp} = this.props;
+    const {_} = this.props;
 
     this.handleInteraction();
 
@@ -139,6 +140,7 @@ GroupComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(GroupComponent);
+export default withGmp(withTranslation(GroupComponent));

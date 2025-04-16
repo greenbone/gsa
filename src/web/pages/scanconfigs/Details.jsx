@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -14,6 +13,7 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const ScanConfigDetails = ({entity}) => {
@@ -45,7 +45,6 @@ const ScanConfigDetails = ({entity}) => {
               <TableData>
                 <Divider wrap>
                   {tasks.map((task, index) => {
-                    const [_] = useTranslation();
                     return (
                       <React.Fragment key={task.id}>
                         <DetailsLink id={task.id} type="task">

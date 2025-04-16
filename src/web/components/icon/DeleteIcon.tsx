@@ -5,8 +5,8 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import {CircleX as Icon} from 'lucide-react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {DynamicIcon, DynamicIconProps} from 'web/components/icon/DynamicIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import SelectionType from 'web/utils/SelectionType';
 
 export interface DeleteIconProps<TValue = string>

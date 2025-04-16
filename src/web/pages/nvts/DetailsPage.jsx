@@ -6,7 +6,6 @@
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {
   NewNoteIcon,
   NvtIcon,
@@ -35,6 +34,7 @@ import Override from 'web/entity/Override';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import NvtComponent from 'web/pages/nvts/Component';
 import NvtDetails from 'web/pages/nvts/Details';
 import Preferences from 'web/pages/nvts/Preferences';
@@ -129,8 +129,7 @@ const Details = ({entity, notes = [], overrides = []}) => {
         <DetailsBlock id="overrides" title={_('Overrides')}>
           <Divider wrap align={['start', 'stretch']} width="15px">
             {overrides.map(override => {
-              const [_] = useTranslation();
-              return (<Override key={override.id} override={override} />);
+              return <Override key={override.id} override={override} />;
             })}
           </Divider>
         </DetailsBlock>
@@ -139,8 +138,7 @@ const Details = ({entity, notes = [], overrides = []}) => {
         <DetailsBlock id="notes" title={_('Notes')}>
           <Divider wrap align={['start', 'stretch']} width="15px">
             {notes.map(note => {
-              const [_] = useTranslation();
-              return (<Note key={note.id} note={note} />);
+              return <Note key={note.id} note={note} />;
             })}
           </Divider>
         </DetailsBlock>

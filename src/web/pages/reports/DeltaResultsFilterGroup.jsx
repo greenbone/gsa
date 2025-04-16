@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import Divider from 'web/components/layout/Divider';
 import PropTypes from 'web/utils/PropTypes';
+import withTranslation from 'web/utils/withTranslation';
 
 class DeltaStatesFilterGroup extends React.Component {
   constructor(...args) {
@@ -36,6 +36,8 @@ class DeltaStatesFilterGroup extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {filter} = this.props;
 
     let delta_states = filter.get('delta_states');
@@ -82,6 +84,7 @@ class DeltaStatesFilterGroup extends React.Component {
 DeltaStatesFilterGroup.propTypes = {
   filter: PropTypes.filter.isRequired,
   onChange: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
-export default DeltaStatesFilterGroup;
+export default withTranslation(DeltaStatesFilterGroup);

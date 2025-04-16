@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entitytype';
@@ -16,6 +15,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 export const SELECT_MAX_RESOURCES = 200; // concerns items in TagDialog's Select
 export const MAX_RESOURCES = 40; // concerns listing in "Assigned Resources" tab
@@ -108,6 +108,8 @@ class TagComponent extends React.Component {
   }
 
   openTagDialog(tag, options = {}) {
+    const {_} = this.props;
+
     const {gmp} = this.props;
     const resource_types = this.getResourceTypes();
 
@@ -305,8 +307,7 @@ TagComponent.propTypes = {
   onRemoved: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default compose(withGmp, withCapabilities)(TagComponent);
-
-// vim: set ts=2 sw=2 tw=80:
+export default compose(withTranslation, withGmp, withCapabilities)(TagComponent);

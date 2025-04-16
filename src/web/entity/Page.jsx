@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -17,6 +16,7 @@ import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import EntityInfo from 'web/entity/Info';
 import PropTypes from 'web/utils/PropTypes';
+import withTranslation from 'web/utils/withTranslation';
 
 const ErrorContent = styled.div`
   white-space: pre;
@@ -109,6 +109,8 @@ class EntityPage extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {entity, entityError, entityType, isLoading = true} = this.props;
 
     if (!isDefined(entity)) {
@@ -200,6 +202,7 @@ EntityPage.propTypes = {
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
-export default EntityPage;
+export default withTranslation(EntityPage);

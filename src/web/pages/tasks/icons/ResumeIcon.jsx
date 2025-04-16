@@ -6,13 +6,17 @@
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {ResumeIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-const TaskResumeIcon = ({task, usageType = _('task'), onClick}) => {
+
+const TaskResumeIcon = ({task, usageType, onClick}) => {
   const [_] = useTranslation();
+  const defaultUsageType = _('task');
+  usageType = usageType ? _(usageType) : defaultUsageType;
   const capabilities = useCapabilities();
+
   if (task.isQueued()) {
     return null;
   }
