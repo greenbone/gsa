@@ -44,8 +44,20 @@
  * };
  */
 
+type ExecutorFunc = (reason: string) => void;
+type Executor = (cancel: ExecutorFunc) => void;
+
+interface Source {
+  cancel: ExecutorFunc;
+  token: CancelToken;
+}
+
 class CancelToken {
-  constructor(executor) {
+  canceled: boolean;
+  reason?: string;
+  promise: Promise<string>;
+
+  constructor(executor: Executor) {
     this.canceled = false;
 
     this.promise = new Promise(resolve => {
@@ -58,10 +70,11 @@ class CancelToken {
     });
   }
 
-  static source() {
-    let cancel;
+  static source(): Source {
+    let cancel: ExecutorFunc;
     const token = new CancelToken(func => (cancel = func));
     return {
+      // @ts-expect-error
       cancel,
       token,
     };
