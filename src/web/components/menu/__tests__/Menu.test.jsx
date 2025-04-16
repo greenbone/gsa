@@ -170,6 +170,6 @@ describe('Menu rendering', () => {
       },
     });
 
-    expect(queryByText('Asset')).not.toBeInTheDocument();
+    expect(screen.queryByText('Asset')).not.toBeInTheDocument();
   });
 });
