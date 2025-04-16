@@ -40,7 +40,7 @@ describe('Menu rendering', () => {
     'Administration',
     'Help',
   ])('should render top-level menu: %s', async label => {
-    await renderMenuWith({
+    renderMenuWith({
       capabilities: {
         mayAccess: () => true,
         mayOp: () => true,
