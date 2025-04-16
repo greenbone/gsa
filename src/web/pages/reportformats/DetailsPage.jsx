@@ -6,7 +6,6 @@
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import {ReportFormatIcon} from 'web/components/icon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -39,6 +38,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportFormatComponent from 'web/pages/reportformats/Component';
 import ReportFormatDetails from 'web/pages/reportformats/Details';
 import {
@@ -48,14 +48,12 @@ import {
 import {selector, loadEntity} from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-const ToolBarIcons = (
-  {
-    entity,
-    onReportFormatImportClick,
-    onReportFormatDeleteClick,
-    onReportFormatEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onReportFormatImportClick,
+  onReportFormatDeleteClick,
+  onReportFormatEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -98,7 +96,6 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <ReportFormatDetails entity={entity} links={links} />
@@ -116,10 +113,8 @@ const ReportFormatParamValue = ({
   value_labels = param.value_labels,
   links = true,
 }) => {
-  const [_] = useTranslation();
   if (param.type === 'report_format_list') {
     return map(value, report_format_id => {
-      const [_] = useTranslation();
       const label = isDefined(value_labels[report_format_id])
         ? value_labels[report_format_id]
         : report_format_id;
@@ -142,8 +137,7 @@ const ReportFormatParamValue = ({
     return (
       <OptionsList>
         {param.value.map(option => {
-          const [_] = useTranslation();
-          return (<li key={param.name + '=' + option}>{option}</li>);
+          return <li key={param.name + '=' + option}>{option}</li>;
         })}
       </OptionsList>
     );
@@ -180,8 +174,6 @@ const Parameters = ({entity}) => {
           </TableHeader>
           <TableBody>
             {params.map(param => {
-              const [_] = useTranslation();
-
               return (
                 <TableRow key={param.name}>
                   <TableDataAlignTop>{param.name}</TableDataAlignTop>
@@ -202,17 +194,15 @@ Parameters.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    links = true,
-    permissions = [],
-    onChanged,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  links = true,
+  permissions = [],
+  onChanged,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {GroupIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -31,6 +30,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import GroupComponent from 'web/pages/groups/Component';
 import GroupDetails from 'web/pages/groups/Details';
 import {selector, loadEntity} from 'web/store/entities/groups';
@@ -39,16 +39,14 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = (
-  {
-    entity,
-    onGroupCloneClick,
-    onGroupCreateClick,
-    onGroupDeleteClick,
-    onGroupDownloadClick,
-    onGroupEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onGroupCloneClick,
+  onGroupCreateClick,
+  onGroupDeleteClick,
+  onGroupDownloadClick,
+  onGroupEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (

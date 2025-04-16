@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {ReportConfigIcon} from 'web/components/icon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -36,6 +35,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportConfigComponent from 'web/pages/reportconfigs/Component';
 import ReportConfigDetails, {
   ReportConfigParamValue,
@@ -47,15 +47,13 @@ import {
 import {selector, loadEntity} from 'web/store/entities/reportconfigs';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-const ToolBarIcons = (
-  {
-    entity,
-    onReportConfigCloneClick,
-    onReportConfigCreateClick,
-    onReportConfigDeleteClick,
-    onReportConfigEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onReportConfigCloneClick,
+  onReportConfigCreateClick,
+  onReportConfigDeleteClick,
+  onReportConfigEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -100,7 +98,6 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <ReportConfigDetails entity={entity} links={links} />
@@ -133,8 +130,6 @@ const Parameters = ({entity}) => {
           </TableHeader>
           <TableBody>
             {params.map(param => {
-              const [_] = useTranslation();
-
               return (
                 <TableRow key={param.name}>
                   <TableData>{param.name}</TableData>
@@ -165,17 +160,15 @@ Parameters.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    links = true,
-    permissions = [],
-    onChanged,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  links = true,
+  permissions = [],
+  onChanged,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

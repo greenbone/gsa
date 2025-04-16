@@ -5,7 +5,6 @@
 
 import Filter from 'gmp/models/filter';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {RoleIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -39,6 +38,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import RoleComponent from 'web/pages/roles/Component';
 import RoleDetails from 'web/pages/roles/Details';
 import {
@@ -48,16 +48,14 @@ import {
 import {selector, loadEntity} from 'web/store/entities/roles';
 import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
-const ToolBarIcons = (
-  {
-    entity,
-    onRoleCloneClick,
-    onRoleCreateClick,
-    onRoleDeleteClick,
-    onRoleDownloadClick,
-    onRoleEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onRoleCloneClick,
+  onRoleCreateClick,
+  onRoleDeleteClick,
+  onRoleDownloadClick,
+  onRoleEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -95,7 +93,6 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links}) => {
-  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <RoleDetails entity={entity} links={links} />
@@ -122,8 +119,6 @@ const GeneralPermissions = ({permissions = [], links}) => {
           </TableHeader>
           <TableBody>
             {permissions.map(perm => {
-              const [_] = useTranslation();
-
               return (
                 <TableRow key={perm.id}>
                   <EntityNameTableData
@@ -152,19 +147,17 @@ GeneralPermissions.propTypes = {
   permissions: PropTypes.array,
 };
 
-const Page = (
-  {
-    entity,
-    generalPermissions = [],
-    links = true,
-    permissions = [],
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  generalPermissions = [],
+  links = true,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

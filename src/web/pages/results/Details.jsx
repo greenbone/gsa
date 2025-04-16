@@ -8,7 +8,6 @@ import {DEFAULT_OID_VALUE} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -18,6 +17,7 @@ import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import useTranslation from 'web/hooks/useTranslation';
 import P from 'web/pages/nvts/Preformatted';
 import References from 'web/pages/nvts/References';
 import Solution from 'web/pages/nvts/Solution';
@@ -62,7 +62,6 @@ const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
   return (
     <React.Fragment>
       {lines.map((line, i) => {
-        const [_] = useTranslation();
         const lineWithPrefix = prefix + line;
         return <Component key={i}>{lineWithPrefix}</Component>;
       })}

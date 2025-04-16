@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {USERS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -29,6 +28,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 const ToolBarIcons = ({onUserCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
@@ -85,6 +85,7 @@ class UsersPage extends React.Component {
   openConfirmDeleteDialog(user) {
     const {loadAll, gmp} = this.props;
 
+    const {_} = this.props;
     loadAll();
 
     this.handleInteraction();
@@ -139,6 +140,8 @@ class UsersPage extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       allUsers = [],
       onChanged,
@@ -225,6 +228,7 @@ UsersPage.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -238,11 +242,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadAll: () => dispatch(loadAllEntities(gmp)()),
 });
 
-export default compose(
-  withGmp,
-  withEntitiesContainer('user', {
-    entitiesSelector,
-    loadEntities,
-  }),
-  connect(mapStateToProps, mapDispatchToProps),
-)(UsersPage);
+export default compose(withTranslation, withGmp, withEntitiesContainer('user', {
+  entitiesSelector,
+  loadEntities,
+}), connect(mapStateToProps, mapDispatchToProps))(UsersPage);

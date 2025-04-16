@@ -5,12 +5,12 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import {DeleteIcon, EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 const FilterString = styled.span`

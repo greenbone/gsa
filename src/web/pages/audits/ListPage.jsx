@@ -5,7 +5,6 @@
 
 import {RESET_FILTER, TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {NewIcon, AuditIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -13,6 +12,7 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import AuditComponent from 'web/pages/audits/Component';
 import Table from 'web/pages/audits/Table';
 import {taskReloadInterval} from 'web/pages/tasks/ListPage';

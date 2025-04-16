@@ -8,7 +8,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React, {useState} from 'react';
 import * as ReactIs from 'react-is';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Toolbar from 'web/components/bar/Toolbar';
 import ErrorMessage from 'web/components/error/ErrorMessage';
@@ -17,6 +16,7 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import EntityInfo from 'web/entity/EntityInfo';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityPageRenderProps {
   activeTab: number;

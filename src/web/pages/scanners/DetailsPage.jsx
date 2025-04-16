@@ -6,7 +6,6 @@
 import {CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {DownloadKeyIcon, ScannerIcon, VerifyIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -34,6 +33,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import ScannerComponent from 'web/pages/scanners/Component';
 import ScannerDetails from 'web/pages/scanners/Details';
 import {
@@ -119,18 +119,16 @@ ToolBarIcons.propTypes = {
   onScannerVerifyClick: PropTypes.func.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    permissions = [],
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    showSuccess,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  showSuccess,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -185,7 +183,9 @@ const Page = (
           {({activeTab = 0, onActivateTab}) => {
             return (
               <React.Fragment>
-                <PageTitle title={_('Scanner: {{name}}', {name: entity.name})} />
+                <PageTitle
+                  title={_('Scanner: {{name}}', {name: entity.name})}
+                />
                 <Layout flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
                     <TabList

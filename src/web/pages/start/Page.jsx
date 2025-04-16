@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import memoize from 'memoize-one';
 import React from 'react';
@@ -35,6 +34,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import useTranslation from 'web/hooks/useTranslation';
 import ConfirmRemoveDialog from 'web/pages/start/ConfirmRemoveDialog';
 import Dashboard from 'web/pages/start/Dashboard';
 import EditDashboardDialog from 'web/pages/start/EditDashboardDialog';
@@ -53,11 +53,12 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
 const DEFAULT_OVERVIEW_DISPLAYS = convertDefaultDisplays(DEFAULT_DISPLAYS);
 
-const getDefaults = () => ({
+const getDefaults = _ => ({
   dashboards: [OVERVIEW_DASHBOARD_ID],
   byId: {
     [OVERVIEW_DASHBOARD_ID]: {
@@ -83,13 +84,16 @@ const StyledTab = styled(Tab)`
   }
 `;
 
-const ToolBarIcons = () => (
-  <ManualIcon
-    anchor="dashboards-and-dashboard-displays"
-    page="web-interface"
-    title={_('Help: Dashboards')}
-  />
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
+  return (
+    <ManualIcon
+      anchor="dashboards-and-dashboard-displays"
+      page="web-interface"
+      title={_('Help: Dashboards')}
+    />
+  );
+};
 
 class StartPage extends React.Component {
   constructor(...args) {
@@ -138,7 +142,8 @@ class StartPage extends React.Component {
   }
 
   componentDidMount() {
-    const DEFAULTS = getDefaults();
+    const {_} = this.props;
+    const DEFAULTS = getDefaults(_);
     this.props.loadSettings(DASHBOARD_ID, DEFAULTS);
   }
 
@@ -353,6 +358,8 @@ class StartPage extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {isLoading} = this.props;
     const {
       activeTab,
@@ -505,6 +512,7 @@ StartPage.propTypes = {
     dashboards: PropTypes.arrayOf(PropTypes.string).isRequired,
     defaults: PropTypes.object.isRequired,
   }),
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -528,7 +536,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
     dispatch(setDashboardSettingDefaults(id, settings)),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(StartPage);
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(StartPage);

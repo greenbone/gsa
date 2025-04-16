@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
@@ -14,22 +13,21 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import Settings from 'web/pages/scanconfigs/Settings';
 import Trend from 'web/pages/scanconfigs/Trend';
 import PropTypes from 'web/utils/PropTypes';
 import {na} from 'web/utils/Render';
 
 const ScanConfigActions = withEntitiesActions(
-  (
-    {
-      entity,
-      onScanConfigDeleteClick,
-      onScanConfigDownloadClick,
-      onScanConfigCloneClick,
-      onScanConfigEditClick,
-      onScanConfigSettingsClick,
-    }
-  ) => {
+  ({
+    entity,
+    onScanConfigDeleteClick,
+    onScanConfigDownloadClick,
+    onScanConfigCloneClick,
+    onScanConfigEditClick,
+    onScanConfigSettingsClick,
+  }) => {
     const [_] = useTranslation();
 
     return (
@@ -80,16 +78,14 @@ ScanConfigActions.propTypes = {
   openEditNvtDetailsDialog: PropTypes.func.isRequired,
 };
 
-const ScanConfigRow = (
-  {
-    actionsComponent: ActionsComponent = ScanConfigActions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    openEditNvtDetailsDialog,
-    ...props
-  }
-) => {
+const ScanConfigRow = ({
+  actionsComponent: ActionsComponent = ScanConfigActions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  openEditNvtDetailsDialog,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

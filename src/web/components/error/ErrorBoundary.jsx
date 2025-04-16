@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import PropTypes from 'web/utils/PropTypes';
-
+import withTranslation from 'web/utils/withTranslation';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -25,6 +24,8 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {hasError, error, info} = this.state;
     const {message = _('An error occurred on this page.')} = this.props;
 
@@ -37,6 +38,7 @@ class ErrorBoundary extends React.Component {
 
 ErrorBoundary.propTypes = {
   message: PropTypes.string,
+  _: PropTypes.func.isRequired,
 };
 
-export default ErrorBoundary;
+export default withTranslation(ErrorBoundary);

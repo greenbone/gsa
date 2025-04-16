@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
@@ -12,6 +11,7 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const GroupDetails = ({entity, isSpecial}) => {
@@ -35,8 +35,7 @@ const GroupDetails = ({entity, isSpecial}) => {
             <TableData>
               <HorizontalSep>
                 {users.map(user => {
-                  const [_] = useTranslation();
-                  return (<span key={user}>{user}</span>);
+                  return <span key={user}>{user}</span>;
                 })}
               </HorizontalSep>
             </TableData>

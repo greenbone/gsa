@@ -19,13 +19,14 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/SimpleTable';
 import useTranslation from 'web/hooks/useTranslation';
-import {withTranslation} from 'web/hooks/withTranslation';
 import LdapDialog from 'web/pages/ldap/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
+
 const ToolBarIcons = ({onOpenDialogClick}) => {
   const [_] = useTranslation();
   return (
@@ -70,7 +71,6 @@ class LdapAuthentication extends React.Component {
 
   loadLdapAuthSettings() {
     const {gmp} = this.props;
-    const {_} = this.props;
 
     this.setState({loading: true});
 
@@ -132,6 +132,9 @@ class LdapAuthentication extends React.Component {
     if (loading && initial) {
       return <Loading />;
     }
+
+    const {_} = this.props;
+
     const {
       authdn,
       certificateInfo = {},
@@ -141,7 +144,6 @@ class LdapAuthentication extends React.Component {
       ldaphost,
       ldapsOnly,
     } = this.state;
-    const {_} = this.props;
 
     return (
       <React.Fragment>
@@ -218,14 +220,11 @@ class LdapAuthentication extends React.Component {
 LdapAuthentication.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
-export default compose(
-  withGmp,
-  withTranslation,
-  connect(undefined, mapDispatchToProps),
-)(LdapAuthentication);
+export default compose(withTranslation, withGmp, connect(undefined, mapDispatchToProps))(LdapAuthentication);

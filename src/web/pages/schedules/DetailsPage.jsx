@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {ScheduleIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -31,6 +30,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import ScheduleComponent from 'web/pages/schedules/Component';
 import ScheduleDetails from 'web/pages/schedules/Details';
 import {
@@ -39,16 +39,14 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/schedules';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = (
-  {
-    entity,
-    onScheduleCloneClick,
-    onScheduleCreateClick,
-    onScheduleDeleteClick,
-    onScheduleDownloadClick,
-    onScheduleEditClick,
-  }
-) => {
+export const ToolBarIcons = ({
+  entity,
+  onScheduleCloneClick,
+  onScheduleCreateClick,
+  onScheduleDeleteClick,
+  onScheduleDownloadClick,
+  onScheduleEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -85,17 +83,15 @@ ToolBarIcons.propTypes = {
   onScheduleEditClick: PropTypes.func.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    permissions = [],
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -128,7 +124,9 @@ const Page = (
           {({activeTab = 0, onActivateTab}) => {
             return (
               <React.Fragment>
-                <PageTitle title={_('Schedule: {{name}}', {name: entity.name})} />
+                <PageTitle
+                  title={_('Schedule: {{name}}', {name: entity.name})}
+                />
                 <Layout flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
                     <TabList

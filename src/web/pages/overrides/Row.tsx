@@ -8,7 +8,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -19,6 +18,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   extraRiskFactor,
   translateRiskFactor,
@@ -50,26 +50,14 @@ interface ActionsProps {
   onOverrideEditClick: (entity: Override) => void | Promise<void>;
 }
 
-const renderSeverity = (severity: number): string => {
-  if (isDefined(severity)) {
-    if (severity <= LOG_VALUE) {
-      return translateRiskFactor(extraRiskFactor(severity));
-    }
-    return '> ' + (severityValue(severity - 0.1) as string);
-  }
-  return _('Any');
-};
-
 const Actions = withEntitiesActions(
-  (
-    {
-      entity,
-      onOverrideDeleteClick,
-      onOverrideDownloadClick,
-      onOverrideCloneClick,
-      onOverrideEditClick,
-    }: ActionsProps
-  ) => {
+  ({
+    entity,
+    onOverrideDeleteClick,
+    onOverrideDownloadClick,
+    onOverrideCloneClick,
+    onOverrideEditClick,
+  }: ActionsProps) => {
     const [_] = useTranslation();
 
     return (
@@ -79,7 +67,11 @@ const Actions = withEntitiesActions(
           name="override"
           onClick={onOverrideDeleteClick}
         />
-        <EditIcon entity={entity} name="override" onClick={onOverrideEditClick} />
+        <EditIcon
+          entity={entity}
+          name="override"
+          onClick={onOverrideEditClick}
+        />
         <CloneIcon<Override>
           entity={entity}
           name="override"
@@ -96,15 +88,23 @@ const Actions = withEntitiesActions(
   },
 );
 
-const Row = (
-  {
-    actionsComponent: ActionsComponent = Actions,
-    entity,
-    onToggleDetailsClick,
-    ...props
-  }: OverrideRowProps
-) => {
+const Row = ({
+  actionsComponent: ActionsComponent = Actions,
+  entity,
+  onToggleDetailsClick,
+  ...props
+}: OverrideRowProps) => {
   const [_] = useTranslation();
+
+  const renderSeverity = (severity: number): string => {
+    if (isDefined(severity)) {
+      if (severity <= LOG_VALUE) {
+        return translateRiskFactor(extraRiskFactor(severity));
+      }
+      return '> ' + (severityValue(severity - 0.1) as string);
+    }
+    return _('Any');
+  };
 
   return (
     <TableRow>

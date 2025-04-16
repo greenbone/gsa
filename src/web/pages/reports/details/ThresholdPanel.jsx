@@ -4,18 +4,17 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import FootNote from 'web/components/footnote/Footnote';
 import {EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 const UpdatingDivider = styled(({isUpdating, ...props}) => {
-  const [_] = useTranslation();
-  return (<Divider {...props} />);
+  return <Divider {...props} />;
 })`
   opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
 `;

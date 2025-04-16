@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -19,6 +18,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class CredentialsComponent extends React.Component {
   constructor(...args) {
@@ -33,6 +33,8 @@ class CredentialsComponent extends React.Component {
   }
 
   openCredentialsDialog(credential) {
+    const {_} = this.props;
+
     if (isDefined(credential)) {
       const title = _('Edit Credential {{name}}', {
         name: shorten(credential.name),
@@ -197,6 +199,7 @@ CredentialsComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -214,9 +217,7 @@ const mapStateToProps = rootState => {
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  _: PropTypes.func.isRequired,
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(CredentialsComponent);
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(CredentialsComponent);

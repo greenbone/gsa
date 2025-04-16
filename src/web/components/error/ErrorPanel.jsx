@@ -6,13 +6,12 @@
 import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState} from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Divider from 'web/components/layout/Divider';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
-
 
 const ErrorDetails = styled.div`
   margin-top: 10px;

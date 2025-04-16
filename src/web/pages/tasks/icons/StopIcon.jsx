@@ -4,18 +4,14 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {StopIcon} from 'web/components/icon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-const TaskStopIcon = ({
-  capabilities,
-  size,
-  task,
-  usageType = _('task'),
-  onClick,
-}) => {
+const TaskStopIcon = ({capabilities, size, task, usageType, onClick}) => {
   const [_] = useTranslation();
+  const defaultUsageType = _('task');
+  usageType = usageType ? _(usageType) : defaultUsageType;
   if ((task.isRunning() || task.isQueued()) && !task.isContainer()) {
     if (
       !capabilities.mayOp('stop_task') ||

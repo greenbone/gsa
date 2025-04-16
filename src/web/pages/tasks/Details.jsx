@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {duration} from 'gmp/models/date';
 import {scannerTypeName} from 'gmp/models/scanner';
 import {YES_VALUE} from 'gmp/parser';
@@ -31,6 +30,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 export const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
@@ -57,6 +57,8 @@ class TaskDetails extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {links = true, entity, scanConfig, schedule} = this.props;
     const {
       alerts,
@@ -293,6 +295,7 @@ TaskDetails.propTypes = {
   loadSchedule: PropTypes.func.isRequired,
   scanConfig: PropTypes.model,
   schedule: PropTypes.model,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
@@ -313,7 +316,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(TaskDetails);
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(TaskDetails);

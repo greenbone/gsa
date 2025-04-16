@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -22,6 +21,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 const DEFAULT_FILTER_ID = '0';
 
 const Label = styled.label`
@@ -152,6 +152,8 @@ class PowerFilter extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {userFilterString = ''} = this.state;
     const {
       capabilities,
@@ -264,6 +266,7 @@ PowerFilter.propTypes = {
   onRemoveClick: PropTypes.func,
   onResetClick: PropTypes.func,
   onUpdate: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default compose(withCapabilities, withGmp)(PowerFilter);
+export default compose(withTranslation, withCapabilities, withGmp)(PowerFilter);

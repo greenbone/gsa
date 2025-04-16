@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import React from 'react';
 import styled from 'styled-components';
@@ -19,15 +18,19 @@ import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import TagComponent from 'web/pages/tags/Component';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import withTranslation from 'web/utils/withTranslation';
 const SectionElementDivider = styled(Divider)`
   margin-bottom: 3px;
 `;
 
-const SectionElements = withCapabilities(
-  ({capabilities, entity, onTagCreateClick}) => (
+const SectionElements = ({entity, onTagCreateClick}) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  return (
     <Layout grow align="end">
       <SectionElementDivider margin="10px">
         <IconDivider>
@@ -46,8 +49,8 @@ const SectionElements = withCapabilities(
         </IconDivider>
       </SectionElementDivider>
     </Layout>
-  ),
-);
+  );
+};
 
 SectionElements.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -64,6 +67,7 @@ class EntityTagsTable extends React.Component {
 
   handleCreateTag() {
     const {entity, onTagCreateClick} = this.props;
+    const {_} = this.props;
 
     const entityType = getEntityType(entity);
 
@@ -81,6 +85,8 @@ class EntityTagsTable extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {entity, onTagDisableClick, onTagRemoveClick} = this.props;
     const {userTags} = entity;
     const count = userTags.length;
@@ -156,7 +162,9 @@ EntityTagsTable.propTypes = {
   onTagDisableClick: PropTypes.func.isRequired,
   onTagEditClick: PropTypes.func.isRequired,
   onTagRemoveClick: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
+const TranslatedEntityTagsTable = withTranslation(EntityTagsTable);
 
 const EntityTags = ({entity, onChanged, onError, onInteraction}) => (
   <TagComponent
@@ -177,7 +185,7 @@ const EntityTags = ({entity, onChanged, onError, onInteraction}) => (
     onSaved={onChanged}
   >
     {({create, disable, edit, remove}) => (
-      <EntityTagsTable
+      <TranslatedEntityTagsTable
         entity={entity}
         onTagCreateClick={create}
         onTagDisableClick={disable}

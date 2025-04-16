@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {withTextOnly} from 'web/components/link/Link';
 import PropTypes from 'web/utils/PropTypes';
-
+import withTranslation from 'web/utils/withTranslation';
 
 class ExternalLink extends React.Component {
   constructor() {
@@ -43,6 +42,8 @@ class ExternalLink extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {dialogvisible} = this.state;
 
     const {children, to, ...props} = this.props;
@@ -78,6 +79,7 @@ class ExternalLink extends React.Component {
 
 ExternalLink.propTypes = {
   to: PropTypes.string.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
-export default withTextOnly(ExternalLink);
+export default withTextOnly(withTranslation(ExternalLink));

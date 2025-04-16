@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
@@ -33,7 +32,6 @@ import Table from 'web/components/table/Table';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import SettingsDialog from 'web/pages/usersettings/Dialog';
-import withLanguageUpdates from 'web/pages/usersettings/withLanguageUpdates';
 import {
   loadEntities as loadAlerts,
   loadEntity as loadAlert,
@@ -81,6 +79,7 @@ import Languages, {BROWSER_LANGUAGE} from 'web/utils/Languages';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 const FIRST_COL_WIDTH = '250px';
 
 const getLangNameByCode = code => {
@@ -256,6 +255,8 @@ class UserSettings extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {activeTab, dialogVisible, disableEditIcon} = this.state;
     let {
       capabilities,
@@ -895,6 +896,7 @@ UserSettings.propTypes = {
   usersFilter: PropTypes.object,
   vulnerabilitiesFilter: PropTypes.object,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -1140,6 +1142,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
+  withTranslation,
   connect(mapStateToProps, mapDispatchToProps),
-  withLanguageUpdates, // Add this HOC to the composition
 )(UserSettings);

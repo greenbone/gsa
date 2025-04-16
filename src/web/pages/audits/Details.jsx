@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {duration} from 'gmp/models/date';
 import {scannerTypeName} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
@@ -31,6 +30,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
+import withTranslation from 'web/utils/withTranslation';
 
 class AuditDetails extends React.Component {
   componentDidMount() {
@@ -45,6 +45,8 @@ class AuditDetails extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {links = true, entity, policy, schedule} = this.props;
     const {
       alerts,
@@ -265,6 +267,7 @@ AuditDetails.propTypes = {
   loadSchedule: PropTypes.func.isRequired,
   policy: PropTypes.model,
   schedule: PropTypes.model,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
@@ -285,7 +288,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(AuditDetails);
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(AuditDetails);

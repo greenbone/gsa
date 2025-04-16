@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
@@ -18,6 +17,7 @@ import TableBody from 'web/components/table/Body';
 import StripedTable from 'web/components/table/StripedTable';
 import PropTypes from 'web/utils/PropTypes';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
+import withTranslation from 'web/utils/withTranslation';
 const exclude_props = [
   'row',
   'header',
@@ -109,6 +109,8 @@ class EntitiesTable extends React.Component {
   }
 
   renderEmpty() {
+    const {_} = this.props;
+
     const {emptyTitle, filter, footnote = true} = this.props;
     const filterstring = isDefined(filter) ? filter.toFilterString() : '';
     return (
@@ -126,6 +128,8 @@ class EntitiesTable extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {details, allToggled} = this.state;
     const {
       doubleRow = false,
@@ -281,9 +285,10 @@ EntitiesTable.propTypes = {
   onNextClick: PropTypes.func,
   onPreviousClick: PropTypes.func,
   onSortChange: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 export const createEntitiesTable = options =>
-  withComponentDefaults(options)(EntitiesTable);
+  withComponentDefaults(options)(withTranslation(EntitiesTable));
 
-export default EntitiesTable;
+export default withTranslation(EntitiesTable);

@@ -4,13 +4,13 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import TextField from 'web/components/form/TextField';
 import {NewIcon, WizardIcon as WizIcon} from 'web/components/icon';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 export const WizardContent = styled.div`
   margin: 0 20px;
@@ -21,8 +21,6 @@ const IconContainer = styled.div`
 `;
 
 export const WizardIcon = () => {
-  const [_] = useTranslation();
-
   return (
     <IconContainer>
       <WizIcon size="large" />
@@ -30,16 +28,9 @@ export const WizardIcon = () => {
   );
 };
 
-const TaskWizard = (
-  {
-    hosts,
-    title = _('Task Wizard'),
-    onClose,
-    onNewClick,
-    onSave,
-  }
-) => {
+const TaskWizard = ({hosts, title, onClose, onNewClick, onSave}) => {
   const [_] = useTranslation();
+  title = title || _('Task Wizard');
 
   return (
     <SaveDialog

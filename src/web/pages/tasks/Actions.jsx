@@ -5,33 +5,31 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import ImportReportIcon from 'web/pages/tasks/icons/ImportReportIcon';
 import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
 import StopIcon from 'web/pages/tasks/icons/StopIcon';
 import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
 import PropTypes from 'web/utils/PropTypes';
 
-const Actions = (
-  {
-    entity,
-    links,
-    onReportImportClick,
-    onTaskCloneClick,
-    onTaskDeleteClick,
-    onTaskDownloadClick,
-    onTaskEditClick,
-    onTaskResumeClick,
-    onTaskStartClick,
-    onTaskStopClick,
-  }
-) => {
+const Actions = ({
+  entity,
+  links,
+  onReportImportClick,
+  onTaskCloneClick,
+  onTaskDeleteClick,
+  onTaskDownloadClick,
+  onTaskEditClick,
+  onTaskResumeClick,
+  onTaskStartClick,
+  onTaskStopClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -42,7 +40,11 @@ const Actions = (
       <TaskIconWithSync task={entity} type="start" onClick={onTaskStartClick} />
       <ImportReportIcon task={entity} onClick={onReportImportClick} />
       <StopIcon task={entity} onClick={onTaskStopClick} />
-      <TaskIconWithSync task={entity} type="resume" onClick={onTaskResumeClick} />
+      <TaskIconWithSync
+        task={entity}
+        type="resume"
+        onClick={onTaskResumeClick}
+      />
       <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
       <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
       <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />

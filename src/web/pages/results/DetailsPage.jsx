@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
 import {isDefined, isNumber} from 'gmp/utils/identity';
 import React from 'react';
@@ -52,6 +51,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import NoteComponent from 'web/pages/notes/Component';
 import OverrideComponent from 'web/pages/overrides/Component';
 import ResultDetails from 'web/pages/results/Details';
@@ -64,6 +64,7 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
+import withTranslation from 'web/utils/withTranslation';
 export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,
@@ -72,6 +73,7 @@ export const ToolBarIcons = ({
   onTicketCreateClick,
 }) => {
   const capabilities = useCapabilities();
+  const [_] = useTranslation();
 
   const isMissingPermissions =
     !capabilities.mayCreate('permission') || !capabilities.mayAccess('users');
@@ -164,6 +166,7 @@ const Details = ({entity, ...props}) => {
   const active_overrides = overrides.filter(active_filter);
   const epss = entity?.information?.epss;
   const gmp = useGmp();
+  const [_] = useTranslation();
 
   return (
     <React.Fragment>
@@ -404,6 +407,8 @@ class Page extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {entity, onChanged, onError, onInteraction} = this.props;
     return (
       <NoteComponent onCreated={onChanged} onInteraction={onInteraction}>
@@ -486,6 +491,7 @@ Page.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -505,10 +511,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
-export default compose(
-  withEntityContainer('result', {
-    entitySelector: selector,
-    load: loadEntity,
-  }),
-  connect(mapStateToProps, mapDispatchToProps),
-)(Page);
+export default compose(withTranslation, withEntityContainer('result', {
+  entitySelector: selector,
+  load: loadEntity,
+}), connect(mapStateToProps, mapDispatchToProps))(Page);

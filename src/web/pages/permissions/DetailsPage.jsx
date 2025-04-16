@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {PermissionIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -28,20 +27,19 @@ import {goToDetails, goToList} from 'web/entity/navigation';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import PermissionComponent from 'web/pages/permissions/Component';
 import PermissionDetails from 'web/pages/permissions/Details';
 import {selector, loadEntity} from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = (
-  {
-    entity,
-    onPermissionCloneClick,
-    onPermissionCreateClick,
-    onPermissionDeleteClick,
-    onPermissionDownloadClick,
-    onPermissionEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onPermissionCloneClick,
+  onPermissionCreateClick,
+  onPermissionDeleteClick,
+  onPermissionDownloadClick,
+  onPermissionEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (

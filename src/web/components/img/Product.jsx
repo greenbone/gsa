@@ -5,11 +5,10 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Img from 'web/components/img/Img';
 import useGmp from 'web/hooks/useGmp';
-
+import useTranslation from 'web/hooks/useTranslation';
 
 const Image = styled(Img)`
   display: flex;

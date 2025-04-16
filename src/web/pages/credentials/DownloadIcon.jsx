@@ -8,7 +8,6 @@ import {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {
   DownloadDebIcon,
   DownloadExeIcon,
@@ -16,6 +15,7 @@ import {
   DownloadRpmIcon,
 } from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const CredentialDownloadIcon = ({credential, onDownload}) => {
   const [_] = useTranslation();
