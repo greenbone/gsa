@@ -5,7 +5,6 @@
 
 import {map} from 'gmp/utils/array';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import HorizontalSeparator from 'web/components/layout/HorizontalSep';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -17,6 +16,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import {convert_auth_method, convert_allow} from 'web/pages/users/Details';
 import PropTypes from 'web/utils/PropTypes';
 

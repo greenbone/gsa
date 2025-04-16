@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
@@ -26,6 +25,7 @@ import MenuEntry from 'web/components/menu/MenuEntry';
 import Section from 'web/components/section/Section';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import withTranslation from 'web/hooks/withTranslation';
 import StartEndTimeSelection from 'web/pages/performance/StartEndTimeSelection';
 import {
   loadEntities as loadScanners,
@@ -240,6 +240,8 @@ class PerformancePage extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {scanners = [], gmp} = this.props;
     const {duration, reports, scannerId, startDate, endDate} = this.state;
 
@@ -338,6 +340,7 @@ PerformancePage.propTypes = {
   timezone: PropTypes.string.isRequired,
   onInteraction: PropTypes.func.isRequired,
   searchParams: PropTypes.object,
+  _: PropTypes.func.isRequired,
 };
 
 const SENSOR_SCANNER_FILTER = Filter.fromString(
@@ -363,4 +366,4 @@ export default compose(
   withGmp,
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-)(PerformancePage);
+)(withTranslation(PerformancePage));

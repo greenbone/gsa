@@ -5,10 +5,10 @@
 
 import {getEntityType, typeName, EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {CloneIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityClone extends EntityType {
   userCapabilities: {

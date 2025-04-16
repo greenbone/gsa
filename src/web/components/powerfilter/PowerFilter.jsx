@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -17,6 +16,7 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
+import withTranslation from 'web/hooks/withTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
@@ -152,6 +152,8 @@ class PowerFilter extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {userFilterString = ''} = this.state;
     const {
       capabilities,
@@ -264,6 +266,7 @@ PowerFilter.propTypes = {
   onRemoveClick: PropTypes.func,
   onResetClick: PropTypes.func,
   onUpdate: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default compose(withCapabilities, withGmp)(PowerFilter);
+export default compose(withCapabilities, withGmp)(withTranslation(PowerFilter));

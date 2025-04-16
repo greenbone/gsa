@@ -5,23 +5,20 @@
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Radio from 'web/components/form/Radio';
 import Row from 'web/components/layout/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
-
-const YesNoRadio = (
-  {
-    convert = parseYesNo,
-    disabled,
-    value,
-    name,
-    yesValue = YES_VALUE,
-    noValue = NO_VALUE,
-    onChange,
-  }
-) => {
+const YesNoRadio = ({
+  convert = parseYesNo,
+  disabled,
+  value,
+  name,
+  yesValue = YES_VALUE,
+  noValue = NO_VALUE,
+  onChange,
+}) => {
   const [_] = useTranslation();
 
   return (

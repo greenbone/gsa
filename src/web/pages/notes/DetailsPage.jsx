@@ -6,7 +6,6 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {NoteIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -39,6 +38,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import NoteComponent from 'web/pages/notes/Component';
 import NoteDetails from 'web/pages/notes/Details';
 import {selector as notesSelector, loadEntity} from 'web/store/entities/notes';
@@ -50,16 +50,14 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
-export const ToolBarIcons = (
-  {
-    entity,
-    onNoteCloneClick,
-    onNoteCreateClick,
-    onNoteDeleteClick,
-    onNoteDownloadClick,
-    onNoteEditClick,
-  }
-) => {
+export const ToolBarIcons = ({
+  entity,
+  onNoteCloneClick,
+  onNoteCreateClick,
+  onNoteDeleteClick,
+  onNoteDownloadClick,
+  onNoteEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -156,17 +154,15 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = (
-  {
-    permissions = [],
-    entity,
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  permissions = [],
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

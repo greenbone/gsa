@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import GSA_VERSION from 'version';
 import {HelpIcon} from 'web/components/icon';
@@ -15,6 +14,7 @@ import PageTitle from 'web/components/layout/PageTitle';
 import ExternalLink from 'web/components/link/ExternalLink';
 import ProtocolDocLink from 'web/components/link/ProtocolDocLink';
 import Section from 'web/components/section/Section';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 const StyledLayout = styled(Layout)`

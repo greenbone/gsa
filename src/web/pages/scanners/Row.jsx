@@ -10,7 +10,6 @@ import {
 } from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {DownloadKeyIcon, VerifyIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -23,20 +22,19 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import EntityLink from 'web/entity/Link';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Actions = withEntitiesActions(
-  (
-    {
-      entity,
-      onScannerCertificateDownloadClick,
-      onScannerCloneClick,
-      onScannerCredentialDownloadClick,
-      onScannerDeleteClick,
-      onScannerDownloadClick,
-      onScannerEditClick,
-      onScannerVerifyClick,
-    }
-  ) => {
+  ({
+    entity,
+    onScannerCertificateDownloadClick,
+    onScannerCloneClick,
+    onScannerCredentialDownloadClick,
+    onScannerDeleteClick,
+    onScannerDownloadClick,
+    onScannerEditClick,
+    onScannerVerifyClick,
+  }) => {
     const [_] = useTranslation();
 
     return (

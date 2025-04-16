@@ -5,10 +5,9 @@
 
 import {isString} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DetailsLink from 'web/components/link/DetailsLink';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-
 
 const CertLink = ({id, textOnly = false, type}) => {
   const [_] = useTranslation();

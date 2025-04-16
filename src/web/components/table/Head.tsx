@@ -5,11 +5,11 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import {ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Sort, {ByType, DESC} from 'web/components/sortby/SortBy';
+import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
 const SortSymbol = styled.span`

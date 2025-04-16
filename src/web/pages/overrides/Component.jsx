@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   ANY,
   MANUAL,
@@ -21,6 +20,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
+import withTranslation from 'web/hooks/withTranslation';
 import OverrideDialog from 'web/pages/overrides/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import {
@@ -52,6 +52,8 @@ class OverrideComponent extends React.Component {
   }
 
   openOverrideDialog(override, initial) {
+    const {_} = this.props;
+
     if (isDefined(override)) {
       let active = ACTIVE_NO_VALUE;
       if (override.isActive()) {
@@ -272,6 +274,7 @@ OverrideComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(OverrideComponent);
+export default withGmp(withTranslation(OverrideComponent));

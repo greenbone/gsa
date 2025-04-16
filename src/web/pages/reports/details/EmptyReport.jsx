@@ -5,10 +5,10 @@
 
 import {isActive, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {RefreshIcon, TargetIcon, TaskIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import InfoPanel from 'web/components/panel/InfoPanel';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';

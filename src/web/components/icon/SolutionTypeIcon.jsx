@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {
   StMitigateIcon,
   StUnknownIcon,
@@ -14,6 +13,7 @@ import {
   StWillNotFixIcon,
 } from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const SolutionType = ({type, displayTitleText = false}) => {
   const [_] = useTranslation();

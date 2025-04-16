@@ -5,13 +5,13 @@
 
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {NvtIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import NvtsDashboard, {NVTS_DASHBOARD_ID} from 'web/pages/nvts/dashboard';
 import NvtsFilterDialog from 'web/pages/nvts/FilterDialog';
 import NvtsTable from 'web/pages/nvts/Table';

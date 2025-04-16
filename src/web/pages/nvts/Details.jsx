@@ -6,7 +6,6 @@
 import {TAG_NA} from 'gmp/models/nvt';
 import {isDefined, isNumber} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Severitybar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
@@ -18,6 +17,7 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import Pre from 'web/pages/nvts/Preformatted';
 import References from 'web/pages/nvts/References';
 import Solution from 'web/pages/nvts/Solution';

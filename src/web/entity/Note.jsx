@@ -4,11 +4,11 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {DetailsIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import EntityBox from 'web/entity/Box';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const NoteBox = ({note, detailsLink = true}) => {
   const [_] = useTranslation();

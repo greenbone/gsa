@@ -6,23 +6,21 @@
 import date from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Layout from 'web/components/layout/Layout';
 import Link from 'web/components/link/Link';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useLicense from 'web/hooks/useLicense';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const LICENSE_EXPIRATION_THRESHOLD = 30;
 
 const LicenseLinkComponent = () => {
   const [_] = useTranslation();
-  return (<Link to="license">{_('License Management page')}</Link>);
+  return <Link to="license">{_('License Management page')}</Link>;
 };
 
 const SupportPageLinkComponent = () => {
-  const [_] = useTranslation();
-
   return (
     <a
       href="https://service.greenbone.net"
@@ -35,8 +33,7 @@ const SupportPageLinkComponent = () => {
 };
 
 const SupportMailLinkComponent = () => {
-  const [_] = useTranslation();
-  return (<a href="mailto:support@greenbone.net">{'support@greenbone.net'}</a>);
+  return <a href="mailto:support@greenbone.net">{'support@greenbone.net'}</a>;
 };
 
 const LicenseNotification = ({capabilities, onCloseClick}) => {

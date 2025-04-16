@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {PolicyIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -29,6 +28,7 @@ import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import PolicyComponent from 'web/pages/policies/Component';
 import PolicyDetails from 'web/pages/policies/Details';
 import {
@@ -44,15 +44,13 @@ import {selector, loadEntity} from 'web/store/entities/policies';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 export const ToolBarIcons = withCapabilities(
-  (
-    {
-      entity,
-      onPolicyCloneClick,
-      onPolicyDeleteClick,
-      onPolicyDownloadClick,
-      onPolicyEditClick,
-    }
-  ) => {
+  ({
+    entity,
+    onPolicyCloneClick,
+    onPolicyDeleteClick,
+    onPolicyDownloadClick,
+    onPolicyEditClick,
+  }) => {
     const [_] = useTranslation();
 
     return (
@@ -102,7 +100,6 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, ...props}) => {
-  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <PolicyDetails entity={entity} {...props} />

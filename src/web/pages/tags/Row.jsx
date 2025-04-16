@@ -5,7 +5,6 @@
 
 import {typeName} from 'gmp/utils/entitytype';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import {DisableIcon, EnableIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -17,6 +16,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';

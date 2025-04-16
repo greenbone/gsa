@@ -11,7 +11,6 @@ import {
 } from 'gmp/models/alert';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -20,6 +19,7 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import Condition from 'web/pages/alerts/Condition';
 import Event from 'web/pages/alerts/Event';
 import Method from 'web/pages/alerts/Method';
@@ -132,8 +132,6 @@ const AlertDetails = ({capabilities, entity, reportFormats, reportConfigs}) => {
               <TableData>
                 <HorizontalSep $wrap>
                   {tasks.map(task => {
-                    const [_] = useTranslation();
-
                     return (
                       <span key={task.id}>
                         <DetailsLink id={task.id} type="task">

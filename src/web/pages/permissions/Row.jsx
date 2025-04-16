@@ -6,7 +6,6 @@
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
@@ -17,19 +16,18 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import EntityLink from 'web/entity/Link';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
 
 const Actions = withEntitiesActions(
-  (
-    {
-      entity,
-      onPermissionDeleteClick,
-      onPermissionDownloadClick,
-      onPermissionCloneClick,
-      onPermissionEditClick,
-    }
-  ) => {
+  ({
+    entity,
+    onPermissionDeleteClick,
+    onPermissionDownloadClick,
+    onPermissionCloneClick,
+    onPermissionEditClick,
+  }) => {
     const [_] = useTranslation();
 
     return (
@@ -73,15 +71,13 @@ Actions.propTypes = {
   onPermissionEditClick: PropTypes.func.isRequired,
 };
 
-const Row = (
-  {
-    actionsComponent: ActionsComponent = Actions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...props
-  }
-) => {
+const Row = ({
+  actionsComponent: ActionsComponent = Actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

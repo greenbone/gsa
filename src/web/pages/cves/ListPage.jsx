@@ -5,13 +5,13 @@
 
 import Filter, {CVES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {CveIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import CvesDashboard, {CVES_DASHBOARD_ID} from 'web/pages/cves/dashboard';
 import CveFilterDialog from 'web/pages/cves/FilterDialog';
 import CvesTable from 'web/pages/cves/Table';
@@ -22,7 +22,9 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 export const ToolBarIcons = () => {
   const [_] = useTranslation();
-  return (<ManualIcon anchor="cve" page="managing-secinfo" title={_('Help: CVEs')} />);
+  return (
+    <ManualIcon anchor="cve" page="managing-secinfo" title={_('Help: CVEs')} />
+  );
 };
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {

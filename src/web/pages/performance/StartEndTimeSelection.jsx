@@ -5,12 +5,12 @@
 
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import {useState, useEffect} from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Button from 'web/components/form/Button';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 

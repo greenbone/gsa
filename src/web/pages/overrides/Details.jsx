@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
@@ -16,6 +15,7 @@ import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import EntityLink from 'web/entity/Link';
 import OverrideBox from 'web/entity/Override';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {
   translatedResultSeverityRiskFactor,
@@ -40,8 +40,7 @@ const OverrideDetails = ({entity}) => {
                 {hosts.length > 0 ? (
                   <HorizontalSep>
                     {hosts.map(host => {
-                      const [_] = useTranslation();
-                      return (<span key={host}>{host}</span>);
+                      return <span key={host}>{host}</span>;
                     })}
                   </HorizontalSep>
                 ) : (

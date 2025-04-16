@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import {CpeLogoIcon} from 'web/components/icon';
@@ -37,6 +36,7 @@ import EntityPage from 'web/entity/EntityPage';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
@@ -115,8 +115,6 @@ const Details = ({entity, links = true}) => {
             </TableHeader>
             <TableBody>
               {cves.map(cve => {
-                const [_] = useTranslation();
-
                 return (
                   <TableRow key={cve.id}>
                     <TableData>
@@ -149,16 +147,14 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const CpePage = (
-  {
-    entity,
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const CpePage = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

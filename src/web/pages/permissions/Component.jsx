@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
+import withTranslation from 'web/hooks/withTranslation';
 import PermissionDialog from 'web/pages/permissions/Dialog';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
@@ -28,6 +28,8 @@ class PermissionsComponent extends React.Component {
   }
 
   openPermissionDialog(permission, fixed = false) {
+    const {_} = this.props;
+
     const {gmp, capabilities} = this.props;
 
     let state;
@@ -269,6 +271,10 @@ PermissionsComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default compose(withGmp, withCapabilities)(PermissionsComponent);
+export default compose(
+  withGmp,
+  withCapabilities,
+)(withTranslation(PermissionsComponent));

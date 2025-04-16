@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {
   TrendDownIcon,
   TrendLessIcon,
@@ -12,6 +11,7 @@ import {
   TrendUpIcon,
   TrendNoChangeIcon,
 } from 'web/components/icon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Trend = ({name}) => {
   const [_] = useTranslation();

@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -15,6 +14,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 

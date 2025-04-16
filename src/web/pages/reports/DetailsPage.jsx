@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
@@ -23,6 +22,7 @@ import Reload, {
 } from 'web/components/loading/Reload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
 import FilterProvider from 'web/entities/FilterProvider';
+import withTranslation from 'web/hooks/withTranslation';
 import Page from 'web/pages/reports/DetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/DetailsFilterDialog';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
@@ -61,7 +61,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
-
 
 const log = logger.getLogger('web.pages.report./DetailsPage');
 
@@ -222,6 +221,8 @@ class ReportDetails extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const {_} = this.props;
+
     const {reportFormats} = this.props;
     if (
       !isDefined(this.state.reportFormatId) &&
@@ -314,6 +315,8 @@ class ReportDetails extends React.Component {
   }
 
   handleAddToAssets() {
+    const {_} = this.props;
+
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
     this.handleInteraction();
@@ -329,6 +332,8 @@ class ReportDetails extends React.Component {
   }
 
   handleRemoveFromAssets() {
+    const {_} = this.props;
+
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
     this.handleInteraction();
@@ -522,6 +527,8 @@ class ReportDetails extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       filters = [],
       gmp,
@@ -683,6 +690,7 @@ ReportDetails.propTypes = {
   username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const reloadInterval = report =>
@@ -725,6 +733,8 @@ const load =
     return loadReportWithThreshold(reportId, {filter});
   };
 
+const TranslatedReportDetails = withTranslation(ReportDetails);
+
 const ReportDetailsWrapper = ({reportFilter, ...props}) => (
   <FilterProvider
     fallbackFilter={DEFAULT_FILTER}
@@ -739,7 +749,7 @@ const ReportDetailsWrapper = ({reportFilter, ...props}) => (
         reloadInterval={() => reloadInterval(props.entity)}
       >
         {({reload}) => (
-          <ReportDetails
+          <TranslatedReportDetails
             {...props}
             defaultFilter={filter}
             reload={reload}
@@ -827,4 +837,4 @@ export default compose(
   withDownload,
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-)(ReportDetailsWrapper);
+)(withTranslation(ReportDetailsWrapper));

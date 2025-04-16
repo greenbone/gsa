@@ -4,7 +4,7 @@
  */
 
 import PropTypes from 'prop-types';
-import useTranslation from 'src/web/hooks/useTranslation';
+import useTranslation from 'web/hooks/useTranslation';
 import Metrics from 'web/pages/extras/cvssV4/Metrics';
 
 const MetricsGroups = ({
@@ -16,7 +16,6 @@ const MetricsGroups = ({
   let lastMetricType = null;
   return Object.entries(cvssConfigData).flatMap(
     ([metricType, metricGroups]) => {
-      const [_] = useTranslation();
       const metricGroupElements = Object.entries(metricGroups).map(
         ([metricGroupName, metrics]) => {
           const isDifferentMetricType = lastMetricType !== metricType;

@@ -18,11 +18,12 @@ const CvssDisplay = ({
   filter,
   title,
   yLabel,
-  xLabel = _('Severity'),
+  xLabel = 'Severity',
   onFilterChanged,
   ...props
 }) => {
   const [_] = useTranslation();
+  xLabel = xLabel || _('Severity');
   const gmp = useGmp();
   const severityRating = gmp.settings.severityRating;
   const handleDataClick = data => {
@@ -79,8 +80,6 @@ const CvssDisplay = ({
       title={title}
     >
       {({width, height, data, svgRef}) => {
-        const [_] = useTranslation();
-
         return (
           <BarChart
             data={data}
@@ -90,7 +89,9 @@ const CvssDisplay = ({
             width={width}
             xLabel={xLabel}
             yLabel={yLabel}
-            onDataClick={isDefined(onFilterChanged) ? handleDataClick : undefined}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
           />
         );
       }}

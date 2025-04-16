@@ -6,7 +6,6 @@
 import {isDefined, isNumber} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
@@ -26,6 +25,7 @@ import TableRow from 'web/components/table/Row';
 import EntitiesActions from 'web/entities/Actions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import ResultDelta from 'web/pages/results/Delta';
 import PropTypes from 'web/utils/PropTypes';
 const Row = ({

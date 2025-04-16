@@ -5,8 +5,8 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {TagsIcon as TagsSvgIcon} from 'web/components/icon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 

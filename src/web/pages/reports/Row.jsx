@@ -6,7 +6,6 @@
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
@@ -16,6 +15,7 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Actions = withEntitiesActions(
   ({entity, selectedDeltaReport, onReportDeleteClick, onReportDeltaSelect}) => {
@@ -71,7 +71,6 @@ const Row = ({
   links = true,
   ...props
 }) => {
-  const [_] = useTranslation();
   const {report} = entity;
   const {scan_run_status, task} = report;
 
@@ -128,6 +127,7 @@ Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  _: PropTypes.func.isRequired,
 };
 
 export default Row;

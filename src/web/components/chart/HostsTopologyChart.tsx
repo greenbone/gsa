@@ -16,13 +16,13 @@ import {
 } from 'd3-force';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import equal from 'fast-deep-equal';
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, SeverityRating} from 'gmp/utils/severity';
 import React from 'react';
 import styled from 'styled-components';
 import Group from 'web/components/chart/Group';
 import Layout from 'web/components/layout/Layout';
+import withTranslation from 'web/hooks/withTranslation';
 import {setRef} from 'web/utils/Render';
 import {
   getSeverityLevelBoundaries,
@@ -91,6 +91,7 @@ interface HostsTopologyChartProps {
   width: number;
   data: HostsTopologyChartData;
   svgRef: React.Ref<SVGSVGElement>;
+  _: (text: string, ...args: unknown[]) => string;
 }
 
 const Svg = styled.svg<SvgProps>`
@@ -493,6 +494,8 @@ class HostsTopologyChart extends React.Component<
   }
 
   render() {
+    const {_} = this.props;
+
     const {width, height, svgRef} = this.props;
     const {
       hosts = [],
@@ -582,4 +585,4 @@ class HostsTopologyChart extends React.Component<
   }
 }
 
-export default HostsTopologyChart;
+export default withTranslation(HostsTopologyChart);

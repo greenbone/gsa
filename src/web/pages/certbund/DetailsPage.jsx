@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import {CertBundAdvIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -34,6 +33,7 @@ import EntityPage from 'web/entity/EntityPage';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import CertBundAdvDetails from 'web/pages/certbund/Details';
 import {selector, loadEntity} from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
@@ -88,8 +88,6 @@ const Details = ({entity}) => {
             </TableHeader>
             <TableBody>
               {revisionHistory.map(rev => {
-                const [_] = useTranslation();
-
                 return (
                   <TableRow key={rev.revision}>
                     <TableData>{rev.revision}</TableData>
@@ -108,8 +106,7 @@ const Details = ({entity}) => {
         {categories.length > 0 ? (
           <ul>
             {categories.map(category => {
-              const [_] = useTranslation();
-              return (<li key={category}>{category}</li>);
+              return <li key={category}>{category}</li>;
             })}
           </ul>
         ) : (
@@ -119,17 +116,14 @@ const Details = ({entity}) => {
       <DetailsBlock title={_('Description')}>
         {description.length > 0
           ? description.map(text => {
-          const [_] = useTranslation();
-          return <p key={text}>{text}</p>;
-        })
+              return <p key={text}>{text}</p>;
+            })
           : _('None')}
       </DetailsBlock>
       <DetailsBlock title={_('References CVEs')}>
         {cves.length > 0 ? (
           <ul>
             {cves.map(cve => {
-              const [_] = useTranslation();
-
               return (
                 <li key={cve}>
                   <DetailsLink id={cve} type="cve">
@@ -147,8 +141,6 @@ const Details = ({entity}) => {
         <DetailsBlock title={_('Other Links')}>
           <ul>
             {additionalInformation.map(info => {
-              const [_] = useTranslation();
-
               return (
                 <li key={info.url + '-' + info.issuer}>
                   <Layout flex="column">
@@ -171,16 +163,14 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const CertBundAdvPage = (
-  {
-    entity,
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const CertBundAdvPage = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

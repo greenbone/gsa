@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import CertLink from 'web/components/link/CertLink';
 import CveLink from 'web/components/link/CveLink';
 import ExternalLink from 'web/components/link/ExternalLink';
@@ -14,6 +13,7 @@ import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const References = ({nvt, links = true}) => {
@@ -32,8 +32,6 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('CVE')}</TableDataAlignTop>
               <TableData>
                 {cves.map(cve_id => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={cve_id}>
                       <CveLink
@@ -53,11 +51,13 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('CERT')}</TableDataAlignTop>
               <TableData>
                 {certs.map(cert => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={cert.id}>
-                      <CertLink id={cert.id} textOnly={!links} type={cert.type} />
+                      <CertLink
+                        id={cert.id}
+                        textOnly={!links}
+                        type={cert.type}
+                      />
                     </span>
                   );
                 })}
@@ -70,8 +70,6 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('Other')}</TableDataAlignTop>
               <TableData>
                 {xrefs.map(xref => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={xref.ref}>
                       <ExternalLink

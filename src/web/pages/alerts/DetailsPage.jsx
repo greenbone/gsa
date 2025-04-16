@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {AlertIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -31,6 +30,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import AlertComponent from 'web/pages/alerts/Component';
 import AlertDetails from 'web/pages/alerts/Details';
 import {selector, loadEntity} from 'web/store/entities/alerts';
@@ -47,16 +47,14 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = (
-  {
-    entity,
-    onAlertCloneClick,
-    onAlertCreateClick,
-    onAlertDeleteClick,
-    onAlertDownloadClick,
-    onAlertEditClick,
-  }
-) => {
+export const ToolBarIcons = ({
+  entity,
+  onAlertCloneClick,
+  onAlertCreateClick,
+  onAlertDeleteClick,
+  onAlertDownloadClick,
+  onAlertEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -93,19 +91,17 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    permissions = [],
-    reportConfigs,
-    reportFormats,
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  permissions = [],
+  reportConfigs,
+  reportFormats,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

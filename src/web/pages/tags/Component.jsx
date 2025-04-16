@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entitytype';
@@ -11,6 +10,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
+import withTranslation from 'web/hooks/withTranslation';
 import TagDialog from 'web/pages/tags/Dialog';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
@@ -108,6 +108,8 @@ class TagComponent extends React.Component {
   }
 
   openTagDialog(tag, options = {}) {
+    const {_} = this.props;
+
     const {gmp} = this.props;
     const resource_types = this.getResourceTypes();
 
@@ -305,8 +307,10 @@ TagComponent.propTypes = {
   onRemoved: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default compose(withGmp, withCapabilities)(TagComponent);
-
-// vim: set ts=2 sw=2 tw=80:
+export default compose(
+  withGmp,
+  withCapabilities,
+)(withTranslation(TagComponent));

@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Comment from 'web/components/comment/Comment';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
@@ -13,6 +12,7 @@ import EntityNameTableData from 'web/entities/EntityNameTableData';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
@@ -50,15 +50,13 @@ Actions.propTypes = {
   onReportFormatEditClick: PropTypes.func.isRequired,
 };
 
-const Row = (
-  {
-    actionsComponent: ActionsComponent = Actions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...props
-  }
-) => {
+const Row = ({
+  actionsComponent: ActionsComponent = Actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

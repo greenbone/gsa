@@ -3,19 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
+import withTranslation from 'web/hooks/withTranslation';
 import {loadEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
-
 
 class FilterSelection extends React.Component {
   constructor(...args) {
@@ -58,6 +57,8 @@ class FilterSelection extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {children, filters = [], filterId} = this.props;
     const {showDialog} = this.state;
     const filter = isDefined(filterId)
@@ -118,6 +119,7 @@ FilterSelection.propTypes = {
   filtersFilter: PropTypes.filter.isRequired,
   loadFilters: PropTypes.func.isRequired,
   onFilterIdChanged: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, {filtersFilter}) => {
@@ -141,4 +143,4 @@ const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
 export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
-)(FilterSelection);
+)(withTranslation(FilterSelection));

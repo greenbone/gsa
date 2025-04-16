@@ -6,7 +6,6 @@
 import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import CertInfo from 'web/components/certinfo/CertInfo';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -16,6 +15,7 @@ import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const ScannerDetails = ({entity}) => {
@@ -93,8 +93,6 @@ const ScannerDetails = ({entity}) => {
               </TableDataAlignTop>
               <TableData>
                 {tasks.map(task => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={task.id}>
                       <DetailsLink id={task.id} type="task">
@@ -112,8 +110,6 @@ const ScannerDetails = ({entity}) => {
               <TableData>{_('Scan Configs using this Scanner')}</TableData>
               <TableData>
                 {configs.map(config => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={config.id}>
                       <DetailsLink id={config.id} type="scanconfig">

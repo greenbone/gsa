@@ -5,7 +5,6 @@
 
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {HostIcon, NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -15,6 +14,7 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {goToDetails} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import HostComponent from 'web/pages/hosts/Component';
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from 'web/pages/hosts/dashboard';
 import HostsFilterDialog from 'web/pages/hosts/FilterDialog';
@@ -45,18 +45,16 @@ ToolBarIcons.propTypes = {
   onHostCreateClick: PropTypes.func.isRequired,
 };
 
-const Page = (
-  {
-    entitiesCounts,
-    filter,
-    onChanged,
-    onDownloaded,
-    onError,
-    onFilterChanged,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entitiesCounts,
+  filter,
+  onChanged,
+  onDownloaded,
+  onError,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

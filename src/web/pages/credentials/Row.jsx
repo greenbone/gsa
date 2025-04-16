@@ -5,7 +5,6 @@
 
 import {getCredentialTypeName} from 'gmp/models/credential';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import FootNote from 'web/components/footnote/Footnote';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import Divider from 'web/components/layout/Divider';
@@ -17,21 +16,19 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import CredentialDownloadIcon from 'web/pages/credentials/DownloadIcon';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const Actions = withEntitiesActions(
-  (
-    {
-      entity,
-      onCredentialDeleteClick,
-      onCredentialDownloadClick,
-      onCredentialCloneClick,
-      onCredentialEditClick,
-      onCredentialInstallerDownloadClick,
-    }
-  ) => {
+  ({
+    entity,
+    onCredentialDeleteClick,
+    onCredentialDownloadClick,
+    onCredentialCloneClick,
+    onCredentialEditClick,
+    onCredentialInstallerDownloadClick,
+  }) => {
     const [_] = useTranslation();
 
     return (
@@ -79,15 +76,13 @@ Actions.propTypes = {
   onCredentialInstallerDownloadClick: PropTypes.func.isRequired,
 };
 
-const Row = (
-  {
-    actionsComponent: ActionsComponent = Actions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...props
-  }
-) => {
+const Row = ({
+  actionsComponent: ActionsComponent = Actions,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

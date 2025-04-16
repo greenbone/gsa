@@ -9,7 +9,6 @@ import {
 } from 'gmp/models/credential';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import {CredentialIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -42,6 +41,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import CredentialComponent from 'web/pages/credentials/Component';
 import CredentialDetails from 'web/pages/credentials/Details';
 import CredentialDownloadIcon from 'web/pages/credentials/DownloadIcon';
@@ -51,17 +51,15 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-export const ToolBarIcons = (
-  {
-    entity,
-    onCredentialCloneClick,
-    onCredentialCreateClick,
-    onCredentialDeleteClick,
-    onCredentialDownloadClick,
-    onCredentialEditClick,
-    onCredentialInstallerDownloadClick,
-  }
-) => {
+export const ToolBarIcons = ({
+  entity,
+  onCredentialCloneClick,
+  onCredentialCreateClick,
+  onCredentialDeleteClick,
+  onCredentialDownloadClick,
+  onCredentialEditClick,
+  onCredentialInstallerDownloadClick,
+}) => {
   const [_] = useTranslation();
 
   return (

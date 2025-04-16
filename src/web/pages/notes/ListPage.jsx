@@ -5,7 +5,6 @@
 
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {NewIcon, NoteIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -13,6 +12,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import NoteComponent from 'web/pages/notes/Component';
 import NotesDashboard, {NOTES_DASHBOARD_ID} from 'web/pages/notes/dashboard';
 import FilterDialog from 'web/pages/notes/FilterDialog';
@@ -46,17 +46,15 @@ ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func,
 };
 
-const Page = (
-  {
-    filter,
-    onChanged,
-    onDownloaded,
-    onError,
-    onFilterChanged,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  filter,
+  onChanged,
+  onDownloaded,
+  onError,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

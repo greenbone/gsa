@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/EntityComponent';
+import withTranslation from 'web/hooks/withTranslation';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
 import ScannerDialog from 'web/pages/scanners/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
@@ -45,6 +45,7 @@ class ScannerComponent extends React.Component {
 
   openScannerDialog(scanner) {
     const {gmp} = this.props;
+    const {_} = this.props;
 
     this.handleInteraction();
 
@@ -125,6 +126,8 @@ class ScannerComponent extends React.Component {
 
   handleVerifyFailure(response) {
     const {onVerifyError} = this.props;
+    const {_} = this.props;
+
     const message =
       isDefined(response.root) &&
       isDefined(response.root.action_result) &&
@@ -351,6 +354,7 @@ ScannerComponent.propTypes = {
   onSaved: PropTypes.func,
   onVerified: PropTypes.func,
   onVerifyError: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -373,4 +377,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
-)(ScannerComponent);
+)(withTranslation(ScannerComponent));

@@ -5,7 +5,6 @@
 
 import Filter, {OS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {OsSvgIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -13,6 +12,7 @@ import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import OsComponent from 'web/pages/operatingsystems/Component';
 import OsDashboard, {
   OS_DASHBOARD_ID,
@@ -38,17 +38,15 @@ const ToolBarIcons = () => {
   );
 };
 
-const Page = (
-  {
-    filter,
-    onChanged,
-    onDownloaded,
-    onError,
-    onFilterChanged,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  filter,
+  onChanged,
+  onDownloaded,
+  onError,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

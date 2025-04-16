@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {HostIcon, OsSvgIcon} from 'web/components/icon';
@@ -37,6 +36,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import OsComponent from 'web/pages/operatingsystems/Component';
 import {
   selector as osSelector,
@@ -179,17 +179,15 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    permissions = [],
-    onDownloaded,
-    onChanged,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  permissions = [],
+  onDownloaded,
+  onChanged,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

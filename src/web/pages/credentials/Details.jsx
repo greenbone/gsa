@@ -9,7 +9,6 @@ import {
   getCredentialTypeName,
 } from 'gmp/models/credential';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import Footnote from 'web/components/footnote/Footnote';
 import Divider from 'web/components/layout/Divider';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
@@ -20,6 +19,7 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const CredentialDetails = ({entity}) => {
@@ -92,8 +92,6 @@ const CredentialDetails = ({entity}) => {
               <TableData>
                 <HorizontalSep $wrap>
                   {targets.map(target => {
-                    const [_] = useTranslation();
-
                     return (
                       <span key={target.id}>
                         <DetailsLink id={target.id} type="target">
@@ -113,8 +111,6 @@ const CredentialDetails = ({entity}) => {
               <TableData>
                 <HorizontalSep $wrap>
                   {scanners.map(scanner => {
-                    const [_] = useTranslation();
-
                     return (
                       <span key={scanner.id}>
                         <DetailsLink id={scanner.id} type="scanner">

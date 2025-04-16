@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import {UploadIcon, ScanConfigIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -41,6 +40,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import ScanConfigComponent from 'web/pages/scanconfigs/Component';
 import ScanConfigDetails from 'web/pages/scanconfigs/Details';
 import Trend from 'web/pages/scanconfigs/Trend';
@@ -137,15 +137,15 @@ export const NvtFamilies = ({entity}) => {
           </TableHeader>
           <TableBody>
             {family_list.map(family => {
-              const [_] = useTranslation();
-
               return (
                 <TableRow key={family.name}>
                   <TableData>
                     <span>
                       <Link
                         filter={'family="' + family.name + '"'}
-                        title={_('NVTs of family {{name}}', {name: family.name})}
+                        title={_('NVTs of family {{name}}', {
+                          name: family.name,
+                        })}
                         to="nvts"
                       >
                         {family.name}
@@ -199,8 +199,6 @@ export const ScannerPreferences = ({entity}) => {
           </TableHeader>
           <TableBody>
             {preferences.scanner.map(pref => {
-              const [_] = useTranslation();
-
               return (
                 <TableRow key={pref.name}>
                   <TableData>{pref.name}</TableData>
@@ -242,8 +240,6 @@ export const NvtPreferences = ({entity}) => {
           </TableHeader>
           <TableBody>
             {preferences.nvt.map(pref => {
-              const [_] = useTranslation();
-
               return (
                 <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
                   <TableData>
@@ -271,7 +267,6 @@ NvtPreferences.propTypes = {
 };
 
 const Details = ({entity, ...props}) => {
-  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <ScanConfigDetails entity={entity} {...props} />

@@ -7,12 +7,12 @@ import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React, {useState} from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PortListsDialog from 'web/pages/portlists/Dialog';
 import ImportPortListDialog from 'web/pages/portlists/ImportDialog';
 import PortRangeDialog, {

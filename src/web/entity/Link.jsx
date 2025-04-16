@@ -6,9 +6,9 @@
 import {getEntityType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 

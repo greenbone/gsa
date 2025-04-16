@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {StartIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -17,6 +16,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import Condition from 'web/pages/alerts/Condition';
 import Event from 'web/pages/alerts/Event';
 import Method from 'web/pages/alerts/Method';
@@ -24,16 +24,14 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 const Actions = withEntitiesActions(
-  (
-    {
-      entity,
-      onAlertDeleteClick,
-      onAlertDownloadClick,
-      onAlertCloneClick,
-      onAlertEditClick,
-      onAlertTestClick,
-    }
-  ) => {
+  ({
+    entity,
+    onAlertDeleteClick,
+    onAlertDownloadClick,
+    onAlertCloneClick,
+    onAlertEditClick,
+    onAlertTestClick,
+  }) => {
     const [_] = useTranslation();
 
     return (
@@ -98,16 +96,14 @@ const render_filter = (filter, caps, links = true) => {
   );
 };
 
-const Row = (
-  {
-    actionsComponent: ActionsComponent = Actions,
-    capabilities,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...props
-  }
-) => {
+const Row = ({
+  actionsComponent: ActionsComponent = Actions,
+  capabilities,
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

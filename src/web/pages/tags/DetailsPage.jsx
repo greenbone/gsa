@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {DisableIcon, EnableIcon, TagIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -30,6 +29,7 @@ import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import TagComponent from 'web/pages/tags/Component';
 import TagDetails from 'web/pages/tags/Details';
 import ResourceList from 'web/pages/tags/ResourceList';

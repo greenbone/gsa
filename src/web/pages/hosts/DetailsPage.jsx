@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {HostIcon, ResultIcon, TlsCertificateIcon} from 'web/components/icon';
@@ -40,6 +39,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import HostComponent from 'web/pages/hosts/Component';
 import HostDetails from 'web/pages/hosts/Details';
 import {selector as hostsSelector, loadEntity} from 'web/store/entities/hosts';
@@ -197,13 +197,9 @@ const Details = ({entity, ...props}) => {
               <TableData>
                 <RouteList>
                   {routes.map((route, idx) => {
-                    const [_] = useTranslation();
-
                     return (
                       <li key={idx}>
                         {route.map(host => {
-                          const [_] = useTranslation();
-
                           return (
                             <Hop key={host.ip}>
                               <DetailsLink

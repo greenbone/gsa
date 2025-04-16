@@ -4,13 +4,13 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import {NewIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 const ENTITIES_THRESHOLD = 50000;
@@ -19,24 +19,23 @@ const Notification = styled(Layout)`
   justify-content: center;
 `;
 
-const TagsDialog = (
-  {
-    comment = '',
-    entitiesCount,
-    error,
-    tagId: id,
-    name,
-    tags,
-    title = _('Add Tag'),
-    value = '',
-    onClose,
-    onErrorClose,
-    onNewTagClick,
-    onTagChanged,
-    onSave,
-  }
-) => {
+const TagsDialog = ({
+  comment = '',
+  entitiesCount,
+  error,
+  tagId: id,
+  name,
+  tags,
+  title = 'Add Tag',
+  value = '',
+  onClose,
+  onErrorClose,
+  onNewTagClick,
+  onTagChanged,
+  onSave,
+}) => {
   const [_] = useTranslation();
+  title = _(title);
 
   return (
     <SaveDialog

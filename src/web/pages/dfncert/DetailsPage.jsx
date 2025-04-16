@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {DfnCertAdvIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -28,6 +27,7 @@ import EntityPage from 'web/entity/EntityPage';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import DfnCertAdvDetails from 'web/pages/dfncert/Details';
 import {selector, loadEntity} from 'web/store/entities/dfncerts';
 import PropTypes from 'web/utils/PropTypes';
@@ -71,8 +71,6 @@ const Details = ({entity}) => {
         <DetailsBlock title={_('Other Links')}>
           <ul>
             {additionalLinks.map(link => {
-              const [_] = useTranslation();
-
               return (
                 <li key={link}>
                   <ExternalLink to={link}>{link}</ExternalLink>
@@ -86,8 +84,6 @@ const Details = ({entity}) => {
         {cves.length > 0 ? (
           <ul>
             {cves.map(cve => {
-              const [_] = useTranslation();
-
               return (
                 <li key={cve}>
                   <DetailsLink id={cve} type="cve">
@@ -109,16 +105,14 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const DfnCertAdvPage = (
-  {
-    entity,
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const DfnCertAdvPage = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -142,7 +136,9 @@ const DfnCertAdvPage = (
             return (
               <React.Fragment>
                 <PageTitle
-                  title={_('DFN-CERT Advisory: {{title}}', {title: entity.title})}
+                  title={_('DFN-CERT Advisory: {{title}}', {
+                    title: entity.title,
+                  })}
                 />
                 <Layout flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">

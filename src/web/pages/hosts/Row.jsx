@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
@@ -19,6 +18,7 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -84,7 +84,6 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const [_] = useTranslation();
   const {details = {}, os} = entity;
   const os_cpe = os;
   const os_txt = isDefined(details.best_os_txt)

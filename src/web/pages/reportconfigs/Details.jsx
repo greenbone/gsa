@@ -6,7 +6,6 @@
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -15,6 +14,7 @@ import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 
@@ -24,10 +24,8 @@ export const ReportConfigParamValue = ({
   valueLabels = param.valueLabels,
   links = true,
 }) => {
-  const [_] = useTranslation();
   if (param.type === 'report_format_list') {
     return map(value, reportFormatId => {
-      const [_] = useTranslation();
       const label = isDefined(valueLabels[reportFormatId])
         ? valueLabels[reportFormatId]
         : reportFormatId;
@@ -50,8 +48,7 @@ export const ReportConfigParamValue = ({
     return (
       <OptionsList>
         {value.map(option => {
-          const [_] = useTranslation();
-          return (<li key={param.name + '=' + option}>{option}</li>);
+          return <li key={param.name + '=' + option}>{option}</li>;
         })}
       </OptionsList>
     );
@@ -134,8 +131,6 @@ const ReportConfigDetails = ({entity, links = true}) => {
               </TableDataAlignTop>
               <TableData>
                 {alerts.map(alert => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={alert.id}>
                       <DetailsLink id={alert.id} type="alert">

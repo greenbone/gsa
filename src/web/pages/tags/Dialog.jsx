@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {YES_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -16,6 +15,7 @@ import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextArea';
 import YesNoRadio from 'web/components/form/YesNoRadio';
+import withTranslation from 'web/hooks/withTranslation';
 import {SELECT_MAX_RESOURCES} from 'web/pages/tags/Component';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
@@ -174,6 +174,8 @@ class TagDialog extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       active = YES_VALUE,
       comment = '',
@@ -324,8 +326,7 @@ TagDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(TagDialog);
-
-// vim: set ts=2 sw=2 tw=80:
+export default withGmp(withTranslation(TagDialog));

@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import {CveIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -36,6 +35,7 @@ import EntityPage from 'web/entity/EntityPage';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import CveDetails from 'web/pages/cves/Details';
 import {selector, loadEntity} from 'web/store/entities/cves';
 import PropTypes from 'web/utils/PropTypes';
@@ -85,8 +85,6 @@ const Details = ({entity, links = true}) => {
             </TableHeader>
             <TableBody>
               {certs.map(cert => {
-                const [_] = useTranslation();
-
                 return (
                   <TableRow key={cert.name}>
                     <TableData>
@@ -110,8 +108,6 @@ const Details = ({entity, links = true}) => {
         <DetailsBlock title={_('Vulnerable Products')}>
           <Layout flex="column">
             {products.map(product => {
-              const [_] = useTranslation();
-
               return (
                 <span key={product}>
                   <DetailsLink id={product} type="cpe">
@@ -127,8 +123,6 @@ const Details = ({entity, links = true}) => {
         <DetailsBlock title={_('NVTs addressing this CVE')}>
           <Layout flex="column">
             {nvts.map(nvt => {
-              const [_] = useTranslation();
-
               return (
                 <span key={nvt.id}>
                   <DetailsLink id={nvt.id} type="nvt">
@@ -184,16 +178,14 @@ EntityInfo.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const CvePage = (
-  {
-    entity,
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-    ...props
-  }
-) => {
+const CvePage = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

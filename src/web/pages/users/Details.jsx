@@ -10,7 +10,6 @@ import {
   ACCESS_DENY_ALL,
 } from 'gmp/models/user';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -19,9 +18,10 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
-export const convert_auth_method = auth_method => {
+export const convert_auth_method = (auth_method, _) => {
   if (auth_method === AUTH_METHOD_LDAP) {
     return _('LDAP');
   }
@@ -31,7 +31,7 @@ export const convert_auth_method = auth_method => {
   return _('Local');
 };
 
-export const convert_allow = ({addresses, allow}) => {
+export const convert_allow = ({addresses, allow}, _) => {
   if (allow === ACCESS_ALLOW_ALL) {
     if (addresses.length === 0) {
       return _('Allow all');
@@ -72,8 +72,6 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>
               <HorizontalSep>
                 {roles.map(role => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={role.id}>
                       <DetailsLink id={role.id} textOnly={!links} type="role">
@@ -91,8 +89,6 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>
               <HorizontalSep>
                 {groups.map(group => {
-                  const [_] = useTranslation();
-
                   return (
                     <span key={group.id}>
                       <DetailsLink
@@ -113,13 +109,13 @@ const UserDetails = ({entity, links = true}) => {
           <TableRow>
             <TableData>{_('Host Access')}</TableData>
             <TableData>
-              {convert_allow(hosts).replace(/&#x2F;/g, '/')}
+              {convert_allow(hosts, _).replace(/&#x2F;/g, '/')}
             </TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('Authentication Type')}</TableData>
-            <TableData>{convert_auth_method(authMethod)}</TableData>
+            <TableData>{convert_auth_method(authMethod, _)}</TableData>
           </TableRow>
         </TableBody>
       </InfoTable>

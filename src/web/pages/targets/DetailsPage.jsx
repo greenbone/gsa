@@ -6,7 +6,6 @@
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {TargetIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -37,6 +36,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import TargetComponent from 'web/pages/targets/Component';
 import TargetDetails from 'web/pages/targets/Details';
 import {

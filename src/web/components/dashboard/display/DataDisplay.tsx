@@ -8,7 +8,6 @@ import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import Display, {
@@ -18,6 +17,7 @@ import Display, {
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
+import withTranslation from 'web/hooks/withTranslation';
 import Theme from 'web/utils/Theme';
 
 export interface State {
@@ -94,6 +94,7 @@ export interface DataDisplayProps<
   state: TState;
   title: TitleFunc<TTransformedData>;
   width: number;
+  _: (text: string, ...args: string[]) => string;
 }
 
 interface DataDisplayState<TData, TTransformedData> {
@@ -168,7 +169,6 @@ const DisplayBox = styled.div`
 const escapeCsv = (value: string) => '"' + `${value}`.replace(/"/g, '""') + '"';
 
 const renderIcons = props => {
-  const [_] = useTranslation();
   return <DataDisplayIcons {...props} />;
 };
 
@@ -409,6 +409,7 @@ class DataDisplay<
       showFilterString = false,
       showFilterSelection = false,
     } = this.props;
+    const {_} = this.props;
     const {
       children,
       id,
@@ -492,4 +493,4 @@ class DataDisplay<
   }
 }
 
-export default DataDisplay;
+export default withTranslation(DataDisplay);

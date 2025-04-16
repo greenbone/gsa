@@ -6,10 +6,10 @@
 import {Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
+import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
 interface Owner {
@@ -22,7 +22,11 @@ interface OwnerInfoProps {
 
 const OwnerInfo: React.FC<OwnerInfoProps> = ({owner}: OwnerInfoProps) => {
   const [_] = useTranslation();
-  return isDefined(owner) ? <span>{owner.name}</span> : <i>{_('(Global Object)')}</i>;
+  return isDefined(owner) ? (
+    <span>{owner.name}</span>
+  ) : (
+    <i>{_('(Global Object)')}</i>
+  );
 };
 
 export const InfoLayout = styled(Layout)`

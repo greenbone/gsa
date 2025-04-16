@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import {PortListIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -31,6 +30,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import PortListDetails from 'web/pages/portlists/Details';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
 import PortRangesTable from 'web/pages/portlists/PortRangesTable';
@@ -40,16 +40,14 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/portlists';
 import PropTypes from 'web/utils/PropTypes';
-const ToolBarIcons = (
-  {
-    entity,
-    onPortListCloneClick,
-    onPortListCreateClick,
-    onPortListDeleteClick,
-    onPortListDownloadClick,
-    onPortListEditClick,
-  }
-) => {
+const ToolBarIcons = ({
+  entity,
+  onPortListCloneClick,
+  onPortListCreateClick,
+  onPortListDeleteClick,
+  onPortListDownloadClick,
+  onPortListEditClick,
+}) => {
   const [_] = useTranslation();
 
   return (
@@ -91,7 +89,6 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const [_] = useTranslation();
   return (
     <Layout flex="column">
       <PortListDetails entity={entity} links={links} />
@@ -122,18 +119,16 @@ PortRanges.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = (
-  {
-    entity,
-    links = true,
-    permissions = [],
-    onError,
-    onChanged,
-    onDownloaded,
-    onInteraction,
-    ...props
-  }
-) => {
+const Page = ({
+  entity,
+  links = true,
+  permissions = [],
+  onError,
+  onChanged,
+  onDownloaded,
+  onInteraction,
+  ...props
+}) => {
   const [_] = useTranslation();
 
   return (

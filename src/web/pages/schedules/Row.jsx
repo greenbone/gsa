@@ -5,7 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import useTranslation from 'src/web/hooks/useTranslation';
 import DateTime from 'web/components/date/DateTime';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -16,20 +15,18 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import {renderDuration, renderRecurrence} from 'web/pages/schedules/Render';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const Actions = withEntitiesActions(
-  (
-    {
-      entity,
-      onScheduleDeleteClick,
-      onScheduleDownloadClick,
-      onScheduleCloneClick,
-      onScheduleEditClick,
-    }
-  ) => {
+  ({
+    entity,
+    onScheduleDeleteClick,
+    onScheduleDownloadClick,
+    onScheduleCloneClick,
+    onScheduleEditClick,
+  }) => {
     const [_] = useTranslation();
 
     return (
