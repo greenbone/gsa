@@ -47,6 +47,7 @@ interface GmpSettingsOptions {
   timeout?: number;
   vendorVersion?: string;
   vendorLabel?: string;
+  title?: string;
 }
 
 interface GmpSettingsStorage {
@@ -99,6 +100,7 @@ class GmpSettings {
   reloadIntervalInactive: number;
   reportResultsThreshold: number;
   timeout: number;
+  title!: string;
   readonly apiProtocol!: string;
   readonly apiServer!: string;
   readonly disableLoginForm!: boolean;
