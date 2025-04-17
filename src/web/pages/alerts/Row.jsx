@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {StartIcon} from 'web/components/icon';
@@ -17,6 +16,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import Condition from 'web/pages/alerts/Condition';
 import Event from 'web/pages/alerts/Event';
 import Method from 'web/pages/alerts/Method';
@@ -31,40 +31,44 @@ const Actions = withEntitiesActions(
     onAlertCloneClick,
     onAlertEditClick,
     onAlertTestClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Alert')}
-        entity={entity}
-        name="alert"
-        onClick={onAlertDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Alert')}
-        entity={entity}
-        name="alert"
-        onClick={onAlertEditClick}
-      />
-      <CloneIcon
-        displayName={_('Alert')}
-        entity={entity}
-        name="alert"
-        title={_('Clone Alert')}
-        value={entity}
-        onClick={onAlertCloneClick}
-      />
-      <ExportIcon
-        title={_('Export Alert')}
-        value={entity}
-        onClick={onAlertDownloadClick}
-      />
-      <StartIcon
-        title={_('Test Alert')}
-        value={entity}
-        onClick={onAlertTestClick}
-      />
-    </IconDivider>
-  ),
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <TrashIcon
+          displayName={_('Alert')}
+          entity={entity}
+          name="alert"
+          onClick={onAlertDeleteClick}
+        />
+        <EditIcon
+          displayName={_('Alert')}
+          entity={entity}
+          name="alert"
+          onClick={onAlertEditClick}
+        />
+        <CloneIcon
+          displayName={_('Alert')}
+          entity={entity}
+          name="alert"
+          title={_('Clone Alert')}
+          value={entity}
+          onClick={onAlertCloneClick}
+        />
+        <ExportIcon
+          title={_('Export Alert')}
+          value={entity}
+          onClick={onAlertDownloadClick}
+        />
+        <StartIcon
+          title={_('Test Alert')}
+          value={entity}
+          onClick={onAlertTestClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -99,29 +103,33 @@ const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      displayName={_('Alert')}
-      entity={entity}
-      link={links}
-      type="alert"
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData>
-      <Event event={entity.event} />
-    </TableData>
-    <TableData>
-      <Condition condition={entity.condition} event={entity.event} />
-    </TableData>
-    <TableData>
-      <Method method={entity.method} />
-    </TableData>
-    <TableData>{render_filter(entity.filter, capabilities)}</TableData>
-    <TableData>{renderYesNo(entity.active)}</TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <TableRow>
+      <EntityNameTableData
+        displayName={_('Alert')}
+        entity={entity}
+        link={links}
+        type="alert"
+        onToggleDetailsClick={onToggleDetailsClick}
+      />
+      <TableData>
+        <Event event={entity.event} />
+      </TableData>
+      <TableData>
+        <Condition condition={entity.condition} event={entity.event} />
+      </TableData>
+      <TableData>
+        <Method method={entity.method} />
+      </TableData>
+      <TableData>{render_filter(entity.filter, capabilities)}</TableData>
+      <TableData>{renderYesNo(entity.active)}</TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

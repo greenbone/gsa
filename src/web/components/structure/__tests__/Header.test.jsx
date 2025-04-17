@@ -20,7 +20,7 @@ const gmp = {
 };
 
 describe('Header', () => {
-  test('renders component', async () => {
+  test('renders component', () => {
     const {render, store} = rendererWith({
       gmp,
       router: true,

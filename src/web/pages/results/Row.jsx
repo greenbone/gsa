@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined, isNumber} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
@@ -26,6 +25,7 @@ import TableRow from 'web/components/table/Row';
 import EntitiesActions from 'web/entities/Actions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import ResultDelta from 'web/pages/results/Delta';
 import PropTypes from 'web/utils/PropTypes';
 const Row = ({
@@ -37,6 +37,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const {host} = entity;
   let shownName = isDefined(entity.name) ? entity.name : entity.information.id;
   if (!isDefined(shownName)) {

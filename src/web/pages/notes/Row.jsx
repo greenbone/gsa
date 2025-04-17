@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -15,6 +14,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const Actions = withEntitiesActions(
@@ -24,18 +24,22 @@ const Actions = withEntitiesActions(
     onNoteDownloadClick,
     onNoteCloneClick,
     onNoteEditClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon entity={entity} name="note" onClick={onNoteDeleteClick} />
-      <EditIcon entity={entity} name="note" onClick={onNoteEditClick} />
-      <CloneIcon entity={entity} name="note" onClick={onNoteCloneClick} />
-      <ExportIcon
-        title={_('Export Note')}
-        value={entity}
-        onClick={onNoteDownloadClick}
-      />
-    </IconDivider>
-  ),
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <TrashIcon entity={entity} name="note" onClick={onNoteDeleteClick} />
+        <EditIcon entity={entity} name="note" onClick={onNoteEditClick} />
+        <CloneIcon entity={entity} name="note" onClick={onNoteCloneClick} />
+        <ExportIcon
+          title={_('Export Note')}
+          value={entity}
+          onClick={onNoteDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -52,6 +56,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const text = (
     <div>
       {entity.isOrphan() && (

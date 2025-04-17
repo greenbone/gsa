@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import date from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -11,29 +10,34 @@ import Layout from 'web/components/layout/Layout';
 import Link from 'web/components/link/Link';
 import InfoPanel from 'web/components/panel/InfoPanel';
 import useLicense from 'web/hooks/useLicense';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const LICENSE_EXPIRATION_THRESHOLD = 30;
 
-const LicenseLinkComponent = () => (
-  <Link to="license">{_('License Management page')}</Link>
-);
+const LicenseLinkComponent = () => {
+  const [_] = useTranslation();
+  return <Link to="license">{_('License Management page')}</Link>;
+};
 
-const SupportPageLinkComponent = () => (
-  <a
-    href="https://service.greenbone.net"
-    rel="noopener noreferrer"
-    target="_blank"
-  >
-    {'https://service.greenbone.net'}
-  </a>
-);
+const SupportPageLinkComponent = () => {
+  return (
+    <a
+      href="https://service.greenbone.net"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {'https://service.greenbone.net'}
+    </a>
+  );
+};
 
-const SupportMailLinkComponent = () => (
-  <a href="mailto:support@greenbone.net">{'support@greenbone.net'}</a>
-);
+const SupportMailLinkComponent = () => {
+  return <a href="mailto:support@greenbone.net">{'support@greenbone.net'}</a>;
+};
 
 const LicenseNotification = ({capabilities, onCloseClick}) => {
+  const [_] = useTranslation();
   const {license} = useLicense();
   const days = license?.expires
     ? date(license?.expires).diff(date(), 'days')

@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isString} from 'gmp/utils/identity';
 import React from 'react';
 import DetailsLink from 'web/components/link/DetailsLink';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const CertLink = ({id, textOnly = false, type}) => {
+  const [_] = useTranslation();
   const lcType = isString(type) ? type.toLowerCase() : undefined;
   if (lcType !== 'cert-bund' && lcType !== 'dfn-cert') {
     return (

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import {PolicyIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -29,6 +28,7 @@ import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import PolicyComponent from 'web/pages/policies/Component';
 import PolicyDetails from 'web/pages/policies/Details';
 import {
@@ -50,41 +50,45 @@ export const ToolBarIcons = withCapabilities(
     onPolicyDeleteClick,
     onPolicyDownloadClick,
     onPolicyEditClick,
-  }) => (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="configuring-and-managing-policies"
-          page="compliance-and-special-scans"
-          title={_('Help: Policies')}
-        />
-        <ListIcon page="policies" title={_('Policies List')} />
-      </IconDivider>
-      <IconDivider>
-        <CloneIcon
-          displayName={_('Policy')}
-          entity={entity}
-          onClick={onPolicyCloneClick}
-        />
-        <EditIcon
-          disabled={entity.predefined}
-          displayName={_('Policy')}
-          entity={entity}
-          onClick={onPolicyEditClick}
-        />
-        <TrashIcon
-          displayName={_('Policy')}
-          entity={entity}
-          onClick={onPolicyDeleteClick}
-        />
-        <ExportIcon
-          title={_('Export Policy as XML')}
-          value={entity}
-          onClick={onPolicyDownloadClick}
-        />
-      </IconDivider>
-    </Divider>
-  ),
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <Divider margin="10px">
+        <IconDivider>
+          <ManualIcon
+            anchor="configuring-and-managing-policies"
+            page="compliance-and-special-scans"
+            title={_('Help: Policies')}
+          />
+          <ListIcon page="policies" title={_('Policies List')} />
+        </IconDivider>
+        <IconDivider>
+          <CloneIcon
+            displayName={_('Policy')}
+            entity={entity}
+            onClick={onPolicyCloneClick}
+          />
+          <EditIcon
+            disabled={entity.predefined}
+            displayName={_('Policy')}
+            entity={entity}
+            onClick={onPolicyEditClick}
+          />
+          <TrashIcon
+            displayName={_('Policy')}
+            entity={entity}
+            onClick={onPolicyDeleteClick}
+          />
+          <ExportIcon
+            title={_('Export Policy as XML')}
+            value={entity}
+            onClick={onPolicyDownloadClick}
+          />
+        </IconDivider>
+      </Divider>
+    );
+  },
 );
 
 ToolBarIcons.propTypes = {
@@ -116,6 +120,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <PolicyComponent
       onCloneError={onError}

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -14,6 +13,7 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntity as loadTlsCertificate,
   selector as tlsCertificateSelector,
@@ -24,6 +24,7 @@ import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
 const TlsCertificateDetails = ({entity}) => {
+  const [_] = useTranslation();
   return (
     <Layout flex="column" grow="1">
       <InfoTable>

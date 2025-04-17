@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getEntityType, typeName, EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {CloneIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityClone extends EntityType {
   userCapabilities: {
@@ -38,6 +38,7 @@ const EntityCloneIcon = <TEntity extends EntityClone>({
   onClick,
   ...props
 }: EntityCloneIconProps<TEntity>) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);

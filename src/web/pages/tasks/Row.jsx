@@ -24,6 +24,7 @@ import Actions from 'web/pages/tasks/Actions';
 import TaskStatus from 'web/pages/tasks/Status';
 import Trend from 'web/pages/tasks/Trend';
 import PropTypes from 'web/utils/PropTypes';
+
 export const renderReport = (report, links) => {
   if (!isDefined(report)) {
     return null;
@@ -34,28 +35,6 @@ export const renderReport = (report, links) => {
         <DateTime date={report.timestamp} />
       </DetailsLink>
     </span>
-  );
-};
-
-const renderReportTotal = (entity, links) => {
-  if (entity.report_count.total <= 0) {
-    return null;
-  }
-  return (
-    <Layout>
-      <Link
-        filter={'task_id=' + entity.id + ' sort-reverse=date'}
-        textOnly={!links || entity.report_count.total === 0}
-        title={_(
-          'View list of all reports for Task {{name}},' +
-            ' including unfinished ones',
-          {name: entity.name},
-        )}
-        to={'reports'}
-      >
-        {entity.report_count.total}
-      </Link>
-    </Layout>
   );
 };
 
@@ -70,6 +49,28 @@ const Row = ({
   const {scanner, observers} = entity;
 
   const obs = [];
+
+  const renderReportTotal = (entity, links) => {
+    if (entity.report_count.total <= 0) {
+      return null;
+    }
+    return (
+      <Layout>
+        <Link
+          filter={'task_id=' + entity.id + ' sort-reverse=date'}
+          textOnly={!links || entity.report_count.total === 0}
+          title={_(
+            'View list of all reports for Task {{name}},' +
+              ' including unfinished ones',
+            {name: entity.name},
+          )}
+          to={'reports'}
+        >
+          {entity.report_count.total}
+        </Link>
+      </Layout>
+    );
+  };
 
   if (isDefined(observers)) {
     if (isDefined(observers.user)) {

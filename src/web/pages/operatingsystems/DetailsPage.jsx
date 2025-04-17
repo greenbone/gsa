@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -37,6 +36,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import OsComponent from 'web/pages/operatingsystems/Component';
 import {
   selector as osSelector,
@@ -55,6 +55,7 @@ let ToolBarIcons = ({
   onOperatingSystemDeleteClick,
   onOperatingSystemDownloadClick,
 }) => {
+  const [_] = useTranslation();
   const {allHosts, hosts} = entity;
   return (
     <Divider margin="10px">
@@ -128,6 +129,7 @@ ToolBarIcons.propTypes = {
 ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({entity}) => {
+  const [_] = useTranslation();
   const {averageSeverity, highestSeverity, latestSeverity, name} = entity;
   return (
     <Layout flex="column">
@@ -185,84 +187,88 @@ const Page = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <OsComponent
-    onDeleteError={onError}
-    onDeleted={goToList('operatingsystems', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-  >
-    {({delete: delete_func, download}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<OsSvgIcon size="large" />}
-        title={_('Operating System')}
-        toolBarIcons={ToolBarIcons}
-        onInteraction={onInteraction}
-        onOperatingSystemDeleteClick={delete_func}
-        onOperatingSystemDownloadClick={download}
-        onPermissionChanged={onChanged}
-        onPermissionDownloadError={onError}
-        onPermissionDownloaded={onDownloaded}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle
-                title={_('Operating System: {{name}}', {name: entity.name})}
-              />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+}) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </OsComponent>
-);
+  return (
+    <OsComponent
+      onDeleteError={onError}
+      onDeleted={goToList('operatingsystems', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+    >
+      {({delete: delete_func, download}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<OsSvgIcon size="large" />}
+          title={_('Operating System')}
+          toolBarIcons={ToolBarIcons}
+          onInteraction={onInteraction}
+          onOperatingSystemDeleteClick={delete_func}
+          onOperatingSystemDownloadClick={download}
+          onPermissionChanged={onChanged}
+          onPermissionDownloadError={onError}
+          onPermissionDownloaded={onDownloaded}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle
+                  title={_('Operating System: {{name}}', {name: entity.name})}
+                />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </OsComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

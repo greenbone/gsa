@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityDelete extends EntityType {
   userCapabilities: {
@@ -38,6 +38,7 @@ const EntityDeleteIcon = <TEntity extends EntityDelete>({
   onClick,
   ...props
 }: EntityDeleteIconProps<TEntity>) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);

@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {EntityType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {EditIcon} from 'web/components/icon';
 import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityEdit extends EntityType {
   userCapabilities: {
@@ -39,6 +39,7 @@ const EntityEditIcon = <TEntity extends EntityEdit>({
   onClick,
   ...props
 }: EntityEditIconProps<TEntity>) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = getEntityType(entity);

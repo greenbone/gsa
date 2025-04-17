@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Model from 'gmp/model';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
@@ -19,6 +18,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import {
   extraRiskFactor,
   translateRiskFactor,
@@ -50,16 +50,6 @@ interface ActionsProps {
   onOverrideEditClick: (entity: Override) => void | Promise<void>;
 }
 
-const renderSeverity = (severity: number): string => {
-  if (isDefined(severity)) {
-    if (severity <= LOG_VALUE) {
-      return translateRiskFactor(extraRiskFactor(severity));
-    }
-    return '> ' + (severityValue(severity - 0.1) as string);
-  }
-  return _('Any');
-};
-
 const Actions = withEntitiesActions(
   ({
     entity,
@@ -67,27 +57,35 @@ const Actions = withEntitiesActions(
     onOverrideDownloadClick,
     onOverrideCloneClick,
     onOverrideEditClick,
-  }: ActionsProps) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon<Override>
-        entity={entity}
-        name="override"
-        onClick={onOverrideDeleteClick}
-      />
-      <EditIcon entity={entity} name="override" onClick={onOverrideEditClick} />
-      <CloneIcon<Override>
-        entity={entity}
-        name="override"
-        onClick={onOverrideCloneClick}
-      />
-      <ExportIcon<Override>
-        title={_('Export Override')}
-        value={entity}
-        /* @ts-expect-error */
-        onClick={onOverrideDownloadClick}
-      />
-    </IconDivider>
-  ),
+  }: ActionsProps) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <TrashIcon<Override>
+          entity={entity}
+          name="override"
+          onClick={onOverrideDeleteClick}
+        />
+        <EditIcon
+          entity={entity}
+          name="override"
+          onClick={onOverrideEditClick}
+        />
+        <CloneIcon<Override>
+          entity={entity}
+          name="override"
+          onClick={onOverrideCloneClick}
+        />
+        <ExportIcon<Override>
+          title={_('Export Override')}
+          value={entity}
+          /* @ts-expect-error */
+          onClick={onOverrideDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 const Row = ({
@@ -95,27 +93,41 @@ const Row = ({
   entity,
   onToggleDetailsClick,
   ...props
-}: OverrideRowProps) => (
-  <TableRow>
-    <TableData>
-      <span>
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {shorten(entity.text)}
-        </RowDetailsToggle>
-      </span>
-    </TableData>
-    <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
-    <TableData title={entity.hosts}>
-      {shorten(entity.hosts.join(', '))}
-    </TableData>
-    <TableData title={entity.port}>{shorten(entity.port)}</TableData>
-    <TableData>{renderSeverity(entity.severity)}</TableData>
-    <TableData>
-      <SeverityBar severity={entity.newSeverity} />
-    </TableData>
-    <TableData>{entity.isActive() ? _('yes') : _('no')}</TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+}: OverrideRowProps) => {
+  const [_] = useTranslation();
+
+  const renderSeverity = (severity: number): string => {
+    if (isDefined(severity)) {
+      if (severity <= LOG_VALUE) {
+        return translateRiskFactor(extraRiskFactor(severity));
+      }
+      return '> ' + (severityValue(severity - 0.1) as string);
+    }
+    return _('Any');
+  };
+
+  return (
+    <TableRow>
+      <TableData>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {shorten(entity.text)}
+          </RowDetailsToggle>
+        </span>
+      </TableData>
+      <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
+      <TableData title={entity.hosts}>
+        {shorten(entity.hosts.join(', '))}
+      </TableData>
+      <TableData title={entity.port}>{shorten(entity.port)}</TableData>
+      <TableData>{renderSeverity(entity.severity)}</TableData>
+      <TableData>
+        <SeverityBar severity={entity.newSeverity} />
+      </TableData>
+      <TableData>{entity.isActive() ? _('yes') : _('no')}</TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 export default Row;

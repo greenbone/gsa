@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
@@ -16,6 +15,7 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -23,6 +23,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 const MAX_HOSTS_LISTINGS = 70;
 
 const TargetDetails = ({capabilities, entity}) => {
+  const [_] = useTranslation();
   const {
     alive_tests,
     esxi_credential,
@@ -122,7 +123,6 @@ const TargetDetails = ({capabilities, entity}) => {
           </TableBody>
         </InfoTable>
       </DetailsBlock>
-
       {capabilities.mayAccess('credentials') &&
         (isDefined(ssh_credential) ||
           isDefined(snmp_credential) ||
@@ -225,13 +225,15 @@ const TargetDetails = ({capabilities, entity}) => {
           })}
         >
           <HorizontalSep>
-            {tasks.map(task => (
-              <span key={task.id}>
-                <DetailsLink id={task.id} type="task">
-                  {task.name}
-                </DetailsLink>
-              </span>
-            ))}
+            {tasks.map(task => {
+              return (
+                <span key={task.id}>
+                  <DetailsLink id={task.id} type="task">
+                    {task.name}
+                  </DetailsLink>
+                </span>
+              );
+            })}
           </HorizontalSep>
         </DetailsBlock>
       )}

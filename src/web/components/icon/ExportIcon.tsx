@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {FileOutput as Icon} from 'lucide-react';
 import {DynamicIcon, DynamicIconProps} from 'web/components/icon/DynamicIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import SelectionType from 'web/utils/SelectionType';
 
 export interface ExportIconProps<TValue = string>
@@ -20,6 +20,7 @@ function ExportIcon<TValue = string>({
   title,
   ...props
 }: Readonly<ExportIconProps<TValue>>): React.ReactNode {
+  const [_] = useTranslation();
   let downloadTitle = title;
   if (!isDefined(downloadTitle)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {

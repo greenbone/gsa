@@ -1,9 +1,8 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -17,6 +16,7 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import EntityInfo from 'web/entity/EntityInfo';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityPageRenderProps {
   activeTab: number;
@@ -98,6 +98,7 @@ const EntityPage: React.FC<EntityPageProps> = ({
   onInteraction,
   ...props
 }: EntityPageProps) => {
+  const [_] = useTranslation();
   const [activeTab, setActiveTab] = useState(0);
 
   const handleActivateTab = (index: number) => {

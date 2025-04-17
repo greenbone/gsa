@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {DetailsIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import EntityBox from 'web/entity/Box';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {
   LOG_VALUE,
@@ -17,6 +17,7 @@ import {
 } from 'web/utils/severity';
 
 const OverrideBox = ({override, detailsLink = true}) => {
+  const [_] = useTranslation();
   let severity;
   let newSeverity = '';
   if (!isDefined(override.severity)) {

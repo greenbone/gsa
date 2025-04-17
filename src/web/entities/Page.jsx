@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
@@ -14,11 +13,11 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import PowerFilter from 'web/components/powerfilter/PowerFilter';
 import Section from 'web/components/section/Section';
+import withTranslation from 'web/hooks/withTranslation';
 import {loadAllEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 
 const exclude_props = [
   'children',
@@ -33,18 +32,6 @@ const exclude_props = [
   'title',
   'toolBarIcons',
 ];
-
-const renderSectionTitle = (counts, title) => {
-  if (!isDefined(counts)) {
-    return title;
-  }
-
-  return _('{{title}} {{filtered}} of {{all}}', {
-    title,
-    filtered: counts.filtered,
-    all: counts.all,
-  });
-};
 
 class EntitiesPage extends React.Component {
   constructor(...args) {
@@ -65,9 +52,17 @@ class EntitiesPage extends React.Component {
   }
 
   getSectionTitle() {
-    const {entitiesCounts, title} = this.props;
+    const {entitiesCounts, title, _} = this.props;
 
-    return renderSectionTitle(entitiesCounts, title);
+    if (!isDefined(entitiesCounts)) {
+      return title;
+    }
+
+    return _('{{title}} {{filtered}} of {{all}}', {
+      title,
+      filtered: entitiesCounts.filtered,
+      all: entitiesCounts.all,
+    });
   }
 
   handleFilterEditClick() {
@@ -279,6 +274,7 @@ EntitiesPage.propTypes = {
   onFilterRemoved: PropTypes.func.isRequired,
   onFilterReset: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 export const createEntitiesPage = (options = {}) => {
@@ -311,5 +307,6 @@ const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
 
 export default compose(
   withGmp,
+  withTranslation,
   connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesPage);

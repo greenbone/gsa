@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -16,9 +15,11 @@ import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const ScannerDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {
     comment,
     scannerType,
@@ -91,13 +92,15 @@ const ScannerDetails = ({entity}) => {
                 {_('Tasks using this Scanner')}
               </TableDataAlignTop>
               <TableData>
-                {tasks.map(task => (
-                  <span key={task.id}>
-                    <DetailsLink id={task.id} type="task">
-                      {task.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {tasks.map(task => {
+                  return (
+                    <span key={task.id}>
+                      <DetailsLink id={task.id} type="task">
+                        {task.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
               </TableData>
             </TableRow>
           )}
@@ -106,19 +109,20 @@ const ScannerDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Scan Configs using this Scanner')}</TableData>
               <TableData>
-                {configs.map(config => (
-                  <span key={config.id}>
-                    <DetailsLink id={config.id} type="scanconfig">
-                      {config.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {configs.map(config => {
+                  return (
+                    <span key={config.id}>
+                      <DetailsLink id={config.id} type="scanconfig">
+                        {config.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
               </TableData>
             </TableRow>
           )}
         </TableBody>
       </InfoTable>
-
       {!entity.hasUnixSocket() &&
         isDefined(credential) &&
         isDefined(credential.certificate_info) && (

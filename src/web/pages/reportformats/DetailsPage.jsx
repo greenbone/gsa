@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -39,6 +38,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportFormatComponent from 'web/pages/reportformats/Component';
 import ReportFormatDetails from 'web/pages/reportformats/Details';
 import {
@@ -53,36 +53,40 @@ const ToolBarIcons = ({
   onReportFormatImportClick,
   onReportFormatDeleteClick,
   onReportFormatEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-report-formats"
-        page="reports"
-        title={_('Help: Report Formats')}
-      />
-      <ListIcon page="reportformats" title={_('Report Formats List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon
-        displayName={_('Report Format')}
-        entity={entity}
-        onClick={onReportFormatImportClick}
-      />
-      <EditIcon
-        disabled={entity.predefined}
-        displayName={_('Report Format')}
-        entity={entity}
-        onClick={onReportFormatEditClick}
-      />
-      <TrashIcon
-        displayName={_('Report Format')}
-        entity={entity}
-        onClick={onReportFormatDeleteClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-report-formats"
+          page="reports"
+          title={_('Help: Report Formats')}
+        />
+        <ListIcon page="reportformats" title={_('Report Formats List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon
+          displayName={_('Report Format')}
+          entity={entity}
+          onClick={onReportFormatImportClick}
+        />
+        <EditIcon
+          disabled={entity.predefined}
+          displayName={_('Report Format')}
+          entity={entity}
+          onClick={onReportFormatEditClick}
+        />
+        <TrashIcon
+          displayName={_('Report Format')}
+          entity={entity}
+          onClick={onReportFormatDeleteClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -132,9 +136,9 @@ const ReportFormatParamValue = ({
     `;
     return (
       <OptionsList>
-        {param.value.map(option => (
-          <li key={param.name + '=' + option}>{option}</li>
-        ))}
+        {param.value.map(option => {
+          return <li key={param.name + '=' + option}>{option}</li>;
+        })}
       </OptionsList>
     );
   } else if (param.type === 'text') {
@@ -154,6 +158,7 @@ ReportFormatParamValue.propTypes = {
 };
 
 const Parameters = ({entity}) => {
+  const [_] = useTranslation();
   const {params = []} = entity;
 
   return (
@@ -168,14 +173,16 @@ const Parameters = ({entity}) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {params.map(param => (
-              <TableRow key={param.name}>
-                <TableDataAlignTop>{param.name}</TableDataAlignTop>
-                <TableData>
-                  <ReportFormatParamValue param={param} value={param.value} />
-                </TableData>
-              </TableRow>
-            ))}
+            {params.map(param => {
+              return (
+                <TableRow key={param.name}>
+                  <TableDataAlignTop>{param.name}</TableDataAlignTop>
+                  <TableData>
+                    <ReportFormatParamValue param={param} value={param.value} />
+                  </TableData>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       )}
@@ -195,88 +202,92 @@ const Page = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <ReportFormatComponent
-    onDeleteError={onError}
-    onDeleted={goToList('reportformats', props)}
-    onImported={goToDetails('reportformat', props)}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({delete: delete_func, edit, import: import_func, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<ReportFormatIcon size="large" />}
-        title={_('Report Format')}
-        toolBarIcons={ToolBarIcons}
-        onInteraction={onInteraction}
-        onReportFormatDeleteClick={delete_func}
-        onReportFormatEditClick={edit}
-        onReportFormatImportClick={import_func}
-        onReportFormatSaveClick={save}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle
-                title={_('Report Format: {{name}}', {name: entity.name})}
-              />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.params}>
-                      {_('Parameters')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+}) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} links={links} />
-                    </TabPanel>
-                    <TabPanel>
-                      <Parameters entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </ReportFormatComponent>
-);
+  return (
+    <ReportFormatComponent
+      onDeleteError={onError}
+      onDeleted={goToList('reportformats', props)}
+      onImported={goToDetails('reportformat', props)}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({delete: delete_func, edit, import: import_func, save}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<ReportFormatIcon size="large" />}
+          title={_('Report Format')}
+          toolBarIcons={ToolBarIcons}
+          onInteraction={onInteraction}
+          onReportFormatDeleteClick={delete_func}
+          onReportFormatEditClick={edit}
+          onReportFormatImportClick={import_func}
+          onReportFormatSaveClick={save}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle
+                  title={_('Report Format: {{name}}', {name: entity.name})}
+                />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.params}>
+                        {_('Parameters')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} links={links} />
+                      </TabPanel>
+                      <TabPanel>
+                        <Parameters entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </ReportFormatComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

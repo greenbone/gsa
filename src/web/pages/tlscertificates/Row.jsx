@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
@@ -15,6 +14,7 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Div = styled.div`
   word-break: break-all;
@@ -26,29 +26,33 @@ const Actions = withEntitiesActions(
     onTlsCertificateDeleteClick,
     onTlsCertificateDownloadClick,
     onTlsCertificateExportClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      {entity.isInUse() ? (
-        <DeleteIcon disabled={true} title={_('TLS Certificate is in use')} />
-      ) : (
-        <DeleteIcon
-          title={_('Delete TLS Certificate')}
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        {entity.isInUse() ? (
+          <DeleteIcon disabled={true} title={_('TLS Certificate is in use')} />
+        ) : (
+          <DeleteIcon
+            title={_('Delete TLS Certificate')}
+            value={entity}
+            onClick={onTlsCertificateDeleteClick}
+          />
+        )}
+        <DownloadIcon
+          title={_('Download TLS Certificate')}
           value={entity}
-          onClick={onTlsCertificateDeleteClick}
+          onClick={onTlsCertificateDownloadClick}
         />
-      )}
-      <DownloadIcon
-        title={_('Download TLS Certificate')}
-        value={entity}
-        onClick={onTlsCertificateDownloadClick}
-      />
-      <ExportIcon
-        title={_('Export TLS Certificate as XML')}
-        value={entity}
-        onClick={onTlsCertificateExportClick}
-      />
-    </IconDivider>
-  ),
+        <ExportIcon
+          title={_('Export TLS Certificate as XML')}
+          value={entity}
+          onClick={onTlsCertificateExportClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {

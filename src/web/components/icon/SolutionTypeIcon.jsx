@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import {
   StMitigateIcon,
@@ -14,8 +13,10 @@ import {
   StWillNotFixIcon,
 } from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const SolutionType = ({type, displayTitleText = false}) => {
+  const [_] = useTranslation();
   let IconComponent;
   let title;
 

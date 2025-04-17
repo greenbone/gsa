@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -19,6 +18,7 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -33,6 +33,7 @@ const Actions = compose(
   onHostDeleteClick,
   onHostDownloadClick,
 }) => {
+  const [_] = useTranslation();
   let new_title;
   const can_create_target = capabilities.mayCreate('target');
   if (can_create_target) {

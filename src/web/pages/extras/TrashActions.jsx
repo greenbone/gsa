@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -11,7 +10,9 @@ import {RestoreIcon} from 'web/components/icon';
 import TrashDeleteIcon from 'web/components/icon/TrashDeleteIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
+
 const getRestorableDeletableForEntityType = {
   alert: entity => {
     const restorable = isDefined(entity.filter)
@@ -121,37 +122,38 @@ const isAbleToRestoreAndDelete = entity => {
     : {restorable: false, deletable: false};
 };
 
-const getRestoreDeleteProps = (entity, onEntityRestore, onEntityDelete) => {
-  let restoreprops;
-  let deleteprops;
-  const {restorable, deletable} = isAbleToRestoreAndDelete(entity);
-
-  if (restorable) {
-    restoreprops = {
-      title: _('Restore'),
-      onClick: onEntityRestore,
-    };
-  } else {
-    restoreprops = {
-      active: false,
-    };
-  }
-
-  if (deletable) {
-    deleteprops = {
-      title: _('Delete'),
-      onClick: onEntityDelete,
-    };
-  } else {
-    deleteprops = {
-      active: false,
-      title: _('Still in use'),
-    };
-  }
-  return {restoreprops, deleteprops};
-};
-
 const TrashActions = ({entity, onEntityDelete, onEntityRestore}) => {
+  const [_] = useTranslation();
+  const getRestoreDeleteProps = (entity, onEntityRestore, onEntityDelete) => {
+    let restoreprops;
+    let deleteprops;
+    const {restorable, deletable} = isAbleToRestoreAndDelete(entity);
+
+    if (restorable) {
+      restoreprops = {
+        title: _('Restore'),
+        onClick: onEntityRestore,
+      };
+    } else {
+      restoreprops = {
+        active: false,
+      };
+    }
+
+    if (deletable) {
+      deleteprops = {
+        title: _('Delete'),
+        onClick: onEntityDelete,
+      };
+    } else {
+      deleteprops = {
+        active: false,
+        title: _('Still in use'),
+      };
+    }
+    return {restoreprops, deleteprops};
+  };
+
   const {restoreprops, deleteprops} = getRestoreDeleteProps(
     entity,
     onEntityRestore,

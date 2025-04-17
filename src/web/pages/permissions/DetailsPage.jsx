@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import {PermissionIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -28,6 +27,7 @@ import {goToDetails, goToList} from 'web/entity/navigation';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import PermissionComponent from 'web/pages/permissions/Component';
 import PermissionDetails from 'web/pages/permissions/Details';
 import {selector, loadEntity} from 'web/store/entities/permissions';
@@ -39,29 +39,33 @@ const ToolBarIcons = ({
   onPermissionDeleteClick,
   onPermissionDownloadClick,
   onPermissionEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-permissions"
-        page="web-interface-access"
-        title={_('Help: Permissions')}
-      />
-      <ListIcon page="permissions" title={_('Permission List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onPermissionCreateClick} />
-      <CloneIcon entity={entity} onClick={onPermissionCloneClick} />
-      <EditIcon entity={entity} onClick={onPermissionEditClick} />
-      <TrashIcon entity={entity} onClick={onPermissionDeleteClick} />
-      <ExportIcon
-        title={_('Export Permission as XML')}
-        value={entity}
-        onClick={onPermissionDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-permissions"
+          page="web-interface-access"
+          title={_('Help: Permissions')}
+        />
+        <ListIcon page="permissions" title={_('Permission List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onPermissionCreateClick} />
+        <CloneIcon entity={entity} onClick={onPermissionCloneClick} />
+        <EditIcon entity={entity} onClick={onPermissionEditClick} />
+        <TrashIcon entity={entity} onClick={onPermissionDeleteClick} />
+        <ExportIcon
+          title={_('Export Permission as XML')}
+          value={entity}
+          onClick={onPermissionDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -80,6 +84,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <PermissionComponent
       onCloneError={onError}

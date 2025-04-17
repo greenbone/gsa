@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -15,6 +14,7 @@ import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 
@@ -47,9 +47,9 @@ export const ReportConfigParamValue = ({
     `;
     return (
       <OptionsList>
-        {value.map(option => (
-          <li key={param.name + '=' + option}>{option}</li>
-        ))}
+        {value.map(option => {
+          return <li key={param.name + '=' + option}>{option}</li>;
+        })}
       </OptionsList>
     );
   } else if (param.type === 'text') {
@@ -69,6 +69,7 @@ ReportConfigParamValue.propTypes = {
 };
 
 const ReportConfigDetails = ({entity, links = true}) => {
+  const [_] = useTranslation();
   const {orphan, reportFormat, params, alerts = []} = entity;
 
   const reportFormatLink = orphan ? (
@@ -129,13 +130,15 @@ const ReportConfigDetails = ({entity, links = true}) => {
                 {_('Alerts using this Report Config')}
               </TableDataAlignTop>
               <TableData>
-                {alerts.map(alert => (
-                  <span key={alert.id}>
-                    <DetailsLink id={alert.id} type="alert">
-                      {alert.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {alerts.map(alert => {
+                  return (
+                    <span key={alert.id}>
+                      <DetailsLink id={alert.id} type="alert">
+                        {alert.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
               </TableData>
             </TableRow>
           )}

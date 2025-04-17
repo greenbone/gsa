@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import {
   TrendDownIcon,
@@ -12,8 +11,10 @@ import {
   TrendUpIcon,
   TrendNoChangeIcon,
 } from 'web/components/icon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Trend = ({name}) => {
+  const [_] = useTranslation();
   let title;
   let IconComponent;
 

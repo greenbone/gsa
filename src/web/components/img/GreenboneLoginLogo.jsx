@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
 import Img from 'web/components/img/Img';
+import useTranslation from 'web/hooks/useTranslation';
 
 const Image = styled(Img)`
   display: flex;
@@ -14,6 +14,7 @@ const Image = styled(Img)`
 `;
 
 const LoginLogo = () => {
+  const [_] = useTranslation();
   return (
     <Image
       alt={_('Greenbone AG')}

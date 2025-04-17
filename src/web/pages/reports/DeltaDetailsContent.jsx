@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -27,6 +26,7 @@ import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
+import useTranslation from 'web/hooks/useTranslation';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
@@ -69,6 +69,7 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
+  const [_] = useTranslation();
   const {report = {}} = entity || {};
 
   const {userTags = {}} = report;

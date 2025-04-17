@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -14,6 +13,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const IconActions = ({
@@ -22,34 +22,38 @@ const IconActions = ({
   onPortListDownloadClick,
   onPortListCloneClick,
   onPortListEditClick,
-}) => (
-  <IconDivider grow align={['center', 'center']}>
-    <TrashIcon
-      displayName={_('Port List')}
-      entity={entity}
-      name="portlist"
-      onClick={onPortListDeleteClick}
-    />
-    <EditIcon
-      disabled={entity.predefined}
-      displayName={_('Port List')}
-      entity={entity}
-      name="port_list"
-      onClick={onPortListEditClick}
-    />
-    <CloneIcon
-      displayName={_('Port List')}
-      entity={entity}
-      name="port_list"
-      onClick={onPortListCloneClick}
-    />
-    <ExportIcon
-      title={_('Export Port List')}
-      value={entity}
-      onClick={onPortListDownloadClick}
-    />
-  </IconDivider>
-);
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <IconDivider grow align={['center', 'center']}>
+      <TrashIcon
+        displayName={_('Port List')}
+        entity={entity}
+        name="portlist"
+        onClick={onPortListDeleteClick}
+      />
+      <EditIcon
+        disabled={entity.predefined}
+        displayName={_('Port List')}
+        entity={entity}
+        name="port_list"
+        onClick={onPortListEditClick}
+      />
+      <CloneIcon
+        displayName={_('Port List')}
+        entity={entity}
+        name="port_list"
+        onClick={onPortListCloneClick}
+      />
+      <ExportIcon
+        title={_('Export Port List')}
+        value={entity}
+        onClick={onPortListDownloadClick}
+      />
+    </IconDivider>
+  );
+};
 
 IconActions.propTypes = {
   entity: PropTypes.model,
@@ -67,21 +71,25 @@ const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      displayName={_('Port List')}
-      entity={entity}
-      link={links}
-      type="portlist"
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData align="start">{entity.port_count.all}</TableData>
-    <TableData align="start">{entity.port_count.tcp}</TableData>
-    <TableData align="start">{entity.port_count.udp}</TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <TableRow>
+      <EntityNameTableData
+        displayName={_('Port List')}
+        entity={entity}
+        link={links}
+        type="portlist"
+        onToggleDetailsClick={onToggleDetailsClick}
+      />
+      <TableData align="start">{entity.port_count.all}</TableData>
+      <TableData align="start">{entity.port_count.tcp}</TableData>
+      <TableData align="start">{entity.port_count.udp}</TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

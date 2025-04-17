@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -15,6 +14,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -25,6 +25,7 @@ const Actions = compose(withEntitiesActions)(({
   onReportConfigCloneClick,
   onReportConfigDownloadClick,
 }) => {
+  const [_] = useTranslation();
   return (
     <IconDivider grow align={['center', 'center']}>
       <TrashIcon
@@ -68,6 +69,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const reportFormat = entity.orphan ? (
     entity.reportFormat.id
   ) : (

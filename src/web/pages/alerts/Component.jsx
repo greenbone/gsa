@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   email_credential_filter,
   password_only_credential_filter,
@@ -20,6 +19,7 @@ import {connect} from 'react-redux';
 import FootNote from 'web/components/footnote/Footnote';
 import Layout from 'web/components/layout/Layout';
 import EntityComponent from 'web/entity/EntityComponent';
+import withTranslation from 'web/hooks/withTranslation';
 import ContentComposerDialog from 'web/pages/alerts/ContentComposerDialog';
 import AlertDialog, {
   ATTACH_MESSAGE_DEFAULT,
@@ -183,6 +183,8 @@ class AlertComponent extends React.Component {
   }
 
   openCredentialDialog({type, types}) {
+    const {_} = this.props;
+
     this.credentialType = type;
 
     this.setState({
@@ -289,6 +291,7 @@ class AlertComponent extends React.Component {
 
   openAlertDialog(alert) {
     const {gmp} = this.props;
+    const {_} = this.props;
 
     this.handleInteraction();
 
@@ -828,6 +831,8 @@ class AlertComponent extends React.Component {
   }
 
   handleTestAlert(alert) {
+    const {_} = this.props;
+
     const {gmp} = this.props;
     const {onTestSuccess, onTestError} = this.props;
 
@@ -934,6 +939,8 @@ class AlertComponent extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       children,
       onError,
@@ -1293,6 +1300,7 @@ AlertComponent.propTypes = {
   onSaved: PropTypes.func,
   onTestError: PropTypes.func,
   onTestSuccess: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => {
@@ -1313,4 +1321,4 @@ const mapStateToProps = rootState => {
 export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
-)(AlertComponent);
+)(withTranslation(AlertComponent));

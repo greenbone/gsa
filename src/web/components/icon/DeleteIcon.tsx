@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {CircleX as Icon} from 'lucide-react';
 import {DynamicIcon, DynamicIconProps} from 'web/components/icon/DynamicIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import SelectionType from 'web/utils/SelectionType';
 
 export interface DeleteIconProps<TValue = string>
@@ -20,6 +20,7 @@ function DeleteIcon<TValue = string>({
   title,
   ...props
 }: Readonly<DeleteIconProps<TValue>>): React.ReactNode {
+  const [_] = useTranslation();
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = _('Delete page contents');

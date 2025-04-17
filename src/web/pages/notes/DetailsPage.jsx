@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -39,6 +38,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useTranslation from 'web/hooks/useTranslation';
 import NoteComponent from 'web/pages/notes/Component';
 import NoteDetails from 'web/pages/notes/Details';
 import {selector as notesSelector, loadEntity} from 'web/store/entities/notes';
@@ -57,29 +57,33 @@ export const ToolBarIcons = ({
   onNoteDeleteClick,
   onNoteDownloadClick,
   onNoteEditClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-notes"
-        page="reports"
-        title={_('Help: Notes')}
-      />
-      <ListIcon page="notes" title={_('Note List')} />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon entity={entity} onClick={onNoteCreateClick} />
-      <CloneIcon entity={entity} onClick={onNoteCloneClick} />
-      <EditIcon entity={entity} onClick={onNoteEditClick} />
-      <TrashIcon entity={entity} onClick={onNoteDeleteClick} />
-      <ExportIcon
-        title={_('Export Note as XML')}
-        value={entity}
-        onClick={onNoteDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-);
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          anchor="managing-notes"
+          page="reports"
+          title={_('Help: Notes')}
+        />
+        <ListIcon page="notes" title={_('Note List')} />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onNoteCreateClick} />
+        <CloneIcon entity={entity} onClick={onNoteCloneClick} />
+        <EditIcon entity={entity} onClick={onNoteEditClick} />
+        <TrashIcon entity={entity} onClick={onNoteDeleteClick} />
+        <ExportIcon
+          title={_('Export Note as XML')}
+          value={entity}
+          onClick={onNoteDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -93,6 +97,7 @@ ToolBarIcons.propTypes = {
 const Details = connect(rootState => ({
   timezone: getTimezone(rootState),
 }))(({entity, timezone, ...props}) => {
+  const [_] = useTranslation();
   const {nvt} = entity;
   return (
     <Layout flex="column">
@@ -157,90 +162,94 @@ const Page = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <NoteComponent
-    onCloneError={onError}
-    onCloned={goToDetails('note', props)}
-    onCreated={goToDetails('note', props)}
-    onDeleteError={onError}
-    onDeleted={goToList('notes', props)}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<NoteIcon size="large" />}
-        title={_('Note')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onInteraction={onInteraction}
-        onNoteCloneClick={clone}
-        onNoteCreateClick={create}
-        onNoteDeleteClick={delete_func}
-        onNoteDownloadClick={download}
-        onNoteEditClick={edit}
-        onNoteSaveClick={save}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Note Details')} />
-              <Layout flex="column" grow="1">
-                <TabLayout align={['start', 'end']} grow="1">
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+}) => {
+  const [_] = useTranslation();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </NoteComponent>
-);
+  return (
+    <NoteComponent
+      onCloneError={onError}
+      onCloned={goToDetails('note', props)}
+      onCreated={goToDetails('note', props)}
+      onDeleteError={onError}
+      onDeleted={goToList('notes', props)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<NoteIcon size="large" />}
+          title={_('Note')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+          onNoteCloneClick={clone}
+          onNoteCreateClick={create}
+          onNoteDeleteClick={delete_func}
+          onNoteDownloadClick={download}
+          onNoteEditClick={edit}
+          onNoteSaveClick={save}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Note Details')} />
+                <Layout flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </NoteComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

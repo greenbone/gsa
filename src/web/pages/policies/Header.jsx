@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({
@@ -17,6 +17,7 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
+  const [_] = useTranslation();
   return (
     <TableHeader>
       <TableRow>

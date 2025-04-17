@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -13,6 +12,7 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/Data';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -24,6 +24,7 @@ const EntityNameTableData = ({
   children,
   onToggleDetailsClick,
 }) => {
+  const [_] = useTranslation();
   const [username] = useUserName();
   return (
     <TableData>

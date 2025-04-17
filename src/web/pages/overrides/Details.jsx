@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
@@ -16,6 +15,7 @@ import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import EntityLink from 'web/entity/Link';
 import OverrideBox from 'web/entity/Override';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {
   translatedResultSeverityRiskFactor,
@@ -23,6 +23,7 @@ import {
 } from 'web/utils/severity';
 
 const OverrideDetails = ({entity}) => {
+  const [_] = useTranslation();
   const {hosts, port, result, severity, task} = entity;
   return (
     <Layout flex="column" grow="1">
@@ -38,9 +39,9 @@ const OverrideDetails = ({entity}) => {
               <TableData>
                 {hosts.length > 0 ? (
                   <HorizontalSep>
-                    {hosts.map(host => (
-                      <span key={host}>{host}</span>
-                    ))}
+                    {hosts.map(host => {
+                      return <span key={host}>{host}</span>;
+                    })}
                   </HorizontalSep>
                 ) : (
                   _('Any')
@@ -96,7 +97,6 @@ const OverrideDetails = ({entity}) => {
           </TableBody>
         </InfoTable>
       </DetailsBlock>
-
       <DetailsBlock
         title={
           entity.isActive() ? _('Appearance') : _('Appearance when active')

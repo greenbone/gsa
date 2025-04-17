@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 import {FirstIcon, LastIcon, NextIcon, PreviousIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const PaginationText = styled.span`
   margin: 0 3px;
@@ -33,6 +33,7 @@ const Pagination = ({
   onNextClick,
   onPreviousClick,
 }) => {
+  const [_] = useTranslation();
   if (!isDefined(counts)) {
     return null;
   }

@@ -4,7 +4,6 @@
  */
 
 import equal from 'fast-deep-equal';
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
@@ -18,6 +17,7 @@ import Display, {
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
+import withTranslation from 'web/hooks/withTranslation';
 import Theme from 'web/utils/Theme';
 
 export interface State {
@@ -94,6 +94,7 @@ export interface DataDisplayProps<
   state: TState;
   title: TitleFunc<TTransformedData>;
   width: number;
+  _: (text: string, ...args: string[]) => string;
 }
 
 interface DataDisplayState<TData, TTransformedData> {
@@ -167,7 +168,9 @@ const DisplayBox = styled.div`
 
 const escapeCsv = (value: string) => '"' + `${value}`.replace(/"/g, '""') + '"';
 
-const renderIcons = props => <DataDisplayIcons {...props} />;
+const renderIcons = props => {
+  return <DataDisplayIcons {...props} />;
+};
 
 class DataDisplay<
   TData,
@@ -406,6 +409,7 @@ class DataDisplay<
       showFilterString = false,
       showFilterSelection = false,
     } = this.props;
+    const {_} = this.props;
     const {
       children,
       id,
@@ -489,4 +493,4 @@ class DataDisplay<
   }
 }
 
-export default DataDisplay;
+export default withTranslation(DataDisplay);

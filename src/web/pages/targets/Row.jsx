@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React from 'react';
@@ -19,6 +18,7 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const Actions = withEntitiesActions(
@@ -28,35 +28,39 @@ const Actions = withEntitiesActions(
     onTargetCloneClick,
     onTargetDownloadClick,
     onTargetDeleteClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Target')}
-        entity={entity}
-        name="target"
-        onClick={onTargetDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Target')}
-        entity={entity}
-        name="target"
-        onClick={onTargetEditClick}
-      />
-      <CloneIcon
-        displayName={_('Target')}
-        entity={entity}
-        name="target"
-        title={_('Clone Target')}
-        value={entity}
-        onClick={onTargetCloneClick}
-      />
-      <ExportIcon
-        title={_('Export Target')}
-        value={entity}
-        onClick={onTargetDownloadClick}
-      />
-    </IconDivider>
-  ),
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <TrashIcon
+          displayName={_('Target')}
+          entity={entity}
+          name="target"
+          onClick={onTargetDeleteClick}
+        />
+        <EditIcon
+          displayName={_('Target')}
+          entity={entity}
+          name="target"
+          onClick={onTargetEditClick}
+        />
+        <CloneIcon
+          displayName={_('Target')}
+          entity={entity}
+          name="target"
+          title={_('Clone Target')}
+          value={entity}
+          onClick={onTargetCloneClick}
+        />
+        <ExportIcon
+          title={_('Export Target')}
+          value={entity}
+          onClick={onTargetDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -96,6 +100,7 @@ export const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const gmp = useGmp();
 
   return (

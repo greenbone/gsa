@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
@@ -18,6 +17,7 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import Actions from 'web/pages/audits/Actions';
 import AuditStatus from 'web/pages/tasks/Status';
@@ -64,6 +64,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const [username] = useUserName();
   const {scanner, observers} = entity;
   const obs = [];

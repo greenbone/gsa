@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {typeName} from 'gmp/utils/entitytype';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
@@ -17,6 +16,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
@@ -34,6 +34,7 @@ const Actions = compose(
   onTagDisableClick,
   onTagEnableClick,
 }) => {
+  const [_] = useTranslation();
   let endisableable = null;
 
   if (capabilities.mayEdit('tag')) {
@@ -104,6 +105,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const {resourceCount, resourceType} = entity;
   return (
     <TableRow>

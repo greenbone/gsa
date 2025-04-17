@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
@@ -32,6 +31,7 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/Table';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import withTranslation from 'web/hooks/withTranslation';
 import SettingsDialog from 'web/pages/usersettings/Dialog';
 import {
   loadEntities as loadAlerts,
@@ -255,6 +255,8 @@ class UserSettings extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {activeTab, dialogVisible, disableEditIcon} = this.state;
     let {
       capabilities,
@@ -894,6 +896,7 @@ UserSettings.propTypes = {
   usersFilter: PropTypes.object,
   vulnerabilitiesFilter: PropTypes.object,
   onInteraction: PropTypes.func.isRequired,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -1140,4 +1143,4 @@ export default compose(
   withGmp,
   withCapabilities,
   connect(mapStateToProps, mapDispatchToProps),
-)(UserSettings);
+)(withTranslation(UserSettings));

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   apiType,
   EntityType,
@@ -13,6 +12,7 @@ import {
 import {isDefined} from 'gmp/utils/identity';
 import {VerifyIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityVerify extends EntityType {
   userCapabilities: {
@@ -42,6 +42,7 @@ const EntityVerifyIcon = <TEntity extends EntityVerify>({
   onClick,
   ...props
 }: EntityVerifyIconProps<TEntity>) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (!isDefined(name)) {
     name = apiType(getEntityType(entity));

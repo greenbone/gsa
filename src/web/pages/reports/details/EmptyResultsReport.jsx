@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
@@ -11,6 +10,7 @@ import {DeleteIcon, EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 const FilterString = styled.span`
@@ -27,6 +27,7 @@ const EmptyResultsReport = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
 }) => {
+  const [_] = useTranslation();
   const levels = filter.get('levels', '');
   const severity = filter.getTerm('severity');
   const min_qod = filter.get('min_qod');

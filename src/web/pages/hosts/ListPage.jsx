@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
@@ -15,6 +14,7 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {goToDetails} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 import HostComponent from 'web/pages/hosts/Component';
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from 'web/pages/hosts/dashboard';
 import HostsFilterDialog from 'web/pages/hosts/FilterDialog';
@@ -25,6 +25,7 @@ import {
 } from 'web/store/entities/hosts';
 import PropTypes from 'web/utils/PropTypes';
 export const ToolBarIcons = ({onHostCreateClick}) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   return (
     <IconDivider>
@@ -53,65 +54,69 @@ const Page = ({
   onFilterChanged,
   onInteraction,
   ...props
-}) => (
-  <HostComponent
-    entitiesCounts={entitiesCounts}
-    onCreated={onChanged}
-    onDeleted={onChanged}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-    onTargetCreateError={onError}
-    onTargetCreated={goToDetails('target', props)}
-  >
-    {({
-      create,
-      createtargetfromselection,
-      createtargetfromhost,
-      delete: delete_func,
-      download,
-      edit,
-    }) => (
-      <React.Fragment>
-        <PageTitle title={_('Hosts')} />
-        <EntitiesPage
-          {...props}
-          dashboard={() => (
-            <HostsDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={HOSTS_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          entitiesCounts={entitiesCounts}
-          filter={filter}
-          filterEditDialog={HostsFilterDialog}
-          filtersFilter={HOSTS_FILTER_FILTER}
-          sectionIcon={<HostIcon size="large" />}
-          table={HostsTable}
-          title={_('Hosts')}
-          toolBarIcons={ToolBarIcons}
-          onError={onError}
-          onFilterChanged={onFilterChanged}
-          onHostCreateClick={create}
-          onHostDeleteClick={delete_func}
-          onHostDownloadClick={download}
-          onHostEditClick={edit}
-          onInteraction={onInteraction}
-          onTargetCreateFromHostClick={createtargetfromhost}
-          onTargetCreateFromSelection={createtargetfromselection}
-        />
-      </React.Fragment>
-    )}
-  </HostComponent>
-);
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <HostComponent
+      entitiesCounts={entitiesCounts}
+      onCreated={onChanged}
+      onDeleted={onChanged}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+      onTargetCreateError={onError}
+      onTargetCreated={goToDetails('target', props)}
+    >
+      {({
+        create,
+        createtargetfromselection,
+        createtargetfromhost,
+        delete: delete_func,
+        download,
+        edit,
+      }) => (
+        <React.Fragment>
+          <PageTitle title={_('Hosts')} />
+          <EntitiesPage
+            {...props}
+            dashboard={() => (
+              <HostsDashboard
+                filter={filter}
+                onFilterChanged={onFilterChanged}
+                onInteraction={onInteraction}
+              />
+            )}
+            dashboardControls={() => (
+              <DashboardControls
+                dashboardId={HOSTS_DASHBOARD_ID}
+                onInteraction={onInteraction}
+              />
+            )}
+            entitiesCounts={entitiesCounts}
+            filter={filter}
+            filterEditDialog={HostsFilterDialog}
+            filtersFilter={HOSTS_FILTER_FILTER}
+            sectionIcon={<HostIcon size="large" />}
+            table={HostsTable}
+            title={_('Hosts')}
+            toolBarIcons={ToolBarIcons}
+            onError={onError}
+            onFilterChanged={onFilterChanged}
+            onHostCreateClick={create}
+            onHostDeleteClick={delete_func}
+            onHostDownloadClick={download}
+            onHostEditClick={edit}
+            onInteraction={onInteraction}
+            onTargetCreateFromHostClick={createtargetfromhost}
+            onTargetCreateFromSelection={createtargetfromselection}
+          />
+        </React.Fragment>
+      )}
+    </HostComponent>
+  );
+};
 
 Page.propTypes = {
   entitiesCounts: PropTypes.counts,

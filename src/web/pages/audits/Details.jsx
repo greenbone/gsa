@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {duration} from 'gmp/models/date';
 import {scannerTypeName} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
@@ -18,6 +17,7 @@ import TableData from 'web/components/table/Data';
 import DetailsTable from 'web/components/table/DetailsTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import withTranslation from 'web/hooks/withTranslation';
 import {compareAlerts} from 'web/pages/tasks/Details';
 import {
   loadEntity as loadPolicy,
@@ -45,6 +45,8 @@ class AuditDetails extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {links = true, entity, policy, schedule} = this.props;
     const {
       alerts,
@@ -265,6 +267,7 @@ AuditDetails.propTypes = {
   loadSchedule: PropTypes.func.isRequired,
   policy: PropTypes.model,
   schedule: PropTypes.model,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
@@ -288,4 +291,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
-)(AuditDetails);
+)(withTranslation(AuditDetails));

@@ -1,9 +1,8 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -13,6 +12,7 @@ import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PortListsDialog from 'web/pages/portlists/Dialog';
 import ImportPortListDialog from 'web/pages/portlists/ImportDialog';
 import PortRangeDialog, {
@@ -75,6 +75,7 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
   onImported,
   onImportError,
 }) => {
+  const [_] = useTranslation();
   const gmp = useGmp();
   const [importDialogVisible, setImportDialogVisible] = useState(false);
   const [portListDialogVisible, setPortListDialogVisible] = useState(false);

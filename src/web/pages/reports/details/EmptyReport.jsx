@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isActive, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
 import {RefreshIcon, TargetIcon, TaskIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import InfoPanel from 'web/components/panel/InfoPanel';
+import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -19,6 +19,7 @@ const EmptyReport = ({
   status,
   onTargetEditClick,
 }) => {
+  const [_] = useTranslation();
   const may_edit_target = capabilities.mayEdit('target');
   const isActiveReport = hasTarget && isActive(status);
   return (

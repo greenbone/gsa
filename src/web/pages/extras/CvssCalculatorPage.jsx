@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   parseCvssV2BaseVector,
   parseCvssV3BaseVector,
@@ -24,24 +23,30 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
+import useTranslation from 'web/hooks/useTranslation';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 const StyledTextField = styled(TextField)`
   width: 180px;
 `;
 
-const ToolBarIcons = () => (
-  <ManualIcon
-    anchor="cvss"
-    page="managing-secinfo"
-    size="small"
-    title={_('Help: CVSS Base Score Calculator')}
-  />
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
+
+  return (
+    <ManualIcon
+      anchor="cvss"
+      page="managing-secinfo"
+      size="small"
+      title={_('Help: CVSS Base Score Calculator')}
+    />
+  );
+};
 
 /* CVSS v2 .... */
 
 const CvssV2Calculator = () => {
+  const [_] = useTranslation();
   const [, renewSession] = useUserSessionTimeout();
   const [searchParams] = useSearchParams();
 
@@ -332,6 +337,7 @@ const CvssV2Calculator = () => {
 /* CVSS v3 .... */
 
 const CvssV3Calculator = () => {
+  const [_] = useTranslation();
   const [, renewSession] = useUserSessionTimeout();
   const [searchParams] = useSearchParams();
 
@@ -664,24 +670,32 @@ const CvssV3Calculator = () => {
   );
 };
 
-const CvssCalculator = props => (
-  <Layout flex="column">
-    <span>
-      {/* span prevents Toolbar from growing */}
-      <ToolBarIcons />
-    </span>
-    <Divider grow wrap align={['flex-start', 'start']} flex="row" margin="20px">
-      <Layout grow flex="1">
-        <CvssV2Calculator {...props} />
-      </Layout>
-      <Layout grow flex="1">
-        <CvssV3Calculator {...props} />
-      </Layout>
-      <Layout grow flex="1">
-        <CvssV4Calculator />
-      </Layout>
-    </Divider>
-  </Layout>
-);
+const CvssCalculator = props => {
+  return (
+    <Layout flex="column">
+      <span>
+        {/* span prevents Toolbar from growing */}
+        <ToolBarIcons />
+      </span>
+      <Divider
+        grow
+        wrap
+        align={['flex-start', 'start']}
+        flex="row"
+        margin="20px"
+      >
+        <Layout grow flex="1">
+          <CvssV2Calculator {...props} />
+        </Layout>
+        <Layout grow flex="1">
+          <CvssV3Calculator {...props} />
+        </Layout>
+        <Layout grow flex="1">
+          <CvssV4Calculator />
+        </Layout>
+      </Divider>
+    </Layout>
+  );
+};
 
 export default CvssCalculator;

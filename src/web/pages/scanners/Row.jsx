@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {
   scannerTypeName,
   CVE_SCANNER_TYPE,
@@ -23,6 +22,7 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import EntityLink from 'web/entity/Link';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 const Actions = withEntitiesActions(
   ({
@@ -34,54 +34,58 @@ const Actions = withEntitiesActions(
     onScannerDownloadClick,
     onScannerEditClick,
     onScannerVerifyClick,
-  }) => (
-    <IconDivider grow align={['start', 'center']}>
-      <TrashIcon
-        displayName={_('Scanner')}
-        entity={entity}
-        name="permission"
-        onClick={onScannerDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Scanner')}
-        entity={entity}
-        name="permission"
-        onClick={onScannerEditClick}
-      />
-      <CloneIcon
-        displayName={_('Scanner')}
-        entity={entity}
-        mayClone={entity.isClonable()}
-        name="permission"
-        value={entity}
-        onClick={onScannerCloneClick}
-      />
-      <ExportIcon
-        title={_('Export Scanner')}
-        value={entity}
-        onClick={onScannerDownloadClick}
-      />
-      <VerifyIcon
-        title={_('Verify Scanner')}
-        value={entity}
-        onClick={onScannerVerifyClick}
-      />
-      {isDefined(entity.credential) && (
-        <DownloadKeyIcon
-          title={_('Download Certificate')}
-          value={entity}
-          onClick={onScannerCredentialDownloadClick}
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['start', 'center']}>
+        <TrashIcon
+          displayName={_('Scanner')}
+          entity={entity}
+          name="permission"
+          onClick={onScannerDeleteClick}
         />
-      )}
-      {isDefined(entity.caPub) && (
-        <DownloadKeyIcon
-          title={_('Download CA Certificate')}
-          value={entity}
-          onClick={onScannerCertificateDownloadClick}
+        <EditIcon
+          displayName={_('Scanner')}
+          entity={entity}
+          name="permission"
+          onClick={onScannerEditClick}
         />
-      )}
-    </IconDivider>
-  ),
+        <CloneIcon
+          displayName={_('Scanner')}
+          entity={entity}
+          mayClone={entity.isClonable()}
+          name="permission"
+          value={entity}
+          onClick={onScannerCloneClick}
+        />
+        <ExportIcon
+          title={_('Export Scanner')}
+          value={entity}
+          onClick={onScannerDownloadClick}
+        />
+        <VerifyIcon
+          title={_('Verify Scanner')}
+          value={entity}
+          onClick={onScannerVerifyClick}
+        />
+        {isDefined(entity.credential) && (
+          <DownloadKeyIcon
+            title={_('Download Certificate')}
+            value={entity}
+            onClick={onScannerCredentialDownloadClick}
+          />
+        )}
+        {isDefined(entity.caPub) && (
+          <DownloadKeyIcon
+            title={_('Download CA Certificate')}
+            value={entity}
+            onClick={onScannerCertificateDownloadClick}
+          />
+        )}
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -102,6 +106,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const gmp = useGmp();
   const isSensor = entity.scannerType === GREENBONE_SENSOR_SCANNER_TYPE;
   const showSensors = gmp.settings.enableGreenboneSensor && isSensor;

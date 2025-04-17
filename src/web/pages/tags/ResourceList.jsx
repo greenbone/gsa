@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
@@ -15,6 +14,7 @@ import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Loading from 'web/components/loading/Loading';
+import useTranslation from 'web/hooks/useTranslation';
 import {MAX_RESOURCES} from 'web/pages/tags/Component';
 import {
   createLoadEntities,
@@ -30,6 +30,7 @@ const Spacer = styled.div`
 `;
 
 const Notification = ({id, resourceType}) => {
+  const [_] = useTranslation();
   const filter = Filter.fromString('tag_id=' + id);
   return (
     <Divider>
@@ -149,5 +150,3 @@ export default compose(
   withGmp,
   connect(mapStateToProps, mapDispatchToProps),
 )(ResourceList);
-
-// vim: set ts=2 sw=2 tw=80:

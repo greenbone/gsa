@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -14,6 +13,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import Settings from 'web/pages/scanconfigs/Settings';
 import Trend from 'web/pages/scanconfigs/Trend';
 import PropTypes from 'web/utils/PropTypes';
@@ -27,42 +27,46 @@ const ScanConfigActions = withEntitiesActions(
     onScanConfigCloneClick,
     onScanConfigEditClick,
     onScanConfigSettingsClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      <Settings
-        disabled={entity.predefined}
-        displayName={_('Scan Config')}
-        entity={entity}
-        name="config"
-        onClick={onScanConfigSettingsClick}
-      />
-      <TrashIcon
-        displayName={_('Scan Config')}
-        entity={entity}
-        name="config"
-        onClick={onScanConfigDeleteClick}
-      />
-      <EditIcon
-        disabled={entity.predefined}
-        displayName={_('Scan Config')}
-        entity={entity}
-        name="config"
-        onClick={onScanConfigEditClick}
-      />
-      <CloneIcon
-        displayName={_('Scan Config')}
-        entity={entity}
-        name="config"
-        value={entity}
-        onClick={onScanConfigCloneClick}
-      />
-      <ExportIcon
-        title={_('Export Scan Config')}
-        value={entity}
-        onClick={onScanConfigDownloadClick}
-      />
-    </IconDivider>
-  ),
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <Settings
+          disabled={entity.predefined}
+          displayName={_('Scan Config')}
+          entity={entity}
+          name="config"
+          onClick={onScanConfigSettingsClick}
+        />
+        <TrashIcon
+          displayName={_('Scan Config')}
+          entity={entity}
+          name="config"
+          onClick={onScanConfigDeleteClick}
+        />
+        <EditIcon
+          disabled={entity.predefined}
+          displayName={_('Scan Config')}
+          entity={entity}
+          name="config"
+          onClick={onScanConfigEditClick}
+        />
+        <CloneIcon
+          displayName={_('Scan Config')}
+          entity={entity}
+          name="config"
+          value={entity}
+          onClick={onScanConfigCloneClick}
+        />
+        <ExportIcon
+          title={_('Export Scan Config')}
+          value={entity}
+          onClick={onScanConfigDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 ScanConfigActions.propTypes = {
@@ -81,51 +85,55 @@ const ScanConfigRow = ({
   onToggleDetailsClick,
   openEditNvtDetailsDialog,
   ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      displayName={_('Scan Config')}
-      entity={entity}
-      link={links}
-      type="scanconfig"
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData>{na(entity.families.count)}</TableData>
-    <TableData>
-      <Trend
-        titleDynamic={_(
-          'The family selection is DYNAMIC. New families ' +
-            'will automatically be added and considered.',
-        )}
-        titleStatic={_(
-          'The family selection is STATIC. New families ' +
-            'will NOT automatically be added and considered.',
-        )}
-        trend={entity.families.trend}
+}) => {
+  const [_] = useTranslation();
+
+  return (
+    <TableRow>
+      <EntityNameTableData
+        displayName={_('Scan Config')}
+        entity={entity}
+        link={links}
+        type="scanconfig"
+        onToggleDetailsClick={onToggleDetailsClick}
       />
-    </TableData>
-    <TableData>{na(entity.nvts.count)}</TableData>
-    <TableData>
-      <Trend
-        titleDynamic={_(
-          'The NVT selection is DYNAMIC. New NVTs of ' +
-            'selected families will automatically be added and considered.',
-        )}
-        titleStatic={_(
-          'The NVT selection is STATIC. New NVTs of ' +
-            'selected families will NOT automatically be added and ' +
-            'considered.',
-        )}
-        trend={entity.nvts.trend}
+      <TableData>{na(entity.families.count)}</TableData>
+      <TableData>
+        <Trend
+          titleDynamic={_(
+            'The family selection is DYNAMIC. New families ' +
+              'will automatically be added and considered.',
+          )}
+          titleStatic={_(
+            'The family selection is STATIC. New families ' +
+              'will NOT automatically be added and considered.',
+          )}
+          trend={entity.families.trend}
+        />
+      </TableData>
+      <TableData>{na(entity.nvts.count)}</TableData>
+      <TableData>
+        <Trend
+          titleDynamic={_(
+            'The NVT selection is DYNAMIC. New NVTs of ' +
+              'selected families will automatically be added and considered.',
+          )}
+          titleStatic={_(
+            'The NVT selection is STATIC. New NVTs of ' +
+              'selected families will NOT automatically be added and ' +
+              'considered.',
+          )}
+          trend={entity.nvts.trend}
+        />
+      </TableData>
+      <ActionsComponent
+        {...props}
+        entity={entity}
+        openEditNvtDetailsDialog={openEditNvtDetailsDialog}
       />
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-      openEditNvtDetailsDialog={openEditNvtDetailsDialog}
-    />
-  </TableRow>
-);
+    </TableRow>
+  );
+};
 
 ScanConfigRow.propTypes = {
   actionsComponent: PropTypes.component,

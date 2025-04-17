@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
@@ -12,9 +11,11 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const GroupDetails = ({entity, isSpecial}) => {
+  const [_] = useTranslation();
   const {users = [], comment} = entity;
   return (
     <Layout grow flex="column">
@@ -33,9 +34,9 @@ const GroupDetails = ({entity, isSpecial}) => {
             <TableData>{_('Users')}</TableData>
             <TableData>
               <HorizontalSep>
-                {users.map(user => (
-                  <span key={user}>{user}</span>
-                ))}
+                {users.map(user => {
+                  return <span key={user}>{user}</span>;
+                })}
               </HorizontalSep>
             </TableData>
           </TableRow>

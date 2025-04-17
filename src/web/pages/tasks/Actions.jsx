@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -12,6 +11,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import ImportReportIcon from 'web/pages/tasks/icons/ImportReportIcon';
 import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
 import StopIcon from 'web/pages/tasks/icons/StopIcon';
@@ -29,29 +29,33 @@ const Actions = ({
   onTaskResumeClick,
   onTaskStartClick,
   onTaskStopClick,
-}) => (
-  <IconDivider grow align={['center', 'center']}>
-    {isDefined(entity.schedule) && (
-      <ScheduleIcon links={links} schedule={entity.schedule} />
-    )}
-    <TaskIconWithSync task={entity} type="start" onClick={onTaskStartClick} />
+}) => {
+  const [_] = useTranslation();
 
-    <ImportReportIcon task={entity} onClick={onReportImportClick} />
-
-    <StopIcon task={entity} onClick={onTaskStopClick} />
-
-    <TaskIconWithSync task={entity} type="resume" onClick={onTaskResumeClick} />
-
-    <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
-    <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-    <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
-    <ExportIcon
-      title={_('Export Task')}
-      value={entity}
-      onClick={onTaskDownloadClick}
-    />
-  </IconDivider>
-);
+  return (
+    <IconDivider grow align={['center', 'center']}>
+      {isDefined(entity.schedule) && (
+        <ScheduleIcon links={links} schedule={entity.schedule} />
+      )}
+      <TaskIconWithSync task={entity} type="start" onClick={onTaskStartClick} />
+      <ImportReportIcon task={entity} onClick={onReportImportClick} />
+      <StopIcon task={entity} onClick={onTaskStopClick} />
+      <TaskIconWithSync
+        task={entity}
+        type="resume"
+        onClick={onTaskResumeClick}
+      />
+      <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
+      <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
+      <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
+      <ExportIcon
+        title={_('Export Task')}
+        value={entity}
+        onClick={onTaskDownloadClick}
+      />
+    </IconDivider>
+  );
+};
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
@@ -13,6 +12,7 @@ import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
@@ -40,6 +40,7 @@ const EntityBox = ({
   toolbox,
   ...props
 }) => {
+  const [_] = useTranslation();
   return (
     <BoxLayout {...props} align="space-between" flex="column">
       <Layout align={['space-between', 'start']}>

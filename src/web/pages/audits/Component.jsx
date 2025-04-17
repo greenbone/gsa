@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {
@@ -19,6 +18,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import withDownload from 'web/components/form/withDownload';
 import EntityComponent from 'web/entity/EntityComponent';
+import withTranslation from 'web/hooks/withTranslation';
 import AlertComponent from 'web/pages/alerts/Component';
 import AuditDialog from 'web/pages/audits/Dialog';
 import ScheduleComponent from 'web/pages/schedules/Component';
@@ -264,6 +264,7 @@ class AuditComponent extends React.Component {
 
   openAuditDialog(audit) {
     const {capabilities} = this.props;
+    const {_} = this.props;
 
     this.props.loadAlerts();
     this.props.loadPolicies();
@@ -392,6 +393,8 @@ class AuditComponent extends React.Component {
   }
 
   render() {
+    const {_} = this.props;
+
     const {
       alerts,
       isLoadingScanners,
@@ -567,6 +570,7 @@ AuditComponent.propTypes = {
   onStarted: PropTypes.func,
   onStopError: PropTypes.func,
   onStopped: PropTypes.func,
+  _: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -626,4 +630,4 @@ export default compose(
   withDownload,
   withRouter,
   connect(mapStateToProps, mapDispatchToProp),
-)(AuditComponent);
+)(withTranslation(AuditComponent));

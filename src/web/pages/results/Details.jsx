@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {TAG_NA} from 'gmp/models/nvt';
 import {DEFAULT_OID_VALUE} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
@@ -18,6 +17,7 @@ import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import useTranslation from 'web/hooks/useTranslation';
 import P from 'web/pages/nvts/Preformatted';
 import References from 'web/pages/nvts/References';
 import Solution from 'web/pages/nvts/Solution';
@@ -40,6 +40,7 @@ const GrowDiv = styled.div`
 `;
 
 const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
+  const [_] = useTranslation();
   let Component;
   let lines;
   let prefix;
@@ -75,6 +76,7 @@ DerivedDiff.propTypes = {
 };
 
 const ResultDetails = ({className, links = true, entity}) => {
+  const [_] = useTranslation();
   const result = entity;
 
   const {information} = result;

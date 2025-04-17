@@ -1,9 +1,8 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
@@ -12,16 +11,19 @@ import BarChart from 'web/components/chart/Bar';
 import transformCvssData from 'web/components/dashboard/display/cvss/cvssTransform';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
 const CvssDisplay = ({
   filter,
   title,
   yLabel,
-  xLabel = _('Severity'),
+  xLabel = 'Severity',
   onFilterChanged,
   ...props
 }) => {
+  const [_] = useTranslation();
+  xLabel = xLabel || _('Severity');
   const gmp = useGmp();
   const severityRating = gmp.settings.severityRating;
   const handleDataClick = data => {
@@ -77,18 +79,22 @@ const CvssDisplay = ({
       showToggleLegend={false}
       title={title}
     >
-      {({width, height, data, svgRef}) => (
-        <BarChart
-          data={data}
-          height={height}
-          showLegend={false}
-          svgRef={svgRef}
-          width={width}
-          xLabel={xLabel}
-          yLabel={yLabel}
-          onDataClick={isDefined(onFilterChanged) ? handleDataClick : undefined}
-        />
-      )}
+      {({width, height, data, svgRef}) => {
+        return (
+          <BarChart
+            data={data}
+            height={height}
+            showLegend={false}
+            svgRef={svgRef}
+            width={width}
+            xLabel={xLabel}
+            yLabel={yLabel}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        );
+      }}
     </DataDisplay>
   );
 };

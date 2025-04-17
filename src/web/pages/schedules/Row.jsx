@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
@@ -16,9 +15,9 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
+import useTranslation from 'web/hooks/useTranslation';
 import {renderDuration, renderRecurrence} from 'web/pages/schedules/Render';
 import PropTypes from 'web/utils/PropTypes';
-
 
 const Actions = withEntitiesActions(
   ({
@@ -27,35 +26,39 @@ const Actions = withEntitiesActions(
     onScheduleDownloadClick,
     onScheduleCloneClick,
     onScheduleEditClick,
-  }) => (
-    <IconDivider grow align={['center', 'center']}>
-      <TrashIcon
-        displayName={_('Schedule')}
-        entity={entity}
-        name="schedule"
-        onClick={onScheduleDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Schedule')}
-        entity={entity}
-        name="schedule"
-        onClick={onScheduleEditClick}
-      />
-      <CloneIcon
-        displayName={_('Schedule')}
-        entity={entity}
-        name="schedule"
-        title={_('Clone Schedule')}
-        value={entity}
-        onClick={onScheduleCloneClick}
-      />
-      <ExportIcon
-        title={_('Export Schedule')}
-        value={entity}
-        onClick={onScheduleDownloadClick}
-      />
-    </IconDivider>
-  ),
+  }) => {
+    const [_] = useTranslation();
+
+    return (
+      <IconDivider grow align={['center', 'center']}>
+        <TrashIcon
+          displayName={_('Schedule')}
+          entity={entity}
+          name="schedule"
+          onClick={onScheduleDeleteClick}
+        />
+        <EditIcon
+          displayName={_('Schedule')}
+          entity={entity}
+          name="schedule"
+          onClick={onScheduleEditClick}
+        />
+        <CloneIcon
+          displayName={_('Schedule')}
+          entity={entity}
+          name="schedule"
+          title={_('Clone Schedule')}
+          value={entity}
+          onClick={onScheduleCloneClick}
+        />
+        <ExportIcon
+          title={_('Export Schedule')}
+          value={entity}
+          onClick={onScheduleDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 Actions.propTypes = {
@@ -73,6 +76,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const [_] = useTranslation();
   const {event = {}, timezone} = entity;
   const {startDate, nextDate, duration, recurrence} = event;
   return (

@@ -1,9 +1,8 @@
-/* SPDX-FileCopyrightText: 2024 Greenbone AG
+/* SPDX-FileCopyrightText: 2025 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
 import React from 'react';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -12,6 +11,7 @@ import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import useTranslation from 'web/hooks/useTranslation';
 
 interface Target {
   id: string;
@@ -36,6 +36,7 @@ interface PortListDetailsProps {
 const PortListDetails: React.FC<PortListDetailsProps> = ({
   entity,
 }: PortListDetailsProps) => {
+  const [_] = useTranslation();
   const {
     comment,
     deprecated,
@@ -87,13 +88,15 @@ const PortListDetails: React.FC<PortListDetailsProps> = ({
                 {_('Targets using this Port List')}
               </TableDataAlignTop>
               <TableData>
-                {targets.map(target => (
-                  <span key={target.id}>
-                    <DetailsLink id={target.id} type="target">
-                      {target.name}
-                    </DetailsLink>
-                  </span>
-                ))}
+                {targets.map(target => {
+                  return (
+                    <span key={target.id}>
+                      <DetailsLink id={target.id} type="target">
+                        {target.name}
+                      </DetailsLink>
+                    </span>
+                  );
+                })}
               </TableData>
             </TableRow>
           )}
