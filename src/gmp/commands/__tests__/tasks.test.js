@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, test, expect, beforeAll, afterAll} from '@gsa/testing';
 import {FeedStatus} from 'gmp/commands/feedstatus';
 import {TaskCommand} from 'gmp/commands/tasks';
 import {
@@ -11,6 +11,7 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
+import logger from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -20,6 +21,17 @@ import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_KEEP,
 } from 'gmp/models/task';
+
+let logLevel;
+
+beforeAll(() => {
+  logLevel = logger.level;
+  logger.setDefaultLevel('silent');
+});
+
+afterAll(() => {
+  logger.setDefaultLevel(logLevel);
+});
 
 describe('TaskCommand tests', () => {
   test('should create new task', async () => {
