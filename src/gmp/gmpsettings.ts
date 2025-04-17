@@ -19,6 +19,7 @@ export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-2
 export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
 export const DEFAULT_TIMEOUT = 300000; // 5 minutes
+export const DEFAULT_TITLE = 'Greenbone Security Assistant'
 
 interface GmpSettingsOptions {
   apiProtocol?: string;
@@ -46,6 +47,7 @@ interface GmpSettingsOptions {
   timeout?: number;
   vendorVersion?: string;
   vendorLabel?: string;
+  title?: string;
 }
 
 interface GmpSettingsStorage {
@@ -98,6 +100,7 @@ class GmpSettings {
   reloadIntervalInactive: number;
   reportResultsThreshold: number;
   timeout: number;
+  title!: string;
   readonly apiProtocol!: string;
   readonly apiServer!: string;
   readonly disableLoginForm!: boolean;
@@ -140,6 +143,7 @@ class GmpSettings {
       timeout = DEFAULT_TIMEOUT,
       vendorVersion,
       vendorLabel,
+      title = DEFAULT_TITLE
     } = options;
     let {
       apiProtocol = protocol,
@@ -191,6 +195,7 @@ class GmpSettings {
     this.reloadIntervalInactive = reloadIntervalInactive;
     this.reportResultsThreshold = reportResultsThreshold;
     this.timeout = timeout;
+    this.title = title
 
     setAndFreeze(this, 'apiProtocol', apiProtocol);
     setAndFreeze(this, 'apiServer', apiServer);
