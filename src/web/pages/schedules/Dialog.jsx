@@ -215,13 +215,13 @@ const ScheduleDialog = ({
 
     if (type === 'startTime') {
       const newStartDate = date(selectedTime, 'HH:mm');
-      if (newStartDate.isValid && newStartDate.isValid()) {
+      if (newStartDate.isValid()) {
         setStartDate(newStartDate);
         setStartTime(selectedTime);
       }
     } else if (type === 'endTime') {
       const newEndDate = date(selectedTime, 'HH:mm');
-      if (newEndDate.isValid && newEndDate.isValid()) {
+      if (newEndDate.isValid()) {
         setEndDate(newEndDate);
         setEndTime(selectedTime);
       }
