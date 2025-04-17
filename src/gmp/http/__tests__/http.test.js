@@ -6,6 +6,7 @@
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import Http from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
+import DefaultTransform from 'gmp/http/transform/default';
 import {vi} from 'vitest';
 
 const mockGetFeedAccessStatusMessage = testing.fn();
@@ -37,13 +38,16 @@ describe('Http', () => {
     let options;
 
     beforeEach(() => {
-      instance = new Http();
+      instance = new Http('http://www.greenbone.net', {
+        transform: DefaultTransform,
+      });
       resolve = testing.fn();
       reject = testing.fn();
       xhr = {status: 500};
       options = {};
       testing.clearAllMocks();
     });
+
     test('should handle response error without error handlers', async () => {
       await instance.handleResponseError(xhr, reject, resolve, options);
       expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
