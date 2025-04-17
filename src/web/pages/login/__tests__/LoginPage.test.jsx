@@ -7,6 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Logger from 'gmp/log';
 import {beforeEach, vi} from 'vitest';
 import LoginPage from 'web/pages/login/LoginPage';
+import {
+  NOTIFICATION_SHOWN,
+  NOTIFICATION_SHOWN_KEY,
+} from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
@@ -170,6 +174,17 @@ describe('LoginPage tests', () => {
       writable: true,
     });
 
+    //make a mock session sto
+    Object.defineProperty(window, 'sessionStorage', {
+      value: {
+        setItem: testing.fn(),
+        getItem: testing.fn(),
+        removeItem: testing.fn(),
+        clear: testing.fn(),
+      },
+      writable: true,
+    });
+
     const setupLoginPageTest = ({
       isCommunityFeed = false,
       loginResponse = {
@@ -232,13 +247,10 @@ describe('LoginPage tests', () => {
       await wait();
       expect(gmp.feedstatus.isCommunityFeed).toBeCalledTimes(1);
 
-      const notificationTextKey = screen.queryByText(
-        'You are currently using the free Greenbone Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.',
+      expect(window.sessionStorage.setItem).not.toHaveBeenCalledWith(
+        NOTIFICATION_SHOWN_KEY,
+        NOTIFICATION_SHOWN,
       );
-      expect(notificationTextKey).not.toBeInTheDocument();
-
-      const notificationLinkText = screen.queryByText('Learn more');
-      expect(notificationLinkText).not.toBeInTheDocument();
     });
 
     test('should call communityFeedNotification if using community feed', async () => {
@@ -269,13 +281,11 @@ describe('LoginPage tests', () => {
 
       expect(gmp.feedstatus.isCommunityFeed).toBeCalledTimes(1);
 
-      const notificationTextKey = await screen.findByText(
-        'You are currently using the free Greenbone Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.',
+      await wait();
+      expect(window.sessionStorage.setItem).toHaveBeenCalledWith(
+        NOTIFICATION_SHOWN_KEY,
+        NOTIFICATION_SHOWN,
       );
-      expect(notificationTextKey).toBeVisible();
-
-      const notificationLinkText = await screen.findByText('Learn more');
-      expect(notificationLinkText).toBeVisible();
     });
   });
 });

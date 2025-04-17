@@ -31,6 +31,7 @@ import {Store} from 'redux';
 import {StyleSheetManager} from 'styled-components';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import GmpContext from 'web/components/provider/GmpProvider';
+import LanguageProvider from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
 import configureStore from 'web/store';
 
@@ -47,6 +48,7 @@ interface RendererOptions {
   router?: boolean;
   route?: string;
   showLocation?: boolean;
+  language?: string;
 }
 
 export async function wait(ms: number = 0) {
@@ -137,6 +139,10 @@ const TestingLicenseProvider = withProvider(
   'license',
   'value',
 )(LicenseProvider);
+const TestingLanguageProvider = withProvider(
+  'language',
+  'value',
+)(LanguageProvider);
 
 export const rendererWith = (
   {
@@ -147,6 +153,7 @@ export const rendererWith = (
     router,
     route = '/',
     showLocation = false,
+    language = 'en',
   }: RendererOptions = {
     store: true,
     router: true,
@@ -177,14 +184,16 @@ export const rendererWith = (
       <TestingCapabilitiesProvider capabilities={capabilities}>
         <TestingLicenseProvider license={license}>
           <TestingStoreProvider store={store}>
-            {router ? (
-              <MemoryRouter initialEntries={[route]}>
-                {children}
-                {showLocation && <LocationDisplay />}
-              </MemoryRouter>
-            ) : (
-              children
-            )}
+            <TestingLanguageProvider language={language}>
+              {router ? (
+                <MemoryRouter initialEntries={[route]}>
+                  {children}
+                  {showLocation && <LocationDisplay />}
+                </MemoryRouter>
+              ) : (
+                children
+              )}
+            </TestingLanguageProvider>
           </TestingStoreProvider>
         </TestingLicenseProvider>
       </TestingCapabilitiesProvider>
