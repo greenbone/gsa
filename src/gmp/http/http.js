@@ -6,11 +6,7 @@
 import Rejection from 'gmp/http/rejection';
 import Response from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
-import {
-  buildUrlParams,
-  getFeedAccessStatusMessage,
-  findActionInXMLString,
-} from 'gmp/http/utils';
+import {buildUrlParams} from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import {isDefined, hasValue, isArray} from 'gmp/utils/identity';
@@ -175,25 +171,6 @@ class Http {
       );
 
       let rejectedResponse = await this.transformRejection(rej, options);
-
-      const actionsRequiringFeedAccess = [
-        'Run Wizard',
-        'Create Task',
-        'Save Task',
-        'Create Target',
-        'Save Target',
-      ];
-
-      if (
-        rej.status === 404 &&
-        findActionInXMLString(request.response, actionsRequiringFeedAccess)
-      ) {
-        const additionalMessage = await getFeedAccessStatusMessage(this);
-
-        if (additionalMessage) {
-          rejectedResponse.message = `${rejectedResponse.message}\n${additionalMessage}`;
-        }
-      }
 
       reject(rejectedResponse);
     } catch (error) {

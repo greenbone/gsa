@@ -5,6 +5,7 @@
 
 import registerCommand from 'gmp/command';
 import HttpCommand from 'gmp/commands/http';
+import _ from 'gmp/locale';
 import date, {duration} from 'gmp/models/date';
 import {parseDate} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
@@ -34,6 +35,35 @@ export function createFeed(feed) {
     age: duration(date().diff(lastUpdate)),
   };
 }
+
+export const feedStatusRejection = async (http, rejection) => {
+  if (rejection?.status === 404) {
+    const feedStatus = new FeedStatus(http);
+    const {isFeedOwner, isFeedResourcesAccess} =
+      await feedStatus.checkFeedOwnerAndPermissions();
+    const syncMessage = _(
+      'This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    );
+    if (!isFeedOwner) {
+      rejection.setMessage(
+        `${_('The feed owner is currently not set.')} ${syncMessage}`,
+      );
+    } else if (!isFeedResourcesAccess) {
+      rejection.setMessage(
+        `${_('Access to the feed resources is currently restricted.')} ${syncMessage}`,
+      );
+    } else if (rejection.message.includes('Failed to find port_list')) {
+      rejection.setMessage(
+        `${_('Failed to create a new Target because the default Port List is not available.')} ${syncMessage}`,
+      );
+    } else if (rejection.message.includes('Failed to find config')) {
+      rejection.setMessage(
+        `${_('Failed to create a new Task because the default Scan Config is not available.')} ${syncMessage}`,
+      );
+    }
+  }
+  throw rejection;
+};
 
 export class FeedStatus extends HttpCommand {
   constructor(http) {

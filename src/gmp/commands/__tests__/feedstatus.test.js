@@ -3,9 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {FeedStatus, NVT_FEED, FEED_COMMUNITY} from 'gmp/commands/feedstatus';
+import {describe, test, expect, testing, assert} from '@gsa/testing';
+import {
+  FeedStatus,
+  NVT_FEED,
+  FEED_COMMUNITY,
+  feedStatusRejection,
+} from 'gmp/commands/feedstatus';
 import {createResponse, createHttp} from 'gmp/commands/testing';
+import GmpHttp from 'gmp/http/gmp';
+import Rejection from 'gmp/http/rejection';
 
 describe('FeedStatusCommand tests', () => {
   test('should return feed information', () => {
@@ -247,5 +254,115 @@ describe('FeedStatusCommand tests', () => {
         expect.any(Error),
       );
     });
+  });
+});
+
+describe('feedStatusRejection tests', () => {
+  test('should pass rejection for non 404 errors', async () => {
+    const gmpHttp = {};
+    const xhr = {
+      status: 500,
+    };
+    const rejection = new Rejection(
+      xhr,
+      Rejection.REASON_ERROR,
+      'Internal Server Error',
+    );
+    await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
+    expect(rejection.message).toEqual('Internal Server Error');
+  });
+
+  test('should detect feed owner not set', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {},
+      },
+    });
+    const gmpHttp = createHttp(response);
+    const xhr = {
+      status: 404,
+    };
+    const rejection = new Rejection(
+      xhr,
+      Rejection.REASON_ERROR,
+      'Some Message',
+    );
+
+    await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
+    expect(rejection.message).toEqual(
+      'The feed owner is currently not set. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    );
+  });
+
+  test('should detect feed resources access restricted', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {feed_owner_set: 1},
+      },
+    });
+    const gmpHttp = createHttp(response);
+    const xhr = {
+      status: 404,
+    };
+    const rejection = new Rejection(
+      xhr,
+      Rejection.REASON_ERROR,
+      'Some Message',
+    );
+
+    await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
+    expect(rejection.message).toEqual(
+      'Access to the feed resources is currently restricted. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    );
+  });
+
+  test('should detect missing port list', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {
+          feed_owner_set: 1,
+          feed_resources_access: 1,
+        },
+      },
+    });
+    const gmpHttp = createHttp(response);
+    const xhr = {
+      status: 404,
+    };
+    const rejection = new Rejection(
+      xhr,
+      Rejection.REASON_ERROR,
+      'Failed to find port_list XYZ',
+    );
+
+    await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
+    expect(rejection.message).toEqual(
+      'Failed to create a new Target because the default Port List is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    );
+  });
+
+  test('should detect missing scan config', async () => {
+    const response = createResponse({
+      get_feeds: {
+        get_feeds_response: {
+          feed_owner_set: 1,
+          feed_resources_access: 1,
+        },
+      },
+    });
+    const gmpHttp = createHttp(response);
+    const xhr = {
+      status: 404,
+    };
+    const rejection = new Rejection(
+      xhr,
+      Rejection.REASON_ERROR,
+      'Failed to find config XYZ',
+    );
+
+    await expect(feedStatusRejection(gmpHttp, rejection)).rejects.toThrow();
+    expect(rejection.message).toEqual(
+      'Failed to create a new Task because the default Scan Config is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    );
   });
 });
