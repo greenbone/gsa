@@ -3,7 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, beforeAll, afterAll} from '@gsa/testing';
+import {
+  describe,
+  test,
+  expect,
+  beforeAll,
+  afterAll,
+  testing,
+} from '@gsa/testing';
 import {FeedStatus} from 'gmp/commands/feedstatus';
 import {TaskCommand} from 'gmp/commands/tasks';
 import {
@@ -11,6 +18,7 @@ import {
   createHttp,
   createResponse,
 } from 'gmp/commands/testing';
+import Rejection from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {
   OPENVAS_SCANNER_TYPE,
@@ -144,6 +152,82 @@ describe('TaskCommand tests', () => {
     expect(data.id).toEqual('foo');
   });
 
+  test.each([
+    {
+      name: 'resource restricted',
+      feedsResponse: {feed_owner_set: 1},
+      message: 'Some Error',
+      expectedMessage:
+        'Access to the feed resources is currently restricted. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'feed owner not set',
+      feedsResponse: {feed_owner_set: 0},
+      message: 'Some Error',
+      expectedMessage:
+        'The feed owner is currently not set. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'missing port list',
+      message: 'Failed to find port_list XYZ',
+      feedsResponse: {
+        feed_owner_set: 1,
+        feed_resources_access: 1,
+      },
+      expectedMessage:
+        'Failed to create a new Target because the default Port List is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'missing scan config',
+      message: 'Failed to find config XYZ',
+      feedsResponse: {
+        feed_owner_set: 1,
+        feed_resources_access: 1,
+      },
+      expectedMessage:
+        'Failed to create a new Task because the default Scan Config is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+  ])(
+    'should not create new task while feed is not available: $name',
+    async ({feedsResponse, message, expectedMessage}) => {
+      const xhr = {
+        status: 404,
+      };
+      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const feedStatusResponse = createResponse({
+        get_feeds: {
+          get_feeds_response: feedsResponse,
+        },
+      });
+      const fakeHttp = {
+        request: testing
+          .fn()
+          .mockRejectedValueOnce(rejection)
+          .mockResolvedValueOnce(feedStatusResponse),
+      };
+
+      const cmd = new TaskCommand(fakeHttp);
+      await expect(
+        cmd.create({
+          alterable: 0,
+          apply_overrides: 0,
+          auto_delete: AUTO_DELETE_KEEP,
+          comment: 'comment',
+          config_id: 'c1',
+          hosts_ordering: HOSTS_ORDERING_RANDOM,
+          in_assets: 0,
+          max_checks: 10,
+          max_hosts: 10,
+          min_qod: 70,
+          name: 'foo',
+          scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
+          scanner_type: OPENVAS_SCANNER_TYPE,
+          target_id: 't1',
+        }),
+      ).rejects.toThrow(expectedMessage);
+    },
+  );
+
   test('should create new container task', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
@@ -216,6 +300,79 @@ describe('TaskCommand tests', () => {
     const {data} = resp;
     expect(data.id).toEqual('foo');
   });
+
+  test.each([
+    {
+      name: 'resource restricted',
+      feedsResponse: {feed_owner_set: 1},
+      message: 'Some Error',
+      expectedMessage:
+        'Access to the feed resources is currently restricted. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'feed owner not set',
+      feedsResponse: {feed_owner_set: 0},
+      message: 'Some Error',
+      expectedMessage:
+        'The feed owner is currently not set. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'missing port list',
+      message: 'Failed to find port_list XYZ',
+      feedsResponse: {
+        feed_owner_set: 1,
+        feed_resources_access: 1,
+      },
+      expectedMessage:
+        'Failed to create a new Target because the default Port List is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+    {
+      name: 'missing scan config',
+      message: 'Failed to find config XYZ',
+      feedsResponse: {
+        feed_owner_set: 1,
+        feed_resources_access: 1,
+      },
+      expectedMessage:
+        'Failed to create a new Task because the default Scan Config is not available. This issue may be due to the feed not having completed its synchronization.\nPlease try again shortly.',
+    },
+  ])(
+    'should not save task while feed is not available: $name',
+    async ({feedsResponse, message, expectedMessage}) => {
+      const xhr = {
+        status: 404,
+      };
+      const rejection = new Rejection(xhr, Rejection.REASON_ERROR, message);
+      const feedStatusResponse = createResponse({
+        get_feeds: {
+          get_feeds_response: feedsResponse,
+        },
+      });
+      const fakeHttp = {
+        request: testing
+          .fn()
+          .mockRejectedValueOnce(rejection)
+          .mockResolvedValueOnce(feedStatusResponse),
+      };
+
+      const cmd = new TaskCommand(fakeHttp);
+      await expect(
+        cmd.save({
+          alterable: 0,
+          apply_overrides: 0,
+          auto_delete: AUTO_DELETE_KEEP,
+          comment: 'comment',
+          hosts_ordering: HOSTS_ORDERING_RANDOM,
+          id: 'task1',
+          in_assets: 0,
+          max_checks: 10,
+          max_hosts: 10,
+          min_qod: 70,
+          name: 'foo',
+        }),
+      ).rejects.toThrow(expectedMessage);
+    },
+  );
 
   test('should save task with all parameters', async () => {
     const response = createActionResultResponse();
