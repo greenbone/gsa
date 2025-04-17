@@ -752,6 +752,8 @@
   "Export User": "导出用户",
   "Export User as XML": "导出用户至XML",
   "Extension": "扩展名",
+  "Failed to create a new Target because the default Port List is not available.": "",
+  "Failed to create a new Task because the default Scan Config is not available.": "",
   "Failed to run alert.": "运行告警失败.",
   "False Pos.": "误报",
   "False Positive": "误报",

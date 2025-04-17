@@ -6,14 +6,13 @@
 import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import {FeedStatus} from 'gmp/commands/feedstatus';
+import {FeedStatus, feedStatusRejection} from 'gmp/commands/feedstatus';
 import logger from 'gmp/log';
 import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
 } from 'gmp/models/task';
 import {NO_VALUE} from 'gmp/parser';
-
 
 const log = logger.getLogger('gmp.commands.tasks');
 
@@ -78,7 +77,7 @@ export class TaskCommand extends EntityCommand {
       });
   }
 
-  create(args) {
+  async create(args) {
     const {
       add_tag,
       alert_ids = [],
@@ -127,7 +126,12 @@ export class TaskCommand extends EntityCommand {
       usage_type: 'scan',
     };
     log.debug('Creating task', args, data);
-    return this.action(data);
+
+    try {
+      return await this.action(data);
+    } catch (rejection) {
+      await feedStatusRejection(this.http, rejection);
+    }
   }
 
   createContainer(args) {
@@ -142,7 +146,7 @@ export class TaskCommand extends EntityCommand {
     });
   }
 
-  save(args) {
+  async save(args) {
     const {
       alert_ids = [],
       alterable,
@@ -188,7 +192,11 @@ export class TaskCommand extends EntityCommand {
       usage_type: 'scan',
     };
     log.debug('Saving task', args, data);
-    return this.action(data);
+    try {
+      return await this.action(data);
+    } catch (rejection) {
+      await feedStatusRejection(this.http, rejection);
+    }
   }
 
   saveContainer(args) {

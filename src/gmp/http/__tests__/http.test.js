@@ -6,8 +6,8 @@
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import Http from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
+import DefaultTransform from 'gmp/http/transform/default';
 import {vi} from 'vitest';
-
 
 const mockGetFeedAccessStatusMessage = testing.fn();
 const mockFindActionInXMLString = testing.fn();
@@ -38,13 +38,16 @@ describe('Http', () => {
     let options;
 
     beforeEach(() => {
-      instance = new Http();
+      instance = new Http('http://www.greenbone.net', {
+        transform: DefaultTransform,
+      });
       resolve = testing.fn();
       reject = testing.fn();
       xhr = {status: 500};
       options = {};
       testing.clearAllMocks();
     });
+
     test('should handle response error without error handlers', async () => {
       await instance.handleResponseError(xhr, reject, resolve, options);
       expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
@@ -57,20 +60,6 @@ describe('Http', () => {
       expect(reject.mock.calls[0][0].reason).toBe(
         Rejection.REASON_UNAUTHORIZED,
       );
-    });
-
-    test('404 error should append additional message', async () => {
-      xhr.status = 404;
-      const additionalMessage = 'Additional feed access status message';
-      mockGetFeedAccessStatusMessage.mockResolvedValue(additionalMessage);
-      mockFindActionInXMLString.mockReturnValue(true);
-
-      await instance.handleResponseError(resolve, reject, xhr, options);
-      expect(mockGetFeedAccessStatusMessage).toHaveBeenCalled();
-
-      expect(reject).toHaveBeenCalledWith(expect.any(Rejection));
-      const rejectedResponse = reject.mock.calls[0][0];
-      expect(rejectedResponse.message).toContain(additionalMessage);
     });
 
     test('404 error should not append additional message', async () => {
