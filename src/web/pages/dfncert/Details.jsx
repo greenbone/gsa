@@ -10,13 +10,13 @@ import SeverityBar from 'web/components/bar/SeverityBar';
 import Layout from 'web/components/layout/Layout';
 import ExternalLink from 'web/components/link/ExternalLink';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
-import {Col} from 'web/entity/Page';
 import PropTypes from 'web/utils/PropTypes';
 
-const DfnCertAdvDetails = ({entity, links = true}) => {
+const DfnCertAdvDetails = ({entity}) => {
   const {title, severity, advisoryLink} = entity;
   return (
     <Layout grow flex="column">
@@ -58,7 +58,6 @@ const DfnCertAdvDetails = ({entity, links = true}) => {
 
 DfnCertAdvDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default DfnCertAdvDetails;

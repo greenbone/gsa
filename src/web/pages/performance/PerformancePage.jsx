@@ -15,9 +15,8 @@ import styled from 'styled-components';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import withClickHandler from 'web/components/form/withClickHandler';
+import {PerformanceIcon, WizardIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import PerformanceIcon from 'web/components/icon/PerformanceIcon';
-import WizardIcon from 'web/components/icon/WizardIcon';
 import Column from 'web/components/layout/Column';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -39,8 +38,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
-
-
 const DURATION_HOUR = 60 * 60;
 const DURATION_DAY = DURATION_HOUR * 24;
 const DURATION_WEEK = DURATION_DAY * 7;
@@ -110,8 +107,8 @@ const ReportImage = ({name, duration, scannerId, endDate, startDate}) => {
   if (isDefined(duration)) {
     params.duration = DURATIONS[duration];
   } else {
-    params.start_time = startDate.toISOString();
-    params.end_time = endDate.toISOString();
+    params.start_time = startDate.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    params.end_time = endDate.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
   }
   const url = gmp.buildUrl('system_report/' + name + '/report.', params);
   return <img alt="" src={url} />;

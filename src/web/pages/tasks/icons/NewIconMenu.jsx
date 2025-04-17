@@ -5,20 +5,23 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import NewIcon from 'web/components/icon/NewIcon';
+import {NewIcon} from 'web/components/icon';
 import IconMenu from 'web/components/menu/IconMenu';
 import MenuEntry from 'web/components/menu/MenuEntry';
 import useCapabilities from 'web/hooks/useCapabilities';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
 const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
   const capabilities = useCapabilities();
   if (capabilities.mayCreate('task')) {
     return (
-      <IconMenu icon={<NewIcon />} onClick={onNewClick}>
-        <MenuEntry title={_('New Task')} onClick={onNewClick} />
+      <IconMenu icon={<NewIcon />}>
         <MenuEntry
+          data-testid="new-task-menu"
+          title={_('New Task')}
+          onClick={onNewClick}
+        />
+        <MenuEntry
+          data-testid="new-container-task-menu"
           title={_('New Container Task')}
           onClick={onNewContainerClick}
         />
@@ -33,4 +36,4 @@ NewIconMenu.propTypes = {
   onNewContainerClick: PropTypes.func,
 };
 
-export default withCapabilities(NewIconMenu);
+export default NewIconMenu;

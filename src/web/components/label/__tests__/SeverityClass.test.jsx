@@ -8,7 +8,6 @@ import SeverityClassLabel from 'web/components/label/SeverityClass';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('SeverityClassLabel tests', () => {
   test('should render', () => {
     const {element} = render(<SeverityClassLabel.High />);
@@ -65,5 +64,20 @@ describe('SeverityClassLabel tests', () => {
     expect(element).toHaveStyleRule('border-color', Theme.mediumGray);
     expect(element).toHaveStyleRule('color', Theme.white);
     expect(element).toHaveTextContent('False Pos.');
+  });
+
+  test('should render CriticalLabel', () => {
+    const {element} = render(<SeverityClassLabel.Critical />);
+
+    expect(element).toHaveStyleRule(
+      'background-color',
+      Theme.severityClassCritical,
+    );
+    expect(element).toHaveStyleRule(
+      'border-color',
+      Theme.severityClassCritical,
+    );
+    expect(element).toHaveStyleRule('color', Theme.white);
+    expect(element).toHaveTextContent('Critical');
   });
 });

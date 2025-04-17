@@ -8,20 +8,19 @@ import Filter from 'gmp/models/filter';
 import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
 import {
   clickElement,
-  getElementOrDocument,
+  getElementOrReturnDocument,
   getSelectItemElements,
   openSelectElement,
 } from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 const getTitle = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelector('.mantine-Text-root');
 };
 
 const getSeverityInput = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelector('.mantine-NumberInput-input');
 };
 

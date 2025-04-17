@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import DfnCertAdvIcon from 'web/components/icon/DfnCertAdvIcon';
+import {DfnCertAdvIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -24,14 +24,13 @@ import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import DetailsBlock from 'web/entity/Block';
 import EntityComponent from 'web/entity/EntityComponent';
-import EntityPage from 'web/entity/Page';
+import EntityPage from 'web/entity/EntityPage';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import DfnCertAdvDetails from 'web/pages/dfncert/Details';
 import {selector, loadEntity} from 'web/store/entities/dfncerts';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
@@ -55,7 +54,7 @@ ToolBarIcons.propTypes = {
   onDfnCertAdvDownloadClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, links = true}) => {
+const Details = ({entity}) => {
   const {cves, summary, additionalLinks} = entity;
   return (
     <Layout flex="column">
@@ -98,7 +97,6 @@ const Details = ({entity, links = true}) => {
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 const DfnCertAdvPage = ({

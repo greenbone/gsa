@@ -11,13 +11,13 @@ import {
 import {
   changeInputValue,
   clickElement,
-  getCheckBoxes,
-  getDialogContent,
+  queryCheckBoxes,
+  queryDialogContent,
   getDialogSaveButton,
-  getDialogTitle,
+  queryDialogTitle,
   getRadioInputs,
-  getTableBody,
-  getTextInputs,
+  queryTableBody,
+  queryTextInputs,
 } from 'web/components/testing';
 import EditScanConfigDialog, {
   handleSearchChange,
@@ -165,9 +165,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -209,9 +209,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -261,9 +261,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Policy');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Policy');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -395,8 +395,8 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const content = getDialogContent();
-    const inputs = getTextInputs(content);
+    const content = queryDialogContent();
+    const inputs = queryTextInputs(content);
 
     changeInputValue(inputs[0], 'lorem');
     changeInputValue(inputs[1], 'ipsum');
@@ -448,15 +448,15 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const dialogContent = getDialogContent();
-    const tableBody = getTableBody(dialogContent);
+    const dialogContent = queryDialogContent();
+    const tableBody = queryTableBody(dialogContent);
 
     const rows = tableBody.querySelectorAll('tr');
 
     const family1Inputs = getRadioInputs(rows[0]);
     await clickElement(family1Inputs[1]);
 
-    const family2Checkboxes = getCheckBoxes(rows[1]);
+    const family2Checkboxes = queryCheckBoxes(rows[1]);
     await clickElement(family2Checkboxes[0]);
 
     const saveButton = getDialogSaveButton();
@@ -495,7 +495,10 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditConfigFamilyDialog = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+    });
     render(
       <EditScanConfigDialog
         comment="bar"
@@ -520,27 +523,26 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const content = getDialogContent();
-    const sections = content.querySelectorAll('section');
+    const editNvtFamiliesSection = screen.getByTestId('nvt-families-section');
+    const editFamilyIcons = getAllByTestId(editNvtFamiliesSection, 'edit-icon');
+    fireEvent.click(editFamilyIcons[0]);
 
-    const editFamilyIcons = getAllByTestId(sections[0], 'svg-icon');
-    fireEvent.click(editFamilyIcons[3]);
-
-    expect(editFamilyIcons[3]).toHaveAttribute(
+    expect(editFamilyIcons[0]).toHaveAttribute(
       'title',
       'Edit Scan Config Family',
     );
+    expect(handleOpenEditConfigFamilyDialog).toHaveBeenCalledWith('family1');
 
-    const editNvtIcons = getAllByTestId(sections[2], 'svg-icon');
-    fireEvent.click(editNvtIcons[1]);
+    const editNvtPreferencesSection = screen.getByTestId(
+      'nvt-preferences-section',
+    );
+    const editNvtIcons = getAllByTestId(editNvtPreferencesSection, 'edit-icon');
+    fireEvent.click(editNvtIcons[0]);
 
     expect(editNvtIcons[1]).toHaveAttribute(
       'title',
       'Edit Scan Config NVT Details',
     );
-
-    expect(handleOpenEditConfigFamilyDialog).toHaveBeenCalledWith('family1');
-
     expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith('1.2.1');
   });
 

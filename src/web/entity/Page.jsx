@@ -18,11 +18,6 @@ import Section from 'web/components/section/Section';
 import EntityInfo from 'web/entity/Info';
 import PropTypes from 'web/utils/PropTypes';
 
-
-export const Col = styled.col`
-  width: ${props => props.width};
-`;
-
 const ErrorContent = styled.div`
   white-space: pre;
 `;

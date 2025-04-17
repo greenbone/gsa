@@ -4,8 +4,7 @@
  */
 
 const getMajorMinorVersion = () => {
-  // eslint-disable-next-line no-unused-vars
-  let [major, minor, ...rest] = VERSION.split('.');
+  let [major, minor] = VERSION.split('.');
   minor = parseInt(minor);
   if (minor < 10) {
     // add a leading zero for the links
@@ -14,7 +13,7 @@ const getMajorMinorVersion = () => {
   return `${major}.${minor}`;
 };
 
-export const VERSION = '24.3.1-dev1';
+export const VERSION = '24.6.2-dev1';
 
 export const RELEASE_VERSION = getMajorMinorVersion();
 

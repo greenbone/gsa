@@ -4,12 +4,16 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 import {fireEvent, rendererWith, wait, userEvent} from 'web/utils/Testing';
 
 const gmp = {
   user: {
     renewSession: testing.fn().mockResolvedValue({data: 123}),
+  },
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
   },
 };
 

@@ -8,7 +8,6 @@ import InfoPanel from 'web/components/panel/InfoPanel';
 import {render, userEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('InfoPanel tests', () => {
   test('should render with children', () => {
     const {element, queryByRole, getByTestId} = render(
@@ -29,7 +28,7 @@ describe('InfoPanel tests', () => {
 
   test('should show close button if handler is defined', () => {
     const handleCloseClick = testing.fn();
-    const {element, queryByRole} = render(
+    const {element, getByRole} = render(
       <InfoPanel
         footer="footer text"
         heading="heading text"
@@ -37,7 +36,7 @@ describe('InfoPanel tests', () => {
       />,
     );
 
-    const closeButton = queryByRole('button');
+    const closeButton = getByRole('button', {name: 'Close Icon'});
 
     expect(element).toHaveTextContent('heading text');
     expect(element).toHaveTextContent('footer text');
@@ -46,7 +45,7 @@ describe('InfoPanel tests', () => {
 
   test('should render blue if info', () => {
     const handleCloseClick = testing.fn();
-    const {element, queryByRole, getByTestId} = render(
+    const {element, getByRole, getByTestId} = render(
       <InfoPanel
         footer="footer text"
         heading="heading text"
@@ -55,7 +54,7 @@ describe('InfoPanel tests', () => {
     );
 
     const heading = getByTestId('infopanel-heading');
-    const closeButton = queryByRole('button');
+    const closeButton = getByRole('button', {name: 'Close Icon'});
 
     expect(element).toHaveTextContent('heading text');
     expect(element).toHaveTextContent('footer text');
@@ -65,7 +64,7 @@ describe('InfoPanel tests', () => {
 
   test('should render red if warning', () => {
     const handleCloseClick = testing.fn();
-    const {element, queryByRole, getByTestId} = render(
+    const {element, getByTestId, getByRole} = render(
       <InfoPanel
         footer="footer text"
         heading="heading text"
@@ -75,7 +74,7 @@ describe('InfoPanel tests', () => {
     );
 
     const heading = getByTestId('infopanel-heading');
-    const closeButton = queryByRole('button');
+    const closeButton = getByRole('button', {name: 'Close Icon'});
 
     expect(element).toHaveTextContent('heading text');
     expect(element).toHaveTextContent('footer text');
@@ -85,7 +84,7 @@ describe('InfoPanel tests', () => {
 
   test('should call click handler', async () => {
     const handleCloseClick = testing.fn();
-    const {queryByRole} = render(
+    const {getByRole} = render(
       <InfoPanel
         footer="footer text"
         heading="heading text"
@@ -93,7 +92,7 @@ describe('InfoPanel tests', () => {
       />,
     );
 
-    const closeButton = queryByRole('button');
+    const closeButton = getByRole('button', {name: 'Close Icon'});
 
     expect(closeButton).toBeInTheDocument();
 

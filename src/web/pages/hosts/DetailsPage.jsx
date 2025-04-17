@@ -8,13 +8,11 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
+import {HostIcon, ResultIcon, TlsCertificateIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import HostIcon from 'web/components/icon/HostIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import OsIcon from 'web/components/icon/OsIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
-import TlsCertificateIcon from 'web/components/icon/TlsCertificateIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -27,14 +25,15 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import EntityPage from 'web/entity/EntityPage';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage, {Col} from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -49,7 +48,6 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   entity,
   onHostCreateClick,

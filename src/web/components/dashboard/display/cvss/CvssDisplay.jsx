@@ -9,21 +9,22 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import BarChart from 'web/components/chart/Bar';
-import transformCvssData from 'web/components/dashboard/display/cvss/CvssTransform';
+import transformCvssData from 'web/components/dashboard/display/cvss/cvssTransform';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 
-
-class CvssDisplay extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleDataClick = this.handleDataClick.bind(this);
-  }
-
-  handleDataClick(data) {
-    const {onFilterChanged, filter} = this.props;
-
+const CvssDisplay = ({
+  filter,
+  title,
+  yLabel,
+  xLabel = _('Severity'),
+  onFilterChanged,
+  ...props
+}) => {
+  const gmp = useGmp();
+  const severityRating = gmp.settings.severityRating;
+  const handleDataClick = data => {
     if (!isDefined(onFilterChanged)) {
       return;
     }
@@ -67,41 +68,30 @@ class CvssDisplay extends React.Component {
       : statusFilter;
 
     onFilterChanged(newFilter);
-  }
-
-  render() {
-    const {
-      title,
-      yLabel,
-      xLabel = _('Severity'),
-      onFilterChanged,
-      ...props
-    } = this.props;
-    return (
-      <DataDisplay
-        {...props}
-        dataTransform={transformCvssData}
-        showToggleLegend={false}
-        title={title}
-      >
-        {({width, height, data, svgRef}) => (
-          <BarChart
-            data={data}
-            height={height}
-            showLegend={false}
-            svgRef={svgRef}
-            width={width}
-            xLabel={xLabel}
-            yLabel={yLabel}
-            onDataClick={
-              isDefined(onFilterChanged) ? this.handleDataClick : undefined
-            }
-          />
-        )}
-      </DataDisplay>
-    );
-  }
-}
+  };
+  return (
+    <DataDisplay
+      {...props}
+      dataTransform={transformCvssData}
+      severityRating={severityRating}
+      showToggleLegend={false}
+      title={title}
+    >
+      {({width, height, data, svgRef}) => (
+        <BarChart
+          data={data}
+          height={height}
+          showLegend={false}
+          svgRef={svgRef}
+          width={width}
+          xLabel={xLabel}
+          yLabel={yLabel}
+          onDataClick={isDefined(onFilterChanged) ? handleDataClick : undefined}
+        />
+      )}
+    </DataDisplay>
+  );
+};
 
 CvssDisplay.propTypes = {
   filter: PropTypes.filter,

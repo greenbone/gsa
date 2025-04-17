@@ -19,7 +19,6 @@ import Trend from 'web/pages/scanconfigs/Trend';
 import PropTypes from 'web/utils/PropTypes';
 import {na} from 'web/utils/Render';
 
-
 const ScanConfigActions = withEntitiesActions(
   ({
     entity,
@@ -120,7 +119,11 @@ const ScanConfigRow = ({
         trend={entity.nvts.trend}
       />
     </TableData>
-    <ActionsComponent {...props} entity={entity} />
+    <ActionsComponent
+      {...props}
+      entity={entity}
+      openEditNvtDetailsDialog={openEditNvtDetailsDialog}
+    />
   </TableRow>
 );
 
@@ -128,8 +131,8 @@ ScanConfigRow.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
-  openEditNvtDetailsDialog: PropTypes.func.isRequired,
+  onToggleDetailsClick: PropTypes.func,
+  openEditNvtDetailsDialog: PropTypes.func,
 };
 
 export default ScanConfigRow;

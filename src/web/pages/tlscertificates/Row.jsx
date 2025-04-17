@@ -7,16 +7,15 @@ import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
 import DateTime from 'web/components/date/DateTime';
+import {DownloadIcon} from 'web/components/icon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
-import DownloadIcon from 'web/components/icon/DownloadIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
-import {RowDetailsToggle} from 'web/entities/Row';
+import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import PropTypes from 'web/utils/PropTypes';
-
 const Div = styled.div`
   word-break: break-all;
 `;
@@ -62,7 +61,6 @@ Actions.propTypes = {
 const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
-  links = true,
   onToggleDetailsClick,
   ...props
 }) => {
@@ -93,7 +91,6 @@ const Row = ({
 Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 

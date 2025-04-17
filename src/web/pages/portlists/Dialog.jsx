@@ -11,14 +11,12 @@ import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
 import TextField from 'web/components/form/TextField';
-import NewIcon from 'web/components/icon/NewIcon';
+import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-import PortRangesTable from 'web/pages/portlists/portrangestable';
+import PortRangesTable from 'web/pages/portlists/PortRangesTable';
 import PropTypes from 'web/utils/PropTypes';
-
-
 const FROM_FILE = YES_VALUE;
 const NOT_FROM_FILE = NO_VALUE;
 
@@ -44,6 +42,7 @@ const PortListsDialog = ({
   const newRangeIcon = (
     <div>
       <NewIcon
+        data-testid="new-port-range"
         title={_('Add Port Range')}
         value={port_list}
         onClick={onNewPortRangeClick}

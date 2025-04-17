@@ -10,23 +10,20 @@ import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
-import AlterableIcon from 'web/components/icon/AlterableIcon';
-import ProvideViewIcon from 'web/components/icon/ProvideViewIcon';
-import SensorIcon from 'web/components/icon/SensorIcon';
+import {AlterableIcon, ProvideViewIcon, SensorIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
-import {RowDetailsToggle} from 'web/entities/Row';
+import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
+import useUserName from 'web/hooks/useUserName';
 import Actions from 'web/pages/tasks/Actions';
 import TaskStatus from 'web/pages/tasks/Status';
 import Trend from 'web/pages/tasks/Trend';
 import PropTypes from 'web/utils/PropTypes';
-import withUserName from 'web/utils/withUserName';
-
 export const renderReport = (report, links) => {
   if (!isDefined(report)) {
     return null;
@@ -66,10 +63,10 @@ const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
-  username,
   onToggleDetailsClick,
   ...props
 }) => {
+  const [username] = useUserName();
   const {scanner, observers} = entity;
 
   const obs = [];
@@ -154,8 +151,7 @@ Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  username: PropTypes.string.isRequired,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withUserName(Row);
+export default Row;

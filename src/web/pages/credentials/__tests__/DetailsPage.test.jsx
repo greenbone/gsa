@@ -133,10 +133,10 @@ describe('Credential Detailspage tests', () => {
 
     expect(container).toHaveTextContent('ID:6575');
     expect(container).toHaveTextContent(
-      'Created:Wed, Dec 16, 2020 4:23 PM CET',
+      'Created:Wed, Dec 16, 2020 4:23 PM Central European Standard',
     );
     expect(container).toHaveTextContent(
-      'Modified:Tue, Mar 2, 2021 11:28 AM CET',
+      'Modified:Tue, Mar 2, 2021 11:28 AM Central European Standard',
     );
     expect(container).toHaveTextContent('Owner:admin');
 

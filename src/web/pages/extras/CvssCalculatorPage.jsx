@@ -19,14 +19,13 @@ import SeverityBar from 'web/components/bar/SeverityBar';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
-import CvssIcon from 'web/components/icon/CvssIcon';
+import {CvssIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
-
 const StyledTextField = styled(TextField)`
   width: 180px;
 `;
@@ -42,7 +41,7 @@ const ToolBarIcons = () => (
 
 /* CVSS v2 .... */
 
-const CvssV2Calculator = props => {
+const CvssV2Calculator = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [searchParams] = useSearchParams();
 
@@ -332,7 +331,7 @@ const CvssV2Calculator = props => {
 
 /* CVSS v3 .... */
 
-const CvssV3Calculator = props => {
+const CvssV3Calculator = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [searchParams] = useSearchParams();
 

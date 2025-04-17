@@ -16,18 +16,16 @@ import {
   CircleHelp,
 } from 'lucide-react';
 import React from 'react';
-import {useMatch} from "react-router";
+import {useMatch} from 'react-router';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
-import useManualURL from 'web/hooks/useManualURL';
 import useTranslation from 'web/hooks/useTranslation';
 
 const Menu = () => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const gmp = useGmp();
-  const manualURL = useManualURL();
 
   function checkCapabilities(capabilitiesList) {
     return capabilitiesList.reduce(
@@ -64,6 +62,9 @@ const Menu = () => {
   const mayOpAssets = checkCapabilities(['assets', 'tls_certificates']);
 
   const useIsActive = path => Boolean(useMatch(path));
+
+  const conditionalSubNavConfig = (feature, label, to, activeCondition) =>
+        capabilities.mayAccess(feature) && { label, to, activeCondition };
 
   const isUserActive = useIsActive('/users');
   const isGroupsActive = useIsActive('/groups');
@@ -129,27 +130,31 @@ const Menu = () => {
       },
     ],
     resilience: [
-      {
-        label: _('Remediation Tickets'),
-        to: '/tickets',
-        activeCondition: useIsActive('/tickets'),
-      },
-      {
-        label: _('Compliance Policies'),
-        to: '/policies',
-        activeCondition: useIsActive('/policies'),
-      },
-      {
-        label: _('Compliance Audits'),
-        to: '/audits',
-        activeCondition: useIsActive('/audits'),
-      },
-      {
-        label: _('Compliance Audit Reports'),
-        to: '/auditreports',
-        activeCondition: useIsActive('/auditreports'),
-      },
-    ],
+      conditionalSubNavConfig(
+        'tickets',
+        _('Remediation Tickets'),
+        '/tickets',
+        useIsActive('/tickets'),
+      ),
+      conditionalSubNavConfig(
+        'policies',
+        _('Compliance Policies'),
+        '/policies',
+        useIsActive('/policies'),
+      ),
+      conditionalSubNavConfig(
+        'audits',
+        _('Compliance Audits'),
+        '/audits',
+        useIsActive('/audits'),
+      ),
+      conditionalSubNavConfig(
+        'auditreports',
+        _('Compliance Audit Reports'),
+        '/auditreports',
+        useIsActive('/auditreports'),
+      ),
+    ].filter(Boolean),
     secInfo: [
       {
         label: _('NVTs'),
@@ -257,6 +262,7 @@ const Menu = () => {
       {
         label: _('Dashboards'),
         to: '/dashboards',
+        key: 'dashboards',
         icon: BarChart3,
       },
     ],
@@ -355,11 +361,6 @@ const Menu = () => {
         key: 'help',
         icon: CircleHelp,
         subNav: [
-          {
-            label: _('User Manual'),
-            to: manualURL,
-            isExternal: true,
-          },
           {
             label: _('CVSS Calculator'),
             to: '/cvsscalculator',

@@ -7,6 +7,7 @@ import {format as d3format} from 'd3-format';
 import {_, _l} from 'gmp/locale/lang';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import React from 'react';
 import BarChart from 'web/components/chart/Bar';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
@@ -19,12 +20,15 @@ import {TasksHighResultsLoader} from 'web/pages/tasks/dashboard/Loaders';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
+import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
-
 
 const format = d3format('0.2f');
 
-const transformHighResultsData = (data = {}) => {
+const transformHighResultsData = (
+  data = {},
+  {severityRating = DEFAULT_SEVERITY_RATING} = {},
+) => {
   const {groups = []} = data;
 
   return groups
@@ -38,7 +42,7 @@ const transformHighResultsData = (data = {}) => {
       const {name} = text;
       const high_per_host = parseFloat(text.high_per_host);
       const severity = parseSeverity(text.severity);
-      const riskFactor = resultSeverityRiskFactor(severity);
+      const riskFactor = resultSeverityRiskFactor(severity, severityRating);
       return {
         y: high_per_host,
         x: name,
@@ -64,7 +68,8 @@ export class TasksMostHighResultsDisplay extends React.Component {
   }
 
   render() {
-    const {filter, ...props} = this.props;
+    const {filter, gmp, ...props} = this.props;
+    const severityRating = gmp.settings.severityRating;
     return (
       <TasksHighResultsLoader filter={filter}>
         {loaderProps => (
@@ -75,6 +80,7 @@ export class TasksMostHighResultsDisplay extends React.Component {
             dataTitles={[_('Task Name'), _('Max. High per Host')]}
             dataTransform={transformHighResultsData}
             filter={filter}
+            severityRating={severityRating}
             showToggleLegend={false}
             title={() => _('Tasks with most High Results per Host')}
           >
@@ -99,10 +105,12 @@ export class TasksMostHighResultsDisplay extends React.Component {
 
 TasksMostHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   navigate: PropTypes.func.isRequired,
 };
 
 TasksMostHighResultsDisplay = compose(
+  withGmp,
   withRouter,
   withFilterSelection({
     filtersFilter: TASKS_FILTER_FILTER,

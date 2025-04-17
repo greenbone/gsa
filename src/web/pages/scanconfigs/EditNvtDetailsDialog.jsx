@@ -136,7 +136,7 @@ const EditNvtDetailsDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({values: state, onValueChange}) =>
+      {({values: state}) =>
         isLoadingNvt ? (
           <Loading />
         ) : (

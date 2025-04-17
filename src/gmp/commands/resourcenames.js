@@ -11,7 +11,6 @@ import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import ResourceName from 'gmp/models/resourcename';
 
-
 export class ResourceNamesCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'resource_name', ResourceName);
@@ -26,7 +25,7 @@ export class ResourceNamesCommand extends EntitiesCommand {
     return parseResourceNamesEntities(response, name, modelclass);
   }
 
-  getCollectionListFromRoot(root, meta) {
+  getCollectionListFromRoot(root) {
     const response = this.getEntitiesResponse(root);
     const res = parseCollectionList(response, this.name, this.clazz, {
       entities_parse_func: this.parseResourceNamesEntities,
@@ -34,49 +33,41 @@ export class ResourceNamesCommand extends EntitiesCommand {
     return res;
   }
 
-  export(entities) {
+  export() {
     throw new Error('export not implemented in ' + this.constructor.name);
   }
 
-  exportByIds(ids) {
+  exportByIds() {
     throw new Error('exportByIds not implemented in ' + this.constructor.name);
   }
 
-  exportByFilter(filter) {
+  exportByFilter() {
     throw new Error(
       'exportByFilter not implemented in ' + this.constructor.name,
     );
   }
 
-  delete(entities, extraParams) {
+  delete() {
     throw new Error('delete not implemented in ' + this.constructor.name);
   }
 
-  deleteByIds(ids, extraParams = {}) {
+  deleteByIds() {
     throw new Error('deleteByIds not implemented in ' + this.constructor.name);
   }
 
-  deleteByFilter(filter, extraParams) {
+  deleteByFilter() {
     throw new Error(
       'deleteByFilter not implemented in ' + this.constructor.name,
     );
   }
 
-  transformAggregates(response) {
+  transformAggregates() {
     throw new Error(
       'transformAggregates not implemented in ' + this.constructor.name,
     );
   }
 
-  getAggregates({
-    dataColumns = [],
-    textColumns = [],
-    sort = [],
-    aggregateMode,
-    maxGroups,
-    subgroupColumn,
-    ...params
-  } = {}) {
+  getAggregates() {
     throw new Error(
       'getAggregates not implemented in ' + this.constructor.name,
     );

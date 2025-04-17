@@ -73,12 +73,7 @@ const FoldStatePropType = PropTypes.oneOf([
  */
 
 export const withFolding = Component => {
-  const FoldingWrapper = ({
-    foldState,
-    onFoldStepEnd,
-    onFoldToggle,
-    ...props
-  }) => (
+  const FoldingWrapper = ({foldState, onFoldStepEnd, ...props}) => (
     <FoldableDiv
       $foldState={foldState}
       onAnimationEnd={onFoldStepEnd}

@@ -7,8 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import TlsCertificate from 'gmp/models/tlscertificate';
 import Row from 'web/pages/tlscertificates/Row';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
-
+import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 
@@ -50,7 +49,7 @@ describe('Tls Certificate Row tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <Row
         entity={tlsCertificate}
         links={true}
@@ -64,13 +63,20 @@ describe('Tls Certificate Row tests', () => {
     // Info
     expect(baseElement).toHaveTextContent('CN=LoremIpsumSubject C=Dolor');
     expect(baseElement).toHaveTextContent('123');
-    expect(baseElement).toHaveTextContent('Sat, Aug 10, 2019 12:51 PM UTC');
-    expect(baseElement).toHaveTextContent('Tue, Sep 10, 2019 12:51 PM UTC');
-    expect(baseElement).toHaveTextContent('Thu, Oct 10, 2019 12:51 PM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Sat, Aug 10, 2019 12:51 PM Coordinated Universal Time',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Tue, Sep 10, 2019 12:51 PM Coordinated Universal Time',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Thu, Oct 10, 2019 12:51 PM Coordinated Universal Time',
+    );
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-    expect(icons.length).toEqual(3);
+    screen.getAllByTestId('delete-icon');
+    screen.getByTestId('download-icon');
+    screen.getByTestId('export-icon');
   });
 
   test('should render icons', () => {
@@ -84,7 +90,7 @@ describe('Tls Certificate Row tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {getAllByTestId} = render(
+    render(
       <Row
         entity={tlsCertificate}
         links={true}
@@ -96,10 +102,18 @@ describe('Tls Certificate Row tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    expect(icons[0]).toHaveAttribute('title', 'Delete TLS Certificate');
-    expect(icons[1]).toHaveAttribute('title', 'Download TLS Certificate');
-    expect(icons[2]).toHaveAttribute('title', 'Export TLS Certificate as XML');
+    expect(screen.getAllByTestId('delete-icon')[0]).toHaveAttribute(
+      'title',
+      'Delete TLS Certificate',
+    );
+    expect(screen.getByTestId('download-icon')).toHaveAttribute(
+      'title',
+      'Download TLS Certificate',
+    );
+    expect(screen.getByTestId('export-icon')).toHaveAttribute(
+      'title',
+      'Export TLS Certificate as XML',
+    );
   });
 
   test('should call click handlers', () => {
@@ -115,7 +129,7 @@ describe('Tls Certificate Row tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {baseElement, getAllByTestId} = render(
+    render(
       <Row
         entity={tlsCertificate}
         links={true}
@@ -127,20 +141,20 @@ describe('Tls Certificate Row tests', () => {
     );
 
     // Name
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const deleteIcon = screen.getAllByTestId('delete-icon')[0];
+    fireEvent.click(deleteIcon);
     expect(handleTlsCertificateDelete).toHaveBeenCalledWith(tlsCertificate);
 
-    fireEvent.click(icons[1]);
+    const downloadIcon = screen.getByTestId('download-icon');
+    fireEvent.click(downloadIcon);
     expect(handleTlsCertificateDownload).toHaveBeenCalledWith(tlsCertificate);
 
-    fireEvent.click(icons[2]);
+    const exportIcon = screen.getByTestId('export-icon');
+    fireEvent.click(exportIcon);
     expect(handleTlsCertificateExport).toHaveBeenCalledWith(tlsCertificate);
   });
 

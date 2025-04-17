@@ -6,11 +6,10 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import styled from 'styled-components';
+import {UploadIcon, ScanConfigIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ScanConfigIcon from 'web/components/icon/ScanConfigIcon';
-import UploadIcon from 'web/components/icon/UploadIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -29,12 +28,12 @@ import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import StripedTable from 'web/components/table/StripedTable';
+import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -51,7 +50,6 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   entity,
   onScanConfigCloneClick,

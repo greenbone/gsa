@@ -9,20 +9,19 @@ import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
+import {NewIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import NewIcon from 'web/components/icon/NewIcon';
 import OsIcon from 'web/components/icon/OsIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
-import {RowDetailsToggle} from 'web/entities/Row';
+import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 const Actions = compose(
   withCapabilities,
   withEntitiesActions,
@@ -81,7 +80,6 @@ Actions.propTypes = {
 const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
-  links = true,
   onToggleDetailsClick,
   ...props
 }) => {
@@ -119,7 +117,6 @@ const Row = ({
 Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 

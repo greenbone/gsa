@@ -14,8 +14,8 @@ import {selectSaveId, hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import {handleNotificationForAction} from 'web/components/notification/handleNotificationForAction';
 import EntityComponent from 'web/entity/EntityComponent';
+import actionFunction from 'web/entity/hooks/actionFunction';
 import AlertComponent from 'web/pages/alerts/Component';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
 import ScheduleComponent from 'web/pages/schedules/Component';
@@ -61,7 +61,6 @@ import withGmp from 'web/utils/withGmp';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
-
 class TaskComponent extends React.Component {
   constructor(...args) {
     super(...args);
@@ -152,7 +151,7 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return handleNotificationForAction(
+    return actionFunction(
       this.cmd.start(task),
       onStarted,
       onStartError,
@@ -165,7 +164,7 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return handleNotificationForAction(
+    return actionFunction(
       this.cmd.stop(task),
       onStopped,
       onStopError,
@@ -178,7 +177,7 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return handleNotificationForAction(
+    return actionFunction(
       this.cmd.resume(task),
       onResumed,
       onResumeError,
@@ -519,8 +518,8 @@ class TaskComponent extends React.Component {
         esxi_credential: defaultEsxiCredential,
         scanner_id: defaultScannerId,
         start_date: now,
-        start_minute: now.minutes(),
-        start_hour: now.hours(),
+        start_minute: now.minute(),
+        start_hour: now.hour(),
         start_timezone: timezone,
       });
     });
@@ -561,8 +560,8 @@ class TaskComponent extends React.Component {
         reschedule: NO_VALUE,
         task_id: selectSaveId(settings.tasks),
         start_date: now,
-        start_minute: now.minutes(),
-        start_hour: now.hours(),
+        start_minute: now.minute(),
+        start_hour: now.hour(),
         start_timezone: timezone,
       });
     });

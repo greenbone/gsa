@@ -10,7 +10,6 @@ import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
@@ -71,27 +70,27 @@ describe('Report Details ToolBarIcons tests', () => {
     );
 
     const links = element.querySelectorAll('a');
-    const spans = element.querySelectorAll('span');
-
+    const buttons = element.querySelectorAll('button');
+    const spanLinks = element.querySelectorAll('span');
     // Manual Icon
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/reports.html#reading-a-report',
     );
-    expect(spans[0]).toHaveAttribute('title', 'Help: Reading Reports');
+    expect(spanLinks[0]).toHaveAttribute('title', 'Help: Reading Reports');
 
     // Reports List Icon
     expect(links[1]).toHaveAttribute('href', '/reports');
-    expect(spans[1]).toHaveAttribute('title', 'Reports List');
+    expect(spanLinks[1]).toHaveAttribute('title', 'Reports List');
 
     // Add to Assets Icon
-    expect(spans[2]).toHaveAttribute(
+    expect(buttons[0]).toHaveAttribute(
       'title',
       'Add to Assets with QoD >= 70% and Overrides enabled',
     );
 
     // Remove from Assets Icon
-    expect(spans[3]).toHaveAttribute('title', 'Remove from Assets');
+    expect(buttons[1]).toHaveAttribute('title', 'Remove from Assets');
 
     // Corresponding Task Icon
     expect(links[2]).toHaveAttribute('href', '/task/314');
@@ -126,10 +125,10 @@ describe('Report Details ToolBarIcons tests', () => {
     expect(links[6]).toHaveAttribute('title', 'Corresponding Performance');
 
     // Download Report Icon
-    expect(spans[9]).toHaveAttribute('title', 'Download filtered Report');
+    expect(buttons[2]).toHaveAttribute('title', 'Download filtered Report');
 
     // Trigger Alert Icon
-    expect(spans[10]).toHaveAttribute('title', 'Trigger Alert');
+    expect(buttons[3]).toHaveAttribute('title', 'Trigger Alert');
   });
 
   test('should call click handler', () => {
@@ -169,21 +168,21 @@ describe('Report Details ToolBarIcons tests', () => {
       />,
     );
 
-    const spans = element.querySelectorAll('span');
+    const buttons = element.querySelectorAll('button');
 
-    expect(spans[2]).toHaveAttribute(
+    expect(buttons[0]).toHaveAttribute(
       'title',
       'Add to Assets with QoD >= 70% and Overrides enabled',
     );
-    fireEvent.click(spans[2]);
+    fireEvent.click(buttons[0]);
     expect(onAddToAssetsClick).toHaveBeenCalled();
 
-    expect(spans[3]).toHaveAttribute('title', 'Remove from Assets');
-    fireEvent.click(spans[3]);
+    expect(buttons[1]).toHaveAttribute('title', 'Remove from Assets');
+    fireEvent.click(buttons[1]);
     expect(onRemoveFromAssetsClick).toHaveBeenCalled();
 
-    expect(spans[9]).toHaveAttribute('title', 'Download filtered Report');
-    fireEvent.click(spans[9]);
+    expect(buttons[2]).toHaveAttribute('title', 'Download filtered Report');
+    fireEvent.click(buttons[2]);
     expect(onReportDownloadClick).toHaveBeenCalled();
   });
 });

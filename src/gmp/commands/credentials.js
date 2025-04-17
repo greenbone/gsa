@@ -10,10 +10,9 @@ import DefaultTransform from 'gmp/http/transform/default';
 import logger from 'gmp/log';
 import Credential from 'gmp/models/credential';
 
-
 const log = logger.getLogger('gmp.commands.credentials');
 
-class CredentialCommand extends EntityCommand {
+export class CredentialCommand extends EntityCommand {
   constructor(http) {
     super(http, 'credential', Credential);
   }
@@ -35,6 +34,8 @@ class CredentialCommand extends EntityCommand {
       privacy_algorithm = 'aes',
       private_key,
       public_key,
+      realm,
+      kdc,
     } = args;
     log.debug('Creating new credential', args);
     return this.action({
@@ -54,6 +55,8 @@ class CredentialCommand extends EntityCommand {
       private_key,
       public_key,
       certificate,
+      realm,
+      kdc,
     });
   }
 
@@ -78,6 +81,8 @@ class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
+      kdc,
+      realm,
     } = args;
     log.debug('Saving credential', args);
     return this.action({
@@ -101,6 +106,8 @@ class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
+      kdc,
+      realm,
     });
   }
 

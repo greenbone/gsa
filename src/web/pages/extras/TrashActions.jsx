@@ -7,12 +7,11 @@ import _ from 'gmp/locale';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import RestoreIcon from 'web/components/icon/RestoreIcon';
+import {RestoreIcon} from 'web/components/icon';
 import TrashDeleteIcon from 'web/components/icon/TrashDeleteIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
 import PropTypes from 'web/utils/PropTypes';
-
 const getRestorableDeletableForEntityType = {
   alert: entity => {
     const restorable = isDefined(entity.filter)
@@ -35,10 +34,10 @@ const getRestorableDeletableForEntityType = {
   group: entity => {
     return {restorable: true, deletable: !entity.isInUse()};
   },
-  note: entity => {
+  note: () => {
     return {restorable: true, deletable: true};
   },
-  override: entity => {
+  override: () => {
     return {restorable: true, deletable: true};
   },
   permission: entity => {
@@ -81,12 +80,15 @@ const getRestorableDeletableForEntityType = {
     const snmp_cred = isDefined(entity.snmp_credential)
       ? !entity.snmp_credential.isInTrash()
       : true;
+    const krb5Cred = isDefined(entity.krb5_credential)
+      ? !entity.krb5_credential.isInTrash()
+      : true;
     const portlist = isDefined(entity.port_list)
       ? !entity.port_list.isInTrash()
       : true;
 
     const restorable =
-      ssh_cred && smb_cred && esxi_cred && snmp_cred && portlist;
+      ssh_cred && smb_cred && esxi_cred && snmp_cred && krb5Cred && portlist;
     return {restorable, deletable: !entity.isInUse()};
   },
   task: entity => {
@@ -105,7 +107,7 @@ const getRestorableDeletableForEntityType = {
     const restorable = schedule && target && config && scanner && alerts;
     return {restorable, deletable: true};
   },
-  ticket: entity => {
+  ticket: () => {
     return {restorable: true, deletable: true};
   },
 };

@@ -10,18 +10,19 @@ import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
-import {Col} from 'web/entity/Page';
+import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 const MAX_HOSTS_LISTINGS = 70;
 
-const TargetDetails = ({capabilities, entity, links = true}) => {
+const TargetDetails = ({capabilities, entity}) => {
   const {
     alive_tests,
     esxi_credential,
@@ -35,9 +36,12 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     snmp_credential,
     ssh_credential,
     ssh_elevate_credential,
+    krb5_credential: krb5Credential,
     tasks,
     allowSimultaneousIPs,
   } = entity;
+
+  const gmp = useGmp();
 
   const hostsListing = hosts
     .slice(0, MAX_HOSTS_LISTINGS)
@@ -159,9 +163,22 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                     </TableRow>
                   )}
 
+                {gmp.settings.enableKrb5 && isDefined(krb5Credential) && (
+                  <TableRow>
+                    <TableData>{_('SMB (Kerberos)')}</TableData>
+                    <TableData>
+                      <span>
+                        <DetailsLink id={krb5Credential.id} type="credential">
+                          {krb5Credential.name}
+                        </DetailsLink>
+                      </span>
+                    </TableData>
+                  </TableRow>
+                )}
+
                 {isDefined(smb_credential) && (
                   <TableRow>
-                    <TableData>{_('SMB')}</TableData>
+                    <TableData>{_('SMB (NTLM)')}</TableData>
                     <TableData>
                       <span>
                         <DetailsLink id={smb_credential.id} type="credential">
@@ -225,7 +242,6 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 TargetDetails.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default withCapabilities(TargetDetails);

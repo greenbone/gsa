@@ -9,6 +9,11 @@ import Target from 'gmp/models/target';
 import Details from 'web/pages/targets/Details';
 import {rendererWith} from 'web/utils/Testing';
 
+const gmp = {
+  settings: {
+    enableKrb5: false,
+  },
+};
 
 const target_elevate = Target.fromElement({
   _id: 'foo',
@@ -81,6 +86,11 @@ const target_no_elevate = Target.fromElement({
     name: 'pl1',
     trash: '0',
   },
+  krb5_credential: {
+    _id: 'krb5_id',
+    name: 'krb5',
+    trash: '0',
+  },
   ssh_credential: {
     _id: '',
     name: '',
@@ -113,6 +123,7 @@ describe('Target Details tests', () => {
     const caps = new Capabilities(['everything']);
 
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
@@ -144,15 +155,39 @@ describe('Target Details tests', () => {
 
     expect(headings[1]).toHaveTextContent('Credentials');
 
-    expect(element).toHaveTextContent('SMB');
+    expect(element).toHaveTextContent('SMB (NTLM)');
 
     expect(detailsLinks[1]).toHaveAttribute('href', '/credential/4784');
+  });
+
+  test('should render Kerberos in target details, when KRB5 is enabled', () => {
+    const caps = new Capabilities(['everything']);
+
+    const {render} = rendererWith({
+      gmp: {
+        settings: {
+          enableKrb5: true,
+        },
+      },
+      capabilities: caps,
+      router: true,
+    });
+
+    const {element, getAllByTestId} = render(
+      <Details entity={target_no_elevate} />,
+    );
+    const kerberosLink = getAllByTestId('details-link')[1];
+
+    expect(element).toHaveTextContent('SMB (Kerberos)');
+    expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
+    expect(kerberosLink).toHaveTextContent('krb5');
   });
 
   test('should render full target details with elevate credentials and tasks', () => {
     const caps = new Capabilities(['everything']);
 
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });

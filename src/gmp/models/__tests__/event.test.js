@@ -65,7 +65,7 @@ END:VCALENDAR
   });
 
   test('should calculate start date as next date for daily recurrence', () => {
-    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
+    const now = date().tz('utc').minute(0).second(0).millisecond(0);
     const startDate = now.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -90,7 +90,7 @@ END:VCALENDAR
   });
 
   test('should calculate next day as next day for daily recurrence', () => {
-    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
+    const now = date().tz('utc').minute(0).second(0).millisecond(0);
     const startDate = now.clone().subtract(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -119,7 +119,7 @@ END:VCALENDAR
   });
 
   test('should calculate start date as next date for no recurrence', () => {
-    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
+    const now = date().tz('utc').minute(0).second(0).millisecond(0);
     const startDate = now.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -143,7 +143,7 @@ END:VCALENDAR
   });
 
   test('should calculate no next date for no recurrence if start date is already over', () => {
-    const startDate = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
+    const startDate = date().tz('utc').minute(0).second(0).millisecond(0);
     const now = startDate.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -170,11 +170,11 @@ END:VCALENDAR
     const tz = process.env.TZ;
     process.env.TZ = 'America/New_York'; // UTC-4 or UTC-5
 
-    const now = date
+    const now = date()
       .tz('America/New_York')
-      .minutes(0)
-      .seconds(0)
-      .milliseconds(0);
+      .minute(0)
+      .second(0)
+      .millisecond(0);
     // The target date is in 2 hours.  If the recurrence calculation converts the current NY
     // time directly to UTC (for example 16h00 NY becomes 16h00 UTC) then the test will fail
     // because UTC is more than 2 hours ahead of NY.

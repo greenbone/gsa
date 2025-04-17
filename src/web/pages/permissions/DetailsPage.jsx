@@ -5,10 +5,10 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
+import {PermissionIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import PermissionIcon from 'web/components/icon/PermissionIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -19,12 +19,12 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
@@ -32,7 +32,6 @@ import PermissionComponent from 'web/pages/permissions/Component';
 import PermissionDetails from 'web/pages/permissions/Details';
 import {selector, loadEntity} from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   entity,
   onPermissionCloneClick,

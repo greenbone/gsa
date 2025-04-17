@@ -10,13 +10,13 @@ import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -150,9 +150,9 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
     const display = screen.getAllByTestId('grid-item');
 
     // Toolbar Icons
@@ -342,15 +342,15 @@ describe('NotesPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a note
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected note
@@ -425,7 +425,7 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);
@@ -463,7 +463,10 @@ describe('NotesPage ToolBarIcons test', () => {
 
     const links = element.querySelectorAll('a');
 
-    expect(screen.getAllByTitle('Help: Notes')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Notes',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/reports.html#managing-notes',
@@ -485,11 +488,9 @@ describe('NotesPage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onNoteCreateClick={handleNoteCreateClick} />);
 
-    const newIcon = screen.getAllByTitle('New Note');
-
-    expect(newIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(newIcon[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'New Note');
+    fireEvent.click(newIcon);
     expect(handleNoteCreateClick).toHaveBeenCalled();
   });
 
@@ -506,12 +507,12 @@ describe('NotesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
-      <ToolBarIcons onNoteCreateClick={handleNoteCreateClick} />,
-    );
+    render(<ToolBarIcons onNoteCreateClick={handleNoteCreateClick} />);
 
-    const icons = queryAllByTestId('svg-icon'); // this test is probably appropriate to keep in the old format
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Notes');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Notes',
+    );
+    expect(screen.queryByTestId('new-icon')).toBeNull();
   });
 });

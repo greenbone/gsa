@@ -11,15 +11,14 @@ import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
-import {Col} from 'web/entity/Page';
 import {renderDuration, renderRecurrence} from 'web/pages/schedules/Render';
 import PropTypes from 'web/utils/PropTypes';
 
-
-const ScheduleDetails = ({entity, links = true}) => {
+const ScheduleDetails = ({entity}) => {
   const {comment, tasks = [], timezone, timezone_abbrev, event = {}} = entity;
   const {startDate, nextDate, duration, recurrence} = event;
   return (
@@ -107,7 +106,6 @@ const ScheduleDetails = ({entity, links = true}) => {
 
 ScheduleDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default ScheduleDetails;

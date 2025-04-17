@@ -17,8 +17,7 @@ import {
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
-import NewIcon from 'web/components/icon/NewIcon';
-import ResetIcon from 'web/components/icon/ResetIcon';
+import {NewIcon, ResetIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import {
   resetSettings,
@@ -28,7 +27,6 @@ import getDashboardSettings from 'web/store/dashboard/settings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 
 export class DashboardControls extends React.Component {
   constructor(...args) {
@@ -113,6 +111,7 @@ export class DashboardControls extends React.Component {
             onClick={canAdd ? this.handleNewClick : undefined}
           />
           <ResetIcon
+            data-testid="reset-dashboard"
             title={_('Reset to Defaults')}
             onClick={this.handleResetClick}
           />

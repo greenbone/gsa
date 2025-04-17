@@ -8,15 +8,16 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CvesPage, {ToolBarIcons} from 'web/pages/cves/ListPage';
@@ -113,7 +114,12 @@ describe('CvesPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval, enableEPSS: true},
+      settings: {
+        manualUrl,
+        reloadInterval,
+        enableEPSS: true,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings, getSetting},
     };
 
@@ -151,8 +157,8 @@ describe('CvesPage tests', () => {
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const powerFilter = getPowerFilter();
-    const inputs = getTextInputs(powerFilter);
+    const powerFilter = queryPowerFilter();
+    const inputs = queryTextInputs(powerFilter);
     const select = getSelectElement(powerFilter);
 
     // Toolbar Icons
@@ -191,7 +197,9 @@ describe('CvesPage tests', () => {
 
     expect(row[2]).toHaveTextContent('CVE-2020-9992');
     expect(row[2]).toHaveTextContent('foo bar baz');
-    expect(row[2]).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CESTA');
+    expect(row[2]).toHaveTextContent(
+      'Thu, Oct 22, 2020 9:15 PM Central European Summer TimeA',
+    );
     expect(row[2]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
     expect(row[2]).toHaveTextContent('9.3 (Critical)');
     expect(row[2]).toHaveTextContent('0.50000');
@@ -327,15 +335,15 @@ describe('CvesPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a cve
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected cve
@@ -405,7 +413,7 @@ describe('CvesPage tests', () => {
 
     await wait();
 
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);
@@ -432,7 +440,10 @@ describe('CvesPage ToolBarIcons test', () => {
     const {baseElement} = render(<ToolBarIcons />);
 
     const links = baseElement.querySelectorAll('a');
-    expect(screen.getAllByTitle('Help: CVEs')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: CVEs',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-secinfo.html#cve',

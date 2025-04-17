@@ -5,27 +5,31 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import date from 'gmp/models/date';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import {
   changeInputValue,
   getDialogCloseButton,
-  getDialogContent,
+  queryDialogContent,
   getDialogSaveButton,
-  getDialogTitle,
+  queryDialogTitle,
   getRadioInputs,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
-
 
 const preferences = [
   {name: 'pref 1', value: 'no', id: '1', type: 'checkbox'},
   {name: 'pref 2', value: '1', id: '2', type: 'radio', alt: ['2', '3']},
   {name: 'pref 3', value: 'foo', id: '3', type: 'entry'},
 ];
-
 const modified = date('2019-09-09T12:00:00Z');
+const gmp = {
+  settings: {
+    severityRating: DEFAULT_SEVERITY_RATING,
+  },
+};
 
 describe('EditNvtDetailsDialog component tests', () => {
   test('should render dialog', () => {
@@ -33,6 +37,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render, store} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -61,9 +66,9 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).toHaveTextContent('Config');
     expect(content).toHaveTextContent('foo');
   });
@@ -73,6 +78,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render, store} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -101,9 +107,9 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
+    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
 
-    const content = getDialogContent();
+    const content = queryDialogContent();
     expect(content).not.toHaveTextContent('Config');
     expect(content).not.toHaveTextContent('foo');
   });
@@ -113,6 +119,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -172,6 +179,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -210,6 +218,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,
@@ -240,7 +249,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     fireEvent.click(radios[2]);
     fireEvent.click(radios[5]);
 
-    const inputs = getTextInputs(baseElement);
+    const inputs = queryTextInputs(baseElement);
 
     changeInputValue(inputs[1], 'bar');
     const saveButton = getDialogSaveButton();
@@ -266,6 +275,7 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleSave = testing.fn();
 
     const {render} = rendererWith({
+      gmp,
       capabilities: true,
       store: true,
       router: true,

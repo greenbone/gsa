@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
-import CertBundAdvIcon from 'web/components/icon/CertBundAdvIcon';
+import {CertBundAdvIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -30,14 +30,13 @@ import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import EntityComponent from 'web/entity/EntityComponent';
-import EntityPage from 'web/entity/Page';
+import EntityPage from 'web/entity/EntityPage';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import CertBundAdvDetails from 'web/pages/certbund/Details';
 import {selector, loadEntity} from 'web/store/entities/certbund';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>

@@ -7,6 +7,7 @@ import DefaultFilterDialog from 'web/components/powerfilter/Dialog';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -19,7 +20,9 @@ const TargetsFilterDialog = ({
   ...props
 }) => {
   const [_] = useTranslation();
+  const gmp = useGmp();
   const filterDialogProps = useFilterDialog(filter);
+
   const [handleSave] = useFilterDialogSave(
     'target',
     {
@@ -29,6 +32,7 @@ const TargetsFilterDialog = ({
     },
     filterDialogProps,
   );
+
   const SORT_FIELDS = [
     {
       name: 'name',
@@ -50,10 +54,19 @@ const TargetsFilterDialog = ({
       name: 'ssh_credential',
       displayName: _('SSH Credential'),
     },
+    ...(gmp.settings.enableKrb5
+      ? [
+          {
+            name: 'krb5_credential',
+            displayName: _('SMB (Kerberos) Credential'),
+          },
+        ]
+      : []),
     {
       name: 'smb_credential',
-      displayName: _('SMB Credential'),
+      displayName: _('SMB (NTLM) Credential'),
     },
+
     {
       name: 'esxi_credential',
       displayName: _('ESXi Credential'),
@@ -63,6 +76,7 @@ const TargetsFilterDialog = ({
       displayName: _('SNMP Credential'),
     },
   ];
+
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <DefaultFilterDialog

@@ -7,7 +7,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
-import CveIcon from 'web/components/icon/CveIcon';
+import {CveIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -31,15 +31,14 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import DetailsBlock from 'web/entity/Block';
 import EntityComponent from 'web/entity/EntityComponent';
-import {InfoLayout} from 'web/entity/Info';
-import EntityPage from 'web/entity/Page';
+import {InfoLayout} from 'web/entity/EntityInfo';
+import EntityPage from 'web/entity/EntityPage';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import CveDetails from 'web/pages/cves/Details';
 import {selector, loadEntity} from 'web/store/entities/cves';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({entity, onCveDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>

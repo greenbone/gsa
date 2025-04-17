@@ -6,7 +6,6 @@
 import _ from 'gmp/locale';
 import {useCallback, useState} from 'react';
 
-
 /**
  * Hook to handle the state for showing different types of messages in a dialog
  *
@@ -32,7 +31,7 @@ import {useCallback, useState} from 'react';
 const useDialogNotification = () => {
   const [dialogState, setDialogState] = useState({});
   const showMessage = useCallback((message, subject = _('Message')) => {
-    setDialogState(prevState => ({
+    setDialogState(() => ({
       message,
       title: subject,
     }));

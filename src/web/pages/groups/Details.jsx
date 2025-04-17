@@ -8,13 +8,13 @@ import React from 'react';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
-import {Col} from 'web/entity/Page';
 import PropTypes from 'web/utils/PropTypes';
 
-const GroupDetails = ({entity, isSpecial, links}) => {
+const GroupDetails = ({entity, isSpecial}) => {
   const {users = [], comment} = entity;
   return (
     <Layout grow flex="column">
@@ -54,7 +54,6 @@ const GroupDetails = ({entity, isSpecial, links}) => {
 GroupDetails.propTypes = {
   entity: PropTypes.model.isRequired,
   isSpecial: PropTypes.bool,
-  links: PropTypes.bool,
 };
 
 export default GroupDetails;

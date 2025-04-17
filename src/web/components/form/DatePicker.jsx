@@ -10,10 +10,14 @@ import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback} from 'react';
 import PropTypes from 'web/utils/PropTypes';
 
-const DatePickerComponent = (
-  {disabled, minDate = date(), name, value = date(), onChange, label = ''},
-  ref,
-) => {
+const DatePickerComponent = ({
+  disabled,
+  minDate = date(),
+  name,
+  value = date(),
+  onChange,
+  label = '',
+}) => {
   const handleChange = useCallback(
     newValue => {
       if (isDefined(onChange)) {

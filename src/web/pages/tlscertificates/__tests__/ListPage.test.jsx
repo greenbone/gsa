@@ -8,9 +8,9 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/task';
 import {
-  getPowerFilter,
+  queryPowerFilter,
   getSelectElement,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import TlsCertificatePage from 'web/pages/tlscertificates/ListPage';
@@ -18,7 +18,7 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, wait} from 'web/utils/Testing';
+import {rendererWith, screen, wait} from 'web/utils/Testing';
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -141,34 +141,36 @@ describe('TlsCertificatePage tests', () => {
       ),
     );
 
-    const {baseElement, getAllByTestId} = render(<TlsCertificatePage />);
+    const {baseElement} = render(<TlsCertificatePage />);
 
     await wait();
 
-    const display = getAllByTestId('grid-item');
-    const icons = getAllByTestId('svg-icon');
+    const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icon
-    expect(icons[0]).toHaveAttribute('title', 'Help: TLS Certificate Assets');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: TLS Certificate Assets',
+    );
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[1]).toHaveAttribute('title', 'Update Filter');
-    expect(icons[2]).toHaveAttribute('title', 'Remove Filter');
-    expect(icons[3]).toHaveAttribute('title', 'Reset to Default Filter');
-    expect(icons[4]).toHaveAttribute('title', 'Help: Powerfilter');
-    expect(icons[5]).toHaveAttribute('title', 'Edit Filter');
+    screen.getAllByTitle('Update Filter');
+    screen.getAllByTitle('Remove Filter');
+    screen.getAllByTitle('Reset to Default Filter');
+    screen.getAllByTitle('Help: Powerfilter');
+    screen.getAllByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('--');
 
     // Dashboard
-    expect(icons[7]).toHaveAttribute('title', 'Add new Dashboard Display');
-    expect(icons[8]).toHaveAttribute('title', 'Reset to Defaults');
+    screen.getAllByTitle('Add new Dashboard Display');
+    screen.getAllByTitle('Reset to Defaults');
     expect(display[0]).toHaveTextContent(
       'TLS Certificates by Status (Total: 1)',
     );
@@ -189,16 +191,15 @@ describe('TlsCertificatePage tests', () => {
     // the serial but not the issuerDn or timestamps
 
     // expect(row[1]).toHaveTextContent('CN=LoremIpsum C=Dolor');
-    // expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 12:51 PM UTC');
-    // expect(row[1]).toHaveTextContent('Tue, Sep 10, 2019 12:51 PM UTC');
-    // expect(row[1]).toHaveTextContent('Thu, Oct 10, 2019 12:51 PM UTC');
+    // expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 12:51 PM Coordinated Universal Time');
+    // expect(row[1]).toHaveTextContent('Tue, Sep 10, 2019 12:51 PM Coordinated Universal Time');
+    // expect(row[1]).toHaveTextContent('Thu, Oct 10, 2019 12:51 PM Coordinated Universal Time');
 
-    expect(icons[24]).toHaveAttribute('title', 'Delete TLS Certificate');
-    expect(icons[25]).toHaveAttribute('title', 'Download TLS Certificate');
-    expect(icons[26]).toHaveAttribute('title', 'Export TLS Certificate as XML');
-
-    expect(icons[27]).toHaveAttribute('title', 'Add tag to page contents');
-    expect(icons[28]).toHaveAttribute('title', 'Delete page contents');
-    expect(icons[29]).toHaveAttribute('title', 'Export page contents');
+    screen.getAllByTitle('Delete TLS Certificate');
+    screen.getAllByTitle('Download TLS Certificate');
+    screen.getAllByTitle('Export TLS Certificate as XML');
+    screen.getAllByTitle('Add tag to page contents');
+    screen.getAllByTitle('Delete page contents');
+    screen.getAllByTitle('Export page contents');
   });
 });

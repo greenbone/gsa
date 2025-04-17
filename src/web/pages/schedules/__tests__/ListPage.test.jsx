@@ -10,13 +10,13 @@ import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -124,9 +124,9 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
@@ -158,7 +158,9 @@ describe('SchedulePage tests', () => {
 
     expect(row[1]).toHaveTextContent('schedule 1');
     expect(row[1]).toHaveTextContent('(hello world)');
-    expect(row[1]).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
+    expect(row[1]).toHaveTextContent(
+      'Mon, Jan 4, 2021 11:54 AM Coordinated Universal Time',
+    );
     expect(row[1]).toHaveTextContent('-');
     expect(row[1]).toHaveTextContent('Entire Operation');
 
@@ -294,15 +296,15 @@ describe('SchedulePage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select an schedule
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected schedule
@@ -372,7 +374,7 @@ describe('SchedulePage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);
@@ -410,7 +412,10 @@ describe('SchedulePage ToolBarIcons test', () => {
 
     const links = element.querySelectorAll('a');
 
-    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Schedules',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-schedules',
@@ -432,11 +437,9 @@ describe('SchedulePage ToolBarIcons test', () => {
 
     render(<ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />);
 
-    const newIcon = screen.getAllByTitle('New Schedule');
-
-    expect(newIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(newIcon[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'New Schedule');
+    fireEvent.click(newIcon);
     expect(handleScheduleCreateClick).toHaveBeenCalled();
   });
 
@@ -453,12 +456,9 @@ describe('SchedulePage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
-      <ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />,
-    );
+    render(<ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />);
 
-    const icons = queryAllByTestId('svg-icon'); // this test is probably appropriate to keep in the old format
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
+    const newIcon = screen.queryByTestId('new-icon');
+    expect(newIcon).not.toBeInTheDocument();
   });
 });

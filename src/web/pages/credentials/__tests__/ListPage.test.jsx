@@ -10,13 +10,13 @@ import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
   testBulkTrashcanDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -123,9 +123,9 @@ describe('CredentialPage tests', () => {
 
     await wait();
 
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Credentials')[0]).toBeInTheDocument();
@@ -267,15 +267,15 @@ describe('CredentialPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select an credential
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected credential
@@ -333,7 +333,7 @@ describe('CredentialPage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);
@@ -371,7 +371,10 @@ describe('CredentialPage ToolBarIcons test', () => {
 
     const links = element.querySelectorAll('a');
 
-    expect(screen.getAllByTitle('Help: Credentials')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Credentials',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-credentials',
@@ -395,11 +398,9 @@ describe('CredentialPage ToolBarIcons test', () => {
       <ToolBarIcons onCredentialCreateClick={handleCredentialCreateClick} />,
     );
 
-    const newIcon = screen.getAllByTitle('New Credential');
-
-    expect(newIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(newIcon[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'New Credential');
+    fireEvent.click(newIcon);
     expect(handleCredentialCreateClick).toHaveBeenCalled();
   });
 
@@ -416,12 +417,13 @@ describe('CredentialPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
+    render(
       <ToolBarIcons onCredentialCreateClick={handleCredentialCreateClick} />,
     );
 
-    const icons = queryAllByTestId('svg-icon'); // this test is probably appropriate to keep in the old format
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Credentials');
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Credentials',
+    );
   });
 });

@@ -8,11 +8,11 @@ import {getTranslatableTicketStatus} from 'gmp/models/ticket';
 import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
+import {TicketIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import SolutionType from 'web/components/icon/SolutionTypeIcon';
-import TicketIcon from 'web/components/icon/TicketIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -25,14 +25,15 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import EntityPage from 'web/entity/EntityPage';
 import EntityCloneIcon from 'web/entity/icon/CloneIcon';
 import EntityEditIcon from 'web/entity/icon/EditIcon';
 import EntityTrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage, {Col} from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
@@ -43,7 +44,6 @@ import {
   loadEntity as loadTicket,
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   entity,
   onTicketCloneClick,

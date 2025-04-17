@@ -6,10 +6,10 @@
 import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import React from 'react';
+import {RoleIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import RoleIcon from 'web/components/icon/RoleIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -27,12 +27,12 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
+import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -48,7 +48,6 @@ import {
 import {selector, loadEntity} from 'web/store/entities/roles';
 import PropTypes from 'web/utils/PropTypes';
 import {permissionDescription} from 'web/utils/Render';
-
 const ToolBarIcons = ({
   entity,
   onRoleCloneClick,
@@ -89,7 +88,7 @@ ToolBarIcons.propTypes = {
   onRoleEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, general_permissions = [], links}) => {
+const Details = ({entity, links}) => {
   return (
     <Layout flex="column">
       <RoleDetails entity={entity} links={links} />
@@ -99,7 +98,6 @@ const Details = ({entity, general_permissions = [], links}) => {
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
-  general_permissions: PropTypes.object,
   links: PropTypes.bool,
 };
 

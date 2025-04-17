@@ -12,7 +12,7 @@ import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';
-import ReportIcon from 'web/components/icon/ReportIcon';
+import {ReportIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
@@ -25,7 +25,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
-import EntityInfo from 'web/entity/Info';
+import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
 import ApplicationsTab from 'web/pages/reports/details/ApplicationsTab';
 import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
@@ -42,7 +42,6 @@ import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
 const Span = styled.span`
   margin-top: 2px;
 `;

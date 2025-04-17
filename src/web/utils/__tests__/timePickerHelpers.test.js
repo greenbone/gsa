@@ -4,7 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {formatSplitTime, formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
+import date from 'gmp/models/date';
+import {
+  formatSplitTime,
+  formatTimeForTimePicker,
+} from 'web/utils/timePickerHelpers';
 
 describe('timePickerHelpers', () => {
   describe('formatSplitTime', () => {
@@ -28,33 +32,23 @@ describe('timePickerHelpers', () => {
 
   describe('formatTimeForTimePicker', () => {
     test('formats time correctly for a given date object', () => {
-      // Mock date object with hours and minutes methods
-      const mockDate = {
-        hours: () => 9,
-        minutes: () => 30,
-      };
+      const dateTime = date().hour(9).minute(30);
       const expected = '09:30';
-      const result = formatTimeForTimePicker(mockDate);
+      const result = formatTimeForTimePicker(dateTime);
       expect(result).toBe(expected);
     });
 
     test('pads single-digit hours and minutes with leading zeros', () => {
-      const mockDate = {
-        hours: () => 5,
-        minutes: () => 4,
-      };
+      const dateTime = date().hour(5).minute(4);
       const expected = '05:04';
-      const result = formatTimeForTimePicker(mockDate);
+      const result = formatTimeForTimePicker(dateTime);
       expect(result).toBe(expected);
     });
 
     test('handles times at the edge of valid ranges', () => {
-      const mockDate = {
-        hours: () => 23,
-        minutes: () => 59,
-      };
+      const dateTime = date().hour(23).minute(59);
       const expected = '23:59';
-      const result = formatTimeForTimePicker(mockDate);
+      const result = formatTimeForTimePicker(dateTime);
       expect(result).toBe(expected);
     });
   });

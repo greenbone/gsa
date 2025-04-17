@@ -54,7 +54,6 @@ const MultiSelect = ({
   title,
   value,
   size = 'md',
-  height,
   onChange,
   ...props
 }) => {
@@ -120,7 +119,6 @@ MultiSelect.propTypes = {
   title: PropTypes.string,
   value: PropTypes.arrayOf(PropTypes.string),
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
-  height: PropTypes.number,
   onChange: PropTypes.func,
 };
 

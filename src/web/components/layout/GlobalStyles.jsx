@@ -79,6 +79,10 @@ const GlobalStyles = createGlobalStyle`
     stroke: ${Theme.mediumGray};
     stroke-width: 0.99;
   }
+
+  .mantine-Notifications-root.width-before-scroll-bar[data-position='top-right'] {
+  top: calc(var(--header-height) + var(--mantine-spacing-md)); 
+}
 `;
 
 export default GlobalStyles;

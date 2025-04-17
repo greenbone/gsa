@@ -6,6 +6,7 @@
 import {_, _l} from 'gmp/locale/lang';
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
+import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import React from 'react';
 import styled from 'styled-components';
 import BarChart from 'web/components/chart/Bar';
@@ -20,8 +21,8 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
+import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
-
 
 const ToolTip = styled.div`
   font-weight: normal;
@@ -29,7 +30,10 @@ const ToolTip = styled.div`
   line-height: 1.2em;
 `;
 
-const transformVulnScoreData = (data = {}) => {
+const transformVulnScoreData = (
+  data = {},
+  {severityRating = DEFAULT_SEVERITY_RATING} = {},
+) => {
   const {groups = []} = data;
   const tdata = groups
     .filter(group => {
@@ -42,7 +46,10 @@ const transformVulnScoreData = (data = {}) => {
       const {hosts, modified, name} = text;
       const {average_severity, average_severity_score} = stats;
       const averageSeverity = parseSeverity(average_severity.mean);
-      const riskFactor = resultSeverityRiskFactor(averageSeverity);
+      const riskFactor = resultSeverityRiskFactor(
+        averageSeverity,
+        severityRating,
+      );
       const modifiedDate = formattedUserSettingLongDate(modified);
       const toolTip = (
         <ToolTip>
@@ -86,7 +93,8 @@ export class OsVulnScoreDisplay extends React.Component {
   }
 
   render() {
-    const {filter, ...props} = this.props;
+    const {filter, gmp, ...props} = this.props;
+    const severityRating = gmp.settings.severityRating;
     return (
       <OsVulnScoreLoader filter={filter}>
         {loaderProps => (
@@ -95,6 +103,7 @@ export class OsVulnScoreDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformVulnScoreData}
             filter={filter}
+            severityRating={severityRating}
             showToggleLegend={false}
             title={() => _('Most Vulnerable Operating Systems')}
           >
@@ -119,12 +128,14 @@ export class OsVulnScoreDisplay extends React.Component {
 
 OsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   navigate: PropTypes.func.isRequired,
 };
 
 OsVulnScoreDisplay.displayId = 'os-by-most-vulnerable';
 
 OsVulnScoreDisplay = compose(
+  withGmp,
   withRouter,
   withFilterSelection({
     filtersFilter: OS_FILTER_FILTER,
@@ -137,7 +148,7 @@ export const OsVulnScoreTableDisplay = createDisplay({
   dataTitles: [_l('Operating System Name'), _l('Max. Average Severity Score')],
   dataRow: row => [row.x, row.y],
   dataTransform: transformVulnScoreData,
-  title: ({data: tdata}) => _('Most Vulnerable Operating Systems'),
+  title: () => _('Most Vulnerable Operating Systems'),
   displayId: 'os-by-most-vulnerable-table',
   displayName: 'OsVulnScoreTableDisplay',
   filtersFilter: OS_FILTER_FILTER,

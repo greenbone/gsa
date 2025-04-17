@@ -1289,6 +1289,11 @@ describe('filter hasTerm', () => {
     expect(filter.hasTerm(term4)).toBe(false);
     expect(filter.hasTerm(term5)).toBe(false);
   });
+
+  test('should return false for undefined term', () => {
+    const filter = Filter.fromString('apply_overrides=1 min_qod=70 severity>0');
+    expect(filter.hasTerm()).toBe(false);
+  });
 });
 
 describe('Filter fromTerm', () => {

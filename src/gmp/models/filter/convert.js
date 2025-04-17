@@ -19,7 +19,7 @@ const convertInt = (keyword, value, relation) => ({
   relation,
 });
 
-const convertFirst = (keyword, value, relation) => {
+const convertFirst = (keyword, value) => {
   const intValue = parseInt(value);
   return {
     keyword,
@@ -28,15 +28,14 @@ const convertFirst = (keyword, value, relation) => {
   };
 };
 
-const convertRows = (keyword, value, relation) =>
-  convertInt(keyword, value, '=');
+const convertRows = (keyword, value) => convertInt(keyword, value, '=');
 
-const convertNoRelation = (keyword, value, relation) => ({
+const convertNoRelation = (keyword, value) => ({
   keyword,
   value,
 });
 
-const convertNoRelationAndKeyword = (keyword, value, relation) => ({value});
+const convertNoRelationAndKeyword = (keyword, value) => ({value});
 
 const KEYWORD_CONVERTERS = {
   apply_overrides: convertBooleanInt,

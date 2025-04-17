@@ -5,10 +5,10 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
+import {PolicyIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import PolicyIcon from 'web/components/icon/PolicyIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -19,11 +19,11 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
@@ -43,10 +43,8 @@ import {
 import {selector, loadEntity} from 'web/store/entities/policies';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 export const ToolBarIcons = withCapabilities(
   ({
-    capabilities,
     entity,
     onPolicyCloneClick,
     onPolicyDeleteClick,

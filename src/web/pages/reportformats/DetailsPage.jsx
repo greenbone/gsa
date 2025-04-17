@@ -8,9 +8,9 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {ReportFormatIcon} from 'web/components/icon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ReportFormatIcon from 'web/components/icon/ReportFormatIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -28,11 +28,11 @@ import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
+import EntityPage from 'web/entity/EntityPage';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -48,45 +48,40 @@ import {
 import {selector, loadEntity} from 'web/store/entities/reportformats';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
-import withCapabilities from 'web/utils/withCapabilities';
-
-const ToolBarIcons = withCapabilities(
-  ({
-    capabilities,
-    entity,
-    onReportFormatImportClick,
-    onReportFormatDeleteClick,
-    onReportFormatEditClick,
-  }) => (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="managing-report-formats"
-          page="reports"
-          title={_('Help: Report Formats')}
-        />
-        <ListIcon page="reportformats" title={_('Report Formats List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon
-          displayName={_('Report Format')}
-          entity={entity}
-          onClick={onReportFormatImportClick}
-        />
-        <EditIcon
-          disabled={entity.predefined}
-          displayName={_('Report Format')}
-          entity={entity}
-          onClick={onReportFormatEditClick}
-        />
-        <TrashIcon
-          displayName={_('Report Format')}
-          entity={entity}
-          onClick={onReportFormatDeleteClick}
-        />
-      </IconDivider>
-    </Divider>
-  ),
+const ToolBarIcons = ({
+  entity,
+  onReportFormatImportClick,
+  onReportFormatDeleteClick,
+  onReportFormatEditClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        anchor="managing-report-formats"
+        page="reports"
+        title={_('Help: Report Formats')}
+      />
+      <ListIcon page="reportformats" title={_('Report Formats List')} />
+    </IconDivider>
+    <IconDivider>
+      <CreateIcon
+        displayName={_('Report Format')}
+        entity={entity}
+        onClick={onReportFormatImportClick}
+      />
+      <EditIcon
+        disabled={entity.predefined}
+        displayName={_('Report Format')}
+        entity={entity}
+        onClick={onReportFormatEditClick}
+      />
+      <TrashIcon
+        displayName={_('Report Format')}
+        entity={entity}
+        onClick={onReportFormatDeleteClick}
+      />
+    </IconDivider>
+  </Divider>
 );
 
 ToolBarIcons.propTypes = {

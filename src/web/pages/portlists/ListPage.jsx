@@ -9,10 +9,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
+import {NewIcon, PortListIcon, UploadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewIcon from 'web/components/icon/NewIcon';
-import PortListIcon from 'web/components/icon/PortListIcon';
-import UploadIcon from 'web/components/icon/UploadIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
@@ -31,15 +29,14 @@ import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
-import PortListComponent from 'web/pages/portlists/Component';
 import PortListsFilterDialog from 'web/pages/portlists/FilterDialog';
+import PortListComponent from 'web/pages/portlists/PortListComponent';
 import PortListsTable from 'web/pages/portlists/Table';
 import {loadEntities, selector} from 'web/store/entities/portlists';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
-
 const ToolBarIcons = ({onPortListCreateClick, onPortListImportClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

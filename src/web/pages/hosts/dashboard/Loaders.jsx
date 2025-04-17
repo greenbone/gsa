@@ -6,7 +6,7 @@
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import {MAX_HOSTS} from 'web/components/chart/Topology';
+import {MAX_HOSTS} from 'web/components/chart/HostsTopologyChart';
 import Loader, {
   loadFunc,
   loaderPropTypes,

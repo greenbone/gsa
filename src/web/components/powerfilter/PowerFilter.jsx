@@ -11,11 +11,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
+import {EditIcon, RefreshIcon, ResetIcon} from 'web/components/icon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
-import EditIcon from 'web/components/icon/EditIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import RefreshIcon from 'web/components/icon/RefreshIcon';
-import ResetIcon from 'web/components/icon/ResetIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -24,7 +22,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
 const DEFAULT_FILTER_ID = '0';
 
 const Label = styled.label`
@@ -189,7 +186,7 @@ class PowerFilter extends React.Component {
             </Layout>
             <IconDivider align={['start', 'center']}>
               <RefreshIcon
-                data-testid="powerfiler-refresh"
+                data-testid="powerfilter-refresh"
                 title={_('Update Filter')}
                 onClick={this.handleUpdateFilter}
               />
@@ -197,7 +194,7 @@ class PowerFilter extends React.Component {
               {onRemoveClick && (
                 <DeleteIcon
                   active={isDefined(filter)}
-                  data-testid="powefilter-delete"
+                  data-testid="powerfilter-delete"
                   title={_('Remove Filter')}
                   onClick={
                     isDefined(filter) ? this.handleRemoveClick : undefined

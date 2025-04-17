@@ -10,9 +10,8 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
 import DashboardControls from 'web/components/dashboard/Controls';
+import {ReportIcon, UploadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ReportIcon from 'web/components/icon/ReportIcon';
-import UploadIcon from 'web/components/icon/UploadIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
@@ -21,7 +20,9 @@ import {
 } from 'web/components/loading/Reload';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import ReportsDashboard, {REPORTS_DASHBOARD_ID} from 'web/pages/reports/dashboard';
+import ReportsDashboard, {
+  REPORTS_DASHBOARD_ID,
+} from 'web/pages/reports/dashboard';
 import ReportFilterDialog from 'web/pages/reports/FilterDialog';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
 import ReportsTable from 'web/pages/reports/Table';
@@ -37,8 +38,6 @@ import {
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
-
-
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 
 const ToolBarIcons = ({onUploadReportClick}) => (
@@ -96,7 +95,7 @@ class Page extends React.Component {
     this.setState({containerTaskDialogVisible: true});
   }
 
-  openImportDialog(task_id) {
+  openImportDialog() {
     this.props.loadTasks().then(() => {
       this.setState({
         importDialogVisible: true,

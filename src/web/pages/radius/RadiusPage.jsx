@@ -7,27 +7,24 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
-import EditIcon from 'web/components/icon/EditIcon';
+import {EditIcon, RadiusIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import RadiusIcon from 'web/components/icon/RadiusIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/SimpleTable';
-import {Col} from 'web/entity/Page';
 import RadiusDialog from 'web/pages/radius/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
-
-
 const ToolBarIcons = ({onOpenDialogClick}) => (
   <IconDivider>
     <ManualIcon

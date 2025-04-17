@@ -9,7 +9,7 @@ import Date from 'gmp/models/date';
 import Task from 'gmp/models/task';
 import {
   closeDialog,
-  getElementOrDocument,
+  getElementOrReturnDocument,
   getRadioInputs,
 } from 'web/components/testing';
 import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
@@ -30,15 +30,15 @@ const reschedule = 0;
 const startDate = Date('2020-01-01T12:10:00Z');
 const startMinute = 10;
 const startHour = 12;
-const startTimezone = 'UTC';
+const startTimezone = 'Coordinated Universal Time';
 
 const getFormGroupTitles = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-Text-root');
 };
 
 const getRadioTitles = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-Radio-label');
 };
 

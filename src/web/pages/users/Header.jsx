@@ -13,8 +13,6 @@ import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({
   actionsColumn,
-  filter,
-  links = true,
   sort = true,
   currentSortBy,
   currentSortDir,
@@ -73,8 +71,6 @@ Header.propTypes = {
   actionsColumn: PropTypes.element,
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
-  filter: PropTypes.filter,
-  links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };

@@ -159,22 +159,22 @@ describe('for_each function tests', () => {
 
 describe('filter function tests', () => {
   test('should return empty array', () => {
-    expect(filter(undefined, item => true)).toEqual([]);
-    expect(filter(null, item => true)).toEqual([]);
-    expect(filter([], item => true)).toEqual([]);
+    expect(filter(undefined, () => true)).toEqual([]);
+    expect(filter(null, () => true)).toEqual([]);
+    expect(filter([], () => true)).toEqual([]);
     expect(filter([1, 2, 3])).toEqual([]);
   });
 
   test('should return specified empty object', () => {
     const expected = {foo: 1};
-    expect(filter(undefined, item => true, expected)).toEqual(expected);
-    expect(filter(null, item => true, expected)).toEqual(expected);
+    expect(filter(undefined, () => true, expected)).toEqual(expected);
+    expect(filter(null, () => true, expected)).toEqual(expected);
     expect(filter([1, 2, 3], undefined, expected)).toEqual(expected);
   });
 
   test('should always return empty array for empty array', () => {
     const expected = {foo: 1};
-    expect(filter([], item => true, expected)).toEqual([]);
+    expect(filter([], () => true, expected)).toEqual([]);
   });
 
   test('should iterate over single object', () => {

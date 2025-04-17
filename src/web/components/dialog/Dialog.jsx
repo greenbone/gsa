@@ -6,7 +6,7 @@
 import {Modal} from '@greenbone/opensight-ui-components-mantinev7';
 import {ScrollArea} from '@mantine/core';
 import {isDefined, isFunction} from 'gmp/utils/identity';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import styled from 'styled-components';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -96,6 +96,41 @@ const Dialog = ({
       document.body.style.cursor = 'default';
     }
   }, [isDragging]);
+
+  useLayoutEffect(() => {
+    const applyStyles = () => {
+      const modalRoots = document.querySelectorAll(
+        '[data-portal="true"] > div > .mantine-Modal-root',
+      );
+      modalRoots.forEach((modalRoot, index) => {
+        const overlay = modalRoot.querySelector('.mantine-Modal-overlay');
+        if (overlay) {
+          const isTopmostModal = index === modalRoots.length - 1;
+          overlay.style.backgroundColor = isTopmostModal
+            ? 'rgba(0, 0, 0, 0.6)'
+            : 'transparent';
+        }
+      });
+    };
+
+    applyStyles();
+
+    const observer = new MutationObserver(() => {
+      const portals = document.querySelectorAll('[data-portal="true"]');
+      if (portals.length > 0) {
+        applyStyles();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleDragMouseDown = e => {
     if (

@@ -6,20 +6,20 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
-
 const caps = new Capabilities(['everything']);
-
 const gmp = {
-  settings: {},
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
 };
 
 describe('Delta Results Tab tests', () => {
@@ -91,7 +91,9 @@ describe('Delta Results Tab tests', () => {
     expect(rows[2]).toHaveTextContent('80 %');
     expect(rows[2]).toHaveTextContent('123.456.78.910');
     expect(rows[2]).toHaveTextContent('80/tcp');
-    expect(rows[2]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(rows[2]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Row 2
     expect(rows[3]).toHaveTextContent('[ = ]');
@@ -101,7 +103,9 @@ describe('Delta Results Tab tests', () => {
     expect(rows[3]).toHaveTextContent('70 %');
     expect(rows[3]).toHaveTextContent('109.876.54.321');
     expect(rows[3]).toHaveTextContent('80/tcp');
-    expect(rows[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(rows[3]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Filter
     expect(baseElement).toHaveTextContent(

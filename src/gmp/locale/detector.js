@@ -7,7 +7,6 @@ import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
 import logger from 'gmp/log';
 import {isArray, isDefined} from 'gmp/utils/identity';
 
-
 const log = logger.getLogger('gmp.locale.detector');
 
 const detectLanguageFromStorage = options => options.storage.locale;
@@ -39,7 +38,7 @@ class LanguageDetector {
     };
   }
 
-  detect(...options) {
+  detect() {
     const detectors = [detectLanguageFromStorage, detectLanguageFromNavigator];
     let detected = [];
 

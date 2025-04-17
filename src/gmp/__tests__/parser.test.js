@@ -10,7 +10,6 @@ import {
   parseBoolean,
   parseDate,
   parseDuration,
-  parseEnvelopeMeta,
   parseFloat,
   parseInt,
   parseProgressElement,
@@ -260,50 +259,6 @@ describe('parseQod tests', () => {
   });
 });
 
-describe('parseEnvelopeMeta tests', () => {
-  test('should parse envelope information', () => {
-    expect(
-      parseEnvelopeMeta({
-        version: '1.0',
-        backend_operation: '0.01',
-        vendor_version: '1.1',
-        i18n: 'en',
-        time: 'Fri Sep 14 11:26:40 2018 CEST',
-        timezone: 'Europe/Berlin',
-      }),
-    ).toEqual({
-      version: '1.0',
-      backendOperation: '0.01',
-      vendorVersion: '1.1',
-      i18n: 'en',
-      time: 'Fri Sep 14 11:26:40 2018 CEST',
-      timezone: 'Europe/Berlin',
-    });
-  });
-
-  test('should drop unknown envelope information', () => {
-    expect(
-      parseEnvelopeMeta({
-        version: '1.0',
-        backend_operation: '0.01',
-        vendor_version: '1.1',
-        i18n: 'en',
-        time: 'Fri Sep 14 11:26:40 2018 CEST',
-        timezone: 'Europe/Berlin',
-        foo: 'bar',
-        lorem: 'ipsum',
-      }),
-    ).toEqual({
-      version: '1.0',
-      backendOperation: '0.01',
-      vendorVersion: '1.1',
-      i18n: 'en',
-      time: 'Fri Sep 14 11:26:40 2018 CEST',
-      timezone: 'Europe/Berlin',
-    });
-  });
-});
-
 describe('setProperties tests', () => {
   test('should create new object', () => {
     expect(setProperties()).toEqual({});
@@ -421,31 +376,6 @@ describe('parseProperties tests', () => {
 
     expect(parsed).not.toBe(obj);
     expect(parsed.foo).toBe(obj.foo);
-    expect(parsed.lorem).toEqual('ipsum');
-  });
-
-  test('should copy additional properties', () => {
-    const obj = {
-      foo: 'bar',
-      lorem: 'ipsum',
-    };
-
-    const parsed = parseProperties(obj, {bar: 'foo'});
-
-    expect(parsed.bar).toEqual('foo');
-    expect(parsed.foo).toEqual('bar');
-    expect(parsed.lorem).toEqual('ipsum');
-  });
-
-  test('should not override properties with additional properties', () => {
-    const obj = {
-      foo: 'bar',
-      lorem: 'ipsum',
-    };
-
-    const parsed = parseProperties(obj, {foo: 'foo'});
-
-    expect(parsed.foo).toEqual('bar');
     expect(parsed.lorem).toEqual('ipsum');
   });
 

@@ -9,15 +9,17 @@ import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import Badge from 'web/components/badge/Badge';
-import AlterableIcon from 'web/components/icon/AlterableIcon';
+import {
+  AlterableIcon,
+  NoteIcon,
+  OverrideIcon,
+  ReportIcon,
+  ResultIcon,
+  TaskIcon,
+} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NoteIcon from 'web/components/icon/NoteIcon';
-import OverrideIcon from 'web/components/icon/OverrideIcon';
-import ReportIcon from 'web/components/icon/ReportIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
-import TaskIcon from 'web/components/icon/TaskIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -36,14 +38,15 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage, {Col} from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -78,7 +81,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
-
 export const ToolBarIcons = ({
   entity,
   links,
@@ -297,8 +299,7 @@ Details.propTypes = {
 
 class Page extends React.Component {
   componentDidUpdate() {
-    // eslint-disable-next-line no-unused-vars
-    const {entity, navigate, ...props} = this.props;
+    const {entity, navigate} = this.props;
     if (isDefined(entity) && entity.usageType === 'audit') {
       return navigate('/audit/' + entity.id, {replace: true});
     }
@@ -436,11 +437,11 @@ Page.propTypes = {
 
 export const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
-    ({entity, gmp}) =>
+    ({entity}) =>
       isDefined(entity.alerts)
         ? Promise.resolve([...entity.alerts])
         : Promise.resolve([]),
-    ({entity, gmp}) => {
+    ({entity}) => {
       const resources = [];
       const names = ['config', 'scanner', 'schedule'];
 

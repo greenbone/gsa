@@ -25,7 +25,7 @@ export const loadReportComposerDefaults = gmp => () => dispatch =>
 export const saveReportComposerDefaults = gmp => defaults => dispatch =>
   gmp.user
     .saveReportComposerDefaults(defaults)
-    .then(response => dispatch(getReportComposerDefaultsAction(defaults)));
+    .then(() => dispatch(getReportComposerDefaultsAction(defaults)));
 
 export const setTimezone = timezone => ({
   type: USER_SETTINGS_SET_TIMEZONE,
@@ -64,5 +64,3 @@ export const updateTimezone = gmp => timezone => dispatch => {
   gmp.setTimezone(timezone);
   return Promise.resolve(dispatch(setTimezone(timezone)));
 };
-
-// vim: set ts=2 sw=2 two=80:

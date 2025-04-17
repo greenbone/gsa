@@ -6,9 +6,8 @@
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
+import {TaskIcon, WizardIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import TaskIcon from 'web/components/icon/TaskIcon';
-import WizardIcon from 'web/components/icon/WizardIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
@@ -31,7 +30,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tasks';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   onAdvancedTaskWizardClick,
   onModifyTaskWizardClick,
@@ -54,16 +52,22 @@ export const ToolBarIcons = ({
       {capabilities.mayOp('run_wizard') && (
         <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
           {capabilities.mayCreate('task') && (
-            <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
+            <MenuEntry
+              data-testid="task-wizard-menu"
+              title={_('Task Wizard')}
+              onClick={onTaskWizardClick}
+            />
           )}
           {capabilities.mayCreate('task') && (
             <MenuEntry
+              data-testid="advanced-task-wizard-menu"
               title={_('Advanced Task Wizard')}
               onClick={onAdvancedTaskWizardClick}
             />
           )}
           {mayUseModifyTaskWizard && (
             <MenuEntry
+              data-testid="modify-task-wizard-menu"
               title={_('Modify Task Wizard')}
               onClick={onModifyTaskWizardClick}
             />

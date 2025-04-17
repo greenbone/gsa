@@ -7,13 +7,15 @@ import _ from 'gmp/locale';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
+import {TicketIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import TicketIcon from 'web/components/icon/TicketIcon';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import TicketComponent from 'web/pages/tickets/Component';
-import TicketsDashboard, {TICKETS_DASHBOARD_ID} from 'web/pages/tickets/dashboard';
+import TicketsDashboard, {
+  TICKETS_DASHBOARD_ID,
+} from 'web/pages/tickets/dashboard';
 import TicketsFilterDialogComponent from 'web/pages/tickets/FilterDialog';
 import Table from 'web/pages/tickets/Table';
 import {
@@ -21,7 +23,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tickets';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = () => (
   <ManualIcon
     anchor="managing-tickets"

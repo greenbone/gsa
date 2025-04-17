@@ -7,12 +7,12 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Cve from 'gmp/models/cve';
 import {parseDate} from 'gmp/parser';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CveRow from 'web/pages/cves/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWithTable, fireEvent, screen} from 'web/utils/Testing';
 
-
-const gmp = {settings: {}};
+const gmp = {settings: {severityRating: SEVERITY_RATING_CVSS_3}};
 const caps = new Capabilities(['everything']);
 
 const entity = Cve.fromElement({
@@ -26,15 +26,10 @@ const entity = Cve.fromElement({
 });
 
 describe('CVEv2 Row tests', () => {
-  // deactivate console.error for tests
-  // to make it possible to test a row without a table
-  const consoleError = console.error;
-  console.error = () => {};
-
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -44,7 +39,7 @@ describe('CVEv2 Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <CveRow
         entity={entity}
         onToggleDetailsClick={handleToggleDetailsClick}
@@ -64,10 +59,12 @@ describe('CVEv2 Row tests', () => {
     expect(links[0]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
 
     // Published
-    expect(baseElement).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CEST');
+    expect(baseElement).toHaveTextContent(
+      'Thu, Oct 22, 2020 9:15 PM Central European Summer Time',
+    );
 
     // Severity
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', 'Critical');
     expect(bars[0]).toHaveTextContent('9.3 (Critical)');
 
@@ -78,7 +75,7 @@ describe('CVEv2 Row tests', () => {
   test('should call click handlers', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render} = rendererWith({
+    const {render} = rendererWithTable({
       gmp,
       capabilities: true,
       router: true,
@@ -99,8 +96,6 @@ describe('CVEv2 Row tests', () => {
       'CVE-2020-9992',
     );
   });
-
-  console.warn = consoleError;
 });
 
 const entity_v3 = Cve.fromElement({
@@ -114,15 +109,10 @@ const entity_v3 = Cve.fromElement({
 });
 
 describe('CVEv3 Row tests', () => {
-  // deactivate console.error for tests
-  // to make it possible to test a row without a table
-  const consoleError = console.error;
-  console.error = () => {};
-
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       store: true,
@@ -132,7 +122,7 @@ describe('CVEv3 Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <CveRow
         entity={entity_v3}
         onToggleDetailsClick={handleToggleDetailsClick}
@@ -154,10 +144,12 @@ describe('CVEv3 Row tests', () => {
     );
 
     // Published
-    expect(baseElement).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CEST');
+    expect(baseElement).toHaveTextContent(
+      'Thu, Oct 22, 2020 9:15 PM Central European Summer Time',
+    );
 
     // Severity
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', 'High');
     expect(bars[0]).toHaveTextContent('7.1 (High)');
 
@@ -168,7 +160,7 @@ describe('CVEv3 Row tests', () => {
   test('should call click handlers', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render} = rendererWith({
+    const {render} = rendererWithTable({
       gmp,
       capabilities: true,
       router: true,
@@ -189,6 +181,4 @@ describe('CVEv3 Row tests', () => {
       'CVE-2020-9992',
     );
   });
-
-  console.warn = consoleError;
 });

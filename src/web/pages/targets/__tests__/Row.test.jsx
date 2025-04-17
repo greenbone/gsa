@@ -8,8 +8,12 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Target from 'gmp/models/target';
 import Row from 'web/pages/targets/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
-
+import {
+  rendererWithTable,
+  fireEvent,
+  screen,
+  rendererWith,
+} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -134,6 +138,11 @@ const target_no_elevate = Target.fromElement({
     name: 'pl1',
     trash: '0',
   },
+  krb5_credential: {
+    _id: 'krb5_id',
+    name: 'krb5',
+    trash: '0',
+  },
   ssh_credential: {
     _id: '',
     name: '',
@@ -162,11 +171,6 @@ const target_no_elevate = Target.fromElement({
 });
 
 describe('Target row tests', () => {
-  // deactivate console.error for tests
-  // to make it possible to test a row without a table
-  const consoleError = console.error;
-  console.error = () => {};
-
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
     const handleTargetCloneClick = testing.fn();
@@ -174,7 +178,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       router: true,
@@ -184,7 +188,7 @@ describe('Target row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
       <Row
         entity={target_no_elevate}
         onTargetCloneClick={handleTargetCloneClick}
@@ -195,37 +199,32 @@ describe('Target row tests', () => {
       />,
     );
 
-    const links = baseElement.querySelectorAll('a');
+    expect(screen.getByText('target')).toBeVisible();
+    expect(screen.getByText('(hello world)')).toBeVisible();
 
-    expect(baseElement).toHaveTextContent('target');
-    expect(baseElement).toHaveTextContent('(hello world)');
+    const portlistLink = screen.getByText('pl1');
+    expect(portlistLink).toHaveAttribute('href', '/portlist/pl_id1');
 
-    expect(links[0]).toHaveAttribute('href', '/portlist/pl_id1');
-    expect(links[0]).toHaveTextContent('pl1');
+    expect(screen.getByText('127.0.0.1, 192.168.0.1')).toBeVisible();
 
-    expect(baseElement).toHaveTextContent('127.0.0.1, 192.168.0.1');
+    expect(screen.getByText(/SMB \(NTLM\)/)).toBeVisible();
+    const smbLink = screen.getByText('smb_credential');
+    expect(smbLink).toHaveAttribute('href', '/credential/4784');
 
-    expect(baseElement).toHaveTextContent('SMB');
-    expect(links[1]).toHaveAttribute('href', '/credential/4784');
-    expect(links[1]).toHaveTextContent('smb_credential');
-
-    expect(
-      screen.getAllByTitle('Move Target to trashcan')[0],
-    ).toBeInTheDocument();
-
-    expect(screen.getAllByTitle('Edit Target')[0]).toBeInTheDocument();
-
-    expect(screen.getAllByTitle('Clone Target')[0]).toBeInTheDocument();
-
-    expect(screen.getAllByTitle('Export Target')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Move Target to trashcan')[0]).toBeVisible();
+    expect(screen.getAllByTitle('Edit Target')[0]).toBeVisible();
+    expect(screen.getAllByTitle('Clone Target')[0]).toBeVisible();
+    expect(screen.getAllByTitle('Export Target')[0]).toBeVisible();
   });
 
-  test('should render ssh elevate credential', () => {
+  test('should render Kerberos credentials, when KRB5 is enabled', () => {
     const handleToggleDetailsClick = testing.fn();
     const handleTargetCloneClick = testing.fn();
     const handleTargetDeleteClick = testing.fn();
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
+
+    gmp.settings.enableKrb5 = true;
 
     const {render, store} = rendererWith({
       gmp,
@@ -237,7 +236,40 @@ describe('Target row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
+      <Row
+        entity={target_no_elevate}
+        onTargetCloneClick={handleTargetCloneClick}
+        onTargetDeleteClick={handleTargetDeleteClick}
+        onTargetDownloadClick={handleTargetDownloadClick}
+        onTargetEditClick={handleTargetEditClick}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
+    );
+
+    expect(screen.getByText(/SMB \(Kerberos\)/)).toBeVisible();
+    const kerberosLink = screen.getByText('krb5');
+    expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
+  });
+
+  test('should render ssh elevate credential', () => {
+    const handleToggleDetailsClick = testing.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
+
+    const {render, store} = rendererWithTable({
+      gmp,
+      capabilities: caps,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    render(
       <Row
         entity={target_elevate}
         onTargetCloneClick={handleTargetCloneClick}
@@ -248,26 +280,24 @@ describe('Target row tests', () => {
       />,
     );
 
-    const links = baseElement.querySelectorAll('a');
+    expect(screen.getByText('target')).toBeVisible();
 
-    expect(baseElement).toHaveTextContent('target');
+    const portlistLink = screen.getByText('pl1');
+    expect(portlistLink).toHaveAttribute('href', '/portlist/pl_id1');
 
-    expect(links[0]).toHaveAttribute('href', '/portlist/pl_id1');
-    expect(links[0]).toHaveTextContent('pl1');
+    expect(screen.getByText('127.0.0.1, 192.168.0.1')).toBeVisible();
 
-    expect(baseElement).toHaveTextContent('127.0.0.1, 192.168.0.1');
+    expect(screen.getByText(/SSH\s*:/)).toBeVisible();
+    const sshLink = screen.getByText('ssh');
+    expect(sshLink).toHaveAttribute('href', '/credential/1235');
 
-    expect(baseElement).toHaveTextContent('SSH');
-    expect(links[1]).toHaveAttribute('href', '/credential/1235');
-    expect(links[1]).toHaveTextContent('ssh');
+    expect(screen.getByText(/SSH Elevate/)).toBeVisible();
+    const sshElevateLink = screen.getByText('ssh_elevate');
+    expect(sshElevateLink).toHaveAttribute('href', '/credential/3456');
 
-    expect(baseElement).toHaveTextContent('SSH Elevate');
-    expect(links[2]).toHaveAttribute('href', '/credential/3456');
-    expect(links[2]).toHaveTextContent('ssh_elevate');
-
-    expect(baseElement).toHaveTextContent('SMB');
-    expect(links[3]).toHaveAttribute('href', '/credential/4784');
-    expect(links[3]).toHaveTextContent('smb_credential');
+    expect(screen.getByText(/SMB \(NTLM\)/)).toBeVisible();
+    const smbLink = screen.getByText('smb_credential');
+    expect(smbLink).toHaveAttribute('href', '/credential/4784');
   });
 
   test('should render with undefined portlist', () => {
@@ -277,7 +307,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       router: true,
@@ -287,7 +317,7 @@ describe('Target row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
       <Row
         entity={target_no_portlist}
         onTargetCloneClick={handleTargetCloneClick}
@@ -298,14 +328,12 @@ describe('Target row tests', () => {
       />,
     );
 
-    const links = baseElement.querySelectorAll('a');
+    expect(screen.getByText('target')).toBeVisible();
+    expect(screen.getByText('(hello world)')).toBeVisible();
 
-    expect(baseElement).toHaveTextContent('target');
-    expect(baseElement).toHaveTextContent('(hello world)');
-
-    // First link is no longer to portlist, because it shouldn't be in the table
-    expect(links[0]).toHaveAttribute('href', '/credential/1235');
-    expect(links[0]).toHaveTextContent('ssh');
+    expect(screen.getByText(/SSH\s*:/)).toBeVisible();
+    const sshLink = screen.getByText('ssh');
+    expect(sshLink).toHaveAttribute('href', '/credential/1235');
   });
 
   test('should call click handlers', () => {
@@ -315,16 +343,17 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       store: true,
       capabilities: caps,
       router: true,
     });
 
+    store.dispatch(setUsername('admin'));
     store.dispatch(setTimezone('UTC'));
 
-    const {baseElement} = render(
+    render(
       <Row
         entity={target_no_elevate}
         onTargetCloneClick={handleTargetCloneClick}
@@ -336,27 +365,20 @@ describe('Target row tests', () => {
     );
 
     // Name
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
+    fireEvent.click(screen.getByText('target'));
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, 'foo');
 
     // Actions
-    const cloneIcon = screen.getAllByTitle('Clone Target');
-    fireEvent.click(cloneIcon[0]);
+    fireEvent.click(screen.getAllByTitle('Clone Target')[0]);
     expect(handleTargetCloneClick).toHaveBeenCalledWith(target_no_elevate);
 
-    const deleteIcon = screen.getAllByTitle('Move Target to trashcan');
-    fireEvent.click(deleteIcon[0]);
+    fireEvent.click(screen.getAllByTitle('Move Target to trashcan')[0]);
     expect(handleTargetDeleteClick).toHaveBeenCalledWith(target_no_elevate);
 
-    const editIcon = screen.getAllByTitle('Edit Target');
-    fireEvent.click(editIcon[0]);
+    fireEvent.click(screen.getAllByTitle('Edit Target')[0]);
     expect(handleTargetEditClick).toHaveBeenCalledWith(target_no_elevate);
 
-    const exportIcon = screen.getAllByTitle('Export Target');
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(screen.getAllByTitle('Export Target')[0]);
     expect(handleTargetDownloadClick).toHaveBeenCalledWith(target_no_elevate);
   });
-
-  console.warn = consoleError;
 });

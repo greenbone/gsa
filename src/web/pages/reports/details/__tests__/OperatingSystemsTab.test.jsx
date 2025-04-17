@@ -5,16 +5,21 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
+const gmp = {
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
+};
 
 describe('Report Operating Systems Tab tests', () => {
   test('should render Report Operating Systems Tab', () => {
@@ -24,6 +29,7 @@ describe('Report Operating Systems Tab tests', () => {
     const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
+      gmp,
       router: true,
       store: true,
     });

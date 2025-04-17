@@ -25,6 +25,7 @@ written in [React](https://reactjs.org/).
     - [guestUsername and guestPassword](#guestusername-and-guestpassword)
     - [disableLoginForm](#disableloginform)
     - [enableEPSS](#enableepss)
+    - [enableKrb5](#enablekrb5)
     - [enableStoreDebugLog](#enablestoredebuglog)
     - [logLevel](#loglevel)
     - [timeout](#timeout)
@@ -37,6 +38,7 @@ written in [React](https://reactjs.org/).
     - [reloadIntervalActive](#reloadintervalactive)
     - [reloadIntervalInactive](#reloadintervalinactive)
     - [reportResultsThreshold](#reportresultsthreshold)
+    - [severityRating](#severityrating)
 - [Support](#support)
 - [Maintainer](#maintainer)
 - [Contributing](#contributing)
@@ -233,6 +235,7 @@ instantiated once for the [GSA application](./src/web/app.js#L53)
 | enableGreenboneSensor                             | Boolean                    | false                                                                            | -                         | x                       |
 | [disableLoginForm](#disableloginform)             | Boolean                    | false                                                                            | -                         | x                       |
 | [enableEPSS](#enableepss)                         | Boolean                    | false                                                                            | x                         | x                       |
+| [enableKrb5](#enablekrb5)                         | Boolean                    | false                                                                            | x                         | x                       |
 | [enableStoreDebugLog](#enablestoredebuglog)       | Boolean                    | false                                                                            | x                         | x                       |
 | [guestUsername](#guestusername-and-guestpassword) | String                     | undefined                                                                        | -                         | x                       |
 | [guestPassword](#guestusername-and-guestpassword) | String                     | undefined                                                                        | -                         | x                       |
@@ -246,6 +249,7 @@ instantiated once for the [GSA application](./src/web/app.js#L53)
 | [reloadIntervalInactive](#reloadintervalinactive) | Integer                    | [60 \* 1000; // one minute](./src/gmp/gmpsettings.js#L22)                        | x                         | -                       |
 | [reportResultsThreshold](#reportresultsthreshold) | Integer                    | [25000](./src/gmp/gmpsettings.js#L26)                                            | x                         | -                       |
 | [timeout](#timeout)                               | Integer                    | [300000; // 5 minutes](./src/gmp/gmpsettings.js#L28)                             | x                         | -                       |
+| [severityRating](#severityrating)                 | `'CVSSv2'` or `'CVSSv3'`   | `'CVSSv2'`                                                                       | -                         | x                       |
 | [vendorVersion](#vendorversion)                   | String                     | undefined                                                                        | -                         | x                       |
 | [vendorLabel](#vendorlabel)                       | String                     | undefined                                                                        | -                         | x                       |
 
@@ -277,6 +281,10 @@ It can be used to deactivate login for _normal_ users.
 Enables the display of EPSS scores and percentiles in CVEs and NVTs.
 
 The data required for this is not available in the feed yet, so this is disabled by default.
+
+#### enableKrb5
+
+Enable the ability to add Kerberos credentials.
 
 #### enableStoreDebugLog
 
@@ -358,6 +366,13 @@ Certificates tabs to prompt the user for lowering the number of results by
 additional filtering. This setting can be used to improve the responsiveness of
 the report details page.
 
+#### severityRating
+
+Defines which Severity Rating should be used for the severity classes. Currently
+the values `CVSSv2` and `CVSSv3` are allowed. CVSS version 3 introduces a new
+_Critical_ level from 9.0 to 10.0 which _High_ level in CVSS version 2. The
+severity classes are used for example in the charts.
+
 ## Support
 
 For any question on the usage of `gsa` please use the [Greenbone Community
@@ -379,7 +394,7 @@ github](https://github.com/greenbone/gsa/issues) first.
 
 ## License
 
-Copyright (C) 2009-2023 [Greenbone AG](https://www.greenbone.net/)
+Copyright (C) 2009-2025 [Greenbone AG](https://www.greenbone.net/)
 
 Licensed under the AGPL-3.0 [GNU Affero General Public License v3.0 or later](LICENSE).
 

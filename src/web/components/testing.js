@@ -8,36 +8,51 @@ import {isDefined} from 'gmp/utils/identity';
 import {expect} from 'vitest';
 import {
   userEvent,
-  act,
   fireEvent,
   queryByRole,
   getByRole,
-  getAllByTestId,
   getByTestId,
   queryAllByTestId,
+  queryAllByRole,
+  screen,
 } from 'web/utils/Testing';
 
-export const getElementOrDocument = element =>
+/**
+ * Returns the provided element if it is defined, otherwise returns the document body.
+ *
+ * @param {HTMLElement} [element] - The element to check.
+ * @returns {HTMLElement} The provided element if defined, otherwise the document body.
+ */
+export const getElementOrReturnDocument = element =>
   isDefined(element) ? element : document.body;
 
 /**
- * Get all the radio inputs
+ * Get all the radio inputs within the specified element.
+ *
+ * @param {HTMLElement|Document} [element] - The optional parent element or document to search within.
+ * @returns {NodeListOf<Element>} A NodeList of radio input elements.
  */
 export const getRadioInputs = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-Radio-radio');
 };
 
 /**
  * Get all the items of a Select component
+ *
+ * @param {Element|Document} [element] - The optional root element or document to search within.
+ * @returns {NodeList} A NodeList of select item elements
  */
 export const getSelectItemElements = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll("[role='option']");
 };
 
 /**
- * Get the items that are selectable of a Select component
+ * Retrieves the selectable item elements for a given select element.
+ *
+ * @param {HTMLElement} [element] - The optional select element to retrieve items for. If not provided, a default select element will be used.
+ * @returns {Promise<NodeList>} A promise that resolves to a NodeList of the selectable item elements.
  */
 export const getSelectItemElementsForSelect = async element => {
   element = isDefined(element) ? element : getSelectElement();
@@ -49,9 +64,15 @@ export const getSelectItemElementsForSelect = async element => {
 
 /**
  * Get the input box of a Select component
+ *
+ * This function first attempts to find an element with the test ID 'form-select'.
+ * If no such element is found, it falls back to finding an element with the role 'textbox'.
+ *
+ * @param {HTMLElement} [element] - The optional element to search within.
+ * @returns {HTMLElement} The found select element
  */
 export const getSelectElement = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   const select = getByTestId(element, 'form-select');
   if (select) {
     return select;
@@ -61,24 +82,31 @@ export const getSelectElement = element => {
 
 /**
  * Get all select components
+ *
+ * @param {HTMLElement} [element] - The root element to query within. If not provided, the document will be used.
+ * @returns {NodeListOf<HTMLElement>} A list of select elements
  */
 export const queryAllSelectElements = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return queryAllByTestId(element, 'form-select');
 };
 
 /**
  * Open a select element (MultiSelect, Select, etc.)
+ *
+ * @param {HTMLElement} [select] - An optional select element to open. If not provided, it defaults to the result of getSelectElement().
+ * @returns {Promise<void>} A promise that resolves when the select element has been opened.
  */
 export const openSelectElement = async select => {
-  await act(async () => {
-    select = select || getSelectElement();
-    await clickElement(select);
-  });
+  select = select || getSelectElement();
+  await clickElement(select);
 };
 
 /**
- * Click on an element/item/node
+ * Clicks on the given element/item/node using userEvent.
+ *
+ * @param {HTMLElement} element - The element to be clicked.
+ * @returns {Promise<void>} A promise that resolves when the click action is complete.
  */
 export const clickElement = async element => {
   await userEvent.click(element, {
@@ -88,14 +116,20 @@ export const clickElement = async element => {
 
 /**
  * Get all multi select (root) elements
+ *
+ * @param {Element} [element] - An optional element to search within. If not provided, the document will be used.
+ * @returns {NodeList} A NodeList of multi select elements.
  */
 export const getMultiSelectElements = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-MultiSelect-inputField');
 };
 
 /**
- * Get all multi select (root) element
+ * Retrieves the multi select (root) element from the given element.
+ *
+ * @param {HTMLElement} element - The element to search within.
+ * @returns {HTMLElement} The found multi select element.
  */
 export const getMultiSelectElement = element => {
   return element.getByRole('textbox');
@@ -103,6 +137,9 @@ export const getMultiSelectElement = element => {
 
 /**
  * Open a MultiSelect component for displaying item selection
+ *
+ * @param {HTMLElement} [element] - The multi-select element to open. If not defined, it will use a default multi-select element.
+ * @returns {Promise<void>} A promise that resolves when the input element has been clicked.
  */
 export const openMultiSelectElement = async element => {
   element = isDefined(element) ? element : getMultiSelectElement();
@@ -112,19 +149,28 @@ export const openMultiSelectElement = async element => {
 
 /**
  * Get current selected items of a MultiSelect component
+ *
+ * @param {HTMLElement} element - The document object to query.
+ * @returns {NodeList} A NodeList of selected items.
  */
-export const getSelectedItems = document => {
-  return document.querySelectorAll('.mantine-MultiSelect-pill');
+export const getSelectedItems = element => {
+  return element.querySelectorAll('.mantine-MultiSelect-pill');
 };
 
 /**
- * Get all the selectable items of a MultiSelect component
+ * Get all the selectable items of a MultiSelect component from screen.
+ *
+ * @returns {HTMLElement[]} An array of select item elements.
  */
-export const getSelectItemElementsForMultiSelect = screen => {
+export const getSelectItemElementsForMultiSelect = () => {
   return screen.getAllByRole('option');
 };
+
 /**
- * Change the value of an input element like Select or TestField component
+ * Changes the value of an input element like Select or TestField component and triggers the blur event.
+ *
+ * @param {HTMLElement} element - The input element whose value is to be changed.
+ * @param {string|number} value - The new value to be set for the input element.
  */
 export const changeInputValue = (element, value) => {
   fireEvent.change(element, {target: {value}});
@@ -132,7 +178,10 @@ export const changeInputValue = (element, value) => {
 };
 
 /**
- * Change the input of a Select component
+ * Changes the value of a select input element.
+ *
+ * @param {string} value - The new value to set for the select input.
+ * @param {HTMLSelectElement} [input] - The select input element to change. If not provided, a default select element will be used.
  */
 export const changeSelectInput = (value, input) => {
   if (!isDefined(input)) {
@@ -142,39 +191,65 @@ export const changeSelectInput = (value, input) => {
 };
 
 /**
- * Query if a dialog is present
+ * Queries all dialog elements within the specified element or document.
+ *
+ * @param {HTMLElement} [element] - The element or document to query within. If not provided, the document will be used.
+ * @returns {NodeListOf<HTMLElement>} A list of dialogs.
+ */
+export const queryDialogs = element => {
+  element = getElementOrReturnDocument(element);
+  return queryAllByRole(element, 'dialog');
+};
+
+/**
+ * Queries if a dialog is present
+ *
+ * @param {HTMLElement} [element] - The element to query within. If not provided, the document will be used.
+ * @returns {HTMLElement|null} The dialog element if found, otherwise null.
  */
 export const queryDialog = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return queryByRole(element, 'dialog');
 };
 
 /**
- * Get a dialog
+ * Retrieves the dialog
+ *
+ * @param {HTMLElement} [element] - The element to search within. If not provided, the document will be used.
+ * @returns {HTMLElement} The dialog element found within the specified element or document.
  */
 export const getDialog = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return getByRole(element, 'dialog');
 };
 
 /**
- * Get the dialog content
+ * Retrieves the content of a dialog.
+ *
+ * @param {HTMLElement} [dialog] - The dialog element. If not defined, a default dialog is retrieved.
+ * @returns {HTMLElement|null} The content element of the dialog, or null if not found.
  */
-export const getDialogContent = dialog => {
+export const queryDialogContent = dialog => {
   dialog = isDefined(dialog) ? dialog : getDialog();
   return dialog.querySelector('.mantine-Modal-body');
 };
 
 /**
- * Get the dialog title
+ * Retrieves the title element from a dialog.
+ *
+ * @param {HTMLElement} [dialog] - The dialog element. If not provided, a default dialog is retrieved using the getDialog function.
+ * @returns {HTMLElement|null} The title element of the dialog, or null if not found.
  */
-export const getDialogTitle = dialog => {
+export const queryDialogTitle = dialog => {
   dialog = isDefined(dialog) ? dialog : getDialog();
   return dialog.querySelector('.mantine-Modal-title');
 };
 
 /**
- * Get the save button of a dialog
+ * Retrieves the save button of a dialog (in the footer)
+ *
+ * @param {HTMLElement} dialog - The dialog element. If not provided, the default dialog will be used.
+ * @returns {HTMLElement} The save button element within the dialog.
  */
 export const getDialogSaveButton = dialog => {
   dialog = isDefined(dialog) ? dialog : getDialog();
@@ -182,7 +257,10 @@ export const getDialogSaveButton = dialog => {
 };
 
 /**
- * Get the close button of a dialog (in the footer)
+ * Retrieves the close button of a dialog (in the footer).
+ *
+ * @param {HTMLElement} [dialog] - The dialog element. If not provided, the default dialog will be used.
+ * @returns {HTMLElement} The close button element within the dialog.
  */
 export const getDialogCloseButton = dialog => {
   dialog = isDefined(dialog) ? dialog : getDialog();
@@ -190,7 +268,9 @@ export const getDialogCloseButton = dialog => {
 };
 
 /**
- * Close a dialog
+ * Closes a dialog by clicking its close (X) button.
+ *
+ * @param {HTMLElement} [dialog] - The dialog element to close. If not provided, it defaults to the result of getDialog().
  */
 export const closeDialog = dialog => {
   dialog = isDefined(dialog) ? dialog : getDialog();
@@ -200,81 +280,89 @@ export const closeDialog = dialog => {
 
 /**
  * Get the element containing the powerfilter
+ *
+ * @param {HTMLElement} [element] - The element to search within. If not provided, the document will be used.
+ * @returns {HTMLElement|null} The powerfilter element, or null if not found.
  */
-export const getPowerFilter = element => {
-  element = getElementOrDocument(element);
+export const queryPowerFilter = element => {
+  element = getElementOrReturnDocument(element);
   return element.querySelector('.powerfilter');
 };
 
 /**
  * Get text inputs
+ *
+ * @param {HTMLElement} [element] - The element to search within. If not provided, the document will be used.
+ * @returns {NodeListOf<Element>} A NodeList of text input elements
  */
-export const getTextInputs = element => {
-  element = getElementOrDocument(element);
+export const queryTextInputs = element => {
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-TextInput-input');
 };
 
 /**
- * Get the table element
+ * Queries the table element
+ *
+ * @param {HTMLElement} [element] - The element to search within. If not provided, the document will be used.
+ * @returns {HTMLTableElement|null} The first table element found within the given element, or null if no table is found.
  */
-export const getTable = element => {
-  element = getElementOrDocument(element);
+export const queryTable = element => {
+  element = getElementOrReturnDocument(element);
   return element.querySelector('table');
 };
 
 /**
- * Get the table body element
+ * Queries the table body element
+ *
+ * @param {HTMLElement} [element] - The element to search within. If not provided, the document will be used.
+ * @returns {HTMLTableSectionElement|null} The <tbody> element if found, otherwise null.
  */
-export const getTableBody = element => {
-  element = getElementOrDocument(element);
+export const queryTableBody = element => {
+  element = getElementOrReturnDocument(element);
   return element.querySelector('tbody');
 };
 
 /**
- * Get the table footer element
+ * Queries the table footer element.
+ *
+ * @param {HTMLElement} [element] - The element to search within. If not provided, the document will be used.
+ * @returns {HTMLElement|null} The `<tfoot>` element if found, otherwise `null`.
  */
-export const getTableFooter = element => {
-  element = getElementOrDocument(element);
+export const queryTableFooter = element => {
+  element = getElementOrReturnDocument(element);
   return element.querySelector('tfoot');
 };
 
 /**
- * Get the table header element
+ * Queries the table header element.
+ *
+ * @param {HTMLElement} [element] - The element to search within. If not provided, the document will be used.
+ * @returns {HTMLElement|null} The <thead> element of the table, or null if not found.
  */
-export const getTableHeader = element => {
-  element = getElementOrDocument(element);
+export const queryTableHeader = element => {
+  element = getElementOrReturnDocument(element);
   return element.querySelector('thead');
 };
 
 /**
- * Get action items
+ * Queries and returns all checkbox input elements
+ *
+ * @param {HTMLElement} [element] - The element to search within. If not provided, the document will be used.
+ * @returns {NodeList} A NodeList of all checkbox input elements found within the specified element.
  */
-export const getActionItems = element => {
-  element = getElementOrDocument(element);
-  return getAllByTestId(element, 'svg-icon');
-};
-
-/**
- * Get the bulk action items of a page
- */
-export const getBulkActionItems = element => {
-  const tableFooter = getTableFooter(element);
-  return getActionItems(tableFooter);
-};
-
-/**
- * Get the check boxes
- */
-export const getCheckBoxes = element => {
-  element = getElementOrDocument(element);
+export const queryCheckBoxes = element => {
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-Checkbox-input');
 };
 
 /**
- * Get file input elements
+ * Queries and returns all file input elements
+ *
+ * @param {HTMLElement} element - The element to search within. If not provided, the document will be used.
+ * @returns {NodeList} A NodeList of file input elements
  */
-export const getFileInputs = element => {
-  element = getElementOrDocument(element);
+export const queryFileInputs = element => {
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-FileInput-input');
 };
 

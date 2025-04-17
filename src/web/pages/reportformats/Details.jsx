@@ -10,15 +10,15 @@ import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
-import {Col} from 'web/entity/Page';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-const ReportFormatDetails = ({entity, links = true}) => {
+const ReportFormatDetails = ({entity}) => {
   const {
     configurable,
     deprecated,
@@ -152,7 +152,6 @@ const ReportFormatDetails = ({entity, links = true}) => {
 
 ReportFormatDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default ReportFormatDetails;

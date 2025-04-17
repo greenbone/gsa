@@ -12,12 +12,16 @@ describe('NvtPreference', () => {
 
   const renderComponent = (preference, value) => {
     render(
-      <NvtPreference
-        preference={preference}
-        title="Edit NVT Details"
-        value={value}
-        onChange={mockOnChange}
-      />,
+      <table>
+        <tbody>
+          <NvtPreference
+            preference={preference}
+            title="Edit NVT Details"
+            value={value}
+            onChange={mockOnChange}
+          />
+        </tbody>
+      </table>,
     );
   };
 

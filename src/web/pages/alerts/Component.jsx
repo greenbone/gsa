@@ -835,7 +835,7 @@ class AlertComponent extends React.Component {
 
     return gmp.alert
       .test(alert)
-      .then(response => {
+      .then(() => {
         if (isDefined(onTestSuccess)) {
           onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
         }

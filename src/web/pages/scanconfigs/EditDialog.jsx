@@ -6,7 +6,14 @@
 import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import {useReducer, useState, useEffect, useCallback} from 'react';
+import {
+  useReducer,
+  useState,
+  useEffect,
+  useCallback,
+  memo,
+  useRef,
+} from 'react';
 import DialogInlineNotification from 'web/components/dialog/DialogInlineNotification';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import TextField from 'web/components/form/TextField';
@@ -14,11 +21,15 @@ import Loading from 'web/components/loading/Loading';
 import SearchBar from 'web/components/searchbar/SearchBar';
 import useTranslation from 'web/hooks/useTranslation';
 import NvtFamilies from 'web/pages/scanconfigs/NvtFamilies';
-import NvtPreferences, {NvtPreferencePropType} from 'web/pages/scanconfigs/NvtPreferences';
+import NvtPreferences, {
+  NvtPreferencePropType,
+} from 'web/pages/scanconfigs/NvtPreferences';
 import ScannerPreferences, {
   ScannerPreferencePropType,
 } from 'web/pages/scanconfigs/ScannerPreferences';
 import PropTypes from 'web/utils/PropTypes';
+
+const MemoizedNvtPreferences = memo(NvtPreferences);
 
 const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
   const trend = {};
@@ -93,6 +104,47 @@ export const handleSearchChange = (
   setFilteredItems(filtered);
 };
 
+const BasicFieldsContainer = memo(
+  ({initialName, initialComment, syncDataRef}) => {
+    const [_] = useTranslation();
+    const [name, setName] = useState(initialName);
+    const [comment, setComment] = useState(initialComment);
+
+    const valuesRef = useRef({name, comment});
+
+    useEffect(() => {
+      valuesRef.current = {name, comment};
+    }, [name, comment]);
+
+    useEffect(() => {
+      syncDataRef(valuesRef);
+    }, [syncDataRef]);
+
+    return (
+      <>
+        <TextField
+          name="name"
+          title={_('Name')}
+          value={name}
+          onChange={value => setName(value)}
+        />
+        <TextField
+          name="comment"
+          title={_('Comment')}
+          value={comment}
+          onChange={value => setComment(value)}
+        />
+      </>
+    );
+  },
+);
+
+BasicFieldsContainer.propTypes = {
+  initialName: PropTypes.string,
+  initialComment: PropTypes.string,
+  syncDataRef: PropTypes.func,
+};
+
 const EditScanConfigDialog = ({
   comment = '',
   configId,
@@ -108,7 +160,6 @@ const EditScanConfigDialog = ({
   nvtPreferences = [],
   scannerPreferences = [],
   scannerId,
-  scanners = [],
   title,
   usageType = 'scan',
   onClose,
@@ -128,6 +179,7 @@ const EditScanConfigDialog = ({
     useState(scannerPreferences);
   const [filteredNvtPreferences, setFilteredNvtPreferences] =
     useState(nvtPreferences);
+  const basicFieldsRef = useRef(null);
 
   useEffect(() => {
     dispatch({
@@ -156,8 +208,6 @@ const EditScanConfigDialog = ({
   }
 
   const uncontrolledData = {
-    comment,
-    name,
     scannerId,
   };
 
@@ -208,6 +258,24 @@ const EditScanConfigDialog = ({
       filteredScannerPreferences.length +
       filteredNvtPreferences.length;
 
+  const handleSave = values => {
+    const basicFields = basicFieldsRef.current
+      ? basicFieldsRef.current.current
+      : {};
+
+    const allValues = {
+      ...values,
+      name: basicFields.name,
+      comment: basicFields.comment,
+    };
+
+    onSave(allValues);
+  };
+
+  const syncDataRef = useCallback(ref => {
+    basicFieldsRef.current = ref;
+  }, []);
+
   return (
     <SaveDialog
       defaultValues={uncontrolledData}
@@ -216,22 +284,14 @@ const EditScanConfigDialog = ({
       values={controlledData}
       width="900px"
       onClose={onClose}
-      onSave={onSave}
+      onSave={handleSave}
     >
       {({values: state, onValueChange}) => (
         <>
-          <TextField
-            name="name"
-            title={_('Name')}
-            value={state.name}
-            onChange={onValueChange}
-          />
-
-          <TextField
-            name="comment"
-            title={_('Comment')}
-            value={state.comment}
-            onChange={onValueChange}
+          <BasicFieldsContainer
+            initialComment={comment}
+            initialName={name}
+            syncDataRef={syncDataRef}
           />
 
           <SearchBar
@@ -258,7 +318,6 @@ const EditScanConfigDialog = ({
                   onValueChange={onValueChange}
                 />
               )}
-
               {isLoadingConfig ? (
                 <Loading />
               ) : (
@@ -272,7 +331,7 @@ const EditScanConfigDialog = ({
               {isLoadingConfig ? (
                 <Loading />
               ) : (
-                <NvtPreferences
+                <MemoizedNvtPreferences
                   editTitle={editNvtDetailsTitle}
                   preferences={filteredNvtPreferences}
                   onEditNvtDetailsClick={onEditNvtDetailsClick}
@@ -306,8 +365,6 @@ EditScanConfigDialog.propTypes = {
   nvtPreferences: PropTypes.arrayOf(NvtPreferencePropType),
   scannerId: PropTypes.id,
   scannerPreferences: PropTypes.arrayOf(ScannerPreferencePropType),
-  scanners: PropTypes.array,
-  select: PropTypes.object,
   title: PropTypes.string.isRequired,
   usageType: PropTypes.string,
   onClose: PropTypes.func.isRequired,

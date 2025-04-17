@@ -8,7 +8,6 @@ import DefaultTransform from 'gmp/http/transform/default';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 
-
 const log = logger.getLogger('gmp.commands.entity');
 
 class EntityCommand extends GmpCommand {
@@ -92,7 +91,7 @@ class EntityCommand extends GmpCommand {
     return this.httpPost(params, {transform: DefaultTransform});
   }
 
-  getElementFromRoot(root) {
+  getElementFromRoot() {
     throw new Error(
       'getElementFromRoot not implemented in ' + this.constructor.name,
     );

@@ -42,10 +42,10 @@ exports[`HorizontalSep tests > should allow to wrap 1`] = `
 }
 
 .c3 {
-  -webkit-box-flex-wrap: true;
-  -webkit-flex-wrap: true;
-  -ms-flex-wrap: true;
-  flex-wrap: true;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .c3>*:not(:last-child)::after {
@@ -103,6 +103,13 @@ exports[`HorizontalSep tests > should render 1`] = `
   display: inline-flex;
 }
 
+.c3 {
+  -webkit-box-flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+
 .c3>*:not(:last-child)::after {
   content: '•';
   margin-left: 5px;
@@ -158,6 +165,13 @@ exports[`HorizontalSep tests > should render with separator option 1`] = `
   display: inline-flex;
 }
 
+.c3 {
+  -webkit-box-flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+
 .c3>*:not(:last-child)::after {
   content: '|';
   margin-left: 5px;
@@ -211,6 +225,13 @@ exports[`HorizontalSep tests > should render with spacing 1`] = `
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
+}
+
+.c3 {
+  -webkit-box-flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
 }
 
 .c3>*:not(:last-child)::after {

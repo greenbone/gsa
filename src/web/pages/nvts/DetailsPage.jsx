@@ -7,14 +7,16 @@ import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {
+  NewNoteIcon,
+  NvtIcon,
+  ResultIcon,
+  VulnerabilityIcon,
+  NewOverrideIcon,
+} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewNoteIcon from 'web/components/icon/NewNoteIcon';
-import NewOverrideIcon from 'web/components/icon/NewOverrideIcon';
-import NvtIcon from 'web/components/icon/NvtIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
-import VulnerabilityIcon from 'web/components/icon/VulnerabilityIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -27,9 +29,9 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import DetailsBlock from 'web/entity/Block';
+import EntityPage from 'web/entity/EntityPage';
 import Note from 'web/entity/Note';
 import Override from 'web/entity/Override';
-import EntityPage from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
@@ -47,7 +49,6 @@ import {
 } from 'web/store/entities/overrides';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 export let ToolBarIcons = ({
   capabilities,
   entity,

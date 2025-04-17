@@ -10,7 +10,7 @@ import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
-import {RowDetailsToggle} from 'web/entities/Row';
+import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
@@ -49,7 +49,6 @@ Actions.propTypes = {
 const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
-  links = true,
   onToggleDetailsClick,
   ...props
 }) => {
@@ -86,7 +85,6 @@ const Row = ({
 Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model,
-  links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 

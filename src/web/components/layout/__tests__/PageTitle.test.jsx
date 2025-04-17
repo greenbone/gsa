@@ -47,6 +47,7 @@ describe('PageTitle tests', () => {
 
     expect(global.window.document.title).toBe(defaultTitle + ' - ' + title2);
   });
+
   test('should render appliance model title', () => {
     const {render} = rendererWith({
       gmp: {

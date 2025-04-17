@@ -13,7 +13,7 @@ const Image = styled(Img)`
   width: 300px;
 `;
 
-const LoginLogo = props => {
+const LoginLogo = () => {
   return (
     <Image
       alt={_('Greenbone AG')}

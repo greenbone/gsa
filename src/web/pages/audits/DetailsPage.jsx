@@ -7,13 +7,15 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import Badge from 'web/components/badge/Badge';
-import AlterableIcon from 'web/components/icon/AlterableIcon';
-import AuditIcon from 'web/components/icon/AuditIcon';
+import {
+  AlterableIcon,
+  ReportIcon,
+  ResultIcon,
+  AuditIcon,
+} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import ReportIcon from 'web/components/icon/ReportIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -27,14 +29,15 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage, {Col} from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
   permissionsResourceFilter,
@@ -61,7 +64,6 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
-
 export const ToolBarIcons = ({
   entity,
   links,

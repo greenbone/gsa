@@ -6,7 +6,7 @@
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
-import DownloadIcon from 'web/components/icon/DownloadIcon';
+import {DownloadIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
@@ -18,7 +18,6 @@ import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
 import StartIcon from 'web/pages/tasks/icons/StartIcon';
 import StopIcon from 'web/pages/tasks/icons/StopIcon';
 import PropTypes from 'web/utils/PropTypes';
-
 const Actions = ({
   entity,
   links,

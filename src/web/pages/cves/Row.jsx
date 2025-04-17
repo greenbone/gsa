@@ -14,14 +14,13 @@ import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import EntitiesActions from 'web/entities/Actions';
-import {RowDetailsToggle} from 'web/entities/Row';
+import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   entity,
-  links = true,
   onToggleDetailsClick,
   ...props
 }) => {
@@ -70,7 +69,6 @@ const Row = ({
 Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model,
-  links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 

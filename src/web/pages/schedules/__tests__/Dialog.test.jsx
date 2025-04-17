@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import date from 'gmp/models/date';
 import Schedule from 'gmp/models/schedule';
 import timezones from 'gmp/timezones';
 import {
@@ -13,7 +14,7 @@ import {
   getDialogSaveButton,
   queryAllSelectElements,
   getSelectItemElementsForSelect,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import ScheduleDialog from 'web/pages/schedules/Dialog';
 import {render, fireEvent, screen} from 'web/utils/Testing';
@@ -98,7 +99,7 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const inputs = getTextInputs();
+    const inputs = queryTextInputs();
     const selects = queryAllSelectElements();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
@@ -132,8 +133,11 @@ describe('ScheduleDialog component tests', () => {
   });
 
   test('should allow to change text field', () => {
+    const mockCurrentTime = date('2021-02-08T14:37:04+00:00');
+
     const {getByName} = render(
       <ScheduleDialog
+        startDate={mockCurrentTime}
         title={'New Schedule'}
         onClose={handleClose}
         onSave={handleSave}
@@ -150,10 +154,12 @@ describe('ScheduleDialog component tests', () => {
     changeInputValue(commentInput, 'bar');
     expect(commentInput).toHaveValue('bar');
 
-    const saveButton = getDialogSaveButton();
+    handleSave.mockResolvedValue({});
+
+    const saveButton = screen.getByRole('button', {name: 'Save'});
     fireEvent.click(saveButton);
 
-    expect(handleSave).toHaveBeenCalled(); // handleSave in dialog is over 100 lines long and generates an icalendar. toHaveBeenCalledWith(...) is extremely difficult to test...
+    expect(handleSave).toHaveBeenCalled();
   });
 
   test('should allow to close the dialog', () => {
@@ -170,6 +176,8 @@ describe('ScheduleDialog component tests', () => {
   });
 
   test('should allow changing select values', async () => {
+    handleSave.mockResolvedValue({});
+
     render(
       <ScheduleDialog
         comment={scheduleComment}

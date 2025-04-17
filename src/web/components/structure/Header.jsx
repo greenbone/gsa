@@ -7,25 +7,25 @@ import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
 import {useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
-import LogoutIcon from 'web/components/icon/LogoutIcon';
-import MySettingsIcon from 'web/components/icon/MySettingsIcon';
+import {LogoutIcon, MySettingsIcon} from 'web/components/icon';
 import SessionTimer from 'web/components/sessionTimer/SessionTimer';
 import getLogo from 'web/components/structure/getLogo';
 import LanguageSwitch from 'web/components/structure/LanguageSwitch';
 import useGmp from 'web/hooks/useGmp';
+import useManualURL from 'web/hooks/useManualURL';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
-
 const Header = () => {
   const [_] = useTranslation();
 
   const gmp = useGmp();
-  const username = useUserName();
-  const loggedIn = useUserIsLoggedIn();
+  const [username] = useUserName();
+  const [loggedIn] = useUserIsLoggedIn();
   const navigate = useNavigate();
   const logoComponent = getLogo(gmp.settings.vendorLabel);
   const timezone = useSelector(state => state.userSettings.timezone);
+  const manualURL = useManualURL();
 
   const handleSettingsClick = useCallback(
     event => {
@@ -67,6 +67,7 @@ const Header = () => {
       languageSwitch={<LanguageSwitch />}
       logo={logoComponent}
       logoLink="/dashboards"
+      manualLink={manualURL}
       menuPoints={menuPoints}
       sessionTimer={<SessionTimer />}
       username={username}

@@ -17,7 +17,7 @@ describe('EntitiesCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new EntitiesCommand(fakeHttp, 'foo');
-    return cmd.get({filter}).then(resp => {
+    return cmd.get({filter}).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_foos',
@@ -35,7 +35,7 @@ describe('EntitiesCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new EntitiesCommand(fakeHttp, 'foo');
-    return cmd.get({filter}).then(resp => {
+    return cmd.get({filter}).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_foos',
@@ -60,7 +60,7 @@ describe('EntitiesCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new EntitiesCommand(fakeHttp, 'foo');
-    return cmd.get({filter}).then(resp => {
+    return cmd.get({filter}).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_foos',
@@ -81,7 +81,7 @@ describe('EntitiesCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new EntitiesCommand(fakeHttp, 'foo');
-    return cmd.deleteByIds(ids).then(resp => {
+    return cmd.deleteByIds(ids).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: {
           'bulk_selected:123': 1,

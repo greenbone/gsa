@@ -10,17 +10,19 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
+import {
+  NewNoteIcon,
+  NewTicketIcon,
+  OverrideIcon,
+  ReportIcon,
+  ResultIcon,
+  TaskIcon,
+  TicketIcon,
+  NewOverrideIcon,
+} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import NewNoteIcon from 'web/components/icon/NewNoteIcon';
-import NewOverrideIcon from 'web/components/icon/NewOverrideIcon';
-import NewTicketIcon from 'web/components/icon/NewTicketIcon';
-import OverrideIcon from 'web/components/icon/OverrideIcon';
-import ReportIcon from 'web/components/icon/ReportIcon';
-import ResultIcon from 'web/components/icon/ResultIcon';
-import TaskIcon from 'web/components/icon/TaskIcon';
-import TicketIcon from 'web/components/icon/TicketIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -36,14 +38,15 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import EntityPage from 'web/entity/EntityPage';
 import {goToDetails} from 'web/entity/navigation';
 import Note from 'web/entity/Note';
 import Override from 'web/entity/Override';
-import EntityPage, {Col} from 'web/entity/Page';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
@@ -61,7 +64,6 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
-
 export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,

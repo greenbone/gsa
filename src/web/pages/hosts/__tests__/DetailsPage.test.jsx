@@ -7,8 +7,9 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/hosts/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/hosts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/hosts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
@@ -169,8 +170,8 @@ beforeEach(() => {
   });
 });
 
-describe('Host Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('Host DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const gmp = {
       host: {
         get: getHost,
@@ -178,7 +179,11 @@ describe('Host Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {
+        manualUrl,
+        reloadInterval,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings, renewSession},
     };
 
@@ -194,18 +199,24 @@ describe('Host Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     // Toolbar Icons
     const links = baseElement.querySelectorAll('a');
 
-    expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Hosts',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-assets.html#managing-hosts',
     );
 
-    expect(screen.getAllByTitle('Host List')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Host List',
+    );
     expect(links[1]).toHaveAttribute('href', '/hosts');
 
     expect(screen.getAllByTitle('Create new Host')[0]).toBeInTheDocument();
@@ -223,10 +234,10 @@ describe('Host Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Host: Foo');
     expect(baseElement).toHaveTextContent('ID:12345');
     expect(baseElement).toHaveTextContent(
-      'Created:Sun, Jun 2, 2019 2:00 PM CEST',
+      'Created:Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -272,17 +283,23 @@ describe('Host Detailspage tests', () => {
 
     expect(row[1]).toHaveTextContent('hostname');
     expect(row[1]).toHaveTextContent('foo');
-    expect(row[1]).toHaveTextContent('Sun, Jun 2, 2019 2:00 PM CEST');
+    expect(row[1]).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    );
     expect(row[1]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
 
     expect(row[2]).toHaveTextContent('ip');
     expect(row[2]).toHaveTextContent('123.456.789.10');
-    expect(row[2]).toHaveTextContent('Sun, Jun 2, 2019 2:00 PM CEST');
+    expect(row[2]).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    );
     expect(row[2]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
 
     expect(row[3]).toHaveTextContent('OS');
     expect(row[3]).toHaveTextContent('cpe:/o:linux:kernel');
-    expect(row[3]).toHaveTextContent('Sun, Jun 2, 2019 2:00 PM CEST');
+    expect(row[3]).toHaveTextContent(
+      'Sun, Jun 2, 2019 2:00 PM Central European Summer Time',
+    );
     expect(row[3]).toHaveTextContent('Report 910 (NVT 1.2.3.4.5)');
   });
 
@@ -313,7 +330,7 @@ describe('Host Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
 
@@ -350,7 +367,7 @@ describe('Host Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
 
@@ -400,32 +417,23 @@ describe('Host Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', host));
 
-    render(<Detailspage id="12345" />);
+    render(<DetailsPage id="12345" />);
 
     await wait();
 
     // delete identifier
-
     fireEvent.click(screen.getAllByTitle('Delete Identifier')[0]);
-
     await wait();
-
     expect(deleteIdentifier).toHaveBeenCalledWith(host.identifiers[0]);
 
     // export host
-
     fireEvent.click(screen.getAllByTitle('Export Host as XML')[0]);
-
     await wait();
-
     expect(exportFunc).toHaveBeenCalledWith(host);
 
     // delete host
-
     fireEvent.click(screen.getAllByTitle('Delete Host')[0]);
-
     await wait();
-
     expect(deleteFunc).toHaveBeenCalledWith({id: host.id});
   });
 });
@@ -456,17 +464,19 @@ describe('Host ToolBarIcons tests', () => {
     );
 
     const links = element.querySelectorAll('a');
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons.length).toBe(8);
-
-    expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Hosts',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-assets.html#managing-hosts',
     );
 
-    expect(screen.getAllByTitle('Host List')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('list-icon')).toHaveAttribute(
+      'title',
+      'Host List',
+    );
     expect(links[1]).toHaveAttribute('href', '/hosts');
 
     expect(screen.getAllByTitle('Create new Host')[0]).toBeInTheDocument();
@@ -505,16 +515,23 @@ describe('Host ToolBarIcons tests', () => {
       />,
     );
 
-    fireEvent.click(screen.getAllByTitle('Create new Host')[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'Create new Host');
+    fireEvent.click(newIcon);
     expect(handleHostCreateClick).toHaveBeenCalled();
 
-    fireEvent.click(screen.getAllByTitle('Edit Host')[0]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Edit Host');
+    fireEvent.click(editIcon);
     expect(handleHostEditClick).toHaveBeenCalledWith(host);
 
-    fireEvent.click(screen.getAllByTitle('Delete Host')[0]);
+    const deleteIcon = screen.getAllByTestId('delete-icon')[0];
+    fireEvent.click(deleteIcon);
     expect(handleHostDeleteClick).toHaveBeenCalledWith(host);
 
-    fireEvent.click(screen.getAllByTitle('Export Host as XML')[0]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Host as XML');
+    fireEvent.click(exportIcon);
     expect(handleHostDownloadClick).toHaveBeenCalledWith(host);
   });
 
@@ -542,20 +559,27 @@ describe('Host ToolBarIcons tests', () => {
       />,
     );
 
-    fireEvent.click(screen.getAllByTitle('Create new Host')[0]);
+    const newIcon = screen.getByTestId('new-icon');
+    expect(newIcon).toHaveAttribute('title', 'Create new Host');
+    fireEvent.click(newIcon);
     expect(handleHostCreateClick).toHaveBeenCalled();
 
-    expect(screen.queryByTitle('Edit Host')).not.toBeInTheDocument();
-    fireEvent.click(screen.getAllByTitle('Permission to edit Host denied')[0]);
+    const editIcon = screen.getByTestId('edit-icon');
+    expect(editIcon).toHaveAttribute('title', 'Permission to edit Host denied');
+    fireEvent.click(editIcon);
     expect(handleHostEditClick).not.toHaveBeenCalled();
 
-    expect(screen.queryByTitle('Delete Host')).not.toBeInTheDocument();
-    fireEvent.click(
-      screen.getAllByTitle('Permission to delete Host denied')[0],
+    const deleteIcon = screen.getAllByTestId('delete-icon')[0];
+    expect(deleteIcon).toHaveAttribute(
+      'title',
+      'Permission to delete Host denied',
     );
+    fireEvent.click(deleteIcon);
     expect(handleHostDeleteClick).not.toHaveBeenCalledWith(host);
 
-    fireEvent.click(screen.getAllByTitle('Export Host as XML')[0]);
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Host as XML');
+    fireEvent.click(exportIcon);
     expect(handleHostDownloadClick).toHaveBeenCalledWith(hostWithoutPermission);
   });
 });

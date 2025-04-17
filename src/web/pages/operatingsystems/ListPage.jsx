@@ -7,14 +7,16 @@ import _ from 'gmp/locale';
 import Filter, {OS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
 import DashboardControls from 'web/components/dashboard/Controls';
+import {OsSvgIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import OsSvgIcon from 'web/components/icon/OsSvgIcon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import OsComponent from 'web/pages/operatingsystems/Component';
-import OsDashboard, {OS_DASHBOARD_ID} from 'web/pages/operatingsystems/dashboard';
+import OsDashboard, {
+  OS_DASHBOARD_ID,
+} from 'web/pages/operatingsystems/dashboard';
 import OsFilterDialog from 'web/pages/operatingsystems/FilterDialog';
 import OsTable from 'web/pages/operatingsystems/Table';
 import {
@@ -22,7 +24,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/operatingsystems';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = () => (
   <Layout>
     <ManualIcon

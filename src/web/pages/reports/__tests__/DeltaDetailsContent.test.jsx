@@ -6,16 +6,16 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {
-  getPowerFilter,
+  queryPowerFilter,
   getSelectElement,
-  getTextInputs,
+  queryTextInputs,
 } from 'web/components/testing';
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
-
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
@@ -132,9 +132,9 @@ describe('Delta Report Details Content tests', () => {
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
     const bars = getAllByTestId('progressbar-box');
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -143,15 +143,15 @@ describe('Delta Report Details Content tests', () => {
 
     // Header
     expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(baseElement).toHaveTextContent(
-      'Created:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Created:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -174,7 +174,7 @@ describe('Delta Report Details Content tests', () => {
 
     expect(tableData[6]).toHaveTextContent('Scan Time Report 1');
     expect(tableData[7]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM CEST - Mon, Jun 3, 2019 1:31 PM CEST',
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time - Mon, Jun 3, 2019 1:31 PM Central European Summer Time',
     );
 
     expect(tableData[8]).toHaveTextContent('Scan Duration Report 1');
@@ -189,7 +189,7 @@ describe('Delta Report Details Content tests', () => {
 
     expect(tableData[14]).toHaveTextContent('Scan Time Report 2');
     expect(tableData[15]).toHaveTextContent(
-      'Mon, May 20, 2019 2:00 PM CEST - Mon, May 20, 2019 2:30 PM CEST',
+      'Mon, May 20, 2019 2:00 PM Central European Summer Time - Mon, May 20, 2019 2:30 PM Central European Summer Time',
     );
 
     expect(tableData[16]).toHaveTextContent('Scan Duration Report 2');
@@ -250,7 +250,11 @@ describe('Delta Report Details Content tests', () => {
     const filters = [filterWithName];
 
     const gmp = {
-      settings: {manualUrl, reportResultsThreshold: 10},
+      settings: {
+        manualUrl,
+        reportResultsThreshold: 10,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings, getReportComposerDefaults},
     };
 
@@ -302,9 +306,9 @@ describe('Delta Report Details Content tests', () => {
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
     const bars = getAllByTestId('progressbar-box');
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -313,15 +317,15 @@ describe('Delta Report Details Content tests', () => {
 
     // Header
     expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(baseElement).toHaveTextContent(
-      'Created:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Created:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+      'Modified:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -351,7 +355,9 @@ describe('Delta Report Details Content tests', () => {
     expect(rows[2]).toHaveTextContent('80 %');
     expect(rows[2]).toHaveTextContent('123.456.78.910');
     expect(rows[2]).toHaveTextContent('80/tcp');
-    expect(rows[2]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(rows[2]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Row 2
     expect(rows[3]).toHaveTextContent('[ = ]');
@@ -361,7 +367,9 @@ describe('Delta Report Details Content tests', () => {
     expect(rows[3]).toHaveTextContent('70 %');
     expect(rows[3]).toHaveTextContent('109.876.54.321');
     expect(rows[3]).toHaveTextContent('80/tcp');
-    expect(rows[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(rows[3]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Filter
     expect(baseElement).toHaveTextContent(

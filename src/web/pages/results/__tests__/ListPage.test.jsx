@@ -7,15 +7,16 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {
   clickElement,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ResultsPage from 'web/pages/results/ListPage';
@@ -171,7 +172,11 @@ describe('Results listpage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {
+        manualUrl,
+        reloadInterval,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings},
     };
 
@@ -208,9 +213,9 @@ describe('Results listpage tests', () => {
 
     await wait();
 
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Results')[0]).toBeInTheDocument();
@@ -260,7 +265,9 @@ describe('Results listpage tests', () => {
     expect(row[2]).toHaveTextContent('123.456.78.910');
     expect(row[2]).toHaveTextContent('foo');
     expect(row[2]).toHaveTextContent('80/tcp');
-    expect(row[2]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[2]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Row 2
     expect(row[3]).toHaveTextContent('Result 2');
@@ -268,7 +275,9 @@ describe('Results listpage tests', () => {
     expect(row[3]).toHaveTextContent('70 %');
     expect(row[3]).toHaveTextContent('109.876.54.321');
     expect(row[3]).toHaveTextContent('80/tcp');
-    expect(row[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[3]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Row 3
     expect(row[4]).toHaveTextContent('Result 3');
@@ -277,7 +286,9 @@ describe('Results listpage tests', () => {
     expect(row[4]).toHaveTextContent('109.876.54.321');
     expect(row[4]).toHaveTextContent('bar');
     expect(row[4]).toHaveTextContent('80/tcp');
-    expect(row[4]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
+    expect(row[4]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:06 PM Central European Summer Time',
+    );
 
     // Footer
     expect(
@@ -401,15 +412,15 @@ describe('Results listpage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a result
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected result
@@ -473,7 +484,7 @@ describe('Results listpage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);

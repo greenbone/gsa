@@ -7,17 +7,17 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {
   clickElement,
-  getBulkActionItems,
-  getCheckBoxes,
-  getPowerFilter,
+  queryCheckBoxes,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTable,
-  getTableBody,
-  getTableFooter,
-  getTextInputs,
+  queryTable,
+  queryTableBody,
+  queryTableFooter,
+  queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CpesPage, {ToolBarIcons} from 'web/pages/cpes/ListPage';
@@ -25,7 +25,7 @@ import {entitiesLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, screen, wait} from 'web/utils/Testing';
+import {getByTestId, rendererWith, screen, wait} from 'web/utils/Testing';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -120,7 +120,11 @@ describe('CpesPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {
+        manualUrl,
+        reloadInterval,
+        severityRating: SEVERITY_RATING_CVSS_3,
+      },
       user: {currentSettings, getSetting},
     };
 
@@ -158,8 +162,8 @@ describe('CpesPage tests', () => {
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const powerFilter = getPowerFilter();
-    const inputs = getTextInputs(powerFilter);
+    const powerFilter = queryPowerFilter();
+    const inputs = queryTextInputs(powerFilter);
     const select = getSelectElement(powerFilter);
 
     // Toolbar Icons
@@ -187,7 +191,7 @@ describe('CpesPage tests', () => {
     expect(display[2]).toHaveTextContent('CPEs by CVSS (Total: 0)');
 
     // Table
-    const table = getTable();
+    const table = queryTable();
     const header = table.querySelectorAll('th');
 
     expect(header[0]).toHaveTextContent('Name');
@@ -200,7 +204,9 @@ describe('CpesPage tests', () => {
 
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('bar');
-    expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
+    expect(row[1]).toHaveTextContent(
+      'Mon, Jun 24, 2019 12:12 PM Central European Summer Time',
+    );
     expect(row[1]).toHaveTextContent('3');
     expect(row[1]).toHaveTextContent('9.8 (Critical)');
   });
@@ -267,8 +273,8 @@ describe('CpesPage tests', () => {
     await wait();
 
     // export page contents
-    const bulkActions = getBulkActionItems();
-    const exportIcon = bulkActions[1];
+    const tableFooter = queryTableFooter();
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
     await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
@@ -335,20 +341,19 @@ describe('CpesPage tests', () => {
     await wait();
 
     // change bulk action to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const selectElement = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(selectElement);
     await clickElement(selectItems[1]);
     expect(selectElement).toHaveValue('Apply to selection');
 
     // select a cpe
-    const tableBody = getTableBody();
-    const inputs = getCheckBoxes(tableBody);
+    const tableBody = queryTableBody();
+    const inputs = queryCheckBoxes(tableBody);
     await clickElement(inputs[1]);
 
     // export selected cpe
-    const bulkActions = getBulkActionItems();
-    const exportIcon = bulkActions[1];
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
     await clickElement(exportIcon);
 
     expect(exportByIds).toHaveBeenCalled();
@@ -416,15 +421,14 @@ describe('CpesPage tests', () => {
     await wait();
 
     // change bulk action to apply to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const selectElement = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(selectElement);
     await clickElement(selectItems[2]);
     expect(selectElement).toHaveValue('Apply to all filtered');
 
     // export all filtered cpes
-    const bulkActions = getBulkActionItems();
-    const exportIcon = bulkActions[1];
+    const exportIcon = getByTestId(tableFooter, 'export-icon');
     await clickElement(exportIcon);
 
     expect(exportByFilter).toHaveBeenCalled();

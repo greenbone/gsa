@@ -11,7 +11,7 @@ import {
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import DateTime from 'web/components/date/DateTime';
-import CredentialIcon from 'web/components/icon/CredentialIcon';
+import {CredentialIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -30,12 +30,12 @@ import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPage from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -51,7 +51,6 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-
 export const ToolBarIcons = ({
   entity,
   onCredentialCloneClick,
@@ -98,7 +97,7 @@ ToolBarIcons.propTypes = {
   onCredentialInstallerDownloadClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, links = true, ...props}) => {
+const Details = ({entity, links = true}) => {
   const {certificate_info: cert} = entity;
   return (
     <Layout flex="column">

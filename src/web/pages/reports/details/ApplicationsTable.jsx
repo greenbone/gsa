@@ -15,7 +15,6 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import {createEntitiesTable} from 'web/entities/Table';
 import PropTypes from 'web/utils/PropTypes';
-
 const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => {
   return (
     <TableHeader>
@@ -57,12 +56,11 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => {
 Header.propTypes = {
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
-  links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };
 
-const Row = ({entity, links = true, onToggleDetailsClick, ...props}) => {
+const Row = ({entity, links = true}) => {
   const {name, hosts, occurrences, severity} = entity;
   return (
     <TableRow>
@@ -96,7 +94,6 @@ Row.propTypes = {
     severity: PropTypes.any,
   }).isRequired,
   links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default createEntitiesTable({

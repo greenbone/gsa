@@ -7,13 +7,12 @@ import _ from 'gmp/locale';
 import React from 'react';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
+import {HostIcon, OsSvgIcon} from 'web/components/icon';
 import CpeIcon from 'web/components/icon/CpeIcon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
-import HostIcon from 'web/components/icon/HostIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import OsSvgIcon from 'web/components/icon/OsSvgIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
@@ -26,11 +25,12 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
+import EntityPage from 'web/entity/EntityPage';
 import {goToList} from 'web/entity/navigation';
-import EntityPage, {Col} from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -48,7 +48,6 @@ import {
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
 let ToolBarIcons = ({
   capabilities,
   entity,

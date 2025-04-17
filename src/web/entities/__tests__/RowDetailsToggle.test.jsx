@@ -4,7 +4,7 @@
  */
 
 import {describe, test, testing} from '@gsa/testing';
-import RowDetailsToggle from 'web/entities/Row';
+import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
 describe('RowDetailsToggle tests', () => {

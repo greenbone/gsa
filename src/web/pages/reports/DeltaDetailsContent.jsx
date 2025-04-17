@@ -12,7 +12,7 @@ import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorMessage from 'web/components/error/ErrorMessage';
-import ReportIcon from 'web/components/icon/ReportIcon';
+import {ReportIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
@@ -25,14 +25,13 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
-import EntityInfo from 'web/entity/Info';
+import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
 import ToolBarIcons from 'web/pages/reports/details/ToolbarIcons';
 import PropTypes from 'web/utils/PropTypes';
-
 const Span = styled.span`
   margin-top: 2px;
 `;

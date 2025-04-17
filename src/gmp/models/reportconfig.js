@@ -13,7 +13,7 @@ const get_value = val => {
 };
 
 class Param {
-  constructor({name, type, value, options, _using_default, ...other}) {
+  constructor({name, type, value, options, ...other}) {
     this.name = name;
     this.max = type.max;
     this.min = type.min;

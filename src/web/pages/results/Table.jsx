@@ -5,7 +5,7 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
-import SolutionTypeSvgIcon from 'web/components/icon/SolutionTypeSvgIcon';
+import {SolutionTypeSvgIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Sort from 'web/components/sortby/SortBy';
 import TableHead from 'web/components/table/Head';
@@ -24,7 +24,6 @@ const Header = ({
   actionsColumn,
   audit = false,
   delta = false,
-  links = true,
   sort = true,
   currentSortBy,
   currentSortDir,
@@ -167,7 +166,6 @@ Header.propTypes = {
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
   delta: PropTypes.bool,
-  links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };

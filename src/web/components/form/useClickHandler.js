@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const eventValue = (event, props) => event.target.value;
-const eventName = (event, props) => event.target.name;
+const eventValue = event => event.target.value;
+const eventName = event => event.target.name;
 const noopConvert = value => value;
 
 /**

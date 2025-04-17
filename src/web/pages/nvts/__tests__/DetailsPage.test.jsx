@@ -290,8 +290,12 @@ describe('Nvt DetailsPage tests', () => {
     expect(links[1]).toHaveAttribute('href', '/nvts');
 
     expect(baseElement).toHaveTextContent('ID:12345');
-    expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 11:55 AM UTC');
-    expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 10:12 AM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Mon, Jun 24, 2019 11:55 AM Coordinated Universal Time',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
+    );
     expect(baseElement).toHaveTextContent('Owner:(Global Object)');
 
     const spans = baseElement.querySelectorAll('span');
@@ -343,23 +347,35 @@ describe('Nvt DetailsPage tests', () => {
     );
     expect(baseElement).toHaveTextContent('test_override_1');
     expect(baseElement).toHaveTextContent('Active until');
-    expect(baseElement).toHaveTextContent('Sat, Mar 13, 2021 10:35 AM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Sat, Mar 13, 2021 10:35 AM Coordinated Universal Time',
+    );
     expect(baseElement).toHaveTextContent('Modified');
-    expect(baseElement).toHaveTextContent('Thu, Jan 14, 2021 6:20 AM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Thu, Jan 14, 2021 6:20 AM Coordinated Universal Time',
+    );
 
     expect(baseElement).toHaveTextContent('test_override_2');
     expect(baseElement).toHaveTextContent('Active until');
-    expect(baseElement).toHaveTextContent('Sat, Feb 13, 2021 11:35 AM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Sat, Feb 13, 2021 11:35 AM Coordinated Universal Time',
+    );
     expect(baseElement).toHaveTextContent('Modified');
-    expect(baseElement).toHaveTextContent('Fri, Feb 14, 2020 6:35 AM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Fri, Feb 14, 2020 6:35 AM Coordinated Universal Time',
+    );
 
     expect(baseElement).toHaveTextContent('Notes');
     expect(baseElement).toHaveTextContent('Note');
     expect(baseElement).toHaveTextContent('test_note');
     expect(baseElement).toHaveTextContent('Active until');
-    expect(baseElement).toHaveTextContent('Sat, Feb 13, 2021 6:35 AM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Sat, Feb 13, 2021 6:35 AM Coordinated Universal Time',
+    );
     expect(baseElement).toHaveTextContent('Modified');
-    expect(baseElement).toHaveTextContent('Thu, Jan 14, 2021 6:35 AM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Thu, Jan 14, 2021 6:35 AM Coordinated Universal Time',
+    );
   });
 
   test('should render preferences tab', () => {
@@ -517,20 +533,17 @@ describe('Nvt ToolBarIcons tests', () => {
       />,
     );
 
-    const exportIcon = screen.getAllByTitle('Export NVT');
-    const addNewNoteIcon = screen.getAllByTitle('Add new Note');
-    const addNewOverrideIcon = screen.getAllByTitle('Add new Override');
+    const exportIcon = screen.getAllByTitle('Export NVT')[0];
+    const addNewNoteIcon = screen.getAllByTitle('Add new Note')[0];
+    const addNewOverrideIcon = screen.getAllByTitle('Add new Override')[0];
 
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(exportIcon);
     expect(handleNvtDownloadClick).toHaveBeenCalledWith(nvt);
 
-    expect(addNewNoteIcon[0]).toBeInTheDocument();
-    fireEvent.click(addNewNoteIcon[0]);
+    fireEvent.click(addNewNoteIcon);
     expect(handleOnNoteCreateClick).toHaveBeenCalledWith(nvt);
 
-    expect(addNewOverrideIcon[0]).toBeInTheDocument();
-    fireEvent.click(addNewOverrideIcon[0]);
+    fireEvent.click(addNewOverrideIcon);
     expect(handleOnOverrideCreateClick).toHaveBeenCalledWith(nvt);
   });
 });

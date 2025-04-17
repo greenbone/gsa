@@ -13,7 +13,7 @@ import Date from 'gmp/models/date';
 import ScanConfig from 'gmp/models/scanconfig';
 import {
   closeDialog,
-  getElementOrDocument,
+  getElementOrReturnDocument,
   getRadioInputs,
 } from 'web/components/testing';
 import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
@@ -54,15 +54,15 @@ const smbCredential = '91011';
 const esxiCredential = '121314';
 const startMinute = 10;
 const startHour = 12;
-const startTimezone = 'UTC';
+const startTimezone = 'Coordinated Universal Time';
 
 const getFormGroupTitles = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-Text-root');
 };
 
 const getRadioTitles = element => {
-  element = getElementOrDocument(element);
+  element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-Radio-label');
 };
 

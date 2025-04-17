@@ -38,6 +38,8 @@ const types = {
   reportformats: 'report_format',
   scanconfig: 'config',
   scanconfigs: 'config',
+  ticket: 'ticket',
+  tickets: 'ticket',
   tlscertificate: 'tls_certificate',
   tlscertificates: 'tls_certificate',
 };

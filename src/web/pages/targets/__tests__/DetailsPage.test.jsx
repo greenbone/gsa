@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Target from 'gmp/models/target';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/targets/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/targets/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
@@ -69,6 +69,11 @@ const target = Target.fromElement({
   alive_tests: 'Scan Config Default',
   allow_simultaneous_ips: 1,
   port_range: '1-5',
+  krb5_credential: {
+    _id: 'krb5_id',
+    name: 'krb5',
+    trash: '0',
+  },
   ssh_credential: {
     _id: '1235',
     name: 'ssh',
@@ -146,8 +151,8 @@ const noPermTarget = Target.fromElement({
   port_range: '1-5',
 });
 
-describe('Target Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+describe('Target DetailsPage tests', () => {
+  test('should render full DetailsPage', () => {
     const gmp = {
       target: {
         get: getTarget,
@@ -173,7 +178,7 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement} = render(<Detailspage id="46264" />);
+    const {baseElement} = render(<DetailsPage id="46264" />);
 
     expect(baseElement).toHaveTextContent('Target: target 1');
 
@@ -190,10 +195,10 @@ describe('Target Detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('ID:46264');
     expect(baseElement).toHaveTextContent(
-      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+      'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+      'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -235,13 +240,51 @@ describe('Target Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('ssh_elevate');
     expect(links[4]).toHaveAttribute('href', '/credential/3456');
 
-    expect(baseElement).toHaveTextContent('SMB');
+    expect(baseElement).toHaveTextContent('SMB (NTLM)');
     expect(baseElement).toHaveTextContent('smb_credential');
     expect(links[5]).toHaveAttribute('href', '/credential/4784');
 
     expect(baseElement).toHaveTextContent('Tasks using this Target (1)');
     expect(links[6]).toHaveAttribute('href', '/task/465');
     expect(baseElement).toHaveTextContent('foo');
+  });
+
+  test('should render full DetailsPage with Kerberos, when KRB5 is enabled', () => {
+    const gmp = {
+      target: {
+        get: getTarget,
+      },
+      permissions: {
+        get: getEntities,
+      },
+      settings: {
+        manualUrl,
+        reloadInterval,
+        enableKrb5: true,
+      },
+      user: {
+        currentSettings,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('46264', target));
+
+    const {baseElement} = render(<DetailsPage id="46264" />);
+    const kerberosLink = baseElement.querySelectorAll('a')[5];
+
+    expect(baseElement).toHaveTextContent('SMB (Kerberos)');
+    expect(baseElement).toHaveTextContent('krb5');
+    expect(kerberosLink).toHaveAttribute('href', '/credential/krb5_id');
   });
 
   test('should render user tags tab', () => {
@@ -271,7 +314,7 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', target));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[9]).toHaveTextContent('User Tags');
@@ -308,7 +351,7 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    const {baseElement} = render(<Detailspage id="46264" />);
+    const {baseElement} = render(<DetailsPage id="46264" />);
 
     const spans = baseElement.querySelectorAll('span');
     expect(spans[11]).toHaveTextContent('Permissions');
@@ -360,7 +403,7 @@ describe('Target Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('46264', target));
 
-    render(<Detailspage id="46264" />);
+    render(<DetailsPage id="46264" />);
 
     await wait();
 

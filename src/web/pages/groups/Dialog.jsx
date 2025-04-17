@@ -14,7 +14,7 @@ import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
-const Dialog = ({allUsers, grant_full, group, title, onClose, onSave}) => {
+const Dialog = ({allUsers, group, title, onClose, onSave}) => {
   const [_] = useTranslation();
   const is_edit = isDefined(group);
 
@@ -89,7 +89,6 @@ const Dialog = ({allUsers, grant_full, group, title, onClose, onSave}) => {
 
 Dialog.propTypes = {
   allUsers: PropTypes.array,
-  grant_full: PropTypes.oneOf(['0', '1']),
   group: PropTypes.model,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,

@@ -5,11 +5,10 @@
 
 import _ from 'gmp/locale';
 import React from 'react';
-import DownloadIcon from 'web/components/icon/DownloadIcon';
+import {DownloadIcon, TlsCertificateIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
-import TlsCertificateIcon from 'web/components/icon/TlsCertificateIcon';
 import Divider from 'web/components/layout/Divider';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -23,13 +22,14 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
+import EntityPage from 'web/entity/EntityPage';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import {goToList} from 'web/entity/navigation';
-import EntityPage, {Col} from 'web/entity/Page';
 import EntityPermissions from 'web/entity/Permissions';
 import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
@@ -44,7 +44,6 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/tlscertificates';
 import PropTypes from 'web/utils/PropTypes';
-
 const ToolBarIcons = ({
   entity,
   onTlsCertificateDeleteClick,

@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import Detailspage, {ToolBarIcons} from 'web/pages/overrides/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/overrides/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/overrides';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
@@ -106,7 +106,7 @@ const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe('Override detailspage tests', () => {
+describe('Override DetailsPage tests', () => {
   test('should render full /DetailsPage', () => {
     const gmp = {
       override: {
@@ -139,7 +139,7 @@ describe('Override detailspage tests', () => {
     );
 
     const {baseElement} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
     );
 
     expect(baseElement).toHaveTextContent('override text');
@@ -159,10 +159,10 @@ describe('Override detailspage tests', () => {
       'ID:6d00d22f-551b-4fbe-8215-d8615eff73ea',
     );
     expect(baseElement).toHaveTextContent(
-      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+      'Created:Wed, Dec 23, 2020 3:14 PM Central European Standard',
     );
     expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+      'Modified:Mon, Jan 4, 2021 12:54 PM Central European Standard',
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
@@ -238,7 +238,7 @@ describe('Override detailspage tests', () => {
     );
 
     const {baseElement} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -282,7 +282,7 @@ describe('Override detailspage tests', () => {
     );
 
     const {baseElement} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+      <DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -340,7 +340,7 @@ describe('Override detailspage tests', () => {
       ),
     );
 
-    render(<Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />);
+    render(<DetailsPage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />);
 
     await wait();
 

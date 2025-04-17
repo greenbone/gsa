@@ -10,11 +10,11 @@ import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
 import {
   clickElement,
-  getPowerFilter,
+  queryPowerFilter,
   getSelectElement,
   getSelectItemElementsForSelect,
-  getTableFooter,
-  getTextInputs,
+  queryTableFooter,
+  queryTextInputs,
   testBulkDeleteDialog,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
@@ -24,7 +24,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-
 // setup
 
 const capabilities = new Capabilities(['everything']);
@@ -133,8 +132,8 @@ beforeEach(() => {
   });
 });
 
-describe('Host listpage tests', () => {
-  test('should render full host listpage', async () => {
+describe('Host ListPage tests', () => {
+  test('should render full host ListPage', async () => {
     const gmp = {
       hosts: {
         get: getHosts,
@@ -184,9 +183,9 @@ describe('Host listpage tests', () => {
 
     await wait();
 
-    const powerFilter = getPowerFilter();
+    const powerFilter = queryPowerFilter();
     const select = getSelectElement(powerFilter);
-    const inputs = getTextInputs(powerFilter);
+    const inputs = queryTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
@@ -235,8 +234,10 @@ describe('Host listpage tests', () => {
     expect(row[1]).toHaveTextContent('bar');
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('123.456.789.10');
-    expect(row[1]).toHaveTextContent('10.0 (Critical)');
-    expect(row[1]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM CEST');
+    expect(row[1]).toHaveTextContent('10.0 (High)');
+    expect(row[1]).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    );
 
     const osImage = baseElement.querySelector('img');
     expect(osImage).toHaveAttribute('src', '/img/os_linux.svg');
@@ -321,16 +322,12 @@ describe('Host listpage tests', () => {
 
     // export page contents
     fireEvent.click(screen.getAllByTitle('Export page contents')[0]);
-
     await wait();
-
     expect(exportByFilter).toHaveBeenCalled();
 
     // delete page contents
     fireEvent.click(screen.getAllByTitle('Delete page contents')[0]);
-
     await wait();
-
     testBulkDeleteDialog(screen, deleteByFilter);
   });
 
@@ -395,7 +392,7 @@ describe('Host listpage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[1]);
@@ -470,7 +467,7 @@ describe('Host listpage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = getTableFooter();
+    const tableFooter = queryTableFooter();
     const select = getSelectElement(tableFooter);
     const selectItems = await getSelectItemElementsForSelect(select);
     await clickElement(selectItems[2]);
@@ -485,7 +482,7 @@ describe('Host listpage tests', () => {
   });
 });
 
-describe('Host listpage ToolBarIcons test', () => {
+describe('Host ListPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleCreateHostClick = testing.fn();
 
@@ -503,18 +500,18 @@ describe('Host listpage ToolBarIcons test', () => {
       <ToolBarIcons onHostCreateClick={handleCreateHostClick} />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
-    expect(icons.length).toBe(2);
-
-    expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('help-icon')).toHaveAttribute(
+      'title',
+      'Help: Hosts',
+    );
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/managing-assets.html#managing-hosts',
     );
 
-    expect(screen.getAllByTitle('New Host')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('new-icon')).toHaveAttribute('title', 'New Host');
   });
 
   test('should call click handlers', () => {
@@ -550,10 +547,6 @@ describe('Host listpage ToolBarIcons test', () => {
     });
 
     render(<ToolBarIcons onHostCreateClick={handleCreateHostClick} />);
-
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons.length).toBe(1);
 
     expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
     expect(screen.queryByTitle('New Host')).not.toBeInTheDocument();

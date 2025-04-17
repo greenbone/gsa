@@ -10,10 +10,10 @@ import {connect} from 'react-redux';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
+import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/Row';
-import {Col} from 'web/entity/Page';
 import {
   loadEntity as loadTlsCertificate,
   selector as tlsCertificateSelector,
@@ -23,7 +23,7 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 
-const TlsCertificateDetails = ({entity, links = true}) => {
+const TlsCertificateDetails = ({entity}) => {
   return (
     <Layout flex="column" grow="1">
       <InfoTable>
@@ -86,7 +86,6 @@ const TlsCertificateDetails = ({entity, links = true}) => {
 
 TlsCertificateDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
