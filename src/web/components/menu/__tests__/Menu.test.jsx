@@ -5,8 +5,8 @@
 
 import {describe, expect, test} from '@gsa/testing';
 import React from 'react';
-import {rendererWith, screen} from 'web/utils/Testing';
 import Menu from 'web/components/menu/Menu';
+import {rendererWith, screen} from 'web/utils/Testing';
 
 const renderMenuWith = ({capabilities, gmpSettings}) => {
   const gmp = {
