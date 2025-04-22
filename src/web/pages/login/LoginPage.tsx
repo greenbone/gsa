@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {notifications} from '@mantine/notifications';
 import Rejection from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
@@ -19,7 +20,10 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginForm from 'web/pages/login/LoginForm';
-import CommunityFeedUsageNotification from 'web/pages/login/notifications/CommunityFeedUsageNotification';
+import {
+  NOTIFICATION_SHOWN,
+  NOTIFICATION_SHOWN_KEY,
+} from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 import {
   setSessionTimeout,
   setUsername,
@@ -85,6 +89,8 @@ const LoginPage: React.FC = () => {
     };
 
     void checkLoginStatus();
+
+    notifications.clean();
   }, [isLoggedIn, navigate]);
 
   const login = async (username: string, password: string) => {
@@ -128,7 +134,7 @@ const LoginPage: React.FC = () => {
       const isCommunityFeed: boolean = await gmp.feedstatus.isCommunityFeed();
 
       if (isCommunityFeed) {
-        CommunityFeedUsageNotification();
+        sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
       }
     } catch (error) {
       log.error(error);
