@@ -832,9 +832,10 @@ const mapStateToProps = (rootState, {params}) => {
 };
 
 export default compose(
+  withTranslation,
   withGmp,
   withDialogNotification,
   withDownload,
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(ReportDetailsWrapper));
+  connect(mapStateToProps, mapDispatchToProps)
+)(ReportDetailsWrapper);

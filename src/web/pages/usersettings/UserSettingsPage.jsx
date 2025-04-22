@@ -1142,5 +1142,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
+  withTranslation,
   connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(UserSettings));
+)(UserSettings);

@@ -632,7 +632,4 @@ const mapDispatchToProps = (dispatch, {gmpname, gmp}) => {
   };
 };
 
-export default compose(
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(EntitiesContainer));
+export default compose(withTranslation, withRouter, connect(mapStateToProps, mapDispatchToProps))(EntitiesContainer);

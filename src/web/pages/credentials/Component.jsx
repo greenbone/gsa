@@ -220,7 +220,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   _: PropTypes.func.isRequired,
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(CredentialsComponent));
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(CredentialsComponent);

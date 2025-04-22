@@ -288,7 +288,4 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(AuditDetails));
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(AuditDetails);

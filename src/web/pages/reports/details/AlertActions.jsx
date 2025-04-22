@@ -227,7 +227,8 @@ const mapStateToProps = rootState => {
 };
 
 export default compose(
+  withTranslation,
   withGmp,
   withCapabilities,
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(AlertActions));
+  connect(mapStateToProps, mapDispatchToProps)
+)(AlertActions);

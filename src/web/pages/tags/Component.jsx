@@ -310,7 +310,4 @@ TagComponent.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(withTranslation(TagComponent));
+export default compose(withTranslation, withGmp, withCapabilities)(TagComponent);

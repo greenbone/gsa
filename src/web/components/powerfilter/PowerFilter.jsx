@@ -269,4 +269,4 @@ PowerFilter.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-export default compose(withCapabilities, withGmp)(withTranslation(PowerFilter));
+export default compose(withTranslation, withCapabilities, withGmp)(PowerFilter);

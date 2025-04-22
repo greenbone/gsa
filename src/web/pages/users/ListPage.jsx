@@ -242,11 +242,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadAll: () => dispatch(loadAllEntities(gmp)()),
 });
 
-export default compose(
-  withGmp,
-  withEntitiesContainer('user', {
-    entitiesSelector,
-    loadEntities,
-  }),
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(UsersPage));
+export default compose(withTranslation, withGmp, withEntitiesContainer('user', {
+  entitiesSelector,
+  loadEntities,
+}), connect(mapStateToProps, mapDispatchToProps))(UsersPage);

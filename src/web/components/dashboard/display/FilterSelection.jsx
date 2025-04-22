@@ -140,7 +140,4 @@ const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
   loadFilters: () => dispatch(loadEntities(gmp)(filtersFilter)),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(FilterSelection));
+export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(FilterSelection);

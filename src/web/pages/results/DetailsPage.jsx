@@ -511,10 +511,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
-export default compose(
-  withEntityContainer('result', {
-    entitySelector: selector,
-    load: loadEntity,
-  }),
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(Page));
+export default compose(withTranslation, withEntityContainer('result', {
+  entitySelector: selector,
+  load: loadEntity,
+}), connect(mapStateToProps, mapDispatchToProps))(Page);

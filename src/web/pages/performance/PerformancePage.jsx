@@ -363,7 +363,8 @@ const mapStateToProps = rootState => {
 };
 
 export default compose(
+  withTranslation,
   withGmp,
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
-)(withTranslation(PerformancePage));
+  connect(mapStateToProps, mapDispatchToProps)
+)(PerformancePage);
