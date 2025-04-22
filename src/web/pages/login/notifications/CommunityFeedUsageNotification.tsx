@@ -5,7 +5,7 @@
 
 import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {updateNotification} from '@mantine/notifications';
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -17,7 +17,6 @@ const CommunityFeedUsageNotification: React.FC = () => {
   const NOTIFICATION_ID = 'communityFeedNotification';
   const [_] = useTranslation();
   const [language] = useLanguage();
-  const hasShownRef = useRef(false);
 
   const notificationMessage = useMemo(
     () => (
@@ -47,16 +46,15 @@ const CommunityFeedUsageNotification: React.FC = () => {
     const hasBeenShown =
       sessionStorage.getItem(NOTIFICATION_SHOWN_KEY) === NOTIFICATION_SHOWN;
 
-    if (!hasBeenShown && !hasShownRef.current) {
+    if (!hasBeenShown) {
       showNotification({
         id: NOTIFICATION_ID,
         autoClose: NEVER_AUTO_CLOSE,
         title: notificationMessage,
         message: '',
       });
-      hasShownRef.current = true;
       sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
-    } else if (hasShownRef.current) {
+    } else if (hasBeenShown) {
       updateNotification({
         id: NOTIFICATION_ID,
         autoClose: NEVER_AUTO_CLOSE,

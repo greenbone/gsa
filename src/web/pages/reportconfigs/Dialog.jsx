@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import _ from 'gmp/locale';
 import {parseBoolean} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -22,7 +23,6 @@ import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/Table';
-import withTranslation from 'web/hooks/withTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
@@ -257,8 +257,6 @@ class Dialog extends React.Component {
   }
 
   render() {
-    const {_} = this.props;
-
     const {
       formats,
       reportConfig,
@@ -383,7 +381,6 @@ Dialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
-  _: PropTypes.func.isRequired,
 };
 
-export default withGmp(withTranslation(Dialog));
+export default withGmp(Dialog);

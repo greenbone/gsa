@@ -493,4 +493,4 @@ class DataDisplay<
   }
 }
 
-export default withTranslation(DataDisplay);
+export default withTranslation(DataDisplay) as unknown as typeof DataDisplay;

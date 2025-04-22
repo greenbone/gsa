@@ -48,7 +48,7 @@ interface RendererOptions {
   router?: boolean;
   route?: string;
   showLocation?: boolean;
-  language?: string;
+  language?: string | Record<string, unknown>;
 }
 
 export async function wait(ms: number = 0) {

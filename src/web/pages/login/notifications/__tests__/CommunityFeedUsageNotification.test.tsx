@@ -4,12 +4,26 @@
  */
 
 import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
-import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import {describe, test, expect, beforeEach, testing} from '@gsa/testing';
+import {updateNotification} from '@mantine/notifications';
 import {vi} from 'vitest';
-import CommunityFeedUsageNotification from 'web/pages/login/notifications/CommunityFeedUsageNotification';
+import CommunityFeedUsageNotification, {
+  NOTIFICATION_SHOWN_KEY,
+  NOTIFICATION_SHOWN,
+} from 'web/pages/login/notifications/CommunityFeedUsageNotification';
+import {render} from 'web/utils/Testing';
 
 vi.mock('@greenbone/opensight-ui-components-mantinev7', () => ({
   showNotification: vi.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  ThemeProvider: ({children}) => children,
+  theme: {
+    colorScheme: 'light',
+  },
+}));
+
+vi.mock('@mantine/notifications', () => ({
+  updateNotification: vi.fn(),
 }));
 
 describe('CommunityFeedUsageNotification', () => {
@@ -18,28 +32,52 @@ describe('CommunityFeedUsageNotification', () => {
     sessionStorage.clear();
   });
 
-  test('Notification should be shown on login if not already shown', () => {
-    sessionStorage.setItem('communityFeedNotificationShown', 'false');
+  test('shows notification if it has not been shown before', () => {
+    render(<CommunityFeedUsageNotification />);
 
-    CommunityFeedUsageNotification();
+    const notificationTitle =
+      'You are currently using the free Greenbone Community Feed - this shows only a few vulnerabilities for business critical enterprise software such as MS Exchange, Cisco, VMware, Citrix and many more. Over 60% of all relevant exploits remain hidden.';
 
-    expect(showNotification).toHaveBeenCalledTimes(1);
-    expect(showNotification).toHaveBeenCalledWith({
-      autoClose: false,
-      title: expect.anything(),
-      message: '',
-    });
+    expect(showNotification).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'communityFeedNotification',
+        autoClose: false,
+        title: expect.anything(),
+        message: '',
+      }),
+    );
 
-    expect(sessionStorage.getItem('communityFeedNotificationShown')).toBe(
-      'true',
+    const mockCalls = vi.mocked(showNotification, {partial: true}).mock.calls;
+    const [notificationArgs] = mockCalls[0];
+    const {title} = notificationArgs;
+    const {getByText} = render(title);
+    expect(getByText(notificationTitle)).toBeVisible();
+
+    expect(sessionStorage.getItem(NOTIFICATION_SHOWN_KEY)).toBe(
+      NOTIFICATION_SHOWN,
     );
   });
 
-  test('Notification should not be shown if already shown', () => {
-    sessionStorage.setItem('communityFeedNotificationShown', 'true');
+  test('updates notification if it has already been shown', () => {
+    sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
 
-    CommunityFeedUsageNotification();
+    render(<CommunityFeedUsageNotification />);
 
-    expect(showNotification).not.toHaveBeenCalled();
+    expect(updateNotification).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'communityFeedNotification',
+        autoClose: false,
+        title: expect.anything(),
+        message: '',
+      }),
+    );
+  });
+
+  test('does not show or update notification if already handled in the same session', () => {
+    sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
+
+    render(<CommunityFeedUsageNotification />);
+
+    expect(showNotification).toHaveBeenCalledTimes(0);
   });
 });
