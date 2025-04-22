@@ -3,43 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect} from '@gsa/testing';
 import useLanguage from 'web/hooks/useLanguage';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith, wait} from 'web/utils/Testing';
 
 describe('useLanguage', () => {
   test('should return the current language and setLanguage function from context', () => {
-    const mockLanguage = 'en';
-    const mockSetLanguage = testing.fn();
-
-    const {renderHook} = rendererWith({
-      language: {
-        language: mockLanguage,
-        setLanguage: mockSetLanguage,
-      },
-    });
+    const {renderHook} = rendererWith();
 
     const {result} = renderHook(() => useLanguage());
 
-    expect(result.current[0]).toBe(mockLanguage);
-    expect(result.current[1]).toBe(mockSetLanguage);
+    expect(result.current[0]).toBe('en');
   });
 
-  test('should call setLanguage when the setter function is invoked', () => {
-    const mockSetLanguage = testing.fn();
-
-    const {renderHook} = rendererWith({
-      language: {
-        language: 'en',
-        setLanguage: mockSetLanguage,
-      },
-    });
+  test('should call setLanguage when the setter function is invoked', async () => {
+    const {renderHook} = rendererWith();
 
     const {result} = renderHook(() => useLanguage());
 
     const setLanguage = result.current[1];
-    setLanguage('fr');
+    const newLanguage = 'fr';
 
-    expect(mockSetLanguage).toHaveBeenCalledWith('fr');
+    setLanguage(newLanguage);
+
+    await wait();
+
+    expect(result.current[0]).toBe(newLanguage);
   });
 });

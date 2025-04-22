@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing, assert} from '@gsa/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
 import {
   FeedStatus,
   NVT_FEED,
@@ -11,7 +11,6 @@ import {
   feedStatusRejection,
 } from 'gmp/commands/feedstatus';
 import {createResponse, createHttp} from 'gmp/commands/testing';
-import GmpHttp from 'gmp/http/gmp';
 import Rejection from 'gmp/http/rejection';
 
 describe('FeedStatusCommand tests', () => {

@@ -10,9 +10,10 @@ import {StartIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-const TaskStartIcon = ({task, usageType = 'task', onClick}) => {
+const TaskStartIcon = ({task, usageType, onClick}) => {
   const [_] = useTranslation();
-  usageType = _(usageType);
+  const defaultUsageType = _('task');
+  usageType = usageType ? _(usageType) : defaultUsageType;
   const capabilities = useCapabilities();
 
   if (task.isRunning() || task.isContainer()) {

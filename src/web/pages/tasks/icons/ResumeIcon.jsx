@@ -10,10 +10,13 @@ import {ResumeIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-const TaskResumeIcon = ({task, usageType = 'task', onClick}) => {
+
+const TaskResumeIcon = ({task, usageType, onClick}) => {
   const [_] = useTranslation();
-  usageType = _(usageType);
+  const defaultUsageType = _('task');
+  usageType = usageType ? _(usageType) : defaultUsageType;
   const capabilities = useCapabilities();
+
   if (task.isQueued()) {
     return null;
   }

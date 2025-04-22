@@ -26,7 +26,7 @@ const TagsDialog = ({
   tagId: id,
   name,
   tags,
-  title = 'Add Tag',
+  title,
   value = '',
   onClose,
   onErrorClose,
@@ -35,7 +35,8 @@ const TagsDialog = ({
   onSave,
 }) => {
   const [_] = useTranslation();
-  title = _(title);
+  const defaultTitle = _('Add Tag');
+  title = title ? _(title) : defaultTitle;
 
   return (
     <SaveDialog

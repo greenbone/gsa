@@ -25,11 +25,12 @@ interface ObserverIconProps<TEntity extends ObserverEntity> {
 const ObserverIcon = <TEntity extends ObserverEntity>({
   entity,
   userName,
-  displayName = 'Entity',
+  displayName,
   ['data-testid']: dataTestId = 'observer-icon',
 }: ObserverIconProps<TEntity>) => {
   const [_] = useTranslation();
-  displayName = _(displayName);
+  const defaultDisplayName = _('Entity');
+  displayName = displayName ? _(displayName) : defaultDisplayName;
 
   const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
 
