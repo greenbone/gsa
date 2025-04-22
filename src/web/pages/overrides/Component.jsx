@@ -21,6 +21,7 @@ import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import OverrideDialog from 'web/pages/overrides/Dialog';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {
   FALSE_POSITIVE_VALUE,
@@ -277,4 +278,4 @@ OverrideComponent.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-export default withGmp(withTranslation(OverrideComponent));
+export default compose(withGmp, withTranslation)(OverrideComponent);

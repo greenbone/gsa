@@ -6,6 +6,7 @@
 import React from 'react';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {withTextOnly} from 'web/components/link/Link';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withTranslation from 'web/utils/withTranslation';
 
@@ -82,4 +83,4 @@ ExternalLink.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-export default withTextOnly(withTranslation(ExternalLink));
+export default compose(withTextOnly, withTranslation)(ExternalLink);

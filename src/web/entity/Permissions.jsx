@@ -20,6 +20,7 @@ import MultiplePermissionDialog, {
   INCLUDE_RELATED_RESOURCES,
 } from 'web/pages/permissions/MultipleDialog';
 import PermissionsTable from 'web/pages/permissions/Table';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
@@ -245,8 +246,7 @@ PermissionsBase.propTypes = {
   onPermissionEditClick: PropTypes.func.isRequired,
   _: PropTypes.func.isRequired,
 };
-
-const Permissions = withGmp(withTranslation(PermissionsBase));
+const Permissions = compose(withGmp, withTranslation)(PermissionsBase);
 
 const EntityPermissions = ({
   entity,

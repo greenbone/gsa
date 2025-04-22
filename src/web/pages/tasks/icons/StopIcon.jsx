@@ -10,8 +10,8 @@ import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 const TaskStopIcon = ({capabilities, size, task, usageType, onClick}) => {
   const [_] = useTranslation();
-  const defaultUsageType = _('task');
-  usageType = usageType ? _(usageType) : defaultUsageType;
+  usageType = usageType ?? _('task');
+
   if ((task.isRunning() || task.isQueued()) && !task.isContainer()) {
     if (
       !capabilities.mayOp('stop_task') ||
