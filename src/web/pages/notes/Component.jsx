@@ -20,6 +20,7 @@ import {shorten} from 'gmp/utils/string';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import NoteDialog from 'web/pages/notes/Dialog';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
@@ -235,4 +236,4 @@ NoteComponent.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-export default withGmp(withTranslation(NoteComponent));
+export default compose(withGmp, withTranslation)(NoteComponent);

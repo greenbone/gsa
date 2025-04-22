@@ -20,7 +20,7 @@ import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
-import {cvssConfigData} from 'web/pages/extras/cvssV4/cvssConfig';
+import {createCvssConfigData} from 'web/pages/extras/cvssV4/cvssConfig';
 import MetricsGroups from 'web/pages/extras/cvssV4/MetricsGroups';
 const StyledTextField = styled(TextField)`
   width: 180px;
@@ -31,6 +31,8 @@ const cvssV4Prefix = 'CVSS:4.0/';
 const CvssV4Calculator = () => {
   const [_] = useTranslation();
   const [searchParams] = useSearchParams();
+
+  const cvssConfigData = useMemo(() => createCvssConfigData(_), [_]);
 
   const initialState = useMemo(() => {
     return expectedMetricOptionsOrdered.reduce((obj, item) => {

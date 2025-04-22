@@ -29,8 +29,7 @@ const ObserverIcon = <TEntity extends ObserverEntity>({
   ['data-testid']: dataTestId = 'observer-icon',
 }: ObserverIconProps<TEntity>) => {
   const [_] = useTranslation();
-  const defaultDisplayName = _('Entity');
-  displayName = displayName ? _(displayName) : defaultDisplayName;
+  displayName = displayName ?? _('Entity');
 
   const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
 

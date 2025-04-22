@@ -4,7 +4,6 @@
  */
 
 import PropTypes from 'prop-types';
-import useTranslation from 'web/hooks/useTranslation';
 import Metrics from 'web/pages/extras/cvssV4/Metrics';
 
 const MetricsGroups = ({
@@ -12,7 +11,6 @@ const MetricsGroups = ({
   selectedOptions,
   handleOptionChange,
 }) => {
-  const [_] = useTranslation();
   let lastMetricType = null;
   return Object.entries(cvssConfigData).flatMap(
     ([metricType, metricGroups]) => {
@@ -22,8 +20,8 @@ const MetricsGroups = ({
           lastMetricType = metricType;
           return (
             <section key={`${metricGroupName}-${metricType}`}>
-              {isDifferentMetricType && <h3>{_(metricType)}</h3>}
-              {metricType !== metricGroupName && <h4>{_(metricGroupName)}</h4>}
+              {isDifferentMetricType && <h3>{metricType}</h3>}
+              {metricType !== metricGroupName && <h4>{metricGroupName}</h4>}
               <Metrics
                 handleOptionChange={handleOptionChange}
                 metrics={metrics}

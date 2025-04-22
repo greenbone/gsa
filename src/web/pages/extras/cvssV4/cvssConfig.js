@@ -3,340 +3,340 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export const cvssConfigData = {
-  'Base Metrics': {
-    'Exploitability Metrics': {
+export const createCvssConfigData = _ => ({
+  [_('Base Metrics')]: {
+    [_('Exploitability Metrics')]: {
       AV: {
         default: 'N',
-        name: 'Attack Vector',
+        name: _('Attack Vector'),
         options: {
-          N: 'Network',
-          A: 'Adjacent',
-          L: 'Local',
-          P: 'Physical',
+          N: _('Network'),
+          A: _('Adjacent'),
+          L: _('Local'),
+          P: _('Physical'),
         },
       },
       AC: {
-        name: 'Attack Complexity',
+        name: _('Attack Complexity'),
         default: 'L',
         options: {
-          L: 'Low',
-          H: 'High',
+          L: _('Low'),
+          H: _('High'),
         },
       },
       AT: {
         default: 'N',
-        name: 'Attack Requirements',
+        name: _('Attack Requirements'),
         options: {
-          N: 'None',
-          P: 'Present',
+          N: _('None'),
+          P: _('Present'),
         },
       },
       PR: {
         default: 'N',
-        name: 'Privileges Required',
+        name: _('Privileges Required'),
         options: {
-          N: 'None',
-          L: 'Low',
-          H: 'High',
+          N: _('None'),
+          L: _('Low'),
+          H: _('High'),
         },
       },
       UI: {
         default: 'N',
-        name: 'User Interaction',
+        name: _('User Interaction'),
         options: {
-          N: 'None',
-          P: 'Passive',
-          A: 'Active',
+          N: _('None'),
+          P: _('Passive'),
+          A: _('Active'),
         },
       },
     },
-    'Vulnerable System Impact Metrics': {
+    [_('Vulnerable System Impact Metrics')]: {
       VC: {
         default: 'N',
-        name: 'Confidentiality Impact',
+        name: _('Confidentiality Impact'),
         options: {
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
       VI: {
         default: 'N',
-        name: 'Integrity Impact',
+        name: _('Integrity Impact'),
         options: {
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
       VA: {
         default: 'N',
-        name: 'Availability Impact',
+        name: _('Availability Impact'),
         options: {
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
     },
-    'Subsequent System Impact Metrics': {
+    [_('Subsequent System Impact Metrics')]: {
       SC: {
         default: 'N',
-        name: 'Confidentiality Impact',
+        name: _('Confidentiality Impact'),
         options: {
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
       SI: {
         default: 'N',
-        name: 'Integrity Impact',
+        name: _('Integrity Impact'),
         options: {
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
       SA: {
         default: 'N',
-        name: 'Availability Impact',
+        name: _('Availability Impact'),
         options: {
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
     },
   },
-  'Supplemental Metrics': {
-    'Supplemental Metrics': {
+  [_('Supplemental Metrics')]: {
+    [_('Supplemental Metrics')]: {
       S: {
         default: 'X',
-        name: 'Safety',
+        name: _('Safety'),
         options: {
-          X: 'Not Defined',
-          N: 'Negligible',
-          P: 'Present',
+          X: _('Not Defined'),
+          N: _('Negligible'),
+          P: _('Present'),
         },
       },
       AU: {
         default: 'X',
-        name: 'Automatable',
+        name: _('Automatable'),
         options: {
-          X: 'Not Defined',
-          N: 'No',
-          Y: 'Yes',
+          X: _('Not Defined'),
+          N: _('No'),
+          Y: _('Yes'),
         },
       },
       R: {
         default: 'X',
-        name: 'Recovery',
+        name: _('Recovery'),
         options: {
-          X: 'Not Defined',
-          A: 'Automatic',
-          U: 'User',
-          I: 'Irrecoverable',
+          X: _('Not Defined'),
+          A: _('Automatic'),
+          U: _('User'),
+          I: _('Irrecoverable'),
         },
       },
       V: {
         default: 'X',
-        name: 'Value Density',
+        name: _('Value Density'),
         options: {
-          X: 'Not Defined',
-          D: 'Diffuse',
-          C: 'Concentrated',
+          X: _('Not Defined'),
+          D: _('Diffuse'),
+          C: _('Concentrated'),
         },
       },
       RE: {
         default: 'X',
-        name: 'Vulnerability Response Effort',
+        name: _('Vulnerability Response Effort'),
         options: {
-          X: 'Not Defined',
-          L: 'Low',
-          M: 'Moderate',
-          H: 'High',
+          X: _('Not Defined'),
+          L: _('Low'),
+          M: _('Moderate'),
+          H: _('High'),
         },
       },
       U: {
         default: 'X',
-        name: 'Provider Urgency',
+        name: _('Provider Urgency'),
         options: {
-          X: 'Not Defined',
-          Clear: 'Clear',
-          Green: 'Green',
-          Amber: 'Amber',
-          Red: 'Red',
+          X: _('Not Defined'),
+          Clear: _('Clear'),
+          Green: _('Green'),
+          Amber: _('Amber'),
+          Red: _('Red'),
         },
       },
     },
   },
-  'Environmental (Modified Base Metrics)': {
-    'Exploitability Metrics': {
+  [_('Environmental (Modified Base Metrics)')]: {
+    [_('Exploitability Metrics')]: {
       MAV: {
         default: 'X',
-        name: 'Attack Vector',
+        name: _('Attack Vector'),
         options: {
-          X: 'Not Defined',
-          N: 'Network',
-          A: 'Adjacent',
-          L: 'Local',
-          P: 'Physical',
+          X: _('Not Defined'),
+          N: _('Network'),
+          A: _('Adjacent'),
+          L: _('Local'),
+          P: _('Physical'),
         },
       },
       MAC: {
         default: 'X',
-        name: 'Attack Complexity',
+        name: _('Attack Complexity'),
         options: {
-          X: 'Not Defined',
-          L: 'Low',
-          H: 'High',
+          X: _('Not Defined'),
+          L: _('Low'),
+          H: _('High'),
         },
       },
       MAT: {
         default: 'X',
-        name: 'Attack Requirements',
+        name: _('Attack Requirements'),
         options: {
-          X: 'Not Defined',
-          N: 'None',
-          P: 'Present',
+          X: _('Not Defined'),
+          N: _('None'),
+          P: _('Present'),
         },
       },
       MPR: {
         default: 'X',
-        name: 'Privileges Required',
+        name: _('Privileges Required'),
         options: {
-          X: 'Not Defined',
-          N: 'None',
-          L: 'Low',
-          H: 'High',
+          X: _('Not Defined'),
+          N: _('None'),
+          L: _('Low'),
+          H: _('High'),
         },
       },
       MUI: {
         default: 'X',
-        name: 'User Interaction',
+        name: _('User Interaction'),
         options: {
-          X: 'Not Defined',
-          N: 'None',
-          P: 'Passive',
-          A: 'Active',
+          X: _('Not Defined'),
+          N: _('None'),
+          P: _('Passive'),
+          A: _('Active'),
         },
       },
     },
-    'Vulnerable System Impact Metrics': {
+    [_('Vulnerable System Impact Metrics')]: {
       MVC: {
         default: 'X',
-        name: 'Confidentiality Impact',
+        name: _('Confidentiality Impact'),
         options: {
-          X: 'Not Defined',
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          X: _('Not Defined'),
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
       MVI: {
         default: 'X',
-        name: 'Integrity Impact',
+        name: _('Integrity Impact'),
         options: {
-          X: 'Not Defined',
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          X: _('Not Defined'),
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
       MVA: {
         default: 'X',
-        name: 'Availability Impact',
+        name: _('Availability Impact'),
         options: {
-          X: 'Not Defined',
-          H: 'High',
-          L: 'Low',
-          N: 'None',
+          X: _('Not Defined'),
+          H: _('High'),
+          L: _('Low'),
+          N: _('None'),
         },
       },
     },
-    'Subsequent System Impact Metrics': {
+    [_('Subsequent System Impact Metrics')]: {
       MSC: {
         default: 'X',
-        name: 'Confidentiality Impact',
+        name: _('Confidentiality Impact'),
         options: {
-          X: 'Not Defined',
-          H: 'High',
-          L: 'Low',
-          N: 'Negligible',
+          X: _('Not Defined'),
+          H: _('High'),
+          L: _('Low'),
+          N: _('Negligible'),
         },
       },
       MSI: {
         default: 'X',
-        name: 'Integrity Impact',
+        name: _('Integrity Impact'),
         options: {
-          X: 'Not Defined',
-          S: 'Safety',
-          H: 'High',
-          L: 'Low',
-          N: 'Negligible',
+          X: _('Not Defined'),
+          S: _('Safety'),
+          H: _('High'),
+          L: _('Low'),
+          N: _('Negligible'),
         },
       },
       MSA: {
         default: 'X',
-        name: 'Availability Impact',
+        name: _('Availability Impact'),
         options: {
-          X: 'Not Defined',
-          S: 'Safety',
-          H: 'High',
-          L: 'Low',
-          N: 'Negligible',
+          X: _('Not Defined'),
+          S: _('Safety'),
+          H: _('High'),
+          L: _('Low'),
+          N: _('Negligible'),
         },
       },
     },
   },
-  'Environmental (Security Requirements)': {
-    'Environmental (Security Requirements)': {
+  [_('Environmental (Security Requirements)')]: {
+    [_('Environmental (Security Requirements)')]: {
       CR: {
         default: 'X',
-        name: 'Confidentiality Requirements',
+        name: _('Confidentiality Requirements'),
         options: {
-          X: 'Not Defined',
-          H: 'High',
-          M: 'Medium',
-          L: 'Low',
+          X: _('Not Defined'),
+          H: _('High'),
+          M: _('Medium'),
+          L: _('Low'),
         },
       },
       IR: {
         default: 'X',
-        name: 'Integrity Requirements',
+        name: _('Integrity Requirements'),
         options: {
-          X: 'Not Defined',
-          H: 'High',
-          M: 'Medium',
-          L: 'Low',
+          X: _('Not Defined'),
+          H: _('High'),
+          M: _('Medium'),
+          L: _('Low'),
         },
       },
       AR: {
         default: 'X',
-        name: 'Availability Requirements',
+        name: _('Availability Requirements'),
         options: {
-          X: 'Not Defined',
-          H: 'High',
-          M: 'Medium',
-          L: 'Low',
+          X: _('Not Defined'),
+          H: _('High'),
+          M: _('Medium'),
+          L: _('Low'),
         },
       },
     },
   },
-  'Threat Metrics': {
-    'Threat Metrics': {
+  [_('Threat Metrics')]: {
+    [_('Threat Metrics')]: {
       E: {
         default: 'X',
-        name: 'Exploit Maturity',
+        name: _('Exploit Maturity'),
         options: {
-          X: 'Not Defined',
-          A: 'Attacked',
-          P: 'POC',
-          U: 'Unreported',
+          X: _('Not Defined'),
+          A: _('Attacked'),
+          P: _('POC'),
+          U: _('Unreported'),
         },
       },
     },
   },
-};
+});

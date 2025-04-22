@@ -77,6 +77,7 @@ import {
   selector as taskSelector,
   loadEntity as loadTask,
 } from 'web/store/entities/tasks';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
@@ -519,4 +520,4 @@ export default withEntityContainer('task', {
   entitySelector: taskSelector,
   mapStateToProps,
   reloadInterval,
-})(withTranslation(Page));
+})(compose(withTranslation)(Page));

@@ -13,8 +13,7 @@ import PropTypes from 'web/utils/PropTypes';
 
 const TaskResumeIcon = ({task, usageType, onClick}) => {
   const [_] = useTranslation();
-  const defaultUsageType = _('task');
-  usageType = usageType ? _(usageType) : defaultUsageType;
+  usageType = usageType ?? _('task');
   const capabilities = useCapabilities();
 
   if (task.isQueued()) {

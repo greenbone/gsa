@@ -10,6 +10,7 @@ import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import HostDialog from 'web/pages/hosts/Dialog';
 import TargetComponent from 'web/pages/targets/Component';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 import withGmp from 'web/utils/withGmp';
@@ -184,7 +185,7 @@ HostComponent.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-HostComponent = withGmp(withTranslation(HostComponent));
+HostComponent = compose(withGmp, withTranslation)(HostComponent);
 
 const HostWithTargetComponent = ({
   onInteraction,

@@ -18,7 +18,7 @@ const CvssDisplay = ({
   filter,
   title,
   yLabel,
-  xLabel = 'Severity',
+  xLabel,
   onFilterChanged,
   ...props
 }) => {

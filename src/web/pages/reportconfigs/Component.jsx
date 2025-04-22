@@ -7,6 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
@@ -178,4 +179,4 @@ ReportConfigComponent.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-export default withGmp(withTranslation(ReportConfigComponent));
+export default compose(withGmp, withTranslation)(ReportConfigComponent);

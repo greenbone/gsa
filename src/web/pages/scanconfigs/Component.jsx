@@ -15,6 +15,7 @@ import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog
 import EditScanConfigDialog from 'web/pages/scanconfigs/EditDialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import ImportDialog from 'web/pages/scanconfigs/ImportDialog';
+import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
@@ -614,4 +615,4 @@ ScanConfigComponent.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-export default withGmp(withTranslation(ScanConfigComponent));
+export default compose(withGmp, withTranslation)(ScanConfigComponent);
