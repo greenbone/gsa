@@ -20,7 +20,7 @@ import GmpSettings, {
   DEFAULT_RELOAD_INTERVAL_INACTIVE,
   DEFAULT_TIMEOUT,
   DEFAULT_REPORT_RESULTS_THRESHOLD,
-  DEFAULT_TITLE
+  DEFAULT_VENDOR_TITLE
 } from 'gmp/gmpsettings';
 import {
   DEFAULT_SEVERITY_RATING,
@@ -85,7 +85,7 @@ describe('GmpSettings tests', () => {
     expect(settings.vendorVersion).toBeUndefined();
     expect(settings.vendorLabel).toBeUndefined();
 
-    expect(settings.title).toEqual(DEFAULT_TITLE);
+    expect(settings.vendorTitle).toEqual(DEFAULT_VENDOR_TITLE);
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', DEFAULT_LOG_LEVEL);
@@ -116,7 +116,7 @@ describe('GmpSettings tests', () => {
       timeout: 30000,
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
-      title: 'test title'
+      vendorTitle: 'test title'
     });
 
     expect(settings.apiProtocol).toEqual('http');
@@ -143,7 +143,7 @@ describe('GmpSettings tests', () => {
     expect(settings.username).toBeUndefined();
     expect(settings.vendorVersion).toEqual('foo');
     expect(settings.vendorLabel).toEqual('foo.bar');
-    expect(settings.title).toEqual('test title');
+    expect(settings.vendorTitle).toEqual('test title');
 
     expect(storage.setItem).toHaveBeenCalledTimes(2);
     expect(storage.setItem).toHaveBeenNthCalledWith(
@@ -194,7 +194,7 @@ describe('GmpSettings tests', () => {
     expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
-    expect(settings.title).toEqual(DEFAULT_TITLE);
+    expect(settings.vendorTitle).toEqual(DEFAULT_VENDOR_TITLE);
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
@@ -219,7 +219,7 @@ describe('GmpSettings tests', () => {
       username: 'bar',
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
-      title: 'test title',
+      vendorTitle: 'test title',
     });
     const settings = new GmpSettings(storage, {
       apiProtocol: 'http',
@@ -236,7 +236,7 @@ describe('GmpSettings tests', () => {
       timeout: 30000,
       vendorVersion: 'bar',
       vendorLabel: 'bar.foo',
-      title: 'title test',
+      vendorTitle: 'title test',
     });
 
     expect(settings.apiProtocol).toEqual('http');
@@ -258,7 +258,7 @@ describe('GmpSettings tests', () => {
     expect(settings.username).toEqual('bar');
     expect(settings.vendorVersion).toEqual('bar');
     expect(settings.vendorLabel).toEqual('bar.foo');
-    expect(settings.title).toEqual('title test');
+    expect(settings.vendorTitle).toEqual('title test');
 
     expect(storage.setItem).toHaveBeenCalledTimes(2);
     expect(storage.setItem).toHaveBeenNthCalledWith(
@@ -286,7 +286,7 @@ describe('GmpSettings tests', () => {
     expect(settings.token).toEqual('atoken');
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
-    expect(settings.title).toEqual(DEFAULT_TITLE);
+    expect(settings.vendorTitle).toEqual(DEFAULT_VENDOR_TITLE);
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');

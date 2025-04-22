@@ -15,7 +15,7 @@
       window.addEventListener('DOMContentLoaded', () => {
         try {
           const vendorLabel = config.vendorLabel;
-          const title = config.title
+          const vendorTitle = config.vendorTitle
 
           const match = vendorLabel?.match(/gsm-(\w+)_label\.svg/);
           if (match) {
@@ -23,9 +23,9 @@
             if (isNaN(labelPart)) {
               labelPart = labelPart.toUpperCase();
             }
-            document.title = `${title} - ${labelPart}`;
+            document.title = `${vendorTitle} - ${labelPart}`;
           } else {
-            document.title = title;
+            document.title = vendorTitle;
           }
         } catch (error) {}
       });
