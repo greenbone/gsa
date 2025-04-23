@@ -20,7 +20,6 @@ import GmpSettings, {
   DEFAULT_RELOAD_INTERVAL_INACTIVE,
   DEFAULT_TIMEOUT,
   DEFAULT_REPORT_RESULTS_THRESHOLD,
-  DEFAULT_VENDOR_TITLE
 } from 'gmp/gmpsettings';
 import {
   DEFAULT_SEVERITY_RATING,
@@ -84,8 +83,7 @@ describe('GmpSettings tests', () => {
     expect(settings.username).toBeUndefined();
     expect(settings.vendorVersion).toBeUndefined();
     expect(settings.vendorLabel).toBeUndefined();
-
-    expect(settings.vendorTitle).toEqual(DEFAULT_VENDOR_TITLE);
+    expect(settings.vendorTitle).toBeUndefined();
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', DEFAULT_LOG_LEVEL);
@@ -116,7 +114,7 @@ describe('GmpSettings tests', () => {
       timeout: 30000,
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
-      vendorTitle: 'test title'
+      vendorTitle: 'test title',
     });
 
     expect(settings.apiProtocol).toEqual('http');
@@ -194,7 +192,6 @@ describe('GmpSettings tests', () => {
     expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
-    expect(settings.vendorTitle).toEqual(DEFAULT_VENDOR_TITLE);
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
@@ -286,7 +283,6 @@ describe('GmpSettings tests', () => {
     expect(settings.token).toEqual('atoken');
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
-    expect(settings.vendorTitle).toEqual(DEFAULT_VENDOR_TITLE);
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
@@ -329,6 +325,7 @@ describe('GmpSettings tests', () => {
       timeout: 30000,
       vendorVersion: 'foobar',
       vendorLabel: 'foo.bar',
+      vendorTitle: 'test title',
     });
 
     expect(() => {
@@ -396,6 +393,11 @@ describe('GmpSettings tests', () => {
       settings.vendorLabel = 'bar.foo';
     }).toThrow();
     expect(settings.vendorLabel).toEqual('foo.bar');
+    expect(() => {
+      // @ts-expect-error
+      settings.vendorTitle = 'foo title';
+    }).toThrow();
+    expect(settings.vendorTitle).toEqual('test title');
   });
 
   test('should only allow setting severity rating to CVSS 2 or 3', () => {
