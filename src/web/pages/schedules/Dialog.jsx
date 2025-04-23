@@ -211,8 +211,6 @@ const ScheduleDialog = ({
   };
 
   const handleTimeChange = (selectedTime, type) => {
-    const [hour, minute] = selectedTime.split(':').map(Number);
-
     if (type === 'startTime') {
       const newStartDate = date(selectedTime, 'HH:mm');
       if (newStartDate.isValid()) {
