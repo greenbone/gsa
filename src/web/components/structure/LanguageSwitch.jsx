@@ -8,7 +8,6 @@ import {
   FlagEnIcon,
 } from '@greenbone/opensight-ui-components-mantinev7';
 import {ActionIcon} from '@mantine/core';
-import i18next from 'i18next';
 import {useState} from 'react';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
@@ -26,7 +25,7 @@ const getNextLanguage = language =>
 
 const LanguageSwitch = () => {
   const [language, setLanguage] = useLanguage();
-  const [_] = useTranslation();
+  const [_, i18n] = useTranslation();
   const gmp = useGmp();
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
 
@@ -46,9 +45,9 @@ const LanguageSwitch = () => {
       setIsChangingLanguage(true);
 
       await new Promise((resolve, reject) => {
-        i18next.changeLanguage(newLanguage, err => {
+        i18n.changeLanguage(newLanguage, err => {
           if (err) {
-            reject(err);
+            reject(err instanceof Error ? err : new Error(err));
           } else {
             resolve();
           }
