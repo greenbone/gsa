@@ -6,6 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Logo from 'web/components/img/Greenbone';
+import PageTitle from 'web/components/layout/PageTitle';
 import useTranslation from 'web/hooks/useTranslation';
 
 const StyledLogo = styled(Logo)`
@@ -28,6 +29,7 @@ const PageNotFound = () => {
 
   return (
     <CenteredDiv>
+      <PageTitle title={_('Page Not Found')} />
       <h1>{_('Page Not Found.')}</h1>
       <StyledLogo />
       <p>

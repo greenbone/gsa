@@ -11,24 +11,5 @@
     <div id="app"></div>
     <div id="portals"></div>
     <script type="module" src="/src/index.jsx"></script>
-    <script>
-      window.addEventListener('DOMContentLoaded', () => {
-        try {
-          const vendorLabel = config.vendorLabel;
-          const vendorTitle = config.vendorTitle
-
-          const match = vendorLabel?.match(/gsm-(\w+)_label\.svg/);
-          if (match) {
-            let labelPart = match[1];
-            if (isNaN(labelPart)) {
-              labelPart = labelPart.toUpperCase();
-            }
-            document.title = `${vendorTitle} - ${labelPart}`;
-          } else {
-            document.title = vendorTitle;
-          }
-        } catch (error) {}
-      });
-    </script>
   </body>
 </html>
