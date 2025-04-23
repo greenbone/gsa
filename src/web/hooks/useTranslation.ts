@@ -35,6 +35,8 @@ const useTranslation = (): TranslationHook => {
   const [language] = useLanguage();
 
   return useMemo(() => {
+    // provide same interface as useTranslation from i18next
+    // this will allow to use react-i18next in future if required
     const ret = [_, i18next, true] as TranslationHook;
     ret.t = _;
     ret.i18n = i18next;
