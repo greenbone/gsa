@@ -19,7 +19,6 @@ export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-2
 export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
 export const DEFAULT_TIMEOUT = 300000; // 5 minutes
-export const DEFAULT_VENDOR_TITLE = 'Greenbone Security Assistant'
 
 interface GmpSettingsOptions {
   apiProtocol?: string;
@@ -100,7 +99,6 @@ class GmpSettings {
   reloadIntervalInactive: number;
   reportResultsThreshold: number;
   timeout: number;
-  vendorTitle!: string;
   readonly apiProtocol!: string;
   readonly apiServer!: string;
   readonly disableLoginForm!: boolean;
@@ -108,14 +106,15 @@ class GmpSettings {
   readonly enableEPSS!: boolean;
   readonly enableGreenboneSensor!: boolean;
   readonly enableKrb5!: boolean;
-  readonly guestPassword!: string;
-  readonly guestUsername!: string;
+  readonly guestPassword?: string;
+  readonly guestUsername?: string;
   readonly manualLanguageMapping!: LanguageMapping;
   readonly manualUrl!: string;
   readonly protocolDocUrl!: string;
   readonly severityRating!: SeverityRating;
-  readonly vendorLabel!: string;
-  readonly vendorVersion!: string;
+  readonly vendorLabel?: string;
+  readonly vendorTitle?: string;
+  readonly vendorVersion?: string;
 
   constructor(
     storage: GmpSettingsStorage = global.localStorage,
@@ -143,7 +142,7 @@ class GmpSettings {
       timeout = DEFAULT_TIMEOUT,
       vendorVersion,
       vendorLabel,
-      vendorTitle: vendorTitle = DEFAULT_VENDOR_TITLE
+      vendorTitle,
     } = options;
     let {
       apiProtocol = protocol,
@@ -195,7 +194,6 @@ class GmpSettings {
     this.reloadIntervalInactive = reloadIntervalInactive;
     this.reportResultsThreshold = reportResultsThreshold;
     this.timeout = timeout;
-    this.vendorTitle = vendorTitle
 
     setAndFreeze(this, 'apiProtocol', apiProtocol);
     setAndFreeze(this, 'apiServer', apiServer);
@@ -211,6 +209,7 @@ class GmpSettings {
     setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);
     setAndFreeze(this, 'severityRating', severityRating);
     setAndFreeze(this, 'vendorLabel', vendorLabel);
+    setAndFreeze(this, 'vendorTitle', vendorTitle);
     setAndFreeze(this, 'vendorVersion', vendorVersion);
   }
 
