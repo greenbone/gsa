@@ -13,6 +13,7 @@ import {useLocation, useNavigate} from 'react-router';
 import styled from 'styled-components';
 import Img from 'web/components/img/Img';
 import Layout from 'web/components/layout/Layout';
+import PageTitle from 'web/components/layout/PageTitle';
 import Footer from 'web/components/structure/Footer';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -163,6 +164,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <StyledLayout>
+      <PageTitle />
       <BackgroundTopImage src="login-top.svg" />
       <BackgroundBottomImage src="login-bottom.svg" />
       <LoginForm
