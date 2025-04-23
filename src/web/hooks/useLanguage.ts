@@ -6,7 +6,7 @@
 import {useContext} from 'react';
 import {LanguageContext} from 'web/components/provider/LanguageProvider';
 
-type LanguageHook = [string, (newLang: string) => void];
+type LanguageHook = [string, (lang: string) => Promise<void>];
 
 /**
  * Hook to access and update the current language

@@ -9,7 +9,6 @@ import {
 } from '@greenbone/opensight-ui-components-mantinev7';
 import {ActionIcon} from '@mantine/core';
 import {useState} from 'react';
-import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -18,15 +17,12 @@ const LANGUAGES = {
   DE: 'de',
 };
 
-const SETTING_ID_LOCALE = '6765549a-934e-11e3-b358-406186ea4fc5';
-
 const getNextLanguage = language =>
   language === LANGUAGES.EN ? LANGUAGES.DE : LANGUAGES.EN;
 
 const LanguageSwitch = () => {
   const [language, setLanguage] = useLanguage();
-  const [_, i18n] = useTranslation();
-  const gmp = useGmp();
+  const [_] = useTranslation();
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
 
   const nextLanguage = getNextLanguage(language);
@@ -41,25 +37,10 @@ const LanguageSwitch = () => {
     }
 
     try {
-      const newLanguage = nextLanguage;
       setIsChangingLanguage(true);
-
-      await new Promise((resolve, reject) => {
-        i18n.changeLanguage(newLanguage, err => {
-          if (err) {
-            reject(err instanceof Error ? err : new Error(err));
-          } else {
-            resolve();
-          }
-        });
-      });
-
-      gmp.setLocale(newLanguage);
-      setLanguage(newLanguage);
-
-      await gmp.user.saveSetting(SETTING_ID_LOCALE, newLanguage);
+      setLanguage(nextLanguage);
     } catch (error) {
-      console.error('Failed to change language:', error);
+      throw new Error(error);
     } finally {
       setIsChangingLanguage(false);
     }

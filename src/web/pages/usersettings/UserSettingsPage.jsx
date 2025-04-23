@@ -31,6 +31,7 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/Table';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import withLanguage from 'web/hooks/withLanguage';
 import SettingsDialog from 'web/pages/usersettings/Dialog';
 import {
   loadEntities as loadAlerts,
@@ -220,12 +221,13 @@ class UserSettings extends React.Component {
   async handleSaveSettings(data) {
     try {
       const {gmp} = this.props;
+      const {setLanguage} = this.props;
 
       const {userInterfaceLanguage = BROWSER_LANGUAGE, timezone} = data;
 
       await gmp.user.saveSettings(data).then(() => {
         this.closeDialog();
-        this.props.setLocale(
+        setLanguage(
           userInterfaceLanguage === BROWSER_LANGUAGE
             ? undefined
             : userInterfaceLanguage,
@@ -256,6 +258,7 @@ class UserSettings extends React.Component {
 
   render() {
     const {_} = this.props;
+    const {language} = this.props;
 
     const {activeTab, dialogVisible, disableEditIcon} = this.state;
     let {
@@ -434,9 +437,7 @@ class UserSettings extends React.Component {
                         </TableRow>
                         <TableRow title={userInterfaceLanguage.comment}>
                           <TableData>{_('User Interface Language')}</TableData>
-                          <TableData>
-                            {getLangNameByCode(userInterfaceLanguage.value)}
-                          </TableData>
+                          <TableData>{getLangNameByCode(language)}</TableData>
                         </TableRow>
                         <TableRow title={rowsPerPage.comment}>
                           <TableData>{_('Rows Per Page')}</TableData>
@@ -797,7 +798,7 @@ class UserSettings extends React.Component {
               timezone={timezone}
               tlsCertificatesFilter={tlsCertificatesFilter.id}
               userInterfaceDateFormat={userInterfaceDateFormat.value}
-              userInterfaceLanguage={userInterfaceLanguage.value}
+              userInterfaceLanguage={language}
               userInterfaceTimeFormat={userInterfaceTimeFormat.value}
               usersFilter={usersFilter.id}
               vulnerabilitiesFilter={vulnerabilitiesFilter.id}
@@ -875,11 +876,12 @@ UserSettings.propTypes = {
   rolesFilter: PropTypes.object,
   rowsPerPage: PropTypes.object,
   scanconfigs: PropTypes.array,
+  setLanguage: PropTypes.func,
+  language: PropTypes.string,
   scanners: PropTypes.array,
   scannersFilter: PropTypes.object,
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.object,
-  setLocale: PropTypes.func.isRequired,
   setTimezone: PropTypes.func.isRequired,
   tagsFilter: PropTypes.object,
   targets: PropTypes.array,
@@ -1135,7 +1137,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadAlert: id => dispatch(loadAlert(gmp)(id)),
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-  setLocale: locale => gmp.setLocale(locale),
   setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),
 });
 
@@ -1143,5 +1144,6 @@ export default compose(
   withGmp,
   withCapabilities,
   withTranslation,
+  withLanguage,
   connect(mapStateToProps, mapDispatchToProps),
 )(UserSettings);
