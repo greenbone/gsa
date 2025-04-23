@@ -9,23 +9,25 @@ import useGmp from 'web/hooks/useGmp';
 import {applianceTitle} from 'web/utils/applianceData';
 import PropTypes from 'web/utils/PropTypes';
 
-const PageTitle = ({title}) => {
+export const DEFAULT_TITLE = 'Greenbone Security Assistant';
+
+const PageTitle = ({title: pageTitle}) => {
   const gmp = useGmp();
   const vendorLabel = gmp?.settings?.vendorLabel || 'defaultVendorLabel';
-  const defaultTitle =
-    applianceTitle[vendorLabel] || 'Greenbone Security Assistant';
+  const vendorTitle = gmp?.settings?.vendorTitle;
+  const title = vendorTitle ?? applianceTitle[vendorLabel] ?? DEFAULT_TITLE;
 
   useEffect(() => {
-    if (isDefined(title)) {
-      document.title = defaultTitle + ' - ' + title;
+    if (isDefined(pageTitle)) {
+      document.title = title + ' - ' + pageTitle;
     } else {
-      document.title = defaultTitle;
+      document.title = title;
     }
 
     return () => {
-      document.title = defaultTitle;
+      document.title = title;
     };
-  }, [defaultTitle, title]);
+  }, [title, pageTitle]);
 
   return null;
 };
