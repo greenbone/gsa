@@ -127,4 +127,4 @@ jobs:
       - if: ${{ failure() && steps.check.outcome == 'failure' }}
         run: |
           echo "Translations are not up to date." >> $GITHUB_STEP_SUMMARY
-          echo 'Please run `npm run i18next-extract` and update the translation files.' >> $GITHUB_STEP_SUMMARY
+          echo 'Please run `npm run i18n-extract` and update the translation files.' >> $GITHUB_STEP_SUMMARY
