@@ -5,8 +5,8 @@
 
 import _ from 'gmp/locale';
 import i18next from 'i18next';
-import {useContext, useMemo} from 'react';
-import {LanguageContext} from 'web/components/provider/LanguageProvider';
+import {useMemo} from 'react';
+import useLanguage from 'web/hooks/useLanguage';
 
 type TranslationHook = {
   t: typeof _;
@@ -32,8 +32,7 @@ type TranslationHook = {
  * @returns Array|Object with the translation function, i18next instance and ready status
  */
 const useTranslation = (): TranslationHook => {
-  // Get the current language context to trigger component updates only when language changes
-  const {language} = useContext(LanguageContext);
+  const [language] = useLanguage();
 
   return useMemo(() => {
     const ret = [_, i18next, true] as TranslationHook;
