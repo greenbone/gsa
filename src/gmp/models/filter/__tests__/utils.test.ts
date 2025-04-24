@@ -5,20 +5,20 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-import {filter_string} from 'gmp/models/filter/utils';
+import {filterString} from 'gmp/models/filter/utils';
 
-describe('filter_string function tests', () => {
+describe('filterString function tests', () => {
   test('should return string for non Filter objects', () => {
-    expect(filter_string(1)).toEqual('1');
-    expect(filter_string('foo')).toEqual('foo');
-    expect(filter_string()).toEqual('undefined');
+    expect(filterString(1)).toEqual('1');
+    expect(filterString('foo')).toEqual('foo');
+    expect(filterString()).toEqual('undefined');
   });
 
   test('should return the filter string from Filters', () => {
     let filter = Filter.fromString('foo bar');
-    expect(filter_string(filter)).toEqual('foo bar');
+    expect(filterString(filter)).toEqual('foo bar');
 
     filter = Filter.fromString('name=foo and severity>1');
-    expect(filter_string(filter)).toEqual('name=foo and severity>1');
+    expect(filterString(filter)).toEqual('name=foo and severity>1');
   });
 });
