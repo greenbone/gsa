@@ -24,7 +24,7 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-type Element = Record<string, unknown>;
+export type Element = Record<string, unknown>;
 
 interface Permission {
   name: string;
