@@ -45,7 +45,7 @@ const notifyLanguageChangeListeners = (lang: string, initial = false): void => {
   }
 };
 
-const fallbackLng = 'en';
+export const DEFAULT_LANGUAGE = 'en';
 const whitelist = getLanguageCodes();
 
 // We need to use unknown type for the localStorage access since it's not properly typed in Node environment
@@ -54,7 +54,7 @@ const I18N_OPTIONS: InitOptions = {
   storage: typeof window !== 'undefined' ? window.localStorage : undefined,
   nsSeparator: false, // don't use a namespace separator in keys
   keySeparator: false as const, // don't use a key separator in keys
-  fallbackLng,
+  fallbackLng: DEFAULT_LANGUAGE,
   ns: ['gsa'], // use gsa as namespace
   defaultNS: 'gsa',
   fallbackNS: 'gsa',
@@ -129,8 +129,8 @@ export const setLocale = (lang?: string): void => {
 
     if (!whitelist.includes(lang) && !whitelist.includes(code)) {
       log.warn(`Unknown locale ${lang}. Possible locales are ${whitelist}
-        Falling back to ${fallbackLng}.`);
-      lang = fallbackLng;
+        Falling back to ${DEFAULT_LANGUAGE}.`);
+      lang = DEFAULT_LANGUAGE;
     }
   }
 
