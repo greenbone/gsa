@@ -7,6 +7,7 @@ import {
   getLocale,
   setLocale as changeGmpLocale,
   onLanguageChange,
+  DEFAULT_LANGUAGE,
 } from 'gmp/locale/lang';
 import {createContext, useState, useEffect, useCallback, useMemo} from 'react';
 import useGmp from 'web/hooks/useGmp';
@@ -32,7 +33,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 }) => {
   const gmp = useGmp();
   const [languageState, setLanguageState] = useState<string>(
-    getLocale() ?? 'en',
+    getLocale() ?? DEFAULT_LANGUAGE,
   );
 
   useEffect(() => {
@@ -54,7 +55,8 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       if (newLang !== languageState) {
         // Set locale in gmp
         changeGmpLocale(newLang);
-        gmp.setLocale(newLang);
+        // store language in the session
+        gmp.settings.locale = newLang;
 
         // Save the setting permanently
         // @ts-expect-error
