@@ -6,11 +6,16 @@
 import GmpHttp from 'gmp/http/gmp';
 import {UrlParams as Params, UrlParamValue as ParamValue} from 'gmp/http/utils';
 
-interface HttpCommandParams extends Params {
+export interface HttpCommandOptions {
+  extraParams?: Params;
+  includeDefaultParams?: boolean;
+}
+
+export interface HttpCommandParams extends Params {
   cmd?: string;
 }
-interface HttpCommandOptions {
-  extraParams?: Params;
+
+export interface HttpCommandParamsOptions {
   includeDefaultParams?: boolean;
 }
 
@@ -35,8 +40,8 @@ class HttpCommand {
   getParams(
     params: HttpCommandParams,
     extraParams: HttpCommandParams = {},
-    {includeDefaultParams = true} = {},
-  ) {
+    {includeDefaultParams = true}: HttpCommandParamsOptions = {},
+  ): HttpCommandParams {
     const defaultParams = includeDefaultParams ? this._params : undefined;
     return {
       ...defaultParams,
