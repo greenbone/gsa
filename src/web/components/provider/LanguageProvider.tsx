@@ -36,19 +36,39 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     getLocale() ?? DEFAULT_LANGUAGE,
   );
 
+  const handleLanguageChange = useCallback(
+    (newLang: string) => {
+      setLanguageState(currentLang => {
+        if (currentLang !== newLang) {
+          // store language in the session
+          gmp.settings.locale = newLang;
+
+          void (async () => {
+            try {
+              // @ts-expect-error
+              await gmp.user.saveSetting(SETTING_ID_LOCALE, newLang);
+            } catch (error) {
+              console.error('Error saving languagte setting:', error);
+            }
+          })();
+
+          return newLang;
+        }
+        return currentLang;
+      });
+    },
+    [gmp],
+  );
+
   useEffect(() => {
-    const unsubscribe = onLanguageChange((newLang: string) => {
-      setLanguageState(currentLang =>
-        currentLang !== newLang ? newLang : currentLang,
-      );
-    });
+    const unsubscribe = onLanguageChange(handleLanguageChange);
 
     return () => {
       if (unsubscribe) {
         unsubscribe();
       }
     };
-  }, []);
+  }, [handleLanguageChange]);
 
   const setLanguage = useCallback(
     async (newLang: string) => {

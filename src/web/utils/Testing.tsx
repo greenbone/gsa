@@ -24,14 +24,16 @@ import {
 import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
+import {DEFAULT_LANGUAGE, getLocale} from 'gmp/locale/lang';
 import {hasValue, isDefined} from 'gmp/utils/identity';
+import React from 'react';
 import {Provider} from 'react-redux';
 import {MemoryRouter, useLocation} from 'react-router';
 import {Store} from 'redux';
 import {StyleSheetManager} from 'styled-components';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import GmpContext from 'web/components/provider/GmpProvider';
-import LanguageProvider from 'web/components/provider/LanguageProvider';
+import {LanguageContext} from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
 import configureStore from 'web/store';
 
@@ -139,10 +141,36 @@ const TestingLicenseProvider = withProvider(
   'license',
   'value',
 )(LicenseProvider);
-const TestingLanguageProvider = withProvider(
-  'language',
-  'value',
-)(LanguageProvider);
+
+// Mock LanguageProvider that doesn't use GMP
+const TestingLanguageProvider = ({
+  children,
+  language,
+}: {
+  children: React.ReactNode;
+  language?: Record<string, unknown>;
+}) => {
+  // Use provided object or default
+  const languageValue = language || {
+    language: getLocale() ?? DEFAULT_LANGUAGE,
+    setLanguage: async () => {},
+  };
+
+  // Ensure we have required properties with correct types
+  const value = {
+    language:
+      (languageValue.language as string) ?? getLocale() ?? DEFAULT_LANGUAGE,
+    setLanguage:
+      (languageValue.setLanguage as (lang: string) => Promise<void>) ??
+      (async () => {}),
+  };
+
+  return (
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
 
 export const rendererWith = (
   {
@@ -184,7 +212,9 @@ export const rendererWith = (
       <TestingCapabilitiesProvider capabilities={capabilities}>
         <TestingLicenseProvider license={license}>
           <TestingStoreProvider store={store}>
-            <TestingLanguageProvider language={language}>
+            <TestingLanguageProvider
+              language={typeof language === 'string' ? {language} : language}
+            >
               {router ? (
                 <MemoryRouter initialEntries={[route]}>
                   {children}

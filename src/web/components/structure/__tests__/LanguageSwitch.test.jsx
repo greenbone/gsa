@@ -5,29 +5,42 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import LanguageSwitch from 'web/components/structure/LanguageSwitch';
-import {setLocale} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
-
-const mockSaveSetting = testing.fn();
-const mockSetLocale = testing.fn();
-
-const gmp = {
-  user: {
-    saveSetting: () => mockSaveSetting(),
-  },
-  setLocale: () => mockSetLocale(),
-};
 
 describe('LanguageSwitch', () => {
   test('should switch language and update settings', async () => {
-    const {render, store} = rendererWith({store: true, gmp});
-    store.dispatch(setLocale('en'));
-    const {getByRole} = render(<LanguageSwitch />);
+    const mockSetLanguage = testing.fn().mockResolvedValue(undefined);
 
-    const button = getByRole('button', {name: 'Switch language to German'});
+    const {render} = rendererWith({
+      language: {
+        language: 'en',
+        setLanguage: mockSetLanguage,
+      },
+    });
+
+    render(<LanguageSwitch />);
+
+    const button = screen.getByRole('button', {
+      name: 'Switch language to German',
+    });
 
     fireEvent.click(button);
 
-    expect(screen.getByTitle('Switch language to English')).toBeVisible();
+    expect(mockSetLanguage).toHaveBeenCalledWith('de');
+  });
+
+  test('should show English option when current language is German', async () => {
+    const mockSetLanguage = testing.fn().mockResolvedValue(undefined);
+
+    const {render} = rendererWith({
+      language: {
+        language: 'de',
+        setLanguage: mockSetLanguage,
+      },
+    });
+
+    render(<LanguageSwitch />);
+
+    expect(screen.getByTitle('Switch language to English')).toBeInTheDocument();
   });
 });

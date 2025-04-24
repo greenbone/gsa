@@ -25,8 +25,8 @@ describe('useLanguage', () => {
     expect(result.current[1]).toBe(mockSetLanguage);
   });
 
-  test('should call setLanguage when the setter function is invoked', () => {
-    const mockSetLanguage = testing.fn();
+  test('should call setLanguage when the setter function is invoked', async () => {
+    const mockSetLanguage = testing.fn().mockResolvedValue(undefined);
 
     const {renderHook} = rendererWith({
       language: {
@@ -37,8 +37,8 @@ describe('useLanguage', () => {
 
     const {result} = renderHook(() => useLanguage());
 
-    const setLanguage = result.current[1];
-    setLanguage('fr');
+    const [, setLanguage] = result.current;
+    await setLanguage('fr');
 
     expect(mockSetLanguage).toHaveBeenCalledWith('fr');
   });
