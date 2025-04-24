@@ -6,7 +6,11 @@
 import CancelToken from 'gmp/cancel';
 import Rejection from 'gmp/http/rejection';
 import Response, {Meta} from 'gmp/http/response';
-import {Transform, TransformOptions} from 'gmp/http/transform/transform';
+import {
+  Method as HttpMethod,
+  Transform,
+  TransformOptions,
+} from 'gmp/http/transform/transform';
 import {buildUrlParams} from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
@@ -18,7 +22,6 @@ type Data = Record<
   string,
   string | number | boolean | string[] | number[] | boolean[]
 >;
-type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 type ErrorHandler = (request: XMLHttpRequest) => void;
 type Resolve<TData, TMeta extends Meta> = (
   value: Response<TData, TMeta>,
@@ -27,7 +30,7 @@ type Reject = (reason?: string | Error) => void;
 type Params = Record<string, string | number | boolean>;
 
 interface HandleOptions {
-  method?: Method;
+  method?: HttpMethod;
   url?: string;
   formdata?: FormData;
   force?: boolean;
@@ -157,7 +160,7 @@ class Http<
   }
 
   request(
-    method: Method,
+    method: HttpMethod,
     {
       args,
       data,
@@ -176,7 +179,7 @@ class Http<
     const self = this;
     let formdata: FormData | undefined;
 
-    method = method.toUpperCase() as Method;
+    method = method.toUpperCase() as HttpMethod;
 
     if (args) {
       url += '?' + buildUrlParams({...this.getParams(), ...args});
