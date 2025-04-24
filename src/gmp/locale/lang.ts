@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {setDateLocale} from 'gmp/locale/date';
 import Detector from 'gmp/locale/detector';
 import {getLanguageCodes} from 'gmp/locale/languages';
 import logger from 'gmp/log';
@@ -74,8 +73,6 @@ i18next.on('languageChanged', (lang: string) => {
     log.debug('Language changed to', lang);
 
     currentLocale = lang;
-
-    setDateLocale(lang);
 
     notifyLanguageChangeListeners(lang);
   }
