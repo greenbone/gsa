@@ -6,7 +6,6 @@
 import {describe, test, expect} from '@gsa/testing';
 import date from 'gmp/models/date';
 import Footer from 'web/components/structure/Footer';
-import {setLocale} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
 describe('Footer tests', () => {
@@ -27,9 +26,12 @@ describe('Footer tests', () => {
     ['de', 'https://www.greenbone.net'],
     ['en', 'https://www.greenbone.net/en'],
   ])('should render footer with %s link', (locale, expectedHref) => {
-    const {store, render} = rendererWith({store: true});
-
-    store.dispatch(setLocale(locale));
+    const {render} = rendererWith({
+      store: true,
+      language: {
+        language: locale,
+      },
+    });
 
     const {element} = render(<Footer />);
 
