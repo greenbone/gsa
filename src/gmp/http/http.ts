@@ -11,23 +11,23 @@ import {
   Transform,
   TransformOptions,
 } from 'gmp/http/transform/transform';
-import {buildUrlParams} from 'gmp/http/utils';
+import {
+  buildUrlParams,
+  UrlParams as Params,
+  UrlParamValue as ParamValue,
+} from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import {isDefined, hasValue, isArray} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.http');
 
-type Data = Record<
-  string,
-  string | number | boolean | string[] | number[] | boolean[]
->;
+type Data = Record<string, ParamValue | string[] | number[] | boolean[]>;
 type ErrorHandler = (request: XMLHttpRequest) => void;
 type Resolve<TData, TMeta extends Meta> = (
   value: Response<TData, TMeta>,
 ) => void;
 type Reject = (reason?: string | Error) => void;
-type Params = Record<string, string | number | boolean>;
 
 interface HandleOptions {
   method?: HttpMethod;
@@ -71,7 +71,7 @@ interface RequestOptions<
   TSuccessDataOut = TSuccessDataIn,
   TSuccessMetaOut extends Meta = TSuccessMetaIn,
 > {
-  args?: Record<string, string | number | boolean>;
+  args?: Params;
   data?: Data;
   url?: string;
   cancelToken?: CancelToken;
@@ -89,7 +89,7 @@ interface RequestOptions<
 function formdataAppend(
   formdata: FormData,
   key: string,
-  value: string | number | boolean | null | undefined,
+  value: ParamValue | null,
 ) {
   if (hasValue(value)) {
     formdata.append(key, String(value));
