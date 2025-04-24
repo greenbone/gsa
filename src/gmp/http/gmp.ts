@@ -3,16 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Http, {HttpOptions} from 'gmp/http/http';
+import Http from 'gmp/http/http';
 import {Meta} from 'gmp/http/response';
 import transform, {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
-import {buildServerUrl} from 'gmp/http/utils';
+import {buildServerUrl, UrlParams as Params} from 'gmp/http/utils';
 
-interface GmpHttpSettings
-  extends HttpOptions<string, Meta, XmlResponseData, XmlMeta> {
+interface GmpHttpSettings {
   apiServer: string;
-  apiProtocol: string;
-  token: string;
+  apiProtocol?: string;
+  timeout?: number;
+  token?: string;
+}
+
+interface GmpHttpParams extends Params {
+  token?: string;
 }
 
 class GmpHttp extends Http<string, Meta, XmlResponseData, XmlMeta> {
@@ -25,7 +29,7 @@ class GmpHttp extends Http<string, Meta, XmlResponseData, XmlMeta> {
     this.settings = settings;
   }
 
-  getParams() {
+  getParams(): GmpHttpParams {
     const params = super.getParams();
     return {
       ...params,
