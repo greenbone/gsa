@@ -19,21 +19,32 @@ export const LogLevels = {
   silent: 5,
 };
 
-const isValidLogLevel = level =>
+type LogLevel = keyof typeof LogLevels;
+
+const isValidLogLevel = (level: string) =>
   isString(level) && level.toLowerCase() in LogLevels;
 
-const getLogLevel = logLevel =>
+const getLogLevel = (logLevel: string): number | undefined =>
   isValidLogLevel(logLevel) ? LogLevels[logLevel.toLowerCase()] : undefined;
 
 function noop() {}
 
-class Logger {
-  constructor(name, level = DEFAULT_LOG_LEVEL) {
+export class Logger {
+  readonly name: string;
+  defaultLogValue!: number;
+  logValue?: number;
+  trace!: (...args: unknown[]) => void;
+  debug!: (...args: unknown[]) => void;
+  info!: (...args: unknown[]) => void;
+  warn!: (...args: unknown[]) => void;
+  error!: (...args: unknown[]) => void;
+
+  constructor(name: string, level: LogLevel = DEFAULT_LOG_LEVEL) {
     this.name = name;
     this.setDefaultLevel(level);
   }
 
-  _updateLogging(newLogValue) {
+  _updateLogging(newLogValue: number) {
     for (const [logName, logValue] of Object.entries(LogLevels)) {
       if (logValue === LogLevels.silent) {
         continue;
@@ -53,7 +64,7 @@ class Logger {
     }
   }
 
-  setDefaultLevel(level) {
+  setDefaultLevel(level: LogLevel) {
     let logValue = getLogLevel(level);
 
     if (!isDefined(logValue)) {
@@ -68,7 +79,7 @@ class Logger {
     }
   }
 
-  setLevel(level) {
+  setLevel(level: LogLevel) {
     let logValue = getLogLevel(level);
 
     if (!isDefined(logValue)) {
@@ -83,6 +94,9 @@ class Logger {
 }
 
 export class RootLogger {
+  level: LogLevel;
+  loggers: Record<string, Logger>;
+
   constructor() {
     this.loggers = {};
     this.level = DEFAULT_LOG_LEVEL;
@@ -92,9 +106,9 @@ export class RootLogger {
     return this.setDefaultLevel(logLevel);
   }
 
-  setDefaultLevel(level) {
+  setDefaultLevel(level: LogLevel) {
     if (isValidLogLevel(level)) {
-      level = level.toLowerCase();
+      level = level.toLowerCase() as LogLevel;
       this.level = level;
       for (const logger of Object.values(this.loggers)) {
         logger.setDefaultLevel(level);
@@ -104,7 +118,7 @@ export class RootLogger {
     return false;
   }
 
-  getLogger(name) {
+  getLogger(name: string): Logger {
     name = isString(name) ? name : 'unknown';
     let logger = this.loggers[name];
 
