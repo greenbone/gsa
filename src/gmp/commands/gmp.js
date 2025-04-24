@@ -5,9 +5,8 @@
 
 import HttpCommand from 'gmp/commands/http';
 import ActionResult from 'gmp/models/actionresult';
-import {filter_string} from 'gmp/models/filter/utils';
+import {filterString} from 'gmp/models/filter/utils';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-
 
 export const BULK_SELECT_BY_IDS = 1;
 export const BULK_SELECT_BY_FILTER = 0;
@@ -21,7 +20,7 @@ class GmpCommand extends HttpCommand {
       if (isDefined(filter.id)) {
         rparams.filter_id = filter.id;
       } else {
-        rparams.filter = filter_string(filter);
+        rparams.filter = filterString(filter);
       }
     }
 
