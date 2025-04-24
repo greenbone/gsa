@@ -25,7 +25,7 @@ describe('Gmp tests', () => {
 
   describe('isLoggedIn tests', () => {
     test('should return false if user has no token', () => {
-      const gmp = new Gmp();
+      const gmp = new Gmp({});
 
       expect(gmp.isLoggedIn()).toEqual(false);
     });
