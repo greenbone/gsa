@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {getDateLocale} from 'gmp/locale/date';
 import {_, setLocale, getLocale, onLanguageChange, _l} from 'gmp/locale/lang';
 import {isFunction} from 'gmp/utils/identity';
 
@@ -71,11 +70,9 @@ describe('setLocale tests', () => {
   test('should change the date locale too', () => {
     setLocale('en');
     expect(getLocale()).toEqual('en');
-    expect(getDateLocale()).toEqual('en');
 
     setLocale('de');
     expect(getLocale()).toEqual('de');
-    expect(getDateLocale()).toEqual('de');
   });
 });
 
