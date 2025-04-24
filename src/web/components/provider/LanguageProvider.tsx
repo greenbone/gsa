@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {setDateLocale} from 'gmp/locale/date';
 import {
   getLocale,
   setLocale as changeGmpLocale,
@@ -40,6 +41,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     (newLang: string) => {
       setLanguageState(currentLang => {
         if (currentLang !== newLang) {
+          // Explicitly set date locale
+          setDateLocale(newLang);
+
           // store language in the session
           gmp.settings.locale = newLang;
 
@@ -48,7 +52,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
               // @ts-expect-error
               await gmp.user.saveSetting(SETTING_ID_LOCALE, newLang);
             } catch (error) {
-              console.error('Error saving languagte setting:', error);
+              console.error('Error saving language setting:', error);
             }
           })();
 
@@ -75,6 +79,10 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       if (newLang !== languageState) {
         // Set locale in gmp
         changeGmpLocale(newLang);
+
+        // Explicitly set date locale
+        setDateLocale(newLang);
+
         // store language in the session
         gmp.settings.locale = newLang;
 
