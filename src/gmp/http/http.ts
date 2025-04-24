@@ -23,7 +23,7 @@ import {isDefined, hasValue, isArray} from 'gmp/utils/identity';
 const log = logger.getLogger('gmp.http');
 
 type Data = Record<string, ParamValue | string[] | number[] | boolean[]>;
-type ErrorHandler = (request: XMLHttpRequest) => void;
+export type ErrorHandler = (request: XMLHttpRequest) => void;
 type Resolve<TData, TMeta extends Meta> = (
   value: Response<TData, TMeta>,
 ) => void;
