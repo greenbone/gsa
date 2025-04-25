@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import GmpHttp from 'gmp/http/gmp';
@@ -43,7 +42,7 @@ interface PortListCommandImportParams {
   xml_file: string;
 }
 
-class PortListCommand extends EntityCommand<PortList, PortListElement> {
+export class PortListCommand extends EntityCommand<PortList, PortListElement> {
   constructor(http: GmpHttp) {
     super(http, 'port_list', PortList);
   }
@@ -130,7 +129,7 @@ class PortListCommand extends EntityCommand<PortList, PortListElement> {
   }
 }
 
-class PortListsCommand extends EntitiesCommand<PortList> {
+export class PortListsCommand extends EntitiesCommand<PortList> {
   constructor(http: GmpHttp) {
     super(http, 'port_list', PortList);
   }
@@ -140,6 +139,3 @@ class PortListsCommand extends EntitiesCommand<PortList> {
     return root.get_port_lists.get_port_lists_response;
   }
 }
-
-registerCommand('portlist', PortListCommand);
-registerCommand('portlists', PortListsCommand);
