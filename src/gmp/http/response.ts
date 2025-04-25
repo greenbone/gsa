@@ -29,7 +29,7 @@ class Response<TData = unknown, TMeta extends Meta = Meta> {
 
   set<TSetData = TData, TSetMeta extends Meta = TMeta>(
     data: TSetData,
-    meta?: TSetData,
+    meta?: TSetMeta,
   ) {
     return new Response<TSetData, TSetMeta>(this._xhr, data, {
       ...this._meta,
