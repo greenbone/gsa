@@ -27,14 +27,14 @@ interface FilterKeyword {
 
 interface FilterModelProperties extends ModelProperties {
   _term?: string;
-  alerts?: ModelElement[];
+  alerts?: Model[];
   filter_type?: string;
   terms: FilterTerm[];
 }
 
 interface FilterModelElement extends ModelElement {
   alerts?: {
-    alert: ModelProperties[];
+    alert: ModelElement[];
   };
   filter_type?: string;
   keywords?: {
@@ -103,7 +103,7 @@ class Filter extends Model {
   static entityType = 'filter';
   terms: FilterTerm[];
   filter_type!: string;
-  alerts?: ModelElement[];
+  alerts?: Model[];
 
   constructor() {
     super();
@@ -158,7 +158,7 @@ class Filter extends Model {
     }
 
     if (isDefined(element.alerts?.alert)) {
-      ret.alerts = map(element.alerts.alert, (alert: ModelElement) =>
+      ret.alerts = map(element.alerts.alert, alert =>
         parseModelFromElement(alert, 'alert'),
       );
     }
