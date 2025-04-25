@@ -37,7 +37,7 @@ export const goToDetails = (
   if (!isDefined(navigate)) {
     throw new Error('navigate function is required for goToDetails');
   }
-  if (!isFunction<Navigate, NavigateFunc>(navigate)) {
+  if (!isFunction(navigate)) {
     // we expect an object with a navigate function
     navigate = navigate.navigate;
 
@@ -60,7 +60,7 @@ export const goToList = (type: string, navigate: Navigate): GotoListFunc => {
   if (!isDefined(navigate)) {
     throw new Error('navigate function is required for goToList');
   }
-  if (!isFunction<Navigate, NavigateFunc>(navigate)) {
+  if (!isFunction(navigate)) {
     // we expect an object with a navigate function
     navigate = navigate.navigate;
 

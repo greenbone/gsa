@@ -5,10 +5,10 @@
 
 export const {isArray} = Array;
 
-export const isDefined = <T>(value: T | undefined): value is T =>
+export const isDefined = <T>(value: T | undefined): value is T & ({} | null) =>
   value !== undefined;
 
-export const hasValue = <T>(value: T | null | undefined): value is T =>
+export const hasValue = (value: unknown): value is {} =>
   value !== null && value !== undefined;
 
 export const isObject = <T>(value: T): value is T & object =>
@@ -27,7 +27,7 @@ export const isNumberOrNumberString = <T>(
   parseFunc: (value: T) => number,
 ): boolean => !isNaN(parseFunc(value));
 
-export const isFunction = <T, F = Function>(value: T): value is T & F =>
+export const isFunction = (value: unknown): value is Function =>
   typeof value === 'function';
 
 export const isJsDate = <T>(value: T): value is T & Date =>
