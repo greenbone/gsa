@@ -5,7 +5,10 @@
 
 import {hasValue, isDefined, isArray} from 'gmp/utils/identity';
 
-export const forEach = (array, func) => {
+export const forEach = <T>(
+  array?: T[],
+  func?: (value: T, index: number, array: T[]) => void,
+) => {
   if (!hasValue(array) || !isDefined(func)) {
     return;
   }
@@ -21,7 +24,11 @@ export const forEach = (array, func) => {
   array.forEach(func);
 };
 
-export function map(array, func, empty = []) {
+export function map<T, U>(
+  array: T | T[] | null | undefined,
+  func: (value: T, index: number, array: T[]) => U,
+  empty: U[] = [],
+): U[] {
   if (!hasValue(array) || !isDefined(func)) {
     return empty;
   }
@@ -32,9 +39,11 @@ export function map(array, func, empty = []) {
 
   if (isDefined(array.forEach)) {
     // support array like objects e.g. Set and Map
-    const result = [];
+    const result: U[] = [];
 
-    array.forEach(entry => result.push(func(entry)));
+    array.forEach((entry: T, index: number, values: T[]) =>
+      result.push(func(entry, index, values)),
+    );
 
     if (result.length === 0) {
       return empty;
@@ -48,17 +57,25 @@ export function map(array, func, empty = []) {
   return array.map(func);
 }
 
-export function filter(array, func, empty = []) {
+export function filter<T extends {}>(
+  array: T | T[] | null | undefined,
+  func: (value: T, index: number, array: T[]) => boolean,
+  empty: T[] = [],
+): T[] {
   if (!hasValue(array) || !isDefined(func)) {
     return empty;
   }
-  if (!isDefined(array.filter)) {
-    array = [array];
+  if (!isDefined((array as T[]).filter)) {
+    array = [array as T];
   }
-  return array.filter(func);
+  return (array as T[]).filter(func);
 }
 
-export function first(array, non = {}) {
+export function first<T extends {}, U extends {}>(
+  array: T[] | undefined,
+  // @ts-expect-error
+  non: U = {},
+): T | U {
   if (isArray(array)) {
     if (array.length === 0) {
       return non;
@@ -77,11 +94,12 @@ export function first(array, non = {}) {
     return non;
   }
 
+  // @ts-expect-error
   const {value, done} = array[Symbol.iterator]().next(); // returns array[0]
   return done ? non : value; // done is true for empty iterables
 }
 
-export const arraysEqual = (arr1, arr2) => {
+export const arraysEqual = <T, U>(arr1: T[], arr2: U[]) => {
   if (Object.is(arr1, arr2)) {
     return true;
   }
@@ -95,6 +113,7 @@ export const arraysEqual = (arr1, arr2) => {
   }
 
   for (let i = 0; i < arr1.length; i++) {
+    // @ts-expect-error
     if (arr1[i] !== arr2[i]) {
       return false;
     }
