@@ -31,7 +31,15 @@ interface EntityCommandGetParams {
   filter?: string;
 }
 
-abstract class EntityCommand<TModel extends Model> extends GmpCommand {
+export interface EntityCommandParams {
+  id: string;
+}
+
+abstract class EntityCommand<
+  TModel extends Model,
+  TElement = XmlResponseData,
+  TRoot extends XmlResponseData = XmlResponseData,
+> extends GmpCommand {
   clazz: ModelClass<TModel>;
   name: string;
   id_name: string;
@@ -46,7 +54,7 @@ abstract class EntityCommand<TModel extends Model> extends GmpCommand {
     this.transformResponse = this.transformResponse.bind(this);
   }
 
-  abstract getElementFromRoot(data: unknown): unknown;
+  abstract getElementFromRoot(root: TRoot): TElement;
 
   getParams(
     params: EntityCommandInputParams,
@@ -62,12 +70,12 @@ abstract class EntityCommand<TModel extends Model> extends GmpCommand {
     return rParams;
   }
 
-  getModelFromResponse(response: Response<XmlResponseData, XmlMeta>): TModel {
+  getModelFromResponse(response: Response<TRoot, XmlMeta>): TModel {
     return this.clazz.fromElement(this.getElementFromRoot(response.data));
   }
 
   transformResponse(
-    response: Response<XmlResponseData, XmlMeta>,
+    response: Response<TRoot, XmlMeta>,
   ): Response<TModel, XmlMeta> {
     let entity = this.getModelFromResponse(response);
     if (!isDefined(entity.id)) {
@@ -78,12 +86,15 @@ abstract class EntityCommand<TModel extends Model> extends GmpCommand {
     return response.setData(entity);
   }
 
-  async get({id}: Model, {filter, ...options}: EntityCommandGetParams = {}) {
+  async get(
+    {id}: EntityCommandParams,
+    {filter, ...options}: EntityCommandGetParams = {},
+  ) {
     const response = await this.httpGet({id, filter}, options);
-    return this.transformResponse(response);
+    return this.transformResponse(response as Response<TRoot, XmlMeta>);
   }
 
-  async clone({id}: Model) {
+  async clone({id}: EntityCommandParams) {
     const extraParams = {
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
@@ -105,7 +116,7 @@ abstract class EntityCommand<TModel extends Model> extends GmpCommand {
     }
   }
 
-  delete({id}: Model) {
+  delete({id}: EntityCommandParams) {
     log.debug('Deleting', this.name, id);
 
     const params = {
@@ -115,7 +126,7 @@ abstract class EntityCommand<TModel extends Model> extends GmpCommand {
     return this.httpPost(params);
   }
 
-  export({id}: Model) {
+  export({id}: EntityCommandParams) {
     const params = {
       cmd: 'bulk_export',
       resource_type: this.name,

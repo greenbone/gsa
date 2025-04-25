@@ -19,13 +19,10 @@ import GmpHttp from 'gmp/http/gmp';
 import Response, {Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
-import logger from 'gmp/log';
 import Model, {Element} from 'gmp/model';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {map, forEach} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
-
-const log = logger.getLogger('gmp.commands.entities');
 
 interface GetAggregatesSortParam {
   field: string;
@@ -80,7 +77,11 @@ interface EntitiesMeta extends Meta {
   counts: CollectionCounts;
 }
 
-abstract class EntitiesCommand<TModel extends Model> extends GmpCommand {
+abstract class EntitiesCommand<
+  TModel extends Model,
+  TEntitiesResponse extends Element = Element,
+  TRoot extends Element = Element,
+> extends GmpCommand {
   readonly clazz: ModelClass<TModel>;
   readonly name: string;
 
@@ -91,9 +92,9 @@ abstract class EntitiesCommand<TModel extends Model> extends GmpCommand {
     this.name = name;
   }
 
-  abstract getEntitiesResponse(root: Element);
+  abstract getEntitiesResponse(root: TRoot): TEntitiesResponse;
 
-  getCollectionListFromRoot(root: Element): CollectionList<TModel> {
+  getCollectionListFromRoot(root: TRoot): CollectionList<TModel> {
     const response = this.getEntitiesResponse(root);
     return parseCollectionList(response, this.name, this.clazz);
   }
@@ -101,7 +102,7 @@ abstract class EntitiesCommand<TModel extends Model> extends GmpCommand {
   async get(params: GmpCommandInputParams, options?: HttpCommandOptions) {
     const response = await this.httpGet(params, options);
     const {entities, filter, counts} = this.getCollectionListFromRoot(
-      response.data,
+      response.data as TRoot,
     );
     return response.set<TModel[], EntitiesMeta>(entities, {filter, counts});
   }
