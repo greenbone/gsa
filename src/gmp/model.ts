@@ -118,10 +118,10 @@ class Model implements ModelProperties {
     }, {});
   }
 
-  static fromElement(element: Element = {}, type?: string) {
+  static fromElement<TModel>(element: Element = {}, type?: string): TModel {
     const f = new this(type);
     f.setProperties(this.parseElement(element));
-    return f;
+    return f as TModel;
   }
 
   static parseElement(element: ModelElement = {}): ModelProperties {
