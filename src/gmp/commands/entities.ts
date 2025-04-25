@@ -40,36 +40,63 @@ interface GetAggregatesParams {
   [key: string]: unknown;
 }
 
+interface AggregateData {
+  data_type: string;
+  column_info: {
+    aggregate_column: {
+      column: string;
+      data_type: 'unix_time' | 'integer' | 'text' | string;
+      name: string;
+      stat: string;
+      type: string;
+    };
+  };
+  group_column: string;
+  group?: Array<{
+    value: string | number;
+    count: number;
+    c_count: number;
+    stats?: Array<{
+      _column: string;
+      c_sum: number;
+      max: number;
+      mean: number;
+      min: number;
+      sum: number;
+    }>;
+    text?: Array<{
+      _column: string;
+      __text: string;
+    }>;
+  }>;
+}
+
 interface GetAggregatesResponseData extends XmlResponseData {
   get_aggregate?: {
     get_aggregates_response: {
-      aggregate: {
-        [key: string]: unknown;
-        group?: Array<{
-          [key: string]: unknown;
-          stats?: Array<{
-            _column?: string;
-          }>;
-          text?: Array<{
-            _column: string;
-            __text: string;
-          }>;
-        }>;
-      };
+      aggregate: AggregateData;
     };
   };
 }
 
+interface Stats {
+  c_sum: number;
+  max: number;
+  mean: number;
+  min: number;
+  sum: number;
+}
+
 interface Group {
-  stats?: Record<string, unknown>;
+  stats?: Record<string, Stats>;
   text?: Record<string, string>;
-  [key: string]: unknown;
+  value: string | number;
+  count: number;
+  c_count: number;
 }
 
 interface TransformedAggregatesResponseData {
   groups: Group[];
-  // in future we need to specify what the user can expect here in detail
-  [key: string]: unknown;
 }
 
 interface EntitiesMeta extends Meta {
@@ -194,44 +221,45 @@ abstract class EntitiesCommand<
     const {group: groups = []} = aggregate;
 
     const newGroups = map(groups, group => {
-      const {stats, text, other} = group;
+      const {stats, text, value, count, c_count} = group;
 
       const newGroup: Group = {
-        // we need to specify what's in other in future
-        ...(other as Record<string, unknown>),
+        value,
+        count,
+        c_count,
       };
 
       if (isDefined(text)) {
-        newGroup.text = {};
-
+        const newText = {};
         forEach(text, t => {
           const name = t._column;
           const value = t.__text;
-          // @ts-expect-error
-          newGroup.text[name] = value;
+          newText[name] = value;
         });
+        newGroup.text = newText;
       }
       if (isDefined(stats)) {
-        newGroup.stats = {};
-
+        const newStats = {};
         forEach(stats, s => {
           const name = s._column;
-          const nStat = {...s};
-          delete nStat._column;
-          // @ts-expect-error
-          newGroup.stats[name] = nStat;
+          const nStat: Stats = {
+            c_sum: s.c_sum,
+            max: s.max,
+            mean: s.mean,
+            min: s.min,
+            sum: s.sum,
+          };
+          newStats[name] = nStat;
         });
+        newGroup.stats = newStats;
       }
 
       return newGroup;
     });
 
     const ret: TransformedAggregatesResponseData = {
-      ...aggregate,
       groups: newGroups,
     };
-
-    delete ret.group;
 
     return response.setData(ret);
   }
