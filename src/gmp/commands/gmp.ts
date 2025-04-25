@@ -4,6 +4,7 @@
  */
 
 import HttpCommand, {
+  HttpCommandInputParams,
   HttpCommandOptions,
   HttpCommandParams,
   HttpCommandParamsOptions,
@@ -22,8 +23,7 @@ interface Filter {
   id?: string;
 }
 
-export interface GmpCommandInputParams extends UrlParams {
-  // @ts-expect-error
+export interface GmpCommandInputParams extends HttpCommandInputParams {
   filter?: Filter | string;
 }
 
