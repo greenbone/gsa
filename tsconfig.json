@@ -20,6 +20,6 @@
       "@gsa/testing": ["src/testing.js"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "vitest.projects.ts"],
   "exclude": ["node_modules", "build", "coverage"]
 }
