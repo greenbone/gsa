@@ -15,6 +15,11 @@ export interface HttpCommandParams extends Params {
   cmd?: string;
 }
 
+export interface HttpCommandInputParams {
+  cmd?: string;
+  [key: string]: unknown;
+}
+
 export interface HttpCommandParamsOptions {
   includeDefaultParams?: boolean;
 }
@@ -38,19 +43,19 @@ class HttpCommand {
   }
 
   getParams(
-    params: HttpCommandParams,
+    params: HttpCommandInputParams,
     extraParams: HttpCommandParams = {},
     {includeDefaultParams = true}: HttpCommandParamsOptions = {},
   ): HttpCommandParams {
     const defaultParams = includeDefaultParams ? this._params : undefined;
     return {
       ...defaultParams,
-      ...params,
+      ...(params as HttpCommandParams),
       ...extraParams,
     };
   }
 
-  httpGet(params: HttpCommandParams, options: HttpCommandOptions = {}) {
+  httpGet(params: HttpCommandInputParams, options: HttpCommandOptions = {}) {
     const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('get', {
       args: this.getParams(params, extraParams, {includeDefaultParams}),
@@ -58,7 +63,7 @@ class HttpCommand {
     });
   }
 
-  httpPost(params: HttpCommandParams, options: HttpCommandOptions = {}) {
+  httpPost(params: HttpCommandInputParams, options: HttpCommandOptions = {}) {
     const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('post', {
       data: this.getParams(params, extraParams, {includeDefaultParams}),
