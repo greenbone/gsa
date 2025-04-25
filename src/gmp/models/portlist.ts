@@ -22,7 +22,7 @@ interface PortRangeProperties extends ModelProperties {
   protocol_type?: string;
 }
 
-interface PortListElement extends ModelElement {
+export interface PortListElement extends ModelElement {
   id?: string;
   port_ranges?: {
     port_range: PortRangeElement[];
