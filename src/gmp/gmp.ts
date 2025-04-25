@@ -28,7 +28,6 @@ import 'gmp/commands/overrides';
 import 'gmp/commands/performance';
 import 'gmp/commands/permissions';
 import 'gmp/commands/policies';
-import 'gmp/commands/portlists';
 import 'gmp/commands/reportconfigs';
 import 'gmp/commands/reportformats';
 import 'gmp/commands/reports';
@@ -49,6 +48,7 @@ import 'gmp/commands/wizard';
 
 import {getCommands} from 'gmp/command';
 import LoginCommand from 'gmp/commands/login';
+import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
 import GmpSettings from 'gmp/gmpsettings';
 import GmpHttp from 'gmp/http/gmp';
 import {ErrorHandler} from 'gmp/http/http';
@@ -71,6 +71,9 @@ class Gmp {
   readonly _login: LoginCommand;
   _logoutListeners: Listener[];
 
+  readonly portlist: PortListCommand;
+  readonly portlists: PortListsCommand;
+
   constructor(settings: GmpSettings, http?: GmpHttp) {
     this.settings = settings;
 
@@ -85,6 +88,9 @@ class Gmp {
     this._login = new LoginCommand(this.http);
 
     this._logoutListeners = [];
+
+    this.portlist = new PortListCommand(this.http);
+    this.portlists = new PortListsCommand(this.http);
 
     this._initCommands();
   }
