@@ -62,9 +62,9 @@ describe('PortRangeDialog tests', () => {
 
     expect(onSave).toHaveBeenCalledWith({
       id: '123',
-      port_range_end: '',
-      port_range_start: '',
-      port_type: 'tcp',
+      portRangeEnd: '',
+      portRangeStart: '',
+      portType: 'tcp',
     });
   });
 
@@ -75,9 +75,9 @@ describe('PortRangeDialog tests', () => {
     render(<PortRangeDialog id="123" onClose={onClose} onSave={onSave} />);
 
     const dialog = getDialog();
-    const startInput = getByName(dialog, 'port_range_start');
+    const startInput = getByName(dialog, 'portRangeStart');
     changeInputValue(startInput, '123');
-    const endInput = getByName(dialog, 'port_range_end');
+    const endInput = getByName(dialog, 'portRangeEnd');
     changeInputValue(endInput, '456');
 
     const save = getDialogSaveButton();
@@ -85,9 +85,9 @@ describe('PortRangeDialog tests', () => {
 
     expect(onSave).toHaveBeenCalledWith({
       id: '123',
-      port_range_end: 456,
-      port_range_start: 123,
-      port_type: 'tcp',
+      portRangeEnd: 456,
+      portRangeStart: 123,
+      portType: 'tcp',
     });
   });
 
@@ -105,9 +105,9 @@ describe('PortRangeDialog tests', () => {
 
     expect(onSave).toHaveBeenCalledWith({
       id: '123',
-      port_range_end: '',
-      port_range_start: '',
-      port_type: 'udp',
+      portRangeEnd: '',
+      portRangeStart: '',
+      portType: 'udp',
     });
   });
 });

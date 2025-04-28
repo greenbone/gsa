@@ -39,17 +39,17 @@ describe('PortList model tests', () => {
     expect(portList.port_ranges[0].start).toEqual('1');
     expect(portList.port_ranges[0].end).toEqual('2');
     expect(portList.port_ranges[0].comment).toEqual('foo');
-    expect(portList.port_ranges[0].port_list_id).toEqual('1337');
+    expect(portList.port_ranges[0].portListId).toEqual('1337');
     expect(portList.port_ranges[0].id).toEqual('123abc');
-    expect(portList.port_ranges[0].protocol_type).toEqual('tcp');
+    expect(portList.port_ranges[0].protocolType).toEqual('tcp');
     expect(portList.port_ranges[1]).toBeInstanceOf(Model);
     expect(portList.port_ranges[1].entityType).toEqual('portrange');
     expect(portList.port_ranges[1].start).toEqual('3');
     expect(portList.port_ranges[1].end).toEqual('200');
     expect(portList.port_ranges[1].comment).toBeUndefined();
-    expect(portList.port_ranges[1].port_list_id).toEqual('1337');
+    expect(portList.port_ranges[1].portListId).toEqual('1337');
     expect(portList.port_ranges[1].id).toEqual('42xy');
-    expect(portList.port_ranges[1].protocol_type).toEqual('udp');
+    expect(portList.port_ranges[1].protocolType).toEqual('udp');
   });
 
   test('should parse port_count correctly and as integer', () => {

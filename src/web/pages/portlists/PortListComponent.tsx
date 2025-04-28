@@ -25,8 +25,8 @@ import PortRangeDialog, {
 interface PortRange {
   id: string;
   isTmp?: boolean;
-  protocol_type: ProtocolType;
-  port_list_id?: string;
+  protocolType: ProtocolType;
+  portListId?: string;
   start: number;
   end: number;
 }
@@ -179,7 +179,7 @@ const PortListComponent = ({
   const handleDeletePortRange = async (range: PortRange) => {
     await gmp.portlist.deletePortRange({
       id: range.id as string,
-      portListId: range.port_list_id as string,
+      portListId: range.portListId as string,
     });
   };
 
@@ -221,7 +221,7 @@ const PortListComponent = ({
               id: range.id as string,
               portRangeStart: range.start,
               portRangeEnd: range.end,
-              portType: range.protocol_type,
+              portType: range.protocolType,
             });
             range.isTmp = false;
             range.id = id;
@@ -290,7 +290,7 @@ const PortListComponent = ({
       }
 
       if (
-        range.protocol_type === portType &&
+        range.protocolType === portType &&
         (portRangeStart === start ||
           portRangeStart === end ||
           (portRangeStart > start && portRangeStart < end) ||
@@ -306,7 +306,7 @@ const PortListComponent = ({
     const newRange: PortRange = {
       end: portRangeEnd,
       id,
-      protocol_type: portType,
+      protocolType: portType,
       start: portRangeStart,
       isTmp: true,
     };
