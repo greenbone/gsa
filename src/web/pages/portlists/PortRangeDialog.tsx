@@ -3,32 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseInt} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
+import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
-import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 
-const convertPort = (value: string | number | undefined) =>
-  value === '' ? value : parseInt(value);
+type ProtocolType = 'tcp' | 'udp';
 
 export interface PortRangeDialogData {
   id: string;
   port_range_start: string;
   port_range_end: string;
-  port_type: string;
+  port_type: ProtocolType;
 }
 
 interface PortRangeDialogProps {
   id: string;
-  port_type?: string;
+  port_type?: ProtocolType;
   title?: string;
   onClose: () => void;
   onSave: (data: PortRangeDialogData) => void;
 }
 
-const PortRangeDialog: React.FC<PortRangeDialogProps> = ({
+const PortRangeDialog = ({
   id,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   port_type = 'tcp',
@@ -58,20 +56,18 @@ const PortRangeDialog: React.FC<PortRangeDialogProps> = ({
         return (
           <>
             <FormGroup title={_('Start')}>
-              {/* @ts-expect-error */}
-              <TextField
-                convert={convertPort}
+              <NumberField
                 name="port_range_start"
+                type="int"
                 value={state.port_range_start}
                 onChange={onValueChange}
               />
             </FormGroup>
 
             <FormGroup title={_('End')}>
-              {/* @ts-expect-error */}
-              <TextField
-                convert={convertPort}
+              <NumberField
                 name="port_range_end"
+                type="int"
                 value={state.port_range_end}
                 onChange={onValueChange}
               />
