@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import timezones from 'gmp/timezones';
+import timezones, {DEFAULT_TIMEZONE} from 'gmp/timezones';
 import React, {useMemo} from 'react';
 import Select from 'web/components/form/Select';
 import PropTypes from 'web/utils/PropTypes';
 
-
-const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
+const TimeZoneSelectComponent = ({value = DEFAULT_TIMEZONE, ...props}) => {
   const timezoneItems = useMemo(
     () =>
       timezones.map(name => ({
