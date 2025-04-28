@@ -75,7 +75,7 @@ const NvtPreference = ({preference, value = '', onChange}) => {
     );
   } else if (type === 'file') {
     input = (
-      <Divider>
+      <Column>
         <Checkbox
           checked={checked}
           title={
@@ -86,7 +86,7 @@ const NvtPreference = ({preference, value = '', onChange}) => {
           onChange={onCheckedChange}
         />
         <FileField disabled={!checked} onChange={onPreferenceChange} />
-      </Divider>
+      </Column>
     );
   } else if (type === 'radio') {
     input = (
