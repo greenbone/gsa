@@ -326,15 +326,10 @@ describe('Port List Component tests', () => {
     fireEvent.click(savePortListButton);
     await wait();
     expect(createPortRange).toHaveBeenCalledExactlyOnceWith({
-      end: 20,
-      entityType: 'portrange',
       id: '123',
-      start: 1,
-      isTmp: true,
       port_range_end: 20,
       port_range_start: 1,
       port_type: 'tcp',
-      protocol_type: 'tcp',
     });
     expect(save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
@@ -412,9 +407,10 @@ describe('Port List Component tests', () => {
     fireEvent.click(savePortListButton);
     await wait();
 
-    expect(deletePortRange).toHaveBeenCalledExactlyOnceWith(
-      portList.port_ranges[0],
-    );
+    expect(deletePortRange).toHaveBeenCalledExactlyOnceWith({
+      id: portList.port_ranges[0].id,
+      port_list_id: portList.id,
+    });
     expect(onSaveError).not.toHaveBeenCalled();
     expect(save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
