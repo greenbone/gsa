@@ -41,7 +41,7 @@ interface PortListCommandCreatePortRangeParams {
 
 interface PortListCommandDeletePortRangeParams {
   id: string;
-  port_list_id: string;
+  portListId: string;
 }
 
 interface PortListCommandImportParams {
@@ -104,15 +104,14 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
 
   async deletePortRange({
     id,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_list_id,
+    portListId,
   }: PortListCommandDeletePortRangeParams) {
     await this.httpPost({
       cmd: 'delete_port_range',
       port_range_id: id,
       no_redirect: 1,
     });
-    return await this.get({id: port_list_id});
+    return await this.get({id: portListId});
   }
 
   import({xmlFile}: PortListCommandImportParams) {
