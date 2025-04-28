@@ -28,8 +28,8 @@ interface PortListCommandSaveParams {
 
 interface PortListCommandCreatePortRangeParams {
   id: string;
-  port_range_start: string;
-  port_range_end: string;
+  port_range_start: number;
+  port_range_end: number;
   port_type: string;
 }
 
