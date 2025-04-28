@@ -15,7 +15,9 @@ import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PortListsDialog from 'web/pages/portlists/PortListDialog';
+import PortListsDialog, {
+  SavePortListData,
+} from 'web/pages/portlists/PortListDialog';
 import ImportPortListDialog from 'web/pages/portlists/PortListImportDialog';
 import PortRangeDialog, {
   PortRangeDialogData,
@@ -207,7 +209,7 @@ const PortListComponent = ({
     }
   };
 
-  const handleSavePortList = async (data: {id?: string}) => {
+  const handleSavePortList = async (data: SavePortListData) => {
     handleInteraction();
 
     if (isDefined(data.id)) {
@@ -358,8 +360,8 @@ const PortListComponent = ({
           comment={comment}
           id={id}
           name={name}
-          port_list={portList}
-          port_ranges={portRanges}
+          portList={portList}
+          portRanges={portRanges}
           title={portListDialogTitle}
           onClose={handleClosePortListDialog}
           onNewPortRangeClick={openNewPortRangeDialog}
