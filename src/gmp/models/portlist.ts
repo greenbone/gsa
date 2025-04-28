@@ -13,13 +13,21 @@ import {parseInt, parseBoolean} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
+export type ProtocolType = 'tcp' | 'udp';
+
 interface PortRangeElement extends ModelElement {
-  type?: string;
+  type: ProtocolType;
   port_list_id?: string;
+  start: number;
+  end: number;
+  [key: string]: unknown;
 }
 
 interface PortRangeProperties extends ModelProperties {
-  protocol_type?: string;
+  protocol_type: ProtocolType;
+  port_list_id: string;
+  start: number;
+  end: number;
 }
 
 export interface PortListElement extends ModelElement {
@@ -55,10 +63,12 @@ interface PortListProperties extends ModelProperties {
   predefined?: boolean;
 }
 
-class PortRange extends Model {
+export class PortRange extends Model {
   static entityType = 'portrange';
-  protocol_type!: string;
+  protocol_type!: ProtocolType;
   port_list_id!: string;
+  start!: number;
+  end!: number;
 
   parseProperties(element: PortRangeElement): PortRangeProperties {
     return PortRange.parseElement(element);
