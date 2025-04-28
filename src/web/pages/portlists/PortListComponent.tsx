@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {EntityCommandParams} from 'gmp/commands/entity';
+import PortList, {ProtocolType} from 'gmp/models/portlist';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -19,20 +21,14 @@ import PortRangeDialog, {
   PortRangeDialogData,
 } from 'web/pages/portlists/PortRangeDialog';
 
-interface PortList {
-  id: string;
-  name: string;
-  comment: string;
-  port_ranges: PortRange[];
-}
-
 interface PortRange {
-  end: string;
   entityType: string;
-  id: string;
-  protocol_type: string;
-  start: string;
-  isTmp: boolean;
+  id?: string;
+  isTmp?: boolean;
+  protocol_type: ProtocolType;
+  port_list_id?: string;
+  start: number;
+  end: number;
 }
 
 interface PortListComponentProps {
@@ -59,7 +55,7 @@ interface PortListComponentProps {
   onSaved?: (response: unknown) => void;
 }
 
-const PortListComponent: React.FC<PortListComponentProps> = ({
+const PortListComponent = ({
   children,
   onCloned,
   onCloneError,
@@ -74,7 +70,7 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
   onSaveError,
   onImported,
   onImportError,
-}) => {
+}: PortListComponentProps) => {
   const [_] = useTranslation();
   const gmp = useGmp();
   const [importDialogVisible, setImportDialogVisible] = useState(false);
@@ -120,9 +116,8 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
   const openPortListDialog = async (entity?: PortList) => {
     if (entity) {
       // edit
-      // @ts-expect-error
-      const response = await gmp.portlist.get(entity);
-      const portList: PortList = response.data;
+      const response = await gmp.portlist.get(entity as EntityCommandParams);
+      const portList = response.data;
       setCreatedPortRanges([]);
       setDeletedPortRanges([]);
       setPortListDialogTitle(
@@ -182,12 +177,18 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
   };
 
   const handleDeletePortRange = async (range: PortRange) => {
-    // @ts-expect-error
-    await gmp.portlist.deletePortRange(range);
+    await gmp.portlist.deletePortRange({
+      id: range.id as string,
+      port_list_id: range.port_list_id as string,
+    });
   };
 
-  const handleSavePortRange = async (data: unknown) => {
-    // @ts-expect-error
+  const handleSavePortRange = async (data: {
+    id: string;
+    port_range_start: number;
+    port_range_end: number;
+    port_type: ProtocolType;
+  }) => {
     const response = await gmp.portlist.createPortRange(data);
     return response.data.id;
   };
@@ -208,7 +209,7 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
     }
   };
 
-  const handleSavePortList = async (data: {id?: string}) => {
+  const handleSavePortList = async (data: {id: string}) => {
     handleInteraction();
 
     try {
@@ -216,9 +217,9 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
         async (range: PortRange) => {
           // save temporary port ranges in the backend
           const id = await handleSavePortRange({
-            ...range,
-            port_range_start: parseInt(range.start),
-            port_range_end: parseInt(range.end),
+            id: range.id as string,
+            port_range_start: range.start,
+            port_range_end: range.end,
             port_type: range.protocol_type,
           });
           range.isTmp = false;
@@ -255,9 +256,15 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
     closePortListDialog();
   };
 
-  const handleTmpAddPortRange = (values: PortRangeDialogData) => {
-    let {port_range_end, port_range_start, port_type} = values;
-
+  const handleTmpAddPortRange = ({
+    id,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    port_range_end,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    port_range_start,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    port_type,
+  }: PortRangeDialogData) => {
     const portRangeEnd = parseInt(port_range_end);
     const portRangeStart = parseInt(port_range_start);
 
@@ -280,8 +287,8 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
     // check if new port range overlaps with existing and temporarily existing
     // ones, only relevant if protocol_type is the same
     for (const range of portRanges) {
-      const start = parseInt(range.start);
-      const end = parseInt(range.end);
+      const start = range.start;
+      const end = range.end;
       if (!start || !end) {
         continue;
       }
@@ -300,12 +307,12 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
       }
     }
 
-    const newRange = {
-      end: values.port_range_end,
+    const newRange: PortRange = {
+      end: portRangeEnd,
       entityType: 'portrange',
-      id: values.id,
-      protocol_type: values.port_type,
-      start: values.port_range_start,
+      id,
+      protocol_type: port_type,
+      start: portRangeStart,
       isTmp: true,
     };
 
@@ -339,9 +346,9 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
   return (
     <>
       {children({
-        clone: handleClone,
+        clone: handleClone as (entity: PortList) => void,
         download: handleDownload,
-        delete: handleDelete,
+        delete: handleDelete as (entity: PortList) => void,
         create: openPortListDialog,
         edit: openPortListDialog,
         import: openImportDialog,
@@ -351,7 +358,6 @@ const PortListComponent: React.FC<PortListComponentProps> = ({
           comment={comment}
           id={id}
           name={name}
-          // @ts-expect-error
           port_list={portList}
           // @ts-expect-error
           port_ranges={portRanges}
