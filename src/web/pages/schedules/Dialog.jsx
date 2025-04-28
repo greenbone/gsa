@@ -6,6 +6,7 @@
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import date, {duration as createDuration} from 'gmp/models/date';
 import Event, {ReccurenceFrequency, WeekDays} from 'gmp/models/event';
+import {DEFAULT_TIMEZONE} from 'gmp/timezones';
 import {isDefined} from 'gmp/utils/identity';
 import React, {useState} from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
@@ -48,7 +49,7 @@ const getNthWeekday = cdate => Math.ceil(cdate.date() / 7);
 
 const ScheduleDialog = ({
   duration,
-  timezone: initialTimezone = 'UTC',
+  timezone: initialTimezone = DEFAULT_TIMEZONE,
   startDate: initialStartDate = date()
     .tz(initialTimezone)
     .startOf('hour')
