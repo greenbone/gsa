@@ -185,9 +185,9 @@ const PortListComponent = ({
 
   const handleSavePortRange = async (data: {
     id: string;
-    port_range_start: number;
-    port_range_end: number;
-    port_type: ProtocolType;
+    portRangeStart: number;
+    portRangeEnd: number;
+    portType: ProtocolType;
   }) => {
     const response = await gmp.portlist.createPortRange(data);
     return response.data.id;
@@ -219,9 +219,9 @@ const PortListComponent = ({
             // save temporary port ranges in the backend
             const id = await handleSavePortRange({
               id: range.id as string,
-              port_range_start: range.start,
-              port_range_end: range.end,
-              port_type: range.protocol_type,
+              portRangeStart: range.start,
+              portRangeEnd: range.end,
+              portType: range.protocol_type,
             });
             range.isTmp = false;
             range.id = id;
