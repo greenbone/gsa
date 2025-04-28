@@ -40,6 +40,7 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/portlists';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = ({
   entity,
   onPortListCloneClick,
@@ -103,13 +104,13 @@ Details.propTypes = {
 
 const PortRanges = ({entity}) => {
   const [_] = useTranslation();
-  const {port_ranges = []} = entity;
+  const {portRanges = []} = entity;
 
   return (
-    <Layout title={_('Port Ranges ({{count}})', {count: port_ranges.length})}>
-      {port_ranges.length === 0 && _('No port ranges available')}
-      {port_ranges.length > 0 && (
-        <PortRangesTable actions={false} portRanges={port_ranges} />
+    <Layout title={_('Port Ranges ({{count}})', {count: portRanges.length})}>
+      {portRanges.length === 0 && _('No port ranges available')}
+      {portRanges.length > 0 && (
+        <PortRangesTable actions={false} portRanges={portRanges} />
       )}
     </Layout>
   );
@@ -175,7 +176,7 @@ const Page = ({
                       onActivateTab={onActivateTab}
                     >
                       <Tab>{_('Information')}</Tab>
-                      <EntitiesTab entities={entity.port_ranges}>
+                      <EntitiesTab entities={entity.portRanges}>
                         {_('Port Ranges')}
                       </EntitiesTab>
                       <EntitiesTab entities={entity.userTags}>
