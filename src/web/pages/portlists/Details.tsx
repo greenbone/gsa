@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableBody from 'web/components/table/Body';
@@ -21,7 +20,7 @@ interface Target {
 interface PortListDetailsEntity {
   comment: string;
   deprecated: boolean;
-  port_count: {
+  portCount: {
     all: number;
     tcp: number;
     udp: number;
@@ -33,14 +32,12 @@ interface PortListDetailsProps {
   entity: PortListDetailsEntity;
 }
 
-const PortListDetails: React.FC<PortListDetailsProps> = ({
-  entity,
-}: PortListDetailsProps) => {
+const PortListDetails = ({entity}: PortListDetailsProps) => {
   const [_] = useTranslation();
   const {
     comment,
     deprecated,
-    port_count = {
+    portCount = {
       all: 0,
       tcp: 0,
       udp: 0,
@@ -69,17 +66,17 @@ const PortListDetails: React.FC<PortListDetailsProps> = ({
 
           <TableRow>
             <TableData>{_('Port Count')}</TableData>
-            <TableData>{port_count.all}</TableData>
+            <TableData>{portCount.all}</TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('TCP Port Count')}</TableData>
-            <TableData>{port_count.tcp}</TableData>
+            <TableData>{portCount.tcp}</TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('UDP Port Count')}</TableData>
-            <TableData>{port_count.udp}</TableData>
+            <TableData>{portCount.udp}</TableData>
           </TableRow>
 
           {targets.length > 0 && (

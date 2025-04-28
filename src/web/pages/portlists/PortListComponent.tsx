@@ -125,7 +125,7 @@ const PortListComponent = ({
       );
       setPortList(portList);
       setPortListDialogVisible(true);
-      setPortRanges(portList.port_ranges as PortRange[]);
+      setPortRanges(portList.portRanges as PortRange[]);
     } else {
       // create
       setCreatedPortRanges([]);

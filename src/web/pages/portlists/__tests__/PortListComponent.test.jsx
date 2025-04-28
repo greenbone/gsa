@@ -407,7 +407,7 @@ describe('Port List Component tests', () => {
     await wait();
 
     expect(deletePortRange).toHaveBeenCalledExactlyOnceWith({
-      id: portList.port_ranges[0].id,
+      id: portList.portRanges[0].id,
       portListId: portList.id,
     });
     expect(onSaveError).not.toHaveBeenCalled();
