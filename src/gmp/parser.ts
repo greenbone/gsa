@@ -35,9 +35,6 @@ type NumberValue = string | number | undefined;
 type NumberReturn = undefined | number;
 type BooleanValue = NumberValue | boolean;
 
-export const parseSeverity = (value: undefined | string) =>
-  isEmpty(value) ? undefined : parseFloat(value);
-
 const isText = (value: unknown): value is Text =>
   typeof value === 'object' && value !== null && '__text' in value;
 
@@ -112,6 +109,8 @@ export const parseFloat = (value: NumberValue): NumberReturn => {
 
   return val;
 };
+
+export const parseSeverity = parseFloat;
 
 export const parseIntoArray = <T>(value: T | Array<T>): Array<T> =>
   isArray(value) ? value : [value];
