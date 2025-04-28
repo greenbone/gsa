@@ -34,9 +34,9 @@ interface PortListCommandSaveParams {
 
 interface PortListCommandCreatePortRangeParams {
   id: string;
-  port_range_start: number;
-  port_range_end: number;
-  port_type: string;
+  portRangeStart: number;
+  portRangeEnd: number;
+  portType: string;
 }
 
 interface PortListCommandDeletePortRangeParams {
@@ -89,19 +89,16 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
 
   createPortRange({
     id,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range_start,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range_end,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_type,
+    portRangeStart,
+    portRangeEnd,
+    portType,
   }: PortListCommandCreatePortRangeParams) {
     return this.action({
       cmd: 'create_port_range',
       id,
-      port_range_start,
-      port_range_end,
-      port_type,
+      port_range_start: portRangeStart,
+      port_range_end: portRangeEnd,
+      port_type: portType,
     });
   }
 
