@@ -108,6 +108,34 @@ describe('DateTime render tests', () => {
     expect(baseElement).toHaveTextContent('foo');
   });
 
+  test('should render timezone on separate lines when showTimezoneAsSeparateLine is true', () => {
+    const {render, store} = rendererWith({gmp, store: true});
+
+    const date = Date('2019-01-01T12:00:00Z');
+    expect(date.isValid()).toEqual(true);
+
+    store.dispatch(setTimezone('CET'));
+
+    localStorage.setItem('userInterfaceTimeFormat', 12);
+    localStorage.setItem('userInterfaceDateFormat', 'wdmy');
+
+    const {container} = render(
+      <DateTime showTimezoneAsSeparateLine date={date} />,
+    );
+
+    const divElement = container.querySelector('div');
+    expect(divElement).not.toBeNull();
+
+    const paragraphs = container.querySelectorAll('p');
+    expect(paragraphs.length).toBe(2);
+
+    expect(paragraphs[0].textContent).not.toBe('');
+
+    expect(paragraphs[1].textContent).toContain(
+      'Central European Standard Time',
+    );
+  });
+
   test.each([
     [
       'should render with default formatter',

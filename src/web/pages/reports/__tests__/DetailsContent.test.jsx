@@ -155,8 +155,10 @@ describe('Report Details Content tests', () => {
     expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
-    expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    const headerSection = baseElement.querySelector('.report-header');
+    within(headerSection).getByText('Report:');
+    within(headerSection).getByText(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
@@ -325,8 +327,10 @@ describe('Report Details Content tests', () => {
     expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
-    expect(baseElement).toHaveTextContent(
-      'Report:Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    const headerSection = baseElement.querySelector('.report-header');
+    within(headerSection).getByText('Report:');
+    within(headerSection).getByText(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
     );
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
