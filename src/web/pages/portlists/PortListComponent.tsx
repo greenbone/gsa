@@ -22,8 +22,7 @@ import PortRangeDialog, {
 } from 'web/pages/portlists/PortRangeDialog';
 
 interface PortRange {
-  entityType: string;
-  id?: string;
+  id: string;
   isTmp?: boolean;
   protocol_type: ProtocolType;
   port_list_id?: string;
@@ -125,7 +124,7 @@ const PortListComponent = ({
       );
       setPortList(portList);
       setPortListDialogVisible(true);
-      setPortRanges(portList.port_ranges);
+      setPortRanges(portList.port_ranges as PortRange[]);
     } else {
       // create
       setCreatedPortRanges([]);
@@ -193,10 +192,9 @@ const PortListComponent = ({
     return response.data.id;
   };
 
-  const handleImportPortList = async (data: unknown) => {
+  const handleImportPortList = async (data: {xml_file: string}) => {
     handleInteraction();
     try {
-      // @ts-expect-error
       const response = await gmp.portlist.import(data);
       if (isDefined(onImported)) {
         onImported(response);
@@ -209,48 +207,51 @@ const PortListComponent = ({
     }
   };
 
-  const handleSavePortList = async (data: {id: string}) => {
+  const handleSavePortList = async (data: {id?: string}) => {
     handleInteraction();
 
-    try {
-      const createdPromises = createdPortRanges.map(
-        async (range: PortRange) => {
-          // save temporary port ranges in the backend
-          const id = await handleSavePortRange({
-            id: range.id as string,
-            port_range_start: range.start,
-            port_range_end: range.end,
-            port_type: range.protocol_type,
-          });
-          range.isTmp = false;
-          range.id = id;
-          // the range has been saved in the backend
-          // if something fails the state contains the still to be saved ranges
-          setCreatedPortRanges(createdPortRanges =>
-            createdPortRanges.filter(pRange => pRange !== range),
-          );
-        },
-      );
-      const deletedPromises = deletedPortRanges.map(
-        async (range: PortRange) => {
-          await handleDeletePortRange(range);
-          // the range has been deleted from the backend
-          // if something fails the state contains the still to be deleted ranges
-          setDeletedPortRanges(deletedPortRanges =>
-            deletedPortRanges.filter(pRange => pRange !== range),
-          );
-        },
-      );
+    if (isDefined(data.id)) {
+      // save existing port list
+      try {
+        const createdPromises = createdPortRanges.map(
+          async (range: PortRange) => {
+            // save temporary port ranges in the backend
+            const id = await handleSavePortRange({
+              id: range.id as string,
+              port_range_start: range.start,
+              port_range_end: range.end,
+              port_type: range.protocol_type,
+            });
+            range.isTmp = false;
+            range.id = id;
+            // the range has been saved in the backend
+            // if something fails the state contains the still to be saved ranges
+            setCreatedPortRanges(createdPortRanges =>
+              createdPortRanges.filter(pRange => pRange !== range),
+            );
+          },
+        );
+        const deletedPromises = deletedPortRanges.map(
+          async (range: PortRange) => {
+            await handleDeletePortRange(range);
+            // the range has been deleted from the backend
+            // if something fails the state contains the still to be deleted ranges
+            setDeletedPortRanges(deletedPortRanges =>
+              deletedPortRanges.filter(pRange => pRange !== range),
+            );
+          },
+        );
 
-      const promises = [...createdPromises, ...deletedPromises];
-      await Promise.all(promises);
-    } catch (error) {
-      if (isDefined(data?.id) && isDefined(onSaveError)) {
-        return onSaveError(error);
-      } else if (!isDefined(data?.id) && isDefined(onCreateError)) {
-        return onCreateError(error);
+        const promises = [...createdPromises, ...deletedPromises];
+        await Promise.all(promises);
+      } catch (error) {
+        if (isDefined(data?.id) && isDefined(onSaveError)) {
+          return onSaveError(error);
+        } else if (!isDefined(data?.id) && isDefined(onCreateError)) {
+          return onCreateError(error);
+        }
+        throw error;
       }
-      throw error;
     }
     await handleSave(data);
     closePortListDialog();
@@ -309,7 +310,6 @@ const PortListComponent = ({
 
     const newRange: PortRange = {
       end: portRangeEnd,
-      entityType: 'portrange',
       id,
       protocol_type: port_type,
       start: portRangeStart,
@@ -359,7 +359,6 @@ const PortListComponent = ({
           id={id}
           name={name}
           port_list={portList}
-          // @ts-expect-error
           port_ranges={portRanges}
           title={portListDialogTitle}
           onClose={handleClosePortListDialog}
