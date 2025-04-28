@@ -16,7 +16,7 @@ import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListsDialog from 'web/pages/portlists/Dialog';
-import ImportPortListDialog from 'web/pages/portlists/ImportDialog';
+import ImportPortListDialog from 'web/pages/portlists/PortListImportDialog';
 import PortRangeDialog, {
   PortRangeDialogData,
 } from 'web/pages/portlists/PortRangeDialog';

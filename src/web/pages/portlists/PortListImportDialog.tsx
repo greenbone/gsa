@@ -3,14 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const ImportDialog = ({onClose, onSave}) => {
+interface PortListImportDialogProps {
+  onClose: () => void;
+  onSave: (data: {xml_file: string}) => void | Promise<void>;
+}
+
+const PortListImportDialog = ({onClose, onSave}: PortListImportDialogProps) => {
   const [_] = useTranslation();
   return (
     <SaveDialog
@@ -22,6 +25,7 @@ const ImportDialog = ({onClose, onSave}) => {
       {({onValueChange}) => {
         return (
           <FormGroup title={_('Import XML Port List')}>
+            {/* @ts-expect-error */}
             <FileField name="xml_file" onChange={onValueChange} />
           </FormGroup>
         );
@@ -30,9 +34,4 @@ const ImportDialog = ({onClose, onSave}) => {
   );
 };
 
-ImportDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-};
-
-export default ImportDialog;
+export default PortListImportDialog;
