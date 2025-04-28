@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import PortList from 'gmp/models/portlist';
 import {NO_VALUE, YES_VALUE, parseYesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
@@ -15,25 +15,52 @@ import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-import PortRangesTable from 'web/pages/portlists/PortRangesTable';
-import PropTypes from 'web/utils/PropTypes';
+import PortRangesTable, {PortRange} from 'web/pages/portlists/PortRangesTable';
 const FROM_FILE = YES_VALUE;
 const NOT_FROM_FILE = NO_VALUE;
 
+interface SaveDialogData {
+  id?: string;
+  comment: string;
+  from_file: typeof FROM_FILE | typeof NOT_FROM_FILE;
+  name: string;
+  port_range: string;
+  port_ranges: PortRange[];
+}
+
+interface PortListsDialogProps {
+  comment?: string;
+  from_file?: typeof FROM_FILE | typeof NOT_FROM_FILE;
+  id?: string;
+  name?: string;
+  port_list?: PortList;
+  port_range?: string;
+  port_ranges?: PortRange[];
+  title?: string;
+  onClose: () => void;
+  onNewPortRangeClick: () => void;
+  onSave: (data: SaveDialogData) => void | Promise<void>;
+  onTmpDeletePortRange: (portRange: PortRange) => void;
+}
+
 const PortListsDialog = ({
   comment = '',
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   from_file = NO_VALUE,
   id,
   name,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   port_list,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   port_range = 'T:1-5,7,9,U:1-3,5,7,9',
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   port_ranges = [],
   title,
   onClose,
   onNewPortRangeClick,
   onTmpDeletePortRange,
   onSave,
-}) => {
+}: PortListsDialogProps) => {
   const [_] = useTranslation();
   const isEdit = isDefined(port_list);
   name = name || _('Unnamed');
@@ -44,7 +71,6 @@ const PortListsDialog = ({
       <NewIcon
         data-testid="new-port-range"
         title={_('Add Port Range')}
-        value={port_list}
         onClick={onNewPortRangeClick}
       />
     </div>
@@ -69,6 +95,7 @@ const PortListsDialog = ({
       {({values: state, onValueChange}) => {
         return (
           <>
+            {/* @ts-expect-error */}
             <TextField
               name="name"
               title={_('Name')}
@@ -76,6 +103,7 @@ const PortListsDialog = ({
               onChange={onValueChange}
             />
 
+            {/* @ts-expect-error */}
             <TextField
               name="comment"
               title={_('Comment')}
@@ -86,6 +114,7 @@ const PortListsDialog = ({
             {!isEdit && (
               <FormGroup title={_('Port Ranges')}>
                 <Row>
+                  {/* @ts-expect-error */}
                   <Radio
                     checked={parseYesNo(state.from_file) !== FROM_FILE}
                     name="from_file"
@@ -93,6 +122,7 @@ const PortListsDialog = ({
                     value={NOT_FROM_FILE}
                     onChange={onValueChange}
                   />
+                  {/* @ts-expect-error */}
                   <TextField
                     disabled={parseYesNo(state.from_file) === FROM_FILE}
                     grow="1"
@@ -102,6 +132,7 @@ const PortListsDialog = ({
                   />
                 </Row>
                 <Row>
+                  {/* @ts-expect-error */}
                   <Radio
                     checked={parseYesNo(state.from_file) === FROM_FILE}
                     name="from_file"
@@ -109,6 +140,7 @@ const PortListsDialog = ({
                     value={FROM_FILE}
                     onChange={onValueChange}
                   />
+                  {/* @ts-expect-error */}
                   <FileField
                     disabled={parseYesNo(state.from_file) !== FROM_FILE}
                     grow="1"
@@ -133,22 +165,6 @@ const PortListsDialog = ({
       }}
     </SaveDialog>
   );
-};
-
-PortListsDialog.propTypes = {
-  comment: PropTypes.string,
-  from_file: PropTypes.yesno,
-  id: PropTypes.string,
-  name: PropTypes.string,
-  port_list: PropTypes.model,
-  port_range: PropTypes.string,
-  port_ranges: PropTypes.array,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onDeletePortRangeClick: PropTypes.func,
-  onNewPortRangeClick: PropTypes.func,
-  onSave: PropTypes.func.isRequired,
-  onTmpDeletePortRange: PropTypes.func.isRequired,
 };
 
 export default PortListsDialog;
