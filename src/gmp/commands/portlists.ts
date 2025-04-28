@@ -9,14 +9,20 @@ import GmpHttp from 'gmp/http/gmp';
 import logger from 'gmp/log';
 import {Element} from 'gmp/model';
 import PortList, {PortListElement} from 'gmp/models/portlist';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 const log = logger.getLogger('gmp.commands.portlists');
+
+export const FROM_FILE = YES_VALUE;
+export const NOT_FROM_FILE = NO_VALUE;
+
+export type FromFile = typeof FROM_FILE | typeof NOT_FROM_FILE;
 
 interface PortListCommandCreateParams {
   name: string;
   comment?: string;
-  from_file?: string;
-  port_range?: string;
+  fromFile?: FromFile;
+  portRange?: string;
   file?: string;
 }
 
@@ -50,25 +56,23 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
   create({
     name,
     comment = '',
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    from_file,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range,
+    fromFile,
+    portRange,
     file,
   }: PortListCommandCreateParams) {
     log.debug('Creating new port list', {
       name,
       comment,
-      from_file,
-      port_range,
+      from_file: fromFile,
+      port_range: portRange,
       file,
     });
     return this.action({
       cmd: 'create_port_list',
       name,
       comment,
-      from_file,
-      port_range,
+      from_file: fromFile,
+      port_range: portRange,
       file,
     });
   }
