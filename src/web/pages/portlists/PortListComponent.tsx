@@ -179,7 +179,7 @@ const PortListComponent = ({
   const handleDeletePortRange = async (range: PortRange) => {
     await gmp.portlist.deletePortRange({
       id: range.id as string,
-      port_list_id: range.port_list_id as string,
+      portListId: range.port_list_id as string,
     });
   };
 
