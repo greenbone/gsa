@@ -52,8 +52,8 @@ export interface NumberFieldProps
   errorContent?: string;
   onChange?: (value: number | string, name?: string) => void;
   precision?: number | string;
-  type: 'int' | 'float';
-  size: 'sm' | 'md' | 'lg';
+  type?: 'int' | 'float';
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
