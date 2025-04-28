@@ -5,7 +5,6 @@
 
 import {EntityCommandParams} from 'gmp/commands/entity';
 import PortList, {ProtocolType} from 'gmp/models/portlist';
-import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React, {useState} from 'react';
@@ -261,16 +260,10 @@ const PortListComponent = ({
 
   const handleTmpAddPortRange = async ({
     id,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range_end,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range_start,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_type,
+    portRangeEnd,
+    portRangeStart,
+    portType,
   }: PortRangeDialogData) => {
-    const portRangeEnd = parseInt(port_range_end);
-    const portRangeStart = parseInt(port_range_start);
-
     handleInteraction();
 
     // reject port ranges with missing values
@@ -297,7 +290,7 @@ const PortListComponent = ({
       }
 
       if (
-        range.protocol_type === port_type &&
+        range.protocol_type === portType &&
         (portRangeStart === start ||
           portRangeStart === end ||
           (portRangeStart > start && portRangeStart < end) ||
@@ -313,7 +306,7 @@ const PortListComponent = ({
     const newRange: PortRange = {
       end: portRangeEnd,
       id,
-      protocol_type: port_type,
+      protocol_type: portType,
       start: portRangeStart,
       isTmp: true,
     };
