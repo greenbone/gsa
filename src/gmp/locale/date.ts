@@ -154,20 +154,20 @@ export const longDate = (
 };
 
 /**
- * Formats a date with a given time zone and user setting formats, including the full timezone name.
+ * Helper function to process a date with timezone information
  *
- * @param {Date} date - The date to format.
- * @param {string} [tz] - The time zone identifier (e.g., 'CET', 'UTC'). Optional if date already has timezone.
- * @param {string} [userInterfaceTimeFormat=SYSTEM_DEFAULT] - The user setting time format ('12' or '24').
- * @param {string} [userInterfaceDateFormat=SYSTEM_DEFAULT] - The user setting date format ('wmdy' or 'wdmy').
- * @returns {string|undefined} - The formatted date string with the full timezone name.
+ * @param {Date} date - The date to format
+ * @param {string} tz - The timezone
+ * @param {string} [userInterfaceTimeFormat=SYSTEM_DEFAULT] - The user setting time format ('12' or '24')
+ * @param {string} [userInterfaceDateFormat=SYSTEM_DEFAULT] - The user setting date format ('wmdy' or 'wdmy')
+ * @returns {Object|undefined} - Object with formattedDate and tzDisplay properties or undefined
  */
-export const dateTimeWithTimeZone = (
+export const processDateWithTimeZone = (
   date: DateInput,
-  tz: string,
+  tz?: string,
   userInterfaceTimeFormat: string = SYSTEM_DEFAULT,
   userInterfaceDateFormat: string = SYSTEM_DEFAULT,
-): string | undefined => {
+): {formattedDate: string; tzDisplay: string | undefined} | undefined => {
   const dateObj = ensureDate(date);
   if (!isDefined(dateObj)) {
     return undefined;
@@ -185,13 +185,17 @@ export const dateTimeWithTimeZone = (
     ? 'llll'
     : `${dateFormatString} ${timeFormatString}`;
 
-  const formattedDate = getFormattedDate(dateObj, formatString, tz);
+  const formattedDate =
+    isDefined(tz) && tz !== ''
+      ? getFormattedDate(dateObj, formatString, tz)
+      : getFormattedDate(dateObj, formatString);
+
   if (!isDefined(formattedDate)) {
     return undefined;
   }
 
-  let tzDisplay = '';
-  if (tz) {
+  let tzDisplay: string | undefined = undefined;
+  if (isDefined(tz) && tz !== '') {
     // If a timezone is provided, use it
     tzDisplay = dateObj.tz(tz).format('zzz');
     // @ts-expect-error
@@ -200,5 +204,69 @@ export const dateTimeWithTimeZone = (
     tzDisplay = dateObj.format('zzz');
   }
 
+  return {
+    formattedDate,
+    tzDisplay: tzDisplay ?? tz,
+  };
+};
+
+/**
+ * Formats a date with a given time zone and user setting formats, including the full timezone name.
+ *
+ * @param {Date} date - The date to format.
+ * @param {string} [tz] - The time zone identifier (e.g., 'CET', 'UTC'). Optional if date already has timezone.
+ * @param {string} [userInterfaceTimeFormat=SYSTEM_DEFAULT] - The user setting time format ('12' or '24').
+ * @param {string} [userInterfaceDateFormat=SYSTEM_DEFAULT] - The user setting date format ('wmdy' or 'wdmy').
+ * @returns {string|undefined} - The formatted date string with the full timezone name.
+ */
+export const dateTimeWithTimeZone = (
+  date: DateInput,
+  tz: string,
+  userInterfaceTimeFormat: string = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: string = SYSTEM_DEFAULT,
+): string | undefined => {
+  const result = processDateWithTimeZone(
+    date,
+    tz,
+    userInterfaceTimeFormat,
+    userInterfaceDateFormat,
+  );
+  if (!result) {
+    return undefined;
+  }
+
+  const {formattedDate, tzDisplay} = result;
   return tzDisplay ? `${formattedDate} ${tzDisplay}` : formattedDate;
+};
+
+/**
+ * Returns date and timezone as separate object properties for display on separate lines
+ *
+ * @param {Date} date - The date to format
+ * @param {string} tz - The timezone
+ * @param {string} [userInterfaceTimeFormat=SYSTEM_DEFAULT] - The user setting time format ('12' or '24')
+ * @param {string} [userInterfaceDateFormat=SYSTEM_DEFAULT] - The user setting date format ('wmdy' or 'wdmy')
+ * @returns {Object|undefined} - Object with datetime and timezone properties or undefined
+ */
+export const dateTimeWithTimeZoneObject = (
+  date: DateInput,
+  tz: string,
+  userInterfaceTimeFormat: string = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: string = SYSTEM_DEFAULT,
+): {datetime: string; timezone: string} | undefined => {
+  const result = processDateWithTimeZone(
+    date,
+    tz,
+    userInterfaceTimeFormat,
+    userInterfaceDateFormat,
+  );
+  if (!result) {
+    return undefined;
+  }
+
+  const {formattedDate, tzDisplay} = result;
+  return {
+    datetime: formattedDate,
+    timezone: tzDisplay ?? '',
+  };
 };

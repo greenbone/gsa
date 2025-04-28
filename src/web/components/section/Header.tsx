@@ -35,20 +35,22 @@ const WordBreakLayout = styled(Layout)`
 
 interface SectionHeaderProps {
   align?: string | [string, string];
+  alignHeading?: string | [string, string];
   children?: React.ReactNode;
   img?: string | React.ReactNode;
   title?: string | React.ReactNode;
 }
 
-const SectionHeader: React.FC<SectionHeaderProps> = ({
+const SectionHeader = ({
   children,
   align = ['space-between', 'end'],
+  alignHeading = ['start', 'stretch'],
   title,
   img,
 }: SectionHeaderProps) => {
   return (
     <HeaderLayout flex align={align} className="section-header">
-      <HeaderHeading align={['start', 'stretch']}>
+      <HeaderHeading align={alignHeading}>
         {isDefined(img) && (
           <HeaderIconLayout flex align={['start', 'end']}>
             {isString(img) ? <Icon img={img} size="large" /> : img}

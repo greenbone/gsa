@@ -46,6 +46,16 @@ const Span = styled.span`
   margin-top: 2px;
 `;
 
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  white-space: normal;
+  word-break: normal;
+  word-wrap: break-word;
+`;
+
 const PageContent = ({
   activeTab,
   applicationsCounts,
@@ -140,24 +150,28 @@ const PageContent = ({
     !showThresholdMessage &&
     (!isDefined(results.entities) || results.entities.length === 0);
 
-  const header_title = (
+  const HeaderTitle = (
     <Divider>
-      <span>{_('Report:')}</span>
+      <span style={{whiteSpace: 'nowrap'}}>{_('Report:')}</span>
       {showIsLoading ? (
         <span>{_('Loading')}</span>
       ) : (
-        <Divider>
-          <DateTime date={timestamp} />
+        <HeaderContainer>
+          <DateTime showTimezoneAsSeparateLine date={timestamp} />
           <Span>
             <StatusBar progress={progress} status={status} />
           </Span>
-        </Divider>
+        </HeaderContainer>
       )}
     </Divider>
   );
 
   const header = (
-    <SectionHeader img={<ReportIcon size="large" />} title={header_title}>
+    <SectionHeader
+      alignHeading={['start', 'baseline']}
+      img={<ReportIcon size="large" />}
+      title={HeaderTitle}
+    >
       {hasReport && <EntityInfo entity={entity} />}
     </SectionHeader>
   );
