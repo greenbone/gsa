@@ -45,7 +45,7 @@ interface PortListCommandDeletePortRangeParams {
 }
 
 interface PortListCommandImportParams {
-  xml_file: string;
+  xmlFile: string;
 }
 
 export class PortListCommand extends EntityCommand<PortList, PortListElement> {
@@ -115,12 +115,11 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
     return await this.get({id: port_list_id});
   }
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  import({xml_file}: PortListCommandImportParams) {
-    log.debug('Importing port list', {xml_file});
+  import({xmlFile}: PortListCommandImportParams) {
+    log.debug('Importing port list', {xml_file: xmlFile});
     return this.httpPost({
       cmd: 'import_port_list',
-      xml_file,
+      xml_file: xmlFile,
     });
   }
 

@@ -10,7 +10,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface PortListImportDialogProps {
   onClose: () => void;
-  onSave: (data: {xml_file: string}) => void | Promise<void>;
+  onSave: (data: {xmlFile: string}) => void | Promise<void>;
 }
 
 const PortListImportDialog = ({onClose, onSave}: PortListImportDialogProps) => {
@@ -26,7 +26,7 @@ const PortListImportDialog = ({onClose, onSave}: PortListImportDialogProps) => {
         return (
           <FormGroup title={_('Import XML Port List')}>
             {/* @ts-expect-error */}
-            <FileField name="xml_file" onChange={onValueChange} />
+            <FileField name="xmlFile" onChange={onValueChange} />
           </FormGroup>
         );
       }}
