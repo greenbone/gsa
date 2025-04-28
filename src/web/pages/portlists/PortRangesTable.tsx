@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ProtocolType} from 'gmp/models/portlist';
 import {isDefined} from 'gmp/utils/identity';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import TableBody from 'web/components/table/Body';
@@ -12,10 +13,11 @@ import TableHeader from 'web/components/table/Header';
 import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
+
 interface PortRange {
   start: number;
   end: number;
-  protocol_type: string;
+  protocolType: ProtocolType;
 }
 
 interface PortRangesTableProps {
@@ -45,10 +47,10 @@ const PortRangesTable: React.FC<PortRangesTableProps> = ({
       </TableHeader>
       <TableBody>
         {portRanges.map(range => (
-          <TableRow key={range.start + range.protocol_type}>
+          <TableRow key={range.start + range.protocolType}>
             <TableData>{range.start}</TableData>
             <TableData>{range.end}</TableData>
-            <TableData>{range.protocol_type}</TableData>
+            <TableData>{range.protocolType}</TableData>
             {actions && (
               <TableData align={['center', 'center']}>
                 <DeleteIcon<PortRange>

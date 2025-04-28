@@ -24,8 +24,8 @@ interface PortRangeElement extends ModelElement {
 }
 
 interface PortRangeProperties extends ModelProperties {
-  protocol_type: ProtocolType;
-  port_list_id: string;
+  protocolType: ProtocolType;
+  portListId: string;
   start: number;
   end: number;
 }
@@ -65,8 +65,8 @@ interface PortListProperties extends ModelProperties {
 
 export class PortRange extends Model {
   static entityType = 'portrange';
-  protocol_type!: ProtocolType;
-  port_list_id!: string;
+  protocolType!: ProtocolType;
+  portListId!: string;
   start!: number;
   end!: number;
 
@@ -76,7 +76,7 @@ export class PortRange extends Model {
 
   static parseElement(element: PortRangeElement): PortRangeProperties {
     const ret = super.parseElement(element) as PortRangeProperties;
-    ret.protocol_type = element.type;
+    ret.protocolType = element.type;
     return ret;
   }
 }
@@ -97,7 +97,7 @@ class PortList extends Model {
         : [];
 
     ret.port_ranges = map(ranges, (range: PortRangeElement) => {
-      range.port_list_id = ret.id;
+      range.portListId = ret.id;
       return PortRange.fromElement(range as Element);
     });
 
