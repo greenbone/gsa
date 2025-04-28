@@ -65,4 +65,8 @@ describe('isEmpty function test', () => {
   test('should return false for a string', () => {
     expect(isEmpty('abc')).toBe(false);
   });
+
+  test('should return false for numbers', () => {
+    expect(isEmpty(123)).toBe(false);
+  });
 });
