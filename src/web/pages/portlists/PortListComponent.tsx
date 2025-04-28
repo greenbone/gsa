@@ -256,7 +256,7 @@ const PortListComponent = ({
     closePortListDialog();
   };
 
-  const handleTmpAddPortRange = ({
+  const handleTmpAddPortRange = async ({
     id,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     port_range_end,
