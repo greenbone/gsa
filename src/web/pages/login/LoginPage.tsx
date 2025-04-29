@@ -149,7 +149,10 @@ const LoginPage: React.FC = () => {
   };
 
   const handleGuestLogin = async () => {
-    await login(gmp.settings.guestUsername, gmp.settings.guestPassword);
+    await login(
+      gmp.settings.guestUsername ?? 'guest',
+      gmp.settings.guestPassword ?? 'guest',
+    );
   };
 
   let message: string | undefined;
