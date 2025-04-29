@@ -7,7 +7,20 @@ import * as importPlugin from 'eslint-plugin-import';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
-import allowedSnakeCase from './allowedSnakeCase.js';
+import allowedSnakeCase from './eslint-script/allowedSnakeCase.js';
+import noDynamicI18n from './eslint-script/no-dynamic-i18n.js';
+
+// Create a custom plugin for our no-dynamic-i18n rule
+const customPlugin = {
+  plugins: {
+    custom: {
+      rules: {
+        'no-dynamic-i18n': noDynamicI18n,
+      },
+    },
+  },
+};
+
 pluginHeader.rules.header.meta.schema = false; // https://github.com/Stuk/eslint-plugin-header/issues/57
 
 const year = new Date().getFullYear();
@@ -84,6 +97,7 @@ const commonRules = {
 export default [
   pluginJs.configs.recommended,
   pluginReact.configs.flat?.recommended,
+  customPlugin,
   {
     ignores: ['build', 'eslint.config.js'],
   },
@@ -92,6 +106,7 @@ export default [
     files: ['**/*.{js,mjs,cjs,jsx}'],
     rules: {
       ...commonRules,
+      'custom/no-dynamic-i18n': 'warn',
       'react/prop-types': [
         'warn',
         {
@@ -133,7 +148,7 @@ export default [
     },
     rules: {
       ...commonRules,
-
+      'custom/no-dynamic-i18n': 'error',
       'react/prop-types': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
