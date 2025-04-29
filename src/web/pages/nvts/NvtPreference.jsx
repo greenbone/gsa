@@ -14,7 +14,6 @@ import Radio from 'web/components/form/Radio';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import Column from 'web/components/layout/Column';
-import Divider from 'web/components/layout/Divider';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
 import useTranslation from 'web/hooks/useTranslation';
