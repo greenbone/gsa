@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
