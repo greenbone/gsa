@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import CollectionCounts from 'gmp/collection/collectioncounts';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
 import {

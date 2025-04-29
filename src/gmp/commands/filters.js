@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import CollectionCounts from 'gmp/collection/collectioncounts';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
 import {parseCollectionList} from 'gmp/collection/parser';
 import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
@@ -11,7 +11,6 @@ import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-
 
 const log = logger.getLogger('gmp.commands.filters');
 

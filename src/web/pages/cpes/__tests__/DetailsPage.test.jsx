@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
