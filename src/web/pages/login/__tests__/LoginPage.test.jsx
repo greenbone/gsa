@@ -163,6 +163,58 @@ describe('LoginPage tests', () => {
     expect(mockUseNavigate).toBeCalledWith('/dashboards', {replace: true});
   });
 
+  test('should dispatch timezone to Redux after login', async () => {
+    const login = testing.fn().mockResolvedValue({
+      locale: 'locale',
+      token: 'token',
+      timezone: 'Australia/Sydney',
+      sessionTimeout: '10:00',
+    });
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {},
+      user: {
+        currentSettings: testing.fn().mockResolvedValue({
+          data: {
+            userinterfacetimeformat: {value: '24h'},
+            userinterfacedateformat: {value: 'YYYY-MM-DD'},
+          },
+        }),
+      },
+    };
+    const {render, store} = rendererWith({gmp, router: true, store: true});
+
+    const {getByName, getByTestId} = render(<LoginPage />);
+
+    const usernameField = getByName('username');
+    const passwordField = getByName('password');
+
+    fireEvent.change(usernameField, {target: {value: 'foo'}});
+    fireEvent.change(passwordField, {target: {value: 'bar'}});
+
+    const button = getByTestId('login-button');
+    fireEvent.click(button);
+
+    expect(login).toBeCalledWith('foo', 'bar');
+
+    await wait();
+
+    const userSettings = store.getState().userSettings;
+    expect(userSettings.timezone).toEqual('Australia/Sydney');
+    expect(userSettings.username).toEqual('foo');
+    expect(userSettings.isLoggedIn).toBe(true);
+
+    expect(setTimezone).toHaveBeenCalledWith('Australia/Sydney');
+  });
+
   describe('Community feed notification visibility based on user login and feed type', () => {
     Object.defineProperty(window, 'localStorage', {
       value: {

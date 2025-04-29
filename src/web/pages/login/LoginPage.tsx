@@ -28,6 +28,7 @@ import {
   setSessionTimeout,
   setUsername,
   setIsLoggedIn,
+  setTimezone,
 } from 'web/store/usersettings/actions';
 import Theme from 'web/utils/Theme';
 
@@ -103,6 +104,8 @@ const LoginPage: React.FC = () => {
       gmp.setLocale(locale);
       dispatch(setSessionTimeout(sessionTimeout));
       dispatch(setUsername(username));
+      dispatch(setTimezone(timezone));
+
       // must be set before changing the location
 
       dispatch(setIsLoggedIn(true));
