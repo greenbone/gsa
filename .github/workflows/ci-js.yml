@@ -80,10 +80,12 @@ jobs:
         run: npm install
       - name: Lint JavaScript files
         run: |
+          set -o pipefail
           echo "## Linting JavaScript files" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           npm run lint | tee -a $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+        shell: bash
 
   typecheck:
     name: Typecheck
