@@ -42,7 +42,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import AuditComponent from 'web/pages/audits/Component';
+import AuditComponent from 'web/pages/audits/AuditComponent';
 import AuditDetails from 'web/pages/audits/Details';
 import {
   TaskPermissions as AuditPermissions,
