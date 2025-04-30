@@ -6,7 +6,8 @@
 import Rejection from 'gmp/http/rejection';
 import Response, {Meta} from 'gmp/http/response';
 
-type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+type MethodUpperCase = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export type Method = MethodUpperCase | Lowercase<MethodUpperCase>;
 
 export interface TransformOptions {
   method?: Method;

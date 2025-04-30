@@ -6,28 +6,31 @@
 import CancelToken from 'gmp/cancel';
 import Rejection from 'gmp/http/rejection';
 import Response, {Meta} from 'gmp/http/response';
-import {Transform, TransformOptions} from 'gmp/http/transform/transform';
-import {buildUrlParams} from 'gmp/http/utils';
+import {
+  Method as HttpMethod,
+  Transform,
+  TransformOptions,
+} from 'gmp/http/transform/transform';
+import {
+  buildUrlParams,
+  UrlParams as Params,
+  UrlParamValue as ParamValue,
+} from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import {isDefined, hasValue, isArray} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.http');
 
-type Data = Record<
-  string,
-  string | number | boolean | string[] | number[] | boolean[]
->;
-type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-type ErrorHandler = (request: XMLHttpRequest) => void;
+type Data = Record<string, ParamValue | string[] | number[] | boolean[]>;
+export type ErrorHandler = (request: XMLHttpRequest) => void;
 type Resolve<TData, TMeta extends Meta> = (
   value: Response<TData, TMeta>,
 ) => void;
 type Reject = (reason?: string | Error) => void;
-type Params = Record<string, string | number | boolean>;
 
 interface HandleOptions {
-  method?: Method;
+  method?: HttpMethod;
   url?: string;
   formdata?: FormData;
   force?: boolean;
@@ -68,7 +71,7 @@ interface RequestOptions<
   TSuccessDataOut = TSuccessDataIn,
   TSuccessMetaOut extends Meta = TSuccessMetaIn,
 > {
-  args?: Record<string, string | number | boolean>;
+  args?: Params;
   data?: Data;
   url?: string;
   cancelToken?: CancelToken;
@@ -86,7 +89,7 @@ interface RequestOptions<
 function formdataAppend(
   formdata: FormData,
   key: string,
-  value: string | number | boolean | null | undefined,
+  value: ParamValue | null,
 ) {
   if (hasValue(value)) {
     formdata.append(key, String(value));
@@ -157,7 +160,7 @@ class Http<
   }
 
   request(
-    method: Method,
+    method: HttpMethod,
     {
       args,
       data,
@@ -176,7 +179,7 @@ class Http<
     const self = this;
     let formdata: FormData | undefined;
 
-    method = method.toUpperCase() as Method;
+    method = method.toUpperCase() as HttpMethod;
 
     if (args) {
       url += '?' + buildUrlParams({...this.getParams(), ...args});

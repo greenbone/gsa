@@ -97,9 +97,9 @@ const Theme: ThemeInterface = {
 
   severityClassLog: '#DDDDDD',
   severityClassLow: 'skyblue',
-  severityClassMedium: 'orange',
-  severityClassHigh: '#f51414',
-  severityClassCritical: '#bf0000',
+  severityClassMedium: '#F0A519',
+  severityClassHigh: '#F0868A',
+  severityClassCritical: '#C12C30',
 
   statusNewGreen: '#99be48', // used by: progressbar
   statusRunGreen: '#70c000', // used by: progressbar

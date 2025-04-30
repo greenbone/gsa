@@ -28,7 +28,6 @@ import 'gmp/commands/overrides';
 import 'gmp/commands/performance';
 import 'gmp/commands/permissions';
 import 'gmp/commands/policies';
-import 'gmp/commands/portlists';
 import 'gmp/commands/reportconfigs';
 import 'gmp/commands/reportformats';
 import 'gmp/commands/reports';
@@ -49,19 +48,33 @@ import 'gmp/commands/wizard';
 
 import {getCommands} from 'gmp/command';
 import LoginCommand from 'gmp/commands/login';
+import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
+import GmpSettings from 'gmp/gmpsettings';
 import GmpHttp from 'gmp/http/gmp';
+import {ErrorHandler} from 'gmp/http/http';
 import DefaultTransform from 'gmp/http/transform/default';
-import {buildServerUrl, buildUrlParams} from 'gmp/http/utils';
+import {buildServerUrl, buildUrlParams, UrlParams} from 'gmp/http/utils';
 import {setLocale} from 'gmp/locale/lang';
 import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
-import logger from 'gmp/log';
+import logger, {RootLogger} from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 const log = logger.getLogger('gmp');
 
+type Listener = () => void;
+
 class Gmp {
-  constructor(settings = {}, http) {
+  readonly settings: GmpSettings;
+  readonly log: RootLogger;
+  readonly http: GmpHttp;
+  readonly _login: LoginCommand;
+  _logoutListeners: Listener[];
+
+  readonly portlist: PortListCommand;
+  readonly portlists: PortListsCommand;
+
+  constructor(settings: GmpSettings, http?: GmpHttp) {
     this.settings = settings;
 
     logger.init(this.settings);
@@ -70,11 +83,14 @@ class Gmp {
 
     this.log = logger;
 
-    this.http = isDefined(http) ? http : new GmpHttp(this.settings);
+    this.http = http ?? new GmpHttp(this.settings);
 
     this._login = new LoginCommand(this.http);
 
     this._logoutListeners = [];
+
+    this.portlist = new PortListCommand(this.http);
+    this.portlists = new PortListsCommand(this.http);
 
     this._initCommands();
   }
@@ -91,44 +107,43 @@ class Gmp {
     }
   }
 
-  login(username, password) {
-    return this._login.login(username, password).then(login => {
-      const {token, timezone, locale, sessionTimeout} = login;
+  async login(username: string, password: string) {
+    const {token, timezone, locale, sessionTimeout} = await this._login.login(
+      username,
+      password,
+    );
 
-      this.settings.username = username;
-      this.settings.timezone = timezone;
-      this.settings.token = token;
-      this.settings.locale = locale;
+    this.settings.username = username;
+    this.settings.timezone = timezone;
+    this.settings.token = token;
+    this.settings.locale = locale;
 
-      return {
-        locale: locale === BROWSER_LANGUAGE ? undefined : locale,
-        username,
-        token,
-        timezone,
-        sessionTimeout,
-      };
-    });
+    return {
+      locale: locale === BROWSER_LANGUAGE ? undefined : locale,
+      username,
+      token,
+      timezone,
+      sessionTimeout,
+    };
   }
 
-  doLogout() {
+  async doLogout() {
     if (this.isLoggedIn()) {
       const url = this.buildUrl('logout');
       const args = {token: this.settings.token};
 
-      const promise = this.http
-        .request('get', {
+      try {
+        await this.http.request('get', {
           url,
           args,
+          // @ts-expect-error
           transform: DefaultTransform,
-        })
-        .catch(err => {
-          log.error('Error on logout', err);
-        })
-        .then(() => {
-          this.logout();
         });
-
-      return promise;
+      } catch (err) {
+        log.error('Error on logout', err);
+      } finally {
+        this.logout();
+      }
     }
 
     return Promise.resolve();
@@ -146,7 +161,7 @@ class Gmp {
     return !isEmpty(this.settings.token);
   }
 
-  subscribeToLogout(listener) {
+  subscribeToLogout(listener: Listener) {
     this._logoutListeners.push(listener);
 
     return () =>
@@ -155,7 +170,7 @@ class Gmp {
       ));
   }
 
-  buildUrl(path, params, anchor) {
+  buildUrl(path: string, params?: UrlParams, anchor?: string) {
     let url = buildServerUrl(
       this.settings.apiServer,
       path,
@@ -176,18 +191,18 @@ class Gmp {
     this.settings.token = undefined;
   }
 
-  setLocale(lang) {
+  setLocale(lang?: string) {
     this.settings.locale = lang;
     setLocale(lang);
     return this;
   }
 
-  setTimezone(timezone) {
+  setTimezone(timezone?: string) {
     this.settings.timezone = timezone;
     return this;
   }
 
-  addHttpErrorHandler(handler) {
+  addHttpErrorHandler(handler: ErrorHandler) {
     return this.http.addErrorHandler(handler);
   }
 }

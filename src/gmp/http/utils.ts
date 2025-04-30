@@ -5,9 +5,10 @@
 
 import {isDefined} from 'gmp/utils/identity';
 
-type Params = Record<string, string | number | boolean | undefined>;
+export type UrlParamValue = string | number | boolean | undefined;
+export type UrlParams = Record<string, UrlParamValue>;
 
-export const buildUrlParams = (params: Params) => {
+export const buildUrlParams = (params: UrlParams) => {
   let argCount = 0;
   let uri = '';
 
