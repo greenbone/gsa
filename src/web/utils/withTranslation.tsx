@@ -30,7 +30,7 @@ const withTranslation = WrappedComponent => {
     );
   };
 
-  WithTranslation.displayName = `withTranslation(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+  WithTranslation.displayName = `withTranslation(${WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'})`;
 
   return WithTranslation;
 };

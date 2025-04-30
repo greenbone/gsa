@@ -53,7 +53,7 @@ class UserComponent extends React.Component {
           oldName: user.name,
           roleIds,
           settings: response.data,
-          title: _('Edit User {{name}}', user),
+          title: _('Edit User {{name}}', {name: user.name}),
           user,
         });
       } else {
