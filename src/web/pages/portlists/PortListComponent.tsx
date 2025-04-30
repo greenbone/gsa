@@ -208,7 +208,7 @@ const PortListComponent = ({
     }
   };
 
-  const handleSavePortList = async (data: SavePortListData) => {
+  const handleSavePortList = async (data: SavePortListData<PortRange>) => {
     handleInteraction();
 
     if (isDefined(data.id)) {

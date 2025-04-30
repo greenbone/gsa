@@ -18,31 +18,31 @@ import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
 import PortRangesTable, {PortRange} from 'web/pages/portlists/PortRangesTable';
 
-export interface SavePortListData {
+export interface SavePortListData<TPortRange extends PortRange> {
   id?: string;
   comment: string;
   fromFile: FromFile;
   name: string;
   portRange: string;
-  portRanges: PortRange[];
+  portRanges: TPortRange[];
 }
 
-interface PortListsDialogProps {
+interface PortListsDialogProps<TPortRange extends PortRange> {
   comment?: string;
   fromFile?: FromFile;
   id?: string;
   name?: string;
   portList?: PortList;
   portRange?: string;
-  portRanges?: PortRange[];
+  portRanges?: TPortRange[];
   title?: string;
   onClose: () => void;
   onNewPortRangeClick: () => void;
-  onSave: (data: SavePortListData) => void | Promise<void>;
-  onTmpDeletePortRange: (portRange: PortRange) => void;
+  onSave: (data: SavePortListData<TPortRange>) => void | Promise<void>;
+  onTmpDeletePortRange: (portRange: TPortRange) => void;
 }
 
-const PortListsDialog = ({
+const PortListsDialog = <TPortRange extends PortRange>({
   comment = '',
   fromFile = NOT_FROM_FILE,
   id,
@@ -55,7 +55,7 @@ const PortListsDialog = ({
   onNewPortRangeClick,
   onTmpDeletePortRange,
   onSave,
-}: PortListsDialogProps) => {
+}: PortListsDialogProps<TPortRange>) => {
   const [_] = useTranslation();
   const isEdit = isDefined(portList);
   name = name || _('Unnamed');
@@ -148,7 +148,7 @@ const PortListsDialog = ({
             {isEdit && (
               <Section extra={newRangeIcon} title={_('Port Ranges')}>
                 {isDefined(portList) && (
-                  <PortRangesTable
+                  <PortRangesTable<TPortRange>
                     portRanges={state.portRanges}
                     onDeleteClick={onTmpDeletePortRange}
                   />
