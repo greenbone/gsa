@@ -91,8 +91,8 @@ const Row = ({
     </DetailsLink>
   ));
 
-  const authMethod = convert_auth_method(entity.authMethod);
-  const host_allow = convert_allow(entity.hosts).replace(/&#x2F;/g, '/');
+  const authMethod = convert_auth_method(entity.authMethod, _);
+  const host_allow = convert_allow(entity.hosts, _).replace(/&#x2F;/g, '/');
   return (
     <TableRow>
       <EntityNameTableData
