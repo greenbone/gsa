@@ -14,23 +14,23 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface PortRange {
+export interface PortRange {
   start: number;
   end: number;
   protocolType: ProtocolType;
 }
 
-interface PortRangesTableProps {
+interface PortRangesTableProps<TPortRange extends PortRange> {
   actions?: boolean;
-  portRanges?: PortRange[];
-  onDeleteClick?: (value?: PortRange) => void | Promise<void>;
+  portRanges?: TPortRange[];
+  onDeleteClick?: (value: TPortRange) => void | Promise<void>;
 }
 
-const PortRangesTable: React.FC<PortRangesTableProps> = ({
+const PortRangesTable = <TPortRange extends PortRange>({
   actions = true,
   portRanges,
   onDeleteClick,
-}: PortRangesTableProps) => {
+}: PortRangesTableProps<TPortRange>) => {
   const [_] = useTranslation();
   if (!isDefined(portRanges) || portRanges.length === 0) {
     return _('No Port Ranges available');
@@ -47,16 +47,16 @@ const PortRangesTable: React.FC<PortRangesTableProps> = ({
       </TableHeader>
       <TableBody>
         {portRanges.map(range => (
-          <TableRow key={range.start + range.protocolType}>
+          <TableRow key={`${range.start}-${range.protocolType}`}>
             <TableData>{range.start}</TableData>
             <TableData>{range.end}</TableData>
             <TableData>{range.protocolType}</TableData>
             {actions && (
               <TableData align={['center', 'center']}>
-                <DeleteIcon<PortRange>
+                <DeleteIcon<TPortRange>
                   title={_('Delete Port Range')}
                   value={range}
-                  onClick={onDeleteClick}
+                  onClick={onDeleteClick as () => void}
                 />
               </TableData>
             )}
