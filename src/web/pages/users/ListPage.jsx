@@ -15,10 +15,10 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import UserComponent from 'web/pages/users/Component';
 import ConfirmDeleteDialog from 'web/pages/users/ConfirmDeleteDialog';
 import UsersFilterDialog from 'web/pages/users/FilterDialog';
 import UsersTable from 'web/pages/users/Table';
+import UserComponent from 'web/pages/users/UserComponent';
 import {
   loadEntities,
   loadAllEntities,
@@ -242,7 +242,12 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadAll: () => dispatch(loadAllEntities(gmp)()),
 });
 
-export default compose(withTranslation, withGmp, withEntitiesContainer('user', {
-  entitiesSelector,
-  loadEntities,
-}), connect(mapStateToProps, mapDispatchToProps))(UsersPage);
+export default compose(
+  withTranslation,
+  withGmp,
+  withEntitiesContainer('user', {
+    entitiesSelector,
+    loadEntities,
+  }),
+  connect(mapStateToProps, mapDispatchToProps),
+)(UsersPage);
