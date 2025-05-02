@@ -4,177 +4,160 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
+import {useState} from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import UserDialog from 'web/pages/users/Dialog';
-import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import withGmp from 'web/utils/withGmp';
-import withTranslation from 'web/utils/withTranslation';
 
-class UserComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const UserComponent = props => {
+  const {
+    onInteraction,
+    children,
+    onCloned,
+    onCloneError,
+    onCreated,
+    onCreateError,
+    onDeleted,
+    onDeleteError,
+    onDownloaded,
+    onDownloadError,
+    onSaved,
+    onSaveError,
+  } = props;
+  const gmp = useGmp();
+  const [_] = useTranslation();
 
-    this.state = {
-      dialogVisible: false,
-    };
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [accessHosts, setAccessHosts] = useState();
+  const [comment, setComment] = useState();
+  const [groupIds, setGroupIds] = useState();
+  const [groups, setGroups] = useState();
+  const [hostsAllow, setHostsAllow] = useState();
+  const [name, setName] = useState();
+  const [oldName, setOldName] = useState();
+  const [roleIds, setRoleIds] = useState();
+  const [roles, setRoles] = useState();
+  const [settings, setSettings] = useState();
+  const [title, setTitle] = useState();
+  const [user, setUser] = useState();
 
-    this.handleCloseUserDialog = this.handleCloseUserDialog.bind(this);
-    this.openUserDialog = this.openUserDialog.bind(this);
-  }
-
-  openUserDialog(user) {
-    const {gmp} = this.props;
-    const {_} = this.props;
-
-    this.handleInteraction();
-
-    gmp.groups
-      .getAll({
-        filter: 'permission=modify_group', //  list only groups current user may modify
-      })
-      .then(resp => this.setState({groups: resp.data}));
-
-    gmp.roles.getAll().then(resp => this.setState({roles: resp.data}));
-
-    gmp.user.currentAuthSettings().then(response => {
-      if (isDefined(user)) {
-        const groupIds = user.groups.map(group => group.id);
-        const roleIds = user.roles.map(role => role.id);
-
-        this.setState({
-          dialogVisible: true,
-          accessHosts: user.hosts.addresses.join(', '),
-          comment: user.comment,
-          groupIds,
-          hostsAllow: user.hosts.allow,
-          name: user.name,
-          oldName: user.name,
-          roleIds,
-          settings: response.data,
-          title: _('Edit User {{name}}', {name: user.name}),
-          user,
-        });
-      } else {
-        this.setState({
-          accessHosts: undefined,
-          comment: undefined,
-          dialogVisible: true,
-          groupIds: undefined,
-          hostsAllow: undefined,
-          name: undefined,
-          oldName: undefined,
-          roleIds: undefined,
-          settings: response.data,
-          title: undefined,
-          user: undefined,
-        });
-      }
-    });
-  }
-
-  closeUserDialog() {
-    this.setState({dialogVisible: false});
-  }
-
-  handleCloseUserDialog() {
-    this.closeUserDialog();
-    this.handleInteraction();
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  render() {
-    const {
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
+  const closeUserDialog = () => {
+    setDialogVisible(false);
+  };
 
-    const {
-      accessHosts,
-      comment,
-      dialogVisible,
-      groupIds,
-      groups,
-      hostsAllow,
-      name,
-      oldName,
-      roleIds,
-      roles,
-      settings,
-      title,
-      user,
-    } = this.state;
+  const handleCloseUserDialog = () => {
+    closeUserDialog();
+    handleInteraction();
+  };
 
-    return (
-      <EntityComponent
-        name="user"
-        onCloneError={onCloneError}
-        onCloned={onCloned}
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onDownloadError={onDownloadError}
-        onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openUserDialog,
-              edit: this.openUserDialog,
-            })}
-            {dialogVisible && (
-              <UserDialog
-                accessHosts={accessHosts}
-                comment={comment}
-                groupIds={groupIds}
-                groups={groups}
-                hostsAllow={hostsAllow}
-                name={name}
-                oldName={oldName}
-                roleIds={roleIds}
-                roles={roles}
-                settings={settings}
-                title={title}
-                user={user}
-                onClose={this.handleCloseUserDialog}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d).then(() => this.closeUserDialog());
-                }}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
-}
+  const openUserDialog = async user => {
+    handleInteraction();
+
+    try {
+      const [groupsResponse, rolesResponse, authSettingsResponse] =
+        await Promise.all([
+          gmp.groups.getAll({
+            filter: 'permission=modify_group', //  list only groups current user may modify
+          }),
+          gmp.roles.getAll(),
+          gmp.user.currentAuthSettings(),
+        ]);
+
+      setGroups(groupsResponse.data);
+      setRoles(rolesResponse.data);
+
+      const settings = authSettingsResponse.data;
+      setSettings(settings);
+      setDialogVisible(true);
+
+      if (isDefined(user)) {
+        const newGroupIds = user.groups.map(group => group.id);
+        const newRoleIds = user.roles.map(role => role.id);
+
+        setAccessHosts(user.hosts.addresses.join(', '));
+        setComment(user.comment);
+        setGroupIds(newGroupIds);
+        setHostsAllow(user.hosts.allow);
+        setName(user.name);
+        setOldName(user.name);
+        setRoleIds(newRoleIds);
+        setTitle(_('Edit User {{name}}', user));
+        setUser(user);
+      } else {
+        setAccessHosts(undefined);
+        setComment(undefined);
+        setGroupIds(undefined);
+        setHostsAllow(undefined);
+        setName(undefined);
+        setOldName(undefined);
+        setRoleIds(undefined);
+        setTitle(undefined);
+        setUser(undefined);
+      }
+    } catch (error) {
+      console.error('Error loading user dialog data:', error);
+    }
+  };
+
+  return (
+    <EntityComponent
+      name="user"
+      onCloneError={onCloneError}
+      onCloned={onCloned}
+      onCreateError={onCreateError}
+      onCreated={onCreated}
+      onDeleteError={onDeleteError}
+      onDeleted={onDeleted}
+      onDownloadError={onDownloadError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaveError={onSaveError}
+      onSaved={onSaved}
+    >
+      {({save, ...other}) => (
+        <>
+          {children({
+            ...other,
+            create: openUserDialog,
+            edit: openUserDialog,
+          })}
+          {dialogVisible && (
+            <UserDialog
+              accessHosts={accessHosts}
+              comment={comment}
+              groupIds={groupIds}
+              groups={groups}
+              hostsAllow={hostsAllow}
+              name={name}
+              oldName={oldName}
+              roleIds={roleIds}
+              roles={roles}
+              settings={settings}
+              title={title}
+              user={user}
+              onClose={handleCloseUserDialog}
+              onSave={d => {
+                handleInteraction();
+                return save(d).then(() => closeUserDialog());
+              }}
+            />
+          )}
+        </>
+      )}
+    </EntityComponent>
+  );
+};
 
 UserComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -186,7 +169,6 @@ UserComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-  _: PropTypes.func.isRequired,
 };
 
-export default compose(withGmp, withTranslation)(UserComponent);
+export default UserComponent;
