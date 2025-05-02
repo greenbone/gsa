@@ -83,9 +83,9 @@ const Row = ({
         type="portlist"
         onToggleDetailsClick={onToggleDetailsClick}
       />
-      <TableData align="start">{entity.port_count.all}</TableData>
-      <TableData align="start">{entity.port_count.tcp}</TableData>
-      <TableData align="start">{entity.port_count.udp}</TableData>
+      <TableData align="start">{entity.portCount.all}</TableData>
+      <TableData align="start">{entity.portCount.tcp}</TableData>
+      <TableData align="start">{entity.portCount.udp}</TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );

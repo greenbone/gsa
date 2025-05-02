@@ -9,14 +9,20 @@ import GmpHttp from 'gmp/http/gmp';
 import logger from 'gmp/log';
 import {Element} from 'gmp/model';
 import PortList, {PortListElement} from 'gmp/models/portlist';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 const log = logger.getLogger('gmp.commands.portlists');
+
+export const FROM_FILE = YES_VALUE;
+export const NOT_FROM_FILE = NO_VALUE;
+
+export type FromFile = typeof FROM_FILE | typeof NOT_FROM_FILE;
 
 interface PortListCommandCreateParams {
   name: string;
   comment?: string;
-  from_file?: string;
-  port_range?: string;
+  fromFile?: FromFile;
+  portRange?: string;
   file?: string;
 }
 
@@ -27,19 +33,19 @@ interface PortListCommandSaveParams {
 }
 
 interface PortListCommandCreatePortRangeParams {
-  id: string;
-  port_range_start: number;
-  port_range_end: number;
-  port_type: string;
+  portListId: string;
+  portRangeStart: number;
+  portRangeEnd: number;
+  portType: string;
 }
 
 interface PortListCommandDeletePortRangeParams {
   id: string;
-  port_list_id: string;
+  portListId: string;
 }
 
 interface PortListCommandImportParams {
-  xml_file: string;
+  xmlFile: string;
 }
 
 export class PortListCommand extends EntityCommand<PortList, PortListElement> {
@@ -50,25 +56,23 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
   create({
     name,
     comment = '',
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    from_file,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range,
+    fromFile,
+    portRange,
     file,
   }: PortListCommandCreateParams) {
     log.debug('Creating new port list', {
       name,
       comment,
-      from_file,
-      port_range,
+      from_file: fromFile,
+      port_range: portRange,
       file,
     });
     return this.action({
       cmd: 'create_port_list',
       name,
       comment,
-      from_file,
-      port_range,
+      from_file: fromFile,
+      port_range: portRange,
       file,
     });
   }
@@ -84,42 +88,37 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
   }
 
   createPortRange({
-    id,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range_start,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range_end,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_type,
+    portListId,
+    portRangeStart,
+    portRangeEnd,
+    portType,
   }: PortListCommandCreatePortRangeParams) {
     return this.action({
       cmd: 'create_port_range',
-      id,
-      port_range_start,
-      port_range_end,
-      port_type,
+      id: portListId,
+      port_range_start: portRangeStart,
+      port_range_end: portRangeEnd,
+      port_type: portType,
     });
   }
 
   async deletePortRange({
     id,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_list_id,
+    portListId,
   }: PortListCommandDeletePortRangeParams) {
     await this.httpPost({
       cmd: 'delete_port_range',
       port_range_id: id,
       no_redirect: 1,
     });
-    return await this.get({id: port_list_id});
+    return await this.get({id: portListId});
   }
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  import({xml_file}: PortListCommandImportParams) {
-    log.debug('Importing port list', {xml_file});
+  import({xmlFile}: PortListCommandImportParams) {
+    log.debug('Importing port list', {xml_file: xmlFile});
     return this.httpPost({
       cmd: 'import_port_list',
-      xml_file,
+      xml_file: xmlFile,
     });
   }
 

@@ -24,8 +24,8 @@ interface PortRangeElement extends ModelElement {
 }
 
 interface PortRangeProperties extends ModelProperties {
-  protocol_type: ProtocolType;
-  port_list_id: string;
+  protocolType: ProtocolType;
+  portListId: string;
   start: number;
   end: number;
 }
@@ -53,8 +53,8 @@ interface PortCount {
 }
 
 interface PortListProperties extends ModelProperties {
-  port_ranges?: PortRangeProperties[];
-  port_count: {
+  portRanges?: PortRangeProperties[];
+  portCount: {
     all: number;
     tcp: number;
     udp: number;
@@ -65,8 +65,8 @@ interface PortListProperties extends ModelProperties {
 
 export class PortRange extends Model {
   static entityType = 'portrange';
-  protocol_type!: ProtocolType;
-  port_list_id!: string;
+  protocolType!: ProtocolType;
+  portListId!: string;
   start!: number;
   end!: number;
 
@@ -76,39 +76,42 @@ export class PortRange extends Model {
 
   static parseElement(element: PortRangeElement): PortRangeProperties {
     const ret = super.parseElement(element) as PortRangeProperties;
-    ret.protocol_type = element.type;
+    ret.protocolType = element.type;
     return ret;
   }
 }
 
 class PortList extends Model {
   static entityType = 'portlist';
-  port_ranges!: PortRange[];
-  port_count!: PortCount;
+  portRanges!: PortRange[];
+  portCount!: PortCount;
   targets!: Model[];
   predefined!: boolean;
 
   static parseElement(element: PortListElement): PortListProperties {
     const ret = super.parseElement(element) as PortListProperties;
 
-    const ranges =
-      isDefined(ret.port_ranges) && isDefined(element.port_ranges)
-        ? element.port_ranges.port_range
-        : [];
+    const ranges = isDefined(element.port_ranges?.port_range)
+      ? element.port_ranges.port_range
+      : [];
+    // @ts-expect-error
+    delete ret.port_ranges;
 
-    ret.port_ranges = map(ranges, (range: PortRangeElement) => {
-      range.port_list_id = ret.id;
+    ret.portRanges = map(ranges, (range: PortRangeElement) => {
+      range.portListId = ret.id;
       return PortRange.fromElement(range as Element);
     });
 
     const {port_count} = element;
-    ret.port_count = {
+    // @ts-expect-error
+    delete ret.port_count;
+    ret.portCount = {
       all: parseInt(port_count?.all) || 0,
       tcp: parseInt(port_count?.tcp) || 0,
       udp: parseInt(port_count?.udp) || 0,
     };
 
-    ret.targets = map(element?.targets?.target, target =>
+    ret.targets = map(element.targets?.target, target =>
       parseModelFromElement(target, 'target'),
     );
 

@@ -5,7 +5,6 @@
 
 import {EntityCommandParams} from 'gmp/commands/entity';
 import PortList, {ProtocolType} from 'gmp/models/portlist';
-import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import React, {useState} from 'react';
@@ -15,18 +14,19 @@ import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PortListsDialog from 'web/pages/portlists/Dialog';
-import ImportPortListDialog from 'web/pages/portlists/ImportDialog';
+import PortListsDialog, {
+  SavePortListData,
+} from 'web/pages/portlists/PortListDialog';
+import ImportPortListDialog from 'web/pages/portlists/PortListImportDialog';
 import PortRangeDialog, {
   PortRangeDialogData,
 } from 'web/pages/portlists/PortRangeDialog';
 
 interface PortRange {
-  entityType: string;
   id?: string;
   isTmp?: boolean;
-  protocol_type: ProtocolType;
-  port_list_id?: string;
+  protocolType: ProtocolType;
+  portListId: string;
   start: number;
   end: number;
 }
@@ -125,7 +125,7 @@ const PortListComponent = ({
       );
       setPortList(portList);
       setPortListDialogVisible(true);
-      setPortRanges(portList.port_ranges);
+      setPortRanges(portList.portRanges as PortRange[]);
     } else {
       // create
       setCreatedPortRanges([]);
@@ -179,24 +179,23 @@ const PortListComponent = ({
   const handleDeletePortRange = async (range: PortRange) => {
     await gmp.portlist.deletePortRange({
       id: range.id as string,
-      port_list_id: range.port_list_id as string,
+      portListId: range.portListId,
     });
   };
 
   const handleSavePortRange = async (data: {
-    id: string;
-    port_range_start: number;
-    port_range_end: number;
-    port_type: ProtocolType;
+    portListId: string;
+    portRangeStart: number;
+    portRangeEnd: number;
+    portType: ProtocolType;
   }) => {
     const response = await gmp.portlist.createPortRange(data);
     return response.data.id;
   };
 
-  const handleImportPortList = async (data: unknown) => {
+  const handleImportPortList = async (data: {xmlFile: string}) => {
     handleInteraction();
     try {
-      // @ts-expect-error
       const response = await gmp.portlist.import(data);
       if (isDefined(onImported)) {
         onImported(response);
@@ -209,65 +208,62 @@ const PortListComponent = ({
     }
   };
 
-  const handleSavePortList = async (data: {id: string}) => {
+  const handleSavePortList = async (data: SavePortListData<PortRange>) => {
     handleInteraction();
 
-    try {
-      const createdPromises = createdPortRanges.map(
-        async (range: PortRange) => {
-          // save temporary port ranges in the backend
-          const id = await handleSavePortRange({
-            id: range.id as string,
-            port_range_start: range.start,
-            port_range_end: range.end,
-            port_type: range.protocol_type,
-          });
-          range.isTmp = false;
-          range.id = id;
-          // the range has been saved in the backend
-          // if something fails the state contains the still to be saved ranges
-          setCreatedPortRanges(createdPortRanges =>
-            createdPortRanges.filter(pRange => pRange !== range),
-          );
-        },
-      );
-      const deletedPromises = deletedPortRanges.map(
-        async (range: PortRange) => {
-          await handleDeletePortRange(range);
-          // the range has been deleted from the backend
-          // if something fails the state contains the still to be deleted ranges
-          setDeletedPortRanges(deletedPortRanges =>
-            deletedPortRanges.filter(pRange => pRange !== range),
-          );
-        },
-      );
+    if (isDefined(data.id)) {
+      // save existing port list
+      try {
+        const createdPromises = createdPortRanges.map(
+          async (range: PortRange) => {
+            // save temporary port ranges in the backend
+            const id = await handleSavePortRange({
+              portListId: range.portListId,
+              portRangeStart: range.start,
+              portRangeEnd: range.end,
+              portType: range.protocolType,
+            });
+            range.isTmp = false;
+            range.id = id;
+            // the range has been saved in the backend
+            // if something fails the state contains the still to be saved ranges
+            setCreatedPortRanges(createdPortRanges =>
+              createdPortRanges.filter(pRange => pRange !== range),
+            );
+          },
+        );
+        const deletedPromises = deletedPortRanges.map(
+          async (range: PortRange) => {
+            await handleDeletePortRange(range);
+            // the range has been deleted from the backend
+            // if something fails the state contains the still to be deleted ranges
+            setDeletedPortRanges(deletedPortRanges =>
+              deletedPortRanges.filter(pRange => pRange !== range),
+            );
+          },
+        );
 
-      const promises = [...createdPromises, ...deletedPromises];
-      await Promise.all(promises);
-    } catch (error) {
-      if (isDefined(data?.id) && isDefined(onSaveError)) {
-        return onSaveError(error);
-      } else if (!isDefined(data?.id) && isDefined(onCreateError)) {
-        return onCreateError(error);
+        const promises = [...createdPromises, ...deletedPromises];
+        await Promise.all(promises);
+      } catch (error) {
+        if (isDefined(data?.id) && isDefined(onSaveError)) {
+          return onSaveError(error);
+        } else if (!isDefined(data?.id) && isDefined(onCreateError)) {
+          return onCreateError(error);
+        }
+        throw error;
       }
-      throw error;
     }
     await handleSave(data);
     closePortListDialog();
   };
 
   const handleTmpAddPortRange = async ({
-    id,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range_end,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_range_start,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    port_type,
+    portListId,
+    portRangeEnd,
+    portRangeStart,
+    portType,
   }: PortRangeDialogData) => {
-    const portRangeEnd = parseInt(port_range_end);
-    const portRangeStart = parseInt(port_range_start);
-
     handleInteraction();
 
     // reject port ranges with missing values
@@ -294,7 +290,7 @@ const PortListComponent = ({
       }
 
       if (
-        range.protocol_type === port_type &&
+        range.protocolType === portType &&
         (portRangeStart === start ||
           portRangeStart === end ||
           (portRangeStart > start && portRangeStart < end) ||
@@ -309,9 +305,8 @@ const PortListComponent = ({
 
     const newRange: PortRange = {
       end: portRangeEnd,
-      entityType: 'portrange',
-      id,
-      protocol_type: port_type,
+      portListId,
+      protocolType: portType,
       start: portRangeStart,
       isTmp: true,
     };
@@ -358,9 +353,8 @@ const PortListComponent = ({
           comment={comment}
           id={id}
           name={name}
-          port_list={portList}
-          // @ts-expect-error
-          port_ranges={portRanges}
+          portList={portList}
+          portRanges={portRanges}
           title={portListDialogTitle}
           onClose={handleClosePortListDialog}
           onNewPortRangeClick={openNewPortRangeDialog}
@@ -376,7 +370,7 @@ const PortListComponent = ({
       )}
       {portRangeDialogVisible && id && (
         <PortRangeDialog
-          id={id}
+          portListId={id}
           onClose={handleCloseNewPortRangeDialog}
           onSave={handleTmpAddPortRange}
         />

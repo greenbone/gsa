@@ -34,22 +34,22 @@ describe('PortList model tests', () => {
     };
     const portList = PortList.fromElement(elem);
 
-    expect(portList.port_ranges[0]).toBeInstanceOf(Model);
-    expect(portList.port_ranges[0].entityType).toEqual('portrange');
-    expect(portList.port_ranges[0].start).toEqual('1');
-    expect(portList.port_ranges[0].end).toEqual('2');
-    expect(portList.port_ranges[0].comment).toEqual('foo');
-    expect(portList.port_ranges[0].port_list_id).toEqual('1337');
-    expect(portList.port_ranges[0].id).toEqual('123abc');
-    expect(portList.port_ranges[0].protocol_type).toEqual('tcp');
-    expect(portList.port_ranges[1]).toBeInstanceOf(Model);
-    expect(portList.port_ranges[1].entityType).toEqual('portrange');
-    expect(portList.port_ranges[1].start).toEqual('3');
-    expect(portList.port_ranges[1].end).toEqual('200');
-    expect(portList.port_ranges[1].comment).toBeUndefined();
-    expect(portList.port_ranges[1].port_list_id).toEqual('1337');
-    expect(portList.port_ranges[1].id).toEqual('42xy');
-    expect(portList.port_ranges[1].protocol_type).toEqual('udp');
+    expect(portList.portRanges[0]).toBeInstanceOf(Model);
+    expect(portList.portRanges[0].entityType).toEqual('portrange');
+    expect(portList.portRanges[0].start).toEqual('1');
+    expect(portList.portRanges[0].end).toEqual('2');
+    expect(portList.portRanges[0].comment).toEqual('foo');
+    expect(portList.portRanges[0].portListId).toEqual('1337');
+    expect(portList.portRanges[0].id).toEqual('123abc');
+    expect(portList.portRanges[0].protocolType).toEqual('tcp');
+    expect(portList.portRanges[1]).toBeInstanceOf(Model);
+    expect(portList.portRanges[1].entityType).toEqual('portrange');
+    expect(portList.portRanges[1].start).toEqual('3');
+    expect(portList.portRanges[1].end).toEqual('200');
+    expect(portList.portRanges[1].comment).toBeUndefined();
+    expect(portList.portRanges[1].portListId).toEqual('1337');
+    expect(portList.portRanges[1].id).toEqual('42xy');
+    expect(portList.portRanges[1].protocolType).toEqual('udp');
   });
 
   test('should parse port_count correctly and as integer', () => {
@@ -62,17 +62,17 @@ describe('PortList model tests', () => {
     };
     const portList = PortList.fromElement(elem);
 
-    expect(portList.port_count.all).toEqual(42);
-    expect(portList.port_count.tcp).toEqual(20);
-    expect(portList.port_count.udp).toEqual(1);
+    expect(portList.portCount.all).toEqual(42);
+    expect(portList.portCount.tcp).toEqual(20);
+    expect(portList.portCount.udp).toEqual(1);
   });
 
   test('should return counts of zero, if port_count is not defined', () => {
     const portList = PortList.fromElement({});
 
-    expect(portList.port_count.all).toEqual(0);
-    expect(portList.port_count.tcp).toEqual(0);
-    expect(portList.port_count.udp).toEqual(0);
+    expect(portList.portCount.all).toEqual(0);
+    expect(portList.portCount.tcp).toEqual(0);
+    expect(portList.portCount.udp).toEqual(0);
   });
 
   test('should parse targets', () => {

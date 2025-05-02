@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {NO_VALUE, YES_VALUE, parseYesNo} from 'gmp/parser';
+import {FROM_FILE, FromFile, NOT_FROM_FILE} from 'gmp/commands/portlists';
+import PortList from 'gmp/models/portlist';
+import {parseYesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
@@ -15,27 +16,48 @@ import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-import PortRangesTable from 'web/pages/portlists/PortRangesTable';
-import PropTypes from 'web/utils/PropTypes';
-const FROM_FILE = YES_VALUE;
-const NOT_FROM_FILE = NO_VALUE;
+import PortRangesTable, {PortRange} from 'web/pages/portlists/PortRangesTable';
 
-const PortListsDialog = ({
+export interface SavePortListData<TPortRange extends PortRange> {
+  id?: string;
+  comment: string;
+  fromFile: FromFile;
+  name: string;
+  portRange: string;
+  portRanges: TPortRange[];
+}
+
+interface PortListsDialogProps<TPortRange extends PortRange> {
+  comment?: string;
+  fromFile?: FromFile;
+  id?: string;
+  name?: string;
+  portList?: PortList;
+  portRange?: string;
+  portRanges?: TPortRange[];
+  title?: string;
+  onClose: () => void;
+  onNewPortRangeClick: () => void;
+  onSave: (data: SavePortListData<TPortRange>) => void | Promise<void>;
+  onTmpDeletePortRange: (portRange: TPortRange) => void;
+}
+
+const PortListsDialog = <TPortRange extends PortRange>({
   comment = '',
-  from_file = NO_VALUE,
+  fromFile = NOT_FROM_FILE,
   id,
   name,
-  port_list,
-  port_range = 'T:1-5,7,9,U:1-3,5,7,9',
-  port_ranges = [],
+  portList,
+  portRange = 'T:1-5,7,9,U:1-3,5,7,9',
+  portRanges = [],
   title,
   onClose,
   onNewPortRangeClick,
   onTmpDeletePortRange,
   onSave,
-}) => {
+}: PortListsDialogProps<TPortRange>) => {
   const [_] = useTranslation();
-  const isEdit = isDefined(port_list);
+  const isEdit = isDefined(portList);
   name = name || _('Unnamed');
   title = title || _('New Port List');
 
@@ -44,7 +66,6 @@ const PortListsDialog = ({
       <NewIcon
         data-testid="new-port-range"
         title={_('Add Port Range')}
-        value={port_list}
         onClick={onNewPortRangeClick}
       />
     </div>
@@ -53,22 +74,23 @@ const PortListsDialog = ({
   const data = {
     id,
     comment,
-    from_file,
+    fromFile,
     name,
-    port_range,
+    portRange,
   };
 
   return (
     <SaveDialog
       defaultValues={data}
       title={title}
-      values={{port_ranges}}
+      values={{portRanges}}
       onClose={onClose}
       onSave={onSave}
     >
       {({values: state, onValueChange}) => {
         return (
           <>
+            {/* @ts-expect-error */}
             <TextField
               name="name"
               title={_('Name')}
@@ -76,6 +98,7 @@ const PortListsDialog = ({
               onChange={onValueChange}
             />
 
+            {/* @ts-expect-error */}
             <TextField
               name="comment"
               title={_('Comment')}
@@ -86,31 +109,35 @@ const PortListsDialog = ({
             {!isEdit && (
               <FormGroup title={_('Port Ranges')}>
                 <Row>
+                  {/* @ts-expect-error */}
                   <Radio
-                    checked={parseYesNo(state.from_file) !== FROM_FILE}
-                    name="from_file"
+                    checked={parseYesNo(state.fromFile) !== FROM_FILE}
+                    name="fromFile"
                     title={_('Manual')}
                     value={NOT_FROM_FILE}
                     onChange={onValueChange}
                   />
+                  {/* @ts-expect-error */}
                   <TextField
-                    disabled={parseYesNo(state.from_file) === FROM_FILE}
+                    disabled={parseYesNo(state.fromFile) === FROM_FILE}
                     grow="1"
-                    name="port_range"
-                    value={state.port_range}
+                    name="portRange"
+                    value={state.portRange}
                     onChange={onValueChange}
                   />
                 </Row>
                 <Row>
+                  {/* @ts-expect-error */}
                   <Radio
-                    checked={parseYesNo(state.from_file) === FROM_FILE}
-                    name="from_file"
+                    checked={parseYesNo(state.fromFile) === FROM_FILE}
+                    name="fromFile"
                     title={_('From file')}
                     value={FROM_FILE}
                     onChange={onValueChange}
                   />
+                  {/* @ts-expect-error */}
                   <FileField
-                    disabled={parseYesNo(state.from_file) !== FROM_FILE}
+                    disabled={parseYesNo(state.fromFile) !== FROM_FILE}
                     grow="1"
                     name="file"
                     onChange={onValueChange}
@@ -120,9 +147,9 @@ const PortListsDialog = ({
             )}
             {isEdit && (
               <Section extra={newRangeIcon} title={_('Port Ranges')}>
-                {isDefined(port_list) && (
-                  <PortRangesTable
-                    portRanges={state.port_ranges}
+                {isDefined(portList) && (
+                  <PortRangesTable<TPortRange>
+                    portRanges={state.portRanges}
                     onDeleteClick={onTmpDeletePortRange}
                   />
                 )}
@@ -133,22 +160,6 @@ const PortListsDialog = ({
       }}
     </SaveDialog>
   );
-};
-
-PortListsDialog.propTypes = {
-  comment: PropTypes.string,
-  from_file: PropTypes.yesno,
-  id: PropTypes.string,
-  name: PropTypes.string,
-  port_list: PropTypes.model,
-  port_range: PropTypes.string,
-  port_ranges: PropTypes.array,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onDeletePortRangeClick: PropTypes.func,
-  onNewPortRangeClick: PropTypes.func,
-  onSave: PropTypes.func.isRequired,
-  onTmpDeletePortRange: PropTypes.func.isRequired,
 };
 
 export default PortListsDialog;

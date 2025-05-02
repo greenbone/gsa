@@ -37,6 +37,7 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
+
 const ToolBarIcons = ({onPortListCreateClick, onPortListImportClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();

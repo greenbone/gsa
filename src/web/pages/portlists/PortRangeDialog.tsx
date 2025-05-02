@@ -11,24 +11,23 @@ import Radio from 'web/components/form/Radio';
 import useTranslation from 'web/hooks/useTranslation';
 
 export interface PortRangeDialogData {
-  id: string;
-  port_range_start: string;
-  port_range_end: string;
-  port_type: ProtocolType;
+  portListId: string;
+  portRangeStart: number;
+  portRangeEnd: number;
+  portType: ProtocolType;
 }
 
 interface PortRangeDialogProps {
-  id: string;
-  port_type?: ProtocolType;
+  portListId: string;
+  portType?: ProtocolType;
   title?: string;
   onClose: () => void;
   onSave: (data: PortRangeDialogData) => void;
 }
 
 const PortRangeDialog = ({
-  id,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  port_type = 'tcp',
+  portListId,
+  portType = 'tcp',
   title,
   onClose,
   onSave,
@@ -38,10 +37,10 @@ const PortRangeDialog = ({
   title = title || _('New Port Range');
 
   const data = {
-    id,
-    port_range_start: '',
-    port_range_end: '',
-    port_type,
+    portListId,
+    portRangeStart: '',
+    portRangeEnd: '',
+    portType,
   };
 
   return (
@@ -56,18 +55,18 @@ const PortRangeDialog = ({
           <>
             <FormGroup title={_('Start')}>
               <NumberField
-                name="port_range_start"
+                name="portRangeStart"
                 type="int"
-                value={state.port_range_start}
+                value={state.portRangeStart}
                 onChange={onValueChange}
               />
             </FormGroup>
 
             <FormGroup title={_('End')}>
               <NumberField
-                name="port_range_end"
+                name="portRangeEnd"
                 type="int"
-                value={state.port_range_end}
+                value={state.portRangeEnd}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -75,16 +74,16 @@ const PortRangeDialog = ({
             <FormGroup direction="row" title={_('Protocol')}>
               {/* @ts-expect-error */}
               <Radio
-                checked={state.port_type === 'tcp'}
-                name="port_type"
+                checked={state.portType === 'tcp'}
+                name="portType"
                 title={_('TCP')}
                 value="tcp"
                 onChange={onValueChange}
               />
               {/* @ts-expect-error */}
               <Radio
-                checked={state.port_type === 'udp'}
-                name="port_type"
+                checked={state.portType === 'udp'}
+                name="portType"
                 title={_('UDP')}
                 value="udp"
                 onChange={onValueChange}

@@ -311,10 +311,10 @@ describe('Port List Component tests', () => {
     const portListDialog = dialogs[0];
     const portRangeDialog = dialogs[1];
 
-    const portRangeStart = getByName(portRangeDialog, 'port_range_start');
+    const portRangeStart = getByName(portRangeDialog, 'portRangeStart');
     changeInputValue(portRangeStart, '1');
 
-    const portRangeEnd = getByName(portRangeDialog, 'port_range_end');
+    const portRangeEnd = getByName(portRangeDialog, 'portRangeEnd');
     changeInputValue(portRangeEnd, '20');
 
     const savePortRangeButton = getDialogSaveButton(portRangeDialog);
@@ -326,25 +326,25 @@ describe('Port List Component tests', () => {
     fireEvent.click(savePortListButton);
     await wait();
     expect(createPortRange).toHaveBeenCalledExactlyOnceWith({
-      id: '123',
-      port_range_end: 20,
-      port_range_start: 1,
-      port_type: 'tcp',
+      portListId: '123',
+      portRangeEnd: 20,
+      portRangeStart: 1,
+      portType: 'tcp',
     });
     expect(save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
-      from_file: 0,
+      fromFile: 0,
       id: '123',
       name: 'foo',
-      port_range: 'T:1-5,7,9,U:1-3,5,7,9',
-      port_ranges: [
+      portRange: 'T:1-5,7,9,U:1-3,5,7,9',
+      portRanges: [
         {
           end: 20,
           id: 1234,
           start: 1,
-          entityType: 'portrange',
           isTmp: false,
-          protocol_type: 'tcp',
+          portListId: '123',
+          protocolType: 'tcp',
         },
       ],
     });
@@ -408,17 +408,17 @@ describe('Port List Component tests', () => {
     await wait();
 
     expect(deletePortRange).toHaveBeenCalledExactlyOnceWith({
-      id: portList.port_ranges[0].id,
-      port_list_id: portList.id,
+      id: portList.portRanges[0].id,
+      portListId: portList.id,
     });
     expect(onSaveError).not.toHaveBeenCalled();
     expect(save).toHaveBeenCalledExactlyOnceWith({
       comment: '',
-      from_file: 0,
+      fromFile: 0,
       id: '123',
       name: 'foo',
-      port_range: 'T:1-5,7,9,U:1-3,5,7,9',
-      port_ranges: [],
+      portRange: 'T:1-5,7,9,U:1-3,5,7,9',
+      portRanges: [],
     });
     expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
     expect(onInteraction).toHaveBeenCalled();
