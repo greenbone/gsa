@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import RoleComponent from 'web/pages/roles/Component';
+import RoleComponent from 'web/pages/roles/RoleComponent';
 import RolesFilterDialog from 'web/pages/roles/FilterDialog';
 import Table from 'web/pages/roles/Table';
 import {
