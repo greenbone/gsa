@@ -7,10 +7,7 @@
 // it requires global.beforeEach and expect
 import 'jest-styled-components';
 
-import {
-  ThemeProvider,
-  theme,
-} from '@greenbone/opensight-ui-components-mantinev7';
+import {ThemeProvider} from '@greenbone/opensight-ui-components-mantinev7';
 import {afterEach} from '@gsa/testing';
 import {
   act,
@@ -91,8 +88,7 @@ export const getByName = (container: HTMLElement, name: string) => {
 
 const Main = ({children}: {children: React.ReactNode}) => {
   return (
-    // @ts-expect-error
-    <ThemeProvider theme={{...theme, colorScheme: 'light'}}>
+    <ThemeProvider defaultColorScheme="light">
       <StyleSheetManager enableVendorPrefixes>{children}</StyleSheetManager>
     </ThemeProvider>
   );
