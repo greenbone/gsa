@@ -3,11 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {
-  ThemeProvider,
-  theme,
-} from '@greenbone/opensight-ui-components-mantinev7';
-import Gmp from 'gmp';
+import {ThemeProvider} from '@greenbone/opensight-ui-components-mantinev7';
+import Gmp from 'gmp/gmp';
 import GmpSettings from 'gmp/gmpsettings';
 import {_, initLocale} from 'gmp/locale/lang';
 import {LOG_LEVEL_DEBUG} from 'gmp/log';
@@ -27,7 +24,7 @@ import {
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
 
-initLocale();
+void initLocale();
 
 const settings = new GmpSettings(global.localStorage, global.config);
 const gmp = new Gmp(settings);
@@ -38,6 +35,7 @@ const store = configureStore({
     : settings.logLevel === LOG_LEVEL_DEBUG,
 });
 
+// @ts-expect-error
 window.gmp = gmp;
 
 const initStore = () => {
@@ -52,8 +50,10 @@ const initStore = () => {
   store.dispatch(setIsLoggedIn(gmp.isLoggedIn()));
 };
 
-class App extends React.Component {
-  constructor(props) {
+class App extends React.Component<{}> {
+  private unsubscribeFromLogout!: () => void;
+
+  constructor(props: {}) {
     super(props);
 
     this.handleLogout = this.handleLogout.bind(this);
@@ -78,7 +78,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={{...theme, colorScheme: 'light'}}>
+      <ThemeProvider defaultColorScheme="light">
         <GlobalStyles />
         <ErrorBoundary message={_('An error occurred on this page')}>
           <GmpContext.Provider value={gmp}>
