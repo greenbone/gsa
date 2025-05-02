@@ -5,10 +5,13 @@
 
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import {connect} from 'react-redux';
+import {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/actionFunction';
+import useCapabilities from 'web/hooks/useCapabilities';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import RoleDialog from 'web/pages/roles/Dialog';
 import {
   loadAllEntities as loadAllGroups,
@@ -18,73 +21,80 @@ import {
   loadAllEntities as loadAllUsers,
   selector as userSelector,
 } from 'web/store/entities/users';
-import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-import withTranslation from 'web/utils/withTranslation';
 
-class RoleComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const RoleComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
+  const gmp = useGmp();
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  const dispatch = useDispatch();
 
-    this.state = {
-      dialogVisible: false,
-      error: undefined,
-    };
+  const allUsers = useSelector(state => userSelector(state).getAllEntities());
+  const allGroups = useSelector(state => groupSelector(state).getAllEntities());
 
-    this.handleCreatePermission = this.handleCreatePermission.bind(this);
-    this.handleCreateSuperPermission =
-      this.handleCreateSuperPermission.bind(this);
-    this.handleDeletePermission = this.handleDeletePermission.bind(this);
-    this.handleErrorClose = this.handleErrorClose.bind(this);
+  const dispatchLoadAllUsers = () => dispatch(loadAllUsers(gmp)());
+  const dispatchLoadAllGroups = () => dispatch(loadAllGroups(gmp)());
 
-    this.handleCloseRoleDialog = this.handleCloseRoleDialog.bind(this);
-    this.openRoleDialog = this.openRoleDialog.bind(this);
-  }
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [error, setError] = useState(undefined);
+  const [allPermissions, setAllPermissions] = useState(undefined);
+  const [isCreatingPermission, setIsCreatingPermission] = useState(false);
+  const [isCreatingSuperPermission, setIsCreatingSuperPermission] =
+    useState(false);
+  const [isInUse, setIsInUse] = useState(false);
+  const [isLoadingPermissions, setIsLoadingPermissions] = useState(false);
+  const [permissions, setPermissions] = useState(undefined);
+  const [role, setRole] = useState(undefined);
+  const [title, setTitle] = useState('');
 
-  openRoleDialog(role) {
-    this.handleInteraction();
-    const {_} = this.props;
+  const openRoleDialog = role => {
+    handleInteraction();
 
-    this.props.loadAllUsers();
+    dispatchLoadAllUsers();
 
     if (isDefined(role)) {
-      this.loadSettings(role.id);
+      loadSettings(role.id);
 
-      this.setState({
-        dialogVisible: true,
-        isInUse: role.isInUse(),
-        role,
-        title: _('Edit Role {{name}}', role),
-      });
+      setDialogVisible(true);
+      setIsInUse(role.isInUse());
+      setRole(role);
+      setTitle(_('Edit Role {{name}}', role));
     } else {
-      this.setState({
-        allPermissions: undefined,
-        dialogVisible: true,
-        permissions: undefined,
-        role: undefined,
-        isInUse: false,
-        title: _('New Role'),
-      });
+      setAllPermissions(undefined);
+      setDialogVisible(true);
+      setPermissions(undefined);
+      setRole(undefined);
+      setIsInUse(false);
+      setTitle(_('New Role'));
     }
-  }
+  };
 
-  closeRoleDialog() {
-    this.setState({dialogVisible: false});
-  }
+  const closeRoleDialog = () => {
+    setDialogVisible(false);
+  };
 
-  handleCloseRoleDialog() {
-    this.closeRoleDialog();
-    this.handleInteraction();
-  }
+  const handleCloseRoleDialog = () => {
+    closeRoleDialog();
+    handleInteraction();
+  };
 
-  handleCreateSuperPermission({roleId, groupId}) {
-    const {gmp} = this.props;
+  const handleCreateSuperPermission = ({roleId, groupId}) => {
+    handleInteraction();
 
-    this.handleInteraction();
-
-    this.setState({isCreatingSuperPermission: true});
+    setIsCreatingSuperPermission(true);
 
     return gmp.permission
       .create({
@@ -95,18 +105,16 @@ class RoleComponent extends React.Component {
         subjectType: 'role',
       })
       .then(
-        () => this.loadSettings(roleId),
-        error => this.setError(error),
+        () => loadSettings(roleId),
+        error => setError(error.message),
       )
-      .then(() => this.setState({isCreatingSuperPermission: false}));
-  }
+      .then(() => setIsCreatingSuperPermission(false));
+  };
 
-  handleCreatePermission({roleId, name}) {
-    const {gmp} = this.props;
+  const handleCreatePermission = ({roleId, name}) => {
+    handleInteraction();
 
-    this.handleInteraction();
-
-    this.setState({isCreatingPermission: true});
+    setIsCreatingPermission(true);
 
     return gmp.permission
       .create({
@@ -115,43 +123,35 @@ class RoleComponent extends React.Component {
         subjectType: 'role',
       })
       .then(
-        () => this.loadSettings(roleId),
-        error => this.setError(error),
+        () => loadSettings(roleId),
+        error => setError(error.message),
       )
-      .then(() => this.setState({isCreatingPermission: false}));
-  }
+      .then(() => setIsCreatingPermission(false));
+  };
 
-  handleDeletePermission({roleId, permissionId}) {
-    const {gmp} = this.props;
-    const {_} = this.props;
-
-    this.handleInteraction();
+  const handleDeletePermission = ({roleId, permissionId}) => {
+    handleInteraction();
 
     return actionFunction(
       gmp.permission.delete({id: permissionId}),
-      () => this.loadSettings(roleId),
-      error => this.setError(error),
+      () => loadSettings(roleId),
+      error => setError(error.message),
       _('Permission deleted successfully.'),
     );
-  }
+  };
 
-  handleErrorClose() {
-    this.setState({error: undefined});
-  }
+  const handleErrorClose = () => {
+    setError(undefined);
+  };
 
-  setError(error) {
-    this.setState({error: error.message});
-  }
-
-  loadSettings(roleId) {
-    const {gmp, capabilities} = this.props;
-
+  const loadSettings = roleId => {
     if (capabilities.mayAccess('groups')) {
-      this.props.loadAllGroups(); // groups are only used in edit dialog
+      dispatchLoadAllGroups();
     }
 
     if (capabilities.mayAccess('permissions')) {
-      this.setState({isLoadingPermissions: true});
+      setIsLoadingPermissions(true);
+
       gmp.permissions
         .getAll({
           filter: Filter.fromString(
@@ -173,114 +173,77 @@ class RoleComponent extends React.Component {
               allPermissions.push(cap);
             }
           }
-          this.setState({permissions, allPermissions});
-        })
-        .catch(error => this.setError(error))
-        .then(() => this.setState({isLoadingPermissions: false}));
-    }
-  }
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
+          setPermissions(permissions);
+          setAllPermissions(allPermissions);
+        })
+        .catch(error => setError(error.message))
+        .then(() => setIsLoadingPermissions(false));
+    }
+  };
+
+  const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  render() {
-    const {
-      allGroups,
-      allUsers,
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
-
-    const {
-      allPermissions,
-      dialogVisible,
-      error,
-      isCreatingPermission,
-      isCreatingSuperPermission,
-      isInUse,
-      isLoadingPermissions,
-      permissions,
-      role,
-      title,
-    } = this.state;
-
-    return (
-      <EntityComponent
-        name="role"
-        onCloneError={onCloneError}
-        onCloned={onCloned}
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onDownloadError={onDownloadError}
-        onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openRoleDialog,
-              edit: this.openRoleDialog,
-            })}
-            {dialogVisible && (
-              <RoleDialog
-                allGroups={allGroups}
-                allPermissions={allPermissions}
-                allUsers={allUsers}
-                error={error}
-                isCreatingPermission={isCreatingPermission}
-                isCreatingSuperPermission={isCreatingSuperPermission}
-                isInUse={isInUse}
-                isLoadingPermissions={isLoadingPermissions}
-                permissions={permissions}
-                role={role}
-                title={title}
-                onClose={this.handleCloseRoleDialog}
-                onCreatePermission={this.handleCreatePermission}
-                onCreateSuperPermission={this.handleCreateSuperPermission}
-                onDeletePermission={this.handleDeletePermission}
-                onErrorClose={this.handleErrorClose}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d)
-                    .then(() => this.closeRoleDialog())
-                    .catch(e => this.setError(e));
-                }}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
-}
+  return (
+    <EntityComponent
+      name="role"
+      onCloneError={onCloneError}
+      onCloned={onCloned}
+      onCreateError={onCreateError}
+      onCreated={onCreated}
+      onDeleteError={onDeleteError}
+      onDeleted={onDeleted}
+      onDownloadError={onDownloadError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaveError={onSaveError}
+      onSaved={onSaved}
+    >
+      {({save, ...other}) => (
+        <>
+          {children({
+            ...other,
+            create: openRoleDialog,
+            edit: openRoleDialog,
+          })}
+          {dialogVisible && (
+            <RoleDialog
+              allGroups={allGroups}
+              allPermissions={allPermissions}
+              allUsers={allUsers}
+              error={error}
+              isCreatingPermission={isCreatingPermission}
+              isCreatingSuperPermission={isCreatingSuperPermission}
+              isInUse={isInUse}
+              isLoadingPermissions={isLoadingPermissions}
+              permissions={permissions}
+              role={role}
+              title={title}
+              onClose={handleCloseRoleDialog}
+              onCreatePermission={handleCreatePermission}
+              onCreateSuperPermission={handleCreateSuperPermission}
+              onDeletePermission={handleDeletePermission}
+              onErrorClose={handleErrorClose}
+              onSave={d => {
+                handleInteraction();
+                return save(d)
+                  .then(() => closeRoleDialog())
+                  .catch(e => setError(e.message));
+              }}
+            />
+          )}
+        </>
+      )}
+    </EntityComponent>
+  );
+};
 
 RoleComponent.propTypes = {
-  allGroups: PropTypes.arrayOf(PropTypes.model),
-  allUsers: PropTypes.arrayOf(PropTypes.model),
-  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
-  loadAllGroups: PropTypes.func.isRequired,
-  loadAllUsers: PropTypes.func.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -292,26 +255,6 @@ RoleComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-  _: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = rootState => {
-  const usersSel = userSelector(rootState);
-  const groupsSel = groupSelector(rootState);
-  return {
-    allUsers: usersSel.getAllEntities(),
-    allGroups: groupsSel.getAllEntities(),
-  };
-};
-
-const mapDispatchToProp = (dispatch, {gmp}) => ({
-  loadAllGroups: () => dispatch(loadAllGroups(gmp)()),
-  loadAllUsers: () => dispatch(loadAllUsers(gmp)()),
-});
-
-export default compose(
-  withTranslation,
-  withGmp,
-  withCapabilities,
-  connect(mapStateToProps, mapDispatchToProp)
-)(RoleComponent);
+export default RoleComponent;
