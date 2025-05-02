@@ -23,10 +23,10 @@ import PortRangeDialog, {
 } from 'web/pages/portlists/PortRangeDialog';
 
 interface PortRange {
-  id: string;
+  id?: string;
   isTmp?: boolean;
   protocolType: ProtocolType;
-  portListId?: string;
+  portListId: string;
   start: number;
   end: number;
 }
@@ -179,12 +179,12 @@ const PortListComponent = ({
   const handleDeletePortRange = async (range: PortRange) => {
     await gmp.portlist.deletePortRange({
       id: range.id as string,
-      portListId: range.portListId as string,
+      portListId: range.portListId,
     });
   };
 
   const handleSavePortRange = async (data: {
-    id: string;
+    portListId: string;
     portRangeStart: number;
     portRangeEnd: number;
     portType: ProtocolType;
@@ -218,7 +218,7 @@ const PortListComponent = ({
           async (range: PortRange) => {
             // save temporary port ranges in the backend
             const id = await handleSavePortRange({
-              id: range.id as string,
+              portListId: range.portListId,
               portRangeStart: range.start,
               portRangeEnd: range.end,
               portType: range.protocolType,
@@ -259,7 +259,7 @@ const PortListComponent = ({
   };
 
   const handleTmpAddPortRange = async ({
-    id,
+    portListId,
     portRangeEnd,
     portRangeStart,
     portType,
@@ -305,7 +305,7 @@ const PortListComponent = ({
 
     const newRange: PortRange = {
       end: portRangeEnd,
-      id,
+      portListId,
       protocolType: portType,
       start: portRangeStart,
       isTmp: true,
@@ -370,7 +370,7 @@ const PortListComponent = ({
       )}
       {portRangeDialogVisible && id && (
         <PortRangeDialog
-          id={id}
+          portListId={id}
           onClose={handleCloseNewPortRangeDialog}
           onSave={handleTmpAddPortRange}
         />

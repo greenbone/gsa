@@ -326,7 +326,7 @@ describe('Port List Component tests', () => {
     fireEvent.click(savePortListButton);
     await wait();
     expect(createPortRange).toHaveBeenCalledExactlyOnceWith({
-      id: '123',
+      portListId: '123',
       portRangeEnd: 20,
       portRangeStart: 1,
       portType: 'tcp',
@@ -343,6 +343,7 @@ describe('Port List Component tests', () => {
           id: 1234,
           start: 1,
           isTmp: false,
+          portListId: '123',
           protocolType: 'tcp',
         },
       ],

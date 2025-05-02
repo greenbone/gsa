@@ -33,7 +33,7 @@ interface PortListCommandSaveParams {
 }
 
 interface PortListCommandCreatePortRangeParams {
-  id: string;
+  portListId: string;
   portRangeStart: number;
   portRangeEnd: number;
   portType: string;
@@ -88,14 +88,14 @@ export class PortListCommand extends EntityCommand<PortList, PortListElement> {
   }
 
   createPortRange({
-    id,
+    portListId,
     portRangeStart,
     portRangeEnd,
     portType,
   }: PortListCommandCreatePortRangeParams) {
     return this.action({
       cmd: 'create_port_range',
-      id,
+      id: portListId,
       port_range_start: portRangeStart,
       port_range_end: portRangeEnd,
       port_type: portType,
