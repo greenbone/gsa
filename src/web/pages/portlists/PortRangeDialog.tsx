@@ -11,14 +11,14 @@ import Radio from 'web/components/form/Radio';
 import useTranslation from 'web/hooks/useTranslation';
 
 export interface PortRangeDialogData {
-  id: string;
+  portListId: string;
   portRangeStart: number;
   portRangeEnd: number;
   portType: ProtocolType;
 }
 
 interface PortRangeDialogProps {
-  id: string;
+  portListId: string;
   portType?: ProtocolType;
   title?: string;
   onClose: () => void;
@@ -26,7 +26,7 @@ interface PortRangeDialogProps {
 }
 
 const PortRangeDialog = ({
-  id,
+  portListId,
   portType = 'tcp',
   title,
   onClose,
@@ -37,7 +37,7 @@ const PortRangeDialog = ({
   title = title || _('New Port Range');
 
   const data = {
-    id,
+    portListId,
     portRangeStart: '',
     portRangeEnd: '',
     portType,

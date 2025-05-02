@@ -85,7 +85,7 @@ describe('PortListCommand', () => {
     const http = createHttp(response);
     const command = new PortListCommand(http);
     const result = await command.createPortRange({
-      id: '12345',
+      portListId: '12345',
       portRangeStart: 1,
       portRangeEnd: 1000,
       portType: 'tcp',

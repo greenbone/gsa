@@ -18,7 +18,9 @@ describe('PortRangeDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    render(<PortRangeDialog id="123" onClose={onClose} onSave={onSave} />);
+    render(
+      <PortRangeDialog portListId="123" onClose={onClose} onSave={onSave} />,
+    );
 
     screen.getByText('New Port Range');
   });
@@ -29,7 +31,7 @@ describe('PortRangeDialog tests', () => {
 
     render(
       <PortRangeDialog
-        id="123"
+        portListId="123"
         title="Custom Title"
         onClose={onClose}
         onSave={onSave}
@@ -43,7 +45,9 @@ describe('PortRangeDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    render(<PortRangeDialog id="123" onClose={onClose} onSave={onSave} />);
+    render(
+      <PortRangeDialog portListId="123" onClose={onClose} onSave={onSave} />,
+    );
 
     const close = getDialogCloseButton();
     fireEvent.click(close);
@@ -55,13 +59,15 @@ describe('PortRangeDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    render(<PortRangeDialog id="123" onClose={onClose} onSave={onSave} />);
+    render(
+      <PortRangeDialog portListId="123" onClose={onClose} onSave={onSave} />,
+    );
 
     const save = getDialogSaveButton();
     fireEvent.click(save);
 
     expect(onSave).toHaveBeenCalledWith({
-      id: '123',
+      portListId: '123',
       portRangeEnd: '',
       portRangeStart: '',
       portType: 'tcp',
@@ -72,7 +78,9 @@ describe('PortRangeDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    render(<PortRangeDialog id="123" onClose={onClose} onSave={onSave} />);
+    render(
+      <PortRangeDialog portListId="123" onClose={onClose} onSave={onSave} />,
+    );
 
     const dialog = getDialog();
     const startInput = getByName(dialog, 'portRangeStart');
@@ -84,7 +92,7 @@ describe('PortRangeDialog tests', () => {
     fireEvent.click(save);
 
     expect(onSave).toHaveBeenCalledWith({
-      id: '123',
+      portListId: '123',
       portRangeEnd: 456,
       portRangeStart: 123,
       portType: 'tcp',
@@ -95,7 +103,9 @@ describe('PortRangeDialog tests', () => {
     const onSave = testing.fn();
     const onClose = testing.fn();
 
-    render(<PortRangeDialog id="123" onClose={onClose} onSave={onSave} />);
+    render(
+      <PortRangeDialog portListId="123" onClose={onClose} onSave={onSave} />,
+    );
 
     const udpRadio = screen.getByLabelText('UDP');
     fireEvent.click(udpRadio);
@@ -104,7 +114,7 @@ describe('PortRangeDialog tests', () => {
     fireEvent.click(save);
 
     expect(onSave).toHaveBeenCalledWith({
-      id: '123',
+      portListId: '123',
       portRangeEnd: '',
       portRangeStart: '',
       portType: 'udp',
