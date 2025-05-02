@@ -31,8 +31,8 @@ import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import UserComponent from 'web/pages/users/Component';
 import UserDetails from 'web/pages/users/Details';
+import UserComponent from 'web/pages/users/UserComponent';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
