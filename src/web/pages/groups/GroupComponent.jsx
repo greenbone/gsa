@@ -4,132 +4,119 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
+import React, {useState} from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import GroupDialog from 'web/pages/groups/Dialog';
-import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import withGmp from 'web/utils/withGmp';
-import withTranslation from 'web/utils/withTranslation';
 
-class GroupComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const GroupComponent = props => {
+  const {
+    children,
+    onCloned,
+    onCloneError,
+    onCreated,
+    onCreateError,
+    onDeleted,
+    onDeleteError,
+    onDownloaded,
+    onDownloadError,
+    onInteraction,
+    onSaved,
+    onSaveError,
+  } = props;
 
-    this.state = {dialogVisible: false};
+  const gmp = useGmp();
+  const [_] = useTranslation();
 
-    this.handleCloseGroupDialog = this.handleCloseGroupDialog.bind(this);
-    this.openGroupDialog = this.openGroupDialog.bind(this);
-  }
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
+  const [group, setGroup] = useState(undefined);
+  const [title, setTitle] = useState(undefined);
 
-  openGroupDialog(group) {
-    const {gmp} = this.props;
-    const {_} = this.props;
-
-    this.handleInteraction();
-
-    let allUsers = [];
-    gmp.users.getAll().then(response => {
-      allUsers = response.data;
-      this.setState({allUsers});
-    });
-
-    if (isDefined(group)) {
-      const title = _('Edit Group {{name}}', group);
-
-      this.setState({
-        allUsers,
-        dialogVisible: true,
-        group,
-        title,
-      });
-    } else {
-      this.setState({
-        allUsers,
-        dialogVisible: true,
-        group,
-      });
-    }
-  }
-
-  closeGroupDialog() {
-    this.setState({dialogVisible: false});
-  }
-
-  handleCloseGroupDialog() {
-    this.closeGroupDialog();
-    this.handleInteraction();
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  const handleInteraction = () => {
+    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  render() {
-    const {
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
+  const closeGroupDialog = () => {
+    setDialogVisible(false);
+  };
 
-    const {allUsers, dialogVisible, group, title} = this.state;
+  const handleCloseGroupDialog = () => {
+    closeGroupDialog();
+    handleInteraction();
+  };
 
-    return (
-      <EntityComponent
-        name="group"
-        onCloneError={onCloneError}
-        onCloned={onCloned}
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onDownloadError={onDownloadError}
-        onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openGroupDialog,
-              edit: this.openGroupDialog,
-            })}
-            {dialogVisible && (
-              <GroupDialog
-                allUsers={allUsers}
-                group={group}
-                title={title}
-                onClose={this.handleCloseGroupDialog}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d).then(() => this.closeGroupDialog());
-                }}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
-}
+  const openGroupDialog = group => {
+    handleInteraction();
+
+    let usersList = [];
+    gmp.users.getAll().then(response => {
+      usersList = response.data;
+      setAllUsers(usersList);
+    });
+
+    if (isDefined(group)) {
+      const groupTitle = _('Edit Group {{name}}', group);
+
+      setAllUsers(usersList);
+      setDialogVisible(true);
+      setGroup(group);
+      setTitle(groupTitle);
+    } else {
+      setAllUsers(usersList);
+      setDialogVisible(true);
+      setGroup(group);
+      setTitle(undefined);
+    }
+  };
+
+  return (
+    <EntityComponent
+      name="group"
+      onCloneError={onCloneError}
+      onCloned={onCloned}
+      onCreateError={onCreateError}
+      onCreated={onCreated}
+      onDeleteError={onDeleteError}
+      onDeleted={onDeleted}
+      onDownloadError={onDownloadError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaveError={onSaveError}
+      onSaved={onSaved}
+    >
+      {({save, ...other}) => (
+        <>
+          {children({
+            ...other,
+            create: openGroupDialog,
+            edit: openGroupDialog,
+          })}
+          {dialogVisible && (
+            <GroupDialog
+              allUsers={allUsers}
+              group={group}
+              title={title}
+              onClose={handleCloseGroupDialog}
+              onSave={d => {
+                handleInteraction();
+                return save(d).then(() => closeGroupDialog());
+              }}
+            />
+          )}
+        </>
+      )}
+    </EntityComponent>
+  );
+};
 
 GroupComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -141,6 +128,6 @@ GroupComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-  _: PropTypes.func.isRequired,
 };
-export default compose(withGmp, withTranslation)(GroupComponent);
+
+export default GroupComponent;
