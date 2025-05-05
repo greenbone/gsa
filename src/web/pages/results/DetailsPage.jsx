@@ -52,7 +52,7 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import NoteComponent from 'web/pages/notes/Component';
+import NoteComponent from 'web/pages/notes/NoteComponent';
 import OverrideComponent from 'web/pages/overrides/Component';
 import ResultDetails from 'web/pages/results/Details';
 import TicketComponent from 'web/pages/tickets/Component';

@@ -40,8 +40,8 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import HostComponent from 'web/pages/hosts/Component';
 import HostDetails from 'web/pages/hosts/Details';
+import HostComponent from 'web/pages/hosts/HostComponent';
 import {selector as hostsSelector, loadEntity} from 'web/store/entities/hosts';
 import {
   selector as permissionsSelector,
