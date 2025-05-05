@@ -43,11 +43,11 @@ const FILTER_OPTIONS = [
   ['vulnerability', _l('Vulnerability')],
 ];
 
-const filter_types = (caps, name) => {
+const hasAccessToFilter = (caps, name) => {
   return caps.mayAccess(name);
 };
 
-const includes_type = (types, type) => {
+const includesType = (types, type) => {
   for (const option of types) {
     if (option[0] === type) {
       return true;
@@ -56,22 +56,20 @@ const includes_type = (types, type) => {
   return false;
 };
 
-const FilterComponent = props => {
-  const {
-    children,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-    onSaved,
-    onSaveError,
-  } = props;
-
+const FilterComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
   const capabilities = useCapabilities();
   const [dialogVisible, setDialogVisible] = useState(false);
   const [types, setTypes] = useState([]);
@@ -83,7 +81,6 @@ const FilterComponent = props => {
   const [type, setType] = useState();
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
@@ -100,7 +97,7 @@ const FilterComponent = props => {
 
   const openFilterDialog = filter => {
     let filterTypes = FILTER_OPTIONS.filter(option =>
-      filter_types(capabilities, option[0]),
+      hasAccessToFilter(capabilities, option[0]),
     );
 
     if (!isDefined(filterTypes)) {
@@ -111,7 +108,7 @@ const FilterComponent = props => {
 
     if (isDefined(filter)) {
       let {filter_type} = filter;
-      if (!includes_type(filterTypes, filter_type)) {
+      if (!includesType(filterTypes, filter_type)) {
         filter_type = first(filterTypes, [])[0];
       }
 
