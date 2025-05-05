@@ -15,9 +15,9 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {goToDetails} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import HostComponent from 'web/pages/hosts/Component';
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from 'web/pages/hosts/dashboard';
 import HostsFilterDialog from 'web/pages/hosts/FilterDialog';
+import HostComponent from 'web/pages/hosts/HostComponent';
 import HostsTable from 'web/pages/hosts/Table';
 import {
   loadEntities,

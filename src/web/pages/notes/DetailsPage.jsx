@@ -39,8 +39,8 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import NoteComponent from 'web/pages/notes/Component';
 import NoteDetails from 'web/pages/notes/Details';
+import NoteComponent from 'web/pages/notes/NoteComponent';
 import {selector as notesSelector, loadEntity} from 'web/store/entities/notes';
 import {
   selector as permissionsSelector,

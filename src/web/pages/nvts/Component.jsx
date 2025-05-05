@@ -5,7 +5,7 @@
 
 import React from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
-import NoteComponent from 'web/pages/notes/Component';
+import NoteComponent from 'web/pages/notes/NoteComponent';
 import OverrideComponent from 'web/pages/overrides/Component';
 import PropTypes from 'web/utils/PropTypes';
 
