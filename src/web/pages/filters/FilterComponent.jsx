@@ -7,11 +7,11 @@ import {_, _l} from 'gmp/locale/lang';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import React from 'react';
+import React, {useState} from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
+import useCapabilities from 'web/hooks/useCapabilities';
 import FilterDialog from 'web/pages/filters/Dialog';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 const FILTER_OPTIONS = [
   ['alert', _l('Alert')],
@@ -56,146 +56,135 @@ const includes_type = (types, type) => {
   return false;
 };
 
-class FilterComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const FilterComponent = props => {
+  const {
+    children,
+    onCloned,
+    onCloneError,
+    onCreated,
+    onCreateError,
+    onDeleted,
+    onDeleteError,
+    onDownloaded,
+    onDownloadError,
+    onInteraction,
+    onSaved,
+    onSaveError,
+  } = props;
 
-    this.state = {
-      dialogVisible: false,
-      types: [],
-    };
+  const capabilities = useCapabilities();
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [types, setTypes] = useState([]);
+  const [comment, setComment] = useState();
+  const [id, setId] = useState();
+  const [name, setName] = useState();
+  const [term, setTerm] = useState('');
+  const [title, setTitle] = useState();
+  const [type, setType] = useState();
 
-    this.handleCloseFilterDialog = this.handleCloseFilterDialog.bind(this);
-    this.openFilterDialog = this.openFilterDialog.bind(this);
-  }
-
-  openFilterDialog(filter) {
-    const {capabilities} = this.props;
-    let types = FILTER_OPTIONS.filter(option =>
-      filter_types(capabilities, option[0]),
-    );
-
-    if (!isDefined(types)) {
-      types = [];
-    }
-
-    this.handleInteraction();
-
-    if (isDefined(filter)) {
-      let {filter_type} = filter;
-      if (!includes_type(types, filter_type)) {
-        filter_type = first(types, [])[0];
-      }
-
-      const title = _('Edit Filter {{name}}', {name: shorten(filter.name)});
-
-      this.setState({
-        comment: filter.comment,
-        dialogVisible: true,
-        id: filter.id,
-        name: filter.name,
-        term: filter.toFilterString(),
-        title,
-        type: filter_type,
-        types,
-      });
-    } else {
-      const type = first(types, [])[0];
-
-      this.setState({
-        comment: undefined,
-        dialogVisible: true,
-        id: undefined,
-        name: undefined,
-        term: '',
-        type,
-        types,
-      });
-    }
-  }
-
-  closeFilterDialog() {
-    this.setState({dialogVisible: false});
-  }
-
-  handleCloseFilterDialog() {
-    this.closeFilterDialog();
-    this.handleInteraction();
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  const handleInteraction = () => {
+    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  render() {
-    const {
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
+  const closeFilterDialog = () => {
+    setDialogVisible(false);
+  };
 
-    const {comment, dialogVisible, id, name, term, title, type, types} =
-      this.state;
+  const handleCloseFilterDialog = () => {
+    closeFilterDialog();
+    handleInteraction();
+  };
 
-    return (
-      <EntityComponent
-        name="filter"
-        onCloneError={onCloneError}
-        onCloned={onCloned}
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onDownloadError={onDownloadError}
-        onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openFilterDialog,
-              edit: this.openFilterDialog,
-            })}
-            {dialogVisible && (
-              <FilterDialog
-                comment={comment}
-                id={id}
-                name={name}
-                term={term}
-                title={title}
-                type={type}
-                types={types}
-                onClose={this.handleCloseFilterDialog}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d).then(() => this.closeFilterDialog());
-                }}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
+  const openFilterDialog = filter => {
+    let filterTypes = FILTER_OPTIONS.filter(option =>
+      filter_types(capabilities, option[0]),
     );
-  }
-}
+
+    if (!isDefined(filterTypes)) {
+      filterTypes = [];
+    }
+
+    handleInteraction();
+
+    if (isDefined(filter)) {
+      let {filter_type} = filter;
+      if (!includes_type(filterTypes, filter_type)) {
+        filter_type = first(filterTypes, [])[0];
+      }
+
+      const filterTitle = _('Edit Filter {{name}}', {
+        name: shorten(filter.name),
+      });
+
+      setComment(filter.comment);
+      setDialogVisible(true);
+      setId(filter.id);
+      setName(filter.name);
+      setTerm(filter.toFilterString());
+      setTitle(filterTitle);
+      setType(filter_type);
+      setTypes(filterTypes);
+    } else {
+      const filterType = first(filterTypes, [])[0];
+
+      setComment(undefined);
+      setDialogVisible(true);
+      setId(undefined);
+      setName(undefined);
+      setTerm('');
+      setType(filterType);
+      setTypes(filterTypes);
+    }
+  };
+
+  return (
+    <EntityComponent
+      name="filter"
+      onCloneError={onCloneError}
+      onCloned={onCloned}
+      onCreateError={onCreateError}
+      onCreated={onCreated}
+      onDeleteError={onDeleteError}
+      onDeleted={onDeleted}
+      onDownloadError={onDownloadError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaveError={onSaveError}
+      onSaved={onSaved}
+    >
+      {({save, ...other}) => (
+        <>
+          {children({
+            ...other,
+            create: openFilterDialog,
+            edit: openFilterDialog,
+          })}
+          {dialogVisible && (
+            <FilterDialog
+              comment={comment}
+              id={id}
+              name={name}
+              term={term}
+              title={title}
+              type={type}
+              types={types}
+              onClose={handleCloseFilterDialog}
+              onSave={d => {
+                handleInteraction();
+                return save(d).then(() => closeFilterDialog());
+              }}
+            />
+          )}
+        </>
+      )}
+    </EntityComponent>
+  );
+};
 
 FilterComponent.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
@@ -210,4 +199,4 @@ FilterComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withCapabilities(FilterComponent);
+export default FilterComponent;
