@@ -42,7 +42,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import CredentialComponent from 'web/pages/credentials/Component';
+import CredentialComponent from 'web/pages/credentials/CredentialsComponent';
 import CredentialDetails from 'web/pages/credentials/Details';
 import CredentialDownloadIcon from 'web/pages/credentials/DownloadIcon';
 import {selector, loadEntity} from 'web/store/entities/credentials';

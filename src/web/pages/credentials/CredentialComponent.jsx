@@ -20,7 +20,7 @@ import {generateFilename} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
-class CredentialsComponent extends React.Component {
+class CredentialComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -181,7 +181,7 @@ class CredentialsComponent extends React.Component {
   }
 }
 
-CredentialsComponent.propTypes = {
+CredentialComponent.propTypes = {
   children: PropTypes.func.isRequired,
   detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
@@ -220,4 +220,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   _: PropTypes.func.isRequired,
 });
 
-export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(CredentialsComponent);
+export default compose(
+  withTranslation,
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(CredentialComponent);
