@@ -11,22 +11,20 @@ import useTranslation from 'web/hooks/useTranslation';
 import GroupDialog from 'web/pages/groups/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 
-const GroupComponent = props => {
-  const {
-    children,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-    onSaved,
-    onSaveError,
-  } = props;
-
+const GroupComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
   const gmp = useGmp();
   const [_] = useTranslation();
 
@@ -36,7 +34,6 @@ const GroupComponent = props => {
   const [title, setTitle] = useState(undefined);
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
