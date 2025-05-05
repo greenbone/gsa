@@ -6,171 +6,157 @@
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import React from 'react';
+import {useState} from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
 import HostDialog from 'web/pages/hosts/Dialog';
 import TargetComponent from 'web/pages/targets/Component';
-import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
-import withGmp from 'web/utils/withGmp';
-import withTranslation from 'web/utils/withTranslation';
 
-class HostComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const HostComponent = ({
+  children,
+  createtarget,
+  entitiesCounts,
+  onIdentifierDeleted,
+  onIdentifierDeleteError,
+  onCreateError,
+  onCreated,
+  onDeleteError,
+  onDeleted,
+  onDownloadError,
+  onDownloaded,
+  onInteraction,
+  onSaveError,
+  onSaved,
+  ...props
+}) => {
+  const gmp = useGmp();
+  const [_] = useTranslation();
 
-    this.state = {dialogVisible: false};
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [host, setHost] = useState();
+  const [title, setTitle] = useState();
 
-    this.handleCloseHostDialog = this.handleCloseHostDialog.bind(this);
-    this.handleIdentifierDelete = this.handleIdentifierDelete.bind(this);
-    this.openHostDialog = this.openHostDialog.bind(this);
-    this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
-    this.openCreateTargetSelectionDialog =
-      this.openCreateTargetSelectionDialog.bind(this);
-  }
+  const handleIdentifierDelete = identifier => {
+    const {onIdentifierDeleted, onIdentifierDeleteError} = props;
 
-  handleIdentifierDelete(identifier) {
-    const {gmp, onIdentifierDeleted, onIdentifierDeleteError} = this.props;
-
-    this.handleInteraction();
+    handleInteraction();
 
     return gmp.host
       .deleteIdentifier(identifier)
       .then(onIdentifierDeleted, onIdentifierDeleteError);
-  }
+  };
 
-  openHostDialog(host) {
-    const {_} = this.props;
-
-    let title;
+  const openHostDialog = host => {
+    let dialogTitle;
 
     if (isDefined(host)) {
-      title = _('Edit Host {{name}}', {name: shorten(host.name)});
+      dialogTitle = _('Edit Host {{name}}', {name: shorten(host.name)});
     }
 
-    this.setState({
-      dialogVisible: true,
-      host,
-      title,
-    });
+    setDialogVisible(true);
+    setHost(host);
+    setTitle(dialogTitle);
 
-    this.handleInteraction();
-  }
+    handleInteraction();
+  };
 
-  closeHostDialog() {
-    this.setState({dialogVisible: false});
-  }
+  const closeHostDialog = () => {
+    setDialogVisible(false);
+  };
 
-  handleCloseHostDialog() {
-    this.closeHostDialog();
-    this.handleInteraction();
-  }
+  const handleCloseHostDialog = () => {
+    closeHostDialog();
+    handleInteraction();
+  };
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  const handleInteraction = () => {
+    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  openCreateTargetDialog(host) {
-    this._openTargetDialog(1, 'uuid=' + host.id);
-  }
+  const openCreateTargetDialog = host => {
+    _openTargetDialog(1, 'uuid=' + host.id);
+  };
 
-  openCreateTargetSelectionDialog(data) {
+  const openCreateTargetSelectionDialog = data => {
     const {entities, entitiesSelected, selectionType, filter} = data;
-    const {entitiesCounts} = this.props;
+    const {entitiesCounts} = props;
     let size;
-    let filterstring;
+    let filterString;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       const hosts = [...entitiesSelected]; // convert set to array
       size = entitiesSelected.size;
-      filterstring = map(hosts, host => 'uuid=' + host.id).join(' ');
+      filterString = map(hosts, host => 'uuid=' + host.id).join(' ');
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       size = entities.length;
-      filterstring = filter.toFilterString();
+      filterString = filter.toFilterString();
     } else {
       const counts = entitiesCounts;
       size = counts.filtered;
-      filterstring = filter.all().toFilterString();
+      filterString = filter.all().toFilterString();
     }
-    this._openTargetDialog(size, filterstring);
-  }
+    _openTargetDialog(size, filterString);
+  };
 
-  _openTargetDialog(count, filterstring) {
-    const {createtarget} = this.props;
+  const _openTargetDialog = (count, filterString) => {
+    const {createtarget} = props;
     createtarget({
       target_source: 'asset_hosts',
       hosts_count: count,
-      hosts_filter: filterstring,
+      hosts_filter: filterString,
     });
-  }
+  };
 
-  render() {
-    const {
-      children,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
-
-    const {dialogVisible, host, title} = this.state;
-
-    return (
-      <EntityComponent
-        name="host"
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onDownloadError={onDownloadError}
-        onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openHostDialog,
-              edit: this.openHostDialog,
-              deleteidentifier: this.handleIdentifierDelete,
-              createtargetfromselection: this.openCreateTargetSelectionDialog,
-              createtargetfromhost: this.openCreateTargetDialog,
-            })}
-            {dialogVisible && (
-              <HostDialog
-                host={host}
-                title={title}
-                onClose={this.handleCloseHostDialog}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d).then(() => this.closeHostDialog());
-                }}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
-}
+  return (
+    <EntityComponent
+      name="host"
+      onCreateError={onCreateError}
+      onCreated={onCreated}
+      onDeleteError={onDeleteError}
+      onDeleted={onDeleted}
+      onDownloadError={onDownloadError}
+      onDownloaded={onDownloaded}
+      onInteraction={onInteraction}
+      onSaveError={onSaveError}
+      onSaved={onSaved}
+    >
+      {({save, ...other}) => (
+        <>
+          {children({
+            ...other,
+            create: openHostDialog,
+            edit: openHostDialog,
+            deleteidentifier: handleIdentifierDelete,
+            createtargetfromselection: openCreateTargetSelectionDialog,
+            createtargetfromhost: openCreateTargetDialog,
+          })}
+          {dialogVisible && (
+            <HostDialog
+              host={host}
+              title={title}
+              onClose={handleCloseHostDialog}
+              onSave={d => {
+                handleInteraction();
+                return save(d).then(() => closeHostDialog());
+              }}
+            />
+          )}
+        </>
+      )}
+    </EntityComponent>
+  );
+};
 
 HostComponent.propTypes = {
   children: PropTypes.func.isRequired,
   createtarget: PropTypes.func.isRequired,
   entitiesCounts: PropTypes.counts,
-  gmp: PropTypes.gmp.isRequired,
-  selectionType: PropTypes.string,
   onCreateError: PropTypes.func,
   onCreated: PropTypes.func,
   onDeleteError: PropTypes.func,
@@ -182,10 +168,9 @@ HostComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-  _: PropTypes.func.isRequired,
 };
 
-HostComponent = compose(withGmp, withTranslation)(HostComponent);
+const HostComponentWrapper = HostComponent;
 
 const HostWithTargetComponent = ({
   onInteraction,
@@ -200,7 +185,7 @@ const HostWithTargetComponent = ({
       onInteraction={onInteraction}
     >
       {({create}) => (
-        <HostComponent
+        <HostComponentWrapper
           {...props}
           createtarget={create}
           onInteraction={onInteraction}
