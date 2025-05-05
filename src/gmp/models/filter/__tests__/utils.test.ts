@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
-import {filterString} from 'gmp/models/filter/utils';
+import {filterString, isFilter} from 'gmp/models/filter/utils';
 
 describe('filterString function tests', () => {
   test('should return string for non Filter objects', () => {
@@ -20,5 +20,18 @@ describe('filterString function tests', () => {
 
     filter = Filter.fromString('name=foo and severity>1');
     expect(filterString(filter)).toEqual('name=foo and severity>1');
+  });
+});
+
+describe('isFilter function tests', () => {
+  test('should return true for Filter objects', () => {
+    const filter = Filter.fromString('foo bar');
+    expect(isFilter(filter)).toBe(true);
+  });
+
+  test('should return false for non-Filter objects', () => {
+    expect(isFilter(1)).toBe(false);
+    expect(isFilter('foo')).toBe(false);
+    expect(isFilter()).toBe(false);
   });
 });
