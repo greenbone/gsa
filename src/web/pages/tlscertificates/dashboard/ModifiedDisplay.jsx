@@ -21,7 +21,6 @@ import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-
 const transformModified = (data = {}) => {
   const {groups = []} = data;
   const sum = totalCount(groups);

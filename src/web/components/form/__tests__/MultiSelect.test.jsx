@@ -13,7 +13,6 @@ import {
 } from 'web/components/testing';
 import {render, screen, userEvent, within} from 'web/utils/Testing';
 
-
 describe('MultiSelect tests', () => {
   test('should render', () => {
     render(<MultiSelect />);

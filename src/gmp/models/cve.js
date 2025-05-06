@@ -14,7 +14,6 @@ import {map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 class Cve extends Info {
   static entityType = 'cve';
 

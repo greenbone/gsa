@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import withDownload from 'web/components/form/withDownload';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 const TestComponent = withDownload(({onDownload, filename, data}) => (
   <button data-testid="button" onClick={() => onDownload({filename, data})} />
 ));

@@ -4,9 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {withFolding, FoldState, withFoldToggle} from 'web/components/folding/Folding';
+import {
+  withFolding,
+  FoldState,
+  withFoldToggle,
+} from 'web/components/folding/Folding';
 import {render, screen, fireEvent} from 'web/utils/Testing';
-
 
 describe('withFolding', () => {
   const DummyComponent = props => <div {...props}>Dummy Component</div>;

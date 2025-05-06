@@ -7,7 +7,6 @@ import registerCommand from 'gmp/command';
 import HttpCommand from 'gmp/commands/http';
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-
 class PerformanceCommand extends HttpCommand {
   constructor(http) {
     super(http, {cmd: 'get_system_reports'});

@@ -12,7 +12,6 @@ import AuditReport from 'gmp/models/auditreport';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 
-
 export class AuditReportsCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'report', AuditReport);

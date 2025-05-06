@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import ProtocolDocLink from 'web/components/link/ProtocolDocLink';
 import {rendererWith} from 'web/utils/Testing';
 
-
 describe('ProtocolDocLink tests', () => {
   test('should render ProtocolDocLink', () => {
     const gmp = {

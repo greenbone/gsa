@@ -8,7 +8,6 @@ import {parseSeverity} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-
 class DfnCertAdv extends Info {
   static entityType = 'dfncert';
 

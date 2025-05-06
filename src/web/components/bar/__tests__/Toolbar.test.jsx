@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import Toolbar from 'web/components/bar/Toolbar';
 import {render} from 'web/utils/Testing';
 
-
 describe('Toolbar tests', () => {
   test('should render', () => {
     const {element} = render(<Toolbar />);

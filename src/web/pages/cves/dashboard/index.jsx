@@ -5,8 +5,14 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-import {CvesCreatedDisplay, CvesCreatedTableDisplay} from 'web/pages/cves/dashboard/CreatedDisplay';
-import {CvesCvssDisplay, CvesCvssTableDisplay} from 'web/pages/cves/dashboard/CvssDisplay';
+import {
+  CvesCreatedDisplay,
+  CvesCreatedTableDisplay,
+} from 'web/pages/cves/dashboard/CreatedDisplay';
+import {
+  CvesCvssDisplay,
+  CvesCvssTableDisplay,
+} from 'web/pages/cves/dashboard/CvssDisplay';
 import {
   CvesSeverityClassDisplay,
   CvesSeverityClassTableDisplay,

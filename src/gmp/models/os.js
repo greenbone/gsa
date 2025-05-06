@@ -6,7 +6,6 @@
 import Asset from 'gmp/models/asset';
 import {parseSeverity} from 'gmp/parser';
 
-
 class OperatingSystem extends Asset {
   static entityType = 'operatingsystem';
 

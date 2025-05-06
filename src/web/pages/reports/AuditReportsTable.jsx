@@ -16,7 +16,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import AuditReportRow from 'web/pages/reports/AuditReportRow';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const Header = ({
   actionsColumn,
   sort = true,

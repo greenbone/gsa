@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import Diff from 'web/pages/results/Diff';
 import {render} from 'web/utils/Testing';
 
-
 const diff = `
 @@ -1,9 +1,14 @@
 -Remote SSH server version: SSH-2.0-OpenSSH_7.6p1 Ubuntu-4

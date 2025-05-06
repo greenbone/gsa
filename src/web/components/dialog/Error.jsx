@@ -12,7 +12,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-
 const StyledLayout = styled(Layout)`
   padding: 15px;
   margin: 0px 15px 20px 15px;

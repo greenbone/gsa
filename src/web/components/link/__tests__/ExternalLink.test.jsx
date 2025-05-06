@@ -13,7 +13,6 @@ import {
   rendererWith,
 } from 'web/utils/Testing';
 
-
 describe('ExternalLink tests', () => {
   test('should render ExternalLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});

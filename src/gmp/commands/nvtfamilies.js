@@ -8,7 +8,6 @@ import GmpCommand from 'gmp/commands/gmp';
 import {parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 
-
 export class NvtFamiliesCommand extends GmpCommand {
   constructor(http) {
     super(http, {cmd: 'get_nvt_families'});

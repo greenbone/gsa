@@ -8,7 +8,6 @@ import Settings from 'gmp/models/settings';
 import RadiusAuthentication from 'web/pages/radius/RadiusPage';
 import {rendererWith, wait} from 'web/utils/Testing';
 
-
 describe('RADIUS page renders', () => {
   test('should render page with no radius key', async () => {
     const settings = new Settings();

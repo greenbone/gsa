@@ -11,7 +11,6 @@ import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const caps = new Capabilities(['everything']);
 
 const filter = Filter.fromString(

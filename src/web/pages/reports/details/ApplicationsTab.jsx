@@ -13,7 +13,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-
 const appsSortFunctions = {
   name: makeCompareString('name'),
   hosts: makeCompareNumber(entity => entity.hosts.count),

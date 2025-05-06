@@ -7,7 +7,6 @@ import React from 'react';
 import Table from 'web/components/table/Table';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const SimpleTable = ({size = 'auto', ...props}) => (
   <Table {...props} size={size} />
 );

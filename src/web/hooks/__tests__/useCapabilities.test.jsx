@@ -8,7 +8,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import useCapabilities from 'web/hooks/useCapabilities';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const TestUseCapabilities = () => {
   const capabilities = useCapabilities();
   if (capabilities.mayCreate('task')) {

@@ -9,7 +9,6 @@ import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import ReportFormat from 'gmp/models/reportformat';
 
-
 const log = logger.getLogger('gmp.commands.reportformats');
 
 class ReportFormatCommand extends EntityCommand {

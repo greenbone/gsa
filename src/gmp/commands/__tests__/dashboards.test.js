@@ -4,7 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {DEFAULT_ROW_HEIGHT, createDisplay, createRow} from 'gmp/commands/dashboards';
+import {
+  DEFAULT_ROW_HEIGHT,
+  createDisplay,
+  createRow,
+} from 'gmp/commands/dashboards';
 
 describe('createRow tests', () => {
   test('should create row with default height', () => {

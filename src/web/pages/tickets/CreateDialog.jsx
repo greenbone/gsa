@@ -14,7 +14,6 @@ import {createTicketRules as validationRules} from 'web/pages/tickets/validation
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 
-
 const fieldsToValidate = ['note'];
 
 const CreateTicketDialog = ({

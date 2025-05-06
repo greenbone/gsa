@@ -630,5 +630,5 @@ export default compose(
   withCapabilities,
   withDownload,
   withRouter,
-  connect(mapStateToProps, mapDispatchToProp)
+  connect(mapStateToProps, mapDispatchToProp),
 )(AuditComponent);

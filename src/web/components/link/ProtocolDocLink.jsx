@@ -8,7 +8,6 @@ import BlankLink from 'web/components/link/BlankLink';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ProtocolDocLink = ({title}) => {
   const gmp = useGmp();
   const {protocolDocUrl} = gmp.settings;

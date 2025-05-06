@@ -15,7 +15,6 @@ import {
   MANUAL,
 } from 'gmp/models/override';
 
-
 const log = logger.getLogger('gmp.commands.notes');
 
 class NoteCommand extends EntityCommand {

@@ -8,7 +8,6 @@ import {parseSeverity, parseDate} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-
 class CertBundAdv extends Info {
   static entityType = 'certbund';
 

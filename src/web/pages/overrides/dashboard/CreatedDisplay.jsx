@@ -13,7 +13,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {OverridesCreatedLoader} from 'web/pages/overrides/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 export const OverridesCreatedDisplay = createDisplay({
   loaderComponent: OverridesCreatedLoader,
   displayComponent: CreatedDisplay,

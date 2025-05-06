@@ -16,7 +16,6 @@ import {
   createEntityLoadingActions,
 } from 'web/store/entities/utils/actions';
 
-
 export const reportActions = {
   request: (id, filter) => ({
     type: types.ENTITY_LOADING_REQUEST,

@@ -9,7 +9,6 @@ import Event from 'gmp/models/event';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-
 const log = logger.getLogger('gmp.models.schedule');
 
 class Schedule extends Model {

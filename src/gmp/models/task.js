@@ -23,7 +23,6 @@ import {normalizeType} from 'gmp/utils/entitytype';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
 export const AUTO_DELETE_KEEP_DEFAULT_VALUE = 5;

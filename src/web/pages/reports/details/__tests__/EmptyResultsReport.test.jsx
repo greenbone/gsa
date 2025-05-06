@@ -8,7 +8,6 @@ import Filter from 'gmp/models/filter';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('Empty Results Report tests', () => {
   test('should render empty results report', () => {
     const onFilterAddLogLevelClick = testing.fn();

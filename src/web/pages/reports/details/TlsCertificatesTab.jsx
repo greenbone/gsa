@@ -14,7 +14,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-
 const tlsCertificatesSortFunctions = {
   dn: makeCompareString('subjectDn'),
   serial: makeCompareString('serial'),

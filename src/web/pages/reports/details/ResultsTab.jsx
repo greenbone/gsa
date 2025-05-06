@@ -365,4 +365,8 @@ const mapDispatchToProps = (dispatch, {reportId, gmp}) => {
   };
 };
 
-export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(ResultsTabWrapper);
+export default compose(
+  withTranslation,
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(ResultsTabWrapper);

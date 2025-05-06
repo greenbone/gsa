@@ -15,7 +15,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TicketsListLoader} from 'web/pages/tickets/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 const ticketStatusColorScale = scaleOrdinal()
   .domain(Object.values(TICKET_STATUS).sort())
   .range([

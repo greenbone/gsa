@@ -57,7 +57,6 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 
-
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
 const DEFAULT_FILTER = Filter.fromString(

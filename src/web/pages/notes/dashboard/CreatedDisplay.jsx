@@ -13,7 +13,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NotesCreatedLoader} from 'web/pages/notes/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 export const NotesCreatedDisplay = createDisplay({
   loaderComponent: NotesCreatedLoader,
   displayComponent: CreatedDisplay,

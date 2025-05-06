@@ -239,16 +239,16 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const startTimeInput = getByName('startDate')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, '12:00')
-    expect(startTimeInput).toHaveValue('12:00')
+    const startTimeInput = getByName('startDate');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, '12:00');
+    expect(startTimeInput).toHaveValue('12:00');
 
-    const endTimeInput = getByName('endTime')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, '13:00')
-    expect(endTimeInput).toHaveValue('13:00')
-  })
+    const endTimeInput = getByName('endTime');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, '13:00');
+    expect(endTimeInput).toHaveValue('13:00');
+  });
 
   test('should prevent changing start and end times when value is invalid', async () => {
     handleSave.mockResolvedValue({});
@@ -271,46 +271,46 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const startTimeInput = getByName('startDate')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, '')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, '13')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, 'a:00')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, ':00')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, '25:00')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, '15:a')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, '15:0')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, '15:')
-    expect(startTimeInput).toHaveValue('15:00')
-    changeInputValue(startTimeInput, '15:62')
-    expect(startTimeInput).toHaveValue('15:00')
+    const startTimeInput = getByName('startDate');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, '');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, '13');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, 'a:00');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, ':00');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, '25:00');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, '15:a');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, '15:0');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, '15:');
+    expect(startTimeInput).toHaveValue('15:00');
+    changeInputValue(startTimeInput, '15:62');
+    expect(startTimeInput).toHaveValue('15:00');
 
-    const endTimeInput = getByName('endTime')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, '')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, '15')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, 'a:00')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, ':00')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, '25:00')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, '19:a')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, '19:0')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, '19:')
-    expect(endTimeInput).toHaveValue('19:45')
-    changeInputValue(endTimeInput, '19:62')
-    expect(endTimeInput).toHaveValue('19:45')
-  })
+    const endTimeInput = getByName('endTime');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, '');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, '15');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, 'a:00');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, ':00');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, '25:00');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, '19:a');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, '19:0');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, '19:');
+    expect(endTimeInput).toHaveValue('19:45');
+    changeInputValue(endTimeInput, '19:62');
+    expect(endTimeInput).toHaveValue('19:45');
+  });
 });

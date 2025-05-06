@@ -11,7 +11,6 @@ import logger from 'gmp/log';
 import ReportConfig from 'gmp/models/reportconfig';
 import {isArray} from 'gmp/utils/identity';
 
-
 const log = logger.getLogger('gmp.commands.reportconfigs');
 
 export class ReportConfigCommand extends EntityCommand {

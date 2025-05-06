@@ -9,7 +9,6 @@ import Policy from 'gmp/models/policy';
 import Details from 'web/pages/policies/Details';
 import {rendererWith} from 'web/utils/Testing';
 
-
 describe('Policy Details tests', () => {
   test('should render full Details', () => {
     const policy = Policy.fromElement({

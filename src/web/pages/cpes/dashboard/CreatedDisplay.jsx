@@ -13,7 +13,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {CpesCreatedLoader} from 'web/pages/cpes/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 export const CpesCreatedDisplay = createDisplay({
   loaderComponent: CpesCreatedLoader,
   displayComponent: CreatedDisplay,

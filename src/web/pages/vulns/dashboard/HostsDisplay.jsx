@@ -23,7 +23,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {VulnsHostsLoader} from 'web/pages/vulns/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const format = d3format('0.1f');
 
 const calculateBins = (minHosts, maxHosts, totalVulns) => {

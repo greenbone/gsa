@@ -10,7 +10,6 @@ import {YES_VALUE} from 'gmp/parser';
 import EntityLink from 'web/entity/Link';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 

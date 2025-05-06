@@ -9,7 +9,6 @@ import AuditReportReport from 'gmp/models/report/auditreport';
 import {parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-
 export const COMPLIANCE_STATES = {
   yes: _l('Yes'),
   no: _l('No'),

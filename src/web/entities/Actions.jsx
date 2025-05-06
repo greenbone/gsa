@@ -10,7 +10,6 @@ import EntitySelection from 'web/entities/Selection';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
 
-
 const EntitiesActions = ({
   children,
   entity,

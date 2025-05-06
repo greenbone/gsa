@@ -8,7 +8,6 @@ import Layout from 'web/components/layout/Layout';
 import Identifiers from 'web/pages/hosts/Identifiers';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const HostDetails = ({entity, onHostIdentifierDeleteClick}) => {
   const {identifiers} = entity;
   return (

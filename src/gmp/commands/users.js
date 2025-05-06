@@ -21,7 +21,6 @@ import {forEach, map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 
-
 const log = logger.getLogger('gmp.commands.users');
 
 const REPORT_COMPOSER_DEFAULTS_SETTING_ID =

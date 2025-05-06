@@ -10,7 +10,6 @@ import ProgressBar from 'web/components/bar/ProgressBar';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-
 const ComplianceBar = ({compliance, toolTip}) => {
   const title = getTranslatableReportCompliance(compliance);
 

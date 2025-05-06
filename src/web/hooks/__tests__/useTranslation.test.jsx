@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import useTranslation from 'web/hooks/useTranslation';
 import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
-
 const TestComponent = () => {
   const [_, i18n_1, ready_1] = useTranslation();
   const {t, i18n, ready} = useTranslation();

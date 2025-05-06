@@ -17,7 +17,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TaskStatusLoader} from 'web/pages/tasks/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');
 const blue = interpolateHcl('#aec7e8', '#1f77b4');
