@@ -62,7 +62,6 @@ const NoteComponent = ({
   const [title, setTitle] = useState();
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
