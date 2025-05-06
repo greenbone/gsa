@@ -1,8 +1,9 @@
+/* eslint-disable header/header */
 const config = {
   arrowParens: 'avoid',
   bracketSpacing: false,
   jsxSingleQuote: false,
-  jsxBracketSameLine: false,
+  bracketSameLine: false,
   semi: true,
   singleQuote: true,
   tabWidth: 2,
