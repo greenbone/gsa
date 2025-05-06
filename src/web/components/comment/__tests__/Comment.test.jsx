@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import Comment from 'web/components/comment/Comment';
 import {render} from 'web/utils/Testing';
 
-
 describe('Comment tests', () => {
   test('should render children', () => {
     const {element} = render(<Comment>Hello World</Comment>);

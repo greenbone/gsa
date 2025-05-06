@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import InnerLink from 'web/components/link/InnerLink';
 import {render} from 'web/utils/Testing';
 
-
 describe('InnerLink tests', () => {
   test('should render InnerLink', () => {
     const {element} = render(<InnerLink to="foo" />);

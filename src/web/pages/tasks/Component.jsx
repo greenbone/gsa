@@ -1011,5 +1011,5 @@ export default compose(
   withTranslation,
   withGmp,
   withCapabilities,
-  connect(mapStateToProps, mapDispatchToProp)
+  connect(mapStateToProps, mapDispatchToProp),
 )(TaskComponent);

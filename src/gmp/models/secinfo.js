@@ -7,7 +7,6 @@ import {_} from 'gmp/locale/lang';
 import Info from 'gmp/models/info';
 import {isDefined} from 'gmp/utils/identity';
 
-
 export const secInfoTypeName = (type, unknown) => {
   if (!isDefined(unknown)) {
     unknown = _('N/A');

@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import CveLink from 'web/components/link/CveLink';
 import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
-
 describe('CveLink tests', () => {
   test('should render CveLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});

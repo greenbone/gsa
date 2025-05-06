@@ -15,7 +15,6 @@ import {editTicketRules as validationRules} from 'web/pages/tickets/validationru
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 
-
 const STATUS = [TICKET_STATUS.open, TICKET_STATUS.fixed, TICKET_STATUS.closed];
 
 const fieldsToValidate = ['openNote', 'closedNote', 'fixedNote'];

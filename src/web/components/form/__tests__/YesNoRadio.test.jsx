@@ -9,7 +9,6 @@ import YesNoRadio from 'web/components/form/YesNoRadio';
 import {getRadioInputs} from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 const getLabels = element => element.querySelectorAll('label');
 
 describe('YesNoRadio tests', () => {

@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import SnackbarCreator from 'web/components/snackbar/Snackbar';
 import {render} from 'web/utils/Testing';
 
-
 describe('Snackbar tests', () => {
   test('should render', () => {
     const {rerender, element} = render(

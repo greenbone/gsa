@@ -5,11 +5,26 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from 'web/pages/nvts/dashboard/CreatedDisplay';
-import {NvtsCvssDisplay, NvtsCvssTableDisplay} from 'web/pages/nvts/dashboard/CvssDisplay';
-import {NvtsFamilyDisplay, NvtsFamilyTableDisplay} from 'web/pages/nvts/dashboard/FamilyDisplay';
-import {NvtsQodDisplay, NvtsQodTableDisplay} from 'web/pages/nvts/dashboard/QodDisplay';
-import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from 'web/pages/nvts/dashboard/QodTypeDisplay';
+import {
+  NvtsCreatedDisplay,
+  NvtsCreatedTableDisplay,
+} from 'web/pages/nvts/dashboard/CreatedDisplay';
+import {
+  NvtsCvssDisplay,
+  NvtsCvssTableDisplay,
+} from 'web/pages/nvts/dashboard/CvssDisplay';
+import {
+  NvtsFamilyDisplay,
+  NvtsFamilyTableDisplay,
+} from 'web/pages/nvts/dashboard/FamilyDisplay';
+import {
+  NvtsQodDisplay,
+  NvtsQodTableDisplay,
+} from 'web/pages/nvts/dashboard/QodDisplay';
+import {
+  NvtsQodTypeDisplay,
+  NvtsQodTypeTableDisplay,
+} from 'web/pages/nvts/dashboard/QodTypeDisplay';
 import {
   NvtsSeverityClassDisplay,
   NvtsSeverityClassTableDisplay,

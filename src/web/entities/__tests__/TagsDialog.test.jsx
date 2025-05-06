@@ -8,7 +8,6 @@ import {getDialog, getSelectElement} from 'web/components/testing';
 import Dialog from 'web/entities/TagsDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('TagsDialog dialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();

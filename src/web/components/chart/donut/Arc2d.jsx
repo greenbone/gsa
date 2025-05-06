@@ -11,7 +11,6 @@ import ToolTip from 'web/components/chart/Tooltip';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-
 const Arc2d = ({data, path, x, y, onDataClick}) => {
   const {color = Theme.lightGray, toolTip} = data;
   return (

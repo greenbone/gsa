@@ -23,7 +23,6 @@ import {reportIdentifier} from 'web/store/entities/report/selectors';
 import {types} from 'web/store/entities/utils/actions';
 import {createState, testEntityActions} from 'web/store/entities/utils/testing';
 
-
 testEntityActions('report', reportActions);
 testEntityActions('deltaReport', deltaReportActions);
 testEntityActions('auditreport', auditReportActions);

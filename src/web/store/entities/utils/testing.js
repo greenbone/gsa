@@ -10,7 +10,6 @@ import {isFunction} from 'gmp/utils/identity';
 import {types} from 'web/store/entities/utils/actions';
 import {filterIdentifier} from 'web/store/utils';
 
-
 export const createRootState = stateData => ({
   entities: {
     ...stateData,

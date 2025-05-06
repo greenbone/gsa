@@ -10,7 +10,11 @@ import styled from 'styled-components';
 import Arc2d from 'web/components/chart/donut/Arc2d';
 import Arc3d from 'web/components/chart/donut/Arc3d';
 import Labels from 'web/components/chart/donut/Labels';
-import {PieInnerPath, PieTopPath, PieOuterPath} from 'web/components/chart/donut/Paths';
+import {
+  PieInnerPath,
+  PieTopPath,
+  PieOuterPath,
+} from 'web/components/chart/donut/Paths';
 import Pie from 'web/components/chart/donut/Pie';
 import {DataPropType} from 'web/components/chart/donut/PropTypes';
 import Group from 'web/components/chart/Group';

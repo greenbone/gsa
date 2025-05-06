@@ -13,7 +13,6 @@ import {
 import Dialog from 'web/pages/radius/Dialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('RADIUS dialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();

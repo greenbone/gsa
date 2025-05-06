@@ -17,7 +17,6 @@ import {parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 class AuditReportReport extends Model {
   static entityType = 'auditreport';
 

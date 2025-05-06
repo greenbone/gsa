@@ -10,7 +10,6 @@ import logger from 'gmp/log';
 import Audit, {HOSTS_ORDERING_SEQUENTIAL} from 'gmp/models/audit';
 import {NO_VALUE} from 'gmp/parser';
 
-
 const log = logger.getLogger('gmp.commands.audits');
 
 export class AuditCommand extends EntityCommand {

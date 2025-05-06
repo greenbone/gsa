@@ -9,7 +9,10 @@ import {
   NotesActiveDaysDisplay,
   NotesActiveDaysTableDisplay,
 } from 'web/pages/notes/dashboard/ActiveDaysDisplay';
-import {NotesCreatedDisplay, NotesCreatedTableDisplay} from 'web/pages/notes/dashboard/CreatedDisplay';
+import {
+  NotesCreatedDisplay,
+  NotesCreatedTableDisplay,
+} from 'web/pages/notes/dashboard/CreatedDisplay';
 import {
   NotesWordCloudDisplay,
   NotesWordCloudTableDisplay,

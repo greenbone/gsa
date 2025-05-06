@@ -182,4 +182,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
     dispatch(addDisplay(gmp)(settings, dashboardId, displayId)),
 });
 
-export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(DashboardControls);
+export default compose(
+  withTranslation,
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(DashboardControls);

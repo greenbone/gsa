@@ -11,7 +11,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import {MAX_TITLE_LENGTH} from 'web/pages/start/NewDashboardDialog';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const EditDashboardDialog = ({
   dashboardId,
   dashboardTitle,

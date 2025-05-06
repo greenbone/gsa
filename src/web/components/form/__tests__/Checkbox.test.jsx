@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CheckBox from 'web/components/form/Checkbox';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-
 describe('CheckBox component tests', () => {
   test('should call change handler', () => {
     const change = testing.fn();

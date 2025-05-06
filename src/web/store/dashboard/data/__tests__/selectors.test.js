@@ -8,7 +8,6 @@ import Filter from 'gmp/models/filter';
 import getDashboardData from 'web/store/dashboard/data/selectors';
 import {filterIdentifier} from 'web/store/utils';
 
-
 const createState = state => ({
   dashboardData: {
     ...state,

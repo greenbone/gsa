@@ -36,7 +36,6 @@ import {normalizeType} from 'gmp/utils/entitytype';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 export {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_NO,

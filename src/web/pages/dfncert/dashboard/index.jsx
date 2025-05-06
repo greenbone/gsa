@@ -9,7 +9,10 @@ import {
   DfnCertsCreatedDisplay,
   DfnCertsCreatedTableDisplay,
 } from 'web/pages/dfncert/dashboard/CreatedDisplay';
-import {DfnCertCvssDisplay, DfnCertCvssTableDisplay} from 'web/pages/dfncert/dashboard/CvssDisplay';
+import {
+  DfnCertCvssDisplay,
+  DfnCertCvssTableDisplay,
+} from 'web/pages/dfncert/dashboard/CvssDisplay';
 import {
   DfnCertSeverityClassDisplay,
   DfnCertSeverityClassTableDisplay,

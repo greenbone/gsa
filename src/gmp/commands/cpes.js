@@ -9,7 +9,6 @@ import InfoEntityCommand from 'gmp/commands/infoentity';
 import Cpe from 'gmp/models/cpe';
 import {isDefined} from 'gmp/utils/identity';
 
-
 const info_filter = info => isDefined(info.cpe);
 
 class CpeCommand extends InfoEntityCommand {

@@ -9,7 +9,6 @@ import logger from 'gmp/log';
 import {isArray, isDefined} from 'gmp/utils/identity';
 import {v4 as uuid} from 'uuid';
 
-
 const log = logger.getLogger('gmp.commands.dashboards');
 
 export const DEFAULT_ROW_HEIGHT = 250;

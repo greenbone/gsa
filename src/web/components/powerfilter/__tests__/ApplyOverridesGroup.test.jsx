@@ -9,7 +9,6 @@ import ApplyOverridesGroup from 'web/components/powerfilter/ApplyOverridesGroup'
 import {getRadioInputs} from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('ApplyOverridesGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString();

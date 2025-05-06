@@ -15,7 +15,6 @@ import {
 import {isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 export const NOTE_ACTIVE_UNLIMITED_VALUE = -2;
 export const NOTE_INACTIVE_VALUE = -1;
 

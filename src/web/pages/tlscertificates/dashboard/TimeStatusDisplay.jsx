@@ -18,7 +18,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TlsCertificatesStatusLoader} from 'web/pages/tlscertificates/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 const timeStatusColorScale = scaleOrdinal()
   .domain(Object.values(TIME_STATUS).sort())
   .range([

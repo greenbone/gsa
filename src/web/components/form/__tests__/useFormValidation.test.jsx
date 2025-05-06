@@ -7,7 +7,9 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import React, {useState} from 'react';
 import Button from 'web/components/form/Button';
 import TextField from 'web/components/form/TextField';
-import useFormValidation, {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
+import useFormValidation, {
+  shouldBeNonEmpty,
+} from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 

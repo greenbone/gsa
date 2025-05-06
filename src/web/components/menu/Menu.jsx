@@ -64,7 +64,7 @@ const Menu = () => {
   const useIsActive = path => Boolean(useMatch(path));
 
   const conditionalSubNavConfig = (feature, label, to, activeCondition) =>
-        capabilities.mayAccess(feature) && { label, to, activeCondition };
+    capabilities.mayAccess(feature) && {label, to, activeCondition};
 
   const isUserActive = useIsActive('/users');
   const isGroupsActive = useIsActive('/groups');

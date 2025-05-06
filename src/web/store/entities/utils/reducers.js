@@ -7,7 +7,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {types} from 'web/store/entities/utils/actions';
 import {filterIdentifier} from 'web/store/utils';
 
-
 /**
  * Return true if error is not a Rejection class or if Rejection class has a
  * reason of error

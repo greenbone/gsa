@@ -9,7 +9,6 @@ import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Host from 'gmp/models/host';
 
-
 const log = logger.getLogger('gmp.commands.hosts');
 
 class HostCommand extends EntityCommand {

@@ -1318,4 +1318,8 @@ const mapStateToProps = rootState => {
   };
 };
 
-export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(AlertComponent);
+export default compose(
+  withTranslation,
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(AlertComponent);

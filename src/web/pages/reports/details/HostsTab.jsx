@@ -15,7 +15,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-
 const hostsSortFunctions = {
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),

@@ -13,7 +13,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {CvesCreatedLoader} from 'web/pages/cves/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 export const CvesCreatedDisplay = createDisplay({
   loaderComponent: CvesCreatedLoader,
   displayComponent: CreatedDisplay,

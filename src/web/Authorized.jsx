@@ -11,7 +11,6 @@ import {setIsLoggedIn} from 'web/store/usersettings/actions';
 import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const Authorized = ({children}) => {
   const gmp = useGmp();
   const dispatch = useDispatch();

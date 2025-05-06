@@ -9,7 +9,6 @@ import InfoEntityCommand from 'gmp/commands/infoentity';
 import Nvt from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 
-
 const info_filter = info => isDefined(info.nvt);
 
 export class NvtCommand extends InfoEntityCommand {

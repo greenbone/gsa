@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import SaveDialogFooter from 'web/components/dialog/SaveDialogFooter';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-
 describe('SaveDialogFooter', () => {
   const defaultProps = {
     multiStep: 0,

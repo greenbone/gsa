@@ -22,7 +22,6 @@ import {
   AUTO_DELETE_KEEP,
 } from 'gmp/models/task';
 
-
 describe('AuditCommand tests', () => {
   test('should create new audit', () => {
     const response = createActionResultResponse();

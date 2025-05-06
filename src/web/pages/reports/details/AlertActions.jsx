@@ -230,5 +230,5 @@ export default compose(
   withTranslation,
   withGmp,
   withCapabilities,
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
 )(AlertActions);

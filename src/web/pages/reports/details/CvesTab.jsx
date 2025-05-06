@@ -13,7 +13,6 @@ import {
   makeCompareSeverity,
 } from 'web/utils/Sort';
 
-
 const cvesSortFunctions = {
   cve: makeCompareString(entity => entity.cves.join(' ')),
   hosts: makeCompareNumber(entity => entity.hosts.count),

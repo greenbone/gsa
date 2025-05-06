@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import useGmp from 'web/hooks/useGmp';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const TestUseGmp = () => {
   const gmp = useGmp();
   return <span>{gmp.foo()}</span>;

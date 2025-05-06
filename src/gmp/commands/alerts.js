@@ -14,7 +14,6 @@ import Filter from 'gmp/models/filter';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-
 const log = logger.getLogger('gmp.commands.alerts');
 
 const event_data_fields = ['status', 'feed_event', 'secinfo_type'];

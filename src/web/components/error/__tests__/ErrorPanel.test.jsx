@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('ErrorPanel tests', () => {
   test('should render message', () => {
     const message = 'An error occurred';

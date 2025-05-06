@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import Languages, {getLanguageCodes} from 'gmp/locale/languages';
 import {isString} from 'gmp/utils/identity';
 
-
 describe('Language tests', () => {
   test('should contain list of languagegs', () => {
     expect(Object.keys(Languages).length).toEqual(3);

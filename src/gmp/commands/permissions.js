@@ -10,7 +10,6 @@ import logger from 'gmp/log';
 import Permission from 'gmp/models/permission';
 import {apiType} from 'gmp/utils/entitytype';
 
-
 const log = logger.getLogger('gmp.commands.permissions');
 
 class PermissionCommand extends EntityCommand {

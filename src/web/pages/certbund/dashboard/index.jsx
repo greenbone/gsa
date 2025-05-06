@@ -9,7 +9,10 @@ import {
   CertBundCreatedDisplay,
   CertBundCreatedTableDisplay,
 } from 'web/pages/certbund/dashboard/CreatedDisplay';
-import {CertBundCvssDisplay, CertBundCvssTableDisplay} from 'web/pages/certbund/dashboard/CvssDisplay';
+import {
+  CertBundCvssDisplay,
+  CertBundCvssTableDisplay,
+} from 'web/pages/certbund/dashboard/CvssDisplay';
 import {
   CertBundSeverityClassDisplay,
   CertBundSeverityClassTableDisplay,

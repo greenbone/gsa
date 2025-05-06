@@ -13,7 +13,6 @@ import {changeInputValue, getRadioInputs} from 'web/components/testing';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('AutoDeleteReportsGroup tests', () => {
   test('should render dialog group', () => {
     const handleChange = testing.fn();

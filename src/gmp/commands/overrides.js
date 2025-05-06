@@ -16,7 +16,6 @@ import Override, {
 } from 'gmp/models/override';
 import {NO_VALUE} from 'gmp/parser';
 
-
 const log = logger.getLogger('gmp.commands.overrides');
 
 class OverrideCommand extends EntityCommand {

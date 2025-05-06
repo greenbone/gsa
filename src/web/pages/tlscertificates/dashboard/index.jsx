@@ -9,7 +9,10 @@ import {
   TlsCertificatesModifiedDisplay,
   TlsCertificatesModifiedTableDisplay,
 } from 'web/pages/tlscertificates/dashboard/ModifiedDisplay';
-import {TimeStatusDisplay, TimeStatusTableDisplay} from 'web/pages/tlscertificates/dashboard/TimeStatusDisplay';
+import {
+  TimeStatusDisplay,
+  TimeStatusTableDisplay,
+} from 'web/pages/tlscertificates/dashboard/TimeStatusDisplay';
 
 export const TLS_CERTIFICATES_DASHBOARD_ID =
   '9b62bf16-bf90-11e9-ad97-28d24461215b';

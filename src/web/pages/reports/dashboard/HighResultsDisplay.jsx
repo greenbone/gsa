@@ -20,7 +20,6 @@ import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingLongDate} from 'web/utils/userSettingTimeDateFormatters';
 
-
 const transformHighResults = (data = {}) => {
   const {groups = []} = data;
   return groups.map(group => {

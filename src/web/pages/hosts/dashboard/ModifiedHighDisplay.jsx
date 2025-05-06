@@ -21,7 +21,6 @@ import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-
 const transformModified = (data = {}) => {
   let {groups = []} = data;
   groups = groups.filter(group => group.subgroup.value === 'High');

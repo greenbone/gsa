@@ -374,4 +374,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
-export default compose(withTranslation, withGmp, connect(mapStateToProps, mapDispatchToProps))(ScannerComponent);
+export default compose(
+  withTranslation,
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(ScannerComponent);
