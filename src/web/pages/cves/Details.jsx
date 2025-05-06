@@ -95,7 +95,7 @@ const CveDetails = ({entity}) => {
               </TableRow>
               <TableRow>
                 <TableData>{_('Percentage')}</TableData>
-                <TableData>{`${(epss?.percentile * 100).toFixed(3)}%`}</TableData>
+                <TableData>{`${(epss?.percentile * 1).toFixed(3)}%`}</TableData>
               </TableRow>
             </TableBody>
           </InfoTable>

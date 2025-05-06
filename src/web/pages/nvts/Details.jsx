@@ -106,7 +106,7 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>{_('EPSS Percentage')}</TableData>
                   <TableData>
                     {isNumber(epss?.max_severity?.percentile)
-                      ? `${(epss.max_severity.percentile * 100).toFixed(3)}%`
+                      ? `${(epss.max_severity.percentile * 1).toFixed(3)}%`
                       : _('N/A')}
                   </TableData>
                 </TableRow>
@@ -147,7 +147,7 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>{_('EPSS Percentage')}</TableData>
                   <TableData>
                     {isNumber(epss?.max_epss?.percentile)
-                      ? `${(epss?.max_epss?.percentile * 100).toFixed(3)}%`
+                      ? `${(epss?.max_epss?.percentile * 1).toFixed(3)}%`
                       : _('N/A')}
                   </TableData>
                 </TableRow>
