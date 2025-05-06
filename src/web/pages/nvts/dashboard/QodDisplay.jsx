@@ -24,7 +24,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NvtsQodLoader} from 'web/pages/nvts/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const transformQodData = (data = {}) => {
   const {groups = []} = data;
   const sum = totalCount(groups);

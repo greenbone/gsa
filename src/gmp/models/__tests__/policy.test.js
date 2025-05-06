@@ -9,7 +9,6 @@ import Policy from 'gmp/models/policy';
 import {SCANCONFIG_TREND_DYNAMIC} from 'gmp/models/scanconfig';
 import {testModel} from 'gmp/models/testing';
 
-
 testModel(Policy, 'policy');
 
 describe('Policy model tests', () => {

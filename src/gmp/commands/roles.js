@@ -10,7 +10,6 @@ import logger from 'gmp/log';
 import Role from 'gmp/models/role';
 import {isArray} from 'gmp/utils/identity';
 
-
 const log = logger.getLogger('gmp.commands.roles');
 
 class RoleCommand extends EntityCommand {

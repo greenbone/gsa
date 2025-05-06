@@ -27,7 +27,10 @@ import {reducer as policy} from 'web/store/entities/policies';
 import {reducer as portlist} from 'web/store/entities/portlists';
 import {reducer as reportconfig} from 'web/store/entities/reportconfigs';
 import {reducer as reportformat} from 'web/store/entities/reportformats';
-import {reducer as report, deltaReducer as deltaReport} from 'web/store/entities/reports';
+import {
+  reducer as report,
+  deltaReducer as deltaReport,
+} from 'web/store/entities/reports';
 import {reducer as result} from 'web/store/entities/results';
 import {reducer as role} from 'web/store/entities/roles';
 import {reducer as scanconfig} from 'web/store/entities/scanconfigs';

@@ -366,5 +366,5 @@ export default compose(
   withTranslation,
   withGmp,
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
 )(PerformancePage);

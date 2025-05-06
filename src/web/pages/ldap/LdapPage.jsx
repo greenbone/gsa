@@ -227,4 +227,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
-export default compose(withTranslation, withGmp, connect(undefined, mapDispatchToProps))(LdapAuthentication);
+export default compose(
+  withTranslation,
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(LdapAuthentication);

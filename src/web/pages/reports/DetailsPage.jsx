@@ -837,5 +837,5 @@ export default compose(
   withDialogNotification,
   withDownload,
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
 )(ReportDetailsWrapper);

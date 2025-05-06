@@ -191,4 +191,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
-export default compose(withTranslation, withGmp, connect(undefined, mapDispatchToProps))(RadiusAuthentication);
+export default compose(
+  withTranslation,
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(RadiusAuthentication);

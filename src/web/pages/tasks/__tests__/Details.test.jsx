@@ -13,7 +13,6 @@ import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scan
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const config = ScanConfig.fromElement({
   _id: '314',
   name: 'foo',

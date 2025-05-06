@@ -13,7 +13,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ContainerTaskDialog = ({
   comment = '',
   in_assets = YES_VALUE,

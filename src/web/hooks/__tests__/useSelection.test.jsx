@@ -8,7 +8,6 @@ import useSelection from 'web/hooks/useSelection';
 import SelectionType from 'web/utils/SelectionType';
 import {fireEvent, render, screen} from 'web/utils/Testing';
 
-
 const TestComponent = () => {
   const {selected, selectionType, select, deselect, changeSelectionType} =
     useSelection(SelectionType.SELECTION_USER);

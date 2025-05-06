@@ -8,7 +8,6 @@ import React from 'react';
 import FilterSelection from 'web/components/dashboard/display/FilterSelection';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const withFilterSelection =
   ({filtersFilter}) =>
   Component => {

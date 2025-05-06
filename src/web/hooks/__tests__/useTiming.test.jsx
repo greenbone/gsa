@@ -8,7 +8,6 @@ import {useState} from 'react';
 import useTiming from 'web/hooks/useTiming';
 import {act, fireEvent, render, screen} from 'web/utils/Testing';
 
-
 const TestComponent = ({doFunc}) => {
   const [value, setValue] = useState(0);
   const timingFunc = () => {

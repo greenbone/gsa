@@ -13,7 +13,6 @@ import {
   makeCompareSeverity,
 } from 'web/utils/Sort';
 
-
 const closedCvesSortFunctions = {
   cve: makeCompareString('cveId'),
   host: makeCompareIp(entity => entity.host.ip),

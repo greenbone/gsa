@@ -16,7 +16,6 @@ import {map} from 'gmp/utils/array';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 
-
 export const TAG_NA = 'N/A';
 
 const parseTags = tags => {

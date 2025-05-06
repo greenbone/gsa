@@ -8,7 +8,6 @@ import Filter from 'gmp/models/filter';
 import Thresholdpanel from 'web/pages/reports/details/ThresholdPanel';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('Report Threshold Panel tests', () => {
   test('should render threshold panel', () => {
     const onFilterEditClick = testing.fn();

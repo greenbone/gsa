@@ -13,7 +13,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {DfnCertsCreatedLoader} from 'web/pages/dfncert/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 export const DfnCertsCreatedDisplay = createDisplay({
   loaderComponent: DfnCertsCreatedLoader,
   displayComponent: CreatedDisplay,

@@ -24,7 +24,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {OverridesActiveDaysLoader} from 'web/pages/overrides/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const MAX_BINS = 10; // if this is changed, activeDaysColorScale needs adjustment
 
 const ACTIVE_YES_ALWAYS_VALUE = -2;

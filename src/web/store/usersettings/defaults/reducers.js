@@ -10,7 +10,6 @@ import {
 } from 'web/store/usersettings/defaults/actions';
 import {combineReducers} from 'web/store/utils';
 
-
 const isLoading = (state = false, action) => {
   switch (action.type) {
     case USER_SETTINGS_DEFAULTS_LOADING_REQUEST:

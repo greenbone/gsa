@@ -8,7 +8,6 @@ import React from 'react';
 import useValueChange from 'web/components/form/useValueChange';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const Radio = ({
   checked,
   disabled,

@@ -13,7 +13,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {CertBundCreatedLoader} from 'web/pages/certbund/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 export const CertBundCreatedDisplay = createDisplay({
   loaderComponent: CertBundCreatedLoader,
   displayComponent: CreatedDisplay,

@@ -9,7 +9,6 @@ import EntityCommand from 'gmp/commands/entity';
 import Ticket from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
 
-
 const convertNote = note => {
   if (!isDefined(note)) {
     return note;

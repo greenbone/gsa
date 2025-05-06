@@ -5,8 +5,14 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-import {CpesCreatedDisplay, CpesCreatedTableDisplay} from 'web/pages/cpes/dashboard/CreatedDisplay';
-import {CpesCvssDisplay, CpesCvssTableDisplay} from 'web/pages/cpes/dashboard/CvssDisplay';
+import {
+  CpesCreatedDisplay,
+  CpesCreatedTableDisplay,
+} from 'web/pages/cpes/dashboard/CreatedDisplay';
+import {
+  CpesCvssDisplay,
+  CpesCvssTableDisplay,
+} from 'web/pages/cpes/dashboard/CvssDisplay';
 import {
   CpesSeverityClassDisplay,
   CpesSeverityClassTableDisplay,

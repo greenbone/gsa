@@ -280,5 +280,5 @@ export default compose(
     entitiesSelector,
     loadEntities,
     reloadInterval: reportsReloadInterval,
-  })
+  }),
 )(Page);

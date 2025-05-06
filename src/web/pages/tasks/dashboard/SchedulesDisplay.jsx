@@ -17,7 +17,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {TasksSchedulesLoader} from 'web/pages/tasks/dashboard/Loaders';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/userSettingTimeDateFormatters';
 
-
 const today = date().startOf('day');
 const week = today.clone().add(7, 'days');
 

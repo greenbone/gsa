@@ -9,7 +9,10 @@ import {
   TicketsCreatedDisplay,
   TicketsCreatedTableDisplay,
 } from 'web/pages/tickets/dashboard/CreatedDisplay';
-import {TicketsStatusDisplay, TicketsStatusTableDisplay} from 'web/pages/tickets/dashboard/StatusDisplay';
+import {
+  TicketsStatusDisplay,
+  TicketsStatusTableDisplay,
+} from 'web/pages/tickets/dashboard/StatusDisplay';
 import {
   TicketsAssignedUsersDisplay,
   TicketsAssignedUsersTableDisplay,

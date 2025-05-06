@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import DetailsBlock from 'web/entity/Block';
 import {render} from 'web/utils/Testing';
 
-
 describe('Entity Block component tests', () => {
   test('should render', () => {
     const {element} = render(

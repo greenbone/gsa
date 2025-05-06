@@ -11,7 +11,6 @@ import ToolTip from 'web/components/chart/Tooltip';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-
 const DEFAULT_SHAPE_SIZE = 15;
 
 const StyledLegend = styled.div`

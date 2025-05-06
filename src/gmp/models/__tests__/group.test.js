@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import Group from 'gmp/models/group';
 import {testModel} from 'gmp/models/testing';
 
-
 testModel(Group, 'group');
 
 describe('Group model tests', () => {

@@ -14,7 +14,6 @@ import {TicketsListLoader} from 'web/pages/tickets/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 
-
 const transfromCreated = (tickets = []) => {
   const dates = tickets.reduce((prev, ticket) => {
     const timestamp = +ticket.creationTime.startOf('day');

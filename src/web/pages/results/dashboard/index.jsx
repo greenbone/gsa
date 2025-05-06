@@ -5,7 +5,10 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-import {ResultsCvssDisplay, ResultsCvssTableDisplay} from 'web/pages/results/dashboard/CvssDisplay';
+import {
+  ResultsCvssDisplay,
+  ResultsCvssTableDisplay,
+} from 'web/pages/results/dashboard/CvssDisplay';
 import {
   ResultsDescriptionWordCloudDisplay,
   ResultsDescriptionWordCloudTableDisplay,

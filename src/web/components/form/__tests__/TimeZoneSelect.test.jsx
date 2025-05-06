@@ -13,7 +13,6 @@ import {
 } from 'web/components/testing';
 import {render, userEvent} from 'web/utils/Testing';
 
-
 describe('TimezoneSelect tests', () => {
   test('should render', () => {
     const {element} = render(<TimezoneSelect />);

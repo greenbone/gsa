@@ -10,7 +10,6 @@ import logger from 'gmp/log';
 import Group from 'gmp/models/group';
 import {isArray} from 'gmp/utils/identity';
 
-
 const log = logger.getLogger('gmp.commands.groups');
 
 class GroupCommand extends EntityCommand {

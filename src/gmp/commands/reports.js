@@ -13,7 +13,6 @@ import {ALL_FILTER} from 'gmp/models/filter';
 import Report from 'gmp/models/report';
 import {isDefined} from 'gmp/utils/identity';
 
-
 const log = logger.getLogger('gmp.commands.reports');
 
 export class ReportsCommand extends EntitiesCommand {

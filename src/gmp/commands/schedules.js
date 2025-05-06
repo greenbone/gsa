@@ -9,7 +9,6 @@ import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Schedule from 'gmp/models/schedule';
 
-
 const log = logger.getLogger('gmp.commands.schedules');
 
 class ScheduleCommand extends EntityCommand {

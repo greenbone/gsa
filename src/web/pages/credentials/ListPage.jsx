@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import CredentialComponent from 'web/pages/credentials/Component';
+import CredentialComponent from 'web/pages/credentials/CredentialsComponent';
 import CredentialsFilterDialog from 'web/pages/credentials/FilterDialog';
 import CredentialsTable from 'web/pages/credentials/Table';
 import {

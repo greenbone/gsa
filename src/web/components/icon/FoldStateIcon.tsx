@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {FoldState} from 'web/components/folding/Folding';
 import {FoldIcon, UnfoldIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';

@@ -9,7 +9,6 @@ import StatusBar from 'web/components/bar/StatusBar';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('StatusBar tests', () => {
   test('should render', () => {
     const {element} = render(<StatusBar progress="90" status="Unknown" />);

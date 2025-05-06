@@ -22,7 +22,6 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 import {loadUserSettingDefault} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
-
 /**
  * Hook to get the default filter of a page from the store
  *

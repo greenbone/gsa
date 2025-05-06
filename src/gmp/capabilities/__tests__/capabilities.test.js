@@ -229,21 +229,21 @@ describe('Capabilities tests', () => {
   });
 
   test('should support ticket capabilities', () => {
-      const caps = new Capabilities([
-          'get_tickets',
-          'create_ticket',
-          'delete_ticket',
-          'modify_ticket',
-      ]);
+    const caps = new Capabilities([
+      'get_tickets',
+      'create_ticket',
+      'delete_ticket',
+      'modify_ticket',
+    ]);
 
-      expect(caps.mayAccess('ticket')).toEqual(true);
-      expect(caps.mayAccess('tickets')).toEqual(true);
+    expect(caps.mayAccess('ticket')).toEqual(true);
+    expect(caps.mayAccess('tickets')).toEqual(true);
 
-      expect(caps.mayClone('ticket')).toEqual(true);
-      expect(caps.mayCreate('ticket')).toEqual(true);
-      expect(caps.mayDelete('ticket')).toEqual(true);
-      expect(caps.mayEdit('ticket')).toEqual(true);
+    expect(caps.mayClone('ticket')).toEqual(true);
+    expect(caps.mayCreate('ticket')).toEqual(true);
+    expect(caps.mayDelete('ticket')).toEqual(true);
+    expect(caps.mayEdit('ticket')).toEqual(true);
 
-      expect(caps.mayAccess('other')).toEqual(false);
+    expect(caps.mayAccess('other')).toEqual(false);
   });
 });

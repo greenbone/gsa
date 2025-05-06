@@ -28,7 +28,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NotesActiveDaysLoader} from 'web/pages/notes/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const MAX_BINS = 10; // if this is changed, activeDaysColorScale needs adjustment
 
 const transformActiveDaysData = (data = {}) => {

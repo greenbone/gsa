@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import FileField from 'web/components/form/FileField';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('FileField tests', () => {
   test('should render', () => {
     const {element} = render(<FileField />);

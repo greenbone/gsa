@@ -14,7 +14,6 @@ import {
 import CreatePolicyDialog from 'web/pages/policies/Dialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('CreatePolicyDialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();

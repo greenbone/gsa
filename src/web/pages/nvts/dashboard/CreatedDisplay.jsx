@@ -13,7 +13,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {NvtCreatedLoader} from 'web/pages/nvts/dashboard/Loaders';
 import Theme from 'web/utils/Theme';
 
-
 export const NvtsCreatedDisplay = createDisplay({
   loaderComponent: NvtCreatedLoader,
   displayComponent: CreatedDisplay,

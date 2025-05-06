@@ -6,14 +6,17 @@
 import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import {convert, convertSelect, convertPreferences} from 'gmp/commands/scanconfigs';
+import {
+  convert,
+  convertSelect,
+  convertPreferences,
+} from 'gmp/commands/scanconfigs';
 import logger from 'gmp/log';
 import Policy from 'gmp/models/policy';
 import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-
 
 const log = logger.getLogger('gmp.commands.policies');
 

@@ -8,7 +8,6 @@ import ReportReport from 'gmp/models/report/report';
 import {parseSeverity, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-
 // FIXME the report xml structure is really ugly
 
 class Report extends Model {

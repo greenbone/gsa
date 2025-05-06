@@ -9,7 +9,6 @@ import BlankLink from 'web/components/link/BlankLink';
 import useManualURL from 'web/hooks/useManualURL';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ManualLink = ({anchor, page, searchTerm, lang, highlight, ...props}) => {
   const manualURL = useManualURL(lang);
 

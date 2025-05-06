@@ -274,4 +274,8 @@ PermissionsComponent.propTypes = {
   _: PropTypes.func.isRequired,
 };
 
-export default compose(withTranslation, withGmp, withCapabilities)(PermissionsComponent);
+export default compose(
+  withTranslation,
+  withGmp,
+  withCapabilities,
+)(PermissionsComponent);

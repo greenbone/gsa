@@ -24,7 +24,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import DeltaResultsFilterGroup from 'web/pages/reports/DeltaResultsFilterGroup';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const ReportDetailsFilterDialog = ({
   audit = false,
   delta = false,

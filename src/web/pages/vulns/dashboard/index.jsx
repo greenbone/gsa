@@ -5,8 +5,14 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-import {VulnsCvssDisplay, VulnsCvssTableDisplay} from 'web/pages/vulns/dashboard/CvssDisplay';
-import {VulnsHostsDisplay, VulnsHostsTableDisplay} from 'web/pages/vulns/dashboard/HostsDisplay';
+import {
+  VulnsCvssDisplay,
+  VulnsCvssTableDisplay,
+} from 'web/pages/vulns/dashboard/CvssDisplay';
+import {
+  VulnsHostsDisplay,
+  VulnsHostsTableDisplay,
+} from 'web/pages/vulns/dashboard/HostsDisplay';
 import {
   VulnsSeverityDisplay,
   VulnsSeverityTableDisplay,

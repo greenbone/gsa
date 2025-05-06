@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import DialogTwoButtonFooter from 'web/components/dialog/TwoButtonFooter';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-
 describe('DialogTwoButtonFooter tests', () => {
   test('should render', () => {
     const {element} = render(<DialogTwoButtonFooter rightButtonTitle="Foo" />);

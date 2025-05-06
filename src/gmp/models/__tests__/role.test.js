@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import Role from 'gmp/models/role';
 import {testModel} from 'gmp/models/testing';
 
-
 testModel(Role, 'role');
 
 describe('Role model tests', () => {

@@ -9,7 +9,6 @@ import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesCon
 import PropTypes from 'web/utils/PropTypes';
 import {makeCompareIp, makeCompareString} from 'web/utils/Sort';
 
-
 export const errorsSortFunctions = {
   error: makeCompareString('description'),
   host: makeCompareIp(entity => entity.host.ip),

@@ -17,7 +17,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-
 const resultsSortFunctions = {
   delta: makeCompareString(entity => entity.delta.delta_type),
   created: makeCompareDate('creationTime'),
