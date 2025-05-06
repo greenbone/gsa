@@ -34,7 +34,7 @@ const entity_v2 = Cve.fromElement({
     nvts: '',
     epss: {
       score: 0.5,
-      percentile: 0.75,
+      percentile: 75.0,
     },
     cert: {
       cert_ref: {
