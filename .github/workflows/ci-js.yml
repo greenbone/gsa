@@ -78,7 +78,7 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
-      - name: Lint JavaScript files
+      - name: Lint files
         run: |
           set -o pipefail
           echo "## Linting JavaScript files" >> $GITHUB_STEP_SUMMARY
@@ -130,3 +130,33 @@ jobs:
         run: |
           echo "Translations are not up to date." >> $GITHUB_STEP_SUMMARY
           echo 'Please run `npm run i18n-extract` and update the translation files.' >> $GITHUB_STEP_SUMMARY
+
+  format:
+    name: Check formatting
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        node-version:
+          - 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Check code formatting
+        id: check
+        run: |
+          set -o pipefail
+          echo "## Formatting JavaScript/TypeScript files" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          npm run format-check | tee -a $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+        shell: bash
+      - if: ${{ failure() && steps.check.outcome == 'failure' }}
+        run: |
+          echo "Code formatting is not up to date." >> $GITHUB_STEP_SUMMARY
+          echo 'Please run `npm run format` and update the affected files.' >> $GITHUB_STEP_SUMMARY
