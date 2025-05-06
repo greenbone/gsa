@@ -17,7 +17,7 @@ import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 const StartTimeSelection = ({
   startDate: initialStartDate,
   endDate: initialEndDate,
-  timezone,
+  timezone = '',
   onChanged,
 }) => {
   const [_] = useTranslation();
@@ -58,7 +58,6 @@ const StartTimeSelection = ({
       endDate: endDate.clone(),
     });
   };
-
   return (
     <Column>
       <FormGroup data-testid="timezone" title={_('Timezone')}>
