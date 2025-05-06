@@ -23,6 +23,7 @@ import React from 'react';
 import DateTime from 'web/components/date/DateTime';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
+import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import Spinner from 'web/components/form/Spinner';
@@ -369,10 +370,13 @@ const OverrideDialog = ({
                   value={YES_VALUE}
                   onChange={onValueChange}
                 />
-                <TextField
-                  convert={parseFloat}
+                <NumberField
                   disabled={state.custom_severity === NO_VALUE}
+                  max={10}
+                  min={0}
                   name="newSeverity"
+                  precision={1}
+                  type="float"
                   value={state.newSeverity}
                   onChange={onValueChange}
                 />
