@@ -19,7 +19,6 @@ import {
 } from 'gmp/models/scanconfig';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-
 describe('PolicyCommand tests', () => {
   test('should create new policy', () => {
     const response = createActionResultResponse();

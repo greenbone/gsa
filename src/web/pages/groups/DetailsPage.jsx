@@ -31,8 +31,8 @@ import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import GroupComponent from 'web/pages/groups/Component';
 import GroupDetails from 'web/pages/groups/Details';
+import GroupComponent from 'web/pages/groups/GroupComponent';
 import {selector, loadEntity} from 'web/store/entities/groups';
 import {
   selector as permissionsSelector,

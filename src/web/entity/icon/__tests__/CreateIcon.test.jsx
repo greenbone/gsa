@@ -10,7 +10,6 @@ import CreateIcon from 'web/entity/icon/CreateIcon';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('Entity CreateIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);

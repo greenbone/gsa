@@ -10,7 +10,6 @@ import logger from 'gmp/log';
 import Tag from 'gmp/models/tag';
 import {apiType} from 'gmp/utils/entitytype';
 
-
 const log = logger.getLogger('gmp.commands.tags');
 
 export class TagCommand extends EntityCommand {

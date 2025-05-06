@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import Loading from 'web/components/loading/Loading';
 import {render} from 'web/utils/Testing';
 
-
 describe('Loading component tests', () => {
   test('should render', () => {
     const {element} = render(<Loading />);

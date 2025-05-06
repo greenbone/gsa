@@ -15,7 +15,6 @@ import {
 import {isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 export const MANUAL = '1';
 export const ANY = '0';
 

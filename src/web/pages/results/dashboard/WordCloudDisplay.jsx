@@ -20,7 +20,6 @@ import {registerDisplay} from 'web/components/dashboard/Registry';
 import {ResultsWordCountLoader} from 'web/pages/results/dashboard/Loaders';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const transformWordCountData = (data = {}) => {
   const {groups = []} = data;
   const tdata = groups.map(group => {

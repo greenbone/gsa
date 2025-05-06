@@ -8,7 +8,6 @@ import useUserName from 'web/hooks/useUserName';
 import {setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
-
 const TestUserName = () => <span>{useUserName()[0]}</span>;
 
 const TestUserName2 = () => {

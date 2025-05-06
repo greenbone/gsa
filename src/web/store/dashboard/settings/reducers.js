@@ -13,7 +13,6 @@ import {
 } from 'web/store/dashboard/settings/actions';
 import {combineReducers} from 'web/store/utils';
 
-
 const defaults = (state = {}, action) => {
   switch (action.type) {
     case DASHBOARD_SETTINGS_SET_DEFAULTS:

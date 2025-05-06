@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import PasswordField from 'web/components/form/PasswordField';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-
 describe('PasswordField tests', () => {
   test('should render', () => {
     render(<PasswordField data-testid="input" />);

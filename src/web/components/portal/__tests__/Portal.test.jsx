@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import Portal from 'web/components/portal/Portal';
 import {render} from 'web/utils/Testing';
 
-
 describe('Portal component tests', () => {
   test('should render portal', () => {
     const {baseElement} = render(<Portal />);

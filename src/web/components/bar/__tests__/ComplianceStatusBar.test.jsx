@@ -8,7 +8,6 @@ import ComplianceStatusBar from 'web/components/bar/ComplianceStatusBar';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('ComplianceStatusBar tests', () => {
   test('should render', () => {
     const {element} = render(<ComplianceStatusBar complianceStatus={75} />);

@@ -17,7 +17,6 @@ import {
 import defaults from 'gmp/http/transform/default';
 import {ALL_FILTER} from 'gmp/models/filter';
 
-
 describe('TlsCertificateCommand tests', () => {
   test('should return a single TLS certificate', () => {
     const response = createEntityResponse('tls_certificate', {

@@ -8,7 +8,6 @@ import ProgressBar from 'web/components/bar/ProgressBar';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('ProgressBar tests', () => {
   test('should render', () => {
     const {element} = render(

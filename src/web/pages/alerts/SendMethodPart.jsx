@@ -14,7 +14,6 @@ import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 import withPrefix from 'web/utils/withPrefix';
 
-
 const SendMethodPart = ({
   prefix,
   reportConfigs,

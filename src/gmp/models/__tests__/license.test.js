@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import {License} from 'gmp/models/license';
 import {parseDate} from 'gmp/parser';
 
-
 describe('License tests', () => {
   test('should init license data via constructor', () => {
     const license = new License({

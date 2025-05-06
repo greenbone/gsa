@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import SearchBar from 'web/components/searchbar/SearchBar';
 import {render, screen, fireEvent, waitFor} from 'web/utils/Testing';
 
-
 describe('SearchBar', () => {
   const placeholder = 'Search...';
   const onSearch = testing.fn();

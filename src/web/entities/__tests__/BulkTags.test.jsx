@@ -22,7 +22,6 @@ import {
   getByRole,
 } from 'web/utils/Testing';
 
-
 const getDialog = () => {
   return screen.getByRole('dialog');
 };

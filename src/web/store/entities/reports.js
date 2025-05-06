@@ -14,7 +14,6 @@ import {
 import {createReducer, initialState} from 'web/store/entities/utils/reducers';
 import {createEntitiesSelector} from 'web/store/entities/utils/selectors';
 
-
 const reportsSelector = createEntitiesSelector('report');
 const entitiesActions = createEntitiesLoadingActions('report');
 const loadAllEntities = createLoadAllEntities({

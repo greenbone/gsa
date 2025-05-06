@@ -9,7 +9,6 @@ import Link from 'web/components/link/Link';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-
 const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
   textOnly = textOnly || !capabilities.mayAccess(type) || !isDefined(id);
 

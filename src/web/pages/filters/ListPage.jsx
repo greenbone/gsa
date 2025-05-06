@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import FilterComponent from 'web/pages/filters/Component';
+import FilterComponent from 'web/pages/filters/FilterComponent';
 import FiltersFilterDialog from 'web/pages/filters/FilterDialog';
 import FiltersTable from 'web/pages/filters/Table';
 import {

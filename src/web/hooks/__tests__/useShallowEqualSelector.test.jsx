@@ -10,7 +10,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
-
 const reducer = (state = {value: 0}, action) => {
   switch (action.type) {
     case 'increment':

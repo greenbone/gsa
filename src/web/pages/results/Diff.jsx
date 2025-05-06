@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {isString} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-
 
 const Pre = styled.div`
   white-space: pre-wrap;

@@ -9,7 +9,6 @@ import ReportEntitiesContainer from 'web/pages/reports/details/ReportEntitiesCon
 import PropTypes from 'web/utils/PropTypes';
 import {makeCompareNumber, makeCompareString} from 'web/utils/Sort';
 
-
 const operatingssystemsSortFunctions = {
   name: makeCompareString('name'),
   cpe: makeCompareString('id'),

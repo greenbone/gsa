@@ -12,7 +12,6 @@ import {
 import Dialog from 'web/pages/ldap/Dialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('Ldap dialog component tests', () => {
   test('should render dialog', () => {
     const handleChange = testing.fn();

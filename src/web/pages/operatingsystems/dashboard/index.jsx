@@ -5,12 +5,18 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-import {OsCvssDisplay, OsCvssTableDisplay} from 'web/pages/operatingsystems/dashboard/CvssDisplay';
+import {
+  OsCvssDisplay,
+  OsCvssTableDisplay,
+} from 'web/pages/operatingsystems/dashboard/CvssDisplay';
 import {
   OsSeverityClassDisplay,
   OsSeverityClassTableDisplay,
 } from 'web/pages/operatingsystems/dashboard/SeverityClassDisplay';
-import {OsVulnScoreDisplay, OsVulnScoreTableDisplay} from 'web/pages/operatingsystems/dashboard/VulnScoreDisplay';
+import {
+  OsVulnScoreDisplay,
+  OsVulnScoreTableDisplay,
+} from 'web/pages/operatingsystems/dashboard/VulnScoreDisplay';
 
 export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
 

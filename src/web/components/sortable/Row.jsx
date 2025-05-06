@@ -11,7 +11,6 @@ import Resizer from 'web/components/sortable/Resizer';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-
 const MIN_HEIGHT = 175;
 
 const GridRow = styled.div`

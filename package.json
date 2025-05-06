@@ -25,6 +25,8 @@
     "start": "npm run dev",
     "build": "tsc && vite build",
     "lint": "eslint src --max-warnings 0",
+    "format": "prettier --write src",
+    "format-check": "prettier -l src",
     "preview": "vite preview",
     "i18n-extract": "i18next",
     "type-check": "tsc --noEmit",

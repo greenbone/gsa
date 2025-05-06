@@ -8,7 +8,6 @@ import Filter from 'gmp/models/filter';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import {fireEvent, render, screen} from 'web/utils/Testing';
 
-
 const TestComponent = ({filter, changeFilter}) => {
   const [sortBy, sortDir, sortChange] = useFilterSortBy(filter, changeFilter);
   return (

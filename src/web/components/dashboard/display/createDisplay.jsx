@@ -8,7 +8,6 @@ import React from 'react';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const createDisplay = ({
   chartComponent: Chart,
   displayComponent: Display,

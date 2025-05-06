@@ -8,7 +8,6 @@ import {useState} from 'react';
 import usePreviousValue from 'web/hooks/usePreviousValue';
 import {fireEvent, render, screen} from 'web/utils/Testing';
 
-
 const TestComponent = () => {
   const [value, setValue] = useState(0);
   const previousValue = usePreviousValue(value);

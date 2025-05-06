@@ -12,7 +12,6 @@ import Reload, {
 } from 'web/components/loading/Reload';
 import {act, fireEvent, rendererWith} from 'web/utils/Testing';
 
-
 const TestComponent = ({reload, id, reloadOptions}) => (
   <button data-testid={id} onClick={() => reload(reloadOptions)} />
 );

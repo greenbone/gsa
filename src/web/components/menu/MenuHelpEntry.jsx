@@ -9,7 +9,6 @@ import ManualLink from 'web/components/link/manuallink';
 import MenuEntry from 'web/components/menu/MenuEntry';
 import PropTypes from 'web/utils/PropTypes';
 
-
 const StyledManualLink = styled(ManualLink)`
   height: 100%;
 `;

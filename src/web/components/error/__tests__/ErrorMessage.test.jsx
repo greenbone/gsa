@@ -7,7 +7,6 @@ import {describe, test, expect} from '@gsa/testing';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import {render} from 'web/utils/Testing';
 
-
 describe('ErrorMessage tests', () => {
   test('should render', () => {
     const {element} = render(

@@ -5,7 +5,10 @@
 
 import React from 'react';
 import Dashboard from 'web/components/dashboard/Dashboard';
-import {TasksCvssDisplay, TasksCvssTableDisplay} from 'web/pages/tasks/dashboard/CvssDisplay';
+import {
+  TasksCvssDisplay,
+  TasksCvssTableDisplay,
+} from 'web/pages/tasks/dashboard/CvssDisplay';
 import {
   TasksHighResultsDisplay,
   TasksHighResultsTableDisplay,
@@ -22,7 +25,10 @@ import {
   TasksSeverityDisplay,
   TasksSeverityTableDisplay,
 } from 'web/pages/tasks/dashboard/SeverityClassDisplay';
-import {TasksStatusDisplay, TasksStatusTableDisplay} from 'web/pages/tasks/dashboard/StatusDisplay';
+import {
+  TasksStatusDisplay,
+  TasksStatusTableDisplay,
+} from 'web/pages/tasks/dashboard/StatusDisplay';
 
 export const TASK_DASHBOARD_ID = '3d5db3c7-5208-4b47-8c28-48efc621b1e0';
 

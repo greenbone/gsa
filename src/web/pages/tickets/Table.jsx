@@ -27,7 +27,6 @@ import TicketDetails from 'web/pages/tickets/Details';
 import PropTypes from 'web/utils/PropTypes';
 import {NA_VALUE} from 'web/utils/severity';
 
-
 export const FIELDS = [
   {
     name: 'name',

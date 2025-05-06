@@ -18,7 +18,6 @@ import {
 } from 'gmp/models/scanconfig';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-
 describe('convertPreferences tests', () => {
   test('should convert preferences', () => {
     const prefenceValues = {

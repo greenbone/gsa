@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import LoginForm from 'web/pages/login/LoginForm';
 import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
 
-
 const gmp = {settings: {}};
 
 describe('LoginForm tests', () => {

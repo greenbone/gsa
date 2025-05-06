@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {useCallback, useState} from 'react';
@@ -25,17 +24,16 @@ const useFilterDialog = initialFilter => {
     isDefined(initialFilter) ? initialFilter.toFilterCriteriaString() : '',
   );
 
-   
   const handleFilterChange = useCallback(filter => {
     setFilter(filter);
   }, []);
 
   const handleFilterValueChange = useCallback((value, name, relation = '=') => {
-    setFilter(filter => filter.copy().set(name, value, relation));  
+    setFilter(filter => filter.copy().set(name, value, relation));
   }, []);
 
   const handleSearchTermChange = useCallback((value, name, relation = '~') => {
-    setFilter(filter => filter.copy().set(name, `"${value}"`, relation));  
+    setFilter(filter => filter.copy().set(name, `"${value}"`, relation));
   }, []);
 
   const handleFilterStringChange = useCallback(value => {
@@ -43,11 +41,11 @@ const useFilterDialog = initialFilter => {
   }, []);
 
   const handleSortByChange = useCallback(value => {
-    setFilter(filter => filter.copy().setSortBy(value));  
+    setFilter(filter => filter.copy().setSortBy(value));
   }, []);
 
   const handleSortOrderChange = useCallback(value => {
-    setFilter(filter => filter.copy().setSortOrder(value));  
+    setFilter(filter => filter.copy().setSortOrder(value));
   }, []);
 
   const handleChange = useCallback((value, name) => {

@@ -11,7 +11,6 @@ import {
 } from 'web/store/dashboard/data/actions';
 import {filterIdentifier} from 'web/store/utils';
 
-
 const dashboardData = (state = {}, action) => {
   switch (action.type) {
     case DASHBOARD_DATA_LOADING_REQUEST:

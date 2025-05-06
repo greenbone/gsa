@@ -17,7 +17,6 @@ import {
 import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 const u1 = User.fromElement({
   _id: 'u1',
   name: 'foo',

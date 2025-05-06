@@ -9,7 +9,6 @@ import EntityCommand from 'gmp/commands/entity';
 import logger from 'gmp/log';
 import Scanner from 'gmp/models/scanner';
 
-
 const log = logger.getLogger('gmp.commands.scanners');
 
 class ScannersCommand extends EntitiesCommand {

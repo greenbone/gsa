@@ -8,7 +8,10 @@ import Filter from 'gmp/models/filter';
 import {isFunction} from 'gmp/utils/identity';
 import {reportActions} from 'web/store/entities/report/actions';
 import {reportReducer} from 'web/store/entities/report/reducers';
-import {reportIdentifier, simplifiedReportIdentifier} from 'web/store/entities/report/selectors';
+import {
+  reportIdentifier,
+  simplifiedReportIdentifier,
+} from 'web/store/entities/report/selectors';
 
 describe('report reducer tests', () => {
   test('should be a reducer function', () => {

@@ -27,7 +27,6 @@ import {map} from 'gmp/utils/array';
 import {apiType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
-
 class Trashcan extends HttpCommand {
   restore({id}) {
     const data = {

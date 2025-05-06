@@ -3,9 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import {deltaReportActions} from 'web/store/entities/report/actions';
-import {entitiesActions, loadEntities, reducer, deltaReducer} from 'web/store/entities/reports';
+import {
+  entitiesActions,
+  loadEntities,
+  reducer,
+  deltaReducer,
+} from 'web/store/entities/reports';
 import {
   testEntitiesActions,
   testLoadEntities,

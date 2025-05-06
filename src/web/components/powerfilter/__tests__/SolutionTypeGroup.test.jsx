@@ -9,7 +9,6 @@ import SolutionTypesFilterGroup from 'web/components/powerfilter/SolutionTypeGro
 import {getRadioInputs} from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('SolutionTypesFilterGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('solution_type=All');

@@ -7,7 +7,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Button from 'web/components/form/Button';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
-
 describe('Button tests', () => {
   test('should call click handler', () => {
     const handler = testing.fn();

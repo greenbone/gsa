@@ -8,7 +8,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import DetailsLink from 'web/components/link/DetailsLink';
 import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
-
 describe('DetailsLink tests', () => {
   beforeEach(() => {
     window.history.pushState({}, 'Test page', '/');

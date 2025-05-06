@@ -8,7 +8,6 @@ import ToggleButton from 'web/components/form/ToggleButton';
 import {render, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
-
 describe('ToggleButton tests', () => {
   test('should render', () => {
     const {element} = render(<ToggleButton />);

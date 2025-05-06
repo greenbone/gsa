@@ -10,7 +10,6 @@ import Dialog from 'web/components/dialog/Dialog';
 import {queryDialog} from 'web/components/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('Dialog component tests', () => {
   test('should render a Dialog', () => {
     const handleClose = testing.fn();

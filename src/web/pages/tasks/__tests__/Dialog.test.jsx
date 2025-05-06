@@ -6,16 +6,16 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import ScanConfig from 'gmp/models/scanconfig';
 import {
-    CVE_SCANNER_TYPE,
-    OPENVAS_DEFAULT_SCANNER_ID,
-    OPENVAS_SCANNER_TYPE,
-    OPENVASD_SCANNER_TYPE,
+  CVE_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
+  OPENVAS_SCANNER_TYPE,
+  OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {
-    getDialogCloseButton,
-    getDialogSaveButton,
-    getSelectItemElementsForSelect,
-    queryAllSelectElements,
+  getDialogCloseButton,
+  getDialogSaveButton,
+  getSelectItemElementsForSelect,
+  queryAllSelectElements,
 } from 'web/components/testing';
 import TaskDialog from 'web/pages/tasks/Dialog';
 import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
@@ -52,16 +52,16 @@ describe('TaskDialog component tests', () => {
   const renderDialog = scannerType =>
     rendererWith({gmp, capabilities: true}).render(
       <TaskDialog
-          alerts={[]}
-          comment="hello world"
-          config_id="config-1"
-          name="target"
-          scan_configs={[scanConfig]}
-          scanner_id="scanner-id"
-          scanners={[{id: 'scanner-id', scannerType, name: 'Test Scanner'}]}
-          schedules={[]}
-          tags={[]}
-          targets={[]}
+        alerts={[]}
+        comment="hello world"
+        config_id="config-1"
+        name="target"
+        scan_configs={[scanConfig]}
+        scanner_id="scanner-id"
+        scanners={[{id: 'scanner-id', scannerType, name: 'Test Scanner'}]}
+        schedules={[]}
+        tags={[]}
+        targets={[]}
         {...commonHandlers()}
       />,
     );

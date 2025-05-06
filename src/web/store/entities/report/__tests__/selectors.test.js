@@ -13,7 +13,6 @@ import {
 } from 'web/store/entities/report/selectors';
 import {createState, createRootState} from 'web/store/entities/utils/testing';
 
-
 describe('reportIdentifier tests', () => {
   test('should create identifier without filter', () => {
     const id = 'foo';

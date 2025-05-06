@@ -14,7 +14,6 @@ import {
 import ContainerDialog from 'web/pages/tasks/ContainerDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('ContainerDialog tests', () => {
   test('should render create dialog', () => {
     const handleClose = testing.fn();

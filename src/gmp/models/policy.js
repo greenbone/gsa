@@ -10,7 +10,6 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-
 class Policy extends Model {
   static entityType = 'policy';
 

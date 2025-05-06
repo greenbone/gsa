@@ -12,7 +12,6 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, screen} from 'web/utils/Testing';
 
-
 let mockSearchParams = {};
 const mockUseNavigate = vi.fn();
 const mockUseSearchParams = vi

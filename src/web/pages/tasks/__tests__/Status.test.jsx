@@ -9,7 +9,6 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 import Status from 'web/pages/tasks/Status';
 import {rendererWith} from 'web/utils/Testing';
 
-
 const caps = new Capabilities(['everything']);
 
 describe('Task Status tests', () => {

@@ -13,7 +13,6 @@ import {
   makeCompareString,
 } from 'web/utils/Sort';
 
-
 const portsSortFunctions = {
   name: makeCompareString('id'),
   hosts: makeCompareNumber(entity => entity.hosts.count),

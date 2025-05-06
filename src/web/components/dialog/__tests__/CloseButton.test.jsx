@@ -11,7 +11,6 @@ import {
 } from 'web/hooks/useIconSize';
 import {render, fireEvent} from 'web/utils/Testing';
 
-
 describe('Dialog CloseButton tests', () => {
   test('should render', () => {
     const {element} = render(<CloseButton onClick={() => {}} />);
