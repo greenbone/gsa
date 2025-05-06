@@ -26,6 +26,11 @@ describe('includesId function tests', () => {
 
     expect(includesId(list, '2')).toBe(false);
   });
+
+  test('should return false for an empty or undefined list', () => {
+    expect(includesId([], 1)).toBe(false);
+    expect(includesId(undefined, 2)).toBe(false);
+  });
 });
 
 describe('selectSaveId function tests', () => {
