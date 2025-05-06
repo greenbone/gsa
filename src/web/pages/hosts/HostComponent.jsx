@@ -40,8 +40,6 @@ const HostComponent = ({
   const [title, setTitle] = useState();
 
   const handleIdentifierDelete = identifier => {
-    const {onIdentifierDeleted, onIdentifierDeleteError} = props;
-
     handleInteraction();
 
     return gmp.host
@@ -73,7 +71,6 @@ const HostComponent = ({
   };
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
@@ -85,7 +82,6 @@ const HostComponent = ({
 
   const openCreateTargetSelectionDialog = data => {
     const {entities, entitiesSelected, selectionType, filter} = data;
-    const {entitiesCounts} = props;
     let size;
     let filterString;
 
@@ -105,7 +101,6 @@ const HostComponent = ({
   };
 
   const _openTargetDialog = (count, filterString) => {
-    const {createtarget} = props;
     createtarget({
       target_source: 'asset_hosts',
       hosts_count: count,
