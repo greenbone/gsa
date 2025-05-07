@@ -107,7 +107,7 @@ const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
 interface ReportImageProps {
   name: string;
   duration?: Duration;
-  scannerId?: string;
+  sensorId?: string;
   endDate: Date;
   startDate: Date;
 }
@@ -123,13 +123,13 @@ interface ReportUrlParams extends UrlParams {
 const ReportImage = ({
   name,
   duration,
-  scannerId,
+  sensorId,
   endDate,
   startDate,
 }: ReportImageProps) => {
   const gmp = useGmp();
   const params: ReportUrlParams = {
-    slave_id: scannerId,
+    slave_id: sensorId,
     token: gmp.settings.token,
   };
 
@@ -172,7 +172,7 @@ const PerformancePage = () => {
   const [endDate, setEndDate] = useState(end);
   const scannerEntitiesSelector = useShallowEqualSelector(scannerSelector);
   const timezone = useShallowEqualSelector(getTimezone);
-  const scanners = scannerEntitiesSelector.getEntities(SENSOR_SCANNER_FILTER);
+  const sensors = scannerEntitiesSelector.getEntities(SENSOR_SCANNER_FILTER);
   const dispatch = useDispatch();
   // @ts-expect-error
   const handleInteraction = () => dispatch(renewSessionTimeout(gmp)());
@@ -184,7 +184,7 @@ const PerformancePage = () => {
 
   const startParam = searchParams.get('start');
   const endParam = searchParams.get('end');
-  const saveSensorId = selectSaveId(scanners, sensorId, DEFAULT_SENSOR_ID);
+  const saveSensorId = selectSaveId(sensors, sensorId, DEFAULT_SENSOR_ID);
 
   useEffect(() => {
     fetchScanners();
@@ -316,8 +316,8 @@ const PerformancePage = () => {
               <FormGroup title={_('Report for Greenbone Sensor')}>
                 <Select
                   // @ts-expect-error
-                  items={renderSelectItems(scanners, DEFAULT_SENSOR_ID)}
-                  name="scannerId"
+                  items={renderSelectItems(sensors, DEFAULT_SENSOR_ID)}
+                  name="sensorId"
                   value={saveSensorId}
                   onChange={handleScannerChange}
                 />
@@ -332,7 +332,7 @@ const PerformancePage = () => {
                   duration={duration}
                   endDate={endDate}
                   name={report.name}
-                  scannerId={saveSensorId}
+                  sensorId={saveSensorId}
                   startDate={startDate}
                 />
               </div>
