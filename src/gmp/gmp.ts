@@ -25,7 +25,6 @@ import 'gmp/commands/nvt';
 import 'gmp/commands/nvtfamilies';
 import 'gmp/commands/os';
 import 'gmp/commands/overrides';
-import 'gmp/commands/performance';
 import 'gmp/commands/permissions';
 import 'gmp/commands/policies';
 import 'gmp/commands/reportconfigs';
@@ -48,6 +47,7 @@ import 'gmp/commands/wizard';
 
 import {getCommands} from 'gmp/command';
 import LoginCommand from 'gmp/commands/login';
+import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
 import GmpSettings from 'gmp/gmpsettings';
 import GmpHttp from 'gmp/http/gmp';
@@ -73,6 +73,7 @@ class Gmp {
 
   readonly portlist: PortListCommand;
   readonly portlists: PortListsCommand;
+  readonly performance: PerformanceCommand;
 
   constructor(settings: GmpSettings, http?: GmpHttp) {
     this.settings = settings;
@@ -91,6 +92,7 @@ class Gmp {
 
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
+    this.performance = new PerformanceCommand(this.http);
 
     this._initCommands();
   }

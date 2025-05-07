@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from 'gmp/command';
 import HttpCommand from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
 import {XmlResponseData} from 'gmp/http/transform/fastxml';
@@ -106,5 +105,3 @@ class PerformanceCommand extends HttpCommand {
 }
 
 export default PerformanceCommand;
-
-registerCommand('performance', PerformanceCommand);
