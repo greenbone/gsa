@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import ScanConfigComponent from 'web/pages/scanconfigs/Component';
 import ScanConfigFilterDialog from 'web/pages/scanconfigs/FilterDialog';
+import ScanConfigComponent from 'web/pages/scanconfigs/ScanConfigComponent';
 import Table from 'web/pages/scanconfigs/Table';
 import {
   loadEntities,
