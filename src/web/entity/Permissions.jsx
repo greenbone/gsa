@@ -14,11 +14,11 @@ import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PermissionComponent from 'web/pages/permissions/Component';
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,
   INCLUDE_RELATED_RESOURCES,
 } from 'web/pages/permissions/MultipleDialog';
+import PermissionComponent from 'web/pages/permissions/PermissionsComponent';
 import PermissionsTable from 'web/pages/permissions/Table';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';

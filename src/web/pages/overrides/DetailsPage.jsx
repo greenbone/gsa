@@ -39,8 +39,8 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import OverrideDetails from 'web/pages/overrides/Details';
+import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import {
   selector as overridesSelector,
   loadEntity,
