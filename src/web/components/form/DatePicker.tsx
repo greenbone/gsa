@@ -4,23 +4,34 @@
  */
 
 import {DatePickerInput} from '@greenbone/opensight-ui-components-mantinev7';
-import date from 'gmp/models/date';
+import {DateValue} from '@mantine/dates';
+import date, {Date} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useCallback} from 'react';
+import {useCallback} from 'react';
 import useLanguage from 'web/hooks/useLanguage';
-import PropTypes from 'web/utils/PropTypes';
+
+interface DatePickerComponentProps {
+  disabled?: boolean;
+  minDate?: Date | false;
+  maxDate?: Date;
+  name: string;
+  value?: Date;
+  onChange?: (value: Date, name: string) => void;
+  label?: string;
+}
 
 const DatePickerComponent = ({
   disabled,
   minDate = date(),
+  maxDate = date().add(3, 'years'),
   name,
   value = date(),
   onChange,
   label = '',
-}) => {
+}: DatePickerComponentProps) => {
   const [language] = useLanguage();
   const handleChange = useCallback(
-    newValue => {
+    (newValue: DateValue) => {
       if (isDefined(onChange)) {
         const valueToPass = date(newValue);
         onChange(valueToPass, name);
@@ -35,7 +46,7 @@ const DatePickerComponent = ({
       disabled={disabled}
       label={label}
       locale={language}
-      maxDate={date().add(3, 'years').toDate()}
+      maxDate={isDefined(maxDate) ? maxDate.toDate() : undefined}
       minDate={
         minDate === false || !isDefined(minDate) ? undefined : minDate.toDate()
       }
@@ -43,15 +54,6 @@ const DatePickerComponent = ({
       onChange={handleChange}
     />
   );
-};
-
-DatePickerComponent.propTypes = {
-  disabled: PropTypes.bool,
-  minDate: PropTypes.oneOfType([PropTypes.date, PropTypes.oneOf([false])]),
-  name: PropTypes.string.isRequired,
-  value: PropTypes.date,
-  onChange: PropTypes.func,
-  label: PropTypes.string,
 };
 
 export default DatePickerComponent;
