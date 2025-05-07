@@ -132,8 +132,6 @@ OsVulnScoreDisplay.propTypes = {
   navigate: PropTypes.func.isRequired,
 };
 
-OsVulnScoreDisplay.displayId = 'os-by-most-vulnerable';
-
 OsVulnScoreDisplay = compose(
   withGmp,
   withRouter,
@@ -141,6 +139,8 @@ OsVulnScoreDisplay = compose(
     filtersFilter: OS_FILTER_FILTER,
   }),
 )(OsVulnScoreDisplay);
+
+OsVulnScoreDisplay.displayId = 'os-by-most-vulnerable';
 
 export const OsVulnScoreTableDisplay = createDisplay({
   loaderComponent: OsVulnScoreLoader,
