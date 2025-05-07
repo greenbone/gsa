@@ -15,7 +15,7 @@ import {
   queryTextInputs,
 } from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import ReportFormatComponent from 'web/pages/reportconfigs/Component';
+import ReportFormatComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
 import {fireEvent, getByTestId, rendererWith, wait} from 'web/utils/Testing';
 
 describe('Report Config Component tests', () => {

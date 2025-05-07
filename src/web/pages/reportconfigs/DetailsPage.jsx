@@ -36,10 +36,10 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import ReportConfigComponent from 'web/pages/reportconfigs/Component';
 import ReportConfigDetails, {
   ReportConfigParamValue,
 } from 'web/pages/reportconfigs/Details';
+import ReportConfigComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
