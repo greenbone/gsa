@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import date from 'gmp/models/date';
+import {PerformanceReport} from 'gmp/commands/performance';
+import {UrlParams} from 'gmp/http/utils';
+import date, {Date} from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {selectSaveId} from 'gmp/utils/id';
-import {isDefined} from 'gmp/utils/identity';
-import React, {useCallback, useEffect, useState} from 'react';
+import {hasValue, isDefined} from 'gmp/utils/identity';
+import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useSearchParams} from 'react-router';
 import styled from 'styled-components';
@@ -34,7 +36,6 @@ import {
 } from 'web/store/entities/scanners';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {getTimezone} from 'web/store/usersettings/selectors';
-import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 
 const DURATION_HOUR = 60 * 60;
@@ -49,16 +50,23 @@ const DURATIONS = {
   week: DURATION_WEEK,
   month: DURATION_MONTH,
   year: DURATION_YEAR,
-};
+} as const;
 
 const SENSOR_SCANNER_FILTER = Filter.fromString(
   `type=${GREENBONE_SENSOR_SCANNER_TYPE}`,
 );
 
-const ToolBar = ({onDurationChangeClick}) => {
+type Duration = keyof typeof DURATIONS;
+
+interface ToolBarProps {
+  onDurationChangeClick: (duration: Duration) => void;
+}
+
+const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
   const [_] = useTranslation();
   return (
     <IconDivider>
+      {/* @ts-expect-error*/}
       <ManualIcon
         anchor="optimizing-the-appliance-performance"
         page="performance"
@@ -96,19 +104,37 @@ const ToolBar = ({onDurationChangeClick}) => {
   );
 };
 
-ToolBar.propTypes = {
-  onDurationChangeClick: PropTypes.func.isRequired,
-};
+interface ReportImageProps {
+  name: string;
+  duration?: Duration;
+  scannerId?: string;
+  endDate: Date;
+  startDate: Date;
+}
 
-const ReportImage = ({name, duration, scannerId, endDate, startDate}) => {
+interface ReportUrlParams extends UrlParams {
+  slave_id?: string;
+  token?: string;
+  duration?: string;
+  start_time?: string;
+  end_time?: string;
+}
+
+const ReportImage = ({
+  name,
+  duration,
+  scannerId,
+  endDate,
+  startDate,
+}: ReportImageProps) => {
   const gmp = useGmp();
-  const params = {
+  const params: ReportUrlParams = {
     slave_id: scannerId,
     token: gmp.settings.token,
   };
 
   if (isDefined(duration)) {
-    params.duration = DURATIONS[duration];
+    params.duration = String(DURATIONS[duration]);
   } else {
     params.start_time = startDate.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     params.end_time = endDate.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
@@ -117,16 +143,9 @@ const ReportImage = ({name, duration, scannerId, endDate, startDate}) => {
   return <img alt="" src={url} />;
 };
 
-ReportImage.propTypes = {
-  duration: PropTypes.string,
-  endDate: PropTypes.date,
-  name: PropTypes.string.isRequired,
-  scannerId: PropTypes.idOrZero.isRequired,
-  startDate: PropTypes.date,
-};
-
 const Selector = withClickHandler()(styled.span`
   ${props => {
+    // @ts-expect-error
     if (props.value !== props.$duration) {
       return {
         color: 'blue',
@@ -144,17 +163,19 @@ const PerformancePage = () => {
   const [searchParams] = useSearchParams();
   const end = date();
   const start = end.clone().subtract(1, 'day');
-  const [reports, setReports] = useState([]);
-  const [duration, setDuration] = useState('day');
-  const [scannerId, setScannerId] = useState(0);
+  const [reports, setReports] = useState<PerformanceReport[]>([]);
+  const [duration, setDuration] = useState<Duration | undefined>('day');
+  const [scannerId, setScannerId] = useState('0');
   const [startDate, setStartDate] = useState(start);
   const [endDate, setEndDate] = useState(end);
   const scannerEntitiesSelector = useShallowEqualSelector(scannerSelector);
   const timezone = useShallowEqualSelector(getTimezone);
   const scanners = scannerEntitiesSelector.getEntities(SENSOR_SCANNER_FILTER);
   const dispatch = useDispatch();
-  const onInteraction = () => dispatch(renewSessionTimeout(gmp)());
+  // @ts-expect-error
+  const handleInteraction = () => dispatch(renewSessionTimeout(gmp)());
   const fetchScanners = useCallback(
+    // @ts-expect-error
     () => dispatch(loadScanners(gmp)(SENSOR_SCANNER_FILTER)),
     [dispatch, gmp],
   );
@@ -172,11 +193,11 @@ const PerformancePage = () => {
       const response = await gmp.performance.get();
       setReports(response.data);
     };
-    fetchReports();
+    void fetchReports();
   }, [gmp]);
 
   useEffect(() => {
-    if (isDefined(scannerParam)) {
+    if (hasValue(scannerParam)) {
       setScannerId(scannerParam);
     }
   }, [scannerParam]);
@@ -209,13 +230,7 @@ const PerformancePage = () => {
     }
   }, [startParam, endParam, timezone]);
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
-  const handleDurationChange = duration => {
+  const handleDurationChange = (duration: Duration | undefined) => {
     if (isDefined(duration)) {
       const end = date().tz(timezone);
       const start = end.clone().subtract(DURATIONS[duration], 'seconds');
@@ -227,7 +242,13 @@ const PerformancePage = () => {
     }
   };
 
-  const handleStartEndChange = ({startDate, endDate}) => {
+  const handleStartEndChange = ({
+    startDate,
+    endDate,
+  }: {
+    startDate: Date;
+    endDate: Date;
+  }) => {
     setEndDate(endDate);
     setStartDate(startDate);
     setDuration(undefined);
@@ -235,12 +256,12 @@ const PerformancePage = () => {
     handleInteraction();
   };
 
-  const handleScannerChange = value => {
+  const handleScannerChange = (value: string) => {
     setScannerId(value);
     handleInteraction();
   };
 
-  const sensorId = selectSaveId(scanners, scannerId, 0);
+  const sensorId = selectSaveId(scanners, scannerId, '0');
   return (
     <>
       <PageTitle title={_('Performance')} />
@@ -299,6 +320,7 @@ const PerformancePage = () => {
             {gmp.settings.enableGreenboneSensor && (
               <FormGroup title={_('Report for Greenbone Sensor')}>
                 <Select
+                  // @ts-expect-error
                   items={renderSelectItems(scanners, 0)}
                   name="scannerId"
                   value={sensorId}
