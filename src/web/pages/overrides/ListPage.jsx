@@ -13,7 +13,7 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import OverrideComponent from 'web/pages/overrides/Component';
+import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import OverridesDashboard, {
   OVERRIDES_DASHBOARD_ID,
 } from 'web/pages/overrides/dashboard';
