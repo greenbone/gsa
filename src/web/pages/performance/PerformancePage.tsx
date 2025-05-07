@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {PerformanceReport} from 'gmp/commands/performance';
+import {DEFAULT_SENSOR_ID, PerformanceReport} from 'gmp/commands/performance';
 import {UrlParams} from 'gmp/http/utils';
 import date, {Date} from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {selectSaveId} from 'gmp/utils/id';
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useSearchParams} from 'react-router';
@@ -163,9 +163,11 @@ const PerformancePage = () => {
   const [searchParams] = useSearchParams();
   const end = date();
   const start = end.clone().subtract(1, 'day');
+  const scannerParam = searchParams.get('scanner');
+
   const [reports, setReports] = useState<PerformanceReport[]>([]);
   const [duration, setDuration] = useState<Duration | undefined>('day');
-  const [scannerId, setScannerId] = useState('0');
+  const [sensorId, setSensorId] = useState(scannerParam ?? DEFAULT_SENSOR_ID);
   const [startDate, setStartDate] = useState(start);
   const [endDate, setEndDate] = useState(end);
   const scannerEntitiesSelector = useShallowEqualSelector(scannerSelector);
@@ -182,7 +184,7 @@ const PerformancePage = () => {
 
   const startParam = searchParams.get('start');
   const endParam = searchParams.get('end');
-  const scannerParam = searchParams.get('scanner');
+  const saveSensorId = selectSaveId(scanners, sensorId, DEFAULT_SENSOR_ID);
 
   useEffect(() => {
     fetchScanners();
@@ -190,17 +192,11 @@ const PerformancePage = () => {
 
   useEffect(() => {
     const fetchReports = async () => {
-      const response = await gmp.performance.get();
+      const response = await gmp.performance.get({sensorId: saveSensorId});
       setReports(response.data);
     };
     void fetchReports();
-  }, [gmp]);
-
-  useEffect(() => {
-    if (hasValue(scannerParam)) {
-      setScannerId(scannerParam);
-    }
-  }, [scannerParam]);
+  }, [gmp, saveSensorId]);
 
   useEffect(() => {
     if (isDefined(startParam) && isDefined(endParam)) {
@@ -257,11 +253,10 @@ const PerformancePage = () => {
   };
 
   const handleScannerChange = (value: string) => {
-    setScannerId(value);
+    setSensorId(value);
     handleInteraction();
   };
 
-  const sensorId = selectSaveId(scanners, scannerId, '0');
   return (
     <>
       <PageTitle title={_('Performance')} />
@@ -321,9 +316,9 @@ const PerformancePage = () => {
               <FormGroup title={_('Report for Greenbone Sensor')}>
                 <Select
                   // @ts-expect-error
-                  items={renderSelectItems(scanners, 0)}
+                  items={renderSelectItems(scanners, DEFAULT_SENSOR_ID)}
                   name="scannerId"
-                  value={sensorId}
+                  value={saveSensorId}
                   onChange={handleScannerChange}
                 />
               </FormGroup>
@@ -337,7 +332,7 @@ const PerformancePage = () => {
                   duration={duration}
                   endDate={endDate}
                   name={report.name}
-                  scannerId={sensorId}
+                  scannerId={saveSensorId}
                   startDate={startDate}
                 />
               </div>

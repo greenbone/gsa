@@ -10,6 +10,8 @@ import date, {Date} from 'gmp/models/date';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
+export const DEFAULT_SENSOR_ID = '0';
+
 interface PerformanceReportDetailsData {
   _format: string;
   _start_time?: string;
@@ -87,9 +89,9 @@ class PerformanceCommand extends HttpCommand {
     super(http, {cmd: 'get_system_reports'});
   }
 
-  async get({slaveId = '0'} = {}) {
+  async get({sensorId = DEFAULT_SENSOR_ID} = {}) {
     const response = await this.httpGet({
-      slave_id: slaveId,
+      slave_id: sensorId,
     });
     const {get_system_reports: sys_reports = {}} =
       response.data as PerformanceResponseData;
