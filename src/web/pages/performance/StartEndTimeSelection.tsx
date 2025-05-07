@@ -4,6 +4,7 @@
  */
 
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
+import {Date} from 'gmp/models/date';
 import {useState, useEffect} from 'react';
 import Button from 'web/components/form/Button';
 import DatePicker from 'web/components/form/DatePicker';
@@ -11,15 +12,21 @@ import FormGroup from 'web/components/form/FormGroup';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
+
+interface StartTimeSelectionProps {
+  startDate: Date;
+  endDate: Date;
+  timezone: string;
+  onChanged: (dates: {startDate: Date; endDate: Date}) => void;
+}
 
 const StartTimeSelection = ({
   startDate: initialStartDate,
   endDate: initialEndDate,
   timezone = '',
   onChanged,
-}) => {
+}: StartTimeSelectionProps) => {
   const [_] = useTranslation();
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
@@ -38,18 +45,18 @@ const StartTimeSelection = ({
     setEndTime(formatTimeForTimePicker(initialEndDate));
   }, [initialStartDate, initialEndDate]);
 
-  const handleTimeChange = (selectedTime, type) => {
+  const handleStartTimeChange = (selectedTime: string) => {
     const [hour, minute] = selectedTime.split(':').map(Number);
+    const newStartDate = startDate.clone().hour(hour).minute(minute);
+    setStartDate(newStartDate);
+    setStartTime(selectedTime);
+  };
 
-    if (type === 'startTime') {
-      const newStartDate = startDate.clone().hour(hour).minute(minute);
-      setStartDate(newStartDate);
-      setStartTime(selectedTime);
-    } else if (type === 'endTime') {
-      const newEndDate = endDate.clone().hour(hour).minute(minute);
-      setEndDate(newEndDate);
-      setEndTime(selectedTime);
-    }
+  const handleEndTimeChange = (selectedTime: string) => {
+    const [hour, minute] = selectedTime.split(':').map(Number);
+    const newEndDate = endDate.clone().hour(hour).minute(minute);
+    setEndDate(newEndDate);
+    setEndTime(selectedTime);
   };
 
   const handleUpdate = () => {
@@ -76,7 +83,7 @@ const StartTimeSelection = ({
           label={_('Start Time')}
           name="startTime"
           value={startTime}
-          onChange={newStartTime => handleTimeChange(newStartTime, 'startTime')}
+          onChange={handleStartTimeChange}
         />
       </FormGroup>
 
@@ -92,7 +99,7 @@ const StartTimeSelection = ({
           label={_('End Time')}
           name="endTime"
           value={endTime}
-          onChange={newEndTime => handleTimeChange(newEndTime, 'endTime')}
+          onChange={handleEndTimeChange}
         />
       </FormGroup>
 
@@ -109,13 +116,6 @@ const StartTimeSelection = ({
       </Row>
     </Column>
   );
-};
-
-StartTimeSelection.propTypes = {
-  endDate: PropTypes.date.isRequired,
-  startDate: PropTypes.date.isRequired,
-  timezone: PropTypes.string.isRequired,
-  onChanged: PropTypes.func.isRequired,
 };
 
 export default StartTimeSelection;
