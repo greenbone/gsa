@@ -41,8 +41,8 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import ScanConfigComponent from 'web/pages/scanconfigs/Component';
 import ScanConfigDetails from 'web/pages/scanconfigs/Details';
+import ScanConfigComponent from 'web/pages/scanconfigs/ScanConfigComponent';
 import Trend from 'web/pages/scanconfigs/Trend';
 import {
   selector as permissionsSelector,

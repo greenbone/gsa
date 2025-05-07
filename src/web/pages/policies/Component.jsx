@@ -20,11 +20,11 @@ import EntityComponent from 'web/entity/EntityComponent';
 import AlertComponent from 'web/pages/alerts/Component';
 import AuditDialog from 'web/pages/audits/Dialog';
 import PolicyDialog from 'web/pages/policies/Dialog';
-import {createSelectedNvts} from 'web/pages/scanconfigs/Component';
 import EditPolicyFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
 import EditPolicyDialog from 'web/pages/scanconfigs/EditDialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import ImportDialog from 'web/pages/scanconfigs/ImportDialog';
+import {createSelectedNvts} from 'web/pages/scanconfigs/ScanConfigComponent';
 import ScheduleComponent from 'web/pages/schedules/Component';
 import TargetComponent from 'web/pages/targets/Component';
 import {
