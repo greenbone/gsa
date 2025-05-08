@@ -12,7 +12,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityEdit extends EntityType {
   userCapabilities: {
-    mayEdit: (name?: string) => boolean;
+    mayEdit: (name: string) => boolean;
   };
   isWritable: () => boolean;
 }
