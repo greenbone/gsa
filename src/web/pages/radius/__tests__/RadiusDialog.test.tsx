@@ -10,7 +10,7 @@ import {
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
-import Dialog from 'web/pages/radius/Dialog';
+import Dialog from 'web/pages/radius/RadiusDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('RADIUS dialog component tests', () => {
@@ -21,7 +21,7 @@ describe('RADIUS dialog component tests', () => {
     render(
       <Dialog
         enable={true}
-        radiushost="foo"
+        radiusHost="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -37,18 +37,19 @@ describe('RADIUS dialog component tests', () => {
     render(
       <Dialog
         enable={true}
-        radiushost="foo"
+        radiusHost="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
+    // @ts-expect-error
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
       enable: true,
-      radiushost: 'foo',
-      radiuskey: '',
+      radiusHost: 'foo',
+      radiusKey: '',
     });
   });
 
@@ -59,7 +60,7 @@ describe('RADIUS dialog component tests', () => {
     render(
       <Dialog
         enable={true}
-        radiushost="foo"
+        radiusHost="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -77,7 +78,7 @@ describe('RADIUS dialog component tests', () => {
     const {getByTestId} = render(
       <Dialog
         enable={true}
-        radiushost="foo"
+        radiusHost="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -92,12 +93,13 @@ describe('RADIUS dialog component tests', () => {
     const radiusKeyTextField = getByTestId('radiuskey-textfield');
     changeInputValue(radiusKeyTextField, 'bar');
 
+    // @ts-expect-error
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
-      radiushost: 'lorem',
+      radiusHost: 'lorem',
       enable: false,
-      radiuskey: 'bar',
+      radiusKey: 'bar',
     });
   });
 });
