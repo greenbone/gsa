@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import registerCommand from 'gmp/command';
 import {convertBoolean} from 'gmp/commands/convert';
 import HttpCommand from 'gmp/commands/http';
 
@@ -21,7 +20,7 @@ interface SaveRadiusArguments {
   radiusKey: string;
 }
 
-export class AuthenticationCommand extends HttpCommand {
+class AuthenticationCommand extends HttpCommand {
   saveLdap({
     authdn,
     certificate,
@@ -51,4 +50,4 @@ export class AuthenticationCommand extends HttpCommand {
   }
 }
 
-registerCommand('auth', AuthenticationCommand);
+export default AuthenticationCommand;
