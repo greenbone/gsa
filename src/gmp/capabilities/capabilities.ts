@@ -42,33 +42,43 @@ const types = {
   tickets: 'ticket',
   tlscertificate: 'tls_certificate',
   tlscertificates: 'tls_certificate',
-};
+} as const;
 
 const subtypes = {
   audit: 'task',
   audits: 'task',
   audit_report: 'report',
   audit_reports: 'reports',
-};
+} as const;
 
-const convertType = type => {
-  const ctype = types[type];
-  if (isDefined(ctype)) {
-    type = ctype;
+const convertType = (type: string): string => {
+  const cType = types[type];
+  if (isDefined(cType)) {
+    type = cType;
   }
   return subtypes[type] || type;
 };
 
+interface Feature {
+  name: string;
+  _enabled: string | boolean | number;
+}
+
 class Capabilities {
-  constructor(cap_names, featuresList) {
-    this._hasCaps = isDefined(cap_names);
+  private readonly _hasCaps: boolean;
+  private readonly _hasFeatures: boolean;
+  private readonly _capabilities: Set<string>;
+  private readonly _featuresEnabled: Record<string, boolean>;
+
+  constructor(capNames?: string[], featuresList?: Feature[]) {
+    this._hasCaps = isDefined(capNames);
     this._hasFeatures = isDefined(featuresList);
 
     let caps;
     let featuresEnabled = {};
 
     if (this._hasCaps) {
-      caps = map(cap_names, name => name.toLowerCase());
+      caps = map(capNames, name => name.toLowerCase());
     }
 
     if (this._hasFeatures) {
@@ -91,31 +101,31 @@ class Capabilities {
     return this._hasCaps;
   }
 
-  has(name) {
+  has(name: string) {
     return this._capabilities.has(name.toLowerCase());
   }
 
-  mayAccess(type) {
-    return this.mayOp('get_' + pluralizeType(convertType(type)));
-  }
-
-  mayOp(value) {
+  mayOp(value: string) {
     return this.has(value) || this.has('everything');
   }
 
-  mayClone(type) {
+  mayAccess(type: string) {
+    return this.mayOp('get_' + pluralizeType(convertType(type)));
+  }
+
+  mayClone(type: string) {
     return this.mayOp('create_' + convertType(type));
   }
 
-  mayEdit(type) {
+  mayEdit(type: string) {
     return this.mayOp('modify_' + convertType(type));
   }
 
-  mayDelete(type) {
+  mayDelete(type: string) {
     return this.mayOp('delete_' + convertType(type));
   }
 
-  mayCreate(type) {
+  mayCreate(type: string) {
     return this.mayOp('create_' + convertType(type));
   }
 
@@ -123,7 +133,7 @@ class Capabilities {
     return this._capabilities.size;
   }
 
-  featureEnabled(feature) {
+  featureEnabled(feature: string) {
     return this._featuresEnabled[feature.toUpperCase()] === true;
   }
 }
