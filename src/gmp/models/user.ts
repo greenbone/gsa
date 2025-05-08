@@ -3,11 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {
+  ModelElement,
+  ModelProperties,
+  parseModelFromElement,
+} from 'gmp/model';
 import {parseCsv} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 
 export const AUTH_METHOD_PASSWORD = 'password';
 export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';
@@ -19,17 +22,48 @@ export const ACCESS_DENY_ALL = '1';
 
 const SUPERADMIN_ROLE_ID = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5';
 
+export interface UserElement extends ModelElement {
+  role?: ModelElement[] | ModelElement;
+  groups?: {
+    group: ModelElement[];
+  };
+  hosts?: {
+    __text: string;
+    _allow?: string;
+  };
+  sources?: {
+    source: string;
+  };
+}
+
+interface Hosts {
+  addresses: string[];
+  allow?: string;
+}
+
+interface UserProperties extends ModelProperties {
+  roles: Model[];
+  groups: Model[];
+  hosts: Hosts;
+  authMethod: string;
+}
+
 class User extends Model {
   static entityType = 'user';
+  readonly roles!: Model[];
+  readonly groups!: Model[];
+  readonly hosts!: Hosts;
+  readonly authMethod!: string;
 
-  static parseElement(element) {
-    const ret = super.parseElement(element);
+  static parseElement(element: UserElement): UserProperties {
+    const ret = super.parseElement(element) as UserProperties;
 
     ret.roles = map(element.role, role => parseModelFromElement(role, 'role'));
 
+    // @ts-expect-error
     delete ret.role;
 
-    if (isEmpty(element.groups)) {
+    if (!isDefined(element.groups)) {
       ret.groups = [];
     } else {
       ret.groups = map(element.groups.group, group =>
@@ -55,6 +89,7 @@ class User extends Model {
       } else if (source === 'radius_connect') {
         ret.authMethod = AUTH_METHOD_RADIUS;
       }
+      // @ts-expect-error
       delete ret.sources;
     } else {
       ret.authMethod = AUTH_METHOD_PASSWORD;
