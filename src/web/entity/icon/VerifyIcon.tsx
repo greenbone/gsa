@@ -16,7 +16,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityVerify extends EntityType {
   userCapabilities: {
-    mayOp: (name?: string) => boolean;
+    mayOp: (name: string) => boolean;
   };
 }
 
