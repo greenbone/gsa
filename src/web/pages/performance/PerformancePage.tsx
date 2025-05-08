@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {DEFAULT_SENSOR_ID, PerformanceReport} from 'gmp/commands/performance';
-import {UrlParams} from 'gmp/http/utils';
+import {
+  DEFAULT_SENSOR_ID,
+  PerformanceReport as PerformanceReportModel,
+} from 'gmp/commands/performance';
 import date, {Date} from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
@@ -22,13 +24,14 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import Column from 'web/components/layout/Column';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
-import LinkTarget from 'web/components/link/Target';
 import IconMenu from 'web/components/menu/IconMenu';
 import MenuEntry from 'web/components/menu/MenuEntry';
 import Section from 'web/components/section/Section';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
+import {Duration, getDurationInSeconds} from 'web/pages/performance/durations';
+import PerformanceReport from 'web/pages/performance/PerformanceReport';
 import StartEndTimeSelection from 'web/pages/performance/StartEndTimeSelection';
 import {
   loadEntities as loadScanners,
@@ -38,25 +41,9 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import {renderSelectItems} from 'web/utils/Render';
 
-const DURATION_HOUR = 60 * 60;
-const DURATION_DAY = DURATION_HOUR * 24;
-const DURATION_WEEK = DURATION_DAY * 7;
-const DURATION_MONTH = DURATION_DAY * 31;
-const DURATION_YEAR = DURATION_DAY * 365;
-
-const DURATIONS = {
-  hour: DURATION_HOUR,
-  day: DURATION_DAY,
-  week: DURATION_WEEK,
-  month: DURATION_MONTH,
-  year: DURATION_YEAR,
-} as const;
-
 const SENSOR_SCANNER_FILTER = Filter.fromString(
   `type=${GREENBONE_SENSOR_SCANNER_TYPE}`,
 );
-
-type Duration = keyof typeof DURATIONS;
 
 interface ToolBarProps {
   onDurationChangeClick: (duration: Duration) => void;
@@ -104,45 +91,6 @@ const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
   );
 };
 
-interface ReportImageProps {
-  name: string;
-  duration?: Duration;
-  sensorId?: string;
-  endDate: Date;
-  startDate: Date;
-}
-
-interface ReportUrlParams extends UrlParams {
-  slave_id?: string;
-  token?: string;
-  duration?: string;
-  start_time?: string;
-  end_time?: string;
-}
-
-const ReportImage = ({
-  name,
-  duration,
-  sensorId,
-  endDate,
-  startDate,
-}: ReportImageProps) => {
-  const gmp = useGmp();
-  const params: ReportUrlParams = {
-    slave_id: sensorId,
-    token: gmp.settings.token,
-  };
-
-  if (isDefined(duration)) {
-    params.duration = String(DURATIONS[duration]);
-  } else {
-    params.start_time = startDate.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-    params.end_time = endDate.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-  }
-  const url = gmp.buildUrl(`system_report/${name}/report.`, params);
-  return <img alt="" src={url} />;
-};
-
 const Selector = withClickHandler()(styled.span`
   ${props => {
     // @ts-expect-error
@@ -165,7 +113,7 @@ const PerformancePage = () => {
   const start = end.clone().subtract(1, 'day');
   const scannerParam = searchParams.get('scanner');
 
-  const [reports, setReports] = useState<PerformanceReport[]>([]);
+  const [reports, setReports] = useState<PerformanceReportModel[]>([]);
   const [duration, setDuration] = useState<Duration | undefined>('day');
   const [sensorId, setSensorId] = useState(scannerParam ?? DEFAULT_SENSOR_ID);
   const [startDate, setStartDate] = useState(start);
@@ -192,7 +140,7 @@ const PerformancePage = () => {
 
   useEffect(() => {
     const fetchReports = async () => {
-      const response = await gmp.performance.get({sensorId: saveSensorId});
+      const response = await gmp.performance.getAll({sensorId: saveSensorId});
       setReports(response.data);
     };
     void fetchReports();
@@ -229,7 +177,9 @@ const PerformancePage = () => {
   const handleDurationChange = (duration: Duration | undefined) => {
     if (isDefined(duration)) {
       const end = date().tz(timezone);
-      const start = end.clone().subtract(DURATIONS[duration], 'seconds');
+      const start = end
+        .clone()
+        .subtract(getDurationInSeconds(duration), 'seconds');
       setDuration(duration);
       setStartDate(start);
       setEndDate(end);
@@ -325,17 +275,14 @@ const PerformancePage = () => {
             )}
 
             {reports.map(report => (
-              <div key={report.name}>
-                <LinkTarget id={report.name} />
-                <h2>{report.title}</h2>
-                <ReportImage
-                  duration={duration}
-                  endDate={endDate}
-                  name={report.name}
-                  sensorId={saveSensorId}
-                  startDate={startDate}
-                />
-              </div>
+              <PerformanceReport
+                key={report.name}
+                duration={duration}
+                endDate={endDate}
+                name={report.name}
+                sensorId={saveSensorId}
+                startDate={startDate}
+              />
             ))}
           </Column>
         </Section>
