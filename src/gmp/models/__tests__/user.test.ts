@@ -23,10 +23,11 @@ describe('User model tests', () => {
         },
       ],
     };
-    const user = User.fromElement(elem);
+    const user = User.fromElement<User>(elem);
 
     expect(user.roles[0]).toBeInstanceOf(Model);
     expect(user.roles[0].entityType).toEqual('role');
+    // @ts-expect-error
     expect(user.role).toBeUndefined();
   });
 
@@ -40,8 +41,8 @@ describe('User model tests', () => {
         ],
       },
     };
-    const user = User.fromElement(elem);
-    const user2 = User.fromElement({});
+    const user = User.fromElement<User>(elem);
+    const user2 = User.fromElement<User>({});
 
     expect(user.groups[0]).toBeInstanceOf(Model);
     expect(user.groups[0].entityType).toEqual('group');
@@ -62,8 +63,8 @@ describe('User model tests', () => {
     const res2 = {
       addresses: [],
     };
-    const user = User.fromElement(elem);
-    const user2 = User.fromElement({});
+    const user = User.fromElement<User>(elem);
+    const user2 = User.fromElement<User>({});
 
     expect(user.hosts).toEqual(res);
     expect(user2.hosts).toEqual(res2);
@@ -80,32 +81,33 @@ describe('User model tests', () => {
         source: 'radius_connect',
       },
     };
-    const user1 = User.fromElement(elem1);
-    const user2 = User.fromElement(elem2);
-    const user3 = User.fromElement({});
+    const user1 = User.fromElement<User>(elem1);
+    const user2 = User.fromElement<User>(elem2);
+    const user3 = User.fromElement<User>({});
 
     expect(user1.authMethod).toEqual(AUTH_METHOD_LDAP);
     expect(user2.authMethod).toEqual(AUTH_METHOD_RADIUS);
+    // @ts-expect-error
     expect(user1.sources).toBeUndefined();
     expect(user3.authMethod).toEqual(AUTH_METHOD_PASSWORD);
   });
 
   test('isSuperAdmin() should return correct true/false', () => {
-    const user1 = User.fromElement({
+    const user1 = User.fromElement<User>({
       role: [
         {
           _id: '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5', // ID for Superadmin
         },
       ],
     });
-    const user2 = User.fromElement({
+    const user2 = User.fromElement<User>({
       role: [
         {
           _id: '42',
         },
       ],
     });
-    const user3 = User.fromElement({
+    const user3 = User.fromElement<User>({
       role: [
         {
           _id: '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5', // ID for Superadmin
