@@ -4,7 +4,6 @@
  */
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
 import {HttpCommandOptions} from 'gmp/commands/http';
@@ -550,7 +549,7 @@ export class UserCommand extends EntityCommand<User, PortListElement> {
   }
 }
 
-class UsersCommand extends EntitiesCommand<User> {
+export class UsersCommand extends EntitiesCommand<User> {
   constructor(http: GmpHttp) {
     super(http, 'user', User);
   }
@@ -560,6 +559,3 @@ class UsersCommand extends EntitiesCommand<User> {
     return root.get_users.get_users_response;
   }
 }
-
-registerCommand('user', UserCommand);
-registerCommand('users', UsersCommand);
