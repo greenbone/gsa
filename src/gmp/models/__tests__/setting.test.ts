@@ -13,6 +13,7 @@ describe('Setting tests', () => {
       comment: 'a comment',
       name: 'bar',
       value: 'foobar',
+      // @ts-expect-error
       foo: 'bar',
     });
 
@@ -20,11 +21,14 @@ describe('Setting tests', () => {
     expect(setting.comment).toEqual('a comment');
     expect(setting.name).toEqual('bar');
     expect(setting.value).toEqual('foobar');
+    // @ts-expect-error
     expect(setting.foo).toBeUndefined();
   });
 
   test('should not set empty value', () => {
     const setting = Setting.fromElement({
+      _id: 'foo',
+      name: 'bar',
       value: '',
     });
 
@@ -33,6 +37,8 @@ describe('Setting tests', () => {
 
   test('should consider 0 as undefined value', () => {
     const setting = Setting.fromElement({
+      _id: 'foo',
+      name: 'bar',
       value: '0',
     });
 
@@ -41,6 +47,8 @@ describe('Setting tests', () => {
 
   test('should ignore (null) in comment', () => {
     const setting = Setting.fromElement({
+      _id: 'foo',
+      name: 'bar',
       comment: '(null)',
     });
 

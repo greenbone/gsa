@@ -5,18 +5,31 @@
 
 import {isEmpty} from 'gmp/utils/string';
 
+export interface SettingElement {
+  _id: string;
+  comment?: string;
+  name: string;
+  value?: string | number;
+}
+
 class Setting {
-  constructor(element) {
+  readonly id: string;
+  readonly comment?: string;
+  readonly name: string;
+  readonly value?: string | number;
+
+  constructor(element: SettingElement) {
     this.id = element._id;
     this.comment = element.comment === '(null)' ? undefined : element.comment;
     this.name = element.name;
     this.value =
+      // @ts-expect-error
       !isEmpty(element.value) && element.value !== '0'
         ? element.value
         : undefined;
   }
 
-  static fromElement(element) {
+  static fromElement(element: SettingElement): Setting {
     return new Setting(element);
   }
 }
