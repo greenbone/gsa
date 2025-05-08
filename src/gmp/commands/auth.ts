@@ -7,26 +7,46 @@ import registerCommand from 'gmp/command';
 import {convertBoolean} from 'gmp/commands/convert';
 import HttpCommand from 'gmp/commands/http';
 
+interface SaveLdapArguments {
+  authdn: string;
+  certificate: File;
+  enable: boolean;
+  ldapHost: string;
+  ldapsOnly?: boolean;
+}
+
+interface SaveRadiusArguments {
+  enable: boolean;
+  radiusHost: string;
+  radiusKey: string;
+}
+
 export class AuthenticationCommand extends HttpCommand {
-  saveLdap({authdn, certificate, enable, ldaphost, ldapsOnly}) {
+  saveLdap({
+    authdn,
+    certificate,
+    enable,
+    ldapHost,
+    ldapsOnly,
+  }: SaveLdapArguments) {
     return this.httpPost({
       cmd: 'save_auth',
       group: 'method:ldap_connect',
       authdn,
       certificate,
       enable: convertBoolean(enable),
-      ldaphost,
+      ldaphost: ldapHost,
       ldaps_only: convertBoolean(ldapsOnly),
     });
   }
 
-  saveRadius({enable, radiushost, radiuskey}) {
+  saveRadius({enable, radiusHost, radiusKey}: SaveRadiusArguments) {
     return this.httpPost({
       cmd: 'save_auth',
       group: 'method:radius_connect',
       enable: convertBoolean(enable),
-      radiushost,
-      radiuskey,
+      radiushost: radiusHost,
+      radiuskey: radiusKey,
     });
   }
 }
