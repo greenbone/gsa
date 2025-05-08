@@ -3,21 +3,35 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import CheckBox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const RadiusDialog = ({enable = false, radiushost = '', onClose, onSave}) => {
+interface RadiusDialogProps {
+  enable?: boolean;
+  radiusHost?: string;
+  onClose: () => void;
+  onSave: (values: {
+    enable: boolean;
+    radiusHost: string;
+    radiusKey: string;
+  }) => void;
+}
+
+const RadiusDialog = ({
+  enable = false,
+  radiusHost = '',
+  onClose,
+  onSave,
+}: RadiusDialogProps) => {
   const [_] = useTranslation();
   const uncontrolledValues = {
     enable,
-    radiushost,
-    radiuskey: '',
+    radiusHost,
+    radiusKey: '',
   };
   return (
     <SaveDialog
@@ -29,6 +43,7 @@ const RadiusDialog = ({enable = false, radiushost = '', onClose, onSave}) => {
     >
       {({values, onValueChange}) => (
         <>
+          {/* @ts-expect-error */}
           <CheckBox
             checked={values.enable}
             checkedValue={true}
@@ -39,20 +54,22 @@ const RadiusDialog = ({enable = false, radiushost = '', onClose, onSave}) => {
             onChange={onValueChange}
           />
           <FormGroup title={_('RADIUS Host')}>
+            {/* @ts-expect-error */}
             <TextField
               data-testid="radiushost-textfield"
               grow="1"
-              name="radiushost"
-              value={values.radiushost}
+              name="radiusHost"
+              value={values.radiusHost}
               onChange={onValueChange}
             />
           </FormGroup>
           <FormGroup title={_('Secret Key')}>
+            {/* @ts-expect-error */}
             <PasswordField
               data-testid="radiuskey-textfield"
               grow="1"
-              name="radiuskey"
-              value={values.radiuskey}
+              name="radiusKey"
+              value={values.radiusKey}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -60,13 +77,6 @@ const RadiusDialog = ({enable = false, radiushost = '', onClose, onSave}) => {
       )}
     </SaveDialog>
   );
-};
-
-RadiusDialog.propTypes = {
-  enable: PropTypes.bool,
-  radiushost: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default RadiusDialog;
