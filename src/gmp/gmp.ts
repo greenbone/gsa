@@ -6,7 +6,6 @@
 import 'gmp/commands/alerts';
 import 'gmp/commands/audits';
 import 'gmp/commands/auditreports';
-import 'gmp/commands/auth';
 import 'gmp/commands/certbund';
 import 'gmp/commands/credentials';
 import 'gmp/commands/cpes';
@@ -46,6 +45,7 @@ import 'gmp/commands/vulns';
 import 'gmp/commands/wizard';
 
 import {getCommands} from 'gmp/command';
+import AuthenticationCommand from 'gmp/commands/auth';
 import LoginCommand from 'gmp/commands/login';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
@@ -71,6 +71,7 @@ class Gmp {
   readonly _login: LoginCommand;
   _logoutListeners: Listener[];
 
+  readonly auth: AuthenticationCommand;
   readonly portlist: PortListCommand;
   readonly portlists: PortListsCommand;
   readonly performance: PerformanceCommand;
@@ -90,6 +91,7 @@ class Gmp {
 
     this._logoutListeners = [];
 
+    this.auth = new AuthenticationCommand(this.http);
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
     this.performance = new PerformanceCommand(this.http);

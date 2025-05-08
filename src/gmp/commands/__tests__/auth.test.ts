@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {AuthenticationCommand} from 'gmp/commands/auth';
+import AuthenticationCommand from 'gmp/commands/auth';
 import {createActionResultResponse, createHttp} from 'gmp/commands/testing';
 
 describe('AuthenticationCommand tests', () => {
