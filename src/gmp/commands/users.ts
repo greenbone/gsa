@@ -7,9 +7,15 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
+import {HttpCommandOptions} from 'gmp/commands/http';
+import GmpHttp from 'gmp/http/gmp';
+import Response from 'gmp/http/response';
+import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
-import moment from 'gmp/models/date';
-import Setting from 'gmp/models/setting';
+import {Element} from 'gmp/model';
+import date, {Date} from 'gmp/models/date';
+import {PortListElement} from 'gmp/models/portlist';
+import Setting, {SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
 import User, {
   AUTH_METHOD_LDAP,
@@ -61,122 +67,275 @@ export const DEFAULT_FILTER_SETTINGS = {
   tlscertificate: '34a176c1-0278-4c29-b84d-3d72117b2169',
   user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
-};
+} as const;
 
 const PARAM_KEYS = {
   DATE: 'date_format',
   TIME: 'time_format',
-};
+} as const;
 
-const saveDefaultFilterSettingId = entityType =>
+const saveDefaultFilterSettingId = (entityType: string) =>
   `settings_filter:${DEFAULT_FILTER_SETTINGS[entityType]}`;
 
-export const transformSettingName = name =>
+export const transformSettingName = (name: string) =>
   name.toLowerCase().replace(/ |-/g, '');
 
-export class UserCommand extends EntityCommand {
-  constructor(http) {
+interface AuthSettingsResponseData extends XmlResponseData {
+  auth_settings: {
+    describe_auth_response: {
+      group: {
+        _name: string;
+        auth_conf_setting: {
+          key: string;
+          value: string | boolean;
+          certificate_info?: {
+            activation_time: string;
+            expiration_time: string;
+            md5_fingerprint: string;
+            issuer: string;
+          };
+        }[];
+      }[];
+    };
+  };
+}
+
+interface GetSettingsResponse extends XmlResponseData {
+  get_settings: {
+    get_settings_response: {
+      setting: SettingElement | SettingElement[];
+    };
+  };
+}
+
+interface GetCapabilitiesResponse extends XmlResponseData {
+  get_capabilities: {
+    help_response: {
+      schema: {
+        command: {
+          name: string;
+        }[];
+      };
+    };
+    get_features_response: {
+      feature: {
+        name: string;
+        _enabled: string | number;
+        description: string;
+      }[];
+    };
+  };
+}
+
+export interface CertificateInfo {
+  issuer: string;
+  activationTime?: Date;
+  expirationTime?: Date;
+  md5Fingerprint: string;
+}
+
+interface AuthSettingsValues {
+  enabled?: boolean;
+  ldapsOnly?: boolean;
+  certificateInfo?: CertificateInfo;
+  [key: string]: string | boolean | CertificateInfo | undefined;
+}
+
+interface CreateArguments {
+  access_hosts: string;
+  auth_method: string;
+  comment: string;
+  group_ids: string;
+  hosts_allow: string;
+  name: string;
+  password: string;
+  role_ids: string;
+}
+
+interface SaveArguments {
+  id: string;
+  access_hosts: string;
+  auth_method: string;
+  comment: string;
+  group_ids: string;
+  hosts_allow: string;
+  name: string;
+  old_name: string;
+  password: string;
+  role_ids: string;
+}
+
+interface DeleteArguments {
+  id: string;
+  inheritorId: string;
+}
+
+interface SaveSettingsArguments {
+  autoCacheRebuild?: string;
+  timezone?: string;
+  oldPassword?: string;
+  newPassword?: string;
+  userInterfaceDateFormat?: string;
+  userInterfaceTimeFormat?: string;
+  userInterfaceLanguage?: string;
+  rowsPerPage?: string;
+  detailsExportFileName?: string;
+  listExportFileName?: string;
+  reportExportFileName?: string;
+  dynamicSeverity?: string;
+  defaultSeverity?: string;
+  defaultAlert?: string;
+  defaultEsxiCredential?: string;
+  defaultOpenvasScanConfig?: string;
+  defaultOspScanConfig?: string;
+  defaultSmbCredential?: string;
+  defaultSnmpCredential?: string;
+  defaultPortList?: string;
+  defaultOpenvasScanner?: string;
+  defaultOspScanner?: string;
+  defaultSchedule?: string;
+  defaultTarget?: string;
+  alertsFilter?: string;
+  assetsFilter?: string;
+  auditReportsFilter?: string;
+  configsFilter?: string;
+  credentialsFilter?: string;
+  filtersFilter?: string;
+  groupsFilter?: string;
+  hostsFilter?: string;
+  notesFilter?: string;
+  operatingSystemsFilter?: string;
+  overridesFilter?: string;
+  permissionsFilter?: string;
+  portListsFilter?: string;
+  reportsFilter?: string;
+  reportFormatsFilter?: string;
+  resultsFilter?: string;
+  rolesFilter?: string;
+  scannersFilter?: string;
+  schedulesFilter?: string;
+  tagsFilter?: string;
+  targetsFilter?: string;
+  tasksFilter?: string;
+  ticketsFilter?: string;
+  tlsCertificatesFilter?: string;
+  usersFilter?: string;
+  vulnerabilitiesFilter?: string;
+  cpeFilter?: string;
+  cveFilter?: string;
+  nvtFilter?: string;
+  certBundFilter?: string;
+  dfnCertFilter?: string;
+}
+
+export class UserCommand extends EntityCommand<User, PortListElement> {
+  constructor(http: GmpHttp) {
     super(http, 'user', User);
   }
 
-  currentAuthSettings(options = {}) {
-    const pauth = this.httpGet(
+  async currentAuthSettings(options: HttpCommandOptions = {}) {
+    const response = await this.httpGet(
       {
         cmd: 'auth_settings',
         name: '--', // only used in old xslt and can be any string
       },
       options,
     );
+    const {data} = response as Response<AuthSettingsResponseData, XmlMeta>;
+    const settings = new Settings();
+    if (isDefined(data.auth_settings?.describe_auth_response)) {
+      forEach(data.auth_settings.describe_auth_response.group, group => {
+        const values: AuthSettingsValues = {};
 
-    return pauth.then(response => {
-      const settings = new Settings();
-      const {data} = response;
-
-      if (
-        isDefined(data.auth_settings) &&
-        isDefined(data.auth_settings.describe_auth_response)
-      ) {
-        forEach(data.auth_settings.describe_auth_response.group, group => {
-          const values = {};
-
-          forEach(group.auth_conf_setting, setting => {
-            if (setting.key === 'enable') {
-              values.enabled = setting.value === true;
-            } else if (setting.key === 'ldaps-only') {
-              values.ldapsOnly = setting.value === true;
-            } else {
-              values[setting.key] = setting.value;
-            }
-            if (isDefined(setting.certificate_info)) {
-              values.certificateInfo = setting.certificate_info;
-            }
-          });
-          settings.set(group._name, values);
+        forEach(group.auth_conf_setting, setting => {
+          if (setting.key === 'enable') {
+            values.enabled = setting.value === true;
+          } else if (setting.key === 'ldaps-only') {
+            values.ldapsOnly = setting.value === true;
+          } else {
+            values[setting.key] = setting.value;
+          }
+          if (isDefined(setting.certificate_info)) {
+            const {certificate_info} = setting;
+            values.certificateInfo = {
+              issuer: certificate_info.issuer,
+              md5Fingerprint: certificate_info.md5_fingerprint,
+              activationTime: certificate_info.activation_time
+                ? date(certificate_info.activation_time)
+                : undefined,
+              expirationTime: certificate_info.expiration_time
+                ? date(certificate_info.expiration_time)
+                : undefined,
+            };
+          }
         });
-      }
-
-      return response.setData(settings);
-    });
+        settings.set(group._name, values);
+      });
+    }
+    return response.setData(settings);
   }
 
-  getSetting(id) {
-    return this.httpGet({
+  async getSetting(id: string) {
+    const response = await this.httpGet({
       cmd: 'get_setting',
       setting_id: id,
-    }).then(response => {
-      const {data} = response;
-      const {setting} = data.get_settings.get_settings_response;
-      if (!isDefined(setting)) {
-        return response.setData(undefined);
-      }
-      // used for the rowsPerPage setting which returns two settings with the same id
-      return response.setData(isArray(setting) ? setting[0] : setting);
     });
+    const {data} = response as Response<GetSettingsResponse, XmlMeta>;
+    const {setting} = data.get_settings.get_settings_response;
+    if (!isDefined(setting)) {
+      return response.setData(undefined);
+    }
+    return response.setData(
+      isArray(setting) ? new Setting(setting[0]) : new Setting(setting),
+    );
   }
 
-  currentSettings(options = {}) {
-    return this.httpGet(
+  async currentSettings(options: HttpCommandOptions = {}) {
+    const response = await this.httpGet(
       {
         cmd: 'get_settings',
       },
       options,
-    ).then(response => {
-      const settings = {};
-      const {data} = response;
-      forEach(data.get_settings.get_settings_response.setting, setting => {
-        // set setting keys to lowercase and remove '-'
-        const keyName = transformSettingName(setting.name);
-        settings[keyName] = new Setting(setting);
-      });
-      return response.setData(settings);
+    );
+    const settings: Record<string, Setting> = {};
+    const {data} = response as Response<GetSettingsResponse, XmlMeta>;
+    forEach(data.get_settings.get_settings_response.setting, setting => {
+      // set setting keys to lowercase and remove '-'
+      const keyName = transformSettingName(setting.name);
+      settings[keyName] = new Setting(setting);
     });
+    return response.setData(settings);
   }
 
-  currentCapabilities(options = {}) {
-    return this.httpGet(
+  async currentCapabilities(options: HttpCommandOptions = {}) {
+    const response = await this.httpGet(
       {
         cmd: 'get_capabilities',
       },
       options,
-    ).then(response => {
-      const {data} = response;
-      const {command: commands} = data.get_capabilities.help_response.schema;
-      const featuresList = data.get_capabilities.get_features_response.feature;
-      const caps = map(commands, command => command.name);
-      return response.setData(new Capabilities(caps, featuresList));
-    });
+    );
+    const {data} = response as Response<GetCapabilitiesResponse, XmlMeta>;
+    const {command: commands} = data.get_capabilities.help_response.schema;
+    const featuresList = data.get_capabilities.get_features_response.feature;
+    const caps = map(commands, command => command.name);
+    return response.setData(new Capabilities(caps, featuresList));
   }
 
   create({
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     access_hosts,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     auth_method,
     comment,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     group_ids,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     hosts_allow,
     name,
     password,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     role_ids,
-  }) {
+  }: CreateArguments) {
     if (auth_method === AUTH_METHOD_LDAP) {
       auth_method = '1';
     } else if (auth_method === AUTH_METHOD_RADIUS) {
@@ -201,16 +360,22 @@ export class UserCommand extends EntityCommand {
 
   save({
     id,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     access_hosts = '',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     auth_method,
     comment = '',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     group_ids,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     hosts_allow,
     name,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     old_name,
     password = '', // needs to be included in httpPost, should be optional in gsad
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     role_ids,
-  }) {
+  }: SaveArguments) {
     if (auth_method === AUTH_METHOD_LDAP) {
       auth_method = '2';
     } else if (auth_method === AUTH_METHOD_RADIUS) {
@@ -237,7 +402,7 @@ export class UserCommand extends EntityCommand {
     return this.action(data);
   }
 
-  delete({id, inheritorId}) {
+  delete({id, inheritorId}: DeleteArguments) {
     const data = {
       cmd: 'delete_user',
       id,
@@ -247,7 +412,7 @@ export class UserCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  saveSettings(data) {
+  saveSettings(data: SaveSettingsArguments) {
     log.debug('Saving settings', data);
 
     return this.httpPost({
@@ -323,7 +488,7 @@ export class UserCommand extends EntityCommand {
     });
   }
 
-  saveSetting(settingId, settingValue) {
+  saveSetting(settingId: string, settingValue: string | number) {
     log.debug(`Saving setting ${settingId} with value ${settingValue}`);
     try {
       return this.httpPost({
@@ -336,31 +501,25 @@ export class UserCommand extends EntityCommand {
     }
   }
 
-  getReportComposerDefaults() {
-    return this.httpGet({
-      cmd: 'get_setting',
-      setting_id: REPORT_COMPOSER_DEFAULTS_SETTING_ID,
-    }).then(response => {
-      const {data} = response;
-      const {setting = {}} = data.get_settings.get_settings_response;
-      const {value} = setting;
-      let defaults;
+  async getReportComposerDefaults() {
+    const response = await this.getSetting(REPORT_COMPOSER_DEFAULTS_SETTING_ID);
+    const {data: setting} = response;
+    if (!isDefined(setting?.value)) {
+      return response.setData({});
+    }
 
-      try {
-        defaults = JSON.parse(value);
-      } catch {
-        log.warn(
-          'Could not parse saved report composer defaults, setting ' +
-            'back to default defaults...',
-        );
-        defaults = {};
-      }
-
-      return response.setData(defaults);
-    });
+    try {
+      return response.setData(JSON.parse(setting.value as string));
+    } catch {
+      log.warn(
+        'Could not parse saved report composer defaults, setting ' +
+          'back to default defaults...',
+      );
+      return response.setData({});
+    }
   }
 
-  saveReportComposerDefaults(defaults = {}) {
+  saveReportComposerDefaults(defaults: Record<string, unknown> = {}) {
     log.debug('Saving report composer defaults', defaults);
 
     return this.action({
@@ -370,15 +529,14 @@ export class UserCommand extends EntityCommand {
     });
   }
 
-  renewSession() {
-    return this.httpPost({
+  async renewSession() {
+    const response = await this.action({
       cmd: 'renew_session',
-    }).then(response => {
-      const {data} = response;
-      const {action_result} = data;
-      const seconds = parseInt(action_result.message);
-      return response.setData(moment.unix(seconds));
     });
+    const seconds = parseInt(response.data.message);
+    return response.setData(
+      isDefined(seconds) ? date.unix(seconds) : undefined,
+    );
   }
 
   ping() {
@@ -392,12 +550,13 @@ export class UserCommand extends EntityCommand {
   }
 }
 
-class UsersCommand extends EntitiesCommand {
-  constructor(http) {
+class UsersCommand extends EntitiesCommand<User> {
+  constructor(http: GmpHttp) {
     super(http, 'user', User);
   }
 
-  getEntitiesResponse(root) {
+  getEntitiesResponse(root: Element) {
+    // @ts-expect-error
     return root.get_users.get_users_response;
   }
 }
