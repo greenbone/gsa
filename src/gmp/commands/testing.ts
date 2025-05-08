@@ -5,6 +5,7 @@
 
 import {testing} from '@gsa/testing';
 import GmpHttp from 'gmp/http/gmp';
+import Rejection from 'gmp/http/rejection';
 import Response, {Meta} from 'gmp/http/response';
 import {Element} from 'gmp/model';
 
@@ -78,6 +79,11 @@ export const createHttp = <
 ) =>
   ({
     request: testing.fn().mockResolvedValue(response),
+  }) as unknown as GmpHttp;
+
+export const createHttpError = (error: Error | Rejection) =>
+  ({
+    request: testing.fn().mockRejectedValue(error),
   }) as unknown as GmpHttp;
 
 export const createHttpMany = (responses: Element[] | Response[]) => {
