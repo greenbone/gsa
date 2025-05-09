@@ -87,4 +87,14 @@ describe('formdataAppend', () => {
     formdataAppend(formdata, 'key', undefined);
     expect(formdata.has('key')).toBe(false);
   });
+
+  test('should append a Blob value to FormData', async () => {
+    const formdata = new FormData();
+    const blob = new Blob(['test'], {type: 'text/plain'});
+    formdataAppend(formdata, 'key', blob);
+    const appendedBlob = formdata.get('key') as Blob;
+    expect(appendedBlob.type).toEqual('text/plain');
+    expect(appendedBlob.size).toEqual(4);
+    await expect(appendedBlob.text()).resolves.toEqual('test');
+  });
 });

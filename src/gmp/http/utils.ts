@@ -8,7 +8,7 @@ import {hasValue, isDefined} from 'gmp/utils/identity';
 export type UrlParamValue = string | number | boolean | undefined;
 export type UrlParams = Record<string, UrlParamValue>;
 
-export type DataValue = string | number | boolean | undefined;
+export type DataValue = string | number | boolean | Blob | undefined;
 export type Data = Record<string, DataValue | string[] | number[] | boolean[]>;
 
 export const buildUrlParams = (params: UrlParams) => {
@@ -41,12 +41,14 @@ export const buildServerUrl = (
   return protocol + '//' + server + '/' + path;
 };
 
+const isBlob = (value: unknown): value is Blob => value instanceof Blob;
+
 export const formdataAppend = (
   formdata: FormData,
   key: string,
   value: DataValue | null,
 ) => {
   if (hasValue(value)) {
-    formdata.append(key, String(value));
+    formdata.append(key, isBlob(value) ? value : String(value));
   }
 };
