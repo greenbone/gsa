@@ -3,10 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 export type UrlParamValue = string | number | boolean | undefined;
 export type UrlParams = Record<string, UrlParamValue>;
+
+export type DataValue = string | number | boolean | undefined;
+export type Data = Record<string, DataValue | string[] | number[] | boolean[]>;
 
 export const buildUrlParams = (params: UrlParams) => {
   let argCount = 0;
@@ -36,4 +39,14 @@ export const buildServerUrl = (
     protocol = window.location.protocol;
   }
   return protocol + '//' + server + '/' + path;
+};
+
+export const formdataAppend = (
+  formdata: FormData,
+  key: string,
+  value: DataValue | null,
+) => {
+  if (hasValue(value)) {
+    formdata.append(key, String(value));
+  }
 };

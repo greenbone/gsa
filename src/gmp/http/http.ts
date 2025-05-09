@@ -13,16 +13,16 @@ import {
 } from 'gmp/http/transform/transform';
 import {
   buildUrlParams,
+  Data,
+  formdataAppend,
   UrlParams as Params,
-  UrlParamValue as ParamValue,
 } from 'gmp/http/utils';
 import _ from 'gmp/locale';
 import logger from 'gmp/log';
-import {isDefined, hasValue, isArray} from 'gmp/utils/identity';
+import {isDefined, isArray} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.http');
 
-type Data = Record<string, ParamValue | string[] | number[] | boolean[]>;
 export type ErrorHandler = (request: XMLHttpRequest) => void;
 type Resolve<TData, TMeta extends Meta> = (
   value: Response<TData, TMeta>,
@@ -84,16 +84,6 @@ interface RequestOptions<
     TSuccessMetaOut
   >;
   [key: string]: unknown;
-}
-
-function formdataAppend(
-  formdata: FormData,
-  key: string,
-  value: ParamValue | null,
-) {
-  if (hasValue(value)) {
-    formdata.append(key, String(value));
-  }
 }
 
 class Http<

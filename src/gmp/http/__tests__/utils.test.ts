@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {buildUrlParams, buildServerUrl} from 'gmp/http/utils';
+import {buildUrlParams, buildServerUrl, formdataAppend} from 'gmp/http/utils';
 
 describe('buildUrlParams', () => {
   test('should return an empty string for an empty params object', () => {
@@ -60,5 +60,31 @@ describe('buildServerUrl', () => {
       `${window.location.protocol}//example.com/`,
     );
     globalThis.window = originalWindow;
+  });
+});
+
+describe('formdataAppend', () => {
+  test('should append a string value to FormData', () => {
+    const formdata = new FormData();
+    formdataAppend(formdata, 'key', 'value');
+    expect(formdata.get('key')).toBe('value');
+  });
+
+  test('should append a number value to FormData', () => {
+    const formdata = new FormData();
+    formdataAppend(formdata, 'key', 42);
+    expect(formdata.get('key')).toBe('42');
+  });
+
+  test('should append a boolean value to FormData', () => {
+    const formdata = new FormData();
+    formdataAppend(formdata, 'key', true);
+    expect(formdata.get('key')).toBe('true');
+  });
+
+  test('should not append undefined or null values to FormData', () => {
+    const formdata = new FormData();
+    formdataAppend(formdata, 'key', undefined);
+    expect(formdata.has('key')).toBe(false);
   });
 });
