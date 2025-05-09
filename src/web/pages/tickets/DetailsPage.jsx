@@ -37,8 +37,8 @@ import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import TicketComponent from 'web/pages/tickets/Component';
 import TicketDetails from 'web/pages/tickets/Details';
+import TicketComponent from 'web/pages/tickets/TicketComponent';
 import {
   selector as ticketSelector,
   loadEntity as loadTicket,
