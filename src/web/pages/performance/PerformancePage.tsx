@@ -9,7 +9,7 @@ import {
 } from 'gmp/commands/performance';
 import date, {Date} from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
-import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {useCallback, useEffect, useState} from 'react';
@@ -118,9 +118,11 @@ const PerformancePage = () => {
   const [sensorId, setSensorId] = useState(scannerParam ?? DEFAULT_SENSOR_ID);
   const [startDate, setStartDate] = useState(start);
   const [endDate, setEndDate] = useState(end);
-  const scannerEntitiesSelector = useShallowEqualSelector(scannerSelector);
+  const sensors = useShallowEqualSelector<unknown, Scanner[]>(state => {
+    const scannerEntitiesSelector = scannerSelector(state);
+    return scannerEntitiesSelector.getEntities(SENSOR_SCANNER_FILTER);
+  });
   const timezone = useShallowEqualSelector(getTimezone);
-  const sensors = scannerEntitiesSelector.getEntities(SENSOR_SCANNER_FILTER);
   const dispatch = useDispatch();
   // @ts-expect-error
   const handleInteraction = () => dispatch(renewSessionTimeout(gmp)());
