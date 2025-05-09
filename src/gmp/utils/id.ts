@@ -7,15 +7,19 @@ import {first} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 
 interface Model {
-  id: string;
+  id?: string;
 }
 
 export const hasId = (model: unknown) =>
   isDefined(model) &&
   isString((model as Model).id) &&
+  // @ts-expect-error
   (model as Model).id.length > 0;
 
-export const includesId = (list: Model[] | undefined, id: string) => {
+export const includesId = <TModel extends Model>(
+  list: TModel[] | undefined,
+  id: string,
+) => {
   if (!isDefined(list)) {
     return false;
   }
@@ -27,8 +31,8 @@ export const includesId = (list: Model[] | undefined, id: string) => {
   return false;
 };
 
-export const selectSaveId = (
-  list: Model[] | undefined,
+export const selectSaveId = <TModel extends Model>(
+  list: TModel[] | undefined,
   id: string,
   emptyDefault: string,
 ) => {
