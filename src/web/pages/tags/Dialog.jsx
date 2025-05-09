@@ -16,7 +16,7 @@ import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextArea';
 import YesNoRadio from 'web/components/form/YesNoRadio';
-import {SELECT_MAX_RESOURCES} from 'web/pages/tags/Component';
+import {SELECT_MAX_RESOURCES} from 'web/pages/tags/TagsComponent';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import withGmp from 'web/utils/withGmp';

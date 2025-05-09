@@ -20,7 +20,7 @@ import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import TagComponent from 'web/pages/tags/Component';
+import TagComponent from 'web/pages/tags/TagsComponent';
 import PropTypes from 'web/utils/PropTypes';
 import withTranslation from 'web/utils/withTranslation';
 const SectionElementDivider = styled(Divider)`
