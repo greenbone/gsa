@@ -7,18 +7,17 @@ import {_l, _} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 export interface EntityType {
-  entityType?: string;
+  entityType: string;
 }
 
 /**
  * Return the entity type of a Model object
  *
- * @param {Object} model Model to get the entity type from
+ * @param model Model to get the entity type from
  *
- * @returns {String} The GSA entity type of a model
+ * @returns The GSA entity type of a model
  */
-export const getEntityType = (model: EntityType = {}): string | undefined =>
-  model.entityType;
+export const getEntityType = (model: EntityType): string => model.entityType;
 
 /**
  * Convert a type into its pluralized form
