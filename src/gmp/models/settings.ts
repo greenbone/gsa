@@ -6,19 +6,21 @@
 import {isDefined} from 'gmp/utils/identity';
 
 class Settings {
+  private readonly _settings: Record<string, unknown>;
+
   constructor() {
     this._settings = {};
   }
 
-  has(name) {
+  has(name: string) {
     return name in this._settings;
   }
 
-  set(name, value) {
+  set(name: string, value: unknown) {
     this._settings[name] = value;
   }
 
-  get(name) {
+  get(name: string) {
     const setting = this._settings[name];
     if (isDefined(setting)) {
       return setting;

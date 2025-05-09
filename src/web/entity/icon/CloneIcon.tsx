@@ -12,7 +12,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface EntityClone extends EntityType {
   userCapabilities: {
-    mayAccess: (name?: string) => boolean;
+    mayAccess: (name: string) => boolean;
   };
 }
 
