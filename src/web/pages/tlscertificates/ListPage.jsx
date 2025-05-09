@@ -13,12 +13,12 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import TlsCertificateComponent from 'web/pages/tlscertificates/Component';
 import TlsCertificatesDashboard, {
   TLS_CERTIFICATES_DASHBOARD_ID,
 } from 'web/pages/tlscertificates/dashboard';
 import TlsCertificatesFilterDialog from 'web/pages/tlscertificates/FilterDialog';
 import TlsCertificateTable from 'web/pages/tlscertificates/Table';
+import TlsCertificateComponent from 'web/pages/tlscertificates/TlsCertificateComponent';
 import {
   loadEntities,
   selector as entitiesSelector,
