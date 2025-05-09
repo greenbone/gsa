@@ -4,12 +4,6 @@ on:
   push:
     branches: ["main"]
 
-# cancel eventually still running jobs for the same branch and workflow
-# to save resources.
-#
-# NOTE:
-# This *can* lead to the effect that the first job that fails due to an
-# error introduced by a commit is *not* the run for the same commit but a later one.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true 
