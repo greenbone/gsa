@@ -3,28 +3,43 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import CheckBox from 'web/components/form/Checkbox';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+export interface SaveLdapArguments {
+  authdn: string;
+  certificate: File;
+  enable: boolean;
+  ldapHost: string;
+  ldapsOnly: boolean;
+}
+
+interface LdapDialogProps {
+  authdn?: string;
+  enable?: boolean;
+  ldapHost?: string;
+  ldapsOnly?: boolean;
+  onClose: () => void;
+  onSave: (values: SaveLdapArguments) => void;
+}
 
 const LdapDialog = ({
   authdn = '',
   enable = false,
-  ldaphost = '',
+  ldapHost = '',
   ldapsOnly = false,
   onClose,
   onSave,
-}) => {
+}: LdapDialogProps) => {
   const [_] = useTranslation();
   const uncontrolledValues = {
     authdn,
     enable,
-    ldaphost,
+    ldapHost,
     ldapsOnly,
   };
   return (
@@ -37,6 +52,7 @@ const LdapDialog = ({
     >
       {({values, onValueChange}) => (
         <>
+          {/* @ts-expect-error */}
           <CheckBox
             checked={values.enable}
             checkedValue={true}
@@ -47,15 +63,17 @@ const LdapDialog = ({
             onChange={onValueChange}
           />
           <FormGroup title={_('LDAP Host')}>
+            {/* @ts-expect-error */}
             <TextField
               data-testid="ldaphost-textfield"
-              name="ldaphost"
+              name="ldapHost"
               size="30"
-              value={values.ldaphost}
+              value={values.ldapHost}
               onChange={onValueChange}
             />
           </FormGroup>
           <FormGroup title={_('Auth. DN')}>
+            {/* @ts-expect-error */}
             <TextField
               data-testid="authdn-textfield"
               name="authdn"
@@ -65,8 +83,10 @@ const LdapDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('CA Certificate')}>
+            {/* @ts-expect-error */}
             <FileField name="certificate" onChange={onValueChange} />
           </FormGroup>
+          {/* @ts-expect-error */}
           <CheckBox
             checked={values.ldapsOnly}
             checkedValue={true}
@@ -80,15 +100,6 @@ const LdapDialog = ({
       )}
     </SaveDialog>
   );
-};
-
-LdapDialog.propTypes = {
-  authdn: PropTypes.string,
-  enable: PropTypes.bool,
-  ldaphost: PropTypes.string,
-  ldapsOnly: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default LdapDialog;
