@@ -6,7 +6,7 @@
 import {hasValue, isDefined, isArray} from 'gmp/utils/identity';
 
 export const forEach = <T>(
-  array?: T[],
+  array?: T | T[],
   func?: (value: T, index: number, array: T[]) => void,
 ) => {
   if (!hasValue(array) || !isDefined(func)) {
