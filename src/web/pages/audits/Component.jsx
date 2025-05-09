@@ -20,7 +20,7 @@ import withDownload from 'web/components/form/withDownload';
 import EntityComponent from 'web/entity/EntityComponent';
 import AlertComponent from 'web/pages/alerts/Component';
 import AuditDialog from 'web/pages/audits/Dialog';
-import ScheduleComponent from 'web/pages/schedules/Component';
+import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/Component';
 import {
   loadEntities as loadAlerts,

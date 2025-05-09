@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import ScheduleComponent from 'web/pages/schedules/Component';
 import SchedulesFilterDialog from 'web/pages/schedules/FilterDialog';
+import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import SchedulesTable from 'web/pages/schedules/Table';
 import {
   loadEntities,
