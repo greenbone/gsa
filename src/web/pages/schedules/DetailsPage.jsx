@@ -31,8 +31,8 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import ScheduleComponent from 'web/pages/schedules/Component';
 import ScheduleDetails from 'web/pages/schedules/Details';
+import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
