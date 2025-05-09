@@ -36,7 +36,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import TlsCertificateComponent from 'web/pages/tlscertificates/Component';
+import TlsCertificateComponent from 'web/pages/tlscertificates/TlsCertificateComponent';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
 import {
   selector as permissionsSelector,
