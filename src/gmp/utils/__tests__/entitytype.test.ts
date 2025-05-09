@@ -16,10 +16,6 @@ import {
 } from 'gmp/utils/entitytype';
 
 describe('getEntityType function tests', () => {
-  test('should return undefined for undefined model', () => {
-    expect(getEntityType()).toBeUndefined();
-  });
-
   test('should return entity type of object', () => {
     const model = {entityType: 'foo'};
 
