@@ -15,7 +15,7 @@ import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Loading from 'web/components/loading/Loading';
 import useTranslation from 'web/hooks/useTranslation';
-import {MAX_RESOURCES} from 'web/pages/tags/Component';
+import {MAX_RESOURCES} from 'web/pages/tags/TagsComponent';
 import {
   createLoadEntities,
   createEntitiesLoadingActions,

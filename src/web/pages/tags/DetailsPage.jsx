@@ -30,9 +30,9 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import TagComponent from 'web/pages/tags/Component';
 import TagDetails from 'web/pages/tags/Details';
 import ResourceList from 'web/pages/tags/ResourceList';
+import TagComponent from 'web/pages/tags/TagsComponent';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
