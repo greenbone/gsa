@@ -9,22 +9,20 @@ import {
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
-import Dialog from 'web/pages/ldap/Dialog';
+import LdapDialog from 'web/pages/ldap/LdapDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('Ldap dialog component tests', () => {
   test('should render dialog', () => {
-    const handleChange = testing.fn();
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
     render(
-      <Dialog
+      <LdapDialog
         authdn="foo"
         enable={true}
-        ldaphost="bar"
+        ldapHost="bar"
         ldapsOnly={true}
-        onChange={handleChange}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -37,26 +35,25 @@ describe('Ldap dialog component tests', () => {
   test('should save data', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
-    const handleValueChange = testing.fn();
 
     render(
-      <Dialog
+      <LdapDialog
         authdn="foo"
         enable={true}
-        ldaphost="bar"
+        ldapHost="bar"
         ldapsOnly={true}
-        onChange={handleValueChange}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
+    // @ts-expect-error
     const button = getDialogSaveButton();
     fireEvent.click(button);
     expect(handleSave).toHaveBeenCalledWith({
       authdn: 'foo',
       enable: true,
-      ldaphost: 'bar',
+      ldapHost: 'bar',
       ldapsOnly: true,
     });
   });
@@ -66,10 +63,10 @@ describe('Ldap dialog component tests', () => {
     const handleSave = testing.fn();
 
     render(
-      <Dialog
+      <LdapDialog
         authdn="foo"
         enable={true}
-        ldaphost="bar"
+        ldapHost="bar"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -85,10 +82,10 @@ describe('Ldap dialog component tests', () => {
     const handleSave = testing.fn();
 
     const {getByTestId} = render(
-      <Dialog
+      <LdapDialog
         authdn="foo"
         enable={true}
-        ldaphost="bar"
+        ldapHost="bar"
         ldapsOnly={false}
         onClose={handleClose}
         onSave={handleSave}
@@ -107,6 +104,7 @@ describe('Ldap dialog component tests', () => {
     const ldapsOnlyCheck = getByTestId('ldapsOnly-checkbox');
     fireEvent.click(ldapsOnlyCheck);
 
+    // @ts-expect-error
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
@@ -114,7 +112,7 @@ describe('Ldap dialog component tests', () => {
       ldapsOnly: true,
       authdn: 'lorem',
       enable: false,
-      ldaphost: 'ipsum',
+      ldapHost: 'ipsum',
     });
   });
 });
