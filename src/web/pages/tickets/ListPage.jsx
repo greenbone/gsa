@@ -12,12 +12,12 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import TicketComponent from 'web/pages/tickets/Component';
 import TicketsDashboard, {
   TICKETS_DASHBOARD_ID,
 } from 'web/pages/tickets/dashboard';
 import TicketsFilterDialogComponent from 'web/pages/tickets/FilterDialog';
 import Table from 'web/pages/tickets/Table';
+import TicketComponent from 'web/pages/tickets/TicketComponent';
 import {
   loadEntities,
   selector as entitiesSelector,
