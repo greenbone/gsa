@@ -127,7 +127,8 @@ const TargetDetails = ({capabilities, entity}) => {
         (isDefined(ssh_credential) ||
           isDefined(snmp_credential) ||
           isDefined(smb_credential) ||
-          isDefined(esxi_credential)) && (
+          isDefined(esxi_credential) ||
+          (gmp.settings.enableKrb5 && isDefined(krb5Credential))) && (
           <DetailsBlock title={_('Credentials')}>
             <InfoTable>
               <TableBody>
