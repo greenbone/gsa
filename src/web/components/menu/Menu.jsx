@@ -4,7 +4,6 @@
  */
 
 import {AppNavigation} from '@greenbone/opensight-ui-components-mantinev7';
-import {isDefined} from 'gmp/utils/identity';
 import {
   BarChart3,
   Server,
@@ -27,14 +26,50 @@ const Menu = () => {
   const capabilities = useCapabilities();
   const gmp = useGmp();
 
-  function checkCapabilities(capabilitiesList) {
-    return capabilitiesList.reduce(
-      (sum, cur) => sum || capabilities.mayAccess(cur),
-      false,
-    );
-  }
+  const isTasksActive = Boolean(useMatch('/tasks'));
+  const isReportsActive = Boolean(useMatch('/reports'));
+  const isResultsActive = Boolean(useMatch('/results'));
+  const isVulnerabilitiesActive = Boolean(useMatch('/vulnerabilities'));
+  const isNotesActive = Boolean(useMatch('/notes'));
+  const isOverridesActive = Boolean(useMatch('/overrides'));
+  const isHostsActive = Boolean(useMatch('/hosts'));
+  const isOperatingSystemsActive = Boolean(useMatch('/operatingsystems'));
+  const isTlsCertificatesActive = Boolean(useMatch('/tlscertificates'));
+  const isTicketsActive = Boolean(useMatch('/tickets'));
+  const isPoliciesActive = Boolean(useMatch('/policies'));
+  const isAuditsActive = Boolean(useMatch('/audits'));
+  const isAuditReportsActive = Boolean(useMatch('/auditreports'));
+  const isNvtsActive = Boolean(useMatch('/nvts'));
+  const isCvesActive = Boolean(useMatch('/cves'));
+  const isCpesActive = Boolean(useMatch('/cpes'));
+  const isCertbundsActive = Boolean(useMatch('/certbunds'));
+  const isDfncertsActive = Boolean(useMatch('/dfncerts'));
+  const isTargetsActive = Boolean(useMatch('/targets'));
+  const isPortlistsActive = Boolean(useMatch('/portlists'));
+  const isCredentialsActive = Boolean(useMatch('/credentials'));
+  const isScanConfigsActive = Boolean(useMatch('/scanconfigs'));
+  const isAlertsActive = Boolean(useMatch('/alerts'));
+  const isSchedulesActive = Boolean(useMatch('/schedules'));
+  const isReportConfigsActive = Boolean(useMatch('/reportconfigs'));
+  const isReportFormatsActive = Boolean(useMatch('/reportformats'));
+  const isScannersActive = Boolean(useMatch('/scanners'));
+  const isFiltersActive = Boolean(useMatch('/filters'));
+  const isTagsActive = Boolean(useMatch('/tags'));
+  const isUserActive = Boolean(useMatch('/users'));
+  const isGroupsActive = Boolean(useMatch('/groups'));
+  const isRolesActive = Boolean(useMatch('/roles'));
+  const isPermissionsActive = Boolean(useMatch('/permissions'));
+  const isPerformanceActive = Boolean(useMatch('/performance'));
+  const isTrashcanActive = Boolean(useMatch('/trashcan'));
+  const isFeedStatusActive = Boolean(useMatch('/feedstatus'));
+  const isLdapActive = Boolean(useMatch('/ldap'));
+  const isRadiusActive = Boolean(useMatch('/radius'));
+  const isCvssCalculatorActive = Boolean(useMatch('/cvsscalculator'));
+  const isAboutActive = Boolean(useMatch('/about'));
 
-  const mayOpScans = checkCapabilities([
+  const mayAccessAny = keys => keys.some(key => capabilities.mayAccess(key));
+
+  const mayOpScans = mayAccessAny([
     'tasks',
     'reports',
     'results',
@@ -42,8 +77,7 @@ const Menu = () => {
     'overrides',
     'notes',
   ]);
-
-  const mayOpConfiguration = checkCapabilities([
+  const mayOpConfiguration = mayAccessAny([
     'targets',
     'port_lists',
     'credentials',
@@ -56,252 +90,204 @@ const Menu = () => {
     'filters',
     'tags',
   ]);
-
-  const mayOpResilience = checkCapabilities(['tickets', 'policies', 'audits']);
-
-  const mayOpAssets = checkCapabilities(['assets', 'tls_certificates']);
-
-  const useIsActive = path => Boolean(useMatch(path));
-
-  const conditionalSubNavConfig = (feature, label, to, activeCondition) =>
-    capabilities.mayAccess(feature) && {label, to, activeCondition};
-
-  const isUserActive = useIsActive('/users');
-  const isGroupsActive = useIsActive('/groups');
-  const isRolesActive = useIsActive('/roles');
-  const isPermissionsActive = useIsActive('/permissions');
-  const isPerformanceActive = useIsActive('/performance');
-  const isTrashcanActive = useIsActive('/trashcan');
-  const isFeedStatusActive = useIsActive('/feedstatus');
-  const isLdapActive = useIsActive('/ldap');
-  const isRadiusActive = useIsActive('/radius');
-
-  const isCvssCalculatorActive = useIsActive('/cvsscalculator');
-  const isAboutActive = useIsActive('/about');
-
-  const subNavConfigs = {
-    scans: [
-      {
-        label: _('Tasks'),
-        to: '/tasks',
-        activeCondition: useIsActive('/tasks'),
-      },
-      {
-        label: _('Reports'),
-        to: '/reports',
-        activeCondition: useIsActive('/reports'),
-      },
-      {
-        label: _('Results'),
-        to: '/results',
-        activeCondition: useIsActive('/results'),
-      },
-      {
-        label: _('Vulnerabilities'),
-        to: '/vulnerabilities',
-        activeCondition: useIsActive('/vulnerabilities'),
-      },
-      {
-        label: _('Notes'),
-        to: '/notes',
-        activeCondition: useIsActive('/notes'),
-      },
-      {
-        label: _('Overrides'),
-        to: '/overrides',
-        activeCondition: useIsActive('/overrides'),
-      },
-    ],
-    assets: [
-      {
-        label: _('Hosts'),
-        to: '/hosts',
-        activeCondition: useIsActive('/hosts'),
-      },
-      {
-        label: _('Operating Systems'),
-        to: '/operatingsystems',
-        activeCondition: useIsActive('/operatingsystems'),
-      },
-      {
-        label: _('TLS Certificates'),
-        to: '/tlscertificates',
-        activeCondition: useIsActive('/tlscertificates'),
-      },
-    ],
-    resilience: [
-      conditionalSubNavConfig(
-        'tickets',
-        _('Remediation Tickets'),
-        '/tickets',
-        useIsActive('/tickets'),
-      ),
-      conditionalSubNavConfig(
-        'policies',
-        _('Compliance Policies'),
-        '/policies',
-        useIsActive('/policies'),
-      ),
-      conditionalSubNavConfig(
-        'audits',
-        _('Compliance Audits'),
-        '/audits',
-        useIsActive('/audits'),
-      ),
-      conditionalSubNavConfig(
-        'auditreports',
-        _('Compliance Audit Reports'),
-        '/auditreports',
-        useIsActive('/auditreports'),
-      ),
-    ].filter(Boolean),
-    secInfo: [
-      {
-        label: _('NVTs'),
-        to: '/nvts',
-        activeCondition: useIsActive('/nvts'),
-      },
-      {
-        label: _('CVEs'),
-        to: '/cves',
-        activeCondition: useIsActive('/cves'),
-      },
-      {
-        label: _('CPEs'),
-        to: '/cpes',
-        activeCondition: useIsActive('/cpes'),
-      },
-      {
-        label: _('CERT-Bund Advisories'),
-        to: '/certbunds',
-        activeCondition: useIsActive('/certbunds'),
-      },
-      {
-        label: _('DFN-CERT Advisories'),
-        to: '/dfncerts',
-        activeCondition: useIsActive('/dfncerts'),
-      },
-    ],
-    configuration: [
-      {
-        label: _('Targets'),
-        to: '/targets',
-        activeCondition: useIsActive('/targets'),
-      },
-      {
-        label: _('Port Lists'),
-        to: '/portlists',
-        activeCondition: useIsActive('/portlists'),
-      },
-      {
-        label: _('Credentials'),
-        to: '/credentials',
-        activeCondition: useIsActive('/credentials'),
-      },
-      {
-        label: _('Scan Configs'),
-        to: '/scanconfigs',
-        activeCondition: useIsActive('/scanconfigs'),
-      },
-      {
-        label: _('Alerts'),
-        to: '/alerts',
-        activeCondition: useIsActive('/alerts'),
-      },
-      {
-        label: _('Schedules'),
-        to: '/schedules',
-        activeCondition: useIsActive('/schedules'),
-      },
-      {
-        label: _('Report Configs'),
-        to: '/reportconfigs',
-        activeCondition: useIsActive('/reportconfigs'),
-      },
-      {
-        label: _('Report Formats'),
-        to: '/reportformats',
-        activeCondition: useIsActive('/reportformats'),
-      },
-      {
-        label: _('Scanners'),
-        to: '/scanners',
-        activeCondition: useIsActive('/scanners'),
-      },
-      {
-        label: _('Filters'),
-        to: '/filters',
-        activeCondition: useIsActive('/filters'),
-      },
-      {
-        label: _('Tags'),
-        to: '/tags',
-        activeCondition: useIsActive('/tags'),
-      },
-    ],
-  };
-
-  const createMenuItemWithSubNav = (label, key, icon, config) => ({
-    label: label,
-    key: key,
-    icon: icon,
-    subNav: config
-      .map(({label, to, activeCondition, featureEnabled}) => ({
-        label: label,
-        to: to,
-        active: activeCondition,
-        visible:
-          !isDefined(featureEnabled) ||
-          capabilities.featureEnabled(featureEnabled),
-      }))
-      .filter(({visible}) => visible !== false),
-  });
+  const mayOpResilience = mayAccessAny([
+    'tickets',
+    'policies',
+    'audits',
+    'auditreports',
+  ]);
+  const mayOpAssets = mayAccessAny(['assets', 'tls_certificates']);
 
   const menuPoints = [
     [
       {
+        icon: BarChart3,
         label: _('Dashboards'),
         to: '/dashboards',
         key: 'dashboards',
-        icon: BarChart3,
       },
     ],
     [
-      mayOpScans &&
-        createMenuItemWithSubNav(
-          _('Scans'),
-          'scans',
-          ShieldCheck,
-          subNavConfigs.scans,
-        ),
-      mayOpAssets &&
-        createMenuItemWithSubNav(
-          _('Assets'),
-          'assets',
-          Server,
-          subNavConfigs.assets,
-        ),
-      mayOpResilience &&
-        createMenuItemWithSubNav(
-          _('Resilience'),
-          'resilience',
-          FileCheck,
-          subNavConfigs.resilience,
-        ),
-      capabilities.mayAccess('info') &&
-        createMenuItemWithSubNav(
-          _('Security Information'),
-          'secInfo',
-          View,
-          subNavConfigs.secInfo,
-        ),
-      mayOpConfiguration &&
-        createMenuItemWithSubNav(
-          _('Configuration'),
-          'configuration',
-          Wrench,
-          subNavConfigs.configuration,
-        ),
+      mayOpScans && {
+        icon: ShieldCheck,
+        label: _('Scans'),
+        key: 'scans',
+        subNav: [
+          capabilities.mayAccess('tasks') && {
+            label: _('Tasks'),
+            to: '/tasks',
+            active: isTasksActive,
+          },
+          capabilities.mayAccess('reports') && {
+            label: _('Reports'),
+            to: '/reports',
+            active: isReportsActive,
+          },
+          capabilities.mayAccess('results') && {
+            label: _('Results'),
+            to: '/results',
+            active: isResultsActive,
+          },
+          capabilities.mayAccess('vulns') && {
+            label: _('Vulnerabilities'),
+            to: '/vulnerabilities',
+            active: isVulnerabilitiesActive,
+          },
+          capabilities.mayAccess('notes') && {
+            label: _('Notes'),
+            to: '/notes',
+            active: isNotesActive,
+          },
+          capabilities.mayAccess('overrides') && {
+            label: _('Overrides'),
+            to: '/overrides',
+            active: isOverridesActive,
+          },
+        ].filter(Boolean),
+      },
+      mayOpAssets && {
+        icon: Server,
+        label: _('Assets'),
+        key: 'assets',
+        subNav: [
+          capabilities.mayAccess('assets') && {
+            label: _('Hosts'),
+            to: '/hosts',
+            active: isHostsActive,
+          },
+          capabilities.mayAccess('assets') && {
+            label: _('Operating Systems'),
+            to: '/operatingsystems',
+            active: isOperatingSystemsActive,
+          },
+          capabilities.mayAccess('tls_certificates') && {
+            label: _('TLS Certificates'),
+            to: '/tlscertificates',
+            active: isTlsCertificatesActive,
+          },
+        ].filter(Boolean),
+      },
+      mayOpResilience && {
+        icon: FileCheck,
+        label: _('Resilience'),
+        key: 'resilience',
+        subNav: [
+          capabilities.mayAccess('tickets') && {
+            label: _('Remediation Tickets'),
+            to: '/tickets',
+            active: isTicketsActive,
+          },
+          capabilities.mayAccess('policies') && {
+            label: _('Compliance Policies'),
+            to: '/policies',
+            active: isPoliciesActive,
+          },
+          capabilities.mayAccess('audits') && {
+            label: _('Compliance Audits'),
+            to: '/audits',
+            active: isAuditsActive,
+          },
+          capabilities.mayAccess('auditreports') && {
+            label: _('Compliance Audit Reports'),
+            to: '/auditreports',
+            active: isAuditReportsActive,
+          },
+        ].filter(Boolean),
+      },
+      capabilities.mayAccess('info') && {
+        icon: View,
+        label: _('Security Information'),
+        key: 'secInfo',
+        subNav: [
+          {
+            label: _('NVTs'),
+            to: '/nvts',
+            active: isNvtsActive,
+          },
+          {
+            label: _('CVEs'),
+            to: '/cves',
+            active: isCvesActive,
+          },
+          {
+            label: _('CPEs'),
+            to: '/cpes',
+            active: isCpesActive,
+          },
+          {
+            label: _('CERT-Bund Advisories'),
+            to: '/certbunds',
+            active: isCertbundsActive,
+          },
+          {
+            label: _('DFN-CERT Advisories'),
+            to: '/dfncerts',
+            active: isDfncertsActive,
+          },
+        ],
+      },
+      mayOpConfiguration && {
+        icon: Wrench,
+        label: _('Configuration'),
+        key: 'configuration',
+        subNav: [
+          capabilities.mayAccess('targets') && {
+            label: _('Targets'),
+            to: '/targets',
+            active: isTargetsActive,
+          },
+          capabilities.mayAccess('port_lists') && {
+            label: _('Port Lists'),
+            to: '/portlists',
+            active: isPortlistsActive,
+          },
+          capabilities.mayAccess('credentials') && {
+            label: _('Credentials'),
+            to: '/credentials',
+            active: isCredentialsActive,
+          },
+          capabilities.mayAccess('scan_configs') && {
+            label: _('Scan Configs'),
+            to: '/scanconfigs',
+            active: isScanConfigsActive,
+          },
+          capabilities.mayAccess('alerts') && {
+            label: _('Alerts'),
+            to: '/alerts',
+            active: isAlertsActive,
+          },
+          capabilities.mayAccess('schedules') && {
+            label: _('Schedules'),
+            to: '/schedules',
+            active: isSchedulesActive,
+          },
+          capabilities.mayAccess('report_configs') && {
+            label: _('Report Configs'),
+            to: '/reportconfigs',
+            active: isReportConfigsActive,
+          },
+          capabilities.mayAccess('report_formats') && {
+            label: _('Report Formats'),
+            to: '/reportformats',
+            active: isReportFormatsActive,
+          },
+          capabilities.mayAccess('scanners') && {
+            label: _('Scanners'),
+            to: '/scanners',
+            active: isScannersActive,
+          },
+          capabilities.mayAccess('filters') && {
+            label: _('Filters'),
+            to: '/filters',
+            active: isFiltersActive,
+          },
+          capabilities.mayAccess('tags') && {
+            label: _('Tags'),
+            to: '/tags',
+            active: isTagsActive,
+          },
+        ].filter(Boolean),
+      },
       {
         label: _('Administration'),
         key: 'administration',
