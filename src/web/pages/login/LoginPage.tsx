@@ -121,16 +121,15 @@ const LoginPage: React.FC = () => {
     }
 
     try {
-      // @ts-expect-error
-      const userSettings = await gmp.user.currentSettings();
+      const {data: userSettings} = await gmp.user.currentSettings();
 
       localStorage.setItem(
         'userInterfaceTimeFormat',
-        userSettings.data.userinterfacetimeformat.value,
+        userSettings.userinterfacetimeformat?.value as string,
       );
       localStorage.setItem(
         'userInterfaceDateFormat',
-        userSettings.data.userinterfacedateformat.value,
+        userSettings.userinterfacedateformat?.value as string,
       );
 
       // @ts-expect-error

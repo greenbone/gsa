@@ -5,29 +5,31 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {
-  changeInputValue,
   getDialog,
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
-import Dialog from 'web/pages/radius/Dialog';
+import LdapDialog from 'web/pages/ldap/LdapDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-describe('RADIUS dialog component tests', () => {
+describe('Ldap dialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
     render(
-      <Dialog
+      <LdapDialog
+        authdn="foo"
         enable={true}
-        radiushost="foo"
+        ldapHost="bar"
+        ldapsOnly={true}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    expect(getDialog()).toBeInTheDocument();
+    const dialog = getDialog();
+    expect(dialog).toBeInTheDocument();
   });
 
   test('should save data', () => {
@@ -35,20 +37,24 @@ describe('RADIUS dialog component tests', () => {
     const handleSave = testing.fn();
 
     render(
-      <Dialog
+      <LdapDialog
+        authdn="foo"
         enable={true}
-        radiushost="foo"
+        ldapHost="bar"
+        ldapsOnly={true}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    const saveButton = getDialogSaveButton();
-    fireEvent.click(saveButton);
+    // @ts-expect-error
+    const button = getDialogSaveButton();
+    fireEvent.click(button);
     expect(handleSave).toHaveBeenCalledWith({
+      authdn: 'foo',
       enable: true,
-      radiushost: 'foo',
-      radiuskey: '',
+      ldapHost: 'bar',
+      ldapsOnly: true,
     });
   });
 
@@ -57,9 +63,10 @@ describe('RADIUS dialog component tests', () => {
     const handleSave = testing.fn();
 
     render(
-      <Dialog
+      <LdapDialog
+        authdn="foo"
         enable={true}
-        radiushost="foo"
+        ldapHost="bar"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -75,9 +82,11 @@ describe('RADIUS dialog component tests', () => {
     const handleSave = testing.fn();
 
     const {getByTestId} = render(
-      <Dialog
+      <LdapDialog
+        authdn="foo"
         enable={true}
-        radiushost="foo"
+        ldapHost="bar"
+        ldapsOnly={false}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -86,18 +95,24 @@ describe('RADIUS dialog component tests', () => {
     const checkBox = getByTestId('enable-checkbox');
     fireEvent.click(checkBox);
 
-    const radiusHostTextField = getByTestId('radiushost-textfield');
-    changeInputValue(radiusHostTextField, 'lorem');
+    const authdnTextField = getByTestId('authdn-textfield');
+    fireEvent.change(authdnTextField, {target: {value: 'lorem'}});
 
-    const radiusKeyTextField = getByTestId('radiuskey-textfield');
-    changeInputValue(radiusKeyTextField, 'bar');
+    const ldapHostTextField = getByTestId('ldaphost-textfield');
+    fireEvent.change(ldapHostTextField, {target: {value: 'ipsum'}});
 
+    const ldapsOnlyCheck = getByTestId('ldapsOnly-checkbox');
+    fireEvent.click(ldapsOnlyCheck);
+
+    // @ts-expect-error
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
+
     expect(handleSave).toHaveBeenCalledWith({
-      radiushost: 'lorem',
+      ldapsOnly: true,
+      authdn: 'lorem',
       enable: false,
-      radiuskey: 'bar',
+      ldapHost: 'ipsum',
     });
   });
 });

@@ -5,59 +5,51 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {
+  changeInputValue,
   getDialog,
   getDialogCloseButton,
   getDialogSaveButton,
 } from 'web/components/testing';
-import Dialog from 'web/pages/ldap/Dialog';
+import Dialog from 'web/pages/radius/RadiusDialog';
 import {render, fireEvent} from 'web/utils/Testing';
 
-describe('Ldap dialog component tests', () => {
+describe('RADIUS dialog component tests', () => {
   test('should render dialog', () => {
-    const handleChange = testing.fn();
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
     render(
       <Dialog
-        authdn="foo"
         enable={true}
-        ldaphost="bar"
-        ldapsOnly={true}
-        onChange={handleChange}
+        radiusHost="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    const dialog = getDialog();
-    expect(dialog).toBeInTheDocument();
+    expect(getDialog()).toBeInTheDocument();
   });
 
   test('should save data', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
-    const handleValueChange = testing.fn();
 
     render(
       <Dialog
-        authdn="foo"
         enable={true}
-        ldaphost="bar"
-        ldapsOnly={true}
-        onChange={handleValueChange}
+        radiusHost="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    const button = getDialogSaveButton();
-    fireEvent.click(button);
+    // @ts-expect-error
+    const saveButton = getDialogSaveButton();
+    fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
-      authdn: 'foo',
       enable: true,
-      ldaphost: 'bar',
-      ldapsOnly: true,
+      radiusHost: 'foo',
+      radiusKey: '',
     });
   });
 
@@ -67,9 +59,8 @@ describe('Ldap dialog component tests', () => {
 
     render(
       <Dialog
-        authdn="foo"
         enable={true}
-        ldaphost="bar"
+        radiusHost="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -86,10 +77,8 @@ describe('Ldap dialog component tests', () => {
 
     const {getByTestId} = render(
       <Dialog
-        authdn="foo"
         enable={true}
-        ldaphost="bar"
-        ldapsOnly={false}
+        radiusHost="foo"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -98,23 +87,19 @@ describe('Ldap dialog component tests', () => {
     const checkBox = getByTestId('enable-checkbox');
     fireEvent.click(checkBox);
 
-    const authdnTextField = getByTestId('authdn-textfield');
-    fireEvent.change(authdnTextField, {target: {value: 'lorem'}});
+    const radiusHostTextField = getByTestId('radiushost-textfield');
+    changeInputValue(radiusHostTextField, 'lorem');
 
-    const ldapHostTextField = getByTestId('ldaphost-textfield');
-    fireEvent.change(ldapHostTextField, {target: {value: 'ipsum'}});
+    const radiusKeyTextField = getByTestId('radiuskey-textfield');
+    changeInputValue(radiusKeyTextField, 'bar');
 
-    const ldapsOnlyCheck = getByTestId('ldapsOnly-checkbox');
-    fireEvent.click(ldapsOnlyCheck);
-
+    // @ts-expect-error
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
-
     expect(handleSave).toHaveBeenCalledWith({
-      ldapsOnly: true,
-      authdn: 'lorem',
+      radiusHost: 'lorem',
       enable: false,
-      ldaphost: 'ipsum',
+      radiusKey: 'bar',
     });
   });
 });

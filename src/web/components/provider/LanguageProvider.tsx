@@ -49,7 +49,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 
           void (async () => {
             try {
-              // @ts-expect-error
               await gmp.user.saveSetting(SETTING_ID_LOCALE, newLang);
             } catch (error) {
               console.error('Error saving language setting:', error);
@@ -87,7 +86,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
         gmp.settings.locale = newLang;
 
         // Save the setting permanently
-        // @ts-expect-error
         await gmp.user.saveSetting(SETTING_ID_LOCALE, newLang);
       }
     },

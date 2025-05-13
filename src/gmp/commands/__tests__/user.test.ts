@@ -5,10 +5,14 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {createResponse, createHttp} from 'gmp/commands/testing';
-import {UserCommand, transformSettingName} from 'gmp/commands/users';
+import {
+  CertificateInfo,
+  UserCommand,
+  transformSettingName,
+} from 'gmp/commands/users';
 
 describe('UserCommand tests', () => {
-  test('should parse auth settings in currentAuthSettings', () => {
+  test('should parse auth settings in currentAuthSettings', async () => {
     const response = createResponse({
       auth_settings: {
         describe_auth_response: {
@@ -30,7 +34,9 @@ describe('UserCommand tests', () => {
                   value: 'true',
                 },
                 {
-                  certificate_info: 'ipsum',
+                  certificate_info: {
+                    issuer: 'ipsum',
+                  },
                 },
               ],
             },
@@ -43,30 +49,28 @@ describe('UserCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new UserCommand(fakeHttp);
-    return cmd.currentAuthSettings().then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'auth_settings',
-          name: '--',
-        },
-      });
-
-      const {data: settings} = resp;
-
-      expect(settings.has('foo')).toEqual(true);
-      expect(settings.has('bar')).toEqual(true);
-      expect(settings.has('ipsum')).toEqual(false);
-
-      const fooSettings = settings.get('foo');
-      expect(fooSettings.enabled).toEqual(true);
-
-      const barSettings = settings.get('bar');
-      expect(barSettings.foo).toEqual('true');
-      expect(barSettings.certificateInfo).toEqual('ipsum');
+    const resp = await cmd.currentAuthSettings();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'auth_settings',
+        name: '--',
+      },
     });
+    const {data: settings} = resp;
+    expect(settings.has('foo')).toEqual(true);
+    expect(settings.has('bar')).toEqual(true);
+    expect(settings.has('ipsum')).toEqual(false);
+    const fooSettings = settings.get('foo') as {enabled: boolean};
+    expect(fooSettings.enabled).toEqual(true);
+    const barSettings = settings.get('bar') as {
+      foo: string;
+      certificateInfo: CertificateInfo;
+    };
+    expect(barSettings.foo).toEqual('true');
+    expect(barSettings.certificateInfo.issuer).toEqual('ipsum');
   });
 
-  test('should return the first single setting value if given an array', () => {
+  test('should return the first single setting value if given an array', async () => {
     const response = createResponse({
       get_settings: {
         get_settings_response: {
@@ -90,20 +94,17 @@ describe('UserCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new UserCommand(fakeHttp);
-    return cmd.getSetting({id: '123'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_setting',
-          setting_id: {
-            id: '123',
-          },
-        },
-      });
-
-      const {data} = resp;
-
-      expect(data).toEqual({_id: '123', name: 'Rows Per Page', value: '42'});
+    const {data} = await cmd.getSetting('123');
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_setting',
+        setting_id: '123',
+      },
     });
+    expect(data).toBeDefined();
+    expect(data?.id).toEqual('123');
+    expect(data?.name).toEqual('Rows Per Page');
+    expect(data?.value).toEqual('42');
   });
 });
 
@@ -121,7 +122,7 @@ describe('UserCommand transformSettingName() function tests', () => {
 });
 
 describe('UserCommand capabilities tests', () => {
-  test('should get capabilities', () => {
+  test('should get capabilities', async () => {
     const response = createResponse({
       get_capabilities: {
         help_response: {
@@ -153,24 +154,23 @@ describe('UserCommand capabilities tests', () => {
     const fakeHttp = createHttp(response);
     const cmd = new UserCommand(fakeHttp);
 
-    cmd.currentCapabilities().then(resp => {
-      const {data: caps} = resp;
-
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_capabilities',
-        },
-      });
-
-      expect(caps._hasCaps).toBe(true);
-      expect(caps.mayAccess('report')).toBe(true);
-      expect(caps.mayAccess('task')).toBe(true);
-      expect(caps.mayAccess('user')).toBe(false);
-
-      expect(caps._hasFeatures).toBe(true);
-      expect(caps.featureEnabled('test_feature_1')).toBe(true);
-      expect(caps.featureEnabled('TEST_FEATURE_2')).toBe(true);
-      expect(caps.featureEnabled('TEST_FEATURE_3')).toBe(false);
+    const {data: caps} = await cmd.currentCapabilities();
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_capabilities',
+      },
     });
+
+    // @ts-expect-error
+    expect(caps._hasCaps).toBe(true);
+    expect(caps.mayAccess('report')).toBe(true);
+    expect(caps.mayAccess('task')).toBe(true);
+    expect(caps.mayAccess('user')).toBe(false);
+
+    // @ts-expect-error
+    expect(caps._hasFeatures).toBe(true);
+    expect(caps.featureEnabled('test_feature_1')).toBe(true);
+    expect(caps.featureEnabled('TEST_FEATURE_2')).toBe(true);
+    expect(caps.featureEnabled('TEST_FEATURE_3')).toBe(false);
   });
 });
