@@ -54,7 +54,7 @@ const nvt = NVT.fromElement({
     epss: {
       max_severity: {
         score: 0.8765,
-        percentile: 0.9,
+        percentile: 90.0,
         cve: {
           _id: 'CVE-2020-1234',
           severity: 10.0,
@@ -62,7 +62,7 @@ const nvt = NVT.fromElement({
       },
       max_epss: {
         score: 0.9876,
-        percentile: 0.8,
+        percentile: 80.0,
         cve: {
           _id: 'CVE-2020-5678',
         },

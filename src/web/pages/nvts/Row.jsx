@@ -88,7 +88,7 @@ const Row = ({
           </TableData>
           <TableData>
             {isNumber(epssPercentile)
-              ? `${(epssPercentile * 100).toFixed(3)}%`
+              ? `${(epssPercentile * 1).toFixed(3)}%`
               : _('N/A')}
           </TableData>
         </>

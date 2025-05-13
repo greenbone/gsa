@@ -37,7 +37,7 @@ const cve = Cve.fromElement({
   usage_type: 'cve',
   epss: {
     score: 0.5,
-    percentile: 0.75,
+    percentile: 75.0,
   },
 });
 
