@@ -13,16 +13,20 @@ export interface DeleteIconProps<TValue = string>
   extends Omit<DynamicIconProps<TValue>, 'icon'> {
   selectionType?: keyof typeof SelectionType;
   title?: string;
+  loading?: boolean;
 }
 
 function DeleteIcon<TValue = string>({
   selectionType,
   title,
+  loading = false,
   ...props
 }: Readonly<DeleteIconProps<TValue>>): React.ReactNode {
   const [_] = useTranslation();
   if (!isDefined(title)) {
-    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+    if (loading) {
+      title = _('Deleting');
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = _('Delete page contents');
     } else if (selectionType === SelectionType.SELECTION_USER) {
       title = _('Delete selection');
@@ -34,6 +38,7 @@ function DeleteIcon<TValue = string>({
     <DynamicIcon<TValue>
       dataTestId="delete-icon"
       icon={Icon}
+      loading={loading}
       title={title}
       {...props}
     />
