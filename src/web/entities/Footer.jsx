@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {
+  showNotification,
+  showSuccessNotification,
+} from '@greenbone/opensight-ui-components-mantinev7';
 import {useState} from 'react';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
@@ -19,6 +23,7 @@ import TableRow from 'web/components/table/Row';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
+
 const DIALOG_TYPES = {
   TRASH: 'trash',
   DELETE: 'delete',
@@ -44,6 +49,7 @@ export const EntitiesFooter = ({
   const [_] = useTranslation();
   const [configDialog, setConfigDialog] = useState(undefined);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [isInProgress, setIsInProgress] = useState(false);
 
   const onIconClick = (type, propOnAction) => {
     if (!isGenericBulkTrashcanDeleteDialog) {
@@ -54,19 +60,43 @@ export const EntitiesFooter = ({
     const configMap = {
       [DIALOG_TYPES.DELETE]: {
         dialogText: _(
-          'Are you sure you want to delete all rows in the page of the table?\n This action cannot be undone.',
+          'Are you sure you want to delete all items on this page?\nThis action cannot be undone.',
         ),
         dialogTitle: _('Confirm Deletion'),
         dialogButtonTitle: _('Delete'),
         dialogFunction: propOnAction,
+        confirmFunction: async () => {
+          try {
+            setIsInProgress(true);
+            showNotification({
+              title: _('Deletion started'),
+            });
+            await propOnAction();
+          } finally {
+            setIsInProgress(false);
+            showSuccessNotification('', _('Deletion completed'));
+          }
+        },
       },
       [DIALOG_TYPES.TRASH]: {
         dialogText: _(
-          'Are you sure you want to move all rows in the page of the table to the trashcan?',
+          'Are you sure you want to move all items on this page to the trashcan?',
         ),
-        dialogTitle: _('Confirm Move to Trashcan'),
+        dialogTitle: _('Confirm move to trashcan'),
         dialogButtonTitle: _('Move to Trashcan'),
         dialogFunction: propOnAction,
+        confirmFunction: async () => {
+          try {
+            setIsInProgress(true);
+            showNotification({
+              title: _('Moving to trashcan'),
+            });
+            await propOnAction();
+          } finally {
+            setIsInProgress(false);
+            showSuccessNotification('', _('Move to trashcan completed'));
+          }
+        },
       },
     };
     setConfigDialog(configMap[type]);
@@ -116,6 +146,7 @@ export const EntitiesFooter = ({
                   )}
                   {trash && (
                     <TrashIcon
+                      loading={isInProgress}
                       selectionType={selectionType}
                       onClick={() =>
                         onIconClick(DIALOG_TYPES.TRASH, onTrashClick)
@@ -124,6 +155,7 @@ export const EntitiesFooter = ({
                   )}
                   {deleteEntities && (
                     <DeleteIcon
+                      loading={isInProgress}
                       selectionType={selectionType}
                       onClick={() =>
                         onIconClick(DIALOG_TYPES.DELETE, onDeleteClick)
@@ -146,7 +178,7 @@ export const EntitiesFooter = ({
           )}
         </td>
       </TableRow>
-      {isDialogVisible && (
+      {isDialogVisible && configDialog && (
         <ConfirmationDialog
           content={configDialog.dialogText}
           rightButtonAction={DELETE_ACTION}
@@ -155,8 +187,8 @@ export const EntitiesFooter = ({
           width="500px"
           onClose={closeDialog}
           onResumeClick={() => {
-            configDialog.dialogFunction();
             closeDialog();
+            configDialog.confirmFunction();
           }}
         />
       )}
