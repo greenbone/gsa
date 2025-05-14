@@ -11,7 +11,7 @@ import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
-import TrashIcon from 'web/components/icon/TrashIcon';
+import {TrashcanIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import TableBody from 'web/components/table/Body';
@@ -188,7 +188,7 @@ const Dialog = ({
                           </TableData>
                           <TableData align={['center', 'center']}>
                             {!permission.isInUse() && (
-                              <TrashIcon
+                              <TrashcanIcon
                                 title={_('Move permission to trashcan')}
                                 value={{
                                   roleId: state.id,
