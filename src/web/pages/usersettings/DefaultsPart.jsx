@@ -9,7 +9,11 @@ import Select from 'web/components/form/Select';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-import {renderSelectItems, UNSET_VALUE, UNSET_VALUE_EMPTY_STRING} from 'web/utils/Render';
+import {
+  renderSelectItems,
+  UNSET_VALUE,
+  UNSET_VALUE_EMPTY_STRING,
+} from 'web/utils/Render';
 
 const DefaultsPart = ({
   alerts,
