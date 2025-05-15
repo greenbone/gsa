@@ -9,7 +9,7 @@ import Select from 'web/components/form/Select';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
+import {renderSelectItems, UNSET_VALUE, UNSET_VALUE_EMPTY_STRING} from 'web/utils/Render';
 
 const DefaultsPart = ({
   alerts,
@@ -38,7 +38,7 @@ const DefaultsPart = ({
       {capabilities.mayAccess('alert') && (
         <FormGroup title={_('Default Alert')} titleSize="3">
           <Select
-            items={renderSelectItems(alerts, UNSET_VALUE)}
+            items={renderSelectItems(alerts, UNSET_VALUE_EMPTY_STRING)}
             name="defaultAlert"
             value={defaultAlert}
             onChange={onChange}

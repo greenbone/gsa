@@ -12,6 +12,7 @@ import {isEmpty, shorten, split} from 'gmp/utils/string';
 import React from 'react';
 
 export const UNSET_VALUE = '0';
+export const UNSET_VALUE_EMPTY_STRING = '';
 export const UNSET_LABEL = '--';
 
 /**
