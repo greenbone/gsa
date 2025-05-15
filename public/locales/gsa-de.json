@@ -16,6 +16,7 @@
   "{{count}} alert(s) only visible to other users": "{{count}} Benachrichtigung(en) nur für andere Benutzer sichtbar",
   "{{count}} of {{max}}": "{{count}} von {{max}}",
   "{{count}} report config(s) only visible to other users": "{{count}} Berichtkonfiguration(en) nur für andere Benutzer sichtbar",
+  "{{count}} user(s) deleted successfully": "{{count}} Benutzer erfolgreich gelöscht",
   "{{count}} users will be deleted": "{{count}} Benutzer werden gelöscht",
   "{{days}} day {{hours}}:{{minutes}} h": "{{days}} Tag {{hours}}:{{minutes}} h",
   "{{days}} days {{hours}}:{{minutes}} h": "{{days}} Tage {{hours}}:{{minutes}} h",

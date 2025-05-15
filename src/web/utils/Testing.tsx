@@ -273,3 +273,11 @@ export const rendererWithTableRow = (options: RendererOptions) => {
       ),
   };
 };
+
+export const rendererWithTableFooter = (options: RendererOptions) => {
+  const {render, ...other} = rendererWith(options);
+  return {
+    ...other,
+    render: (element: React.ReactNode) => render(<table>{element}</table>),
+  };
+};
