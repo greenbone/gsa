@@ -230,10 +230,18 @@ class EntitiesContainer extends React.Component {
 
     this.handleInteraction();
 
-    return promise.then(deleted => {
-      log.debug('successfully deleted entities', deleted);
-      this.handleChanged();
-    }, this.handleError);
+    return promise
+      .then(deleted => {
+        log.debug('successfully deleted entities', deleted);
+        this.handleChanged();
+        return Promise.resolve();
+      })
+      .catch(error => {
+        this.handleError(error);
+        return Promise.reject(
+          error instanceof Error ? error : new Error(String(error)),
+        );
+      });
   }
 
   handleSelected(entity) {
@@ -480,7 +488,6 @@ class EntitiesContainer extends React.Component {
     const {
       children,
       isLoading,
-      isGenericBulkTrashcanDeleteDialog = true,
       onDownload,
       showErrorMessage,
       showSuccessMessage,
@@ -525,7 +532,6 @@ class EntitiesContainer extends React.Component {
           filter: loadedFilter,
           isLoading,
           isUpdating,
-          isGenericBulkTrashcanDeleteDialog,
           selectionType: selectionType,
           sortBy,
           sortDir,
@@ -596,7 +602,6 @@ EntitiesContainer.propTypes = {
   gmpname: PropTypes.string.isRequired,
   navigate: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  isGenericBulkTrashcanDeleteDialog: PropTypes.bool,
   listExportFileName: PropTypes.string,
   loadSettings: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,

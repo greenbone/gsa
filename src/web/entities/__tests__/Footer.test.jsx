@@ -5,7 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Footer from 'web/entities/Footer';
-import {screen, rendererWith, fireEvent, userEvent} from 'web/utils/Testing';
+import {
+  screen,
+  rendererWithTableFooter,
+  fireEvent,
+  userEvent,
+} from 'web/utils/Testing';
 
 const entities = [];
 const entitiesCounts = {filtered: 0, all: 0};
@@ -21,7 +26,7 @@ const gmp = {
 
 describe('Footer', () => {
   test('should render the Footer component', async () => {
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWithTableFooter({gmp});
 
     render(
       <Footer
@@ -57,7 +62,7 @@ describe('Footer', () => {
   });
 
   test('should show ConfirmationDialog when DeleteIcon is clicked and notification', async () => {
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWithTableFooter({gmp});
 
     render(
       <Footer
@@ -103,7 +108,7 @@ describe('Footer', () => {
   });
 
   test('should show ConfirmationDialog when TrashIcon is clicked and notification', async () => {
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWithTableFooter({gmp});
 
     render(
       <Footer
