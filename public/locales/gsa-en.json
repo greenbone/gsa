@@ -16,6 +16,7 @@
   "{{count}} alert(s) only visible to other users": "{{count}} alert(s) only visible to other users",
   "{{count}} of {{max}}": "{{count}} of {{max}}",
   "{{count}} report config(s) only visible to other users": "{{count}} report config(s) only visible to other users",
+  "{{count}} user(s) deleted successfully": "{{count}} user(s) deleted successfully",
   "{{count}} users will be deleted": "{{count}} users will be deleted",
   "{{days}} day {{hours}}:{{minutes}} h": "{{days}} day {{hours}}:{{minutes}} h",
   "{{days}} days {{hours}}:{{minutes}} h": "{{days}} days {{hours}}:{{minutes}} h",
