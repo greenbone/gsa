@@ -153,6 +153,9 @@ const TaskDialog = ({
 
   const openvasScanConfigItems = renderSelectItems(scan_configs);
 
+  const alertIds =
+    alert_ids.length === 1 && alert_ids[0] === 0 ? [] : alert_ids;
+
   const alertItems = renderSelectItems(alerts);
 
   // having a task means we are editing a task
@@ -188,7 +191,7 @@ const TaskDialog = ({
   };
 
   const controlledData = {
-    alert_ids,
+    alert_ids: alertIds,
     config_id,
     schedule_id,
     scanner_id,
