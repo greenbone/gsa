@@ -134,7 +134,8 @@ const AuditDialog = ({
 
   policyId = selectSaveId(policies, policyId, undefined);
 
-  const adjustedAlertsIds = alertIds.length === 1 && alertIds[0] === 0 ? [] : alertIds;
+  const adjustedAlertsIds =
+    alertIds.length === 1 && alertIds[0] === 0 ? [] : alertIds;
 
   const alertItems = renderSelectItems(alerts);
 
