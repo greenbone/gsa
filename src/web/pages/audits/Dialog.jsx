@@ -134,6 +134,8 @@ const AuditDialog = ({
 
   policyId = selectSaveId(policies, policyId, undefined);
 
+  const alertIDS = alertIds.length === 1 && alertIds[0] === 0 ? [] : alertIds;
+
   const alertItems = renderSelectItems(alerts);
 
   // having an audit means we are editing an audit
@@ -162,7 +164,7 @@ const AuditDialog = ({
   };
 
   const controlledData = {
-    alertIds,
+    alertIds: alertIDS,
     policyId,
     scannerId,
     scannerType,
