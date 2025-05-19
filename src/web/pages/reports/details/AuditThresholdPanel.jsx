@@ -13,7 +13,10 @@ import InfoPanel from 'web/components/panel/InfoPanel';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
 import PropTypes from 'web/utils/PropTypes';
-const UpdatingDivider = styled(({...props}) => <Divider {...props} />)`
+
+const UpdatingDivider = styled(({isUpdating, ...props}) => (
+  <Divider {...props} />
+))`
   opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
 `;
 

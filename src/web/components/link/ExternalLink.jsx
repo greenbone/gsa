@@ -43,11 +43,9 @@ class ExternalLink extends React.Component {
   }
 
   render() {
-    const {_} = this.props;
-
     const {dialogvisible} = this.state;
 
-    const {children, to, ...props} = this.props;
+    const {children, to, _, ...props} = this.props;
 
     const dialogtitle = _('You are leaving GSA');
     const dialogtext = _(

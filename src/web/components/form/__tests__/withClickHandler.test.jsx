@@ -14,7 +14,10 @@ describe('withClickHandler tests', () => {
     const Component = withClickHandler()(TestInput);
 
     const onClick = testing.fn();
-    const {element} = render(<Component value="foo" onClick={onClick} />);
+    const onChange = testing.fn();
+    const {element} = render(
+      <Component value="foo" onChange={onChange} onClick={onClick} />,
+    );
 
     fireEvent.click(element);
 
@@ -25,8 +28,14 @@ describe('withClickHandler tests', () => {
     const Component = withClickHandler()(TestInput);
 
     const onClick = testing.fn();
+    const onChange = testing.fn();
     const {element} = render(
-      <Component name="bar" value="foo" onClick={onClick} />,
+      <Component
+        name="bar"
+        value="foo"
+        onChange={onChange}
+        onClick={onClick}
+      />,
     );
 
     fireEvent.click(element);
@@ -38,8 +47,14 @@ describe('withClickHandler tests', () => {
     const Component = withClickHandler()(TestInput);
 
     const onClick = testing.fn();
+    const onChange = testing.fn();
     const {element} = render(
-      <Component convert={v => v * 2} value={21} onClick={onClick} />,
+      <Component
+        convert={v => v * 2}
+        value={21}
+        onChange={onChange}
+        onClick={onClick}
+      />,
     );
 
     fireEvent.click(element);
@@ -53,7 +68,10 @@ describe('withClickHandler tests', () => {
     })(TestInput);
 
     const onClick = testing.fn();
-    const {element} = render(<Component value={21} onClick={onClick} />);
+    const onChange = testing.fn();
+    const {element} = render(
+      <Component value={21} onChange={onChange} onClick={onClick} />,
+    );
 
     fireEvent.click(element);
 
@@ -66,8 +84,9 @@ describe('withClickHandler tests', () => {
     })(TestInput);
 
     const onClick = testing.fn();
+    const onChange = testing.fn();
     const {element} = render(
-      <Component foo="bar" value={21} onClick={onClick} />,
+      <Component foo="bar" value={21} onChange={onChange} onClick={onClick} />,
     );
 
     fireEvent.click(element);

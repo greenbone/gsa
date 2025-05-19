@@ -58,10 +58,14 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
       <SupportMailLinkComponent />
     </span>
   );
-  const corruptMessageUser = _(
-    'The Greenbone Enterprise License for this system is invalid. ' +
-      'You can still use the system without restrictions, but you will not ' +
-      'receive updates anymore. Please contact your administrator.',
+  const corruptMessageUser = (
+    <span>
+      {_(
+        'The Greenbone Enterprise License for this system is invalid. ' +
+          'You can still use the system without restrictions, but you will not ' +
+          'receive updates anymore. Please contact your administrator.',
+      )}
+    </span>
   );
   const corruptTitleMessage = _(
     'Your Greenbone Enterprise License is invalid!',
@@ -80,13 +84,17 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
       <LicenseLinkComponent />
     </span>
   );
-  const expiringMessageUser = _(
-    'The Greenbone Enterprise License for this system will expire in ' +
-      '{{days}} days. After that your appliance remains valid and you can ' +
-      'still use the system without restrictions, but you will not receive ' +
-      'updates anymore. Please contact your administrator for extending the ' +
-      'license.',
-    {days},
+  const expiringMessageUser = (
+    <span>
+      {_(
+        'The Greenbone Enterprise License for this system will expire in ' +
+          '{{days}} days. After that your appliance remains valid and you can ' +
+          'still use the system without restrictions, but you will not receive ' +
+          'updates anymore. Please contact your administrator for extending the ' +
+          'license.',
+        {days},
+      )}
+    </span>
   );
   const expiringTitleMessage = _(
     'Your Greenbone Enterprise License will expire in {{days}} days!',
@@ -106,10 +114,14 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
       <LicenseLinkComponent />
     </span>
   );
-  const expiringTrialMessageUser = _(
-    'The trial period for this system will end in {{days}} days. Please contact ' +
-      'your administrator for purchasing a new license.',
-    {days},
+  const expiringTrialMessageUser = (
+    <span>
+      {_(
+        'The trial period for this system will end in {{days}} days. Please contact ' +
+          'your administrator for purchasing a new license.',
+        {days},
+      )}
+    </span>
   );
   const expiredMessageAdmin = (
     <Layout flex="column">
@@ -129,14 +141,18 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
       </span>
     </Layout>
   );
-  const expiredMessageUser = _(
-    'The Greenbone Enterprise License for ' +
-      'this system expired {{days}} days ago. You can still use the system without ' +
-      'restrictions, but you will not receive updates anymore. Especially you ' +
-      'will miss new vulnerability tests and thus your scans will not detect ' +
-      'important new vulnerabilities in your network. Please contact your ' +
-      'administrator for renewing the license.',
-    {days: Math.abs(days)},
+  const expiredMessageUser = (
+    <span>
+      {_(
+        'The Greenbone Enterprise License for ' +
+          'this system expired {{days}} days ago. You can still use the system without ' +
+          'restrictions, but you will not receive updates anymore. Especially you ' +
+          'will miss new vulnerability tests and thus your scans will not detect ' +
+          'important new vulnerabilities in your network. Please contact your ' +
+          'administrator for renewing the license.',
+        {days: Math.abs(days)},
+      )}
+    </span>
   );
   const expiredTitleMessage = _(
     'Your Greenbone Enterprise License has expired {{days}} days ago!',

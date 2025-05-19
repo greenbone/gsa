@@ -41,8 +41,10 @@ const EmptyResultsReport = ({
           {all},
         )}
       >
-        {_('The following filter is currently applied: ')}
-        <FilterString>{filter.toFilterString()}</FilterString>
+        <>
+          {_('The following filter is currently applied: ')}
+          <FilterString>{filter.toFilterString()}</FilterString>
+        </>
       </InfoPanel>
 
       <Divider wrap align={['start', 'stretch']}>

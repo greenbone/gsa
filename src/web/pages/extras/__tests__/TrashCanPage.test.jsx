@@ -21,7 +21,7 @@ const gmp = {
     empty: testing.fn().mockResolvedValueOnce(),
     get: testing.fn().mockReturnValue(
       Promise.resolve({
-        data: [],
+        data: {},
       }),
     ),
   },

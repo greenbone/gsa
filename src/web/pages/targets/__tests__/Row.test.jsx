@@ -8,12 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Target from 'gmp/models/target';
 import Row from 'web/pages/targets/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {
-  rendererWithTable,
-  fireEvent,
-  screen,
-  rendererWith,
-} from 'web/utils/Testing';
+import {rendererWithTable, fireEvent, screen} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -226,7 +221,7 @@ describe('Target row tests', () => {
 
     gmp.settings.enableKrb5 = true;
 
-    const {render, store} = rendererWith({
+    const {render, store} = rendererWithTable({
       gmp,
       capabilities: caps,
       router: true,
