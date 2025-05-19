@@ -200,7 +200,6 @@ const NoteComponent = ({
 
 NoteComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -212,7 +211,6 @@ NoteComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-  _: PropTypes.func.isRequired,
 };
 
 export default NoteComponent;

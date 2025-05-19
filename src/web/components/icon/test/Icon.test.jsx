@@ -8,6 +8,10 @@ import Icon from 'web/components/icon/Icon';
 import {ICON_SIZE_LARGE_PIXELS} from 'web/hooks/useIconSize';
 import {fireEvent, render} from 'web/utils/Testing';
 
+global.fetch = testing.fn(() => ({
+  text: () => '',
+}));
+
 describe('Icon', () => {
   test('renders with specified size', () => {
     const {element} = render(<Icon img="test.svg" size="large" />);

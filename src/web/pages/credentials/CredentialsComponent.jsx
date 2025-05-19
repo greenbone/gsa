@@ -10,6 +10,7 @@ import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
+import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
@@ -38,7 +39,7 @@ const CredentialsComponent = ({
   const [_] = useTranslation();
   const dispatch = useDispatch();
 
-  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
+  const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
   const username = useSelector(getUsername);
   const detailsExportFileName = userDefaultsSelector.getValueByName(
     'detailsexportfilename',

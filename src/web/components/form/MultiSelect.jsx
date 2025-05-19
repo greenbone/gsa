@@ -32,8 +32,8 @@ const StyledMultiSelect = styled(MantineMultiSelect)`
   .mantine-MultiSelect-item {
     min-height: ${({size}) => getSize(size)};
     font-size: ${({size}) => getFontSize(size)};
-    border-color: ${({errorContent}) => getBorderColor(errorContent)};
-    color: ${({errorContent}) => getColor(errorContent)};
+    border-color: ${({$errorContent}) => getBorderColor($errorContent)};
+    color: ${({$errorContent}) => getColor($errorContent)};
   }
   .mantine-MultiSelect-item:hover {
     background-color: var(--select-selected-background-color-hover);
@@ -82,11 +82,11 @@ const MultiSelect = ({
     <StyledMultiSelect
       data-testid="multi-select"
       {...props}
+      $errorContent={errorContent}
       data={items}
       disabled={disabled || !items?.length}
       dropdownPosition={dropdownPosition}
       error={isDefined(errorContent) && `${errorContent}`}
-      errorContent={errorContent}
       label={label}
       name={name}
       placeholder={placeholder}

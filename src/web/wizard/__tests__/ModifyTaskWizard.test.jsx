@@ -30,7 +30,7 @@ const reschedule = 0;
 const startDate = Date('2020-01-01T12:10:00Z');
 const startMinute = 10;
 const startHour = 12;
-const startTimezone = 'Coordinated Universal Time';
+const startTimezone = 'UTC';
 
 const getFormGroupTitles = element => {
   element = getElementOrReturnDocument(element);

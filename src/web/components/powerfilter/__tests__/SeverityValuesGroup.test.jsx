@@ -47,7 +47,7 @@ describe('Severity Values Group Tests', () => {
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 
-    const {debug} = render(
+    render(
       <SeverityValuesGroup
         filter={filter}
         name={name}
@@ -55,8 +55,6 @@ describe('Severity Values Group Tests', () => {
         onChange={onChange}
       />,
     );
-
-    debug();
 
     const numField = getSeverityInput();
 

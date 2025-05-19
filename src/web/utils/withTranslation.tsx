@@ -15,7 +15,7 @@ import useTranslation from 'web/hooks/useTranslation';
  */
 const withTranslation = WrappedComponent => {
   const WithTranslation = props => {
-    const [_, i18n, ready] = useTranslation();
+    const [_, i18n] = useTranslation();
     const [language] = useLanguage();
 
     // Using language as a key forces re-render of the component when language changes
@@ -25,7 +25,6 @@ const withTranslation = WrappedComponent => {
         key={`translation-wrapper-${language}`}
         _={_}
         i18n={i18n}
-        ready={ready}
       />
     );
   };

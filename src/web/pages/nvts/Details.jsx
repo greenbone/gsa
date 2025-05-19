@@ -120,13 +120,15 @@ const NvtDetails = ({entity, links = true}) => {
                 </TableRow>
                 <TableRow>
                   <TableData>{_('CVE Severity')}</TableData>
-                  <Severitybar
-                    severity={
-                      isDefined(epss?.max_severity?.cve?.severity)
-                        ? epss?.max_severity?.cve?.severity
-                        : _('N/A')
-                    }
-                  />
+                  <TableData>
+                    <Severitybar
+                      severity={
+                        isDefined(epss?.max_severity?.cve?.severity)
+                          ? epss?.max_severity?.cve?.severity
+                          : _('N/A')
+                      }
+                    />
+                  </TableData>
                 </TableRow>
               </>
             )}
