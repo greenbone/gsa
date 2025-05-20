@@ -34,8 +34,8 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ScannerComponent from 'web/pages/scanners/Component';
 import ScannerDetails from 'web/pages/scanners/Details';
+import ScannerComponent from 'web/pages/scanners/ScannerComponent';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,

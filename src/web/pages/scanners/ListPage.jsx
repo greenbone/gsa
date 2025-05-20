@@ -14,8 +14,8 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ScannerComponent from 'web/pages/scanners/Component';
 import ScannersFilterDialog from 'web/pages/scanners/FilterDialog';
+import ScannerComponent from 'web/pages/scanners/ScannerComponent';
 import ScannersTable from 'web/pages/scanners/Table';
 import {
   loadEntities,
