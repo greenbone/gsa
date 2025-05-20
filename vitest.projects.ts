@@ -11,7 +11,7 @@ export default defineWorkspace([
     test: {
       name: 'web',
       environment: 'jsdom',
-      setupFiles: './src/web/setupTests.js',
+      setupFiles: './src/web/setupTests.ts',
       include: [
         'src/web/**/*.{test,spec}.?(c|m)[jt]s?(x)',
         'src/web/**/__tests__/*.?(c|m)[jt]s?(x)',
