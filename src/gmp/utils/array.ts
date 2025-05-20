@@ -25,23 +25,23 @@ export const forEach = <T>(
 };
 
 export function map<T, U>(
-  array: T | T[] | null | undefined,
-  func: (value: T, index: number, array: T[]) => U,
+  array: T | T[] | Set<T> | null | undefined,
+  func?: (value: T, index: number, array: T[]) => U,
   empty: U[] = [],
 ): U[] {
   if (!hasValue(array) || !isDefined(func)) {
     return empty;
   }
 
-  if (isDefined(array.map)) {
-    return array.map(func);
+  if (isDefined((array as T[]).map)) {
+    return (array as T[]).map(func);
   }
 
   if (isDefined(array.forEach)) {
     // support array like objects e.g. Set and Map
     const result: U[] = [];
 
-    array.forEach((entry: T, index: number, values: T[]) =>
+    (array as T[]).forEach((entry: T, index: number, values: T[]) =>
       result.push(func(entry, index, values)),
     );
 
@@ -52,14 +52,14 @@ export function map<T, U>(
   }
 
   if (!isArray(array)) {
-    array = [array];
+    array = [array as T];
   }
   return array.map(func);
 }
 
 export function filter<T extends {}>(
   array: T | T[] | null | undefined,
-  func: (value: T, index: number, array: T[]) => boolean,
+  func?: (value: T, index: number, array: T[]) => boolean,
   empty: T[] = [],
 ): T[] {
   if (!hasValue(array) || !isDefined(func)) {
@@ -71,8 +71,8 @@ export function filter<T extends {}>(
   return (array as T[]).filter(func);
 }
 
-export function first<T extends {}, U extends {}>(
-  array: T[] | undefined,
+export function first<T, U>(
+  array: T | T[] | Set<T> | undefined,
   // @ts-expect-error
   non: U = {},
 ): T | U {
@@ -84,7 +84,7 @@ export function first<T extends {}, U extends {}>(
     return array[0];
   }
 
-  if (!isDefined(array)) {
+  if (!hasValue(array)) {
     return non;
   }
 
@@ -94,7 +94,6 @@ export function first<T extends {}, U extends {}>(
     return non;
   }
 
-  // @ts-expect-error
   const {value, done} = array[Symbol.iterator]().next(); // returns array[0]
   return done ? non : value; // done is true for empty iterables
 }

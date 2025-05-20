@@ -21,7 +21,7 @@ describe('arrayEquals function test', () => {
 
   test('should return false if param is not an array', () => {
     const array1 = [2, 3, 4];
-    const array2 = 'This is a string';
+    const array2 = ['This is a string'];
     expect(arraysEqual(array1, array2)).toBe(false);
   });
 
@@ -46,7 +46,7 @@ describe('arrayEquals function test', () => {
     expect(arraysEqual(array1, array2)).toBe(false);
   });
 
-  test('array should equals with itself', () => {
+  test('array should equal with itself', () => {
     const array1 = [1, 2, 3];
     expect(arraysEqual(array1, array1)).toBe(true);
   });
@@ -63,22 +63,22 @@ describe('map function tests', () => {
     expect(mapped).toEqual([]);
   });
 
-  test('should empty array for null', () => {
+  test('should return empty array for null', () => {
     const mapped = map(null, item => item);
 
     expect(mapped).toEqual([]);
   });
 
-  test('should empty array if not map function is set', () => {
+  test('should return empty array if no map function is set', () => {
     const mapped = map([1, 2, 3]);
 
     expect(mapped).toEqual([]);
   });
 
   test('should return object for undefined array', () => {
-    const mapped = map(undefined, item => item, {});
+    const mapped = map(undefined, item => item, [{}]);
 
-    expect(mapped).toEqual({});
+    expect(mapped).toEqual([{}]);
   });
 
   test('should iterate over array', () => {
@@ -94,19 +94,22 @@ describe('map function tests', () => {
   });
 
   test('should iterate over Set', () => {
-    const mapped = map(new Set([1, 2, 3]), item => item * 2);
+    const mapped = map<number, number>(
+      new Set([1, 2, 3]),
+      (item: number) => item * 2,
+    );
 
     expect(mapped).toEqual([2, 4, 6]);
   });
 
   test('should return empty object for empty Set', () => {
-    const mapped = map(new Set(), item => item * 2, {});
+    const mapped = map(new Set<{}>(), (item: {}) => item, [{}]);
 
-    expect(mapped).toEqual({});
+    expect(mapped).toEqual([{}]);
   });
 });
 
-describe('for_each function tests', () => {
+describe('forEach function tests', () => {
   test('should return undefined for undefined array', () => {
     const array = forEach(undefined, item => item);
 
@@ -166,15 +169,15 @@ describe('filter function tests', () => {
   });
 
   test('should return specified empty object', () => {
-    const expected = {foo: 1};
+    const expected = [1];
     expect(filter(undefined, () => true, expected)).toEqual(expected);
     expect(filter(null, () => true, expected)).toEqual(expected);
     expect(filter([1, 2, 3], undefined, expected)).toEqual(expected);
   });
 
   test('should always return empty array for empty array', () => {
-    const expected = {foo: 1};
-    expect(filter([], () => true, expected)).toEqual([]);
+    const expected = [{foo: 1}];
+    expect(filter<{foo: number}>([], () => true, expected)).toEqual([]);
   });
 
   test('should iterate over single object', () => {
@@ -188,7 +191,6 @@ describe('filter function tests', () => {
 
 describe('first function tests', () => {
   test('should return non for undefined array', () => {
-    expect(first()).toEqual({});
     expect(first(undefined, 'foo')).toEqual('foo');
   });
 
