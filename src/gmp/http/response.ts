@@ -48,7 +48,7 @@ class Response<TData = unknown, TMeta extends Meta = Meta> {
     return new Response<TSetData, TMeta>(this._xhr, data, this._meta);
   }
 
-  plainData(type: 'xml' | 'text' | undefined): string | Document | null {
+  plainData(type?: 'xml' | 'text' | undefined): string | Document | null {
     if (type === 'xml') {
       return this._xhr.responseXML;
     }

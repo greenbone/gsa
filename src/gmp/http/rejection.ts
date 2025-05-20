@@ -40,7 +40,7 @@ class Rejection {
   }
 
   plainData(
-    type: 'xml' | 'text' | undefined,
+    type?: 'xml' | 'text' | undefined,
   ): Document | string | ArrayBuffer | null {
     if (type === 'xml') {
       return this._xhr.responseXML;

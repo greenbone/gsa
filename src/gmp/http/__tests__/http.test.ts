@@ -19,6 +19,7 @@ vi.mock('gmp/http/utils', async () => {
   };
 });
 
+// @ts-expect-error
 global.XMLHttpRequest = testing.fn(() => ({
   open: testing.fn(),
   send: testing.fn(),

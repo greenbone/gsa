@@ -12,7 +12,7 @@ describe('Response tests', () => {
       response: 'foo',
       responseText: 'bar',
       responseXML: 'ipsum',
-    };
+    } as unknown as XMLHttpRequest;
     const response = new Response(xhr, {});
 
     expect(response.plainData()).toEqual('foo');
