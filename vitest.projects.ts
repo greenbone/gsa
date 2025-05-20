@@ -29,7 +29,7 @@ export default defineWorkspace([
     test: {
       name: 'gmp',
       environment: 'node',
-      setupFiles: './src/gmp/setupTests.js',
+      setupFiles: './src/gmp/setupTests.ts',
       include: [
         'src/gmp/**/*.{test,spec}.?(c|m)[jt]s?(x)',
         'src/gmp/**/__tests__/*.?(c|m)[jt]s?(x)',
