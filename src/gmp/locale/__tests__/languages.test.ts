@@ -8,7 +8,7 @@ import Languages, {getLanguageCodes} from 'gmp/locale/languages';
 import {isString} from 'gmp/utils/identity';
 
 describe('Language tests', () => {
-  test('should contain list of languagegs', () => {
+  test('should contain list of languages', () => {
     expect(Object.keys(Languages).length).toEqual(3);
 
     let called = false;

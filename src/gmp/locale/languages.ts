@@ -20,6 +20,6 @@ const Languages = {
     name: 'Traditional Chinese',
     native_name: '繁體中文',
   },
-};
+} as const;
 
 export default Languages;
