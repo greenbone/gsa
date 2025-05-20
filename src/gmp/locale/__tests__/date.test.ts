@@ -45,7 +45,9 @@ describe('shortDate tests', () => {
   });
 
   test('should not parse invalid date', () => {
+    // @ts-expect-error
     expect(shortDate({})).toBeUndefined();
+    // @ts-expect-error
     expect(shortDate(null)).toBeUndefined();
   });
 
@@ -88,7 +90,9 @@ describe('longDate tests', () => {
   });
 
   test('should not parse invalid date', () => {
+    // @ts-expect-error
     expect(longDate({})).toBeUndefined();
+    // @ts-expect-error
     expect(longDate(null)).toBeUndefined();
   });
 
@@ -149,6 +153,7 @@ describe('longDate tests', () => {
         expected,
       ) => {
         expect(
+          // @ts-expect-error
           longDate(input, tz, userInterfaceTimeFormat, userInterfaceDateFormat),
         ).toEqual(expected);
       },
@@ -162,7 +167,9 @@ describe('dateTimeWithTimeZone tests', () => {
   });
 
   test('should not parse invalid date', () => {
+    // @ts-expect-error
     expect(dateTimeWithTimeZone({})).toBeUndefined();
+    // @ts-expect-error
     expect(dateTimeWithTimeZone(null)).toBeUndefined();
   });
 
@@ -233,6 +240,7 @@ describe('dateTimeWithTimeZone tests', () => {
           dateTimeWithTimeZone(
             input,
             tz,
+            // @ts-expect-error
             userInterfaceTimeFormat,
             userInterfaceDateFormat,
           ),
@@ -248,7 +256,9 @@ describe('dateTimeWithTimeZoneObject tests', () => {
   });
 
   test('should not parse invalid date', () => {
+    // @ts-expect-error
     expect(dateTimeWithTimeZoneObject({})).toBeUndefined();
+    // @ts-expect-error
     expect(dateTimeWithTimeZoneObject(null)).toBeUndefined();
   });
 
@@ -337,6 +347,7 @@ describe('dateTimeWithTimeZoneObject tests', () => {
           dateTimeWithTimeZoneObject(
             input,
             tz,
+            // @ts-expect-error
             userInterfaceTimeFormat,
             userInterfaceDateFormat,
           ),
@@ -352,7 +363,9 @@ describe('processDateWithTimeZone tests', () => {
   });
 
   test('should not process invalid date', () => {
+    // @ts-expect-error
     expect(processDateWithTimeZone({})).toBeUndefined();
+    // @ts-expect-error
     expect(processDateWithTimeZone(null)).toBeUndefined();
   });
 
