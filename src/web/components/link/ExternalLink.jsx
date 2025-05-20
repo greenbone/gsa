@@ -3,82 +3,63 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {withTextOnly} from 'web/components/link/Link';
+import useTranslation from 'web/hooks/useTranslation';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import withTranslation from 'web/utils/withTranslation';
 
-class ExternalLink extends React.Component {
-  constructor() {
-    super();
+const ExternalLink = ({children, to, ...props}) => {
+  const [_] = useTranslation();
+  const [dialogVisible, setDialogVisible] = useState(false);
 
-    this.state = {
-      dialogvisible: false,
-    };
-
-    this.handleClick = this.handleClick.bind(this);
-    this.handleCloseDialog = this.handleCloseDialog.bind(this);
-    this.handleOpenLink = this.handleOpenLink.bind(this);
-  }
-
-  handleClick(event) {
+  const handleClick = event => {
     event.preventDefault();
-    this.setState({
-      dialogvisible: true,
-    });
-  }
+    setDialogVisible(true);
+  };
 
-  handleCloseDialog() {
-    this.setState({
-      dialogvisible: false,
-    });
-  }
+  const handleCloseDialog = () => {
+    setDialogVisible(false);
+  };
 
-  handleOpenLink() {
-    const url = this.props.to;
-    window.open(url, '_blank', 'noopener, scrollbars=1, resizable=1');
-    this.handleCloseDialog();
-  }
+  const handleOpenLink = () => {
+    window.open(to, '_blank', 'noopener, scrollbars=1, resizable=1');
+    handleCloseDialog();
+  };
 
-  render() {
-    const {dialogvisible} = this.state;
+  const dialogTitle = _('You are leaving GSA');
+  const dialogText = _(
+    'This dialog will open a new window for {{- to}} ' +
+      'if you click on "follow link". Following this link is on your own ' +
+      'responsibility. Greenbone does not endorse the content you will ' +
+      'see there.',
+    {to},
+  );
 
-    const {children, to, _, ...props} = this.props;
-
-    const dialogtitle = _('You are leaving GSA');
-    const dialogtext = _(
-      'This dialog will open a new window for {{- to}} ' +
-        'if you click on "follow link". Following this link is on your own ' +
-        'responsibility. Greenbone does not endorse the content you will ' +
-        'see there.',
-      {to},
-    );
-    return (
-      <React.Fragment>
-        <a {...props} href={to} onClick={this.handleClick}>
-          {children}
-        </a>
-        {dialogvisible && (
-          <ConfirmationDialog
-            content={dialogtext}
-            rightButtonTitle={_('Follow Link')}
-            title={dialogtitle}
-            to={to}
-            width="500px"
-            onClose={this.handleCloseDialog}
-            onResumeClick={this.handleOpenLink}
-          />
-        )}
-      </React.Fragment>
-    );
-  }
-}
-
-ExternalLink.propTypes = {
-  to: PropTypes.string.isRequired,
-  _: PropTypes.func.isRequired,
+  return (
+    <>
+      <a {...props} href={to} onClick={handleClick}>
+        {children}
+      </a>
+      {dialogVisible && (
+        <ConfirmationDialog
+          content={dialogText}
+          rightButtonTitle={_('Follow Link')}
+          title={dialogTitle}
+          to={to}
+          width="500px"
+          onClose={handleCloseDialog}
+          onResumeClick={handleOpenLink}
+        />
+      )}
+    </>
+  );
 };
 
-export default compose(withTextOnly, withTranslation)(ExternalLink);
+ExternalLink.propTypes = {
+  children: PropTypes.node,
+  to: PropTypes.string.isRequired,
+};
+
+export default compose(withTextOnly)(ExternalLink);
