@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export const exclude = (object, func) =>
+type ExcludeFunc = (key: string) => boolean;
+
+export const exclude = (object: {}, func: ExcludeFunc) =>
   Object.keys(object)
     .filter(key => !func(key))
     .reduce((obj, key) => {
@@ -11,5 +13,5 @@ export const exclude = (object, func) =>
       return obj;
     }, {});
 
-export const excludeObjectProps = (object, exclude_array) =>
-  exclude(object, key => exclude_array.includes(key));
+export const excludeObjectProps = (object: {}, excludeArray: string[]) =>
+  exclude(object, key => excludeArray.includes(key));
