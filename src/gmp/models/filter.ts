@@ -115,6 +115,7 @@ class Filter extends Model {
     return this.terms.length;
   }
 
+  // @ts-expect-error
   setProperties({id, ...properties}: FilterModelProperties) {
     // override setProperties to allow changing the id
     setProperties(properties, this);

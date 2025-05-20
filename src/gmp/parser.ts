@@ -8,8 +8,8 @@ import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 interface Text {
-  __text: string;
-  __excerpt: string;
+  __text: string | number;
+  __excerpt?: string;
 }
 
 interface QoDParam {
@@ -38,7 +38,9 @@ type BooleanValue = NumberValue | boolean;
 const isText = (value: unknown): value is Text =>
   typeof value === 'object' && value !== null && '__text' in value;
 
-export const parseProgressElement = (value: string | undefined | Text) => {
+export const parseProgressElement = (
+  value?: string | number | undefined | Text,
+) => {
   if (!isDefined(value)) {
     return 0;
   }
@@ -52,10 +54,10 @@ export const parseProgressElement = (value: string | undefined | Text) => {
 };
 
 export const parseText = (
-  text: Text | string | undefined,
+  text?: Text | string | undefined,
 ): string | undefined => {
   if (isText(text)) {
-    text = text.__text;
+    text = String(text.__text);
   }
   return text;
 };
@@ -74,7 +76,7 @@ export const parseTextElement = (text: string | object = {}) => {
   };
 };
 
-export const parseInt = (value: NumberValue): NumberReturn => {
+export const parseInt = (value?: NumberValue): NumberReturn => {
   if (!isDefined(value)) {
     return undefined;
   }
@@ -120,16 +122,16 @@ export const NO_VALUE = 0;
 
 export type YesNo = typeof YES_VALUE | typeof NO_VALUE;
 
-export const parseYesNo = (value: string | number): YesNo =>
+export const parseYesNo = (value?: string | number): YesNo =>
   value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
 
 export const parseYes = (value: string): YesNo => {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 };
 
-export const parseCsv = (value: string = ''): string[] => {
+export const parseCsv = (value: string | number = ''): string[] => {
   if (!isString(value)) {
-    value = `${value}`;
+    value = String(value);
   }
 
   return isEmpty(value.trim()) ? [] : value.split(',').map(val => val.trim());
@@ -199,11 +201,11 @@ export const parseProperties = (
   return copy;
 };
 
-export const setProperties = <T>(
-  properties?: Properties,
+export const setProperties = <P extends Properties, T>(
+  properties?: P,
   object: T = {} as T,
   {writable = false} = {},
-): T => {
+): P & T => {
   if (isDefined(properties)) {
     for (const [key, value] of Object.entries(properties)) {
       if (!key.startsWith('_')) {
@@ -215,24 +217,24 @@ export const setProperties = <T>(
       }
     }
   }
-  return object;
+  return object as P & T;
 };
 
 /**
  * Parse date(time) from string
  *
- * @param {String} value Date as string to be parsed
+ * @param value Date as string to be parsed
  *
- * @returns {date} A date instance (Not a js Date!)
+ * @returns A date instance (Not a js Date!)
  */
 export const parseDate = (
-  value: string | GmpDate | Date | undefined,
+  value?: string | GmpDate | Date | undefined,
 ): GmpDate | undefined => (isDefined(value) ? createDate(value) : undefined);
 
 /**
  * Parse duration from string or integer
  *
- * @param {string|int} value Duration as string or int in seconds.
+ * @param value Duration as string or int in seconds.
  *
  * @returns duration A duration instance
  */
@@ -253,11 +255,11 @@ export const parseDuration = (value: NumberValue) => {
  * A Number is considered true if the value is not equal zero.
  * All other values are compared against true.
  *
- * @param {string|number|boolean} value Value to convert to boolean
+ * @param value Value to convert to boolean
  *
  * @returns true if value is considered true else false
  */
-export const parseBoolean = (value: BooleanValue): boolean => {
+export const parseBoolean = (value?: BooleanValue): boolean => {
   if (isString(value)) {
     if (value.trim().toLowerCase() === 'true') return true;
     value = parseInt(value);
@@ -271,10 +273,10 @@ export const parseBoolean = (value: BooleanValue): boolean => {
 /**
  * Parses the given value into a string if it is defined.
  *
- * @param {*} value - The value to be parsed into a string.
- * @returns {string|undefined} The parsed string if the value is defined, otherwise undefined.
+ * @param value - The value to be parsed into a string.
+ * @returns The parsed string if the value is defined, otherwise undefined.
  */
-export const parseToString = (value: unknown): string | undefined => {
+export const parseToString = (value?: unknown): string | undefined => {
   if (isDefined(value)) {
     return String(value);
   }
