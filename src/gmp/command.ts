@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const COMMANDS = {};
+import GmpCommand from 'gmp/commands/gmp';
 
-const registerCommand = (name, clazz) => {
+const COMMANDS: Record<string, typeof GmpCommand> = {};
+
+const registerCommand = (name: string, clazz: typeof GmpCommand) => {
   COMMANDS[name] = clazz;
 };
 
