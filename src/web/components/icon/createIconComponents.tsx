@@ -26,19 +26,44 @@ export interface IconDefinition {
   isLucide: boolean;
 }
 
+export const getIconStyling = (
+  isLucide: boolean,
+  color?: string,
+  active?: boolean,
+) => {
+  return {
+    strokeWidth: isLucide ? 1.5 : undefined,
+    style: !isLucide
+      ? {
+          color: color,
+          fill: !active ? 'var(--mantine-color-gray-5)' : undefined,
+        }
+      : undefined,
+  };
+};
+
 const createIconComponents = (icons: IconDefinition[]): IconComponentsType => {
   return icons.reduce(
     (acc, {name, component, dataTestId, ariaLabel, isLucide}) => {
       acc[name] = (props: ExtendedDynamicIconProps) => {
-        const {'data-testid': dataTestIdFromProps, ...otherProps} = props;
+        const {
+          'data-testid': dataTestIdFromProps,
+          color,
+          active,
+          ...otherProps
+        } = props;
         const finalDataTestId = dataTestIdFromProps ?? dataTestId;
+        const {strokeWidth, style} = getIconStyling(isLucide, color, active);
 
         return (
           <DynamicIcon
+            active={active}
             ariaLabel={ariaLabel}
+            color={color}
             dataTestId={finalDataTestId}
             icon={component}
-            strokeWidth={isLucide ? 1.5 : undefined}
+            strokeWidth={strokeWidth}
+            style={style}
             {...otherProps}
           />
         );
