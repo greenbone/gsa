@@ -5,10 +5,10 @@
 
 const getMajorMinorVersion = () => {
   let [major, minor] = VERSION.split('.');
-  minor = parseInt(minor);
-  if (minor < 10) {
+  const minorVersion = parseInt(minor);
+  if (minorVersion < 10) {
     // add a leading zero for the links
-    minor = `0${minor}`;
+    minor = `0${minorVersion}`;
   }
   return `${major}.${minor}`;
 };
