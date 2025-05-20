@@ -92,5 +92,6 @@ describe('translateLazy tests', () => {
     expect(_l('Foo').toString()).toEqual('Foo');
     expect('' + _l('Foo')).toEqual('Foo');
     expect(`${_l('Foo')}`).toEqual('Foo');
+    expect(String(_l('Foo'))).toEqual('Foo');
   });
 });
