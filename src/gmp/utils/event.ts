@@ -22,21 +22,22 @@ export const KeyCode = {
   UP: 38,
   SUBTRACT: 109,
   MINUS: 173,
-};
+} as const;
 
 /**
  * Group multiple sequential calls in a single one
  *
- * @param {Function} func      Function to call
- * @param {Number}   wait      Wait time in ms until no more calls to the
- *                             wrapper function are fired
- * @param {Boolean}  immediate Call func initially
+ * @param func Function to call
+ * @param wait Wait time in ms until no more calls to the
+ *             wrapper function are fired
+ * @param immediate Call func initially
  *
- * @returns {Function} Wrapper function
+ * @returns Wrapper function
  */
-export const debounce = (func, wait, immediate = false) => {
-  let timeout;
+export const debounce = (func, wait?: number, immediate = false) => {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   return function (...args) {
+    // @ts-expect-error
     const context = this;
     const later = () => {
       timeout = undefined;
@@ -59,9 +60,9 @@ export const debounce = (func, wait, immediate = false) => {
  * If a animation is scheduled func will not be called. Only
  * after the animation has been rendered func can will be called again.
  *
- * @param {Function} func Function to call
+ * @param func Function to call
  *
- * @returns {Function} Wrapper function
+ * @returns Wrapper function
  */
 export const throttleAnimation = func => {
   let calling = false;
