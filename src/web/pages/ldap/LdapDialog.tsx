@@ -13,14 +13,14 @@ import useTranslation from 'web/hooks/useTranslation';
 export interface SaveLdapArguments {
   authdn: string;
   certificate: File;
-  enable: boolean;
+  ldapEnabled: boolean;
   ldapHost: string;
   ldapsOnly: boolean;
 }
 
 interface LdapDialogProps {
   authdn?: string;
-  enable?: boolean;
+  ldapEnabled?: boolean;
   ldapHost?: string;
   ldapsOnly?: boolean;
   onClose: () => void;
@@ -29,7 +29,7 @@ interface LdapDialogProps {
 
 const LdapDialog = ({
   authdn = '',
-  enable = false,
+  ldapEnabled = false,
   ldapHost = '',
   ldapsOnly = false,
   onClose,
@@ -38,7 +38,7 @@ const LdapDialog = ({
   const [_] = useTranslation();
   const uncontrolledValues = {
     authdn,
-    enable,
+    ldapEnabled,
     ldapHost,
     ldapsOnly,
   };
@@ -54,10 +54,10 @@ const LdapDialog = ({
         <>
           {/* @ts-expect-error */}
           <CheckBox
-            checked={values.enable}
+            checked={values.ldapEnabled}
             checkedValue={true}
             data-testid="enable-checkbox"
-            name="enable"
+            name="ldapEnabled"
             title={_('Enable')}
             unCheckedValue={false}
             onChange={onValueChange}

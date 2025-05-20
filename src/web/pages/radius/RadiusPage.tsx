@@ -23,6 +23,12 @@ import RadiusDialog from 'web/pages/radius/RadiusDialog';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {renderYesNo} from 'web/utils/Render';
 
+interface RadiusSettings {
+  enabled?: boolean;
+  radiushost?: string;
+  radiuskey?: string;
+}
+
 interface ToolBarIconsProps {
   onOpenDialogClick: () => void;
 }
@@ -53,7 +59,7 @@ const RadiusAuthentication = () => {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hasRadiusSupport, setHasRadiusSupport] = useState(true);
-  const [enabled, setEnabled] = useState(false);
+  const [radiusEnabled, setRadiusEnabled] = useState(false);
   const [radiusHost, setRadiusHost] = useState('');
   const [radiusKey, setRadiusKey] = useState('');
 
@@ -65,22 +71,21 @@ const RadiusAuthentication = () => {
     const {data: settings} = response;
     // radius support is enabled in gvm-libs
     const hasRadiusSupport = settings.has('method:radius_connect');
-    // @ts-expect-error
-    const {enabled, radiushost, radiuskey} = settings.get(
+    const radiusSettings = settings.get(
       'method:radius_connect',
-    );
+    ) as RadiusSettings;
     setHasRadiusSupport(hasRadiusSupport);
-    setEnabled(enabled);
+    setRadiusEnabled(radiusSettings.enabled || false);
     setLoading(false);
-    setRadiusHost(radiushost);
-    setRadiusKey(radiuskey);
+    setRadiusHost(radiusSettings.radiushost || '');
+    setRadiusKey(radiusSettings.radiuskey || '');
   }, [gmp.user]);
 
-  const handleSaveSettings = async ({enable, radiusHost, radiusKey}) => {
+  const handleSaveSettings = async ({radiusEnabled, radiusHost, radiusKey}) => {
     handleInteraction();
 
     await gmp.auth.saveRadius({
-      enable,
+      radiusEnabled,
       radiusHost,
       radiusKey,
     });
@@ -122,7 +127,7 @@ const RadiusAuthentication = () => {
             <TableBody>
               <TableRow>
                 <TableData>{_('Enabled')}</TableData>
-                <TableData>{renderYesNo(enabled)}</TableData>
+                <TableData>{renderYesNo(radiusEnabled)}</TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('RADIUS Host')}</TableData>
@@ -140,7 +145,7 @@ const RadiusAuthentication = () => {
       </Layout>
       {dialogVisible && (
         <RadiusDialog
-          enable={enabled}
+          radiusEnabled={radiusEnabled}
           radiusHost={radiusHost}
           onClose={closeDialog}
           onSave={handleSaveSettings}

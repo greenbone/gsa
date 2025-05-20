@@ -30,6 +30,14 @@ interface ToolBarIconsProps {
   onOpenDialogClick: () => void;
 }
 
+interface LdapSettings {
+  authdn?: string;
+  certificateInfo?: CertificateInfo;
+  enabled?: boolean;
+  ldaphost?: string;
+  ldapsOnly?: boolean;
+}
+
 const ToolBarIcons = ({onOpenDialogClick}: ToolBarIconsProps) => {
   const [_] = useTranslation();
   return (
@@ -60,7 +68,7 @@ const LdapAuthentication = () => {
   const [certificateInfo, setCertificateInfo] = useState<
     CertificateInfo | undefined
   >();
-  const [enabled, setEnabled] = useState(false);
+  const [ldapEnabled, setLdapEnabled] = useState(false);
   const [ldapHost, setLdapHost] = useState('');
   const [ldapsOnly, setLdapsOnly] = useState(false);
   const dispatch = useDispatch();
@@ -76,16 +84,14 @@ const LdapAuthentication = () => {
       const {data: settings} = response;
       // ldap support is enabled in gvm-libs
       const hasLdapSupport = settings.has('method:ldap_connect');
-      // @ts-expect-error
-      const {authdn, certificateInfo, enabled, ldaphost, ldapsOnly} =
-        settings.get('method:ldap_connect');
+      const ldapSettings = settings.get('method:ldap_connect') as LdapSettings;
       setHasLdapSupport(hasLdapSupport);
       setInitial(false);
-      setAuthdn(authdn);
-      setCertificateInfo(certificateInfo);
-      setEnabled(enabled);
-      setLdapHost(ldaphost);
-      setLdapsOnly(ldapsOnly);
+      setAuthdn(ldapSettings.authdn || '');
+      setCertificateInfo(ldapSettings.certificateInfo);
+      setLdapEnabled(ldapSettings.enabled || false);
+      setLdapHost(ldapSettings.ldaphost || '');
+      setLdapsOnly(ldapSettings.ldapsOnly || false);
     } finally {
       setLoading(false);
     }
@@ -94,7 +100,7 @@ const LdapAuthentication = () => {
   const handleSaveSettings = async ({
     authdn,
     certificate,
-    enable,
+    ldapEnabled,
     ldapHost,
     ldapsOnly,
   }: SaveLdapArguments) => {
@@ -103,7 +109,7 @@ const LdapAuthentication = () => {
     await gmp.auth.saveLdap({
       authdn,
       certificate,
-      enable,
+      ldapEnabled,
       ldapHost,
       ldapsOnly,
     });
@@ -145,7 +151,7 @@ const LdapAuthentication = () => {
             <TableBody>
               <TableRow>
                 <TableData>{_('Enabled')}</TableData>
-                <TableData>{renderYesNo(enabled)}</TableData>
+                <TableData>{renderYesNo(ldapEnabled)}</TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('LDAP Host')}</TableData>
@@ -193,7 +199,7 @@ const LdapAuthentication = () => {
       {dialogVisible && (
         <LdapDialog
           authdn={authdn}
-          enable={enabled}
+          ldapEnabled={ldapEnabled}
           ldapHost={ldapHost}
           ldapsOnly={ldapsOnly}
           onClose={closeDialog}

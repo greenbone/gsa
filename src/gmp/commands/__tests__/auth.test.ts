@@ -22,7 +22,7 @@ describe('AuthenticationCommand tests', () => {
     await cmd.saveLdap({
       authdn,
       certificate,
-      enable: true,
+      ldapEnabled: true,
       ldapHost,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -51,7 +51,7 @@ describe('AuthenticationCommand tests', () => {
     await cmd.saveLdap({
       authdn,
       certificate,
-      enable: false,
+      ldapEnabled: false,
       ldapHost,
     });
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -76,7 +76,7 @@ describe('AuthenticationCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new AuthenticationCommand(fakeHttp);
-    await cmd.saveRadius({enable: true, radiusHost, radiusKey});
+    await cmd.saveRadius({radiusEnabled: true, radiusHost, radiusKey});
     expect(fakeHttp.request).toBeCalledWith('post', {
       data: {
         cmd: 'save_auth',
@@ -98,7 +98,7 @@ describe('AuthenticationCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new AuthenticationCommand(fakeHttp);
-    await cmd.saveRadius({enable: false, radiusHost, radiusKey});
+    await cmd.saveRadius({radiusEnabled: false, radiusHost, radiusKey});
     expect(fakeHttp.request).toBeCalledWith('post', {
       data: {
         cmd: 'save_auth',

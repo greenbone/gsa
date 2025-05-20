@@ -11,25 +11,25 @@ import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface RadiusDialogProps {
-  enable?: boolean;
+  radiusEnabled?: boolean;
   radiusHost?: string;
   onClose: () => void;
   onSave: (values: {
-    enable: boolean;
+    radiusEnabled: boolean;
     radiusHost: string;
     radiusKey: string;
   }) => void;
 }
 
 const RadiusDialog = ({
-  enable = false,
+  radiusEnabled = false,
   radiusHost = '',
   onClose,
   onSave,
 }: RadiusDialogProps) => {
   const [_] = useTranslation();
   const uncontrolledValues = {
-    enable,
+    radiusEnabled,
     radiusHost,
     radiusKey: '',
   };
@@ -45,10 +45,10 @@ const RadiusDialog = ({
         <>
           {/* @ts-expect-error */}
           <CheckBox
-            checked={values.enable}
+            checked={values.radiusEnabled}
             checkedValue={true}
             data-testid="enable-checkbox"
-            name="enable"
+            name="radiusEnabled"
             title={_('Enable')}
             unCheckedValue={false}
             onChange={onValueChange}

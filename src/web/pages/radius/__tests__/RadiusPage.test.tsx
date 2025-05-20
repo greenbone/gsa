@@ -20,6 +20,7 @@ describe('RADIUS page renders', () => {
         currentAuthSettings: testing.fn().mockResolvedValue({
           data: settings,
         }),
+        renewSession: testing.fn(),
       },
       settings: {
         manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
@@ -45,6 +46,7 @@ describe('RADIUS page renders', () => {
     const gmp = {
       user: {
         currentAuthSettings: testing.fn().mockResolvedValue({data: settings}),
+        renewSession: testing.fn(),
       },
       settings: {
         manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
@@ -97,6 +99,7 @@ describe('RADIUS page renders', () => {
     const gmp = {
       user: {
         currentAuthSettings: testing.fn().mockResolvedValue({data: settings}),
+        renewSession: testing.fn().mockResolvedValue({}),
       },
       settings: {
         manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',

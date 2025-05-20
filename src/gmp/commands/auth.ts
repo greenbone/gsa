@@ -9,13 +9,13 @@ import HttpCommand from 'gmp/commands/http';
 interface SaveLdapArguments {
   authdn: string;
   certificate: File;
-  enable: boolean;
+  ldapEnabled: boolean;
   ldapHost: string;
   ldapsOnly?: boolean;
 }
 
 interface SaveRadiusArguments {
-  enable: boolean;
+  radiusEnabled: boolean;
   radiusHost: string;
   radiusKey: string;
 }
@@ -24,7 +24,7 @@ class AuthenticationCommand extends HttpCommand {
   saveLdap({
     authdn,
     certificate,
-    enable,
+    ldapEnabled,
     ldapHost,
     ldapsOnly,
   }: SaveLdapArguments) {
@@ -33,17 +33,17 @@ class AuthenticationCommand extends HttpCommand {
       group: 'method:ldap_connect',
       authdn,
       certificate,
-      enable: convertBoolean(enable),
+      enable: convertBoolean(ldapEnabled),
       ldaphost: ldapHost,
       ldaps_only: convertBoolean(ldapsOnly),
     });
   }
 
-  saveRadius({enable, radiusHost, radiusKey}: SaveRadiusArguments) {
+  saveRadius({radiusEnabled, radiusHost, radiusKey}: SaveRadiusArguments) {
     return this.httpPost({
       cmd: 'save_auth',
       group: 'method:radius_connect',
-      enable: convertBoolean(enable),
+      enable: convertBoolean(radiusEnabled),
       radiushost: radiusHost,
       radiuskey: radiusKey,
     });

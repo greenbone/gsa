@@ -20,7 +20,7 @@ describe('Ldap dialog component tests', () => {
     render(
       <LdapDialog
         authdn="foo"
-        enable={true}
+        ldapEnabled={true}
         ldapHost="bar"
         ldapsOnly={true}
         onClose={handleClose}
@@ -39,7 +39,7 @@ describe('Ldap dialog component tests', () => {
     render(
       <LdapDialog
         authdn="foo"
-        enable={true}
+        ldapEnabled={true}
         ldapHost="bar"
         ldapsOnly={true}
         onClose={handleClose}
@@ -52,7 +52,7 @@ describe('Ldap dialog component tests', () => {
     fireEvent.click(button);
     expect(handleSave).toHaveBeenCalledWith({
       authdn: 'foo',
-      enable: true,
+      ldapEnabled: true,
       ldapHost: 'bar',
       ldapsOnly: true,
     });
@@ -65,7 +65,7 @@ describe('Ldap dialog component tests', () => {
     render(
       <LdapDialog
         authdn="foo"
-        enable={true}
+        ldapEnabled={true}
         ldapHost="bar"
         onClose={handleClose}
         onSave={handleSave}
@@ -84,7 +84,7 @@ describe('Ldap dialog component tests', () => {
     const {getByTestId} = render(
       <LdapDialog
         authdn="foo"
-        enable={true}
+        ldapEnabled={true}
         ldapHost="bar"
         ldapsOnly={false}
         onClose={handleClose}
@@ -111,7 +111,7 @@ describe('Ldap dialog component tests', () => {
     expect(handleSave).toHaveBeenCalledWith({
       ldapsOnly: true,
       authdn: 'lorem',
-      enable: false,
+      ldapEnabled: false,
       ldapHost: 'ipsum',
     });
   });
