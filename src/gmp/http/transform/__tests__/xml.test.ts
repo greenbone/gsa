@@ -4,12 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import Rejection from 'gmp/http/rejection';
+import Response, {Meta} from 'gmp/http/response';
 import {success, rejection} from 'gmp/http/transform/xml';
 
 describe('xml base transform tests', () => {
   test('should call transform function', () => {
     const fakeTransform = testing.fn().mockReturnValue('foo');
-    const response = {};
+    const response = {} as Response<string, Meta>;
     const options = {};
 
     const transform = success(fakeTransform);
@@ -24,7 +26,7 @@ describe('xml base transform tests', () => {
     const xhr = {};
     const response = {
       xhr,
-    };
+    } as unknown as Response<string, Meta>;
     const options = {url: 'http://foo'};
     const transform = success(fakeTransform);
 
@@ -40,7 +42,7 @@ describe('xml base transform tests', () => {
     const isError = testing.fn().mockReturnValue(false);
     const errorRejection = {
       isError,
-    };
+    } as unknown as Rejection;
 
     expect(transform(errorRejection)).toBe(errorRejection);
     expect(isError).toHaveBeenCalled();
@@ -61,7 +63,7 @@ describe('xml base transform tests', () => {
     const errorRejection = {
       isError,
       setMessage,
-    };
+    } as unknown as Rejection;
 
     expect(transform(errorRejection)).toBe(errorRejection);
     expect(fakeTransform).toHaveBeenCalledWith(errorRejection);
@@ -86,7 +88,7 @@ describe('xml base transform tests', () => {
     const errorRejection = {
       isError,
       setMessage,
-    };
+    } as unknown as Rejection;
 
     expect(transform(errorRejection)).toBe(errorRejection);
     expect(fakeTransform).toHaveBeenCalledWith(errorRejection);
@@ -102,7 +104,7 @@ describe('xml base transform tests', () => {
     const isError = testing.fn().mockReturnValue(true);
     const errorRejection = {
       isError,
-    };
+    } as unknown as Rejection;
 
     expect(transform(errorRejection)).toBe(errorRejection);
     expect(fakeTransform).toHaveBeenCalledWith(errorRejection);
