@@ -8,6 +8,6 @@ export const trace = () => {
   try {
     throw Error();
   } catch (e) {
-    return e.stack;
+    return (e as Error).stack;
   }
 };
