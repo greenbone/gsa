@@ -4,6 +4,7 @@
  */
 
 import {initLocale} from 'gmp/locale/lang';
+import I18NextHttpBackend from 'i18next-http-backend';
 
 class FakeBackend {
   static type = 'backend';
@@ -30,7 +31,7 @@ class FakeLanguageDetector {
   cacheUserLanguage() {}
 }
 
-initLocale({
-  backend: FakeBackend,
+void initLocale({
+  backend: FakeBackend as typeof I18NextHttpBackend,
   detector: FakeLanguageDetector,
 });

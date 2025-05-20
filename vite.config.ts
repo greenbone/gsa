@@ -39,11 +39,11 @@ export default defineConfig({
       },
       {
         find: 'version',
-        replacement: path.resolve(projectRootDir, 'src', 'version.js'),
+        replacement: path.resolve(projectRootDir, 'src', 'version.ts'),
       },
       {
         find: '@gsa/testing',
-        replacement: path.resolve(projectRootDir, 'src', 'testing.js'),
+        replacement: path.resolve(projectRootDir, 'src', 'testing.ts'),
       },
     ],
   },
