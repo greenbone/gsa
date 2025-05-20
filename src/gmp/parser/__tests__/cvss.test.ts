@@ -1700,7 +1700,9 @@ describe('parseCvssV2BaseVector tests', () => {
     expect(parseCvssV2BaseVector()[1]).toBeUndefined();
     expect(parseCvssV2BaseVector({})[0]).toBeUndefined();
     expect(parseCvssV2BaseVector({})[1]).toBeUndefined();
+    // @ts-expect-error
     expect(parseCvssV2BaseVector({foo: 'bar'})[0]).toBeUndefined();
+    // @ts-expect-error
     expect(parseCvssV2BaseVector({foo: 'bar'})[1]).toBeUndefined();
   });
 
@@ -1825,7 +1827,9 @@ describe('parseCvssV3BaseVector tests', () => {
     expect(parseCvssV3BaseVector()[1]).toBeUndefined();
     expect(parseCvssV3BaseVector({})[0]).toBeUndefined();
     expect(parseCvssV3BaseVector({})[1]).toBeUndefined();
+    // @ts-expect-error
     expect(parseCvssV3BaseVector({foo: 'bar'})[0]).toBeUndefined();
+    // @ts-expect-error
     expect(parseCvssV3BaseVector({foo: 'bar'})[1]).toBeUndefined();
   });
 

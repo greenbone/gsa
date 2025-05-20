@@ -9,11 +9,10 @@ import {isDefined} from 'gmp/utils/identity';
 
 /**
  * (from https://nvd.nist.gov/site-media/js/nvdApp/cvssV2/cvssV2.service.js)
- * Handles percision and rounding of numbers to one decimal place
+ * Handles precision and rounding of numbers to one decimal place
  * @param value
- * @returns {number}
  */
-const toFixed1 = value => {
+const toFixed1 = (value: number) => {
   if (isNaN(value)) {
     return undefined;
   }
@@ -22,10 +21,52 @@ const toFixed1 = value => {
   return result;
 };
 
+interface BaseScoreV2 {
+  av: number;
+  ac: number;
+  au: number;
+  c: number;
+  i: number;
+  a: number;
+}
+
+interface BaseScoreV3 {
+  av: number;
+  ac: number;
+  pr: number;
+  ui: number;
+  s: number;
+  c: number;
+  i: number;
+  a: number;
+}
+
+interface CvssV2BaseVector {
+  accessVector?: string;
+  accessComplexity?: string;
+  authentication?: string;
+  confidentialityImpact?: string;
+  integrityImpact?: string;
+  availabilityImpact?: string;
+  cvssScore?: number;
+}
+
+interface CvssV3BaseVector {
+  attackVector?: string;
+  attackComplexity?: string;
+  privilegesRequired?: string;
+  userInteraction?: string;
+  scope?: string;
+  confidentialityImpact?: string;
+  integrityImpact?: string;
+  availabilityImpact?: string;
+  cvssScore?: number;
+}
+
 /*
  * Calculating the CVSS v2 BaseScore
  */
-const baseScore = ({av, ac, au, c, i, a}) => {
+const baseScoreV2 = ({av, ac, au, c, i, a}: BaseScoreV2) => {
   const raw_impact = 10.41 * (1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a));
   const raw_exploit = 20 * ac * av * au;
   const f_impact = raw_impact === 0.0 ? 0.0 : 1.176;
@@ -42,7 +83,7 @@ export const parseCvssV2BaseVector = ({
   confidentialityImpact,
   availabilityImpact,
   integrityImpact,
-} = {}) => {
+}: CvssV2BaseVector = {}) => {
   if (
     !isDefined(accessVector) &&
     !isDefined(accessComplexity) &&
@@ -54,13 +95,14 @@ export const parseCvssV2BaseVector = ({
     return [undefined, undefined];
   }
 
-  let av;
-  let ac;
-  let au;
-  let c;
-  let i;
-  let a;
+  let av: number;
+  let ac: number;
+  let au: number;
+  let c: number;
+  let i: number;
+  let a: number;
   let vector = 'AV:';
+  let hasError = false;
 
   switch (accessVector) {
     case 'Local':
@@ -77,7 +119,7 @@ export const parseCvssV2BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      av = undefined;
+      hasError = true;
   }
 
   vector += '/AC:';
@@ -96,7 +138,7 @@ export const parseCvssV2BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      ac = undefined;
+      hasError = true;
   }
 
   vector += '/Au:';
@@ -115,7 +157,7 @@ export const parseCvssV2BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      au = undefined;
+      hasError = true;
   }
 
   vector += '/C:';
@@ -134,7 +176,7 @@ export const parseCvssV2BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      c = undefined;
+      hasError = true;
   }
 
   vector += '/I:';
@@ -153,7 +195,7 @@ export const parseCvssV2BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      i = undefined;
+      hasError = true;
   }
 
   vector += '/A:';
@@ -172,10 +214,11 @@ export const parseCvssV2BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      a = undefined;
+      hasError = true;
   }
 
-  const base = baseScore({av, ac, au, c, i, a});
+  // @ts-expect-error
+  const base = hasError ? undefined : baseScoreV2({av, ac, au, c, i, a});
 
   return [vector, base];
 };
@@ -188,28 +231,28 @@ export const parseCvssV2BaseVector = ({
  *                  the different metric values and the calculated
  *                  v2 base score
  */
-export const parseCvssV2BaseFromVector = vector => {
+export const parseCvssV2BaseFromVector = (vector?: string) => {
   if (!isDefined(vector) || vector.trim().length === 0) {
     return {};
   }
 
-  let av;
-  let accessVector;
-  let ac;
-  let accessComplexity;
-  let au;
-  let authentication;
-  let c;
-  let confidentialityImpact;
-  let i;
-  let integrityImpact;
-  let a;
-  let availabilityImpact;
+  let av: number;
+  let accessVector: string;
+  let ac: number;
+  let accessComplexity: string;
+  let au: number;
+  let authentication: string;
+  let c: number;
+  let confidentialityImpact: string;
+  let i: number;
+  let integrityImpact: string;
+  let a: number;
+  let availabilityImpact: string;
 
   const values = vector.split('/');
 
-  for (const currentvalue of values) {
-    let [metric, value] = currentvalue.split(':');
+  for (const currentValue of values) {
+    let [metric, value] = currentValue.split(':');
 
     metric = metric.toLowerCase();
     value = isDefined(value) ? value.toLowerCase() : '';
@@ -292,14 +335,21 @@ export const parseCvssV2BaseFromVector = vector => {
     }
   }
 
-  const base = baseScore({av, ac, au, c, i, a});
+  // @ts-expect-error
+  const base = baseScoreV2({av, ac, au, c, i, a});
 
   return {
+    // @ts-expect-error
     accessVector: accessVector,
+    // @ts-expect-error
     accessComplexity: accessComplexity,
+    // @ts-expect-error
     authentication: authentication,
+    // @ts-expect-error
     confidentialityImpact: confidentialityImpact,
+    // @ts-expect-error
     integrityImpact: integrityImpact,
+    // @ts-expect-error
     availabilityImpact: availabilityImpact,
     cvssScore: base,
   };
@@ -327,7 +377,7 @@ export const parseCvssV3BaseVector = ({
   confidentialityImpact,
   integrityImpact,
   availabilityImpact,
-} = {}) => {
+}: CvssV3BaseVector = {}) => {
   if (
     !isDefined(attackVector) &&
     !isDefined(attackComplexity) &&
@@ -341,16 +391,18 @@ export const parseCvssV3BaseVector = ({
     return [undefined, undefined];
   }
 
-  let av;
-  let ac;
-  let pr;
-  let ui;
-  let s;
-  let c;
-  let i;
-  let a;
+  let av: number | undefined = undefined;
+  let ac: number | undefined = undefined;
+  let pr: number | undefined = undefined;
+  let ui: number | undefined = undefined;
+  let s: number | undefined = undefined;
+  let c: number | undefined = undefined;
+  let i: number | undefined = undefined;
+  let a: number | undefined = undefined;
 
   let vector = 'CVSS:3.1/AV:';
+
+  let hasError = false;
 
   switch (attackVector) {
     case 'Physical':
@@ -371,7 +423,7 @@ export const parseCvssV3BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      ac = undefined;
+      hasError = true;
   }
 
   vector += '/AC:';
@@ -386,7 +438,7 @@ export const parseCvssV3BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      ac = undefined;
+      hasError = true;
   }
 
   vector += '/PR:';
@@ -405,7 +457,7 @@ export const parseCvssV3BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      pr = undefined;
+      hasError = true;
   }
 
   vector += '/UI:';
@@ -420,7 +472,7 @@ export const parseCvssV3BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      ui = undefined;
+      hasError = true;
   }
 
   vector += '/S:';
@@ -435,7 +487,7 @@ export const parseCvssV3BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      s = undefined;
+      hasError = true;
   }
 
   vector += '/C:';
@@ -454,7 +506,7 @@ export const parseCvssV3BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      c = undefined;
+      hasError = true;
   }
 
   vector += '/I:';
@@ -473,7 +525,7 @@ export const parseCvssV3BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      i = undefined;
+      hasError = true;
   }
 
   vector += '/A:';
@@ -492,12 +544,11 @@ export const parseCvssV3BaseVector = ({
       break;
     default:
       vector += 'ERROR';
-      a = undefined;
+      hasError = true;
   }
-  let base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
-  if (isNaN(base)) {
-    base = undefined;
-  }
+
+  // @ts-expect-error
+  const base = hasError ? undefined : baseScoreV3({av, ac, pr, ui, s, c, i, a});
 
   return [vector, base];
 };
@@ -510,32 +561,32 @@ export const parseCvssV3BaseVector = ({
  *                  the different metric values and the calculated
  *                  v3.1 base score
  */
-export const parseCvssV3BaseFromVector = vector => {
+export const parseCvssV3BaseFromVector = (vector?: string) => {
   if (!isDefined(vector) || vector.trim().length === 0) {
     return {};
   }
 
-  let av;
-  let attackVector;
-  let ac;
-  let attackComplexity;
-  let pr;
-  let privilegesRequired;
-  let ui;
-  let userInteraction;
-  let s;
-  let scope;
-  let c;
-  let confidentialityImpact;
-  let i;
-  let integrityImpact;
-  let a;
-  let availabilityImpact;
+  let av: number;
+  let attackVector: string;
+  let ac: number;
+  let attackComplexity: string;
+  let pr: number;
+  let privilegesRequired: string;
+  let ui: number;
+  let userInteraction: string;
+  let s: number;
+  let scope: string;
+  let c: number;
+  let confidentialityImpact: string;
+  let i: number;
+  let integrityImpact: string;
+  let a: number;
+  let availabilityImpact: string;
 
   const values = vector.split('/');
 
-  for (const currentvalue of values) {
-    let [metric, value] = currentvalue.split(':');
+  for (const currentValue of values) {
+    let [metric, value] = currentValue.split(':');
 
     metric = metric.toLowerCase();
     value = isDefined(value) ? value.toLowerCase() : '';
@@ -636,33 +687,42 @@ export const parseCvssV3BaseFromVector = vector => {
     }
   }
 
-  let base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
+  // @ts-expect-error
+  let base: number | undefined = baseScoreV3({av, ac, pr, ui, s, c, i, a});
   if (isNaN(base)) {
     base = undefined;
   }
 
   return {
+    // @ts-expect-error
     attackVector,
+    // @ts-expect-error
     attackComplexity,
+    // @ts-expect-error
     privilegesRequired,
+    // @ts-expect-error
     userInteraction,
+    // @ts-expect-error
     scope,
+    // @ts-expect-error
     confidentialityImpact,
+    // @ts-expect-error
     integrityImpact,
+    // @ts-expect-error
     availabilityImpact,
     cvssScore: base,
   };
 };
 
-const roundUp = value => {
-  const intput = Math.round(value * 100000);
-  if (intput % 10000 === 0) {
-    return intput / 100000;
+const roundUp = (value: number) => {
+  const input = Math.round(value * 100000);
+  if (input % 10000 === 0) {
+    return input / 100000;
   }
-  return (Math.floor(intput / 10000) + 1) / 10;
+  return (Math.floor(input / 10000) + 1) / 10;
 };
 
-const V3ScoreBase = ({av, ac, pr, ui, s, c, i, a} = {}) => {
+const baseScoreV3 = ({av, ac, pr, ui, s, c, i, a}: BaseScoreV3): number => {
   let impact = 1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a);
 
   impact =
