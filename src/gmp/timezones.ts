@@ -602,6 +602,6 @@ const timezones = [
   'W-SU',
   'WET',
   'Zulu',
-];
+] as const;
 
 export default timezones;
