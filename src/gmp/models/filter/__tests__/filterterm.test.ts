@@ -4,11 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import FilterTerm from 'gmp/models/filter/filterterm.js';
+import FilterTerm from 'gmp/models/filter/filterterm';
 
 describe('FilterTerm equals', () => {
   test('should not equal object', () => {
     const term = new FilterTerm({});
+    // @ts-expect-error
     expect(term.equals({})).toBe(false);
   });
 
