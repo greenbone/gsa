@@ -75,7 +75,7 @@ commit_parsers = [
   { message = "^[d|D]oc", group = "<!-- 5 -->:books: Documentation" },
   { message = "^[t|T]est", group = "<!-- 6 -->:white_check_mark: Testing" },
   { message = "^[c|C]hore", group = "<!-- 7 -->:wrench: Miscellaneous" },
-  { message = "^[c|C]i", group = "<!-- 7 -->️:wrench: Miscellaneous" },
+  { message = "^[c|C]i", group = "<!-- 7 -->:wrench: Miscellaneous" },
   { message = "^[m|M]isc", group = "<!-- 7 -->:wrench: Miscellaneous" },
   { message = "^[d|D]eps", group = "<!-- 8 -->:ship: Dependencies" },
 ]
