@@ -6,13 +6,12 @@
 import {describe, test, expect} from '@gsa/testing';
 import {
   calculateVector,
-  expectedMetricOptionsOrdered,
   parseCvssV4MetricsFromVector,
   processVector,
   removeUnusedMetrics,
 } from 'gmp/parser/cvssV4';
 
-describe('CVSSV4 parser', () => {
+describe('CVSSv4 parser', () => {
   describe('calculateVector', () => {
     test('should correctly calculate the CVSS vector', () => {
       const cvssVectorObject = {
@@ -23,10 +22,7 @@ describe('CVSSV4 parser', () => {
         AV: 'N',
       };
 
-      const result = calculateVector(
-        cvssVectorObject,
-        expectedMetricOptionsOrdered,
-      );
+      const result = calculateVector(cvssVectorObject);
       expect(result).toEqual('AV:N/AC:L/PR:N/UI:N/S:P');
     });
   });
