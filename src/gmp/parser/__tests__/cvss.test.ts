@@ -11,7 +11,7 @@ import {
   parseCvssV3BaseVector,
 } from 'gmp/parser/cvss';
 
-const cvss_v2_entries = {
+const cvssV2Entries = {
   entries: [
     {vector: 'AV:A/AC:H/Au:M/C:N/I:P/A:P', value: 2.7},
     {vector: 'AV:A/AC:H/Au:N/C:C/I:C/A:C', value: 6.8},
@@ -373,7 +373,7 @@ const cvss_v2_entries = {
 
 describe('CVSS v2 parser tests', () => {
   test('should return correct severity value for cvss v2 vector', () => {
-    cvss_v2_entries.entries.forEach(element => {
+    cvssV2Entries.entries.forEach(element => {
       const {
         accessVector,
         accessComplexity,
@@ -398,7 +398,7 @@ describe('CVSS v2 parser tests', () => {
   });
 });
 
-const cvss_v3_entries = {
+const cvssV3Entries = {
   entries: [
     {vector: 'CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:H', value: 7.6},
     {vector: 'CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:C/C:H/I:L/A:L', value: 6.8},
@@ -1665,7 +1665,7 @@ const cvss_v3_entries = {
 
 describe('CVSS v3 parser tests', () => {
   test('should return correct severity value for cvss v3 vector', () => {
-    cvss_v3_entries.entries.forEach(element => {
+    cvssV3Entries.entries.forEach(element => {
       const {
         attackVector,
         attackComplexity,
