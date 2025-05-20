@@ -49,6 +49,7 @@ describe('shorten function tests', () => {
   });
 
   test('should shorten non string values', () => {
+    // @ts-expect-error
     expect(shorten(123, 2)).toEqual('12...');
   });
 });
@@ -67,6 +68,7 @@ describe('isEmpty function test', () => {
   });
 
   test('should return false for numbers', () => {
+    // @ts-expect-error
     expect(isEmpty(123)).toBe(false);
   });
 });
