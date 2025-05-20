@@ -8,7 +8,7 @@ import Rejection from 'gmp/http/rejection';
 
 describe('Rejection tests', () => {
   test('should create error rejection by default', () => {
-    const rejection = new Rejection();
+    const rejection = new Rejection({} as XMLHttpRequest);
 
     expect(rejection.reason).toEqual(Rejection.REASON_ERROR);
     expect(rejection.message).toEqual('Unknown Error');
@@ -19,7 +19,7 @@ describe('Rejection tests', () => {
   });
 
   test('should create error rejection', () => {
-    const xhr = {status: 123};
+    const xhr = {status: 123} as XMLHttpRequest;
     const error = new Error('foobar');
     const rejection = new Rejection(
       xhr,
@@ -37,7 +37,7 @@ describe('Rejection tests', () => {
   });
 
   test('should create unauthorized rejection', () => {
-    const xhr = {status: 123};
+    const xhr = {status: 123} as XMLHttpRequest;
     const rejection = new Rejection(
       xhr,
       Rejection.REASON_UNAUTHORIZED,
@@ -53,7 +53,7 @@ describe('Rejection tests', () => {
   });
 
   test('should create cancel rejection', () => {
-    const xhr = {status: 123};
+    const xhr = {status: 123} as XMLHttpRequest;
     const rejection = new Rejection(xhr, Rejection.REASON_CANCEL, 'foo');
 
     expect(rejection.reason).toEqual(Rejection.REASON_CANCEL);
@@ -65,7 +65,7 @@ describe('Rejection tests', () => {
   });
 
   test('should create timeout rejection', () => {
-    const xhr = {status: 123};
+    const xhr = {status: 123} as XMLHttpRequest;
     const rejection = new Rejection(xhr, Rejection.REASON_TIMEOUT, 'foo');
 
     expect(rejection.reason).toEqual(Rejection.REASON_TIMEOUT);
@@ -77,7 +77,11 @@ describe('Rejection tests', () => {
   });
 
   test('should allow to change message', () => {
-    const rejection = new Rejection({}, Rejection.REASON_ERROR, 'foo');
+    const rejection = new Rejection(
+      {} as XMLHttpRequest,
+      Rejection.REASON_ERROR,
+      'foo',
+    );
 
     expect(rejection.message).toEqual('foo');
 
@@ -91,7 +95,7 @@ describe('Rejection tests', () => {
       response: 'foo',
       responseText: 'bar',
       responseXML: 'ipsum',
-    };
+    } as unknown as XMLHttpRequest;
     const rejection = new Rejection(xhr, Rejection.REASON_ERROR, 'foo');
 
     expect(rejection.plainData()).toEqual('foo');
