@@ -96,16 +96,18 @@ const cvss4MetricValueToLabels = {
     L: 'Low',
     H: 'High',
   },
-};
+} as const;
 
 /**
  * This function calculates the CVSS vector from a set of metrics.
  *
- * @param {Record<string,string>} cvssVectorObject - An object with key-value pairs of the metrics.
- * @returns {string} - The CVSS vector string.
+ * @param cvssVectorObject - An object with key-value pairs of the metrics.
+ * @returns The CVSS vector string.
  */
 
-export const calculateVector = cvssVectorObject => {
+export const calculateVector = (
+  cvssVectorObject: Record<string, string>,
+): string => {
   const result = expectedMetricOptionsOrdered
     .filter(metric => cvssVectorObject[metric[0]] !== undefined)
     .map(metric => `${metric[0]}:${cvssVectorObject[metric[0]]}`)
@@ -117,11 +119,11 @@ export const calculateVector = cvssVectorObject => {
  * This function processes a CVSS vector string and returns an object with the metrics.
  * Checks if the metric is a valid option.
  *
- * @param {string} vectorString - The CVSS vector string to process.
- * @returns {Record<string,string>} - An object with key-value pairs of the metrics.
+ * @param vectorString - The CVSS vector string to process.
+ * @returns An object with key-value pairs of the metrics.
  */
 
-export const processVector = vectorString => {
+export const processVector = (vectorString: string) => {
   const vector = vectorString.replace(/^CVSS:4.0\//, '').split('/');
   const result = {};
   const expectedMetricMap = new Map(
@@ -131,8 +133,9 @@ export const processVector = vectorString => {
   vector.forEach(metricString => {
     const [key, value] = metricString.split(':');
     if (
-      expectedMetricMap.has(key) &&
       value &&
+      expectedMetricMap.has(key) &&
+      // @ts-expect-error
       expectedMetricMap.get(key).includes(value)
     ) {
       result[key] = value;
@@ -146,11 +149,11 @@ export const processVector = vectorString => {
  * This function removes the unused metrics from a CVSS vector.
  * The unused optional metrics are the ones with the value 'X'.
  *
- * @param {Record<string,string>} cvssVector - The CVSS vector to remove the unused metrics.
- * @returns {string} - The CVSS vector without the unused metrics.
+ * @param cvssVector - The CVSS vector to remove the unused metrics.
+ * @returns The CVSS vector without the unused metrics.
  */
 
-export const removeUnusedMetrics = cvssVector => {
+export const removeUnusedMetrics = (cvssVector: Record<string, string>) => {
   const vector = calculateVector(cvssVector).split('/');
 
   const validMetrics = vector.filter(metric => {
@@ -162,8 +165,9 @@ export const removeUnusedMetrics = cvssVector => {
     expectedMetricOptionsOrdered.map((metric, index) => [metric[0], index]),
   );
 
-  const getKey = metricString => metricString.split(':')[0];
+  const getKey = (metricString: string) => metricString.split(':')[0];
   validMetrics.sort(
+    // @ts-expect-error
     (a, b) => orderMap.get(getKey(a)) - orderMap.get(getKey(b)),
   );
 
@@ -172,12 +176,12 @@ export const removeUnusedMetrics = cvssVector => {
 
 /**
  * This function calculates the CVSS score from a CVSS vector.
- * @param {string} cvssVector - The CVSS vector with all the metrics to calculate the score.
- * @returns {number | undefined} - The CVSS score.
+ * @param cvssVector - The CVSS vector with all the metrics to calculate the score.
+ * @returns The CVSS score.
  *
  */
 
-export const calculateScoreSafely = cvssVector => {
+export const calculateScoreSafely = (cvssVector?: string) => {
   try {
     return new CVSS40(cvssVector).Score();
   } catch {
@@ -188,10 +192,10 @@ export const calculateScoreSafely = cvssVector => {
 /**
  * This function parses a CVSS vector string and returns an object with the
  * metrics as labels.
- * @param {string} cvssVector - The CVSS vector to parse the metrics from.
- * @returns {Record<string,string>} - An object with key-value pairs of the metrics.
+ * @param cvssVector - The CVSS vector to parse the metrics from.
+ * @returns An object with key-value pairs of the metrics.
  */
-export const parseCvssV4MetricsFromVector = cvssVector => {
+export const parseCvssV4MetricsFromVector = (cvssVector?: string) => {
   if (!isDefined(cvssVector) || cvssVector.trim().length === 0) {
     return {};
   }
