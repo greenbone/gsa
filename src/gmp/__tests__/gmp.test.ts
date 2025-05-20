@@ -12,32 +12,54 @@ import {
   testing,
 } from '@gsa/testing';
 import Gmp from 'gmp/gmp';
+import GmpSettings from 'gmp/gmpsettings';
+import GmpHttp from 'gmp/http/gmp';
 import DefaultTransform from 'gmp/http/transform/default';
+
+const createStorage = (state?: Record<string, string>) => {
+  const store = {
+    state: {...state},
+    getItem: testing.fn(name => store.state[name] || null),
+    setItem: testing.fn((name, value) => (store.state[name] = String(value))),
+    removeItem: testing.fn(name => delete store.state[name]),
+  };
+  return store;
+};
+
+let origLocation: Location;
 
 describe('Gmp tests', () => {
   beforeAll(() => {
-    global.window = {location: {protocol: 'http:'}};
+    origLocation = global.location;
+    // @ts-expect-error
+    global.location = {protocol: 'http:', host: 'localhost:9392'};
   });
 
   afterAll(() => {
-    global.window = undefined;
+    global.location = origLocation;
   });
 
   describe('isLoggedIn tests', () => {
     test('should return false if user has no token', () => {
-      const gmp = new Gmp({});
+      const storage = createStorage();
+      const settings = new GmpSettings(storage);
+      const gmp = new Gmp(settings);
 
       expect(gmp.isLoggedIn()).toEqual(false);
     });
 
     test('should return false if user has empty token', () => {
-      const gmp = new Gmp({token: ''});
+      const storage = createStorage({token: ''});
+      const settings = new GmpSettings(storage);
+      const gmp = new Gmp(settings);
 
       expect(gmp.isLoggedIn()).toEqual(false);
     });
 
     test('should return true if user has token', () => {
-      const gmp = new Gmp({token: 'foo'});
+      const storage = createStorage({token: 'foo'});
+      const settings = new GmpSettings(storage);
+      const gmp = new Gmp(settings);
 
       expect(gmp.isLoggedIn()).toEqual(true);
     });
@@ -50,12 +72,12 @@ describe('Gmp tests', () => {
           token: 'foo',
         },
       });
-      const settings = {};
-
       const http = {
         request,
-      };
+      } as unknown as GmpHttp;
 
+      const storage = createStorage();
+      const settings = new GmpSettings(storage);
       const gmp = new Gmp(settings, http);
 
       return gmp.login('foo', 'bar').then(() => {
@@ -74,12 +96,12 @@ describe('Gmp tests', () => {
       const request = testing.fn().mockRejectedValue({
         message: 'An error',
       });
-      const settings = {};
-
       const http = {
         request,
-      };
+      } as unknown as GmpHttp;
 
+      const storage = createStorage();
+      const settings = new GmpSettings(storage);
       const gmp = new Gmp(settings, http);
 
       return gmp.login('foo', 'bar').catch(error => {
@@ -98,7 +120,8 @@ describe('Gmp tests', () => {
 
   describe('clearToken tests', () => {
     test('should reset token', () => {
-      const settings = {token: 'foo'};
+      const storage = createStorage({token: 'foo'});
+      const settings = new GmpSettings(storage);
       const gmp = new Gmp(settings);
 
       expect(gmp.isLoggedIn()).toEqual(true);
@@ -112,7 +135,8 @@ describe('Gmp tests', () => {
 
   describe('logout tests', () => {
     test('should reset token', () => {
-      const settings = {token: 'foo'};
+      const storage = createStorage({token: 'foo'});
+      const settings = new GmpSettings(storage);
       const gmp = new Gmp(settings);
 
       expect(gmp.isLoggedIn()).toEqual(true);
@@ -124,7 +148,8 @@ describe('Gmp tests', () => {
     });
 
     test('should call logout handlers if logged in', () => {
-      const settings = {token: 'foo'};
+      const storage = createStorage({token: 'foo'});
+      const settings = new GmpSettings(storage);
       const gmp = new Gmp(settings);
       const handler = testing.fn();
       const unsub = gmp.subscribeToLogout(handler);
@@ -140,7 +165,8 @@ describe('Gmp tests', () => {
     });
 
     test('should call logout handlers if logged out', () => {
-      const settings = {};
+      const storage = createStorage();
+      const settings = new GmpSettings(storage);
       const gmp = new Gmp(settings);
       const handler = testing.fn();
       const unsub = gmp.subscribeToLogout(handler);
@@ -163,12 +189,12 @@ describe('Gmp tests', () => {
           token: 'foo',
         },
       });
-      const settings = {token: 'foo', apiServer: 'localhost'};
-
       const http = {
         request,
-      };
+      } as unknown as GmpHttp;
 
+      const storage = createStorage({token: 'foo'});
+      const settings = new GmpSettings(storage, {apiServer: 'localhost'});
       const gmp = new Gmp(settings, http);
 
       expect(gmp.isLoggedIn()).toEqual(true);
@@ -190,14 +216,13 @@ describe('Gmp tests', () => {
       const request = testing.fn().mockResolvedValue({
         data: {},
       });
-      const settings = {token: 'foo', apiServer: 'localhost'};
-
       const http = {
         request,
-      };
-
+      } as unknown as GmpHttp;
       const handler = testing.fn();
 
+      const storage = createStorage({token: 'foo'});
+      const settings = new GmpSettings(storage, {apiServer: 'localhost'});
       const gmp = new Gmp(settings, http);
 
       gmp.subscribeToLogout(handler);
@@ -215,18 +240,16 @@ describe('Gmp tests', () => {
       const request = testing.fn().mockRejectedValue({
         message: 'foo',
       });
-      const settings = {
-        logLevel: 'silent',
-        token: 'foo',
-        apiServer: 'localhost',
-      };
-
       const http = {
         request,
-      };
-
+      } as unknown as GmpHttp;
       const handler = testing.fn();
 
+      const storage = createStorage({token: 'foo'});
+      const settings = new GmpSettings(storage, {
+        apiServer: 'localhost',
+        logLevel: 'silent',
+      });
       const gmp = new Gmp(settings, http);
 
       gmp.subscribeToLogout(handler);
@@ -244,14 +267,13 @@ describe('Gmp tests', () => {
       const request = testing.fn().mockResolvedValue({
         data: {},
       });
-      const settings = {apiServer: 'localhost'};
-
       const http = {
         request,
-      };
-
+      } as unknown as GmpHttp;
       const handler = testing.fn();
 
+      const storage = createStorage();
+      const settings = new GmpSettings(storage, {apiServer: 'localhost'});
       const gmp = new Gmp(settings, http);
 
       gmp.subscribeToLogout(handler);

@@ -14,7 +14,7 @@ import {
 import {RootLogger, DEFAULT_LOG_LEVEL, LogLevels} from 'gmp/log.js';
 import {isFunction} from 'gmp/utils/identity';
 
-let origConsole;
+let origConsole: Console;
 let testConsole;
 
 const getRootLogger = () => new RootLogger();
@@ -65,6 +65,7 @@ describe('log tests', () => {
     expect(isFunction(newLogger.info)).toEqual(true);
     expect(isFunction(newLogger.debug)).toEqual(true);
     expect(isFunction(newLogger.trace)).toEqual(true);
+    // @ts-expect-error
     expect(newLogger.silent).toBeUndefined();
     expect(isFunction(newLogger.setLevel)).toEqual(true);
     expect(isFunction(newLogger.setDefaultLevel)).toEqual(true);
@@ -91,6 +92,7 @@ describe('log tests', () => {
     const newLogger = logger.getLogger('foo.bar');
     expect(newLogger.defaultLogValue).toEqual(LogLevels.error);
 
+    // @ts-expect-error
     expect(logger.setDefaultLevel('foo')).toEqual(false);
     expect(newLogger.defaultLogValue).toEqual(LogLevels.error);
   });
@@ -103,6 +105,7 @@ describe('log tests', () => {
     const newLogger = logger.getLogger('foo.bar');
     expect(newLogger.defaultLogValue).toEqual(LogLevels.error);
 
+    // @ts-expect-error
     newLogger.setDefaultLevel('foo');
     expect(newLogger.defaultLogValue).toEqual(LogLevels.silent);
   });
@@ -138,6 +141,7 @@ describe('log tests', () => {
     expect(newLogger.defaultLogValue).toEqual(LogLevels.error);
     expect(isFunction(newLogger.setLevel)).toEqual(true);
 
+    // @ts-expect-error
     newLogger.setLevel('foo');
     expect(testConsole.error).toHaveBeenCalled();
     expect(newLogger.logValue).toEqual(LogLevels.silent);
