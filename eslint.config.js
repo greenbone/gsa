@@ -99,7 +99,7 @@ export default [
   pluginReact.configs.flat?.recommended,
   customPlugin,
   {
-    ignores: ['build', 'eslint.config.js'],
+    ignores: ['build', 'eslint.config.js', 'vite.config.ts'],
   },
   // JavaScript configuration
   {
