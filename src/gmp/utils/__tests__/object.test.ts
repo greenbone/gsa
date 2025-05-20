@@ -14,7 +14,9 @@ describe('exclude function test', () => {
     };
     const result = exclude(obj, prop => prop === 'foo');
 
+    // @ts-expect-error
     expect(result.foo).toBeUndefined();
+    // @ts-expect-error
     expect(result.bar).toBe(2);
   });
 });
@@ -28,8 +30,11 @@ describe('excludeObjectProps function test', () => {
     };
     const result = excludeObjectProps(obj, ['foo', 'bar']);
 
+    // @ts-expect-error
     expect(result.foo).toBeUndefined();
+    // @ts-expect-error
     expect(result.bar).toBeUndefined();
+    // @ts-expect-error
     expect(result.abc).toBe(3);
   });
 });
