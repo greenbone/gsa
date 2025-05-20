@@ -16,6 +16,7 @@ describe('parseModelFromElement tests', () => {
     const element = {
       _id: '1',
     };
+    // @ts-expect-error
     const model = parseModelFromElement(element);
 
     expect(model.id).toEqual('1');
