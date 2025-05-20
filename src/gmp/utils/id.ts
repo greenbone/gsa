@@ -32,9 +32,9 @@ export const includesId = <TModel extends Model>(
 };
 
 export const selectSaveId = <TModel extends Model>(
-  list: TModel[] | undefined,
-  id: string,
-  emptyDefault: string,
+  list?: TModel[] | undefined,
+  id?: string,
+  emptyDefault?: string,
 ) => {
   if (!isDefined(id) || !includesId(list, id)) {
     if (!isDefined(emptyDefault)) {
