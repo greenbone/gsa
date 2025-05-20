@@ -8,58 +8,61 @@ import {includesId, selectSaveId, hasId} from 'gmp/utils/id';
 
 describe('includesId function tests', () => {
   test('should return true for found id', () => {
-    const list = [{id: 1}, {id: 2}, {id: 3}];
+    const list = [{id: '1'}, {id: '2'}, {id: '3'}];
 
-    expect(includesId(list, 1)).toBe(true);
-    expect(includesId(list, 2)).toBe(true);
-    expect(includesId(list, 3)).toBe(true);
+    expect(includesId(list, '1')).toBe(true);
+    expect(includesId(list, '2')).toBe(true);
+    expect(includesId(list, '3')).toBe(true);
   });
 
   test('should return false for unknown id', () => {
-    const list = [{id: 1}, {id: 2}, {id: 3}];
+    const list = [{id: '1'}, {id: '2'}, {id: '3'}];
 
-    expect(includesId(list, 4)).toBe(false);
+    expect(includesId(list, '4')).toBe(false);
   });
 
   test('should return false for different type of id', () => {
-    const list = [{id: 1}, {id: 2}, {id: 3}];
+    const list = [{id: '1'}, {id: '2'}, {id: '3'}];
 
-    expect(includesId(list, '2')).toBe(false);
+    // @ts-expect-error
+    expect(includesId(list, 2)).toBe(false);
   });
 
   test('should return false for an empty or undefined list', () => {
-    expect(includesId([], 1)).toBe(false);
-    expect(includesId(undefined, 2)).toBe(false);
+    expect(includesId([], '1')).toBe(false);
+    expect(includesId(undefined, '2')).toBe(false);
   });
 });
 
 describe('selectSaveId function tests', () => {
   test('should return id if id is in list', () => {
-    const list = [{id: 1}, {id: 2}, {id: 3}];
+    const list = [{id: '1'}, {id: '2'}, {id: '3'}];
 
-    expect(selectSaveId(list, 1)).toEqual(1);
-    expect(selectSaveId(list, 2)).toEqual(2);
-    expect(selectSaveId(list, 3)).toEqual(3);
+    expect(selectSaveId(list, '1')).toEqual('1');
+    expect(selectSaveId(list, '2')).toEqual('2');
+    expect(selectSaveId(list, '3')).toEqual('3');
   });
 
   test('should return first id if id is not in list', () => {
-    const list = [{id: 1}, {id: 2}, {id: 3}];
+    const list = [{id: '1'}, {id: '2'}, {id: '3'}];
 
-    expect(selectSaveId(list, 4)).toBe(1);
-    expect(selectSaveId(list, '2')).toBe(1);
+    expect(selectSaveId(list, '4')).toBe('1');
+    // @ts-expect-error
+    expect(selectSaveId(list, 2)).toBe('1');
   });
 
   test('should return default if id is not in list', () => {
-    const list = [{id: 1}, {id: 2}, {id: 3}];
+    const list = [{id: '1'}, {id: '2'}, {id: '3'}];
 
-    expect(selectSaveId(list, 4, 42)).toBe(42);
-    expect(selectSaveId(list, '2', 42)).toBe(42);
+    expect(selectSaveId(list, '4', '42')).toBe('42');
+    // @ts-expect-error
+    expect(selectSaveId(list, 2, '42')).toBe('42');
   });
 
   test('should select first entry id if id is undefined', () => {
-    const list = [{id: 1}, {id: 2}, {id: 3}];
+    const list = [{id: '1'}, {id: '2'}, {id: '3'}];
 
-    expect(selectSaveId(list)).toEqual(1);
+    expect(selectSaveId(list)).toEqual('1');
   });
 
   test('should return undefined for undefined list', () => {
