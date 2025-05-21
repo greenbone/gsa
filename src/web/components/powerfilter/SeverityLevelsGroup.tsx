@@ -30,7 +30,7 @@ const SeverityLevelsFilterGroup = ({
 
   const handleLevelChange = useCallback(
     (value: string, level: string) => {
-      let levels = filter.get('levels');
+      let levels = filter.get('levels') as string;
 
       if (!isDefined(levels)) {
         levels = '';
@@ -52,7 +52,7 @@ const SeverityLevelsFilterGroup = ({
     [filter, onChange, onRemove],
   );
 
-  let levels = filter.get('levels');
+  let levels = filter.get('levels') as string;
 
   if (!isDefined(levels)) {
     levels = '';
