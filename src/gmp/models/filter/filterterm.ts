@@ -3,16 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import convert from 'gmp/models/filter/convert.js';
+import convert, {FilterTermObject} from 'gmp/models/filter/convert';
 import {isDefined} from 'gmp/utils/identity';
 
 const RELATIONS = ['=', ':', '~', '>', '<'];
-
-interface FilterTermParams {
-  keyword?: string;
-  value?: string;
-  relation?: string;
-}
 
 /**
  * Represents a filter term
@@ -22,11 +16,11 @@ interface FilterTermParams {
  * relation.
  *
  * A FilterTerm is expected to be immutable. A user MUST NOT change the keyword,
- * value or relation after creation. This can lead to unexpected behaviour.
+ * value or relation after creation. This can lead to unexpected behavior.
  */
 class FilterTerm {
   keyword?: string;
-  value?: string;
+  value?: string | number;
   relation?: string;
 
   /**
@@ -34,7 +28,7 @@ class FilterTerm {
    * @param value    Value of the filter term
    * @param relation Relation between keyword and filter, =,<,>,...
    */
-  constructor({keyword, value, relation}: FilterTermParams) {
+  constructor({keyword, value, relation}: FilterTermObject) {
     this.keyword = isDefined(keyword) ? String(keyword).toLowerCase() : keyword;
     this.value = value;
     this.relation = relation;
