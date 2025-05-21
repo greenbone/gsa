@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PoliciesComponent from 'web/pages/policies/Component';
+import PoliciesComponent from 'web/pages/policies/PoliciesComponent';
 import Table from 'web/pages/policies/Table';
 import {
   loadEntities,
