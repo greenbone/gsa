@@ -4,8 +4,8 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import {FileOutput as Icon} from 'lucide-react';
-import {DynamicIcon, DynamicIconProps} from 'web/components/icon/DynamicIcon';
+import {FileOutputIcon} from 'web/components/icon';
+import {DynamicIconProps} from 'web/components/icon/DynamicIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import SelectionType from 'web/utils/SelectionType';
 
@@ -32,9 +32,8 @@ function ExportIcon<TValue = string>({
     }
   }
   return (
-    <DynamicIcon<TValue>
-      dataTestId="export-icon"
-      icon={Icon}
+    <FileOutputIcon
+      data-testid="export-icon"
       title={downloadTitle}
       {...props}
     />

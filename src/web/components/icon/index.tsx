@@ -5,6 +5,8 @@
 
 // Import LucideIcon type once
 import {
+  CircleX,
+  FileOutput,
   LucideIcon,
   Megaphone,
   FilePenLine,
@@ -130,6 +132,20 @@ export interface IconDefinition {
 
 export const icons: IconDefinition[] = [
   // Lucide icons
+  {
+    name: 'FileOutput',
+    component: FileOutput,
+    dataTestId: 'export-icon',
+    ariaLabel: 'Export Icon',
+    isLucide: true,
+  },
+  {
+    name: 'CircleX',
+    component: CircleX,
+    dataTestId: 'delete-icon',
+    ariaLabel: 'Delete Icon',
+    isLucide: true,
+  },
   {
     name: 'RefreshCcw',
     component: RefreshCcw,
@@ -917,6 +933,8 @@ export const {
   ArrowUp: ArrowUpIcon,
   Calendar: CalendarIcon,
   CertBundAdv: CertBundAdvIcon,
+  CircleX: CircleXIcon,
+  Config: ConfigIcon,
   Clone: CloneIcon,
   CpeLogo: CpeLogoIcon,
   KeyRound: CredentialIcon,
@@ -925,6 +943,7 @@ export const {
   BarChart3: DashboardIcon,
   Trash2: DeleteIcon,
   DeltaDifference: DeltaDifferenceIcon,
+  FileOutput: FileOutputIcon,
   Delta: DeltaIcon,
   ZoomIn: DetailsIcon,
   DfnCertAdv: DfnCertAdvIcon,

@@ -26,22 +26,6 @@ export interface IconDefinition {
   isLucide: boolean;
 }
 
-export const getIconStyling = (
-  isLucide: boolean,
-  color?: string,
-  active?: boolean,
-) => {
-  return {
-    strokeWidth: isLucide ? 1.5 : undefined,
-    style: !isLucide
-      ? {
-          color: color,
-          fill: !active ? 'var(--mantine-color-gray-5)' : undefined,
-        }
-      : undefined,
-  };
-};
-
 const createIconComponents = (icons: IconDefinition[]): IconComponentsType => {
   return icons.reduce(
     (acc, {name, component, dataTestId, ariaLabel, isLucide}) => {
@@ -53,7 +37,6 @@ const createIconComponents = (icons: IconDefinition[]): IconComponentsType => {
           ...otherProps
         } = props;
         const finalDataTestId = dataTestIdFromProps ?? dataTestId;
-        const {strokeWidth, style} = getIconStyling(isLucide, color, active);
 
         return (
           <DynamicIcon
@@ -62,8 +45,7 @@ const createIconComponents = (icons: IconDefinition[]): IconComponentsType => {
             color={color}
             dataTestId={finalDataTestId}
             icon={component}
-            strokeWidth={strokeWidth}
-            style={style}
+            isLucide={isLucide}
             {...otherProps}
           />
         );
