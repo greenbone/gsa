@@ -244,10 +244,18 @@ describe('convert tests', () => {
   });
 
   test('should return correct value and relation when keyword is a number', () => {
-    expect(convert(123, 456, ':')).toEqual({
+    expect(convert('123', 456, ':')).toEqual({
       value: '"123:456"',
 
       relation: '~',
+    });
+  });
+
+  test('should convert with undefined value and relation', () => {
+    expect(convert('foo', undefined, undefined)).toEqual({
+      keyword: 'foo',
+      value: undefined,
+      relation: undefined,
     });
   });
 });
