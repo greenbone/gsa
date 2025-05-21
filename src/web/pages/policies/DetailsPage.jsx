@@ -29,8 +29,8 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import PolicyComponent from 'web/pages/policies/Component';
 import PolicyDetails from 'web/pages/policies/Details';
+import PolicyComponent from 'web/pages/policies/PoliciesComponent';
 import {
   NvtFamilies,
   ScannerPreferences,
