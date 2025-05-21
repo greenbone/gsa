@@ -386,7 +386,7 @@ class Filter extends Model {
       return false;
     }
     const terms = this.getTerms(term.keyword);
-    return terms.findIndex(cterm => cterm.equals(term)) !== -1;
+    return terms.findIndex(currentTerm => currentTerm.equals(term)) !== -1;
   }
 
   /**
