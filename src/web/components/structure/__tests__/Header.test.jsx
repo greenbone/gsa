@@ -40,7 +40,7 @@ describe('Header', () => {
     expect(langBtn).toBeVisible();
 
     const renewBtn = screen.getByRole('button', {
-      name: 'Renew session timeout',
+      name: 'Refresh Icon',
     });
     expect(renewBtn).toBeVisible();
 

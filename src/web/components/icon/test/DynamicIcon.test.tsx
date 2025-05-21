@@ -4,14 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {LucideIcon} from 'lucide-react';
-import React from 'react';
 import DynamicIcon from 'web/components/icon/DynamicIcon';
-import {render, screen, fireEvent} from 'web/utils/Testing';
+import {render, screen, fireEvent, within} from 'web/utils/Testing';
 
-const MockIcon: LucideIcon = React.forwardRef((props, ref) => (
-  <svg {...props} ref={ref} data-testid="mock-icon" />
-));
+const MockIcon = props => <svg {...props} data-testid="mock-icon" />;
 
 describe('DynamicIcon', () => {
   test('renders static icon when forceStatic is true', () => {
@@ -23,8 +19,8 @@ describe('DynamicIcon', () => {
       />,
     );
     const staticIcon = screen.getByTestId('static-icon');
-    expect(staticIcon).toBeInTheDocument();
-    expect(staticIcon.querySelector('svg')).toBeInTheDocument();
+    expect(staticIcon).toBeVisible();
+    expect(staticIcon.querySelector('svg')).toBeVisible();
   });
 
   test('renders DynamicIcon when forceStatic is false', () => {
@@ -36,8 +32,8 @@ describe('DynamicIcon', () => {
       />,
     );
     const dynamicIcon = screen.getByTestId('dynamic-icon');
-    expect(dynamicIcon).toBeInTheDocument();
-    expect(dynamicIcon.querySelector('svg')).toBeInTheDocument();
+    expect(dynamicIcon).toBeVisible();
+    expect(dynamicIcon.querySelector('svg')).toBeVisible();
   });
 
   test('displays loading state when onClick returns a promise', async () => {
@@ -75,19 +71,6 @@ describe('DynamicIcon', () => {
     expect(mockOnClick).not.toHaveBeenCalled();
   });
 
-  test('applies correct size and color', () => {
-    render(
-      <DynamicIcon
-        color="red"
-        dataTestId="sized-icon"
-        icon={MockIcon}
-        size="large"
-      />,
-    );
-    const dynamicIcon = screen.getByTestId('sized-icon');
-    expect(dynamicIcon).toHaveStyle({color: 'rgb(255, 0, 0)'});
-  });
-
   test('displays loading title when loading', () => {
     const mockOnClick = testing.fn<() => Promise<void>>(
       () => new Promise<void>(resolve => setTimeout(resolve, 100)),
@@ -116,5 +99,139 @@ describe('DynamicIcon', () => {
     );
     const dynamicIcon = screen.getByTestId('title-icon');
     expect(dynamicIcon).toHaveAttribute('title', 'Test Title');
+  });
+
+  describe('Lucide', () => {
+    test('renders Lucide icon size', () => {
+      render(
+        <DynamicIcon
+          dataTestId="lucide-icon"
+          icon={MockIcon}
+          isLucide={true}
+        />,
+      );
+      const lucideIcon = screen.getByTestId('lucide-icon');
+      const svgElement = within(lucideIcon).getByText('', {
+        selector: 'svg',
+      });
+
+      expect(svgElement).toHaveAttribute('color', 'black');
+    });
+
+    test('renders Lucide icon with custom size and color', () => {
+      render(
+        <DynamicIcon
+          color="red"
+          dataTestId="custom-lucide-icon"
+          icon={MockIcon}
+          isLucide={true}
+          size="large"
+        />,
+      );
+      const customLucideIcon = screen.getByTestId('custom-lucide-icon');
+      const svgElement = within(customLucideIcon).getByText('', {
+        selector: 'svg',
+      });
+
+      expect(svgElement).toHaveAttribute('color', 'red');
+    });
+
+    test('renders disabled icon', () => {
+      render(
+        <DynamicIcon
+          active={false}
+          dataTestId="disabled-icon"
+          icon={MockIcon}
+          isLucide={true}
+          onClick={testing.fn()}
+        />,
+      );
+      const disabledIcon = screen.getByTestId('disabled-icon');
+      expect(disabledIcon.querySelector('svg')).toBeVisible();
+      expect(disabledIcon).toHaveStyle('color: GrayText');
+    });
+
+    test('renders custom action icon', () => {
+      render(
+        <DynamicIcon
+          active={true}
+          color="red"
+          dataTestId="action-icon"
+          icon={MockIcon}
+          isLucide={true}
+          onClick={testing.fn()}
+        />,
+      );
+      const actionIcon = screen.getByTestId('action-icon');
+
+      const svg = actionIcon.querySelector('svg');
+      expect(svg).toBeVisible();
+      expect(actionIcon).toHaveStyle(
+        '--ai-color: var(--mantine-color-red-light-color);',
+      );
+    });
+  });
+  describe('Non-Lucide', () => {
+    test('renders non-Lucide icon', () => {
+      render(
+        <DynamicIcon
+          dataTestId="non-lucide-icon"
+          icon={MockIcon}
+          isLucide={false}
+        />,
+      );
+      const nonLucideIcon = screen.getByTestId('non-lucide-icon');
+      expect(nonLucideIcon).toBeVisible();
+      const svg = nonLucideIcon.querySelector('svg');
+      expect(svg).toHaveStyle('fill: black');
+    });
+
+    test('renders non-Lucide icon with custom size and color', () => {
+      render(
+        <DynamicIcon
+          color="blue"
+          dataTestId="custom-non-lucide-icon"
+          icon={MockIcon}
+          isLucide={false}
+          size="large"
+        />,
+      );
+      const customNonLucideIcon = screen.getByTestId('custom-non-lucide-icon');
+      const svg = customNonLucideIcon.querySelector('svg');
+      expect(svg).toHaveStyle('fill: blue');
+    });
+
+    test('renders disabled non-Lucide icon', () => {
+      render(
+        <DynamicIcon
+          active={false}
+          dataTestId="disabled-non-lucide-icon"
+          icon={MockIcon}
+          isLucide={false}
+          onClick={testing.fn()}
+        />,
+      );
+      const disabledNonLucideIcon = screen.getByTestId(
+        'disabled-non-lucide-icon',
+      );
+      expect(disabledNonLucideIcon.querySelector('svg')).toBeVisible();
+      expect(disabledNonLucideIcon).toHaveStyle('color: GrayText');
+    });
+
+    test('renders custom action icon', () => {
+      render(
+        <DynamicIcon
+          active={true}
+          color="purple"
+          dataTestId="action-icon"
+          icon={MockIcon}
+          isLucide={false}
+          onClick={testing.fn()}
+        />,
+      );
+      const actionIcon = screen.getByTestId('action-icon');
+
+      expect(actionIcon).toHaveStyle('--ai-color: purple;');
+    });
   });
 });

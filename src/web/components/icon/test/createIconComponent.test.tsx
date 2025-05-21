@@ -3,73 +3,123 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
-import {getIconStyling} from 'web/components/icon/createIconComponents';
+import {describe, test, expect, testing} from '@gsa/testing';
+import {createIconComponents} from 'web/components/icon/createIconComponents';
+import {render, screen, within} from 'web/utils/Testing';
 
-describe('getIconStyling', () => {
-  test('should return correct styling for Lucide icons', () => {
-    const result = getIconStyling(true);
+const MockIcon = props => <svg {...props} data-testid="mock-icon" />;
 
-    expect(result).toEqual({
-      strokeWidth: 1.5,
-      style: undefined,
-    });
-  });
-
-  test('should return correct styling for Lucide icons with color', () => {
-    const result = getIconStyling(true, 'red');
-
-    expect(result).toEqual({
-      strokeWidth: 1.5,
-      style: undefined,
-    });
-  });
-
-  test('should return correct styling for non-Lucide icons', () => {
-    const result = getIconStyling(false);
-
-    expect(result).toEqual({
-      strokeWidth: undefined,
-      style: {
-        color: undefined,
-        fill: 'var(--mantine-color-gray-5)',
+describe('createIconComponents', () => {
+  describe('Lucide icon', () => {
+    const lucideIconSet = [
+      {
+        name: 'DummyLucideIcon',
+        component: MockIcon,
+        dataTestId: 'dummy-lucide-icon',
+        ariaLabel: 'Dummy Lucide Icon',
+        isLucide: true,
       },
+    ];
+
+    test('should create static icon components with correct props', () => {
+      const IconComponents = createIconComponents(lucideIconSet);
+      const DummyLucideIcon = IconComponents.DummyLucideIcon;
+
+      render(<DummyLucideIcon active={true} color="red" />);
+
+      const iconElement = screen.getByTestId('dummy-lucide-icon');
+      expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
+      expect(iconElement).toHaveAttribute('data-testid', 'dummy-lucide-icon');
+      const svgElement = within(iconElement).getByText('', {selector: 'svg'});
+      expect(svgElement).toBeVisible();
+      expect(iconElement).toHaveStyle('color: red(255, 0, 0)');
+    });
+
+    test('should create action icon components with default props', () => {
+      const IconComponents = createIconComponents(lucideIconSet);
+      const DummyLucideIcon = IconComponents.DummyLucideIcon;
+
+      render(
+        <DummyLucideIcon active={true} color="red" onClick={testing.fn()} />,
+      );
+
+      const iconElement = screen.getByTestId('dummy-lucide-icon');
+      expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
+      expect(iconElement).toHaveAttribute('data-testid', 'dummy-lucide-icon');
+    });
+
+    test('should create action icon components with custom props and disabled', () => {
+      const IconComponents = createIconComponents(lucideIconSet);
+      const DummyLucideIcon = IconComponents.DummyLucideIcon;
+
+      render(
+        <DummyLucideIcon
+          active={false}
+          color="red"
+          data-testid="custom-icon"
+        />,
+      );
+
+      const iconElement = screen.getByTestId('custom-icon');
+      expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
+      expect(iconElement).toHaveAttribute('data-testid', 'custom-icon');
+      expect(iconElement).toHaveStyle('color: GrayText');
     });
   });
 
-  test('should return correct styling for non-Lucide icons with color', () => {
-    const result = getIconStyling(false, 'blue');
-
-    expect(result).toEqual({
-      strokeWidth: undefined,
-      style: {
-        color: 'blue',
-        fill: 'var(--mantine-color-gray-5)',
+  describe('Non-Lucide icon', () => {
+    const svgIconDefinitions = [
+      {
+        name: 'DummyLucideIcon',
+        component: MockIcon,
+        dataTestId: 'dummy-lucide-icon',
+        ariaLabel: 'Dummy Lucide Icon',
+        isLucide: false,
       },
+    ];
+    test('should create static icon components with correct props', () => {
+      const IconComponents = createIconComponents(svgIconDefinitions);
+      const DummyLucideIcon = IconComponents.DummyLucideIcon;
+
+      render(<DummyLucideIcon active={true} color="red" />);
+
+      const iconElement = screen.getByTestId('dummy-lucide-icon');
+      expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
+      expect(iconElement).toHaveAttribute('data-testid', 'dummy-lucide-icon');
+      const svgElement = within(iconElement).getByText('', {selector: 'svg'});
+      expect(svgElement).toHaveStyle('fill:red');
     });
-  });
 
-  test('should return correct styling for active non-Lucide icons', () => {
-    const result = getIconStyling(false, undefined, true);
+    test('should create action icon components with default props', () => {
+      const IconComponents = createIconComponents(svgIconDefinitions);
+      const DummyLucideIcon = IconComponents.DummyLucideIcon;
 
-    expect(result).toEqual({
-      strokeWidth: undefined,
-      style: {
-        color: undefined,
-        fill: undefined,
-      },
+      render(
+        <DummyLucideIcon active={true} color="red" onClick={testing.fn()} />,
+      );
+
+      const iconElement = screen.getByTestId('dummy-lucide-icon');
+      expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
+      expect(iconElement).toHaveAttribute('data-testid', 'dummy-lucide-icon');
     });
-  });
 
-  test('should return correct styling for active non-Lucide icons with color', () => {
-    const result = getIconStyling(false, 'green', true);
+    test('should create action icon components with custom props and disabled', () => {
+      const IconComponents = createIconComponents(svgIconDefinitions);
+      const DummyLucideIcon = IconComponents.DummyLucideIcon;
 
-    expect(result).toEqual({
-      strokeWidth: undefined,
-      style: {
-        color: 'green',
-        fill: undefined,
-      },
+      render(
+        <DummyLucideIcon
+          active={false}
+          color="red"
+          data-testid="custom-icon"
+          onClick={testing.fn()}
+        />,
+      );
+
+      const iconElement = screen.getByTestId('custom-icon');
+      expect(iconElement).toHaveAttribute('aria-label', 'Dummy Lucide Icon');
+      expect(iconElement).toHaveAttribute('data-testid', 'custom-icon');
+      expect(iconElement).toHaveStyle('color: GrayText');
     });
   });
 });

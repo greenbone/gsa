@@ -24,11 +24,13 @@ export interface DynamicIconProps<TValue = string>
   title?: string;
   loadingTitle?: string;
   value?: TValue;
-  strokeWidth?: number;
   dataTestId?: string;
   forceStatic?: boolean;
+  isLucide?: boolean;
   onClick?: (value?: TValue) => void | Promise<void>;
 }
+
+const inheritColor = undefined;
 
 export function DynamicIcon<TValue = string>({
   icon: Icon,
@@ -37,12 +39,12 @@ export function DynamicIcon<TValue = string>({
   active = true,
   title,
   loadingTitle,
-  strokeWidth,
   color = 'black',
   value,
   variant = 'transparent',
   dataTestId,
   forceStatic = false,
+  isLucide = false,
   onClick,
   ...restProps
 }: Readonly<DynamicIconProps<TValue>>) {
@@ -75,38 +77,91 @@ export function DynamicIcon<TValue = string>({
     }
   };
 
-  if (forceStatic || (active && !isDefined(onClick))) {
+  const renderActionIcon = (child: React.ReactNode) => {
+    return (
+      <ActionIcon
+        aria-label={ariaLabel}
+        color={color}
+        data-testid={dataTestId}
+        disabled={!active || loading}
+        loaderProps={{
+          type: 'bars',
+          color: Theme.darkGray,
+          size: width,
+        }}
+        loading={loading}
+        size={mantineSize}
+        title={displayedTitle}
+        variant={variant}
+        onClick={handleClick}
+        {...restProps}
+      >
+        {child}
+      </ActionIcon>
+    );
+  };
+
+  const renderSpanIcon = (child: React.ReactNode) => {
     return (
       <span
+        aria-label={ariaLabel}
         data-testid={dataTestId}
-        style={{display: 'inline-flex', color}}
-        title={title}
+        style={{display: 'inline-flex'}}
+        title={displayedTitle}
       >
-        <Icon height={height} strokeWidth={strokeWidth} width={width} />
+        {child}
       </span>
+    );
+  };
+
+  /*
+   * - SVG icons from Lucide package
+   */
+
+  if (isLucide) {
+    const defaultLucideStrokeWidth = 1.5;
+    if (forceStatic || (active && !isDefined(onClick))) {
+      return renderSpanIcon(
+        <Icon
+          color={color}
+          height={height}
+          strokeWidth={defaultLucideStrokeWidth}
+          width={width}
+        />,
+      );
+    }
+
+    return renderActionIcon(
+      <Icon
+        height={height}
+        strokeWidth={defaultLucideStrokeWidth}
+        width={width}
+      />,
     );
   }
 
-  return (
-    <ActionIcon
-      aria-label={ariaLabel}
-      color={color}
-      data-testid={dataTestId}
-      disabled={!active || loading}
-      loaderProps={{
-        type: 'bars',
-        color: Theme.darkGray,
-        size: width,
-      }}
-      loading={loading}
-      size={mantineSize}
-      title={displayedTitle}
-      variant={variant}
-      onClick={handleClick}
-      {...restProps}
-    >
-      <Icon height={height} strokeWidth={strokeWidth} width={width} />
-    </ActionIcon>
+  /*
+   * - SVG icons not from Lucide package
+   */
+
+  const svgIconsStyle = !isLucide
+    ? {fill: !active ? 'var(--mantine-color-gray-5)' : inheritColor}
+    : inheritColor;
+
+  if (forceStatic || (active && !isDefined(onClick))) {
+    return renderSpanIcon(
+      <Icon
+        height={height}
+        style={{
+          fill: color,
+        }}
+        width={width}
+      />,
+    );
+  }
+
+  return renderActionIcon(
+    <Icon height={height} style={svgIconsStyle} width={width} />,
   );
 }
 export default DynamicIcon;
