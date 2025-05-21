@@ -8,7 +8,7 @@ import date, {Date} from 'gmp/models/date';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-interface LoginData {
+export interface LoginData {
   client_address?: string;
   guest?: boolean;
   role?: string;
@@ -17,7 +17,7 @@ interface LoginData {
   token?: string;
 }
 
-interface LoginMeta extends Meta {
+export interface LoginMeta extends Meta {
   i18n?: string;
   timezone?: string;
   vendor_version?: string;
