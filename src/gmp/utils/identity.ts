@@ -24,8 +24,11 @@ export const isNumber = <T>(value: T): value is T & number =>
 
 export const isNumberOrNumberString = <T>(
   value: T,
-  parseFunc: (value: T) => number,
-): boolean => !isNaN(parseFunc(value));
+  parseFunc: (value: T) => number | undefined,
+): boolean => {
+  const parseValue = parseFunc(value);
+  return isDefined(parseValue) && !isNaN(parseValue);
+};
 
 export const isFunction = (value: unknown): value is Function =>
   typeof value === 'function';
