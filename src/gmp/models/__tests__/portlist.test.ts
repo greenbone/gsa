@@ -32,7 +32,7 @@ describe('PortList model tests', () => {
         ],
       },
     };
-    const portList = PortList.fromElement(elem);
+    const portList = PortList.fromElement<PortList>(elem);
 
     expect(portList.portRanges[0]).toBeInstanceOf(Model);
     expect(portList.portRanges[0].entityType).toEqual('portrange');
@@ -60,7 +60,7 @@ describe('PortList model tests', () => {
         udp: '1',
       },
     };
-    const portList = PortList.fromElement(elem);
+    const portList = PortList.fromElement<PortList>(elem);
 
     expect(portList.portCount.all).toEqual(42);
     expect(portList.portCount.tcp).toEqual(20);
@@ -68,7 +68,7 @@ describe('PortList model tests', () => {
   });
 
   test('should return counts of zero, if port_count is not defined', () => {
-    const portList = PortList.fromElement({});
+    const portList = PortList.fromElement<PortList>({});
 
     expect(portList.portCount.all).toEqual(0);
     expect(portList.portCount.tcp).toEqual(0);
@@ -81,7 +81,7 @@ describe('PortList model tests', () => {
         target: [{id: '123'}, {id: '456'}],
       },
     };
-    const portList = PortList.fromElement(elem);
+    const portList = PortList.fromElement<PortList>(elem);
 
     expect(portList.targets[0]).toBeInstanceOf(Model);
     expect(portList.targets[0].entityType).toEqual('target');
@@ -92,14 +92,14 @@ describe('PortList model tests', () => {
   });
 
   test('should return empty array if no targets are given', () => {
-    const portList = PortList.fromElement({});
+    const portList = PortList.fromElement<PortList>({});
 
     expect(portList.targets).toEqual([]);
   });
 
   test('should parse predefined as boolean correctly', () => {
-    const portList = PortList.fromElement({predefined: '0'});
-    const portList2 = PortList.fromElement({predefined: '1'});
+    const portList = PortList.fromElement<PortList>({predefined: '0'});
+    const portList2 = PortList.fromElement<PortList>({predefined: '1'});
 
     expect(portList.predefined).toEqual(false);
     expect(portList2.predefined).toEqual(true);
