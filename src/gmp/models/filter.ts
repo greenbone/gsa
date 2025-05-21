@@ -430,7 +430,10 @@ class Filter extends Model {
    * @return Returns the first FilterTerm value for the passed keyword
    *         or def if no FilterTerm for the keyword exists in this Filter.
    */
-  get(key: string, def: string | undefined = undefined): string | undefined {
+  get(
+    key: string,
+    def: string | undefined = undefined,
+  ): string | number | undefined {
     const term = this.getTerm(key);
     return isDefined(term) ? term.value : def;
   }
@@ -691,7 +694,7 @@ class Filter extends Model {
    */
   getSortBy(): string | undefined {
     const order = this.getSortOrder();
-    return this.get(order);
+    return this.get(order) as string | undefined;
   }
 
   /**
