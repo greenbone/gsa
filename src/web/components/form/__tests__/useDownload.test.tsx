@@ -15,7 +15,9 @@ const TestComponent = () => {
       <Download ref={ref} />
       <button
         data-testid="download"
-        onClick={() => download({filename: 'foo', data: 'bar'})}
+        onClick={() =>
+          download({filename: 'foo', data: 'bar', mimetype: 'text/plain'})
+        }
       />
     </>
   );
