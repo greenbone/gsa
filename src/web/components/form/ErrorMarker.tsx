@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-const StyledMarker = styled.div`
+interface StyledMarkerProps {
+  $isVisible?: boolean;
+}
+
+const StyledMarker = styled.div<StyledMarkerProps>`
   color: ${Theme.darkRed};
   font-weight: bold;
   font-size: 19px;
@@ -22,9 +24,5 @@ const ErrorMarker = ({isVisible}) => (
     ×
   </StyledMarker>
 );
-
-ErrorMarker.propTypes = {
-  isVisible: PropTypes.bool,
-};
 
 export default ErrorMarker;
