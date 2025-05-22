@@ -5,9 +5,24 @@
 
 import {PasswordInput} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import useValueChange from 'web/components/form/useValueChange';
-import PropTypes from 'web/utils/PropTypes';
+
+interface PasswordFieldProps
+  extends Omit<
+    React.ComponentPropsWithoutRef<typeof PasswordInput>,
+    'onChange'
+  > {
+  autoComplete?: string;
+  disabled?: boolean;
+  errorContent?: string;
+  grow?: number | string;
+  name?: string;
+  placeholder?: string;
+  title?: string;
+  value?: string;
+  onChange?: (value: string, name?: string) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+}
 
 const PasswordField = ({
   autoComplete,
@@ -21,15 +36,15 @@ const PasswordField = ({
   onChange,
   onKeyDown,
   ...props
-}) => {
-  const handleChange = useValueChange({onChange, name, disabled});
+}: PasswordFieldProps) => {
+  const handleChange = useValueChange<string>({onChange, name, disabled});
   return (
     <PasswordInput
       data-testid="password-input"
       {...props}
       autoComplete={autoComplete}
       disabled={disabled}
-      error={isDefined(errorContent) && `${errorContent}`}
+      error={isDefined(errorContent) && String(errorContent)}
       label={title}
       name={name}
       placeholder={placeholder}
@@ -39,19 +54,6 @@ const PasswordField = ({
       onKeyDown={onKeyDown}
     />
   );
-};
-
-PasswordField.propTypes = {
-  autoComplete: PropTypes.string,
-  disabled: PropTypes.bool,
-  errorContent: PropTypes.toString,
-  grow: PropTypes.numberOrNumberString,
-  name: PropTypes.string,
-  placeholder: PropTypes.string,
-  title: PropTypes.string,
-  value: PropTypes.any,
-  onChange: PropTypes.func,
-  onKeyDown: PropTypes.func,
 };
 
 export default PasswordField;
