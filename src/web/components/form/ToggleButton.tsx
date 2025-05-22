@@ -6,10 +6,15 @@
 import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-const Styled = styled.div`
+interface StyledProps extends React.HTMLAttributes<HTMLDivElement> {
+  checked?: boolean;
+  disabled?: boolean;
+  width?: string;
+}
+
+const Styled = styled.div<StyledProps>`
   border-radius: 2px;
   padding: 5px;
   user-select: none;
@@ -37,14 +42,22 @@ const Styled = styled.div`
   }}
 `;
 
+interface ToggleButtonProps extends StyledProps {
+  name?: string;
+  checked?: boolean;
+  disabled?: boolean;
+  onToggle?: (checked: boolean, name?: string) => void;
+}
+
 const ToggleButton = ({
   name,
   checked = false,
   disabled,
   onToggle,
   ...props
-}) => (
+}: ToggleButtonProps) => (
   <Styled
+    data-testid="toggle-button"
     {...props}
     checked={checked}
     disabled={disabled}
@@ -55,13 +68,5 @@ const ToggleButton = ({
     }
   />
 );
-
-ToggleButton.propTypes = {
-  checked: PropTypes.bool,
-  disabled: PropTypes.bool,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onToggle: PropTypes.func,
-};
 
 export default ToggleButton;
