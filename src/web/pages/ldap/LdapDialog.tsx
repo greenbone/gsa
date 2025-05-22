@@ -52,8 +52,7 @@ const LdapDialog = ({
     >
       {({values, onValueChange}) => (
         <>
-          {/* @ts-expect-error */}
-          <CheckBox
+          <CheckBox<boolean>
             checked={values.ldapEnabled}
             checkedValue={true}
             data-testid="enable-checkbox"
@@ -86,8 +85,7 @@ const LdapDialog = ({
             {/* @ts-expect-error */}
             <FileField name="certificate" onChange={onValueChange} />
           </FormGroup>
-          {/* @ts-expect-error */}
-          <CheckBox
+          <CheckBox<boolean>
             checked={values.ldapsOnly}
             checkedValue={true}
             data-testid="ldapsOnly-checkbox"
