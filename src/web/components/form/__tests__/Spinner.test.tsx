@@ -105,7 +105,7 @@ describe('Spinner tests', () => {
       <Spinner data-testid="input" value={1} onChange={onChange} />,
     );
 
-    const element = screen.getByTestId('input');
+    const element = screen.getByTestId<HTMLInputElement>('input');
 
     fireEvent.change(element, {target: {value: '2'}});
 
@@ -124,7 +124,7 @@ describe('Spinner tests', () => {
     const {element} = render(<Spinner value={1} onChange={handler} />);
 
     await clickIncrementButton(element);
-    fireEvent.blur(element);
+    fireEvent.blur(element as HTMLElement);
     expect(handler).toHaveBeenCalledWith(2, undefined);
   });
 
@@ -133,7 +133,7 @@ describe('Spinner tests', () => {
     const {element} = render(<Spinner value={1} onChange={handler} />);
 
     await clickDecrementButton(element);
-    fireEvent.blur(element);
+    fireEvent.blur(element as HTMLElement);
 
     expect(handler).toHaveBeenCalledWith(0, undefined);
   });
