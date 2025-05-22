@@ -9,7 +9,6 @@ import {
   getSelectElement,
   getSelectItemElements,
   openSelectElement,
-  clickElement,
 } from 'web/components/testing';
 import {render, fireEvent, screen} from 'web/utils/Testing';
 
@@ -98,9 +97,7 @@ describe('Select component tests', () => {
     const domItems = getSelectItemElements();
 
     expect(domItems.length).toEqual(2);
-
-    await clickElement(domItems[0]);
-
+    fireEvent.click(domItems[0]);
     expect(onChange).toHaveBeenCalledWith('bar', undefined);
   });
 
@@ -123,9 +120,7 @@ describe('Select component tests', () => {
     await openSelectElement();
 
     const domItems = getSelectItemElements();
-
-    await clickElement(domItems[0]);
-
+    fireEvent.click(domItems[0]);
     expect(onChange).toHaveBeenCalledWith('bar', 'abc');
   });
 
@@ -171,9 +166,7 @@ describe('Select component tests', () => {
     await openSelectElement(input);
 
     const domItems = getSelectItemElements();
-
-    await clickElement(domItems[1]);
-
+    fireEvent.click(domItems[1]);
     expect(onChange).toHaveBeenCalledWith('foo', undefined);
   });
 
