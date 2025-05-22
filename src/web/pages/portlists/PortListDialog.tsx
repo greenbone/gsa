@@ -5,7 +5,7 @@
 
 import {FROM_FILE, FromFile, NOT_FROM_FILE} from 'gmp/commands/portlists';
 import PortList from 'gmp/models/portlist';
-import {parseYesNo} from 'gmp/parser';
+import {parseYesNo, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
@@ -109,8 +109,7 @@ const PortListsDialog = <TPortRange extends PortRange>({
             {!isEdit && (
               <FormGroup title={_('Port Ranges')}>
                 <Row>
-                  {/* @ts-expect-error */}
-                  <Radio
+                  <Radio<YesNo>
                     checked={parseYesNo(state.fromFile) !== FROM_FILE}
                     name="fromFile"
                     title={_('Manual')}
@@ -127,8 +126,7 @@ const PortListsDialog = <TPortRange extends PortRange>({
                   />
                 </Row>
                 <Row>
-                  {/* @ts-expect-error */}
-                  <Radio
+                  <Radio<YesNo>
                     checked={parseYesNo(state.fromFile) === FROM_FILE}
                     name="fromFile"
                     title={_('From file')}
