@@ -5,12 +5,27 @@
 
 import {FileInput} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useCallback} from 'react';
-import PropTypes from 'web/utils/PropTypes';
+import {useCallback} from 'react';
 
-const FileField = ({disabled, grow, name, title, onChange, ...props}) => {
+interface FileFieldProps
+  extends React.ComponentPropsWithoutRef<typeof FileInput> {
+  disabled?: boolean;
+  grow?: number | string;
+  name?: string;
+  title?: string;
+  onChange?: (file: File, name?: string) => void;
+}
+
+const FileField = ({
+  disabled,
+  grow,
+  name,
+  title,
+  onChange,
+  ...props
+}: FileFieldProps) => {
   const handleChange = useCallback(
-    file => {
+    (file: File) => {
       if (!disabled && isDefined(onChange)) {
         onChange(file, name);
       }
@@ -29,14 +44,6 @@ const FileField = ({disabled, grow, name, title, onChange, ...props}) => {
       onChange={handleChange}
     />
   );
-};
-
-FileField.propTypes = {
-  disabled: PropTypes.bool,
-  grow: PropTypes.numberOrNumberString,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onChange: PropTypes.func,
 };
 
 export default FileField;
