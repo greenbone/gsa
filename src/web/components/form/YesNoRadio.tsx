@@ -3,27 +3,35 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
-import React from 'react';
+import {parseYesNo, YES_VALUE, NO_VALUE, YesNo} from 'gmp/parser';
 import Radio from 'web/components/form/Radio';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const YesNoRadio = ({
-  convert = parseYesNo,
+interface YesNoRadioProps<TValue> {
+  convert?: (value?: string) => TValue;
+  disabled?: boolean;
+  name?: string;
+  noValue?: TValue;
+  value?: TValue;
+  yesValue?: TValue;
+  onChange?: (value: TValue, name?: string) => void;
+}
+
+const YesNoRadio = <TValue = YesNo,>({
+  convert = parseYesNo as (value?: string) => TValue,
   disabled,
   value,
   name,
-  yesValue = YES_VALUE,
-  noValue = NO_VALUE,
+  yesValue = YES_VALUE as TValue,
+  noValue = NO_VALUE as TValue,
   onChange,
-}) => {
+}: YesNoRadioProps<TValue>) => {
   const [_] = useTranslation();
 
   return (
     <Row>
-      <Radio
+      <Radio<TValue>
         checked={value === yesValue}
         convert={convert}
         data-testid="radio-yes"
@@ -33,7 +41,7 @@ const YesNoRadio = ({
         value={yesValue}
         onChange={onChange}
       />
-      <Radio
+      <Radio<TValue>
         checked={value === noValue}
         convert={convert}
         data-testid="radio-no"
@@ -45,16 +53,6 @@ const YesNoRadio = ({
       />
     </Row>
   );
-};
-
-YesNoRadio.propTypes = {
-  convert: PropTypes.func,
-  disabled: PropTypes.bool,
-  name: PropTypes.string,
-  noValue: PropTypes.any,
-  value: PropTypes.any,
-  yesValue: PropTypes.any,
-  onChange: PropTypes.func,
 };
 
 export default YesNoRadio;
