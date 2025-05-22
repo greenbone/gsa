@@ -133,7 +133,6 @@ const PortListsDialog = <TPortRange extends PortRange>({
                     value={FROM_FILE}
                     onChange={onValueChange}
                   />
-                  {/* @ts-expect-error */}
                   <FileField
                     disabled={parseYesNo(state.fromFile) !== FROM_FILE}
                     grow="1"

@@ -82,7 +82,6 @@ const LdapDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('CA Certificate')}>
-            {/* @ts-expect-error */}
             <FileField name="certificate" onChange={onValueChange} />
           </FormGroup>
           <CheckBox<boolean>

@@ -25,7 +25,6 @@ const PortListImportDialog = ({onClose, onSave}: PortListImportDialogProps) => {
       {({onValueChange}) => {
         return (
           <FormGroup title={_('Import XML Port List')}>
-            {/* @ts-expect-error */}
             <FileField name="xmlFile" onChange={onValueChange} />
           </FormGroup>
         );
