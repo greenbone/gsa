@@ -17,13 +17,13 @@ describe('FileField tests', () => {
   test('should call change handler with file', () => {
     const onChange = testing.fn();
 
-    const {baseElement} = render(<FileField onChange={onChange} />);
+    const {baseElement} = render(<FileField name="foo" onChange={onChange} />);
 
-    const input = baseElement.querySelector('input[type=file]');
-
-    fireEvent.change(input, {target: {files: ['bar']}});
-
-    expect(onChange).toHaveBeenCalledWith('bar', undefined);
+    const input = baseElement.querySelector('input[type=file]') as Element;
+    fireEvent.change(input, {
+      target: {files: ['bar']},
+    });
+    expect(onChange).toHaveBeenCalledWith('bar', 'foo');
   });
 
   test('should call change handler with file and name', () => {
@@ -31,7 +31,7 @@ describe('FileField tests', () => {
 
     const {baseElement} = render(<FileField name="foo" onChange={onChange} />);
 
-    const input = baseElement.querySelector('input[type=file]');
+    const input = baseElement.querySelector('input[type=file]') as Element;
 
     fireEvent.change(input, {target: {files: ['bar']}});
 
@@ -45,7 +45,7 @@ describe('FileField tests', () => {
       <FileField disabled={true} onChange={onChange} />,
     );
 
-    const input = baseElement.querySelector('input[type=file]');
+    const input = baseElement.querySelector('input[type=file]') as Element;
 
     fireEvent.change(input, {target: {files: ['bar']}});
 
