@@ -53,7 +53,6 @@ const RadiusDialog = ({
             onChange={onValueChange}
           />
           <FormGroup title={_('RADIUS Host')}>
-            {/* @ts-expect-error */}
             <TextField
               data-testid="radiushost-textfield"
               grow="1"

@@ -90,7 +90,6 @@ const PortListsDialog = <TPortRange extends PortRange>({
       {({values: state, onValueChange}) => {
         return (
           <>
-            {/* @ts-expect-error */}
             <TextField
               name="name"
               title={_('Name')}
@@ -98,7 +97,6 @@ const PortListsDialog = <TPortRange extends PortRange>({
               onChange={onValueChange}
             />
 
-            {/* @ts-expect-error */}
             <TextField
               name="comment"
               title={_('Comment')}
@@ -116,7 +114,6 @@ const PortListsDialog = <TPortRange extends PortRange>({
                     value={NOT_FROM_FILE}
                     onChange={onValueChange}
                   />
-                  {/* @ts-expect-error */}
                   <TextField
                     disabled={parseYesNo(state.fromFile) === FROM_FILE}
                     grow="1"
