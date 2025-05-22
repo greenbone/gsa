@@ -62,7 +62,6 @@ const LdapDialog = ({
             onChange={onValueChange}
           />
           <FormGroup title={_('LDAP Host')}>
-            {/* @ts-expect-error */}
             <TextField
               data-testid="ldaphost-textfield"
               name="ldapHost"
@@ -72,7 +71,6 @@ const LdapDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('Auth. DN')}>
-            {/* @ts-expect-error */}
             <TextField
               data-testid="authdn-textfield"
               name="authdn"
