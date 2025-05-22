@@ -16,7 +16,7 @@ interface SelectItem {
   deprecated?: string;
 }
 
-interface SelectProps
+export interface SelectProps
   extends Omit<
     React.ComponentPropsWithoutRef<typeof OpenSightSelect>,
     'onChange'

@@ -11,7 +11,7 @@ import {
   getSelectItemElements,
   getSelectElement,
 } from 'web/components/testing';
-import {render, userEvent} from 'web/utils/Testing';
+import {fireEvent, render} from 'web/utils/Testing';
 
 describe('TimezoneSelect tests', () => {
   test('should render', () => {
@@ -35,7 +35,7 @@ describe('TimezoneSelect tests', () => {
     await openSelectElement();
 
     const items = getSelectItemElements();
-    await userEvent.click(items[1]);
+    fireEvent.click(items[1]);
 
     expect(handler).toHaveBeenCalledWith(timezones[1], undefined);
   });
@@ -47,7 +47,7 @@ describe('TimezoneSelect tests', () => {
     await openSelectElement();
 
     const items = getSelectItemElements();
-    await userEvent.click(items[1]);
+    fireEvent.click(items[1]);
 
     expect(handler).toHaveBeenCalledWith(timezones[1], 'foo');
   });

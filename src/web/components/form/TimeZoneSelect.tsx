@@ -4,11 +4,17 @@
  */
 
 import timezones, {DEFAULT_TIMEZONE} from 'gmp/timezones';
-import React, {useMemo} from 'react';
-import Select from 'web/components/form/Select';
-import PropTypes from 'web/utils/PropTypes';
+import {useMemo} from 'react';
+import Select, {SelectProps} from 'web/components/form/Select';
 
-const TimeZoneSelectComponent = ({value = DEFAULT_TIMEZONE, ...props}) => {
+interface TimeZoneSelectProps extends Omit<SelectProps, 'items' | 'value'> {
+  value?: string;
+}
+
+const TimeZoneSelectComponent = ({
+  value = DEFAULT_TIMEZONE,
+  ...props
+}: TimeZoneSelectProps) => {
   const timezoneItems = useMemo(
     () =>
       timezones.map(name => ({
@@ -19,10 +25,6 @@ const TimeZoneSelectComponent = ({value = DEFAULT_TIMEZONE, ...props}) => {
   );
 
   return <Select {...props} items={timezoneItems} value={value} />;
-};
-
-TimeZoneSelectComponent.propTypes = {
-  value: PropTypes.string,
 };
 
 export default TimeZoneSelectComponent;
