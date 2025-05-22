@@ -5,9 +5,27 @@
 
 import {Textarea as GreenboneTextArea} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import useValueChange from 'web/components/form/useValueChange';
-import PropTypes from 'web/utils/PropTypes';
+
+interface TextAreaProps
+  extends Omit<
+    React.ComponentPropsWithoutRef<typeof GreenboneTextArea>,
+    'onChange' | 'value'
+  > {
+  autosize?: boolean;
+  disabled?: boolean;
+  errorContent?: string;
+  minRows?: number | string;
+  maxRows?: number | string;
+  name?: string;
+  placeholder?: string;
+  title?: string;
+  value?: string;
+  onChange?: (value: string, name?: string) => void;
+  classNames?: {
+    input?: string;
+  };
+}
 
 const TextArea = ({
   autosize,
@@ -22,9 +40,8 @@ const TextArea = ({
   value,
   classNames,
   ...props
-}) => {
-  const handleChange = useValueChange({disabled, name, onChange});
-
+}: TextAreaProps) => {
+  const handleChange = useValueChange<string>({disabled, name, onChange});
   return (
     <GreenboneTextArea
       {...props}
@@ -44,20 +61,6 @@ const TextArea = ({
       onChange={handleChange}
     />
   );
-};
-
-TextArea.propTypes = {
-  autosize: PropTypes.bool,
-  disabled: PropTypes.bool,
-  errorContent: PropTypes.toString,
-  minRows: PropTypes.numberOrNumberString,
-  maxRows: PropTypes.numberOrNumberString,
-  name: PropTypes.string,
-  placeholder: PropTypes.string,
-  title: PropTypes.string,
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-  classNames: PropTypes.object,
 };
 
 export default TextArea;
