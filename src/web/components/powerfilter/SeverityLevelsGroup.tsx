@@ -67,7 +67,7 @@ const SeverityLevelsFilterGroup = ({
       <IconDivider>
         {useCritical && (
           <>
-            <Checkbox
+            <Checkbox<boolean>
               checked={levels.includes('c')}
               data-testid="severity-filter-critical"
               name="c"
@@ -76,14 +76,14 @@ const SeverityLevelsFilterGroup = ({
             <SeverityClassLabel.Critical />
           </>
         )}
-        <Checkbox
+        <Checkbox<boolean>
           checked={levels.includes('h')}
           data-testid="severity-filter-high"
           name="h"
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.High />
-        <Checkbox
+        <Checkbox<boolean>
           checked={levels.includes('m')}
           data-testid="severity-filter-medium"
           name="m"
@@ -97,14 +97,14 @@ const SeverityLevelsFilterGroup = ({
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.Low />
-        <Checkbox
+        <Checkbox<boolean>
           checked={levels.includes('g')}
           data-testid="severity-filter-log"
           name="g"
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.Log />
-        <Checkbox
+        <Checkbox<boolean>
           checked={levels.includes('f')}
           data-testid="severity-filter-false-positive"
           name="f"
