@@ -3,38 +3,49 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import ComplianceStateLabels from 'web/components/label/ComplianceState';
 import IconDivider from 'web/components/layout/IconDivider';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface ComplianceLevelsFilterGroupProps {
+  filter: Filter;
+  onChange: (value: string, field: string) => void;
+  onRemove: () => void;
+  isResult?: boolean;
+}
 
 const ComplianceLevelsFilterGroup = ({
   filter,
   onChange,
   onRemove,
   isResult = false,
-}) => {
+}: ComplianceLevelsFilterGroupProps) => {
   const [_] = useTranslation();
-  const handleComplianceChange = (value, level) => {
+  const handleComplianceChange = (
+    value: boolean,
+    level: string | undefined,
+  ) => {
     const filterName = isResult
       ? 'compliance_levels'
       : 'report_compliance_levels';
 
-    let compliance = filter.get(filterName);
+    let compliance = filter.get(filterName) as string | undefined;
 
     if (!compliance) {
       compliance = '';
     }
 
-    if (value && !compliance.includes(level)) {
+    const includesLevel = compliance.includes(level as string);
+
+    if (value && !includesLevel) {
       compliance += level;
       onChange(compliance, filterName);
-    } else if (!value && compliance.includes(level)) {
-      compliance = compliance.replace(level, '');
+    } else if (!value && includesLevel) {
+      compliance = compliance.replace(level as string, '');
 
       if (compliance.trim().length === 0) {
         onRemove();
@@ -46,7 +57,7 @@ const ComplianceLevelsFilterGroup = ({
 
   let complianceLevels = filter.get(
     isResult ? 'compliance_levels' : 'report_compliance_levels',
-  );
+  ) as string | undefined;
 
   if (!isDefined(complianceLevels)) {
     complianceLevels = '';
@@ -88,13 +99,6 @@ const ComplianceLevelsFilterGroup = ({
       </IconDivider>
     </FormGroup>
   );
-};
-
-ComplianceLevelsFilterGroup.propTypes = {
-  filter: PropTypes.filter.isRequired,
-  isResult: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
 };
 
 export default ComplianceLevelsFilterGroup;
