@@ -63,7 +63,6 @@ const RadiusDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('Secret Key')}>
-            {/* @ts-expect-error */}
             <PasswordField
               data-testid="radiuskey-textfield"
               grow="1"
