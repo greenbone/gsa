@@ -43,8 +43,7 @@ const RadiusDialog = ({
     >
       {({values, onValueChange}) => (
         <>
-          {/* @ts-expect-error */}
-          <CheckBox
+          <CheckBox<boolean>
             checked={values.radiusEnabled}
             checkedValue={true}
             data-testid="enable-checkbox"

@@ -19,9 +19,10 @@ describe('CheckBox component tests', () => {
       />,
     );
 
-    const input = screen.getByTestId('checkbox');
+    const checkbox = screen.getByTestId<HTMLInputElement>('checkbox');
+    expect(checkbox.checked).toBe(false);
 
-    fireEvent.click(input);
+    fireEvent.click(checkbox);
 
     expect(change).toHaveBeenCalledWith(true, 'foo');
   });
@@ -29,7 +30,7 @@ describe('CheckBox component tests', () => {
   test('should use checkedValue', () => {
     const change = testing.fn();
     render(
-      <CheckBox
+      <CheckBox<string>
         checked={false}
         checkedValue="ipsum"
         data-testid="checkbox"
@@ -39,9 +40,10 @@ describe('CheckBox component tests', () => {
       />,
     );
 
-    const input = screen.getByTestId('checkbox');
+    const checkbox = screen.getByTestId<HTMLInputElement>('checkbox');
+    expect(checkbox.checked).toBe(false);
 
-    fireEvent.click(input);
+    fireEvent.click(checkbox);
 
     expect(change).toHaveBeenCalledWith('ipsum', 'foo');
   });
@@ -59,9 +61,10 @@ describe('CheckBox component tests', () => {
       />,
     );
 
-    const input = screen.getByTestId('checkbox');
+    const checkbox = screen.getByTestId<HTMLInputElement>('checkbox');
+    expect(checkbox.checked).toBe(true);
 
-    fireEvent.click(input);
+    fireEvent.click(checkbox);
 
     expect(change).toHaveBeenCalledWith('lorem', 'foo');
   });
@@ -80,9 +83,10 @@ describe('CheckBox component tests', () => {
       />,
     );
 
-    const input = screen.getByTestId('checkbox');
+    const checkbox = screen.getByTestId<HTMLInputElement>('checkbox');
+    expect(checkbox.checked).toBe(true);
 
-    fireEvent.click(input);
+    fireEvent.click(checkbox);
 
     expect(change).not.toHaveBeenCalled();
   });
@@ -92,5 +96,11 @@ describe('CheckBox component tests', () => {
 
     screen.getByTestId('checkbox');
     screen.getByLabelText('bar');
+  });
+
+  test('should render default checked state', () => {
+    render(<CheckBox data-testid="checkbox" />);
+    const checkbox = screen.getByTestId<HTMLInputElement>('checkbox');
+    expect(checkbox.checked).toBe(false);
   });
 });
