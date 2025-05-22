@@ -9,7 +9,7 @@ import {render, fireEvent, screen} from 'web/utils/Testing';
 
 describe('Radio tests', () => {
   test('should render radio', () => {
-    const {element} = render(<Radio />);
+    const {element} = render(<Radio value="" />);
 
     expect(element).toBeInTheDocument();
   });
@@ -17,13 +17,43 @@ describe('Radio tests', () => {
   test('should call change handler', () => {
     const onChange = testing.fn();
 
-    render(<Radio data-testid="input" onChange={onChange} />);
+    render(<Radio data-testid="input" value="" onChange={onChange} />);
 
     const element = screen.getByTestId('input');
 
     fireEvent.click(element);
 
-    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith('', undefined);
+  });
+
+  test('should not call change handler if disabled', () => {
+    const onChange = testing.fn();
+    render(
+      <Radio
+        data-testid="input"
+        disabled={true}
+        value=""
+        onChange={onChange}
+      />,
+    );
+    const element = screen.getByTestId('input');
+    fireEvent.click(element);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  test('should use value as number', () => {
+    const onChange = testing.fn();
+    render(
+      <Radio<number>
+        convert={parseInt}
+        data-testid="input"
+        value={1}
+        onChange={onChange}
+      />,
+    );
+    const element = screen.getByTestId('input');
+    fireEvent.click(element);
+    expect(onChange).toHaveBeenCalledWith(1, undefined);
   });
 
   test('should call change handler with value', () => {
@@ -55,7 +85,14 @@ describe('Radio tests', () => {
   test('should not call change handler if disabled', () => {
     const onChange = testing.fn();
 
-    render(<Radio data-testid="input" disabled={true} onChange={onChange} />);
+    render(
+      <Radio
+        data-testid="input"
+        disabled={true}
+        value=""
+        onChange={onChange}
+      />,
+    );
 
     const element = screen.getByTestId('input');
 
@@ -65,10 +102,10 @@ describe('Radio tests', () => {
   });
 
   test('should render title', () => {
-    const {element} = render(<Radio data-testid="input" title="foo" />);
+    render(<Radio data-testid="input" title="foo" value="" />);
 
-    const titleElement = element.querySelector('label');
-    expect(titleElement).toHaveTextContent('foo');
+    const titleElement = screen.getByLabelText('foo');
+    expect(titleElement).toBeInTheDocument();
   });
 
   test('should not call change handler if already checked', () => {
