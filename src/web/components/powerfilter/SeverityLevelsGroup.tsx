@@ -29,18 +29,18 @@ const SeverityLevelsFilterGroup = ({
   const gmp = useGmp();
 
   const handleLevelChange = useCallback(
-    (value: string, level: string) => {
+    (value: boolean, level: string | undefined) => {
       let levels = filter.get('levels') as string;
 
       if (!isDefined(levels)) {
         levels = '';
       }
 
-      if (value && !levels.includes(level)) {
+      if (value && !levels.includes(level as string)) {
         levels += level;
         onChange(levels, 'levels');
-      } else if (!value && levels.includes(level)) {
-        levels = levels.replace(level, '');
+      } else if (!value && levels.includes(level as string)) {
+        levels = levels.replace(level as string, '');
 
         if (levels.trim().length === 0) {
           onRemove();
@@ -67,7 +67,6 @@ const SeverityLevelsFilterGroup = ({
       <IconDivider>
         {useCritical && (
           <>
-            {/* @ts-expect-error */}
             <Checkbox
               checked={levels.includes('c')}
               data-testid="severity-filter-critical"
@@ -77,7 +76,6 @@ const SeverityLevelsFilterGroup = ({
             <SeverityClassLabel.Critical />
           </>
         )}
-        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('h')}
           data-testid="severity-filter-high"
@@ -85,7 +83,6 @@ const SeverityLevelsFilterGroup = ({
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.High />
-        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('m')}
           data-testid="severity-filter-medium"
@@ -93,7 +90,6 @@ const SeverityLevelsFilterGroup = ({
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.Medium />
-        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('l')}
           data-testid="severity-filter-low"
@@ -101,7 +97,6 @@ const SeverityLevelsFilterGroup = ({
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.Low />
-        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('g')}
           data-testid="severity-filter-log"
@@ -109,7 +104,6 @@ const SeverityLevelsFilterGroup = ({
           onChange={handleLevelChange}
         />
         <SeverityClassLabel.Log />
-        {/* @ts-expect-error */}
         <Checkbox
           checked={levels.includes('f')}
           data-testid="severity-filter-false-positive"
