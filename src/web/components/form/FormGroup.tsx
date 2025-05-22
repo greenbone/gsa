@@ -4,11 +4,18 @@
  */
 
 import {LabelWithIcon as Label} from '@greenbone/opensight-ui-components-mantinev7';
+import {MantineSpacing, StyleProp} from '@mantine/core';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
-import PropTypes from 'web/utils/PropTypes';
+
+interface FormGroupProps {
+  children?: React.ReactNode;
+  'data-testid'?: string;
+  direction?: 'row' | 'column';
+  gap?: StyleProp<MantineSpacing>;
+  title?: string;
+}
 
 const FormGroup = ({
   children,
@@ -16,7 +23,7 @@ const FormGroup = ({
   gap = 'md',
   direction = 'column',
   'data-testid': dataTestId,
-}) => {
+}: FormGroupProps) => {
   const Layout = direction === 'column' ? Column : Row;
   return (
     <Column
@@ -29,14 +36,6 @@ const FormGroup = ({
       <Layout gap={gap}>{children}</Layout>
     </Column>
   );
-};
-
-FormGroup.propTypes = {
-  children: PropTypes.node,
-  'data-testid': PropTypes.string,
-  direction: PropTypes.oneOf(['row', 'column']),
-  gap: PropTypes.string,
-  title: PropTypes.string,
 };
 
 export default FormGroup;
