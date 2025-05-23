@@ -7,27 +7,36 @@ import {
   MultiSelect as MantineMultiSelect,
   TextInput,
   Loader,
+  MultiSelectProps as MantineMultiSelectProps,
+  MantineSize,
 } from '@mantine/core';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useCallback} from 'react';
+import {useCallback} from 'react';
 import styled from 'styled-components';
+import {SelectItem} from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const getSize = size => (size === 'lg' ? '40px' : '32px');
+type Size = MantineSize | undefined;
 
-const getFontSize = size =>
+const getSize = (size: Size) => (size === 'lg' ? '40px' : '32px');
+
+const getFontSize = (size: Size) =>
   size === 'lg' ? 'var(--mantine-font-size-lg)' : 'var(--mantine-font-size-md)';
 
-const getBorderColor = errorContent =>
+const getBorderColor = (errorContent: string | undefined) =>
   isDefined(errorContent)
     ? 'var(--input-error-border-color)'
     : 'var(--input-border-color)';
 
-const getColor = errorContent =>
+const getColor = (errorContent: string | undefined) =>
   isDefined(errorContent) ? 'var(--mantine-color-red-5)' : 'var(--input-color)';
 
-const StyledMultiSelect = styled(MantineMultiSelect)`
+interface StyledMultiSelectProps extends MantineMultiSelectProps {
+  $errorContent?: string;
+  size?: Size;
+}
+
+const StyledMultiSelect = styled(MantineMultiSelect)<StyledMultiSelectProps>`
   .mantine-MultiSelect-input,
   .mantine-MultiSelect-item {
     min-height: ${({size}) => getSize(size)};
@@ -39,6 +48,22 @@ const StyledMultiSelect = styled(MantineMultiSelect)`
     background-color: var(--select-selected-background-color-hover);
   }
 `;
+
+interface MultiSelectProps extends StyledMultiSelectProps {
+  disabled?: boolean;
+  dropdownPosition?: 'top' | 'bottom';
+  errorContent?: string;
+  grow?: number | string;
+  isLoading?: boolean;
+  items?: SelectItem[];
+  label?: string;
+  name?: string;
+  placeholder?: string;
+  searchable?: boolean;
+  title?: string;
+  value?: string[];
+  onChange?: (value: string[], name?: string) => void;
+}
 
 const MultiSelect = ({
   disabled,
@@ -56,10 +81,10 @@ const MultiSelect = ({
   size = 'md',
   onChange,
   ...props
-}) => {
+}: MultiSelectProps) => {
   const [_] = useTranslation();
   const handleChange = useCallback(
-    newValue => {
+    (newValue: string[]) => {
       if (isDefined(onChange)) {
         onChange(newValue, name);
       }
@@ -83,9 +108,9 @@ const MultiSelect = ({
       data-testid="multi-select"
       {...props}
       $errorContent={errorContent}
+      comboboxProps={{position: dropdownPosition}}
       data={items}
       disabled={disabled || !items?.length}
-      dropdownPosition={dropdownPosition}
       error={isDefined(errorContent) && `${errorContent}`}
       label={label}
       name={name}
@@ -98,28 +123,6 @@ const MultiSelect = ({
       onChange={handleChange}
     />
   );
-};
-
-MultiSelect.propTypes = {
-  disabled: PropTypes.bool,
-  dropdownPosition: PropTypes.oneOf(['top', 'bottom']),
-  errorContent: PropTypes.toString,
-  grow: PropTypes.numberOrNumberString,
-  isLoading: PropTypes.bool,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-    }),
-  ),
-  label: PropTypes.string,
-  name: PropTypes.string,
-  placeholder: PropTypes.string,
-  searchable: PropTypes.bool,
-  title: PropTypes.string,
-  value: PropTypes.arrayOf(PropTypes.string),
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
-  onChange: PropTypes.func,
 };
 
 export default MultiSelect;
