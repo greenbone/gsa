@@ -47,7 +47,6 @@ describe('Ldap dialog component tests', () => {
       />,
     );
 
-    // @ts-expect-error
     const button = getDialogSaveButton();
     fireEvent.click(button);
     expect(handleSave).toHaveBeenCalledWith({
@@ -104,7 +103,6 @@ describe('Ldap dialog component tests', () => {
     const ldapsOnlyCheck = getByTestId('ldapsOnly-checkbox');
     fireEvent.click(ldapsOnlyCheck);
 
-    // @ts-expect-error
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
