@@ -11,13 +11,13 @@ import {
   getSelectItemElementsForMultiSelect,
   getSelectedItems,
 } from 'web/components/testing';
-import {render, screen, userEvent, within} from 'web/utils/Testing';
+import {render, userEvent, within, screen} from 'web/utils/Testing';
 
 describe('MultiSelect tests', () => {
   test('should render', () => {
     render(<MultiSelect />);
 
-    const multiSelect = getMultiSelectElement(screen);
+    const multiSelect = getMultiSelectElement();
     expect(multiSelect).toBeVisible();
   });
 
@@ -31,10 +31,10 @@ describe('MultiSelect tests', () => {
 
     expect(screen.queryAllByRole('option').length).toEqual(0);
 
-    const multiSelect = getMultiSelectElement(screen);
+    const multiSelect = getMultiSelectElement();
     await clickElement(multiSelect);
 
-    const options = getSelectItemElementsForMultiSelect(screen);
+    const options = getSelectItemElementsForMultiSelect();
     expect(options.length).toEqual(2);
     expect(options[0]).toHaveTextContent('Bar');
     expect(options[1]).toHaveTextContent('Foo');
@@ -70,10 +70,10 @@ describe('MultiSelect tests', () => {
 
     render(<MultiSelect items={items} onChange={onChange} />);
 
-    const multiSelect = getMultiSelectElement(screen);
+    const multiSelect = getMultiSelectElement();
     await clickElement(multiSelect);
 
-    const options = getSelectItemElementsForMultiSelect(screen);
+    const options = getSelectItemElementsForMultiSelect();
     expect(options.length).toEqual(2);
     await clickElement(options[1]);
     expect(onChange).toHaveBeenCalledWith(['foo'], undefined);
@@ -130,17 +130,17 @@ describe('MultiSelect tests', () => {
 
     render(<MultiSelect items={items} value={[]} />);
 
-    const multiSelect = getMultiSelectElement(screen);
+    const multiSelect = getMultiSelectElement();
     await clickElement(multiSelect);
 
-    expect(getSelectItemElementsForMultiSelect(screen).length).toEqual(3);
+    expect(getSelectItemElementsForMultiSelect().length).toEqual(3);
 
     await userEvent.type(multiSelect, 'ba');
-    expect(getSelectItemElementsForMultiSelect(screen).length).toEqual(2);
+    expect(getSelectItemElementsForMultiSelect().length).toEqual(2);
 
     await userEvent.clear(multiSelect);
     await userEvent.type(multiSelect, 'F');
-    expect(getSelectItemElementsForMultiSelect(screen).length).toEqual(1);
+    expect(getSelectItemElementsForMultiSelect().length).toEqual(1);
   });
 
   test('should select and remove items', async () => {
@@ -151,10 +151,10 @@ describe('MultiSelect tests', () => {
 
     render(<MultiSelect items={items} />);
 
-    const multiSelect = getMultiSelectElement(screen);
+    const multiSelect = getMultiSelectElement();
     await clickElement(multiSelect);
 
-    const options = getSelectItemElementsForMultiSelect(screen);
+    const options = getSelectItemElementsForMultiSelect();
     await clickElement(options[0]);
     await clickElement(options[1]);
 

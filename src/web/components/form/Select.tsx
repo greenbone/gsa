@@ -10,7 +10,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {useState, useCallback} from 'react';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface SelectItem {
+export interface SelectItem {
   label: string;
   value: string;
   deprecated?: string;
