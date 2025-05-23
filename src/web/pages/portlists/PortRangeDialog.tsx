@@ -72,16 +72,14 @@ const PortRangeDialog = ({
             </FormGroup>
 
             <FormGroup direction="row" title={_('Protocol')}>
-              {/* @ts-expect-error */}
-              <Radio
+              <Radio<'tcp' | 'udp'>
                 checked={state.portType === 'tcp'}
                 name="portType"
                 title={_('TCP')}
                 value="tcp"
                 onChange={onValueChange}
               />
-              {/* @ts-expect-error */}
-              <Radio
+              <Radio<'tcp' | 'udp'>
                 checked={state.portType === 'udp'}
                 name="portType"
                 title={_('UDP')}

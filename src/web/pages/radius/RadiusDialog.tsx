@@ -43,8 +43,7 @@ const RadiusDialog = ({
     >
       {({values, onValueChange}) => (
         <>
-          {/* @ts-expect-error */}
-          <CheckBox
+          <CheckBox<boolean>
             checked={values.radiusEnabled}
             checkedValue={true}
             data-testid="enable-checkbox"
@@ -54,7 +53,6 @@ const RadiusDialog = ({
             onChange={onValueChange}
           />
           <FormGroup title={_('RADIUS Host')}>
-            {/* @ts-expect-error */}
             <TextField
               data-testid="radiushost-textfield"
               grow="1"
@@ -64,7 +62,6 @@ const RadiusDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('Secret Key')}>
-            {/* @ts-expect-error */}
             <PasswordField
               data-testid="radiuskey-textfield"
               grow="1"

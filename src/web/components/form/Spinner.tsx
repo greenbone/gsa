@@ -9,9 +9,10 @@ import NumberField, {NumberFieldProps} from 'web/components/form/NumberField';
 interface SpinnerProps
   extends Omit<
     NumberFieldProps,
-    'fixedDecimalScale' | 'hideControls' | 'onChange'
+    'fixedDecimalScale' | 'hideControls' | 'onChange' | 'value' | 'allowEmpty'
   > {
-  onChange: (value: number, name?: string) => void;
+  value?: number;
+  onChange?: (value: number, name?: string) => void;
 }
 
 const Spinner = forwardRef<HTMLInputElement, SpinnerProps>(
@@ -23,7 +24,6 @@ const Spinner = forwardRef<HTMLInputElement, SpinnerProps>(
       fixedDecimalScale={true}
       hideControls={false}
       type={type}
-      /* @ts-expect-error */
       onChange={onChange}
     />
   ),

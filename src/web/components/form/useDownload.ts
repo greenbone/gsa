@@ -10,11 +10,13 @@ import Download from 'web/components/form/Download';
 
 const log = logger.getLogger('web.components.form.useDownload');
 
-type DownloadFunc = (params: {
+type DownloadParams = {
   filename: string;
   data: string;
-  mimetype: string;
-}) => void;
+  mimetype?: string;
+};
+
+export type DownloadFunc = (params: DownloadParams) => void;
 
 /**
  * Hook to download a file
@@ -29,7 +31,7 @@ const useDownload = (): [
 ] => {
   const downloadRef = useRef<Download | null>(null);
 
-  const download = useCallback(({filename, data, mimetype}) => {
+  const download = useCallback(({filename, data, mimetype}: DownloadParams) => {
     if (!hasValue(downloadRef.current)) {
       log.warn('Download ref not set.');
       return;

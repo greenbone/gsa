@@ -267,7 +267,6 @@ const PerformancePage = () => {
             {gmp.settings.enableGreenboneSensor && (
               <FormGroup title={_('Report for Greenbone Sensor')}>
                 <Select
-                  // @ts-expect-error
                   items={renderSelectItems(sensors, DEFAULT_SENSOR_ID)}
                   name="sensorId"
                   value={saveSensorId}

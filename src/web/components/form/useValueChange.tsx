@@ -6,24 +6,25 @@
 import {isDefined} from 'gmp/utils/identity';
 import {useCallback} from 'react';
 
-interface UseValueChangeParams<T> {
+type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
+
+interface UseValueChangeParams<TValue, TChange> {
   disabled?: boolean;
   name?: string;
-  onChange?: (value: T, name?: string) => void;
-  convert?: (value: unknown) => T;
-  valueFunc?: (event: React.ChangeEvent<HTMLInputElement>) => unknown;
+  onChange?: (value: TChange, name?: string) => void;
+  convert?: (value: TValue) => TChange;
+  valueFunc?: (event: ChangeEvent) => TValue;
 }
 
-const eventTargetValue = (event: React.ChangeEvent<HTMLInputElement>) =>
-  event.target.value;
-const noOpConvert = <T,>(value: unknown): T => value as T;
+const eventTargetValue = (event: ChangeEvent) => event.target.value;
+const noOpConvert = <TValue,>(value: TValue): TValue => value;
 /**
  * A hook that handles the change of a value of an input field.
  *
  * It gets the event target value and optionally converts it.
  * value and name are passed to the onChange function.
  *
- * @param {Object} param0 An object with the following properties:
+ * @param object An object with the following properties:
  *  - disabled: A boolean that indicates if the value can be changed.
  *  - name: A string that represents the name of the value.
  *  - onChange: A function that is called when the value changes.
@@ -31,15 +32,15 @@ const noOpConvert = <T,>(value: unknown): T => value as T;
  *  - valueFunc: A function that gets the value from the event. Defaults to event.target.value.
  * @returns A function as a callback that handles the change of a value in an input field.
  */
-const useValueChange = <T,>({
+const useValueChange = <TConvert, TValue = string>({
   disabled = false, // Default to false
   name,
   onChange,
-  convert = noOpConvert,
-  valueFunc = eventTargetValue,
-}: UseValueChangeParams<T>) => {
+  convert = noOpConvert as (value: TValue) => TConvert,
+  valueFunc = eventTargetValue as (event: ChangeEvent) => TValue,
+}: UseValueChangeParams<TValue, TConvert>) => {
   const notifyChange = useCallback(
-    (value: T) => {
+    (value: TConvert) => {
       if (isDefined(onChange) && !disabled) {
         onChange(value, name);
       }
@@ -48,7 +49,7 @@ const useValueChange = <T,>({
   );
 
   const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (event: ChangeEvent) => {
       notifyChange(convert(valueFunc(event)));
     },
     [notifyChange, convert, valueFunc],
