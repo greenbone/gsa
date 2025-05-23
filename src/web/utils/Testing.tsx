@@ -105,7 +105,7 @@ export const render = (ui: React.ReactNode) => {
     }),
     baseElement,
     container,
-    element: hasValue(container) ? container.lastChild : undefined,
+    element: container.lastChild as HTMLElement,
     getAllByName: (name: string) => getAllByName(baseElement, name),
     getByName: (name: string) => getByName(baseElement, name),
     queryByName: (name: string) => queryByName(baseElement, name),
