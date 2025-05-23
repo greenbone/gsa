@@ -22,7 +22,7 @@ import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import {DEFAULT_LANGUAGE, getLocale} from 'gmp/locale/lang';
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {MemoryRouter, useLocation} from 'react-router';
@@ -105,7 +105,7 @@ export const render = (ui: React.ReactNode) => {
     }),
     baseElement,
     container,
-    element: hasValue(container) ? container.lastChild : undefined,
+    element: container.lastChild as HTMLElement,
     getAllByName: (name: string) => getAllByName(baseElement, name),
     getByName: (name: string) => getByName(baseElement, name),
     queryByName: (name: string) => queryByName(baseElement, name),
