@@ -15,7 +15,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/actionFunction';
-import AlertComponent from 'web/pages/alerts/Component';
+import AlertComponent from 'web/pages/alerts/AlertComponent';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/Component';

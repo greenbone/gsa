@@ -10,7 +10,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {StartIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
-import AlertComponent from 'web/pages/alerts/Component';
+import AlertComponent from 'web/pages/alerts/AlertComponent';
 import TriggerAlertDialog from 'web/pages/reports/TriggerAlertDialog';
 import {
   loadEntities as loadAlerts,

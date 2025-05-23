@@ -20,7 +20,7 @@ import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import AlertComponent from 'web/pages/alerts/Component';
+import AlertComponent from 'web/pages/alerts/AlertComponent';
 import AuditDialog from 'web/pages/audits/Dialog';
 import PolicyDialog from 'web/pages/policies/Dialog';
 import EditPolicyFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
