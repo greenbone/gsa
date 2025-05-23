@@ -43,7 +43,6 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    // @ts-expect-error
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
@@ -93,7 +92,6 @@ describe('RADIUS dialog component tests', () => {
     const radiusKeyTextField = getByTestId('radiuskey-textfield');
     changeInputValue(radiusKeyTextField, 'bar');
 
-    // @ts-expect-error
     const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
