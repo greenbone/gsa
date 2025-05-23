@@ -7,13 +7,22 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import useClickHandler from 'web/components/form/useClickHandler';
 import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
+interface MockEvent {
+  currentTarget: {
+    value: string;
+    name: string;
+  };
+}
+
 describe('useClickHandler tests', () => {
   test('should call click handler with value', () => {
     const {renderHook} = rendererWith();
 
     const onClick = testing.fn();
-    const {result} = renderHook(() => useClickHandler({onClick, name: 'test'}));
-    result.current({target: {value: 'foo', name: 'test'}});
+    const {result} = renderHook(() =>
+      useClickHandler<{name: string}, MockEvent>({onClick, name: 'test'}),
+    );
+    result.current({currentTarget: {value: 'foo', name: 'test'}});
 
     expect(onClick).toHaveBeenCalledWith('foo', 'test');
   });
@@ -23,13 +32,13 @@ describe('useClickHandler tests', () => {
 
     const onClick = testing.fn();
     const {result} = renderHook(() =>
-      useClickHandler({
+      useClickHandler<{bar: string}, MockEvent>({
         onClick,
         valueFunc: (event, props) => props.bar,
         bar: 'baz',
       }),
     );
-    result.current({target: {value: 'foo', name: 'test'}});
+    result.current({currentTarget: {value: 'foo', name: 'test'}});
 
     expect(onClick).toHaveBeenCalledWith('baz', 'test');
   });
@@ -39,13 +48,13 @@ describe('useClickHandler tests', () => {
 
     const onClick = testing.fn();
     const {result} = renderHook(() =>
-      useClickHandler({
+      useClickHandler<{name: string}, MockEvent>({
         onClick,
         nameFunc: (event, props) => props.name,
         name: 'ipsum',
       }),
     );
-    result.current({target: {value: 'foo', name: 'test'}});
+    result.current({currentTarget: {value: 'foo', name: 'test'}});
 
     expect(onClick).toHaveBeenCalledWith('foo', 'ipsum');
   });
@@ -55,12 +64,12 @@ describe('useClickHandler tests', () => {
 
     const onClick = testing.fn();
     const {result} = renderHook(() =>
-      useClickHandler({
+      useClickHandler<{}, MockEvent>({
         onClick,
         convert: value => value.toUpperCase(),
       }),
     );
-    result.current({target: {value: 'foo', name: 'test'}});
+    result.current({currentTarget: {value: 'foo', name: 'test'}});
 
     expect(onClick).toHaveBeenCalledWith('FOO', 'test');
   });
@@ -70,10 +79,25 @@ describe('useClickHandler tests', () => {
     const handleClick = testing.fn();
     const ClickComponent = ({onClick}) => {
       const handleClick = useClickHandler({onClick});
+      return <button data-testid="button" value="foo" onClick={handleClick} />;
+    };
+    render(<ClickComponent onClick={handleClick} />);
+
+    const button = screen.getByTestId('button');
+    fireEvent.click(button);
+
+    expect(handleClick).toHaveBeenCalledWith('foo', '');
+  });
+
+  test('should work with a button component and name', () => {
+    const {render} = rendererWith();
+    const handleClick = testing.fn();
+    const ClickComponent = ({onClick}) => {
+      const handleClick = useClickHandler({onClick});
       return (
         <button
           data-testid="button"
-          name="test"
+          name="foo"
           value="foo"
           onClick={handleClick}
         />
@@ -84,6 +108,6 @@ describe('useClickHandler tests', () => {
     const button = screen.getByTestId('button');
     fireEvent.click(button);
 
-    expect(handleClick).toHaveBeenCalledWith('foo', 'test');
+    expect(handleClick).toHaveBeenCalledWith('foo', 'foo');
   });
 });
