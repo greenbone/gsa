@@ -4,12 +4,21 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {DownloadFunc} from 'web/components/form/useDownload';
 import withDownload from 'web/components/form/withDownload';
 import {render, fireEvent} from 'web/utils/Testing';
 
-const TestComponent = withDownload(({onDownload, filename, data}) => (
-  <button data-testid="button" onClick={() => onDownload({filename, data})} />
-));
+interface TestComponentProps {
+  onDownload?: DownloadFunc;
+  filename: string;
+  data: string;
+}
+
+const TestComponent = withDownload<TestComponentProps>(
+  ({onDownload, filename, data}) => (
+    <button data-testid="button" onClick={() => onDownload({filename, data})} />
+  ),
+);
 
 const createObjectURL = testing.fn().mockReturnValue('foo://bar');
 window.URL.createObjectURL = createObjectURL;
