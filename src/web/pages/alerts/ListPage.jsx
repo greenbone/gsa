@@ -12,7 +12,7 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import AlertComponent from 'web/pages/alerts/Component';
+import AlertComponent from 'web/pages/alerts/AlertComponent';
 import AlertsFilterDialog from 'web/pages/alerts/FilterDialog';
 import AlertTable from 'web/pages/alerts/Table';
 import {
