@@ -23,7 +23,11 @@ const UseFormValuesTestComponent = () => {
         data-testid="changeToSameValue"
         onClick={() => handleValueChange('bar', 'foo')}
       />
-      <TextField name="foo" value={values.foo} onChange={handleValueChange} />
+      <TextField
+        name="foo"
+        value={values.foo}
+        onChange={handleValueChange as (value: string, name?: string) => void}
+      />
     </React.Fragment>
   );
 };
