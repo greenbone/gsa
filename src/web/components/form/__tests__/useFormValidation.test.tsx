@@ -20,7 +20,7 @@ import {render, fireEvent, screen} from 'web/utils/Testing';
  */
 
 const validationRules = {
-  foo: value => {
+  foo: (value: unknown) => {
     if (value !== '' && value !== 'foo') {
       throw Error('Value must be foo!');
     }
@@ -28,10 +28,14 @@ const validationRules = {
 };
 const fieldsToValidate = ['foo'];
 
+interface FormValues {
+  foo: string;
+}
+
 const UseFormValidationTestComponent = ({onSave}) => {
-  const [values, handleValueChange] = useFormValues({foo: ''});
-  const [error, setError] = useState();
-  const {hasError, errors, validate} = useFormValidation(
+  const [values, handleValueChange] = useFormValues<FormValues>({foo: ''});
+  const [error, setError] = useState<string | undefined>();
+  const {hasError, errors, validate} = useFormValidation<FormValues>(
     validationRules,
     values,
     {
