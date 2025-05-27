@@ -11,16 +11,16 @@ import {render, fireEvent} from 'web/utils/Testing';
 
 const TestInput = ({...props}) => <input {...props} type="text" />;
 
-interface TestComponentProps<TValue = string>
-  extends WithClickHandlerProps<TValue> {
-  onChange: (value: string, name?: string) => void;
+interface TestComponentProps extends WithClickHandlerProps<string> {
+  onChange?: (value: string) => void;
 }
 
 describe('withClickHandler tests', () => {
   test('should call click handler with value', () => {
-    const Component = withClickHandler<string, string, TestComponentProps>()(
-      TestInput,
-    );
+    const Component = withClickHandler<TestComponentProps, string>({
+      valueFunc: (_event, props): string => props.value,
+      nameFunc: (_event, props): string | undefined => props.name,
+    })(TestInput);
     const onChange = testing.fn();
     const onClick = testing.fn();
     const {element} = render(
@@ -33,9 +33,10 @@ describe('withClickHandler tests', () => {
   });
 
   test('should call click handler with value and name', () => {
-    const Component = withClickHandler<string, string, TestComponentProps>()(
-      TestInput,
-    );
+    const Component = withClickHandler<TestComponentProps, string>({
+      valueFunc: (_event, props): string => props.value,
+      nameFunc: (_event, props): string | undefined => props.name,
+    })(TestInput);
 
     const onClick = testing.fn();
     const onChange = testing.fn();
@@ -51,28 +52,5 @@ describe('withClickHandler tests', () => {
     fireEvent.click(element);
 
     expect(onClick).toHaveBeenCalledWith('foo', 'bar');
-  });
-
-  test('should call click handler with converted value', () => {
-    const Component = withClickHandler<
-      number,
-      number,
-      TestComponentProps<number>
-    >()(TestInput);
-
-    const onClick = testing.fn();
-    const onChange = testing.fn();
-    const {element} = render(
-      <Component
-        convert={v => v * 2}
-        value={21}
-        onChange={onChange}
-        onClick={onClick}
-      />,
-    );
-
-    fireEvent.click(element);
-
-    expect(onClick).toHaveBeenCalledWith(42, undefined);
   });
 });
