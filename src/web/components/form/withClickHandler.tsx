@@ -4,61 +4,38 @@
  */
 
 import React from 'react';
-import useClickHandler, {
-  ClickEvent,
-  ClickHandlerParams,
-} from 'web/components/form/useClickHandler';
+import useClickHandler, {ClickEvent} from 'web/components/form/useClickHandler';
 
-interface ClickHandlerProps<TEvent = ClickEvent> {
-  onClick?: (value: TEvent, name?: string) => void;
-}
+type WrappedComponent<TEvent> = React.ComponentType<{
+  onClick?: (event: TEvent) => void;
+}>;
 
 export interface WithClickHandlerProps<TValue> {
+  children?: React.ReactNode;
   name?: string;
   value: TValue;
+  onClick?: (value: TValue, name?: string) => void;
 }
 
-const valueFromProps = <TEvent, TValue>(
-  event: TEvent,
-  props: WithClickHandlerProps<TValue>,
-) => props.value;
+interface WithClickHandlerParams<TProps, TValue, TEvent> {
+  valueFunc: (event: TEvent, props: TProps) => TValue;
+  nameFunc: (event: TEvent, props: TProps) => string | undefined;
+}
 
-const nameFromProps = <TEvent, TValue>(
-  event: TEvent,
-  props: WithClickHandlerProps<TValue>,
-) => props.name;
-
-const withClickHandler =
-  <
-    TValue = string,
-    TConvert = string,
-    TCurrentProps extends
-      WithClickHandlerProps<TValue> = WithClickHandlerProps<TValue>,
-    TEvent = ClickEvent,
-  >() =>
-  (Component: React.ComponentType<ClickHandlerProps<TEvent>>) =>
-  ({
-    onClick,
-    convert,
-    valueFunc = valueFromProps<TEvent, TValue>,
-    nameFunc = nameFromProps<TEvent, TValue>,
-    ...props
-  }: ClickHandlerParams<TCurrentProps, TEvent, TValue, TConvert> &
-    TCurrentProps) => {
-    const handleClick = useClickHandler<
-      TCurrentProps,
-      TEvent,
-      TValue,
-      TConvert
-    >({
-      onClick,
-      convert,
-      valueFunc,
-      nameFunc,
-      ...props,
-    } as ClickHandlerParams<TCurrentProps, TEvent, TValue, TConvert> &
-      TCurrentProps);
-    return <Component {...props} onClick={handleClick} />;
-  };
+function withClickHandler<TProps, TValue, TEvent = ClickEvent>({
+  valueFunc,
+  nameFunc,
+}: WithClickHandlerParams<TProps, TValue, TEvent>) {
+  return (Component: WrappedComponent<TEvent>) =>
+    ({onClick, ...props}: WithClickHandlerProps<TValue> & TProps) => {
+      const handleClick = useClickHandler<TProps, TValue, TEvent>({
+        onClick,
+        valueFunc,
+        nameFunc,
+        props: props as TProps,
+      });
+      return <Component {...props} onClick={handleClick} />;
+    };
+}
 
 export default withClickHandler;

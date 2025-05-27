@@ -4,7 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import useClickHandler from 'web/components/form/useClickHandler';
+import useClickHandler, {
+  nameFromEvent,
+  valueFromEvent,
+} from 'web/components/form/useClickHandler';
 import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
 
 interface MockEvent {
@@ -20,7 +23,12 @@ describe('useClickHandler tests', () => {
 
     const onClick = testing.fn();
     const {result} = renderHook(() =>
-      useClickHandler<{name: string}, MockEvent>({onClick, name: 'test'}),
+      useClickHandler<{name: string}, string, MockEvent>({
+        onClick,
+        nameFunc: nameFromEvent,
+        valueFunc: valueFromEvent,
+        props: {name: 'test'},
+      }),
     );
     result.current({currentTarget: {value: 'foo', name: 'test'}});
 
@@ -32,10 +40,11 @@ describe('useClickHandler tests', () => {
 
     const onClick = testing.fn();
     const {result} = renderHook(() =>
-      useClickHandler<{bar: string}, MockEvent>({
+      useClickHandler<{bar: string}, string, MockEvent>({
         onClick,
         valueFunc: (event, props) => props.bar,
-        bar: 'baz',
+        nameFunc: nameFromEvent,
+        props: {bar: 'baz'},
       }),
     );
     result.current({currentTarget: {value: 'foo', name: 'test'}});
@@ -48,10 +57,11 @@ describe('useClickHandler tests', () => {
 
     const onClick = testing.fn();
     const {result} = renderHook(() =>
-      useClickHandler<{name: string}, MockEvent>({
+      useClickHandler<{name: string}, string, MockEvent>({
         onClick,
+        valueFunc: valueFromEvent,
         nameFunc: (event, props) => props.name,
-        name: 'ipsum',
+        props: {name: 'ipsum'},
       }),
     );
     result.current({currentTarget: {value: 'foo', name: 'test'}});
@@ -64,9 +74,10 @@ describe('useClickHandler tests', () => {
 
     const onClick = testing.fn();
     const {result} = renderHook(() =>
-      useClickHandler<{}, MockEvent>({
+      useClickHandler<{}, string, MockEvent>({
         onClick,
-        convert: value => value.toUpperCase(),
+        nameFunc: nameFromEvent,
+        valueFunc: event => valueFromEvent(event).toUpperCase(),
       }),
     );
     result.current({currentTarget: {value: 'foo', name: 'test'}});
@@ -78,7 +89,11 @@ describe('useClickHandler tests', () => {
     const {render} = rendererWith();
     const handleClick = testing.fn();
     const ClickComponent = ({onClick}) => {
-      const handleClick = useClickHandler({onClick});
+      const handleClick = useClickHandler({
+        onClick,
+        valueFunc: valueFromEvent,
+        nameFunc: nameFromEvent,
+      });
       return <button data-testid="button" value="foo" onClick={handleClick} />;
     };
     render(<ClickComponent onClick={handleClick} />);
@@ -93,7 +108,11 @@ describe('useClickHandler tests', () => {
     const {render} = rendererWith();
     const handleClick = testing.fn();
     const ClickComponent = ({onClick}) => {
-      const handleClick = useClickHandler({onClick});
+      const handleClick = useClickHandler({
+        onClick,
+        valueFunc: valueFromEvent,
+        nameFunc: nameFromEvent,
+      });
       return (
         <button
           data-testid="button"
