@@ -5,7 +5,9 @@
 
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import useClickHandler from 'web/components/form/useClickHandler';
+import useClickHandler, {
+  valueFromEvent,
+} from 'web/components/form/useClickHandler';
 import Theme from 'web/utils/Theme';
 
 const StyledSpan = styled.span`
@@ -24,8 +26,9 @@ const StyledSpan = styled.span`
 const RowDetailsToggle = ({name, onClick, ...props}) => {
   const handleClick = useClickHandler({
     onClick,
-    name,
     nameFunc: (event, props) => props.name,
+    valueFunc: valueFromEvent,
+    props: {name},
   });
   return (
     <StyledSpan

@@ -26,4 +26,7 @@ MenuEntry.propTypes = {
   to: PropTypes.string,
 };
 
-export default withClickHandler()(MenuEntry);
+export default withClickHandler({
+  valueFunc: (event, props) => props.value,
+  nameFunc: (event, props) => props.name,
+})(MenuEntry);
