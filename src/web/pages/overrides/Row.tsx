@@ -116,7 +116,7 @@ const Row = ({
         </span>
       </TableData>
       <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
-      <TableData title={entity.hosts}>
+      <TableData title={entity.hosts.join(', ')}>
         {shorten(entity.hosts.join(', '))}
       </TableData>
       <TableData title={entity.port}>{shorten(entity.port)}</TableData>
