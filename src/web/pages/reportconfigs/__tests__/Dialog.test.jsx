@@ -29,7 +29,6 @@ import {
   fireEvent,
   getByName,
   getAllByName,
-  screen,
   within,
 } from 'web/utils/Testing';
 
@@ -442,8 +441,7 @@ describe('New Report Config Dialog component tests', () => {
     });
 
     await clickElement(closeBtnElement);
-    const multiSelectMenuItems =
-      await getSelectItemElementsForMultiSelect(screen);
+    const multiSelectMenuItems = getSelectItemElementsForMultiSelect();
     await clickElement(multiSelectMenuItems[1]);
 
     const saveButton = getDialogSaveButton();
