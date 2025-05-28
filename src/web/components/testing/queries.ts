@@ -30,7 +30,9 @@ export const getElementOrReturnDocument = (element?: HTMLElement) =>
  */
 export const getRadioInputs = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-Radio-radio');
+  return Array.from(
+    element.querySelectorAll<HTMLElement>('.mantine-Radio-radio'),
+  );
 };
 
 /**
@@ -41,7 +43,7 @@ export const getRadioInputs = (element?: HTMLElement) => {
  */
 export const getSelectItemElements = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelectorAll("[role='option']");
+  return Array.from(element.querySelectorAll<HTMLElement>("[role='option']"));
 };
 
 /**
@@ -81,7 +83,9 @@ export const queryAllSelectElements = (element?: HTMLElement) => {
  */
 export const getMultiSelectElements = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-MultiSelect-inputField');
+  return Array.from(
+    element.querySelectorAll<HTMLElement>('.mantine-MultiSelect-inputField'),
+  );
 };
 
 /**
@@ -101,7 +105,9 @@ export const getMultiSelectElement = (element?: HTMLElement) => {
  * @returns A NodeList of selected items.
  */
 export const getSelectedItems = (element: ParentNode) => {
-  return element.querySelectorAll<HTMLElement>('.mantine-MultiSelect-pill');
+  return Array.from(
+    element.querySelectorAll<HTMLElement>('.mantine-MultiSelect-pill'),
+  );
 };
 
 /**
@@ -155,7 +161,7 @@ export const getDialog = (element?: HTMLElement) => {
  */
 export const queryDialogContent = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  return dialog.querySelector('.mantine-Modal-body');
+  return dialog.querySelector<HTMLElement>('.mantine-Modal-body');
 };
 
 /**
@@ -166,7 +172,7 @@ export const queryDialogContent = (dialog?: HTMLElement) => {
  */
 export const queryDialogTitle = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  return dialog.querySelector('.mantine-Modal-title');
+  return dialog.querySelector<HTMLElement>('.mantine-Modal-title');
 };
 
 /**
@@ -210,7 +216,7 @@ export const getDialogXButton = (dialog?: HTMLElement) => {
  */
 export const queryPowerFilter = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelector('.powerfilter');
+  return element.querySelector<HTMLElement>('.powerfilter');
 };
 
 /**
@@ -221,7 +227,9 @@ export const queryPowerFilter = (element?: HTMLElement) => {
  */
 export const queryTextInputs = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-TextInput-input');
+  return Array.from(
+    element.querySelectorAll<HTMLElement>('.mantine-TextInput-input'),
+  );
 };
 
 /**
@@ -276,7 +284,9 @@ export const queryTableHeader = (element?: HTMLElement) => {
  */
 export const queryCheckBoxes = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-Checkbox-input');
+  return Array.from(
+    element.querySelectorAll<HTMLElement>('.mantine-Checkbox-input'),
+  );
 };
 
 /**
@@ -287,5 +297,7 @@ export const queryCheckBoxes = (element?: HTMLElement) => {
  */
 export const queryFileInputs = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-FileInput-input');
+  return Array.from(
+    element.querySelectorAll<HTMLElement>('.mantine-FileInput-input'),
+  );
 };
