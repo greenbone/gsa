@@ -7,6 +7,8 @@ import {
   getAllByRole,
   getByRole,
   getByTestId,
+  getElementError,
+  queryAllByAttribute,
   queryAllByRole,
   queryAllByTestId,
   queryByRole,
@@ -300,4 +302,62 @@ export const queryFileInputs = (element?: HTMLElement) => {
   return Array.from(
     element.querySelectorAll<HTMLElement>('.mantine-FileInput-input'),
   );
+};
+
+/**
+ * Queries all elements within a given container that have the specified `name` attribute.
+ *
+ * @param container - The HTML container element to search within.
+ * @param name - The value of the `name` attribute to match.
+ * @returns An array of elements that match the specified `name` attribute.
+ */
+export const queryAllByName = (container: HTMLElement, name: string) =>
+  queryAllByAttribute('name', container, name);
+
+/**
+ * Queries the given container for elements matching the specified name and returns the first matching element.
+ * If no elements are found, returns `null`.
+ *
+ * @param container - The HTML container element to search within.
+ * @param name - The name attribute or identifier to match elements against.
+ * @returns The first matching HTMLElement, or `null` if no matches are found.
+ */
+export const queryByName = (container: HTMLElement, name: string) => {
+  const elements = queryAllByName(container, name);
+  if (!elements.length) {
+    return null;
+  }
+  return elements[0];
+};
+
+/**
+ * Retrieves all elements within a given container that match the specified name.
+ * Throws an error if no matching elements are found.
+ *
+ * @param container - The HTML container element to search within.
+ * @param name - The name attribute value to match against.
+ * @returns An array of elements that match the specified name.
+ * @throws Will throw an error if no elements with the specified name are found.
+ */
+export const getAllByName = (container: HTMLElement, name: string) => {
+  const elements = queryAllByName(container, name);
+  if (!elements.length) {
+    throw getElementError(
+      `Unable to find an element with the name: ${name}.`,
+      container,
+    );
+  }
+  return elements;
+};
+
+/**
+ * Retrieves the first element within a container that matches the specified name.
+ *
+ * @param container - The HTML container element to search within.
+ * @param name - The name attribute value to match.
+ * @returns The first matching HTMLElement, or undefined if no matches are found.
+ */
+export const getByName = (container: HTMLElement, name: string) => {
+  const elements = getAllByName(container, name);
+  return elements[0];
 };
