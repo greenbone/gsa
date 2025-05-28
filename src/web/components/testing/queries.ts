@@ -3,19 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {PointerEventsCheckLevel} from '@testing-library/user-event';
-import {isDefined} from 'gmp/utils/identity';
-import {expect, Mock} from 'vitest';
 import {
-  userEvent,
-  fireEvent,
-  queryByRole,
+  getAllByRole,
   getByRole,
   getByTestId,
-  queryAllByTestId,
   queryAllByRole,
-  screen,
-} from 'web/utils/Testing';
+  queryAllByTestId,
+  queryByRole,
+} from '@testing-library/react';
+import {isDefined} from 'gmp/utils/identity';
 
 /**
  * Returns the provided element if it is defined, otherwise returns the document body.
@@ -49,23 +45,6 @@ export const getSelectItemElements = (element?: HTMLElement) => {
 };
 
 /**
- * Retrieves the selectable item elements for a given select element.
- *
- * @param element - The optional select element to retrieve items for. If not provided, a default select element will be used.
- * @returns A promise that resolves to a NodeList of the selectable item elements.
- */
-export const getSelectItemElementsForSelect = async (
-  element?: HTMLSelectElement,
-) => {
-  element = isDefined(element) ? element : getSelectElement();
-  await openSelectElement(element);
-  const selectItemsId = element.getAttribute('aria-controls');
-  const itemsContainer =
-    document.body.querySelector<HTMLElement>('#' + selectItemsId) || undefined;
-  return getSelectItemElements(itemsContainer);
-};
-
-/**
  * Get the input box of a Select component
  *
  * This function first attempts to find an element with the test ID 'form-select'.
@@ -95,29 +74,6 @@ export const queryAllSelectElements = (element?: HTMLElement) => {
 };
 
 /**
- * Open a select element (MultiSelect, Select, etc.)
- *
- * @param select - An optional select element to open. If not provided, it defaults to the result of getSelectElement().
- * @returns A promise that resolves when the select element has been opened.
- */
-export const openSelectElement = async (select?: HTMLSelectElement) => {
-  select = select || getSelectElement();
-  await clickElement(select);
-};
-
-/**
- * Clicks on the given element/item/node using userEvent.
- *
- * @param element - The element to be clicked.
- * @returns A promise that resolves when the click action is complete.
- */
-export const clickElement = async (element: Element) => {
-  await userEvent.click(element, {
-    pointerEventsCheck: PointerEventsCheckLevel.Never,
-  });
-};
-
-/**
  * Get all multi select (root) elements
  *
  * @param element - An optional element to search within. If not provided, the document will be used.
@@ -133,20 +89,9 @@ export const getMultiSelectElements = (element?: HTMLElement) => {
  *
  * @returns The found multi select element.
  */
-export const getMultiSelectElement = () => {
-  return screen.getByRole('textbox');
-};
-
-/**
- * Open a MultiSelect component for displaying item selection
- *
- * @param element - The multi-select element to open. If not defined, it will use a default multi-select element.
- * @returns A promise that resolves when the input element has been clicked.
- */
-export const openMultiSelectElement = async (element?: HTMLElement) => {
-  element = isDefined(element) ? element : getMultiSelectElement();
-  const input = getSelectElement(element);
-  return await clickElement(input);
+export const getMultiSelectElement = (element?: HTMLElement) => {
+  element = getElementOrReturnDocument(element);
+  return getByRole(element, 'textbox');
 };
 
 /**
@@ -164,35 +109,9 @@ export const getSelectedItems = (element: ParentNode) => {
  *
  * @returns An array of select item elements.
  */
-export const getSelectItemElementsForMultiSelect = () => {
-  return screen.getAllByRole('option');
-};
-
-/**
- * Changes the value of an input element like Select or TestField component and triggers the blur event.
- *
- * @param element - The input element whose value is to be changed.
- * @param value - The new value to be set for the input element.
- */
-export const changeInputValue = (
-  element: Document | Element | Window | Node,
-  value: string,
-) => {
-  fireEvent.change(element, {target: {value}});
-  fireEvent.blur(element);
-};
-
-/**
- * Changes the value of a select input element.
- *
- * @param value - The new value to set for the select input.
- * @param input - The select input element to change. If not provided, a default select element will be used.
- */
-export const changeSelectInput = (value: string, input?: HTMLSelectElement) => {
-  if (!isDefined(input)) {
-    input = getSelectElement();
-  }
-  changeInputValue(input, value);
+export const getSelectItemElementsForMultiSelect = (element?: HTMLElement) => {
+  element = getElementOrReturnDocument(element);
+  return getAllByRole(element, 'option');
 };
 
 /**
@@ -273,16 +192,14 @@ export const getDialogCloseButton = (dialog?: HTMLElement) => {
 };
 
 /**
- * Closes a dialog by clicking its close (X) button.
+ * Retrieves the dialog  X button to close it.
  *
- * @param dialog - The dialog element to close. If not provided, it defaults to the result of getDialog().
+ * @param dialog - The dialog element. If not provided, the default dialog will be used.
+ * @returns The X button element within the dialog.
  */
-export const closeDialog = (dialog?: HTMLElement) => {
+export const getDialogXButton = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  const closeButton = dialog.querySelector(
-    '.mantine-CloseButton-root',
-  ) as HTMLElement;
-  fireEvent.click(closeButton);
+  return dialog.querySelector<HTMLElement>('.mantine-CloseButton-root');
 };
 
 /**
@@ -371,31 +288,4 @@ export const queryCheckBoxes = (element?: HTMLElement) => {
 export const queryFileInputs = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
   return element.querySelectorAll('.mantine-FileInput-input');
-};
-
-export const testBulkTrashcanDialog = (
-  _screen: unknown,
-  dialogAction: Mock,
-) => {
-  const dialog = screen.getByRole('dialog');
-  expect(dialog).toBeVisible();
-
-  const moveToTrashcanButton = screen.getByText('Move to Trashcan');
-  fireEvent.click(moveToTrashcanButton);
-
-  expect(dialogAction).toHaveBeenCalled();
-};
-
-export const testBulkDeleteDialog = (_screen: unknown, dialogAction: Mock) => {
-  const dialog = screen.getByTestId('confirmation-dialog');
-  expect(dialog).toBeVisible();
-
-  const title = screen.getByText('Confirm Deletion');
-
-  expect(title).toBeVisible();
-
-  const deleteButton = screen.getByText('Delete');
-  fireEvent.click(deleteButton);
-
-  expect(dialogAction).toHaveBeenCalled();
 };
