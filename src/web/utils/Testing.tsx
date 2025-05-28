@@ -13,8 +13,6 @@ import {
   act,
   render as reactTestingRender,
   cleanup,
-  queryAllByAttribute,
-  getElementError,
   within,
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
@@ -32,10 +30,17 @@ import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import GmpContext from 'web/components/provider/GmpProvider';
 import {LanguageContext} from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
+import {
+  getAllByName,
+  getByName,
+  queryAllByName,
+  queryByName,
+} from 'web/components/testing';
 import configureStore from 'web/store';
 
 export * from '@testing-library/react/pure';
 export {userEvent};
+export {getAllByName, getByName, queryAllByName, queryByName};
 
 afterEach(cleanup);
 
@@ -58,33 +63,6 @@ export async function wait(ms: number = 0) {
       }),
   );
 }
-
-export const queryAllByName = (container: HTMLElement, name: string) =>
-  queryAllByAttribute('name', container, name);
-
-export const queryByName = (container: HTMLElement, name: string) => {
-  const elements = queryAllByName(container, name);
-  if (!elements.length) {
-    return null;
-  }
-  return elements[0];
-};
-
-export const getAllByName = (container: HTMLElement, name: string) => {
-  const elements = queryAllByName(container, name);
-  if (!elements.length) {
-    throw getElementError(
-      `Unable to find an element with the name: ${name}.`,
-      container,
-    );
-  }
-  return elements;
-};
-
-export const getByName = (container: HTMLElement, name: string) => {
-  const elements = getAllByName(container, name);
-  return elements[0];
-};
 
 const Main = ({children}: {children: React.ReactNode}) => {
   return (
