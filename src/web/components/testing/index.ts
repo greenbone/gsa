@@ -6,3 +6,4 @@
 export * from 'web/components/testing/queries';
 export * from 'web/components/testing/actions';
 export * from 'web/components/testing/helpers';
+export * from 'web/components/testing/screen';
