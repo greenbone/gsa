@@ -292,6 +292,25 @@ export const queryCheckBoxes = (element?: HTMLElement) => {
 };
 
 /**
+ * Retrieves all checkbox elements within a specified container.
+ * Throws an error if no checkboxes are found.
+ *
+ * @param container - The HTML element that serves as the container to search for checkboxes.
+ * @returns An array of checkbox elements found within the container.
+ * @throws Will throw an error if no checkboxes are found within the container.
+ */
+export const getAllCheckBoxes = (container: HTMLElement) => {
+  const elements = queryCheckBoxes(container);
+  if (!elements.length) {
+    throw getElementError(
+      `Unable to find checkboxes within: ${container}.`,
+      container,
+    );
+  }
+  return elements;
+};
+
+/**
  * Queries and returns all file input elements
  *
  * @param element - The element to search within. If not provided, the document will be used.
