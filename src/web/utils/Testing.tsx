@@ -30,13 +30,13 @@ import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import GmpContext from 'web/components/provider/GmpProvider';
 import {LanguageContext} from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
+import configureStore from 'web/store';
 import {
   getAllByName,
   getByName,
   queryAllByName,
   queryByName,
-} from 'web/components/testing';
-import configureStore from 'web/store';
+} from 'web/testing';
 
 export * from '@testing-library/react/pure';
 export {userEvent};
