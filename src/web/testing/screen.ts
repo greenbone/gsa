@@ -5,16 +5,10 @@
 
 import {
   getQueriesForElement,
-  queries,
   Screen as TestingScreen,
   screen as testingScreen,
 } from '@testing-library/dom';
-import * as customQueries from 'web/components/testing/queries';
-
-const allQueries = {
-  ...queries,
-  ...customQueries,
-};
+import {allQueries} from 'web/testing/allQueries';
 
 type Screen = TestingScreen<typeof allQueries>;
 

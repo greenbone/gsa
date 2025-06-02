@@ -4,7 +4,7 @@
  */
 
 import {expect, Mock} from 'vitest';
-import {screen} from 'web/components/testing/screen';
+import {screen} from 'web/testing/screen';
 import {fireEvent} from 'web/utils/Testing';
 
 export const testBulkTrashcanDialog = (
