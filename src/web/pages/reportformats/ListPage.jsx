@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import ReportFormatComponent from 'web/pages/reportformats/Component';
 import ReportFormatsFilterDialog from 'web/pages/reportformats/FilterDialog';
+import ReportFormatComponent from 'web/pages/reportformats/ReportFormatComponent';
 import ReportFormatsTable from 'web/pages/reportformats/Table';
 import {
   loadEntities,
