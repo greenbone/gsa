@@ -39,8 +39,8 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import ReportFormatComponent from 'web/pages/reportformats/Component';
 import ReportFormatDetails from 'web/pages/reportformats/Details';
+import ReportFormatComponent from 'web/pages/reportformats/ReportFormatComponent';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
