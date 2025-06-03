@@ -8,12 +8,8 @@ import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import StartPage from 'web/pages/start/Page';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {
-  rendererWith,
-  wait,
-  getByTestId as getByTestIdFromElement,
-  screen,
-} from 'web/utils/Testing';
+import {within} from 'web/testing';
+import {rendererWith, wait, screen} from 'web/utils/Testing';
 
 const manualUrl = 'test/';
 
@@ -110,64 +106,73 @@ describe('StartPage tests', () => {
 
     // Displays
     const tasksBySeverityClass = displays[0];
+    const withinTasksBySeverityClass = within(tasksBySeverityClass);
     expect(tasksBySeverityClass).toHaveTextContent(
       'Tasks by Severity Class (Total: 0)',
     );
     expect(
-      getByTestIdFromElement(tasksBySeverityClass, 'filter-icon'),
+      withinTasksBySeverityClass.getByTestId('filter-icon'),
     ).toHaveAttribute('title', 'Select Filter');
     expect(
-      getByTestIdFromElement(tasksBySeverityClass, 'download-svg-icon'),
+      withinTasksBySeverityClass.getByTestId('download-svg-icon'),
     ).toHaveAttribute('title', 'Download SVG');
     expect(
-      getByTestIdFromElement(tasksBySeverityClass, 'legend-icon'),
+      withinTasksBySeverityClass.getByTestId('legend-icon'),
     ).toHaveAttribute('title', 'Toggle Legend');
     expect(
-      getByTestIdFromElement(tasksBySeverityClass, 'toggle-3d-icon'),
+      withinTasksBySeverityClass.getByTestId('toggle-3d-icon'),
     ).toHaveAttribute('title', 'Toggle 2D/3D view');
 
     const tasksByStatus = displays[1];
+    const withinTasksByStatus = within(tasksByStatus);
     expect(tasksByStatus).toHaveTextContent('Tasks by Status (Total: 0)');
+    expect(withinTasksByStatus.getByTestId('filter-icon')).toHaveAttribute(
+      'title',
+      'Select Filter',
+    );
     expect(
-      getByTestIdFromElement(tasksByStatus, 'filter-icon'),
-    ).toHaveAttribute('title', 'Select Filter');
-    expect(
-      getByTestIdFromElement(tasksByStatus, 'download-svg-icon'),
+      withinTasksByStatus.getByTestId('download-svg-icon'),
     ).toHaveAttribute('title', 'Download SVG');
-    expect(
-      getByTestIdFromElement(tasksByStatus, 'legend-icon'),
-    ).toHaveAttribute('title', 'Toggle Legend');
-    expect(
-      getByTestIdFromElement(tasksByStatus, 'toggle-3d-icon'),
-    ).toHaveAttribute('title', 'Toggle 2D/3D view');
+    expect(withinTasksByStatus.getByTestId('legend-icon')).toHaveAttribute(
+      'title',
+      'Toggle Legend',
+    );
+    expect(withinTasksByStatus.getByTestId('toggle-3d-icon')).toHaveAttribute(
+      'title',
+      'Toggle 2D/3D view',
+    );
 
     const cvesByCreationTime = displays[2];
+    const withinCvesByCreationTime = within(cvesByCreationTime);
     expect(cvesByCreationTime).toHaveTextContent('CVEs by Creation Time');
+    expect(withinCvesByCreationTime.getByTestId('filter-icon')).toHaveAttribute(
+      'title',
+      'Select Filter',
+    );
     expect(
-      getByTestIdFromElement(cvesByCreationTime, 'filter-icon'),
-    ).toHaveAttribute('title', 'Select Filter');
-    expect(
-      getByTestIdFromElement(cvesByCreationTime, 'download-svg-icon'),
+      withinCvesByCreationTime.getByTestId('download-svg-icon'),
     ).toHaveAttribute('title', 'Download SVG');
-    expect(
-      getByTestIdFromElement(cvesByCreationTime, 'legend-icon'),
-    ).toHaveAttribute('title', 'Toggle Legend');
+    expect(withinCvesByCreationTime.getByTestId('legend-icon')).toHaveAttribute(
+      'title',
+      'Toggle Legend',
+    );
 
     const nvtsBySeverityClass = displays[3];
+    const withinNvtsBySeverityClass = within(nvtsBySeverityClass);
     expect(nvtsBySeverityClass).toHaveTextContent(
       'NVTs by Severity Class (Total: 0)',
     );
     expect(
-      getByTestIdFromElement(nvtsBySeverityClass, 'filter-icon'),
+      withinNvtsBySeverityClass.getByTestId('filter-icon'),
     ).toHaveAttribute('title', 'Select Filter');
     expect(
-      getByTestIdFromElement(nvtsBySeverityClass, 'download-svg-icon'),
+      withinNvtsBySeverityClass.getByTestId('download-svg-icon'),
     ).toHaveAttribute('title', 'Download SVG');
     expect(
-      getByTestIdFromElement(nvtsBySeverityClass, 'legend-icon'),
+      withinNvtsBySeverityClass.getByTestId('legend-icon'),
     ).toHaveAttribute('title', 'Toggle Legend');
     expect(
-      getByTestIdFromElement(nvtsBySeverityClass, 'toggle-3d-icon'),
+      withinNvtsBySeverityClass.getByTestId('toggle-3d-icon'),
     ).toHaveAttribute('title', 'Toggle 2D/3D view');
   });
 });

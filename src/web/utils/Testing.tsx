@@ -31,7 +31,13 @@ import {LanguageContext} from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
 import configureStore from 'web/store';
 
-export * from '@testing-library/react/pure';
+export {
+  renderHook,
+  waitFor,
+  act,
+  screen,
+  fireEvent,
+} from '@testing-library/react/pure';
 export {userEvent};
 
 afterEach(cleanup);
