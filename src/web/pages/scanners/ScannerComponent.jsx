@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {AGENT_CONTROLLER_SCANNER_TYPE} from 'gmp/models/scanner';
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -90,6 +91,7 @@ const ScannerComponent = ({
             name: shorten(scanner.name),
           });
 
+          console.info ("CERT:", scanner.ca_pub, ":CERT", "TYPE", scanner.scannerType);
           setCaPub(
             isDefined(scanner.ca_pub) ? scanner.ca_pub.certificate : undefined,
           );
@@ -234,6 +236,7 @@ const ScannerComponent = ({
   };
 
   const handleScannerTypeChange = (value, name) => {
+    console.info ("VALUE", value, "NAME", name);
     if (name === 'type') {
       setType(value);
     } else if (name === 'which_cert') {

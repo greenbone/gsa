@@ -4,6 +4,7 @@
  */
 
 import {
+  AGENT_CONTROLLER_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
@@ -12,15 +13,18 @@ import {filter, map} from 'gmp/utils/array';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import React, {useCallback} from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
+import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {NewIcon} from 'web/components/icon';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
-const AVAILABLE_SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
+const AVAILABLE_SCANNER_TYPES = [AGENT_CONTROLLER_SCANNER_TYPE,
+                                 GREENBONE_SENSOR_SCANNER_TYPE];
 
 const ScannerDialog = ({
   ca_pub,
@@ -42,6 +46,7 @@ const ScannerDialog = ({
   onScannerTypeChange,
 }) => {
   const [_] = useTranslation();
+  const capabilities = useCapabilities();
   const gmp = useGmp();
 
   name = name || _('Unnamed');
@@ -70,10 +75,16 @@ const ScannerDialog = ({
 
   let SCANNER_TYPES = [];
 
+  if (capabilities.featureEnabled("AGENT_CONTROLLER")) {
+    type = hasValue(type) ? type : AGENT_CONTROLLER_SCANNER_TYPE;
+    SCANNER_TYPES.push(AGENT_CONTROLLER_SCANNER_TYPE);
+  }
   if (gmp.settings.enableGreenboneSensor) {
     type = hasValue(type) ? type : GREENBONE_SENSOR_SCANNER_TYPE;
-    SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
-  } else {
+    SCANNER_TYPES.push(GREENBONE_SENSOR_SCANNER_TYPE);
+  }
+  if (!capabilities.featureEnabled("AGENT_CONTROLLER") &&
+      !gmp.settings.enableGreenboneSensor) {
     type = hasValue(type) ? type : undefined;
     SCANNER_TYPES = [];
   }
@@ -87,8 +98,13 @@ const ScannerDialog = ({
   const isInUse = isDefined(scanner) && scanner.isInUse();
 
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
+  const isAgentControllerScannerType = type === AGENT_CONTROLLER_SCANNER_TYPE;
 
   if (isGreenboneSensorType) {
+    credential_id = '';
+  }
+
+  if (isAgentControllerScannerType) {
     credential_id = '';
   }
 
@@ -139,7 +155,13 @@ const ScannerDialog = ({
               />
             </FormGroup>
 
-            {!isGreenboneSensorType && (
+            {isAgentControllerScannerType && (
+              <FormGroup title={_('Certificate')}>
+                <FileField name={'ca_pub'} onChange={onValueChange} />
+              </FormGroup>
+            )}
+
+            {!isGreenboneSensorType && !isAgentControllerScannerType && (
               <FormGroup direction="row" title={_('Credential')}>
                 <Select
                   grow="1"
