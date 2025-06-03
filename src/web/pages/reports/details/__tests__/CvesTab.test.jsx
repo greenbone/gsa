@@ -10,6 +10,7 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import CvesTab from 'web/pages/reports/details/CvesTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
@@ -38,7 +39,7 @@ describe('Report CVEs Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <CvesTab
         counts={cves.counts}
         cves={cves.entities}
@@ -54,7 +55,7 @@ describe('Report CVEs Tab tests', () => {
     const links = baseElement.querySelectorAll('a');
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Headings
     expect(header[0]).toHaveTextContent('CVE');

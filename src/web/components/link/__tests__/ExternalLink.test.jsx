@@ -5,13 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import ExternalLink from 'web/components/link/ExternalLink';
-import {
-  fireEvent,
-  getByRole,
-  getByText,
-  queryByRole,
-  rendererWith,
-} from 'web/utils/Testing';
+import {screen, within} from 'web/testing';
+import {fireEvent, rendererWith} from 'web/utils/Testing';
 
 describe('ExternalLink tests', () => {
   test('should render ExternalLink', () => {
@@ -29,19 +24,16 @@ describe('ExternalLink tests', () => {
 
   test('should open confirmation dialog', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element, baseElement} = render(
+    const {element} = render(
       <ExternalLink title="Foo" to="http://foo.bar">
         Bar
       </ExternalLink>,
     );
 
-    expect(queryByRole(baseElement, 'dialog')).toBeNull();
-
+    expect(screen.queryDialog()).not.toBeInTheDocument();
     fireEvent.click(element);
-
-    const dialog = queryByRole(baseElement, 'dialog');
-
-    expect(dialog).toBeTruthy();
+    const dialog = screen.getDialog();
+    expect(dialog).toBeInTheDocument();
   });
 
   test('should close confirmation dialog on resume click', () => {
@@ -50,27 +42,21 @@ describe('ExternalLink tests', () => {
     window.open = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element, baseElement, getByTestId} = render(
+    const {element} = render(
       <ExternalLink title="Foo" to="http://foo.bar">
         Bar
       </ExternalLink>,
     );
 
-    expect(queryByRole(baseElement, 'dialog')).toBeNull();
-
+    expect(screen.queryDialog()).not.toBeInTheDocument();
     fireEvent.click(element);
-
-    const dialog = queryByRole(baseElement, 'dialog');
-
-    expect(dialog).toBeTruthy();
-
-    const resumeButton = getByTestId('dialog-save-button');
-
+    const dialog = screen.getDialog();
+    expect(dialog).toBeInTheDocument();
+    const resumeButton = screen.getDialogSaveButton();
     fireEvent.click(resumeButton);
 
-    const closedDialog = queryByRole(baseElement, 'dialog');
-
-    expect(closedDialog).toBeFalsy();
+    const closedDialog = screen.queryDialog();
+    expect(closedDialog).not.toBeInTheDocument();
 
     window.open = oldOpen;
   });
@@ -81,7 +67,7 @@ describe('ExternalLink tests', () => {
     window.open = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element, baseElement} = render(
+    const {element} = render(
       <ExternalLink title="Foo" to="http://foo.bar">
         Bar
       </ExternalLink>,
@@ -89,10 +75,8 @@ describe('ExternalLink tests', () => {
 
     fireEvent.click(element);
 
-    const dialog = getByRole(baseElement, 'dialog');
-
-    fireEvent.click(getByText(dialog, 'Follow Link'));
-
+    const dialog = within(screen.getDialog());
+    fireEvent.click(dialog.getByText('Follow Link'));
     expect(window.open).toBeCalledWith(
       'http://foo.bar',
       '_blank',

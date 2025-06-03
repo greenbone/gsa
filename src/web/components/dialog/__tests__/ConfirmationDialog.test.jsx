@@ -101,7 +101,7 @@ describe('ConfirmationDialog component tests', () => {
     const handleClose = testing.fn();
     const handleResumeClick = testing.fn();
 
-    const {getByRole} = render(
+    render(
       <ConfirmationDialog
         title="bar"
         onClose={handleClose}
@@ -109,7 +109,7 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    fireEvent.keyDown(getByRole('dialog'), {
+    fireEvent.keyDown(screen.getDialog(), {
       key: 'Escape',
       keyCode: KeyCode.ESC,
     });

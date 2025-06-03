@@ -7,6 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Status from 'web/pages/tasks/Status';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
@@ -21,13 +22,13 @@ describe('Task Status tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps});
-    const {getByTestId, queryByTestId} = render(<Status task={task} />);
+    render(<Status task={task} />);
 
-    const bar = getByTestId('progressbar-box');
+    const bar = screen.getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.new);
     expect(bar).toHaveTextContent(TASK_STATUS.new);
 
-    const detailsLink = queryByTestId('details-link');
+    const detailsLink = screen.queryByTestId('details-link');
     expect(detailsLink).toBe(null);
   });
 
@@ -41,13 +42,13 @@ describe('Task Status tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps, router: true});
-    const {getByTestId, queryByTestId} = render(<Status task={task} />);
+    render(<Status task={task} />);
 
-    const bar = getByTestId('progressbar-box');
+    const bar = screen.getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.done);
     expect(bar).toHaveTextContent(TASK_STATUS.done);
 
-    const detailslink = queryByTestId('details-link');
+    const detailslink = screen.queryByTestId('details-link');
     expect(detailslink).toHaveTextContent('Done');
     expect(detailslink).toHaveAttribute('href', '/report/42');
   });
@@ -63,13 +64,13 @@ describe('Task Status tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps, router: true});
-    const {getByTestId, queryByTestId} = render(<Status task={task} />);
+    render(<Status task={task} />);
 
-    const bar = getByTestId('progressbar-box');
+    const bar = screen.getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.running);
     expect(bar).toHaveTextContent('0 %');
 
-    const detailslink = queryByTestId('details-link');
+    const detailslink = screen.queryByTestId('details-link');
     expect(detailslink).toHaveTextContent('0 %');
     expect(detailslink).toHaveAttribute('href', '/report/1234');
   });
@@ -81,13 +82,13 @@ describe('Task Status tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps, router: true});
-    const {getByTestId, queryByTestId} = render(<Status task={task} />);
+    render(<Status task={task} />);
 
-    const bar = getByTestId('progressbar-box');
+    const bar = screen.getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', 'Container');
     expect(bar).toHaveTextContent('Container');
 
-    const detailslink = queryByTestId('details-link');
+    const detailslink = screen.queryByTestId('details-link');
     expect(detailslink).toHaveTextContent('Container');
     expect(detailslink).toHaveAttribute('href', '/report/42');
   });
@@ -99,9 +100,9 @@ describe('Task Status tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps});
-    const {getByTestId} = render(<Status task={task} />);
+    render(<Status task={task} />);
 
-    const bar = getByTestId('progressbar-box');
+    const bar = screen.getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.interrupted);
     expect(bar).toHaveTextContent(TASK_STATUS.interrupted);
   });
@@ -113,9 +114,9 @@ describe('Task Status tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps});
-    const {getByTestId} = render(<Status task={task} />);
+    render(<Status task={task} />);
 
-    const bar = getByTestId('progressbar-box');
+    const bar = screen.getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.processing);
     expect(bar).toHaveTextContent(TASK_STATUS.processing);
   });
@@ -127,9 +128,9 @@ describe('Task Status tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps});
-    const {getByTestId} = render(<Status task={task} />);
+    render(<Status task={task} />);
 
-    const bar = getByTestId('progressbar-box');
+    const bar = screen.getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.processing);
     expect(bar).toHaveTextContent(TASK_STATUS.processing);
   });

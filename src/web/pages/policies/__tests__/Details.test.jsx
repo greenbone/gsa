@@ -7,6 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Policy from 'gmp/models/policy';
 import Details from 'web/pages/policies/Details';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 describe('Policy Details tests', () => {
@@ -26,11 +27,11 @@ describe('Policy Details tests', () => {
 
     const {render} = rendererWith({capabilities: caps, router: true});
 
-    const {element, getAllByTestId} = render(<Details entity={policy} />);
+    const {element} = render(<Details entity={policy} />);
 
     expect(element).toHaveTextContent('bar');
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(element).toHaveTextContent('audit1');
     expect(detailsLinks[0]).toHaveAttribute('href', '/audit/1234');

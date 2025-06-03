@@ -65,7 +65,7 @@ const Main = ({children}: {children: React.ReactNode}) => {
 };
 
 export const render = (ui: React.ReactNode) => {
-  const {container, baseElement, rerender, ...other} = reactTestingRender(
+  const {container, baseElement, rerender} = reactTestingRender(
     <Main>{ui}</Main>,
   );
 
@@ -78,7 +78,6 @@ export const render = (ui: React.ReactNode) => {
     element: container.lastChild as HTMLElement,
     rerender: (component: React.ReactNode) =>
       rerender(<Main>{component}</Main>),
-    ...other,
   };
 };
 

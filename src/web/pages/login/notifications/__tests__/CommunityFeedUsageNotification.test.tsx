@@ -11,6 +11,7 @@ import CommunityFeedUsageNotification, {
   NOTIFICATION_SHOWN_KEY,
   NOTIFICATION_SHOWN,
 } from 'web/pages/login/notifications/CommunityFeedUsageNotification';
+import {screen} from 'web/testing';
 import {render} from 'web/utils/Testing';
 
 vi.mock('@greenbone/opensight-ui-components-mantinev7', () => ({
@@ -50,9 +51,8 @@ describe('CommunityFeedUsageNotification', () => {
     const mockCalls = vi.mocked(showNotification, {partial: true}).mock.calls;
     const [notificationArgs] = mockCalls[0];
     const {title} = notificationArgs;
-    const {getByText} = render(title);
-    expect(getByText(notificationTitle)).toBeVisible();
-
+    render(title);
+    expect(screen.getByText(notificationTitle)).toBeVisible();
     expect(sessionStorage.getItem(NOTIFICATION_SHOWN_KEY)).toBe(
       NOTIFICATION_SHOWN,
     );

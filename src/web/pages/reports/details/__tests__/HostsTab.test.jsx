@@ -11,6 +11,7 @@ import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import HostsTab from 'web/pages/reports/details/HostsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const filter = Filter.fromString(
@@ -40,7 +41,7 @@ describe('Report Hosts Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <HostsTab
         counts={hosts.counts}
         filter={filter}
@@ -57,7 +58,7 @@ describe('Report Hosts Tab tests', () => {
     const links = baseElement.querySelectorAll('a');
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Headings
     expect(header[0]).toHaveTextContent('IP Address');
@@ -120,7 +121,7 @@ describe('Report Hosts Tab tests', () => {
   });
 });
 
-const auditfilter = Filter.fromString(
+const auditFilter = Filter.fromString(
   'apply_overrides=0 levels=hmlg rows=3 min_qod=70 first=1 sort=compliant',
 );
 
@@ -141,11 +142,11 @@ describe('Audit Report Hosts Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <HostsTab
         audit={true}
         counts={hosts.counts}
-        filter={auditfilter}
+        filter={auditFilter}
         hosts={hosts.entities}
         isUpdating={false}
         sortField={'compliant'}
@@ -160,7 +161,7 @@ describe('Audit Report Hosts Tab tests', () => {
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
 
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Headings
     expect(header[0]).toHaveTextContent('IP Address');

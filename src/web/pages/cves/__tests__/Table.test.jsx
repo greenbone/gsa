@@ -11,6 +11,7 @@ import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
 import CveTable from 'web/pages/cves/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen} from 'web/testing';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
@@ -111,7 +112,7 @@ describe('Cve table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element, getByTestId} = render(
+    const {element} = render(
       <CveTable
         entities={[entity, entity2, entity3, entity_v3]}
         entitiesCounts={counts}
@@ -123,7 +124,7 @@ describe('Cve table tests', () => {
     expect(element).not.toHaveTextContent('Confidentiality ImpactPartial');
     expect(element).not.toHaveTextContent('Attack VectorLocal');
 
-    const unfoldIcon = getByTestId('fold-state-icon-unfold');
+    const unfoldIcon = screen.getByTestId('fold-state-icon-unfold');
     fireEvent.click(unfoldIcon);
     expect(unfoldIcon).toHaveAttribute('title', 'Unfold all details');
     expect(element).toHaveTextContent('Availability ImpactComplete');

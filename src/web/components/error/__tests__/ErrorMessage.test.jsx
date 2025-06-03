@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import ErrorMessage from 'web/components/error/ErrorMessage';
+import {screen} from 'web/testing';
 import {render} from 'web/utils/Testing';
 
 describe('ErrorMessage tests', () => {
@@ -20,7 +21,7 @@ describe('ErrorMessage tests', () => {
     const message = 'An error occurred.';
     const details = 'Because of foo.';
 
-    const {element, getByTestId} = render(
+    const {element} = render(
       <ErrorMessage details={details} message={message}>
         <span id="bar">bar</span>
       </ErrorMessage>,
@@ -30,8 +31,8 @@ describe('ErrorMessage tests', () => {
 
     expect(icon).not.toBeNull();
 
-    expect(getByTestId('error-message')).toHaveTextContent(message);
-    expect(getByTestId('error-details')).toHaveTextContent(details);
+    expect(screen.getByTestId('error-message')).toHaveTextContent(message);
+    expect(screen.getByTestId('error-details')).toHaveTextContent(details);
     expect(element.querySelector('#bar')).toHaveTextContent('bar');
   });
 });

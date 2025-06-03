@@ -10,6 +10,7 @@ import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
   USE_DEFAULT_RELOAD_INTERVAL_INACTIVE,
 } from 'web/components/loading/Reload';
+import {screen} from 'web/testing';
 import {act, fireEvent, rendererWith} from 'web/utils/Testing';
 
 const TestComponent = ({reload, id, reloadOptions}) => (
@@ -36,7 +37,7 @@ describe('Reload component tests', () => {
     const loadFunc = testing.fn().mockResolvedValue();
     const reloadFunc = testing.fn().mockResolvedValue();
 
-    const {getByTestId} = render(
+    render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
@@ -45,8 +46,7 @@ describe('Reload component tests', () => {
     expect(loadFunc).toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
-
-    expect(getByTestId('foo')).toBeInTheDocument();
+    expect(screen.getByTestId('foo')).toBeInTheDocument();
   });
 
   test('should fallback to call reload function on mount', () => {
@@ -61,7 +61,7 @@ describe('Reload component tests', () => {
     const renderFunc = testing.fn().mockReturnValue(<div data-testid="foo" />);
     const reloadFunc = testing.fn().mockResolvedValue();
 
-    const {getByTestId} = render(
+    render(
       <Reload name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
@@ -69,8 +69,7 @@ describe('Reload component tests', () => {
 
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadFunc).toHaveBeenCalled();
-
-    expect(getByTestId('foo')).toBeInTheDocument();
+    expect(screen.getByTestId('foo')).toBeInTheDocument();
   });
 
   test('should reload when timer fires', async () => {
@@ -91,7 +90,7 @@ describe('Reload component tests', () => {
     const loadFunc = testing.fn().mockResolvedValue();
     const reloadFunc = testing.fn().mockResolvedValue();
 
-    const {queryByTestId} = render(
+    render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
@@ -100,8 +99,7 @@ describe('Reload component tests', () => {
     expect(loadFunc).toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -112,9 +110,8 @@ describe('Reload component tests', () => {
     expect(loadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadFunc).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('two')).not.toBeInTheDocument();
   });
 
   test('should not reload when initial loading fails', async () => {
@@ -135,7 +132,7 @@ describe('Reload component tests', () => {
     const loadFunc = testing.fn().mockRejectedValue();
     const reloadFunc = testing.fn().mockResolvedValue();
 
-    const {queryByTestId} = render(
+    render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
@@ -144,8 +141,7 @@ describe('Reload component tests', () => {
     expect(loadFunc).toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -156,9 +152,8 @@ describe('Reload component tests', () => {
     expect(loadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('two')).not.toBeInTheDocument();
   });
 
   test('should not reload when reloading fails', async () => {
@@ -179,7 +174,7 @@ describe('Reload component tests', () => {
     const loadFunc = testing.fn().mockResolvedValue();
     const reloadFunc = testing.fn().mockRejectedValue();
 
-    const {queryByTestId} = render(
+    render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
@@ -188,8 +183,7 @@ describe('Reload component tests', () => {
     expect(loadFunc).toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -200,9 +194,8 @@ describe('Reload component tests', () => {
     expect(loadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadFunc).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('two')).not.toBeInTheDocument();
 
     reloadFunc.mockClear();
 
@@ -232,7 +225,7 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
@@ -240,20 +233,18 @@ describe('Reload component tests', () => {
 
     expect(loadFunc).toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
 
-    const button = queryByTestId('one');
+    const button = screen.queryByTestId('one');
     fireEvent.click(button);
 
     expect(loadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadFunc).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
   });
 
   test('should allow to reload on demand', async () => {
@@ -275,7 +266,7 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
@@ -284,8 +275,7 @@ describe('Reload component tests', () => {
     expect(loadFunc).toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -296,12 +286,11 @@ describe('Reload component tests', () => {
     expect(loadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadFunc).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     reloadFunc.mockClear();
 
-    const button = queryByTestId('one');
+    const button = screen.queryByTestId('one');
     fireEvent.click(button);
 
     expect(loadFunc).not.toHaveBeenCalled();
@@ -329,7 +318,7 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <Reload
         load={loadFunc}
         name="foo"
@@ -344,8 +333,7 @@ describe('Reload component tests', () => {
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadInterval).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -357,9 +345,8 @@ describe('Reload component tests', () => {
     expect(reloadFunc).toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadInterval).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('two')).not.toBeInTheDocument();
   });
 
   test('should not start reload timer if reloadInterval returns equal or less then zero', async () => {
@@ -382,7 +369,7 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <Reload
         load={loadFunc}
         name="foo"
@@ -397,8 +384,7 @@ describe('Reload component tests', () => {
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadInterval).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -410,9 +396,8 @@ describe('Reload component tests', () => {
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadInterval).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('two')).not.toBeInTheDocument();
   });
 
   test(
@@ -440,7 +425,7 @@ describe('Reload component tests', () => {
 
       const {render} = rendererWith({gmp});
 
-      const {queryByTestId} = render(
+      render(
         <Reload
           defaultReloadInterval={NO_RELOAD}
           load={loadFunc}
@@ -456,8 +441,7 @@ describe('Reload component tests', () => {
       expect(reloadFunc).not.toHaveBeenCalled();
       expect(renderFunc).toHaveBeenCalled();
       expect(reloadInterval).not.toHaveBeenCalled();
-
-      expect(queryByTestId('one')).toBeInTheDocument();
+      expect(screen.queryByTestId('one')).toBeInTheDocument();
 
       loadFunc.mockClear();
       renderFunc.mockClear();
@@ -469,9 +453,8 @@ describe('Reload component tests', () => {
       expect(reloadFunc).not.toHaveBeenCalled();
       expect(renderFunc).not.toHaveBeenCalled();
       expect(reloadInterval).toHaveBeenCalled();
-
-      expect(queryByTestId('one')).toBeInTheDocument();
-      expect(queryByTestId('two')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('one')).toBeInTheDocument();
+      expect(screen.queryByTestId('two')).not.toBeInTheDocument();
     },
   );
 
@@ -500,7 +483,7 @@ describe('Reload component tests', () => {
 
       const {render} = rendererWith({gmp});
 
-      const {queryByTestId} = render(
+      render(
         <Reload
           defaultReloadIntervalActive={NO_RELOAD}
           load={loadFunc}
@@ -516,8 +499,7 @@ describe('Reload component tests', () => {
       expect(reloadFunc).not.toHaveBeenCalled();
       expect(renderFunc).toHaveBeenCalled();
       expect(reloadInterval).not.toHaveBeenCalled();
-
-      expect(queryByTestId('one')).toBeInTheDocument();
+      expect(screen.queryByTestId('one')).toBeInTheDocument();
 
       loadFunc.mockClear();
       renderFunc.mockClear();
@@ -529,9 +511,8 @@ describe('Reload component tests', () => {
       expect(reloadFunc).not.toHaveBeenCalled();
       expect(renderFunc).not.toHaveBeenCalled();
       expect(reloadInterval).toHaveBeenCalled();
-
-      expect(queryByTestId('one')).toBeInTheDocument();
-      expect(queryByTestId('two')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('one')).toBeInTheDocument();
+      expect(screen.queryByTestId('two')).not.toBeInTheDocument();
     },
   );
 
@@ -560,7 +541,7 @@ describe('Reload component tests', () => {
 
       const {render} = rendererWith({gmp});
 
-      const {queryByTestId} = render(
+      render(
         <Reload
           defaultReloadIntervalActive={NO_RELOAD}
           load={loadFunc}
@@ -576,8 +557,7 @@ describe('Reload component tests', () => {
       expect(reloadFunc).not.toHaveBeenCalled();
       expect(renderFunc).toHaveBeenCalled();
       expect(reloadInterval).not.toHaveBeenCalled();
-
-      expect(queryByTestId('one')).toBeInTheDocument();
+      expect(screen.queryByTestId('one')).toBeInTheDocument();
 
       loadFunc.mockClear();
       renderFunc.mockClear();
@@ -588,9 +568,8 @@ describe('Reload component tests', () => {
       expect(reloadFunc).not.toHaveBeenCalled();
       expect(renderFunc).not.toHaveBeenCalled();
       expect(reloadInterval).toHaveBeenCalled();
-
-      expect(queryByTestId('one')).toBeInTheDocument();
-      expect(queryByTestId('two')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('one')).toBeInTheDocument();
+      expect(screen.queryByTestId('two')).not.toBeInTheDocument();
     },
   );
 
@@ -612,7 +591,7 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
         {renderFunc}
       </Reload>,
@@ -621,8 +600,7 @@ describe('Reload component tests', () => {
     expect(loadFunc).toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -632,9 +610,8 @@ describe('Reload component tests', () => {
     expect(loadFunc).not.toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('two')).not.toBeInTheDocument();
   });
 
   test('should use reloadIntervalActive from settings', async () => {
@@ -658,7 +635,7 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <Reload
         load={loadFunc}
         name="foo"
@@ -673,8 +650,7 @@ describe('Reload component tests', () => {
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadIntervalFunc).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -685,9 +661,8 @@ describe('Reload component tests', () => {
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadIntervalFunc).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('two')).not.toBeInTheDocument();
   });
 
   test('should use reloadIntervalInactive from settings', async () => {
@@ -711,7 +686,7 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <Reload
         load={loadFunc}
         name="foo"
@@ -726,8 +701,7 @@ describe('Reload component tests', () => {
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).toHaveBeenCalled();
     expect(reloadIntervalFunc).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
 
     loadFunc.mockClear();
     renderFunc.mockClear();
@@ -738,8 +712,7 @@ describe('Reload component tests', () => {
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
     expect(reloadIntervalFunc).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('one')).toBeInTheDocument();
+    expect(screen.queryByTestId('two')).not.toBeInTheDocument();
   });
 });

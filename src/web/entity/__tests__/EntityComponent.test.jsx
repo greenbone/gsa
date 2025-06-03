@@ -5,7 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import EntityComponent from 'web/entity/EntityComponent';
-import {rendererWith, wait} from 'web/utils/Testing';
+import {screen} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 const currentSettingsResponse = {
   data: {
@@ -24,7 +25,7 @@ describe('EntityComponent', () => {
       .mockResolvedValue(currentSettingsResponse);
     const gmp = {foo: {}, user: {currentSettings}};
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onCloneError={testing.fn()}
@@ -43,7 +44,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    expect(queryByTestId('child')).toBeInTheDocument();
+    expect(screen.queryByTestId('child')).toBeInTheDocument();
   });
 
   test('should allow cloning an entity', async () => {
@@ -59,7 +60,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onCloneError={onCloneError}
@@ -72,7 +73,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onCloned).toHaveBeenCalledWith(clonedData);
     expect(onCloneError).not.toHaveBeenCalled();
@@ -92,7 +93,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onCloneError={onCloneError}
@@ -105,7 +106,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onCloneError).toHaveBeenCalledWith(error);
     expect(onCloned).not.toHaveBeenCalled();
@@ -127,7 +128,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onDeleteError={onDeleteError}
@@ -140,7 +141,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onDeleted).toHaveBeenCalledOnce(); // currently the redux action for deleting an entity is passed
     expect(onDeleteError).not.toHaveBeenCalled();
@@ -160,7 +161,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onDeleteError={onDeleteError}
@@ -173,7 +174,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onDeleteError).toHaveBeenCalledWith(error);
     expect(onDeleted).not.toHaveBeenCalled();
@@ -195,7 +196,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onInteraction={onInteraction}
@@ -208,7 +209,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onSaved).toHaveBeenCalledWith(savedData);
     expect(onSaveError).not.toHaveBeenCalled();
@@ -228,7 +229,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onInteraction={onInteraction}
@@ -241,7 +242,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onSaveError).toHaveBeenCalledWith(error);
     expect(onSaved).not.toHaveBeenCalled();
@@ -263,7 +264,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onCreateError={onCreateError}
@@ -276,7 +277,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onCreated).toHaveBeenCalledWith(createdData);
     expect(onCreateError).not.toHaveBeenCalled();
@@ -296,7 +297,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onCreateError={onCreateError}
@@ -309,7 +310,7 @@ describe('EntityComponent', () => {
       </EntityComponent>,
     );
 
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onCreateError).toHaveBeenCalledWith(error);
     expect(onCreated).not.toHaveBeenCalled();
@@ -337,7 +338,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp, store: true});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onDownloadError={onDownloadError}
@@ -351,7 +352,7 @@ describe('EntityComponent', () => {
     );
     await wait(); // wait for currentSettings to be resolved and put into the store
     expect(currentSettings).toHaveBeenCalledOnce();
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onDownloaded).toHaveBeenCalledWith({
       filename: 'foo-123.xml',
@@ -375,7 +376,7 @@ describe('EntityComponent', () => {
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp, store: true});
-    const {queryByTestId} = render(
+    render(
       <EntityComponent
         name="foo"
         onDownloadError={onDownloadError}
@@ -389,7 +390,7 @@ describe('EntityComponent', () => {
     );
 
     await wait(); // wait for currentSettings to be resolved and put into the store
-    queryByTestId('button').click();
+    fireEvent.click(screen.queryByTestId('button'));
     await wait();
     expect(onDownloadError).toHaveBeenCalledWith(error);
     expect(onDownloaded).not.toHaveBeenCalled();

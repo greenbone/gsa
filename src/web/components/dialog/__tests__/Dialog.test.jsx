@@ -43,13 +43,12 @@ describe('Dialog component tests', () => {
     const handleClose = testing.fn();
     const renderFunc = testing.fn().mockReturnValue(<div />);
 
-    const {getByRole} = render(
-      <Dialog onClose={handleClose}>{renderFunc}</Dialog>,
-    );
+    render(<Dialog onClose={handleClose}>{renderFunc}</Dialog>);
 
     expect(renderFunc).toHaveBeenCalled();
 
-    fireEvent.keyDown(getByRole('dialog'), {
+    const dialog = screen.getDialog();
+    fireEvent.keyDown(dialog, {
       key: 'Escape',
       keyCode: KeyCode.ESC,
     });

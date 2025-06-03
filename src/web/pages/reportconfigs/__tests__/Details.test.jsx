@@ -8,6 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import ReportConfig from 'gmp/models/reportconfig';
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
 import Details from 'web/pages/reportconfigs/Details';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 describe('Report Config Details tests', () => {
@@ -18,7 +19,7 @@ describe('Report Config Details tests', () => {
 
     const {render} = rendererWith({capabilities: caps, router: true});
 
-    const {element, getAllByTestId} = render(<Details entity={config} />);
+    const {element} = render(<Details entity={config} />);
 
     expect(element).toHaveTextContent('StringParam');
     expect(element).toHaveTextContent('StringValue');
@@ -34,7 +35,7 @@ describe('Report Config Details tests', () => {
     expect(element).toHaveTextContent('ReportFormatListParam');
     expect(element).toHaveTextContent('non-configurable');
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     // Report format of the config
     expect(detailsLinks[0]).toHaveTextContent('example-configurable-1');

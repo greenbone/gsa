@@ -8,7 +8,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import React from 'react';
 import FilterDialog from 'web/pages/reports/DetailsFilterDialog';
-import {rendererWith, within} from 'web/utils/Testing';
+import {screen, within} from 'web/testing';
+import {rendererWith} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 
@@ -33,7 +34,7 @@ describe('Details Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {baseElement, getByText, getByLabelText, getByTestId} = render(
+    const {baseElement} = render(
       <FilterDialog
         audit={true}
         createFilterType="result"
@@ -44,7 +45,7 @@ describe('Details Filter Dialog for Audit report', () => {
         onFilterCreated={onFilterCreated}
       />,
     );
-    const dialogTitle = getByText('Update Filter');
+    const dialogTitle = screen.getByText('Update Filter');
     expect(dialogTitle).toBeInTheDocument();
 
     const formGroups = baseElement.querySelectorAll(
@@ -55,13 +56,15 @@ describe('Details Filter Dialog for Audit report', () => {
     expect(formGroups[1]).toHaveTextContent('QoD');
     expect(formGroups[2]).toHaveTextContent('Compliance');
 
-    const filterGroup = getByTestId('compliance-levels-filter-group');
+    const filterGroup = screen.getByTestId('compliance-levels-filter-group');
     const {queryAllByRole} = within(filterGroup);
 
-    const yesCheckbox = getByTestId('compliance-state-yes');
-    const noCheckbox = getByTestId('compliance-state-no');
-    const incompleteCheckbox = getByTestId('compliance-state-incomplete');
-    const undefinedCheckbox = getByTestId('compliance-state-undefined');
+    const yesCheckbox = screen.getByTestId('compliance-state-yes');
+    const noCheckbox = screen.getByTestId('compliance-state-no');
+    const incompleteCheckbox = screen.getByTestId(
+      'compliance-state-incomplete',
+    );
+    const undefinedCheckbox = screen.getByTestId('compliance-state-undefined');
 
     expect(yesCheckbox).toHaveTextContent('Yes');
     expect(noCheckbox).toHaveTextContent('No');
@@ -77,13 +80,13 @@ describe('Details Filter Dialog for Audit report', () => {
     expect(formGroups[7]).toHaveTextContent('First result');
     expect(formGroups[8]).toHaveTextContent('Results per page');
 
-    const onlyShowHostsCheckbox = getByLabelText(
+    const onlyShowHostsCheckbox = screen.getByLabelText(
       'Only show hosts that have results',
     );
     expect(onlyShowHostsCheckbox).toBeInTheDocument();
 
-    const cancelButton = getByText('Cancel');
-    const updateButton = getByText('Update');
+    const cancelButton = screen.getByText('Cancel');
+    const updateButton = screen.getByText('Update');
     expect(cancelButton).toBeInTheDocument();
     expect(updateButton).toBeInTheDocument();
   });
@@ -106,7 +109,7 @@ describe('Details Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {getByText, baseElement, getByLabelText, getByTestId} = render(
+    const {baseElement} = render(
       <FilterDialog
         audit={false}
         createFilterType="result"
@@ -118,7 +121,7 @@ describe('Details Filter Dialog for Audit report', () => {
       />,
     );
 
-    const dialogTitle = getByText('Update Filter');
+    const dialogTitle = screen.getByText('Update Filter');
     expect(dialogTitle).toBeInTheDocument();
 
     const formGroups = baseElement.querySelectorAll(
@@ -130,15 +133,17 @@ describe('Details Filter Dialog for Audit report', () => {
     expect(formGroups[2]).toHaveTextContent('QoD');
     expect(formGroups[3]).toHaveTextContent('Severity (Class)');
 
-    const filterGroup = getByTestId('severity-levels-filter-group');
+    const filterGroup = screen.getByTestId('severity-levels-filter-group');
 
     const {queryAllByRole} = within(filterGroup);
 
-    const highCheckbox = getByTestId('severity-class-High');
-    const mediumCheckbox = getByTestId('severity-class-Medium');
-    const lowCheckbox = getByTestId('severity-class-Low');
-    const logCheckbox = getByTestId('severity-class-Log');
-    const falsePositiveCheckbox = getByTestId('severity-class-False-Positive');
+    const highCheckbox = screen.getByTestId('severity-class-High');
+    const mediumCheckbox = screen.getByTestId('severity-class-Medium');
+    const lowCheckbox = screen.getByTestId('severity-class-Low');
+    const logCheckbox = screen.getByTestId('severity-class-Log');
+    const falsePositiveCheckbox = screen.getByTestId(
+      'severity-class-False-Positive',
+    );
 
     expect(highCheckbox).toHaveTextContent('High');
     expect(mediumCheckbox).toHaveTextContent('Medium');
@@ -157,13 +162,13 @@ describe('Details Filter Dialog for Audit report', () => {
     expect(formGroups[9]).toHaveTextContent('First result');
     expect(formGroups[10]).toHaveTextContent('Results per page');
 
-    const onlyShowHostsCheckbox = getByLabelText(
+    const onlyShowHostsCheckbox = screen.getByLabelText(
       'Only show hosts that have results',
     );
     expect(onlyShowHostsCheckbox).toBeInTheDocument();
 
-    const cancelButton = getByText('Cancel');
-    const updateButton = getByText('Update');
+    const cancelButton = screen.getByText('Cancel');
+    const updateButton = screen.getByText('Update');
     expect(cancelButton).toBeInTheDocument();
     expect(updateButton).toBeInTheDocument();
   });

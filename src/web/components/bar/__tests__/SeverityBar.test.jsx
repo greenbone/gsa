@@ -10,6 +10,7 @@ import {
   SEVERITY_RATING_CVSS_3,
 } from 'gmp/utils/severity';
 import SeverityBar from 'web/components/bar/SeverityBar';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
@@ -80,9 +81,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="9.5" />);
-    const progressbarBox = getByTestId('progressbar-box');
-
+    render(<SeverityBar severity="9.5" />);
+    const progressbarBox = screen.getByTestId('progressbar-box');
     expect(progressbarBox).toHaveAttribute('title', 'High');
   });
 
@@ -93,9 +93,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="5" />);
-    const progressbarBox = getByTestId('progressbar-box');
-
+    render(<SeverityBar severity="5" />);
+    const progressbarBox = screen.getByTestId('progressbar-box');
     expect(progressbarBox).toHaveAttribute('title', 'Medium');
   });
 
@@ -106,9 +105,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="9" />);
-    const progressbarBox = getByTestId('progressbar-box');
-
+    render(<SeverityBar severity="9" />);
+    const progressbarBox = screen.getByTestId('progressbar-box');
     expect(progressbarBox).toHaveAttribute('title', 'Critical');
   });
 
@@ -122,7 +120,6 @@ describe('SeverityBar tests', () => {
     const {element} = render(
       <SeverityBar severity="9.5" toolTip="tooltip text" />,
     );
-
     expect(element).toHaveAttribute('title', 'tooltip text');
   });
 
@@ -133,9 +130,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="9.5" />);
-    const progress = getByTestId('progress');
-
+    render(<SeverityBar severity="9.5" />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule('width', '95%');
   });
 
@@ -146,9 +142,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="10.1" />);
-    const progress = getByTestId('progress');
-
+    render(<SeverityBar severity="10.1" />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule('width', '100%');
   });
 
@@ -159,9 +154,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="-0.1" />);
-    const progress = getByTestId('progress');
-
+    render(<SeverityBar severity="-0.1" />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule('width', '0%');
   });
 
@@ -172,9 +166,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="9.5" />);
-    const progress = getByTestId('progress');
-
+    render(<SeverityBar severity="9.5" />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule(
       'background',
       `linear-gradient(90deg, ${Theme.severityClassHigh} 0%, ${Theme.severityClassHigh} 100%)`,
@@ -188,9 +181,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="5" />);
-    const progress = getByTestId('progress');
-
+    render(<SeverityBar severity="5" />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule(
       'background',
       `linear-gradient(90deg, ${Theme.severityClassMedium} 0%, ${Theme.severityClassMedium} 100%)`,
@@ -204,9 +196,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar severity="9" />);
-    const progress = getByTestId('progress');
-
+    render(<SeverityBar severity="9" />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule(
       'background',
       `linear-gradient(90deg, ${Theme.severityClassCritical} 0%, ${Theme.severityClassCritical} 100%)`,
@@ -220,9 +211,8 @@ describe('SeverityBar tests', () => {
       },
     };
     const {render} = rendererWith({gmp});
-    const {getByTestId} = render(<SeverityBar />);
-    const progress = getByTestId('progress');
-
+    render(<SeverityBar />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule(
       'background',
       `linear-gradient(90deg, ${Theme.severityClassLow} 0%, ${Theme.severityClassLow} 100%)`,

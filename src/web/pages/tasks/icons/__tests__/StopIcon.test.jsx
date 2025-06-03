@@ -8,6 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import StopIcon from 'web/pages/tasks/icons/StopIcon';
+import {screen} from 'web/testing';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 describe('Task StopIcon component tests', () => {
@@ -118,13 +119,11 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {queryByTestId} = render(
-      <StopIcon task={task} onClick={clickHandler} />,
-    );
+    render(<StopIcon task={task} onClick={clickHandler} />);
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
-    expect(queryByTestId('stop-icon')).toEqual(null);
+    expect(screen.queryByTestId('stop-icon')).toEqual(null);
   });
 
   test('should not be rendered if task is a container', () => {
@@ -137,13 +136,10 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {queryByTestId} = render(
-      <StopIcon task={task} onClick={clickHandler} />,
-    );
+    render(<StopIcon task={task} onClick={clickHandler} />);
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
-
-    expect(queryByTestId('stop-icon')).toEqual(null);
+    expect(screen.queryByTestId('stop-icon')).toEqual(null);
   });
 });

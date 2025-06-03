@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import getLogo from 'web/components/structure/getLogo';
+import {screen} from 'web/testing';
 import {render} from 'web/utils/Testing';
 
 describe('getLogo', () => {
@@ -28,8 +29,8 @@ describe('getLogo', () => {
   ];
 
   test.each(testCases)('returns %s for %s', (model, expectedTestId) => {
-    const {getByTestId} = render(getLogo(model));
-    expect(getByTestId(expectedTestId)).toBeInTheDocument();
+    render(getLogo(model));
+    expect(screen.getByTestId(expectedTestId)).toBeInTheDocument();
   });
 
   test('returns undefined for unknown model', () => {

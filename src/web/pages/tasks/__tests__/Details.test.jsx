@@ -11,6 +11,7 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 import Details from 'web/pages/tasks/Details';
 import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const config = ScanConfig.fromElement({
@@ -118,10 +119,10 @@ describe('Task Details tests', () => {
     store.dispatch(scanconfigActions.success('314', config));
     store.dispatch(scheduleActions.success('121314', schedule));
 
-    const {element, getAllByTestId} = render(<Details entity={task} />);
+    const {element} = render(<Details entity={task} />);
 
     const headings = element.querySelectorAll('h2');
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(headings[0]).toHaveTextContent('Target');
     expect(detailsLinks[0]).toHaveAttribute('href', '/target/5678');
