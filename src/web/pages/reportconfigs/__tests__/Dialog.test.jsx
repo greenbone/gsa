@@ -426,7 +426,7 @@ describe('New Report Config Dialog component tests', () => {
     });
 
     fireEvent.click(closeBtnElement);
-    const multiSelectMenuItems = await getSelectItemElementsForMultiSelect();
+    const multiSelectMenuItems = getSelectItemElementsForMultiSelect();
     fireEvent.click(multiSelectMenuItems[1]);
 
     const saveButton = screen.getDialogSaveButton();
