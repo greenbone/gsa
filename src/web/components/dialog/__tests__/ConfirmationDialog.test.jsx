@@ -6,13 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {KeyCode} from 'gmp/utils/event';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {
-  closeDialog,
-  queryDialogContent,
-  queryDialogTitle,
-  queryDialog,
-} from 'web/components/testing';
-import {render, fireEvent, screen} from 'web/utils/Testing';
+import {closeDialog, screen} from 'web/testing';
+import {render, fireEvent} from 'web/utils/Testing';
 
 describe('ConfirmationDialog component tests', () => {
   test('should render ConfirmationDialog with text and title', () => {
@@ -28,10 +23,10 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    expect(queryDialog()).toBeInTheDocument();
+    expect(screen.queryDialog()).toBeInTheDocument();
 
-    expect(queryDialogContent()).toHaveTextContent('foo');
-    expect(queryDialogTitle()).toHaveTextContent('bar');
+    expect(screen.queryDialogContent()).toHaveTextContent('foo');
+    expect(screen.queryDialogTitle()).toHaveTextContent('bar');
   });
 
   test('should render ConfirmationDialog with element content and title', () => {
@@ -47,10 +42,10 @@ describe('ConfirmationDialog component tests', () => {
       />,
     );
 
-    expect(queryDialog()).toBeInTheDocument();
+    expect(screen.queryDialog()).toBeInTheDocument();
 
-    expect(queryDialogContent()).toHaveTextContent('foo');
-    expect(queryDialogTitle()).toHaveTextContent('bar');
+    expect(screen.queryDialogContent()).toHaveTextContent('foo');
+    expect(screen.queryDialogTitle()).toHaveTextContent('bar');
   });
 
   test('should close ConfirmationDialog with close button', () => {

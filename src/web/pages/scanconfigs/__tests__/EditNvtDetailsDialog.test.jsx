@@ -6,17 +6,9 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import date from 'gmp/models/date';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
-import {
-  changeInputValue,
-  getDialogCloseButton,
-  queryDialogContent,
-  getDialogSaveButton,
-  queryDialogTitle,
-  getRadioInputs,
-  queryTextInputs,
-} from 'web/components/testing';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import {setTimezone} from 'web/store/usersettings/actions';
+import {changeInputValue, screen} from 'web/testing';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 const preferences = [
@@ -66,9 +58,9 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
+    expect(screen.queryDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
 
-    const content = queryDialogContent();
+    const content = screen.queryDialogContent();
     expect(content).toHaveTextContent('Config');
     expect(content).toHaveTextContent('foo');
   });
@@ -107,9 +99,9 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    expect(queryDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
+    expect(screen.queryDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
 
-    const content = queryDialogContent();
+    const content = screen.queryDialogContent();
     expect(content).not.toHaveTextContent('Config');
     expect(content).not.toHaveTextContent('foo');
   });
@@ -146,7 +138,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -206,7 +198,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const closeButton = getDialogCloseButton();
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
 
     expect(handleClose).toHaveBeenCalled();
@@ -224,7 +216,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       router: true,
     });
 
-    const {baseElement} = render(
+    render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -245,14 +237,14 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const radios = getRadioInputs();
+    const radios = screen.getRadioInputs();
     fireEvent.click(radios[2]);
     fireEvent.click(radios[5]);
 
-    const inputs = queryTextInputs(baseElement);
+    const inputs = screen.queryTextInputs();
 
     changeInputValue(inputs[1], 'bar');
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     const newPreferenceValues = {
@@ -281,7 +273,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       router: true,
     });
 
-    const {getAllByName, getByName} = render(
+    render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -302,14 +294,14 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const useDefaultTimeoutRadios = getAllByName('useDefaultTimeout');
+    const useDefaultTimeoutRadios = screen.getAllByName('useDefaultTimeout');
     expect(useDefaultTimeoutRadios.length).toEqual(2);
     fireEvent.click(useDefaultTimeoutRadios[1]);
 
-    const timeoutField = getByName('timeout');
+    const timeoutField = screen.getByName('timeout');
     changeInputValue(timeoutField, '100');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     const preferenceValues = {

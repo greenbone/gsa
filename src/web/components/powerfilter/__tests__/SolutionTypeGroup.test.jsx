@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import SolutionTypesFilterGroup from 'web/components/powerfilter/SolutionTypeGroup';
-import {getRadioInputs} from 'web/components/testing';
+import {screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('SolutionTypesFilterGroup tests', () => {
@@ -28,7 +28,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
     fireEvent.click(radio[1]);
 
     expect(handleChange).toHaveBeenCalled();
@@ -45,7 +45,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
     expect(radio[1].checked).toEqual(true);
   });
 
@@ -58,7 +58,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter1} onChange={handleChange} />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
 
     expect(radio[1].checked).toEqual(true);
     expect(radio[2].checked).toEqual(false);
@@ -79,7 +79,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
     expect(radio[0].checked).toEqual(true);
   });
 });

@@ -9,15 +9,8 @@ import Credential, {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-import {
-  changeInputValue,
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-  getSelectElement,
-  queryTextInputs,
-} from 'web/components/testing';
 import ScannerDialog from 'web/pages/scanners/Dialog';
+import {changeInputValue, screen} from 'web/testing';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 const sensorScanner = {
@@ -76,7 +69,7 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    expect(getDialog()).toBeInTheDocument();
+    expect(screen.getDialog()).toBeInTheDocument();
   });
 
   test('should display default info', () => {
@@ -102,19 +95,15 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    const inputs = queryTextInputs();
-
+    const inputs = screen.queryTextInputs();
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveValue('Unnamed'); // name field
-
     expect(inputs[1]).toHaveAttribute('name', 'comment');
     expect(inputs[1]).toHaveValue(''); // comment field
-
     expect(inputs[2]).toHaveAttribute('name', 'host');
     expect(inputs[2]).toHaveValue('localhost');
 
-    const select = getSelectElement();
-
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('Greenbone Sensor');
   });
 
@@ -144,7 +133,7 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    const inputs = queryTextInputs();
+    const inputs = screen.queryTextInputs();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveAttribute('value', 'john');
@@ -155,8 +144,7 @@ describe('ScannerDialog component tests', () => {
     expect(inputs[2]).toHaveAttribute('name', 'host');
     expect(inputs[2]).toHaveAttribute('value', 'mypc');
 
-    const select = getSelectElement();
-
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('Greenbone Sensor');
   });
 
@@ -186,7 +174,7 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
 
     fireEvent.click(saveButton);
 
@@ -213,7 +201,7 @@ describe('ScannerDialog component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByName} = render(
+    render(
       <ScannerDialog
         comment={scanner.comment}
         credential_id={scanner.credential.id}
@@ -230,18 +218,18 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    const inputs = queryTextInputs();
+    const inputs = screen.queryTextInputs();
 
     expect(inputs[0]).toHaveValue('john');
     expect(inputs[1]).toHaveValue('lorem ipsum');
 
-    const nameInput = getByName('name');
+    const nameInput = screen.getByName('name');
     changeInputValue(nameInput, 'ipsum');
 
-    const commentInput = getByName('comment');
+    const commentInput = screen.getByName('comment');
     changeInputValue(commentInput, 'lorem');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -280,9 +268,8 @@ describe('ScannerDialog component tests', () => {
       />,
     );
 
-    const closeButton = getDialogCloseButton();
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
-
     expect(handleClose).toHaveBeenCalled();
     expect(handleSave).not.toHaveBeenCalled();
   });

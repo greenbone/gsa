@@ -6,11 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import timezones from 'gmp/timezones';
 import TimezoneSelect from 'web/components/form/TimeZoneSelect';
-import {
-  openSelectElement,
-  getSelectItemElements,
-  getSelectElement,
-} from 'web/components/testing';
+import {openSelectElement, screen} from 'web/testing';
 import {fireEvent, render} from 'web/utils/Testing';
 
 describe('TimezoneSelect tests', () => {
@@ -25,7 +21,7 @@ describe('TimezoneSelect tests', () => {
 
     await openSelectElement();
 
-    expect(getSelectItemElements().length).toEqual(timezones.length);
+    expect(screen.getSelectItemElements().length).toEqual(timezones.length);
   });
 
   test('should call onChange handler', async () => {
@@ -34,7 +30,7 @@ describe('TimezoneSelect tests', () => {
 
     await openSelectElement();
 
-    const items = getSelectItemElements();
+    const items = screen.getSelectItemElements();
     fireEvent.click(items[1]);
 
     expect(handler).toHaveBeenCalledWith(timezones[1], undefined);
@@ -46,7 +42,7 @@ describe('TimezoneSelect tests', () => {
 
     await openSelectElement();
 
-    const items = getSelectItemElements();
+    const items = screen.getSelectItemElements();
     fireEvent.click(items[1]);
 
     expect(handler).toHaveBeenCalledWith(timezones[1], 'foo');
@@ -56,7 +52,7 @@ describe('TimezoneSelect tests', () => {
     const timezone = timezones[1];
     render(<TimezoneSelect value={timezone} />);
 
-    const input = getSelectElement();
+    const input = screen.getSelectElement();
     expect(input).toHaveValue(timezone);
   });
 });

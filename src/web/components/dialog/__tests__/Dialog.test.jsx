@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {KeyCode} from 'gmp/utils/event';
 import {isFunction} from 'gmp/utils/identity';
 import Dialog from 'web/components/dialog/Dialog';
-import {queryDialog} from 'web/components/testing';
+import {screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('Dialog component tests', () => {
@@ -16,8 +16,7 @@ describe('Dialog component tests', () => {
     const renderFunc = testing.fn().mockReturnValue(<div />);
 
     render(<Dialog onClose={handleClose}>{renderFunc}</Dialog>);
-
-    expect(queryDialog()).toBeInTheDocument();
+    screen.getDialog();
 
     expect(renderFunc).toHaveBeenCalled();
 

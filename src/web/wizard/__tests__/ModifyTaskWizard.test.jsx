@@ -7,12 +7,8 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Date from 'gmp/models/date';
 import Task from 'gmp/models/task';
-import {
-  closeDialog,
-  getElementOrReturnDocument,
-  getRadioInputs,
-} from 'web/components/testing';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {changeInputValue, screen} from 'web/testing';
+import {rendererWith, fireEvent} from 'web/utils/Testing';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
@@ -32,14 +28,12 @@ const startMinute = 10;
 const startHour = 12;
 const startTimezone = 'UTC';
 
-const getFormGroupTitles = element => {
-  element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-Text-root');
+const getFormGroupTitles = () => {
+  return document.body.querySelectorAll('.mantine-Text-root');
 };
 
-const getRadioTitles = element => {
-  element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-Radio-label');
+const getRadioTitles = () => {
+  return document.body.querySelectorAll('.mantine-Radio-label');
 };
 
 describe('ModifyTaskWizard component tests', () => {
@@ -66,7 +60,7 @@ describe('ModifyTaskWizard component tests', () => {
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = getRadioInputs();
+    const radioInputs = screen.getRadioInputs();
     const radioTitles = getRadioTitles();
 
     const selectedDate = '01/01/2020';
@@ -161,7 +155,7 @@ describe('ModifyTaskWizard component tests', () => {
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = getRadioInputs();
+    const radioInputs = screen.getRadioInputs();
     const radioTitles = getRadioTitles();
 
     expect(baseElement).toHaveTextContent('Setting a start time');
@@ -204,8 +198,8 @@ describe('ModifyTaskWizard component tests', () => {
       />,
     );
 
-    closeDialog();
-
+    const closeButton = screen.getDialogXButton();
+    fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -231,10 +225,8 @@ describe('ModifyTaskWizard component tests', () => {
       />,
     );
 
-    const cancelButton = screen.getByTestId('dialog-close-button');
-
+    const cancelButton = screen.getDialogCloseButton();
     fireEvent.click(cancelButton);
-
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -246,7 +238,7 @@ describe('ModifyTaskWizard component tests', () => {
       capabilities: true,
     });
 
-    const {getByName} = render(
+    render(
       <ModifyTaskWizard
         reschedule={reschedule}
         start_date={startDate}
@@ -260,10 +252,10 @@ describe('ModifyTaskWizard component tests', () => {
       />,
     );
 
-    const emailInput = getByName('alert_email');
-    fireEvent.change(emailInput, {target: {value: 'foo@bar.com'}});
+    const emailInput = screen.getByName('alert_email');
+    changeInputValue(emailInput, 'foo@bar.com');
 
-    const saveButton = screen.getByTestId('dialog-save-button');
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({

@@ -8,24 +8,14 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Filter from 'gmp/models/filter';
-import {
-  queryTableBody,
-  queryTableFooter,
-  testBulkTrashcanDialog,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import AuditPage, {ToolBarIcons} from 'web/pages/audits/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {
-  rendererWith,
-  fireEvent,
-  wait,
-  screen,
-  getByTestId,
-} from 'web/utils/Testing';
+import {screen, testBulkTrashcanDialog, within} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const lastReport = {
   report: {
@@ -142,7 +132,7 @@ describe('AuditPage tests', () => {
     await wait();
 
     expect(baseElement).toBeVisible();
-    const tableBody = queryTableBody();
+    const tableBody = screen.queryTableBody();
     expect(tableBody.querySelectorAll('tr').length).toEqual(1);
   });
 
@@ -205,8 +195,8 @@ describe('AuditPage tests', () => {
 
     await wait();
 
-    const tableFooter = queryTableFooter();
-    const deleteIcon = getByTestId(tableFooter, 'trash-icon');
+    const tableFooter = within(screen.queryTableFooter());
+    const deleteIcon = tableFooter.getByTestId('trash-icon');
     expect(deleteByFilter).not.toHaveBeenCalled();
     expect(deleteIcon).toHaveAttribute(
       'title',
@@ -216,7 +206,7 @@ describe('AuditPage tests', () => {
 
     testBulkTrashcanDialog(screen, deleteByFilter);
 
-    const exportIcon = getByTestId(tableFooter, 'export-icon');
+    const exportIcon = tableFooter.getByTestId('export-icon');
     expect(exportByFilter).not.toHaveBeenCalled();
     expect(exportIcon).toHaveAttribute('title', 'Export page contents');
     fireEvent.click(exportIcon);

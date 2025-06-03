@@ -11,13 +11,12 @@ import {
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-import {
-  getDialogCloseButton,
-  getDialogSaveButton,
-  getSelectItemElementsForSelect,
-  queryAllSelectElements,
-} from 'web/components/testing';
 import TaskDialog from 'web/pages/tasks/Dialog';
+import {
+  changeInputValue,
+  getSelectItemElementsForSelect,
+  screen,
+} from 'web/testing';
 import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 describe('TaskDialog component tests', () => {
@@ -68,7 +67,7 @@ describe('TaskDialog component tests', () => {
 
   test('should render scan config section for OPENVAS_SCANNER_TYPE', async () => {
     renderDialog(OPENVAS_SCANNER_TYPE);
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(5);
 
     const scanConfigSelect = selects[3];
@@ -80,7 +79,7 @@ describe('TaskDialog component tests', () => {
 
   test('should render scan config section for OPENVASD_SCANNER_TYPE', async () => {
     renderDialog(OPENVASD_SCANNER_TYPE);
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(5);
 
     const scanConfigSelect = selects[3];
@@ -92,13 +91,13 @@ describe('TaskDialog component tests', () => {
 
   test('should not render scan config section for CVE_SCANNER_TYPE', () => {
     renderDialog(CVE_SCANNER_TYPE);
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(3); // config select is hidden
   });
 
   test('should save dialog with updated values', async () => {
     const onSave = testing.fn();
-    const {getByName} = rendererWith({gmp, capabilities: true}).render(
+    rendererWith({gmp, capabilities: true}).render(
       <TaskDialog
         {...commonHandlers()}
         alerts={[]}
@@ -116,16 +115,11 @@ describe('TaskDialog component tests', () => {
       />,
     );
 
-    fireEvent.change(getByName('name'), {target: {value: 'UpdatedTask'}});
-    fireEvent.change(getByName('comment'), {
-      target: {value: 'Updated comment'},
-    });
-
-    fireEvent.click(getDialogSaveButton());
-
-    await wait(() => {
-      expect(onSave).toHaveBeenCalled();
-    });
+    changeInputValue(screen.getByName('name'), 'UpdatedTask');
+    changeInputValue(screen.getByName('comment'), 'Updated comment');
+    fireEvent.click(screen.getDialogSaveButton());
+    await wait();
+    expect(onSave).toHaveBeenCalled();
   });
 
   test('should close dialog on close button click', () => {
@@ -134,7 +128,7 @@ describe('TaskDialog component tests', () => {
       <TaskDialog {...defaultProps} onClose={onClose} />,
     );
 
-    fireEvent.click(getDialogCloseButton());
+    fireEvent.click(screen.getDialogCloseButton());
     expect(onClose).toHaveBeenCalled();
   });
 

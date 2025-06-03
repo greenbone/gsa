@@ -7,17 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import date from 'gmp/models/date';
 import Schedule from 'gmp/models/schedule';
 import timezones from 'gmp/timezones';
+import ScheduleDialog from 'web/pages/schedules/Dialog';
 import {
   changeInputValue,
-  clickElement,
   closeDialog,
-  getDialogSaveButton,
-  queryAllSelectElements,
   getSelectItemElementsForSelect,
-  queryTextInputs,
-} from 'web/components/testing';
-import ScheduleDialog from 'web/pages/schedules/Dialog';
-import {render, fireEvent, screen} from 'web/utils/Testing';
+  screen,
+} from 'web/testing';
+import {render, fireEvent} from 'web/utils/Testing';
 
 const checkElementVisibilityAndContent = (
   labelText,
@@ -99,8 +96,8 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const inputs = queryTextInputs();
-    const selects = queryAllSelectElements();
+    const inputs = screen.queryTextInputs();
+    const selects = screen.queryAllSelectElements();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveValue('schedule 1'); // name field
@@ -135,7 +132,7 @@ describe('ScheduleDialog component tests', () => {
   test('should allow to change text field', () => {
     const mockCurrentTime = date('2021-02-08T14:37:04+00:00');
 
-    const {getByName} = render(
+    render(
       <ScheduleDialog
         startDate={mockCurrentTime}
         title={'New Schedule'}
@@ -144,12 +141,12 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const nameInput = getByName('name');
+    const nameInput = screen.getByName('name');
     expect(nameInput).toHaveValue('Unnamed');
     changeInputValue(nameInput, 'foo');
     expect(nameInput).toHaveValue('foo');
 
-    const commentInput = getByName('comment');
+    const commentInput = screen.getByName('comment');
     expect(commentInput).toHaveValue('');
     changeInputValue(commentInput, 'bar');
     expect(commentInput).toHaveValue('bar');
@@ -197,22 +194,22 @@ describe('ScheduleDialog component tests', () => {
     );
 
     let selectItems;
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     expect(selects[0]).toHaveValue('UTC');
     expect(selects[1]).toHaveValue('Weekly');
 
     selectItems = await getSelectItemElementsForSelect(selects[0]);
     expect(selectItems.length).toBe(timezones.length);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
     expect(selects[0]).toHaveValue(timezones[1]);
 
     selectItems = await getSelectItemElementsForSelect(selects[1]);
     expect(selectItems.length).toBe(8);
-    await clickElement(selectItems[6]);
+    fireEvent.click(selectItems[6]);
 
     expect(selects[1]).toHaveValue('Workweek (Monday till Friday)');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalled();

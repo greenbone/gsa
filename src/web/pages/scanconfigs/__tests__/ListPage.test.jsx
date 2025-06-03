@@ -11,18 +11,14 @@ import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
-import {
-  clickElement,
-  queryTable,
-  testBulkTrashcanDialog,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ScanConfigsPage, {ToolBarIcons} from 'web/pages/scanconfigs/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/Testing';
+import {screen, testBulkTrashcanDialog} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const config = ScanConfig.fromElement({
   _id: '12345',
@@ -131,7 +127,7 @@ describe('ScanConfigsPage tests', () => {
     await wait();
 
     expect(baseElement).toBeInTheDocument();
-    queryTable();
+    expect(screen.queryTable()).toBeInTheDocument();
   });
 
   test('should call commands for bulk actions', async () => {
@@ -194,11 +190,11 @@ describe('ScanConfigsPage tests', () => {
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
-    await clickElement(deleteIcon);
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
 
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 });

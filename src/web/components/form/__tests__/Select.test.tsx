@@ -5,12 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Select from 'web/components/form/Select';
-import {
-  getSelectElement,
-  getSelectItemElements,
-  openSelectElement,
-} from 'web/components/testing';
-import {render, fireEvent, screen} from 'web/utils/Testing';
+import {openSelectElement, screen} from 'web/testing';
+import {render, fireEvent} from 'web/utils/Testing';
 
 describe('Select component tests', () => {
   test('should render with items', async () => {
@@ -25,15 +21,15 @@ describe('Select component tests', () => {
       },
     ];
 
-    const {queryByRole} = render(<Select items={items} />);
+    render(<Select items={items} />);
 
-    const element = getSelectElement();
+    const element = screen.getSelectElement();
 
-    expect(queryByRole('option')).not.toBeInTheDocument();
+    expect(screen.queryByRole('option')).not.toBeInTheDocument();
 
     await openSelectElement(element);
 
-    const domItems = getSelectItemElements();
+    const domItems = screen.getSelectItemElements();
 
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
@@ -50,15 +46,15 @@ describe('Select component tests', () => {
 
     render(<Select isLoading={true} items={items} />);
 
-    const element = getSelectElement();
+    const element = screen.getSelectElement();
 
     expect(element).toHaveAttribute('placeholder', 'Loading...');
 
-    expect(getSelectItemElements().length).toEqual(0);
+    expect(screen.getSelectItemElements().length).toEqual(0);
 
     await openSelectElement(element);
 
-    expect(getSelectItemElements().length).toEqual(0);
+    expect(screen.getSelectItemElements().length).toEqual(0);
   });
 
   test('should render error', () => {
@@ -71,8 +67,7 @@ describe('Select component tests', () => {
 
     render(<Select errorContent="Some Error" items={items} />);
 
-    getSelectElement();
-
+    screen.getSelectElement();
     expect(screen.getByText('Some Error')).toBeVisible();
   });
 
@@ -94,8 +89,7 @@ describe('Select component tests', () => {
 
     await openSelectElement();
 
-    const domItems = getSelectItemElements();
-
+    const domItems = screen.getSelectItemElements();
     expect(domItems.length).toEqual(2);
     fireEvent.click(domItems[0]);
     expect(onChange).toHaveBeenCalledWith('bar', undefined);
@@ -119,7 +113,7 @@ describe('Select component tests', () => {
 
     await openSelectElement();
 
-    const domItems = getSelectItemElements();
+    const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[0]);
     expect(onChange).toHaveBeenCalledWith('bar', 'abc');
   });
@@ -140,8 +134,7 @@ describe('Select component tests', () => {
 
     render(<Select items={items} value="bar" onChange={onChange} />);
 
-    const input = getSelectElement();
-
+    const input = screen.getSelectElement();
     expect(input).toHaveValue('Bar');
   });
 
@@ -161,11 +154,10 @@ describe('Select component tests', () => {
 
     render(<Select items={items} value="bar" onChange={onChange} />);
 
-    const input = getSelectElement();
-
+    const input = screen.getSelectElement();
     await openSelectElement(input);
 
-    const domItems = getSelectItemElements();
+    const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[1]);
     expect(onChange).toHaveBeenCalledWith('foo', undefined);
   });
@@ -189,18 +181,14 @@ describe('Select component tests', () => {
     render(<Select items={items} value="bar" />);
 
     await openSelectElement();
+    expect(screen.getSelectItemElements().length).toEqual(3);
 
-    expect(getSelectItemElements().length).toEqual(3);
-
-    const input = getSelectElement();
-
+    const input = screen.getSelectElement();
     fireEvent.change(input, {target: {value: 'ba'}});
-
-    expect(getSelectItemElements().length).toEqual(2);
+    expect(screen.getSelectItemElements().length).toEqual(2);
 
     fireEvent.change(input, {target: {value: 'F'}});
-
-    expect(getSelectItemElements().length).toEqual(1);
+    expect(screen.getSelectItemElements().length).toEqual(1);
   });
 
   describe('deprecated option rendering', () => {
@@ -233,12 +221,10 @@ describe('Select component tests', () => {
 
         render(<Select items={items} />);
 
-        const input = getSelectElement();
-
+        const input = screen.getSelectElement();
         await openSelectElement(input);
 
-        const domItems = getSelectItemElements();
-
+        const domItems = screen.getSelectItemElements();
         expect(domItems[0]).toHaveTextContent(expectedText);
       },
     );

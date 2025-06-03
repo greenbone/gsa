@@ -6,13 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import TaskTrendGroup from 'web/components/powerfilter/TaskTrendGroup';
-import {
-  clickElement,
-  getSelectElement,
-  getSelectItemElements,
-  openSelectElement,
-} from 'web/components/testing';
-import {render} from 'web/utils/Testing';
+import {openSelectElement, screen} from 'web/testing';
+import {fireEvent, render} from 'web/utils/Testing';
 
 describe('Task Trend Selector Tests', () => {
   test('should render', () => {
@@ -29,17 +24,15 @@ describe('Task Trend Selector Tests', () => {
     const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
 
-    const {queryByRole} = render(
-      <TaskTrendGroup filter={filter} onChange={onChange} />,
-    );
+    render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
-    let domItems = getSelectItemElements();
+    let domItems = screen.getSelectItemElements();
 
-    expect(queryByRole('option')).not.toBeInTheDocument();
+    expect(screen.queryByRole('option')).not.toBeInTheDocument();
 
     await openSelectElement();
 
-    domItems = getSelectItemElements();
+    domItems = screen.getSelectItemElements();
 
     expect(domItems.length).toEqual(5);
     expect(domItems[0]).toHaveTextContent('Severity increased');
@@ -53,7 +46,7 @@ describe('Task Trend Selector Tests', () => {
 
     render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('Vulnerabilities did not change');
   });
 
@@ -65,8 +58,8 @@ describe('Task Trend Selector Tests', () => {
 
     await openSelectElement();
 
-    const domItems = getSelectItemElements();
-    await clickElement(domItems[0]);
+    const domItems = screen.getSelectItemElements();
+    fireEvent.click(domItems[0]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('up', 'trend');
@@ -78,13 +71,13 @@ describe('Task Trend Selector Tests', () => {
 
     render(<TaskTrendGroup filter={filter} trend="up" onChange={onChange} />);
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('Severity increased');
 
     await openSelectElement();
 
-    const domItems = getSelectItemElements();
-    await clickElement(domItems[2]);
+    const domItems = screen.getSelectItemElements();
+    fireEvent.click(domItems[2]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('more', 'trend');
