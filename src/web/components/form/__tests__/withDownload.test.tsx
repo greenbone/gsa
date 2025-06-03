@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {DownloadFunc} from 'web/components/form/useDownload';
 import withDownload from 'web/components/form/withDownload';
+import {screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 interface TestComponentProps {
@@ -26,14 +27,12 @@ window.URL.revokeObjectURL = testing.fn();
 
 describe('withDownload tests', () => {
   test('should render', () => {
-    const {rerender, getByTestId} = render(
-      <TestComponent data="bar" filename="foo" />,
-    );
+    const {rerender} = render(<TestComponent data="bar" filename="foo" />);
 
     // rerender to set reference to Download component
     rerender(<TestComponent data="bar" filename="foo" />);
 
-    const button = getByTestId('button');
+    const button = screen.getByTestId('button');
     fireEvent.click(button);
 
     expect(createObjectURL).toHaveBeenCalled();

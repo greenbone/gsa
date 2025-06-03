@@ -6,7 +6,9 @@
 import {describe, test, expect} from '@gsa/testing';
 import Badge from 'web/components/badge/Badge';
 import {ReportIcon} from 'web/components/icon';
+import {screen} from 'web/testing';
 import {render} from 'web/utils/Testing';
+
 describe('Badge tests', () => {
   test('should render badge', () => {
     const {element} = render(
@@ -25,30 +27,26 @@ describe('Badge tests', () => {
   });
 
   test('should render backgroundColor', () => {
-    const {getByTestId} = render(<Badge backgroundColor="blue" content="1" />);
-    const icon = getByTestId('badge-icon');
-
+    render(<Badge backgroundColor="blue" content="1" />);
+    const icon = screen.getByTestId('badge-icon');
     expect(icon).toHaveStyleRule('background-color', 'blue');
   });
 
   test('should render color', () => {
-    const {getByTestId} = render(<Badge color="blue" content="1" />);
-    const icon = getByTestId('badge-icon');
-
+    render(<Badge color="blue" content="1" />);
+    const icon = screen.getByTestId('badge-icon');
     expect(icon).toHaveStyleRule('color', 'blue');
   });
 
   test('should render position', () => {
-    const {getByTestId} = render(<Badge content="1" position="bottom" />);
-    const icon = getByTestId('badge-icon');
-
+    render(<Badge content="1" position="bottom" />);
+    const icon = screen.getByTestId('badge-icon');
     expect(icon).toHaveStyleRule('bottom', '0');
   });
 
   test('should not be dynamic', () => {
-    const {getByTestId} = render(<Badge content="1" dynamic={false} />);
-
-    const icon = getByTestId('badge-icon');
+    render(<Badge content="1" dynamic={false} />);
+    const icon = screen.getByTestId('badge-icon');
     expect(icon).toHaveStyleRule('right', '0');
   });
 });

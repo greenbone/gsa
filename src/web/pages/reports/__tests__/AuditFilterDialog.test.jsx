@@ -8,7 +8,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import React from 'react';
 import AuditReportFilter from 'web/pages/reports/AuditFilterDialog';
-import {rendererWith, within} from 'web/utils/Testing';
+import {screen, within} from 'web/testing';
+import {rendererWith} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 
@@ -33,7 +34,7 @@ describe('Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {baseElement, getByLabelText, getByTestId} = render(
+    const {baseElement} = render(
       <AuditReportFilter
         createFilterType="result"
         delta={false}
@@ -51,7 +52,7 @@ describe('Filter Dialog for Audit report', () => {
     expect(formGroups[0]).toHaveTextContent('Filter');
     expect(formGroups[1]).toHaveTextContent('Compliance');
 
-    const filterGroup = getByTestId('compliance-levels-filter-group');
+    const filterGroup = screen.getByTestId('compliance-levels-filter-group');
     const {queryByTestId, queryAllByRole} = within(filterGroup);
 
     const yesCheckbox = queryByTestId('compliance-state-yes');
@@ -73,8 +74,8 @@ describe('Filter Dialog for Audit report', () => {
     expect(formGroups[5]).toHaveTextContent('Results per page');
     expect(formGroups[6]).toHaveTextContent('Sort by');
 
-    const ascendingRadio = getByLabelText('Ascending');
-    const descendingRadio = getByLabelText('Descending');
+    const ascendingRadio = screen.getByLabelText('Ascending');
+    const descendingRadio = screen.getByLabelText('Descending');
 
     expect(ascendingRadio).toBeInTheDocument();
     expect(descendingRadio).toBeInTheDocument();

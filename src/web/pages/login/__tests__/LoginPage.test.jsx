@@ -84,11 +84,10 @@ describe('LoginPage tests', () => {
       settings: {},
     };
     const {render} = rendererWith({gmp, router: true, store: true});
+    render(<LoginPage />);
 
-    const {queryByTestId} = render(<LoginPage />);
-
-    expect(queryByTestId('guest-login')).not.toBeInTheDocument();
-    expect(queryByTestId('guest-login-button')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('guest-login')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('guest-login-button')).not.toBeInTheDocument();
   });
 
   test('should allow to login as guest', () => {
@@ -111,10 +110,9 @@ describe('LoginPage tests', () => {
       settings: {guestUsername: 'foo', guestPassword: 'bar'},
     };
     const {render} = rendererWith({gmp, router: true, store: true});
+    render(<LoginPage />);
 
-    const {getByTestId} = render(<LoginPage />);
-
-    const button = getByTestId('guest-login-button');
+    const button = screen.getByTestId('guest-login-button');
     fireEvent.click(button);
 
     expect(login).toBeCalledWith('foo', 'bar');

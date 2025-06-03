@@ -10,6 +10,7 @@ import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import Summary from 'web/pages/reports/details/Summary';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const filter = Filter.fromString(
@@ -31,7 +32,7 @@ describe('Report Summary tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {element, queryAllByTestId} = render(
+    const {element} = render(
       <Summary
         filter={filter}
         isUpdating={false}
@@ -42,7 +43,7 @@ describe('Report Summary tests', () => {
 
     const tableData = element.querySelectorAll('td');
     const links = element.querySelectorAll('a');
-    const progressbar = queryAllByTestId('progressbar-box');
+    const progressbar = screen.queryAllByTestId('progressbar-box');
 
     expect(tableData[0]).toHaveTextContent('Task Name');
     expect(links[0]).toHaveAttribute('href', '/task/314');
@@ -86,13 +87,13 @@ describe('Report Summary tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {element, queryAllByTestId} = render(
+    const {element} = render(
       <Summary filter={filter} report={report} reportId={report.id} />,
     );
 
     const tableData = element.querySelectorAll('td');
     const links = element.querySelectorAll('a');
-    const progressbar = queryAllByTestId('progressbar-box');
+    const progressbar = screen.queryAllByTestId('progressbar-box');
 
     expect(tableData[0]).toHaveTextContent('Task Name');
     expect(links[0]).toHaveAttribute('href', '/task/314');

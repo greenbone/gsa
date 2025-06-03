@@ -10,6 +10,7 @@ import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const filter = Filter.fromString(
@@ -37,7 +38,7 @@ describe('Report Operating Systems Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <OperatingSystemsTab
         counts={operatingsystems.counts}
         filter={filter}
@@ -53,7 +54,7 @@ describe('Report Operating Systems Tab tests', () => {
     const images = baseElement.querySelectorAll('img');
     const links = baseElement.querySelectorAll('a');
     const header = baseElement.querySelectorAll('th');
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Headings
     expect(header[0]).toHaveTextContent('Operating System');
@@ -117,7 +118,7 @@ describe('Audit Report Operating Systems Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <OperatingSystemsTab
         audit={true}
         counts={operatingsystems.counts}
@@ -134,7 +135,7 @@ describe('Audit Report Operating Systems Tab tests', () => {
     const images = baseElement.querySelectorAll('img');
     const links = baseElement.querySelectorAll('a');
     const header = baseElement.querySelectorAll('th');
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Headings
     expect(header[0]).toHaveTextContent('Operating System');
