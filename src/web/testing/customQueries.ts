@@ -166,6 +166,14 @@ export const queryDialogContent = (dialog?: HTMLElement) => {
   return dialog.querySelector<HTMLElement>('.mantine-Modal-body');
 };
 
+export const getDialogContent = (dialog?: HTMLElement) => {
+  const queryDialog = queryDialogContent(dialog);
+  if (!queryDialog) {
+    throw getElementError('Unable to find dialog content.', document.body);
+  }
+  return queryDialog;
+};
+
 /**
  * Retrieves the title element from a dialog.
  *
