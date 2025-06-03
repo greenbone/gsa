@@ -10,12 +10,10 @@ import 'jest-styled-components';
 import {ThemeProvider} from '@greenbone/opensight-ui-components-mantinev7';
 import {afterEach} from '@gsa/testing';
 import {
-  act,
   render as reactTestingRender,
   cleanup,
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
-import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import {DEFAULT_LANGUAGE, getLocale} from 'gmp/locale/lang';
@@ -30,15 +28,11 @@ import GmpContext from 'web/components/provider/GmpProvider';
 import {LanguageContext} from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
 import configureStore from 'web/store';
+import {userEvent, PointerEventsCheckLevel} from 'web/testing';
 
-export {
-  renderHook,
-  waitFor,
-  act,
-  screen,
-  fireEvent,
-} from '@testing-library/react/pure';
-export {userEvent};
+export {renderHook} from '@testing-library/react/pure';
+
+export {wait, waitFor, act, fireEvent, userEvent, screen} from 'web/testing';
 
 afterEach(cleanup);
 
@@ -51,15 +45,6 @@ interface RendererOptions {
   route?: string;
   showLocation?: boolean;
   language?: string | Record<string, unknown>;
-}
-
-export async function wait(ms: number = 0) {
-  await act(
-    () =>
-      new Promise(resolve => {
-        setTimeout(resolve, ms);
-      }),
-  );
 }
 
 const Main = ({children}: {children: React.ReactNode}) => {
