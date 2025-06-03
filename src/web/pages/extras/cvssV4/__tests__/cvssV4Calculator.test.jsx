@@ -6,7 +6,8 @@
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
-import {fireEvent, rendererWith, wait, userEvent} from 'web/utils/Testing';
+import {screen} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 const gmp = {
   user: {
@@ -31,13 +32,9 @@ describe('CvssV4Calculator page tests', () => {
       router: true,
     });
 
-    const {getByText, within} = render(<CvssV4Calculator />);
+    render(<CvssV4Calculator />);
 
-    const cvssVectorEl = getByText('CVSS Base Vector');
-    const spanElement = within(cvssVectorEl.parentElement).getByText(
-      baseCVSSVector,
-    );
-
+    const spanElement = screen.getByText(baseCVSSVector);
     expect(spanElement).toBeVisible();
   });
 
@@ -52,13 +49,9 @@ describe('CvssV4Calculator page tests', () => {
       route: `?cvssVector=${cvssVector}`,
     });
 
-    const {getByText, within} = render(<CvssV4Calculator />);
+    render(<CvssV4Calculator />);
 
-    const cvssVectorEl = getByText('CVSS Base Vector');
-    const spanElement = within(cvssVectorEl.parentElement).getByText(
-      cvssVector,
-    );
-
+    const spanElement = screen.getByText(cvssVector);
     expect(spanElement).toBeVisible();
   });
 
@@ -69,15 +62,13 @@ describe('CvssV4Calculator page tests', () => {
       router: true,
     });
 
-    const {getByText, within, element} = render(<CvssV4Calculator />);
+    const {element} = render(<CvssV4Calculator />);
 
     await wait();
 
     const vectorInput = element.querySelector('input[name="cvssVectorInput"]');
-
     const modifiedVectorInput =
       'CVSS:4.0/AV:P/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';
-
     fireEvent.change(vectorInput, {
       target: {
         value: modifiedVectorInput,
@@ -86,11 +77,7 @@ describe('CvssV4Calculator page tests', () => {
 
     await wait();
 
-    const cvssVectorEl = getByText('CVSS Base Vector');
-    const spanElement = within(cvssVectorEl.parentElement).getByText(
-      modifiedVectorInput,
-    );
-
+    const spanElement = screen.getByText(modifiedVectorInput);
     expect(spanElement).toBeVisible();
 
     const hiddenInput = element.querySelector(
@@ -98,6 +85,7 @@ describe('CvssV4Calculator page tests', () => {
     );
     expect(hiddenInput).toHaveValue('P');
   });
+
   test('Changing displayed select values should change userVector', async () => {
     const {render} = rendererWith({
       gmp,
@@ -105,17 +93,14 @@ describe('CvssV4Calculator page tests', () => {
       router: true,
     });
 
-    const {element, getAllByTestId, getByRole} = render(
-      <CvssV4Calculator location={location} />,
-    );
+    const {element} = render(<CvssV4Calculator location={location} />);
 
-    const allSelectors = getAllByTestId('form-select');
+    const allSelectors = screen.getAllByTestId('form-select');
     const firstSelector = allSelectors[0];
+    fireEvent.click(firstSelector);
 
-    await userEvent.click(firstSelector);
-
-    const option = getByRole('option', {name: 'Local (L)'});
-    await userEvent.click(option);
+    const option = screen.getByRole('option', {name: 'Local (L)'});
+    fireEvent.click(option);
 
     const cvssVector =
       'CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N';

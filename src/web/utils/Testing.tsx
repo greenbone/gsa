@@ -13,7 +13,6 @@ import {
   act,
   render as reactTestingRender,
   cleanup,
-  within,
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
 import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
@@ -77,7 +76,6 @@ export const render = (ui: React.ReactNode) => {
     baseElement,
     container,
     element: container.lastChild as HTMLElement,
-    within: () => within(baseElement),
     rerender: (component: React.ReactNode) =>
       rerender(<Main>{component}</Main>),
     ...other,
