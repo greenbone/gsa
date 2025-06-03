@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {screen} from 'web/components/testing';
+import {screen} from 'web/testing';
 
 describe('screen', () => {
   test('should export screen', () => {

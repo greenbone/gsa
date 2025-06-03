@@ -5,18 +5,10 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import ReportConfig from 'gmp/models/reportconfig';
-import {
-  clickElement,
-  queryDialogContent,
-  getDialogSaveButton,
-  queryDialogTitle,
-  queryAllSelectElements,
-  getSelectItemElementsForSelect,
-  queryTextInputs,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ReportFormatComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
-import {fireEvent, getByTestId, rendererWith, wait} from 'web/utils/Testing';
+import {getSelectItemElementsForSelect, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 describe('Report Config Component tests', () => {
   const mockReportConfig = ReportConfig.fromElement({
@@ -104,17 +96,17 @@ describe('Report Config Component tests', () => {
     });
     expect(getAllReportFormats).toHaveBeenCalledWith();
 
-    expect(queryDialogTitle()).toHaveTextContent(
+    expect(screen.queryDialogTitle()).toHaveTextContent(
       'Edit Report Config test report config',
     );
-    const content = queryDialogContent();
-    const inputs = queryTextInputs(content);
+    const content = within(screen.queryDialogContent());
+    const inputs = content.queryTextInputs();
     expect(inputs[0]).toHaveValue('test report config');
 
-    const select = queryAllSelectElements(content);
+    const select = content.queryAllSelectElements();
     expect(select[0]).toHaveValue('test report format');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(saveReportConfig).toHaveBeenCalledWith({
@@ -184,21 +176,21 @@ describe('Report Config Component tests', () => {
 
     expect(getAllReportFormats).toHaveBeenCalledWith();
 
-    expect(queryDialogTitle()).toHaveTextContent('New Report Config');
-    const content = queryDialogContent();
-
-    const selects = queryAllSelectElements(content);
+    expect(screen.queryDialogTitle()).toHaveTextContent('New Report Config');
+    const content = within(screen.queryDialogContent());
+    const selects = content.queryAllSelectElements();
 
     // No report format selected at start
     expect(selects[0]).not.toHaveTextContent('test report format');
     // No params before report format has been selected
-    expect(content).not.toHaveTextContent('test param');
+    expect(screen.queryDialogContent()).not.toHaveTextContent('test param');
 
     // Choose report format
     const items = await getSelectItemElementsForSelect(selects[0]);
-    await clickElement(items[0]);
+    fireEvent.click(items[0]);
+    await wait();
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(createReportConfig).toHaveBeenCalledWith({
@@ -254,7 +246,7 @@ describe('Report Config Component tests', () => {
 
     expect(baseElement).toHaveTextContent('New Report Config');
 
-    const closeButton = getByTestId(baseElement, 'dialog-close-button');
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
     await wait();
 

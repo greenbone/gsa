@@ -9,23 +9,14 @@ import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {
-  clickElement,
-  queryCheckBoxes,
-  queryPowerFilter,
-  getSelectElement,
-  getSelectItemElementsForSelect,
-  queryTableBody,
-  queryTableFooter,
-  queryTextInputs,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CvesPage, {ToolBarIcons} from 'web/pages/cves/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, screen, wait} from 'web/utils/Testing';
+import {getSelectItemElementsForSelect, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',
@@ -157,9 +148,9 @@ describe('CvesPage tests', () => {
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const powerFilter = queryPowerFilter();
-    const inputs = queryTextInputs(powerFilter);
-    const select = getSelectElement(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const inputs = powerFilter.queryTextInputs();
+    const select = powerFilter.getSelectElement();
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: CVEs')[0]).toBeInTheDocument();
@@ -269,7 +260,7 @@ describe('CvesPage tests', () => {
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 
@@ -335,20 +326,20 @@ describe('CvesPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a cve
-    const tableBody = queryTableBody();
-    const inputs = queryCheckBoxes(tableBody);
-    await clickElement(inputs[1]);
+    const tableBody = within(screen.queryTableBody());
+    const inputs = tableBody.getAllCheckBoxes();
+    fireEvent.click(inputs[0]);
 
     // export selected cve
     const exportIcon = screen.getAllByTitle('Export selection')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
   });
 
@@ -413,15 +404,15 @@ describe('CvesPage tests', () => {
 
     await wait();
 
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[2]);
+    fireEvent.click(selectItems[2]);
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered cves
     const exportIcon = screen.getAllByTitle('Export all filtered')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 });

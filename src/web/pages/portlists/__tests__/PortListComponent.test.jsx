@@ -6,21 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import PortList from 'gmp/models/portlist';
 import Button from 'web/components/form/Button';
-import {
-  changeInputValue,
-  getDialogCloseButton,
-  getDialogSaveButton,
-  queryDialogs,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
-import {
-  rendererWith,
-  wait,
-  screen,
-  fireEvent,
-  getByName,
-} from 'web/utils/Testing';
+import {changeInputValue, screen, within} from 'web/testing';
+import {rendererWith, wait, fireEvent} from 'web/utils/Testing';
 
 const getPortListResponse = {
   data: PortList.fromElement({id: '123', name: 'foo'}),
@@ -66,7 +55,7 @@ describe('Port List Component tests', () => {
     fireEvent.click(screen.getByTestId('open'));
     expect(screen.getByText('New Port List')).toBeInTheDocument();
 
-    const cancelButton = getDialogCloseButton();
+    const cancelButton = screen.getDialogCloseButton();
     fireEvent.click(cancelButton);
     expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
   });
@@ -91,7 +80,7 @@ describe('Port List Component tests', () => {
     fireEvent.click(screen.getByTestId('import'));
     expect(screen.getByText('Import Port List')).toBeInTheDocument();
 
-    const cancelButton = getDialogCloseButton();
+    const cancelButton = screen.getDialogCloseButton();
     fireEvent.click(cancelButton);
     expect(screen.queryByText('Import Port List')).not.toBeInTheDocument();
   });
@@ -121,12 +110,12 @@ describe('Port List Component tests', () => {
     fireEvent.click(newPortRangeIcon);
     expect(screen.getByText('New Port Range')).toBeInTheDocument();
 
-    const portRangeDialog = queryDialogs()[1];
-    const cancelPortRangeButton = getDialogCloseButton(portRangeDialog);
+    const portRangeDialog = within(screen.queryDialogs()[1]);
+    const cancelPortRangeButton = portRangeDialog.getDialogCloseButton();
     fireEvent.click(cancelPortRangeButton);
     expect(screen.queryByText('New Port Range')).not.toBeInTheDocument();
 
-    const cancelPortListButton = getDialogCloseButton();
+    const cancelPortListButton = screen.getDialogCloseButton();
     fireEvent.click(cancelPortListButton);
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
   });
@@ -156,7 +145,7 @@ describe('Port List Component tests', () => {
     fireEvent.click(screen.getByTestId('open'));
     expect(screen.getByText('New Port List')).toBeInTheDocument();
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
 
@@ -192,7 +181,7 @@ describe('Port List Component tests', () => {
     await wait();
     expect(screen.getByText('New Port List')).toBeInTheDocument();
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
     expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
@@ -222,7 +211,7 @@ describe('Port List Component tests', () => {
     await wait();
     expect(screen.getByText('New Port List')).toBeInTheDocument();
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
     screen.getByText('New Port List');
@@ -261,7 +250,7 @@ describe('Port List Component tests', () => {
     await wait();
     expect(screen.getByText('Edit Port List foo')).toBeInTheDocument();
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
@@ -307,22 +296,22 @@ describe('Port List Component tests', () => {
     fireEvent.click(openPortRangeDialog);
     await wait();
     expect(screen.getByText('New Port Range')).toBeInTheDocument();
-    const dialogs = queryDialogs();
-    const portListDialog = dialogs[0];
-    const portRangeDialog = dialogs[1];
+    const dialogs = screen.queryDialogs();
+    const portListDialog = within(dialogs[0]);
+    const portRangeDialog = within(dialogs[1]);
 
-    const portRangeStart = getByName(portRangeDialog, 'portRangeStart');
+    const portRangeStart = portRangeDialog.getByName('portRangeStart');
     changeInputValue(portRangeStart, '1');
 
-    const portRangeEnd = getByName(portRangeDialog, 'portRangeEnd');
+    const portRangeEnd = portRangeDialog.getByName('portRangeEnd');
     changeInputValue(portRangeEnd, '20');
 
-    const savePortRangeButton = getDialogSaveButton(portRangeDialog);
+    const savePortRangeButton = portRangeDialog.getDialogSaveButton();
     fireEvent.click(savePortRangeButton);
     await wait();
     expect(screen.queryByText('New Port Range')).not.toBeInTheDocument();
 
-    const savePortListButton = getDialogSaveButton(portListDialog);
+    const savePortListButton = portListDialog.getDialogSaveButton();
     fireEvent.click(savePortListButton);
     await wait();
     expect(createPortRange).toHaveBeenCalledExactlyOnceWith({
@@ -403,7 +392,7 @@ describe('Port List Component tests', () => {
     const deletePortRangeIcon = screen.queryAllByTestId('delete-icon')[0];
     fireEvent.click(deletePortRangeIcon);
 
-    const savePortListButton = getDialogSaveButton();
+    const savePortListButton = screen.getDialogSaveButton();
     fireEvent.click(savePortListButton);
     await wait();
 
@@ -456,7 +445,7 @@ describe('Port List Component tests', () => {
     await wait();
     expect(screen.getByText('Edit Port List foo')).toBeInTheDocument();
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
 
@@ -492,7 +481,7 @@ describe('Port List Component tests', () => {
     await wait();
     screen.getByText('Edit Port List foo');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
 

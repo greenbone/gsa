@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {getDialog, getSelectElement} from 'web/components/testing';
 import Dialog from 'web/entities/TagsDialog';
+import {screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('TagsDialog dialog component tests', () => {
@@ -26,7 +26,7 @@ describe('TagsDialog dialog component tests', () => {
       />,
     );
 
-    expect(getDialog()).toBeInTheDocument();
+    expect(screen.getDialog()).toBeInTheDocument();
   });
 
   test('should disable tag selection when no options available', () => {
@@ -45,7 +45,7 @@ describe('TagsDialog dialog component tests', () => {
       />,
     );
 
-    expect(getSelectElement()).toBeDisabled();
+    expect(screen.getSelectElement()).toBeDisabled();
   });
 
   test('should save data', () => {
@@ -54,7 +54,7 @@ describe('TagsDialog dialog component tests', () => {
     const handleSave = testing.fn();
     const handleTagChange = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <Dialog
         comment="foo"
         entitiesCount={3}
@@ -69,7 +69,7 @@ describe('TagsDialog dialog component tests', () => {
       />,
     );
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'foo',
@@ -85,7 +85,7 @@ describe('TagsDialog dialog component tests', () => {
     const handleSave = testing.fn();
     const handleTagChange = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <Dialog
         entitiesCount={3}
         tags={[{name: 'foo', id: '123'}]}
@@ -96,10 +96,8 @@ describe('TagsDialog dialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
-
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
-
     expect(handleClose).toHaveBeenCalled();
   });
 });

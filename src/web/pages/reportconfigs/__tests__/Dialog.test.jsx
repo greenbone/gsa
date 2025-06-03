@@ -6,31 +6,17 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import ReportConfig from 'gmp/models/reportconfig';
 import ReportFormat from 'gmp/models/reportformat';
-import {
-  changeInputValue,
-  clickElement,
-  queryCheckBoxes,
-  getDialogCloseButton,
-  queryDialogContent,
-  getDialogSaveButton,
-  queryDialogTitle,
-  getMultiSelectElements,
-  queryAllSelectElements,
-  getSelectItemElementsForMultiSelect,
-  getSelectItemElementsForSelect,
-  getSelectedItems,
-  queryTableBody,
-} from 'web/components/testing';
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
 import {mockReportFormats} from 'web/pages/reportconfigs/__mocks__/MockReportFormats';
 import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
 import {
-  rendererWith,
-  fireEvent,
-  getByName,
-  getAllByName,
+  changeInputValue,
+  getSelectItemElementsForMultiSelect,
+  getSelectItemElementsForSelect,
+  screen,
   within,
-} from 'web/utils/Testing';
+} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const config = ReportConfig.fromElement(mockReportConfig);
 
@@ -54,10 +40,10 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    expect(queryDialogTitle()).toHaveTextContent('Edit Report Config');
+    expect(screen.queryDialogTitle()).toHaveTextContent('Edit Report Config');
 
-    const content = queryDialogContent();
-    const selects = queryAllSelectElements(content);
+    const content = screen.queryDialogContent();
+    const selects = screen.queryAllSelectElements(content);
     expect(selects[0]).toHaveValue('example-configurable-1');
     expect(selects[0]).toBeDisabled();
   });
@@ -80,7 +66,7 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -133,9 +119,8 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const closeButton = getDialogCloseButton();
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
-
     expect(handleClose).toHaveBeenCalled();
     expect(handleSave).not.toHaveBeenCalled();
   });
@@ -160,44 +145,44 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = queryDialogContent();
+    const content = screen.queryDialogContent();
 
     // Set name and comment
-    const nameInput = getByName(content, 'name');
+    const nameInput = screen.getByName('name');
     changeInputValue(nameInput, 'lorem');
 
-    const commentInput = getByName(content, 'comment');
+    const commentInput = screen.getByName('comment');
     changeInputValue(commentInput, 'ipsum');
 
     // Set params
-    const booleanParam = getAllByName(content, 'BooleanParam');
+    const booleanParam = screen.getAllByName('BooleanParam');
     fireEvent.click(booleanParam[1]);
 
-    const integerParam = getByName(content, 'IntegerParam');
+    const integerParam = screen.getByName('IntegerParam');
     changeInputValue(integerParam, '7');
 
-    const stringParam = getByName(content, 'StringParam');
+    const stringParam = screen.getByName('StringParam');
     changeInputValue(stringParam, 'NewString');
 
-    const textParam = getByName(content, 'TextParam');
+    const textParam = screen.getByName('TextParam');
     changeInputValue(textParam, 'NewText');
 
     // Choose new SelectionParam
-    const selects = queryAllSelectElements(content);
+    const selects = screen.queryAllSelectElements();
     const menuItems = await getSelectItemElementsForSelect(selects[1]);
-    await clickElement(menuItems[0]);
+    fireEvent.click(menuItems[0]);
 
     // Unselect report format from ReportFormatListParam
-    const multiSelect = getMultiSelectElements(content)[0];
-    await clickElement(multiSelect);
+    const multiSelect = screen.getMultiSelectElements(content)[0];
+    fireEvent.click(multiSelect);
 
-    let selectedItems = getSelectedItems(document);
+    let selectedItems = screen.getSelectedItems(document);
     const deleteIcon = selectedItems[1].querySelector('button');
-    await clickElement(deleteIcon);
+    fireEvent.click(deleteIcon);
 
     expect(handleValueChange).toHaveBeenCalledTimes(6);
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -252,31 +237,31 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = queryDialogContent();
-    const tableBody = queryTableBody(content);
+    const content = within(screen.queryDialogContent());
+    const tableBody = content.queryTableBody();
     const tableRows = tableBody.querySelectorAll('tr');
 
-    const stringParamRow = tableRows[0];
-    await clickElement(queryCheckBoxes(stringParamRow)[0]);
+    const stringParamRow = within(tableRows[0]);
+    fireEvent.click(stringParamRow.getAllCheckBoxes()[0]);
 
-    const textParamRow = tableRows[1];
-    await clickElement(queryCheckBoxes(textParamRow)[0]);
+    const textParamRow = within(tableRows[1]);
+    fireEvent.click(textParamRow.getAllCheckBoxes()[0]);
 
-    const integerParamRow = tableRows[2];
-    await clickElement(queryCheckBoxes(integerParamRow)[0]);
+    const integerParamRow = within(tableRows[2]);
+    fireEvent.click(integerParamRow.getAllCheckBoxes()[0]);
 
-    const booleanParaRow = tableRows[3];
-    await clickElement(queryCheckBoxes(booleanParaRow)[0]);
+    const booleanParaRow = within(tableRows[3]);
+    fireEvent.click(booleanParaRow.getAllCheckBoxes()[0]);
 
-    const selectionParamRow = tableRows[4];
-    await clickElement(queryCheckBoxes(selectionParamRow)[0]);
+    const selectionParamRow = within(tableRows[4]);
+    fireEvent.click(selectionParamRow.getAllCheckBoxes()[0]);
 
-    const reportFormatListParamRow = tableRows[5];
-    await clickElement(queryCheckBoxes(reportFormatListParamRow)[0]);
+    const reportFormatListParamRow = within(tableRows[5]);
+    fireEvent.click(reportFormatListParamRow.getAllCheckBoxes()[0]);
 
     expect(handleValueChange).toHaveBeenCalledTimes(6);
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -332,7 +317,7 @@ describe('New Report Config Dialog component tests', () => {
       />,
     );
 
-    expect(queryDialogTitle()).toHaveTextContent('New Report Config');
+    expect(screen.queryDialogTitle()).toHaveTextContent('New Report Config');
 
     expect(baseElement).not.toHaveTextContent('Param');
   });
@@ -413,38 +398,38 @@ describe('New Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = queryDialogContent();
-    const nameInput = getByName(content, 'name');
+    const content = within(screen.getDialogContent());
+    const nameInput = screen.getByName('name');
     changeInputValue(nameInput, 'lorem');
 
-    const commentInput = getByName(content, 'comment');
+    const commentInput = screen.getByName('comment');
     changeInputValue(commentInput, 'ipsum');
 
     // Choose new report format
-    const select = queryAllSelectElements(content);
+    const select = screen.queryAllSelectElements();
     const menuItems = await getSelectItemElementsForSelect(select[0]);
-    await clickElement(menuItems[1]);
+    fireEvent.click(menuItems[1]);
+    await wait();
 
     // Set params
     expect(getReportFormat).toHaveBeenCalledWith({id: '1234567'});
-
-    const param2Input = getByName(content, 'Param2');
+    const param2Input = content.getByName('Param2');
     changeInputValue(param2Input, 'XYZ');
 
-    const multiSelect = getMultiSelectElements(content)[0];
-    await clickElement(multiSelect);
+    const multiSelect = content.getMultiSelectElements()[0];
+    fireEvent.click(multiSelect);
 
-    let selectedItems = getSelectedItems(document);
+    let selectedItems = screen.getSelectedItems();
 
     const closeBtnElement = within(selectedItems[0]).getByRole('button', {
       hidden: true,
     });
 
-    await clickElement(closeBtnElement);
-    const multiSelectMenuItems = getSelectItemElementsForMultiSelect();
-    await clickElement(multiSelectMenuItems[1]);
+    fireEvent.click(closeBtnElement);
+    const multiSelectMenuItems = await getSelectItemElementsForMultiSelect();
+    fireEvent.click(multiSelectMenuItems[1]);
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({

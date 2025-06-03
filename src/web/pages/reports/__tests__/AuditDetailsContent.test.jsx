@@ -7,14 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import React from 'react';
-import {
-  queryPowerFilter,
-  queryTextInputs,
-  getSelectElement,
-} from 'web/components/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import DetailsContent from 'web/pages/reports/AuditDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen, within} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const filter = Filter.fromString(
@@ -94,7 +90,7 @@ describe('Audit Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId, within} = render(
+    const {baseElement} = render(
       <DetailsContent
         activeTab={0}
         applicationsCounts={{all: 4, filtered: 4}}
@@ -144,17 +140,15 @@ describe('Audit Report Details Content tests', () => {
     const inputs = baseElement.querySelectorAll('input');
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const powerFilter = queryPowerFilter();
-
-    const select = getSelectElement(powerFilter);
-    const bars = getAllByTestId('progressbar-box');
+    const powerFilter = within(screen.queryPowerFilter());
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Toolbar Icons
     expect(icons.length).toEqual(16);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    const input = within(select).getByTitle('Loaded filter');
+    const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
@@ -262,7 +256,7 @@ describe('Audit Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId, within} = render(
+    const {baseElement} = render(
       <DetailsContent
         activeTab={2}
         applicationsCounts={{all: 4, filtered: 4}}
@@ -309,17 +303,16 @@ describe('Audit Report Details Content tests', () => {
     );
 
     const icons = baseElement.querySelectorAll('svg');
-    const powerFilter = queryPowerFilter();
-    const inputs = queryTextInputs(powerFilter);
-    const select = getSelectElement(powerFilter);
-    const bars = getAllByTestId('progressbar-box');
+    const powerFilter = within(screen.queryPowerFilter());
+    const inputs = powerFilter.queryTextInputs();
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Toolbar Icons
     expect(icons.length).toEqual(20);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    const input = within(select).getByTitle('Loaded filter');
+    const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header

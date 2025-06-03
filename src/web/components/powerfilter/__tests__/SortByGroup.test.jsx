@@ -6,13 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
-import {
-  clickElement,
-  getRadioInputs,
-  getSelectElement,
-  getSelectItemElements,
-  openSelectElement,
-} from 'web/components/testing';
+import {openSelectElement, screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('SortByGroup tests', () => {
@@ -55,7 +49,7 @@ describe('SortByGroup tests', () => {
 
     await openSelectElement();
 
-    const selectElements = getSelectItemElements();
+    const selectElements = screen.getSelectItemElements();
     expect(selectElements.length).toEqual(2);
 
     expect(selectElements[0]).toHaveTextContent('Severity');
@@ -82,12 +76,12 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
 
     expect(radio[0].checked).toEqual(true);
     expect(radio[1].checked).toEqual(false);
 
-    const selectedValue = getSelectElement();
+    const selectedValue = screen.getSelectElement();
     expect(selectedValue).toHaveValue('Severity');
 
     rerender(
@@ -126,12 +120,12 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
 
     expect(radio[0].checked).toEqual(false);
     expect(radio[1].checked).toEqual(true);
 
-    const selectedValue = getSelectElement();
+    const selectedValue = screen.getSelectElement();
 
     expect(selectedValue).toHaveValue('Solution Type');
   });
@@ -157,10 +151,10 @@ describe('SortByGroup tests', () => {
 
     await openSelectElement();
 
-    const selectElements = getSelectItemElements();
+    const selectElements = screen.getSelectItemElements();
     expect(selectElements.length).toEqual(2);
 
-    await clickElement(selectElements[1]);
+    fireEvent.click(selectElements[1]);
 
     expect(handleSortByChange).toHaveBeenCalledWith('solution_type', 'sort_by');
   });
@@ -184,7 +178,7 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
     fireEvent.click(radio[1]);
 
     expect(handleSortOrderChange).toHaveBeenCalledWith(

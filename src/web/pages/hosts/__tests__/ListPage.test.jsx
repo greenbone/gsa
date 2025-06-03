@@ -8,23 +8,19 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
-import {
-  clickElement,
-  queryPowerFilter,
-  getSelectElement,
-  getSelectItemElementsForSelect,
-  queryTableFooter,
-  queryTextInputs,
-  testBulkDeleteDialog,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import HostPage, {ToolBarIcons} from 'web/pages/hosts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
-// setup
+import {
+  getSelectItemElementsForSelect,
+  screen,
+  testBulkDeleteDialog,
+  within,
+} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const capabilities = new Capabilities(['everything']);
 const wrongCapabilities = new Capabilities(['get_host']);
@@ -183,9 +179,9 @@ describe('Host ListPage tests', () => {
 
     await wait();
 
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const select = powerFilter.getSelectElement();
+    const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
@@ -392,17 +388,17 @@ describe('Host ListPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
 
     // export selected host
-    await clickElement(screen.getAllByTitle('Export selection')[0]);
+    fireEvent.click(screen.getAllByTitle('Export selection')[0]);
     expect(exportByIds).toHaveBeenCalled();
 
     // delete selected host
-    await clickElement(screen.getAllByTitle('Delete selection')[0]);
+    fireEvent.click(screen.getAllByTitle('Delete selection')[0]);
     testBulkDeleteDialog(screen, deleteByIds);
   });
 
@@ -467,17 +463,17 @@ describe('Host ListPage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[2]);
+    fireEvent.click(selectItems[2]);
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered hosts
-    await clickElement(screen.getAllByTitle('Export all filtered')[0]);
+    fireEvent.click(screen.getAllByTitle('Export all filtered')[0]);
     expect(exportByFilter).toHaveBeenCalled();
 
-    await clickElement(screen.getAllByTitle('Delete all filtered')[0]);
+    fireEvent.click(screen.getAllByTitle('Delete all filtered')[0]);
     testBulkDeleteDialog(screen, deleteByFilter);
   });
 });

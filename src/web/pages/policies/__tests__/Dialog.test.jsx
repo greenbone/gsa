@@ -4,14 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  changeInputValue,
-  closeDialog,
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-} from 'web/components/testing';
 import CreatePolicyDialog from 'web/pages/policies/Dialog';
+import {changeInputValue, screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('CreatePolicyDialog component tests', () => {
@@ -27,7 +21,7 @@ describe('CreatePolicyDialog component tests', () => {
       />,
     );
 
-    expect(getDialog()).toBeInTheDocument();
+    expect(screen.getDialog()).toBeInTheDocument();
   });
 
   test('should allow to close the dialog', () => {
@@ -42,7 +36,8 @@ describe('CreatePolicyDialog component tests', () => {
       />,
     );
 
-    closeDialog();
+    const closeButton = screen.getDialogXButton();
+    fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -58,7 +53,7 @@ describe('CreatePolicyDialog component tests', () => {
       />,
     );
 
-    const cancelButton = getDialogCloseButton();
+    const cancelButton = screen.getDialogCloseButton();
     fireEvent.click(cancelButton);
     expect(handleClose).toHaveBeenCalled();
   });
@@ -67,7 +62,7 @@ describe('CreatePolicyDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByName} = render(
+    render(
       <CreatePolicyDialog
         title={'New Policy'}
         onClose={handleClose}
@@ -75,13 +70,13 @@ describe('CreatePolicyDialog component tests', () => {
       />,
     );
 
-    const nameInput = getByName('name');
+    const nameInput = screen.getByName('name');
     changeInputValue(nameInput, 'foo');
 
-    const commentInput = getByName('comment');
+    const commentInput = screen.getByName('comment');
     changeInputValue(commentInput, 'bar');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
