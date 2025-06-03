@@ -12,7 +12,8 @@ import {
   NOTIFICATION_SHOWN_KEY,
 } from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
+import {changeInputValue, screen} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 Logger.setDefaultLevel('silent');
 const mockUseNavigate = testing.fn();
@@ -60,15 +61,15 @@ describe('LoginPage tests', () => {
     };
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {getByName, getByTestId} = render(<LoginPage />);
+    render(<LoginPage />);
 
-    const usernameField = getByName('username');
-    const passwordField = getByName('password');
+    const usernameField = screen.getByName('username');
+    const passwordField = screen.getByName('password');
 
-    fireEvent.change(usernameField, {target: {value: 'foo'}});
-    fireEvent.change(passwordField, {target: {value: 'bar'}});
+    changeInputValue(usernameField, 'foo');
+    changeInputValue(passwordField, 'bar');
 
-    const button = getByTestId('login-button');
+    const button = screen.getByTestId('login-button');
     fireEvent.click(button);
 
     expect(login).toBeCalledWith('foo', 'bar');
@@ -135,15 +136,15 @@ describe('LoginPage tests', () => {
     };
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {getByName, getByTestId} = render(<LoginPage />);
+    render(<LoginPage />);
 
-    const usernameField = getByName('username');
-    const passwordField = getByName('password');
+    const usernameField = screen.getByName('username');
+    const passwordField = screen.getByName('password');
 
-    fireEvent.change(usernameField, {target: {value: 'foo'}});
-    fireEvent.change(passwordField, {target: {value: 'bar'}});
+    changeInputValue(usernameField, 'foo');
+    changeInputValue(passwordField, 'bar');
 
-    const button = getByTestId('login-button');
+    const button = screen.getByTestId('login-button');
     fireEvent.click(button);
     expect(login).toBeCalledWith('foo', 'bar');
 
@@ -192,15 +193,15 @@ describe('LoginPage tests', () => {
     };
     const {render, store} = rendererWith({gmp, router: true, store: true});
 
-    const {getByName, getByTestId} = render(<LoginPage />);
+    render(<LoginPage />);
 
-    const usernameField = getByName('username');
-    const passwordField = getByName('password');
+    const usernameField = screen.getByName('username');
+    const passwordField = screen.getByName('password');
 
-    fireEvent.change(usernameField, {target: {value: 'foo'}});
-    fireEvent.change(passwordField, {target: {value: 'bar'}});
+    changeInputValue(usernameField, 'foo');
+    changeInputValue(passwordField, 'bar');
 
-    const button = getByTestId('login-button');
+    const button = screen.getByTestId('login-button');
     fireEvent.click(button);
 
     expect(login).toBeCalledWith('foo', 'bar');
@@ -271,28 +272,26 @@ describe('LoginPage tests', () => {
         },
       };
       const {render} = rendererWith({gmp, router: true, store: true});
-      const {getByName, getByTestId} = render(<LoginPage />);
+      render(<LoginPage />);
 
       return {
         login,
         gmp,
-        getByName,
-        getByTestId,
       };
     };
 
     test('should not show communityFeedNotification if not using community feed', async () => {
-      const {login, gmp, getByName, getByTestId} = setupLoginPageTest({
+      const {login, gmp} = setupLoginPageTest({
         isCommunityFeed: false,
       });
 
-      const usernameField = getByName('username');
-      const passwordField = getByName('password');
+      const usernameField = screen.getByName('username');
+      const passwordField = screen.getByName('password');
 
-      fireEvent.change(usernameField, {target: {value: 'foo'}});
-      fireEvent.change(passwordField, {target: {value: 'bar'}});
+      changeInputValue(usernameField, 'foo');
+      changeInputValue(passwordField, 'bar');
 
-      const button = getByTestId('login-button');
+      const button = screen.getByTestId('login-button');
       fireEvent.click(button);
 
       expect(login).toBeCalledWith('foo', 'bar');
@@ -306,17 +305,17 @@ describe('LoginPage tests', () => {
     });
 
     test('should call communityFeedNotification if using community feed', async () => {
-      const {login, gmp, getByName, getByTestId} = setupLoginPageTest({
+      const {login, gmp} = setupLoginPageTest({
         isCommunityFeed: true,
       });
 
-      const usernameField = getByName('username');
-      const passwordField = getByName('password');
+      const usernameField = screen.getByName('username');
+      const passwordField = screen.getByName('password');
 
-      fireEvent.change(usernameField, {target: {value: 'foo'}});
-      fireEvent.change(passwordField, {target: {value: 'bar'}});
+      changeInputValue(usernameField, 'foo');
+      changeInputValue(passwordField, 'bar');
 
-      const button = getByTestId('login-button');
+      const button = screen.getByTestId('login-button');
       fireEvent.click(button);
 
       expect(login).toBeCalledWith('foo', 'bar');
