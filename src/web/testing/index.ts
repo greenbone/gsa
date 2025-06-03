@@ -4,6 +4,7 @@
  */
 
 export * from 'web/testing/actions';
+export * from 'web/testing/event';
 export * from 'web/testing/helpers';
 export * from 'web/testing/screen';
 export * from 'web/testing/wait';
