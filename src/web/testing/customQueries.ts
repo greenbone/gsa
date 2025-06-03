@@ -166,6 +166,17 @@ export const queryDialogContent = (dialog?: HTMLElement) => {
   return dialog.querySelector<HTMLElement>('.mantine-Modal-body');
 };
 
+/**
+ * Retrieves the content of a dialog element.
+ *
+ * This function attempts to locate the content of a dialog element using the `queryDialogContent` function.
+ * If the dialog content cannot be found, it throws an error indicating the failure.
+ *
+ * @param dialog - An optional `HTMLElement` representing the dialog element to query.
+ *                 If not provided, the function will attempt to query the dialog content globally.
+ * @returns The dialog content as an `HTMLElement`.
+ * @throws Will throw an error if the dialog content cannot be found.
+ */
 export const getDialogContent = (dialog?: HTMLElement) => {
   const queryDialog = queryDialogContent(dialog);
   if (!queryDialog) {
