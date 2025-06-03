@@ -197,6 +197,21 @@ export const queryDialogTitle = (dialog?: HTMLElement) => {
 };
 
 /**
+ * Retrieves the title element of a given dialog.
+ *
+ * @param dialog - The dialog element to search for the title. If undefined, the function will attempt to query the title globally.
+ * @returns The dialog title element if found.
+ * @throws Throws an error if the dialog title cannot be found.
+ */
+export const getDialogTitle = (dialog?: HTMLElement) => {
+  const dialogTitle = queryDialogTitle(dialog);
+  if (!dialogTitle) {
+    throw getElementError('Unable to find dialog title.', document.body);
+  }
+  return dialogTitle;
+};
+
+/**
  * Retrieves the save button of a dialog (in the footer)
  *
  * @param dialog - The dialog element. If not provided, the default dialog will be used.
