@@ -31,16 +31,9 @@ import GmpContext from 'web/components/provider/GmpProvider';
 import {LanguageContext} from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
 import configureStore from 'web/store';
-import {
-  getAllByName,
-  getByName,
-  queryAllByName,
-  queryByName,
-} from 'web/testing';
 
 export * from '@testing-library/react/pure';
 export {userEvent};
-export {getAllByName, getByName, queryAllByName, queryByName};
 
 afterEach(cleanup);
 
@@ -84,10 +77,6 @@ export const render = (ui: React.ReactNode) => {
     baseElement,
     container,
     element: container.lastChild as HTMLElement,
-    getAllByName: (name: string) => getAllByName(baseElement, name),
-    getByName: (name: string) => getByName(baseElement, name),
-    queryByName: (name: string) => queryByName(baseElement, name),
-    queryAllByName: (name: string) => queryAllByName(baseElement, name),
     within: () => within(baseElement),
     rerender: (component: React.ReactNode) =>
       rerender(<Main>{component}</Main>),

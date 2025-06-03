@@ -7,7 +7,8 @@ import {describe, test, expect} from '@gsa/testing';
 import React, {useRef} from 'react';
 import TextField from 'web/components/form/TextField';
 import useFormValues from 'web/components/form/useFormValues';
-import {fireEvent, rendererWith, wait, screen} from 'web/utils/Testing';
+import {changeInputValue, screen} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 const UseFormValuesTestComponent = () => {
   const ref = useRef(0);
@@ -36,10 +37,9 @@ describe('useFormValues tests', () => {
   test('should not re-render if same value is set', async () => {
     const {render} = rendererWith();
 
-    const {getByName} = render(<UseFormValuesTestComponent />);
+    render(<UseFormValuesTestComponent />);
 
     const button = screen.getByTestId('changeToSameValue');
-
     fireEvent.click(button);
 
     await wait();
@@ -50,9 +50,8 @@ describe('useFormValues tests', () => {
     const fooValue = screen.getByTestId('fooValue');
     expect(fooValue).toHaveTextContent(/^bar$/);
 
-    const input = getByName('foo');
-
-    fireEvent.change(input, {target: {value: 'bar'}});
+    const input = screen.getByName('foo');
+    changeInputValue(input, 'bar');
 
     await wait();
 
@@ -63,11 +62,10 @@ describe('useFormValues tests', () => {
   test('should update form value', async () => {
     const {render} = rendererWith();
 
-    const {getByName} = render(<UseFormValuesTestComponent />);
+    render(<UseFormValuesTestComponent />);
 
-    const input = getByName('foo');
-
-    fireEvent.change(input, {target: {value: 'ipsum'}});
+    const input = screen.getByName('foo');
+    changeInputValue(input, 'ipsum');
 
     await wait();
 

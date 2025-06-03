@@ -218,7 +218,7 @@ describe('ScheduleDialog component tests', () => {
   test('should allow changing start and end times', async () => {
     handleSave.mockResolvedValue({});
 
-    const {getByName} = render(
+    render(
       <ScheduleDialog
         comment={scheduleComment}
         duration={scheduleDuration}
@@ -236,12 +236,12 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const startTimeInput = getByName('startDate');
+    const startTimeInput = screen.getByName('startDate');
     expect(startTimeInput).toHaveValue('15:00');
     changeInputValue(startTimeInput, '12:00');
     expect(startTimeInput).toHaveValue('12:00');
 
-    const endTimeInput = getByName('endTime');
+    const endTimeInput = screen.getByName('endTime');
     expect(endTimeInput).toHaveValue('19:45');
     changeInputValue(endTimeInput, '13:00');
     expect(endTimeInput).toHaveValue('13:00');
@@ -250,7 +250,7 @@ describe('ScheduleDialog component tests', () => {
   test('should prevent changing start and end times when value is invalid', async () => {
     handleSave.mockResolvedValue({});
 
-    const {getByName} = render(
+    render(
       <ScheduleDialog
         comment={scheduleComment}
         duration={scheduleDuration}
@@ -268,7 +268,7 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const startTimeInput = getByName('startDate');
+    const startTimeInput = screen.getByName('startDate');
     expect(startTimeInput).toHaveValue('15:00');
     changeInputValue(startTimeInput, '');
     expect(startTimeInput).toHaveValue('15:00');
@@ -289,7 +289,7 @@ describe('ScheduleDialog component tests', () => {
     changeInputValue(startTimeInput, '15:62');
     expect(startTimeInput).toHaveValue('15:00');
 
-    const endTimeInput = getByName('endTime');
+    const endTimeInput = screen.getByName('endTime');
     expect(endTimeInput).toHaveValue('19:45');
     changeInputValue(endTimeInput, '');
     expect(endTimeInput).toHaveValue('19:45');
