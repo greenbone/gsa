@@ -63,6 +63,7 @@ const ScannerComponent = ({
   const [scanner, setScanner] = useState(undefined);
   const [title, setTitle] = useState(undefined);
   const [type, setType] = useState(undefined);
+    
   const [whichCert, setWhichCert] = useState(undefined);
 
   const onInteraction = () => {
@@ -236,12 +237,18 @@ const ScannerComponent = ({
   };
 
   const handleScannerTypeChange = (value, name) => {
-    console.info ("VALUE", value, "NAME", name);
+    console.info ("NAME:", name);
     if (name === 'type') {
+      setWhichCert('default');
       setType(value);
     } else if (name === 'which_cert') {
       setWhichCert(value);
     }
+  };
+
+  const handleScannerCaPubChange = (ovc) => {
+    setWhichCert('new');
+    onValueChange ();
   };
 
   return (
@@ -290,6 +297,7 @@ const ScannerComponent = ({
                 handleInteraction();
                 return save(d).then(() => closeScannerDialog());
               }}
+              onScannerCaPubChange={handleScannerCaPubChange}
               onScannerTypeChange={handleScannerTypeChange}
             />
           )}

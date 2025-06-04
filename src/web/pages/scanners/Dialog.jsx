@@ -43,6 +43,7 @@ const ScannerDialog = ({
   onCredentialChange,
   onNewCredentialClick,
   onSave,
+  onScannerCaPubChange,
   onScannerTypeChange,
 }) => {
   const [_] = useTranslation();
@@ -56,11 +57,19 @@ const ScannerDialog = ({
     (value, name) => {
       if (onScannerTypeChange) {
         value = parseInt(value);
-
         onScannerTypeChange(value, name);
       }
     },
     [onScannerTypeChange],
+  );
+
+  const handleCaPubChange = useCallback(
+    () => {
+      if (onScannerCaPubChange) {
+        onScannerCaPubChange();
+      }
+    },
+    [onScannerCaPubChange],
   );
 
   const data = {
@@ -70,7 +79,6 @@ const ScannerDialog = ({
     id,
     name,
     port,
-    which_cert,
   };
 
   let SCANNER_TYPES = [];
@@ -115,6 +123,7 @@ const ScannerDialog = ({
       values={{
         credential_id,
         type,
+        which_cert,
       }}
       onClose={onClose}
       onSave={onSave}
@@ -157,7 +166,7 @@ const ScannerDialog = ({
 
             {isAgentControllerScannerType && (
               <FormGroup title={_('Certificate')}>
-                <FileField name={'ca_pub'} onChange={onValueChange} />
+                <FileField name={'ca_pub'} onChange={handleCaPubChange} />
               </FormGroup>
             )}
 
@@ -201,6 +210,7 @@ ScannerDialog.propTypes = {
   onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
+  onScannerCaPubChange: PropTypes.func.isRequired,
   onScannerTypeChange: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
