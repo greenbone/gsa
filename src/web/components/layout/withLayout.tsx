@@ -18,7 +18,7 @@ const convertAlign = (align: string): string => {
   }
 };
 
-export interface LayoutProps {
+export interface WithLayoutProps {
   align?: string | [string, string];
   children?: React.ReactNode;
   flex?: true | string;
@@ -27,14 +27,13 @@ export interface LayoutProps {
   wrap?: true | string;
   shrink?: true | string;
   'data-testid'?: string;
-  [key: string]: unknown;
 }
 
 const withLayout =
-  (defaults: LayoutProps = {}) =>
+  (defaults: WithLayoutProps = {}) =>
   (Component: React.ComponentType | string) => {
     const LayoutComponent = styled(
-      ({align, basis, flex, grow, shrink, wrap, ...props}: LayoutProps) => (
+      ({align, basis, flex, grow, shrink, wrap, ...props}: WithLayoutProps) => (
         <Component {...props} />
       ),
     )`

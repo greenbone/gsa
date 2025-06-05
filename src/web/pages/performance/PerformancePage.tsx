@@ -91,9 +91,17 @@ const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
   );
 };
 
-const Selector = withClickHandler()(styled.span`
+interface SelectorProps {
+  $duration: Duration | undefined;
+  value: Duration;
+  name?: string;
+}
+
+const Selector = withClickHandler<SelectorProps, Duration | undefined>({
+  valueFunc: (_event, props) => props.value,
+  nameFunc: (_event, props) => props.name,
+})(styled.span<SelectorProps>`
   ${props => {
-    // @ts-expect-error
     if (props.value !== props.$duration) {
       return {
         color: 'blue',
@@ -176,7 +184,10 @@ const PerformancePage = () => {
     }
   }, [startParam, endParam, timezone]);
 
-  const handleDurationChange = (duration: Duration | undefined) => {
+  const handleDurationChange = (
+    duration: Duration | undefined,
+    _name?: string,
+  ) => {
     if (isDefined(duration)) {
       const end = date().tz(timezone);
       const start = end
@@ -267,7 +278,6 @@ const PerformancePage = () => {
             {gmp.settings.enableGreenboneSensor && (
               <FormGroup title={_('Report for Greenbone Sensor')}>
                 <Select
-                  // @ts-expect-error
                   items={renderSelectItems(sensors, DEFAULT_SENSOR_ID)}
                   name="sensorId"
                   value={saveSensorId}

@@ -4,14 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  changeInputValue,
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-} from 'web/components/testing';
 import PortRangeDialog from 'web/pages/portlists/PortRangeDialog';
-import {screen, fireEvent, getByName, render} from 'web/utils/Testing';
+import {changeInputValue, screen, within} from 'web/testing';
+import {fireEvent, render} from 'web/utils/Testing';
 
 describe('PortRangeDialog tests', () => {
   test('should render without issues', () => {
@@ -49,7 +44,7 @@ describe('PortRangeDialog tests', () => {
       <PortRangeDialog portListId="123" onClose={onClose} onSave={onSave} />,
     );
 
-    const close = getDialogCloseButton();
+    const close = screen.getDialogCloseButton();
     fireEvent.click(close);
 
     expect(onClose).toHaveBeenCalled();
@@ -63,7 +58,7 @@ describe('PortRangeDialog tests', () => {
       <PortRangeDialog portListId="123" onClose={onClose} onSave={onSave} />,
     );
 
-    const save = getDialogSaveButton();
+    const save = screen.getDialogSaveButton();
     fireEvent.click(save);
 
     expect(onSave).toHaveBeenCalledWith({
@@ -82,13 +77,13 @@ describe('PortRangeDialog tests', () => {
       <PortRangeDialog portListId="123" onClose={onClose} onSave={onSave} />,
     );
 
-    const dialog = getDialog();
-    const startInput = getByName(dialog, 'portRangeStart');
+    const dialog = within(screen.getDialog());
+    const startInput = dialog.getByName('portRangeStart');
     changeInputValue(startInput, '123');
-    const endInput = getByName(dialog, 'portRangeEnd');
+    const endInput = dialog.getByName('portRangeEnd');
     changeInputValue(endInput, '456');
 
-    const save = getDialogSaveButton();
+    const save = screen.getDialogSaveButton();
     fireEvent.click(save);
 
     expect(onSave).toHaveBeenCalledWith({
@@ -110,7 +105,7 @@ describe('PortRangeDialog tests', () => {
     const udpRadio = screen.getByLabelText('UDP');
     fireEvent.click(udpRadio);
 
-    const save = getDialogSaveButton();
+    const save = screen.getDialogSaveButton();
     fireEvent.click(save);
 
     expect(onSave).toHaveBeenCalledWith({

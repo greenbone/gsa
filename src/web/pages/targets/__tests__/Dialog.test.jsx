@@ -10,18 +10,13 @@ import Credential, {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   KRB5_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
+import TargetDialog from 'web/pages/targets/Dialog';
 import {
   changeInputValue,
-  getDialogCloseButton,
-  getDialogSaveButton,
-  queryFileInputs,
-  getRadioInputs,
-  queryAllSelectElements,
   getSelectItemElementsForSelect,
-  queryTextInputs,
-} from 'web/components/testing';
-import TargetDialog from 'web/pages/targets/Dialog';
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
+  screen,
+} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const cred1 = Credential.fromElement({
   _id: '5678',
@@ -88,9 +83,9 @@ describe('TargetDialog component tests', () => {
       />,
     );
 
-    const inputs = queryTextInputs();
-    const fileInputs = queryFileInputs();
-    const radioInputs = getRadioInputs();
+    const inputs = screen.queryTextInputs();
+    const fileInputs = screen.queryFileInputs();
+    const radioInputs = screen.getRadioInputs();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveValue('Unnamed'); // name field
@@ -131,7 +126,7 @@ describe('TargetDialog component tests', () => {
     expect(radioInputs[5]).toHaveAttribute('value', '0');
     expect(radioInputs[5]).not.toBeChecked();
 
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
 
     expect(baseElement).not.toHaveTextContent('Elevate privileges'); // elevate privileges should not be rendered without valid sshCredentialId
 
@@ -205,10 +200,10 @@ describe('TargetDialog component tests', () => {
       />,
     );
 
-    const inputs = queryTextInputs();
-    const radioInputs = getRadioInputs();
-    const fileInputs = queryFileInputs();
-    const selects = queryAllSelectElements();
+    const inputs = screen.queryTextInputs();
+    const radioInputs = screen.getRadioInputs();
+    const fileInputs = screen.queryFileInputs();
+    const selects = screen.queryAllSelectElements();
 
     expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveValue('target'); // name field
@@ -291,7 +286,7 @@ describe('TargetDialog component tests', () => {
 
     const {render} = rendererWith({gmp, capabilities: true});
 
-    const {getByName, getAllByName} = render(
+    render(
       <TargetDialog
         aliveTests={'Scan Config Default'}
         allowSimultaneousIPs={0}
@@ -321,11 +316,11 @@ describe('TargetDialog component tests', () => {
     );
 
     // text input
-    const nameInput = getByName('name');
+    const nameInput = screen.getByName('name');
     changeInputValue(nameInput, 'ross');
 
     // radio input
-    const simultaneousIPInput = getAllByName('allowSimultaneousIPs');
+    const simultaneousIPInput = screen.getAllByName('allowSimultaneousIPs');
     expect(simultaneousIPInput.length).toBe(2);
 
     expect(simultaneousIPInput[0]).not.toBeChecked();
@@ -336,7 +331,7 @@ describe('TargetDialog component tests', () => {
 
     fireEvent.click(simultaneousIPInput[0]); // radio button check yes
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -405,7 +400,7 @@ describe('TargetDialog component tests', () => {
 
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
     const createCredentialIcons = screen.getAllByTitle(
@@ -454,7 +449,7 @@ describe('TargetDialog component tests', () => {
 
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
     const selectItems = await getSelectItemElementsForSelect(selects[3]);
@@ -515,7 +510,7 @@ describe('TargetDialog component tests', () => {
       />,
     );
 
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
 
     fireEvent.change(selects[selectIndex], {target: {value: '--'}});
     expect(selects[selectIndex]).toHaveValue('--');
@@ -566,7 +561,7 @@ describe('TargetDialog component tests', () => {
 
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
     const selectItems = await getSelectItemElementsForSelect(selects[2]);
@@ -585,7 +580,7 @@ describe('TargetDialog component tests', () => {
 
     const {render} = rendererWith({gmp, capabilities: true});
 
-    const {baseElement, queryAllByTitle} = render(
+    const {baseElement} = render(
       <TargetDialog
         aliveTests={'Scan Config Default'}
         allowSimultaneousIPs={0}
@@ -617,10 +612,10 @@ describe('TargetDialog component tests', () => {
 
     expect(baseElement).toHaveTextContent('Elevate privileges');
 
-    const newIcons = queryAllByTitle('Create a new credential');
+    const newIcons = screen.queryAllByTitle('Create a new credential');
     expect(newIcons.length).toBe(0); // no new credential can be created
 
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(7); // Should have 7 selects (Kerberos is disabled by default)
 
     expect(selects[0]).toHaveValue('OpenVAS Default');
@@ -667,7 +662,7 @@ describe('TargetDialog component tests', () => {
       />,
     );
 
-    const closeButton = getDialogCloseButton();
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
 
     expect(handleClose).toHaveBeenCalled();

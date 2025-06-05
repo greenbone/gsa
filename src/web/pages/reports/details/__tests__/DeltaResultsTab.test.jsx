@@ -10,6 +10,7 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const filter = Filter.fromString(
@@ -45,7 +46,7 @@ describe('Delta Results Tab tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <DeltaResultsTab
         counts={results.counts}
         delta={true}
@@ -70,7 +71,7 @@ describe('Delta Results Tab tests', () => {
 
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Headings
     expect(header[0]).toHaveTextContent('Delta');

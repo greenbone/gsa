@@ -4,15 +4,13 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import CvssCalculator from 'web/pages/extras/CvssCalculatorPage';
 import {
   changeInputValue,
-  clickElement,
-  queryAllSelectElements,
   getSelectItemElementsForSelect,
-  queryTextInputs,
-} from 'web/components/testing';
-import CvssCalculator from 'web/pages/extras/CvssCalculatorPage';
-import {rendererWith, wait} from 'web/utils/Testing';
+  within,
+} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 const calculateScoreFromVector = testing.fn().mockReturnValue(
   Promise.resolve({
@@ -56,9 +54,9 @@ describe('CvssCalculator page tests', () => {
     await wait();
 
     const sections = element.querySelectorAll('section');
-    const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = queryAllSelectElements(cvssV2section);
-    const cvssV2vector = queryTextInputs(cvssV2section)[0];
+    const cvssV2section = within(sections[0].parentNode);
+    const cvssV2selects = cvssV2section.queryAllSelectElements();
+    const cvssV2vector = cvssV2section.queryTextInputs()[0];
 
     /* CVSSv2 input */
     expect(cvssV2selects[0]).toHaveValue('Local');
@@ -70,9 +68,9 @@ describe('CvssCalculator page tests', () => {
     expect(cvssV2vector).toHaveValue('AV:L/AC:L/Au:N/C:N/I:N/A:N');
 
     /* CVSSv3 input */
-    const cvssV3section = sections[1].parentNode;
-    const cvssV3selects = queryAllSelectElements(cvssV3section);
-    const cvssV3vector = queryTextInputs(cvssV3section)[0];
+    const cvssV3section = within(sections[1].parentNode);
+    const cvssV3selects = cvssV3section.queryAllSelectElements();
+    const cvssV3vector = cvssV3section.queryTextInputs()[0];
 
     expect(cvssV3selects[0]).toHaveValue('Network');
     expect(cvssV3selects[1]).toHaveValue('Low');
@@ -100,9 +98,9 @@ describe('CvssCalculator page tests', () => {
     await wait();
 
     const sections = element.querySelectorAll('section');
-    const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = queryAllSelectElements(cvssV2section);
-    const cvssV2vector = queryTextInputs(cvssV2section)[0];
+    const cvssV2section = within(sections[0].parentNode);
+    const cvssV2selects = cvssV2section.queryAllSelectElements();
+    const cvssV2vector = cvssV2section.queryTextInputs()[0];
 
     /* CVSSv2 input */
     expect(cvssV2selects[0]).toHaveValue('Network');
@@ -114,9 +112,9 @@ describe('CvssCalculator page tests', () => {
     expect(cvssV2vector).toHaveValue('AV:N/AC:L/Au:N/C:P/I:P/A:P');
 
     /* CVSSv3 input */
-    const cvssV3section = sections[1].parentNode;
-    const cvssV3selects = queryAllSelectElements(cvssV3section);
-    const cvssV3vector = queryTextInputs(cvssV3section)[0];
+    const cvssV3section = within(sections[1].parentNode);
+    const cvssV3selects = cvssV3section.queryAllSelectElements();
+    const cvssV3vector = cvssV3section.queryTextInputs()[0];
 
     expect(cvssV3selects[0]).toHaveValue('Network');
     expect(cvssV3selects[1]).toHaveValue('Low');
@@ -143,13 +141,13 @@ describe('CvssCalculator page tests', () => {
     await wait();
 
     const sections = element.querySelectorAll('section');
-    const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = queryAllSelectElements(cvssV2section);
-    const cvssV2vector = queryTextInputs(cvssV2section)[0];
+    const cvssV2section = within(sections[0].parentNode);
+    const cvssV2selects = cvssV2section.queryAllSelectElements();
+    const cvssV2vector = cvssV2section.queryTextInputs()[0];
 
-    const cvssV3section = sections[1].parentNode;
-    const cvssV3selects = queryAllSelectElements(cvssV3section);
-    const cvssV3vector = queryTextInputs(cvssV3section)[0];
+    const cvssV3section = within(sections[1].parentNode);
+    const cvssV3selects = cvssV3section.queryAllSelectElements();
+    const cvssV3vector = cvssV3section.queryTextInputs()[0];
 
     changeInputValue(cvssV2vector, 'AV:N/AC:L/Au:N/C:N/I:P/A:P');
     changeInputValue(
@@ -195,13 +193,13 @@ describe('CvssCalculator page tests', () => {
     await wait();
 
     const sections = element.querySelectorAll('section');
-    const cvssV2section = sections[0].parentNode;
-    const cvssV2selects = queryAllSelectElements(cvssV2section);
-    const cvssV2vector = queryTextInputs(cvssV2section)[0];
+    const cvssV2section = within(sections[0].parentNode);
+    const cvssV2selects = cvssV2section.queryAllSelectElements();
+    const cvssV2vector = cvssV2section.queryTextInputs()[0];
 
-    const cvssV3section = sections[1].parentNode;
-    const cvssV3selects = queryAllSelectElements(cvssV3section);
-    const cvssV3vector = queryTextInputs(cvssV3section)[0];
+    const cvssV3section = within(sections[1].parentNode);
+    const cvssV3selects = cvssV3section.queryAllSelectElements();
+    const cvssV3vector = cvssV3section.queryTextInputs()[0];
 
     /* CVSSv2 input */
     expect(cvssV2selects[0]).toHaveValue('Network');
@@ -226,10 +224,10 @@ describe('CvssCalculator page tests', () => {
     );
 
     const cvssV2items = await getSelectItemElementsForSelect(cvssV2selects[0]);
-    await clickElement(cvssV2items[0]);
+    fireEvent.click(cvssV2items[0]);
 
     const cvssV3items = await getSelectItemElementsForSelect(cvssV3selects[1]);
-    await clickElement(cvssV3items[1]);
+    fireEvent.click(cvssV3items[1]);
 
     expect(cvssV2vector).toHaveValue('AV:L/AC:L/Au:N/C:P/I:P/A:P');
     expect(cvssV3vector).toHaveValue(

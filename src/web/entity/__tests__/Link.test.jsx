@@ -8,6 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Model from 'gmp/model';
 import {YES_VALUE} from 'gmp/parser';
 import EntityLink from 'web/entity/Link';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
@@ -22,10 +23,9 @@ describe('EntityLink component tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps, router: true});
-    const {getByTestId} = render(<EntityLink entity={entity} />);
+    render(<EntityLink entity={entity} />);
 
-    const a = getByTestId('details-link');
-
+    const a = screen.getByTestId('details-link');
     expect(a.getAttribute('href')).toEqual('/foo/123');
   });
 

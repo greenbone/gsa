@@ -8,7 +8,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/reportconfig';
-import {clickElement, testBulkTrashcanDialog} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ReportConfigsPage, {
   ToolBarIcons,
@@ -17,7 +16,8 @@ import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/Testing';
+import {screen, testBulkTrashcanDialog} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const config = ReportConfig.fromElement({
   _id: '12345',
@@ -173,7 +173,7 @@ describe('ReportConfigsPage tests', () => {
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
-    await clickElement(deleteIcon);
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
 

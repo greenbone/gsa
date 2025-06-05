@@ -13,16 +13,13 @@ import {
   act,
   render as reactTestingRender,
   cleanup,
-  queryAllByAttribute,
-  getElementError,
-  within,
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
 import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import {DEFAULT_LANGUAGE, getLocale} from 'gmp/locale/lang';
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {MemoryRouter, useLocation} from 'react-router';
@@ -34,7 +31,13 @@ import {LanguageContext} from 'web/components/provider/LanguageProvider';
 import LicenseProvider from 'web/components/provider/LicenseProvider';
 import configureStore from 'web/store';
 
-export * from '@testing-library/react/pure';
+export {
+  renderHook,
+  waitFor,
+  act,
+  screen,
+  fireEvent,
+} from '@testing-library/react/pure';
 export {userEvent};
 
 afterEach(cleanup);
@@ -59,33 +62,6 @@ export async function wait(ms: number = 0) {
   );
 }
 
-export const queryAllByName = (container: HTMLElement, name: string) =>
-  queryAllByAttribute('name', container, name);
-
-export const queryByName = (container: HTMLElement, name: string) => {
-  const elements = queryAllByName(container, name);
-  if (!elements.length) {
-    return null;
-  }
-  return elements[0];
-};
-
-export const getAllByName = (container: HTMLElement, name: string) => {
-  const elements = queryAllByName(container, name);
-  if (!elements.length) {
-    throw getElementError(
-      `Unable to find an element with the name: ${name}.`,
-      container,
-    );
-  }
-  return elements;
-};
-
-export const getByName = (container: HTMLElement, name: string) => {
-  const elements = getAllByName(container, name);
-  return elements[0];
-};
-
 const Main = ({children}: {children: React.ReactNode}) => {
   return (
     <ThemeProvider defaultColorScheme="light">
@@ -95,7 +71,7 @@ const Main = ({children}: {children: React.ReactNode}) => {
 };
 
 export const render = (ui: React.ReactNode) => {
-  const {container, baseElement, rerender, ...other} = reactTestingRender(
+  const {container, baseElement, rerender} = reactTestingRender(
     <Main>{ui}</Main>,
   );
 
@@ -105,15 +81,9 @@ export const render = (ui: React.ReactNode) => {
     }),
     baseElement,
     container,
-    element: hasValue(container) ? container.lastChild : undefined,
-    getAllByName: (name: string) => getAllByName(baseElement, name),
-    getByName: (name: string) => getByName(baseElement, name),
-    queryByName: (name: string) => queryByName(baseElement, name),
-    queryAllByName: (name: string) => queryAllByName(baseElement, name),
-    within: () => within(baseElement),
+    element: container.lastChild as HTMLElement,
     rerender: (component: React.ReactNode) =>
       rerender(<Main>{component}</Main>),
-    ...other,
   };
 };
 

@@ -8,6 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
 import NoteBox from 'web/entity/Note';
 import {setTimezone} from 'web/store/usersettings/actions';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
@@ -35,11 +36,9 @@ describe('NoteBox component tests', () => {
 
     store.dispatch(setTimezone('CET'));
 
-    const {element, getByTestId} = render(
-      <NoteBox detailsLink={true} note={note} />,
-    );
+    const {element} = render(<NoteBox detailsLink={true} note={note} />);
 
-    const link = getByTestId('details-link');
+    const link = screen.getByTestId('details-link');
     const header = element.querySelector('h3');
 
     expect(link).toBeDefined();

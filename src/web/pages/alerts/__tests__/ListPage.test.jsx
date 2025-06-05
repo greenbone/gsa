@@ -8,18 +8,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Alert from 'gmp/models/alert';
 import Filter from 'gmp/models/filter';
-import {
-  clickElement,
-  queryCheckBoxes,
-  queryPowerFilter,
-  getSelectElement,
-  queryAllSelectElements,
-  getSelectItemElementsForSelect,
-  queryTableBody,
-  queryTableFooter,
-  queryTextInputs,
-  testBulkTrashcanDialog,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import AlertPage, {ToolBarIcons} from 'web/pages/alerts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/alerts';
@@ -27,12 +15,12 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {
-  rendererWith,
-  fireEvent,
+  getSelectItemElementsForSelect,
   screen,
-  wait,
-  getByTestId,
-} from 'web/utils/Testing';
+  testBulkTrashcanDialog,
+  within,
+} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
@@ -148,9 +136,8 @@ describe('Alert ListPage tests', () => {
 
     await wait();
 
-    const powerFilter = queryPowerFilter();
-    const selects = queryAllSelectElements(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const selects = screen.queryAllSelectElements();
+    const inputs = screen.queryTextInputs();
 
     // Toolbar Icons
     expect(screen.getByTestId('help-icon')).toHaveAttribute(
@@ -241,15 +228,15 @@ describe('Alert ListPage tests', () => {
     await wait();
 
     // export page contents
-    const tableFooter = queryTableFooter();
-    const exportIcon = getByTestId(tableFooter, 'export-icon');
+    const tableFooter = within(screen.queryTableFooter());
+    const exportIcon = tableFooter.getByTestId('export-icon');
     expect(exportByFilter).not.toHaveBeenCalled();
     expect(exportIcon).toHaveAttribute('title', 'Export page contents');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    const deleteIcon = getByTestId(tableFooter, 'trash-icon');
+    const deleteIcon = tableFooter.getByTestId('trash-icon');
     expect(deleteByFilter).not.toHaveBeenCalled();
     expect(deleteIcon).toHaveAttribute(
       'title',
@@ -315,27 +302,27 @@ describe('Alert ListPage tests', () => {
     await wait();
 
     // change bulk action to apply to selection
-    const tableFooter = queryTableFooter();
-    const selectElement = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const selectElement = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(selectElement);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
     expect(selectElement).toHaveValue('Apply to selection');
 
     // select an alert
-    const tableBody = queryTableBody();
-    const inputs = queryCheckBoxes(tableBody);
-    await clickElement(inputs[1]);
+    const tableBody = within(screen.queryTableBody());
+    const inputs = tableBody.getAllCheckBoxes();
+    fireEvent.click(inputs[0]);
 
     // export selected alert
     expect(exportByIds).not.toHaveBeenCalled();
-    const exportIcon = getByTestId(tableFooter, 'export-icon');
+    const exportIcon = tableFooter.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export selection');
     fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected alert to trashcan
     expect(deleteByIds).not.toHaveBeenCalled();
-    const deleteIcon = getByTestId(tableFooter, 'trash-icon');
+    const deleteIcon = tableFooter.getByTestId('trash-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Move selection to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByIds);
@@ -397,21 +384,21 @@ describe('Alert ListPage tests', () => {
     await wait();
 
     // change bulk action to apply to all filtered
-    const tableFooter = queryTableFooter();
-    const selectElement = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const selectElement = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(selectElement);
-    await clickElement(selectItems[2]);
+    fireEvent.click(selectItems[2]);
     expect(selectElement).toHaveValue('Apply to all filtered');
 
     // export all filtered alerts
     expect(exportByFilter).not.toHaveBeenCalled();
-    const exportIcon = getByTestId(tableFooter, 'export-icon');
+    const exportIcon = tableFooter.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export all filtered');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered alerts to trashcan
-    const deleteIcon = getByTestId(tableFooter, 'trash-icon');
+    const deleteIcon = tableFooter.getByTestId('trash-icon');
     expect(deleteByFilter).not.toHaveBeenCalled();
     expect(deleteIcon).toHaveAttribute(
       'title',

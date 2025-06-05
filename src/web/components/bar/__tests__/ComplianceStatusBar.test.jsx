@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import ComplianceStatusBar from 'web/components/bar/ComplianceStatusBar';
+import {screen} from 'web/testing';
 import {render} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
@@ -21,45 +22,35 @@ describe('ComplianceStatusBar tests', () => {
   });
 
   test('should render title', () => {
-    const {getByTestId} = render(<ComplianceStatusBar complianceStatus={75} />);
-    const progressbarBox = getByTestId('progressbar-box');
-
+    render(<ComplianceStatusBar complianceStatus={75} />);
+    const progressbarBox = screen.getByTestId('progressbar-box');
     expect(progressbarBox).toHaveAttribute('title', '75%');
   });
 
   test('should render progress', () => {
-    const {getByTestId} = render(<ComplianceStatusBar complianceStatus={75} />);
-    const progress = getByTestId('progress');
-
+    render(<ComplianceStatusBar complianceStatus={75} />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule('width', '75%');
   });
 
   test('should not render progress > 100', () => {
-    const {element, getByTestId} = render(
-      <ComplianceStatusBar complianceStatus={101} />,
-    );
-    const progress = getByTestId('progress');
-
+    const {element} = render(<ComplianceStatusBar complianceStatus={101} />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule('width', '100%');
     expect(element).toHaveTextContent('N/A');
   });
 
   test('should not render progress < 0', () => {
-    const {element, getByTestId} = render(
-      <ComplianceStatusBar complianceStatus={-1} />,
-    );
-    const progress = getByTestId('progress');
-
+    const {element} = render(<ComplianceStatusBar complianceStatus={-1} />);
+    const progress = screen.getByTestId('progress');
     expect(progress).toHaveStyleRule('width', '0%');
     expect(element).toHaveTextContent('N/A');
   });
 
   test('should render colors', () => {
-    const {getByTestId} = render(
-      <ComplianceStatusBar complianceStatus={100} />,
-    );
-    const progress = getByTestId('progress');
-    const progressbarBox = getByTestId('progressbar-box');
+    render(<ComplianceStatusBar complianceStatus={100} />);
+    const progress = screen.getByTestId('progress');
+    const progressbarBox = screen.getByTestId('progressbar-box');
 
     expect(progress).toHaveStyleRule(
       'background',
@@ -69,16 +60,15 @@ describe('ComplianceStatusBar tests', () => {
   });
 
   test('should render gray background for N/A', () => {
-    const {getByTestId} = render(<ComplianceStatusBar complianceStatus={-1} />);
-    const progress = getByTestId('progress');
-    const progressbarBox = getByTestId('progressbar-box');
+    render(<ComplianceStatusBar complianceStatus={-1} />);
+    const progress = screen.getByTestId('progress');
+    const progressbarBox = screen.getByTestId('progressbar-box');
 
     expect(progress).toHaveStyleRule(
       'background',
       `linear-gradient(90deg, ${Theme.statusRunGreen} 0%, ${Theme.statusRunGreen} 100%)`,
     );
     expect(progress).toHaveStyleRule('width', '0%');
-
     expect(progressbarBox).toHaveStyleRule('background', Theme.darkGray);
   });
 });

@@ -8,13 +8,13 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
-import {clickElement, testBulkTrashcanDialog} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import PoliciesPage, {ToolBarIcons} from 'web/pages/policies/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {testBulkTrashcanDialog} from 'web/testing';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
 
 const policy = Policy.fromElement({
@@ -174,14 +174,14 @@ describe('PoliciesPage tests', () => {
     await wait();
 
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
-    await clickElement(deleteIcon);
-    testBulkTrashcanDialog(screen, deleteByFilter);
+    fireEvent.click(deleteIcon);
+    testBulkTrashcanDialog(undefined, deleteByFilter);
   });
 });
 

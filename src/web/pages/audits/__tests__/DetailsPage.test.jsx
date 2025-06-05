@@ -307,7 +307,8 @@ describe('Audit DetailsPage tests', () => {
       'title',
       'Help: Audits',
     );
-    expect(links[0]).toHaveAttribute(
+
+    expect(links[1]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-audits',
     );
@@ -316,7 +317,7 @@ describe('Audit DetailsPage tests', () => {
       'title',
       'Audit List',
     );
-    expect(links[1]).toHaveAttribute('href', '/audits');
+    expect(links[2]).toHaveAttribute('href', '/audits');
 
     expect(baseElement).toHaveTextContent('12345');
     expect(baseElement).toHaveTextContent(

@@ -6,15 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {TICKET_STATUS} from 'gmp/models/ticket';
 import User from 'gmp/models/user';
-import {
-  clickElement,
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-  queryAllSelectElements,
-  getSelectItemElementsForSelect,
-} from 'web/components/testing';
 import EditTicketDialog from 'web/pages/tickets/EditDialog';
+import {getSelectItemElementsForSelect, screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 const u1 = User.fromElement({
@@ -44,14 +37,14 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    expect(getDialog()).toBeInTheDocument();
+    expect(screen.getDialog()).toBeInTheDocument();
   });
 
   test('should display notes', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <EditTicketDialog
         closedNote="Ticket has been closed"
         fixedNote="Ticket has been fixed"
@@ -65,13 +58,13 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    expect(baseElement.querySelector('[name=openNote]')).toHaveTextContent(
+    expect(screen.getByName('openNote')).toHaveTextContent(
       'Ticket has been opened',
     );
-    expect(baseElement.querySelector('[name=closedNote]')).toHaveTextContent(
+    expect(screen.getByName('closedNote')).toHaveTextContent(
       'Ticket has been closed',
     );
-    expect(baseElement.querySelector('[name=fixedNote]')).toHaveTextContent(
+    expect(screen.getByName('fixedNote')).toHaveTextContent(
       'Ticket has been fixed',
     );
   });
@@ -94,7 +87,7 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -123,12 +116,12 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     const selectItems = await getSelectItemElementsForSelect(selects[0]);
     expect(selectItems.length).toEqual(3);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -157,12 +150,12 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const selects = queryAllSelectElements();
+    const selects = screen.queryAllSelectElements();
     const selectItems = await getSelectItemElementsForSelect(selects[1]);
     expect(selectItems.length).toEqual(2);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -191,7 +184,7 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).not.toHaveBeenCalled();
   });
@@ -211,7 +204,7 @@ describe('EditTicketDialog component tests', () => {
       />,
     );
 
-    const closeButton = getDialogCloseButton();
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });

@@ -52,8 +52,7 @@ const LdapDialog = ({
     >
       {({values, onValueChange}) => (
         <>
-          {/* @ts-expect-error */}
-          <CheckBox
+          <CheckBox<boolean>
             checked={values.ldapEnabled}
             checkedValue={true}
             data-testid="enable-checkbox"
@@ -63,7 +62,6 @@ const LdapDialog = ({
             onChange={onValueChange}
           />
           <FormGroup title={_('LDAP Host')}>
-            {/* @ts-expect-error */}
             <TextField
               data-testid="ldaphost-textfield"
               name="ldapHost"
@@ -73,7 +71,6 @@ const LdapDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('Auth. DN')}>
-            {/* @ts-expect-error */}
             <TextField
               data-testid="authdn-textfield"
               name="authdn"
@@ -83,11 +80,9 @@ const LdapDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('CA Certificate')}>
-            {/* @ts-expect-error */}
             <FileField name="certificate" onChange={onValueChange} />
           </FormGroup>
-          {/* @ts-expect-error */}
-          <CheckBox
+          <CheckBox<boolean>
             checked={values.ldapsOnly}
             checkedValue={true}
             data-testid="ldapsOnly-checkbox"

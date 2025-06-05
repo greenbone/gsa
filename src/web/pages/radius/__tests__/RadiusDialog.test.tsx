@@ -4,13 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  changeInputValue,
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-} from 'web/components/testing';
 import Dialog from 'web/pages/radius/RadiusDialog';
+import {changeInputValue, screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('RADIUS dialog component tests', () => {
@@ -27,7 +22,7 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    expect(getDialog()).toBeInTheDocument();
+    expect(screen.getDialog()).toBeInTheDocument();
   });
 
   test('should save data', () => {
@@ -43,8 +38,7 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    // @ts-expect-error
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
       radiusEnabled: true,
@@ -66,7 +60,7 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    const closeButton = getDialogCloseButton();
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });
@@ -75,7 +69,7 @@ describe('RADIUS dialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <Dialog
         radiusEnabled={true}
         radiusHost="foo"
@@ -84,17 +78,16 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    const checkBox = getByTestId('enable-checkbox');
+    const checkBox = screen.getByTestId('enable-checkbox');
     fireEvent.click(checkBox);
 
-    const radiusHostTextField = getByTestId('radiushost-textfield');
+    const radiusHostTextField = screen.getByTestId('radiushost-textfield');
     changeInputValue(radiusHostTextField, 'lorem');
 
-    const radiusKeyTextField = getByTestId('radiuskey-textfield');
+    const radiusKeyTextField = screen.getByTestId('radiuskey-textfield');
     changeInputValue(radiusKeyTextField, 'bar');
 
-    // @ts-expect-error
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
       radiusHost: 'lorem',

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {clickElement, queryDialogTitle} from 'web/components/testing';
 import AboutPage from 'web/pages/help/About';
-import {rendererWith} from 'web/utils/Testing';
+import {screen} from 'web/testing';
+import {fireEvent, rendererWith} from 'web/utils/Testing';
 
 describe('AboutPage tests', () => {
   test('should render about page', async () => {
@@ -49,8 +49,8 @@ describe('AboutPage tests', () => {
 
     const links = element.querySelectorAll('a');
 
-    await clickElement(links[1]);
+    fireEvent.click(links[1]);
 
-    expect(queryDialogTitle()).toHaveTextContent('You are leaving GSA');
+    expect(screen.queryDialogTitle()).toHaveTextContent('You are leaving GSA');
   });
 });

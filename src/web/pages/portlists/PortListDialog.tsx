@@ -5,7 +5,7 @@
 
 import {FROM_FILE, FromFile, NOT_FROM_FILE} from 'gmp/commands/portlists';
 import PortList from 'gmp/models/portlist';
-import {parseYesNo} from 'gmp/parser';
+import {parseYesNo, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
@@ -90,7 +90,6 @@ const PortListsDialog = <TPortRange extends PortRange>({
       {({values: state, onValueChange}) => {
         return (
           <>
-            {/* @ts-expect-error */}
             <TextField
               name="name"
               title={_('Name')}
@@ -98,7 +97,6 @@ const PortListsDialog = <TPortRange extends PortRange>({
               onChange={onValueChange}
             />
 
-            {/* @ts-expect-error */}
             <TextField
               name="comment"
               title={_('Comment')}
@@ -109,15 +107,13 @@ const PortListsDialog = <TPortRange extends PortRange>({
             {!isEdit && (
               <FormGroup title={_('Port Ranges')}>
                 <Row>
-                  {/* @ts-expect-error */}
-                  <Radio
+                  <Radio<YesNo>
                     checked={parseYesNo(state.fromFile) !== FROM_FILE}
                     name="fromFile"
                     title={_('Manual')}
                     value={NOT_FROM_FILE}
                     onChange={onValueChange}
                   />
-                  {/* @ts-expect-error */}
                   <TextField
                     disabled={parseYesNo(state.fromFile) === FROM_FILE}
                     grow="1"
@@ -127,15 +123,13 @@ const PortListsDialog = <TPortRange extends PortRange>({
                   />
                 </Row>
                 <Row>
-                  {/* @ts-expect-error */}
-                  <Radio
+                  <Radio<YesNo>
                     checked={parseYesNo(state.fromFile) === FROM_FILE}
                     name="fromFile"
                     title={_('From file')}
                     value={FROM_FILE}
                     onChange={onValueChange}
                   />
-                  {/* @ts-expect-error */}
                   <FileField
                     disabled={parseYesNo(state.fromFile) !== FROM_FILE}
                     grow="1"

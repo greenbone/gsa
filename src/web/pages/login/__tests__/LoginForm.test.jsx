@@ -5,7 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import LoginForm from 'web/pages/login/LoginForm';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {changeInputValue, screen} from 'web/testing';
+import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 const gmp = {settings: {}};
 
@@ -16,7 +17,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByName} = render(
+    render(
       <LoginForm
         showGuestLogin
         showLogin
@@ -27,8 +28,8 @@ describe('LoginForm tests', () => {
       />,
     );
 
-    expect(getByName('username')).toBeInTheDocument();
-    expect(getByName('password')).toBeInTheDocument();
+    expect(screen.getByName('username')).toBeInTheDocument();
+    expect(screen.getByName('password')).toBeInTheDocument();
   });
 
   test('should display error', () => {
@@ -84,11 +85,11 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
-    expect(queryByTestId('protocol-insecure')).toBeNull();
+    expect(screen.queryByTestId('protocol-insecure')).toBeNull();
   });
 
   test('should display IE11 message', () => {
@@ -114,11 +115,11 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
-    expect(queryByTestId('IE11')).toBeNull();
+    expect(screen.queryByTestId('IE11')).toBeNull();
   });
 
   test('should display login fields by default', () => {
@@ -127,12 +128,12 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByName} = render(
+    render(
       <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
-    expect(getByName('username')).toBeInTheDocument();
-    expect(getByName('password')).toBeInTheDocument();
+    expect(screen.getByName('username')).toBeInTheDocument();
+    expect(screen.getByName('password')).toBeInTheDocument();
   });
 
   test('should allow to disable login fields', () => {
@@ -141,7 +142,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByName} = render(
+    render(
       <LoginForm
         showLogin={false}
         onGuestLoginClick={handleClick}
@@ -149,8 +150,8 @@ describe('LoginForm tests', () => {
       />,
     );
 
-    expect(queryByName('username')).not.toBeInTheDocument();
-    expect(queryByName('password')).not.toBeInTheDocument();
+    expect(screen.queryByName('username')).not.toBeInTheDocument();
+    expect(screen.queryByName('password')).not.toBeInTheDocument();
   });
 
   test('should allow to login with username and password', () => {
@@ -159,15 +160,15 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByName} = render(
+    render(
       <LoginForm onGuestLoginClick={handleClick} onSubmit={handleSubmit} />,
     );
 
-    const usernameField = getByName('username');
-    const passwordField = getByName('password');
+    const usernameField = screen.getByName('username');
+    const passwordField = screen.getByName('password');
 
-    fireEvent.change(usernameField, {target: {value: 'foo'}});
-    fireEvent.change(passwordField, {target: {value: 'bar'}});
+    changeInputValue(usernameField, 'foo');
+    changeInputValue(passwordField, 'bar');
 
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);

@@ -14,6 +14,7 @@ import {
 import Capabilities from 'gmp/capabilities/capabilities';
 import {License} from 'gmp/models/license';
 import LicenseNotification from 'web/components/notification/LicenseNotification';
+import {screen} from 'web/testing';
 import {rendererWith, wait} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
@@ -143,20 +144,18 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
     );
 
     await wait();
 
-    const heading = getByTestId('infopanel-heading');
+    const heading = screen.getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
 
     expect(links.length).toEqual(1);
-
     expect(links[0]).toHaveAttribute('href', '/license');
     expect(links[0]).toHaveTextContent('License Management page');
-
     expect(baseElement).toHaveTextContent(
       'The Greenbone Enterprise License for this system will expire in 26 days',
     );
@@ -180,17 +179,16 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
     );
 
     await wait();
 
-    const heading = getByTestId('infopanel-heading');
+    const heading = screen.getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
 
     expect(links.length).toEqual(0);
-
     expect(baseElement).toHaveTextContent(
       'The Greenbone Enterprise License for this system will expire in 26 days',
     );
@@ -214,20 +212,18 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
     );
 
     await wait();
 
-    const heading = getByTestId('infopanel-heading');
+    const heading = screen.getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
 
     expect(links.length).toEqual(1);
-
     expect(links[0]).toHaveAttribute('href', '/license');
     expect(links[0]).toHaveTextContent('License Management page');
-
     expect(baseElement).toHaveTextContent(
       'The trial period for this system will end in 13 days',
     );
@@ -251,17 +247,15 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
     );
 
     await wait();
 
-    const heading = getByTestId('infopanel-heading');
+    const heading = screen.getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
-
     expect(links.length).toEqual(0);
-
     expect(baseElement).toHaveTextContent(
       'The trial period for this system will end in 13 days',
     );
@@ -343,21 +337,18 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
     );
 
     await wait();
 
-    const heading = getByTestId('infopanel-heading');
-
+    const heading = screen.getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
 
     expect(links.length).toEqual(1);
-
     expect(links[0]).toHaveAttribute('href', '/license');
     expect(links[0]).toHaveTextContent('License Management page');
-
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License has expired 1 days ago!',
     );
@@ -383,17 +374,16 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
     );
 
     await wait();
 
-    const heading = getByTestId('infopanel-heading');
+    const heading = screen.getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
 
     expect(links.length).toEqual(0);
-
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License has expired 1 days ago!',
     );
@@ -419,18 +409,16 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
     );
 
     await wait();
 
-    const heading = getByTestId('infopanel-heading');
-
+    const heading = screen.getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
 
     expect(links.length).toEqual(2);
-
     expect(links[0]).toHaveAttribute('href', 'https://service.greenbone.net');
     expect(links[0]).toHaveTextContent('https://service.greenbone.net');
 
@@ -462,18 +450,16 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement, getByTestId} = render(
+    const {baseElement} = render(
       <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
     );
 
     await wait();
 
-    const heading = getByTestId('infopanel-heading');
-
+    const heading = screen.getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
 
     expect(links.length).toEqual(0);
-
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License is invalid!',
     );

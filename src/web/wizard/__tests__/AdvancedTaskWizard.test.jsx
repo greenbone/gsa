@@ -11,12 +11,8 @@ import Credential, {
 } from 'gmp/models/credential';
 import Date from 'gmp/models/date';
 import ScanConfig from 'gmp/models/scanconfig';
-import {
-  closeDialog,
-  getElementOrReturnDocument,
-  getRadioInputs,
-} from 'web/components/testing';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {screen} from 'web/testing';
+import {rendererWith, fireEvent} from 'web/utils/Testing';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
@@ -56,14 +52,12 @@ const startMinute = 10;
 const startHour = 12;
 const startTimezone = 'UTC';
 
-const getFormGroupTitles = element => {
-  element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-Text-root');
+const getFormGroupTitles = () => {
+  return document.body.querySelectorAll('.mantine-Text-root');
 };
 
-const getRadioTitles = element => {
-  element = getElementOrReturnDocument(element);
-  return element.querySelectorAll('.mantine-Radio-label');
+const getRadioTitles = () => {
+  return document.body.querySelectorAll('.mantine-Radio-label');
 };
 
 describe('AdvancedTaskWizard component tests', () => {
@@ -75,7 +69,7 @@ describe('AdvancedTaskWizard component tests', () => {
       capabilities: true,
     });
 
-    const {getByName} = render(
+    render(
       <AdvancedTaskWizard
         config_id={configId}
         credentials={credentials}
@@ -95,7 +89,7 @@ describe('AdvancedTaskWizard component tests', () => {
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = getRadioInputs();
+    const radioInputs = screen.getRadioInputs();
     const radioTitles = getRadioTitles();
 
     const selectedDate = '01/01/2020';
@@ -117,7 +111,7 @@ describe('AdvancedTaskWizard component tests', () => {
     expect(formGroups[1]).toHaveTextContent('Scan Config');
 
     expect(formGroups[2]).toHaveTextContent('Target Host(s)');
-    const targetHostsInput = getByName('target_hosts');
+    const targetHostsInput = screen.getByName('target_hosts');
     expect(targetHostsInput).toHaveAttribute('value', targetHosts);
 
     expect(formGroups[3]).toHaveTextContent('Start Time');
@@ -168,7 +162,7 @@ describe('AdvancedTaskWizard component tests', () => {
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = getRadioInputs();
+    const radioInputs = screen.getRadioInputs();
     const radioTitles = getRadioTitles();
 
     expect(formGroups[0]).toHaveTextContent('Task Name');
@@ -205,7 +199,7 @@ describe('AdvancedTaskWizard component tests', () => {
       capabilities: scheduleCapabilities,
     });
 
-    const {baseElement, getByName} = render(
+    const {baseElement} = render(
       <AdvancedTaskWizard
         config_id={configId}
         credentials={credentials}
@@ -225,7 +219,7 @@ describe('AdvancedTaskWizard component tests', () => {
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = getRadioInputs();
+    const radioInputs = screen.getRadioInputs();
     const radioTitles = getRadioTitles();
 
     expect(formGroups[0]).toHaveTextContent('Task Name');
@@ -233,7 +227,7 @@ describe('AdvancedTaskWizard component tests', () => {
     expect(formGroups[1]).toHaveTextContent('Scan Config');
 
     expect(formGroups[2]).toHaveTextContent('Target Host(s)');
-    const targetHostsInput = getByName('target_hosts');
+    const targetHostsInput = screen.getByName('target_hosts');
     expect(targetHostsInput).toHaveAttribute('value', targetHosts);
 
     expect(formGroups[3]).toHaveTextContent('Start Time');
@@ -284,8 +278,8 @@ describe('AdvancedTaskWizard component tests', () => {
       />,
     );
 
-    closeDialog();
-
+    const closeButton = screen.getDialogXButton();
+    fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -316,10 +310,8 @@ describe('AdvancedTaskWizard component tests', () => {
       />,
     );
 
-    const cancelButton = screen.getByTestId('dialog-close-button');
-
+    const cancelButton = screen.getDialogCloseButton();
     fireEvent.click(cancelButton);
-
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -331,7 +323,7 @@ describe('AdvancedTaskWizard component tests', () => {
       capabilities: true,
     });
 
-    const {getByName} = render(
+    render(
       <AdvancedTaskWizard
         config_id={configId}
         credentials={credentials}
@@ -350,7 +342,7 @@ describe('AdvancedTaskWizard component tests', () => {
       />,
     );
 
-    const nameInput = getByName('task_name');
+    const nameInput = screen.getByName('task_name');
     fireEvent.change(nameInput, {target: {value: 'Foo'}});
 
     const saveButton = screen.getByTestId('dialog-save-button');

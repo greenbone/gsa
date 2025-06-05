@@ -7,23 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
-import {
-  clickElement,
-  queryCheckBoxes,
-  queryPowerFilter,
-  getSelectElement,
-  getSelectItemElementsForSelect,
-  queryTableBody,
-  queryTableFooter,
-  queryTextInputs,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import NvtsPage, {ToolBarIcons} from 'web/pages/nvts/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, screen, wait} from 'web/utils/Testing';
+import {getSelectItemElementsForSelect, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 const nvt = NVT.fromElement({
   _oid: '1.3.6.1.4.1.25623.1.0',
@@ -165,9 +156,9 @@ describe('NvtsPage tests', () => {
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const select = powerFilter.getSelectElement();
+    const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
@@ -287,7 +278,7 @@ describe('NvtsPage tests', () => {
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 
@@ -353,20 +344,20 @@ describe('NvtsPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a nvt
-    const tableBody = queryTableBody();
-    const inputs = queryCheckBoxes(tableBody);
-    await clickElement(inputs[1]);
+    const tableBody = within(screen.queryTableBody());
+    const inputs = tableBody.getAllCheckBoxes();
+    fireEvent.click(inputs[0]);
 
     // export selected nvt
     const exportIcon = screen.getAllByTitle('Export selection')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
   });
 
@@ -432,15 +423,15 @@ describe('NvtsPage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[2]);
+    fireEvent.click(selectItems[2]);
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered nvts
     const exportIcon = screen.getAllByTitle('Export all filtered')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 });

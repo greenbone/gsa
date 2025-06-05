@@ -7,15 +7,11 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import React from 'react';
-import {
-  queryPowerFilter,
-  getSelectElement,
-  queryTextInputs,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/MockAuditDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen, within} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const filter = Filter.fromString(
@@ -91,7 +87,7 @@ describe('Audit Delta Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId, within} = render(
+    const {baseElement} = render(
       <DeltaDetailsContent
         activeTab={0}
         audit={true}
@@ -131,10 +127,9 @@ describe('Audit Delta Report Details Content tests', () => {
     const icons = baseElement.querySelectorAll('svg');
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const powerFilter = queryPowerFilter();
-    const inputs = queryTextInputs(powerFilter);
-    const select = getSelectElement(powerFilter);
-    const bars = getAllByTestId('progressbar-box');
+    const powerFilter = within(screen.queryPowerFilter());
+    const inputs = powerFilter.queryTextInputs();
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Toolbar Icons
     expect(icons.length).toEqual(15);
@@ -142,7 +137,7 @@ describe('Audit Delta Report Details Content tests', () => {
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
 
-    const input = within(select).getByTitle('Loaded filter');
+    const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveValue('foo');
 
     // Header
@@ -268,7 +263,7 @@ describe('Audit Delta Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId, within} = render(
+    const {baseElement} = render(
       <DeltaDetailsContent
         activeTab={1}
         audit={true}
@@ -307,17 +302,16 @@ describe('Audit Delta Report Details Content tests', () => {
     const icons = baseElement.querySelectorAll('svg');
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
-    const powerFilter = queryPowerFilter();
-    const inputs = queryTextInputs(powerFilter);
-    const select = getSelectElement(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const inputs = screen.queryTextInputs();
 
     // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
 
-    const input = within(select).getByTitle('Loaded filter');
+    const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveValue('--');
 
-    const bars = getAllByTestId('progressbar-box');
+    const bars = screen.getAllByTestId('progressbar-box');
 
     // Toolbar Icons
     expect(icons.length).toEqual(33);

@@ -8,25 +8,14 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import {
-  clickElement,
-  queryPowerFilter,
-  getSelectElement,
-  testBulkTrashcanDialog,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import TaskPage, {ToolBarIcons} from 'web/pages/tasks/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {
-  rendererWith,
-  fireEvent,
-  wait,
-  screen,
-  getByTestId,
-} from 'web/utils/Testing';
+import {screen, testBulkTrashcanDialog, within} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const lastReport = {
   report: {
@@ -109,7 +98,7 @@ const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe('TaskPage tests', () => {
+describe('TaskDetailsPage tests', () => {
   test('should render full TaskPage', async () => {
     const gmp = {
       tasks: {
@@ -168,8 +157,8 @@ describe('TaskPage tests', () => {
     const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tbody tr')[0];
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const select = powerFilter.getSelectElement();
 
     // Toolbar Icons
     const helpIcon = screen.getByTestId('help-icon');
@@ -235,15 +224,16 @@ describe('TaskPage tests', () => {
     );
     expect(row).toHaveTextContent('5.0 (Medium)');
 
-    const startIcon = getByTestId(row, 'start-icon');
+    const withinRow = within(row);
+    const startIcon = withinRow.getByTestId('start-icon');
     expect(startIcon).toHaveAttribute('title', 'Start');
-    const trashcanIcon = getByTestId(row, 'trashcan-icon');
+    const trashcanIcon = withinRow.getByTestId('trashcan-icon');
     expect(trashcanIcon).toHaveAttribute('title', 'Move Task to trashcan');
-    const editIcon = getByTestId(row, 'edit-icon');
+    const editIcon = withinRow.getByTestId('edit-icon');
     expect(editIcon).toHaveAttribute('title', 'Edit Task');
-    const cloneIcon = getByTestId(row, 'clone-icon');
+    const cloneIcon = withinRow.getByTestId('clone-icon');
     expect(cloneIcon).toHaveAttribute('title', 'Clone Task');
-    const exportIcon = getByTestId(row, 'export-icon');
+    const exportIcon = withinRow.getByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export Task');
   });
 
@@ -314,14 +304,14 @@ describe('TaskPage tests', () => {
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
-    await clickElement(deleteIcon);
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });

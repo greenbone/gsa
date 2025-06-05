@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import ApplyOverridesGroup from 'web/components/powerfilter/ApplyOverridesGroup';
-import {getRadioInputs} from 'web/components/testing';
+import {screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('ApplyOverridesGroup tests', () => {
@@ -38,7 +38,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
     fireEvent.click(radio[1]);
 
     expect(handleChange).toHaveBeenCalledWith(0, 'applyOverrides');
@@ -57,7 +57,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
 
     expect(radio[0].checked).toEqual(true);
   });
@@ -76,7 +76,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
 
     expect(radio[0].checked).toEqual(true);
     expect(radio[1].checked).toEqual(false);
@@ -107,7 +107,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
     expect(radio[0].checked).toEqual(true);
     expect(radio[1].checked).toEqual(false);
   });
@@ -123,7 +123,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getRadioInputs();
+    const radio = screen.getRadioInputs();
     expect(radio[0].checked).toEqual(true);
   });
 });

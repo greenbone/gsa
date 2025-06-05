@@ -5,7 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import DynamicIcon from 'web/components/icon/DynamicIcon';
-import {render, screen, fireEvent, within} from 'web/utils/Testing';
+import {screen, within} from 'web/testing';
+import {render, fireEvent} from 'web/utils/Testing';
 
 const MockIcon = props => <svg {...props} data-testid="mock-icon" />;
 

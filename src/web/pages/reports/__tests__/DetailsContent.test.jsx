@@ -6,14 +6,10 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import {
-  queryPowerFilter,
-  queryTextInputs,
-  getSelectElement,
-} from 'web/components/testing';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import DetailsContent from 'web/pages/reports/DetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen, within} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const filter = Filter.fromString(
@@ -95,7 +91,7 @@ describe('Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId, within} = render(
+    const {baseElement} = render(
       <DetailsContent
         activeTab={0}
         applicationsCounts={{all: 4, filtered: 4}}
@@ -143,23 +139,19 @@ describe('Report Details Content tests', () => {
 
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const bars = getAllByTestId('progressbar-box');
-    const powerFilter = queryPowerFilter();
-    const inputs = queryTextInputs(powerFilter);
-    const select = getSelectElement(powerFilter);
+    const bars = screen.getAllByTestId('progressbar-box');
+    const powerFilter = within(screen.queryPowerFilter());
+    const inputs = powerFilter.queryTextInputs();
 
     // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
 
-    const input = within(select).getByTitle('Loaded filter');
+    const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
-    const headerSection = baseElement.querySelector('.report-header');
-    within(headerSection).getByText('Report:');
-    within(headerSection).getByText(
-      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
-    );
+    screen.getByText('Report:');
+    screen.getByText('Mon, Jun 3, 2019 1:00 PM Central European Summer Time');
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(baseElement).toHaveTextContent(
@@ -269,7 +261,7 @@ describe('Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId, within} = render(
+    const {baseElement} = render(
       <DetailsContent
         activeTab={2}
         applicationsCounts={{all: 4, filtered: 4}}
@@ -315,23 +307,19 @@ describe('Report Details Content tests', () => {
       />,
     );
 
-    const bars = getAllByTestId('progressbar-box');
-    const powerFilter = queryPowerFilter();
-    const inputs = queryTextInputs(powerFilter);
-    const select = getSelectElement(powerFilter);
+    const bars = screen.getAllByTestId('progressbar-box');
+    const powerFilter = within(screen.queryPowerFilter());
+    const inputs = powerFilter.queryTextInputs();
 
     // PowerFilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
 
-    const input = within(select).getByTitle('Loaded filter');
+    const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveAttribute('placeholder', 'Loading...');
 
     // Header
-    const headerSection = baseElement.querySelector('.report-header');
-    within(headerSection).getByText('Report:');
-    within(headerSection).getByText(
-      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
-    );
+    screen.getByText('Report:');
+    screen.getByText('Mon, Jun 3, 2019 1:00 PM Central European Summer Time');
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
     expect(baseElement).toHaveTextContent(

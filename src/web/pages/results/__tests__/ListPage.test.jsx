@@ -8,23 +8,14 @@ import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {
-  clickElement,
-  queryCheckBoxes,
-  queryPowerFilter,
-  getSelectElement,
-  getSelectItemElementsForSelect,
-  queryTableBody,
-  queryTableFooter,
-  queryTextInputs,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ResultsPage from 'web/pages/results/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, screen, wait} from 'web/utils/Testing';
+import {getSelectItemElementsForSelect, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 // setup
 
@@ -213,9 +204,9 @@ describe('Results listpage tests', () => {
 
     await wait();
 
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const select = powerFilter.getSelectElement();
+    const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Results')[0]).toBeInTheDocument();
@@ -352,7 +343,7 @@ describe('Results listpage tests', () => {
 
     await wait();
 
-    await clickElement(screen.getAllByTitle('Export page contents')[0]);
+    fireEvent.click(screen.getAllByTitle('Export page contents')[0]);
     expect(exportByFilter).toHaveBeenCalled();
   });
 
@@ -412,19 +403,19 @@ describe('Results listpage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a result
-    const tableBody = queryTableBody();
-    const inputs = queryCheckBoxes(tableBody);
-    await clickElement(inputs[1]);
+    const tableBody = within(screen.queryTableBody());
+    const inputs = tableBody.queryCheckBoxes();
+    fireEvent.click(inputs[1]);
 
     // export selected result
-    await clickElement(screen.getAllByTitle('Export selection')[0]);
+    fireEvent.click(screen.getAllByTitle('Export selection')[0]);
     expect(exportByIds).toHaveBeenCalled();
   });
 
@@ -484,14 +475,14 @@ describe('Results listpage tests', () => {
     await wait();
 
     // change to all filtered
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[2]);
+    fireEvent.click(selectItems[2]);
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered results
-    await clickElement(screen.getAllByTitle('Export all filtered')[0]);
+    fireEvent.click(screen.getAllByTitle('Export all filtered')[0]);
     expect(exportByFilter).toHaveBeenCalled();
   });
 });
