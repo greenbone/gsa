@@ -6,7 +6,7 @@
 import React from 'react';
 import {hasValue} from 'gmp/utils/identity';
 import Dialog from 'web/components/dialog/Dialog';
-import DialogFooter from 'web/components/dialog/Footer';
+import DialogFooter from 'web/components/dialog/DialogFooter';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
