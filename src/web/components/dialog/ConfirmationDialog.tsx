@@ -9,9 +9,19 @@ import DialogTwoButtonFooter, {
   DELETE_ACTION,
 } from 'web/components/dialog/DialogTwoButtonFooter';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
+
+interface ConfirmationDialogProps {
+  content?: React.ReactNode;
+  title: string;
+  rightButtonTitle?: string;
+  rightButtonAction?: typeof DELETE_ACTION;
+  width?: string;
+  onClose?: () => void;
+  onResumeClick?: () => void;
+  loading?: boolean;
+}
 
 const ConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
@@ -22,10 +32,10 @@ const ConfirmationDialog = ({
   onClose,
   onResumeClick,
   loading,
-}) => {
+}: ConfirmationDialogProps) => {
   const [_] = useTranslation();
 
-  rightButtonTitle = rightButtonTitle || _('OK');
+  rightButtonTitle = rightButtonTitle ?? _('OK');
 
   return (
     <Dialog
@@ -46,17 +56,6 @@ const ConfirmationDialog = ({
       <DialogContent>{content}</DialogContent>
     </Dialog>
   );
-};
-
-ConfirmationDialog.propTypes = {
-  content: PropTypes.elementOrString,
-  rightButtonTitle: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  width: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onResumeClick: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
-  rightButtonAction: PropTypes.oneOf([undefined, DELETE_ACTION]),
 };
 
 export default ConfirmationDialog;
