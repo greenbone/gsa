@@ -5,7 +5,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import CloseButton from 'web/components/dialog/CloseButton';
+import DialogCloseButton from 'web/components/dialog/DialogCloseButton';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
@@ -88,7 +88,7 @@ const Display = ({children, dragHandleProps, title, onRemoveClick}) => {
         <Header>
           <HeaderContent>
             <DisplayTitle>{title}</DisplayTitle>
-            <CloseButton
+            <DialogCloseButton
               size="small"
               title={_('Remove')}
               onClick={onRemoveClick}
