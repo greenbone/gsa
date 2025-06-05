@@ -115,6 +115,7 @@ const ScannerDialog = ({
         credential_id,
         type,
         which_cert,
+        ca_pub,
       }}
       onClose={onClose}
       onSave={onSave}

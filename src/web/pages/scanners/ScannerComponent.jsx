@@ -246,7 +246,7 @@ const ScannerComponent = ({
     }
   };
 
-  const handleScannerCaPubChange = (value) => {
+  const handleScannerCaPubChange = (value, name) => {
     setWhichCert('new');
     setCaPub(value);
   };
