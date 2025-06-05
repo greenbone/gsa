@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task from 'gmp/models/task';
 import CloneIcon from 'web/entity/icon/CloneIcon';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWith, fireEvent} from 'web/testing';
 
 describe('Entity CloneIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

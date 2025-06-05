@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
-import {fireEvent, render, screen} from 'web/utils/Testing';
+import {fireEvent, render, screen} from 'web/testing';
 
 const TestComponent = () => {
   const [ref, download] = useDownload();

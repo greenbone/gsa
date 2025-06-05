@@ -11,8 +11,7 @@ import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
 import CveTable from 'web/pages/cves/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {screen} from 'web/testing';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import PageTitle, {DEFAULT_TITLE} from 'web/components/layout/PageTitle';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith} from 'web/testing';
 
 const gmp = {
   settings: {

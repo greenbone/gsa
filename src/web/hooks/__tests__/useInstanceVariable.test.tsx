@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {useState} from 'react';
 import useInstanceVariable from 'web/hooks/useInstanceVariable';
-import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 
 const TestComponent = () => {
   const [someVariable, setVariable] = useInstanceVariable(1);

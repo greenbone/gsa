@@ -8,7 +8,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
-import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 
 const reducer = (state = {value: 0}, action) => {
   switch (action.type) {

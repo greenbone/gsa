@@ -12,8 +12,9 @@ import {
   getSelectItemElementsForSelect,
   screen,
   within,
+  rendererWith,
+  fireEvent,
 } from 'web/testing';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 const gmp = {
   settings: {

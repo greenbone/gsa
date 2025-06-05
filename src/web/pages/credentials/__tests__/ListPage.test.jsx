@@ -18,8 +18,10 @@ import {
   screen,
   testBulkTrashcanDialog,
   within,
+  rendererWith,
+  fireEvent,
+  wait,
 } from 'web/testing';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const credential = Credential.fromElement({
   _id: '6575',

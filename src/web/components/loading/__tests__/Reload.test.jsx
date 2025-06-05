@@ -10,8 +10,7 @@ import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
   USE_DEFAULT_RELOAD_INTERVAL_INACTIVE,
 } from 'web/components/loading/Reload';
-import {screen} from 'web/testing';
-import {act, fireEvent, rendererWith} from 'web/utils/Testing';
+import {screen, act, fireEvent, rendererWith} from 'web/testing';
 
 const TestComponent = ({reload, id, reloadOptions}) => (
   <button data-testid={id} onClick={() => reload(reloadOptions)} />

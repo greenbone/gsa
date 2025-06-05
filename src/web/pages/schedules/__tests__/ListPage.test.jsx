@@ -19,8 +19,10 @@ import {
   screen,
   testBulkTrashcanDialog,
   within,
+  rendererWith,
+  fireEvent,
+  wait,
 } from 'web/testing';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const schedule = Schedule.fromElement({
   comment: 'hello world',

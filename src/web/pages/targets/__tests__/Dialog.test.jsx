@@ -15,8 +15,10 @@ import {
   changeInputValue,
   getSelectItemElementsForSelect,
   screen,
+  fireEvent,
+  wait,
+  rendererWith,
 } from 'web/testing';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const cred1 = Credential.fromElement({
   _id: '5678',

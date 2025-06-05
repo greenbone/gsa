@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import ErrorContainer from 'web/components/error/ErrorContainer';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 describe('ErrorContainer tests', () => {
   test('should render', () => {

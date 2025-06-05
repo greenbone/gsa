@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import useUserName from 'web/hooks/useUserName';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWith, fireEvent} from 'web/testing';
 
 const TestUserName = () => <span>{useUserName()[0]}</span>;
 

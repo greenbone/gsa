@@ -12,7 +12,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage, {ToolBarIcons} from 'web/pages/alerts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

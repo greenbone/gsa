@@ -12,8 +12,13 @@ import {
   NOTIFICATION_SHOWN_KEY,
 } from 'web/pages/login/notifications/CommunityFeedUsageNotification';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
-import {changeInputValue, screen} from 'web/testing';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
+import {
+  changeInputValue,
+  screen,
+  rendererWith,
+  fireEvent,
+  wait,
+} from 'web/testing';
 
 Logger.setDefaultLevel('silent');
 const mockUseNavigate = testing.fn();

@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import BlankLink from 'web/components/link/BlankLink';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 describe('BlankLink tests', () => {
   test('should render BlankLink', () => {

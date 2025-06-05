@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
-import {rendererWith, wait} from 'web/utils/Testing';
+import {rendererWith, wait} from 'web/testing';
 
 describe('useEntitySave', () => {
   test('should allow to save an entity', async () => {

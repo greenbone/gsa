@@ -5,8 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import AboutPage from 'web/pages/help/About';
-import {screen} from 'web/testing';
-import {fireEvent, rendererWith} from 'web/utils/Testing';
+import {screen, fireEvent, rendererWith} from 'web/testing';
 
 describe('AboutPage tests', () => {
   test('should render about page', async () => {

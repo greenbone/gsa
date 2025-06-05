@@ -5,8 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import ErrorMessage from 'web/components/error/ErrorMessage';
-import {screen} from 'web/testing';
-import {render} from 'web/utils/Testing';
+import {screen, render} from 'web/testing';
 
 describe('ErrorMessage tests', () => {
   test('should render', () => {

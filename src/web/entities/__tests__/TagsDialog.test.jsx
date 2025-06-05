@@ -5,8 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Dialog from 'web/entities/TagsDialog';
-import {screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {screen, render, fireEvent} from 'web/testing';
 
 describe('TagsDialog dialog component tests', () => {
   test('should render dialog', () => {

@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import useManualURL from 'web/hooks/useManualURL';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith} from 'web/testing';
 
 const gmp = {settings: {manualUrl: 'http://localhost/manual'}};
 

@@ -10,7 +10,7 @@ import {parseDate} from 'gmp/parser';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CveRow from 'web/pages/cves/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWithTable, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWithTable, fireEvent, screen} from 'web/testing';
 
 const gmp = {settings: {severityRating: SEVERITY_RATING_CVSS_3}};
 const caps = new Capabilities(['everything']);

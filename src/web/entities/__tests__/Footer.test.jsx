@@ -10,7 +10,7 @@ import {
   rendererWithTableFooter,
   fireEvent,
   userEvent,
-} from 'web/utils/Testing';
+} from 'web/testing';
 
 const entities = [];
 const entitiesCounts = {filtered: 0, all: 0};

@@ -12,7 +12,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage from 'web/pages/tlscertificates/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tlscertificates';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, screen} from 'web/utils/Testing';
+import {rendererWith, screen} from 'web/testing';
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',

@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/tlscertificate';
 import Table from 'web/pages/tlscertificates/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

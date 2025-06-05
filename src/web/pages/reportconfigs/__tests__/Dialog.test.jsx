@@ -14,8 +14,10 @@ import {
   getSelectItemElementsForSelect,
   screen,
   within,
+  rendererWith,
+  fireEvent,
+  wait,
 } from 'web/testing';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const config = ReportConfig.fromElement(mockReportConfig);
 

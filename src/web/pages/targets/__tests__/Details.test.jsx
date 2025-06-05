@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Target from 'gmp/models/target';
 import Details from 'web/pages/targets/Details';
-import {rendererWith, screen} from 'web/utils/Testing';
+import {rendererWith, screen} from 'web/testing';
 
 const gmp = {
   settings: {

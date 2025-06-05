@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import SeverityClassLabel from 'web/components/label/SeverityClass';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 import Theme from 'web/utils/Theme';
 
 describe('SeverityClassLabel tests', () => {

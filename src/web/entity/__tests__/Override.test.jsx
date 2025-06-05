@@ -8,8 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Override from 'gmp/models/override';
 import OverrideBox from 'web/entity/Override';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {screen} from 'web/testing';
-import {rendererWith} from 'web/utils/Testing';
+import {screen, rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {createFeed} from 'gmp/commands/feedstatus';
 import Response from 'gmp/http/response';
 import FeedStatus from 'web/pages/extras/FeedStatusPage';
-import {rendererWith, screen, waitFor} from 'web/utils/Testing';
+import {rendererWith, screen, waitFor} from 'web/testing';
 
 testing.setSystemTime(new Date('2020-07-25T07:00:00Z'));
 

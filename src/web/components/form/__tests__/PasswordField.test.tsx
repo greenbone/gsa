@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import PasswordField from 'web/components/form/PasswordField';
-import {render, fireEvent, screen} from 'web/utils/Testing';
+import {render, fireEvent, screen} from 'web/testing';
 
 describe('PasswordField tests', () => {
   test('should render', () => {

@@ -10,8 +10,7 @@ import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import OperatingSystemsTab from 'web/pages/reports/details/OperatingSystemsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {screen} from 'web/testing';
-import {rendererWith} from 'web/utils/Testing';
+import {screen, rendererWith} from 'web/testing';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',

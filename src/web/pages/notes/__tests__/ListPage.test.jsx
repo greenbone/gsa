@@ -19,8 +19,10 @@ import {
   screen,
   testBulkTrashcanDialog,
   within,
+  rendererWith,
+  fireEvent,
+  wait,
 } from 'web/testing';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const note = Note.fromElement({
   _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
