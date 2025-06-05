@@ -3,17 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
-import {DialogFooterLayout} from 'web/components/dialog/Footer';
+import {DialogFooterLayout} from 'web/components/dialog/DialogFooter';
 import Button from 'web/components/form/Button';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
 const StyledLayout = styled(DialogFooterLayout)`
   justify-content: space-between;
 `;
+
+interface MultiStepFooterProps {
+  leftButtonTitle?: string;
+  nextButtonTitle?: string;
+  previousButtonTitle?: string;
+  rightButtonTitle?: string;
+  onLeftButtonClick?: () => void;
+  onNextButtonClick?: () => void;
+  onPreviousButtonClick?: () => void;
+  onRightButtonClick?: () => void;
+  prevDisabled?: boolean;
+  nextDisabled?: boolean;
+  loading?: boolean;
+}
 
 const MultiStepFooter = ({
   leftButtonTitle,
@@ -27,7 +39,7 @@ const MultiStepFooter = ({
   prevDisabled = false,
   nextDisabled = false,
   loading = false,
-}) => {
+}: MultiStepFooterProps) => {
   const [_] = useTranslation();
   leftButtonTitle = leftButtonTitle || _('Cancel');
   rightButtonTitle = rightButtonTitle || _('Save');
@@ -69,20 +81,6 @@ const MultiStepFooter = ({
       </Divider>
     </StyledLayout>
   );
-};
-
-MultiStepFooter.propTypes = {
-  leftButtonTitle: PropTypes.string,
-  loading: PropTypes.bool,
-  nextButtonTitle: PropTypes.string,
-  nextDisabled: PropTypes.bool,
-  prevDisabled: PropTypes.bool,
-  previousButtonTitle: PropTypes.string,
-  rightButtonTitle: PropTypes.string.isRequired,
-  onLeftButtonClick: PropTypes.func,
-  onNextButtonClick: PropTypes.func,
-  onPreviousButtonClick: PropTypes.func,
-  onRightButtonClick: PropTypes.func,
 };
 
 export default MultiStepFooter;
