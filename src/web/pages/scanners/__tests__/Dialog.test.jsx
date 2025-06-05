@@ -12,6 +12,7 @@ import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/Dialog';
 import {changeInputValue, screen} from 'web/testing';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
+import Capabilities from 'gmp/capabilities/capabilities';
 
 const sensorScanner = {
   _id: '1234',
@@ -44,6 +45,7 @@ const cred2 = Credential.fromElement({
 const credentials = [cred1, cred2];
 
 const gmp = {settings: {enableGreenboneSensor: true}};
+const capabilities = new Capabilities(['everything']);
 
 describe('ScannerDialog component tests', () => {
   test('should render', () => {
@@ -54,7 +56,7 @@ describe('ScannerDialog component tests', () => {
     const handleSave = testing.fn();
     const handleScannerTypeChange = testing.fn();
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities});
 
     render(
       <ScannerDialog
@@ -80,7 +82,7 @@ describe('ScannerDialog component tests', () => {
     const handleSave = testing.fn();
     const handleScannerTypeChange = testing.fn();
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities});
 
     render(
       <ScannerDialog
@@ -115,7 +117,7 @@ describe('ScannerDialog component tests', () => {
     const handleSave = testing.fn();
     const handleScannerTypeChange = testing.fn();
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities});
 
     render(
       <ScannerDialog
@@ -155,7 +157,7 @@ describe('ScannerDialog component tests', () => {
     const handleSave = testing.fn();
     const handleScannerTypeChange = testing.fn();
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities});
 
     render(
       <ScannerDialog
@@ -199,7 +201,7 @@ describe('ScannerDialog component tests', () => {
     const handleSave = testing.fn();
     const handleScannerTypeChange = testing.fn();
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities});
 
     render(
       <ScannerDialog
@@ -253,7 +255,7 @@ describe('ScannerDialog component tests', () => {
     const handleSave = testing.fn();
     const handleScannerTypeChange = testing.fn();
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities});
 
     render(
       <ScannerDialog
