@@ -5,15 +5,15 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent} from 'web/testing';
-import CloseButton from 'web/components/dialog/CloseButton';
+import DialogCloseButton from 'web/components/dialog/DialogCloseButton';
 import {
   ICON_SIZE_LARGE_PIXELS,
   ICON_SIZE_MEDIUM_PIXELS,
 } from 'web/hooks/useIconSize';
 
-describe('Dialog CloseButton tests', () => {
+describe('DialogCloseButton tests', () => {
   test('should render', () => {
-    const {element} = render(<CloseButton onClick={() => {}} />);
+    const {element} = render(<DialogCloseButton onClick={() => {}} />);
 
     expect(element).toHaveAttribute('title', 'Close');
     expect(element).toHaveStyleRule('height', ICON_SIZE_MEDIUM_PIXELS);
@@ -23,7 +23,7 @@ describe('Dialog CloseButton tests', () => {
   test('should call close handler', () => {
     const handler = testing.fn();
 
-    const {element} = render(<CloseButton onClick={handler} />);
+    const {element} = render(<DialogCloseButton onClick={handler} />);
 
     fireEvent.click(element);
 
@@ -31,7 +31,9 @@ describe('Dialog CloseButton tests', () => {
   });
 
   test('should render a large button', () => {
-    const {element} = render(<CloseButton size="large" onClick={() => {}} />);
+    const {element} = render(
+      <DialogCloseButton size="large" onClick={() => {}} />,
+    );
 
     expect(element).toHaveStyleRule('height', ICON_SIZE_LARGE_PIXELS);
     expect(element).toHaveStyleRule('width', ICON_SIZE_LARGE_PIXELS);
