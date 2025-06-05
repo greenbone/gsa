@@ -63,7 +63,6 @@ const ScannerComponent = ({
   const [scanner, setScanner] = useState(undefined);
   const [title, setTitle] = useState(undefined);
   const [type, setType] = useState(undefined);
-    
   const [whichCert, setWhichCert] = useState(undefined);
 
   const onInteraction = () => {
@@ -92,7 +91,6 @@ const ScannerComponent = ({
             name: shorten(scanner.name),
           });
 
-          console.info ("CERT:", scanner.ca_pub, ":CERT", "TYPE", scanner.scannerType);
           setCaPub(
             isDefined(scanner.ca_pub) ? scanner.ca_pub.certificate : undefined,
           );
@@ -237,7 +235,6 @@ const ScannerComponent = ({
   };
 
   const handleScannerTypeChange = (value, name) => {
-    console.info ("NAME:", name);
     if (name === 'type') {
       setWhichCert('default');
       setType(value);

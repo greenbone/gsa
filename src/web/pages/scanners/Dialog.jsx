@@ -23,8 +23,10 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
-const AVAILABLE_SCANNER_TYPES = [AGENT_CONTROLLER_SCANNER_TYPE,
-                                 GREENBONE_SENSOR_SCANNER_TYPE];
+const AVAILABLE_SCANNER_TYPES = [
+  AGENT_CONTROLLER_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+];
 
 const ScannerDialog = ({
   ca_pub,
@@ -74,7 +76,7 @@ const ScannerDialog = ({
 
   let SCANNER_TYPES = [];
 
-  if (capabilities.featureEnabled("AGENT_CONTROLLER")) {
+  if (capabilities.featureEnabled('AGENT_CONTROLLER')) {
     type = hasValue(type) ? type : AGENT_CONTROLLER_SCANNER_TYPE;
     SCANNER_TYPES.push(AGENT_CONTROLLER_SCANNER_TYPE);
   }
@@ -82,8 +84,10 @@ const ScannerDialog = ({
     type = hasValue(type) ? type : GREENBONE_SENSOR_SCANNER_TYPE;
     SCANNER_TYPES.push(GREENBONE_SENSOR_SCANNER_TYPE);
   }
-  if (!capabilities.featureEnabled("AGENT_CONTROLLER") &&
-      !gmp.settings.enableGreenboneSensor) {
+  if (
+    !capabilities.featureEnabled('AGENT_CONTROLLER') &&
+    !gmp.settings.enableGreenboneSensor
+  ) {
     type = hasValue(type) ? type : undefined;
     SCANNER_TYPES = [];
   }
@@ -158,7 +162,11 @@ const ScannerDialog = ({
 
             {isAgentControllerScannerType && (
               <FormGroup title={_('Certificate')}>
-                <FileField name="ca_pub" value={state.caPub} onChange={onScannerCaPubChange}/>
+                <FileField
+                  name="ca_pub"
+                  value={state.caPub}
+                  onChange={onScannerCaPubChange}
+                />
               </FormGroup>
             )}
 
