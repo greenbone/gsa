@@ -14,8 +14,13 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {testBulkTrashcanDialog} from 'web/testing';
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
+import {
+  testBulkTrashcanDialog,
+  rendererWith,
+  fireEvent,
+  screen,
+  wait,
+} from 'web/testing';
 
 const policy = Policy.fromElement({
   _id: '12345',

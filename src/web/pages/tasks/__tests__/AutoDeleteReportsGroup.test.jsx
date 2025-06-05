@@ -10,8 +10,7 @@ import {
   AUTO_DELETE_NO,
 } from 'gmp/models/task';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
-import {changeInputValue, screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {changeInputValue, screen, render, fireEvent} from 'web/testing';
 
 describe('AutoDeleteReportsGroup tests', () => {
   test('should render dialog group', () => {

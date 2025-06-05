@@ -8,8 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
 import NoteBox from 'web/entity/Note';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {screen} from 'web/testing';
-import {rendererWith} from 'web/utils/Testing';
+import {screen, rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

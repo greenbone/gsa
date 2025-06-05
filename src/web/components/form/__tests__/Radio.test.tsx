@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Radio from 'web/components/form/Radio';
-import {render, fireEvent, screen} from 'web/utils/Testing';
+import {render, fireEvent, screen} from 'web/testing';
 
 describe('Radio tests', () => {
   test('should render radio', () => {

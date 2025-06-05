@@ -8,8 +8,7 @@ import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import StartPage from 'web/pages/start/Page';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {within} from 'web/testing';
-import {rendererWith, wait, screen} from 'web/utils/Testing';
+import {within, rendererWith, wait, screen} from 'web/testing';
 
 const manualUrl = 'test/';
 

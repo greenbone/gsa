@@ -7,8 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import ReportConfig from 'gmp/models/reportconfig';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import ReportFormatComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
-import {getSelectItemElementsForSelect, screen, within} from 'web/testing';
-import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
+import {
+  getSelectItemElementsForSelect,
+  screen,
+  within,
+  fireEvent,
+  rendererWith,
+  wait,
+} from 'web/testing';
 
 describe('Report Config Component tests', () => {
   const mockReportConfig = ReportConfig.fromElement({

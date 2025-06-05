@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import TabPanels from 'web/components/tab/TabPanels';
-import {render, screen} from 'web/utils/Testing';
+import {render, screen} from 'web/testing';
 
 describe('TabPanels', () => {
   test('should render the active tab panel', () => {

@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Button from 'web/components/panel/Button';
-import {render, fireEvent} from 'web/utils/Testing';
+import {render, fireEvent} from 'web/testing';
 
 describe('InfoPanel button tests', () => {
   test('should render', () => {

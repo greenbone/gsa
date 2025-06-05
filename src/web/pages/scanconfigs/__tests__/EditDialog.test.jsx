@@ -11,8 +11,14 @@ import {
 import EditScanConfigDialog, {
   handleSearchChange,
 } from 'web/pages/scanconfigs/EditDialog';
-import {changeInputValue, screen, within} from 'web/testing';
-import {rendererWith, fireEvent, waitFor} from 'web/utils/Testing';
+import {
+  changeInputValue,
+  screen,
+  within,
+  rendererWith,
+  fireEvent,
+  waitFor,
+} from 'web/testing';
 
 const families = [
   {

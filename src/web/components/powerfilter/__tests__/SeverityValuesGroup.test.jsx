@@ -6,8 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
-import {openSelectElement, screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {openSelectElement, screen, render, fireEvent} from 'web/testing';
 
 const getTitle = () => {
   return document.body.querySelector('.mantine-Text-root');

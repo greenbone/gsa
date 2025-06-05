@@ -8,8 +8,7 @@ import date from 'gmp/models/date';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/EditNvtDetailsDialog';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {changeInputValue, screen} from 'web/testing';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 
 const preferences = [
   {name: 'pref 1', value: 'no', id: '1', type: 'checkbox'},

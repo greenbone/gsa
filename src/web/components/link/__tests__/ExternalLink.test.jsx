@@ -5,8 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import ExternalLink from 'web/components/link/ExternalLink';
-import {screen, within} from 'web/testing';
-import {fireEvent, rendererWith} from 'web/utils/Testing';
+import {screen, within, fireEvent, rendererWith} from 'web/testing';
 
 describe('ExternalLink tests', () => {
   test('should render ExternalLink', () => {

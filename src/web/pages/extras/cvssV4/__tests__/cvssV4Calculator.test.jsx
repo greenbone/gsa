@@ -6,8 +6,7 @@
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
-import {screen} from 'web/testing';
-import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
+import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 
 const gmp = {
   user: {

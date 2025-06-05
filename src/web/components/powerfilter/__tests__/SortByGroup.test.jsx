@@ -6,8 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
-import {openSelectElement, screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {openSelectElement, screen, render, fireEvent} from 'web/testing';
 
 describe('SortByGroup tests', () => {
   test('should render', () => {

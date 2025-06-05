@@ -7,8 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {KeyCode} from 'gmp/utils/event';
 import {isFunction} from 'gmp/utils/identity';
 import Dialog from 'web/components/dialog/Dialog';
-import {screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {screen, render, fireEvent} from 'web/testing';
 
 describe('Dialog component tests', () => {
   test('should render a Dialog', () => {

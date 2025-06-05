@@ -15,7 +15,7 @@ import Date from 'gmp/models/date';
 import DateTime from 'web/components/date/DateTime';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith} from 'web/testing';
 
 const getSetting = testing.fn().mockResolvedValue({});
 

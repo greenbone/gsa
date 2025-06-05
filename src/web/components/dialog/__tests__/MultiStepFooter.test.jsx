@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import MultiStepFooter from 'web/components/dialog/MultiStepFooter';
-import {render, fireEvent, screen} from 'web/utils/Testing';
+import {render, fireEvent, screen} from 'web/testing';
 
 const getRightButton = () => screen.getByTestId('dialog-save-button');
 const getLeftButton = () => screen.getByTestId('dialog-close-button');

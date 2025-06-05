@@ -11,7 +11,7 @@ import Schedule from 'gmp/models/schedule';
 import Details from 'web/pages/audits/Details';
 import {entityLoadingActions as policyActions} from 'web/store/entities/policies';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
-import {rendererWith, screen} from 'web/utils/Testing';
+import {rendererWith, screen} from 'web/testing';
 
 const policy = Policy.fromElement({
   _id: '314',

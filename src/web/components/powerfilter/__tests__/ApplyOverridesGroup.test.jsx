@@ -6,8 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import ApplyOverridesGroup from 'web/components/powerfilter/ApplyOverridesGroup';
-import {screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {screen, render, fireEvent} from 'web/testing';
 
 describe('ApplyOverridesGroup tests', () => {
   test('should render', () => {

@@ -11,8 +11,7 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 import Details from 'web/pages/tasks/Details';
 import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
-import {screen} from 'web/testing';
-import {rendererWith} from 'web/utils/Testing';
+import {screen, rendererWith} from 'web/testing';
 
 const config = ScanConfig.fromElement({
   _id: '314',

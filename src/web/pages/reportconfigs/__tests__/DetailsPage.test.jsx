@@ -13,7 +13,7 @@ import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConf
 import DetailsPage from 'web/pages/reportconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/reportconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWith, fireEvent} from 'web/testing';
 
 const entityType = 'reportconfig';
 const reloadInterval = 1;

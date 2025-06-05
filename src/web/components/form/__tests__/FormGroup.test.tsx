@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import FormGroup from 'web/components/form/FormGroup';
-import {render, screen} from 'web/utils/Testing';
+import {render, screen} from 'web/testing';
 
 describe('FormGroup tests', () => {
   test('should render', () => {

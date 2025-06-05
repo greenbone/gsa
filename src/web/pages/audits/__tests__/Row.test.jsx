@@ -9,7 +9,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Row from 'web/pages/audits/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {screen, rendererWithTable, fireEvent} from 'web/utils/Testing';
+import {screen, rendererWithTable, fireEvent} from 'web/testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

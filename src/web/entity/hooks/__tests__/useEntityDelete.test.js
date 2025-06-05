@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
-import {rendererWith, wait} from 'web/utils/Testing';
+import {rendererWith, wait} from 'web/testing';
 
 describe('useEntityDelete', () => {
   test('should allow to delete an entity', async () => {

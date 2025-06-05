@@ -10,7 +10,7 @@ import {
   setUsername,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
-import {rendererWith, screen, userEvent, waitFor} from 'web/utils/Testing';
+import {rendererWith, screen, userEvent, waitFor} from 'web/testing';
 
 const gmp = {
   settings: {

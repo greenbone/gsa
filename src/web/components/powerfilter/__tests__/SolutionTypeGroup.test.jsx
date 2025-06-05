@@ -6,8 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import SolutionTypesFilterGroup from 'web/components/powerfilter/SolutionTypeGroup';
-import {screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {screen, render, fireEvent} from 'web/testing';
 
 describe('SolutionTypesFilterGroup tests', () => {
   test('should render', () => {

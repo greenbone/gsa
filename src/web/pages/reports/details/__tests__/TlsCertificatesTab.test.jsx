@@ -8,7 +8,7 @@ import Filter from 'gmp/models/filter';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import TLSCertificatesTab from 'web/pages/reports/details/TlsCertificatesTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWith, fireEvent} from 'web/testing';
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity',

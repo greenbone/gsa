@@ -8,8 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Model from 'gmp/model';
 import {YES_VALUE} from 'gmp/parser';
 import EntityLink from 'web/entity/Link';
-import {screen} from 'web/testing';
-import {rendererWith} from 'web/utils/Testing';
+import {screen, rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);

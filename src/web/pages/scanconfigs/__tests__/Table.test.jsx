@@ -12,7 +12,7 @@ import ScanConfig, {
 } from 'gmp/models/scanconfig';
 import Table from 'web/pages/scanconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const config = ScanConfig.fromElement({
   _id: '12345',
