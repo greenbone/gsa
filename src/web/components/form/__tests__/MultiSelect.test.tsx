@@ -5,8 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import MultiSelect from 'web/components/form/MultiSelect';
-import {screen, within} from 'web/testing';
-import {fireEvent, render, userEvent} from 'web/utils/Testing';
+import {screen, within, fireEvent, render, userEvent} from 'web/testing';
 
 describe('MultiSelect tests', () => {
   test('should render', () => {

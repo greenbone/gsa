@@ -13,8 +13,7 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {screen, within} from 'web/testing';
-import {rendererWith, wait} from 'web/utils/Testing';
+import {screen, within, rendererWith, wait} from 'web/testing';
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',

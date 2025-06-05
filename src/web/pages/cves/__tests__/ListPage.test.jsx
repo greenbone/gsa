@@ -15,8 +15,14 @@ import {entitiesLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {getSelectItemElementsForSelect, screen, within} from 'web/testing';
-import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
+import {
+  getSelectItemElementsForSelect,
+  screen,
+  within,
+  fireEvent,
+  rendererWith,
+  wait,
+} from 'web/testing';
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',

@@ -11,7 +11,7 @@ import {
   SEVERITY_RATING_CVSS_3,
 } from 'gmp/utils/severity';
 import SeverityLevelsFilterGroup from 'web/components/powerfilter/SeverityLevelsGroup';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 describe('SeverityLevelsFilterGroup tests', () => {
   test('should render', () => {

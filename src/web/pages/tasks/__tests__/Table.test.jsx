@@ -10,7 +10,7 @@ import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Table from 'web/pages/tasks/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
-import {rendererWith, screen, wait} from 'web/utils/Testing';
+import {rendererWith, screen, wait} from 'web/testing';
 
 const TestComponent = () => {
   const capabilities = useLoadCapabilities();

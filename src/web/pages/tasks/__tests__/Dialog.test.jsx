@@ -13,11 +13,13 @@ import {
 } from 'gmp/models/scanner';
 import TaskDialog from 'web/pages/tasks/Dialog';
 import {
-  changeInputValue,
+  rendererWith,
+  fireEvent,
   getSelectItemElementsForSelect,
+  changeInputValue,
+  wait,
   screen,
 } from 'web/testing';
-import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 describe('TaskDialog component tests', () => {
   const gmp = {settings: {}};

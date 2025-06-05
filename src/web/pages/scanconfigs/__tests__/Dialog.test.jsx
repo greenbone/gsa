@@ -5,8 +5,14 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import CreateScanConfigDialog from 'web/pages/scanconfigs/Dialog';
-import {changeInputValue, closeDialog, screen, within} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {
+  changeInputValue,
+  closeDialog,
+  screen,
+  within,
+  render,
+  fireEvent,
+} from 'web/testing';
 
 describe('CreateScanConfigDialog component tests', () => {
   test('should render dialog with base config as default', () => {

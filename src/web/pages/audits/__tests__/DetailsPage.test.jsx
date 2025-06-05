@@ -14,7 +14,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage, {ToolBarIcons} from 'web/pages/audits/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const policy = Policy.fromElement({
   _id: '314',

@@ -5,8 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import LoginForm from 'web/pages/login/LoginForm';
-import {changeInputValue, screen} from 'web/testing';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 
 const gmp = {settings: {}};
 

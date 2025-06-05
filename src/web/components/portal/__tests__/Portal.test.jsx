@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Portal from 'web/components/portal/Portal';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 describe('Portal component tests', () => {
   test('should render portal', () => {

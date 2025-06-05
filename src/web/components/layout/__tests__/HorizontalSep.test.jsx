@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 describe('HorizontalSep tests', () => {
   test('should render', () => {

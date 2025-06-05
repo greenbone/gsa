@@ -14,8 +14,14 @@ import {entitiesLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {getSelectItemElementsForSelect, screen, within} from 'web/testing';
-import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
+import {
+  getSelectItemElementsForSelect,
+  screen,
+  within,
+  fireEvent,
+  rendererWith,
+  wait,
+} from 'web/testing';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',

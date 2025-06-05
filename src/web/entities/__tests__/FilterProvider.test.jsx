@@ -10,7 +10,7 @@ import FilterProvider from 'web/entities/FilterProvider';
 import {pageFilter} from 'web/store/pages/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, screen} from 'web/utils/Testing';
+import {rendererWith, screen} from 'web/testing';
 
 let mockSearchParams = {};
 const mockUseNavigate = vi.fn();

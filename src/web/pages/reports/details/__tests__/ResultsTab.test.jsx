@@ -14,7 +14,7 @@ import {entitiesLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, wait} from 'web/utils/Testing';
+import {rendererWith, wait} from 'web/testing';
 
 const reloadInterval = 1;
 const manualUrl = 'test/';

@@ -6,8 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {DownloadFunc} from 'web/components/form/useDownload';
 import withDownload from 'web/components/form/withDownload';
-import {screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {screen, render, fireEvent} from 'web/testing';
 
 interface TestComponentProps {
   onDownload?: DownloadFunc;

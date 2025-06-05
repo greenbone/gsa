@@ -6,8 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Task from 'gmp/models/task';
 import ContainerDialog from 'web/pages/tasks/ContainerDialog';
-import {changeInputValue, screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {changeInputValue, screen, render, fireEvent} from 'web/testing';
 
 describe('ContainerTaskDialog tests', () => {
   test('should render create dialog', () => {

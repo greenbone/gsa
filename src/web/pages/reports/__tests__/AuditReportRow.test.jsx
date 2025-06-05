@@ -8,7 +8,7 @@ import React from 'react';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import AuditRow from 'web/pages/reports/AuditReportRow';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {rendererWithTable, screen} from 'web/utils/Testing';
+import {rendererWithTable, screen} from 'web/testing';
 
 describe('Audit report row', () => {
   test('should render row for Audit report', () => {

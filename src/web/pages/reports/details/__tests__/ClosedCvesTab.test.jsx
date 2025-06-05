@@ -10,8 +10,7 @@ import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import ClosedCvesTab from 'web/pages/reports/details/ClosedCvesTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {screen} from 'web/testing';
-import {rendererWith} from 'web/utils/Testing';
+import {screen, rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 const filter = Filter.fromString(

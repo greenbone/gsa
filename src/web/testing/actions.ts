@@ -11,7 +11,7 @@ import {
   getSelectElement,
   getSelectItemElements,
 } from 'web/testing/customQueries';
-import {userEvent, fireEvent} from 'web/utils/Testing';
+import {userEvent, fireEvent} from 'web/testing/event';
 
 /**
  * Retrieves the selectable item elements for a given select element.

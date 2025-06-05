@@ -9,12 +9,13 @@ import Schedule from 'gmp/models/schedule';
 import timezones from 'gmp/timezones';
 import ScheduleDialog from 'web/pages/schedules/Dialog';
 import {
-  changeInputValue,
-  closeDialog,
-  getSelectItemElementsForSelect,
+  fireEvent,
   screen,
+  changeInputValue,
+  getSelectItemElementsForSelect,
+  render,
+  closeDialog,
 } from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
 
 const checkElementVisibilityAndContent = (
   labelText,

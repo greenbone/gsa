@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import withLayout from 'web/components/layout/withLayout';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 const MyComp = props => <div {...props} />;
 

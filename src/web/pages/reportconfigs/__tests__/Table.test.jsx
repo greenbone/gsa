@@ -9,7 +9,7 @@ import Filter from 'gmp/models/filter';
 import ReportConfig from 'gmp/models/reportconfig';
 import Table from 'web/pages/reportconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const config = ReportConfig.fromElement({
   _id: '12345',

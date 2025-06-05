@@ -14,7 +14,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage, {ToolBarIcons} from 'web/pages/tasks/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const config = ScanConfig.fromElement({
   _id: '314',

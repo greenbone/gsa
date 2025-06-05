@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import CertLink from 'web/components/link/CertLink';
-import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 
 describe('CertLink tests', () => {
   test('should render CertLink', () => {

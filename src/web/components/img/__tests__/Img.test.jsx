@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Img from 'web/components/img/Img';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 describe('Img tests', () => {
   test('should render', () => {

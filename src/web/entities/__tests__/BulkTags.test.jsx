@@ -10,9 +10,8 @@ import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import BulkTags from 'web/entities/BulkTags';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
-import {screen, within} from 'web/testing';
+import {screen, within, rendererWith, fireEvent, wait} from 'web/testing';
 import SelectionType from 'web/utils/SelectionType';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 describe('BulkTags', () => {
   test('should render the BulkTags component', () => {

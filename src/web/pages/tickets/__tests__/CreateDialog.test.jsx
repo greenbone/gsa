@@ -10,8 +10,9 @@ import {
   changeInputValue,
   getSelectItemElementsForSelect,
   screen,
+  render,
+  fireEvent,
 } from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
 
 const u1 = User.fromElement({
   _id: 'u1',
