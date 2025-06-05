@@ -16,7 +16,7 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import SaveDialog from 'web/components/dialog/SaveDialog';
-import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
+import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import PasswordField from 'web/components/form/PasswordField';
