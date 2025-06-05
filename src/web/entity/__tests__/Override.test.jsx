@@ -8,6 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Override from 'gmp/models/override';
 import OverrideBox from 'web/entity/Override';
 import {setTimezone} from 'web/store/usersettings/actions';
+import {screen} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const caps = new Capabilities(['everything']);
@@ -31,11 +32,11 @@ describe('OverrideBox component tests', () => {
 
     store.dispatch(setTimezone('CET'));
 
-    const {element, getByTestId} = render(
+    const {element} = render(
       <OverrideBox detailsLink={true} override={override} />,
     );
 
-    const link = getByTestId('details-link');
+    const link = screen.getByTestId('details-link');
     const header = element.querySelector('h3');
 
     expect(header).toHaveTextContent(

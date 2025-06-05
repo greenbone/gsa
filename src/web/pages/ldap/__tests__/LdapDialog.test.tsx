@@ -4,12 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-} from 'web/components/testing';
 import LdapDialog from 'web/pages/ldap/LdapDialog';
+import {changeInputValue, screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('Ldap dialog component tests', () => {
@@ -28,7 +24,7 @@ describe('Ldap dialog component tests', () => {
       />,
     );
 
-    const dialog = getDialog();
+    const dialog = screen.getDialog();
     expect(dialog).toBeInTheDocument();
   });
 
@@ -47,8 +43,7 @@ describe('Ldap dialog component tests', () => {
       />,
     );
 
-    // @ts-expect-error
-    const button = getDialogSaveButton();
+    const button = screen.getDialogSaveButton();
     fireEvent.click(button);
     expect(handleSave).toHaveBeenCalledWith({
       authdn: 'foo',
@@ -72,7 +67,7 @@ describe('Ldap dialog component tests', () => {
       />,
     );
 
-    const closeButton = getDialogCloseButton();
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });
@@ -81,7 +76,7 @@ describe('Ldap dialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <LdapDialog
         authdn="foo"
         ldapEnabled={true}
@@ -92,20 +87,19 @@ describe('Ldap dialog component tests', () => {
       />,
     );
 
-    const checkBox = getByTestId('enable-checkbox');
+    const checkBox = screen.getByTestId('enable-checkbox');
     fireEvent.click(checkBox);
 
-    const authdnTextField = getByTestId('authdn-textfield');
-    fireEvent.change(authdnTextField, {target: {value: 'lorem'}});
+    const authdnTextField = screen.getByTestId('authdn-textfield');
+    changeInputValue(authdnTextField, 'lorem');
 
-    const ldapHostTextField = getByTestId('ldaphost-textfield');
-    fireEvent.change(ldapHostTextField, {target: {value: 'ipsum'}});
+    const ldapHostTextField = screen.getByTestId('ldaphost-textfield');
+    changeInputValue(ldapHostTextField, 'ipsum');
 
-    const ldapsOnlyCheck = getByTestId('ldapsOnly-checkbox');
+    const ldapsOnlyCheck = screen.getByTestId('ldapsOnly-checkbox');
     fireEvent.click(ldapsOnlyCheck);
 
-    // @ts-expect-error
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({

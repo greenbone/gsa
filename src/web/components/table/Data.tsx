@@ -5,17 +5,15 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Layout from 'web/components/layout/Layout';
-import {LayoutProps} from 'web/components/layout/withLayout';
+import Layout, {LayoutProps} from 'web/components/layout/Layout';
 
 interface TableDataProps extends LayoutProps {
-  children?: React.ReactNode;
   className?: string;
   colSpan?: number;
   rowSpan?: number;
 }
 
-const TableData: React.FC<TableDataProps> = ({
+const TableData = ({
   children,
   className,
   colSpan,

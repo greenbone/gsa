@@ -31,7 +31,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import AlertComponent from 'web/pages/alerts/Component';
+import AlertComponent from 'web/pages/alerts/AlertComponent';
 import AlertDetails from 'web/pages/alerts/Details';
 import {selector, loadEntity} from 'web/store/entities/alerts';
 import {

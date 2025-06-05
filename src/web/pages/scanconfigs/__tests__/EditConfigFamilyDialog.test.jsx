@@ -6,14 +6,9 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Nvt from 'gmp/models/nvt';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
-import {
-  getDialog,
-  getDialogSaveButton,
-  queryTableBody,
-  queryTableHeader,
-} from 'web/components/testing';
 import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
-import {rendererWith, fireEvent, within, screen} from 'web/utils/Testing';
+import {screen, within} from 'web/testing';
+import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 const nvt = Nvt.fromElement({
   _oid: '1234',
@@ -132,7 +127,7 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -218,7 +213,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, gmp});
-    const {getAllByTestId} = render(
+    render(
       <EditConfigFamilyDialog
         configId="c1"
         configName="foo"
@@ -234,7 +229,7 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    const editButtons = getAllByTestId('edit-icon');
+    const editButtons = screen.getAllByTestId('edit-icon');
     fireEvent.click(editButtons[0]);
 
     expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith(nvt.id);
@@ -279,9 +274,9 @@ describe('EditConfigFamilyDialog component tests', () => {
 
       const getOidColumn = row => row.querySelectorAll('td')[1];
 
-      const dialog = getDialog();
-      const tableHeader = queryTableHeader(dialog);
-      const tableBody = queryTableBody(dialog);
+      const dialog = within(screen.getDialog());
+      const tableHeader = dialog.queryTableHeader();
+      const tableBody = dialog.queryTableBody();
       let rows = tableBody.querySelectorAll('tr');
       const columns = within(tableHeader).getAllByRole('columnheader');
       expect(columns).toHaveLength(7);
@@ -307,7 +302,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, gmp});
-    const {getAllByRole} = render(
+    render(
       <EditConfigFamilyDialog
         configId="c1"
         configName="foo"
@@ -323,7 +318,7 @@ describe('EditConfigFamilyDialog component tests', () => {
       />,
     );
 
-    const checkboxes = getAllByRole('checkbox');
+    const checkboxes = screen.getAllByRole('checkbox');
 
     expect(checkboxes[0].checked).toBe(false);
 

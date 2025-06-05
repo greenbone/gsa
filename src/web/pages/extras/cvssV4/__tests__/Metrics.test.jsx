@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Metrics from 'web/pages/extras/cvssV4/Metrics';
+import {screen} from 'web/testing';
 import {render} from 'web/utils/Testing';
 
 describe('Metrics', () => {
@@ -22,7 +23,7 @@ describe('Metrics', () => {
     const selectedOptions = {metric1: 'option1', metric2: 'option2'};
     const handleOptionChange = testing.fn();
 
-    const {getAllByTestId} = render(
+    render(
       <Metrics
         handleOptionChange={handleOptionChange}
         metrics={metrics}
@@ -30,7 +31,7 @@ describe('Metrics', () => {
       />,
     );
 
-    const selects = getAllByTestId('form-select');
+    const selects = screen.queryAllSelectElements();
     expect(selects).toHaveLength(Object.keys(metrics).length);
   });
 });

@@ -6,7 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import TrashcanPage from 'web/pages/extras/TrashCanPage';
-import {userEvent, rendererWith, waitFor} from 'web/utils/Testing';
+import {screen} from 'web/testing';
+import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/Testing';
 
 /*
  * The following is a workaround for userEvent v14 and fake timers https://github.com/testing-library/react-testing-library/issues/1197
@@ -39,7 +40,7 @@ const gmp = {
 
 const capabilities = new Capabilities(['everything']);
 
-describe('Trashcan page tests', () => {
+describe('TrashCan page tests', () => {
   test('Should render with empty trashcan button and empty out trash', async () => {
     const {render} = rendererWith({
       gmp,
@@ -47,31 +48,26 @@ describe('Trashcan page tests', () => {
       store: true,
     });
 
-    const {getByText, queryByTestId, getByRole} = render(<TrashcanPage />);
-    expect(queryByTestId('loading')).toBeVisible();
-    await waitFor(() => {
-      expect(queryByTestId('loading')).not.toBeInTheDocument();
-    });
-    const emptyTrashcanButton = getByRole('button', {
+    render(<TrashcanPage />);
+
+    expect(screen.queryByTestId('loading')).toBeVisible();
+    await wait();
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    const emptyTrashcanButton = screen.getByRole('button', {
       name: /Empty Trash/i,
     });
 
-    userEvent.click(emptyTrashcanButton);
-    await waitFor(() => {
-      expect(
-        getByText('Are you sure you want to empty the trash?'),
-      ).toBeVisible();
-    });
+    fireEvent.click(emptyTrashcanButton);
+    await wait();
+    expect(
+      screen.getByText('Are you sure you want to empty the trash?'),
+    ).toBeVisible();
 
-    const confirmButton = getByRole('button', {name: /Confirm/i});
+    const confirmButton = screen.getByRole('button', {name: /Confirm/i});
+    fireEvent.click(confirmButton);
+    expect(gmp.trashcan.empty).toHaveBeenCalled();
 
-    await userEvent.click(confirmButton);
-
-    await waitFor(() => {
-      expect(gmp.trashcan.empty).toHaveBeenCalled();
-    });
-
-    testing.advanceTimersByTime(1000);
+    await wait();
 
     await waitFor(() => {
       expect(confirmButton).not.toBeVisible();
@@ -94,30 +90,27 @@ describe('Trashcan page tests', () => {
       store: true,
     });
 
-    const {getByText, queryByTestId, getByRole} = render(<TrashcanPage />);
-    expect(queryByTestId('loading')).toBeVisible();
-    await waitFor(() => {
-      expect(queryByTestId('loading')).not.toBeInTheDocument();
-    });
-    const emptyTrashcanButton = getByRole('button', {
+    render(<TrashcanPage />);
+    expect(screen.queryByTestId('loading')).toBeVisible();
+
+    await wait();
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    const emptyTrashcanButton = screen.getByRole('button', {
       name: /Empty Trash/i,
     });
 
-    userEvent.click(emptyTrashcanButton);
-    await waitFor(() => {
-      expect(
-        getByText('Are you sure you want to empty the trash?'),
-      ).toBeVisible();
-    });
-
-    const confirmButton = getByRole('button', {name: /Confirm/i});
-
-    await userEvent.click(confirmButton);
-
-    expect(errorGmp.trashcan.empty).toHaveBeenCalled();
-
+    fireEvent.click(emptyTrashcanButton);
+    await wait();
     expect(
-      getByText(
+      screen.getByText('Are you sure you want to empty the trash?'),
+    ).toBeVisible();
+
+    const confirmButton = screen.getByRole('button', {name: /Confirm/i});
+    fireEvent.click(confirmButton);
+    expect(errorGmp.trashcan.empty).toHaveBeenCalled();
+    await wait();
+    expect(
+      screen.getByText(
         'An error occurred while emptying the trash, please try again.',
       ),
     ).toBeVisible();
@@ -130,25 +123,21 @@ describe('Trashcan page tests', () => {
       store: true,
     });
 
-    const {getByText, queryByTestId, getByRole} = render(<TrashcanPage />);
-    expect(queryByTestId('loading')).toBeVisible();
-    await waitFor(() => {
-      expect(queryByTestId('loading')).not.toBeInTheDocument();
-    });
-    const emptyTrashcanButton = getByRole('button', {
+    render(<TrashcanPage />);
+    expect(screen.queryByTestId('loading')).toBeVisible();
+    await wait();
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    const emptyTrashcanButton = screen.getByRole('button', {
       name: /Empty Trash/i,
     });
 
-    await userEvent.click(emptyTrashcanButton);
-
+    fireEvent.click(emptyTrashcanButton);
     expect(
-      getByText('Are you sure you want to empty the trash?'),
+      screen.getByText('Are you sure you want to empty the trash?'),
     ).toBeVisible();
 
-    const cancelButton = getByRole('button', {name: /Cancel/i});
-
-    await userEvent.click(cancelButton);
-
+    const cancelButton = screen.getByRole('button', {name: /Cancel/i});
+    fireEvent.click(cancelButton);
     expect(cancelButton).not.toBeVisible();
   });
 });

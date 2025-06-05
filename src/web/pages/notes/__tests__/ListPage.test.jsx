@@ -8,24 +8,19 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
-import {
-  clickElement,
-  queryCheckBoxes,
-  queryPowerFilter,
-  getSelectElement,
-  getSelectItemElementsForSelect,
-  queryTableBody,
-  queryTableFooter,
-  queryTextInputs,
-  testBulkTrashcanDialog,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import NotesPage, {ToolBarIcons} from 'web/pages/notes/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/notes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
+import {
+  getSelectItemElementsForSelect,
+  screen,
+  testBulkTrashcanDialog,
+  within,
+} from 'web/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const note = Note.fromElement({
   _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
@@ -150,9 +145,9 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const select = powerFilter.getSelectElement();
+    const inputs = powerFilter.queryTextInputs();
     const display = screen.getAllByTestId('grid-item');
 
     // Toolbar Icons
@@ -269,14 +264,14 @@ describe('NotesPage tests', () => {
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle(
       'Move page contents to trashcan',
     )[0];
-    await clickElement(deleteIcon);
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
 
@@ -342,25 +337,25 @@ describe('NotesPage tests', () => {
     await wait();
 
     // change to apply to selection
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
     expect(select).toHaveValue('Apply to selection');
 
     // select a note
-    const tableBody = queryTableBody();
-    const inputs = queryCheckBoxes(tableBody);
-    await clickElement(inputs[1]);
+    const tableBody = within(screen.queryTableBody());
+    const inputs = tableBody.queryCheckBoxes();
+    fireEvent.click(inputs[0]);
 
     // export selected note
     const exportIcon = screen.getAllByTitle('Export selection')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected note to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
-    await clickElement(deleteIcon);
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByIds);
   });
 
@@ -425,20 +420,20 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    const tableFooter = queryTableFooter();
-    const select = getSelectElement(tableFooter);
+    const tableFooter = within(screen.queryTableFooter());
+    const select = tableFooter.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
-    await clickElement(selectItems[2]);
+    fireEvent.click(selectItems[2]);
     expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered notes
     const exportIcon = screen.getAllByTitle('Export all filtered')[0];
-    await clickElement(exportIcon);
+    fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered notes to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
-    await clickElement(deleteIcon);
+    fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
   });
 });

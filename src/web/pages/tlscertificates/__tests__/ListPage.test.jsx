@@ -7,18 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import TlsCertificate from 'gmp/models/task';
-import {
-  queryPowerFilter,
-  getSelectElement,
-  queryTextInputs,
-} from 'web/components/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import TlsCertificatePage from 'web/pages/tlscertificates/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, screen, wait} from 'web/utils/Testing';
+import {screen, within} from 'web/testing';
+import {rendererWith, wait} from 'web/utils/Testing';
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -114,12 +110,12 @@ describe('TlsCertificatePage tests', () => {
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success(
         'tlscertificate',
-        defaultSettingfilter,
+        defaultSettingFilter,
       ),
     );
 
@@ -148,9 +144,9 @@ describe('TlsCertificatePage tests', () => {
     const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const select = powerFilter.getSelectElement();
+    const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icon
     expect(screen.getByTestId('help-icon')).toHaveAttribute(

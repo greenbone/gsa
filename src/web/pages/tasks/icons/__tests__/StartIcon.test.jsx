@@ -9,6 +9,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Event from 'gmp/models/event';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import StartIcon from 'web/pages/tasks/icons/StartIcon';
+import {screen} from 'web/testing';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 describe('Task StartIcon component tests', () => {
@@ -189,11 +190,11 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {queryByTestId} = render(<StartIcon task={task} />);
+    render(<StartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
-    expect(queryByTestId('start-icon')).toEqual(null);
+    expect(screen.queryByTestId('start-icon')).toEqual(null);
   });
 
   test('should not be rendered if task is a container', () => {
@@ -205,10 +206,10 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {queryByTestId} = render(<StartIcon task={task} />);
+    render(<StartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
-    expect(queryByTestId('start-icon')).toEqual(null);
+    expect(screen.queryByTestId('start-icon')).toEqual(null);
   });
 });

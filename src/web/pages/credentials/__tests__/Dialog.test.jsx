@@ -5,19 +5,15 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import Credential, {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
+import CredentialsDialog from 'web/pages/credentials/Dialog';
 import {
   changeInputValue,
-  clickElement,
   closeDialog,
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-  queryDialogTitle,
-  getSelectElement,
   getSelectItemElementsForSelect,
-} from 'web/components/testing';
-import CredentialsDialog from 'web/pages/credentials/Dialog';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+  screen,
+  within,
+} from 'web/testing';
+import {rendererWith, fireEvent} from 'web/utils/Testing';
 
 const gmp = {
   settings: {
@@ -58,7 +54,7 @@ describe('CredentialsDialog component tests', () => {
       gmp,
     });
 
-    const {getByName} = render(
+    render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -67,27 +63,27 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const dialog = getDialog();
-    const dialogTitle = queryDialogTitle(dialog);
+    const dialog = within(screen.getDialog());
+    const dialogTitle = dialog.queryDialogTitle();
 
-    const select = getSelectElement(dialog);
-    const cancelButton = getDialogCloseButton();
-    const saveButton = getDialogSaveButton();
+    const select = dialog.getSelectElement();
+    const cancelButton = dialog.getDialogCloseButton();
+    const saveButton = dialog.getDialogSaveButton();
 
     expect(dialogTitle).toHaveTextContent('New Credential');
 
-    const nameInput = getByName('name');
+    const nameInput = dialog.getByName('name');
     expect(nameInput).toHaveValue('Unnamed');
 
-    const commentInput = getByName('comment');
+    const commentInput = dialog.getByName('comment');
     expect(commentInput).toHaveValue('');
 
     expect(select).toHaveValue('Username + Password');
 
-    const credentialLogin = getByName('credential_login');
+    const credentialLogin = dialog.getByName('credential_login');
     expect(credentialLogin).toHaveValue('');
 
-    const password = getByName('password');
+    const password = dialog.getByName('password');
     expect(password).toHaveValue('');
 
     expect(cancelButton).toHaveTextContent('Cancel');
@@ -100,7 +96,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getByName, getAllByName} = render(
+    render(
       <CredentialsDialog
         allow_insecure={credentialMock.allow_insecure}
         comment={credentialMock.comment}
@@ -114,17 +110,17 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
 
-    const nameInput = getByName('name');
+    const nameInput = screen.getByName('name');
     expect(nameInput).toHaveValue('credential 1');
 
-    const commentInput = getByName('comment');
+    const commentInput = screen.getByName('comment');
     expect(commentInput).toHaveValue('blah');
 
     expect(select).toHaveValue('Username + SSH Key');
 
-    const allowInsecure = getAllByName('allow_insecure');
+    const allowInsecure = screen.getAllByName('allow_insecure');
     expect(allowInsecure[0]).toHaveAttribute('value', '1');
     expect(allowInsecure[0]).toBeChecked();
     expect(allowInsecure[1]).toHaveAttribute('value', '0');
@@ -135,7 +131,7 @@ describe('CredentialsDialog component tests', () => {
       gmp,
     });
 
-    const {getByName} = render(
+    render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -144,17 +140,17 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const nameInput = getByName('name');
+    const nameInput = screen.getByName('name');
     expect(nameInput).toHaveValue('Unnamed');
     changeInputValue(nameInput, 'foo');
     expect(nameInput).toHaveValue('foo');
 
-    const commentInput = getByName('comment');
+    const commentInput = screen.getByName('comment');
     expect(commentInput).toHaveValue('');
     changeInputValue(commentInput, 'bar');
     expect(commentInput).toHaveValue('bar');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -193,17 +189,17 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('Username + Password');
 
     const selectItems = await getSelectItemElementsForSelect(select);
     expect(selectItems.length).toEqual(6);
 
     // change to password only
-    await clickElement(selectItems[5]);
+    fireEvent.click(selectItems[5]);
     expect(select).toHaveValue('Password only');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -251,7 +247,7 @@ describe('CredentialsDialog component tests', () => {
       gmp,
     });
 
-    const {getByName} = render(
+    render(
       <CredentialsDialog
         credential_type={'usk'}
         types={ALL_CREDENTIAL_TYPES}
@@ -261,14 +257,14 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
 
     expect(select).toHaveValue('Username + SSH Key');
 
-    const password = getByName('passphrase');
+    const password = screen.getByName('passphrase');
     expect(password).toHaveValue('');
 
-    const privateKey = getByName('private_key');
+    const privateKey = screen.getByName('private_key');
     expect(privateKey).toHaveAttribute('type', 'file');
   });
 
@@ -277,7 +273,7 @@ describe('CredentialsDialog component tests', () => {
       gmp,
     });
 
-    const {getByName, getAllByName} = render(
+    render(
       <CredentialsDialog
         credential_type="snmp"
         types={ALL_CREDENTIAL_TYPES}
@@ -287,29 +283,29 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('SNMP');
 
-    const snmpCommunity = getByName('community');
+    const snmpCommunity = screen.getByName('community');
     expect(snmpCommunity).toHaveValue('');
 
-    const username = getByName('credential_login');
+    const username = screen.getByName('credential_login');
     expect(username).toHaveValue('');
 
-    const password = getByName('password');
+    const password = screen.getByName('password');
     expect(password).toHaveValue('');
     expect(password).toHaveAttribute('type', 'password');
 
-    const privacyPassword = getByName('privacy_password');
+    const privacyPassword = screen.getByName('privacy_password');
     expect(privacyPassword).toHaveValue('');
     expect(privacyPassword).toHaveAttribute('type', 'password');
 
-    const authAlgorithm = getAllByName('auth_algorithm');
+    const authAlgorithm = screen.getAllByName('auth_algorithm');
     expect(authAlgorithm[0]).toHaveAttribute('value', 'md5');
     expect(authAlgorithm[1]).toHaveAttribute('value', 'sha1');
     expect(authAlgorithm[1]).toBeChecked();
 
-    const privacyAlgorithm = getAllByName('privacy_algorithm');
+    const privacyAlgorithm = screen.getAllByName('privacy_algorithm');
     expect(privacyAlgorithm[0]).toHaveAttribute('value', 'aes');
     expect(privacyAlgorithm[0]).toBeChecked();
     expect(privacyAlgorithm[1]).toHaveAttribute('value', 'des');
@@ -321,7 +317,7 @@ describe('CredentialsDialog component tests', () => {
       gmp,
     });
 
-    const {getByName} = render(
+    render(
       <CredentialsDialog
         credential_type="smime"
         types={ALL_CREDENTIAL_TYPES}
@@ -331,11 +327,11 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
 
     expect(select).toHaveValue('S/MIME Certificate');
 
-    const certificate = getByName('certificate');
+    const certificate = screen.getByName('certificate');
     expect(certificate).toHaveAttribute('type', 'file');
   });
 
@@ -344,7 +340,7 @@ describe('CredentialsDialog component tests', () => {
       gmp,
     });
 
-    const {getByName} = render(
+    render(
       <CredentialsDialog
         credential_type={'pgp'}
         types={ALL_CREDENTIAL_TYPES}
@@ -354,10 +350,10 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('PGP Encryption Key');
 
-    const certificate = getByName('public_key');
+    const certificate = screen.getByName('public_key');
     expect(certificate).toHaveAttribute('type', 'file');
   });
 
@@ -376,7 +372,7 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('Password only');
 
     const password = screen.getByTestId('password-input');
@@ -391,7 +387,7 @@ describe('CredentialsDialog component tests', () => {
       gmp,
     });
 
-    const {getByName} = render(
+    render(
       <CredentialsDialog
         credential_type={'krb5'}
         types={ALL_CREDENTIAL_TYPES}
@@ -401,23 +397,23 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('SMB (Kerberos)');
 
-    const allowInsecure = getByName('allow_insecure');
+    const allowInsecure = screen.getByName('allow_insecure');
     expect(allowInsecure).toHaveAttribute('value', '1');
 
-    const username = getByName('credential_login');
+    const username = screen.getByName('credential_login');
     expect(username).toHaveValue('');
 
-    const password = getByName('password');
+    const password = screen.getByName('password');
     expect(password).toHaveValue('');
     expect(password).toHaveAttribute('type', 'password');
 
-    const realm = getByName('realm');
+    const realm = screen.getByName('realm');
     expect(realm).toHaveValue('');
 
-    const kdc = getByName('kdc');
+    const kdc = screen.getByName('kdc');
     expect(kdc).toHaveValue('');
   });
 

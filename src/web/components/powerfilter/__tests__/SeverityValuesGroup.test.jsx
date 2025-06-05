@@ -6,22 +6,15 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
-import {
-  clickElement,
-  getElementOrReturnDocument,
-  getSelectItemElements,
-  openSelectElement,
-} from 'web/components/testing';
+import {openSelectElement, screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
-const getTitle = element => {
-  element = getElementOrReturnDocument(element);
-  return element.querySelector('.mantine-Text-root');
+const getTitle = () => {
+  return document.body.querySelector('.mantine-Text-root');
 };
 
-const getSeverityInput = element => {
-  element = getElementOrReturnDocument(element);
-  return element.querySelector('.mantine-NumberInput-input');
+const getSeverityInput = () => {
+  return document.body.querySelector('.mantine-NumberInput-input');
 };
 
 describe('Severity Values Group Tests', () => {
@@ -120,10 +113,8 @@ describe('Severity Values Group Tests', () => {
 
     await openSelectElement();
 
-    const domItems = getSelectItemElements();
-
-    await clickElement(domItems[3]);
-
+    const domItems = screen.getSelectItemElements();
+    fireEvent.click(domItems[3]);
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith(3, 'severity', '<');
   });

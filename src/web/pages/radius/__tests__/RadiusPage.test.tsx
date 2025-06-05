@@ -6,7 +6,8 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Settings from 'gmp/models/settings';
 import RadiusAuthentication from 'web/pages/radius/RadiusPage';
-import {fireEvent, rendererWith, screen, wait} from 'web/utils/Testing';
+import {screen} from 'web/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 describe('RADIUS page renders', () => {
   test('should render page with no radius key', async () => {
@@ -29,11 +30,11 @@ describe('RADIUS page renders', () => {
 
     const {render} = rendererWith({gmp, store: true});
 
-    const {queryByText} = render(<RadiusAuthentication />);
+    render(<RadiusAuthentication />);
 
     await wait();
 
-    expect(queryByText('********')).not.toBeInTheDocument();
+    expect(screen.queryByText('********')).not.toBeInTheDocument();
   });
 
   test('should show ******** instead of a key', async () => {

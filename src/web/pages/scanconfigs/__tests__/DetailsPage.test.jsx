@@ -13,7 +13,8 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage, {ToolBarIcons} from 'web/pages/scanconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, act, wait, screen} from 'web/utils/Testing';
+import {screen} from 'web/testing';
+import {rendererWith, fireEvent, act, wait} from 'web/utils/Testing';
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
   default: () => null,
@@ -397,12 +398,12 @@ describe('Scan Config DetailsPage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {baseElement, getAllByTestId} = render(<DetailsPage id="12345" />);
+    const {baseElement} = render(<DetailsPage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
 
-    const detailsLinks = getAllByTestId('details-link');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveAttribute('href', '/nvt/0');
     expect(detailsLinks[0]).toHaveTextContent('nvt0');

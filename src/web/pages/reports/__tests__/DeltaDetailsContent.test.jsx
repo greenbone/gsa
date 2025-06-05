@@ -7,14 +7,10 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {
-  queryPowerFilter,
-  getSelectElement,
-  queryTextInputs,
-} from 'web/components/testing';
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/MockDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {screen, within} from 'web/testing';
 import {rendererWith} from 'web/utils/Testing';
 
 const filter = Filter.fromString(
@@ -94,7 +90,7 @@ describe('Delta Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <DeltaDetailsContent
         activeTab={0}
         entity={entity}
@@ -131,10 +127,10 @@ describe('Delta Report Details Content tests', () => {
 
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const bars = getAllByTestId('progressbar-box');
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const bars = screen.getAllByTestId('progressbar-box');
+    const powerFilter = within(screen.queryPowerFilter());
+    const select = powerFilter.getSelectElement();
+    const inputs = powerFilter.queryTextInputs();
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -268,7 +264,7 @@ describe('Delta Report Details Content tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <DeltaDetailsContent
         activeTab={1}
         entity={entity}
@@ -305,10 +301,10 @@ describe('Delta Report Details Content tests', () => {
 
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
-    const bars = getAllByTestId('progressbar-box');
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const bars = screen.getAllByTestId('progressbar-box');
+    const powerFilter = within(screen.queryPowerFilter());
+    const select = powerFilter.getSelectElement();
+    const inputs = powerFilter.queryTextInputs();
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

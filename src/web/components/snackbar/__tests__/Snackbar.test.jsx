@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import SnackbarCreator from 'web/components/snackbar/Snackbar';
+import {screen} from 'web/testing';
 import {render} from 'web/utils/Testing';
 
 describe('Snackbar tests', () => {
@@ -19,15 +20,12 @@ describe('Snackbar tests', () => {
   });
 
   test('should not render if text is undefined', () => {
-    const {queryByTestId} = render(
-      <SnackbarCreator message={{text: undefined}} />,
-    );
-
-    expect(queryByTestId('snackbar-container')).not.toBeInTheDocument();
+    render(<SnackbarCreator message={{text: undefined}} />);
+    expect(screen.queryByTestId('snackbar-container')).not.toBeInTheDocument();
   });
 
   test('should not render again if message stays the same', () => {
-    const {element, queryByTestId, rerender} = render(
+    const {element, rerender} = render(
       <SnackbarCreator message={{text: undefined}} />,
     );
     const message = {text: 'foo'};
@@ -39,7 +37,10 @@ describe('Snackbar tests', () => {
     rerender(<SnackbarCreator message={message} />);
 
     setTimeout(
-      () => expect(queryByTestId('snackbar-container')).not.toBeInTheDocument(),
+      () =>
+        expect(
+          screen.queryByTestId('snackbar-container'),
+        ).not.toBeInTheDocument(),
       5000,
     );
   });

@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
+import {screen} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 const ThrowError = () => {
@@ -29,14 +30,16 @@ describe('ErrorBoundary tests', () => {
     console.error = () => {};
 
     const message = 'An error occurred';
-    const {getByTestId} = render(
+    render(
       <ErrorBoundary message={message}>
         <ThrowError />
       </ErrorBoundary>,
     );
 
-    expect(getByTestId('error-message')).toHaveTextContent(message);
-    expect(getByTestId('error-details')).toHaveTextContent('Please try again');
+    expect(screen.getByTestId('error-message')).toHaveTextContent(message);
+    expect(screen.getByTestId('error-details')).toHaveTextContent(
+      'Please try again',
+    );
 
     console.error = origConsoleError;
   });
@@ -46,19 +49,21 @@ describe('ErrorBoundary tests', () => {
     console.error = () => {};
 
     const message = 'An error occurred';
-    const {getByTestId} = render(
+    render(
       <ErrorBoundary message={message}>
         <ThrowError />
       </ErrorBoundary>,
     );
 
-    const toggle = getByTestId('errorpanel-toggle');
+    const toggle = screen.getByTestId('errorpanel-toggle');
 
     fireEvent.click(toggle);
 
-    expect(getByTestId('errorpanel-heading')).toHaveTextContent('Error: foo');
-    expect(getByTestId('errorpanel-component-stack')).not.toBeNull();
-    expect(getByTestId('errorpanel-error-stack')).not.toBeNull();
+    expect(screen.getByTestId('errorpanel-heading')).toHaveTextContent(
+      'Error: foo',
+    );
+    expect(screen.getByTestId('errorpanel-component-stack')).not.toBeNull();
+    expect(screen.getByTestId('errorpanel-error-stack')).not.toBeNull();
 
     console.error = origConsoleError;
   });

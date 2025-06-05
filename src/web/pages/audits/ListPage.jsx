@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import AuditComponent from 'web/pages/audits/Component';
+import AuditComponent from 'web/pages/audits/AuditComponent';
 import Table from 'web/pages/audits/Table';
 import {taskReloadInterval} from 'web/pages/tasks/ListPage';
 import {

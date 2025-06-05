@@ -5,13 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import RelationSelector from 'web/components/powerfilter/RelationSelector';
-import {
-  openSelectElement,
-  getSelectItemElements,
-  clickElement,
-  getSelectElement,
-} from 'web/components/testing';
-import {render, screen, fireEvent} from 'web/utils/Testing';
+import {openSelectElement, screen} from 'web/testing';
+import {render, fireEvent} from 'web/utils/Testing';
 
 describe('Relation Selector Tests', () => {
   test('should render', () => {
@@ -25,16 +20,14 @@ describe('Relation Selector Tests', () => {
 
   test('should return items', async () => {
     const onChange = testing.fn();
-    const {queryByRole} = render(
-      <RelationSelector relation="<" onChange={onChange} />,
-    );
+    render(<RelationSelector relation="<" onChange={onChange} />);
 
-    let domItems = getSelectItemElements();
-    expect(queryByRole('option')).not.toBeInTheDocument();
+    let domItems = screen.getSelectItemElements();
+    expect(screen.queryByRole('option')).not.toBeInTheDocument();
 
     await openSelectElement();
 
-    domItems = getSelectItemElements();
+    domItems = screen.getSelectItemElements();
 
     expect(domItems.length).toEqual(4);
     expect(domItems[0]).toHaveTextContent('--');
@@ -50,9 +43,9 @@ describe('Relation Selector Tests', () => {
 
     await openSelectElement();
 
-    const domItems = getSelectItemElements();
+    const domItems = screen.getSelectItemElements();
 
-    await clickElement(domItems[1]);
+    fireEvent.click(domItems[1]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('=', undefined);
@@ -63,14 +56,14 @@ describe('Relation Selector Tests', () => {
 
     render(<RelationSelector relation="=" onChange={onChange} />);
 
-    const displayedValue = getSelectElement();
+    const displayedValue = screen.getSelectElement();
     expect(displayedValue).toHaveValue('is equal to');
 
     await openSelectElement();
 
-    const domItems = getSelectItemElements();
+    const domItems = screen.getSelectItemElements();
 
-    await clickElement(domItems[3]);
+    fireEvent.click(domItems[3]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('<', undefined);

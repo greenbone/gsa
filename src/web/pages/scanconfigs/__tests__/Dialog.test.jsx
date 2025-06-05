@@ -4,15 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  changeInputValue,
-  closeDialog,
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-  getRadioInputs,
-} from 'web/components/testing';
 import CreateScanConfigDialog from 'web/pages/scanconfigs/Dialog';
+import {changeInputValue, closeDialog, screen, within} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 describe('CreateScanConfigDialog component tests', () => {
@@ -28,8 +21,8 @@ describe('CreateScanConfigDialog component tests', () => {
       />,
     );
 
-    const dialog = getDialog();
-    const radioInputs = getRadioInputs(dialog);
+    const dialog = screen.getDialog();
+    const radioInputs = within(dialog).getRadioInputs();
     const radioTitles = dialog.querySelectorAll('.mantine-Radio-label');
 
     expect(radioInputs[0]).toHaveAttribute(
@@ -82,7 +75,7 @@ describe('CreateScanConfigDialog component tests', () => {
       />,
     );
 
-    const cancelButton = getDialogCloseButton();
+    const cancelButton = screen.getDialogCloseButton();
     fireEvent.click(cancelButton);
     expect(handleClose).toHaveBeenCalled();
   });
@@ -91,7 +84,7 @@ describe('CreateScanConfigDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByName} = render(
+    render(
       <CreateScanConfigDialog
         title={'New Scan Config'}
         onClose={handleClose}
@@ -99,13 +92,13 @@ describe('CreateScanConfigDialog component tests', () => {
       />,
     );
 
-    const nameInput = getByName('name');
+    const nameInput = screen.getByName('name');
     changeInputValue(nameInput, 'foo');
 
-    const commentInput = getByName('comment');
+    const commentInput = screen.getByName('comment');
     changeInputValue(commentInput, 'bar');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -120,7 +113,7 @@ describe('CreateScanConfigDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByName} = render(
+    render(
       <CreateScanConfigDialog
         title={'New Scan Config'}
         onClose={handleClose}
@@ -128,18 +121,18 @@ describe('CreateScanConfigDialog component tests', () => {
       />,
     );
 
-    const dialog = getDialog();
+    const dialog = within(screen.getDialog());
 
-    const nameInput = getByName('name');
+    const nameInput = screen.getByName('name');
     changeInputValue(nameInput, 'foo');
 
-    const commentInput = getByName('comment');
+    const commentInput = screen.getByName('comment');
     changeInputValue(commentInput, 'bar');
 
-    const radioInputs = getRadioInputs(dialog);
+    const radioInputs = dialog.getRadioInputs();
     fireEvent.click(radioInputs[1]);
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = dialog.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({

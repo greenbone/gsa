@@ -7,25 +7,14 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import React from 'react';
-import {
-  queryPowerFilter,
-  queryTextInputs,
-  getSelectElement,
-  testBulkDeleteDialog,
-} from 'web/components/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import AuditReportsPage from 'web/pages/reports/AuditReportsListPage';
 import {entitiesActions} from 'web/store/entities/auditreports';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {
-  rendererWith,
-  waitFor,
-  fireEvent,
-  screen,
-  wait,
-} from 'web/utils/Testing';
+import {screen, testBulkDeleteDialog, within} from 'web/testing';
+import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/Testing';
 
 window.URL.createObjectURL = testing.fn();
 
@@ -142,16 +131,15 @@ describe('AuditReportsPage tests', () => {
       entitiesActions.success([entity], filter, loadedFilter, counts),
     );
 
-    const {baseElement, within} = render(<AuditReportsPage />);
+    const {baseElement} = render(<AuditReportsPage />);
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
     const display = screen.getAllByTestId('grid-item');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
-    const powerFilter = queryPowerFilter();
-    const select = getSelectElement(powerFilter);
-    const inputs = queryTextInputs(powerFilter);
+    const powerFilter = within(screen.queryPowerFilter());
+    const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
     expect(screen.getByTestId('help-icon')).toHaveAttribute(
@@ -166,7 +154,7 @@ describe('AuditReportsPage tests', () => {
     screen.getAllByTitle('Reset to Default Filter');
     screen.getAllByTitle('Help: Powerfilter');
     screen.getAllByTitle('Edit Filter');
-    const input = within(select).getByTitle('Loaded filter');
+    const input = powerFilter.getByTitle('Loaded filter');
     expect(input).toHaveValue('--');
 
     // Dashboard

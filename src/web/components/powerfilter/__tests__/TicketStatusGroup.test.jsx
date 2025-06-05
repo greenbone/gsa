@@ -6,18 +6,11 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import Filter from 'gmp/models/filter';
 import TicketStatusGroup from 'web/components/powerfilter/TicketStatusGroup';
-import {
-  clickElement,
-  getElementOrReturnDocument,
-  getSelectElement,
-  getSelectItemElements,
-  openSelectElement,
-} from 'web/components/testing';
-import {render} from 'web/utils/Testing';
+import {openSelectElement, screen} from 'web/testing';
+import {fireEvent, render} from 'web/utils/Testing';
 
-const getTitle = element => {
-  element = getElementOrReturnDocument(element);
-  return element.querySelector('.mantine-Text-root');
+const getTitle = () => {
+  return document.body.querySelector('.mantine-Text-root');
 };
 
 describe('TicketStatusGroup tests', () => {
@@ -48,13 +41,13 @@ describe('TicketStatusGroup tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     expect(select).toHaveValue('Closed');
 
     await openSelectElement();
 
-    const domItems = getSelectItemElements();
-    await clickElement(domItems[2]);
+    const domItems = screen.getSelectItemElements();
+    fireEvent.click(domItems[2]);
 
     expect(handleChange).toBeCalled();
     expect(handleChange).toBeCalledWith('"Fix Verified"', 'status');

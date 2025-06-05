@@ -5,16 +5,12 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import User from 'gmp/models/user';
+import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
 import {
   changeInputValue,
-  clickElement,
-  getDialog,
-  getDialogCloseButton,
-  getDialogSaveButton,
-  getSelectElement,
   getSelectItemElementsForSelect,
-} from 'web/components/testing';
-import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
+  screen,
+} from 'web/testing';
 import {render, fireEvent} from 'web/utils/Testing';
 
 const u1 = User.fromElement({
@@ -45,7 +41,7 @@ describe('CreateTicketDialog component tests', () => {
       />,
     );
 
-    expect(getDialog()).toBeInTheDocument();
+    expect(screen.getDialog()).toBeInTheDocument();
   });
 
   test('should allow to select user', async () => {
@@ -64,10 +60,10 @@ describe('CreateTicketDialog component tests', () => {
       />,
     );
 
-    const select = getSelectElement();
+    const select = screen.getSelectElement();
     const selectItems = await getSelectItemElementsForSelect(select);
     expect(selectItems.length).toEqual(2);
-    await clickElement(selectItems[1]);
+    fireEvent.click(selectItems[1]);
     expect(handleUserIdChange).toHaveBeenCalledWith('u2', 'userId');
   });
 
@@ -87,7 +83,7 @@ describe('CreateTicketDialog component tests', () => {
       />,
     );
 
-    const closeButton = getDialogCloseButton();
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });
@@ -116,7 +112,7 @@ describe('CreateTicketDialog component tests', () => {
     const handleSave = testing.fn();
     const handleUserIdChange = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <CreateTicketDialog
         resultId="r1"
         userId="u1"
@@ -127,10 +123,8 @@ describe('CreateTicketDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
-
+    const closeButton = screen.getDialogCloseButton();
     fireEvent.click(closeButton);
-
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -153,7 +147,7 @@ describe('CreateTicketDialog component tests', () => {
     const noteInput = baseElement.querySelector('textarea');
     changeInputValue(noteInput, 'foobar');
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -179,7 +173,7 @@ describe('CreateTicketDialog component tests', () => {
       />,
     );
 
-    const saveButton = getDialogSaveButton();
+    const saveButton = screen.getDialogSaveButton();
     const noteInput = baseElement.querySelector('textarea');
     changeInputValue(noteInput, '');
 

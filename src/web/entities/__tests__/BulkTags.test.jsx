@@ -8,33 +8,11 @@ import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
-import {isDefined} from 'gmp/utils/identity';
 import BulkTags from 'web/entities/BulkTags';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
+import {screen, within} from 'web/testing';
 import SelectionType from 'web/utils/SelectionType';
-import {
-  screen,
-  rendererWith,
-  getByTestId,
-  fireEvent,
-  getAllByTitle,
-  wait,
-  getByRole,
-} from 'web/utils/Testing';
-
-const getDialog = () => {
-  return screen.getByRole('dialog');
-};
-
-const getDialogTitle = dialog => {
-  dialog = isDefined(dialog) ? dialog : getDialog();
-  return getByRole(dialog, 'heading');
-};
-
-const getDialogSaveButton = dialog => {
-  dialog = isDefined(dialog) ? dialog : getDialog();
-  return getByTestId(dialog, 'dialog-save-button');
-};
+import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 describe('BulkTags', () => {
   test('should render the BulkTags component', () => {
@@ -68,7 +46,7 @@ describe('BulkTags', () => {
         onClose={onClose}
       />,
     );
-    const dialog = getDialog();
+    const dialog = screen.getDialog();
     expect(dialog).toBeInTheDocument();
   });
 
@@ -103,7 +81,7 @@ describe('BulkTags', () => {
         onClose={onClose}
       />,
     );
-    const title = getDialogTitle();
+    const title = screen.getDialogTitle();
     expect(title).toHaveTextContent('Add Tag to All Filtered');
   });
 
@@ -151,8 +129,8 @@ describe('BulkTags', () => {
       />,
     );
 
-    const dialog = getDialog();
-    const newTag = getAllByTitle(dialog, 'Create a new Tag')[0];
+    const dialog = within(screen.getDialog());
+    const newTag = dialog.getAllByTitle('Create a new Tag')[0];
 
     fireEvent.click(newTag);
     expect(getAllResourceNames).toHaveBeenCalledWith({
@@ -162,9 +140,9 @@ describe('BulkTags', () => {
     expect(screen.queryAllByRole('dialog', {hidden: true})).toHaveLength(2);
     const dialogs = screen.getAllByRole('dialog');
 
-    const tagsDialog = dialog[0];
-    const tagDialog = dialogs[1];
-    const saveTagButton = getDialogSaveButton(tagDialog);
+    const tagsDialog = within(dialogs[0]);
+    const tagDialog = within(dialogs[1]);
+    const saveTagButton = tagDialog.getDialogSaveButton();
 
     fireEvent.click(saveTagButton);
 
@@ -181,7 +159,7 @@ describe('BulkTags', () => {
     });
     expect(getTag).toHaveBeenCalledWith({id: '2'});
 
-    const saveTagsButton = getDialogSaveButton(tagsDialog);
+    const saveTagsButton = tagsDialog.getDialogSaveButton();
 
     fireEvent.click(saveTagsButton);
 

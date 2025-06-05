@@ -8,6 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import ResumeIcon from 'web/pages/tasks/icons/ResumeIcon';
+import {screen} from 'web/testing';
 import {rendererWith, fireEvent} from 'web/utils/Testing';
 import Theme from 'web/utils/Theme';
 
@@ -177,11 +178,11 @@ describe('Task ResumeIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {queryByTestId} = render(<ResumeIcon task={task} />);
+    render(<ResumeIcon task={task} />);
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
 
-    expect(queryByTestId('resume-icon')).toEqual(null);
+    expect(screen.queryByTestId('resume-icon')).toEqual(null);
   });
 });
