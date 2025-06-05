@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import Capabilities from 'gmp/capabilities/capabilities';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import Capabilities from 'gmp/capabilities/capabilities';
 import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/Dialog';
 import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
