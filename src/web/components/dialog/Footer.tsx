@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import Button from 'web/components/form/Button';
 import Layout from 'web/components/layout/Layout';
@@ -22,13 +21,13 @@ interface DialogFooterProps {
   'data-testid'?: string;
 }
 
-const DialogFooter: React.FC<DialogFooterProps> = ({
+const DialogFooter = ({
   title,
   onClick,
   loading = false,
   isLoading = loading,
   'data-testid': dataTestId,
-}) => (
+}: DialogFooterProps) => (
   <DialogFooterLayout
     align={['end', 'center']}
     data-testid={dataTestId}
