@@ -246,9 +246,9 @@ const ScannerComponent = ({
     }
   };
 
-  const handleScannerCaPubChange = (ovc) => {
+  const handleScannerCaPubChange = (value) => {
     setWhichCert('new');
-    onValueChange ();
+    setCaPub(value);
   };
 
   return (

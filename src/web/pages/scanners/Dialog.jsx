@@ -63,15 +63,6 @@ const ScannerDialog = ({
     [onScannerTypeChange],
   );
 
-  const handleCaPubChange = useCallback(
-    () => {
-      if (onScannerCaPubChange) {
-        onScannerCaPubChange();
-      }
-    },
-    [onScannerCaPubChange],
-  );
-
   const data = {
     ca_pub,
     comment,
@@ -166,7 +157,7 @@ const ScannerDialog = ({
 
             {isAgentControllerScannerType && (
               <FormGroup title={_('Certificate')}>
-                <FileField name={'ca_pub'} onChange={handleCaPubChange} />
+                <FileField name="ca_pub" value={state.caPub} onChange={onScannerCaPubChange}/>
               </FormGroup>
             )}
 
