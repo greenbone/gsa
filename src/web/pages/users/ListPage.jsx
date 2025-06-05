@@ -9,7 +9,7 @@ import {connect} from 'react-redux';
 import {USERS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
+import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import {NewIcon, UserIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
