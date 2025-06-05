@@ -7,7 +7,7 @@ import {useEffect, useState} from 'react';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import DialogContent from 'web/components/dialog/Content';
 import Dialog from 'web/components/dialog/Dialog';
-import DialogError from 'web/components/dialog/Error';
+import DialogError from 'web/components/dialog/DialogError';
 import SaveDialogFooter from 'web/components/dialog/SaveDialogFooter';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import useTranslation from 'web/hooks/useTranslation';

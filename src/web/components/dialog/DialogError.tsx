@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import DialogCloseButton from 'web/components/dialog/DialogCloseButton';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
 const StyledLayout = styled(Layout)`
@@ -30,7 +28,12 @@ const StyledDialogCloseButton = styled(DialogCloseButton)`
   }
 `;
 
-const DialogError = ({error, onCloseClick}) => {
+interface DialogErrorProps {
+  error?: string;
+  onCloseClick?: () => void;
+}
+
+const DialogError = ({error, onCloseClick}: DialogErrorProps) => {
   const [_] = useTranslation();
   if (!isDefined(error)) {
     return null;
@@ -51,11 +54,6 @@ const DialogError = ({error, onCloseClick}) => {
       />
     </StyledLayout>
   );
-};
-
-DialogError.propTypes = {
-  error: PropTypes.string,
-  onCloseClick: PropTypes.func,
 };
 
 export default DialogError;
