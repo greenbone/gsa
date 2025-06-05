@@ -8,7 +8,6 @@ import {ScrollArea} from '@mantine/core';
 import {Modal} from '@greenbone/opensight-ui-components-mantinev7';
 import styled from 'styled-components';
 import {isDefined, isFunction} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
 
 const INITIAL_POSITION_X = 0;
 const INITIAL_POSITION_Y = 70;
@@ -16,7 +15,17 @@ const MODAL_Z_INDEX = 201;
 const MODAL_HEIGHT = '250px';
 const MODAL_WIDTH = '40vw';
 
-const DialogTitleButton = styled.button`
+interface DialogTitleButtonProps {
+  $isDragging: boolean;
+}
+
+interface StyledModalProps {
+  position: {x: number; y: number};
+  height: string;
+  width: string;
+}
+
+const DialogTitleButton = styled.button<DialogTitleButtonProps>`
   background: none;
   border: none;
   padding: 0;
@@ -27,7 +36,7 @@ const DialogTitleButton = styled.button`
   width: 100%;
 `;
 
-const StyledModal = styled(Modal)`
+const StyledModal = styled(Modal)<StyledModalProps>`
   position: relative;
   left: ${({position}) => `${position.x}px`};
   z-index: ${MODAL_Z_INDEX};
@@ -64,6 +73,20 @@ const StyledScrollArea = styled(ScrollArea)`
   padding-right: 18px;
 `;
 
+interface DialogRenderProps {
+  close: () => void;
+}
+
+interface DialogProps {
+  children?: React.ReactNode | ((props: DialogRenderProps) => React.ReactNode);
+  title?: string;
+  footer?: React.ReactNode;
+  onClose?: () => void;
+  height?: string;
+  width?: string;
+  testId?: string;
+}
+
 const Dialog = ({
   children,
   title,
@@ -72,7 +95,7 @@ const Dialog = ({
   height = MODAL_HEIGHT,
   width = MODAL_WIDTH,
   testId = 'dialog-test-id',
-}) => {
+}: DialogProps) => {
   const [isResizing, setIsResizing] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -103,7 +126,9 @@ const Dialog = ({
         '[data-portal="true"] > div > .mantine-Modal-root',
       );
       modalRoots.forEach((modalRoot, index) => {
-        const overlay = modalRoot.querySelector('.mantine-Modal-overlay');
+        const overlay = modalRoot.querySelector<HTMLElement>(
+          '.mantine-Modal-overlay',
+        );
         if (overlay) {
           const isTopmostModal = index === modalRoots.length - 1;
           overlay.style.backgroundColor = isTopmostModal
@@ -205,16 +230,6 @@ const Dialog = ({
       {footer}
     </StyledModal>
   );
-};
-
-Dialog.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-  testId: PropTypes.string,
-  footer: PropTypes.node,
-  title: PropTypes.string,
-  width: PropTypes.string,
-  onClose: PropTypes.func,
-  height: PropTypes.string,
 };
 
 export default Dialog;
