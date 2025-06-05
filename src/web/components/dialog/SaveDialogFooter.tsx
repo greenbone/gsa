@@ -5,7 +5,18 @@
 
 import DialogFooter from 'web/components/dialog/DialogTwoButtonFooter';
 import MultiStepFooter from 'web/components/dialog/MultiStepFooter';
-import PropTypes from 'web/utils/PropTypes';
+
+interface SaveDialogFooterProps {
+  multiStep: number;
+  isLoading: boolean;
+  prevDisabled: boolean;
+  nextDisabled: boolean;
+  buttonTitle: string;
+  currentStep: number;
+  setCurrentStep: (step: number) => void;
+  onClose: () => void;
+  handleSaveClick: () => void;
+}
 
 const SaveDialogFooter = ({
   multiStep,
@@ -17,7 +28,7 @@ const SaveDialogFooter = ({
   setCurrentStep,
   onClose,
   handleSaveClick,
-}) => {
+}: SaveDialogFooterProps) => {
   return multiStep > 0 ? (
     <MultiStepFooter
       loading={isLoading}
@@ -41,18 +52,6 @@ const SaveDialogFooter = ({
       onRightButtonClick={handleSaveClick}
     />
   );
-};
-
-SaveDialogFooter.propTypes = {
-  multiStep: PropTypes.number.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  prevDisabled: PropTypes.bool.isRequired,
-  nextDisabled: PropTypes.bool.isRequired,
-  buttonTitle: PropTypes.string.isRequired,
-  currentStep: PropTypes.number.isRequired,
-  setCurrentStep: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  handleSaveClick: PropTypes.func.isRequired,
 };
 
 export default SaveDialogFooter;
