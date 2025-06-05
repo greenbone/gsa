@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import CloseButton from 'web/components/dialog/CloseButton';
+import DialogCloseButton from 'web/components/dialog/DialogCloseButton';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
@@ -21,7 +21,7 @@ const StyledLayout = styled(Layout)`
   background-color: ${Theme.lightRed};
 `;
 
-const DialogCloseButton = styled(CloseButton)`
+const StyledDialogCloseButton = styled(DialogCloseButton)`
   background: 0;
   color: ${Theme.darkRed};
 
@@ -44,7 +44,7 @@ const DialogError = ({error, onCloseClick}) => {
       >
         {error}
       </span>
-      <DialogCloseButton
+      <StyledDialogCloseButton
         data-testid="error-close-button"
         title={_('Close')}
         onClick={onCloseClick}
