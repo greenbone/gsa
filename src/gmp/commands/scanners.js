@@ -68,7 +68,6 @@ class ScannerCommand extends EntityCommand {
       scanner_type: type,
       which_cert,
     };
-    console.log('data.ca_pub:', data.ca_pub);
     log.debug('Saving scanner', data);
     return this.action(data);
   }

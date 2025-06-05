@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {AGENT_CONTROLLER_SCANNER_TYPE} from 'gmp/models/scanner';
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
