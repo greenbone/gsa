@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import DialogContent from 'web/components/dialog/Content';
 import Dialog from 'web/components/dialog/Dialog';
+import DialogContent from 'web/components/dialog/DialogContent';
 import DialogTwoButtonFooter, {
   DELETE_ACTION,
 } from 'web/components/dialog/TwoButtonFooter';
