@@ -3,42 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-// jest-styled-components provides expect.toHaveStyleRule and snapshots for styled-components
-// it requires global.beforeEach and expect
-import 'jest-styled-components';
-
-import {ThemeProvider} from '@greenbone/opensight-ui-components-mantinev7';
 import {afterEach} from '@gsa/testing';
 import {
-  act,
   render as reactTestingRender,
   cleanup,
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
-import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
-import {DEFAULT_LANGUAGE, getLocale} from 'gmp/locale/lang';
-import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import {Provider} from 'react-redux';
-import {MemoryRouter, useLocation} from 'react-router';
+import {MemoryRouter} from 'react-router';
 import {Store} from 'redux';
-import {StyleSheetManager} from 'styled-components';
-import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
-import GmpContext from 'web/components/provider/GmpProvider';
-import {LanguageContext} from 'web/components/provider/LanguageProvider';
-import LicenseProvider from 'web/components/provider/LicenseProvider';
 import configureStore from 'web/store';
+import {
+  LocationDisplay,
+  Main,
+  TestingCapabilitiesProvider,
+  TestingGmpProvider,
+  TestingLanguageProvider,
+  TestingLicenseProvider,
+  TestingStoreProvider,
+} from 'web/testing/Components';
+import {userEvent, PointerEventsCheckLevel} from 'web/testing/event';
 
-export {
-  renderHook,
-  waitFor,
-  act,
-  screen,
-  fireEvent,
-} from '@testing-library/react/pure';
-export {userEvent};
+export {renderHook} from '@testing-library/react/pure';
 
 afterEach(cleanup);
 
@@ -52,23 +39,6 @@ interface RendererOptions {
   showLocation?: boolean;
   language?: string | Record<string, unknown>;
 }
-
-export async function wait(ms: number = 0) {
-  await act(
-    () =>
-      new Promise(resolve => {
-        setTimeout(resolve, ms);
-      }),
-  );
-}
-
-const Main = ({children}: {children: React.ReactNode}) => {
-  return (
-    <ThemeProvider defaultColorScheme="light">
-      <StyleSheetManager enableVendorPrefixes>{children}</StyleSheetManager>
-    </ThemeProvider>
-  );
-};
 
 export const render = (ui: React.ReactNode) => {
   const {container, baseElement, rerender} = reactTestingRender(
@@ -85,57 +55,6 @@ export const render = (ui: React.ReactNode) => {
     rerender: (component: React.ReactNode) =>
       rerender(<Main>{component}</Main>),
   };
-};
-
-const withProvider =
-  (name: string, key: string = name) =>
-  (Component: React.ElementType) =>
-  ({children, ...props}: {children: React.ReactNode; [key: string]: unknown}) =>
-    isDefined(props[name]) ? (
-      <Component {...{[key]: props[name]}}>{children}</Component>
-    ) : (
-      children
-    );
-
-const TestingGmpProvider = withProvider('gmp', 'value')(GmpContext.Provider);
-const TestingStoreProvider = withProvider('store')(Provider);
-const TestingCapabilitiesProvider = withProvider(
-  'capabilities',
-  'value',
-)(CapabilitiesContext.Provider);
-const TestingLicenseProvider = withProvider(
-  'license',
-  'value',
-)(LicenseProvider);
-
-// Mock LanguageProvider that doesn't use GMP
-const TestingLanguageProvider = ({
-  children,
-  language,
-}: {
-  children: React.ReactNode;
-  language?: Record<string, unknown>;
-}) => {
-  // Use provided object or default
-  const languageValue = language || {
-    language: getLocale() ?? DEFAULT_LANGUAGE,
-    setLanguage: async () => {},
-  };
-
-  // Ensure we have required properties with correct types
-  const value = {
-    language:
-      (languageValue.language as string) ?? getLocale() ?? DEFAULT_LANGUAGE,
-    setLanguage:
-      (languageValue.setLanguage as (lang: string) => Promise<void>) ??
-      (async () => {}),
-  };
-
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
-  );
 };
 
 export const rendererWith = (
@@ -160,18 +79,6 @@ export const rendererWith = (
   if (capabilities === true) {
     capabilities = new EverythingCapabilities();
   }
-
-  const LocationDisplay = () => {
-    const location = useLocation();
-
-    return (
-      <div>
-        <div data-testid="location-pathname">{location.pathname}</div>
-        <div data-testid="location-search">{location.search}</div>
-        <div data-testid="location-hash">{location.hash}</div>
-      </div>
-    );
-  };
 
   const Providers = ({children}) => (
     <TestingGmpProvider gmp={gmp}>

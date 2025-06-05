@@ -6,8 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {TASK_STATUS} from 'gmp/models/task';
 import StatusBar from 'web/components/bar/StatusBar';
-import {screen} from 'web/testing';
-import {render} from 'web/utils/Testing';
+import {screen, render} from 'web/testing';
 import Theme from 'web/utils/Theme';
 
 describe('StatusBar tests', () => {

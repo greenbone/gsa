@@ -11,8 +11,7 @@ import CommunityFeedUsageNotification, {
   NOTIFICATION_SHOWN_KEY,
   NOTIFICATION_SHOWN,
 } from 'web/pages/login/notifications/CommunityFeedUsageNotification';
-import {screen} from 'web/testing';
-import {render} from 'web/utils/Testing';
+import {screen, render} from 'web/testing';
 
 vi.mock('@greenbone/opensight-ui-components-mantinev7', () => ({
   showNotification: vi.fn(),

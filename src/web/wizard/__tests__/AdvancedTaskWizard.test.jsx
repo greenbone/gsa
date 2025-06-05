@@ -11,8 +11,7 @@ import Credential, {
 } from 'gmp/models/credential';
 import Date from 'gmp/models/date';
 import ScanConfig from 'gmp/models/scanconfig';
-import {screen} from 'web/testing';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {screen, rendererWith, fireEvent} from 'web/testing';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);

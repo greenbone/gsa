@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Trend from 'web/pages/tasks/Trend';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 describe('Task Trend tests', () => {
   test('should render', () => {

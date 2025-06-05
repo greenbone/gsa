@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Target from 'web/components/link/Target';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 describe('Target tests', () => {
   test('should render Target', () => {

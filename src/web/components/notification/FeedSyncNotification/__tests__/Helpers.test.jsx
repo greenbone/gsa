@@ -8,7 +8,7 @@ import {
   useFeedSyncStatus,
   useFeedSyncDialog,
 } from 'web/components/notification/FeedSyncNotification/Helpers';
-import {act, rendererWith} from 'web/utils/Testing';
+import {act, rendererWith} from 'web/testing';
 
 const mockCheckFeedSync = testing.fn();
 

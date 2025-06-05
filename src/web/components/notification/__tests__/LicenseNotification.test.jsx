@@ -14,8 +14,7 @@ import {
 import Capabilities from 'gmp/capabilities/capabilities';
 import {License} from 'gmp/models/license';
 import LicenseNotification from 'web/components/notification/LicenseNotification';
-import {screen} from 'web/testing';
-import {rendererWith, wait} from 'web/utils/Testing';
+import {screen, rendererWith, wait} from 'web/testing';
 import Theme from 'web/utils/Theme';
 
 const dataNoLicense = License.fromElement({

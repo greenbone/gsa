@@ -11,8 +11,7 @@ import Credential, {
 import Capabilities from 'gmp/capabilities/capabilities';
 import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/Dialog';
-import {changeInputValue, screen} from 'web/testing';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 
 const sensorScanner = {
   _id: '1234',

@@ -11,12 +11,13 @@ import {mockReportFormats} from 'web/pages/reportconfigs/__mocks__/MockReportFor
 import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
 import {
   changeInputValue,
-  getSelectItemElementsForMultiSelect,
   getSelectItemElementsForSelect,
   screen,
   within,
+  rendererWith,
+  fireEvent,
+  wait,
 } from 'web/testing';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const config = ReportConfig.fromElement(mockReportConfig);
 
@@ -426,7 +427,7 @@ describe('New Report Config Dialog component tests', () => {
     });
 
     fireEvent.click(closeBtnElement);
-    const multiSelectMenuItems = getSelectItemElementsForMultiSelect();
+    const multiSelectMenuItems = screen.getSelectItemElementsForMultiSelect();
     fireEvent.click(multiSelectMenuItems[1]);
 
     const saveButton = screen.getDialogSaveButton();

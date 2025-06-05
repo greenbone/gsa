@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import InnerLink from 'web/components/link/InnerLink';
-import {render} from 'web/utils/Testing';
+import {render} from 'web/testing';
 
 describe('InnerLink tests', () => {
   test('should render InnerLink', () => {

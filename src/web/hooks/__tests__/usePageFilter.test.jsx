@@ -10,7 +10,7 @@ import usePageFilter from 'web/hooks/usePageFilter';
 import {pageFilter} from 'web/store/pages/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {rendererWith, waitFor} from 'web/utils/Testing';
+import {rendererWith, waitFor} from 'web/testing';
 
 let mockSearchParams = {};
 const mockUseNavigate = testing.fn();

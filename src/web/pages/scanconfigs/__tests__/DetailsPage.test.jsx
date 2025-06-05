@@ -13,8 +13,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage, {ToolBarIcons} from 'web/pages/scanconfigs/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {screen} from 'web/testing';
-import {rendererWith, fireEvent, act, wait} from 'web/utils/Testing';
+import {screen, rendererWith, fireEvent, act, wait} from 'web/testing';
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
   default: () => null,

@@ -10,7 +10,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import CvePage from 'web/pages/cves/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, screen} from 'web/utils/Testing';
+import {rendererWith, screen} from 'web/testing';
 
 const entity_v2 = Cve.fromElement({
   _id: 'CVE-2020-9997',

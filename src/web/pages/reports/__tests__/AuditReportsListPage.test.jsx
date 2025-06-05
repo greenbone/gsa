@@ -13,8 +13,15 @@ import {entitiesActions} from 'web/store/entities/auditreports';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {screen, testBulkDeleteDialog, within} from 'web/testing';
-import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/Testing';
+import {
+  rendererWith,
+  fireEvent,
+  screen,
+  wait,
+  within,
+  waitFor,
+  testBulkDeleteDialog,
+} from 'web/testing';
 
 window.URL.createObjectURL = testing.fn();
 

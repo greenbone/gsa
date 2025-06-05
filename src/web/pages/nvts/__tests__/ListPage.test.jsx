@@ -13,8 +13,14 @@ import {entitiesLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {getSelectItemElementsForSelect, screen, within} from 'web/testing';
-import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
+import {
+  getSelectItemElementsForSelect,
+  rendererWith,
+  fireEvent,
+  screen,
+  wait,
+  within,
+} from 'web/testing';
 
 const nvt = NVT.fromElement({
   _oid: '1.3.6.1.4.1.25623.1.0',

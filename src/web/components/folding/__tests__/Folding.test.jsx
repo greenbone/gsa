@@ -9,7 +9,7 @@ import {
   FoldState,
   withFoldToggle,
 } from 'web/components/folding/Folding';
-import {render, screen, fireEvent} from 'web/utils/Testing';
+import {render, screen, fireEvent} from 'web/testing';
 
 describe('withFolding', () => {
   const DummyComponent = props => <div {...props}>Dummy Component</div>;

@@ -8,7 +8,7 @@ import useClickHandler, {
   nameFromEvent,
   valueFromEvent,
 } from 'web/components/form/useClickHandler';
-import {fireEvent, rendererWith, screen} from 'web/utils/Testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 
 interface MockEvent {
   currentTarget: {

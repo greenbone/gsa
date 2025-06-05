@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ReportFormat from 'gmp/models/reportformat';
 import VerifyIcon from 'web/entity/icon/VerifyIcon';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWith, fireEvent} from 'web/testing';
 import Theme from 'web/utils/Theme';
 
 describe('Entity VerifyIcon component tests', () => {

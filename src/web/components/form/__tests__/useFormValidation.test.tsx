@@ -11,7 +11,7 @@ import useFormValidation, {
   shouldBeNonEmpty,
 } from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
-import {render, fireEvent, screen} from 'web/utils/Testing';
+import {render, fireEvent, screen} from 'web/testing';
 
 /*
  * This suite only tests functions associated with useFormValidation.

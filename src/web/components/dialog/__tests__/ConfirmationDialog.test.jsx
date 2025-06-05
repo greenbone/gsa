@@ -6,8 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {KeyCode} from 'gmp/utils/event';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {closeDialog, screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {closeDialog, screen, render, fireEvent} from 'web/testing';
 
 describe('ConfirmationDialog component tests', () => {
   test('should render ConfirmationDialog with text and title', () => {

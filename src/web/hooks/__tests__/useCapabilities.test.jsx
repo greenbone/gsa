@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import useCapabilities from 'web/hooks/useCapabilities';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith} from 'web/testing';
 
 const TestUseCapabilities = () => {
   const capabilities = useCapabilities();

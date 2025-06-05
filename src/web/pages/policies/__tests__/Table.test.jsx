@@ -9,7 +9,7 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Table from 'web/pages/policies/Table';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const policy = Policy.fromElement({
   _id: '12345',

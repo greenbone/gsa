@@ -8,8 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import React from 'react';
 import FilterDialog from 'web/pages/reports/DetailsFilterDialog';
-import {screen, within} from 'web/testing';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith, screen, within} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

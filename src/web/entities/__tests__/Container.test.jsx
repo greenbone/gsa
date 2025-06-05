@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import EntitiesContainer from 'web/entities/Container';
-import {rendererWith, screen, waitFor, userEvent} from 'web/utils/Testing';
+import {rendererWith, screen, waitFor, userEvent} from 'web/testing';
 
 const currentSettingsResponse = {
   data: {

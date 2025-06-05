@@ -9,7 +9,7 @@ import Filter from 'gmp/models/filter';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
 import ErrorsTab from 'web/pages/reports/details/ErrorsTab';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith} from 'web/utils/Testing';
+import {rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

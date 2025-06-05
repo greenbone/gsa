@@ -19,8 +19,10 @@ import {
   screen,
   testBulkDeleteDialog,
   within,
+  rendererWith,
+  fireEvent,
+  wait,
 } from 'web/testing';
-import {rendererWith, fireEvent, wait} from 'web/utils/Testing';
 
 const capabilities = new Capabilities(['everything']);
 const wrongCapabilities = new Capabilities(['get_host']);

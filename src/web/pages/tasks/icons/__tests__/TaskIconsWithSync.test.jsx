@@ -8,7 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
 import {setSyncStatus} from 'web/store/feedStatus/actions';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {rendererWith, fireEvent} from 'web/testing';
 
 describe('TaskIconWithSync component tests', () => {
   const testCases = [

@@ -12,7 +12,7 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage, {ToolBarIcons} from 'web/pages/results/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/Testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 
 // setup
 

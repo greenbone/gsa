@@ -8,8 +8,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import StopIcon from 'web/pages/tasks/icons/StopIcon';
-import {screen} from 'web/testing';
-import {rendererWith, fireEvent} from 'web/utils/Testing';
+import {screen, rendererWith, fireEvent} from 'web/testing';
 
 describe('Task StopIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

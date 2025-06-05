@@ -9,7 +9,7 @@ import {
   ICON_SIZE_LARGE_PIXELS,
   ICON_SIZE_MEDIUM_PIXELS,
 } from 'web/hooks/useIconSize';
-import {render, fireEvent} from 'web/utils/Testing';
+import {render, fireEvent} from 'web/testing';
 
 describe('Dialog CloseButton tests', () => {
   test('should render', () => {

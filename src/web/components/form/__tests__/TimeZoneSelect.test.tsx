@@ -6,8 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import timezones from 'gmp/timezones';
 import TimezoneSelect from 'web/components/form/TimeZoneSelect';
-import {openSelectElement, screen} from 'web/testing';
-import {fireEvent, render} from 'web/utils/Testing';
+import {openSelectElement, screen, fireEvent, render} from 'web/testing';
 
 describe('TimezoneSelect tests', () => {
   test('should render', () => {

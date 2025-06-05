@@ -9,8 +9,10 @@ import {
   changeInputValue,
   getSelectItemElementsForSelect,
   within,
+  fireEvent,
+  rendererWith,
+  wait,
 } from 'web/testing';
-import {fireEvent, rendererWith, wait} from 'web/utils/Testing';
 
 const calculateScoreFromVector = testing.fn().mockReturnValue(
   Promise.resolve({

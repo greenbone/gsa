@@ -7,8 +7,12 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {TICKET_STATUS} from 'gmp/models/ticket';
 import User from 'gmp/models/user';
 import EditTicketDialog from 'web/pages/tickets/EditDialog';
-import {getSelectItemElementsForSelect, screen} from 'web/testing';
-import {render, fireEvent} from 'web/utils/Testing';
+import {
+  getSelectItemElementsForSelect,
+  screen,
+  render,
+  fireEvent,
+} from 'web/testing';
 
 const u1 = User.fromElement({
   _id: 'u1',
