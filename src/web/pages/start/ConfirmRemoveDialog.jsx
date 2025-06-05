@@ -5,8 +5,8 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import DialogContent from 'web/components/dialog/DialogContent';
 import Dialog from 'web/components/dialog/Dialog';
+import DialogContent from 'web/components/dialog/DialogContent';
 import DialogTwoButtonFooter, {
   DELETE_ACTION,
 } from 'web/components/dialog/DialogTwoButtonFooter';
