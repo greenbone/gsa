@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import useLanguage from 'web/hooks/useLanguage';
 import {rendererWith} from 'web/testing';
+import useLanguage from 'web/hooks/useLanguage';
 
 describe('useLanguage', () => {
   test('should return the current language and setLanguage function from context', () => {

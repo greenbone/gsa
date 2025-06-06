@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {format} from 'd3-format';
 import {getFormattedDate} from 'gmp/locale/date';
 import {_} from 'gmp/locale/lang';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
-import React from 'react';
 
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';

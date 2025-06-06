@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {KeyCode} from 'gmp/utils/event';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {KeyCode} from 'gmp/utils/event';
+import {isDefined} from 'gmp/utils/identity';
 import ErrorContainer from 'web/components/error/ErrorContainer';
 import Button from 'web/components/form/Button';
 import FormGroup from 'web/components/form/FormGroup';

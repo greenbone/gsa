@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import LineChart, {lineDataPropType} from 'web/components/chart/Line';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';

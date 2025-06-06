@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {debounce} from 'gmp/utils/event';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {debounce} from 'gmp/utils/event';
+import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/PropTypes';
 
 const Container = styled.div`

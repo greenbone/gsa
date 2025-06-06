@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {TICKET_STATUS, TICKET_STATUS_TRANSLATIONS} from 'gmp/models/ticket';
 import React, {useState} from 'react';
+import {TICKET_STATUS, TICKET_STATUS_TRANSLATIONS} from 'gmp/models/ticket';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Select from 'web/components/form/Select';
 import TextArea from 'web/components/form/TextArea';

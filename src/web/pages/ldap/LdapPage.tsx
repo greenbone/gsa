@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {CertificateInfo} from 'gmp/commands/users';
-import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {CertificateInfo} from 'gmp/commands/users';
+import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import {EditIcon, LdapIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';

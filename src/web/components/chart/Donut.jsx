@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {color as d3color} from 'd3-color';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {color as d3color} from 'd3-color';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import Arc2d from 'web/components/chart/donut/Arc2d';
 import Arc3d from 'web/components/chart/donut/Arc3d';
 import Labels from 'web/components/chart/donut/Labels';

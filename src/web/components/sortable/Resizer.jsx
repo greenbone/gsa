@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {throttleAnimation} from 'gmp/utils/event';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {throttleAnimation} from 'gmp/utils/event';
+import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 

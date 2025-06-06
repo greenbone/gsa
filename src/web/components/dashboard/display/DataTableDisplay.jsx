@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import DataTable from 'web/components/dashboard/display/DataTable';
 import PropTypes from 'web/utils/PropTypes';

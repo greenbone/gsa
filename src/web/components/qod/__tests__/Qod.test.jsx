@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Qod from 'web/components/qod/Qod';
 import {render} from 'web/testing';
+import Qod from 'web/components/qod/Qod';
 
 describe('Qod tests', () => {
   test('should render Qod value', () => {

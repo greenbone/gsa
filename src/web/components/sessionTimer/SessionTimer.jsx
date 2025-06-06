@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useEffect, useState} from 'react';
 import {ActionIcon} from '@mantine/core';
 import date from 'gmp/models/date';
-import {useEffect, useState} from 'react';
 import {RefreshIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {duration as createDuration} from 'gmp/models/date';
-import {isDefined} from 'gmp/utils/identity';
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {duration as createDuration} from 'gmp/models/date';
+import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';

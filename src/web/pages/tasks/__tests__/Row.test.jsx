@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWithTable, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Row from 'web/pages/tasks/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWithTable, fireEvent, screen} from 'web/testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

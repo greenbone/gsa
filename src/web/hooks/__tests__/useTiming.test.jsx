@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
 import {useState} from 'react';
-import useTiming from 'web/hooks/useTiming';
+import {describe, test, expect, testing} from '@gsa/testing';
 import {act, fireEvent, render, screen} from 'web/testing';
+import useTiming from 'web/hooks/useTiming';
 
 const TestComponent = ({doFunc}) => {
   const [value, setValue] = useState(0);

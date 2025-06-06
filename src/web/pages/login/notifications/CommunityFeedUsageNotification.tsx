@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
-import {updateNotification} from '@mantine/notifications';
 import React, {useEffect, useMemo} from 'react';
+import {updateNotification} from '@mantine/notifications';
+import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
 

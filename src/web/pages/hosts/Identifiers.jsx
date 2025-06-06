@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import DetailsLink from 'web/components/link/DetailsLink';

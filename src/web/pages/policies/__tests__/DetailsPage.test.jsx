@@ -4,16 +4,16 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
+import {vi} from 'vitest';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
-import {vi} from 'vitest';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import DetailsPage, {ToolBarIcons} from 'web/pages/policies/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/testing';
 
 vi.mock('web/pages/scanconfigs/EditDialog', () => ({
   default: () => null,

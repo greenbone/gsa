@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWithTableRow, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Actions from 'web/pages/tasks/Actions';
-import {rendererWithTableRow, fireEvent, screen} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_task']);

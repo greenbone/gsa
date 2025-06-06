@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import ical from 'ical.js';
+import {v4 as uuid} from 'uuid';
 import Logger from 'gmp/log';
 import date, {duration as createDuration} from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import ical from 'ical.js';
-import {v4 as uuid} from 'uuid';
 
 const log = Logger.getLogger('gmp.models.event');
 

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {first} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import {first} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {getDisplay} from 'web/components/dashboard/Registry';
 import {
   addDisplayToSettings,

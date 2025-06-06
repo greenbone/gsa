@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import RelationSelector from 'web/components/powerfilter/RelationSelector';
 import {openSelectElement, screen, render, fireEvent} from 'web/testing';
+import RelationSelector from 'web/components/powerfilter/RelationSelector';
 
 describe('Relation Selector Tests', () => {
   test('should render', () => {

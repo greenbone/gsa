@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWithTable, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Target from 'gmp/models/target';
 import Row from 'web/pages/targets/Row';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWithTable, fireEvent, screen} from 'web/testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {format as d3format} from 'd3-format';
 import {_, _l} from 'gmp/locale/lang';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
-import React from 'react';
 import BubbleChart from 'web/components/chart/Bubble';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';

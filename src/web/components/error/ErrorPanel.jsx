@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
-import {isDefined} from 'gmp/utils/identity';
 import React, {useState} from 'react';
+import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';

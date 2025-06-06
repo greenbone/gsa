@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getTranslatableTicketStatus} from 'gmp/models/ticket';
 import React from 'react';
+import {getTranslatableTicketStatus} from 'gmp/models/ticket';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import {TicketIcon} from 'web/components/icon';

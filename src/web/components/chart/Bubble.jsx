@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {pack, hierarchy} from 'd3-hierarchy';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import Group from 'web/components/chart/Group';
 import Svg from 'web/components/chart/Svg';
 import ToolTip from 'web/components/chart/Tooltip';

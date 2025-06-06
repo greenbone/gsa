@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import styled from 'styled-components';
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
@@ -17,8 +19,6 @@ import {
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';

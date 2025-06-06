@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {openSelectElement, screen, fireEvent, render} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import TaskTrendGroup from 'web/components/powerfilter/TaskTrendGroup';
-import {openSelectElement, screen, fireEvent, render} from 'web/testing';
 
 describe('Task Trend Selector Tests', () => {
   test('should render', () => {

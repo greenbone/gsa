@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Nvt from 'gmp/models/nvt';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
-import {screen, within, rendererWith, fireEvent} from 'web/testing';
 
 const nvt = Nvt.fromElement({
   _oid: '1234',

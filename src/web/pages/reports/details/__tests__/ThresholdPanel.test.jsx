@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {render, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import Thresholdpanel from 'web/pages/reports/details/ThresholdPanel';
-import {render, fireEvent} from 'web/testing';
 
 describe('Report Threshold Panel tests', () => {
   test('should render threshold panel', () => {

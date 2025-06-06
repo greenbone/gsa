@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
 import React, {useState} from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
+import {render, fireEvent, screen} from 'web/testing';
 import Button from 'web/components/form/Button';
 import TextField from 'web/components/form/TextField';
 import useFormValidation, {
   shouldBeNonEmpty,
 } from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
-import {render, fireEvent, screen} from 'web/testing';
 
 /*
  * This suite only tests functions associated with useFormValidation.

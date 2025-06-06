@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {createContext, useState, useEffect, useCallback, useMemo} from 'react';
 import {setDateLocale} from 'gmp/locale/date';
 import {
   getLocale,
@@ -10,7 +11,6 @@ import {
   onLanguageChange,
   DEFAULT_LANGUAGE,
 } from 'gmp/locale/lang';
-import {createContext, useState, useEffect, useCallback, useMemo} from 'react';
 import useGmp from 'web/hooks/useGmp';
 
 interface LanguageContextProps {

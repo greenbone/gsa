@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import ManualLink from 'web/components/link/ManualLink';
 import {rendererWith} from 'web/testing';
+import ManualLink from 'web/components/link/ManualLink';
 
 const createGmp = (settings = {}) => ({
   settings: {

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
@@ -10,7 +11,6 @@ import {
   DELTA_TYPE_REPORT,
 } from 'gmp/models/alert';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';

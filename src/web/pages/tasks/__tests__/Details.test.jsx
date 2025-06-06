@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig from 'gmp/models/scanconfig';
 import Schedule from 'gmp/models/schedule';
@@ -11,7 +12,6 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 import Details from 'web/pages/tasks/Details';
 import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
-import {screen, rendererWith} from 'web/testing';
 
 const config = ScanConfig.fromElement({
   _id: '314',

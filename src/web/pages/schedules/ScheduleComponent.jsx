@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
+import {isDefined} from 'gmp/utils/identity';
 import EntityComponent from 'web/entity/EntityComponent';
 import useTranslation from 'web/hooks/useTranslation';
 import ScheduleDialog from 'web/pages/schedules/Dialog';

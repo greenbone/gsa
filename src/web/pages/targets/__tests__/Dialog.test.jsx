@@ -4,13 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Credential, {
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
-  KRB5_CREDENTIAL_TYPE,
-} from 'gmp/models/credential';
-import TargetDialog from 'web/pages/targets/Dialog';
 import {
   changeInputValue,
   getSelectItemElementsForSelect,
@@ -19,6 +12,13 @@ import {
   wait,
   rendererWith,
 } from 'web/testing';
+import Credential, {
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+  KRB5_CREDENTIAL_TYPE,
+} from 'gmp/models/credential';
+import TargetDialog from 'web/pages/targets/Dialog';
 
 const cred1 = Credential.fromElement({
   _id: '5678',

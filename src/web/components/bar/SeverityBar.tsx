@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import ProgressBar from 'web/components/bar/ProgressBar';
 import useGmp from 'web/hooks/useGmp';
 import {severityFormat} from 'web/utils/Render';

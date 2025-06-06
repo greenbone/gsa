@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {scaleBand, scaleLinear} from 'd3-scale';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {scaleBand, scaleLinear} from 'd3-scale';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/Axis';
 import Group from 'web/components/chart/Group';
 import Legend from 'web/components/chart/Legend';

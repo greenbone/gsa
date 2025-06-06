@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import {useState, useCallback} from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import SelectionType from 'web/utils/SelectionType';
 
 /**

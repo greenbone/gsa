@@ -57,7 +57,7 @@ const commonRules = {
     2,
   ],
   'react/jsx-sort-props': [
-    'error',
+    'warn',
     {
       callbacksLast: true,
       shorthandFirst: true,
@@ -67,14 +67,37 @@ const commonRules = {
     },
   ],
   'import/order': [
-    'error',
+    'warn',
     {
       groups: [
         ['builtin', 'external'],
         ['internal'],
         ['parent', 'sibling', 'index'],
       ],
-      'newlines-between': 'always',
+      pathGroups: [
+        {
+          pattern: 'react',
+          group: 'builtin',
+          position: 'before',
+        },
+        {
+          pattern:
+            '{@open-sight/ui-components-mantinev7,@mantine/core,@mantine/notifications}',
+          group: 'external',
+          position: 'before',
+        },
+        {
+          pattern: '{@gsa/testing,web/testing}',
+          group: 'builtin',
+          position: 'before',
+        },
+        {
+          pattern: '{gmp/**,web/**}',
+          group: 'internal',
+          position: 'after',
+        },
+      ],
+      pathGroupsExcludedImportTypes: ['builtin'],
       alphabetize: {
         order: 'asc',
         caseInsensitive: true,

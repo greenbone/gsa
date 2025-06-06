@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   scannerTypeName,
   CVE_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import {DownloadKeyIcon, VerifyIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';

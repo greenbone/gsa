@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import {connect} from 'react-redux';
 import {duration} from 'gmp/models/date';
 import {scannerTypeName} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import {connect} from 'react-redux';
 import DateTime from 'web/components/date/DateTime';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Line as VxLine} from '@visx/shape';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {Line as VxLine} from '@visx/shape';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import ToolTip from 'web/components/chart/Tooltip';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';

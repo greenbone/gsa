@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import Model from 'gmp/model';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

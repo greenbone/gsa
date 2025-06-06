@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {render, fireEvent, screen, userEvent} from 'web/testing';
 import {KeyCode} from 'gmp/utils/event';
 import Spinner from 'web/components/form/Spinner';
-import {render, fireEvent, screen, userEvent} from 'web/testing';
 
 const getInput = element =>
   element.querySelector('input.mantine-NumberInput-input');

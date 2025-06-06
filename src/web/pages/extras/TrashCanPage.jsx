@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
-import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback, useEffect, useState} from 'react';
+import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
 import Button from 'web/components/form/Button';

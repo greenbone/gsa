@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
 import {
   ACCESS_ALLOW_ALL,
   ACCESS_DENY_ALL,
@@ -13,7 +14,6 @@ import {
 } from 'gmp/models/user';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useState} from 'react';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';

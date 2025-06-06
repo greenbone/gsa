@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
+import styled from 'styled-components';
 import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import {useState} from 'react';
-import styled from 'styled-components';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';

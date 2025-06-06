@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {screen, render} from 'web/testing';
 import Task from 'gmp/models/task';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
-import {screen, render} from 'web/testing';
 
 describe('Entity ObserverIcon component tests', () => {
   test('should render if the owner is not the current user', () => {

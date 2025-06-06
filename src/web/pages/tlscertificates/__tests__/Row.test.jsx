@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 import TlsCertificate from 'gmp/models/tlscertificate';
 import Row from 'web/pages/tlscertificates/Row';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const gmp = {settings: {}};
 

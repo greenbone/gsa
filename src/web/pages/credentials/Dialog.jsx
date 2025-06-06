@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useEffect, useState} from 'react';
 import {
   ALL_CREDENTIAL_TYPES,
   getCredentialTypeName,
@@ -23,7 +24,6 @@ import {
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {first, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import {useEffect, useState} from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
 import FileField from 'web/components/form/FileField';

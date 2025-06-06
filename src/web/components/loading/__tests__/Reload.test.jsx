@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, act, fireEvent, rendererWith} from 'web/testing';
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
   USE_DEFAULT_RELOAD_INTERVAL_INACTIVE,
 } from 'web/components/loading/Reload';
-import {screen, act, fireEvent, rendererWith} from 'web/testing';
 
 const TestComponent = ({reload, id, reloadOptions}) => (
   <button data-testid={id} onClick={() => reload(reloadOptions)} />

@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Footer from 'web/entities/Footer';
 import {
   screen,
   rendererWithTableFooter,
   fireEvent,
   userEvent,
 } from 'web/testing';
+import Footer from 'web/entities/Footer';
 
 const entities = [];
 const entitiesCounts = {filtered: 0, all: 0};

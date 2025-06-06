@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 import React from 'react';
 import styled from 'styled-components';
+import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 import ProgressBar, {adjustProgress} from 'web/components/bar/ProgressBar';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';

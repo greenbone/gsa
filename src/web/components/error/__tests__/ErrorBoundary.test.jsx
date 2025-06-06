@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import {screen, render, fireEvent} from 'web/testing';
+import ErrorBoundary from 'web/components/error/ErrorBoundary';
 
 const ThrowError = () => {
   throw new Error('foo');

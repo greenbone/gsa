@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import useActiveTab from 'web/entity/hooks/useActiveTab';
 import {rendererWith, wait} from 'web/testing';
+import useActiveTab from 'web/entity/hooks/useActiveTab';
 
 describe('useActiveTab', () => {
   test('should set active tab to 0 by default', () => {

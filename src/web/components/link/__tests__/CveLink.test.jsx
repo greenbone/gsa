@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import CveLink from 'web/components/link/CveLink';
 import {fireEvent, rendererWith, screen} from 'web/testing';
+import CveLink from 'web/components/link/CveLink';
 
 describe('CveLink tests', () => {
   test('should render CveLink', () => {

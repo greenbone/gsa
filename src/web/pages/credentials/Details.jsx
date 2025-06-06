@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   SNMP_CREDENTIAL_TYPE,
   SNMP_PRIVACY_ALGORITHM_NONE,
   getCredentialTypeName,
 } from 'gmp/models/credential';
-import React from 'react';
 import Footnote from 'web/components/footnote/Footnote';
 import Divider from 'web/components/layout/Divider';
 import HorizontalSep from 'web/components/layout/HorizontalSep';

@@ -4,6 +4,7 @@
  */
 
 // Import LucideIcon type once
+import React from 'react';
 import {
   CircleX,
   FileOutput,
@@ -60,7 +61,6 @@ import {
   Glasses,
   X,
 } from 'lucide-react';
-import React from 'react';
 import {
   createIconComponents,
   IconComponentsType,

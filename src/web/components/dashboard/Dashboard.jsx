@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import memoize from 'memoize-one';
+import {connect} from 'react-redux';
+import styled from 'styled-components';
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import Logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import memoize from 'memoize-one';
-import React from 'react';
-import {connect} from 'react-redux';
-import styled from 'styled-components';
 import {getDisplay} from 'web/components/dashboard/Registry';
 import {
   convertDefaultDisplays,

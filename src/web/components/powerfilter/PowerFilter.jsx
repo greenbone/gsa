@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import styled from 'styled-components';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
-import React from 'react';
-import styled from 'styled-components';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {EditIcon, RefreshIcon, ResetIcon} from 'web/components/icon';

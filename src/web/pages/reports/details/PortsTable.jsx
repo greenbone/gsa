@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
+import {_, _l} from 'gmp/locale/lang';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';

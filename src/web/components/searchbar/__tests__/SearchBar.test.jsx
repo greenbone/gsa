@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import SearchBar from 'web/components/searchbar/SearchBar';
 import {render, screen, fireEvent, waitFor} from 'web/testing';
+import SearchBar from 'web/components/searchbar/SearchBar';
 
 describe('SearchBar', () => {
   const placeholder = 'Search...';

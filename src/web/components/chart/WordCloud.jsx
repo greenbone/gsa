@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import d3cloud from 'd3-cloud';
 import {scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import Group from 'web/components/chart/Group';
 import Svg from 'web/components/chart/Svg';
 import PropTypes from 'web/utils/PropTypes';

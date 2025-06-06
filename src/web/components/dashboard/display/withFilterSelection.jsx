@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import hoistStatics from 'hoist-non-react-statics';
 import React from 'react';
+import hoistStatics from 'hoist-non-react-statics';
 import FilterSelection from 'web/components/dashboard/display/FilterSelection';
 import PropTypes from 'web/utils/PropTypes';
 

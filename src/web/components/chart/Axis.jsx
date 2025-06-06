@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Axis as VxAxis} from '@visx/axis';
 import React from 'react';
+import {Axis as VxAxis} from '@visx/axis';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 

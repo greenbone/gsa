@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {TASK_STATUS} from 'gmp/models/task';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {TASK_STATUS} from 'gmp/models/task';
+import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/Toolbar';
 import DateTime from 'web/components/date/DateTime';

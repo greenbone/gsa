@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {act, rendererWith} from 'web/testing';
 import {
   useFeedSyncStatus,
   useFeedSyncDialog,
 } from 'web/components/notification/FeedSyncNotification/Helpers';
-import {act, rendererWith} from 'web/testing';
 
 const mockCheckFeedSync = testing.fn();
 

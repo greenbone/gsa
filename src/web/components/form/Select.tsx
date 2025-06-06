@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components-mantinev7';
+import {useState, useCallback} from 'react';
 import {Loader} from '@mantine/core';
+import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components-mantinev7';
 import {_} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
-import {useState, useCallback} from 'react';
 import useTranslation from 'web/hooks/useTranslation';
 
 export interface SelectItem {

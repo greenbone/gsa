@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
 import {EntityCommandParams} from 'gmp/commands/entity';
 import PortList, {ProtocolType} from 'gmp/models/portlist';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import React, {useState} from 'react';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';

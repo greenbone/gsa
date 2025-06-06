@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
-import {isDefined} from 'gmp/utils/identity';
 import {useEffect} from 'react';
+import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {useDispatch, useSelector} from 'react-redux';
+import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';

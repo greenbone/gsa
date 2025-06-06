@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, wait} from 'web/testing';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import {rendererWith, wait} from 'web/testing';
 
 describe('useEntityDownload', () => {
   test('should allow to download an entity', async () => {

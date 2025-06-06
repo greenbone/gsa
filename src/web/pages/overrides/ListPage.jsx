@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {NewIcon, OverrideIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';

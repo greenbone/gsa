@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, rendererWith, waitFor, fireEvent, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import TrashcanPage from 'web/pages/extras/TrashCanPage';
-import {screen, rendererWith, waitFor, fireEvent, wait} from 'web/testing';
 
 /*
  * The following is a workaround for userEvent v14 and fake timers https://github.com/testing-library/react-testing-library/issues/1197

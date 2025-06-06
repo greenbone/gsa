@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import PageTitle, {DEFAULT_TITLE} from 'web/components/layout/PageTitle';
 import {rendererWith} from 'web/testing';
+import PageTitle, {DEFAULT_TITLE} from 'web/components/layout/PageTitle';
 
 const gmp = {
   settings: {

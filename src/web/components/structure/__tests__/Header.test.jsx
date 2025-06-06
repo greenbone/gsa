@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, screen, userEvent, waitFor} from 'web/testing';
 import Header from 'web/components/structure/Header';
 import {
   setTimezone,
   setUsername,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
-import {rendererWith, screen, userEvent, waitFor} from 'web/testing';
 
 const gmp = {
   settings: {

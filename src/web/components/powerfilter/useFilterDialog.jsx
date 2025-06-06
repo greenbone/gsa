@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback, useState} from 'react';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import {useCallback, useState} from 'react';
 
 /**
  * React hook for handling filter dialog state

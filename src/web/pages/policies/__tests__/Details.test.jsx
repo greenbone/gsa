@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Policy from 'gmp/models/policy';
 import Details from 'web/pages/policies/Details';
-import {screen, rendererWith} from 'web/testing';
 
 describe('Policy Details tests', () => {
   test('should render full Details', () => {

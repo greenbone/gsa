@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import Status from 'web/pages/tasks/Status';
-import {screen, rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

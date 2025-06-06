@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import Logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import PropTypes from 'web/utils/PropTypes';
 
 const log = Logger.getLogger('web.components.provider.subscription');

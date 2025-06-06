@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import ReactPropTypes from 'prop-types';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
@@ -12,7 +13,6 @@ import {isDate, isDuration} from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import Settings from 'gmp/models/settings';
 import {isDefined} from 'gmp/utils/identity';
-import ReactPropTypes from 'prop-types';
 import warning from 'web/utils/Warning';
 
 export const mayRequire = validator => {

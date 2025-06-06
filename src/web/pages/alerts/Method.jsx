@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import styled from 'styled-components';
 import {
   EMAIL_NOTICE_ATTACH,
   EMAIL_NOTICE_INCLUDE,
@@ -20,8 +22,6 @@ import {
   METHOD_TYPE_VERINICE,
 } from 'gmp/models/alert';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import styled from 'styled-components';
 import CertInfo from 'web/components/certinfo/CertInfo';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import DetailsLink from 'web/components/link/DetailsLink';

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {openSelectElement, screen, fireEvent, render} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import TicketStatusGroup from 'web/components/powerfilter/TicketStatusGroup';
-import {openSelectElement, screen, fireEvent, render} from 'web/testing';
 
 const getTitle = () => {
   return document.body.querySelector('.mantine-Text-root');

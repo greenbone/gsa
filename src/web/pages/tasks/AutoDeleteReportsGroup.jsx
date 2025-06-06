@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
 import React from 'react';
+import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
 import Spinner from 'web/components/form/Spinner';

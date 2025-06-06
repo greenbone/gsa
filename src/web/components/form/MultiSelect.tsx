@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {
   MultiSelect as MantineMultiSelect,
   TextInput,
@@ -10,9 +11,8 @@ import {
   MultiSelectProps as MantineMultiSelectProps,
   MantineSize,
 } from '@mantine/core';
-import {isDefined} from 'gmp/utils/identity';
-import {useCallback} from 'react';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import {SelectItem} from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
 

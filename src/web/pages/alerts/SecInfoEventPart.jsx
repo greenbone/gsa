@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {EVENT_TYPE_NEW_SECINFO, isSecinfoEvent} from 'gmp/models/alert';
 import React from 'react';
+import {EVENT_TYPE_NEW_SECINFO, isSecinfoEvent} from 'gmp/models/alert';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import Row from 'web/components/layout/Row';

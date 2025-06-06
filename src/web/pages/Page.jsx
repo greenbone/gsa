@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import {useLocation} from 'react-router';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import Layout from 'web/components/layout/Layout';
 import Menu from 'web/components/menu/Menu';

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
@@ -10,7 +11,6 @@ import {
 } from 'gmp/models/scanconfig';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import Radio from 'web/components/form/Radio';
 import {EditIcon} from 'web/components/icon';

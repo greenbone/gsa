@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import PortRangeDialog from 'web/pages/portlists/PortRangeDialog';
 import {changeInputValue, screen, within, fireEvent, render} from 'web/testing';
+import PortRangeDialog from 'web/pages/portlists/PortRangeDialog';
 
 describe('PortRangeDialog tests', () => {
   test('should render without issues', () => {

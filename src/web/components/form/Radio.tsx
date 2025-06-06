@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {RadioButton as GreenboneRadio} from '@greenbone/opensight-ui-components-mantinev7';
 import {RadioProps as MantineRadioProps} from '@mantine/core';
+import {RadioButton as GreenboneRadio} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
 import useValueChange from 'web/components/form/useValueChange';
 

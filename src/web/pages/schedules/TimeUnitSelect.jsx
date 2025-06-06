@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ReccurenceFrequency} from 'gmp/models/event';
 import React from 'react';
+import {ReccurenceFrequency} from 'gmp/models/event';
 import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
 

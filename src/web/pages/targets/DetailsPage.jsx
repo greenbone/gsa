@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import {TargetIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';

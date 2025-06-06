@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import {useNavigate} from 'react-router';
+import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
-import React from 'react';
-import {useNavigate} from 'react-router';
-import styled from 'styled-components';
 import BarChart from 'web/components/chart/Bar';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';

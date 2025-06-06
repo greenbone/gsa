@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import {NewIcon} from 'web/components/icon';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';

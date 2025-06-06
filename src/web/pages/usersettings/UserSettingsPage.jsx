@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import {connect} from 'react-redux';
 import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
 import {openVasScannersFilter} from 'gmp/models/scanner';
 import {YES_VALUE, NO_VALUE, parseYesNo} from 'gmp/parser';
 import {hasValue, isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import {connect} from 'react-redux';
 import {EditIcon, MySettingsIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';

@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
   EMPTY_SCAN_CONFIG_ID,
   BASE_SCAN_CONFIG_ID,
 } from 'gmp/models/scanconfig';
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

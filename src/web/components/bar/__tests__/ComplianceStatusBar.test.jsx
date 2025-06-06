@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import ComplianceStatusBar from 'web/components/bar/ComplianceStatusBar';
 import {screen, render} from 'web/testing';
+import ComplianceStatusBar from 'web/components/bar/ComplianceStatusBar';
 import Theme from 'web/utils/Theme';
 
 describe('ComplianceStatusBar tests', () => {

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test} from '@gsa/testing';
 import React from 'react';
-import Menu from 'web/components/menu/Menu';
+import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
+import Menu from 'web/components/menu/Menu';
 
 const renderMenuWith = ({capabilities, gmpSettings}) => {
   const gmp = {

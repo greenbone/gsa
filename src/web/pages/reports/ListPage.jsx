@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import {connect} from 'react-redux';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import {connect} from 'react-redux';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {ReportIcon, UploadIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
 import React, {useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 

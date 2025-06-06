@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_RADIUS,
   ACCESS_ALLOW_ALL,
   ACCESS_DENY_ALL,
 } from 'gmp/models/user';
-import React from 'react';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';

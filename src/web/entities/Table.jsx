@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import styled from 'styled-components';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import React from 'react';
-import styled from 'styled-components';
 import {FoldState} from 'web/components/folding/Folding';
 import FootNote from 'web/components/footnote/Footnote';
 import FoldStateIcon from 'web/components/icon/FoldStateIcon';
