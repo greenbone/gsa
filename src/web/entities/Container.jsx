@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {connect} from 'react-redux';
 import logger from 'gmp/log';
 import {RESET_FILTER} from 'gmp/models/filter';
 import {YES_VALUE} from 'gmp/parser';
@@ -17,8 +19,6 @@ import {
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import React from 'react';
-import {connect} from 'react-redux';
 import SortBy from 'web/components/sortby/SortBy';
 import TagsDialog from 'web/entities/TagsDialog';
 import actionFunction from 'web/entity/hooks/actionFunction';

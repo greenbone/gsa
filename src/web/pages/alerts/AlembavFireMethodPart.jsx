@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import React from 'react';
+import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
 import Radio from 'web/components/form/Radio';

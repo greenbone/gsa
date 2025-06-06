@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {LinearGradient} from '@visx/gradient';
 import {scaleBand, scaleUtc} from 'd3-scale';
 import date from 'gmp/models/date';
 import {shorten} from 'gmp/utils/string';
-import React from 'react';
 import Axis from 'web/components/chart/Axis';
 import Group from 'web/components/chart/Group';
 import Svg from 'web/components/chart/Svg';

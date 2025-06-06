@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import {vi} from 'vitest';
 import Http from 'gmp/http/http';
 import Rejection from 'gmp/http/rejection';
 import DefaultTransform from 'gmp/http/transform/default';
-import {vi} from 'vitest';
 
 const mockGetFeedAccessStatusMessage = testing.fn();
 const mockFindActionInXMLString = testing.fn();

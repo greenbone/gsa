@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
-import CvssCalculator from 'web/pages/extras/CvssCalculatorPage';
 import {
   changeInputValue,
   getSelectItemElementsForSelect,
@@ -13,6 +12,7 @@ import {
   rendererWith,
   wait,
 } from 'web/testing';
+import CvssCalculator from 'web/pages/extras/CvssCalculatorPage';
 
 const calculateScoreFromVector = testing.fn().mockReturnValue(
   Promise.resolve({

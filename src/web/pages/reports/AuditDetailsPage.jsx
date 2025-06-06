@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {useParams} from 'react-router';
 import logger from 'gmp/log';
 import Filter, {
   ALL_FILTER,
@@ -12,9 +15,6 @@ import Filter, {
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {useParams} from 'react-router';
 import withDownload from 'web/components/form/withDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import Reload, {

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {rendererWith, fireEvent} from 'web/testing';
 import useUserTimezone from 'web/hooks/useUserTimezone';
 import {setTimezone as setTimezoneAction} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent} from 'web/testing';
 
 const TestUserTimezone = () => {
   const [timezone, setUserTimezone] = useUserTimezone();

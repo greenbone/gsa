@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import React, {useState} from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import useCapabilities from 'web/hooks/useCapabilities';
 import FilterDialog from 'web/pages/filters/Dialog';

@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {ThemeProvider} from '@greenbone/opensight-ui-components-mantinev7';
+import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp/gmp';
 import GmpSettings from 'gmp/gmpsettings';
 import {_, initLocale} from 'gmp/locale/lang';
 import {LOG_LEVEL_DEBUG} from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import {Provider as StoreProvider} from 'react-redux';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import GlobalStyles from 'web/components/layout/GlobalStyles';
 import GmpContext from 'web/components/provider/GmpProvider';

@@ -4,6 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  getSelectItemElementsForSelect,
+  screen,
+  testBulkTrashcanDialog,
+  within,
+  rendererWith,
+  fireEvent,
+  wait,
+} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
@@ -14,15 +23,6 @@ import {entitiesLoadingActions} from 'web/store/entities/notes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {
-  getSelectItemElementsForSelect,
-  screen,
-  testBulkTrashcanDialog,
-  within,
-  rendererWith,
-  fireEvent,
-  wait,
-} from 'web/testing';
 
 const note = Note.fromElement({
   _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',

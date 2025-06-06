@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import LanguageSwitch from 'web/components/structure/LanguageSwitch';
 import {rendererWith, fireEvent, screen} from 'web/testing';
+import LanguageSwitch from 'web/components/structure/LanguageSwitch';
 
 describe('LanguageSwitch', () => {
   test('should switch language and update settings', async () => {

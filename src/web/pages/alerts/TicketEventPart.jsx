@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   EVENT_TYPE_TICKET_RECEIVED,
   EVENT_TYPE_OWNED_TICKET_CHANGED,
   EVENT_TYPE_ASSIGNED_TICKET_CHANGED,
 } from 'gmp/models/alert';
-import React from 'react';
 import Radio from 'web/components/form/Radio';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';

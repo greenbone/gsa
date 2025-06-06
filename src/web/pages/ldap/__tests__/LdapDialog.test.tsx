@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import LdapDialog from 'web/pages/ldap/LdapDialog';
 import {changeInputValue, screen, render, fireEvent} from 'web/testing';
+import LdapDialog from 'web/pages/ldap/LdapDialog';
 
 describe('Ldap dialog component tests', () => {
   test('should render dialog', () => {

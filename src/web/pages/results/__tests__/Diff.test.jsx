@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Diff from 'web/pages/results/Diff';
 import {render} from 'web/testing';
+import Diff from 'web/pages/results/Diff';
 
 const diff = `
 @@ -1,9 +1,14 @@

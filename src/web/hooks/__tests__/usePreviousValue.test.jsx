@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
 import {useState} from 'react';
-import usePreviousValue from 'web/hooks/usePreviousValue';
+import {describe, test, expect} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
+import usePreviousValue from 'web/hooks/usePreviousValue';
 
 const TestComponent = () => {
   const [value, setValue] = useState(0);

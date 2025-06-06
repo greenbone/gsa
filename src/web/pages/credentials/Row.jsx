@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getCredentialTypeName} from 'gmp/models/credential';
 import React from 'react';
+import {getCredentialTypeName} from 'gmp/models/credential';
 import FootNote from 'web/components/footnote/Footnote';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import Divider from 'web/components/layout/Divider';

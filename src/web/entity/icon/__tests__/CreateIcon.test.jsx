@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task from 'gmp/models/task';
 import CreateIcon from 'web/entity/icon/CreateIcon';
-import {screen, rendererWith, fireEvent} from 'web/testing';
 import Theme from 'web/utils/Theme';
 
 describe('Entity CreateIcon component tests', () => {

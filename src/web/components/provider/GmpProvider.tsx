@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Gmp from 'gmp/gmp';
 import React from 'react';
+import Gmp from 'gmp/gmp';
 
 const GmpContext = React.createContext<Gmp | undefined>(undefined);
 

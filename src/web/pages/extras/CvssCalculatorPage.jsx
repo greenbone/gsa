@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState, useEffect} from 'react';
+import {useSearchParams} from 'react-router';
+import styled from 'styled-components';
 import {
   parseCvssV2BaseVector,
   parseCvssV3BaseVector,
@@ -11,9 +14,6 @@ import {
 } from 'gmp/parser/cvss';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useState, useEffect} from 'react';
-import {useSearchParams} from 'react-router';
-import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';

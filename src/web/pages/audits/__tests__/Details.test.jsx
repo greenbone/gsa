@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Policy from 'gmp/models/policy';
@@ -11,7 +12,6 @@ import Schedule from 'gmp/models/schedule';
 import Details from 'web/pages/audits/Details';
 import {entityLoadingActions as policyActions} from 'web/store/entities/policies';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
-import {rendererWith, screen} from 'web/testing';
 
 const policy = Policy.fromElement({
   _id: '314',

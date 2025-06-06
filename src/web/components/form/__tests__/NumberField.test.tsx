@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import NumberField from 'web/components/form/NumberField';
 import {render, fireEvent, screen} from 'web/testing';
+import NumberField from 'web/components/form/NumberField';
 
 describe('NumberField tests', () => {
   test('should render', () => {

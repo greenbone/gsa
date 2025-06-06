@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import ScanConfig, {
@@ -12,7 +13,6 @@ import ScanConfig, {
 } from 'gmp/models/scanconfig';
 import Table from 'web/pages/scanconfigs/Table';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const config = ScanConfig.fromElement({
   _id: '12345',

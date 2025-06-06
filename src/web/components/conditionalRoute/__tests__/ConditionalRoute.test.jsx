@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
-import {Route, Routes} from 'react-router';
-import ConditionalRoute from 'web/components/conditionalRoute/ConditionalRoute';
 import {screen, rendererWith} from 'web/testing';
+import {Route, Routes} from 'react-router';
+import Capabilities from 'gmp/capabilities/capabilities';
+import ConditionalRoute from 'web/components/conditionalRoute/ConditionalRoute';
 
 const MockComponent = () => <div>Mock Component</div>;
 

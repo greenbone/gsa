@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import useValueChange from 'web/components/form/useValueChange';
 import {render, screen, fireEvent} from 'web/testing';
+import useValueChange from 'web/components/form/useValueChange';
 
 interface TestComponentProps {
   value: string;

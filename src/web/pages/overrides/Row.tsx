@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import Model from 'gmp/model';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 import {shorten} from 'gmp/utils/string';
-import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';

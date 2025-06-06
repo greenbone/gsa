@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Logger from 'gmp/log';
 import React from 'react';
 import {connect} from 'react-redux';
+import Logger from 'gmp/log';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';

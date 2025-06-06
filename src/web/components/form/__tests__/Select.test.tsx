@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Select from 'web/components/form/Select';
 import {openSelectElement, screen, render, fireEvent} from 'web/testing';
+import Select from 'web/components/form/Select';
 
 describe('Select component tests', () => {
   test('should render with items', async () => {

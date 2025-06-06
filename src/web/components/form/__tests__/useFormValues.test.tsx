@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
 import React, {useRef} from 'react';
-import TextField from 'web/components/form/TextField';
-import useFormValues from 'web/components/form/useFormValues';
+import {describe, test, expect} from '@gsa/testing';
 import {
   changeInputValue,
   screen,
@@ -14,6 +12,8 @@ import {
   rendererWith,
   wait,
 } from 'web/testing';
+import TextField from 'web/components/form/TextField';
+import useFormValues from 'web/components/form/useFormValues';
 
 const UseFormValuesTestComponent = () => {
   const ref = useRef(0);

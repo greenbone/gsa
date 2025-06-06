@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {render, screen} from 'web/testing';
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
 import Trend from 'web/pages/scanconfigs/Trend';
-import {render, screen} from 'web/testing';
 
 describe('Scan Config Trend tests', () => {
   test('should render', () => {

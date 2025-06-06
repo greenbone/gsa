@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import FormGroup from 'web/components/form/FormGroup';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import useTranslation from 'web/hooks/useTranslation';

@@ -4,6 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  getSelectItemElementsForSelect,
+  rendererWith,
+  fireEvent,
+  screen,
+  wait,
+  within,
+} from 'web/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
@@ -13,14 +21,6 @@ import {entitiesLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {
-  getSelectItemElementsForSelect,
-  rendererWith,
-  fireEvent,
-  screen,
-  wait,
-  within,
-} from 'web/testing';
 
 const nvt = NVT.fromElement({
   _oid: '1.3.6.1.4.1.25623.1.0',

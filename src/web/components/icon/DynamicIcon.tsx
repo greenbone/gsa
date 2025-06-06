@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ActionIcon, ActionIconProps} from '@mantine/core';
-import {isDefined} from 'gmp/utils/identity';
-import {LucideIcon} from 'lucide-react';
 import React, {useState} from 'react';
+import {ActionIcon, ActionIconProps} from '@mantine/core';
+import {LucideIcon} from 'lucide-react';
+import {isDefined} from 'gmp/utils/identity';
 import useIconSize, {IconSizeType} from 'web/hooks/useIconSize';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';

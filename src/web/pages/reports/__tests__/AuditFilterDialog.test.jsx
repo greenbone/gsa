@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, within, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import React from 'react';
 import AuditReportFilter from 'web/pages/reports/AuditFilterDialog';
-import {screen, within, rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {_l, _} from 'gmp/locale/lang';
 import {getTranslatableTicketStatus} from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import SolutionType from 'web/components/icon/SolutionTypeIcon';

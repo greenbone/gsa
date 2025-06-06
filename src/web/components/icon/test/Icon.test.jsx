@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {fireEvent, render} from 'web/testing';
 import Icon from 'web/components/icon/Icon';
 import {ICON_SIZE_LARGE_PIXELS} from 'web/hooks/useIconSize';
-import {fireEvent, render} from 'web/testing';
 
 global.fetch = testing.fn(() => ({
   text: () => '',

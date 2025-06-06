@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import DialogError from 'web/components/dialog/Error';
 import {render, fireEvent, screen} from 'web/testing';
+import DialogError from 'web/components/dialog/Error';
 
 describe('Dialog error tests', () => {
   test('should render with defined error', () => {

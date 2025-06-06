@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
   isTaskEvent,
 } from 'gmp/models/alert';
-import React from 'react';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import Row from 'web/components/layout/Row';

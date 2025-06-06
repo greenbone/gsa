@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
 const convertAlign = (align: string): string => {
   switch (align) {

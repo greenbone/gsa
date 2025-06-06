@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import React from 'react';
 import WordCloudChart from 'web/components/chart/WordCloud';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';

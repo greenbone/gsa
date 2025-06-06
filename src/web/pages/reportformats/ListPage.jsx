@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {REPORT_FORMATS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import {REPORT_FORMATS_FILTER_FILTER} from 'gmp/models/filter';
 import {ImportIcon, ReportFormatIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';

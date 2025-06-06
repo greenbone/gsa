@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import ProgressBar from 'web/components/bar/ProgressBar';
 import {screen, render} from 'web/testing';
+import ProgressBar from 'web/components/bar/ProgressBar';
 import Theme from 'web/utils/Theme';
 
 describe('ProgressBar tests', () => {

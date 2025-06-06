@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import CertLink from 'web/components/link/CertLink';
 import CveLink from 'web/components/link/CveLink';
 import ExternalLink from 'web/components/link/ExternalLink';

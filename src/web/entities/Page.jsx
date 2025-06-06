@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
-import {excludeObjectProps} from 'gmp/utils/object';
 import React from 'react';
 import {connect} from 'react-redux';
+import {isDefined, hasValue} from 'gmp/utils/identity';
+import {excludeObjectProps} from 'gmp/utils/object';
 import Toolbar from 'web/components/bar/Toolbar';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Layout from 'web/components/layout/Layout';

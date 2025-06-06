@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Note from 'gmp/models/note';
 import NoteBox from 'web/entity/Note';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {screen, rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

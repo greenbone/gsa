@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {Line, LinePath} from '@visx/shape';
 import {scaleLinear, scaleUtc} from 'd3-scale';
+import memoize from 'memoize-one';
+import styled from 'styled-components';
 import date from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
-import memoize from 'memoize-one';
-import React from 'react';
-import styled from 'styled-components';
 import Axis from 'web/components/chart/Axis';
 import Group from 'web/components/chart/Group';
 import Legend, {

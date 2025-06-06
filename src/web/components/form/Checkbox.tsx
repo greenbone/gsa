@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Checkbox as OpenSightCheckbox} from '@greenbone/opensight-ui-components-mantinev7';
-import {CheckboxProps as MantineCheckboxProps} from '@mantine/core';
 import React, {useCallback} from 'react';
+import {CheckboxProps as MantineCheckboxProps} from '@mantine/core';
+import {Checkbox as OpenSightCheckbox} from '@greenbone/opensight-ui-components-mantinev7';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 

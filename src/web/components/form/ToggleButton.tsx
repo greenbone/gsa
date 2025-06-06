@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import Theme from 'web/utils/Theme';
 
 interface StyledProps extends React.HTMLAttributes<HTMLDivElement> {

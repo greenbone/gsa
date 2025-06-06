@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState, useEffect} from 'react';
 import {notifications} from '@mantine/notifications';
+import {useDispatch} from 'react-redux';
+import {useLocation, useNavigate} from 'react-router';
+import styled from 'styled-components';
 import Rejection from 'gmp/http/rejection';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {useLocation, useNavigate} from 'react-router';
-import styled from 'styled-components';
 import Img from 'web/components/img/Img';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';

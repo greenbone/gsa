@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {describe, test, expect, beforeEach, testing} from '@gsa/testing';
 import {updateNotification} from '@mantine/notifications';
+import {screen, render} from 'web/testing';
+import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {vi} from 'vitest';
 import CommunityFeedUsageNotification, {
   NOTIFICATION_SHOWN_KEY,
   NOTIFICATION_SHOWN,
 } from 'web/pages/login/notifications/CommunityFeedUsageNotification';
-import {screen, render} from 'web/testing';
 
 vi.mock('@greenbone/opensight-ui-components-mantinev7', () => ({
   showNotification: vi.fn(),

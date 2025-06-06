@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState, useEffect} from 'react';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import React, {useState, useEffect} from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';

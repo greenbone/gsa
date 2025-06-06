@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Cve from 'gmp/models/cve';
@@ -11,7 +12,6 @@ import Filter from 'gmp/models/filter';
 import {parseDate} from 'gmp/parser';
 import CveTable from 'web/pages/cves/Table';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

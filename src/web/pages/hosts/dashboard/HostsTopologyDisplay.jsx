@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import {useNavigate} from 'react-router';
 import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import React from 'react';
-import {useNavigate} from 'react-router';
 import HostsTopologyChart from 'web/components/chart/HostsTopologyChart';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';

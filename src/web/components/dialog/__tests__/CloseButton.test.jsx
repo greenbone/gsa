@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {render, fireEvent} from 'web/testing';
 import CloseButton from 'web/components/dialog/CloseButton';
 import {
   ICON_SIZE_LARGE_PIXELS,
   ICON_SIZE_MEDIUM_PIXELS,
 } from 'web/hooks/useIconSize';
-import {render, fireEvent} from 'web/testing';
 
 describe('Dialog CloseButton tests', () => {
   test('should render', () => {

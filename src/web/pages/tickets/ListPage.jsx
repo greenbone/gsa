@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 import React from 'react';
+import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {TicketIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import _ from 'gmp/locale';
-import i18next from 'i18next';
 import {useMemo} from 'react';
+import i18next from 'i18next';
+import _ from 'gmp/locale';
 import useLanguage from 'web/hooks/useLanguage';
 
 type TranslationHook = {

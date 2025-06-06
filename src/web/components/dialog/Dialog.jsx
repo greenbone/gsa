@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Modal} from '@greenbone/opensight-ui-components-mantinev7';
-import {ScrollArea} from '@mantine/core';
-import {isDefined, isFunction} from 'gmp/utils/identity';
 import {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import {ScrollArea} from '@mantine/core';
+import {Modal} from '@greenbone/opensight-ui-components-mantinev7';
 import styled from 'styled-components';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/PropTypes';
 
 const INITIAL_POSITION_X = 0;

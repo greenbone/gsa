@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
+import {ActionIcon} from '@mantine/core';
 import {
   FlagDeIcon,
   FlagEnIcon,
 } from '@greenbone/opensight-ui-components-mantinev7';
-import {ActionIcon} from '@mantine/core';
 import {DEFAULT_LANGUAGE} from 'gmp/locale/lang';
-import {useState} from 'react';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
 

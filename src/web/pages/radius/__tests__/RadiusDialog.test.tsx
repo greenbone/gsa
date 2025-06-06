@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Dialog from 'web/pages/radius/RadiusDialog';
 import {changeInputValue, screen, render, fireEvent} from 'web/testing';
+import Dialog from 'web/pages/radius/RadiusDialog';
 
 describe('RADIUS dialog component tests', () => {
   test('should render dialog', () => {

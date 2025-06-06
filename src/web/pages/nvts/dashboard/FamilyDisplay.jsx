@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
@@ -10,7 +11,6 @@ import {parseFloat, parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import {isEmpty} from 'gmp/utils/string';
-import React from 'react';
 import BubbleChart from 'web/components/chart/Bubble';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';

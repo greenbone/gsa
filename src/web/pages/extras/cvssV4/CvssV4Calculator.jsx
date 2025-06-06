@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState, useEffect, useMemo} from 'react';
+import {useSearchParams} from 'react-router';
+import styled from 'styled-components';
 import {
   expectedMetricOptionsOrdered,
   processVector,
   calculateScoreSafely,
   removeUnusedMetrics,
 } from 'gmp/parser/cvssV4';
-import {useState, useEffect, useMemo} from 'react';
-import {useSearchParams} from 'react-router';
-import styled from 'styled-components';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';

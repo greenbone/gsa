@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import Link from 'web/components/link/Link';
-import {rendererWith, fireEvent, screen} from 'web/testing';
 
 describe('Link tests', () => {
   test('render Link', () => {

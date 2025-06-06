@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import styled from 'styled-components';
 import {typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import React from 'react';
-import styled from 'styled-components';
 import Toolbar from 'web/components/bar/Toolbar';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Message from 'web/components/error/Message';

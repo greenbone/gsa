@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {TAG_NA} from 'gmp/models/nvt';
 import {isDefined, isNumber} from 'gmp/utils/identity';
-import React from 'react';
 import Severitybar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';

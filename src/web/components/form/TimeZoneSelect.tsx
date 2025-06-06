@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import timezones, {DEFAULT_TIMEZONE} from 'gmp/timezones';
 import {useMemo} from 'react';
+import timezones, {DEFAULT_TIMEZONE} from 'gmp/timezones';
 import Select, {SelectProps} from 'web/components/form/Select';
 
 interface TimeZoneSelectProps extends Omit<SelectProps, 'items' | 'value'> {

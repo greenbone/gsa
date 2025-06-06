@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import {RestoreIcon} from 'web/components/icon';
 import TrashDeleteIcon from 'web/components/icon/TrashDeleteIcon';
 import IconDivider from 'web/components/layout/IconDivider';

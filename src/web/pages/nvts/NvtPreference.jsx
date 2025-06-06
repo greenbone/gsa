@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {map} from 'gmp/utils/array';
-import {isEmpty} from 'gmp/utils/string';
 import {useState} from 'react';
 import styled from 'styled-components';
+import {map} from 'gmp/utils/array';
+import {isEmpty} from 'gmp/utils/string';
 import Checkbox from 'web/components/form/Checkbox';
 import FileField from 'web/components/form/FileField';
 import PasswordField from 'web/components/form/PasswordField';

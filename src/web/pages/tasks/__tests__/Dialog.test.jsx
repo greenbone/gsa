@@ -4,14 +4,6 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import ScanConfig from 'gmp/models/scanconfig';
-import {
-  CVE_SCANNER_TYPE,
-  OPENVAS_DEFAULT_SCANNER_ID,
-  OPENVAS_SCANNER_TYPE,
-  OPENVASD_SCANNER_TYPE,
-} from 'gmp/models/scanner';
-import TaskDialog from 'web/pages/tasks/Dialog';
 import {
   rendererWith,
   fireEvent,
@@ -20,6 +12,14 @@ import {
   wait,
   screen,
 } from 'web/testing';
+import ScanConfig from 'gmp/models/scanconfig';
+import {
+  CVE_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
+  OPENVAS_SCANNER_TYPE,
+  OPENVASD_SCANNER_TYPE,
+} from 'gmp/models/scanner';
+import TaskDialog from 'web/pages/tasks/Dialog';
 
 describe('TaskDialog component tests', () => {
   const gmp = {settings: {}};

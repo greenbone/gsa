@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import Settings from 'gmp/models/settings';
 import RadiusAuthentication from 'web/pages/radius/RadiusPage';
-import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 
 describe('RADIUS page renders', () => {
   test('should render page with no radius key', async () => {

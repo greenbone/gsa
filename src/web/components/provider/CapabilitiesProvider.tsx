@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Capabilities from 'gmp/capabilities/capabilities';
 import React from 'react';
+import Capabilities from 'gmp/capabilities/capabilities';
 
 const CapabilitiesContext = React.createContext<Capabilities | undefined>(
   undefined,

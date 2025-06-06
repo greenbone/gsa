@@ -125,7 +125,7 @@ describe('PortListCommand', () => {
     const http = createHttp(response);
     const command = new PortListCommand(http);
     const result = await command.import({
-      xmlFile: 'some file content',
+      xmlFile: new File(['some file content'], 'portlist.xml'),
     });
     expect(result.data).toEqual({});
   });

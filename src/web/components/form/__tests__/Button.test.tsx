@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Button from 'web/components/form/Button';
 import {render, fireEvent, screen} from 'web/testing';
+import Button from 'web/components/form/Button';
 
 describe('Button tests', () => {
   test('should call click handler', () => {

@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import {connect} from 'react-redux';
 import Filter from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import React from 'react';
-import {connect} from 'react-redux';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Loading from 'web/components/loading/Loading';
 import Reload, {

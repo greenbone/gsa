@@ -4,14 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Logger from 'gmp/log';
-import {beforeEach, vi} from 'vitest';
-import LoginPage from 'web/pages/login/LoginPage';
-import {
-  NOTIFICATION_SHOWN,
-  NOTIFICATION_SHOWN_KEY,
-} from 'web/pages/login/notifications/CommunityFeedUsageNotification';
-import {setIsLoggedIn} from 'web/store/usersettings/actions';
 import {
   changeInputValue,
   screen,
@@ -19,6 +11,14 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
+import {beforeEach, vi} from 'vitest';
+import Logger from 'gmp/log';
+import LoginPage from 'web/pages/login/LoginPage';
+import {
+  NOTIFICATION_SHOWN,
+  NOTIFICATION_SHOWN_KEY,
+} from 'web/pages/login/notifications/CommunityFeedUsageNotification';
+import {setIsLoggedIn} from 'web/store/usersettings/actions';
 
 Logger.setDefaultLevel('silent');
 const mockUseNavigate = testing.fn();

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {shorten} from 'gmp/utils/string';
-import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Divider from 'web/components/layout/Divider';
 import CveLink from 'web/components/link/CveLink';

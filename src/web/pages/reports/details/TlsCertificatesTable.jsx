@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_, _l} from 'gmp/locale/lang';
 import React from 'react';
 import styled from 'styled-components';
+import {_, _l} from 'gmp/locale/lang';
 import DateTime from 'web/components/date/DateTime';
 import {DownloadIcon} from 'web/components/icon';
 import Link from 'web/components/link/Link';

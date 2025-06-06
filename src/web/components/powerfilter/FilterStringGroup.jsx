@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isString} from 'gmp/utils/identity';
 import React from 'react';
+import {isString} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';

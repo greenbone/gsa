@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useCallback} from 'react';
 import {WeekDays} from 'gmp/models/event';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useCallback} from 'react';
 import ToggleButton from 'web/components/form/ToggleButton';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';

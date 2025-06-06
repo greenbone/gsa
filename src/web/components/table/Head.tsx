@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import {ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Sort, {ByType, DESC} from 'web/components/sortby/SortBy';

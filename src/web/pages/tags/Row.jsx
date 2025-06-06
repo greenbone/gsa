@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {typeName} from 'gmp/utils/entitytype';
 import React from 'react';
+import {typeName} from 'gmp/utils/entitytype';
 import DateTime from 'web/components/date/DateTime';
 import {DisableIcon, EnableIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';

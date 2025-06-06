@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -11,7 +12,6 @@ import Credential, {
 } from 'gmp/models/credential';
 import Date from 'gmp/models/date';
 import ScanConfig from 'gmp/models/scanconfig';
-import {screen, rendererWith, fireEvent} from 'web/testing';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);

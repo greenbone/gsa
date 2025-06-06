@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import Table from 'web/pages/policies/Table';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen} from 'web/testing';
 
 const policy = Policy.fromElement({
   _id: '12345',

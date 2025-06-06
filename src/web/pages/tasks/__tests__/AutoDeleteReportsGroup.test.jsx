@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {changeInputValue, screen, render, fireEvent} from 'web/testing';
 import {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   AUTO_DELETE_NO,
 } from 'gmp/models/task';
 import AutoDeleteReportsGroup from 'web/pages/tasks/AutoDeleteReportsGroup';
-import {changeInputValue, screen, render, fireEvent} from 'web/testing';
 
 describe('AutoDeleteReportsGroup tests', () => {
   test('should render dialog group', () => {

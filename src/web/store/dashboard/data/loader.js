@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import {
   receivedDashboardData,
   receivedDashboardError,

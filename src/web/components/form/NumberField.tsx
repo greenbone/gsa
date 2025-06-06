@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback, forwardRef} from 'react';
 import {
   NumberInput,
   NumberInputProps as MantineNumberInputProps,
 } from '@mantine/core';
-import {parseFloat, parseInt} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
-import {useCallback, forwardRef} from 'react';
 import {NumberFormatValues} from 'react-number-format';
 import styled from 'styled-components';
+import {parseFloat, parseInt} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 
 interface StyledNumberInputProps {
   size: string;

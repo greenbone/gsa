@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isFunction} from 'gmp/utils/identity';
 import {useEffect, useState} from 'react';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 import DialogContent from 'web/components/dialog/Content';
 import Dialog from 'web/components/dialog/Dialog';
 import DialogError from 'web/components/dialog/Error';

@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {render, fireEvent} from 'web/testing';
 import withClickHandler, {
   WithClickHandlerProps,
 } from 'web/components/form/withClickHandler';
-import {render, fireEvent} from 'web/testing';
 
 const TestInput = ({...props}) => <input {...props} type="text" />;
 

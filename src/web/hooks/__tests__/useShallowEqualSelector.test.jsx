@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {configureStore} from '@reduxjs/toolkit';
 import {useCallback} from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
+import {configureStore} from '@reduxjs/toolkit';
 import {useSelector, useDispatch} from 'react-redux';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
-import {fireEvent, rendererWith, screen} from 'web/testing';
 
 const reducer = (state = {value: 0}, action) => {
   switch (action.type) {

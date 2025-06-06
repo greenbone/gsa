@@ -4,15 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Credential from 'gmp/models/credential';
-import Filter from 'gmp/models/filter';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import CredentialPage, {ToolBarIcons} from 'web/pages/credentials/ListPage';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {
   getSelectItemElementsForSelect,
   screen,
@@ -22,6 +13,15 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
+import Capabilities from 'gmp/capabilities/capabilities';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
+import Credential from 'gmp/models/credential';
+import Filter from 'gmp/models/filter';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import CredentialPage, {ToolBarIcons} from 'web/pages/credentials/ListPage';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 const credential = Credential.fromElement({
   _id: '6575',

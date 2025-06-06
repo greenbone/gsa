@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import date, {duration as createDuration} from 'gmp/models/date';
 import Event, {ReccurenceFrequency, WeekDays} from 'gmp/models/event';
 import {DEFAULT_TIMEZONE} from 'gmp/timezones';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useState} from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Button from 'web/components/form/Button';
 import CheckBox from 'web/components/form/Checkbox';

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {format as d3format} from 'd3-format';
 import {_, _l} from 'gmp/locale/lang';
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import BarChart from 'web/components/chart/Bar';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';

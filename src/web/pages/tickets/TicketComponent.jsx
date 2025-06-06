@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {_} from 'gmp/locale/lang';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {TICKET_STATUS} from 'gmp/models/ticket';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import CreateTicketDialog from 'web/pages/tickets/CreateDialog';

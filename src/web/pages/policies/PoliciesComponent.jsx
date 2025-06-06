@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState, useCallback, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {
@@ -14,8 +16,6 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import React, {useState, useCallback, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
