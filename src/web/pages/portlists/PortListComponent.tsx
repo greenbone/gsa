@@ -193,7 +193,7 @@ const PortListComponent = ({
     return response.data.id;
   };
 
-  const handleImportPortList = async (data: {xmlFile: string}) => {
+  const handleImportPortList = async (data: {xmlFile: File}) => {
     handleInteraction();
     try {
       const response = await gmp.portlist.import(data);
