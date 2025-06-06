@@ -18,6 +18,7 @@ import PageTitle from 'web/components/layout/PageTitle';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Loading from 'web/components/loading/Loading';
 import Tab from 'web/components/tab/Tab';
+import {TabProvider} from 'web/components/tab/TabContext';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
@@ -40,6 +41,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
+
 export const ToolBarIcons = ({entity, onCpeDownloadClick}) => {
   const [_] = useTranslation();
 
@@ -175,41 +177,39 @@ const CpePage = ({
           onCpeDownloadClick={download}
           onInteraction={onInteraction}
         >
-          {({activeTab = 0, onActivateTab}) => {
+          {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle title={_('CPE: {{title}}', {title: entity.title})} />
-                <Layout flex="column" grow="1">
-                  <TabLayout align={['start', 'end']} grow="1">
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
-                      <Tab>{_('Information')}</Tab>
-                      <EntitiesTab entities={entity.userTags}>
-                        {_('User Tags')}
-                      </EntitiesTab>
-                    </TabList>
-                  </TabLayout>
+                <TabProvider>
+                  <Layout flex="column" grow="1">
+                    <TabLayout align={['start', 'end']} grow="1">
+                      <TabList align={['start', 'stretch']}>
+                        <Tab>{_('Information')}</Tab>
+                        <EntitiesTab entities={entity.userTags}>
+                          {_('User Tags')}
+                        </EntitiesTab>
+                      </TabList>
+                    </TabLayout>
 
-                  <Tabs active={activeTab}>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details entity={entity} />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityTags
-                          entity={entity}
-                          onChanged={onChanged}
-                          onError={onError}
-                          onInteraction={onInteraction}
-                        />
-                      </TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </Layout>
-              </React.Fragment>
+                    <Tabs>
+                      <TabPanels>
+                        <TabPanel>
+                          <Details entity={entity} />
+                        </TabPanel>
+                        <TabPanel>
+                          <EntityTags
+                            entity={entity}
+                            onChanged={onChanged}
+                            onError={onError}
+                            onInteraction={onInteraction}
+                          />
+                        </TabPanel>
+                      </TabPanels>
+                    </Tabs>
+                  </Layout>
+                </TabProvider>
+              </>
             );
           }}
         </EntityPage>
