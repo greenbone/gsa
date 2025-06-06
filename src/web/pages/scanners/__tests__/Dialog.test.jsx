@@ -1,4 +1,3 @@
-
 /* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -11,7 +10,10 @@ import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import Scanner, {AGENT_CONTROLLER_SCANNER_TYPE, GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+import Scanner, {
+  AGENT_CONTROLLER_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/Dialog';
 
 const sensorScanner = {
@@ -54,7 +56,10 @@ const cred2 = Credential.fromElement({
 const credentials = [cred1, cred2];
 
 const gmp = {settings: {enableGreenboneSensor: true}};
-const capabilities = new Capabilities(['everything'], {name: 'AGENT_CONTROLLER', _enabled: true});
+const capabilities = new Capabilities(['everything'], {
+  name: 'AGENT_CONTROLLER',
+  _enabled: true,
+});
 
 describe('ScannerDialog component tests', () => {
   test('should render sensor scanner', () => {
