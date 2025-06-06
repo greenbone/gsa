@@ -6,23 +6,36 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, render} from 'web/testing';
 import Badge from 'web/components/badge/Badge';
-import {ReportIcon} from 'web/components/icon';
 
 describe('Badge tests', () => {
-  test('should render badge', () => {
-    const {element} = render(
+  test('should render badge with children', () => {
+    render(
       <Badge content="1">
-        <ReportIcon />
+        <span>Test</span>
       </Badge>,
     );
 
-    expect(element).toBeVisible();
+    const badge = screen.getByTestId('badge-icon');
+    const children = screen.getByText('Test');
+
+    expect(badge).toBeVisible();
+    expect(children).toBeVisible();
   });
 
-  test('should render content', () => {
-    const {element} = render(<Badge content="1" />);
+  test('should render badge with string content', () => {
+    render(<Badge content="1" />);
 
-    expect(element).toHaveTextContent('1');
+    const badge = screen.getByTestId('badge-icon');
+
+    expect(badge).toHaveTextContent('1');
+  });
+
+  test('should render badge with number content', () => {
+    render(<Badge content={2} />);
+
+    const badge = screen.getByTestId('badge-icon');
+
+    expect(badge).toHaveTextContent('2');
   });
 
   test('should render backgroundColor', () => {
