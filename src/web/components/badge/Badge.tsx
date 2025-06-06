@@ -3,13 +3,32 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useRef, useState, useEffect} from 'react';
+import {useRef, useState, useEffect, ReactNode} from 'react';
 import styled from 'styled-components';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-const BadgeContainer = styled.div`
+interface BadgeContainerProps {
+  $margin?: number;
+}
+
+interface BadgeIconProps {
+  $backgroundColor?: string;
+  $color?: string;
+  $margin?: number;
+  $position?: 'top' | 'bottom';
+}
+
+interface BadgeProps {
+  backgroundColor?: string;
+  children?: ReactNode;
+  color?: string;
+  content?: string | number;
+  dynamic?: boolean;
+  position?: 'top' | 'bottom';
+}
+
+const BadgeContainer = styled.div<BadgeContainerProps>`
   position: relative;
   display: inline-flex;
   margin-right: ${props => props.$margin}px;
@@ -17,7 +36,7 @@ const BadgeContainer = styled.div`
 
 BadgeContainer.displayName = 'BadgeContainer';
 
-const BadgeIcon = styled.span`
+const BadgeIcon = styled.span<BadgeIconProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -38,30 +57,28 @@ const BadgeIcon = styled.span`
 
 BadgeIcon.displayName = 'BadgeIcon';
 
-const Badge = props => {
-  const icon = useRef();
+const Badge = ({
+  backgroundColor,
+  children,
+  color,
+  content,
+  dynamic = true,
+  position,
+}: BadgeProps) => {
+  const badgeIconRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     calcMargin();
-  }, [props.content]);
+  }, [content]);
 
-  const [margin, setMargin] = useState(undefined);
+  const [margin, setMargin] = useState<number | undefined>(undefined);
 
   const calcMargin = () => {
-    if (hasValue(icon.current)) {
-      const {width} = icon.current.getBoundingClientRect();
+    if (hasValue(badgeIconRef.current)) {
+      const {width} = badgeIconRef.current.getBoundingClientRect();
       setMargin(width / 2);
     }
   };
-
-  const {
-    backgroundColor,
-    children,
-    color,
-    content,
-    dynamic = true,
-    position,
-  } = props;
 
   return (
     <BadgeContainer $margin={dynamic ? margin : undefined}>
@@ -69,7 +86,7 @@ const Badge = props => {
 
       {isDefined(content) && (
         <BadgeIcon
-          ref={icon}
+          ref={badgeIconRef}
           $backgroundColor={backgroundColor}
           $color={color}
           $margin={dynamic ? margin : undefined}
@@ -81,15 +98,6 @@ const Badge = props => {
       )}
     </BadgeContainer>
   );
-};
-
-Badge.propTypes = {
-  backgroundColor: PropTypes.string,
-  children: PropTypes.node,
-  color: PropTypes.string,
-  content: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  dynamic: PropTypes.bool,
-  position: PropTypes.oneOf(['bottom', 'top']),
 };
 
 export default Badge;
