@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
+import Capabilities from 'gmp/capabilities/capabilities';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
