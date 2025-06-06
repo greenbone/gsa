@@ -21,6 +21,7 @@ import PortRangesTable, {PortRange} from 'web/pages/portlists/PortRangesTable';
 export interface SavePortListData<TPortRange extends PortRange> {
   id?: string;
   comment: string;
+  file?: File;
   fromFile: FromFile;
   name: string;
   portRange: string;
