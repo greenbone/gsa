@@ -8,7 +8,7 @@ import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantin
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
+import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Button from 'web/components/form/Button';
 import {TrashcanIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';

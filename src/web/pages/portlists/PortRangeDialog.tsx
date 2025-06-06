@@ -12,8 +12,8 @@ import useTranslation from 'web/hooks/useTranslation';
 
 export interface PortRangeDialogData {
   portListId: string;
-  portRangeStart: number;
-  portRangeEnd: number;
+  portRangeStart: number | undefined;
+  portRangeEnd: number | undefined;
   portType: ProtocolType;
 }
 
@@ -23,6 +23,13 @@ interface PortRangeDialogProps {
   title?: string;
   onClose: () => void;
   onSave: (data: PortRangeDialogData) => void;
+}
+
+interface PortRangeDialogDefaultValues {
+  portListId: string;
+  portRangeStart: number | undefined;
+  portRangeEnd: number | undefined;
+  portType: ProtocolType;
 }
 
 const PortRangeDialog = ({
@@ -38,13 +45,13 @@ const PortRangeDialog = ({
 
   const data = {
     portListId,
-    portRangeStart: '',
-    portRangeEnd: '',
+    portRangeStart: undefined,
+    portRangeEnd: undefined,
     portType,
   };
 
   return (
-    <SaveDialog
+    <SaveDialog<{}, PortRangeDialogDefaultValues>
       defaultValues={data}
       title={title}
       onClose={onClose}

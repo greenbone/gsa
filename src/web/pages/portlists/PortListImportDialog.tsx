@@ -10,13 +10,17 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface PortListImportDialogProps {
   onClose: () => void;
-  onSave: (data: {xmlFile: File}) => void | Promise<void>;
+  onSave: (data: PortListImportDialogValues) => void | Promise<void>;
+}
+
+interface PortListImportDialogValues {
+  xmlFile: File;
 }
 
 const PortListImportDialog = ({onClose, onSave}: PortListImportDialogProps) => {
   const [_] = useTranslation();
   return (
-    <SaveDialog
+    <SaveDialog<PortListImportDialogValues>
       buttonTitle={_('Import')}
       title={_('Import Port List')}
       onClose={onClose}

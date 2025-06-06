@@ -43,6 +43,19 @@ interface PortListsDialogProps<TPortRange extends PortRange> {
   onTmpDeletePortRange: (portRange: TPortRange) => void;
 }
 
+interface PortListDialogValues<TPortRange extends PortRange> {
+  file?: File;
+  portRanges: TPortRange[];
+}
+
+interface PortListsDialogDefaultValues {
+  id: string | undefined;
+  comment: string;
+  fromFile: FromFile;
+  name: string;
+  portRange: string;
+}
+
 const PortListsDialog = <TPortRange extends PortRange>({
   comment = '',
   fromFile = NOT_FROM_FILE,
@@ -81,7 +94,7 @@ const PortListsDialog = <TPortRange extends PortRange>({
   };
 
   return (
-    <SaveDialog
+    <SaveDialog<PortListDialogValues<TPortRange>, PortListsDialogDefaultValues>
       defaultValues={data}
       title={title}
       values={{portRanges}}

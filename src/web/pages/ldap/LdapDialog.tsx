@@ -27,6 +27,17 @@ interface LdapDialogProps {
   onSave: (values: SaveLdapArguments) => void;
 }
 
+interface LdapDialogDefaultValues {
+  authdn: string;
+  ldapEnabled: boolean;
+  ldapHost: string;
+  ldapsOnly: boolean;
+}
+
+interface LdapDialogValues {
+  certificate: File;
+}
+
 const LdapDialog = ({
   authdn = '',
   ldapEnabled = false,
@@ -43,7 +54,7 @@ const LdapDialog = ({
     ldapsOnly,
   };
   return (
-    <SaveDialog
+    <SaveDialog<LdapDialogValues, LdapDialogDefaultValues>
       buttonTitle={_('Save')}
       defaultValues={uncontrolledValues}
       title={_('Edit LDAP per-User Authentication')}

@@ -3,13 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {DialogFooterLayout} from 'web/components/dialog/Footer';
+import {DialogFooterLayout} from 'web/components/dialog/DialogFooter';
 import Button from 'web/components/form/Button';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
 export const DELETE_ACTION = 'delete';
+
+interface DialogTwoButtonFooterProps {
+  leftButtonTitle?: string;
+  rightButtonTitle: string;
+  onLeftButtonClick?: () => void;
+  onRightButtonClick?: () => void;
+  loading?: boolean;
+  isLoading?: boolean;
+  rightButtonAction?: typeof DELETE_ACTION;
+}
 
 const DialogTwoButtonFooter = ({
   leftButtonTitle,
@@ -19,7 +27,7 @@ const DialogTwoButtonFooter = ({
   loading = false,
   isLoading = loading,
   rightButtonAction,
-}) => {
+}: DialogTwoButtonFooterProps) => {
   const [_] = useTranslation();
   leftButtonTitle = leftButtonTitle || _('Cancel');
   const isRightButtonAction = DELETE_ACTION === rightButtonAction;
@@ -43,16 +51,6 @@ const DialogTwoButtonFooter = ({
       </Button>
     </DialogFooterLayout>
   );
-};
-
-DialogTwoButtonFooter.propTypes = {
-  isLoading: PropTypes.bool,
-  leftButtonTitle: PropTypes.string,
-  loading: PropTypes.bool,
-  rightButtonTitle: PropTypes.string.isRequired,
-  onLeftButtonClick: PropTypes.func,
-  onRightButtonClick: PropTypes.func,
-  rightButtonAction: PropTypes.oneOf([undefined, DELETE_ACTION]),
 };
 
 export default DialogTwoButtonFooter;

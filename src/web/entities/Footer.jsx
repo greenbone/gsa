@@ -9,7 +9,7 @@ import {
   showSuccessNotification,
 } from '@greenbone/opensight-ui-components-mantinev7';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
+import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Select from 'web/components/form/Select';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';

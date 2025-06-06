@@ -62,8 +62,8 @@ describe('PortRangeDialog tests', () => {
 
     expect(onSave).toHaveBeenCalledWith({
       portListId: '123',
-      portRangeEnd: '',
-      portRangeStart: '',
+      portRangeEnd: undefined,
+      portRangeStart: undefined,
       portType: 'tcp',
     });
   });
@@ -109,8 +109,8 @@ describe('PortRangeDialog tests', () => {
 
     expect(onSave).toHaveBeenCalledWith({
       portListId: '123',
-      portRangeEnd: '',
-      portRangeStart: '',
+      portRangeEnd: undefined,
+      portRangeStart: undefined,
       portType: 'udp',
     });
   });
