@@ -45,7 +45,7 @@ interface PortListCommandDeletePortRangeParams {
 }
 
 interface PortListCommandImportParams {
-  xmlFile: string;
+  xmlFile: File;
 }
 
 export class PortListCommand extends EntityCommand<PortList, PortListElement> {
