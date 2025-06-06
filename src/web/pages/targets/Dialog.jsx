@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   snmp_credential_filter,
   ssh_credential_filter,
@@ -16,7 +17,6 @@ import {
   krb5CredentialFilter,
 } from 'gmp/models/credential';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';

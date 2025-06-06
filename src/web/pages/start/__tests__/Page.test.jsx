@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {within, rendererWith, wait, screen} from 'web/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import StartPage from 'web/pages/start/Page';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {within, rendererWith, wait, screen} from 'web/testing';
 
 const manualUrl = 'test/';
 

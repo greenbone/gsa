@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {pie as d3pie} from 'd3-shape';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import Group from 'web/components/chart/Group';
 import arc from 'web/components/chart/utils/Arc';
 import PropTypes from 'web/utils/PropTypes';

@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import equal from 'fast-deep-equal';
+import styled from 'styled-components';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import React from 'react';
-import styled from 'styled-components';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import Display, {
   DISPLAY_HEADER_HEIGHT,

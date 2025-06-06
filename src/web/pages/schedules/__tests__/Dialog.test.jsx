@@ -4,10 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import date from 'gmp/models/date';
-import Schedule from 'gmp/models/schedule';
-import timezones from 'gmp/timezones';
-import ScheduleDialog from 'web/pages/schedules/Dialog';
 import {
   fireEvent,
   screen,
@@ -16,6 +12,10 @@ import {
   render,
   closeDialog,
 } from 'web/testing';
+import date from 'gmp/models/date';
+import Schedule from 'gmp/models/schedule';
+import timezones from 'gmp/timezones';
+import ScheduleDialog from 'web/pages/schedules/Dialog';
 
 const checkElementVisibilityAndContent = (
   labelText,

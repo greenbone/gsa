@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 import useClickHandler, {
   nameFromEvent,
   valueFromEvent,
 } from 'web/components/form/useClickHandler';
-import {fireEvent, rendererWith, screen} from 'web/testing';
 
 interface MockEvent {
   currentTarget: {

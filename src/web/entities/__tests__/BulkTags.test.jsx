@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, within, rendererWith, fireEvent, wait} from 'web/testing';
 import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
 import BulkTags from 'web/entities/BulkTags';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
-import {screen, within, rendererWith, fireEvent, wait} from 'web/testing';
 import SelectionType from 'web/utils/SelectionType';
 
 describe('BulkTags', () => {

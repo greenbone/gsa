@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useRef, useCallback} from 'react';
 import logger from 'gmp/log';
 import {hasValue} from 'gmp/utils/identity';
-import React, {useRef, useCallback} from 'react';
 import Download from 'web/components/form/Download';
 
 const log = logger.getLogger('web.components.form.useDownload');

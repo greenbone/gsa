@@ -4,10 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import PortList from 'gmp/models/portlist';
-import Button from 'web/components/form/Button';
-import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import PortListComponent from 'web/pages/portlists/PortListComponent';
 import {
   changeInputValue,
   screen,
@@ -16,6 +12,10 @@ import {
   wait,
   fireEvent,
 } from 'web/testing';
+import PortList from 'gmp/models/portlist';
+import Button from 'web/components/form/Button';
+import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
+import PortListComponent from 'web/pages/portlists/PortListComponent';
 
 const getPortListResponse = {
   data: PortList.fromElement({id: '123', name: 'foo'}),

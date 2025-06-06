@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import MenuEntry from 'web/components/menu/MenuEntry';
 import {render, rendererWith, screen, fireEvent} from 'web/testing';
+import MenuEntry from 'web/components/menu/MenuEntry';
 
 describe('MenuEntry', () => {
   test('should render title', () => {

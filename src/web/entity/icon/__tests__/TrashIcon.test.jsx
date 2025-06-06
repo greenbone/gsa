@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task from 'gmp/models/task';
 import TrashIcon from 'web/entity/icon/TrashIcon';
-import {rendererWith, fireEvent} from 'web/testing';
 
 describe('Entity TrashIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

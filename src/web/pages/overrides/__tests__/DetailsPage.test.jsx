@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
@@ -12,7 +13,6 @@ import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSetting
 import DetailsPage, {ToolBarIcons} from 'web/pages/overrides/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/overrides';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 

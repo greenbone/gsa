@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React, {useEffect, useState} from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import TabList from 'web/components/tab/TabList';
 import TabPanels from 'web/components/tab/TabPanels';
 

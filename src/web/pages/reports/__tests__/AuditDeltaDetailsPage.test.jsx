@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, within, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import React from 'react';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/MockAuditDeltaReport';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {screen, within, rendererWith} from 'web/testing';
 
 const filter = Filter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',

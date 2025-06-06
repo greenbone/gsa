@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {describe, test, expect, testing} from '@gsa/testing';
+import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import actionFunction from 'web/entity/hooks/actionFunction';
 
 vi.mock('@greenbone/opensight-ui-components-mantinev7', () => ({

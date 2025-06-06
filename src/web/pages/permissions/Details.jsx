@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';

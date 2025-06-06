@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import NvtPreference from 'web/pages/nvts/NvtPreference';
 import {render, fireEvent, screen} from 'web/testing';
+import NvtPreference from 'web/pages/nvts/NvtPreference';
 
 describe('NvtPreference', () => {
   const mockOnChange = testing.fn();

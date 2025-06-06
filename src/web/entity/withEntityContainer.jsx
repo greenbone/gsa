@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import Filter from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
 import withDownload from 'web/components/form/withDownload';
 import Reload, {
   NO_RELOAD,

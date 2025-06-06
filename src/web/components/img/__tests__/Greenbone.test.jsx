@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import GreenboneLogo from 'web/components/img/Greenbone';
 import {render} from 'web/testing';
+import GreenboneLogo from 'web/components/img/Greenbone';
 
 describe('GreenboneLogo tests', () => {
   test('should render', () => {

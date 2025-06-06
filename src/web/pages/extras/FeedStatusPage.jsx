@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
 import {
   NVT_FEED,
   SCAP_FEED,
@@ -11,7 +12,6 @@ import {
 } from 'gmp/commands/feedstatus';
 import {parseInt} from 'gmp/parser';
 import {hasValue} from 'gmp/utils/identity';
-import React, {useState} from 'react';
 import {
   CertBundAdvIcon,
   CpeLogoIcon,

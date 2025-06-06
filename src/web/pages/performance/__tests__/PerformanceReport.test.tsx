@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, screen, wait} from 'web/testing';
 import {PerformanceReport as PerformanceReportModel} from 'gmp/commands/performance';
 import date from 'gmp/models/date';
 import PerformanceReport from 'web/pages/performance/PerformanceReport';
-import {rendererWith, screen, wait} from 'web/testing';
 
 describe('PerformanceReport', () => {
   test('renders nothing if report or report details are undefined', async () => {

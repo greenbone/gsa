@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Spinner} from '@greenbone/opensight-ui-components-mantinev7';
 import React from 'react';
+import {Spinner} from '@greenbone/opensight-ui-components-mantinev7';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
 

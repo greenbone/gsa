@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import React from 'react';
 import styled from 'styled-components';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import CheckBox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import useTranslation from 'web/hooks/useTranslation';

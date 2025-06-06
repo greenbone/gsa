@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React, {useEffect, useReducer, useState} from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import SaveDialog from 'web/components/dialog/SaveDialog';

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import React from 'react';
 import styled from 'styled-components';
+import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

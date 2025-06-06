@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState, useRef, useCallback} from 'react';
+import {useDispatch} from 'react-redux';
 import {
   email_credential_filter,
   password_only_credential_filter,
@@ -14,8 +16,6 @@ import {first} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
-import React, {useState, useRef, useCallback} from 'react';
-import {useDispatch} from 'react-redux';
 import FootNote from 'web/components/footnote/Footnote';
 import Layout from 'web/components/layout/Layout';
 import EntityComponent from 'web/entity/EntityComponent';

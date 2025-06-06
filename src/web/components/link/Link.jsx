@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isString} from 'gmp/utils/identity';
 import React from 'react';
 import {Link as RLink} from 'react-router';
 import styled from 'styled-components';
+import {isDefined, isString} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 

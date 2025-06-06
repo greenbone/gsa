@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import ResumeIcon from 'web/pages/tasks/icons/ResumeIcon';
-import {screen, rendererWith, fireEvent} from 'web/testing';
 import Theme from 'web/utils/Theme';
 
 describe('Task ResumeIcon component tests', () => {

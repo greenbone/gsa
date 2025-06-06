@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
 import {
   isTaskEvent,
   isSecinfoEvent,
@@ -15,7 +16,6 @@ import {
   email_credential_filter,
 } from 'gmp/models/credential';
 import {selectSaveId} from 'gmp/utils/id';
-import React, {useState} from 'react';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';

@@ -4,8 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import User from 'gmp/models/user';
-import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
 import {
   changeInputValue,
   getSelectItemElementsForSelect,
@@ -13,6 +11,8 @@ import {
   render,
   fireEvent,
 } from 'web/testing';
+import User from 'gmp/models/user';
+import CreateTicketDialog from 'web/pages/tickets/CreateDialog';
 
 const u1 = User.fromElement({
   _id: 'u1',

@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import ProtocolDocLink from 'web/components/link/ProtocolDocLink';
 import {rendererWith} from 'web/testing';
+import ProtocolDocLink from 'web/components/link/ProtocolDocLink';
 
 describe('ProtocolDocLink tests', () => {
   test('should render ProtocolDocLink', () => {

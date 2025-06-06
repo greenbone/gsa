@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';

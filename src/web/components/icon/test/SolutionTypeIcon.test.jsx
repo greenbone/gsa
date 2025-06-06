@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import SolutionType from 'web/components/icon/SolutionTypeIcon';
 import {render} from 'web/testing';
+import SolutionType from 'web/components/icon/SolutionTypeIcon';
 
 describe('SolutionType component tests', () => {
   test('should render correct icons', () => {

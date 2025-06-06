@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWithTable, screen} from 'web/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import AuditRow from 'web/pages/reports/AuditReportRow';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {rendererWithTable, screen} from 'web/testing';
 
 describe('Audit report row', () => {
   test('should render row for Audit report', () => {

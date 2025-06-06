@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState, useEffect, useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {hasValue, isDefined, isFunction} from 'gmp/utils/identity';
-import {useState, useEffect, useCallback} from 'react';
 
 type ValidationFunc<TValue, TValues> = (
   value: TValue,

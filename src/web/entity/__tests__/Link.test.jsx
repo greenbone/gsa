@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Model from 'gmp/model';
 import {YES_VALUE} from 'gmp/parser';
 import EntityLink from 'web/entity/Link';
-import {screen, rendererWith} from 'web/testing';
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);

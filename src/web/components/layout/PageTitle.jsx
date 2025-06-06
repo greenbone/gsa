@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import {useEffect} from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import {applianceTitle} from 'web/utils/applianceData';
 import PropTypes from 'web/utils/PropTypes';

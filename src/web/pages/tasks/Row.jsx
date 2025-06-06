@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';

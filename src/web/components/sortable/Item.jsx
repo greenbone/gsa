@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Draggable} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
 import React from 'react';
+import {Draggable} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
 import styled from 'styled-components';
 import PropTypes from 'web/utils/PropTypes';
 

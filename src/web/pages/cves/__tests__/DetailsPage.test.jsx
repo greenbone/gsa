@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Cve from 'gmp/models/cve';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CvePage from 'web/pages/cves/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {rendererWith, screen} from 'web/testing';
 
 const entity_v2 = Cve.fromElement({
   _id: 'CVE-2020-9997',

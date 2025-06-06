@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import {useState} from 'react';
 import EntityComponent from 'web/entity/EntityComponent';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

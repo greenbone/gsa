@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {render, screen, fireEvent} from 'web/testing';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
-import {render, screen, fireEvent} from 'web/testing';
 
 const TestComponent = () => {
   const {

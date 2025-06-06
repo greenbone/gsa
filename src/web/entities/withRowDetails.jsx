@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isFunction} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {isFunction} from 'gmp/utils/identity';
 import {DetailsIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';

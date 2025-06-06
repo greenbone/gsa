@@ -4,8 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Credential, {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
-import CredentialsDialog from 'web/pages/credentials/Dialog';
 import {
   changeInputValue,
   closeDialog,
@@ -15,6 +13,8 @@ import {
   rendererWith,
   fireEvent,
 } from 'web/testing';
+import Credential, {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
+import CredentialsDialog from 'web/pages/credentials/Dialog';
 
 const gmp = {
   settings: {

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, testing} from '@gsa/testing';
+import {rendererWith, screen, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
-import {rendererWith, screen, fireEvent} from 'web/testing';
 
 const capabilities = new Capabilities(['everything']);
 

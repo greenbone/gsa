@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-import {AlertCircle} from 'lucide-react';
 import React from 'react';
+import {AlertCircle} from 'lucide-react';
+import {isDefined} from 'gmp/utils/identity';
 import ErrorContainer from 'web/components/error/ErrorContainer';
 import Divider from 'web/components/layout/Divider';
 import Layout, {LayoutProps} from 'web/components/layout/Layout';

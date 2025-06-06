@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseInt} from 'gmp/parser';
 import React from 'react';
+import {parseInt} from 'gmp/parser';
 import {FoldState} from 'web/components/folding/Folding';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';

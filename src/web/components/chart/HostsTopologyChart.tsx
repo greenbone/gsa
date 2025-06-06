@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {color} from 'd3-color';
 import {
   forceSimulation,
@@ -16,10 +17,9 @@ import {
 } from 'd3-force';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import equal from 'fast-deep-equal';
+import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, SeverityRating} from 'gmp/utils/severity';
-import React from 'react';
-import styled from 'styled-components';
 import Group from 'web/components/chart/Group';
 import Layout from 'web/components/layout/Layout';
 import {setRef} from 'web/utils/Render';

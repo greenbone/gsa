@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_} from 'gmp/locale/lang';
 import React from 'react';
+import {_} from 'gmp/locale/lang';
 import {
   DownloadSvgIcon,
   DownloadCsvIcon,

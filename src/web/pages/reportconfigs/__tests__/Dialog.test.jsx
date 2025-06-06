@@ -4,11 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import ReportConfig from 'gmp/models/reportconfig';
-import ReportFormat from 'gmp/models/reportformat';
-import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
-import {mockReportFormats} from 'web/pages/reportconfigs/__mocks__/MockReportFormats';
-import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
 import {
   changeInputValue,
   getSelectItemElementsForSelect,
@@ -18,6 +13,11 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
+import ReportConfig from 'gmp/models/reportconfig';
+import ReportFormat from 'gmp/models/reportformat';
+import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/MockReportConfig';
+import {mockReportFormats} from 'web/pages/reportconfigs/__mocks__/MockReportFormats';
+import ReportConfigDialog from 'web/pages/reportconfigs/Dialog';
 
 const config = ReportConfig.fromElement(mockReportConfig);
 

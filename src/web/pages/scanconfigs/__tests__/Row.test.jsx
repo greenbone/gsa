@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWithTable, screen, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
@@ -11,7 +12,6 @@ import ScanConfig, {
 } from 'gmp/models/scanconfig';
 import Row from 'web/pages/scanconfigs/Row';
 import {setUsername} from 'web/store/usersettings/actions';
-import {rendererWithTable, screen, fireEvent} from 'web/testing';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);

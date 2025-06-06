@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Delta} from 'gmp/models/result';
 import React from 'react';
+import {Delta} from 'gmp/models/result';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 

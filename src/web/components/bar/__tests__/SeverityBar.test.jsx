@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {screen, rendererWith} from 'web/testing';
 import {
   DEFAULT_SEVERITY_RATING,
   SEVERITY_RATING_CVSS_2,
   SEVERITY_RATING_CVSS_3,
 } from 'gmp/utils/severity';
 import SeverityBar from 'web/components/bar/SeverityBar';
-import {screen, rendererWith} from 'web/testing';
 import Theme from 'web/utils/Theme';
 
 describe('SeverityBar tests', () => {

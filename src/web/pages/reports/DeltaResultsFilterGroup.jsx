@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import Divider from 'web/components/layout/Divider';

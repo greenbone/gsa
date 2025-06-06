@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {AppNavigation} from '@greenbone/opensight-ui-components-mantinev7';
 import {
   BarChart3,
@@ -14,7 +15,6 @@ import {
   FileCheck,
   CircleHelp,
 } from 'lucide-react';
-import React from 'react';
 import {useMatch} from 'react-router';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';

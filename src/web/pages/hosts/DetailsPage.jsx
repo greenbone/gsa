@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {HostIcon, ResultIcon, TlsCertificateIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';

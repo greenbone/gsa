@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
 import {parseSeverity} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React, {useState} from 'react';
 import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
 import RelationSelector from 'web/components/powerfilter/RelationSelector';

@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
 import {
   useReducer,
   useState,
@@ -14,6 +11,9 @@ import {
   memo,
   useRef,
 } from 'react';
+import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 import DialogInlineNotification from 'web/components/dialog/DialogInlineNotification';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import TextField from 'web/components/form/TextField';

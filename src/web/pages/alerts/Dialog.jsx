@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import styled from 'styled-components';
 import _ from 'gmp/locale';
 import {
   CONDITION_TYPE_ALWAYS,
@@ -29,8 +31,6 @@ import {
 import {parseInt, NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';

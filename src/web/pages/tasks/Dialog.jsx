@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import styled from 'styled-components';
 import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -21,8 +23,6 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {first} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';

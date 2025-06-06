@@ -4,6 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  getSelectItemElementsForSelect,
+  screen,
+  within,
+  fireEvent,
+  rendererWith,
+  wait,
+} from 'web/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import CPE from 'gmp/models/cpe';
 import Filter from 'gmp/models/filter';
@@ -14,14 +22,6 @@ import {entitiesLoadingActions} from 'web/store/entities/cpes';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {
-  getSelectItemElementsForSelect,
-  screen,
-  within,
-  fireEvent,
-  rendererWith,
-  wait,
-} from 'web/testing';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',

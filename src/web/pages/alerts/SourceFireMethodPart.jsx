@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   PASSWORD_ONLY_CREDENTIAL_TYPE,
   password_only_credential_filter,
 } from 'gmp/models/credential';
-import React from 'react';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';

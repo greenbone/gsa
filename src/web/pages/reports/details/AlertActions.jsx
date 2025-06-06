@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
+import {connect} from 'react-redux';
 import logger from 'gmp/log';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
-import {connect} from 'react-redux';
 import {StartIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import AlertComponent from 'web/pages/alerts/AlertComponent';

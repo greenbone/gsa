@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback, useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {useSearchParams} from 'react-router';
+import styled from 'styled-components';
 import {
   DEFAULT_SENSOR_ID,
   PerformanceReport as PerformanceReportModel,
@@ -12,10 +16,6 @@ import Filter from 'gmp/models/filter';
 import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
-import {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {useSearchParams} from 'react-router';
-import styled from 'styled-components';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import withClickHandler from 'web/components/form/withClickHandler';

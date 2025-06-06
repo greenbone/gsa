@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
-import memoize from 'memoize-one';
 import React from 'react';
+import memoize from 'memoize-one';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
 import {v4 as uuid} from 'uuid';
+import {isDefined} from 'gmp/utils/identity';
 import {
   addDisplayToSettings,
   canAddDisplay,

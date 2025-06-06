@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useCallback} from 'react';
 import {
   GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
@@ -10,7 +11,6 @@ import {
 import {parseInt} from 'gmp/parser';
 import {filter, map} from 'gmp/utils/array';
 import {hasValue, isDefined} from 'gmp/utils/identity';
-import React, {useCallback} from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';

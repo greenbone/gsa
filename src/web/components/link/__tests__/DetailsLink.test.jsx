@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import DetailsLink from 'web/components/link/DetailsLink';
-import {fireEvent, rendererWith, screen} from 'web/testing';
 
 describe('DetailsLink tests', () => {
   beforeEach(() => {

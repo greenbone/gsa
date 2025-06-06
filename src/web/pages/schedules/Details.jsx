@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';

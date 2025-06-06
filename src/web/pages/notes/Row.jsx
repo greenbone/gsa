@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {shorten} from 'gmp/utils/string';
 import React from 'react';
+import {shorten} from 'gmp/utils/string';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';

@@ -4,11 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {rendererWith} from 'web/testing';
 import Model from 'gmp/model';
 import Date from 'gmp/models/date';
 import EntityInfo from 'web/entity/EntityInfo';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {rendererWith} from 'web/testing';
 
 const date = Date('2019-01-01T12:00:00Z');
 const date2 = Date('2019-02-02T12:00:00Z');

@@ -4,6 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  screen,
+  testBulkTrashcanDialog,
+  within,
+  rendererWith,
+  fireEvent,
+  wait,
+} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
@@ -14,14 +22,6 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
-import {
-  screen,
-  testBulkTrashcanDialog,
-  within,
-  rendererWith,
-  fireEvent,
-  wait,
-} from 'web/testing';
 
 const lastReport = {
   report: {

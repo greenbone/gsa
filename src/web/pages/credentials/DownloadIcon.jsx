@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import React from 'react';
 import {
   DownloadDebIcon,
   DownloadExeIcon,

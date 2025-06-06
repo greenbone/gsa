@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {DragDropContext} from '@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration';
+import {v4 as uuid} from 'uuid';
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import {isDefined} from 'gmp/utils/identity';
-import {useState} from 'react';
-import {v4 as uuid} from 'uuid';
 import AutoSize from 'web/components/layout/AutoSize';
 import Layout from 'web/components/layout/Layout';
 import EmptyRow from 'web/components/sortable/EmptyRow';

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import {isDefined} from 'gmp/utils/identity';
 import {NoteIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {render, fireEvent} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
-import {render, fireEvent} from 'web/testing';
 
 describe('Empty Results Report tests', () => {
   test('should render empty results report', () => {

@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
 import React, {ReactNode, MouseEvent} from 'react';
+import {Button as OpenSightButton} from '@greenbone/opensight-ui-components-mantinev7';
 import useValueChange from 'web/components/form/useValueChange';
 
 interface ButtonProps {

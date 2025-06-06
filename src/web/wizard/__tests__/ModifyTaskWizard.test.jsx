@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Date from 'gmp/models/date';
 import Task from 'gmp/models/task';
-import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);

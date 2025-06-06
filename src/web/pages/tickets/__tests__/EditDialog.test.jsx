@@ -4,15 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {TICKET_STATUS} from 'gmp/models/ticket';
-import User from 'gmp/models/user';
-import EditTicketDialog from 'web/pages/tickets/EditDialog';
 import {
   getSelectItemElementsForSelect,
   screen,
   render,
   fireEvent,
 } from 'web/testing';
+import {TICKET_STATUS} from 'gmp/models/ticket';
+import User from 'gmp/models/user';
+import EditTicketDialog from 'web/pages/tickets/EditDialog';
 
 const u1 = User.fromElement({
   _id: 'u1',

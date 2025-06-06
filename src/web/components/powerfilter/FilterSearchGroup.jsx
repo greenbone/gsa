@@ -6,8 +6,8 @@
 /* this is experimental. trying to consolidate all filter terms whose
  * method should be ~'value' into one. */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import PropTypes from 'web/utils/PropTypes';

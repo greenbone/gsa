@@ -4,11 +4,11 @@
  */
 
 import {ThemeProvider} from '@greenbone/opensight-ui-components-mantinev7';
-import {DEFAULT_LANGUAGE, getLocale} from 'gmp/locale/lang';
-import {isDefined} from 'gmp/utils/identity';
 import {Provider as StoreProvider} from 'react-redux';
 import {useLocation} from 'react-router';
 import {StyleSheetManager} from 'styled-components';
+import {DEFAULT_LANGUAGE, getLocale} from 'gmp/locale/lang';
+import {isDefined} from 'gmp/utils/identity';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import GmpContext from 'web/components/provider/GmpProvider';
 import {LanguageContext} from 'web/components/provider/LanguageProvider';

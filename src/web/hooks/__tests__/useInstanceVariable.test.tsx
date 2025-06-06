@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
 import {useState} from 'react';
-import useInstanceVariable from 'web/hooks/useInstanceVariable';
+import {describe, test, expect} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
+import useInstanceVariable from 'web/hooks/useInstanceVariable';
 
 const TestComponent = () => {
   const [someVariable, setVariable] = useInstanceVariable(1);

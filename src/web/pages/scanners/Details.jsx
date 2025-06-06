@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import CertInfo from 'web/components/certinfo/CertInfo';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';

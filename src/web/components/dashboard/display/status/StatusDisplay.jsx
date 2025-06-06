@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import DonutChart from 'web/components/chart/Donut';
 import DataDisplay from 'web/components/dashboard/display/DataDisplay';
 import {renderDonutChartIcons} from 'web/components/dashboard/display/DataDisplayIcons';

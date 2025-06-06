@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import React from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import {ArcDataPropType} from 'web/components/chart/donut/PropTypes';
 import Group from 'web/components/chart/Group';
 import ToolTip from 'web/components/chart/Tooltip';

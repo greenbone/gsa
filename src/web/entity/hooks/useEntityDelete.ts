@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import {useDispatch} from 'react-redux';
+import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

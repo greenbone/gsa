@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
-import {isDefined, isNumber} from 'gmp/utils/identity';
 import React from 'react';
 import {connect} from 'react-redux';
+import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
+import {isDefined, isNumber} from 'gmp/utils/identity';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {

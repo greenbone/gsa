@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import InfoPanel from 'web/components/panel/InfoPanel';
 import {screen, fireEvent, render} from 'web/testing';
+import InfoPanel from 'web/components/panel/InfoPanel';
 import Theme from 'web/utils/Theme';
 
 describe('InfoPanel tests', () => {

@@ -4,13 +4,13 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import {renderHook} from 'web/testing';
 import useIconSize, {
   ICON_SIZE_LARGE_PIXELS,
   ICON_SIZE_MEDIUM_PIXELS,
   ICON_SIZE_SMALL_PIXELS,
   ICON_SIZE_TINY_PIXELS,
 } from 'web/hooks/useIconSize';
-import {renderHook} from 'web/testing';
 
 describe('useIconSize', () => {
   test.each([

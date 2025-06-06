@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import React from 'react';
 import styled from 'styled-components';
+import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {DeleteIcon, DisableIcon, EditIcon, NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';

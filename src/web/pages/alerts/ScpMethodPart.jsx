@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React, {useState} from 'react';
 import {
   SSH_CREDENTIAL_TYPES,
   ssh_credential_filter,
 } from 'gmp/models/credential';
 import {selectSaveId} from 'gmp/utils/id';
-import React, {useState} from 'react';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import Spinner from 'web/components/form/Spinner';

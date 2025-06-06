@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
 import {useCallback} from 'react';
+import {AppHeader} from '@greenbone/opensight-ui-components-mantinev7';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {LogoutIcon, MySettingsIcon} from 'web/components/icon';

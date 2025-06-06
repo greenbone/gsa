@@ -3,16 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import CollectionCounts from 'gmp/collection/CollectionCounts';
-import Filter from 'gmp/models/filter';
 import React from 'react';
-import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
-import AuditReportsPage from 'web/pages/reports/AuditReportsListPage';
-import {entitiesActions} from 'web/store/entities/auditreports';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {describe, test, expect, testing} from '@gsa/testing';
 import {
   rendererWith,
   fireEvent,
@@ -22,6 +14,14 @@ import {
   waitFor,
   testBulkDeleteDialog,
 } from 'web/testing';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
+import Filter from 'gmp/models/filter';
+import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
+import AuditReportsPage from 'web/pages/reports/AuditReportsListPage';
+import {entitiesActions} from 'web/store/entities/auditreports';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 window.URL.createObjectURL = testing.fn();
 

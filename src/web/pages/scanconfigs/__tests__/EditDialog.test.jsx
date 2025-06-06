@@ -5,13 +5,6 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {
-  SCANCONFIG_TREND_STATIC,
-  SCANCONFIG_TREND_DYNAMIC,
-} from 'gmp/models/scanconfig';
-import EditScanConfigDialog, {
-  handleSearchChange,
-} from 'web/pages/scanconfigs/EditDialog';
-import {
   changeInputValue,
   screen,
   within,
@@ -19,6 +12,13 @@ import {
   fireEvent,
   waitFor,
 } from 'web/testing';
+import {
+  SCANCONFIG_TREND_STATIC,
+  SCANCONFIG_TREND_DYNAMIC,
+} from 'gmp/models/scanconfig';
+import EditScanConfigDialog, {
+  handleSearchChange,
+} from 'web/pages/scanconfigs/EditDialog';
 
 const families = [
   {

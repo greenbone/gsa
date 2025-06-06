@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Event from 'gmp/models/event';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import StartIcon from 'web/pages/tasks/icons/StartIcon';
-import {screen, rendererWith, fireEvent} from 'web/testing';
 
 describe('Task StartIcon component tests', () => {
   test('should render in active state with correct permissions', () => {

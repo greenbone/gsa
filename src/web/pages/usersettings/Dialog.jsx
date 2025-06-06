@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {SYSTEM_DEFAULT} from 'gmp/locale/date';
-import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
 import React, {useCallback, useState} from 'react';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
+import {SYSTEM_DEFAULT} from 'gmp/locale/date';
+import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import useFormValidation from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';

@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState, useEffect, useCallback} from 'react';
+import {useDispatch} from 'react-redux';
 import date from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
@@ -11,8 +13,6 @@ import {NO_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {selectSaveId, hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
-import {useState, useEffect, useCallback} from 'react';
-import {useDispatch} from 'react-redux';
 import EntityComponent from 'web/entity/EntityComponent';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';

@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {render, screen, fireEvent} from 'web/testing';
 import MomentDate from 'gmp/models/date';
 import StartTimeSelection from 'web/pages/performance/StartEndTimeSelection';
-import {render, screen, fireEvent} from 'web/testing';
 
 const timezone = 'CET';
 const startDate = MomentDate('2019-01-01T12:00Z').tz(timezone);

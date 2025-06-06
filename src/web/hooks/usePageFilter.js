@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback, useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {useSearchParams} from 'react-router';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 import Filter, {
   DEFAULT_FALLBACK_FILTER,
@@ -10,9 +13,6 @@ import Filter, {
   RESET_FILTER,
 } from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {useSearchParams} from 'react-router';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import {pageFilter as setPageFilter} from 'web/store/pages/actions';

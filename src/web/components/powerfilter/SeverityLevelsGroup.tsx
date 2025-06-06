@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {useCallback} from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import SeverityClassLabel from 'web/components/label/SeverityClass';

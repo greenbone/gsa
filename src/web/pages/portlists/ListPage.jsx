@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
-import {isDefined, hasValue} from 'gmp/utils/identity';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {NewIcon, PortListIcon, UploadIcon} from 'web/components/icon';

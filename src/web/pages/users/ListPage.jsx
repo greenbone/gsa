@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {connect} from 'react-redux';
 import {USERS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import {useState} from 'react';
-import {connect} from 'react-redux';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/TwoButtonFooter';
 import {NewIcon, UserIcon} from 'web/components/icon';

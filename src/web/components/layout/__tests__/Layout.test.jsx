@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Layout from 'web/components/layout/Layout';
 import {render} from 'web/testing';
+import Layout from 'web/components/layout/Layout';
 
 describe('Layout tests', () => {
   test('should render Layout', () => {

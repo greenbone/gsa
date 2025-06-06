@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {FileInput} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
-import {useCallback} from 'react';
 
 interface FileFieldProps
   extends React.ComponentPropsWithoutRef<typeof FileInput> {

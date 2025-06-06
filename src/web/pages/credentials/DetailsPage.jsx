@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {
   CERTIFICATE_STATUS_INACTIVE,
   CERTIFICATE_STATUS_EXPIRED,
 } from 'gmp/models/credential';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import DateTime from 'web/components/date/DateTime';
 import {CredentialIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';

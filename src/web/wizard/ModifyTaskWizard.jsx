@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
-import {useState} from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';

@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import useEntityClone from 'web/entity/hooks/useEntityClone';
 import {rendererWith, wait} from 'web/testing';
+import useEntityClone from 'web/entity/hooks/useEntityClone';
 
 describe('useEntityClone', () => {
   test('should allow to clone an entity', async () => {

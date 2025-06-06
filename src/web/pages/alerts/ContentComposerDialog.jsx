@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
 } from 'web/components/dialog/ComposerContent';

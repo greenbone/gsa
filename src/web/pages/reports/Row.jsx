@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import React from 'react';
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import React from 'react';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
