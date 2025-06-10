@@ -5,7 +5,8 @@
 
 import {useState} from 'react';
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
-import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {Date} from 'gmp/models/date';
+import {parseYesNo, NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
@@ -17,10 +18,37 @@ import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
+
+interface ModifyTaskWizardState {
+  alertEmail: string;
+  reschedule: YesNo;
+  startDate: Date;
+  startHour: number;
+  startMinute: number;
+  startTimezone: string;
+  taskId?: string;
+}
+
+interface Task {
+  id: string;
+  name: string;
+}
+
+interface ModifyTaskWizardProps {
+  alertEmail?: string;
+  reschedule: YesNo;
+  startDate: Date;
+  startHour: number;
+  startMinute: number;
+  startTimezone: string;
+  taskId?: string;
+  tasks?: Task[];
+  onClose: () => void;
+  onSave: (values: ModifyTaskWizardState) => void;
+}
 
 const ModifyTaskWizard = ({
   alertEmail = '',
@@ -33,7 +61,7 @@ const ModifyTaskWizard = ({
   tasks = [],
   onClose,
   onSave,
-}) => {
+}: ModifyTaskWizardProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const data = {
@@ -58,7 +86,7 @@ const ModifyTaskWizard = ({
   };
 
   return (
-    <SaveDialog
+    <SaveDialog<{}, ModifyTaskWizardState>
       buttonTitle={_('Modify Task')}
       defaultValues={data}
       title={_('Modify Task Wizard')}
@@ -86,8 +114,8 @@ const ModifyTaskWizard = ({
               <div>
                 {_('Please be aware that:')}
                 <ul>
-                  {capabilities.mayCreate('schedule') &&
-                    capabilities.mayAccess('schedules') && (
+                  {capabilities?.mayCreate('schedule') &&
+                    capabilities?.mayAccess('schedules') && (
                       <li>
                         {_(
                           'Setting a start time overwrites a possibly already ' +
@@ -95,8 +123,8 @@ const ModifyTaskWizard = ({
                         )}
                       </li>
                     )}
-                  {capabilities.mayCreate('alert') &&
-                    capabilities.mayAccess('alerts') && (
+                  {capabilities?.mayCreate('alert') &&
+                    capabilities?.mayAccess('alerts') && (
                       <li>
                         {_(
                           'Setting an email Address means adding an additional' +
@@ -118,8 +146,8 @@ const ModifyTaskWizard = ({
               />
             </FormGroup>
 
-            {capabilities.mayCreate('schedule') &&
-              capabilities.mayAccess('schedules') && (
+            {capabilities?.mayCreate('schedule') &&
+              capabilities?.mayAccess('schedules') && (
                 <FormGroup title={_('Start Time')}>
                   <Radio
                     checked={state.reschedule === NO_VALUE}
@@ -140,7 +168,6 @@ const ModifyTaskWizard = ({
                   <DatePicker
                     label={_('Start Date')}
                     name="startDate"
-                    timezone={state.startTimezone}
                     value={state.startDate}
                     onChange={onValueChange}
                   />
@@ -161,12 +188,12 @@ const ModifyTaskWizard = ({
                 </FormGroup>
               )}
 
-            {capabilities.mayCreate('alert') &&
-              capabilities.mayAccess('alerts') && (
+            {capabilities?.mayCreate('alert') &&
+              capabilities?.mayAccess('alerts') && (
                 <FormGroup title={_('Email report to')}>
                   <TextField
                     grow="1"
-                    maxLength="80"
+                    maxLength={80}
                     name="alertEmail"
                     value={state.alertEmail}
                     onChange={onValueChange}
@@ -178,20 +205,6 @@ const ModifyTaskWizard = ({
       )}
     </SaveDialog>
   );
-};
-
-ModifyTaskWizard.propTypes = {
-  alertEmail: PropTypes.string,
-  reschedule: PropTypes.oneOf([NO_VALUE, YES_VALUE]),
-  startDate: PropTypes.date,
-  startHour: PropTypes.number,
-  startMinute: PropTypes.number,
-  startTimezone: PropTypes.string,
-  taskId: PropTypes.id,
-  tasks: PropTypes.array,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default ModifyTaskWizard;
