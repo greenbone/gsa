@@ -41,7 +41,6 @@ import 'gmp/commands/tickets';
 import 'gmp/commands/tlscertificates';
 import 'gmp/commands/trashcan';
 import 'gmp/commands/vulns';
-import 'gmp/commands/wizard';
 
 import {getCommands} from 'gmp/command';
 import AuthenticationCommand from 'gmp/commands/auth';
@@ -49,6 +48,7 @@ import LoginCommand from 'gmp/commands/login';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
 import {UserCommand, UsersCommand} from 'gmp/commands/users';
+import WizardCommand from 'gmp/commands/wizard';
 import GmpSettings from 'gmp/gmpsettings';
 import GmpHttp from 'gmp/http/gmp';
 import {ErrorHandler} from 'gmp/http/http';
@@ -77,6 +77,7 @@ class Gmp {
   readonly performance: PerformanceCommand;
   readonly user: UserCommand;
   readonly users: UsersCommand;
+  readonly wizard: WizardCommand;
 
   constructor(settings: GmpSettings, http?: GmpHttp) {
     this.settings = settings;
@@ -99,6 +100,7 @@ class Gmp {
     this.performance = new PerformanceCommand(this.http);
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
+    this.wizard = new WizardCommand(this.http);
 
     this._initCommands();
   }

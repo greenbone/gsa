@@ -555,10 +555,10 @@ const TaskComponent = ({
 
   const openTaskWizard = () => {
     gmp.wizard.task().then(response => {
-      const settings = response.data;
+      const {data} = response;
 
       setTaskWizardVisible(true);
-      setHosts(settings.client_address);
+      setHosts(data.clientAddress);
       setPortListId(defaultPortListId);
       setAlertId(defaultAlertId);
       setConfigId(defaultScanConfigId);
@@ -588,7 +588,7 @@ const TaskComponent = ({
     fetchScanConfigs();
 
     gmp.wizard.advancedTask().then(response => {
-      const settings = response.data;
+      const {data} = response;
 
       const now = date().tz(timezone);
       setAdvancedTaskWizardVisible(true);
@@ -603,7 +603,7 @@ const TaskComponent = ({
       setStartHour(now.hour());
       setStartMinute(now.minute());
       setStartTimezone(timezone);
-      setTargetHosts(settings.client_address);
+      setTargetHosts(data.clientAddress);
       setTaskName(_('New Quick Task'));
     });
     handleInteraction();
@@ -624,7 +624,7 @@ const TaskComponent = ({
 
   const openModifyTaskWizard = () => {
     gmp.wizard.modifyTask().then(response => {
-      const settings = response.data;
+      const {data} = response;
       const now = date().tz(timezone);
 
       setModifyTaskWizardVisible(true);
@@ -633,8 +633,8 @@ const TaskComponent = ({
       setStartHour(now.hour());
       setStartMinute(now.minute());
       setStartTimezone(timezone);
-      setTaskId(selectSaveId(settings.tasks));
-      setTasks(settings.tasks);
+      setTaskId(selectSaveId(data.tasks));
+      setTasks(data.tasks);
     });
     handleInteraction();
   };
