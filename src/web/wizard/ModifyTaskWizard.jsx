@@ -43,8 +43,8 @@ const ModifyTaskWizard = ({
     start_hour,
     start_minute,
     start_timezone,
-    task_id,
     tasks,
+    task_id,
   };
 
   const [timePickerValue, setTimePickerValue] = useState(
