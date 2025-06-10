@@ -278,7 +278,10 @@ const PerformancePage = () => {
             {gmp.settings.enableGreenboneSensor && (
               <FormGroup title={_('Report for Greenbone Sensor')}>
                 <Select
-                  items={renderSelectItems(sensors, DEFAULT_SENSOR_ID)}
+                  items={renderSelectItems(
+                    sensors as Array<{id: string; name: string}>,
+                    DEFAULT_SENSOR_ID,
+                  )}
                   name="sensorId"
                   value={saveSensorId}
                   onChange={handleScannerChange}

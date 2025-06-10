@@ -4,9 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import date from 'gmp/models/date';
 import {generateFilename, renderSelectItems} from 'web/utils/Render';
 
-describe('render_select_items test', () => {
+describe('renderSelectItems test', () => {
   test('should convert entities list', () => {
     const entities = [
       {
@@ -67,17 +68,18 @@ describe('render_select_items test', () => {
   });
 
   test.each([
-    {name: 'Item 1', id: 1, deprecated: '1'},
-    {name: 'Item 2', id: 2},
-    {name: 123, id: 3, deprecated: '1'},
-    {name: true, id: 4},
-    {name: null, id: 5},
-    {name: undefined, id: 6},
+    {name: 'Item 1', id: '1', deprecated: '1'},
+    {name: 'Item 2', id: '2'},
+    {name: 123, id: '3', deprecated: '1'},
+    {name: true, id: '4'},
+    {name: null, id: '5'},
+    {name: undefined, id: '6'},
   ])('should return labels as strings for item with id %s', item => {
-    const default_item_value = 0;
+    const default_item_value = '0';
     const default_item_label = 'Default Item';
 
     const result = renderSelectItems(
+      // @ts-expect-error
       [item],
       default_item_value,
       default_item_label,
@@ -90,10 +92,10 @@ describe('render_select_items test', () => {
 describe('generateFilename tests', () => {
   test('should generate filename for details export filename', () => {
     const data = {
-      creationTime: new Date('2019-10-10T12:00:00'),
+      creationTime: date('2019-10-10T12:00:00'),
       fileNameFormat: 'foo_%C-%c-%F-%M-%m-%N-%%-%T-%U-%u_42',
       id: '123',
-      modificationTime: new Date('2019-10-10T13:00:00'),
+      modificationTime: date('2019-10-10T13:00:00'),
       resourceName: 'lorem',
       resourceType: 'type',
       username: 'ObiWLAN',
@@ -142,7 +144,7 @@ describe('generateFilename tests', () => {
   test('if no modification time, should fall back to creation time', () => {
     const data = {
       fileNameFormat: '%M',
-      creationTime: new Date('2019-10-10T12:00:00Z'),
+      creationTime: date('2019-10-10T12:00:00Z'),
     };
     const filename = generateFilename(data);
     expect(filename).toEqual('20191010.xml');
