@@ -241,7 +241,11 @@ export const getDialogCloseButton = (dialog?: HTMLElement) => {
  */
 export const getDialogXButton = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  return dialog.querySelector<HTMLElement>('.mantine-CloseButton-root');
+  const button = dialog.querySelector<HTMLElement>('.mantine-CloseButton-root');
+  if (!button) {
+    throw getElementError('Unable to find dialog X button.', dialog);
+  }
+  return button;
 };
 
 /**
