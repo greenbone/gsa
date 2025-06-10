@@ -156,13 +156,13 @@ describe('Wizard Command', () => {
     const http = createHttp(response);
     const wizard = new WizardCommand(http);
     await wizard.runModifyTask({
-      task_id: 'id',
-      alert_email: 'a@b.c',
+      taskId: 'id',
+      alertEmail: 'a@b.c',
       reschedule: 1,
-      start_date: date('2025-01-01'),
-      start_hour: 10,
-      start_minute: 30,
-      start_timezone: 'UTC',
+      startDate: date('2025-01-01'),
+      startHour: 10,
+      startMinute: 30,
+      startTimezone: 'UTC',
     });
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {

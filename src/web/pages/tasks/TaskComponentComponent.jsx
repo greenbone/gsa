@@ -842,11 +842,11 @@ const TaskComponent = ({
       {modifyTaskWizardVisible && (
         <ModifyTaskWizard
           reschedule={reschedule}
-          start_date={startDate}
-          start_hour={startHour}
-          start_minute={startMinute}
-          start_timezone={startTimezone}
-          task_id={taskId}
+          startDate={startDate}
+          startHour={startHour}
+          startMinute={startMinute}
+          startTimezone={startTimezone}
+          taskId={taskId}
           tasks={tasks}
           onClose={handleCloseModifyTaskWizard}
           onSave={handleSaveModifyTaskWizard}

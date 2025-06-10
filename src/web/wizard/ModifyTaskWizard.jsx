@@ -23,13 +23,13 @@ import {formatSplitTime} from 'web/utils/timePickerHelpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 
 const ModifyTaskWizard = ({
-  alert_email = '',
+  alertEmail = '',
   reschedule,
-  start_date,
-  start_hour,
-  start_minute,
-  start_timezone,
-  task_id,
+  startDate,
+  startHour,
+  startMinute,
+  startTimezone,
+  taskId,
   tasks = [],
   onClose,
   onSave,
@@ -37,25 +37,24 @@ const ModifyTaskWizard = ({
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const data = {
-    alert_email,
-    start_date,
+    alertEmail,
+    startDate,
     reschedule,
-    start_hour,
-    start_minute,
-    start_timezone,
-    tasks,
-    task_id,
+    startHour,
+    startMinute,
+    startTimezone,
+    taskId,
   };
 
   const [timePickerValue, setTimePickerValue] = useState(
-    formatSplitTime(start_hour, start_minute),
+    formatSplitTime(startHour, startMinute),
   );
 
   const handleTimeChange = (selectedValue, onValueChange) => {
-    const [start_hour, start_minute] = selectedValue.split(':');
+    const [startHour, startMinute] = selectedValue.split(':');
     setTimePickerValue(selectedValue);
-    onValueChange(parseInt(start_hour), 'start_hour');
-    onValueChange(parseInt(start_minute), 'start_minute');
+    onValueChange(parseInt(startHour), 'startHour');
+    onValueChange(parseInt(startMinute), 'startMinute');
   };
 
   return (
@@ -113,8 +112,8 @@ const ModifyTaskWizard = ({
             <FormGroup title={_('Task')}>
               <Select
                 items={renderSelectItems(tasks)}
-                name="task_id"
-                value={state.task_id}
+                name="taskId"
+                value={state.taskId}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -140,9 +139,9 @@ const ModifyTaskWizard = ({
                   />
                   <DatePicker
                     label={_('Start Date')}
-                    name="start_date"
-                    timezone={state.start_timezone}
-                    value={state.start_date}
+                    name="startDate"
+                    timezone={state.startTimezone}
+                    value={state.startDate}
                     onChange={onValueChange}
                   />
                   <TimePicker
@@ -155,8 +154,8 @@ const ModifyTaskWizard = ({
 
                   <TimeZoneSelect
                     label={_('Timezone')}
-                    name="start_timezone"
-                    value={state.start_timezone}
+                    name="startTimezone"
+                    value={state.startTimezone}
                     onChange={onValueChange}
                   />
                 </FormGroup>
@@ -168,8 +167,8 @@ const ModifyTaskWizard = ({
                   <TextField
                     grow="1"
                     maxLength="80"
-                    name="alert_email"
-                    value={state.alert_email}
+                    name="alertEmail"
+                    value={state.alertEmail}
                     onChange={onValueChange}
                   />
                 </FormGroup>
@@ -182,13 +181,13 @@ const ModifyTaskWizard = ({
 };
 
 ModifyTaskWizard.propTypes = {
-  alert_email: PropTypes.string,
+  alertEmail: PropTypes.string,
   reschedule: PropTypes.oneOf([NO_VALUE, YES_VALUE]),
-  start_date: PropTypes.date,
-  start_hour: PropTypes.number,
-  start_minute: PropTypes.number,
-  start_timezone: PropTypes.string,
-  task_id: PropTypes.id,
+  startDate: PropTypes.date,
+  startHour: PropTypes.number,
+  startMinute: PropTypes.number,
+  startTimezone: PropTypes.string,
+  taskId: PropTypes.id,
   tasks: PropTypes.array,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,

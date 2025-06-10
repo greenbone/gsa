@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import {feedStatusRejection} from 'gmp/commands/feedstatus';
 import HttpCommand from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
@@ -85,13 +83,13 @@ interface RunQuickTaskArguments {
 }
 
 interface RunModifyTaskArguments {
-  task_id: string;
-  alert_email: string;
+  taskId: string;
+  alertEmail: string;
   reschedule: YesNo;
-  start_date: Date;
-  start_hour: number;
-  start_minute: number;
-  start_timezone: string;
+  startDate: Date;
+  startHour: number;
+  startMinute: number;
+  startTimezone: string;
 }
 
 class WizardCommand extends HttpCommand {
@@ -225,24 +223,24 @@ class WizardCommand extends HttpCommand {
   }
 
   runModifyTask({
-    task_id,
-    alert_email,
+    taskId,
+    alertEmail,
     reschedule,
-    start_date,
-    start_hour,
-    start_minute,
-    start_timezone,
+    startDate,
+    startHour,
+    startMinute,
+    startTimezone,
   }: RunModifyTaskArguments) {
     return this.httpPost({
-      'event_data:alert_email': alert_email,
+      'event_data:alert_email': alertEmail,
       'event_data:reschedule': reschedule,
-      'event_data:start_hour': start_hour,
-      'event_data:start_minute': start_minute,
-      'event_data:start_day': start_date.date(),
-      'event_data:start_month': start_date.month() + 1,
-      'event_data:start_year': start_date.year(),
-      'event_data:start_timezone': start_timezone,
-      'event_data:task_id': task_id,
+      'event_data:start_hour': startHour,
+      'event_data:start_minute': startMinute,
+      'event_data:start_day': startDate.date(),
+      'event_data:start_month': startDate.month() + 1,
+      'event_data:start_year': startDate.year(),
+      'event_data:start_timezone': startTimezone,
+      'event_data:task_id': taskId,
       cmd: 'run_wizard',
       name: 'modify_task',
     });
