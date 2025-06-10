@@ -184,7 +184,7 @@ class HostsTopologyChart extends React.Component<
   HostsTopologyChartState
 > {
   colorScale: ScaleLinear<string, string>;
-  svg!: SVGSVGElement;
+  svg: SVGSVGElement | null = null;
   draggingHost?: Host;
   coords: {x?: number; y?: number} = {x: 0, y: 0};
 
@@ -399,6 +399,11 @@ class HostsTopologyChart extends React.Component<
    * @returns {Object} Relative position of the mouse as {x,y}
    */
   getMousePosition(event: React.MouseEvent): {x: number; y: number} {
+    if (!this.svg) {
+      // if svg is not set, which should never happen, return 0,0
+      return {x: 0, y: 0};
+    }
+
     const {clientX, clientY} = event;
     const {left, top} = this.svg.getBoundingClientRect();
 

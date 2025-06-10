@@ -7,49 +7,61 @@ import React from 'react';
 import {format} from 'd3-format';
 import {getFormattedDate} from 'gmp/locale/date';
 import {_} from 'gmp/locale/lang';
-import {typeName, getEntityType} from 'gmp/utils/entitytype';
+import date, {Date} from 'gmp/models/date';
+import {typeName, getEntityType, EntityType} from 'gmp/utils/entitytype';
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
+import {SelectItem} from 'web/components/form/Select';
 
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
 
+interface RenderSelectItem {
+  name: string;
+  id: string;
+  deprecated?: string;
+}
+
 /**
  * Render a entities list as items array
  *
- * @param {Array} list               The entities list
- * @param {*}     default_item_value (optional) Value for the default item
- * @param {*}     default_item_label (optional. Default is '--') Label to display for the default item
+ * @param list             The entities list
+ * @param defaultItemValue (optional) Value for the default item
+ * @param defaultItemLabel (optional. Default is '--') Label to display for the default item
  *
- * @returns {Array} An array to be used as items for a Select component or undefined
+ * @returns An array to be used as items for a Select component or undefined
  */
 export const renderSelectItems = (
-  list,
-  default_item_value,
-  default_item_label = UNSET_LABEL,
-) => {
+  list: RenderSelectItem[] | undefined,
+  defaultItemValue?: string,
+  defaultItemLabel: string = UNSET_LABEL,
+): SelectItem[] => {
   const items = isDefined(list)
     ? list.map(item => ({
         label: String(item.name),
         value: item.id,
         deprecated: item.deprecated,
       }))
-    : undefined;
+    : [];
 
-  if (!isDefined(default_item_value)) {
+  if (!isDefined(defaultItemValue)) {
     return items;
   }
 
-  const default_item = {
-    value: default_item_value,
-    label: default_item_label,
+  const defaultItem = {
+    value: defaultItemValue,
+    label: defaultItemLabel,
   };
-  return isDefined(items) ? [default_item, ...items] : [default_item];
+  return isDefined(items) ? [defaultItem, ...items] : [defaultItem];
 };
 
 export const severityFormat = format('0.1f');
 
-export const renderNvtName = (oid, name, length = 70) => {
+export const renderNvtName = (
+  oid: string,
+  name?: string,
+  length: number = 70,
+) => {
   if (!isDefined(name)) {
     return oid;
   }
@@ -61,21 +73,26 @@ export const renderNvtName = (oid, name, length = 70) => {
   return <abbr title={name + ' (' + oid + ')'}>{shorten(name, length)}</abbr>;
 };
 
-export const renderComponent = (Component, props = {}) =>
-  Component ? <Component {...props} /> : null;
+export const renderComponent = <TProps extends {}>(
+  Component:
+    | React.FunctionComponent<TProps>
+    | React.ComponentClass<TProps>
+    | string,
+  props: TProps = {} as TProps,
+) => (Component ? <Component {...props} /> : null);
 
-export const renderChildren = children =>
+export const renderChildren = (children: React.ReactNode) =>
   React.Children.count(children) > 1 ? (
     <React.Fragment>{children}</React.Fragment>
   ) : (
     children
   );
 
-export const na = value => {
+export const na = (value: string) => {
   return isEmpty(value) ? _('N/A') : value;
 };
 
-export const renderYesNo = value => {
+export const renderYesNo = (value: string | number | boolean) => {
   switch (value) {
     case true:
     case 1:
@@ -94,7 +111,7 @@ export const renderYesNo = value => {
   }
 };
 
-export const getTranslatableSeverityOrigin = origin => {
+export const getTranslatableSeverityOrigin = (origin: string) => {
   switch (origin) {
     case 'Third Party':
       return _('Third Party');
@@ -109,7 +126,7 @@ export const getTranslatableSeverityOrigin = origin => {
   }
 };
 
-const getPermissionTypeName = type => {
+const getPermissionTypeName = (type: string) => {
   switch (type) {
     case 'aggregates':
       return _('Aggregates');
@@ -194,12 +211,19 @@ const getPermissionTypeName = type => {
   }
 };
 
-export const permissionDescription = (name, resource, subject) =>
+interface Resource extends EntityType {
+  name: string;
+}
+
+export const permissionDescription = (name, resource: Resource, subject) =>
   isDefined(subject)
     ? permissionDescriptionResourceWithSubject(name, resource, subject)
     : permissionDescriptionResource(name, resource);
 
-export const permissionDescriptionResource = (name, resource) => {
+export const permissionDescriptionResource = (
+  name: string,
+  resource?: Resource,
+) => {
   if (isDefined(resource)) {
     name = name.toLowerCase();
     const resourceType = {
@@ -233,9 +257,9 @@ export const permissionDescriptionResource = (name, resource) => {
 };
 
 export const permissionDescriptionResourceWithSubject = (
-  name,
-  resource,
-  subject,
+  name: string,
+  resource: Resource | undefined,
+  subject: Resource,
 ) => {
   if (isDefined(resource)) {
     name = name.toLowerCase();
@@ -288,7 +312,7 @@ export const permissionDescriptionResourceWithSubject = (
   return simplePermissionDescriptionWithSubject(name, subject);
 };
 
-export const simplePermissionDescription = name => {
+export const simplePermissionDescription = (name: string) => {
   name = name.toLowerCase();
   switch (name) {
     case 'super':
@@ -358,11 +382,18 @@ export const simplePermissionDescription = name => {
   }
 };
 
-export const simplePermissionDescriptionWithSubject = (name, subject) => {
+export const simplePermissionDescriptionWithSubject = (
+  name: string,
+  subject: Resource,
+) => {
   name = name.toLowerCase();
   let type = {
     subjectType: typeName(getEntityType(subject)),
     subjectName: subject.name,
+  } as {
+    subjectType: string;
+    subjectName: string;
+    resourceType?: string;
   };
 
   switch (name) {
@@ -486,13 +517,14 @@ export const simplePermissionDescriptionWithSubject = (name, subject) => {
 };
 
 export const setRef =
-  (...refs) =>
-  ref => {
+  <TRef,>(...refs: React.Ref<TRef>[]) =>
+  (ref: TRef) => {
     for (const rf of refs) {
       if (isFunction(rf)) {
-        rf(ref);
+        (rf as React.RefCallback<TRef>)(ref);
       } else if (isObject(rf) && isDefined(rf.current)) {
-        rf.current = ref;
+        // @ts-expect-error
+        (rf as React.RefObject<TRef>).current = ref;
       }
     }
   };
@@ -500,16 +532,25 @@ export const setRef =
 export const generateFilename = ({
   creationTime,
   extension = 'xml',
-  fileNameFormat,
+  fileNameFormat = '',
   reportFormat = 'XML',
   id = 'list',
   modificationTime,
   resourceName,
   resourceType,
   username,
+}: {
+  creationTime?: Date;
+  extension?: string;
+  fileNameFormat?: string;
+  reportFormat?: string;
+  id?: string;
+  modificationTime?: Date;
+  resourceName?: string;
+  resourceType?: string;
+  username?: string;
 }) => {
-  let fileName = isDefined(fileNameFormat) ? fileNameFormat : '';
-  const currentTime = new Date();
+  const currentTime = date();
   const cTime = isDefined(creationTime) ? creationTime : currentTime;
 
   let mTime = isDefined(modificationTime) ? modificationTime : creationTime;
@@ -541,7 +582,7 @@ export const generateFilename = ({
   };
   const regExp = new RegExp(Object.keys(fileNameMap).join('|'), 'gi');
 
-  fileName = fileName.replace(regExp, match => fileNameMap[match]);
+  let fileName = fileNameFormat.replace(regExp, match => fileNameMap[match]);
 
   fileName += '.' + extension;
 
