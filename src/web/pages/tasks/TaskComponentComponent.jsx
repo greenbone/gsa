@@ -116,7 +116,7 @@ const TaskComponent = ({
   const [autoDelete, setAutoDelete] = useState();
   const [autoDeleteData, setAutoDeleteData] = useState();
   const [comment, setComment] = useState('');
-  const [configId, setConfigId] = useState();
+  const [scanConfigId, setScanConfigId] = useState();
   const [esxiCredential, setEsxiCredential] = useState();
   const [hosts, setHosts] = useState();
   const [hostsOrdering, setHostsOrdering] = useState();
@@ -126,7 +126,6 @@ const TaskComponent = ({
   const [maxHosts, setMaxHosts] = useState();
   const [minQod, setMinQod] = useState();
   const [name, setName] = useState('');
-  const [portListId, setPortListId] = useState();
   const [reschedule, setReschedule] = useState();
   const [scannerId, setScannerId] = useState();
   const [scheduleId, setScheduleId] = useState();
@@ -188,9 +187,6 @@ const TaskComponent = ({
   const defaultEsxiCredential = userDefaultsSelector.getValueByName(
     'defaultesxicredential',
   );
-
-  const defaultPortListId =
-    userDefaultsSelector.getValueByName('defaultportlist');
 
   const defaultScanConfigId = userDefaultsSelector.getValueByName(
     'defaultopenvasscanconfig',
@@ -509,7 +505,7 @@ const TaskComponent = ({
       setMaxHosts(task.max_hosts);
       setHostsOrdering(task.hosts_ordering);
 
-      setConfigId(hasId(task.config) ? task.config.id : undefined);
+      setScanConfigId(hasId(task.config) ? task.config.id : undefined);
       setScannerId(hasId(task.scanner) ? task.scanner.id : undefined);
       setScheduleId(isDefined(task.schedule) ? task.schedule.id : UNSET_VALUE);
       setSchedulePeriods(task.schedule_periods);
@@ -534,7 +530,7 @@ const TaskComponent = ({
       setMaxHosts(undefined);
       setHostsOrdering(undefined);
 
-      setConfigId(defaultScanConfigId || FULL_AND_FAST_SCAN_CONFIG_ID);
+      setScanConfigId(defaultScanConfigId || FULL_AND_FAST_SCAN_CONFIG_ID);
       setScannerId(defaultScannerId || OPENVAS_DEFAULT_SCANNER_ID);
 
       setScheduleId(defaultScheduleId);
@@ -559,13 +555,6 @@ const TaskComponent = ({
 
       setTaskWizardVisible(true);
       setHosts(data.clientAddress);
-      setPortListId(defaultPortListId);
-      setAlertId(defaultAlertId);
-      setConfigId(defaultScanConfigId);
-      setScannerId(defaultScannerId);
-      setEsxiCredential(defaultEsxiCredential);
-      setSshCredential(defaultSshCredential);
-      setSmbCredential(defaultSmbCredential);
     });
     handleInteraction();
   };
@@ -593,9 +582,8 @@ const TaskComponent = ({
       const now = date().tz(timezone);
       setAdvancedTaskWizardVisible(true);
       setAlertId(defaultAlertId);
-      setConfigId(defaultScanConfigId || FULL_AND_FAST_SCAN_CONFIG_ID);
+      setScanConfigId(defaultScanConfigId || FULL_AND_FAST_SCAN_CONFIG_ID);
       setEsxiCredential(defaultEsxiCredential);
-      setPortListId(defaultPortListId);
       setScannerId(defaultScannerId);
       setSmbCredential(defaultSmbCredential);
       setSshCredential(defaultSshCredential);
@@ -673,7 +661,7 @@ const TaskComponent = ({
   };
 
   const handleScanConfigChange = configId => {
-    setConfigId(configId);
+    setScanConfigId(configId);
   };
 
   const handleScannerChange = scannerId => {
@@ -759,7 +747,7 @@ const TaskComponent = ({
                             auto_delete={autoDelete}
                             auto_delete_data={autoDeleteData}
                             comment={comment}
-                            config_id={configId}
+                            config_id={scanConfigId}
                             hosts_ordering={hostsOrdering}
                             id={id}
                             in_assets={inAssets}
@@ -836,7 +824,7 @@ const TaskComponent = ({
           alertId={alertId}
           credentials={credentials}
           esxiCredential={esxiCredential}
-          scanConfigId={configId}
+          scanConfigId={scanConfigId}
           scanConfigs={scanConfigs}
           smbCredential={smbCredential}
           sshCredential={sshCredential}
