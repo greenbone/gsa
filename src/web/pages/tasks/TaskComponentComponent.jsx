@@ -824,14 +824,7 @@ const TaskComponent = ({
 
       {taskWizardVisible && (
         <TaskWizard
-          alert_id={alertId}
-          config_id={configId}
-          esxi_credential={esxiCredential}
           hosts={hosts}
-          port_list_id={portListId}
-          scanner_id={scannerId}
-          smb_credential={smbCredential}
-          ssh_credential={sshCredential}
           onClose={handleCloseTaskWizard}
           onNewClick={handleTaskWizardNewClick}
           onSave={handleSaveTaskWizard}
@@ -840,21 +833,19 @@ const TaskComponent = ({
 
       {advancedTaskWizardVisible && (
         <AdvancedTaskWizard
-          alert_id={alertId}
-          config_id={configId}
+          alertId={alertId}
           credentials={credentials}
-          esxi_credential={esxiCredential}
-          port_list_id={portListId}
-          scan_configs={scanConfigs}
-          scanner_id={scannerId}
-          smb_credential={smbCredential}
-          ssh_credential={sshCredential}
-          start_date={startDate}
-          start_hour={startHour}
-          start_minute={startMinute}
-          start_timezone={startTimezone}
-          target_hosts={targetHosts}
-          task_name={taskName}
+          esxiCredential={esxiCredential}
+          scanConfigId={configId}
+          scanConfigs={scanConfigs}
+          smbCredential={smbCredential}
+          sshCredential={sshCredential}
+          startDate={startDate}
+          startHour={startHour}
+          startMinute={startMinute}
+          startTimezone={startTimezone}
+          targetHosts={targetHosts}
+          taskName={taskName}
           onClose={handleCloseAdvancedTaskWizard}
           onSave={handleSaveAdvancedTaskWizard}
         />

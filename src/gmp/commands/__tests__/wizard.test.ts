@@ -113,20 +113,20 @@ describe('Wizard Command', () => {
     const http = createHttp(response);
     const wizard = new WizardCommand(http);
     await wizard.runQuickTask({
-      alert_email: 'a@b.c',
-      auto_start: IMMEDIATELY_START_VALUE,
-      config_id: 'cfg',
-      esxi_credential: 'esxi',
-      scan_configs: [],
-      smb_credential: 'smb',
-      ssh_credential: 'ssh',
-      ssh_port: 22,
-      start_date: date('2025-01-01'),
-      start_hour: '10',
-      start_minute: '30',
-      start_timezone: 'UTC',
-      target_hosts: '127.0.0.1',
-      task_name: 'task',
+      alertEmail: 'a@b.c',
+      autoStart: IMMEDIATELY_START_VALUE,
+      scanConfigId: 'cfg',
+      esxiCredential: 'esxi',
+      scanConfigs: [],
+      smbCredential: 'smb',
+      sshCredential: 'ssh',
+      sshPort: 22,
+      startDate: date('2025-01-01'),
+      startHour: '10',
+      startMinute: '30',
+      startTimezone: 'UTC',
+      targetHosts: '127.0.0.1',
+      taskName: 'task',
     });
     expect(http.request).toHaveBeenCalledWith('post', {
       data: {
