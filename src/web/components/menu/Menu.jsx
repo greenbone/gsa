@@ -79,13 +79,13 @@ const Menu = () => {
   ]);
   const mayOpConfiguration = mayAccessAny([
     'targets',
-    'port_lists',
+    'portlists',
     'credentials',
-    'scan_configs',
+    'scanconfigs',
     'alerts',
     'schedules',
-    'report_configs',
-    'report_formats',
+    'reportconfigs',
+    'reportformats',
     'scanners',
     'filters',
     'tags',
@@ -160,7 +160,7 @@ const Menu = () => {
             to: '/operatingsystems',
             active: isOperatingSystemsActive,
           },
-          capabilities.mayAccess('tls_certificates') && {
+          capabilities.mayAccess('tlscertificates') && {
             label: _('TLS Certificates'),
             to: '/tlscertificates',
             active: isTlsCertificatesActive,
@@ -236,7 +236,7 @@ const Menu = () => {
             to: '/targets',
             active: isTargetsActive,
           },
-          capabilities.mayAccess('port_lists') && {
+          capabilities.mayAccess('portlists') && {
             label: _('Port Lists'),
             to: '/portlists',
             active: isPortlistsActive,
@@ -246,7 +246,7 @@ const Menu = () => {
             to: '/credentials',
             active: isCredentialsActive,
           },
-          capabilities.mayAccess('scan_configs') && {
+          capabilities.mayAccess('scanconfigs') && {
             label: _('Scan Configs'),
             to: '/scanconfigs',
             active: isScanConfigsActive,
@@ -261,12 +261,12 @@ const Menu = () => {
             to: '/schedules',
             active: isSchedulesActive,
           },
-          capabilities.mayAccess('report_configs') && {
+          capabilities.mayAccess('reportconfigs') && {
             label: _('Report Configs'),
             to: '/reportconfigs',
             active: isReportConfigsActive,
           },
-          capabilities.mayAccess('report_formats') && {
+          capabilities.mayAccess('reportformats') && {
             label: _('Report Formats'),
             to: '/reportformats',
             active: isReportFormatsActive,
