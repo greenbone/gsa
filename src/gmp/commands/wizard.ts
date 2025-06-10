@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 import {feedStatusRejection} from 'gmp/commands/feedstatus';
 import HttpCommand from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
@@ -14,61 +16,8 @@ import {Date} from 'gmp/models/date';
 import {SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
 import Task from 'gmp/models/task';
+import {YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
-
-function convertData(prefix: string, data: {}, fields: string[]) {
-  const converted = {};
-  for (const name of fields) {
-    if (data.hasOwnProperty(name)) {
-      converted[prefix + ':' + name] = data[name];
-    }
-  }
-  return converted;
-}
-
-const EVENT_DATA_QUICK_FIRST_SCAN_FIELDS = [
-  'config_id',
-  'alert_id',
-  'scanner_id',
-  'smb_credential',
-  'ssh_credential',
-  'ssh_port',
-  'esxi_credential',
-  'hosts',
-  'port_list_id',
-];
-
-const EVENT_DATA_QUICK_TASK_FIELDS = [
-  'config_id',
-  'alert_email',
-  'scanner_id',
-  'auto_start',
-  'start_year',
-  'start_month',
-  'start_day',
-  'start_hour',
-  'start_minute',
-  'start_timezone',
-  'smb_credential',
-  'ssh_credential',
-  'ssh_port',
-  'esxi_credential',
-  'task_name',
-  'target_hosts',
-  'port_list_id',
-];
-
-const EVENT_DATA_MODIFY_TASK_FIELDS = [
-  'task_id',
-  'alert_email',
-  'reschedule',
-  'start_year',
-  'start_month',
-  'start_day',
-  'start_hour',
-  'start_minute',
-  'start_timezone',
-];
 
 interface RunWizardResponseData extends XmlResponseData {
   client_address: string;
@@ -223,10 +172,10 @@ class WizardCommand extends HttpCommand {
     return response.setData<ModifyTaskResponseData>({settings, tasks});
   }
 
-  async runQuickFirstScan(args: RunQuickFirstScanArguments) {
+  async runQuickFirstScan({hosts}: RunQuickFirstScanArguments) {
     try {
       return await this.httpPost({
-        ...convertData('event_data', args, EVENT_DATA_QUICK_FIRST_SCAN_FIELDS),
+        'event_data:hosts': hosts,
         cmd: 'run_wizard',
         name: 'quick_first_scan',
       });
@@ -235,21 +184,38 @@ class WizardCommand extends HttpCommand {
     }
   }
 
-  async runQuickTask(args: RunQuickTaskArguments) {
-    const {start_date, ...other} = args;
-    const event_data = convertData(
-      'event_data',
-      other,
-      EVENT_DATA_QUICK_TASK_FIELDS,
-    );
-
-    event_data['event_data:start_day'] = start_date.date();
-    event_data['event_data:start_month'] = start_date.month() + 1;
-    event_data['event_data:start_year'] = start_date.year();
-
+  async runQuickTask({
+    alert_email,
+    auto_start,
+    config_id,
+    esxi_credential,
+    smb_credential,
+    ssh_credential,
+    ssh_port,
+    start_date,
+    start_hour,
+    start_minute,
+    start_timezone,
+    target_hosts,
+    task_name,
+  }: RunQuickTaskArguments) {
     try {
       return await this.httpPost({
-        ...event_data,
+        'event_data:alert_email': alert_email,
+        'event_data:auto_start': auto_start,
+        'event_data:config_id': config_id,
+        'event_data:esxi_credential': esxi_credential,
+        'event_data:smb_credential': smb_credential,
+        'event_data:ssh_credential': ssh_credential,
+        'event_data:ssh_port': ssh_port,
+        'event_data:start_day': start_date.date(),
+        'event_data:start_month': start_date.month() + 1,
+        'event_data:start_year': start_date.year(),
+        'event_data:start_hour': start_hour,
+        'event_data:start_minute': start_minute,
+        'event_data:start_timezone': start_timezone,
+        'event_data:target_hosts': target_hosts,
+        'event_data:task_name': task_name,
         cmd: 'run_wizard',
         name: 'quick_task',
       });
@@ -258,21 +224,25 @@ class WizardCommand extends HttpCommand {
     }
   }
 
-  runModifyTask(args: RunModifyTaskArguments) {
-    const {start_date, ...other} = args;
-
-    const event_data = convertData(
-      'event_data',
-      other,
-      EVENT_DATA_MODIFY_TASK_FIELDS,
-    );
-
-    event_data['event_data:start_day'] = start_date.date();
-    event_data['event_data:start_month'] = start_date.month() + 1;
-    event_data['event_data:start_year'] = start_date.year();
-
+  runModifyTask({
+    task_id,
+    alert_email,
+    reschedule,
+    start_date,
+    start_hour,
+    start_minute,
+    start_timezone,
+  }: RunModifyTaskArguments) {
     return this.httpPost({
-      ...event_data,
+      'event_data:alert_email': alert_email,
+      'event_data:reschedule': reschedule,
+      'event_data:start_hour': start_hour,
+      'event_data:start_minute': start_minute,
+      'event_data:start_day': start_date.date(),
+      'event_data:start_month': start_date.month() + 1,
+      'event_data:start_year': start_date.year(),
+      'event_data:start_timezone': start_timezone,
+      'event_data:task_id': task_id,
       cmd: 'run_wizard',
       name: 'modify_task',
     });
