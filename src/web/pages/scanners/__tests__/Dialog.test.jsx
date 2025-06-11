@@ -4,6 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  changeInputValue,
+  fireEvent,
+  screen,
+  rendererWith,
+} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -14,14 +20,6 @@ import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/Dialog';
-import {
-  changeInputValue,
-  clickElement,
-  fireEvent,
-  screen,
-  rendererWith,
-  waitFor,
-} from 'web/testing';
 
 const sensorScanner = {
   _id: '1234',
