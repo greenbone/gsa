@@ -18,7 +18,6 @@ interface StyledIconProps {
 }
 
 interface IconProps<TValue> {
-  className?: string;
   to?: string;
   value?: TValue;
   onClick?: (value: TValue | undefined) => void;
@@ -47,8 +46,21 @@ const StyledIcon = styled.span<StyledIconProps>`
   }
 `;
 
+interface StyledDivProps {
+  $active?: boolean;
+}
+
+const StyledDiv = styled.div<StyledDivProps>`
+  & svg path {
+    fill: ${props => {
+      const {$active = true} = props;
+      return $active ? undefined : Theme.inputBorderGray;
+    }};
+  }
+`;
+
 const IconComponent = <TValue,>({
-  className,
+  active,
   to,
   value,
   onClick,
@@ -111,22 +123,13 @@ const IconComponent = <TValue,>({
     >
       {isDefined(to) ? (
         <Anchor href={to}>
-          <div ref={svgRef} className={className} />
+          <StyledDiv ref={svgRef} $active={active} />
         </Anchor>
       ) : (
-        <div ref={svgRef} className={className} />
+        <StyledDiv ref={svgRef} $active={active} />
       )}
     </StyledIcon>
   );
 };
 
-const StyledIconComponent = styled(IconComponent)`
-  & svg path {
-    fill: ${props => {
-      const {active = true} = props;
-      return active ? undefined : Theme.inputBorderGray;
-    }};
-  }
-`;
-
-export default StyledIconComponent;
+export default IconComponent;
