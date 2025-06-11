@@ -3,8 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
-import {openSelectElement, screen, render, fireEvent} from 'web/testing';
+import {
+  openSelectElement,
+  screen,
+  render,
+  fireEvent,
+  getSelectItemElementsForSelect,
+  changeInputValue,
+} from 'web/testing';
 import Select from 'web/components/form/Select';
 
 describe('Select component tests', () => {
@@ -26,9 +34,7 @@ describe('Select component tests', () => {
 
     expect(screen.queryByRole('option')).not.toBeInTheDocument();
 
-    await openSelectElement(element);
-
-    const domItems = screen.getSelectItemElements();
+    const domItems = await getSelectItemElementsForSelect(element);
 
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
@@ -86,9 +92,7 @@ describe('Select component tests', () => {
 
     render(<Select items={items} onChange={onChange} />);
 
-    await openSelectElement();
-
-    const domItems = screen.getSelectItemElements();
+    const domItems = await getSelectItemElementsForSelect();
     expect(domItems.length).toEqual(2);
     fireEvent.click(domItems[0]);
     expect(onChange).toHaveBeenCalledWith('bar', undefined);
@@ -110,9 +114,7 @@ describe('Select component tests', () => {
 
     render(<Select items={items} name="abc" onChange={onChange} />);
 
-    await openSelectElement();
-
-    const domItems = screen.getSelectItemElements();
+    const domItems = await getSelectItemElementsForSelect();
     fireEvent.click(domItems[0]);
     expect(onChange).toHaveBeenCalledWith('bar', 'abc');
   });
@@ -154,9 +156,7 @@ describe('Select component tests', () => {
     render(<Select items={items} value="bar" onChange={onChange} />);
 
     const input = screen.getSelectElement();
-    await openSelectElement(input);
-
-    const domItems = screen.getSelectItemElements();
+    const domItems = await getSelectItemElementsForSelect(input);
     fireEvent.click(domItems[1]);
     expect(onChange).toHaveBeenCalledWith('foo', undefined);
   });
@@ -183,11 +183,44 @@ describe('Select component tests', () => {
     expect(screen.getSelectItemElements().length).toEqual(3);
 
     const input = screen.getSelectElement();
-    fireEvent.change(input, {target: {value: 'ba'}});
+    changeInputValue(input, 'ba');
     expect(screen.getSelectItemElements().length).toEqual(2);
 
-    fireEvent.change(input, {target: {value: 'F'}});
+    changeInputValue(input, 'F');
     expect(screen.getSelectItemElements().length).toEqual(1);
+  });
+
+  test('should update value when items change', async () => {
+    const TestComponent = ({items, value}) => {
+      const [currentValue, setCurrentValue] = useState(value);
+
+      return (
+        <Select
+          items={items}
+          value={currentValue}
+          onChange={newValue => setCurrentValue(newValue)}
+        />
+      );
+    };
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
+
+    render(<TestComponent items={items} value="bar" />);
+
+    const input = screen.getSelectElement();
+    expect(input).toHaveValue('Bar');
+
+    const selectItems = await getSelectItemElementsForSelect(input);
+    fireEvent.click(selectItems[1]);
+    expect(input).toHaveValue('Foo');
   });
 
   describe('deprecated option rendering', () => {
@@ -221,9 +254,7 @@ describe('Select component tests', () => {
         render(<Select items={items} />);
 
         const input = screen.getSelectElement();
-        await openSelectElement(input);
-
-        const domItems = screen.getSelectItemElements();
+        const domItems = await getSelectItemElementsForSelect(input);
         expect(domItems[0]).toHaveTextContent(expectedText);
       },
     );
