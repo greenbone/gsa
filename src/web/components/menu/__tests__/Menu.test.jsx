@@ -6,6 +6,8 @@
 import React from 'react';
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
+import Capabilities from 'gmp/capabilities/capabilities';
+import EverythingCapabilities from 'gmp/capabilities/everything';
 import Menu from 'web/components/menu/Menu';
 
 const renderMenuWith = ({capabilities, gmpSettings}) => {
@@ -33,11 +35,7 @@ describe('Menu rendering', () => {
     'Help',
   ])('should render top-level menu: %s', async label => {
     renderMenuWith({
-      capabilities: {
-        mayAccess: () => true,
-        mayOp: () => true,
-        featureEnabled: () => true,
-      },
+      capabilities: new EverythingCapabilities(),
       gmpSettings: {
         enableAssetManagement: false,
         reloadInterval: 5000,
@@ -89,11 +87,7 @@ describe('Menu rendering', () => {
     'About',
   ])('should render sub-menu: %s', async label => {
     renderMenuWith({
-      capabilities: {
-        mayAccess: () => true,
-        mayOp: () => true,
-        featureEnabled: () => true,
-      },
+      capabilities: new EverythingCapabilities(),
       gmpSettings: {
         enableAssetManagement: false,
         reloadInterval: 5000,
@@ -105,63 +99,26 @@ describe('Menu rendering', () => {
     expect(screen.getByText(label)).toBeInTheDocument();
   });
 
-  test('should not render Remediation Tickets when mayAccess returns false', async () => {
-    renderMenuWith({
-      capabilities: {
-        mayAccess: feature => feature !== 'tickets',
-        mayOp: () => true,
-        featureEnabled: () => true,
-      },
-      gmpSettings: {
-        enableAssetManagement: false,
-        reloadInterval: 5000,
-        reloadIntervalActive: 5000,
-        reloadIntervalInactive: 5000,
-      },
-    });
+  test.each(['Remediation Tickets', 'Configuration'])(
+    'should not render %s when mayAccess returns false',
+    async text => {
+      renderMenuWith({
+        capabilities: new Capabilities(),
+        gmpSettings: {
+          enableAssetManagement: false,
+          reloadInterval: 5000,
+          reloadIntervalActive: 5000,
+          reloadIntervalInactive: 5000,
+        },
+      });
 
-    expect(screen.queryByText('Remediation Tickets')).not.toBeInTheDocument();
-  });
-
-  test('should not render Configuration menu when none of its mayAccess permissions are true', async () => {
-    const configFeatures = [
-      'targets',
-      'port_lists',
-      'credentials',
-      'scan_configs',
-      'alerts',
-      'schedules',
-      'report_configs',
-      'report_formats',
-      'scanners',
-      'filters',
-      'tags',
-    ];
-
-    renderMenuWith({
-      capabilities: {
-        mayAccess: feature => !configFeatures.includes(feature),
-        mayOp: () => true,
-        featureEnabled: () => true,
-      },
-      gmpSettings: {
-        enableAssetManagement: false,
-        reloadInterval: 5000,
-        reloadIntervalActive: 5000,
-        reloadIntervalInactive: 5000,
-      },
-    });
-
-    expect(screen.queryByText('Configuration')).not.toBeInTheDocument();
-  });
+      expect(screen.queryByText(text)).not.toBeInTheDocument();
+    },
+  );
 
   test('should not render Asset menu when enableAssetManagement is false', async () => {
     renderMenuWith({
-      capabilities: {
-        mayAccess: () => false,
-        mayOp: () => false,
-        featureEnabled: () => false,
-      },
+      capabilities: new EverythingCapabilities(),
       gmpSettings: {
         enableAssetManagement: false,
         reloadInterval: 5000,
