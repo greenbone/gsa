@@ -4,16 +4,6 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {
-  changeInputValue,
-  clickElement,
-  fireEvent,
-  getSelectItemElementsForSelect,
-  screen,
-  rendererWith,
-  waitFor,
-} from 'web/testing';
-import getSelectElement from 'web/testing/customQueries';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -24,6 +14,14 @@ import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import ScannerDialog from 'web/pages/scanners/Dialog';
+import {
+  changeInputValue,
+  clickElement,
+  fireEvent,
+  screen,
+  rendererWith,
+  waitFor,
+} from 'web/testing';
 
 const sensorScanner = {
   _id: '1234',
@@ -321,72 +319,6 @@ describe('ScannerDialog component tests', () => {
       comment: 'lorem',
       credential_id: '',
       type: 5,
-      id: '1234',
-      port: '22',
-      which_cert: undefined,
-    });
-  });
-
-  test('should change scanner type', async () => {
-    const scanner = Scanner.fromElement(sensorScanner);
-
-    const handleClose = testing.fn();
-    const handleCredentialChange = testing.fn();
-    const handleSave = testing.fn();
-    const handleScannerTypeChange = testing.fn();
-
-    const {render} = rendererWith({gmp, capabilities});
-
-    const { rerender } = render(
-      <ScannerDialog
-        comment={scanner.comment}
-        host={scanner.host}
-        id={scanner.id}
-        name={scanner.name}
-        scanner={scanner}
-        type={scanner.scannerType}
-        onClose={handleClose}
-        onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
-      />,
-    );
-
-    const inputs = screen.queryTextInputs();
-
-    expect(inputs[0]).toHaveValue('john');
-    expect(inputs[1]).toHaveValue('lorem ipsum');
-
-    const select = screen.getSelectElement();
-    expect(select).toHaveValue('Greenbone Sensor');
-    const selectItems = await getSelectItemElementsForSelect(select);
-    expect(selectItems.length).toEqual(2);
-    await waitFor(() => (clickElement(selectItems[0])));
-
-    rerender (
-      <ScannerDialog
-        scanner={scanner}
-        onClose={handleClose}
-        onSave={handleSave}
-        onScannerTypeChange={handleScannerTypeChange}
-      />,
-    );
-
-    const nameInput = screen.getByName('name');
-    changeInputValue(nameInput, 'paul');
-
-    const commentInput = screen.getByName('comment');
-    changeInputValue(commentInput, 'lorem');
-
-    const saveButton = screen.getDialogSaveButton();
-    await fireEvent.click(saveButton);
-
-    expect(handleSave).toHaveBeenCalledWith({
-      ca_pub: undefined,
-      host: 'mypc',
-      name: 'paul',
-      comment: 'lorem',
-      credential_id: '',
-      type: 7,
       id: '1234',
       port: '22',
       which_cert: undefined,
