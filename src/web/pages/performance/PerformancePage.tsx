@@ -60,7 +60,7 @@ const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
         size="small"
         title={_('Help: Performance')}
       />
-      <IconMenu icon={<WizardIcon />} size="small">
+      <IconMenu icon={<WizardIcon size="small" />}>
         <MenuEntry
           title={_('Report for Last Hour')}
           value="hour"

@@ -6,11 +6,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import Icon from 'web/components/icon/Icon';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-const IconMenu = styled.span`
+const Span = styled.span`
   display: inline-flex;
   flex-direction: column;
 `;
@@ -19,7 +17,7 @@ const Div = styled.div`
   position: relative;
   display: none;
 
-  ${IconMenu}:hover & {
+  ${Span}:hover & {
     display: block;
   }
 `;
@@ -67,22 +65,23 @@ const Entry = styled.li`
   }
 `;
 
-const IconMenuContainer = ({children, icon, ...other}) => {
-  const menuentries = React.Children.map(children, child => (
+interface IconMenuProps {
+  children: React.ReactNode | React.ReactNode[];
+  icon?: React.ReactNode;
+}
+
+const IconMenu = ({children, icon}: IconMenuProps) => {
+  const menuEntries = React.Children.map(children, child => (
     <Entry>{child}</Entry>
   ));
   return (
-    <IconMenu>
-      {isDefined(icon) ? icon : <Icon {...other} />}
+    <Span>
+      {isDefined(icon) ? icon : null}
       <Div>
-        <List>{menuentries}</List>
+        <List>{menuEntries}</List>
       </Div>
-    </IconMenu>
+    </Span>
   );
 };
 
-IconMenuContainer.propTypes = {
-  icon: PropTypes.element,
-};
-
-export default IconMenuContainer;
+export default IconMenu;
