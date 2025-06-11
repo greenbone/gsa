@@ -3,14 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
-import useIconSize from 'web/hooks/useIconSize';
+import useIconSize, {IconSizeType} from 'web/hooks/useIconSize';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-const StyledCloseButton = styled.div`
+interface StyledCloseButtonProps {
+  $width: string;
+  $height: string;
+  $lineHeight: string;
+}
+
+interface DialogCloseButtonProps {
+  title?: string;
+  size?: IconSizeType;
+  onClick?: () => void;
+}
+
+const StyledCloseButton = styled.div<StyledCloseButtonProps>`
   display: flex;
   font-weight: bold;
   font-size: 12px;
@@ -34,9 +44,13 @@ const StyledCloseButton = styled.div`
   }
 `;
 
-const CloseButton = props => {
+const DialogCloseButton = ({
+  title,
+  size = 'medium',
+  onClick,
+}: DialogCloseButtonProps) => {
   const [_] = useTranslation();
-  const {title = _('Close'), size = 'medium'} = props;
+  title = title ?? _('Close');
   const {width, height} = useIconSize(size);
 
   return (
@@ -44,19 +58,13 @@ const CloseButton = props => {
       $height={height}
       $lineHeight={height}
       $width={width}
-      title={title}
-      {...props}
       data-testid="close-button"
+      title={title}
+      onClick={onClick}
     >
       ×{/* Javascript unicode: \u00D7 */}
     </StyledCloseButton>
   );
 };
 
-CloseButton.propTypes = {
-  title: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-  size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
-};
-
-export default CloseButton;
+export default DialogCloseButton;

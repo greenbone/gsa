@@ -5,16 +5,40 @@
 
 import {useEffect, useState} from 'react';
 import {isDefined, isFunction} from 'gmp/utils/identity';
-import DialogContent from 'web/components/dialog/Content';
 import Dialog from 'web/components/dialog/Dialog';
-import DialogError from 'web/components/dialog/Error';
+import DialogContent from 'web/components/dialog/DialogContent';
+import DialogError from 'web/components/dialog/DialogError';
 import SaveDialogFooter from 'web/components/dialog/SaveDialogFooter';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import State from 'web/utils/State';
 
-const SaveDialog = ({
+interface SaveDialogRenderProps<TValues> {
+  currentStep: number;
+  values: TValues;
+  onValueChange: (value: TValues[keyof TValues], name?: string) => void; // name is optional for now to support compatibility with uncontrolled components
+}
+
+interface SaveDialogProps<TValues, TDefaultValues> {
+  buttonTitle?: string;
+  children:
+    | React.ReactNode
+    | ((
+        props: SaveDialogRenderProps<TValues & TDefaultValues>,
+      ) => React.ReactNode);
+  defaultValues?: TDefaultValues; // default values for uncontrolled values
+  error?: string; // for errors controlled from parent (onErrorClose must be used if set)
+  multiStep?: number; // number of steps for multi-step dialogs
+  title: string;
+  values?: TValues; // should be used for controlled values
+  width?: string; // width of the dialog, default is '40vw'
+  onClose: () => void; // function to call when dialog is closed
+  onError?: (error: Error) => void; // function to call when an error occurs
+  onErrorClose?: () => void; // function to call when error dialog is closed
+  onSave: (state: TValues & TDefaultValues) => Promise<void> | void; // function to call when save button is clicked
+}
+
+const SaveDialog = <TValues, TDefaultValues = {}>({
   buttonTitle,
   children,
   defaultValues,
@@ -27,12 +51,12 @@ const SaveDialog = ({
   onError,
   onErrorClose,
   onSave,
-}) => {
+}: SaveDialogProps<TValues, TDefaultValues>) => {
   const [_] = useTranslation();
   buttonTitle = buttonTitle || _('Save');
 
   const [isLoading, setIsLoading] = useState(false);
-  const [stateError, setStateError] = useState(undefined);
+  const [stateError, setStateError] = useState<string | undefined>(undefined);
   const [currentStep, setCurrentStep] = useState(0);
 
   const [prevDisabled, setPrevDisabled] = useState(true);
@@ -61,7 +85,7 @@ const SaveDialog = ({
   const handleSaveClick = state => {
     if (onSave && !isLoading) {
       const promise = onSave(state);
-      if (isDefined(promise)) {
+      if (isFunction(promise?.then)) {
         setIsLoading(true);
         return promise.catch(error => setError(error));
       }
@@ -122,21 +146,6 @@ const SaveDialog = ({
       }}
     </State>
   );
-};
-
-SaveDialog.propTypes = {
-  buttonTitle: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
-  defaultValues: PropTypes.object, // default values for uncontrolled values
-  error: PropTypes.string, // for errors controlled from parent (onErrorClose must be used if set)
-  multiStep: PropTypes.number,
-  title: PropTypes.string.isRequired,
-  values: PropTypes.object, // should be used for controlled values
-  width: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onError: PropTypes.func,
-  onErrorClose: PropTypes.func,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default SaveDialog;

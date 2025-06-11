@@ -5,8 +5,8 @@
 
 import React, {useState} from 'react';
 import {isDefined} from 'gmp/utils/identity';
-import DialogContent from 'web/components/dialog/Content';
-import DialogError from 'web/components/dialog/Error';
+import DialogContent from 'web/components/dialog/DialogContent';
+import DialogError from 'web/components/dialog/DialogError';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';

@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
 import CheckBox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
 export const COMPOSER_CONTENT_DEFAULTS = {
@@ -29,6 +27,15 @@ const FilterField = styled.div`
   width: 100%;
 `;
 
+interface ComposerContentProps {
+  audit: boolean;
+  filterFieldTitle?: string;
+  filterString: string;
+  includeNotes: YesNo;
+  includeOverrides: YesNo;
+  onValueChange?: (value: YesNo, name?: string) => void;
+}
+
 const ComposerContent = ({
   audit = false,
   filterFieldTitle,
@@ -36,7 +43,7 @@ const ComposerContent = ({
   includeNotes,
   includeOverrides,
   onValueChange,
-}) => {
+}: ComposerContentProps) => {
   const [_] = useTranslation();
   filterFieldTitle =
     filterFieldTitle ||
@@ -50,7 +57,7 @@ const ComposerContent = ({
       </FormGroup>
       <FormGroup direction="row" title={_('Include')}>
         <CheckBox
-          checked={includeNotes}
+          checked={includeNotes === YES_VALUE}
           checkedValue={YES_VALUE}
           data-testid="includeNotes"
           name="includeNotes"
@@ -60,7 +67,7 @@ const ComposerContent = ({
         />
         {!audit && (
           <CheckBox
-            checked={includeOverrides}
+            checked={includeOverrides === YES_VALUE}
             checkedValue={YES_VALUE}
             data-testid="include-overrides"
             name="includeOverrides"
@@ -83,15 +90,6 @@ const ComposerContent = ({
       </FormGroup>
     </>
   );
-};
-
-ComposerContent.propTypes = {
-  audit: PropTypes.bool,
-  filterFieldTitle: PropTypes.string,
-  filterString: PropTypes.string.isRequired,
-  includeNotes: PropTypes.number.isRequired,
-  includeOverrides: PropTypes.number.isRequired,
-  onValueChange: PropTypes.func.isRequired,
 };
 
 export default ComposerContent;
