@@ -10,6 +10,7 @@ import MenuEntry from 'web/components/menu/MenuEntry';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
+
 const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();

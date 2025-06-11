@@ -50,7 +50,7 @@ export const ToolBarIcons = ({
         title={_('Help: Tasks')}
       />
       {capabilities.mayOp('run_wizard') && (
-        <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
+        <IconMenu icon={<WizardIcon />}>
           {capabilities.mayCreate('task') && (
             <MenuEntry
               data-testid="task-wizard-menu"
