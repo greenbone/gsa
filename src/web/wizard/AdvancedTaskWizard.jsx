@@ -6,6 +6,11 @@
 import {useState} from 'react';
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import {
+  DONT_START_VALUE,
+  IMMEDIATELY_START_VALUE,
+  SCHEDULE_START_VALUE,
+} from 'gmp/commands/wizard';
+import {
   esxi_credential_filter,
   smb_credential_filter,
   ssh_credential_filter,
@@ -27,14 +32,10 @@ import {renderSelectItems} from 'web/utils/Render';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 
-const IMMEDIATELY_START_VALUE = '2';
-const SCHEDULE_START_VALUE = '1';
-const DONT_START_VALUE = '0';
-
 const DEFAULTS = {
   scan_configs: [],
   credentials: [],
-  auto_start: '2',
+  auto_start: IMMEDIATELY_START_VALUE,
   ssh_port: 22,
 };
 
@@ -81,10 +82,8 @@ const AdvancedTaskWizard = ({
     alert_email,
     auto_start,
     config_id,
-    credentials,
     start_date,
     esxi_credential,
-    scan_configs,
     smb_credential,
     ssh_credential,
     ssh_port,

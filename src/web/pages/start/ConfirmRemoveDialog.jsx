@@ -5,11 +5,11 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import DialogContent from 'web/components/dialog/Content';
 import Dialog from 'web/components/dialog/Dialog';
+import DialogContent from 'web/components/dialog/DialogContent';
 import DialogTwoButtonFooter, {
   DELETE_ACTION,
-} from 'web/components/dialog/TwoButtonFooter';
+} from 'web/components/dialog/DialogTwoButtonFooter';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
