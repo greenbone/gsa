@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import GSA_VERSION from 'version';
 import {isDefined} from 'gmp/utils/identity';
@@ -31,7 +30,7 @@ const About = () => {
   const [_] = useTranslation();
 
   return (
-    <React.Fragment>
+    <>
       <PageTitle title={_('About GSA')} />
       <Layout flex="column">
         <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
@@ -100,7 +99,7 @@ const About = () => {
           </StyledLayout>
         </Section>
       </Layout>
-    </React.Fragment>
+    </>
   );
 };
 
