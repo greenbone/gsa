@@ -7,6 +7,6 @@ const SelectionType = {
   SELECTION_PAGE_CONTENTS: '0',
   SELECTION_USER: '1',
   SELECTION_FILTER: '2',
-};
+} as const;
 
 export default SelectionType;
