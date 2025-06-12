@@ -39,6 +39,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import CveDetails from 'web/pages/cves/Details';
 import {selector, loadEntity} from 'web/store/entities/cves';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = ({entity, onCveDownloadClick}) => {
   const [_] = useTranslation();
 
@@ -70,7 +71,7 @@ const Details = ({entity, links = true}) => {
   const [_] = useTranslation();
   const {certs = [], nvts = []} = entity;
   let {products} = entity;
-  products = products.sort();
+  products = products.toSorted();
   return (
     <Layout flex="column">
       <CveDetails entity={entity} />
