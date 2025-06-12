@@ -34,17 +34,17 @@ describe('useTranslation tests', () => {
 
     render(<TestComponent />);
 
-    const t1 = await screen.getByTestId('t1');
+    const t1 = screen.getByTestId('t1');
     expect(t1).toHaveTextContent('First Translation');
-    const t2 = await screen.getByTestId('t2');
+    const t2 = screen.getByTestId('t2');
     expect(t2).toHaveTextContent('Second Translation');
-    const r1 = await screen.getByTestId('r1');
+    const r1 = screen.getByTestId('r1');
     expect(r1).toHaveTextContent('is ready');
-    const r2 = await screen.getByTestId('r2');
+    const r2 = screen.getByTestId('r2');
     expect(r2).toHaveTextContent('is ready');
-    const b1 = await screen.getByTestId('changeLocale1');
-    await fireEvent.click(b1);
-    const b2 = await screen.getByTestId('changeLocale2');
-    await fireEvent.click(b2);
+    const b1 = screen.getByTestId('changeLocale1');
+    fireEvent.click(b1);
+    const b2 = screen.getByTestId('changeLocale2');
+    fireEvent.click(b2);
   });
 });
