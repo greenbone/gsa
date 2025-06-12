@@ -14,9 +14,8 @@ import PageTitle from 'web/components/layout/PageTitle';
 import ExternalLink from 'web/components/link/ExternalLink';
 import ProtocolDocLink from 'web/components/link/ProtocolDocLink';
 import Section from 'web/components/section/Section';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-import withGmp from 'web/utils/withGmp';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
@@ -27,7 +26,8 @@ const DivP = styled.div`
   margin-bottom: 10px;
 `;
 
-const About = ({gmp}) => {
+const About = () => {
+  const gmp = useGmp();
   const [_] = useTranslation();
 
   return (
@@ -104,8 +104,4 @@ const About = ({gmp}) => {
   );
 };
 
-About.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withGmp(About);
+export default About;
