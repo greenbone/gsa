@@ -59,6 +59,8 @@ interface LinkComponentProps extends Omit<RLinkProps, 'to'> {
   query?: Record<string, string>;
 }
 
+export type LinkProps = LinkComponentProps & WithTextOnlyProps;
+
 const LinkComponent = ({
   anchor,
   to = '',

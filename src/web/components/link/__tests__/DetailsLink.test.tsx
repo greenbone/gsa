@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, test, expect, beforeEach} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import DetailsLink from 'web/components/link/DetailsLink';
@@ -106,5 +106,18 @@ describe('DetailsLink tests', () => {
     fireEvent.click(screen.getByText('Foo'));
 
     expect(locationPathname).toHaveTextContent('/');
+  });
+
+  test('should render with textOnly', () => {
+    const {render} = rendererWith({capabilities: true, router: true});
+    const {element} = render(
+      <DetailsLink id="1" textOnly={true} title="Foo" type="foo">
+        Foo
+      </DetailsLink>,
+    );
+
+    expect(element).toHaveTextContent('Foo');
+    expect(element).toHaveAttribute('title', 'Foo');
+    expect(element).not.toHaveAttribute('href');
   });
 });
