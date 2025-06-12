@@ -10,7 +10,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 
 const TestUseCapabilities = () => {
   const capabilities = useCapabilities();
-  if (capabilities.mayCreate('task')) {
+  if (capabilities?.mayCreate('task')) {
     return <span>May create a task</span>;
   }
   return <span>Not allowed to create a task</span>;

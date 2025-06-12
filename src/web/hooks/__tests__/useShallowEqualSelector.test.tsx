@@ -21,8 +21,16 @@ const reducer = (state = {value: 0}, action) => {
 
 const update = () => ({type: 'increment'});
 
+interface TestCounter {
+  value: number;
+}
+
+interface TestState {
+  counter: TestCounter;
+}
+
 const TestComponent1 = ({renderCallback}) => {
-  const state = useSelector(state => state.counter);
+  const state = useSelector<TestState, TestCounter>(state => state.counter);
   const dispatch = useDispatch();
   const updateCounter = useCallback(() => dispatch(update()), [dispatch]);
   renderCallback();
@@ -37,7 +45,9 @@ const TestComponent1 = ({renderCallback}) => {
 };
 
 const TestComponent2 = ({renderCallback}) => {
-  const state = useShallowEqualSelector(state => state.counter);
+  const state = useShallowEqualSelector<TestState, TestCounter>(
+    state => state.counter,
+  );
   renderCallback();
   return (
     <div>
@@ -54,6 +64,7 @@ describe('useShallowEqualSelector tests', () => {
       reducer: {
         counter: reducer,
       },
+      // @ts-expect-error
       middleware: () => [],
     });
 
