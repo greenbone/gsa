@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, fireEvent, rendererWith} from 'web/testing';
+import GmpSettings from 'gmp/gmpsettings';
 import AboutPage from 'web/pages/help/About';
 
 describe('AboutPage tests', () => {
@@ -50,6 +51,21 @@ describe('AboutPage tests', () => {
 
     fireEvent.click(links[1]);
 
-    expect(screen.queryDialogTitle()).toHaveTextContent('You are leaving GSA');
+    expect(screen.getDialogTitle()).toHaveTextContent('You are leaving GSA');
+  });
+
+  test('should have protocol documentation link', async () => {
+    const gmp = {
+      settings: new GmpSettings(),
+    };
+    const {render} = rendererWith({gmp});
+
+    render(<AboutPage />);
+
+    const link = screen.getByText('here');
+    expect(link).toHaveAttribute(
+      'href',
+      'https://docs.greenbone.net/API/GMP/gmp-22.5.html',
+    );
   });
 });
