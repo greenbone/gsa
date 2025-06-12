@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import TextField from 'web/components/form/TextField';
@@ -11,7 +10,7 @@ import {NewIcon, WizardIcon as WizIcon} from 'web/components/icon';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
 export const WizardContent = styled.div`
   margin: 0 20px;
 `;
@@ -28,12 +27,30 @@ export const WizardIcon = () => {
   );
 };
 
-const TaskWizard = ({hosts, title, onClose, onNewClick, onSave}) => {
+interface TaskWizardState {
+  hosts: string;
+}
+
+interface TaskWizardProps {
+  hosts?: string;
+  title?: string;
+  onClose: () => void;
+  onNewClick?: () => void;
+  onSave: (values: TaskWizardState) => void;
+}
+
+const TaskWizard = ({
+  hosts = '',
+  title,
+  onClose,
+  onNewClick,
+  onSave,
+}: TaskWizardProps) => {
   const [_] = useTranslation();
   title = title || _('Task Wizard');
 
   return (
-    <SaveDialog
+    <SaveDialog<{}, TaskWizardState>
       buttonTitle={_('Start Scan')}
       defaultValues={{hosts}}
       title={title}
@@ -52,7 +69,7 @@ const TaskWizard = ({hosts, title, onClose, onNewClick, onSave}) => {
                 <span>{_('IP address or hostname:')}</span>
                 <TextField
                   grow="1"
-                  maxLength="2000"
+                  maxLength={2000}
                   name="hosts"
                   value={state.hosts}
                   onChange={onValueChange}
@@ -94,14 +111,6 @@ const TaskWizard = ({hosts, title, onClose, onNewClick, onSave}) => {
       )}
     </SaveDialog>
   );
-};
-
-TaskWizard.propTypes = {
-  hosts: PropTypes.string,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onNewClick: PropTypes.func,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default TaskWizard;

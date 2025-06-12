@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import {feedStatusRejection} from 'gmp/commands/feedstatus';
 import HttpCommand from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
@@ -65,33 +63,33 @@ interface RunQuickFirstScanArguments {
 }
 
 interface RunQuickTaskArguments {
-  alert_email: string;
-  auto_start:
+  alertEmail: string;
+  autoStart:
     | typeof IMMEDIATELY_START_VALUE
     | typeof SCHEDULE_START_VALUE
     | typeof DONT_START_VALUE;
-  config_id: string;
-  start_date: Date;
-  esxi_credential: string;
-  scan_configs: string[];
-  smb_credential: string;
-  ssh_credential: string;
-  ssh_port: number;
-  start_hour: string;
-  start_minute: string;
-  start_timezone: string;
-  target_hosts: string;
-  task_name: string;
+  esxiCredential: string;
+  scanConfigId: string;
+  scanConfigs: string[];
+  smbCredential: string;
+  sshCredential: string;
+  sshPort: number;
+  startDate: Date;
+  startHour: string;
+  startMinute: string;
+  startTimezone: string;
+  targetHosts: string;
+  taskName: string;
 }
 
 interface RunModifyTaskArguments {
-  task_id: string;
-  alert_email: string;
+  taskId: string;
+  alertEmail: string;
   reschedule: YesNo;
-  start_date: Date;
-  start_hour: number;
-  start_minute: number;
-  start_timezone: string;
+  startDate: Date;
+  startHour: number;
+  startMinute: number;
+  startTimezone: string;
 }
 
 class WizardCommand extends HttpCommand {
@@ -185,37 +183,37 @@ class WizardCommand extends HttpCommand {
   }
 
   async runQuickTask({
-    alert_email,
-    auto_start,
-    config_id,
-    esxi_credential,
-    smb_credential,
-    ssh_credential,
-    ssh_port,
-    start_date,
-    start_hour,
-    start_minute,
-    start_timezone,
-    target_hosts,
-    task_name,
+    alertEmail,
+    autoStart,
+    esxiCredential,
+    scanConfigId,
+    smbCredential,
+    sshCredential,
+    sshPort,
+    startDate,
+    startHour,
+    startMinute,
+    startTimezone,
+    targetHosts,
+    taskName,
   }: RunQuickTaskArguments) {
     try {
       return await this.httpPost({
-        'event_data:alert_email': alert_email,
-        'event_data:auto_start': auto_start,
-        'event_data:config_id': config_id,
-        'event_data:esxi_credential': esxi_credential,
-        'event_data:smb_credential': smb_credential,
-        'event_data:ssh_credential': ssh_credential,
-        'event_data:ssh_port': ssh_port,
-        'event_data:start_day': start_date.date(),
-        'event_data:start_month': start_date.month() + 1,
-        'event_data:start_year': start_date.year(),
-        'event_data:start_hour': start_hour,
-        'event_data:start_minute': start_minute,
-        'event_data:start_timezone': start_timezone,
-        'event_data:target_hosts': target_hosts,
-        'event_data:task_name': task_name,
+        'event_data:alert_email': alertEmail,
+        'event_data:auto_start': autoStart,
+        'event_data:config_id': scanConfigId,
+        'event_data:esxi_credential': esxiCredential,
+        'event_data:smb_credential': smbCredential,
+        'event_data:ssh_credential': sshCredential,
+        'event_data:ssh_port': sshPort,
+        'event_data:start_day': startDate.date(),
+        'event_data:start_month': startDate.month() + 1,
+        'event_data:start_year': startDate.year(),
+        'event_data:start_hour': startHour,
+        'event_data:start_minute': startMinute,
+        'event_data:start_timezone': startTimezone,
+        'event_data:target_hosts': targetHosts,
+        'event_data:task_name': taskName,
         cmd: 'run_wizard',
         name: 'quick_task',
       });
@@ -225,24 +223,24 @@ class WizardCommand extends HttpCommand {
   }
 
   runModifyTask({
-    task_id,
-    alert_email,
+    taskId,
+    alertEmail,
     reschedule,
-    start_date,
-    start_hour,
-    start_minute,
-    start_timezone,
+    startDate,
+    startHour,
+    startMinute,
+    startTimezone,
   }: RunModifyTaskArguments) {
     return this.httpPost({
-      'event_data:alert_email': alert_email,
+      'event_data:alert_email': alertEmail,
       'event_data:reschedule': reschedule,
-      'event_data:start_hour': start_hour,
-      'event_data:start_minute': start_minute,
-      'event_data:start_day': start_date.date(),
-      'event_data:start_month': start_date.month() + 1,
-      'event_data:start_year': start_date.year(),
-      'event_data:start_timezone': start_timezone,
-      'event_data:task_id': task_id,
+      'event_data:start_hour': startHour,
+      'event_data:start_minute': startMinute,
+      'event_data:start_day': startDate.date(),
+      'event_data:start_month': startDate.month() + 1,
+      'event_data:start_year': startDate.year(),
+      'event_data:start_timezone': startTimezone,
+      'event_data:task_id': taskId,
       cmd: 'run_wizard',
       name: 'modify_task',
     });

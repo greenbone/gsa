@@ -14,25 +14,33 @@ import Date from 'gmp/models/date';
 import ScanConfig from 'gmp/models/scanconfig';
 import AdvancedTaskWizard from 'web/wizard/AdvancedTaskWizard';
 
+interface TestModel {
+  id: string;
+  name: string;
+}
+
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
 const scheduleCapabilities = new Capabilities([
   'create_schedule',
   'get_schedules',
 ]);
 
-const config1 = ScanConfig.fromElement({_id: '1234', name: 'config 1'});
+const config1 = ScanConfig.fromElement<TestModel>({
+  _id: '1234',
+  name: 'config 1',
+});
 
-const credential1 = Credential.fromElement({
+const credential1 = Credential.fromElement<TestModel>({
   _id: '5678',
   name: 'credential 1',
   type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
-const credential2 = Credential.fromElement({
+const credential2 = Credential.fromElement<TestModel>({
   _id: '91011',
   name: 'credential 1',
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
-const credential3 = Credential.fromElement({
+const credential3 = Credential.fromElement<TestModel>({
   _id: '121314',
   name: 'credential 1',
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -70,25 +78,25 @@ describe('AdvancedTaskWizard component tests', () => {
 
     render(
       <AdvancedTaskWizard
-        config_id={configId}
         credentials={credentials}
-        esxi_credential={esxiCredential}
-        scan_configs={scanConfigs}
-        smb_credential={smbCredential}
-        ssh_credential={sshCredential}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        target_hosts={targetHosts}
-        task_name={taskName}
+        esxiCredential={esxiCredential}
+        scanConfigId={configId}
+        scanConfigs={scanConfigs}
+        smbCredential={smbCredential}
+        sshCredential={sshCredential}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        targetHosts={targetHosts}
+        taskName={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = screen.getRadioInputs();
+    const radioInputs = screen.getRadioInputs() as HTMLInputElement[];
     const radioTitles = getRadioTitles();
 
     const selectedDate = '01/01/2020';
@@ -110,7 +118,7 @@ describe('AdvancedTaskWizard component tests', () => {
     expect(formGroups[1]).toHaveTextContent('Scan Config');
 
     expect(formGroups[2]).toHaveTextContent('Target Host(s)');
-    const targetHostsInput = screen.getByName('target_hosts');
+    const targetHostsInput = screen.getByName('targetHosts');
     expect(targetHostsInput).toHaveAttribute('value', targetHosts);
 
     expect(formGroups[3]).toHaveTextContent('Start Time');
@@ -143,25 +151,25 @@ describe('AdvancedTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <AdvancedTaskWizard
-        config_id={configId}
         credentials={credentials}
-        esxi_credential={esxiCredential}
-        scan_configs={scanConfigs}
-        smb_credential={smbCredential}
-        ssh_credential={sshCredential}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        target_hosts={targetHosts}
-        task_name={taskName}
+        esxiCredential={esxiCredential}
+        scanConfigId={configId}
+        scanConfigs={scanConfigs}
+        smbCredential={smbCredential}
+        sshCredential={sshCredential}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        targetHosts={targetHosts}
+        taskName={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = screen.getRadioInputs();
+    const radioInputs = screen.getRadioInputs() as HTMLInputElement[];
     const radioTitles = getRadioTitles();
 
     expect(formGroups[0]).toHaveTextContent('Task Name');
@@ -200,25 +208,25 @@ describe('AdvancedTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <AdvancedTaskWizard
-        config_id={configId}
         credentials={credentials}
-        esxi_credential={esxiCredential}
-        scan_configs={scanConfigs}
-        smb_credential={smbCredential}
-        ssh_credential={sshCredential}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        target_hosts={targetHosts}
-        task_name={taskName}
+        esxiCredential={esxiCredential}
+        scanConfigId={configId}
+        scanConfigs={scanConfigs}
+        smbCredential={smbCredential}
+        sshCredential={sshCredential}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        targetHosts={targetHosts}
+        taskName={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = screen.getRadioInputs();
+    const radioInputs = screen.getRadioInputs() as HTMLInputElement[];
     const radioTitles = getRadioTitles();
 
     expect(formGroups[0]).toHaveTextContent('Task Name');
@@ -226,7 +234,7 @@ describe('AdvancedTaskWizard component tests', () => {
     expect(formGroups[1]).toHaveTextContent('Scan Config');
 
     expect(formGroups[2]).toHaveTextContent('Target Host(s)');
-    const targetHostsInput = screen.getByName('target_hosts');
+    const targetHostsInput = screen.getByName('targetHosts');
     expect(targetHostsInput).toHaveAttribute('value', targetHosts);
 
     expect(formGroups[3]).toHaveTextContent('Start Time');
@@ -260,18 +268,18 @@ describe('AdvancedTaskWizard component tests', () => {
 
     render(
       <AdvancedTaskWizard
-        config_id={configId}
         credentials={credentials}
-        esxi_credential={esxiCredential}
-        scan_configs={scanConfigs}
-        smb_credential={smbCredential}
-        ssh_credential={sshCredential}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        target_hosts={targetHosts}
-        task_name={taskName}
+        esxiCredential={esxiCredential}
+        scanConfigId={configId}
+        scanConfigs={scanConfigs}
+        smbCredential={smbCredential}
+        sshCredential={sshCredential}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        targetHosts={targetHosts}
+        taskName={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -292,18 +300,18 @@ describe('AdvancedTaskWizard component tests', () => {
 
     render(
       <AdvancedTaskWizard
-        config_id={configId}
         credentials={credentials}
-        esxi_credential={esxiCredential}
-        scan_configs={scanConfigs}
-        smb_credential={smbCredential}
-        ssh_credential={sshCredential}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        target_hosts={targetHosts}
-        task_name={taskName}
+        esxiCredential={esxiCredential}
+        scanConfigId={configId}
+        scanConfigs={scanConfigs}
+        smbCredential={smbCredential}
+        sshCredential={sshCredential}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        targetHosts={targetHosts}
+        taskName={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -324,45 +332,43 @@ describe('AdvancedTaskWizard component tests', () => {
 
     render(
       <AdvancedTaskWizard
-        config_id={configId}
         credentials={credentials}
-        esxi_credential={esxiCredential}
-        scan_configs={scanConfigs}
-        smb_credential={smbCredential}
-        ssh_credential={sshCredential}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        target_hosts={targetHosts}
-        task_name={taskName}
+        esxiCredential={esxiCredential}
+        scanConfigId={configId}
+        scanConfigs={scanConfigs}
+        smbCredential={smbCredential}
+        sshCredential={sshCredential}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        targetHosts={targetHosts}
+        taskName={taskName}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    const nameInput = screen.getByName('task_name');
+    const nameInput = screen.getByName('taskName');
     fireEvent.change(nameInput, {target: {value: 'Foo'}});
 
-    const saveButton = screen.getByTestId('dialog-save-button');
+    const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      alert_email: undefined,
-      auto_start: '2',
-      config_id: configId,
-      credentials: [],
-      esxi_credential: esxiCredential,
-      scan_configs: [],
-      smb_credential: smbCredential,
-      ssh_credential: sshCredential,
-      ssh_port: 22,
-      start_date: startDate,
-      start_hour: startHour,
-      start_minute: startMinute,
-      start_timezone: startTimezone,
-      target_hosts: targetHosts,
-      task_name: 'Foo',
+      alertEmail: undefined,
+      autoStart: '2',
+      scanConfigId: configId,
+      esxiCredential: esxiCredential,
+      smbCredential: smbCredential,
+      sshCredential: sshCredential,
+      sshPort: 22,
+      startDate: startDate,
+      startHour: startHour,
+      startMinute: startMinute,
+      startTimezone: startTimezone,
+      targetHosts: targetHosts,
+      taskName: 'Foo',
     });
   });
 });

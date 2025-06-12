@@ -6,23 +6,27 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {changeInputValue, screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import Date from 'gmp/models/date';
+import date from 'gmp/models/date';
 import Task from 'gmp/models/task';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 
+interface TestModel {
+  id: string;
+  name: string;
+}
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
 const scheduleCapabilities = new Capabilities([
   'create_schedule',
   'get_schedules',
 ]);
 
-const task1 = Task.fromElement({id: '1234', name: 'task 1'});
+const task1 = Task.fromElement<TestModel>({id: '1234', name: 'task 1'});
 const taskId = '1234';
 const tasks = [task1];
 
 const reschedule = 0;
 
-const startDate = Date('2020-01-01T12:10:00Z');
+const startDate = date('2020-01-01T12:10:00Z');
 const startMinute = 10;
 const startHour = 12;
 const startTimezone = 'UTC';
@@ -47,11 +51,11 @@ describe('ModifyTaskWizard component tests', () => {
     const {baseElement} = render(
       <ModifyTaskWizard
         reschedule={reschedule}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        task_id={taskId}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        taskId={taskId}
         tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
@@ -59,7 +63,7 @@ describe('ModifyTaskWizard component tests', () => {
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = screen.getRadioInputs();
+    const radioInputs = screen.getRadioInputs() as HTMLInputElement[];
     const radioTitles = getRadioTitles();
 
     const selectedDate = '01/01/2020';
@@ -105,11 +109,11 @@ describe('ModifyTaskWizard component tests', () => {
     const {baseElement} = render(
       <ModifyTaskWizard
         reschedule={reschedule}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        task_id={taskId}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        taskId={taskId}
         tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
@@ -142,11 +146,11 @@ describe('ModifyTaskWizard component tests', () => {
     const {baseElement} = render(
       <ModifyTaskWizard
         reschedule={reschedule}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        task_id={taskId}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        taskId={taskId}
         tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
@@ -154,7 +158,7 @@ describe('ModifyTaskWizard component tests', () => {
     );
 
     const formGroups = getFormGroupTitles();
-    const radioInputs = screen.getRadioInputs();
+    const radioInputs = screen.getRadioInputs() as HTMLInputElement[];
     const radioTitles = getRadioTitles();
 
     expect(baseElement).toHaveTextContent('Setting a start time');
@@ -186,11 +190,11 @@ describe('ModifyTaskWizard component tests', () => {
     render(
       <ModifyTaskWizard
         reschedule={reschedule}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        task_id={taskId}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        taskId={taskId}
         tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
@@ -213,11 +217,11 @@ describe('ModifyTaskWizard component tests', () => {
     render(
       <ModifyTaskWizard
         reschedule={reschedule}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        task_id={taskId}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        taskId={taskId}
         tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
@@ -240,32 +244,31 @@ describe('ModifyTaskWizard component tests', () => {
     render(
       <ModifyTaskWizard
         reschedule={reschedule}
-        start_date={startDate}
-        start_hour={startHour}
-        start_minute={startMinute}
-        start_timezone={startTimezone}
-        task_id={taskId}
+        startDate={startDate}
+        startHour={startHour}
+        startMinute={startMinute}
+        startTimezone={startTimezone}
+        taskId={taskId}
         tasks={tasks}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    const emailInput = screen.getByName('alert_email');
+    const emailInput = screen.getByName('alertEmail');
     changeInputValue(emailInput, 'foo@bar.com');
 
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      alert_email: 'foo@bar.com',
+      alertEmail: 'foo@bar.com',
       reschedule: 0,
-      start_date: startDate,
-      start_hour: startHour,
-      start_minute: startMinute,
-      start_timezone: startTimezone,
-      task_id: taskId,
-      tasks: tasks,
+      startDate: startDate,
+      startHour: startHour,
+      startMinute: startMinute,
+      startTimezone: startTimezone,
+      taskId: taskId,
     });
   });
 });

@@ -15,6 +15,7 @@ import {
   smb_credential_filter,
   ssh_credential_filter,
 } from 'gmp/models/credential';
+import {Date} from 'gmp/models/date';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
@@ -27,43 +28,88 @@ import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import {renderSelectItems} from 'web/utils/Render';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 
-const DEFAULTS = {
-  scan_configs: [],
-  credentials: [],
-  auto_start: IMMEDIATELY_START_VALUE,
-  ssh_port: 22,
-};
+const DEFAULT_SSH_PORT = 22;
+
+type AutoStartType =
+  | typeof IMMEDIATELY_START_VALUE
+  | typeof SCHEDULE_START_VALUE
+  | typeof DONT_START_VALUE;
+
+interface AdvancedTaskWizardState {
+  alertEmail?: string;
+  autoStart: AutoStartType;
+  scanConfigId: string;
+  startDate: Date;
+  esxiCredential?: string;
+  smbCredential?: string;
+  sshCredential?: string;
+  sshPort: number;
+  startHour: number;
+  startMinute: number;
+  startTimezone: string;
+  targetHosts: string;
+  taskName: string;
+}
+
+interface Credential {
+  id: string;
+  name: string;
+}
+
+interface ScanConfig {
+  id: string;
+  name: string;
+}
+
+interface AdvancedTaskWizardProps {
+  alertEmail?: string;
+  autoStart?: AutoStartType;
+  credentials: Credential[];
+  esxiCredential?: string;
+  scanConfigId: string;
+  scanConfigs: ScanConfig[];
+  smbCredential?: string;
+  sshCredential?: string;
+  sshPort?: number;
+  startDate: Date;
+  startHour: number;
+  startMinute: number;
+  startTimezone: string;
+  targetHosts?: string;
+  taskName: string;
+  onClose: () => void;
+  onSave: (values: AdvancedTaskWizardState) => void;
+}
 
 const AdvancedTaskWizard = ({
-  alert_email,
-  auto_start,
-  config_id,
+  alertEmail,
+  autoStart = IMMEDIATELY_START_VALUE,
   credentials = [],
-  start_date,
-  esxi_credential = '',
-  scan_configs,
-  smb_credential = '',
-  ssh_credential = '',
-  ssh_port,
-  start_hour,
-  start_minute,
-  start_timezone,
-  target_hosts,
-  task_name,
+  esxiCredential = '',
+  scanConfigId,
+  scanConfigs,
+  smbCredential = '',
+  sshCredential = '',
+  sshPort = DEFAULT_SSH_PORT,
+  startDate,
+  startHour,
+  startMinute,
+  startTimezone,
+  targetHosts = '',
+  taskName = '',
   onClose,
   onSave,
-}) => {
+}: AdvancedTaskWizardProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
-  const configItems = renderSelectItems(scan_configs);
+  const configItems = renderSelectItems(scanConfigs);
 
   const [timePickerValue, setTimePickerValue] = useState(
-    formatSplitTime(start_hour, start_minute),
+    formatSplitTime(startHour, startMinute),
   );
   const sshCredentialItems = renderSelectItems(
     credentials.filter(ssh_credential_filter),
@@ -79,31 +125,30 @@ const AdvancedTaskWizard = ({
   );
 
   const data = {
-    alert_email,
-    auto_start,
-    config_id,
-    start_date,
-    esxi_credential,
-    smb_credential,
-    ssh_credential,
-    ssh_port,
-    start_hour,
-    start_minute,
-    start_timezone,
-    target_hosts,
-    task_name,
-    ...DEFAULTS,
+    alertEmail,
+    autoStart,
+    scanConfigId,
+    startDate,
+    esxiCredential,
+    smbCredential,
+    sshCredential,
+    sshPort,
+    startHour,
+    startMinute,
+    startTimezone,
+    targetHosts,
+    taskName,
   };
 
   const handleTimeChange = (selectedValue, onValueChange) => {
-    const [start_hour, start_minute] = selectedValue.split(':');
+    const [startHour, startMinute] = selectedValue.split(':');
     setTimePickerValue(selectedValue);
-    onValueChange(parseInt(start_hour), 'start_hour');
-    onValueChange(parseInt(start_minute), 'start_minute');
+    onValueChange(parseInt(startHour), 'startHour');
+    onValueChange(parseInt(startMinute), 'startMinute');
   };
 
   return (
-    <SaveDialog
+    <SaveDialog<{}, AdvancedTaskWizardState>
       buttonTitle={_('Create')}
       defaultValues={data}
       title={_('Advanced Task Wizard')}
@@ -137,8 +182,8 @@ const AdvancedTaskWizard = ({
                   {_(
                     'You can choose, whether you want to run the scan immediately',
                   )}
-                  {capabilities.mayAccess('schedules') &&
-                    capabilities.mayCreate('schedule') &&
+                  {capabilities?.mayAccess('schedules') &&
+                    capabilities?.mayCreate('schedule') &&
                     _(', schedule the task for a later date and time,')}
                   {_(
                     ' or just create the task so you can run it manually later.',
@@ -150,17 +195,17 @@ const AdvancedTaskWizard = ({
                       'select SSH and/or SMB credentials, but you can also run ' +
                       'an unauthenticated scan by not selecting any credentials.',
                   )}
-                  {capabilities.mayAccess('alerts') &&
-                    capabilities.mayCreate('alert') && <br />}
-                  {capabilities.mayAccess('alerts') &&
-                    capabilities.mayCreate('alert') &&
+                  {capabilities?.mayAccess('alerts') &&
+                    capabilities?.mayCreate('alert') && <br />}
+                  {capabilities?.mayAccess('alerts') &&
+                    capabilities?.mayCreate('alert') &&
                     _(
                       'If you enter an email address in the "Email report to"' +
                         ' field, a report of the scan will be sent to this ' +
                         'address once it is finished.',
                     )}
-                  {capabilities.mayAccess('slaves') && <br />}
-                  {capabilities.mayAccess('slaves') &&
+                  {capabilities?.mayAccess('slaves') && <br />}
+                  {capabilities?.mayAccess('slaves') &&
                     _(
                       'Finally, you can select a sensor which will run the ' +
                         'scan.',
@@ -178,9 +223,9 @@ const AdvancedTaskWizard = ({
               <FormGroup title={_('Task Name')}>
                 <TextField
                   grow="1"
-                  maxLength="80"
-                  name="task_name"
-                  value={state.task_name}
+                  maxLength={80}
+                  name="taskName"
+                  value={state.taskName}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -188,8 +233,8 @@ const AdvancedTaskWizard = ({
               <FormGroup title={_('Scan Config')}>
                 <Select
                   items={configItems}
-                  name="config_id"
-                  value={state.config_id}
+                  name="scanConfigId"
+                  value={state.scanConfigId}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -197,37 +242,37 @@ const AdvancedTaskWizard = ({
               <FormGroup title={_('Target Host(s)')}>
                 <TextField
                   grow="1"
-                  maxLength="2000"
-                  name="target_hosts"
-                  value={state.target_hosts}
+                  maxLength={2000}
+                  name="targetHosts"
+                  value={state.targetHosts}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
               <FormGroup title={_('Start Time')}>
                 <Radio
-                  checked={state.auto_start === IMMEDIATELY_START_VALUE}
-                  name="auto_start"
+                  checked={state.autoStart === IMMEDIATELY_START_VALUE}
+                  name="autoStart"
                   title={_('Start immediately')}
                   value={IMMEDIATELY_START_VALUE}
                   onChange={onValueChange}
                 />
 
-                {capabilities.mayCreate('schedule') &&
-                  capabilities.mayAccess('schedules') && (
+                {capabilities?.mayCreate('schedule') &&
+                  capabilities?.mayAccess('schedules') && (
                     <>
                       <Column>
                         <Radio
-                          checked={state.auto_start === SCHEDULE_START_VALUE}
-                          name="auto_start"
+                          checked={state.autoStart === SCHEDULE_START_VALUE}
+                          name="autoStart"
                           title={_('Create Schedule:')}
                           value={SCHEDULE_START_VALUE}
                           onChange={onValueChange}
                         />
                         <DatePicker
                           label={_('Start Date')}
-                          name={'start_date'}
-                          value={state.start_date}
+                          name={'startDate'}
+                          value={state.startDate}
                           onChange={onValueChange}
                         />
                         <TimePicker
@@ -241,16 +286,16 @@ const AdvancedTaskWizard = ({
                       </Column>
                       <TimeZoneSelect
                         label={_('Timezone')}
-                        name="start_timezone"
-                        value={state.start_timezone}
+                        name="startTimezone"
+                        value={state.startTimezone}
                         onChange={onValueChange}
                       />
                     </>
                   )}
 
                 <Radio
-                  checked={state.auto_start === DONT_START_VALUE}
-                  name="auto_start"
+                  checked={state.autoStart === DONT_START_VALUE}
+                  name="autoStart"
                   title={_('Do not start automatically')}
                   value={DONT_START_VALUE}
                   onChange={onValueChange}
@@ -260,17 +305,17 @@ const AdvancedTaskWizard = ({
               <FormGroup direction="row" title={_('SSH Credential')}>
                 <Select
                   items={sshCredentialItems}
-                  name="ssh_credential"
-                  value={state.ssh_credential}
+                  name="sshCredential"
+                  value={state.sshCredential}
                   onChange={onValueChange}
                 />
                 <span>{_(' on port ')}</span>
                 <Spinner
-                  max="65535"
-                  min="0"
-                  name="ssh_port"
+                  max={65535}
+                  min={0}
+                  name="sshPort"
                   type="int"
-                  value={state.ssh_port}
+                  value={state.sshPort}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -278,8 +323,8 @@ const AdvancedTaskWizard = ({
               <FormGroup title={_('SMB Credential')}>
                 <Select
                   items={smbCredentialItems}
-                  name="smb_credential"
-                  value={state.smb_credential}
+                  name="smbCredential"
+                  value={state.smbCredential}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -287,20 +332,20 @@ const AdvancedTaskWizard = ({
               <FormGroup title={_('ESXi Credential')}>
                 <Select
                   items={esxiCredentialItems}
-                  name="esxi_credential"
-                  value={state.esxi_credential}
+                  name="esxiCredential"
+                  value={state.esxiCredential}
                   onChange={onValueChange}
                 />
               </FormGroup>
 
-              {capabilities.mayCreate('alert') &&
-                capabilities.mayAccess('alerts') && (
+              {capabilities?.mayCreate('alert') &&
+                capabilities?.mayAccess('alerts') && (
                   <FormGroup title={_('Email report to')}>
                     <TextField
                       grow="1"
-                      maxLength="80"
-                      name="alert_email"
-                      value={state.alert_email}
+                      maxLength={80}
+                      name="alertEmail"
+                      value={state.alertEmail}
                       onChange={onValueChange}
                     />
                   </FormGroup>
@@ -311,31 +356,6 @@ const AdvancedTaskWizard = ({
       }}
     </SaveDialog>
   );
-};
-
-AdvancedTaskWizard.propTypes = {
-  alert_email: PropTypes.string,
-  auto_start: PropTypes.oneOf([
-    IMMEDIATELY_START_VALUE,
-    SCHEDULE_START_VALUE,
-    DONT_START_VALUE,
-  ]),
-  config_id: PropTypes.idOrZero,
-  credentials: PropTypes.arrayOf(PropTypes.model),
-  esxi_credential: PropTypes.idOrZero,
-  scan_configs: PropTypes.arrayOf(PropTypes.model),
-  smb_credential: PropTypes.idOrZero,
-  ssh_credential: PropTypes.idOrZero,
-  ssh_port: PropTypes.number,
-  start_date: PropTypes.date,
-  start_hour: PropTypes.number,
-  start_minute: PropTypes.number,
-  start_timezone: PropTypes.string,
-  target_hosts: PropTypes.string,
-  task_name: PropTypes.string,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default AdvancedTaskWizard;
