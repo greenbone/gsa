@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {AppNavigation} from '@greenbone/opensight-ui-components-mantinev7';
 import {
   BarChart3,
@@ -16,6 +15,7 @@ import {
   CircleHelp,
 } from 'lucide-react';
 import {useMatch} from 'react-router';
+import {isDefined} from 'gmp/utils/identity';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
@@ -67,7 +67,8 @@ const Menu = () => {
   const isCvssCalculatorActive = Boolean(useMatch('/cvsscalculator'));
   const isAboutActive = Boolean(useMatch('/about'));
 
-  const mayAccessAny = keys => keys.some(key => capabilities.mayAccess(key));
+  const mayAccessAny = (keys: string[]) =>
+    keys.some(key => isDefined(capabilities) && capabilities.mayAccess(key));
 
   const mayOpScans = mayAccessAny([
     'tasks',
@@ -113,32 +114,32 @@ const Menu = () => {
         label: _('Scans'),
         key: 'scans',
         subNav: [
-          capabilities.mayAccess('tasks') && {
+          capabilities?.mayAccess('tasks') && {
             label: _('Tasks'),
             to: '/tasks',
             active: isTasksActive,
           },
-          capabilities.mayAccess('reports') && {
+          capabilities?.mayAccess('reports') && {
             label: _('Reports'),
             to: '/reports',
             active: isReportsActive,
           },
-          capabilities.mayAccess('results') && {
+          capabilities?.mayAccess('results') && {
             label: _('Results'),
             to: '/results',
             active: isResultsActive,
           },
-          capabilities.mayAccess('vulns') && {
+          capabilities?.mayAccess('vulns') && {
             label: _('Vulnerabilities'),
             to: '/vulnerabilities',
             active: isVulnerabilitiesActive,
           },
-          capabilities.mayAccess('notes') && {
+          capabilities?.mayAccess('notes') && {
             label: _('Notes'),
             to: '/notes',
             active: isNotesActive,
           },
-          capabilities.mayAccess('overrides') && {
+          capabilities?.mayAccess('overrides') && {
             label: _('Overrides'),
             to: '/overrides',
             active: isOverridesActive,
@@ -150,17 +151,17 @@ const Menu = () => {
         label: _('Assets'),
         key: 'assets',
         subNav: [
-          capabilities.mayAccess('assets') && {
+          capabilities?.mayAccess('assets') && {
             label: _('Hosts'),
             to: '/hosts',
             active: isHostsActive,
           },
-          capabilities.mayAccess('assets') && {
+          capabilities?.mayAccess('assets') && {
             label: _('Operating Systems'),
             to: '/operatingsystems',
             active: isOperatingSystemsActive,
           },
-          capabilities.mayAccess('tlscertificates') && {
+          capabilities?.mayAccess('tlscertificates') && {
             label: _('TLS Certificates'),
             to: '/tlscertificates',
             active: isTlsCertificatesActive,
@@ -172,29 +173,29 @@ const Menu = () => {
         label: _('Resilience'),
         key: 'resilience',
         subNav: [
-          capabilities.mayAccess('tickets') && {
+          capabilities?.mayAccess('tickets') && {
             label: _('Remediation Tickets'),
             to: '/tickets',
             active: isTicketsActive,
           },
-          capabilities.mayAccess('policies') && {
+          capabilities?.mayAccess('policies') && {
             label: _('Compliance Policies'),
             to: '/policies',
             active: isPoliciesActive,
           },
-          capabilities.mayAccess('audits') && {
+          capabilities?.mayAccess('audits') && {
             label: _('Compliance Audits'),
             to: '/audits',
             active: isAuditsActive,
           },
-          capabilities.mayAccess('auditreports') && {
+          capabilities?.mayAccess('auditreports') && {
             label: _('Compliance Audit Reports'),
             to: '/auditreports',
             active: isAuditReportsActive,
           },
         ].filter(Boolean),
       },
-      capabilities.mayAccess('info') && {
+      capabilities?.mayAccess('info') && {
         icon: View,
         label: _('Security Information'),
         key: 'secInfo',
@@ -231,57 +232,57 @@ const Menu = () => {
         label: _('Configuration'),
         key: 'configuration',
         subNav: [
-          capabilities.mayAccess('targets') && {
+          capabilities?.mayAccess('targets') && {
             label: _('Targets'),
             to: '/targets',
             active: isTargetsActive,
           },
-          capabilities.mayAccess('portlists') && {
+          capabilities?.mayAccess('portlists') && {
             label: _('Port Lists'),
             to: '/portlists',
             active: isPortlistsActive,
           },
-          capabilities.mayAccess('credentials') && {
+          capabilities?.mayAccess('credentials') && {
             label: _('Credentials'),
             to: '/credentials',
             active: isCredentialsActive,
           },
-          capabilities.mayAccess('scanconfigs') && {
+          capabilities?.mayAccess('scanconfigs') && {
             label: _('Scan Configs'),
             to: '/scanconfigs',
             active: isScanConfigsActive,
           },
-          capabilities.mayAccess('alerts') && {
+          capabilities?.mayAccess('alerts') && {
             label: _('Alerts'),
             to: '/alerts',
             active: isAlertsActive,
           },
-          capabilities.mayAccess('schedules') && {
+          capabilities?.mayAccess('schedules') && {
             label: _('Schedules'),
             to: '/schedules',
             active: isSchedulesActive,
           },
-          capabilities.mayAccess('reportconfigs') && {
+          capabilities?.mayAccess('reportconfigs') && {
             label: _('Report Configs'),
             to: '/reportconfigs',
             active: isReportConfigsActive,
           },
-          capabilities.mayAccess('reportformats') && {
+          capabilities?.mayAccess('reportformats') && {
             label: _('Report Formats'),
             to: '/reportformats',
             active: isReportFormatsActive,
           },
-          capabilities.mayAccess('scanners') && {
+          capabilities?.mayAccess('scanners') && {
             label: _('Scanners'),
             to: '/scanners',
             active: isScannersActive,
           },
-          capabilities.mayAccess('filters') && {
+          capabilities?.mayAccess('filters') && {
             label: _('Filters'),
             to: '/filters',
             active: isFiltersActive,
           },
-          capabilities.mayAccess('tags') && {
+          capabilities?.mayAccess('tags') && {
             label: _('Tags'),
             to: '/tags',
             active: isTagsActive,
@@ -293,27 +294,27 @@ const Menu = () => {
         key: 'administration',
         icon: SlidersHorizontal,
         subNav: [
-          capabilities.mayAccess('users') && {
+          capabilities?.mayAccess('users') && {
             label: _('Users'),
             to: '/users',
             active: isUserActive,
           },
-          capabilities.mayAccess('groups') && {
+          capabilities?.mayAccess('groups') && {
             label: _('Groups'),
             to: '/groups',
             active: isGroupsActive,
           },
-          capabilities.mayAccess('roles') && {
+          capabilities?.mayAccess('roles') && {
             label: _('Roles'),
             to: '/roles',
             active: isRolesActive,
           },
-          capabilities.mayAccess('permissions') && {
+          capabilities?.mayAccess('permissions') && {
             label: _('Permissions'),
             to: '/permissions',
             active: isPermissionsActive,
           },
-          capabilities.mayAccess('system_reports') && {
+          capabilities?.mayAccess('system_reports') && {
             label: _('Performance'),
             to: '/performance',
             active: isPerformanceActive,
@@ -323,19 +324,19 @@ const Menu = () => {
             to: '/trashcan',
             active: isTrashcanActive,
           },
-          capabilities.mayAccess('feeds') && {
+          capabilities?.mayAccess('feeds') && {
             label: _('Feed Status'),
             to: '/feedstatus',
             active: isFeedStatusActive,
           },
-          capabilities.mayOp('describe_auth') &&
-            capabilities.mayOp('modify_auth') && {
+          capabilities?.mayOp('describe_auth') &&
+            capabilities?.mayOp('modify_auth') && {
               label: _('LDAP'),
               to: '/ldap',
               active: isLdapActive,
             },
-          capabilities.mayOp('describe_auth') &&
-            capabilities.mayOp('modify_auth') && {
+          capabilities?.mayOp('describe_auth') &&
+            capabilities?.mayOp('modify_auth') && {
               label: _('RADIUS'),
               to: '/radius',
               active: isRadiusActive,
@@ -368,6 +369,7 @@ const Menu = () => {
       },
     ].filter(Boolean),
   ];
+  // @ts-expect-error
   return <AppNavigation as={Link} menuPoints={menuPoints} />;
 };
 
