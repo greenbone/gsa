@@ -4,16 +4,32 @@
  */
 
 import React from 'react';
-import {Link as RLink} from 'react-router';
+import {LinkProps as RLinkProps, Link as RLink} from 'react-router';
 import styled from 'styled-components';
+import Filter from 'gmp/models/filter';
 import {isDefined, isString} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
 RLink.displayName = 'RouterLink';
 
-export const withTextOnly = Component => {
-  const TextOnly = ({textOnly = false, ...props}) => {
+interface WithTextOnlyProps {
+  textOnly?: boolean;
+}
+
+interface WithTextOnlyComponentProps {
+  className?: string;
+  style?: React.CSSProperties;
+  title?: string;
+  children?: React.ReactNode;
+}
+
+export const withTextOnly = <TProps extends {}>(
+  Component: React.ComponentType<TProps & WithTextOnlyComponentProps>,
+) => {
+  const TextOnly = ({
+    textOnly = false,
+    ...props
+  }: TProps & WithTextOnlyComponentProps & WithTextOnlyProps) => {
     if (textOnly) {
       const {className, children, style, title} = props;
       return (
@@ -28,20 +44,28 @@ export const withTextOnly = Component => {
       );
     }
 
-    return <Component {...props} />;
+    return <Component {...(props as TProps & WithTextOnlyComponentProps)} />;
   };
 
-  TextOnly.propTypes = {
-    className: PropTypes.string,
-    style: PropTypes.object,
-    textOnly: PropTypes.bool,
-    title: PropTypes.string,
-  };
+  TextOnly.displayName = `withTextOnly(${Component.displayName ?? Component.name ?? 'Component'})`;
 
   return TextOnly;
 };
 
-const LinkComponent = ({anchor, to = '', filter, query, ...other}) => {
+interface LinkComponentProps extends Omit<RLinkProps, 'to'> {
+  anchor?: string;
+  to?: string;
+  filter?: string | Filter;
+  query?: Record<string, string>;
+}
+
+const LinkComponent = ({
+  anchor,
+  to = '',
+  filter,
+  query,
+  ...other
+}: LinkComponentProps) => {
   let pathname = '';
 
   if (to.startsWith('/')) {
@@ -65,13 +89,6 @@ const LinkComponent = ({anchor, to = '', filter, query, ...other}) => {
   };
 
   return <RLink {...other} to={fullPath} />;
-};
-
-LinkComponent.propTypes = {
-  anchor: PropTypes.string,
-  filter: PropTypes.oneOfType([PropTypes.filter, PropTypes.string]),
-  query: PropTypes.object,
-  to: PropTypes.string,
 };
 
 const Link = styled(withTextOnly(LinkComponent))`
