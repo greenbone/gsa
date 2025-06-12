@@ -7,7 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Link, {LinkProps} from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
 
-interface DetailsLinkProps extends LinkProps {
+export interface DetailsLinkProps extends LinkProps {
   id: string;
   type: string;
   textOnly?: boolean;
