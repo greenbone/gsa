@@ -6,7 +6,16 @@
 import React from 'react';
 import PropTypes from 'web/utils/PropTypes';
 
-const BlankLink = ({to, children, ...props}) => (
+export interface BlankLinkProps
+  extends Omit<
+    React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    'href' | 'target' | 'rel'
+  > {
+  to: string;
+  children?: React.ReactNode;
+}
+
+const BlankLink = ({to, children, ...props}: BlankLinkProps) => (
   <a
     {...props}
     href={to}
