@@ -84,4 +84,17 @@ describe('ExternalLink tests', () => {
 
     window.open = oldOpen;
   });
+
+  test('should render with textOnly', () => {
+    const {render} = rendererWith({capabilities: true, router: true});
+    const {element} = render(
+      <ExternalLink textOnly={true} title="Foo" to="http://foo.bar">
+        Bar
+      </ExternalLink>,
+    );
+
+    expect(element).toHaveTextContent('Bar');
+    expect(element).toHaveAttribute('title', 'Foo');
+    expect(element).not.toHaveAttribute('href');
+  });
 });

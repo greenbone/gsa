@@ -3,18 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import {useState} from 'react';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {withTextOnly} from 'web/components/link/Link';
 import useTranslation from 'web/hooks/useTranslation';
-import compose from 'web/utils/Compose';
-import PropTypes from 'web/utils/PropTypes';
 
-const ExternalLink = ({children, to, ...props}) => {
+interface ExternalLinkProps
+  extends Omit<
+    React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    'href' | 'onClick'
+  > {
+  to: string;
+  children?: React.ReactNode;
+}
+
+const ExternalLink = ({children, to, ...props}: ExternalLinkProps) => {
   const [_] = useTranslation();
   const [dialogVisible, setDialogVisible] = useState(false);
 
-  const handleClick = event => {
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>): void => {
     event.preventDefault();
     setDialogVisible(true);
   };
@@ -47,7 +54,6 @@ const ExternalLink = ({children, to, ...props}) => {
           content={dialogText}
           rightButtonTitle={_('Follow Link')}
           title={dialogTitle}
-          to={to}
           width="500px"
           onClose={handleCloseDialog}
           onResumeClick={handleOpenLink}
@@ -57,9 +63,4 @@ const ExternalLink = ({children, to, ...props}) => {
   );
 };
 
-ExternalLink.propTypes = {
-  children: PropTypes.node,
-  to: PropTypes.string.isRequired,
-};
-
-export default compose(withTextOnly)(ExternalLink);
+export default withTextOnly(ExternalLink);
