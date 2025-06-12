@@ -10,19 +10,19 @@ import SelectionType from 'web/utils/SelectionType';
 
 const TestComponent = () => {
   const {selected, selectionType, select, deselect, changeSelectionType} =
-    useSelection(SelectionType.SELECTION_USER);
+    useSelection<number>(SelectionType.SELECTION_USER);
   return (
     <>
       <span data-testid="selectionType">{selectionType}</span>
       <input
         readOnly
-        checked={selected?.includes(1) === true}
+        checked={selected.includes(1) === true}
         data-testid="checked1"
         type="checkbox"
       />
       <input
         readOnly
-        checked={selected?.includes(2) === true}
+        checked={selected.includes(2) === true}
         data-testid="checked2"
         type="checkbox"
       />
