@@ -3,13 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
-import BlankLink from 'web/components/link/BlankLink';
+import BlankLink, {BlankLinkProps} from 'web/components/link/BlankLink';
 import useManualURL from 'web/hooks/useManualURL';
-import PropTypes from 'web/utils/PropTypes';
 
-const ManualLink = ({anchor, page, searchTerm, lang, highlight, ...props}) => {
+interface ManualLinkProps extends Omit<BlankLinkProps, 'to'> {
+  anchor?: string;
+  highlight?: string;
+  lang?: string;
+  page: string;
+  searchTerm?: string;
+}
+
+const ManualLink = ({
+  anchor,
+  page,
+  searchTerm,
+  lang,
+  highlight,
+  ...props
+}: ManualLinkProps) => {
   const manualURL = useManualURL(lang);
 
   let url = manualURL + '/' + page + '.html';
@@ -22,14 +35,6 @@ const ManualLink = ({anchor, page, searchTerm, lang, highlight, ...props}) => {
     url += '#' + anchor;
   }
   return <BlankLink {...props} to={url} />;
-};
-
-ManualLink.propTypes = {
-  anchor: PropTypes.string,
-  highlight: PropTypes.string,
-  lang: PropTypes.string,
-  page: PropTypes.string.isRequired,
-  searchTerm: PropTypes.string,
 };
 
 export default ManualLink;
