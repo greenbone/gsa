@@ -19,6 +19,7 @@ describe('CveLink tests', () => {
 
   test('should not override type', () => {
     const {render} = rendererWith({capabilities: true, router: true});
+    // @ts-expect-error
     render(<CveLink id="foo" title="Foo" type="bar" />);
 
     const element = screen.getByText('foo');
@@ -56,5 +57,14 @@ describe('CveLink tests', () => {
     fireEvent.click(screen.getByText('foo'));
 
     expect(locationPathname).toHaveTextContent('/');
+  });
+
+  test('should render with textOnly', () => {
+    const {render} = rendererWith({capabilities: true, router: true});
+    render(<CveLink id="foo" textOnly={true} title="Foo" />);
+
+    const element = screen.getByText('foo');
+    expect(element).toHaveAttribute('title', 'Foo');
+    expect(element).not.toHaveAttribute('href');
   });
 });
