@@ -10,13 +10,13 @@ import {getUsername} from 'web/store/usersettings/selectors';
 /**
  * Custom hook to get and set the username.
  *
- * @returns {Array} An array containing the current username and a function to set the username.
+ * @returns An array containing the current username and a function to set the username.
  */
-const useUserName = () => {
+const useUserName = (): [string, (username: string) => void] => {
   const dispatch = useDispatch();
   return [
     useSelector(getUsername),
-    username => dispatch(setUsername(username)),
+    (username: string) => dispatch(setUsername(username)),
   ];
 };
 
