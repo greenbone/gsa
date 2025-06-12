@@ -17,6 +17,7 @@ import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
+
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
   max-width: 680px;
@@ -64,7 +65,7 @@ const About = ({gmp}) => {
               )}
             </DivP>
             <DivP>
-              Copyright (C) 2017-2024 by&nbsp;
+              Copyright (C) 2017-2025 by&nbsp;
               <a
                 href="https://www.greenbone.net"
                 rel="noopener noreferrer"
