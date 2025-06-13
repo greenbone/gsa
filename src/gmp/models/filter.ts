@@ -681,7 +681,7 @@ class Filter extends Model {
   /**
    * Returns the sort order of the current filter
    *
-   * @return {String} The sort order. 'sort' or 'sort-reverse'.
+   * @return The sort order. 'sort' or 'sort-reverse'.
    */
   getSortOrder(): SortOrder {
     return this.has(SORT_ORDER_DESC) ? SORT_ORDER_DESC : SORT_ORDER_ASC;
@@ -690,7 +690,7 @@ class Filter extends Model {
   /**
    * Returns the sort by field name of the current filter
    *
-   * @return The sort order. 'sort' or 'sort-reverse'.
+   * @return The sort field name or undefined if no sort field is set.
    */
   getSortBy(): string | undefined {
     const order = this.getSortOrder();
