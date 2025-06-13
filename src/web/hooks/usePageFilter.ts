@@ -25,27 +25,35 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 /**
  * Hook to get the default filter of a page from the store
  *
- * @param {String} pageName
+ * @param pageName  Name of the page
  * @returns Array of the default filter and and error if the filter could not be loaded
  */
-const useDefaultFilter = pageName =>
+const useDefaultFilter = (pageName: string) =>
   useShallowEqualSelector(state => {
     const defaultFilterSel = getUserSettingsDefaultFilter(state, pageName);
     return [defaultFilterSel.getFilter(), defaultFilterSel.getError()];
   });
 
+interface UsePageFilterOptions {
+  fallbackFilter?: Filter;
+}
+
 /**
  * Hook to get and update the filter of a page
  *
- * @param {String} pageName Name of the page
- * @param {Object} options Options object
- * @param {String} gmpName GMP name for filtering
+ * @param pageName Name of the page
+ * @param options Options object
+ * @param gmpName GMP name for filtering
  * @returns Array of the applied filter, boolean indicating if the filter is
  *          still loading, function to change the filter, function to remove the
  *          filter and function to reset the filter
  */
 
-const usePageFilter = (pageName, gmpName, {fallbackFilter} = {}) => {
+const usePageFilter = (
+  pageName: string,
+  gmpName: string,
+  {fallbackFilter}: UsePageFilterOptions = {},
+): [Filter, boolean, (filter?: Filter) => void, () => void, () => void] => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -63,8 +71,6 @@ const usePageFilter = (pageName, gmpName, {fallbackFilter} = {}) => {
     getPage(state).getFilter(pageName),
   );
 
-  // use null as value for not set at all
-  let returnedFilter;
   const locationQueryFilterString = searchParams.get('filter');
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
@@ -78,6 +84,7 @@ const usePageFilter = (pageName, gmpName, {fallbackFilter} = {}) => {
       !isDefined(defaultSettingFilter) &&
       !isDefined(defaultSettingsFilterError)
     ) {
+      // @ts-expect-error
       dispatch(loadUserSettingsDefaultFilter(gmp)(gmpName));
     }
   }, [
@@ -88,8 +95,11 @@ const usePageFilter = (pageName, gmpName, {fallbackFilter} = {}) => {
     gmpName,
   ]);
 
+  let returnedFilter: Filter | undefined;
+
   useEffect(() => {
     if (!isDefined(rowsPerPage)) {
+      // @ts-expect-error
       dispatch(loadUserSettingDefault(gmp)(ROWS_PER_PAGE_SETTING_ID));
     }
   }, [returnedFilter, rowsPerPage, gmp, dispatch]);
@@ -123,7 +133,11 @@ const usePageFilter = (pageName, gmpName, {fallbackFilter} = {}) => {
     rowsPerPage = DEFAULT_ROWS_PER_PAGE;
   }
 
-  if (!returnedFilter.has('rows') && isDefined(rowsPerPage)) {
+  if (
+    isDefined(returnedFilter) &&
+    !returnedFilter.has('rows') &&
+    isDefined(rowsPerPage)
+  ) {
     returnedFilter = returnedFilter.copy().set('rows', rowsPerPage);
   }
 
@@ -134,7 +148,7 @@ const usePageFilter = (pageName, gmpName, {fallbackFilter} = {}) => {
     isDefined(rowsPerPage);
 
   const changeFilter = useCallback(
-    filter => {
+    (filter?: Filter) => {
       dispatch(setPageFilter(pageName, filter));
     },
     [dispatch, pageName],
@@ -155,7 +169,7 @@ const usePageFilter = (pageName, gmpName, {fallbackFilter} = {}) => {
   }, [changeFilter, setSearchParams, searchParams]);
 
   return [
-    returnedFilter,
+    returnedFilter as Filter,
     !finishedLoading,
     changeFilter,
     removeFilter,

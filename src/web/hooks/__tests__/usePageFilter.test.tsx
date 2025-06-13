@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {rendererWith, waitFor} from 'web/testing';
-import {beforeEach, vi} from 'vitest';
+import {vi} from 'vitest';
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
 import usePageFilter from 'web/hooks/usePageFilter';
 import {pageFilter} from 'web/store/pages/actions';
@@ -90,7 +90,7 @@ describe('usePageFilter tests', () => {
 
     const {result} = renderHook(() => usePageFilter('somePage2', 'somePage'));
 
-    expect(result.current[0]).toEqual(pFilter.set('rows', 42));
+    expect(result.current[0]).toEqual(pFilter.set('rows', '42'));
   });
 
   test('should use defaultSettingFilter', async () => {
@@ -188,7 +188,7 @@ describe('usePageFilter tests', () => {
   });
 
   test('should use default fallback filter as last resort', async () => {
-    const resultingFilter = DEFAULT_FALLBACK_FILTER.copy().set('rows', 42);
+    const resultingFilter = DEFAULT_FALLBACK_FILTER.copy().set('rows', '42');
 
     const getSetting = testing.fn().mockResolvedValue({});
     const subscribe = testing.fn();
@@ -303,6 +303,7 @@ describe('usePageFilter tests', () => {
     );
 
     const {result} = renderHook(() =>
+      // @ts-expect-error
       usePageFilter(undefined, 'somePage', {fallbackFilter}),
     );
 
