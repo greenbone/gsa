@@ -7,11 +7,11 @@ import {isDefined} from 'gmp/utils/identity';
 import {CircleXIcon} from 'web/components/icon';
 import {DynamicIconProps} from 'web/components/icon/DynamicIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
 export interface DeleteIconProps<TValue = string>
   extends Omit<DynamicIconProps<TValue>, 'icon'> {
-  selectionType?: keyof typeof SelectionType;
+  selectionType?: SelectionTypeType;
   title?: string;
   loading?: boolean;
 }
