@@ -15,7 +15,7 @@ const log = logger.getLogger('web.useLoadCapabilities');
  */
 const useLoadCapabilities = () => {
   const gmp = useGmp();
-  const [capabilities, setCapabilities] = useState();
+  const [capabilities, setCapabilities] = useState<Capabilities>();
 
   useEffect(() => {
     gmp.user

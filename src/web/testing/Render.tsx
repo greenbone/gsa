@@ -117,7 +117,7 @@ export const rendererWith = (
       };
     },
     gmp,
-    store,
+    store: (store ?? {}) as Store,
     renderHook: <Result, Props>(hook: (initialProps: Props) => Result) =>
       rtlRenderHook<Result, Props>(hook, {wrapper}),
   };

@@ -13,7 +13,7 @@ const TestComponent = ({reload, timeout}) => {
     <>
       <button data-testid="startTimer" onClick={startTimer}></button>
       <button data-testid="clearTimer" onClick={clearTimer}></button>
-      <span data-testid="isRunning">{'' + isRunning}</span>
+      <span data-testid="isRunning">{String(isRunning)}</span>
     </>
   );
 };
@@ -57,7 +57,7 @@ describe('useTiming', () => {
   test('should reload forever', async () => {
     testing.useFakeTimers();
 
-    const reload = testing.fn().mockResolvedValue();
+    const reload = testing.fn().mockResolvedValue(undefined);
     const timeout = testing.fn().mockImplementation(() => 900);
 
     render(<TestComponent reload={reload} timeout={timeout} />);
@@ -95,7 +95,7 @@ describe('useTiming', () => {
   test('should not reload if loading fails', async () => {
     testing.useFakeTimers();
 
-    const reload = testing.fn().mockRejectedValue();
+    const reload = testing.fn().mockRejectedValue(new Error('Loading failed'));
     const timeout = testing.fn().mockImplementation(() => 900);
 
     render(<TestComponent reload={reload} timeout={timeout} />);
@@ -124,7 +124,7 @@ describe('useTiming', () => {
   test('should allow to cancel reload', async () => {
     testing.useFakeTimers();
 
-    const reload = testing.fn().mockResolvedValue();
+    const reload = testing.fn().mockResolvedValue(undefined);
     const timeout = testing.fn().mockImplementation(() => 900);
 
     render(<TestComponent reload={reload} timeout={timeout} />);

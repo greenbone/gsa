@@ -15,11 +15,11 @@ export interface CollectionCountsOptions {
 }
 
 class CollectionCounts {
-  first?: number;
-  all?: number;
-  filtered?: number;
-  length?: number;
-  rows?: number;
+  first: number;
+  all: number;
+  filtered: number;
+  length: number;
+  rows: number;
   last: number;
 
   /**
@@ -38,18 +38,13 @@ class CollectionCounts {
     length = 0,
     rows = 0,
   }: CollectionCountsOptions = {}) {
-    this.first = parseInt(first);
-    this.all = parseInt(all);
-    this.filtered = parseInt(filtered);
-    this.length = parseInt(length);
-    this.rows = parseInt(rows);
+    this.first = parseInt(first) ?? 0;
+    this.all = parseInt(all) ?? 0;
+    this.filtered = parseInt(filtered) ?? 0;
+    this.length = parseInt(length) ?? 0;
+    this.rows = parseInt(rows) ?? 0;
     this.last =
-      isDefined(this.first) &&
-      isDefined(this.length) &&
-      this.first > 0 &&
-      this.length > 0
-        ? this.first + this.length - 1
-        : 0;
+      this.first > 0 && this.length > 0 ? this.first + this.length - 1 : 0;
   }
 
   isFirst() {
@@ -57,28 +52,15 @@ class CollectionCounts {
   }
 
   hasPrevious() {
-    return (
-      isDefined(this.first) &&
-      isDefined(this.rows) &&
-      this.first > this.rows &&
-      this.rows > 0
-    );
+    return this.first > this.rows && this.rows > 0;
   }
 
   isLast() {
-    return (
-      isDefined(this.last) &&
-      isDefined(this.filtered) &&
-      this.last >= this.filtered
-    );
+    return this.last >= this.filtered;
   }
 
   hasNext() {
-    return (
-      isDefined(this.last) &&
-      isDefined(this.filtered) &&
-      this.last < this.filtered
-    );
+    return this.last < this.filtered;
   }
 
   clone({first, all, filtered, length, rows}: CollectionCountsOptions) {

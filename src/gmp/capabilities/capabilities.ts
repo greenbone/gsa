@@ -74,8 +74,8 @@ class Capabilities {
     this._hasCaps = isDefined(capNames);
     this._hasFeatures = isDefined(featuresList);
 
-    let caps;
-    let featuresEnabled = {};
+    let caps: string[] = [];
+    let featuresEnabled: Record<string, boolean> = {};
 
     if (this._hasCaps) {
       caps = map(capNames, name => name.toLowerCase());
@@ -135,6 +135,10 @@ class Capabilities {
 
   featureEnabled(feature: string) {
     return this._featuresEnabled[feature.toUpperCase()] === true;
+  }
+
+  map<T>(callbackfn: (value: string, index: number, array: string[]) => T) {
+    return Array.from(this._capabilities).map(callbackfn);
   }
 }
 

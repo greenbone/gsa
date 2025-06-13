@@ -3,13 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
 import Filter from 'gmp/models/filter';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 
-const TestComponent = ({filter, changeFilter}) => {
-  const [sortBy, sortDir, sortChange] = useFilterSortBy(filter, changeFilter);
+const TestComponent = ({filter: initialFilter, changeFilter}) => {
+  const [filter, setFilter] = useState(initialFilter);
+  const handleChangeFilter = (newFilter: Filter) => {
+    setFilter(newFilter);
+    changeFilter(newFilter);
+  };
+  const [sortBy, sortDir, sortChange] = useFilterSortBy(
+    filter,
+    handleChangeFilter,
+  );
   return (
     <>
       <span data-testid="sortBy">{sortBy}</span>
@@ -58,5 +67,22 @@ describe('useFilterSortBy', () => {
 
     expect(screen.getByTestId('sortBy')).toHaveTextContent('field');
     expect(screen.getByTestId('sortDir')).toHaveTextContent('desc');
+  });
+
+  test('should handle undefined sort field', async () => {
+    const changeFilter = testing.fn();
+    const filter = Filter.fromString();
+
+    render(<TestComponent changeFilter={changeFilter} filter={filter} />);
+
+    expect(screen.getByTestId('sortBy')).toHaveTextContent('');
+    expect(screen.getByTestId('sortDir')).toHaveTextContent('asc');
+
+    fireEvent.click(screen.getByTestId('sortFieldChange'));
+
+    expect(changeFilter).toHaveBeenCalledWith(
+      Filter.fromString('first=1 sort=other-field'),
+    );
+    expect(screen.getByTestId('sortBy')).toHaveTextContent('other-field');
   });
 });

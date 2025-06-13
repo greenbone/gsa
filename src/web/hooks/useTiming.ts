@@ -10,21 +10,34 @@ import useInstanceVariable from 'web/hooks/useInstanceVariable';
 
 const log = logger.getLogger('web.hooks.useTiming');
 
+type DoFunc = () => void | Promise<void>;
+type Timeout = number | (() => number);
+type TimerId = ReturnType<typeof setTimeout>;
+
+interface Timer {
+  timerId?: TimerId;
+  doFunc: DoFunc;
+  startTimer?: () => void; // function to start the timer, will be set in useEffect
+}
+
 /**
  * Hook to start a timer that calls a function after a given timeout
  *
- * @param {Function} doFunc The function to call
- * @param {Number|Function} timeout The timeout in milliseconds or a function that returns the timeout
+ * @param doFunc The function to call
+ * @param timeout The timeout in milliseconds or a function that returns the timeout
  * @returns Array of startTimer function, clearTimer function and boolean isRunning
  */
-const useTiming = (doFunc, timeout) => {
-  const [timer] = useInstanceVariable({});
-  const [timerId, setTimerId] = useState(); // store timerId in state too to trigger re-render if it changes
+const useTiming = (
+  doFunc: DoFunc,
+  timeout: Timeout,
+): [() => void, () => void, boolean] => {
+  const [timer] = useInstanceVariable<Timer>({doFunc});
+  const [timerId, setTimerId] = useState<TimerId | undefined>(); // store timerId in state too to trigger re-render if it changes
   const isRunning = Boolean(timerId);
   timer.doFunc = doFunc; // always use the latest version of the function
 
   const updateTimerId = useCallback(
-    newTimerId => {
+    (newTimerId?: TimerId) => {
       timer.timerId = newTimerId;
       setTimerId(newTimerId);
     },
@@ -55,7 +68,9 @@ const useTiming = (doFunc, timeout) => {
           if (promise?.then) {
             await promise;
             updateTimerId();
-            timer.startTimer();
+            if (isFunction(timer.startTimer)) {
+              timer.startTimer();
+            }
           } else {
             updateTimerId();
           }

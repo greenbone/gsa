@@ -15,7 +15,7 @@ const TestComponent = () => {
     <>
       <button onClick={() => setValue(1)}></button>
       <span data-testid="value">{value}</span>
-      <span data-testid="previousValue">{'' + previousValue}</span>
+      <span data-testid="previousValue">{String(previousValue)}</span>
     </>
   );
 };

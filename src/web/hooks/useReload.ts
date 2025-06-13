@@ -6,14 +6,29 @@
 import {useCallback, useEffect} from 'react';
 import useTiming from 'web/hooks/useTiming';
 
+interface ReloadFunc {
+  (): void;
+}
+
+interface TimeoutFuncParams {
+  isVisible: boolean;
+}
+
+interface TimeoutFunc {
+  (params: TimeoutFuncParams): number;
+}
+
 /**
  * A hook to reload data considering the visibility change of the browser tab.
  *
- * @param {Function} reloadFunc Function to call when the timer fires
- * @param {Function} timeoutFunc Function to get the timeout value from
+ * @param reloadFunc Function to call when the timer fires
+ * @param timeoutFunc Function to get the timeout value from
  * @returns Array of startTimer function, clearTimer function and boolean isRunning
  */
-const useReload = (reloadFunc, timeoutFunc) => {
+const useReload = (
+  reloadFunc: ReloadFunc,
+  timeoutFunc: TimeoutFunc,
+): [() => void, () => void, boolean] => {
   const timeout = useCallback(
     () => timeoutFunc({isVisible: !document.hidden}),
     [timeoutFunc],

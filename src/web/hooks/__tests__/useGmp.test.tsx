@@ -9,6 +9,7 @@ import useGmp from 'web/hooks/useGmp';
 
 const TestUseGmp = () => {
   const gmp = useGmp();
+  // @ts-expect-error
   return <span>{gmp.foo()}</span>;
 };
 
