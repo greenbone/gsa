@@ -3,23 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import PropTypes from 'web/utils/PropTypes';
 
-export class EntitySelection extends React.Component {
-  constructor(...args) {
-    super(...args);
+const EntitySelection = ({entity, onDeselected, onSelected}) => {
+  const [selected, setSelected] = useState(false);
 
-    this.handleSelection = this.handleSelection.bind(this);
-    this.state = {
-      selected: false,
-    };
-  }
-
-  handleSelection(value) {
-    const {onDeselected, onSelected, entity} = this.props;
-
+  const handleSelection = value => {
     if (value) {
       if (onSelected) {
         onSelected(entity);
@@ -27,14 +18,16 @@ export class EntitySelection extends React.Component {
     } else if (onDeselected) {
       onDeselected(entity);
     }
-    this.setState({selected: value});
-  }
-
-  render() {
-    const {selected} = this.state;
-    return <Checkbox checked={selected} onChange={this.handleSelection} />;
-  }
-}
+    setSelected(value);
+  };
+  return (
+    <Checkbox
+      checked={selected}
+      data-testid={`entity-selection-${entity.id}`}
+      onChange={handleSelection}
+    />
+  );
+};
 
 EntitySelection.propTypes = {
   entity: PropTypes.model,
