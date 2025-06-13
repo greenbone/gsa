@@ -14,7 +14,10 @@ const DEFAULT_LANGUAGE_MAPPING = {
 
 const DEFAULT_LANGUAGE_PATH = 'en';
 
-const getLanguagePath = (locale, languageMapping) => {
+const getLanguagePath = (
+  locale: string | undefined,
+  languageMapping: Record<string, string>,
+) => {
   if (!isDefined(locale)) {
     return DEFAULT_LANGUAGE_PATH;
   }
@@ -25,7 +28,7 @@ const getLanguagePath = (locale, languageMapping) => {
   return isDefined(path) ? path : DEFAULT_LANGUAGE_PATH;
 };
 
-const useManualURL = locale => {
+const useManualURL = (locale?: string) => {
   const [language] = useLanguage();
   const gmp = useGmp();
   const {
