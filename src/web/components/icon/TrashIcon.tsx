@@ -7,10 +7,10 @@ import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import {TrashcanIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
 export interface TrashIconProps {
-  selectionType?: keyof typeof SelectionType;
+  selectionType?: SelectionTypeType;
   title?: string;
   loading?: boolean;
   [key: string]: unknown;
