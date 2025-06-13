@@ -4,6 +4,12 @@
  */
 
 import {useCallback} from 'react';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
+import Filter from 'gmp/models/filter';
+
+interface ChangeFilterFunc {
+  (filter: Filter): void;
+}
 
 /**
  * Hook to to get the filter for the next, previous, last and first page for a
@@ -21,14 +27,18 @@ import {useCallback} from 'react';
  * }, [gmp.tasks]);
  * const [first, last, next, previous] = usePagination(filter, counts, updateFilter)
  *
- * @param {Filter} filter Current applied filter
- * @param {Object} counts Current entities counts. Required for calculating the
+ * @param filter Current applied filter
+ * @param counts Current entities counts. Required for calculating the
  *   last page.
- * @param {Function} changeFilter Function to call when the new filter is applied
- * @returns {Array} Tuple of functions to update the filter for the first, last,
+ * @param changeFilter Function to call when the new filter is applied
+ * @returns Tuple of functions to update the filter for the first, last,
  *   next and previous page.
  */
-const usePagination = (filter, counts, changeFilter) => {
+const usePagination = (
+  filter: Filter,
+  counts: CollectionCounts,
+  changeFilter: ChangeFilterFunc,
+): [() => void, () => void, () => void, () => void] => {
   const getNext = useCallback(() => {
     changeFilter(filter.next());
   }, [filter, changeFilter]);
