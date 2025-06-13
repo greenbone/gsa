@@ -9,4 +9,7 @@ const SelectionType = {
   SELECTION_FILTER: '2',
 } as const;
 
+export type SelectionTypeType =
+  (typeof SelectionType)[keyof typeof SelectionType];
+
 export default SelectionType;
