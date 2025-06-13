@@ -12,6 +12,9 @@ export class EntitySelection extends React.Component {
     super(...args);
 
     this.handleSelection = this.handleSelection.bind(this);
+    this.state = {
+      selected: false,
+    };
   }
 
   handleSelection(value) {
@@ -24,10 +27,12 @@ export class EntitySelection extends React.Component {
     } else if (onDeselected) {
       onDeselected(entity);
     }
+    this.setState({selected: value});
   }
 
   render() {
-    return <Checkbox onChange={this.handleSelection} />;
+    const {selected} = this.state;
+    return <Checkbox checked={selected} onChange={this.handleSelection} />;
   }
 }
 
