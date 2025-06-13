@@ -5,25 +5,26 @@
 
 import React from 'react';
 import Layout from 'web/components/layout/Layout';
+import {useTab} from 'web/components/tab/TabContext';
 import PropTypes from 'web/utils/PropTypes';
 
-const TabList = ({active = 0, children, onActivateTab, ...props}) => {
+const TabList = ({children, ...props}) => {
+  const {activeTab, setActiveTab} = useTab();
+
   children = React.Children.map(children, (child, index) => {
     if (child !== null && child.type !== Layout) {
       return React.cloneElement(child, {
-        isActive: active === index,
-        onActivate: () => onActivateTab(index),
+        isActive: activeTab === index,
+        onActivate: () => setActiveTab(index),
       });
     }
-
     return child;
   });
   return <Layout {...props}>{children}</Layout>;
 };
 
 TabList.propTypes = {
-  active: PropTypes.number,
-  onActivateTab: PropTypes.func,
+  children: PropTypes.node.isRequired,
 };
 
 export default TabList;
