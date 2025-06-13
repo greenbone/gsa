@@ -324,7 +324,7 @@ const PortListsPage = () => {
               entities={entities}
               entitiesCounts={entitiesCounts}
               filter={filter}
-              selected={selectedEntities}
+              selectedEntities={selectedEntities}
               selectionType={selectionType}
               onClose={closeTagsDialog}
             />
