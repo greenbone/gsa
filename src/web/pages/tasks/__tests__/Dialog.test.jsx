@@ -18,6 +18,7 @@ import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
+  OPENVASD_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import TaskDialog from 'web/pages/tasks/Dialog';
 
@@ -81,6 +82,18 @@ describe('TaskDialog component tests', () => {
 
   test('should render scan config section for OPENVASD_SCANNER_TYPE', async () => {
     renderDialog(OPENVASD_SCANNER_TYPE);
+    const selects = screen.queryAllSelectElements();
+    expect(selects.length).toEqual(5);
+
+    const scanConfigSelect = selects[3];
+    fireEvent.click(scanConfigSelect);
+
+    const options = await getSelectItemElementsForSelect(scanConfigSelect);
+    expect(options[0]).toHaveTextContent('Test Config');
+  });
+
+  test('should render scan config section for OPENVASD_SENSOR_SCANNER_TYPE', async () => {
+    renderDialog(OPENVASD_SENSOR_SCANNER_TYPE);
     const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(5);
 

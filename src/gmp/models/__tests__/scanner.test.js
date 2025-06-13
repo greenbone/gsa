@@ -14,6 +14,7 @@ import Scanner, {
   OPENVAS_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
+  OPENVASD_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
 import {YES_VALUE} from 'gmp/parser';
@@ -215,6 +216,7 @@ describe('Scanner model function tests', () => {
     const type4 = scannerTypeName(GREENBONE_SENSOR_SCANNER_TYPE);
     const type5 = scannerTypeName(42);
     const type6 = scannerTypeName(OPENVASD_SCANNER_TYPE);
+    const type7 = scannerTypeName(OPENVASD_SENSOR_SCANNER_TYPE);
 
     expect(type1).toEqual('OpenVAS Scanner');
     expect(type2).toEqual('CVE Scanner');
@@ -222,6 +224,7 @@ describe('Scanner model function tests', () => {
     expect(type4).toEqual('Greenbone Sensor');
     expect(type5).toEqual('Unknown type (42)');
     expect(type6).toEqual('OpenVASD Scanner');
+    expect(type7).toEqual('OpenVASD Sensor');
   });
 
   test('openVasScannersFilter should return filter with correct true/false', () => {

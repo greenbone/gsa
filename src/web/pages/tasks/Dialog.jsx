@@ -10,6 +10,7 @@ import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVASD_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
+  OPENVASD_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
@@ -213,7 +214,8 @@ const TaskDialog = ({
         const useOpenvasScanConfig =
           state.scanner_type === OPENVAS_SCANNER_TYPE ||
           state.scanner_type === GREENBONE_SENSOR_SCANNER_TYPE ||
-          state.scanner_type === OPENVASD_SCANNER_TYPE;
+          state.scanner_type === OPENVASD_SCANNER_TYPE ||
+          state.scanner_type === OPENVASD_SENSOR_SCANNER_TYPE;
 
         return (
           <>
