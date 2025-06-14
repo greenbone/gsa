@@ -15,7 +15,9 @@ export const OPENVAS_SCANNER_TYPE = 2;
 export const CVE_SCANNER_TYPE = 3;
 export const GREENBONE_SENSOR_SCANNER_TYPE = 5;
 export const OPENVASD_SCANNER_TYPE = 6;
+export const AGENT_CONTROLLER_SCANNER_TYPE = 7;
 export const OPENVASD_SENSOR_SCANNER_TYPE = 8;
+export const AGENT_CONTROLLER_SENSOR_SCANNER_TYPE = 9;
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
@@ -35,6 +37,10 @@ export function scannerTypeName(scannerType) {
     return _('OpenVASD Scanner');
   } else if (scannerType === OPENVASD_SENSOR_SCANNER_TYPE) {
     return _('OpenVASD Sensor');
+  } else if (scannerType === AGENT_CONTROLLER_SCANNER_TYPE) {
+    return _('Agent Scanner');
+  } else if (scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) {
+    return _('Agent Sensor');
   }
   return _('Unknown type ({{type}})', {type: scannerType});
 }
