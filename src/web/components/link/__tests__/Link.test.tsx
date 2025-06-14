@@ -58,7 +58,9 @@ describe('Link tests', () => {
 
     expect(locationPathname).toHaveTextContent('/foo');
     expect(
-      decodeURIComponent(screen.getByTestId('location-search').textContent),
+      decodeURIComponent(
+        screen.getByTestId('location-search').textContent as string,
+      ),
     ).toBe('?filter=foo=bar');
   });
 
