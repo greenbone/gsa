@@ -16,6 +16,7 @@ export const SCAP_FEED = 'SCAP';
 export const GVMD_DATA_FEED = 'GVMD_DATA';
 
 export const FEED_COMMUNITY = 'Greenbone Community Feed';
+export const FEED_ENTERPRISE = 'Greenbone Enterprise Feed';
 
 const convertVersion = version =>
   `${version}`.slice(0, 8) + 'T' + `${version}`.slice(8, 12);
@@ -145,15 +146,15 @@ export class FeedStatus extends HttpCommand {
     }
   }
 
-  async isCommunityFeed() {
+  async isEnterpriseFeed() {
     try {
       const {data} = await this.readFeedInformation();
 
       const nvtFeed = data.find(feed => feed.feedType === NVT_FEED);
 
-      return nvtFeed && nvtFeed.name === FEED_COMMUNITY;
+      return nvtFeed && nvtFeed.name === FEED_ENTERPRISE;
     } catch (error) {
-      console.error('Error checking if feed is community:', error);
+      console.error('Error checking if feed is enterprise:', error);
     }
   }
 }
