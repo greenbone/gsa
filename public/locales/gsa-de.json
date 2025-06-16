@@ -155,6 +155,8 @@
   "Advisory Link": "Advisory-Link",
   "Affected Software/OS": "Betroffene Software/Betriebssystem",
   "Agent": "Agent",
+  "Agent Scanner": "Agent-Scanner",
+  "Agent Sensor": "Agent-Sensor",
   "Aggregates": "Aggregate",
   "Alemba Client ID": "Alemba-Client-ID",
   "Alemba vFire": "Alemba vFire",
