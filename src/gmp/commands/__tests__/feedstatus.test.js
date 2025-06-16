@@ -9,6 +9,7 @@ import {
   NVT_FEED,
   FEED_COMMUNITY,
   feedStatusRejection,
+  FEED_ENTERPRISE,
 } from 'gmp/commands/feedstatus';
 import {createResponse, createHttp} from 'gmp/commands/testing';
 import Rejection from 'gmp/http/rejection';
@@ -180,15 +181,15 @@ describe('FeedStatusCommand tests', () => {
     });
   });
 
-  describe('isCommunityFeed', () => {
-    test('should return true if NVT feed is the community feed', async () => {
+  describe('isEnterpriseFeed', () => {
+    test('should return true if NVT feed is the enterprise feed', async () => {
       const response = createResponse({
         get_feeds: {
           get_feeds_response: {
             feed: [
               {
                 type: NVT_FEED,
-                name: FEED_COMMUNITY,
+                name: FEED_ENTERPRISE,
                 version: 202502170647,
               },
               {
@@ -204,19 +205,19 @@ describe('FeedStatusCommand tests', () => {
       const fakeHttp = createHttp(response);
       const feedStatus = new FeedStatus(fakeHttp);
 
-      const result = await feedStatus.isCommunityFeed();
+      const result = await feedStatus.isEnterpriseFeed();
 
       expect(result).toBe(true);
     });
 
-    test('should return false if NVT feed is not the community feed', async () => {
+    test('should return false if NVT feed is not the enterprise feed', async () => {
       const response = createResponse({
         get_feeds: {
           get_feeds_response: {
             feed: [
               {
                 type: NVT_FEED,
-                name: 'Some Other Feed',
+                name: FEED_COMMUNITY,
                 version: 202502170647,
               },
               {
@@ -232,7 +233,7 @@ describe('FeedStatusCommand tests', () => {
       const fakeHttp = createHttp(response);
       const feedStatus = new FeedStatus(fakeHttp);
 
-      const result = await feedStatus.isCommunityFeed();
+      const result = await feedStatus.isEnterpriseFeed();
 
       expect(result).toBe(false);
     });
@@ -244,12 +245,12 @@ describe('FeedStatusCommand tests', () => {
       const consoleErrorSpy = testing.fn();
       console.error = consoleErrorSpy;
 
-      const result = await cmd.isCommunityFeed();
+      const result = await cmd.isEnterpriseFeed();
 
       expect(result).toBeUndefined();
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error checking if feed is community:',
+        'Error checking if feed is enterprise:',
         expect.any(Error),
       );
     });
