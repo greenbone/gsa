@@ -6,6 +6,7 @@
 import React, {useEffect, useMemo} from 'react';
 import {updateNotification} from '@mantine/notifications';
 import {showNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -17,6 +18,7 @@ const NEVER_AUTO_CLOSE = false;
 const CommunityFeedUsageNotification: React.FC = () => {
   const [_] = useTranslation();
   const [language] = useLanguage();
+  const gmp = useGmp();
 
   const notificationMessage = useMemo(
     () => (
@@ -43,26 +45,34 @@ const CommunityFeedUsageNotification: React.FC = () => {
   );
 
   useEffect(() => {
-    const hasBeenShown =
-      sessionStorage.getItem(NOTIFICATION_SHOWN_KEY) === NOTIFICATION_SHOWN;
+    async function notification() {
+      const hasBeenShown =
+        sessionStorage.getItem(NOTIFICATION_SHOWN_KEY) === NOTIFICATION_SHOWN;
 
-    if (!hasBeenShown) {
-      showNotification({
-        id: COMMUNITY_FEED_USAGE_NOTIFICATION_ID,
-        autoClose: NEVER_AUTO_CLOSE,
-        title: notificationMessage,
-        message: '',
-      });
-      sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
-    } else if (hasBeenShown) {
-      updateNotification({
-        id: COMMUNITY_FEED_USAGE_NOTIFICATION_ID,
-        autoClose: NEVER_AUTO_CLOSE,
-        title: notificationMessage,
-        message: '',
-      });
+      // @ts-expect-error
+      const isEnterpriseFeed: boolean = await gmp.feedstatus.isEnterpriseFeed();
+
+      if (!isEnterpriseFeed) {
+        if (!hasBeenShown) {
+          showNotification({
+            id: COMMUNITY_FEED_USAGE_NOTIFICATION_ID,
+            autoClose: NEVER_AUTO_CLOSE,
+            title: notificationMessage,
+            message: '',
+          });
+          sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
+        } else if (hasBeenShown) {
+          updateNotification({
+            id: COMMUNITY_FEED_USAGE_NOTIFICATION_ID,
+            autoClose: NEVER_AUTO_CLOSE,
+            title: notificationMessage,
+            message: '',
+          });
+        }
+      }
     }
-  }, [notificationMessage, language]);
+    void notification();
+  }, [notificationMessage, language, gmp]);
   return null;
 };
 

@@ -21,10 +21,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginForm from 'web/pages/login/LoginForm';
 import {
-  NOTIFICATION_SHOWN,
-  NOTIFICATION_SHOWN_KEY,
-} from 'web/pages/login/notifications/CommunityFeedUsageNotification';
-import {
   setSessionTimeout,
   setUsername,
   setIsLoggedIn,
@@ -131,13 +127,6 @@ const LoginPage: React.FC = () => {
         'userInterfaceDateFormat',
         userSettings.userinterfacedateformat?.value as string,
       );
-
-      // @ts-expect-error
-      const isCommunityFeed: boolean = await gmp.feedstatus.isCommunityFeed();
-
-      if (isCommunityFeed) {
-        sessionStorage.setItem(NOTIFICATION_SHOWN_KEY, NOTIFICATION_SHOWN);
-      }
     } catch (error) {
       log.error(error);
     }
