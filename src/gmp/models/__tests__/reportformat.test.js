@@ -4,8 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Model from 'gmp/model';
 import {isDate} from 'gmp/models/date';
+import Model from 'gmp/models/model';
 import ReportFormat from 'gmp/models/reportformat';
 import {testModel} from 'gmp/models/testing';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';

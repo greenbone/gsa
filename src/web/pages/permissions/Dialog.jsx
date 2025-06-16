@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import Model from 'gmp/model';
+import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
 import SaveDialog from 'web/components/dialog/SaveDialog';

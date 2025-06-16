@@ -14,7 +14,7 @@ import DefaultTransform from 'gmp/http/transform/default';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
 import {UrlParams as Params} from 'gmp/http/utils';
 import logger from 'gmp/log';
-import Model from 'gmp/model';
+import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.commands.entity');

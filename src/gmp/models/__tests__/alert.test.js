@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Model from 'gmp/model';
 import Alert, {
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
   EVENT_TYPE_ASSIGNED_TICKET_CHANGED,
@@ -16,6 +15,7 @@ import Alert, {
   isTaskEvent,
   isTicketEvent,
 } from 'gmp/models/alert';
+import Model from 'gmp/models/model';
 import {testModel} from 'gmp/models/testing';
 
 testModel(Alert, 'alert', {testIsActive: false});

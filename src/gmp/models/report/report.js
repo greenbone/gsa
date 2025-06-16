@@ -4,7 +4,7 @@
  */
 
 import {parseFilter} from 'gmp/collection/parser';
-import Model from 'gmp/model';
+import Model from 'gmp/models/model';
 import {
   parseApps,
   parseClosedCves,

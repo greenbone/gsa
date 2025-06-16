@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Model from 'gmp/model';
+import Model from 'gmp/models/model';
 import {testModel} from 'gmp/models/testing';
 import User, {
   AUTH_METHOD_LDAP,

@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement} from 'gmp/models/model';
 import {parseYesNo, NO_VALUE, parseDate} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

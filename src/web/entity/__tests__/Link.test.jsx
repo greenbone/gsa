@@ -6,7 +6,7 @@
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import Model from 'gmp/model';
+import Model from 'gmp/models/model';
 import {YES_VALUE} from 'gmp/parser';
 import EntityLink from 'web/entity/Link';
 

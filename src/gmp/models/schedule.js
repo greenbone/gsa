@@ -4,8 +4,8 @@
  */
 
 import logger from 'gmp/log';
-import Model, {parseModelFromElement} from 'gmp/model';
 import Event from 'gmp/models/event';
+import Model, {parseModelFromElement} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 

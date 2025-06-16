@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement} from 'gmp/models/model';
 import AuditReportReport from 'gmp/models/report/auditreport';
 import {parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';

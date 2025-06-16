@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model from 'gmp/model';
+import Model from 'gmp/models/model';
 import {parseCsv} from 'gmp/parser';
 
 class Role extends Model {

@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement} from 'gmp/models/model';
 import Report from 'gmp/models/report';
 import Scanner from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';

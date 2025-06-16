@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {parseModelFromElement} from 'gmp/model';
 import Cve from 'gmp/models/cve';
+import Model, {parseModelFromElement} from 'gmp/models/model';
 import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
