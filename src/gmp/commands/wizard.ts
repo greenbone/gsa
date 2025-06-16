@@ -8,9 +8,13 @@ import HttpCommand from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
 import Response from 'gmp/http/response';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
-import Model, {Element, ModelElement, parseModelFromElement} from 'gmp/model';
 import Credential from 'gmp/models/credential';
 import {Date} from 'gmp/models/date';
+import Model, {
+  Element,
+  ModelElement,
+  parseModelFromElement,
+} from 'gmp/models/model';
 import {SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
 import Task from 'gmp/models/task';

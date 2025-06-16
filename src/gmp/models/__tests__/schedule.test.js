@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import Model from 'gmp/model';
+import Model from 'gmp/models/model';
 import Schedule from 'gmp/models/schedule';
 import {testModel} from 'gmp/models/testing';
 

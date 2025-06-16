@@ -19,8 +19,8 @@ import GmpHttp from 'gmp/http/gmp';
 import Response, {Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
-import Model, {Element} from 'gmp/model';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import Model, {Element} from 'gmp/models/model';
 import {map, forEach} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 

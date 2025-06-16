@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Model from 'gmp/model';
+import Model from 'gmp/models/model';
 import Policy from 'gmp/models/policy';
 import {SCANCONFIG_TREND_DYNAMIC} from 'gmp/models/scanconfig';
 import {testModel} from 'gmp/models/testing';

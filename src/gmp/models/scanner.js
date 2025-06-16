@@ -4,8 +4,8 @@
  */
 
 import {_} from 'gmp/locale/lang';
-import Model, {parseModelFromElement} from 'gmp/model';
 import Credential from 'gmp/models/credential';
+import Model, {parseModelFromElement} from 'gmp/models/model';
 import {parseInt, parseYesNo, parseDate} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';

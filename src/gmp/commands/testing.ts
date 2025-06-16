@@ -7,7 +7,7 @@ import {testing} from '@gsa/testing';
 import GmpHttp from 'gmp/http/gmp';
 import Rejection from 'gmp/http/rejection';
 import Response, {Meta} from 'gmp/http/response';
-import {Element} from 'gmp/model';
+import {Element} from 'gmp/models/model';
 
 const entitiesRange = {
   _start: '1',

@@ -7,8 +7,8 @@ import CollectionCounts, {
   CollectionCountsOptions,
 } from 'gmp/collection/CollectionCounts';
 import logger from 'gmp/log';
-import Model, {Element} from 'gmp/model';
 import Filter from 'gmp/models/filter';
+import Model, {Element} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
 

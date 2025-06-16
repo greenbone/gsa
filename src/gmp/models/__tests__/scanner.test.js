@@ -4,9 +4,9 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Model from 'gmp/model';
 import Credential from 'gmp/models/credential';
 import {isDate} from 'gmp/models/date';
+import Model from 'gmp/models/model';
 import Scanner, {
   scannerTypeName,
   openVasScannersFilter,

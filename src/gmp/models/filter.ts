@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import convert from 'gmp/models/filter/convert';
+import FilterTerm, {AND} from 'gmp/models/filter/filterterm';
+import {EXTRA_KEYWORDS} from 'gmp/models/filter/keywords';
 import Model, {
   ModelElement,
   ModelProperties,
   parseModelFromElement,
-} from 'gmp/model';
-import convert from 'gmp/models/filter/convert';
-import FilterTerm, {AND} from 'gmp/models/filter/filterterm';
-import {EXTRA_KEYWORDS} from 'gmp/models/filter/keywords';
+} from 'gmp/models/model';
 import {parseInt, setProperties} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';

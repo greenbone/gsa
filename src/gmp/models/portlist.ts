@@ -8,7 +8,7 @@ import Model, {
   ModelElement,
   ModelProperties,
   parseModelFromElement,
-} from 'gmp/model';
+} from 'gmp/models/model';
 import {parseInt, parseBoolean} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';

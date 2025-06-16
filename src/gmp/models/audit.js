@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement} from 'gmp/models/model';
 import Report from 'gmp/models/report';
 import Scanner from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
