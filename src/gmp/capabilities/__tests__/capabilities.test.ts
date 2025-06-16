@@ -19,6 +19,7 @@ describe('Capabilities tests', () => {
     expect(caps.mayCreate('tasks')).toEqual(false);
     expect(caps.mayDelete('tasks')).toEqual(false);
     expect(caps.mayEdit('tasks')).toEqual(false);
+    expect(caps.map(cap => cap)).toEqual([]);
   });
 
   test('should allow everything', () => {
@@ -40,6 +41,7 @@ describe('Capabilities tests', () => {
     expect(caps.mayCreate('foo')).toEqual(true);
     expect(caps.mayDelete('foo')).toEqual(true);
     expect(caps.mayEdit('foo')).toEqual(true);
+    expect(caps.map(cap => cap)).toEqual(['everything']);
   });
 
   test('should ignore case for capabilities', () => {
@@ -51,6 +53,7 @@ describe('Capabilities tests', () => {
     expect(caps.mayOp('get_tasks')).toEqual(true);
     expect(caps.mayOp('GET_TASKS')).toEqual(true);
     expect(caps.mayOp('get_TASKS')).toEqual(true);
+    expect(caps.map(cap => cap)).toEqual(['get_tasks']);
   });
 
   test('should allow singular and plural for access', () => {
@@ -58,6 +61,7 @@ describe('Capabilities tests', () => {
 
     expect(caps.mayAccess('task')).toEqual(true);
     expect(caps.mayAccess('tasks')).toEqual(true);
+    expect(caps.map(cap => cap)).toEqual(['get_tasks']);
   });
 
   test('should have only access task capabilities', () => {
@@ -245,5 +249,11 @@ describe('Capabilities tests', () => {
     expect(caps.mayEdit('ticket')).toEqual(true);
 
     expect(caps.mayAccess('other')).toEqual(false);
+  });
+
+  test('should map capabilities to strings', () => {
+    const caps = new Capabilities(['get_tasks', 'create_task']);
+
+    expect(caps.map(cap => cap)).toEqual(['get_tasks', 'create_task']);
   });
 });

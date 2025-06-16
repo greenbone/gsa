@@ -57,7 +57,7 @@ describe('useTiming', () => {
 
   test('should keep running a timer when a promise is used', async () => {
     testing.useFakeTimers();
-    const doFunc = testing.fn().mockResolvedValueOnce();
+    const doFunc = testing.fn().mockResolvedValueOnce(undefined);
 
     render(<TestComponent doFunc={doFunc} />);
 
@@ -85,7 +85,7 @@ describe('useTiming', () => {
 
   test('should not rerun timer when a promise fails', async () => {
     testing.useFakeTimers();
-    const doFunc = testing.fn().mockRejectedValue();
+    const doFunc = testing.fn().mockRejectedValue(new Error('Test error'));
 
     render(<TestComponent doFunc={doFunc} />);
 
@@ -108,7 +108,7 @@ describe('useTiming', () => {
 
   test('should allow to clear the timer', async () => {
     testing.useFakeTimers();
-    const doFunc = testing.fn().mockResolvedValue();
+    const doFunc = testing.fn().mockResolvedValue(undefined);
 
     render(<TestComponent doFunc={doFunc} />);
 

@@ -10,6 +10,7 @@ import useIconSize, {
   ICON_SIZE_MEDIUM_PIXELS,
   ICON_SIZE_SMALL_PIXELS,
   ICON_SIZE_TINY_PIXELS,
+  IconSizeParameter,
 } from 'web/hooks/useIconSize';
 
 describe('useIconSize', () => {
@@ -22,7 +23,9 @@ describe('useIconSize', () => {
   ])(
     'should return correct size when %s is specified',
     (input, expectedWidth, expectedHeight) => {
-      const {result} = renderHook(() => useIconSize(input));
+      const {result} = renderHook(() =>
+        useIconSize(input as IconSizeParameter),
+      );
       expect(result.current).toEqual({
         height: expectedHeight,
         width: expectedWidth,
