@@ -102,9 +102,9 @@ const HostComponent = ({
 
   const _openTargetDialog = (count, filterString) => {
     createtarget({
-      target_source: 'asset_hosts',
-      hosts_count: count,
-      hosts_filter: filterString,
+      targetSource: 'asset_hosts',
+      hostsCount: count,
+      hostsFilter: filterString,
     });
   };
 
