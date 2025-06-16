@@ -3,19 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {isDefined} from 'gmp/utils/identity';
+import {useTab} from 'web/components/tab/TabContext';
 
 interface TabPanelsProps {
-  active?: number;
   children: React.ReactNode;
 }
 
-const TabPanels: React.FC<TabPanelsProps> = ({
-  active = 0,
-  children,
-}: TabPanelsProps) => {
-  const child = React.Children.toArray(children)[active];
+const TabPanels = ({children}: TabPanelsProps) => {
+  const {activeTab, setTabCount} = useTab();
+
+  useEffect(() => {
+    setTabCount(React.Children.toArray(children).length);
+  }, [children, setTabCount]);
+
+  const child = React.Children.toArray(children)[activeTab];
   return isDefined(child) ? child : null;
 };
 
