@@ -49,7 +49,7 @@ const EntityTrashIcon = <TEntity extends EntityTrash>({
   }
 
   const mayDelete =
-    capabilities?.mayDelete(name) && entity.userCapabilities.mayDelete(name);
+    capabilities?.mayDelete(name) && entity.userCapabilities?.mayDelete(name);
 
   const active = mayDelete && entity.isWritable() && !entity.isInUse();
   if (!isDefined(title)) {

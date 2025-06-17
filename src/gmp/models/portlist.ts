@@ -3,12 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {
-  Element,
-  ModelElement,
-  ModelProperties,
-  parseModelFromElement,
-} from 'gmp/models/model';
+import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {parseInt, parseBoolean} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -53,7 +48,7 @@ interface PortCount {
 }
 
 interface PortListProperties extends ModelProperties {
-  portRanges?: PortRangeProperties[];
+  portRanges?: PortRange[];
   portCount: {
     all: number;
     tcp: number;
@@ -70,6 +65,10 @@ export class PortRange extends Model {
   start!: number;
   end!: number;
 
+  static fromElement(element: PortRangeElement): PortRange {
+    return super.fromElement(element) as PortRange;
+  }
+
   parseProperties(element: PortRangeElement): PortRangeProperties {
     return PortRange.parseElement(element);
   }
@@ -82,11 +81,16 @@ export class PortRange extends Model {
 }
 
 class PortList extends Model {
-  static entityType = 'portlist';
+  static entityType: string = 'portlist';
+
   portRanges!: PortRange[];
   portCount!: PortCount;
   targets!: Model[];
   predefined!: boolean;
+
+  static fromElement(element: PortListElement = {}): PortList {
+    return super.fromElement(element) as PortList;
+  }
 
   static parseElement(element: PortListElement): PortListProperties {
     const ret = super.parseElement(element) as PortListProperties;
@@ -99,7 +103,7 @@ class PortList extends Model {
 
     ret.portRanges = map(ranges, (range: PortRangeElement) => {
       range.portListId = ret.id;
-      return PortRange.fromElement(range as Element);
+      return PortRange.fromElement(range);
     });
 
     const {port_count} = element;
@@ -112,7 +116,7 @@ class PortList extends Model {
     };
 
     ret.targets = map(element.targets?.target, target =>
-      parseModelFromElement(target, 'target'),
+      Model.fromElement(target, 'target'),
     );
 
     ret.predefined = parseBoolean(element.predefined);

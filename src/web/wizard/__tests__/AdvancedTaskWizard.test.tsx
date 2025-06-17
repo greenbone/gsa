@@ -25,26 +25,26 @@ const scheduleCapabilities = new Capabilities([
   'get_schedules',
 ]);
 
-const config1 = ScanConfig.fromElement<TestModel>({
+const config1 = ScanConfig.fromElement({
   _id: '1234',
   name: 'config 1',
-});
+}) as TestModel;
 
-const credential1 = Credential.fromElement<TestModel>({
+const credential1 = Credential.fromElement({
   _id: '5678',
   name: 'credential 1',
   type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
-});
-const credential2 = Credential.fromElement<TestModel>({
+}) as TestModel;
+const credential2 = Credential.fromElement({
   _id: '91011',
   name: 'credential 1',
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
-});
-const credential3 = Credential.fromElement<TestModel>({
+}) as TestModel;
+const credential3 = Credential.fromElement({
   _id: '121314',
   name: 'credential 1',
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
-});
+}) as TestModel;
 
 const credentials = [credential1, credential2, credential3];
 const scanConfigs = [config1];

@@ -3,11 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {
-  ModelElement,
-  ModelProperties,
-  parseModelFromElement,
-} from 'gmp/models/model';
+import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {parseCsv} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -49,16 +45,20 @@ interface UserProperties extends ModelProperties {
 }
 
 class User extends Model {
-  static entityType = 'user';
+  static entityType: string = 'user';
   readonly roles!: Model[];
   readonly groups!: Model[];
   readonly hosts!: Hosts;
   readonly authMethod!: string;
 
+  static fromElement(element: UserElement = {}): User {
+    return super.fromElement(element) as User;
+  }
+
   static parseElement(element: UserElement): UserProperties {
     const ret = super.parseElement(element) as UserProperties;
 
-    ret.roles = map(element.role, role => parseModelFromElement(role, 'role'));
+    ret.roles = map(element.role, role => Model.fromElement(role, 'role'));
 
     // @ts-expect-error
     delete ret.role;
@@ -67,7 +67,7 @@ class User extends Model {
       ret.groups = [];
     } else {
       ret.groups = map(element.groups.group, group =>
-        parseModelFromElement(group, 'group'),
+        Model.fromElement(group, 'group'),
       );
     }
 

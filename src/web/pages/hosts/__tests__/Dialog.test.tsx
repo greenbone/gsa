@@ -7,6 +7,7 @@ import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, changeInputValue} from 'web/testing';
 import Host from 'gmp/models/host';
+import {ModelElement} from 'gmp/models/model';
 import HostsDialog from 'web/pages/hosts/Dialog.jsx';
 
 const host = Host.fromElement({
@@ -16,8 +17,8 @@ const host = Host.fromElement({
   owner: {name: 'admin'},
   creation_time: '2019-06-02T12:00:22Z',
   modification_time: '2019-06-03T11:00:22Z',
-  writable: '1',
-  in_use: '0',
+  writable: 1,
+  in_use: 0,
   permissions: {permission: [{name: 'everything'}]},
   host: {
     severity: {
@@ -110,7 +111,7 @@ const host = Host.fromElement({
       },
     ],
   },
-});
+} as ModelElement) as Host;
 
 describe('HostsDialog component tests', () => {
   test('should render with default values when no host is provided', () => {

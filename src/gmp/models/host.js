@@ -4,10 +4,10 @@
  */
 
 import Asset from 'gmp/models/asset';
+import {parseBaseModelProperties} from 'gmp/models/basemodel';
 import {
   parseBoolean,
   parseInt,
-  parseProperties,
   parseSeverity,
   parseYesNo,
   setProperties,
@@ -19,11 +19,12 @@ import {isEmpty} from 'gmp/utils/string';
 const get_identifier = (identifiers, name) =>
   identifiers.filter(identifier => identifier.name === name)[0];
 
-const newProperties = properties => setProperties(parseProperties(properties));
+const newProperties = properties =>
+  setProperties(parseBaseModelProperties(properties));
 
 class Identifier {
   constructor(element) {
-    const props = parseProperties(element);
+    const props = parseBaseModelProperties(element);
 
     if (isDefined(props.source)) {
       props.source = newProperties({

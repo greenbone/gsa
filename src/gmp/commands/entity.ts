@@ -40,11 +40,11 @@ abstract class EntityCommand<
   TElement = XmlResponseData,
   TRoot extends XmlResponseData = XmlResponseData,
 > extends GmpCommand {
-  clazz: ModelClass<TModel>;
+  clazz: ModelClass<Model>;
   name: string;
   id_name: string;
 
-  constructor(http: GmpHttp, name: string, clazz: ModelClass<TModel>) {
+  constructor(http: GmpHttp, name: string, clazz: ModelClass<Model>) {
     super(http, {cmd: 'get_' + name});
 
     this.clazz = clazz;
@@ -71,7 +71,9 @@ abstract class EntityCommand<
   }
 
   getModelFromResponse(response: Response<TRoot, XmlMeta>): TModel {
-    return this.clazz.fromElement(this.getElementFromRoot(response.data));
+    return this.clazz.fromElement(
+      this.getElementFromRoot(response.data),
+    ) as TModel;
   }
 
   transformResponse(
