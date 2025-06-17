@@ -10,6 +10,7 @@ import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
 
+import {ModelElement} from 'gmp/models/model';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import HostsDialog from 'web/pages/hosts/Dialog';
@@ -18,14 +19,13 @@ import SelectionType from 'web/utils/SelectionType';
 
 const host = Host.fromElement({
   _id: '12345',
-  id: '12345',
   name: 'Foo',
   comment: 'bar',
   owner: {name: 'admin'},
   creation_time: '2019-06-02T12:00:22Z',
   modification_time: '2019-06-03T11:00:22Z',
-  writable: '1',
-  in_use: '0',
+  writable: 1,
+  in_use: 0,
   permissions: {permission: [{name: 'everything'}]},
   host: {
     severity: {
@@ -118,7 +118,7 @@ const host = Host.fromElement({
       },
     ],
   },
-});
+} as ModelElement) as Host;
 
 interface SelectionDialogData {
   entities: unknown[];

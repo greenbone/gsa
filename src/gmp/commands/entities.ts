@@ -109,10 +109,10 @@ abstract class EntitiesCommand<
   TEntitiesResponse extends Element = Element,
   TRoot extends Element = Element,
 > extends GmpCommand {
-  readonly clazz: ModelClass<TModel>;
+  readonly clazz: ModelClass<Model>;
   readonly name: string;
 
-  constructor(http: GmpHttp, name: string, clazz: ModelClass<TModel>) {
+  constructor(http: GmpHttp, name: string, clazz: ModelClass<Model>) {
     super(http, {cmd: 'get_' + name + 's'});
 
     this.clazz = clazz;
@@ -123,7 +123,11 @@ abstract class EntitiesCommand<
 
   getCollectionListFromRoot(root: TRoot): CollectionList<TModel> {
     const response = this.getEntitiesResponse(root);
-    return parseCollectionList(response, this.name, this.clazz);
+    return parseCollectionList<TModel>(
+      response,
+      this.name,
+      this.clazz as ModelClass<TModel>,
+    );
   }
 
   async get(params: GmpCommandInputParams, options?: HttpCommandOptions) {

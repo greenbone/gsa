@@ -17,13 +17,14 @@ testModel(User, 'user');
 describe('User model tests', () => {
   test('should parse roles', () => {
     const elem = {
+      _id: '123',
       role: [
         {
           _id: '123',
         },
       ],
     };
-    const user = User.fromElement<User>(elem);
+    const user = User.fromElement(elem);
 
     expect(user.roles[0]).toBeInstanceOf(Model);
     expect(user.roles[0].entityType).toEqual('role');
@@ -33,6 +34,7 @@ describe('User model tests', () => {
 
   test('should parse groups or return empty array', () => {
     const elem = {
+      _id: '123',
       groups: {
         group: [
           {
@@ -41,8 +43,8 @@ describe('User model tests', () => {
         ],
       },
     };
-    const user = User.fromElement<User>(elem);
-    const user2 = User.fromElement<User>({});
+    const user = User.fromElement(elem);
+    const user2 = User.fromElement();
 
     expect(user.groups[0]).toBeInstanceOf(Model);
     expect(user.groups[0].entityType).toEqual('group');
@@ -51,6 +53,7 @@ describe('User model tests', () => {
 
   test('should parse hosts', () => {
     const elem = {
+      _id: '123',
       hosts: {
         __text: '123.456.789.42, 987.654.321.1',
         _allow: '0',
@@ -63,8 +66,8 @@ describe('User model tests', () => {
     const res2 = {
       addresses: [],
     };
-    const user = User.fromElement<User>(elem);
-    const user2 = User.fromElement<User>({});
+    const user = User.fromElement(elem);
+    const user2 = User.fromElement({});
 
     expect(user.hosts).toEqual(res);
     expect(user2.hosts).toEqual(res2);
@@ -72,18 +75,20 @@ describe('User model tests', () => {
 
   test('should parse sources to auth_method', () => {
     const elem1 = {
+      _id: '123',
       sources: {
         source: 'ldap_connect',
       },
     };
     const elem2 = {
+      _id: '122',
       sources: {
         source: 'radius_connect',
       },
     };
-    const user1 = User.fromElement<User>(elem1);
-    const user2 = User.fromElement<User>(elem2);
-    const user3 = User.fromElement<User>({});
+    const user1 = User.fromElement(elem1);
+    const user2 = User.fromElement(elem2);
+    const user3 = User.fromElement();
 
     expect(user1.authMethod).toEqual(AUTH_METHOD_LDAP);
     expect(user2.authMethod).toEqual(AUTH_METHOD_RADIUS);
@@ -93,21 +98,24 @@ describe('User model tests', () => {
   });
 
   test('isSuperAdmin() should return correct true/false', () => {
-    const user1 = User.fromElement<User>({
+    const user1 = User.fromElement({
+      _id: '123',
       role: [
         {
           _id: '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5', // ID for Superadmin
         },
       ],
     });
-    const user2 = User.fromElement<User>({
+    const user2 = User.fromElement({
+      _id: '456',
       role: [
         {
           _id: '42',
         },
       ],
     });
-    const user3 = User.fromElement<User>({
+    const user3 = User.fromElement({
+      _id: '789',
       role: [
         {
           _id: '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5', // ID for Superadmin

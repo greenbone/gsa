@@ -247,7 +247,7 @@ describe('entities loading actions tests', () => {
 
       const filter = Filter.fromString('type=teip');
 
-      const myFilterAll = {
+      const myFilterAll = new Filter({
         entityType: 'filter',
         filter_type: undefined,
         id: undefined,
@@ -268,7 +268,7 @@ describe('entities loading actions tests', () => {
             value: -1,
           },
         ],
-      };
+      });
       expect(loadAllEntities).toBeDefined();
       expect(isFunction(loadAllEntities)).toBe(true);
 
@@ -321,8 +321,7 @@ describe('entities loading actions tests', () => {
 
       const filter = Filter.fromString('type=teip');
 
-      const myFilterAll = {
-        entityType: 'filter',
+      const myFilterAll = new Filter({
         filter_type: undefined,
         id: undefined,
         terms: [
@@ -342,7 +341,7 @@ describe('entities loading actions tests', () => {
             value: -1,
           },
         ],
-      };
+      });
 
       expect(loadAllEntities).toBeDefined();
       expect(isFunction(loadAllEntities)).toBe(true);

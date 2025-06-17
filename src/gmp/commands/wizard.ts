@@ -10,11 +10,7 @@ import Response from 'gmp/http/response';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
 import Credential from 'gmp/models/credential';
 import {Date} from 'gmp/models/date';
-import Model, {
-  Element,
-  ModelElement,
-  parseModelFromElement,
-} from 'gmp/models/model';
+import Model, {ModelElement} from 'gmp/models/model';
 import {SettingElement} from 'gmp/models/setting';
 import Settings from 'gmp/models/settings';
 import Task from 'gmp/models/task';
@@ -140,10 +136,10 @@ class WizardCommand extends HttpCommand {
       });
     });
     const scanConfigs = map(resp.get_configs_response.config, config => {
-      return parseModelFromElement(config, 'scanconfig');
+      return Model.fromElement(config, 'scanconfig');
     });
     const credentials = map(resp.get_credentials_response.credential, cred => {
-      return Credential.fromElement<Credential>(cred as Element);
+      return Credential.fromElement(cred) as Credential;
     });
     return response.setData<AdvancedTaskResponseData>({
       settings,
@@ -168,8 +164,9 @@ class WizardCommand extends HttpCommand {
         value: setting.value,
       });
     });
-    const tasks = map<ModelElement, Task>(resp.get_tasks_response.task, task =>
-      Task.fromElement(task as Element),
+    const tasks = map<ModelElement, Task>(
+      resp.get_tasks_response.task,
+      task => Task.fromElement(task) as Task,
     ).filter(currentTask => !currentTask.isContainer());
     return response.setData<ModifyTaskResponseData>({settings, tasks});
   }

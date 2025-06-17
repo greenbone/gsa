@@ -60,10 +60,11 @@ export const testModelFromElement = (
     expect(model.userCapabilities.mayAccess('foo')).toEqual(true);
   });
 
-  test('should return undefined for userCapabilities if no permissions are given to the constructor', () => {
+  test('should return empty userCapabilities if no permissions are given to the constructor', () => {
     const model = new modelClass();
 
-    expect(model.userCapabilities).toBeUndefined();
+    expect(model.userCapabilities).toBeDefined();
+    expect(model.userCapabilities.length).toEqual(0);
   });
 
   test('user_tags are parsed correctly', () => {

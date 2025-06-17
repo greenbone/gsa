@@ -20,7 +20,7 @@ const scheduleCapabilities = new Capabilities([
   'get_schedules',
 ]);
 
-const task1 = Task.fromElement<TestModel>({id: '1234', name: 'task 1'});
+const task1 = Task.fromElement({_id: '1234', name: 'task 1'}) as TestModel;
 const taskId = '1234';
 const tasks = [task1];
 
