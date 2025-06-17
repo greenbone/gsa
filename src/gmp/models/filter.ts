@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import EntityModel, {parseEntityModelProperties} from 'gmp/models/entitymodel';
 import convert from 'gmp/models/filter/convert';
 import FilterTerm, {AND} from 'gmp/models/filter/filterterm';
 import {EXTRA_KEYWORDS} from 'gmp/models/filter/keywords';
-import Model, {
-  ModelElement,
-  ModelProperties,
-  parseModelFromElement,
-} from 'gmp/models/model';
-import {parseInt, setProperties} from 'gmp/parser';
+import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import {parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
 
@@ -25,13 +22,6 @@ interface FilterKeyword {
   value: string;
 }
 
-interface FilterModelProperties extends ModelProperties {
-  _term?: string;
-  alerts?: Model[];
-  filter_type?: string;
-  terms: FilterTerm[];
-}
-
 interface FilterModelElement extends ModelElement {
   alerts?: {
     alert: ModelElement[];
@@ -41,6 +31,13 @@ interface FilterModelElement extends ModelElement {
     keyword: FilterKeyword[];
   };
   term?: string;
+}
+
+interface FilterModelProperties extends ModelProperties {
+  _term?: string;
+  alerts?: Model[];
+  filter_type?: string;
+  terms?: FilterTerm[];
 }
 
 type SortOrder = typeof SORT_ORDER_ASC | typeof SORT_ORDER_DESC;
@@ -96,42 +93,64 @@ const parseFilterTermsFromString = (
 
 /**
  * Represents a filter
- *
- * @extends Model
  */
-class Filter extends Model {
-  static entityType = 'filter';
-  terms: FilterTerm[];
-  filter_type!: string;
-  alerts?: Model[];
+class Filter extends EntityModel {
+  static readonly entityType: string = 'filter';
 
-  constructor() {
-    super();
+  readonly alerts: Model[];
+  readonly filter_type?: string;
+  readonly terms: FilterTerm[];
 
-    this.terms = [];
+  constructor({
+    _type,
+    alerts = [],
+    comment,
+    creationTime,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    filter_type,
+    id,
+    inUse,
+    modificationTime,
+    name,
+    owner,
+    terms = [],
+    userCapabilities,
+    userTags = [],
+    writable,
+  }: FilterModelProperties = {}) {
+    super({
+      _type,
+      comment,
+      creationTime,
+      id,
+      inUse,
+      modificationTime,
+      name,
+      owner,
+      userCapabilities,
+      userTags,
+      writable,
+    });
+
+    this.alerts = alerts;
+    this.filter_type = filter_type;
+    this.terms = terms;
   }
 
   get length() {
     return this.terms.length;
   }
 
-  // @ts-expect-error
-  setProperties({id, ...properties}: FilterModelProperties) {
-    // override setProperties to allow changing the id
-    setProperties(properties, this);
-    this.id = id;
-    return this;
-  }
-
   /**
-   * Parse properties from the passed element object
+   * Create new Filter from the passed element object
    *
-   * @param element  Element object to parse properties from.
+   * @override
+   * @param element Element object to parse properties from.
    *
    * @return An object with properties for the new Filter model
    */
-  static parseElement(element: FilterModelElement = {}): FilterModelProperties {
-    const ret = super.parseElement(element) as FilterModelProperties;
+  static fromElement(element: FilterModelElement = {}): Filter {
+    const ret = parseEntityModelProperties(element) as FilterModelProperties;
 
     ret.filter_type = ret._type;
 
@@ -160,11 +179,11 @@ class Filter extends Model {
 
     if (isDefined(element.alerts?.alert)) {
       ret.alerts = map(element.alerts.alert, alert =>
-        parseModelFromElement(alert, 'alert'),
+        Model.fromElement(alert, 'alert'),
       );
     }
 
-    return ret;
+    return new Filter(ret);
   }
 
   /**
@@ -210,20 +229,6 @@ class Filter extends Model {
    */
   _addTerm(...terms: FilterTerm[]) {
     this.terms.push(...terms);
-    return this;
-  }
-
-  /**
-   * Set the FilterTerm array of this Filter
-   *
-   * @private
-   *
-   * @param terms Array of FilterTerms to set.
-   *
-   * @return This filter
-   */
-  _setTerms(terms: FilterTerm[]) {
-    this.terms = terms;
     return this;
   }
 
@@ -300,6 +305,7 @@ class Filter extends Model {
    * @return This filter.
    */
   _resetFilterId() {
+    // @ts-expect-error
     this.id = undefined;
     return this;
   }
@@ -541,14 +547,13 @@ class Filter extends Model {
    * @return A shallow copy of this filter.
    */
   copy(): Filter {
-    const f = new Filter();
-
-    // copy public properties
-    f.id = this.id;
-    f.filter_type = this.filter_type;
-
-    f._setTerms([...this.getAllTerms()]);
-    return f;
+    return new Filter({
+      id: this.id,
+      filter_type: this.filter_type,
+      terms: [...this.getAllTerms()],
+      userCapabilities: this.userCapabilities,
+      userTags: this.userTags,
+    });
   }
 
   /**
@@ -762,11 +767,11 @@ class Filter extends Model {
    * created and returned. Only extra keywords not included in this filter will
    * be merged.
    *
-   * @param filter  Use extra params terms filter to be merged.
+   * @param filter Use extra params terms filter to be merged.
    *
    * @return A new filter with merged terms.
    */
-  mergeExtraKeywords(filter: Filter): Filter {
+  mergeExtraKeywords(filter?: Filter): Filter {
     const f = this.copy();
     f._resetFilterId();
     return f._mergeExtraKeywords(filter);
@@ -782,9 +787,10 @@ class Filter extends Model {
    * @return New Filter with FilterTerms parsed from filterString.
    */
   static fromString(filterString?: string, filter?: Filter): Filter {
-    const f = new Filter();
+    const f = new Filter({
+      terms: parseFilterTermsFromString(filterString),
+    });
 
-    f._setTerms(parseFilterTermsFromString(filterString));
     f._mergeExtraKeywords(filter);
 
     return f;
@@ -798,8 +804,9 @@ class Filter extends Model {
    * @returns The new Filter
    */
   static fromTerm(...term: FilterTerm[]): Filter {
-    const f = new Filter();
-    return f._addTerm(...term);
+    return new Filter({
+      terms: term,
+    });
   }
 }
 

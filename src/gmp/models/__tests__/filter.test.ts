@@ -269,7 +269,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    const filter = Filter.fromElement<Filter>(elem);
+    const filter = Filter.fromElement(elem);
     expect(filter.toFilterString()).toEqual('~abc');
   });
 
@@ -300,7 +300,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    let filter = Filter.fromElement<Filter>(elem);
+    let filter = Filter.fromElement(elem);
     expect(filter.toFilterString()).toEqual('~abc and not ~def');
 
     elem = {
@@ -344,7 +344,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    filter = Filter.fromElement<Filter>(elem);
+    filter = Filter.fromElement(elem);
     expect(filter.toFilterString()).toEqual(
       '~abc and not ~def rows=10 first=1 sort=name',
     );
@@ -388,7 +388,7 @@ describe('Filter parse from keywords', () => {
       },
     };
 
-    const filter = Filter.fromElement<Filter>(elem);
+    const filter = Filter.fromElement(elem);
     const filterString =
       'severity>3.9 and severity<7 first=1 rows=10 sort=name';
     expect(filter.toFilterString()).toEqual(filterString);
@@ -409,14 +409,14 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    const filter = Filter.fromElement<Filter>(elem);
+    const filter = Filter.fromElement(elem);
     expect(filter.toFilterString()).toEqual('_foo=abc');
   });
 });
 
 describe('Filter set', () => {
   test('should allow to set a filter term', () => {
-    const filter = Filter.fromElement<Filter>();
+    const filter = Filter.fromElement();
     expect(filter.set('abc', '1', '=').toFilterString()).toEqual('abc=1');
   });
 
@@ -426,7 +426,7 @@ describe('Filter set', () => {
   });
 
   test('should remove sort-reverse when adding sort filter term', () => {
-    const filter = Filter.fromElement<Filter>();
+    const filter = Filter.fromElement();
 
     filter.set('sort-reverse', 'foo', '=');
     expect(filter.has('sort-reverse')).toEqual(true);
@@ -438,7 +438,7 @@ describe('Filter set', () => {
   });
 
   test('should remove sort when adding sort-reverse filter term', () => {
-    const filter = Filter.fromElement<Filter>();
+    const filter = Filter.fromElement();
 
     filter.set('sort', 'foo', '=');
     expect(filter.has('sort')).toEqual(true);
@@ -450,7 +450,7 @@ describe('Filter set', () => {
   });
 
   test('should convert 0 or negative values for first to 1', () => {
-    const filter = Filter.fromElement<Filter>();
+    const filter = Filter.fromElement();
     filter.set('first', '0');
     expect(filter.get('first')).toEqual(1);
 
@@ -459,7 +459,7 @@ describe('Filter set', () => {
   });
 
   test('should reset filter id', () => {
-    const filter = Filter.fromElement<Filter>({_id: 'foo'});
+    const filter = Filter.fromElement({_id: 'foo'});
 
     expect(filter.id).toEqual('foo');
 
@@ -468,7 +468,7 @@ describe('Filter set', () => {
   });
 
   test('should allow to set a filter term with underscore', () => {
-    const filter = Filter.fromElement<Filter>();
+    const filter = Filter.fromElement();
     expect(filter.set('_foo', '1', '=').toFilterString()).toEqual('_foo=1');
   });
 });
@@ -517,6 +517,7 @@ describe('Filter delete', () => {
 
   test('should reset filter id', () => {
     const filter = Filter.fromString('abc=1');
+    // @ts-expect-error
     filter.id = 'foo';
     filter.delete('abc');
 
@@ -539,7 +540,7 @@ describe('Filter equal', () => {
   test('empty filter should equal itself', () => {
     let filter = Filter.fromString('');
     expect(filter.equals(filter)).toEqual(true);
-    filter = Filter.fromElement<Filter>();
+    filter = Filter.fromElement();
     expect(filter.equals(filter)).toEqual(true);
   });
 
@@ -752,7 +753,7 @@ describe('Filter getTerms', () => {
 
 describe('Filter parse elem', () => {
   test('Should parse public properties', () => {
-    const filter1 = Filter.fromElement<Filter>({
+    const filter1 = Filter.fromElement({
       _id: '100',
       type: 'foo',
     });
@@ -762,7 +763,7 @@ describe('Filter parse elem', () => {
   });
 
   test('Should not parse term as public property', () => {
-    const filter1 = Filter.fromElement<Filter>({
+    const filter1 = Filter.fromElement({
       term: 'abc=1',
     });
 
@@ -771,15 +772,15 @@ describe('Filter parse elem', () => {
   });
 
   test('should parse alerts', () => {
-    const filter1 = Filter.fromElement<Filter>({
+    const filter1 = Filter.fromElement({
       term: 'abc=1',
       alerts: {
         alert: [
           {
-            id: 'a1',
+            _id: 'a1',
           },
           {
-            id: 'a2',
+            _id: 'a2',
           },
         ],
       },
@@ -787,10 +788,12 @@ describe('Filter parse elem', () => {
 
     expect(isArray(filter1.alerts)).toEqual(true);
     expect(filter1.alerts).toHaveLength(2);
+    expect(filter1.alerts[0].id).toEqual('a1');
+    expect(filter1.alerts[1].id).toEqual('a2');
   });
 
   test('should parse id of zero as undefined id', () => {
-    const filter = Filter.fromElement<Filter>({_id: UNKNOWN_FILTER_ID});
+    const filter = Filter.fromElement({_id: UNKNOWN_FILTER_ID});
     expect(filter.id).toBeUndefined();
   });
 });
@@ -805,7 +808,7 @@ describe('Filter copy', () => {
   });
 
   test('should copy public properties', () => {
-    const filter1 = Filter.fromElement<Filter>({
+    const filter1 = Filter.fromElement({
       term: 'abc=1',
       _id: '100',
       type: 'foo',
@@ -857,6 +860,7 @@ describe('Filter next', () => {
 
   test('should reset filter id', () => {
     let filter = Filter.fromString('first=1 rows=10');
+    // @ts-expect-error
     filter.id = 'foo';
 
     expect(filter.id).toEqual('foo');
@@ -888,6 +892,7 @@ describe('Filter first', () => {
 
   test('should reset filter id', () => {
     let filter = Filter.fromString('first=1 rows=10');
+    // @ts-expect-error
     filter.id = 'foo';
 
     expect(filter.id).toEqual('foo');
@@ -923,6 +928,7 @@ describe('Filter previous', () => {
 
   test('should reset filter id', () => {
     let filter = Filter.fromString('first=1 rows=10');
+    // @ts-expect-error
     filter.id = 'foo';
 
     expect(filter.id).toEqual('foo');
@@ -994,6 +1000,7 @@ describe('Filter setSortOrder', () => {
 
   test('should reset filter id', () => {
     const filter = Filter.fromString('sort-reverse=foo');
+    // @ts-expect-error
     filter.id = 'foo';
 
     expect(filter.id).toEqual('foo');
@@ -1031,6 +1038,7 @@ describe('Filter setSortBy', () => {
 
   test('should reset filter id', () => {
     const filter = Filter.fromString('sort-reverse=bar');
+    // @ts-expect-error
     filter.id = 'foo';
 
     expect(filter.id).toEqual('foo');
@@ -1077,6 +1085,7 @@ describe('Filter simple', () => {
 
   test('should reset filter id', () => {
     const filter = Filter.fromString('sort-reverse=foo foo=bar');
+    // @ts-expect-error
     filter.id = 'foo';
 
     expect(filter.id).toEqual('foo');
@@ -1089,20 +1098,9 @@ describe('Filter simple', () => {
 describe('Filter merge extra keywords', () => {
   test('should handle merging undefined filter', () => {
     const filter1 = Filter.fromString('abc=1');
-    filter1.id = 'f1';
     // @ts-expect-error
+    filter1.id = 'f1';
     const filter2 = filter1.mergeExtraKeywords();
-
-    expect(filter1).not.toBe(filter2);
-    expect(filter2.get('abc')).toEqual('1');
-    expect(filter2.id).toBeUndefined();
-  });
-
-  test('should handle merging null filter', () => {
-    const filter1 = Filter.fromString('abc=1');
-    filter1.id = 'f1';
-    // @ts-expect-error
-    const filter2 = filter1.mergeExtraKeywords(null);
 
     expect(filter1).not.toBe(filter2);
     expect(filter2.get('abc')).toEqual('1');
@@ -1212,12 +1210,14 @@ describe('Filter merge extra keywords', () => {
 
   test('should reset filter id', () => {
     const filter1 = Filter.fromString('abc=1');
+    // @ts-expect-error
     filter1.id = 'f1';
     const filter2 = Filter.fromString(
       'apply_overrides=1 overrides=1 ' +
         'delta_states=1 first=1 levels=hml min_qod=70 notes=1 ' +
         'result_hosts_only=1 rows=10 sort=name timezone=CET',
     );
+    // @ts-expect-error
     filter2.id = 'f2';
 
     const filter3 = filter1.mergeExtraKeywords(filter2);
@@ -1258,8 +1258,10 @@ describe('filter and', () => {
 
   test('should reset filter id', () => {
     const filter1 = Filter.fromString('foo=1');
+    // @ts-expect-error
     filter1.id = 'f1';
     const filter2 = Filter.fromString('bar=2');
+    // @ts-expect-error
     filter2.id = 'f2';
     const filter3 = filter1.and(filter2);
 
@@ -1406,7 +1408,7 @@ describe('should lower the case of capitalized keywords', () => {
         ],
       },
     };
-    const filter = Filter.fromElement<Filter>(element);
+    const filter = Filter.fromElement(element);
     expect(filter.toFilterString()).toEqual(
       '~abc and not ~def rows=10 first=1 sort=name',
     );
