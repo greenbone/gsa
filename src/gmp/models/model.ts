@@ -8,7 +8,7 @@ import EntityModel, {
   EntityModelProperties,
   parseEntityModelProperties,
 } from 'gmp/models/entitymodel';
-import {setProperties, Properties} from 'gmp/parser';
+import {setProperties} from 'gmp/parser';
 
 export type Element = Record<string, unknown>;
 
@@ -22,14 +22,11 @@ class Model extends EntityModel {
   constructor(entityType?: string) {
     super({}, entityType);
   }
-
-  setProperties(properties: ModelProperties) {
-    return setProperties(properties as unknown as Properties, this);
   }
 
   static fromElement(element: ModelElement = {}, entityType?: string): Model {
     const f = new this(entityType);
-    f.setProperties(this.parseElement(element));
+    setProperties(this.parseElement(element), f);
     return f;
   }
 

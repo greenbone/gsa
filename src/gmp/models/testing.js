@@ -231,58 +231,8 @@ export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
   }
 };
 
-const testModelSetProperties = modelClass => {
-  test('should not throw when setting undefined properties', () => {
-    const model = new modelClass();
-    model.setProperties();
-  });
-
-  test('should not throw when setting empty properties', () => {
-    const model = new modelClass();
-    model.setProperties({});
-  });
-
-  test('should allow to set arbitrary properties', () => {
-    const model = new modelClass();
-    model.setProperties({foo: 'bar', bar: 1});
-
-    expect(model.foo).toEqual('bar');
-    expect(model.bar).toEqual(1);
-  });
-
-  test('should not allow to override properties', () => {
-    const model = new modelClass();
-    model.setProperties({foo: 'bar', bar: 1});
-
-    expect(model.foo).toEqual('bar');
-    expect(model.bar).toEqual(1);
-
-    expect(() => {
-      model.setProperties({bar: 2});
-    }).toThrow();
-
-    expect(model.foo).toEqual('bar');
-    expect(model.bar).toEqual(1);
-  });
-
-  test('should not allow to set additional properties', () => {
-    const model = new modelClass();
-    model.setProperties({foo: 'bar', bar: 1});
-
-    expect(model.foo).toEqual('bar');
-    expect(model.bar).toEqual(1);
-
-    model.setProperties({lorem: {}});
-
-    expect(model.foo).toEqual('bar');
-    expect(model.bar).toEqual(1);
-    expect(model.lorem).toEqual({});
-  });
-};
-
 export const testModel = (modelClass, type, options) => {
   testModelFromElement(modelClass, type, options);
   testModelMethods(modelClass, options);
-  testModelSetProperties(modelClass);
   testId(modelClass);
 };
