@@ -38,21 +38,37 @@ interface Hosts {
 }
 
 interface UserProperties extends ModelProperties {
-  roles: Model[];
-  groups: Model[];
-  hosts: Hosts;
-  authMethod: string;
+  roles?: Model[];
+  groups?: Model[];
+  hosts?: Hosts;
+  authMethod?: string;
 }
 
 class User extends Model {
   static entityType: string = 'user';
-  readonly roles!: Model[];
-  readonly groups!: Model[];
-  readonly hosts!: Hosts;
-  readonly authMethod!: string;
+
+  readonly roles: Model[];
+  readonly groups: Model[];
+  readonly hosts?: Hosts;
+  readonly authMethod?: string;
+
+  constructor({
+    roles = [],
+    groups = [],
+    hosts,
+    authMethod,
+    ...properties
+  }: UserProperties = {}) {
+    super(properties);
+
+    this.roles = roles;
+    this.groups = groups;
+    this.hosts = hosts;
+    this.authMethod = authMethod;
+  }
 
   static fromElement(element: UserElement = {}): User {
-    return super.fromElement(element) as User;
+    return new User(this.parseElement(element));
   }
 
   static parseElement(element: UserElement): UserProperties {
