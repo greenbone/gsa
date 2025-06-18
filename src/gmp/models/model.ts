@@ -19,14 +19,57 @@ export type ModelProperties = EntityModelProperties;
  * A model representing an entity with a required ID
  */
 class Model extends EntityModel {
-  constructor(entityType?: string) {
-    super({}, entityType);
-  }
+  constructor(properties: ModelProperties = {}, entityType?: string) {
+    super(properties, entityType);
   }
 
   static fromElement(element: ModelElement = {}, entityType?: string): Model {
-    const f = new this(entityType);
-    setProperties(this.parseElement(element), f);
+    const {
+      id,
+      creationTime,
+      modificationTime,
+      _type,
+      active,
+      comment,
+      endTime,
+      inUse,
+      name,
+      orphan,
+      owner,
+      summary,
+      timestamp,
+      trash,
+      userCapabilities,
+      userTags,
+      writable,
+      ...other
+    } = this.parseElement(element);
+    const f = new this(
+      {
+        id,
+        creationTime,
+        modificationTime,
+        _type,
+        active,
+        comment,
+        endTime,
+        inUse,
+        name,
+        orphan,
+        owner,
+        summary,
+        timestamp,
+        trash,
+        userCapabilities,
+        userTags,
+        writable,
+      },
+      entityType,
+    );
+    // Set additional properties from the element for now
+    // This should be removed when all code is migrated to TypeScript
+    // and the actual used properties are defined in the corresponding classes
+    setProperties(other, f);
     return f;
   }
 
