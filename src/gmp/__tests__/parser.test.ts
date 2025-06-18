@@ -13,7 +13,6 @@ import {
   parseFloat,
   parseInt,
   parseProgressElement,
-  parseProperties,
   parseQod,
   parseSeverity,
   parseXmlEncodedString,
@@ -24,7 +23,6 @@ import {
   NO_VALUE,
   setProperties,
   parseToString,
-  ElementProperties,
 } from 'gmp/parser';
 
 describe('parseInt tests', () => {
@@ -351,59 +349,6 @@ describe('setProperties tests', () => {
 
     obj.foo = 'b';
     expect(obj.foo).toEqual('b');
-  });
-});
-
-describe('parseProperties tests', () => {
-  test('should create new object', () => {
-    expect(parseProperties()).toEqual({});
-  });
-
-  test('should create a shallow copy', () => {
-    const foo = {
-      a: 1,
-    };
-
-    const obj = {
-      foo,
-      lorem: 'ipsum',
-    } as ElementProperties;
-
-    const parsed = parseProperties(obj);
-
-    expect(parsed).not.toBe(obj);
-    // @ts-expect-error
-    expect(parsed.foo).toBe(obj.foo);
-    // @ts-expect-error
-    expect(parsed.lorem).toEqual('ipsum');
-  });
-
-  test('should parse id', () => {
-    const parsed = parseProperties({_id: 'a1'});
-    expect(parsed.id).toEqual('a1');
-  });
-
-  test('should parse creation_time', () => {
-    const parsed = parseProperties({creation_time: '2018-01-01'});
-    // @ts-expect-error
-    expect(parsed.creation_time).toBeUndefined();
-    expect(parsed.creationTime).toBeDefined();
-    expect(isDate(parsed.creationTime)).toEqual(true);
-  });
-
-  test('should parse modification_time', () => {
-    const parsed = parseProperties({modification_time: '2018-01-01'});
-    // @ts-expect-error
-    expect(parsed.modification_time).toBeUndefined();
-    expect(parsed.modificationTime).toBeDefined();
-    expect(isDate(parsed.modificationTime)).toEqual(true);
-  });
-
-  test('should prefix type', () => {
-    const parsed = parseProperties({type: 'foo'});
-    // @ts-expect-error
-    expect(parsed.type).toBeUndefined();
-    expect(parsed._type).toEqual('foo');
   });
 });
 
