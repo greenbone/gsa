@@ -280,34 +280,9 @@ const testModelSetProperties = modelClass => {
   });
 };
 
-const testModelGetProperties = (modelClass, type) => {
-  test('should return set properties', () => {
-    const model = new modelClass();
-    model.setProperties({foo: 'bar', bar: 1});
-
-    const props = model.getProperties();
-
-    expect(props.foo).toEqual('bar');
-    expect(props.bar).toEqual(1);
-    expect(props.entityType).toEqual(type);
-  });
-
-  test('should return parsed default element properties', () => {
-    const model = modelClass.fromElement();
-
-    const props = model.getProperties();
-
-    expect(props.userCapabilities).toBeDefined();
-    expect(props.userCapabilities.areDefined()).toEqual(false);
-    expect(props.userTags).toEqual([]);
-    expect(props.entityType).toEqual(type);
-  });
-};
-
 export const testModel = (modelClass, type, options) => {
   testModelFromElement(modelClass, type, options);
   testModelMethods(modelClass, options);
   testModelSetProperties(modelClass);
-  testModelGetProperties(modelClass, type);
   testId(modelClass);
 };

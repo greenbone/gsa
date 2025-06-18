@@ -27,13 +27,6 @@ class Model extends EntityModel {
     return setProperties(properties as unknown as Properties, this);
   }
 
-  getProperties(): Properties {
-    return Object.entries(this).reduce((prev, [key, value]) => {
-      prev[key] = value;
-      return prev;
-    }, {});
-  }
-
   static fromElement(element: ModelElement = {}, entityType?: string): Model {
     const f = new this(entityType);
     f.setProperties(this.parseElement(element));
