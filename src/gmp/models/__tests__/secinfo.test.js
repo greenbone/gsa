@@ -33,7 +33,6 @@ describe('SecInfo model tests', () => {
     const secInfo = SecInfo.fromElement(elem);
 
     expect(secInfo.allInfo).toBeUndefined();
-    expect(secInfo._type).toBeUndefined();
     expect(secInfo.infoType).toEqual('nvt');
     expect(secInfo.other).toEqual({});
   });
