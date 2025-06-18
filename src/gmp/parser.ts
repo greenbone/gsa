@@ -24,13 +24,6 @@ interface QoD {
 
 export type Properties = Record<string, unknown>;
 
-export interface ParsedProperties {
-  id?: string;
-  creationTime?: GmpDate;
-  modificationTime?: GmpDate;
-  _type?: string;
-}
-
 type NumberValue = string | number | undefined;
 type NumberReturn = undefined | number;
 type BooleanValue = NumberValue | boolean;
@@ -157,49 +150,6 @@ export const parseXmlEncodedString = (value: string) =>
     /(&quot;|&lt;|&gt;|&amp;|&apos;|&#x2F;|&#x5C;)/g,
     (str, symbol) => esc2xml[symbol],
   );
-
-export interface ElementProperties {
-  _id?: string;
-  _type?: string;
-  creation_time?: string;
-  modification_time?: string;
-  type?: string;
-}
-
-export const parseProperties = (
-  element: ElementProperties = {},
-): ParsedProperties => {
-  // in future the function should only return known properties
-  // and not the whole object
-  // for now we need to return the whole object
-  // to not break existing code
-  const copy: ParsedProperties = {...element}; // create shallow copy
-
-  if ('_id' in element && isString(element._id) && element._id.length > 0) {
-    // only set id if it id defined
-    copy.id = element._id;
-  }
-
-  if ('creation_time' in element && isDefined(element.creation_time)) {
-    copy.creationTime = parseDate(element.creation_time);
-    // @ts-expect-error
-    delete copy.creation_time;
-  }
-  if ('modification_time' in element && isDefined(element.modification_time)) {
-    copy.modificationTime = parseDate(element.modification_time);
-    // @ts-expect-error
-    delete copy.modification_time;
-  }
-
-  if ('type' in element && isDefined(element.type)) {
-    // type should not be used directly
-    copy._type = element.type;
-    // @ts-expect-error
-    delete copy.type;
-  }
-
-  return copy;
-};
 
 export const setProperties = <P extends Properties, T>(
   properties?: P,
