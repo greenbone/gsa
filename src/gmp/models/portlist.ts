@@ -49,7 +49,7 @@ interface PortCount {
 
 interface PortListProperties extends ModelProperties {
   portRanges?: PortRange[];
-  portCount: {
+  portCount?: {
     all: number;
     tcp: number;
     udp: number;
@@ -80,16 +80,33 @@ export class PortRange extends Model {
   }
 }
 
+const DEFAULT_PORT_COUNT = {all: 0, tcp: 0, udp: 0};
+
 class PortList extends Model {
   static entityType: string = 'portlist';
 
-  portRanges!: PortRange[];
-  portCount!: PortCount;
-  targets!: Model[];
-  predefined!: boolean;
+  readonly portCount: PortCount;
+  readonly portRanges: PortRange[];
+  readonly predefined: boolean;
+  readonly targets: Model[];
+
+  constructor({
+    portCount = DEFAULT_PORT_COUNT,
+    portRanges = [],
+    predefined = false,
+    targets = [],
+    ...properties
+  }: PortListProperties = {}) {
+    super(properties);
+
+    this.portCount = portCount;
+    this.portRanges = portRanges;
+    this.predefined = predefined;
+    this.targets = targets;
+  }
 
   static fromElement(element: PortListElement = {}): PortList {
-    return super.fromElement(element) as PortList;
+    return new PortList(this.parseElement(element));
   }
 
   static parseElement(element: PortListElement): PortListProperties {
@@ -98,8 +115,6 @@ class PortList extends Model {
     const ranges = isDefined(element.port_ranges?.port_range)
       ? element.port_ranges.port_range
       : [];
-    // @ts-expect-error
-    delete ret.port_ranges;
 
     ret.portRanges = map(ranges, (range: PortRangeElement) => {
       range.portListId = ret.id;
@@ -107,8 +122,6 @@ class PortList extends Model {
     });
 
     const {port_count} = element;
-    // @ts-expect-error
-    delete ret.port_count;
     ret.portCount = {
       all: parseInt(port_count?.all) || 0,
       tcp: parseInt(port_count?.tcp) || 0,
