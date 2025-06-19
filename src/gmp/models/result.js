@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Cve from 'gmp/models/cve';
 import Model, {parseModelFromElement} from 'gmp/models/model';
 import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
@@ -12,6 +11,14 @@ import {parseSeverity, parseQod} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
+
+class CveResult {
+  construct({name, epss}) {
+    this.name = name;
+    this.id = name;
+    this.epss = epss;
+  }
+}
 
 export class Delta {
   static TYPE_NEW = 'new';
@@ -74,7 +81,7 @@ class Result extends Model {
     if (information.type === 'nvt') {
       copy.information = Nvt.fromElement(information);
     } else {
-      copy.information = Cve.fromResultElement(information);
+      copy.information = new CveResult(information);
       copy.name = isDefined(copy.name) ? copy.name : information.name;
     }
 
