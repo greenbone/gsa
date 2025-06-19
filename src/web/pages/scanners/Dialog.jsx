@@ -47,6 +47,7 @@ const ScannerDialog = ({
   onNewCredentialClick,
   onSave,
   onScannerCaPubChange,
+  onScannerPortChange,
   onScannerTypeChange,
 }) => {
   const [_] = useTranslation();
@@ -123,6 +124,7 @@ const ScannerDialog = ({
         type,
         which_cert,
         ca_pub,
+        port,
       }}
       onClose={onClose}
       onSave={onSave}
@@ -171,7 +173,7 @@ const ScannerDialog = ({
                   disabled={isInUse}
                   name="port"
                   value={state.port}
-                  onChange={onValueChange}
+                  onChange={onScannerPortChange}
                 />
               </FormGroup>
             )}
@@ -227,6 +229,7 @@ ScannerDialog.propTypes = {
   onNewCredentialClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   onScannerCaPubChange: PropTypes.func.isRequired,
+  onScannerPortChange: PropTypes.func.isRequired,
   onScannerTypeChange: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
