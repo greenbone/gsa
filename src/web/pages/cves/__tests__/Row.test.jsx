@@ -18,11 +18,12 @@ const caps = new Capabilities(['everything']);
 const entity = Cve.fromElement({
   _id: 'CVE-2020-9992',
   name: 'CVE-2020-9992',
-  cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
   creationTime: parseDate('2020-10-22T19:15:00Z'),
-  severity: '9.3',
-  description: 'foo bar baz',
-  usage_type: 'cve',
+  cve: {
+    cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
+    severity: '9.3',
+    description: 'foo bar baz',
+  },
 });
 
 describe('CVEv2 Row tests', () => {
@@ -101,11 +102,12 @@ describe('CVEv2 Row tests', () => {
 const entity_v3 = Cve.fromElement({
   _id: 'CVE-2020-9992',
   name: 'CVE-2020-9992',
-  cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H',
   creationTime: '2020-10-22T19:15:00Z',
-  severity: '7.1',
-  description: 'foo bar baz',
-  usage_type: 'cve',
+  cve: {
+    cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H',
+    severity: '7.1',
+    description: 'foo bar baz',
+  },
 });
 
 describe('CVEv3 Row tests', () => {
