@@ -15,7 +15,6 @@ import {
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Cve from 'gmp/models/cve';
 import Filter from 'gmp/models/filter';
-import {parseDate} from 'gmp/parser';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import CvesPage, {ToolBarIcons} from 'web/pages/cves/ListPage';
@@ -26,15 +25,16 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',
+  creation_time: '2020-10-22T19:15:00Z',
   name: 'CVE-2020-9992',
-  cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
-  creationTime: parseDate('2020-10-22T19:15:00Z'),
-  severity: '9.3',
-  description: 'foo bar baz',
-  usage_type: 'cve',
-  epss: {
-    score: 0.5,
-    percentile: 75.0,
+  cve: {
+    cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
+    severity: '9.3',
+    description: 'foo bar baz',
+    epss: {
+      score: 0.5,
+      percentile: 75.0,
+    },
   },
 });
 
