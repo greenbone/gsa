@@ -282,18 +282,6 @@ class Cve extends Model {
     this.updateTime = updateTime;
   }
 
-  static fromResultElement(element: {name: string; epss?: number}): {
-    name: string;
-    id: string;
-    epss?: number;
-  } {
-    return {
-      name: element.name,
-      id: element.name,
-      epss: element.epss,
-    };
-  }
-
   static fromElement(element: CveElement = {}): Cve {
     return new Cve(this.parseElement(element));
   }

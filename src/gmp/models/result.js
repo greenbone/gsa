@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Cve from 'gmp/models/cve';
-import Model, {parseModelFromElement} from 'gmp/models/model';
+import Model from 'gmp/models/model';
 import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
@@ -12,6 +11,14 @@ import {parseSeverity, parseQod} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
+
+const createCveResult = ({name, epss}) => {
+  return {
+    name,
+    id: name,
+    epss: epss,
+  };
+};
 
 export class Delta {
   static TYPE_NEW = 'new';
@@ -25,7 +32,7 @@ export class Delta {
     } else {
       this.delta_type = elem.__text;
       this.diff = elem.diff;
-      this.result = parseModelFromElement(elem.result, 'result');
+      this.result = Model.fromElement(elem.result, 'result');
     }
   }
 }
@@ -74,7 +81,7 @@ class Result extends Model {
     if (information.type === 'nvt') {
       copy.information = Nvt.fromElement(information);
     } else {
-      copy.information = Cve.fromResultElement(information);
+      copy.information = createCveResult(information);
       copy.name = isDefined(copy.name) ? copy.name : information.name;
     }
 
@@ -95,11 +102,11 @@ class Result extends Model {
     copy.vulnerability = isDefined(name) ? name : information._oid;
 
     if (isDefined(report)) {
-      copy.report = parseModelFromElement(report, 'report');
+      copy.report = Model.fromElement(report, 'report');
     }
 
     if (isDefined(task)) {
-      copy.task = parseModelFromElement(task, 'task');
+      copy.task = Model.fromElement(task, 'task');
     }
 
     if (isDefined(detection) && isDefined(detection.result)) {
@@ -137,7 +144,7 @@ class Result extends Model {
 
     // parse tickets as models only. we don't have other data then the id here
     copy.tickets = isDefined(tickets)
-      ? map(tickets.ticket, ticket => parseModelFromElement(ticket, 'ticket'))
+      ? map(tickets.ticket, ticket => Model.fromElement(ticket, 'ticket'))
       : [];
 
     return copy;
