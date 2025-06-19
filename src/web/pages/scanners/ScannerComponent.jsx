@@ -235,11 +235,16 @@ const ScannerComponent = ({
 
   const handleScannerTypeChange = (value, name) => {
     if (name === 'type') {
+      setPort(22);
       setWhichCert('default');
       setType(value);
     } else if (name === 'which_cert') {
       setWhichCert(value);
     }
+  };
+
+  const handleScannerPortChange = (value, name) => {
+    setPort(value);
   };
 
   const handleScannerCaPubChange = (value, name) => {
@@ -293,6 +298,7 @@ const ScannerComponent = ({
                 handleInteraction();
                 return save(d).then(() => closeScannerDialog());
               }}
+              onScannerPortChange={handleScannerPortChange}
               onScannerCaPubChange={handleScannerCaPubChange}
               onScannerTypeChange={handleScannerTypeChange}
             />
