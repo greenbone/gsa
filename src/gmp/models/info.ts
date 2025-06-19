@@ -6,6 +6,7 @@
 import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
+// @ts-expect-error
 class Info extends Model {
   static entityType = 'info';
 
