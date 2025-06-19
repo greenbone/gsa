@@ -11,8 +11,9 @@ testModel(Group, 'group');
 
 describe('Group model tests', () => {
   test('should parse multiple users', () => {
-    const elem = {};
-    elem.users = 'foo, bar';
+    const elem = {
+      users: 'foo, bar',
+    };
     const group = Group.fromElement(elem);
 
     expect(group.users).toEqual(['foo', 'bar']);
