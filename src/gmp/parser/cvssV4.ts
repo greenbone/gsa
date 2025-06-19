@@ -98,6 +98,12 @@ const cvss4MetricValueToLabels = {
   },
 } as const;
 
+type CvssV4MetricsKey = keyof typeof cvss4MetricValueToLabels;
+
+type CvssV4Metrics = {
+  [Property in CvssV4MetricsKey]?: string;
+};
+
 /**
  * This function calculates the CVSS vector from a set of metrics.
  *
@@ -123,20 +129,22 @@ export const calculateVector = (
  * @returns An object with key-value pairs of the metrics.
  */
 
-export const processVector = (vectorString: string) => {
+export const processVector = (vectorString: string): CvssV4Metrics => {
   const vector = vectorString.replace(/^CVSS:4.0\//, '').split('/');
   const result = {};
-  const expectedMetricMap = new Map(
-    expectedMetricOptionsOrdered.map(metric => [metric[0], metric]),
+  const expectedMetricMap = new Map<CvssV4MetricsKey, string[]>(
+    expectedMetricOptionsOrdered.map(metric => [
+      metric[0] as CvssV4MetricsKey,
+      metric,
+    ]),
   );
 
   vector.forEach(metricString => {
     const [key, value] = metricString.split(':');
     if (
       value &&
-      expectedMetricMap.has(key) &&
-      // @ts-expect-error
-      expectedMetricMap.get(key).includes(value)
+      expectedMetricMap.has(key as CvssV4MetricsKey) &&
+      expectedMetricMap.get(key as CvssV4MetricsKey)?.includes(value)
     ) {
       result[key] = value;
     }
@@ -195,7 +203,9 @@ export const calculateScoreSafely = (cvssVector?: string) => {
  * @param cvssVector - The CVSS vector to parse the metrics from.
  * @returns An object with key-value pairs of the metrics.
  */
-export const parseCvssV4MetricsFromVector = (cvssVector?: string) => {
+export const parseCvssV4MetricsFromVector = (
+  cvssVector?: string,
+): CvssV4Metrics => {
   if (!isDefined(cvssVector) || cvssVector.trim().length === 0) {
     return {};
   }
