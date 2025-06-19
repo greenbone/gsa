@@ -129,7 +129,7 @@ beforeEach(() => {
   });
 });
 
-describe('Result Detailspage tests', () => {
+describe('Result DetailsPage tests', () => {
   test('should render full Detailspage', () => {
     const gmp = {
       result: {
