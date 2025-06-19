@@ -26,21 +26,22 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
   name: 'foo',
-  title: 'bar',
   creation_time: '2019-06-24T11:55:30Z',
   modification_time: '2019-06-24T10:12:27Z',
   update_time: '2019-06-24T10:12:27Z',
-  cve_refs: '3',
-  cves: {
-    cve: [
-      {entry: {cvss: {base_metrics: {score: 9.8}}, _id: 'CVE-2020-1234'}},
-      {entry: {cvss: {base_metrics: {score: 7.8}}, _id: 'CVE-2020-5678'}},
-      {entry: {cvss: {base_metrics: {score: 7.8}}, _id: 'CVE-2019-5678'}},
-    ],
+  cpe: {
+    cve_refs: '3',
+    cves: {
+      cve: [
+        {entry: {cvss: {base_metrics: {score: 9.8}}, _id: 'CVE-2020-1234'}},
+        {entry: {cvss: {base_metrics: {score: 7.8}}, _id: 'CVE-2020-5678'}},
+        {entry: {cvss: {base_metrics: {score: 7.8}}, _id: 'CVE-2019-5678'}},
+      ],
+    },
+    severity: 9.8,
+    nvd_id: '',
+    title: 'bar',
   },
-  severity: 9.8,
-  status: '',
-  nvd_id: '',
 });
 
 const reloadInterval = -1;
