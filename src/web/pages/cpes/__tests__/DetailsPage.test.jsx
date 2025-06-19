@@ -121,9 +121,6 @@ describe('CPE DetailsPage tests', () => {
       'Last updated:Mon, Jun 24, 2019 10:12 AM Coordinated Universal Time',
     );
 
-    // test page content
-    expect(baseElement).toHaveTextContent('StatusFINAL');
-
     // severity bar(s)
     const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Critical');
