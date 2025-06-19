@@ -298,8 +298,8 @@ const ScannerComponent = ({
                 handleInteraction();
                 return save(d).then(() => closeScannerDialog());
               }}
-              onScannerPortChange={handleScannerPortChange}
               onScannerCaPubChange={handleScannerCaPubChange}
+              onScannerPortChange={handleScannerPortChange}
               onScannerTypeChange={handleScannerTypeChange}
             />
           )}
