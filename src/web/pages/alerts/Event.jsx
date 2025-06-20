@@ -11,10 +11,29 @@ import {
   EVENT_TYPE_ASSIGNED_TICKET_CHANGED,
   EVENT_TYPE_OWNED_TICKET_CHANGED,
 } from 'gmp/models/alert';
-import {secInfoTypeName} from 'gmp/models/secinfo';
 import {isDefined} from 'gmp/utils/identity';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
+
+const secInfoTypeName = (type, _, unknown) => {
+  if (!isDefined(type)) {
+    return unknown;
+  }
+  switch (type) {
+    case 'cve':
+      return _('CVE');
+    case 'cpe':
+      return _('CPE');
+    case 'nvt':
+      return _('NVT');
+    case 'cert_bund_adv':
+      return _('CERT-Bund Advisory');
+    case 'dfn_cert_adv':
+      return _('DFN-CERT Advisory');
+    default:
+      return type;
+  }
+};
 
 const Event = ({event = {}}) => {
   const [_] = useTranslation();
@@ -26,7 +45,7 @@ const Event = ({event = {}}) => {
 
   if (event.type === EVENT_TYPE_NEW_SECINFO) {
     if (isDefined(event.data.secinfo_type)) {
-      type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
+      type = secInfoTypeName(event.data.secinfo_type.value, _, _('SecInfo'));
     }
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});
   }
