@@ -221,7 +221,7 @@ const Details = ({entity, ...props}) => {
                   <TableData>{_('Location')}</TableData>
                   <TableData>{entity.port}</TableData>
                 </TableRow>
-                {gmp.settings.enableEPSS && isDefined(epss?.max_severity) && (
+                {gmp.settings.enableEPSS && isDefined(epss?.maxSeverity) && (
                   <>
                     <TableData colSpan="2">
                       <b>{_('EPSS (CVE with highest severity)')}</b>
@@ -229,24 +229,24 @@ const Details = ({entity, ...props}) => {
                     <TableRow>
                       <TableData>{_('EPSS Score')}</TableData>
                       <TableData>
-                        {isNumber(epss?.max_severity?.score)
-                          ? epss?.max_severity?.score.toFixed(5)
+                        {isNumber(epss?.maxSeverity?.score)
+                          ? epss?.maxSeverity?.score.toFixed(5)
                           : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
                       <TableData>{_('EPSS Percentage')}</TableData>
                       <TableData>
-                        {isNumber(epss?.max_severity?.percentile)
-                          ? `${(epss?.max_severity?.percentile * 1).toFixed(3)}%`
+                        {isNumber(epss?.maxSeverity?.percentile)
+                          ? `${(epss?.maxSeverity?.percentile * 1).toFixed(3)}%`
                           : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
                       <TableData>{_('CVE')}</TableData>
                       <TableData>
-                        <CveLink id={epss?.max_severity?.cve?._id}>
-                          {epss?.max_severity?.cve?._id}
+                        <CveLink id={epss?.maxSeverity?.cve?.id}>
+                          {epss?.maxSeverity?.cve?.id}
                         </CveLink>
                       </TableData>
                     </TableRow>
@@ -254,15 +254,15 @@ const Details = ({entity, ...props}) => {
                       <TableData>{_('CVE Severity')}</TableData>
                       <SeverityBar
                         severity={
-                          isDefined(epss?.max_severity?.cve?.severity)
-                            ? epss?.max_severity?.cve?.severity
+                          isDefined(epss?.maxSeverity?.cve?.severity)
+                            ? epss?.maxSeverity?.cve?.severity
                             : _('N/A')
                         }
                       />
                     </TableRow>
                   </>
                 )}
-                {gmp.settings.enableEPSS && isDefined(epss?.max_epss) && (
+                {gmp.settings.enableEPSS && isDefined(epss?.maxEpss) && (
                   <>
                     <TableData colSpan="2">
                       <b>{_('EPSS (highest EPSS score)')}</b>
@@ -270,24 +270,24 @@ const Details = ({entity, ...props}) => {
                     <TableRow>
                       <TableData>{_('EPSS Score')}</TableData>
                       <TableData>
-                        {isNumber(epss?.max_epss?.score)
-                          ? epss?.max_epss?.score.toFixed(5)
+                        {isNumber(epss?.maxEpss?.score)
+                          ? epss?.maxEpss?.score.toFixed(5)
                           : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
                       <TableData>{_('EPSS Percentage')}</TableData>
                       <TableData>
-                        {isNumber(epss?.max_epss?.percentile)
-                          ? `${(epss?.max_epss?.percentile * 1).toFixed(3)}%`
+                        {isNumber(epss?.maxEpss?.percentile)
+                          ? `${(epss?.maxEpss?.percentile * 1).toFixed(3)}%`
                           : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
                       <TableData>{_('CVE')}</TableData>
                       <TableData>
-                        <CveLink id={epss?.max_epss?.cve?._id}>
-                          {epss?.max_epss?.cve?._id}
+                        <CveLink id={epss?.maxEpss?.cve?.id}>
+                          {epss?.maxEpss?.cve?.id}
                         </CveLink>
                       </TableData>
                     </TableRow>
@@ -296,8 +296,8 @@ const Details = ({entity, ...props}) => {
                       <TableData>
                         <SeverityBar
                           severity={
-                            isDefined(epss?.max_epss?.cve?.severity)
-                              ? epss?.max_epss?.cve?.severity
+                            isDefined(epss?.maxEpss?.cve?.severity)
+                              ? epss?.maxEpss?.cve?.severity
                               : _('N/A')
                           }
                         />

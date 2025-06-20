@@ -33,8 +33,8 @@ const Row = ({
     const filter = Filter.fromString('family="' + entity.family + '"');
     onFilterChanged(filter);
   };
-  const epssScore = entity?.epss?.max_severity?.score;
-  const epssPercentile = entity?.epss?.max_severity?.percentile;
+  const epssScore = entity?.epss?.maxSeverity?.score;
+  const epssPercentile = entity?.epss?.maxSeverity?.percentile;
 
   return (
     <TableRow>

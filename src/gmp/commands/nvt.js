@@ -28,7 +28,7 @@ export class NvtCommand extends InfoEntityCommand {
       const {data} = response;
       const config_resp = data.get_config_nvt_response;
 
-      const nvt = Nvt.fromElement(config_resp.get_nvts_response.nvt);
+      const nvt = Nvt.fromElement(config_resp.get_nvts_response);
 
       return response.setData(nvt);
     });

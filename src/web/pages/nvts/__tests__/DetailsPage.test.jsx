@@ -38,8 +38,6 @@ const nvt = NVT.fromElement({
   nvt: {
     _oid: '12345',
     name: 'foo',
-    creation_time: '2019-06-24T11:55:30Z',
-    modification_time: '2019-06-24T10:12:27Z',
     family: 'bar',
     cvss_base: 4.9,
     qod: {
