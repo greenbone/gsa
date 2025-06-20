@@ -6,37 +6,25 @@
 import {describe, test, expect} from '@gsa/testing';
 import Cve from 'gmp/models/cve';
 import {isDate} from 'gmp/models/date';
-import Info from 'gmp/models/info';
 import {testModel} from 'gmp/models/testing';
 import {parseDate} from 'gmp/parser';
 
 testModel(Cve, 'cve');
 
 describe('CVE model tests', () => {
-  test('should be instance of Info', () => {
-    const certBundAdv = Cve.fromElement({});
-
-    expect(certBundAdv).toBeInstanceOf(Info);
-  });
-
   test('should parse update time', () => {
     const elem = {
       update_time: '2018-10-10T23:00:00.000+0000',
     };
     const cve = Cve.fromElement(elem);
-
-    expect(cve.update_time).toBeUndefined();
     expect(cve.updateTime).toEqual(parseDate('2018-10-10T23:00:00.000+0000'));
   });
 
   test('should parse severity', () => {
-    const elem = {
-      severity: '8.5',
-    };
+    const elem = {cve: {severity: 8.5}};
     const cve = Cve.fromElement(elem);
 
     expect(cve.severity).toEqual(8.5);
-    expect(cve.cvss).toBeUndefined();
   });
 
   test('should parse NVTs', () => {
@@ -118,7 +106,7 @@ describe('CVE model tests', () => {
   test('should parse CVSS metrics', () => {
     const elem = {
       cve: {
-        severity: '10.0',
+        severity: 10.0,
         cvss_vector: 'AV:N/AC:L/Au:N/C:C/I:C/A:C',
       },
     };
@@ -151,10 +139,12 @@ describe('CVE model tests', () => {
 
   test('should parse published and modified date from raw data', () => {
     const elem = {
-      raw_data: {
-        entry: {
-          'published-datetime': '2018-10-10T11:41:23.022Z',
-          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
+      cve: {
+        raw_data: {
+          entry: {
+            'published-datetime': '2018-10-10T11:41:23.022Z',
+            'last-modified-datetime': '2018-10-10T11:41:23.022Z',
+          },
         },
       },
     };
@@ -166,16 +156,18 @@ describe('CVE model tests', () => {
 
   test('should parse references', () => {
     const elem = {
-      raw_data: {
-        entry: {
-          'published-datetime': '2018-10-10T11:41:23.022Z',
-          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
-          references: {
-            source: 'foo',
-            _reference_type: 'bar',
-            reference: {
-              __text: 'lorem',
-              _href: 'prot://url',
+      cve: {
+        raw_data: {
+          entry: {
+            'published-datetime': '2018-10-10T11:41:23.022Z',
+            'last-modified-datetime': '2018-10-10T11:41:23.022Z',
+            references: {
+              source: 'foo',
+              _reference_type: 'bar',
+              reference: {
+                __text: 'lorem',
+                _href: 'prot://url',
+              },
             },
           },
         },
@@ -195,12 +187,14 @@ describe('CVE model tests', () => {
 
   test('should parse vulnerable products from raw data', () => {
     const elem = {
-      raw_data: {
-        entry: {
-          'published-datetime': '2018-10-10T11:41:23.022Z',
-          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
-          'vulnerable-software-list': {
-            product: ['lorem', 'ipsum'],
+      cve: {
+        raw_data: {
+          entry: {
+            'published-datetime': '2018-10-10T11:41:23.022Z',
+            'last-modified-datetime': '2018-10-10T11:41:23.022Z',
+            'vulnerable-software-list': {
+              product: ['lorem', 'ipsum'],
+            },
           },
         },
       },
@@ -214,17 +208,6 @@ describe('CVE model tests', () => {
     const cve = Cve.fromElement({});
 
     expect(cve.references).toEqual([]);
-  });
-
-  test('should parse result cve', () => {
-    const elem = {
-      name: 'CVE-1234',
-    };
-
-    const cve = Cve.fromResultElement(elem);
-
-    expect(cve.name).toBe('CVE-1234');
-    expect(cve.id).toBe('CVE-1234');
   });
 
   test('should parse CVSS4 metrics', () => {

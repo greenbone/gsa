@@ -20,15 +20,8 @@ import {renderYesNo} from 'web/utils/Render';
 
 const CpeDetails = ({entity, links = true}) => {
   const [_] = useTranslation();
-  const {
-    title,
-    cpeNameId,
-    deprecated,
-    deprecatedBy,
-    updateTime,
-    status,
-    severity,
-  } = entity;
+  const {title, cpeNameId, deprecated, deprecatedBy, updateTime, severity} =
+    entity;
   return (
     <Layout flex="column" grow="1">
       {!isDefined(title) && (
@@ -78,12 +71,6 @@ const CpeDetails = ({entity, links = true}) => {
               <TableData>
                 <DateTime date={updateTime} />
               </TableData>
-            </TableRow>
-          )}
-          {isDefined(status) && (
-            <TableRow>
-              <TableData>{_('Status')}</TableData>
-              <TableData>{status}</TableData>
             </TableRow>
           )}
           {isDefined(severity) && (

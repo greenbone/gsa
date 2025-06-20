@@ -100,7 +100,7 @@ EntityInfo.propTypes = {
 
 const Details = ({entity, links = true}) => {
   const [_] = useTranslation();
-  const {cves, cve_refs} = entity;
+  const {cves, cveRefs} = entity;
   return (
     <Layout flex="column">
       <CpeDetails entity={entity} />
@@ -132,7 +132,7 @@ const Details = ({entity, links = true}) => {
               })}
             </TableBody>
           </Table>
-        ) : cve_refs === 0 ? (
+        ) : cveRefs === 0 ? (
           _('None')
         ) : (
           <Loading />
