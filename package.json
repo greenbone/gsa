@@ -40,7 +40,7 @@
     "@greenbone/opensight-ui-components-mantinev7": "^0.7.7",
     "@mantine/core": "^7.17.7",
     "@mantine/dates": "^7.17.7",
-    "@mantine/notifications": "^7.17.7",
+    "@mantine/notifications": "^8.1.1",
     "@reduxjs/toolkit": "^2.8.2",
     "@visx/axis": "^3.12.0",
     "@visx/gradient": "^3.12.0",
