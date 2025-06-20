@@ -596,7 +596,7 @@ export const parseCves = (report, filter) => {
     let cve = cves[id];
 
     if (!isDefined(cve)) {
-      cve = ReportCve.fromElement(nvt);
+      cve = ReportCve.fromElement({nvt});
       cves[id] = cve;
     }
 

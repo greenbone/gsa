@@ -15,40 +15,42 @@ const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
 const entity = NVT.fromElement({
-  _oid: '1.3.6.1.4.1.25623.1.0',
   name: 'foo',
   creation_time: '2019-06-24T11:55:30Z',
   modification_time: '2019-06-24T10:12:27Z',
-  family: 'bar',
-  cvss_base: 5,
-  qod: {value: 80},
-  tags: 'This is a description|solution_type=VendorFix',
-  solution: {
-    _type: 'VendorFix',
-    __text: 'This is a description',
-  },
-  epss: {
-    max_severity: {
-      score: 0.8765,
-      percentile: 90.0,
-      cve: {
-        _id: 'CVE-2020-1234',
-        severity: 10.0,
+  nvt: {
+    _oid: '1.3.6.1.4.1.25623.1.0',
+    family: 'bar',
+    cvss_base: 5,
+    qod: {value: 80},
+    tags: 'This is a description|solution_type=VendorFix',
+    solution: {
+      _type: 'VendorFix',
+      __text: 'This is a description',
+    },
+    epss: {
+      max_severity: {
+        score: 0.8765,
+        percentile: 90.0,
+        cve: {
+          _id: 'CVE-2020-1234',
+          severity: 10.0,
+        },
+      },
+      max_epss: {
+        score: 0.9876,
+        percentile: 80.0,
+        cve: {
+          _id: 'CVE-2020-5678',
+        },
       },
     },
-    max_epss: {
-      score: 0.9876,
-      percentile: 80.0,
-      cve: {
-        _id: 'CVE-2020-5678',
-      },
+    refs: {
+      ref: [
+        {_type: 'cve', _id: 'CVE-2020-1234'},
+        {_type: 'cve', _id: 'CVE-2020-5678'},
+      ],
     },
-  },
-  refs: {
-    ref: [
-      {_type: 'cve', _id: 'CVE-2020-1234'},
-      {_type: 'cve', _id: 'CVE-2020-5678'},
-    ],
   },
 });
 

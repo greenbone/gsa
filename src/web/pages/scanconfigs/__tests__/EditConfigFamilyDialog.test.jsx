@@ -10,28 +10,34 @@ import {DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
 import EditConfigFamilyDialog from 'web/pages/scanconfigs/EditConfigFamilyDialog';
 
 const nvt = Nvt.fromElement({
-  _oid: '1234',
-  name: 'nvt',
-  family: 'family',
-  cvss_base: 1,
-  preference_count: 3,
+  nvt: {
+    _oid: '1234',
+    name: 'nvt',
+    family: 'family',
+    cvss_base: 1,
+    preference_count: 3,
+  },
 });
 
 const nvt2 = Nvt.fromElement({
-  _oid: '5678',
-  name: 'nvt2',
-  family: 'family',
-  cvss_base: 10,
-  timeout: 1,
-  preference_count: 4,
+  nvt: {
+    _oid: '5678',
+    name: 'nvt2',
+    family: 'family',
+    cvss_base: 10,
+    timeout: 1,
+    preference_count: 4,
+  },
 });
 
 const nvt3 = Nvt.fromElement({
-  _oid: '2345',
-  name: 'nvt3',
-  family: 'family',
-  timeout: 2,
-  preference_count: 2,
+  nvt: {
+    _oid: '2345',
+    name: 'nvt3',
+    family: 'family',
+    timeout: 2,
+    preference_count: 2,
+  },
 });
 
 const selected = {

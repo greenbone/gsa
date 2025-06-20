@@ -34,17 +34,19 @@ describe('ReportCve tests', () => {
   test('should parse cves', () => {
     const reportcve1 = ReportCve.fromElement({});
     const elem = {
-      refs: {
-        ref: [
-          {
-            _id: '1',
-            _type: 'cve',
-          },
-          {
-            _id: '2',
-            _type: 'cve_id',
-          },
-        ],
+      nvt: {
+        refs: {
+          ref: [
+            {
+              _id: '1',
+              _type: 'cve',
+            },
+            {
+              _id: '2',
+              _type: 'cve_id',
+            },
+          ],
+        },
       },
     };
     const reportcve2 = ReportCve.fromElement(elem);
@@ -57,7 +59,9 @@ describe('ReportCve tests', () => {
 
   test('should parse oid/id', () => {
     const reportcve = ReportCve.fromElement({
-      _oid: 'c1',
+      nvt: {
+        _oid: 'c1',
+      },
     });
     expect(reportcve.id).toEqual('c1');
   });
