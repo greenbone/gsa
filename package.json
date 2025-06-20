@@ -94,7 +94,7 @@
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/eslint-plugin": "^1.2.7",
     "@vitest/ui": "^3.1.4",
-    "eslint": "^9.28.0",
+    "eslint": "^9.29.0",
     "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.37.5",
