@@ -22,6 +22,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = ({onScannerCreateClick}) => {
   const gmp = useGmp();
   const capabilities = useCapabilities();
