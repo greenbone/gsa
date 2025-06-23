@@ -232,7 +232,7 @@ class Scanner extends Model {
     return ret;
   }
 
-  isClonable() {
+  isCloneable() {
     return (
       this.scannerType !== CVE_SCANNER_TYPE &&
       this.scannerType !== OPENVAS_SCANNER_TYPE
