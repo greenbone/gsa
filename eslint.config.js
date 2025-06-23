@@ -122,7 +122,12 @@ export default [
   pluginReact.configs.flat?.recommended,
   customPlugin,
   {
-    ignores: ['build', 'eslint.config.js', 'vite.config.ts'],
+    ignores: [
+      'build',
+      'eslint.config.js',
+      'vite.config.ts',
+      'vitest.config.ts',
+    ],
   },
   // JavaScript configuration
   {
