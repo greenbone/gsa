@@ -54,7 +54,7 @@ const Actions = withEntitiesActions(
         <CloneIcon
           displayName={_('Scanner')}
           entity={entity}
-          mayClone={entity.isClonable()}
+          mayClone={entity.isCloneable()}
           name="permission"
           value={entity}
           onClick={onScannerCloneClick}

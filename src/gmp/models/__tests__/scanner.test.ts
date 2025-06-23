@@ -168,14 +168,14 @@ describe('Scanner model tests', () => {
 });
 
 describe('Scanner model method tests', () => {
-  test('isClonable() should return correct true/false', () => {
+  test('isCloneable() should return correct true/false', () => {
     const scanner1 = new Scanner({scannerType: CVE_SCANNER_TYPE});
     const scanner2 = new Scanner({scannerType: OPENVAS_SCANNER_TYPE});
     const scanner3 = new Scanner({scannerType: GREENBONE_SENSOR_SCANNER_TYPE});
 
-    expect(scanner1.isClonable()).toEqual(false);
-    expect(scanner2.isClonable()).toEqual(false);
-    expect(scanner3.isClonable()).toEqual(true);
+    expect(scanner1.isCloneable()).toEqual(false);
+    expect(scanner2.isCloneable()).toEqual(false);
+    expect(scanner3.isCloneable()).toEqual(true);
   });
 
   test('isWritable() should return correct true/false', () => {
