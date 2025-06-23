@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
 import {DownloadKeyIcon, ScannerIcon, VerifyIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -42,6 +41,7 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/scanners';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = ({
   entity,
   onScannerCertificateDownloadClick,
@@ -71,7 +71,7 @@ const ToolBarIcons = ({
         )}
         <CloneIcon
           entity={entity}
-          mayClone={entity.scannerType !== CVE_SCANNER_TYPE}
+          mayClone={entity.isCloneable()}
           onClick={onScannerCloneClick}
         />
         <EditIcon entity={entity} onClick={onScannerEditClick} />
