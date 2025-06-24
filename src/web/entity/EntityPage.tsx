@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 import * as ReactIs from 'react-is';
 import styled from 'styled-components';
 import {typeName} from 'gmp/utils/entitytype';
@@ -17,11 +17,6 @@ import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import EntityInfo from 'web/entity/EntityInfo';
 import useTranslation from 'web/hooks/useTranslation';
-
-interface EntityPageRenderProps {
-  activeTab: number;
-  onActivateTab: (index: number) => void;
-}
 
 export interface Entity {
   id: string;
@@ -53,7 +48,7 @@ interface EntityError {
 }
 
 interface EntityPageProps {
-  children: (props: EntityPageRenderProps) => React.ReactNode;
+  children: () => React.ReactNode;
   entity: Entity;
   entityError?: EntityError;
   entityType: string;
@@ -99,15 +94,7 @@ const EntityPage: React.FC<EntityPageProps> = ({
   ...props
 }: EntityPageProps) => {
   const [_] = useTranslation();
-  const [activeTab, setActiveTab] = useState(0);
 
-  const handleActivateTab = (index: number) => {
-    setActiveTab(index);
-
-    if (index !== activeTab && isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
   const renderToolbarIcons = () => {
     if (ReactIs.isElement(ToolBarIconsComponent)) {
       return ToolBarIconsComponent;
@@ -163,10 +150,7 @@ const EntityPage: React.FC<EntityPageProps> = ({
         img={sectionIcon}
         title={sectionTitle}
       >
-        {children({
-          activeTab,
-          onActivateTab: handleActivateTab,
-        })}
+        {children()}
       </SectionComponent>
     );
   };

@@ -72,7 +72,6 @@ const getTarget = (entity = {}) => {
 };
 
 const DeltaAuditReportDetails = props => {
-  const [activeTab, setActiveTab] = useState(0);
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
     useState(false);
@@ -219,11 +218,6 @@ const DeltaAuditReportDetails = props => {
     } else {
       handleFilterChange(DEFAULT_FILTER);
     }
-  };
-
-  const handleActivateTab = index => {
-    handleInteraction();
-    setActiveTab(index);
   };
 
   const handleAddToAssets = () => {
@@ -378,7 +372,6 @@ const DeltaAuditReportDetails = props => {
       <TargetComponent onError={handleError} onInteraction={handleInteraction}>
         {({edit}) => (
           <Page
-            activeTab={activeTab}
             audit={true}
             entity={entity}
             entityError={entityError}
@@ -392,7 +385,6 @@ const DeltaAuditReportDetails = props => {
             showSuccessMessage={showSuccessMessage}
             sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
-            onActivateTab={handleActivateTab}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
             onFilterChanged={handleFilterChange}

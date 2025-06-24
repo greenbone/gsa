@@ -90,7 +90,6 @@ class ReportDetails extends React.Component {
     super(...args);
 
     this.state = {
-      activeTab: 0,
       showFilterDialog: false,
       showDownloadReportDialog: false,
       sorting: {
@@ -133,7 +132,6 @@ class ReportDetails extends React.Component {
       },
     };
 
-    this.handleActivateTab = this.handleActivateTab.bind(this);
     this.handleAddToAssets = this.handleAddToAssets.bind(this);
     this.handleChanged = this.handleChanged.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -306,12 +304,6 @@ class ReportDetails extends React.Component {
     } else {
       this.handleFilterChange(DEFAULT_FILTER);
     }
-  }
-
-  handleActivateTab(index) {
-    this.handleInteraction();
-
-    this.setState({activeTab: index});
   }
 
   handleAddToAssets() {
@@ -546,7 +538,6 @@ class ReportDetails extends React.Component {
       showSuccessMessage,
     } = this.props;
     const {
-      activeTab,
       applicationsCounts,
       cvesCounts,
       closedCvesCounts,
@@ -580,7 +571,6 @@ class ReportDetails extends React.Component {
         >
           {({edit}) => (
             <Page
-              activeTab={activeTab}
               applicationsCounts={applicationsCounts}
               closedCvesCounts={closedCvesCounts}
               cvesCounts={cvesCounts}
@@ -605,7 +595,6 @@ class ReportDetails extends React.Component {
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
               tlsCertificatesCounts={tlsCertificatesCounts}
-              onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}
               onFilterAddLogLevelClick={this.handleFilterAddLogLevel}

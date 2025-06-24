@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, within, rendererWith} from 'web/testing';
+import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {getMockReport} from 'web/pages/reports/__mocks__/MockReport';
@@ -36,8 +36,7 @@ const getReportComposerDefaults = testing.fn().mockResolvedValue({
 });
 
 describe('Report Details Content tests', () => {
-  test('should render Report Details Content', async () => {
-    const onActivateTab = testing.fn();
+  test('should render Report Details Content', () => {
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -92,7 +91,6 @@ describe('Report Details Content tests', () => {
 
     const {baseElement} = render(
       <DetailsContent
-        activeTab={0}
         applicationsCounts={{all: 4, filtered: 4}}
         closedCvesCounts={{all: 2, filtered: 2}}
         cvesCounts={{all: 2, filtered: 2}}
@@ -115,7 +113,6 @@ describe('Report Details Content tests', () => {
         sorting={sorting}
         task={entity.report.task}
         tlsCertificatesCounts={{all: 2, filtered: 2}}
-        onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
@@ -206,8 +203,7 @@ describe('Report Details Content tests', () => {
     expect(tableData[15]).toHaveTextContent('UTC (UTC)');
   });
 
-  test('should render threshold panel', () => {
-    const onActivateTab = testing.fn();
+  test('should render threshold panel', async () => {
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -262,7 +258,6 @@ describe('Report Details Content tests', () => {
 
     const {baseElement} = render(
       <DetailsContent
-        activeTab={2}
         applicationsCounts={{all: 4, filtered: 4}}
         closedCvesCounts={{all: 2, filtered: 2}}
         cvesCounts={{all: 2, filtered: 2}}
@@ -285,7 +280,6 @@ describe('Report Details Content tests', () => {
         sorting={sorting}
         task={entity.report.task}
         tlsCertificatesCounts={{all: 2, filtered: 2}}
-        onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
@@ -305,6 +299,9 @@ describe('Report Details Content tests', () => {
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
     );
+
+    const hostsTab = screen.getByRole('tab', {name: /Hosts/});
+    fireEvent.click(hostsTab);
 
     const bars = screen.getAllByTestId('progressbar-box');
     const powerFilter = within(screen.queryPowerFilter());

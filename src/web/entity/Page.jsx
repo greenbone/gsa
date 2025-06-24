@@ -27,13 +27,6 @@ const MessageContent = styled.div`
 `;
 
 class EntityPage extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = {activeTab: 0};
-
-    this.handleActivateTab = this.handleActivateTab.bind(this);
-  }
-
   renderToolbarIcons() {
     const {toolBarIcons: ToolBarIconsComponent, entity, ...other} = this.props;
 
@@ -44,16 +37,6 @@ class EntityPage extends React.Component {
     return <ToolBarIconsComponent entity={entity} {...other} />;
   }
 
-  handleActivateTab(index) {
-    const {onInteraction} = this.props;
-
-    this.setState({activeTab: index});
-
-    if (index !== this.state.activeTab && isDefined(onInteraction)) {
-      onInteraction();
-    }
-  }
-
   renderSection() {
     const {
       children,
@@ -62,8 +45,6 @@ class EntityPage extends React.Component {
       sectionComponent: SectionComponent = Section,
       title,
     } = this.props;
-
-    const {activeTab} = this.state;
 
     if (SectionComponent === false) {
       return null;
@@ -81,10 +62,7 @@ class EntityPage extends React.Component {
         img={sectionIcon}
         title={section_title}
       >
-        {children({
-          activeTab,
-          onActivateTab: this.handleActivateTab,
-        })}
+        {children()}
       </SectionComponent>
     );
   }

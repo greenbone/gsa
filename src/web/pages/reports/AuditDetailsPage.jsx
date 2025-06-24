@@ -83,7 +83,6 @@ const getTarget = (entity = {}) => {
 };
 
 const ReportDetails = props => {
-  const [activeTab, setActiveTab] = useState(0);
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
     useState(false);
@@ -304,11 +303,6 @@ const ReportDetails = props => {
     }
   };
 
-  const handleActivateTab = index => {
-    handleInteraction();
-    setActiveTab(index);
-  };
-
   const handleAddToAssets = () => {
     const {showSuccessMessage, reportFilter: filter} = props;
 
@@ -493,7 +487,6 @@ const ReportDetails = props => {
       <TargetComponent onError={handleError} onInteraction={handleInteraction}>
         {({edit}) => (
           <Page
-            activeTab={activeTab}
             audit={true}
             entity={entity}
             errorsCounts={errorsCounts}
@@ -515,7 +508,6 @@ const ReportDetails = props => {
             sorting={sorting}
             task={isDefined(report) ? report.task : undefined}
             tlsCertificatesCounts={tlsCertificatesCounts}
-            onActivateTab={handleActivateTab}
             onAddToAssetsClick={handleAddToAssets}
             onError={handleError}
             onFilterChanged={handleFilterChange}

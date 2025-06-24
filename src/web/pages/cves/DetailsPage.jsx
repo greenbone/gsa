@@ -22,6 +22,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
@@ -207,17 +208,13 @@ const CvePage = ({
           onCveDownloadClick={download}
           onInteraction={onInteraction}
         >
-          {({activeTab = 0, onActivateTab}) => {
+          {() => {
             return (
               <React.Fragment>
                 <PageTitle title={_('CVE: {{name}}', {name: entity.name})} />
-                <Layout flex="column" grow="1">
+                <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
+                    <TabList align={['start', 'stretch']}>
                       <Tab>{_('Information')}</Tab>
                       <EntitiesTab entities={entity.userTags}>
                         {_('User Tags')}
@@ -225,7 +222,7 @@ const CvePage = ({
                     </TabList>
                   </TabLayout>
 
-                  <Tabs active={activeTab}>
+                  <Tabs>
                     <TabPanels>
                       <TabPanel>
                         <Details entity={entity} />
@@ -240,7 +237,7 @@ const CvePage = ({
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
-                </Layout>
+                </TabsContainer>
               </React.Fragment>
             );
           }}

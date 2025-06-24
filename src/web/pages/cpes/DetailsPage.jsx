@@ -23,6 +23,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
@@ -40,6 +41,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import CpeDetails from 'web/pages/cpes/Details';
 import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/PropTypes';
+
 export const ToolBarIcons = ({entity, onCpeDownloadClick}) => {
   const [_] = useTranslation();
 
@@ -175,17 +177,13 @@ const CpePage = ({
           onCpeDownloadClick={download}
           onInteraction={onInteraction}
         >
-          {({activeTab = 0, onActivateTab}) => {
+          {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle title={_('CPE: {{title}}', {title: entity.title})} />
-                <Layout flex="column" grow="1">
+                <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
+                    <TabList align={['start', 'stretch']}>
                       <Tab>{_('Information')}</Tab>
                       <EntitiesTab entities={entity.userTags}>
                         {_('User Tags')}
@@ -193,7 +191,7 @@ const CpePage = ({
                     </TabList>
                   </TabLayout>
 
-                  <Tabs active={activeTab}>
+                  <Tabs>
                     <TabPanels>
                       <TabPanel>
                         <Details entity={entity} />
@@ -208,8 +206,8 @@ const CpePage = ({
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
-                </Layout>
-              </React.Fragment>
+                </TabsContainer>
+              </>
             );
           }}
         </EntityPage>

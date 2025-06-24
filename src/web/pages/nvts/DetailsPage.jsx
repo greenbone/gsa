@@ -27,6 +27,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import DetailsBlock from 'web/entity/Block';
 import EntityPage from 'web/entity/EntityPage';
 import Note from 'web/entity/Note';
@@ -197,17 +198,13 @@ const Page = ({
           onNvtDownloadClick={download}
           onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
         >
-          {({activeTab = 0, onActivateTab}) => {
+          {() => {
             return (
               <React.Fragment>
                 <PageTitle title={_('NVT: {{name}}', {name: entity.name})} />
-                <Layout flex="column" grow="1">
+                <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
+                    <TabList align={['start', 'stretch']}>
                       <Tab>{_('Information')}</Tab>
                       <EntitiesTab count={numPreferences}>
                         {_('Preferences')}
@@ -218,7 +215,7 @@ const Page = ({
                     </TabList>
                   </TabLayout>
 
-                  <Tabs active={activeTab}>
+                  <Tabs>
                     <TabPanels>
                       <TabPanel>
                         <Details
@@ -243,7 +240,7 @@ const Page = ({
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
-                </Layout>
+                </TabsContainer>
               </React.Fragment>
             );
           }}
