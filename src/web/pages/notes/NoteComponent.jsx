@@ -43,6 +43,7 @@ const NoteComponent = ({
   const [_] = useTranslation();
 
   const [dialogVisible, setDialogVisible] = useState(false);
+  const [fixed, setFixed] = useState(false);
   const [active, setActive] = useState();
   const [hosts, setHosts] = useState();
   const [hostsManual, setHostsManual] = useState();
@@ -54,8 +55,10 @@ const NoteComponent = ({
   const [portManual, setPortManual] = useState();
   const [resultId, setResultId] = useState();
   const [resultUuid, setResultUuid] = useState();
+  const [resultName, setResultName] = useState();
   const [severity, setSeverity] = useState();
   const [taskId, setTaskId] = useState();
+  const [taskName, setTaskName] = useState();
   const [taskUuid, setTaskUuid] = useState();
   const [tasks, setTasks] = useState();
   const [text, setText] = useState();
@@ -83,6 +86,7 @@ const NoteComponent = ({
   };
 
   const openNoteDialog = (note, initial = {}) => {
+    const {fixed = false} = initial;
     if (isDefined(note)) {
       let activeValue = ACTIVE_NO_VALUE;
       if (note.isActive()) {
@@ -98,6 +102,7 @@ const NoteComponent = ({
       setDialogVisible(true);
       setId(note.id);
       setActive(activeValue);
+      setFixed(fixed);
       setHosts(isDefined(hosts) && hosts.length > 0 ? MANUAL : ANY);
       setHostsManual(isArray(hosts) ? hosts.join(', ') : undefined);
       setPort(isDefined(port) ? MANUAL : ANY);
@@ -106,30 +111,35 @@ const NoteComponent = ({
       setNote(note);
       setNvtName(isDefined(nvt) ? nvt.name : undefined);
       setTaskId(hasId(task) ? TASK_SELECTED : TASK_ANY);
+      setTaskName(hasId(task) ? task.name : undefined);
       setTaskUuid(hasId(task) ? task.id : undefined);
       setResultId(hasId(result) ? RESULT_UUID : RESULT_ANY);
+      setResultName(hasId(result) ? result.name : undefined);
       setResultUuid(hasId(result) ? result.id : undefined);
       setSeverity(note.severity);
       setText(note.text);
       setTitle(_('Edit Note {{name}}', {name: shorten(note.text, 20)}));
     } else {
       setDialogVisible(true);
-      setActive(undefined);
-      setHosts(undefined);
-      setHostsManual(undefined);
-      setId(undefined);
-      setNote(undefined);
-      setNvtName(undefined);
-      setOid(undefined);
-      setPort(undefined);
-      setPortManual(undefined);
-      setResultId(undefined);
-      setResultUuid(undefined);
-      setSeverity(undefined);
-      setTaskId(undefined);
-      setTaskUuid(undefined);
-      setText(undefined);
-      setTitle(undefined);
+      setActive(initial.active);
+      setFixed(initial.fixed);
+      setHosts(initial.hosts);
+      setHostsManual(initial.hosts_manual);
+      setId(initial.id);
+      setNote(initial.note);
+      setNvtName(initial.nvt_name);
+      setOid(initial.oid);
+      setPort(initial.port);
+      setPortManual(initial.port_manual);
+      setResultId(initial.result_id);
+      setResultName(initial.result_name);
+      setResultUuid(initial.result_uuid);
+      setSeverity(initial.severity);
+      setTaskId(initial.task_id);
+      setTaskName(initial.task_name);
+      setTaskUuid(initial.task_uuid);
+      setText(initial.text);
+      setTitle(initial.title);
     }
 
     handleInteraction();
@@ -139,9 +149,6 @@ const NoteComponent = ({
   const openCreateNoteDialog = (initial = {}) => {
     openNoteDialog(undefined, initial);
   };
-
-  // Create an initial object with any other state variables
-  const initial = {};
 
   return (
     <EntityComponent
@@ -168,6 +175,7 @@ const NoteComponent = ({
           {dialogVisible && (
             <NoteDialog
               active={active}
+              fixed={fixed}
               hosts={hosts}
               hosts_manual={hostsManual}
               id={id}
@@ -177,9 +185,11 @@ const NoteComponent = ({
               port={port}
               port_manual={portManual}
               result_id={resultId}
+              result_name={resultName}
               result_uuid={resultUuid}
               severity={severity}
               task_id={taskId}
+              task_name={taskName}
               task_uuid={taskUuid}
               tasks={tasks}
               text={text}
@@ -189,7 +199,6 @@ const NoteComponent = ({
                 handleInteraction();
                 return save(d).then(() => closeNoteDialog());
               }}
-              {...initial}
             />
           )}
         </>
