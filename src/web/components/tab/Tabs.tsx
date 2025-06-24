@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useState} from 'react';
-import {isDefined} from 'gmp/utils/identity';
+import React from 'react';
+import {useTab} from 'web/components/tab/TabContext';
 import TabList from 'web/components/tab/TabList';
 import TabPanels from 'web/components/tab/TabPanels';
 
@@ -17,35 +17,16 @@ import TabPanels from 'web/components/tab/TabPanels';
 
 interface TabProps {
   children: React.ReactNode;
-  active?: number;
 }
 
 const Tabs = (props: TabProps) => {
-  const [active, setActive] = useState(
-    isDefined(props.active) ? props.active : 0,
-  );
-
-  const setActiveTab = index => {
-    setActive(index);
-  };
-
-  useEffect(() => {
-    setActiveTab(props.active);
-  }, [props.active]);
-
-  const handleActivateTab = (index: number) => {
-    setActiveTab(index);
-  };
-
+  const {activeTab} = useTab();
   const children = React.Children.map(props.children, child => {
     if (child && typeof child === 'object' && 'type' in child) {
       if (child.type === TabPanels) {
-        return React.cloneElement(child, {active});
+        return React.cloneElement(child, {activeTab});
       } else if (child.type === TabList) {
-        return React.cloneElement(child, {
-          active,
-          onActivateTab: handleActivateTab,
-        });
+        return child;
       }
     }
     return child;
