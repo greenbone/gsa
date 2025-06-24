@@ -15,12 +15,32 @@ import Alert, {
   isTaskEvent,
   isTicketEvent,
 } from 'gmp/models/alert';
-import Model from 'gmp/models/model';
 import {testModel} from 'gmp/models/testing';
+import {NO_VALUE} from 'gmp/parser';
 
 testModel(Alert, 'alert', {testIsActive: false});
 
 describe('Alert Model tests', () => {
+  test('should use defaults', () => {
+    const alert = new Alert();
+    expect(alert.active).toBeUndefined();
+    expect(alert.condition).toBeUndefined();
+    expect(alert.event).toBeUndefined();
+    expect(alert.filter).toBeUndefined();
+    expect(alert.method).toBeUndefined();
+    expect(alert.tasks).toEqual([]);
+  });
+
+  test('should parse empty element', () => {
+    const alert = Alert.fromElement();
+    expect(alert.active).toEqual(NO_VALUE);
+    expect(alert.condition).toEqual({data: {}});
+    expect(alert.event).toEqual({data: {}});
+    expect(alert.filter).toBeUndefined();
+    expect(alert.method).toEqual({data: {report_formats: []}});
+    expect(alert.tasks).toEqual([]);
+  });
+
   test('should parse condition, event, and method', () => {
     const elem = {
       condition: {
@@ -62,7 +82,7 @@ describe('Alert Model tests', () => {
     });
   });
 
-  test('should parse data values', () => {
+  test('should parse method data', () => {
     const elem = {
       method: {
         __text: 'foo',
@@ -93,37 +113,21 @@ describe('Alert Model tests', () => {
     });
   });
 
-  test('should return given filter as instance of filter model', () => {
-    const elem = {filter: {id: 1, term: 'rows=1337'}};
+  test('should parse filter', () => {
+    const elem = {filter: {_id: '1', term: 'rows=1337'}};
     const alert = Alert.fromElement(elem);
-
-    expect(alert.filter).toBeInstanceOf(Model);
-    expect(alert.filter.entityType).toEqual('filter');
+    expect(alert.filter?.entityType).toEqual('filter');
+    expect(alert.filter?.id).toEqual('1');
   });
 
-  test('should return given tasks as array of instances of task model', () => {
-    const elem = {
-      tasks: {
-        task: {_id: 't1'},
-      },
-    };
-    const alert = Alert.fromElement(elem);
-
-    expect(alert.tasks.length).toEqual(1);
-
-    const [task] = alert.tasks;
-    expect(task).toBeInstanceOf(Model);
-    expect(task.entityType).toEqual('task');
-    expect(task.id).toEqual('t1');
+  test('should parse active', () => {
+    const alert = Alert.fromElement({active: 1});
+    expect(alert.active).toEqual(1);
+    const alert2 = Alert.fromElement({active: 0});
+    expect(alert2.active).toEqual(0);
   });
 
-  test('should return empty array if no tasks are given', () => {
-    const alert = Alert.fromElement({});
-
-    expect(alert.tasks).toEqual([]);
-  });
-
-  test('should parse report format ids', () => {
+  test('should parse report formats', () => {
     const elem = {
       method: {
         data: {
@@ -134,16 +138,10 @@ describe('Alert Model tests', () => {
     };
     const alert = Alert.fromElement(elem);
 
-    expect(alert.method.data.report_formats).toEqual(['123', '456', '789']);
+    expect(alert.method?.data.report_formats).toEqual(['123', '456', '789']);
   });
 
-  test('should return empty array if no report format ids are given', () => {
-    const alert = Alert.fromElement({});
-
-    expect(alert.method.data.report_formats).toEqual([]);
-  });
-
-  test('should parse notice as String', () => {
+  test('should parse notice', () => {
     const elem = {
       method: {
         data: {
@@ -154,12 +152,14 @@ describe('Alert Model tests', () => {
     };
     const alert = Alert.fromElement(elem);
 
-    expect(alert.method.data.notice.value).toEqual('1');
+    expect(alert.method?.data.notice?.value).toEqual('1');
   });
+});
 
+describe('Alert model method tests', () => {
   test('isActive() should return correct true/false', () => {
-    const alert1 = Alert.fromElement({active: '0'});
-    const alert2 = Alert.fromElement({active: '1'});
+    const alert1 = new Alert({active: 0});
+    const alert2 = new Alert({active: 1});
 
     expect(alert1.isActive()).toBe(false);
     expect(alert2.isActive()).toBe(true);
