@@ -3,11 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {ReactNode} from 'react';
 
-const TabPanel = ({children}) => {
+interface TabPanelProps {
+  children?: ReactNode;
+}
+
+const TabPanel = ({children}: TabPanelProps) => {
   if (React.Children.count(children) > 1) {
-    return <React.Fragment>{children}</React.Fragment>;
+    return <>{children}</>;
   }
   return children;
 };
