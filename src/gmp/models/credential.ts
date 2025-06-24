@@ -4,8 +4,9 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import Model, {parseModelFromElement} from 'gmp/models/model';
-import {parseYesNo, NO_VALUE, parseDate} from 'gmp/parser';
+import {Date} from 'gmp/models/date';
+import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
+import {parseYesNo, NO_VALUE, parseDate, YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -48,7 +49,7 @@ export const ALL_CREDENTIAL_TYPES = [
   PGP_CREDENTIAL_TYPE,
   PASSWORD_ONLY_CREDENTIAL_TYPE,
   KRB5_CREDENTIAL_TYPE,
-];
+] as const;
 
 export const ssh_credential_filter = credential =>
   credential.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
@@ -95,44 +96,101 @@ const TYPE_NAMES = {
   [PASSWORD_ONLY_CREDENTIAL_TYPE]: _l('Password only'),
   [SMIME_CREDENTIAL_TYPE]: _l('S/MIME Certificate'),
   [KRB5_CREDENTIAL_TYPE]: _l('SMB (Kerberos)'),
-};
+} as const;
 
-export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
+export const getCredentialTypeName = (type: CredentialType) =>
+  `${TYPE_NAMES[type]}`;
+
+type CredentialType =
+  | typeof CERTIFICATE_CREDENTIAL_TYPE
+  | typeof KRB5_CREDENTIAL_TYPE
+  | typeof PASSWORD_ONLY_CREDENTIAL_TYPE
+  | typeof PGP_CREDENTIAL_TYPE
+  | typeof SMIME_CREDENTIAL_TYPE
+  | typeof SNMP_CREDENTIAL_TYPE
+  | typeof USERNAME_PASSWORD_CREDENTIAL_TYPE
+  | typeof USERNAME_SSH_KEY_CREDENTIAL_TYPE;
+
+interface CredentialElement extends ModelElement {
+  certificate_info?: {
+    activation_time?: string;
+    expiration_time?: string;
+  };
+  credential_type?: CredentialType;
+  allow_insecure?: number;
+  targets?: {
+    target?: ModelElement | ModelElement[];
+  };
+  scanners?: {
+    scanner?: ModelElement | ModelElement[];
+  };
+}
+
+interface CertificateInfo {
+  activationTime?: Date;
+  expirationTime?: Date;
+}
+
+interface CredentialProperties extends ModelProperties {
+  allow_insecure?: YesNo;
+  certificate_info?: CertificateInfo;
+  credential_type?: CredentialType;
+  targets?: Model[];
+  scanners?: Model[];
+}
 
 class Credential extends Model {
   static entityType = 'credential';
 
-  static parseElement(element) {
-    const ret = super.parseElement(element);
+  readonly allow_insecure?: YesNo;
+  readonly certificate_info?: CertificateInfo;
+  readonly credential_type?: CredentialType;
+  readonly targets: Model[];
+  readonly scanners: Model[];
 
-    if (isDefined(ret.certificate_info)) {
-      ret.certificate_info.activationTime = parseDate(
-        ret.certificate_info.activation_time,
-      );
-      ret.certificate_info.expirationTime = parseDate(
-        ret.certificate_info.expiration_time,
-      );
-      delete ret.certificate_info.activation_time;
-      delete ret.certificate_info.expiration_time;
+  constructor({
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    allow_insecure,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    certificate_info,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    credential_type,
+    targets = [],
+    scanners = [],
+    ...properties
+  }: CredentialProperties = {}) {
+    super(properties);
+    this.allow_insecure = allow_insecure;
+    this.certificate_info = certificate_info;
+    this.credential_type = credential_type;
+    this.targets = targets;
+    this.scanners = scanners;
+  }
+
+  static fromElement(element: CredentialElement = {}): Credential {
+    return new Credential(this.parseElement(element));
+  }
+
+  static parseElement(element: CredentialElement = {}): CredentialProperties {
+    const ret = super.parseElement(element) as CredentialProperties;
+
+    if (isDefined(element.certificate_info)) {
+      ret.certificate_info = {
+        activationTime: parseDate(element.certificate_info.activation_time),
+        expirationTime: parseDate(element.certificate_info.expiration_time),
+      };
     }
 
-    ret.credential_type = element.type;
+    ret.credential_type = element.type as CredentialType;
 
     ret.allow_insecure = parseYesNo(element.allow_insecure);
 
-    if (isDefined(element.targets)) {
-      ret.targets = map(element.targets.target, target =>
-        parseModelFromElement(target, 'target'),
-      );
-    } else {
-      ret.targets = [];
-    }
-
-    if (isDefined(element.scanners)) {
-      ret.scanners = map(element.scanners.scanner, scanner =>
-        parseModelFromElement(scanner, 'scanner'),
-      );
-    }
+    ret.targets = map(element.targets?.target, target =>
+      Model.fromElement(target, 'target'),
+    );
+    ret.scanners = map(element.scanners?.scanner, scanner =>
+      Model.fromElement(scanner, 'scanner'),
+    );
 
     return ret;
   }
