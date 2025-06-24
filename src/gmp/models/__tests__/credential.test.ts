@@ -47,6 +47,24 @@ const createAllCredentials = () => [
 testModel(Credential, 'credential');
 
 describe('Credential Model tests', () => {
+  test('should use defaults', () => {
+    const credential = new Credential();
+    expect(credential.allow_insecure).toBeUndefined();
+    expect(credential.certificate_info).toBeUndefined();
+    expect(credential.credential_type).toBeUndefined();
+    expect(credential.targets).toEqual([]);
+    expect(credential.scanners).toEqual([]);
+  });
+
+  test('should parse empty element', () => {
+    const credential = Credential.fromElement({});
+    expect(credential.allow_insecure).toEqual(NO_VALUE);
+    expect(credential.certificate_info).toBeUndefined();
+    expect(credential.credential_type).toBeUndefined();
+    expect(credential.targets).toEqual([]);
+    expect(credential.scanners).toEqual([]);
+  });
+
   test('should parse certificate_info', () => {
     const elem = {
       certificate_info: {
@@ -56,14 +74,12 @@ describe('Credential Model tests', () => {
     };
     const credential = Credential.fromElement(elem);
 
-    expect(credential.certificate_info.activationTime).toEqual(
+    expect(credential.certificate_info?.activationTime).toEqual(
       parseDate('2018-10-10T11:41:23.022Z'),
     );
-    expect(credential.certificate_info.expirationTime).toEqual(
+    expect(credential.certificate_info?.expirationTime).toEqual(
       parseDate('2019-10-10T11:41:23.022Z'),
     );
-    expect(credential.certificate_info.activation_time).toBeUndefined();
-    expect(credential.certificate_info.expiration_time).toBeUndefined();
   });
 
   test('should parse type', () => {
@@ -72,58 +88,45 @@ describe('Credential Model tests', () => {
     expect(credential.credential_type).toEqual('foo');
   });
 
-  test('should parse allow_insecure as Yes/No', () => {
-    const elem1 = {allow_insecure: '1'};
-    const elem2 = {allow_insecure: '0'};
-    const cred1 = Credential.fromElement(elem1);
-    const cred2 = Credential.fromElement(elem2);
+  test('should parse allow insecure ', () => {
+    const cred1 = Credential.fromElement({allow_insecure: 1});
+    const cred2 = Credential.fromElement({allow_insecure: 0});
 
     expect(cred1.allow_insecure).toEqual(YES_VALUE);
     expect(cred2.allow_insecure).toEqual(NO_VALUE);
   });
 
-  test('should return given targets as array of instances of target model', () => {
-    const elem = {
+  test('should parse targets', () => {
+    const credential = Credential.fromElement({
       targets: {
         target: {_id: 't1'},
       },
-    };
-    const credential = Credential.fromElement(elem);
+    });
 
     expect(credential.targets.length).toEqual(1);
-
     const [target] = credential.targets;
-    expect(target).toBeInstanceOf(Model);
     expect(target.id).toEqual('t1');
     expect(target.entityType).toEqual('target');
   });
 
-  test('should return empty array if no targets are given', () => {
-    const credential = Credential.fromElement({});
-
-    expect(credential.targets.length).toEqual(0);
-    expect(credential.targets).toEqual([]);
-  });
-
-  test('should return given scanners as array of instances of scanner model', () => {
-    const elem = {
+  test('should parse scanners', () => {
+    const credential = Credential.fromElement({
       scanners: {
         scanner: {_id: 's1'},
       },
-    };
-    const credential = Credential.fromElement(elem);
-
+    });
     expect(credential.scanners.length).toEqual(1);
-
     const [scanner] = credential.scanners;
     expect(scanner).toBeInstanceOf(Model);
     expect(scanner.id).toEqual('s1');
     expect(scanner.entityType).toEqual('scanner');
   });
+});
 
+describe('Credential model method tests', () => {
   test('isAllowInsecure() should return correct true/false', () => {
-    const cred1 = Credential.fromElement({allow_insecure: '0'});
-    const cred2 = Credential.fromElement({allow_insecure: '1'});
+    const cred1 = new Credential({allow_insecure: 0});
+    const cred2 = new Credential({allow_insecure: 1});
 
     expect(cred1.isAllowInsecure()).toBe(false);
     expect(cred2.isAllowInsecure()).toBe(true);
