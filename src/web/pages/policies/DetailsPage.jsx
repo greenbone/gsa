@@ -18,6 +18,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
@@ -146,18 +147,14 @@ const Page = ({
           onPolicyEditClick={edit}
           onPolicySaveClick={save}
         >
-          {({activeTab = 0, onActivateTab}) => {
+          {() => {
             const {preferences} = entity;
             return (
               <React.Fragment>
                 <PageTitle title={_('Policy: {{name}}', {name: entity.name})} />
-                <Layout flex="column" grow="1">
+                <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
+                    <TabList align={['start', 'stretch']}>
                       <Tab>{_('Information')}</Tab>
                       <EntitiesTab entities={preferences.scanner}>
                         {_('Scanner Preferences')}
@@ -174,7 +171,7 @@ const Page = ({
                     </TabList>
                   </TabLayout>
 
-                  <Tabs active={activeTab}>
+                  <Tabs>
                     <TabPanels>
                       <TabPanel>
                         <Details entity={entity} />
@@ -200,7 +197,7 @@ const Page = ({
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
-                </Layout>
+                </TabsContainer>
               </React.Fragment>
             );
           }}

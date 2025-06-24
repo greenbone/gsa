@@ -69,10 +69,10 @@ export const TabProvider = ({children}: TabProviderProps) => {
   return <TabContext.Provider value={value}>{children}</TabContext.Provider>;
 };
 
-export function useTab() {
+export const useTab = () => {
   const context = useContext(TabContext);
   if (!context) {
     throw new Error('useTab must be used within a TabProvider');
   }
   return context;
-}
+};

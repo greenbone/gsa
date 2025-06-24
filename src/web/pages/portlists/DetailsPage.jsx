@@ -18,6 +18,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
@@ -162,19 +163,15 @@ const Page = ({
           onPortListEditClick={edit}
           onPortListSaveClick={save}
         >
-          {({activeTab = 0, onActivateTab}) => {
+          {() => {
             return (
               <React.Fragment>
                 <PageTitle
                   title={_('Port List: {{name}}', {name: entity.name})}
                 />
-                <Layout flex="column" grow="1">
+                <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
+                    <TabList align={['start', 'stretch']}>
                       <Tab>{_('Information')}</Tab>
                       <EntitiesTab entities={entity.portRanges}>
                         {_('Port Ranges')}
@@ -188,7 +185,7 @@ const Page = ({
                     </TabList>
                   </TabLayout>
 
-                  <Tabs active={activeTab}>
+                  <Tabs>
                     <TabPanels>
                       <TabPanel>
                         <PortListDetails entity={entity} links={links} />
@@ -216,7 +213,7 @@ const Page = ({
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
-                </Layout>
+                </TabsContainer>
               </React.Fragment>
             );
           }}

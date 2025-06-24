@@ -34,6 +34,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import ConfirmRemoveDialog from 'web/pages/start/ConfirmRemoveDialog';
 import Dashboard from 'web/pages/start/Dashboard';
@@ -68,7 +69,6 @@ const getDefaults = _ => ({
   },
 });
 
-const DEFAULT_TAB = 0;
 const MAX_DASHBOARDS = 10;
 
 const StyledNewIcon = styled(NewIcon)`
@@ -100,12 +100,9 @@ class StartPage extends React.Component {
     super(...args);
 
     this.state = {
-      activeTab: DEFAULT_TAB,
       showConfirmRemoveDialog: false,
       showNewDashboardDialog: false,
     };
-
-    this.handleActivateTab = this.handleActivateTab.bind(this);
 
     this.handleOpenConfirmRemoveDashboardDialog =
       this.handleOpenConfirmRemoveDashboardDialog.bind(this);
@@ -171,7 +168,6 @@ class StartPage extends React.Component {
 
     this.setState({
       showConfirmRemoveDialog: false,
-      activeTab: DEFAULT_TAB,
     });
 
     this.saveSettings({
@@ -213,10 +209,6 @@ class StartPage extends React.Component {
 
   handleCloseEditDashboardDialog() {
     this.setState({showEditDashboardDialog: false});
-  }
-
-  handleActivateTab(tab) {
-    this.setState({activeTab: tab});
   }
 
   handleSaveDashboardSettings(dashboardId, settings) {
@@ -273,9 +265,6 @@ class StartPage extends React.Component {
     this.saveSettings(newSettings);
 
     this.closeNewDashboardDialog();
-
-    // change to new dashboard tab
-    this.setState({activeTab: dashboards.length});
   }
 
   handleSaveEditDashboard({dashboardId, dashboardTitle}) {
@@ -362,7 +351,6 @@ class StartPage extends React.Component {
 
     const {isLoading} = this.props;
     const {
-      activeTab,
       editDashboardId,
       removeDashboardId,
       showEditDashboardDialog,
@@ -374,7 +362,7 @@ class StartPage extends React.Component {
 
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
-      <React.Fragment>
+      <>
         <PageTitle title={_('Dashboards')} />
         <span>
           {' '}
@@ -385,13 +373,9 @@ class StartPage extends React.Component {
           {isLoading ? (
             <Loading />
           ) : (
-            <React.Fragment>
+            <TabsContainer flex="column" grow="1">
               <TabLayout align={['start', 'end']} grow="1">
-                <TabList
-                  active={activeTab}
-                  align={['start', 'stretch']}
-                  onActivateTab={this.handleActivateTab}
-                >
+                <TabList align={['start', 'stretch']}>
                   {dashboards.map(id => {
                     const title = this.getDashboardTitle(id);
                     return (
@@ -440,7 +424,7 @@ class StartPage extends React.Component {
                 </TabList>
               </TabLayout>
 
-              <Tabs active={activeTab}>
+              <Tabs>
                 <TabPanels>
                   {dashboards.map(id => {
                     const settings = this.getDashboardSettings(id);
@@ -466,7 +450,7 @@ class StartPage extends React.Component {
                   })}
                 </TabPanels>
               </Tabs>
-            </React.Fragment>
+            </TabsContainer>
           )}
         </Section>
         {showConfirmRemoveDialog && (
@@ -496,7 +480,7 @@ class StartPage extends React.Component {
             onSave={this.handleSaveEditDashboard}
           />
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, within, rendererWith} from 'web/testing';
+import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
@@ -40,7 +40,6 @@ const getReportComposerDefaults = testing.fn().mockResolvedValue({
 
 describe('Audit Report Details Content tests', () => {
   test('should render Audit Report Details Content', () => {
-    const onActivateTab = testing.fn();
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -91,7 +90,6 @@ describe('Audit Report Details Content tests', () => {
 
     const {baseElement} = render(
       <DetailsContent
-        activeTab={0}
         applicationsCounts={{all: 4, filtered: 4}}
         closedCvesCounts={{all: 2, filtered: 2}}
         cvesCounts={{all: 2, filtered: 2}}
@@ -114,7 +112,6 @@ describe('Audit Report Details Content tests', () => {
         sorting={sorting}
         task={entity.report.task}
         tlsCertificatesCounts={{all: 2, filtered: 2}}
-        onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
@@ -206,7 +203,6 @@ describe('Audit Report Details Content tests', () => {
   });
 
   test('should render audit threshold panel', () => {
-    const onActivateTab = testing.fn();
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -257,7 +253,6 @@ describe('Audit Report Details Content tests', () => {
 
     const {baseElement} = render(
       <DetailsContent
-        activeTab={2}
         applicationsCounts={{all: 4, filtered: 4}}
         closedCvesCounts={{all: 2, filtered: 2}}
         cvesCounts={{all: 2, filtered: 2}}
@@ -280,7 +275,6 @@ describe('Audit Report Details Content tests', () => {
         sorting={sorting}
         task={entity.report.task}
         tlsCertificatesCounts={{all: 2, filtered: 2}}
-        onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
@@ -300,6 +294,8 @@ describe('Audit Report Details Content tests', () => {
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
     );
+    const resultsTab = screen.getByRole('tab', {name: /Hosts/});
+    fireEvent.click(resultsTab);
 
     const icons = baseElement.querySelectorAll('svg');
     const powerFilter = within(screen.queryPowerFilter());

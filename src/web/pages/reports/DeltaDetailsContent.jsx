@@ -24,6 +24,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
 import useTranslation from 'web/hooks/useTranslation';
@@ -37,7 +38,6 @@ const Span = styled.span`
 `;
 
 const PageContent = ({
-  activeTab,
   audit = false,
   entity,
   entityError,
@@ -51,7 +51,6 @@ const PageContent = ({
   showErrorMessage,
   showSuccessMessage,
   task,
-  onActivateTab,
   onAddToAssetsClick,
   onError,
   onFilterAddLogLevelClick,
@@ -155,13 +154,9 @@ const PageContent = ({
         {isLoading ? (
           <Loading />
         ) : (
-          <React.Fragment>
+          <TabsContainer flex="column" grow="1">
             <TabLayout align={['start', 'end']} grow="1">
-              <TabList
-                active={activeTab}
-                align={['start', 'stretch']}
-                onActivateTab={onActivateTab}
-              >
+              <TabList align={['start', 'stretch']}>
                 <Tab>{_('Information')}</Tab>
                 <Tab>
                   <TabTitle count={filtered} title={_('Results')} />
@@ -172,7 +167,7 @@ const PageContent = ({
               </TabList>
             </TabLayout>
             {isDefined(report) ? (
-              <Tabs active={activeTab}>
+              <Tabs>
                 <TabPanels>
                   <TabPanel>
                     <Summary
@@ -222,7 +217,7 @@ const PageContent = ({
             ) : (
               <Loading />
             )}
-          </React.Fragment>
+          </TabsContainer>
         )}
       </Section>
     </Layout>
@@ -230,7 +225,6 @@ const PageContent = ({
 };
 
 PageContent.propTypes = {
-  activeTab: PropTypes.number,
   audit: PropTypes.bool,
   entity: PropTypes.model,
   entityError: PropTypes.object,
@@ -244,7 +238,6 @@ PageContent.propTypes = {
   showSuccessMessage: PropTypes.func.isRequired,
   sorting: PropTypes.object,
   task: PropTypes.model,
-  onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterAddLogLevelClick: PropTypes.func,

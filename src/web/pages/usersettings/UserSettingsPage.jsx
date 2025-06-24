@@ -25,6 +25,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/Row';
@@ -151,13 +152,11 @@ class UserSettings extends React.Component {
     super(...args);
 
     this.state = {
-      activeTab: 0,
       dialogVisible: false,
       disableEditIcon: true,
     };
 
     this.openDialog = this.openDialog.bind(this);
-    this.handleActivateTab = this.handleActivateTab.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
@@ -166,12 +165,6 @@ class UserSettings extends React.Component {
   componentDidMount() {
     this.loadSettings();
     this.loadEntities();
-  }
-
-  handleActivateTab(index) {
-    this.handleInteraction();
-
-    this.setState({activeTab: index});
   }
 
   loadEntities() {
@@ -260,7 +253,7 @@ class UserSettings extends React.Component {
     const {_} = this.props;
     const {language} = this.props;
 
-    const {activeTab, dialogVisible, disableEditIcon} = this.state;
+    const {dialogVisible, disableEditIcon} = this.state;
     let {
       capabilities,
       filters,
@@ -388,13 +381,9 @@ class UserSettings extends React.Component {
           {isLoading ? (
             <Loading />
           ) : (
-            <>
+            <TabsContainer flex="column" grow="1">
               <TabLayout align={['start', 'end']} grow="1">
-                <TabList
-                  active={activeTab}
-                  align={['start', 'stretch']}
-                  onActivateTab={this.handleActivateTab}
-                >
+                <TabList align={['start', 'stretch']}>
                   <Tab>{_('General')}</Tab>
                   <Tab>{_('Severity')}</Tab>
                   <Tab>{_('Defaults')}</Tab>
@@ -404,7 +393,7 @@ class UserSettings extends React.Component {
                 </TabList>
               </TabLayout>
 
-              <Tabs active={activeTab}>
+              <Tabs>
                 <TabPanels>
                   <TabPanel>
                     <Table>
@@ -735,7 +724,7 @@ class UserSettings extends React.Component {
                   )}
                 </TabPanels>
               </Tabs>
-            </>
+            </TabsContainer>
           )}
           {dialogVisible && !isLoading && (
             <SettingsDialog

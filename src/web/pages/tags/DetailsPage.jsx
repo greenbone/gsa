@@ -10,7 +10,6 @@ import ListIcon from 'web/components/icon/ListIcon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
-import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
@@ -18,6 +17,7 @@ import TabList from 'web/components/tab/TabList';
 import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
+import TabsContainer from 'web/components/tab/TabsContainer';
 import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
@@ -166,17 +166,13 @@ const Page = ({
           onTagRemoveClick={remove}
           onTagSaveClick={save}
         >
-          {({activeTab = 0, onActivateTab}) => {
+          {() => {
             return (
               <React.Fragment>
                 <PageTitle title={_('Tag: {{name}}', {name: entity.name})} />
-                <Layout flex="column" grow="1">
+                <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
+                    <TabList align={['start', 'stretch']}>
                       <Tab>{_('Information')}</Tab>
                       <EntitiesTab count={entity.resourceCount}>
                         {_('Assigned Items')}
@@ -187,7 +183,7 @@ const Page = ({
                     </TabList>
                   </TabLayout>
 
-                  <Tabs active={activeTab}>
+                  <Tabs>
                     <TabPanels>
                       <TabPanel>
                         <TagDetails entity={entity} />
@@ -207,7 +203,7 @@ const Page = ({
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
-                </Layout>
+                </TabsContainer>
               </React.Fragment>
             );
           }}

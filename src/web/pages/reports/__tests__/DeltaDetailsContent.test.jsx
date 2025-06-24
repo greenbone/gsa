@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, within, rendererWith} from 'web/testing';
+import {screen, within, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
@@ -36,7 +36,6 @@ const getReportComposerDefaults = testing.fn().mockResolvedValue({
 
 describe('Delta Report Details Content tests', () => {
   test('should render Delta Report Details Content', () => {
-    const onActivateTab = testing.fn();
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -91,7 +90,6 @@ describe('Delta Report Details Content tests', () => {
 
     const {baseElement} = render(
       <DeltaDetailsContent
-        activeTab={0}
         entity={entity}
         filter={filterWithName}
         filters={filters}
@@ -103,7 +101,6 @@ describe('Delta Report Details Content tests', () => {
         showSuccessMessage={showSuccessMessage}
         sorting={sorting}
         task={entity.report.task}
-        onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
@@ -206,7 +203,6 @@ describe('Delta Report Details Content tests', () => {
   });
 
   test('should render results tab', () => {
-    const onActivateTab = testing.fn();
     const onAddToAssetsClick = testing.fn();
     const onError = testing.fn();
     const onFilterAddLogLevelClick = testing.fn();
@@ -265,7 +261,6 @@ describe('Delta Report Details Content tests', () => {
 
     const {baseElement} = render(
       <DeltaDetailsContent
-        activeTab={1}
         entity={entity}
         filter={filter}
         filters={filters}
@@ -277,7 +272,6 @@ describe('Delta Report Details Content tests', () => {
         showSuccessMessage={showSuccessMessage}
         sorting={sorting}
         task={entity.report.task}
-        onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
@@ -297,6 +291,9 @@ describe('Delta Report Details Content tests', () => {
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
     );
+
+    const resultsTab = screen.getByRole('tab', {name: /Results/});
+    fireEvent.click(resultsTab);
 
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');

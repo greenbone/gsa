@@ -81,7 +81,6 @@ class DeltaReportDetails extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      activeTab: 0,
       showFilterDialog: false,
       showDownloadReportDialog: false,
       sorting: {
@@ -124,7 +123,6 @@ class DeltaReportDetails extends React.Component {
       },
     };
 
-    this.handleActivateTab = this.handleActivateTab.bind(this);
     this.handleAddToAssets = this.handleAddToAssets.bind(this);
     this.handleChanged = this.handleChanged.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -225,12 +223,6 @@ class DeltaReportDetails extends React.Component {
 
   handleFilterResetClick() {
     this.handleFilterChange(this.props.resultDefaultFilter);
-  }
-
-  handleActivateTab(index) {
-    this.handleInteraction();
-
-    this.setState({activeTab: index});
   }
 
   handleAddToAssets() {
@@ -450,7 +442,6 @@ class DeltaReportDetails extends React.Component {
       showSuccessMessage,
     } = this.props;
     const {
-      activeTab,
       isUpdating = false,
       showFilterDialog,
       showDownloadReportDialog,
@@ -467,7 +458,6 @@ class DeltaReportDetails extends React.Component {
         >
           {({edit}) => (
             <Page
-              activeTab={activeTab}
               entity={entity}
               entityError={entityError}
               filter={reportFilter}
@@ -480,7 +470,6 @@ class DeltaReportDetails extends React.Component {
               showSuccessMessage={showSuccessMessage}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
-              onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}
               onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
