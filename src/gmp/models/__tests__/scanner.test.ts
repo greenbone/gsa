@@ -14,6 +14,8 @@ import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
   OPENVASD_SENSOR_SCANNER_TYPE,
+  AGENT_CONTROLLER_SCANNER_TYPE,
+  AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
 import {YES_VALUE} from 'gmp/parser';
@@ -211,6 +213,12 @@ describe('Scanner model function tests', () => {
     expect(scannerTypeName(OPENVASD_SCANNER_TYPE)).toEqual('OpenVASD Scanner');
     expect(scannerTypeName(OPENVASD_SENSOR_SCANNER_TYPE)).toEqual(
       'OpenVASD Sensor',
+    );
+    expect(scannerTypeName(AGENT_CONTROLLER_SCANNER_TYPE)).toEqual(
+      'Agent Scanner',
+    );
+    expect(scannerTypeName(AGENT_CONTROLLER_SENSOR_SCANNER_TYPE)).toEqual(
+      'Agent Sensor',
     );
     expect(scannerTypeName(undefined)).toEqual('Unknown scanner type');
   });
