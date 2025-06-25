@@ -79,7 +79,7 @@ const NoteDialog = ({
     hosts,
     hosts_manual,
     id,
-    oid: isDefined(oid) ? oid : DEFAULT_OID_VALUE,
+    oid: oid ?? DEFAULT_OID_VALUE,
     port,
     port_manual,
     result_id,
@@ -103,17 +103,29 @@ const NoteDialog = ({
         return (
           <>
             {state.fixed && isDefined(oid) && (
-              <FormGroup flex="column" title={_('NVT')}>
+              <FormGroup
+                data-testid="group-nvt-oid"
+                flex="column"
+                title={_('NVT')}
+              >
                 <span>{renderNvtName(oid, nvt_name)}</span>
               </FormGroup>
             )}
             {state.fixed && !isDefined(oid) && (
-              <FormGroup flex="column" title={_('NVT')}>
+              <FormGroup
+                data-testid="group-nvt-no-oid"
+                flex="column"
+                title={_('NVT')}
+              >
                 <span>{renderNvtName(state.oid, nvt_name)}</span>
               </FormGroup>
             )}
             {isEdit && !state.fixed && (
-              <FormGroup direction="column" title={_('NVT')}>
+              <FormGroup
+                data-testid="group-nvt"
+                direction="column"
+                title={_('NVT')}
+              >
                 <Radio
                   checked={state.oid === oid}
                   name="oid"
@@ -146,7 +158,7 @@ const NoteDialog = ({
                 />
               </FormGroup>
             )}
-            <FormGroup title={_('Active')}>
+            <FormGroup data-testid="group-active" title={_('Active')}>
               <Row>
                 <Radio
                   checked={state.active === ACTIVE_YES_ALWAYS_VALUE}
@@ -195,7 +207,7 @@ const NoteDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Hosts')}>
+            <FormGroup data-testid="group-hosts" title={_('Hosts')}>
               <Radio
                 checked={state.hosts === ANY}
                 name="hosts"
@@ -219,7 +231,7 @@ const NoteDialog = ({
               </Row>
             </FormGroup>
 
-            <FormGroup title={_('Location')}>
+            <FormGroup data-testid="group-location" title={_('Location')}>
               <Radio
                 checked={state.port === ANY}
                 name="port"
@@ -243,7 +255,7 @@ const NoteDialog = ({
               </Row>
             </FormGroup>
 
-            <FormGroup title={_('Severity')}>
+            <FormGroup data-testid="group-severity" title={_('Severity')}>
               <Row>
                 <Radio
                   checked={isEmpty(state.severity)}
@@ -298,7 +310,7 @@ const NoteDialog = ({
               )}
             </FormGroup>
 
-            <FormGroup title={_('Task')}>
+            <FormGroup data-testid="group-task" title={_('Task')}>
               <Radio
                 checked={state.task_id === ''}
                 name="task_id"
@@ -323,7 +335,7 @@ const NoteDialog = ({
               </Row>
             </FormGroup>
 
-            <FormGroup title={_('Result')}>
+            <FormGroup data-testid="group-result" title={_('Result')}>
               <Radio
                 checked={state.result_id === RESULT_ANY}
                 name="result_id"
