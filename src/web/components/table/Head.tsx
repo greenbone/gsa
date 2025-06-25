@@ -62,7 +62,7 @@ const TableHead: React.FC<TableHeadProps> = ({
     return (
       <SortSymbol title={titleText}>
         &nbsp;
-        <Icon />
+        <Icon color="var(--mantine-color-green-5)" />
       </SortSymbol>
     );
   };
