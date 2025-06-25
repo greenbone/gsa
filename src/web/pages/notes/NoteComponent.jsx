@@ -217,7 +217,7 @@ NoteComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
