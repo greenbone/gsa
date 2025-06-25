@@ -7,8 +7,8 @@ import createDate, {Date as GmpDate, duration} from 'gmp/models/date';
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-interface Text {
-  __text: string | number;
+export interface Text {
+  __text?: string | number;
   __excerpt?: string;
 }
 

@@ -17,11 +17,13 @@ const Label = styled.div<StyledLabelProps>`
   font-weight: normal;
   font-style: normal;
   color: white;
-  padding: 1px;
+  padding: 1px 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 70px;
+  min-width: 7em;
+  width: fit-content;
+  max-width: 100%;
   height: 1.5em;
   font-size: 0.8em;
   text-align: center;
@@ -29,6 +31,8 @@ const Label = styled.div<StyledLabelProps>`
   background-color: ${props => props.$backgroundColor};
   border-radius: 5px;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   border-color: ${props => props.$borderColor};
 `;
 
