@@ -37,6 +37,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import OsComponent from 'web/pages/operatingsystems/Component';
 import {
@@ -48,9 +49,8 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
-let ToolBarIcons = ({
-  capabilities,
+
+const ToolBarIcons = ({
   entity,
   links = true,
   onOperatingSystemDeleteClick,
@@ -58,6 +58,7 @@ let ToolBarIcons = ({
 }) => {
   const [_] = useTranslation();
   const {allHosts, hosts} = entity;
+  const capabilities = useCapabilities();
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -120,14 +121,11 @@ let ToolBarIcons = ({
 };
 
 ToolBarIcons.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onOperatingSystemDeleteClick: PropTypes.func.isRequired,
   onOperatingSystemDownloadClick: PropTypes.func.isRequired,
 };
-
-ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({entity}) => {
   const [_] = useTranslation();
