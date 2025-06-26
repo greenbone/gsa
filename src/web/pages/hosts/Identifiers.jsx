@@ -60,7 +60,7 @@ const Source = ({source}) => {
     );
   }
 
-  if (source_type.startsWith('Report')) {
+  if (source_type?.startsWith('Report')) {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
@@ -72,7 +72,7 @@ const Source = ({source}) => {
     );
   }
 
-  if (source_type.startsWith('User')) {
+  if (source_type?.startsWith('User')) {
     return (
       <div>
         <span>{_('User')}</span>{' '}
