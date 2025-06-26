@@ -89,7 +89,7 @@ let ToolBarIcons = ({
         />
       </IconDivider>
       <IconDivider>
-        <Badge content={allHosts.length}>
+        <Badge content={allHosts}>
           <Link
             filter={'os_id="' + entity.id + '"'}
             textOnly={!links}
@@ -101,7 +101,7 @@ let ToolBarIcons = ({
         </Badge>
       </IconDivider>
       <IconDivider>
-        <Badge content={hosts.length}>
+        <Badge content={hosts}>
           <Link
             filter={'best_os_cpe="' + entity.name + '"'}
             textOnly={!links}
