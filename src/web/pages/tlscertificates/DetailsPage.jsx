@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import DateTime from 'web/components/date/DateTime';
 import {DownloadIcon, TlsCertificateIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -125,7 +126,7 @@ const Details = ({entity, ...props}) => {
                             id={report.id}
                             type="report"
                           >
-                            {report.timestamp}
+                            <DateTime date={report.timestamp} />
                           </DetailsLink>
                         );
                       })}
