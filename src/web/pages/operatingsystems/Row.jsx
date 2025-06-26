@@ -85,7 +85,7 @@ const Row = ({
             textOnly={!links}
             to={'hosts'}
           >
-            {entity.allHosts.length}
+            {entity.allHosts}
           </Link>
         </span>
       </TableData>
@@ -96,7 +96,7 @@ const Row = ({
             textOnly={!links}
             to={'hosts'}
           >
-            {entity.hosts.length}
+            {entity.hosts}
           </Link>
         </span>
       </TableData>
