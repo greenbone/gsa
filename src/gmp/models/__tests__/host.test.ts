@@ -4,7 +4,6 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import Asset from 'gmp/models/asset';
 import Host from 'gmp/models/host';
 import {testModel} from 'gmp/models/testing';
 import {parseDate} from 'gmp/parser';
@@ -12,10 +11,26 @@ import {parseDate} from 'gmp/parser';
 testModel(Host, 'host');
 
 describe('Host model tests', () => {
-  test('should be instance of Asset', () => {
-    const host = Host.fromElement({});
+  test('should use defaults', () => {
+    const host = new Host();
+    expect(host.details).toBeUndefined();
+    expect(host.hostname).toBeUndefined();
+    expect(host.identifiers).toEqual([]);
+    expect(host.ip).toBeUndefined();
+    expect(host.os).toBeUndefined();
+    expect(host.routes).toEqual([]);
+    expect(host.severity).toBeUndefined();
+  });
 
-    expect(host).toBeInstanceOf(Asset);
+  test('should parse empty element', () => {
+    const host = Host.fromElement();
+    expect(host.details).toBeUndefined();
+    expect(host.hostname).toBeUndefined();
+    expect(host.identifiers).toEqual([]);
+    expect(host.ip).toBeUndefined();
+    expect(host.os).toBeUndefined();
+    expect(host.routes).toEqual([]);
+    expect(host.severity).toBeUndefined();
   });
 
   test('should parse severity', () => {
@@ -40,8 +55,8 @@ describe('Host model tests', () => {
     expect(host2.severity).toEqual(10);
   });
 
-  test('should parse Identifiers and always return an array', () => {
-    const elem = {
+  test('should parse identifiers', () => {
+    const host = Host.fromElement({
       identifiers: {
         identifier: [
           {
@@ -57,7 +72,7 @@ describe('Host model tests', () => {
               deleted: 0,
             },
             os: {
-              title: 'teitl',
+              id: 'teitl',
             },
           },
           {
@@ -73,21 +88,19 @@ describe('Host model tests', () => {
               deleted: 1,
             },
             os: {
-              title: 'teitl',
+              id: 'teitl',
             },
           },
         ],
       },
-    };
-    const host = Host.fromElement(elem);
-    const host2 = Host.fromElement({});
-    const res = [
+    });
+    expect(host.identifiers).toEqual([
       {
         creationTime: parseDate('2018-10-10T13:31:00+01:00'),
         id: '123abc',
         modificationTime: parseDate('2018-10-10T13:32:00+01:00'),
         name: 'foo',
-        os: {title: 'teitl'},
+        os: {id: 'teitl'},
         source: {
           id: '42xy',
           source_type: 'teip',
@@ -101,7 +114,7 @@ describe('Host model tests', () => {
         id: '321abc',
         modificationTime: parseDate('2018-10-10T13:32:00+01:00'),
         name: 'bar',
-        os: {title: 'teitl'},
+        os: {id: 'teitl'},
         source: {
           id: '42yz',
           source_type: 'teip',
@@ -110,13 +123,11 @@ describe('Host model tests', () => {
         },
         value: 'foo:/3',
       },
-    ];
-    expect(host.identifiers).toEqual(res);
-    expect(host2.identifiers).toEqual([]);
+    ]);
   });
 
-  test('should return hostname identifier, set alternative or undefined', () => {
-    const elem = {
+  test('should parse hostname', () => {
+    const host = Host.fromElement({
       identifiers: {
         identifier: [
           {
@@ -125,8 +136,8 @@ describe('Host model tests', () => {
           },
         ],
       },
-    };
-    const elem2 = {
+    });
+    const host2 = Host.fromElement({
       identifiers: {
         identifier: [
           {
@@ -135,28 +146,14 @@ describe('Host model tests', () => {
           },
         ],
       },
-    };
-    const elem3 = {
-      identifiers: {
-        identifier: [
-          {
-            name: 'notavailable',
-            value: 'no',
-          },
-        ],
-      },
-    };
-    const host = Host.fromElement(elem);
-    const host2 = Host.fromElement(elem2);
-    const host3 = Host.fromElement(elem3);
+    });
 
     expect(host.hostname).toEqual('foo');
     expect(host2.hostname).toEqual('bar');
-    expect(host3.hostname).toBeUndefined();
   });
 
-  test('should parse best_os_cpe', () => {
-    const elem1 = {
+  test('should parse os', () => {
+    const host1 = Host.fromElement({
       host: {
         detail: [
           {
@@ -165,9 +162,8 @@ describe('Host model tests', () => {
           },
         ],
       },
-    };
-
-    const elem2 = {
+    });
+    const host2 = Host.fromElement({
       identifiers: {
         identifier: [
           {
@@ -176,40 +172,14 @@ describe('Host model tests', () => {
           },
         ],
       },
-    };
-
-    const elem3 = {
-      identifiers: {
-        identifier: [
-          {
-            name: 'notavailable',
-            value: 'no',
-          },
-        ],
-      },
-    };
-
-    const elem4 = {
-      host: {
-        severity: {
-          value: '8.5',
-        },
-      },
-    };
-
-    const host1 = Host.fromElement(elem1);
-    const host2 = Host.fromElement(elem2);
-    const host3 = Host.fromElement(elem3);
-    const host4 = Host.fromElement(elem4);
+    });
 
     expect(host1.os).toEqual('cpe:/foo/bar');
     expect(host2.os).toEqual('cpe:/foo/bar');
-    expect(host3.os).toBeUndefined();
-    expect(host4.os).toBeUndefined();
   });
 
-  test('should return ip identifier', () => {
-    const elem = {
+  test('should parse ip', () => {
+    const host = Host.fromElement({
       identifiers: {
         identifier: [
           {
@@ -218,14 +188,13 @@ describe('Host model tests', () => {
           },
         ],
       },
-    };
-    const host = Host.fromElement(elem);
+    });
 
     expect(host.ip).toEqual('123.456.789.42');
   });
 
   test('should parse details', () => {
-    const elem = {
+    const host = Host.fromElement({
       host: {
         detail: [
           {
@@ -244,8 +213,9 @@ describe('Host model tests', () => {
           },
         ],
       },
-    };
-    const res = {
+    });
+
+    expect(host.details).toEqual({
       foo: {
         source: {
           id: '123abc',
@@ -258,14 +228,11 @@ describe('Host model tests', () => {
         },
         value: 'c:/.3',
       },
-    };
-    const host = Host.fromElement(elem);
-
-    expect(host.details).toEqual(res);
+    });
   });
 
   test('should parse routes', () => {
-    const elem = {
+    const host = Host.fromElement({
       host: {
         routes: {
           route: [
@@ -282,8 +249,9 @@ describe('Host model tests', () => {
           ],
         },
       },
-    };
-    const res = [
+    });
+
+    expect(host.routes).toEqual([
       [
         {
           ip: '123.456.789.42',
@@ -292,24 +260,6 @@ describe('Host model tests', () => {
           same_source: 1,
         },
       ],
-    ];
-    const host = Host.fromElement(elem);
-
-    expect(host.routes).toEqual(res);
-  });
-
-  test('should return empty array if no routes are given', () => {
-    const host = Host.fromElement({});
-
-    expect(host.routes).toEqual([]);
-  });
-
-  test('should delete host attribute', () => {
-    const elem = {
-      host: {},
-    };
-    const host = Host.fromElement(elem);
-
-    expect(host.host).toBeUndefined();
+    ]);
   });
 });
