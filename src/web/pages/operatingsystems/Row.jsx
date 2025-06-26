@@ -17,6 +17,7 @@ import TableRow from 'web/components/table/Row';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
+
 const Actions = withEntitiesActions(
   ({entity, onOsDeleteClick, onOsDownloadClick}) => {
     const [_] = useTranslation();
