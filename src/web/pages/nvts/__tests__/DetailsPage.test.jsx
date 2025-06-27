@@ -50,7 +50,7 @@ const nvt = NVT.fromElement({
       __text: 'This is a description',
     },
     epss: {
-      max_severity: {
+      maxSeverity: {
         score: 0.8765,
         percentile: 90.0,
         cve: {
@@ -58,7 +58,7 @@ const nvt = NVT.fromElement({
           severity: 10.0,
         },
       },
-      max_epss: {
+      maxEpss: {
         score: 0.9876,
         percentile: 80.0,
         cve: {

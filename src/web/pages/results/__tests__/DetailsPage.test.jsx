@@ -37,7 +37,7 @@ export const result = Result.fromElement({
     name: 'nvt1',
     tags: 'cvss_base_vector=AV:N/AC:M/Au:N/C:P/I:N/A:N|summary=This is a mock result|insight=This is just a test|affected=Affects test cases only|impact=No real impact|solution=Keep writing tests|vuldetect=This is the detection method|solution_type=Mitigation',
     epss: {
-      max_severity: {
+      maxSeverity: {
         score: 0.8765,
         percentile: 80.0,
         cve: {
@@ -45,7 +45,7 @@ export const result = Result.fromElement({
           severity: 5.0,
         },
       },
-      max_epss: {
+      maxEpss: {
         score: 0.9876,
         percentile: 90.0,
         cve: {

@@ -225,14 +225,14 @@ export const printPercentile = (
   percentile: number,
 ): string => {
   if (isNumber(percentile)) {
-    if (percentile.toFixed(0) % 10 > 3 ||
-        percentile.toFixed(0) % 10 === 0 )
+    if (parseInt(percentile.toFixed(0)) % 10 > 3 ||
+        parseInt(percentile.toFixed(0)) % 10 === 0 )
       return (`${percentile.toFixed(0)}th`);
-    if (percentile.toFixed(0) % 10 === 1)
+    if (parseInt(percentile.toFixed(0)) % 10 === 1)
       return (`${percentile.toFixed(0)}st`);
-    if (percentile.toFixed(0) % 10 === 2)
+    if (parseInt(percentile.toFixed(0)) % 10 === 2)
       return (`${percentile.toFixed(0)}nd`);
-    if (percentile.toFixed(0) % 10 === 3)
+    if (parseInt(percentile.toFixed(0)) % 10 === 3)
       return (`${percentile.toFixed(0)}rd`);
   }
   return ('N/A');

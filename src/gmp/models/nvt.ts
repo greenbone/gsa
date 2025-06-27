@@ -130,7 +130,7 @@ interface NvtElement extends ModelElement {
     cvss_base?: number;
     default_timeout?: string | number;
     epss?: {
-      max_epss?: {
+      maxEpss?: {
         cve?: {
           _id?: string;
           severity?: number;
@@ -138,7 +138,7 @@ interface NvtElement extends ModelElement {
         percentile?: number;
         score?: number;
       };
-      max_severity?: {
+      maxSeverity?: {
         cve?: {
           _id?: string;
           severity?: number;
@@ -314,27 +314,27 @@ class Nvt extends Model {
     if (isDefined(nvtElement?.epss)) {
       ret.epss = {};
 
-      if (isDefined(nvtElement?.epss?.max_epss)) {
+      if (isDefined(nvtElement?.epss?.maxEpss)) {
         ret.epss.maxEpss = {
-          percentile: parseFloat(nvtElement?.epss?.max_epss?.percentile),
-          score: parseFloat(nvtElement?.epss?.max_epss?.score),
+          percentile: parseFloat(nvtElement?.epss?.maxEpss?.percentile),
+          score: parseFloat(nvtElement?.epss?.maxEpss?.score),
         };
-        if (isDefined(nvtElement?.epss?.max_epss?.cve)) {
+        if (isDefined(nvtElement?.epss?.maxEpss?.cve)) {
           ret.epss.maxEpss.cve = {
-            id: nvtElement?.epss?.max_epss?.cve?._id,
-            severity: parseFloat(nvtElement?.epss?.max_epss?.cve?.severity),
+            id: nvtElement?.epss?.maxEpss?.cve?._id,
+            severity: parseFloat(nvtElement?.epss?.maxEpss?.cve?.severity),
           };
         }
       }
-      if (isDefined(nvtElement?.epss?.max_severity)) {
+      if (isDefined(nvtElement?.epss?.maxSeverity)) {
         ret.epss.maxSeverity = {
-          percentile: parseFloat(nvtElement?.epss?.max_severity?.percentile),
-          score: parseFloat(nvtElement?.epss?.max_severity?.score),
+          percentile: parseFloat(nvtElement?.epss?.maxSeverity?.percentile),
+          score: parseFloat(nvtElement?.epss?.maxSeverity?.score),
         };
-        if (isDefined(nvtElement?.epss?.max_severity?.cve)) {
+        if (isDefined(nvtElement?.epss?.maxSeverity?.cve)) {
           ret.epss.maxSeverity.cve = {
-            id: nvtElement?.epss?.max_severity?.cve?._id,
-            severity: parseFloat(nvtElement?.epss?.max_severity?.cve?.severity),
+            id: nvtElement?.epss?.maxSeverity?.cve?._id,
+            severity: parseFloat(nvtElement?.epss?.maxSeverity?.cve?.severity),
           };
         }
       }
