@@ -26,7 +26,11 @@ import withGmp from 'web/utils/withGmp';
 const TlsCertificateDetails = ({entity}) => {
   const [_] = useTranslation();
   return (
-    <Layout flex="column" grow="1">
+    <Layout
+      data-testid={`tls-certificate-details-${entity.id}`}
+      flex="column"
+      grow="1"
+    >
       <InfoTable>
         <colgroup>
           <Col width="10%" />

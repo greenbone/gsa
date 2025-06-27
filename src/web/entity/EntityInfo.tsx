@@ -57,7 +57,7 @@ const EntityInfo: React.FC<EntityInfoProps> = ({entity}: EntityInfoProps) => {
   const [_] = useTranslation();
   const {id, owner, creationTime, modificationTime} = entity;
   return (
-    <InfoLayout>
+    <InfoLayout data-testid="entity-info">
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Created:')}</div>

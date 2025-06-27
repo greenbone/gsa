@@ -69,7 +69,7 @@ const Row = ({
   ...props
 }) => {
   return (
-    <TableRow>
+    <TableRow data-testid={`tls-certificate-row-${entity.id}`}>
       <TableData>
         <span>
           <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>

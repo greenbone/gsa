@@ -17,7 +17,7 @@ import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({sort = true, currentSortBy, currentSortDir, onSortChange}) => {
   return (
-    <TableHeader>
+    <TableHeader data-testid="tls-certificates-table-header">
       <TableRow>
         <TableHead
           currentSortBy={currentSortBy}
