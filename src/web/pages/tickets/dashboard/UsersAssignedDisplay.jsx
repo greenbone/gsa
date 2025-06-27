@@ -27,7 +27,7 @@ export const assignedUserColorScale = scaleLinear()
 
 const transformUserAssignedData = (tickets = []) => {
   const groups = tickets.reduce((prev, ticket) => {
-    const username = ticket.assignedTo.user.name;
+    const username = ticket.assignedTo.name;
     const count = prev[username] || 0;
     prev[username] = count + 1;
     return prev;
