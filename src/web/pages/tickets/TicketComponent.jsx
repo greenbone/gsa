@@ -169,7 +169,7 @@ const TicketComponent = ({
               }
               ticketId={ticket.id}
               title={_('Edit Ticket {{- name}}', ticket)}
-              userId={ticket.assignedTo.user.id}
+              userId={ticket.assignedTo.id}
               users={users}
               onClose={handleCloseEditDialog}
               onSave={({
