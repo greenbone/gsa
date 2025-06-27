@@ -6,7 +6,7 @@
 import React, {useState} from 'react';
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import date, {duration as createDuration} from 'gmp/models/date';
-import Event, {ReccurenceFrequency, WeekDays} from 'gmp/models/event';
+import Event, {RecurrenceFrequency, WeekDays} from 'gmp/models/event';
 import {DEFAULT_TIMEZONE} from 'gmp/timezones';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
@@ -32,11 +32,11 @@ import PropTypes from 'web/utils/PropTypes';
 import {formatTimeForTimePicker} from 'web/utils/timePickerHelpers';
 
 const RECURRENCE_ONCE = 'once';
-const RECURRENCE_HOURLY = ReccurenceFrequency.HOURLY;
-const RECURRENCE_DAILY = ReccurenceFrequency.DAILY;
-const RECURRENCE_WEEKLY = ReccurenceFrequency.WEEKLY;
-const RECURRENCE_MONTHLY = ReccurenceFrequency.MONTHLY;
-const RECURRENCE_YEARLY = ReccurenceFrequency.YEARLY;
+const RECURRENCE_HOURLY = RecurrenceFrequency.HOURLY;
+const RECURRENCE_DAILY = RecurrenceFrequency.DAILY;
+const RECURRENCE_WEEKLY = RecurrenceFrequency.WEEKLY;
+const RECURRENCE_MONTHLY = RecurrenceFrequency.MONTHLY;
+const RECURRENCE_YEARLY = RecurrenceFrequency.YEARLY;
 const RECURRENCE_WORKWEEK = 'workweek';
 const RECURRENCE_CUSTOM = 'custom';
 
@@ -85,7 +85,7 @@ const ScheduleDialog = ({
   const [timezone, setTimezone] = useState(initialTimezone);
 
   const [freq, setFreq] = useState(
-    isDefined(initialFrequency) ? initialFrequency : ReccurenceFrequency.WEEKLY,
+    isDefined(initialFrequency) ? initialFrequency : RecurrenceFrequency.WEEKLY,
   );
   const [recurrenceType, setRecurrenceType] = useState(() => {
     if (isDefined(initialFrequency)) {
@@ -102,7 +102,7 @@ const ScheduleDialog = ({
   });
   const [interval, setInterval] = useState(initialInterval);
   const [monthly, setMonthly] = useState(
-    initialFrequency === ReccurenceFrequency.MONTHLY &&
+    initialFrequency === RecurrenceFrequency.MONTHLY &&
       !isDefined(initialWeekdays)
       ? RepeatMonthly.days
       : RepeatMonthly.nth,
@@ -273,10 +273,10 @@ const ScheduleDialog = ({
         thursday: true,
         friday: true,
       });
-      freq = ReccurenceFrequency.WEEKLY;
+      freq = RecurrenceFrequency.WEEKLY;
     } else if (
       recurrenceType === RECURRENCE_CUSTOM &&
-      freq === ReccurenceFrequency.MONTHLY &&
+      freq === RecurrenceFrequency.MONTHLY &&
       monthly === RepeatMonthly.nth
     ) {
       weekdays = new WeekDays({
@@ -289,14 +289,14 @@ const ScheduleDialog = ({
     const weekdaysSet =
       recurrenceType === RECURRENCE_WORKWEEK ||
       (recurrenceType === RECURRENCE_CUSTOM &&
-        freq === ReccurenceFrequency.WEEKLY) ||
+        freq === RecurrenceFrequency.WEEKLY) ||
       (recurrenceType === RECURRENCE_CUSTOM &&
-        freq === ReccurenceFrequency.MONTHLY &&
+        freq === RecurrenceFrequency.MONTHLY &&
         monthly === RepeatMonthly.nth);
 
     const monthDaysSet =
       recurrenceType === RECURRENCE_CUSTOM &&
-      freq === ReccurenceFrequency.MONTHLY &&
+      freq === RecurrenceFrequency.MONTHLY &&
       monthly === RepeatMonthly.days;
 
     const isPreDefined =
@@ -313,8 +313,8 @@ const ScheduleDialog = ({
         description: comment,
         freq: recurrenceType === RECURRENCE_ONCE ? undefined : freq,
         interval: isPreDefined ? 1 : interval,
-        monthdays: monthDaysSet ? monthdays : undefined,
-        weekdays: weekdaysSet ? weekdays : undefined,
+        monthDays: monthDaysSet ? monthdays : undefined,
+        weekDays: weekdaysSet ? weekdays : undefined,
         // convert name to string explicitly to not run into:
         // `TypeError: e.replace is not a function`
         // when name is just numbers.
@@ -524,11 +524,11 @@ ScheduleDialog.propTypes = {
   date: PropTypes.date,
   duration: PropTypes.duration,
   freq: PropTypes.oneOf([
-    ReccurenceFrequency.HOURLY,
-    ReccurenceFrequency.DAILY,
-    ReccurenceFrequency.WEEKLY,
-    ReccurenceFrequency.MONTHLY,
-    ReccurenceFrequency.YEARLY,
+    RecurrenceFrequency.HOURLY,
+    RecurrenceFrequency.DAILY,
+    RecurrenceFrequency.WEEKLY,
+    RecurrenceFrequency.MONTHLY,
+    RecurrenceFrequency.YEARLY,
   ]),
   id: PropTypes.string,
   interval: PropTypes.number,

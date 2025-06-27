@@ -5,7 +5,7 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import date from 'gmp/models/date';
-import {ReccurenceFrequency} from 'gmp/models/event';
+import {RecurrenceFrequency} from 'gmp/models/event';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import ScheduleChart from 'web/components/chart/Schedule';
@@ -29,9 +29,9 @@ const transformScheduleData = (data = [], {endDate}) => {
       const {durationInSeconds: duration, recurrence = {}} = event;
       const {freq, interval = 1} = recurrence;
       let period;
-      if (freq === ReccurenceFrequency.MINUTELY) {
+      if (freq === RecurrenceFrequency.MINUTELY) {
         period = interval * 60;
-      } else if (freq === ReccurenceFrequency.SECONDLY) {
+      } else if (freq === RecurrenceFrequency.SECONDLY) {
         period = interval;
       }
 
