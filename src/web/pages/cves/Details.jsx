@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isNumber} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Layout from 'web/components/layout/Layout';
 import ExternalLink from 'web/components/link/ExternalLink';
@@ -17,6 +17,7 @@ import TableRow from 'web/components/table/Row';
 import DetailsBlock from 'web/entity/Block';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
+import {printPercentile} from 'web/utils/severity';
 
 const CVSS_PROPS = {
   cvssAccessVector: _l('Access Vector'),
@@ -91,11 +92,13 @@ const CveDetails = ({entity}) => {
             <TableBody>
               <TableRow>
                 <TableData>{_('Score')}</TableData>
-                <TableData>{epss.score.toFixed(5)}</TableData>
+                <TableData>{(epss.score * 100).toFixed(3)}%</TableData>
               </TableRow>
               <TableRow>
-                <TableData>{_('Percentage')}</TableData>
-                <TableData>{`${(epss?.percentile * 1).toFixed(3)}%`}</TableData>
+                <TableData>{_('Percentile')}</TableData>
+                <TableData>
+                  {printPercentile(epss.percentile)}
+                </TableData>
               </TableRow>
             </TableBody>
           </InfoTable>

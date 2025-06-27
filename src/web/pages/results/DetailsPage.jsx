@@ -65,6 +65,7 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
+import {printPercentile} from 'web/utils/severity';
 import withTranslation from 'web/utils/withTranslation';
 export const ToolBarIcons = ({
   entity,
@@ -231,16 +232,14 @@ const Details = ({entity, ...props}) => {
                       <TableData>{_('EPSS Score')}</TableData>
                       <TableData>
                         {isNumber(epss?.maxSeverity?.score)
-                          ? epss?.maxSeverity?.score.toFixed(5)
+                          ? `${(epss?.maxSeverity?.score * 100).toFixed(3)}%`
                           : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
-                      <TableData>{_('EPSS Percentage')}</TableData>
+                      <TableData>{_('EPSS Percentile')}</TableData>
                       <TableData>
-                        {isNumber(epss?.maxSeverity?.percentile)
-                          ? `${(epss?.maxSeverity?.percentile * 1).toFixed(3)}%`
-                          : _('N/A')}
+                        {printPercentile(epss.maxSeverity.percentile)}
                       </TableData>
                     </TableRow>
                     <TableRow>
@@ -253,13 +252,15 @@ const Details = ({entity, ...props}) => {
                     </TableRow>
                     <TableRow>
                       <TableData>{_('CVE Severity')}</TableData>
-                      <SeverityBar
-                        severity={
-                          isDefined(epss?.maxSeverity?.cve?.severity)
-                            ? epss?.maxSeverity?.cve?.severity
-                            : _('N/A')
-                        }
-                      />
+                      <TableData>
+                        <SeverityBar
+                          severity={
+                            isDefined(epss?.maxSeverity?.cve?.severity)
+                              ? epss?.maxSeverity?.cve?.severity
+                              : _('N/A')
+                          }
+                        />
+                      </TableData>
                     </TableRow>
                   </>
                 )}
@@ -272,16 +273,14 @@ const Details = ({entity, ...props}) => {
                       <TableData>{_('EPSS Score')}</TableData>
                       <TableData>
                         {isNumber(epss?.maxEpss?.score)
-                          ? epss?.maxEpss?.score.toFixed(5)
+                          ? `${(epss?.maxEpss?.score * 100).toFixed(3)}%`
                           : _('N/A')}
                       </TableData>
                     </TableRow>
                     <TableRow>
-                      <TableData>{_('EPSS Percentage')}</TableData>
+                      <TableData>{_('EPSS Percentile')}</TableData>
                       <TableData>
-                        {isNumber(epss?.maxEpss?.percentile)
-                          ? `${(epss?.maxEpss?.percentile * 1).toFixed(3)}%`
-                          : _('N/A')}
+                        {printPercentile(epss.maxEpss.percentile)}
                       </TableData>
                     </TableRow>
                     <TableRow>

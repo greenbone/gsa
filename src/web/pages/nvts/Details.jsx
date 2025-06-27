@@ -23,6 +23,7 @@ import References from 'web/pages/nvts/References';
 import Solution from 'web/pages/nvts/Solution';
 import PropTypes from 'web/utils/PropTypes';
 import {na, getTranslatableSeverityOrigin} from 'web/utils/Render';
+import {printPercentile} from 'web/utils/severity';
 
 const NvtDetails = ({entity, links = true}) => {
   const [_] = useTranslation();
@@ -98,16 +99,14 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>{_('EPSS Score')}</TableData>
                   <TableData>
                     {isNumber(epss?.maxSeverity?.score)
-                      ? epss?.maxSeverity?.score.toFixed(5)
+                      ? `${(epss?.maxSeverity?.score * 100).toFixed(3)}%`
                       : _('N/A')}
                   </TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>{_('EPSS Percentage')}</TableData>
+                  <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
-                    {isNumber(epss?.maxSeverity?.percentile)
-                      ? `${(epss.maxSeverity.percentile * 1).toFixed(3)}%`
-                      : _('N/A')}
+                    {printPercentile(epss.maxSeverity.percentile)}
                   </TableData>
                 </TableRow>
                 <TableRow>
@@ -141,18 +140,16 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>{_('EPSS Score')}</TableData>
                   <TableData>
                     {isNumber(epss?.maxEpss?.score)
-                      ? epss?.maxEpss?.score.toFixed(5)
+                      ? `${(epss?.maxEpss?.score * 100).toFixed(3)}%`
                       : _('N/A')}
                   </TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>{_('EPSS Percentage')}</TableData>
+                  <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
-                    {isNumber(epss?.maxEpss?.percentile)
-                      ? `${(epss?.maxEpss?.percentile * 1).toFixed(3)}%`
-                      : _('N/A')}
+                    {printPercentile(epss.maxEpss.percentile)}
                   </TableData>
-                </TableRow>
+            </TableRow>
                 <TableRow>
                   <TableData>{_('CVE')}</TableData>
                   <TableData>

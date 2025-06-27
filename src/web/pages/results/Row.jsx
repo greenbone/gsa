@@ -28,6 +28,8 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ResultDelta from 'web/pages/results/Delta';
 import PropTypes from 'web/utils/PropTypes';
+import {printPercentile} from 'web/utils/severity';
+
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   audit = false,
@@ -52,8 +54,8 @@ const Row = ({
   const deltaCompliance = entity.delta?.result?.compliance;
   const deltaHostname = entity.delta?.result?.host?.hostname;
   const deltaQoD = entity.delta?.result?.qod?.value;
-  const epssScore = entity?.information?.epss?.max_severity?.score;
-  const epssPercentile = entity?.information?.epss?.max_severity?.percentile;
+  const epssScore = entity?.information?.epss?.maxSeverity?.score;
+  const epssPercentile = entity?.information?.epss?.maxSeverity?.percentile;
   const gmp = useGmp();
   return (
     <TableRow>
@@ -152,12 +154,11 @@ const Row = ({
       {gmp.settings.enableEPSS && !audit && (
         <>
           <TableData>
-            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
+            {isNumber(epssScore)
+              ? `${(epssScore * 100).toFixed(3)}%` : _('N/A')}
           </TableData>
           <TableData>
-            {isNumber(epssPercentile)
-              ? `${(epssPercentile * 1).toFixed(3)}%`
-              : _('N/A')}
+            {printPercentile(epssPercentile)}
           </TableData>
         </>
       )}

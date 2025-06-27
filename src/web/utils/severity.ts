@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isNumber} from 'gmp/utils/identity';
 import {
   DEFAULT_SEVERITY_RATING,
   SEVERITY_RATING_CVSS_2,
@@ -220,3 +220,20 @@ export const getSeverityLevels = (
 export const getSeverityLevelBoundaries = (
   rating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ): SeverityLevelBoundaries => SEVERITY_LEVEL_BOUNDARIES[rating];
+
+export const printPercentile = (
+  percentile: number,
+): string => {
+  if (isNumber(percentile)) {
+    if (percentile.toFixed(0) % 10 > 3 ||
+        percentile.toFixed(0) % 10 === 0 )
+      return (`${percentile.toFixed(0)}th`);
+    if (percentile.toFixed(0) % 10 === 1)
+      return (`${percentile.toFixed(0)}st`);
+    if (percentile.toFixed(0) % 10 === 2)
+      return (`${percentile.toFixed(0)}nd`);
+    if (percentile.toFixed(0) % 10 === 3)
+      return (`${percentile.toFixed(0)}rd`);
+  }
+  return ('N/A');
+ }
