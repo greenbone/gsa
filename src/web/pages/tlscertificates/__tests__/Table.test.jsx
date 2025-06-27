@@ -30,6 +30,7 @@ const tlsCertificate = TlsCertificate.fromElement({
   serial: '123',
   sha256_fingerprint: '2142',
   md5_fingerprint: '4221',
+  valid: 1,
   permissions: {permission: [{name: 'everything'}]},
 });
 
@@ -63,7 +64,7 @@ describe('TlsCertificates table tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
       <Table
         entities={[tlsCertificate]}
         filter={filter}
@@ -73,13 +74,14 @@ describe('TlsCertificates table tests', () => {
       />,
     );
 
-    const header = baseElement.querySelectorAll('th');
-    expect(header[0]).toHaveTextContent('Subject DN');
-    expect(header[1]).toHaveTextContent('Serial');
-    expect(header[2]).toHaveTextContent('Activates');
-    expect(header[3]).toHaveTextContent('Expires');
-    expect(header[4]).toHaveTextContent('Last seen');
-    expect(header[5]).toHaveTextContent('Actions');
+    const header = screen.getByTestId('tls-certificates-table-header');
+    const heads = header.querySelectorAll('th');
+    expect(heads[0]).toHaveTextContent('Subject DN');
+    expect(heads[1]).toHaveTextContent('Serial');
+    expect(heads[2]).toHaveTextContent('Activates');
+    expect(heads[3]).toHaveTextContent('Expires');
+    expect(heads[4]).toHaveTextContent('Last seen');
+    expect(heads[5]).toHaveTextContent('Actions');
   });
 
   test('should unfold all details', () => {
@@ -101,7 +103,7 @@ describe('TlsCertificates table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element} = render(
+    render(
       <Table
         entities={[tlsCertificate]}
         entitiesCounts={counts}
@@ -113,17 +115,17 @@ describe('TlsCertificates table tests', () => {
       />,
     );
 
-    expect(element).not.toHaveTextContent('Valid');
-    expect(element).not.toHaveTextContent('SHA-256 Fingerprint');
-    expect(element).not.toHaveTextContent('MD5 Fingerprint');
+    let details = screen.queryByTestId('tls-certificate-details-1234');
+    expect(details).not.toBeInTheDocument();
 
     const unfoldIcon = screen.getByTestId('fold-state-icon-unfold');
-    fireEvent.click(unfoldIcon);
     expect(unfoldIcon).toHaveAttribute('title', 'Unfold all details');
+    fireEvent.click(unfoldIcon);
 
-    expect(element).toHaveTextContent('Valid');
-    expect(element).toHaveTextContent('SHA-256 Fingerprint');
-    expect(element).toHaveTextContent('MD5 Fingerprint');
+    details = screen.getByTestId('tls-certificate-details-1234');
+    expect(details).toHaveTextContent('Valid');
+    expect(details).toHaveTextContent('SHA-256 Fingerprint');
+    expect(details).toHaveTextContent('MD5 Fingerprint');
   });
 
   test('should call click handlers', () => {

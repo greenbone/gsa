@@ -32,6 +32,7 @@ const tlsCertificate = TlsCertificate.fromElement({
   serial: '123',
   sha256_fingerprint: '2142',
   md5_fingerprint: '4221',
+  valid: 1,
   permissions: {permission: [{name: 'everything'}]},
 });
 
@@ -106,27 +107,27 @@ describe('TLS Certificate DetailsPage tests', () => {
     );
     expect(links[1]).toHaveAttribute('href', '/tlscertificates');
 
-    expect(container).toHaveTextContent('1234');
-    expect(container).toHaveTextContent(
+    const entityInfo = screen.getByTestId('entity-info');
+    expect(entityInfo).toHaveTextContent('1234');
+    expect(entityInfo).toHaveTextContent(
       'Wed, Jul 10, 2019 12:51 PM Coordinated Universal Time',
     );
-    expect(container).toHaveTextContent(
+    expect(entityInfo).toHaveTextContent(
       'Tue, Dec 10, 2019 12:51 PM Coordinated Universal Time',
     );
-    expect(container).toHaveTextContent('admin');
+    expect(entityInfo).toHaveTextContent('admin');
 
-    expect(container).toHaveTextContent(
-      'Subject DNCN=LoremIpsumSubject C=Dolor',
-    );
-    expect(container).toHaveTextContent('Issuer DNCN=LoremIpsumIssuer C=Dolor');
-    expect(container).toHaveTextContent('ValidNo');
-    expect(container).toHaveTextContent(
+    const details = screen.getByTestId('tls-certificate-details-1234');
+    expect(details).toHaveTextContent('Subject DNCN=LoremIpsumSubject C=Dolor');
+    expect(details).toHaveTextContent('Issuer DNCN=LoremIpsumIssuer C=Dolor');
+    expect(details).toHaveTextContent('ValidYes');
+    expect(details).toHaveTextContent(
       'ActivatesSat, Aug 10, 2019 12:51 PM Coordinated Universal Time',
     );
-    expect(container).toHaveTextContent(
+    expect(details).toHaveTextContent(
       'ExpiresTue, Sep 10, 2019 12:51 PM Coordinated Universal Time',
     );
-    expect(container).toHaveTextContent('SHA-256 Fingerprint2142');
-    expect(container).toHaveTextContent('MD5 Fingerprint4221');
+    expect(details).toHaveTextContent('SHA-256 Fingerprint2142');
+    expect(details).toHaveTextContent('MD5 Fingerprint4221');
   });
 });
