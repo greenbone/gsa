@@ -6,24 +6,29 @@
 import ical from 'ical.js';
 import {v4 as uuid} from 'uuid';
 import Logger from 'gmp/log';
-import date, {duration as createDuration} from 'gmp/models/date';
+import date, {
+  duration as createDuration,
+  Date,
+  Duration,
+} from 'gmp/models/date';
+import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 const log = Logger.getLogger('gmp.models.event');
 
-const convertIcalDate = (idate, timezone) => {
+const convertIcalDate = (iDate: ical.Time, timezone?: string) => {
   if (isDefined(timezone)) {
-    if (idate.zone === ical.Timezone.localTimezone) {
+    if (iDate.zone === ical.Timezone.localTimezone) {
       // assume timezone hasn't been set and date wasn't supposed to use floating and therefore local timezone
-      return date.tz(idate.toString(), timezone);
+      return date.tz(iDate.toString(), timezone);
     }
-    return date.unix(idate.toUnixTime()).tz(timezone);
+    return date.unix(iDate.toUnixTime()).tz(timezone);
   }
-  return date.unix(idate.toUnixTime());
+  return date.unix(iDate.toUnixTime());
 };
 
-const setEventDuration = (event, duration) => {
+const setEventDuration = (event: ical.Event, duration: ical.Duration) => {
   // setting the duration of an event directly isn't possible in
   // ical 1.2.2 yet. Therefore add same logic from ical master here
   if (event.component.hasProperty('dtend')) {
@@ -33,14 +38,14 @@ const setEventDuration = (event, duration) => {
   event._setProp('duration', duration);
 };
 
-const setEventRecurrence = (event, recurrence) => {
+const setEventRecurrence = (event: ical.Event, recurrence: ical.Recur) => {
   event._setProp('rrule', recurrence);
 };
 
-const PROD_ID = '-//Greenbone.net//NONSGML Greenbone Security Assistent';
+const PROD_ID = '-//Greenbone.net//NONSGML Greenbone Security Assistant';
 const ICAL_VERSION = '2.0';
 
-export const ReccurenceFrequency = {
+export const RecurrenceFrequency = {
   YEARLY: 'YEARLY',
   MONTHLY: 'MONTHLY',
   WEEKLY: 'WEEKLY',
@@ -48,9 +53,11 @@ export const ReccurenceFrequency = {
   HOURLY: 'HOURLY',
   MINUTELY: 'MINUTELY',
   SECONDLY: 'SECONDLY',
-};
+} as const;
 
-const ISOWEEKDAY_TO_WEEKDAY = {
+type RecurrenceFrequencyType = keyof typeof RecurrenceFrequency;
+
+const ISO_WEEKDAY_TO_WEEKDAY: Record<number, WeekDay> = {
   1: 'monday',
   2: 'tuesday',
   3: 'wednesday',
@@ -58,9 +65,9 @@ const ISOWEEKDAY_TO_WEEKDAY = {
   5: 'friday',
   6: 'saturday',
   7: 'sunday',
-};
+} as const;
 
-const ABR_TO_WEEKDAY = {
+const ABR_TO_WEEKDAY: Record<string, WeekDay> = {
   mo: 'monday',
   tu: 'tuesday',
   we: 'wednesday',
@@ -68,27 +75,43 @@ const ABR_TO_WEEKDAY = {
   fr: 'friday',
   sa: 'saturday',
   su: 'sunday',
-};
+} as const;
 
-const getWeekDaysFromRRule = rrule => {
-  if (!isDefined(rrule)) {
+const getWeekDaysFromRRule = (recurrenceRule?: ical.Recur) => {
+  if (!isDefined(recurrenceRule)) {
     return undefined;
   }
 
-  const byday = rrule.getComponent('byday');
+  const byday = recurrenceRule.getComponent('byday') as string[];
   return byday.length > 0 ? WeekDays.fromByDay(byday) : undefined;
 };
 
-const getMonthDaysFromRRule = rrule => {
-  if (!isDefined(rrule)) {
+const getMonthDaysFromRRule = (recurrenceRule?: ical.Recur) => {
+  if (!isDefined(recurrenceRule)) {
     return undefined;
   }
 
-  const bymonthday = rrule.getComponent('bymonthday');
+  const bymonthday = recurrenceRule.getComponent('bymonthday') as number[];
   return bymonthday.length > 0 ? bymonthday.sort((a, b) => a - b) : undefined;
 };
 
+type WeekDayValue = boolean | number;
+
+interface WeekDaysOptions {
+  monday?: WeekDayValue;
+  tuesday?: WeekDayValue;
+  wednesday?: WeekDayValue;
+  thursday?: WeekDayValue;
+  friday?: WeekDayValue;
+  saturday?: WeekDayValue;
+  sunday?: WeekDayValue;
+}
+
+type WeekDay = keyof WeekDaysOptions;
+
 export class WeekDays {
+  private readonly _weekdays: WeekDaysOptions;
+
   constructor({
     monday = false,
     tuesday = false,
@@ -97,7 +120,7 @@ export class WeekDays {
     friday = false,
     saturday = false,
     sunday = false,
-  } = {}) {
+  }: WeekDaysOptions = {}) {
     this._weekdays = {
       monday,
       tuesday,
@@ -109,25 +132,25 @@ export class WeekDays {
     };
   }
 
-  static fromByDay(bydate = []) {
+  static fromByDay(byDate: string[] = []) {
     const weekdays = new WeekDays();
 
-    for (const part of bydate) {
-      const pday = part.slice(-2).toLowerCase();
-      const pval = part.slice(0, -2);
+    for (const part of byDate) {
+      const parsedDay = part.slice(-2).toLowerCase();
+      const parsedValue = part.slice(0, -2);
 
-      const wday = ABR_TO_WEEKDAY[pday];
-      const val = pval.length === 0 ? true : pval;
+      const weekDay = ABR_TO_WEEKDAY[parsedDay];
+      const value = parsedValue.length === 0 ? true : parseInt(parsedValue);
 
-      if (isDefined(wday)) {
-        weekdays._setWeekDay(wday, val);
+      if (isDefined(weekDay) && isDefined(value)) {
+        weekdays._setWeekDay(weekDay, value);
       }
     }
 
     return weekdays;
   }
 
-  _setWeekDay(weekday, value = true) {
+  _setWeekDay(weekday: WeekDay, value: WeekDayValue = true) {
     this._weekdays[weekday] = value;
     return this;
   }
@@ -140,11 +163,11 @@ export class WeekDays {
     return new WeekDays({...this._weekdays});
   }
 
-  entries() {
+  entries(): Array<[string, WeekDayValue]> {
     return Object.entries(this._weekdays);
   }
 
-  values() {
+  values(): WeekDayValue[] {
     return Object.values(this._weekdays);
   }
 
@@ -153,22 +176,22 @@ export class WeekDays {
     return isDefined(ret) ? ret[0] : undefined;
   }
 
-  get(weekday) {
+  get(weekday: WeekDay) {
     return this._weekdays[weekday];
   }
 
-  setWeekDay(weekday, value = true) {
+  setWeekDay(weekday: WeekDay, value: WeekDayValue = true) {
     const copy = this.copy();
     return copy._setWeekDay(weekday, value);
   }
 
-  setWeekDayFromDate(curdate, value = true) {
-    const wday = ISOWEEKDAY_TO_WEEKDAY[curdate.isoWeekday()];
-    return this.setWeekDay(wday, value);
+  setWeekDayFromDate(currentDate: Date, value: WeekDayValue = true) {
+    const weekDay = ISO_WEEKDAY_TO_WEEKDAY[currentDate.isoWeekday()];
+    return this.setWeekDay(weekDay, value);
   }
 
   toByDate() {
-    const byday = [];
+    const byday: string[] = [];
 
     for (const [abbr, weekday] of Object.entries(ABR_TO_WEEKDAY)) {
       const value = this.get(weekday);
@@ -176,7 +199,7 @@ export class WeekDays {
         if (value === true) {
           byday.push(abbr.toUpperCase());
         } else {
-          byday.push('' + value + abbr.toUpperCase());
+          byday.push(`${value}${abbr.toUpperCase()}`);
         }
       }
     }
@@ -214,16 +237,19 @@ export class WeekDays {
 }
 
 class Event {
-  constructor(icalevent, timezone) {
-    this.event = icalevent;
+  readonly event: ical.Event;
+  readonly timezone?: string;
+
+  constructor(icalEvent: ical.Event, timezone?: string) {
+    this.event = icalEvent;
     this.timezone = timezone;
   }
 
-  static fromIcal(icalendar, timezone) {
-    const jcal = ical.parse(icalendar);
-    const comp = new ical.Component(jcal);
+  static fromIcal(icalendar: string, timezone?: string): Event {
+    const jCal = ical.parse(icalendar);
+    const comp = new ical.Component(jCal);
     const vevent = comp.getFirstSubcomponent('vevent');
-    const event = new ical.Event(vevent);
+    const event = new ical.Event(vevent as ical.Component);
     return new Event(event, timezone);
   }
 
@@ -233,75 +259,93 @@ class Event {
       duration,
       freq,
       interval,
-      monthdays = [],
+      monthDays = [],
       startDate,
       summary,
-      weekdays,
+      weekDays,
+      uid = uuid(),
+    }: {
+      description?: string;
+      duration?: Duration;
+      freq?: RecurrenceFrequencyType;
+      interval?: number;
+      monthDays?: number[];
+      startDate: Date;
+      summary?: string;
+      weekDays?: WeekDays;
+      uid?: string;
     },
-    timezone,
+    timezone: string,
   ) {
     const event = new ical.Event();
 
-    event.uid = uuid();
+    event.uid = uid;
     event.startDate = ical.Time.fromJSDate(startDate.toDate(), true);
 
     if (isDefined(duration)) {
-      const eventDuration = new ical.Duration();
-
-      eventDuration.days = duration.days();
-      eventDuration.weeks = duration.weeks();
-      eventDuration.hours = duration.hours();
-      eventDuration.minutes = duration.minutes();
-      eventDuration.seconds = duration.seconds();
-
+      const eventDuration = new ical.Duration({
+        days: duration.days(),
+        weeks: duration.weeks(),
+        hours: duration.hours(),
+        minutes: duration.minutes(),
+        seconds: duration.seconds(),
+      });
       setEventDuration(event, eventDuration);
     }
 
     if (isDefined(freq)) {
-      const eventRecur = new ical.Recur();
+      const eventRecur = new ical.Recur({});
 
       eventRecur.freq = freq;
-      eventRecur.interval = interval;
+      eventRecur.interval = interval as number;
 
-      const icalweekdays = isDefined(weekdays) ? weekdays.toByDate() : [];
+      const icalWeekDays = isDefined(weekDays) ? weekDays.toByDate() : [];
 
-      if (icalweekdays.length > 0) {
-        eventRecur.setComponent('byday', icalweekdays);
+      if (icalWeekDays.length > 0) {
+        eventRecur.setComponent('byday', icalWeekDays);
       }
 
-      if (monthdays.length > 0) {
-        eventRecur.setComponent('bymonthday', monthdays);
+      if (monthDays.length > 0) {
+        eventRecur.setComponent('bymonthday', monthDays);
       }
 
       setEventRecurrence(event, eventRecur);
     }
 
     if (!isEmpty(summary)) {
-      event.summary = summary;
+      event.summary = summary as string;
     }
 
     if (!isEmpty(description)) {
-      event.description = description;
+      event.description = description as string;
     }
 
     return new Event(event, timezone);
   }
 
-  _getReccurenceRule() {
+  _getRecurrenceRule(): ical.Recur | undefined {
     if (this.isRecurring()) {
-      const rrule = this.event.component.getFirstPropertyValue('rrule');
-      return rrule === null ? undefined : rrule;
+      const recurrenceRule = this.event.component.getFirstPropertyValue(
+        'rrule',
+      ) as ical.Recur | null;
+      return recurrenceRule === null ? undefined : recurrenceRule;
     }
     return undefined;
   }
 
-  get startDate() {
+  get startDate(): Date {
     return convertIcalDate(this.event.startDate, this.timezone);
   }
 
-  get duration() {
-    const {...durationWithoutWeeks} = this.event.duration;
-    return createDuration(durationWithoutWeeks);
+  get duration(): Duration {
+    const {days, hours, minutes, weeks, seconds} = this.event.duration;
+    return createDuration({
+      days,
+      hours,
+      minutes,
+      weeks,
+      seconds,
+    });
   }
 
   get durationInSeconds() {
@@ -322,12 +366,16 @@ class Event {
   }
 
   get recurrence() {
-    const rrule = this._getReccurenceRule();
+    const recurrenceRule = this._getRecurrenceRule();
 
     return {
-      ...rrule,
-      weekdays: getWeekDaysFromRRule(rrule),
-      monthdays: getMonthDaysFromRRule(rrule),
+      count: recurrenceRule?.count ?? undefined,
+      freq: (recurrenceRule?.freq as RecurrenceFrequencyType) ?? undefined,
+      interval: recurrenceRule?.interval ?? undefined,
+      monthdays: getMonthDaysFromRRule(recurrenceRule),
+      until: recurrenceRule?.until ?? undefined,
+      weekdays: getWeekDaysFromRRule(recurrenceRule),
+      wkst: recurrenceRule?.wkst ?? undefined,
     };
   }
 
@@ -373,27 +421,35 @@ class Event {
     return undefined;
   }
 
-  getNextDates(until) {
+  get summary(): string | undefined {
+    return this.event.summary !== null ? this.event.summary : undefined;
+  }
+
+  get description(): string | undefined {
+    return this.event.description !== null ? this.event.description : undefined;
+  }
+
+  getNextDates(until: Date) {
     if (this.isRecurring()) {
       const now = date();
       const it = this.event.iterator();
-      const dates = [];
+      const dates: Date[] = [];
 
       while (true) {
         const next = it.next();
 
-        if (it.completed || !next) {
+        if (it.complete || !next) {
           return dates;
         }
 
-        const mnext = convertIcalDate(next, this.timezone);
+        const nextDate = convertIcalDate(next, this.timezone);
 
-        if (mnext.isAfter(until)) {
+        if (nextDate.isAfter(until)) {
           return dates;
         }
 
-        if (mnext.isSameOrAfter(now)) {
-          dates.push(mnext);
+        if (nextDate.isSameOrAfter(now)) {
+          dates.push(nextDate);
         }
       }
     }
@@ -416,13 +472,13 @@ class Event {
   }
 }
 
-export const isEvent = obj => {
+export const isEvent = (obj: unknown): obj is Event => {
   return (
     obj instanceof Event ||
     (obj !== null &&
       isDefined(obj) &&
-      isDefined(obj.event) &&
-      isDefined(obj.timezone))
+      isDefined(obj['event']) &&
+      isDefined(obj['timezone']))
   );
 };
 export default Event;
