@@ -133,7 +133,7 @@ const Row = ({
       <TableData align={['center', 'center']}>
         <SolutionType type={entity.solutionType} />
       </TableData>
-      <TableData>{entity.assignedTo.user.name}</TableData>
+      <TableData>{entity.assignedTo.name}</TableData>
       <TableData>
         <DateTime date={entity.modificationTime} />
       </TableData>

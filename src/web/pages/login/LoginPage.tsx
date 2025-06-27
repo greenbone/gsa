@@ -103,11 +103,17 @@ const LoginPage: React.FC = () => {
       dispatch(setTimezone(timezone));
 
       // must be set before changing the location
-
       dispatch(setIsLoggedIn(true));
 
-      if (location?.state?.next && location.state.next !== location.pathname) {
-        await navigate(location.state.next, {replace: true});
+      const previousLocation = location.state?.from;
+      const previousPath =
+        previousLocation &&
+        previousLocation.pathname +
+          (previousLocation.search ?? '') +
+          (previousLocation.hash ?? '');
+
+      if (previousPath && previousPath !== '/login') {
+        await navigate(previousPath, {replace: true});
       } else {
         await navigate('/dashboards', {replace: true});
       }

@@ -5,7 +5,6 @@
 
 import {useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate, useLocation} from 'react-router';
 import useGmp from 'web/hooks/useGmp';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
 import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
@@ -14,8 +13,7 @@ import PropTypes from 'web/utils/PropTypes';
 const Authorized = ({children}) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
+
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const logout = useCallback(() => {
@@ -34,28 +32,15 @@ const Authorized = ({children}) => {
     [logout],
   );
 
-  const checkIsLoggedIn = useCallback(() => {
-    if (!isLoggedIn) {
-      navigate('/login', {
-        state: {next: location.pathname},
-      });
-    }
-  }, [isLoggedIn, location.pathname, navigate]);
-
   useEffect(() => {
     const unsubscribe = gmp.addHttpErrorHandler(responseError);
-    checkIsLoggedIn();
 
     return () => {
       if (unsubscribe) {
         unsubscribe();
       }
     };
-  }, [gmp, responseError, checkIsLoggedIn]);
-
-  useEffect(() => {
-    checkIsLoggedIn();
-  }, [isLoggedIn, checkIsLoggedIn]);
+  }, [gmp, responseError]);
 
   return isLoggedIn ? children : null;
 };
