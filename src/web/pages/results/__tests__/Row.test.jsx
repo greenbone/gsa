@@ -25,6 +25,7 @@ describe('Should render EPSS fields', () => {
       overrides: [],
       tickets: [],
       nvt: {
+        type: 'nvt',
         epss: {
           max_severity: {
             score: 0.8765,
