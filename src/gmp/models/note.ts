@@ -3,11 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Model, {
-  ModelElement,
-  ModelProperties,
-  parseModelFromElement,
-} from 'gmp/models/model';
+import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import Nvt from 'gmp/models/nvt';
 import {
   parseCsv,
@@ -102,23 +98,15 @@ class Note extends Model {
       : undefined;
     ret.severity = parseSeverity(ret.severity);
 
-    if (isModelElement(element.task)) {
-      ret.task = Model.fromElement(element.task, 'task');
-    } else {
-      delete ret.task;
-    }
-
-    if (isModelElement(element.result)) {
-      ret.result = parseModelFromElement(element.result, 'result');
-    } else {
-      delete ret.result;
-    }
+    ret.task = isModelElement(element.task)
+      ? Model.fromElement(element.task, 'task')
+      : undefined;
+    ret.result = isModelElement(element.result)
+      ? Model.fromElement(element.result, 'result')
+      : undefined;
 
     ret.hosts = parseCsv(element.hosts);
-
-    if (isEmpty(element.port)) {
-      delete ret.port;
-    }
+    ret.port = isEmpty(element.port) ? undefined : String(element.port);
 
     return ret;
   }
