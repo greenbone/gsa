@@ -38,8 +38,6 @@ const Row = ({
   const epssScore = entity?.epss?.maxSeverity?.score;
   const epssPercentile = entity?.epss?.maxSeverity?.percentile;
 
-    console.log("HALLO: ", entity);
-
   return (
     <TableRow>
       <TableData>

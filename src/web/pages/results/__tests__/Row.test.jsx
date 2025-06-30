@@ -27,7 +27,7 @@ describe('Should render EPSS fields', () => {
       nvt: {
         type: 'nvt',
         epss: {
-          maxSeverity: {
+          max_severity: {
             score: 0.8765,
             percentile: 80.0,
             cve: {
@@ -35,7 +35,7 @@ describe('Should render EPSS fields', () => {
               severity: 5.0,
             },
           },
-          maxEpss: {
+          max_epss: {
             score: 0.9876,
             percentile: 90.0,
             cve: {

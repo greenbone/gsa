@@ -158,6 +158,7 @@ const Row = ({
               ? `${(epssScore * 100).toFixed(3)}%` : _('N/A')}
           </TableData>
           <TableData>
+            {console.info ("HALLO: ", entity.information.epss)}
             {printPercentile(epssPercentile)}
           </TableData>
         </>
