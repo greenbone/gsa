@@ -5,10 +5,27 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'web/utils/PropTypes';
+import {BACKGROUND_STATES} from 'web/components/bar/definitions';
 import Theme from 'web/utils/Theme';
 
-const ProgressBarBox = styled.div`
+interface ProgressBarBoxProps {
+  $boxBackground?: string;
+}
+
+interface ProgressProps {
+  $background?: string;
+  $progress?: string | number;
+}
+
+interface ProgressBarProps {
+  background?: string;
+  boxBackground?: string;
+  children?: React.ReactNode;
+  progress?: string | number;
+  title?: string;
+}
+
+const ProgressBarBox = styled.div<ProgressBarBoxProps>`
   height: 16px;
   box-sizing: content-box;
   display: inline-block;
@@ -41,17 +58,21 @@ const Content = styled.div`
   }
 `;
 
-export const adjustProgress = progress => {
-  if (parseInt(progress) > 100) {
-    progress = '100';
+export const adjustProgress = (progress?: string | number): string => {
+  if (!progress) {
+    return '0';
   }
-  if (parseInt(progress) < 0) {
-    progress = '0';
+
+  if (parseInt(String(progress)) > 100) {
+    return '100';
   }
-  return progress;
+  if (parseInt(String(progress)) < 0) {
+    return '0';
+  }
+  return String(progress);
 };
 
-const Progress = styled.div`
+const Progress = styled.div<ProgressProps>`
   height: 16px;
   border-radius: 8px;
 
@@ -61,17 +82,17 @@ const Progress = styled.div`
   ${props => {
     let {$background, $progress} = props;
 
-    if ($background === 'warn') {
+    if ($background === BACKGROUND_STATES.WARN) {
       $background = Theme.severityWarnYellow;
-    } else if ($background === 'error') {
+    } else if ($background === BACKGROUND_STATES.ERROR) {
       $background = Theme.errorRed;
-    } else if ($background === 'low') {
+    } else if ($background === BACKGROUND_STATES.LOW) {
       $background = Theme.severityLowBlue;
-    } else if ($background === 'new') {
+    } else if ($background === BACKGROUND_STATES.NEW) {
       $background = Theme.statusNewGreen;
-    } else if ($background === 'run') {
+    } else if ($background === BACKGROUND_STATES.RUN) {
       $background = Theme.statusRunGreen;
-    } else if ($background === 'log') {
+    } else if ($background === BACKGROUND_STATES.LOG) {
       $background = 'gray';
     }
 
@@ -90,7 +111,7 @@ const ProgressBar = ({
   children,
   progress,
   title,
-}) => {
+}: ProgressBarProps) => {
   return (
     <ProgressBarBox
       $boxBackground={boxBackground}
@@ -105,14 +126,6 @@ const ProgressBar = ({
       <Content>{children}</Content>
     </ProgressBarBox>
   );
-};
-
-ProgressBar.propTypes = {
-  children: PropTypes.node,
-  background: PropTypes.string,
-  boxBackground: PropTypes.string,
-  progress: PropTypes.numberOrNumberString,
-  title: PropTypes.string,
 };
 
 export default ProgressBar;
