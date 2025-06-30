@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import durationPlugin from 'dayjs/plugin/duration';
+import isoWeek from 'dayjs/plugin/isoWeek';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import localeDataPlugin from 'dayjs/plugin/localeData';
@@ -24,16 +25,17 @@ import 'dayjs/locale/ru';
 import 'dayjs/locale/tr';
 import 'dayjs/locale/zh-cn';
 
-dayjs.extend(relativeTime);
 dayjs.extend(advancedFormat);
-dayjs.extend(utc);
-dayjs.extend(timezone);
+dayjs.extend(customParseFormat);
 dayjs.extend(durationPlugin);
+dayjs.extend(isoWeek);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 dayjs.extend(localeDataPlugin);
 dayjs.extend(localizedFormat);
-dayjs.extend(isSameOrBefore);
-dayjs.extend(isSameOrAfter);
-dayjs.extend(customParseFormat);
+dayjs.extend(relativeTime);
+dayjs.extend(timezone);
+dayjs.extend(utc);
 
 export const isDuration = dayjs.isDuration;
 export const isDate = dayjs.isDayjs;
@@ -41,5 +43,6 @@ export const setLocaleDayjs = dayjs.locale;
 export const _localeData = dayjs.localeData;
 export const duration = dayjs.duration;
 export type Date = dayjs.Dayjs;
+export type Duration = durationPlugin.Duration;
 
 export default dayjs;
