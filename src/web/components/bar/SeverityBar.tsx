@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ProgressBar from 'web/components/bar/ProgressBar';
@@ -70,12 +69,7 @@ const SeverityBar = ({severity, toolTip}: SeverityBarProps) => {
   const toolTipText = isDefined(toolTip) ? toolTip : title;
 
   return (
-    <ProgressBar
-      background={background}
-      data-testid="severitybar"
-      progress={fill}
-      title={toolTipText}
-    >
+    <ProgressBar background={background} progress={fill} title={toolTipText}>
       {text}
     </ProgressBar>
   );
