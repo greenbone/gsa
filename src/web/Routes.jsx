@@ -5,7 +5,13 @@
 
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router';
 import Authorized from 'web/Authorized';
 import Loading from 'web/components/loading/Loading';
 import LocationObserver from 'web/components/observer/LocationObserver';
@@ -92,13 +98,19 @@ import UserSettingsPage from 'web/pages/usersettings/UserSettingsPage';
 import VulnerabilitiesPage from 'web/pages/vulns/ListPage';
 import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 
-const LoggedOutRoutes = () => (
-  <Routes>
-    <Route element={<LoginPage />} path="/login" />
-    <Route element={<LegacyOmpPage />} path="/omp" />
-    <Route element={<Navigate to="/login" />} path="*" />
-  </Routes>
-);
+const LoggedOutRoutes = () => {
+  const location = useLocation();
+  return (
+    <Routes>
+      <Route element={<LoginPage />} path="/login" />
+      <Route element={<LegacyOmpPage />} path="/omp" />
+      <Route
+        element={<Navigate state={{from: location}} to="/login" />}
+        path="*"
+      />
+    </Routes>
+  );
+};
 
 const LoggedInRoutes = () => {
   return (

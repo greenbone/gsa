@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {
   changeInputValue,
   screen,
@@ -11,19 +11,22 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import {beforeEach, vi} from 'vitest';
+import {vi} from 'vitest';
 import Logger from 'gmp/log';
 import LoginPage from 'web/pages/login/LoginPage';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
 
 Logger.setDefaultLevel('silent');
-const mockUseNavigate = testing.fn();
+const mockNavigate = testing.fn();
+const mockUseNavigate = testing.fn().mockReturnValue(mockNavigate);
+const mockUseLocation = testing.fn();
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useNavigate: () => mockUseNavigate,
+    useNavigate: () => mockNavigate,
+    useLocation: () => mockUseLocation(),
   };
 });
 
@@ -159,8 +162,8 @@ describe('LoginPage tests', () => {
     store.dispatch(setIsLoggedIn(true));
 
     render(<LoginPage />);
-    expect(mockUseNavigate).toBeCalledTimes(1);
-    expect(mockUseNavigate).toBeCalledWith('/dashboards', {replace: true});
+    expect(mockNavigate).toBeCalledTimes(1);
+    expect(mockNavigate).toBeCalledWith('/dashboards', {replace: true});
   });
 
   test('should dispatch timezone to Redux after login', async () => {
@@ -213,5 +216,77 @@ describe('LoginPage tests', () => {
     expect(userSettings.isLoggedIn).toBe(true);
 
     expect(setTimezone).toHaveBeenCalledWith('Australia/Sydney');
+  });
+
+  test.each([
+    {
+      description:
+        'should redirect to previous path with search and hash after login',
+      locationState: {
+        state: {
+          from: {
+            pathname: '/somewhere',
+            search: '?foo=bar',
+            hash: '#baz',
+          },
+        },
+      },
+      expectedPath: '/somewhere?foo=bar#baz',
+    },
+    {
+      description:
+        'should redirect to dashboards when no previous path is available',
+      locationState: {},
+      expectedPath: '/dashboards',
+    },
+  ])('$description', async ({locationState, expectedPath}) => {
+    mockUseNavigate.mockClear();
+
+    const login = testing.fn().mockResolvedValue({
+      locale: 'locale',
+      token: 'token',
+      timezone: 'Europe/Berlin',
+      sessionTimeout: '10:00',
+    });
+
+    mockUseLocation.mockReturnValue(locationState);
+
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {},
+      user: {
+        currentSettings: testing.fn().mockResolvedValue({
+          data: {
+            userinterfacetimeformat: {value: '24h'},
+            userinterfacedateformat: {value: 'YYYY-MM-DD'},
+          },
+        }),
+      },
+    };
+    const {render} = rendererWith({
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    render(<LoginPage />);
+    const usernameField = screen.getByName('username');
+    const passwordField = screen.getByName('password');
+    changeInputValue(usernameField, 'foo');
+    changeInputValue(passwordField, 'bar');
+    const button = screen.getByTestId('login-button');
+    fireEvent.click(button);
+    await wait();
+    expect(mockNavigate).toHaveBeenCalledWith(expectedPath, {
+      replace: true,
+    });
   });
 });
