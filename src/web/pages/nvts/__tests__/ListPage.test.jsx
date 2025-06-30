@@ -37,7 +37,7 @@ const nvt = NVT.fromElement({
       __text: 'This is a description',
     },
     epss: {
-      max_severity: {
+      maxSeverity: {
         score: 0.8765,
         percentile: 90.0,
         cve: {
@@ -45,7 +45,7 @@ const nvt = NVT.fromElement({
           severity: 10.0,
         },
       },
-      max_epss: {
+      maxEpss: {
         score: 0.9876,
         percentile: 80.0,
         cve: {
@@ -204,7 +204,7 @@ describe('NvtsPage tests', () => {
     expect(header[7]).toHaveTextContent('QoD');
     expect(header[8]).toHaveTextContent('EPSS');
     expect(header[9]).toHaveTextContent('Score');
-    expect(header[10]).toHaveTextContent('Percentage');
+    expect(header[10]).toHaveTextContent('Percentile');
 
     const row = baseElement.querySelectorAll('tr');
 
@@ -219,8 +219,8 @@ describe('NvtsPage tests', () => {
     expect(row[2]).toHaveTextContent('CVE-2020-1234');
     expect(row[2]).toHaveTextContent('CVE-2020-5678');
     expect(row[2]).toHaveTextContent('80 %');
-    expect(row[2]).toHaveTextContent('0.87650');
-    expect(row[2]).toHaveTextContent('90.000%');
+    expect(row[2]).toHaveTextContent('87.650%');
+    expect(row[2]).toHaveTextContent('90th');
   });
 
   test('should allow to bulk action on page contents', async () => {

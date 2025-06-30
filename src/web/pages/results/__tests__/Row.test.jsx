@@ -27,7 +27,7 @@ describe('Should render EPSS fields', () => {
       nvt: {
         type: 'nvt',
         epss: {
-          max_severity: {
+          maxSeverity: {
             score: 0.8765,
             percentile: 80.0,
             cve: {
@@ -35,7 +35,7 @@ describe('Should render EPSS fields', () => {
               severity: 5.0,
             },
           },
-          max_epss: {
+          maxEpss: {
             score: 0.9876,
             percentile: 90.0,
             cve: {
@@ -49,8 +49,8 @@ describe('Should render EPSS fields', () => {
 
     const {element} = render(<Row entity={entity} />);
 
-    expect(element).toHaveTextContent('0.87650');
-    expect(element).toHaveTextContent('80.000%');
+    expect(element).toHaveTextContent('87.650%');
+    expect(element).toHaveTextContent('80th');
   });
 });
 

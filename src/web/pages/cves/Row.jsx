@@ -17,6 +17,7 @@ import EntitiesActions from 'web/entities/Actions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
+import {printPercentile} from 'web/utils/severity';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -52,12 +53,10 @@ const Row = ({
       {gmp.settings.enableEPSS && (
         <>
           <TableData>
-            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
+            {isNumber(epssScore) ? `${(epssScore * 100).toFixed(3)}%` : _('N/A')}
           </TableData>
           <TableData>
-            {isNumber(epssPercentile)
-              ? `${(epssPercentile * 1).toFixed(3)}%`
-              : _('N/A')}
+            {printPercentile(epssPercentile)}
           </TableData>
         </>
       )}

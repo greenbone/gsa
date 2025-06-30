@@ -37,7 +37,7 @@ export const result = Result.fromElement({
     name: 'nvt1',
     tags: 'cvss_base_vector=AV:N/AC:M/Au:N/C:P/I:N/A:N|summary=This is a mock result|insight=This is just a test|affected=Affects test cases only|impact=No real impact|solution=Keep writing tests|vuldetect=This is the detection method|solution_type=Mitigation',
     epss: {
-      max_severity: {
+      maxSeverity: {
         score: 0.8765,
         percentile: 80.0,
         cve: {
@@ -45,7 +45,7 @@ export const result = Result.fromElement({
           severity: 5.0,
         },
       },
-      max_epss: {
+      maxEpss: {
         score: 0.9876,
         percentile: 90.0,
         cve: {
@@ -208,13 +208,13 @@ describe('Result DetailsPage tests', () => {
     expect(baseElement).toHaveTextContent('Host109.876.54.321');
     expect(baseElement).toHaveTextContent('Location80/tcp');
     expect(baseElement).toHaveTextContent('EPSS (CVE with highest severity)');
-    expect(baseElement).toHaveTextContent('EPSS Score0.87650');
-    expect(baseElement).toHaveTextContent('EPSS Percentage80.000%');
+    expect(baseElement).toHaveTextContent('EPSS Score87.650%');
+    expect(baseElement).toHaveTextContent('EPSS Percentile80th');
     expect(baseElement).toHaveTextContent('CVECVE-2019-1234');
     expect(baseElement).toHaveTextContent('CVE Severity5.0 (Medium)');
     expect(baseElement).toHaveTextContent('EPSS (highest EPSS score)');
-    expect(baseElement).toHaveTextContent('EPSS Score0.98760');
-    expect(baseElement).toHaveTextContent('EPSS Percentage90.000%');
+    expect(baseElement).toHaveTextContent('EPSS Score98.760%');
+    expect(baseElement).toHaveTextContent('EPSS Percentile90th');
     expect(baseElement).toHaveTextContent('CVECVE-2020-5678');
     expect(baseElement).toHaveTextContent('CVE Severity2.0 (Low)');
     expect(heading[2]).toHaveTextContent('Summary');

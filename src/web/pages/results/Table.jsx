@@ -149,7 +149,7 @@ const Header = ({
               currentSortBy={currentSortBy}
               currentSortDir={currentSortDir}
               sortBy={sort ? 'epss_percentile' : false}
-              title={_('Percentage')}
+              title={_('Percentile')}
               width="3%"
               onSortChange={onSortChange}
             />

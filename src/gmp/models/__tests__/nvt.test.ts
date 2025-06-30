@@ -390,7 +390,7 @@ describe('Nvt model tests', () => {
     const nvt1 = Nvt.fromElement({
       nvt: {
         epss: {
-          max_epss: {
+          maxEpss: {
             percentile: 0.5,
             score: 0.7,
             cve: {
@@ -398,7 +398,7 @@ describe('Nvt model tests', () => {
               severity: 5.0,
             },
           },
-          max_severity: {
+          maxSeverity: {
             percentile: 0.8,
             score: 0.9,
             cve: {
@@ -412,7 +412,7 @@ describe('Nvt model tests', () => {
     const nvt2 = Nvt.fromElement({
       nvt: {
         epss: {
-          max_epss: {
+          maxEpss: {
             percentile: 0.5,
             score: 0.7,
             cve: {
@@ -426,7 +426,7 @@ describe('Nvt model tests', () => {
     const nvt3 = Nvt.fromElement({
       nvt: {
         epss: {
-          max_severity: {
+          maxSeverity: {
             percentile: 0.8,
             score: 0.9,
             cve: {
