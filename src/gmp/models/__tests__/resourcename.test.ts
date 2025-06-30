@@ -4,10 +4,10 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {ResourceName} from 'gmp/models/resourcename';
+import ResourceName from 'gmp/models/resourcename';
 
 describe('ResourceName tests', () => {
-  test('should init ResourceName data via constructor', () => {
+  test('should init data via constructor', () => {
     const resourceName = new ResourceName({
       id: '19c091f0-a687-4dc3-b482-7d191ead4bb3',
       name: 'Foo',
@@ -19,7 +19,7 @@ describe('ResourceName tests', () => {
     expect(resourceName.type).toEqual('task');
   });
 
-  test('should parse ResourceName data from element', () => {
+  test('should parse element', () => {
     const resourceName = ResourceName.fromElement(
       {
         _id: '19c091f0-a687-4dc3-b482-7d191ead4bba',
@@ -33,7 +33,7 @@ describe('ResourceName tests', () => {
     expect(resourceName.type).toEqual('report');
   });
 
-  test('should parse empty name and id', () => {
+  test('should parse empty element', () => {
     const resourceName = ResourceName.fromElement({}, 'report');
 
     expect(resourceName.id).toEqual('');
