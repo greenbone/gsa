@@ -31,7 +31,7 @@ interface TableHeadProps {
   onSortChange?: (sortBy: ByType) => void;
 }
 
-const TableHead: React.FC<TableHeadProps> = ({
+const TableHead = ({
   children,
   className,
   colSpan,
