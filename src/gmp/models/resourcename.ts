@@ -5,14 +5,29 @@
 
 import {isDefined} from 'gmp/utils/identity';
 
-export class ResourceName {
-  constructor({id, name, type}) {
+interface ResourceNameElement {
+  _id?: string;
+  name?: string;
+}
+
+interface ResourceNameProperties {
+  id: string;
+  name: string;
+  type: string;
+}
+
+class ResourceName {
+  readonly id: string;
+  readonly name: string;
+  readonly type: string;
+
+  constructor({id, name, type}: ResourceNameProperties) {
     this.id = id;
     this.name = name;
     this.type = type;
   }
 
-  static fromElement(element, type) {
+  static fromElement(element: ResourceNameElement, type: string): ResourceName {
     const {_id, name} = element;
 
     return new ResourceName({
