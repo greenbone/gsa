@@ -3,21 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import ProgressBar from 'web/components/bar/ProgressBar';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
-const ComplianceStatusBar = ({complianceStatus}) => {
-  let text;
-  let boxBackground;
+interface ComplianceStatusBarProps {
+  complianceStatus?: string | number;
+}
+
+const ComplianceStatusBar = ({
+  complianceStatus = 0,
+}: ComplianceStatusBarProps) => {
+  let text: string;
+  let boxBackground: string;
   const [_] = useTranslation();
-  if (complianceStatus < 0 || complianceStatus > 100) {
+
+  // Convert to number for comparison
+  const numValue = Number(complianceStatus);
+
+  if (isNaN(numValue) || numValue < 0 || numValue > 100) {
     text = _('N/A');
-    boxBackground = Theme.darkGrey;
+    boxBackground = Theme.darkGray;
   } else {
-    text = complianceStatus + '%';
+    text = numValue + '%';
     boxBackground = Theme.errorRed;
   }
 
@@ -32,10 +40,6 @@ const ComplianceStatusBar = ({complianceStatus}) => {
       {text}
     </ProgressBar>
   );
-};
-
-ComplianceStatusBar.propTypes = {
-  complianceStatus: PropTypes.numberOrNumberString,
 };
 
 export default ComplianceStatusBar;
