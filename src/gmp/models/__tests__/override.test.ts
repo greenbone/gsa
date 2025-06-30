@@ -9,7 +9,7 @@ import Override from 'gmp/models/override';
 import {testModel} from 'gmp/models/testing';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-describe('Note model tests', () => {
+describe('Override model tests', () => {
   testModel(Override, 'override', {testIsActive: false});
 
   test('should use defaults', () => {
