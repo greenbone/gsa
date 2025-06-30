@@ -13,7 +13,7 @@ import SolutionType from 'web/components/icon/SolutionTypeIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import TableData from 'web/components/table/Data';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesHeader} from 'web/entities/Header';

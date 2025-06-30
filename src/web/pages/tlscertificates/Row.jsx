@@ -11,7 +11,7 @@ import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';

@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 import ComplianceState from 'web/components/label/ComplianceState';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';
 import useTranslation from 'web/hooks/useTranslation';

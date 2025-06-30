@@ -10,7 +10,7 @@ import Layout from 'web/components/layout/Layout';
 import Sort from 'web/components/sortby/SortBy';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';

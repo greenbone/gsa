@@ -27,7 +27,7 @@ import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import InfoTable from 'web/components/table/InfoTable';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import EntityComponent from 'web/entity/EntityComponent';
 import EntityPage from 'web/entity/EntityPage';

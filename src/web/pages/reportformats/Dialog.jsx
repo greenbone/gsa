@@ -19,8 +19,8 @@ import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
-import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/Table';
+import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
