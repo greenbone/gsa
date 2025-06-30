@@ -4,6 +4,8 @@
  */
 
 import _ from 'gmp/locale';
+import {Date} from 'gmp/models/date';
+import {ModelElement} from 'gmp/models/model';
 import {parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -38,14 +40,18 @@ const LICENSE_MODEL = {
   6500: 'Greenbone Enterprise 6500',
   expo: 'Greenbone Enterprise EXPO',
   '150c-siesta': 'Greenbone Enterprise 150C-SiESTA',
-};
+} as const;
 
-export const getLicenseApplianceModelName = value => {
+type ApplianceModel = keyof typeof LICENSE_MODEL;
+type ApplianceModelType = 'virtual' | 'hardware';
+type LicenseStatus = 'active' | 'corrupt' | 'expired' | 'no_license';
+
+export const getLicenseApplianceModelName = (value: ApplianceModel) => {
   const name = LICENSE_MODEL[value];
   return isDefined(name) ? name : value;
 };
 
-export const getLicenseApplianceModelType = value => {
+export const getLicenseApplianceModelType = (value?: ApplianceModelType) => {
   if (!isDefined(value)) {
     return value;
   }
@@ -58,7 +64,7 @@ export const getLicenseApplianceModelType = value => {
   return _('Unknown');
 };
 
-export const getTranslatableLicenseStatus = value => {
+export const getTranslatableLicenseStatus = (value: LicenseStatus) => {
   switch (value) {
     case 'active':
       return _('License is active');
@@ -73,20 +79,66 @@ export const getTranslatableLicenseStatus = value => {
   }
 };
 
-export class License {
+interface LicenseElement extends ModelElement {
+  content: {
+    appliance?: {
+      model?: ApplianceModel;
+      model_type?: ApplianceModelType;
+    };
+    meta: {
+      begins?: string;
+      comment?: string;
+      created?: string;
+      customer_name?: string;
+      expires?: string;
+      id?: string;
+      type?: string;
+      version?: string;
+    };
+  };
+  status: LicenseStatus;
+}
+
+interface LicenseProperties {
+  applianceModel?: ApplianceModel;
+  applianceModelType?: ApplianceModelType;
+  begins?: Date;
+  comment?: string;
+  created?: Date;
+  customerName?: string;
+  expires?: Date;
+  id?: string;
+  status?: LicenseStatus;
+  type?: string;
+  version?: string;
+}
+
+class License {
+  readonly applianceModel?: ApplianceModel;
+  readonly applianceModelType?: ApplianceModelType;
+  readonly begins?: Date;
+  readonly comment?: string;
+  readonly created?: Date;
+  readonly customerName?: string;
+  readonly expires?: Date;
+  readonly id?: string;
+  readonly status?: LicenseStatus;
+  readonly type?: string;
+  readonly version?: string;
+
   constructor({
-    id,
-    status,
-    customerName,
-    created,
-    version,
-    begins,
-    expires,
-    comment,
-    type,
     applianceModel,
     applianceModelType,
-  }) {
+    begins,
+    comment,
+    created,
+    customerName,
+    expires,
+    id,
+    status,
+    type,
+    version,
+  }: LicenseProperties) {
     this.status = status;
     this.id = id;
     this.customerName = customerName;
@@ -101,7 +153,7 @@ export class License {
     this.applianceModelType = applianceModelType;
   }
 
-  static fromElement(element) {
+  static fromElement(element: LicenseElement): License {
     const {content, status} = element;
     return new License({
       status: status,

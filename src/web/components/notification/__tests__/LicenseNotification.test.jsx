@@ -13,7 +13,7 @@ import {
 } from '@gsa/testing';
 import {screen, rendererWith, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import {License} from 'gmp/models/license';
+import License from 'gmp/models/license';
 import LicenseNotification from 'web/components/notification/LicenseNotification';
 import Theme from 'web/utils/Theme';
 

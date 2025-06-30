@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {License} from 'gmp/models/license';
+import License from 'gmp/models/license';
 import {parseDate} from 'gmp/parser';
 
 describe('License tests', () => {
@@ -13,7 +13,6 @@ describe('License tests', () => {
       status: 'active',
       id: '12345',
       version: '1.0.0',
-      title: 'Test License',
       type: 'trial',
       customerName: 'Monsters Inc.',
       created: parseDate('2021-08-27T06:05:21Z'),
@@ -22,7 +21,6 @@ describe('License tests', () => {
       comment: 'foo',
       applianceModel: 'trial',
       applianceModelType: 'virtual',
-      sensor: false,
     });
 
     expect(license.id).toEqual('12345');
@@ -44,7 +42,6 @@ describe('License tests', () => {
         meta: {
           id: '12345',
           version: '1.0.0',
-          title: 'Test License',
           type: 'trial',
           customer_name: 'Monsters Inc.',
           created: '2021-08-27T06:05:21Z',
@@ -55,7 +52,6 @@ describe('License tests', () => {
         appliance: {
           model: 'trial',
           model_type: 'virtual',
-          sensor: false,
         },
       },
     });
