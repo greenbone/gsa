@@ -33,7 +33,7 @@ import TableRow from 'web/components/table/TableRow';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import withLanguage from 'web/hooks/withLanguage';
-import SettingsDialog from 'web/pages/usersettings/Dialog';
+import SettingsDialog from 'web/pages/user-settings/Dialog';
 import {
   loadEntities as loadAlerts,
   loadEntity as loadAlert,

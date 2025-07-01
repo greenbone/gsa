@@ -141,7 +141,6 @@ const DefaultsPart = ({
 
 DefaultsPart.propTypes = {
   alerts: PropTypes.array,
-  capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
   defaultAlert: PropTypes.string,
   defaultEsxiCredential: PropTypes.string,

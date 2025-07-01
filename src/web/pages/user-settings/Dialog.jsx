@@ -16,11 +16,11 @@ import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import DefaultsPart from 'web/pages/usersettings/DefaultsPart';
-import FilterPart from 'web/pages/usersettings/FilterPart';
-import GeneralPart from 'web/pages/usersettings/GeneralPart';
-import SeverityPart from 'web/pages/usersettings/SeverityPart';
-import {userSettingsRules} from 'web/pages/usersettings/validationrules';
+import DefaultsPart from 'web/pages/user-settings/DefaultsPart';
+import FilterPart from 'web/pages/user-settings/FilterPart';
+import GeneralPart from 'web/pages/user-settings/GeneralPart';
+import SeverityPart from 'web/pages/user-settings/SeverityPart';
+import {userSettingsRules} from 'web/pages/user-settings/validationRules';
 import PropTypes from 'web/utils/PropTypes';
 
 // necessary to stretch FormGroups to full width inside of Section
@@ -297,7 +297,6 @@ UserSettingsDialogComponent.propTypes = {
   alertsFilter: PropTypes.string,
   auditReportsFilter: PropTypes.string,
   autoCacheRebuild: PropTypes.number,
-  capabilities: PropTypes.capabilities.isRequired,
   certBundFilter: PropTypes.string,
   configsFilter: PropTypes.string,
   cpeFilter: PropTypes.string,
