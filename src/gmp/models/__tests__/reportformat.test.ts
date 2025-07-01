@@ -155,8 +155,8 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat.params[0].type).toEqual('lorem');
     expect(reportFormat.params[0].options).toEqual([]);
     expect(reportFormat.params[0].value).toBeUndefined();
-    expect(reportFormat.params[0].value_labels).toBeUndefined();
-    expect(reportFormat.params[0].default_labels).toBeUndefined();
+    expect(reportFormat.params[0].valueLabels).toBeUndefined();
+    expect(reportFormat.params[0].defaultLabels).toBeUndefined();
 
     const reportFormat2 = ReportFormat.fromElement({
       param: [
@@ -178,8 +178,8 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat2.params[0].type).toBeUndefined();
     expect(reportFormat2.params[0].options).toEqual([]);
     expect(reportFormat2.params[0].value).toBeUndefined();
-    expect(reportFormat2.params[0].value_labels).toBeUndefined();
-    expect(reportFormat2.params[0].default_labels).toBeUndefined();
+    expect(reportFormat2.params[0].valueLabels).toBeUndefined();
+    expect(reportFormat2.params[0].defaultLabels).toBeUndefined();
 
     const reportFormat3 = ReportFormat.fromElement({
       param: [
@@ -203,8 +203,8 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat3.params[0].type).toBeUndefined();
     expect(reportFormat3.params[0].options).toEqual([]);
     expect(reportFormat3.params[0].value).toBeUndefined();
-    expect(reportFormat3.params[0].value_labels).toBeUndefined();
-    expect(reportFormat3.params[0].default_labels).toBeUndefined();
+    expect(reportFormat3.params[0].valueLabels).toBeUndefined();
+    expect(reportFormat3.params[0].defaultLabels).toBeUndefined();
 
     const reportFormat4 = ReportFormat.fromElement({
       param: [
@@ -230,8 +230,8 @@ describe('ReportFormat model tests', () => {
       {value: 'opt2', name: 'opt2'},
     ]);
     expect(reportFormat4.params[0].value).toBeUndefined();
-    expect(reportFormat4.params[0].value_labels).toBeUndefined();
-    expect(reportFormat4.params[0].default_labels).toBeUndefined();
+    expect(reportFormat4.params[0].valueLabels).toBeUndefined();
+    expect(reportFormat4.params[0].defaultLabels).toBeUndefined();
 
     const reportFormat5 = ReportFormat.fromElement({
       param: [
@@ -253,8 +253,8 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat5.params[0].type).toBeUndefined();
     expect(reportFormat5.params[0].options).toEqual([]);
     expect(reportFormat5.params[0].value).toEqual('foo');
-    expect(reportFormat5.params[0].value_labels).toBeUndefined();
-    expect(reportFormat5.params[0].default_labels).toBeUndefined();
+    expect(reportFormat5.params[0].valueLabels).toBeUndefined();
+    expect(reportFormat5.params[0].defaultLabels).toBeUndefined();
 
     const reportFormat6 = ReportFormat.fromElement({
       param: [
@@ -274,8 +274,8 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat6.params[0].type).toBeUndefined();
     expect(reportFormat6.params[0].options).toEqual([]);
     expect(reportFormat6.params[0].value).toEqual('bar');
-    expect(reportFormat6.params[0].value_labels).toBeUndefined();
-    expect(reportFormat6.params[0].default_labels).toBeUndefined();
+    expect(reportFormat6.params[0].valueLabels).toBeUndefined();
+    expect(reportFormat6.params[0].defaultLabels).toBeUndefined();
 
     const reportFormat7 = ReportFormat.fromElement({
       param: [
@@ -301,8 +301,8 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat7.params[0].type).toEqual('report_format_list');
     expect(reportFormat7.params[0].options).toEqual([]);
     expect(reportFormat7.params[0].value).toEqual(['42', '21']);
-    expect(reportFormat7.params[0].value_labels).toEqual({});
-    expect(reportFormat7.params[0].default_labels).toEqual({});
+    expect(reportFormat7.params[0].valueLabels).toEqual({});
+    expect(reportFormat7.params[0].defaultLabels).toEqual({});
 
     const reportFormat8 = ReportFormat.fromElement({
       param: [
@@ -328,8 +328,8 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat8.params[0].type).toEqual('report_format_list');
     expect(reportFormat8.params[0].options).toEqual([]);
     expect(reportFormat8.params[0].value).toEqual(['42']);
-    expect(reportFormat7.params[0].value_labels).toEqual({});
-    expect(reportFormat7.params[0].default_labels).toEqual({});
+    expect(reportFormat8.params[0].valueLabels).toEqual({});
+    expect(reportFormat8.params[0].defaultLabels).toEqual({});
 
     const reportFormat9 = ReportFormat.fromElement({
       param: [
@@ -361,8 +361,8 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat9.params[0].type).toEqual('report_format_list');
     expect(reportFormat9.params[0].options).toEqual([]);
     expect(reportFormat9.params[0].value).toEqual(['42', '21']);
-    expect(reportFormat9.params[0].value_labels).toEqual({21: '2', 42: '1'});
-    expect(reportFormat9.params[0].default_labels).toEqual({22: '4', 43: '3'});
+    expect(reportFormat9.params[0].valueLabels).toEqual({21: '2', 42: '1'});
+    expect(reportFormat9.params[0].defaultLabels).toEqual({22: '4', 43: '3'});
   });
 
   describe('ReportFormat model method tests', () => {
