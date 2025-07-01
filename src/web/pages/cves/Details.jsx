@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
-import {isDefined, isNumber} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Layout from 'web/components/layout/Layout';
 import ExternalLink from 'web/components/link/ExternalLink';

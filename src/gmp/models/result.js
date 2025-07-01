@@ -13,27 +13,27 @@ import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 const createCveResult = ({name, epss}) => {
-  const ret_epss = {};
+  const retEpss = {};
 
   if (isDefined(epss?.max_epss)) {
-    ret_epss.maxEpss = {
+    retEpss.maxEpss = {
       percentile: parseFloat(epss?.max_epss?.percentile),
       score: parseFloat(epss?.max_epss?.score),
     };
     if (isDefined(epss?.max_epss?.cve)) {
-      ret_epss.maxEpss.cve = {
+      retEpss.maxEpss.cve = {
         id: epss?.max_epss?.cve?._id,
         severity: parseFloat(epss?.max_epss?.cve?.severity),
       };
     }
   }
   if (isDefined(epss?.max_severity)) {
-    ret_epss.maxSeverity = {
+    retEpss.maxSeverity = {
       percentile: parseFloat(epss?.max_severity?.percentile),
       score: parseFloat(epss?.max_severity?.score),
     };
     if (isDefined(epss?.max_severity?.cve)) {
-      ret_epss.maxSeverity.cve = {
+      retEpss.maxSeverity.cve = {
         id: epss?.max_severity?.cve?._id,
         severity: parseFloat(epss?.max_severity?.cve?.severity),
       };
@@ -43,7 +43,7 @@ const createCveResult = ({name, epss}) => {
   return {
     name,
     id: name,
-    epss: ret_epss,
+    epss: retEpss,
   };
 };
 
