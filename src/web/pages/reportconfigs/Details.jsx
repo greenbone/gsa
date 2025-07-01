@@ -73,7 +73,7 @@ const ReportConfigDetails = ({entity, links = true}) => {
   const {orphan, reportFormat, params, alerts = []} = entity;
 
   const reportFormatLink = orphan ? (
-    reportFormat.id
+    reportFormat?.id
   ) : (
     <DetailsLink id={reportFormat.id} textOnly={!links} type="reportformat">
       {reportFormat.name}

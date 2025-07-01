@@ -24,10 +24,10 @@ const getValue = <TValue>(val?: {__text?: TValue} | TValue): TValue => {
 
 interface ParamObjectValueElement {
   __text?: string | number | boolean;
-  _using_default?: YesNo;
+  _using_default?: YesNo | '0' | '1';
 }
 
-interface ParamElement {
+export interface ParamElement {
   default?:
     | string
     | number
@@ -84,8 +84,8 @@ export class Param {
 
   constructor({name, type, value, options, ...other}: ParamElement) {
     this.name = name;
-    this.max = isObject(type) ? type?.max : undefined;
-    this.min = isObject(type) ? type?.min : undefined;
+    this.max = isObject(type) ? parseInt(type?.max) : undefined;
+    this.min = isObject(type) ? parseInt(type?.min) : undefined;
     this.type = getValue(type) as ParamType;
     this.valueUsingDefault =
       isObject(value) &&
