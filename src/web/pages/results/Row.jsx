@@ -158,9 +158,7 @@ const Row = ({
               ? `${(epssScore * 100).toFixed(3)}%`
               : _('N/A')}
           </TableData>
-          <TableData>
-            {printPercentile(epssPercentile)}
-          </TableData>
+          <TableData>{printPercentile(epssPercentile)}</TableData>
         </>
       )}
       <TableData>
