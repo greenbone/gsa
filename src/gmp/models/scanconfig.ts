@@ -28,14 +28,14 @@ export const parseTrend = parseInt;
 
 type ScanConfigPreferenceValue = string | number;
 
-interface ScanConfigFamilyElement {
+export interface ScanConfigFamilyElement {
   name: string;
   growing?: number;
   nvt_count?: string;
   max_nvt_count?: string;
 }
 
-interface ScanConfigPreferenceElement {
+export interface ScanConfigPreferenceElement {
   default?: ScanConfigPreferenceValue;
   id?: number;
   name?: string;
@@ -48,7 +48,7 @@ interface ScanConfigPreferenceElement {
   value?: ScanConfigPreferenceValue;
 }
 
-interface ScannerElement extends ModelElement {
+export interface ScannerElement extends ModelElement {
   __text: string;
 }
 
@@ -77,7 +77,7 @@ interface ScanConfigElement extends ModelElement {
   };
 }
 
-interface ScanConfigFamily {
+export interface ScanConfigFamily {
   name: string;
   trend?: number;
   nvts?: {
@@ -86,13 +86,13 @@ interface ScanConfigFamily {
   };
 }
 
-interface ScanConfigFamilies {
+export interface ScanConfigFamilies {
   count?: number;
   trend?: number;
   [name: string]: ScanConfigFamily | number | undefined;
 }
 
-interface ScanConfigPreference {
+export interface ScanConfigPreference {
   default?: ScanConfigPreferenceValue;
   hr_name?: string;
   id?: number;
@@ -105,7 +105,7 @@ interface ScanConfigPreference {
   value?: ScanConfigPreferenceValue;
 }
 
-interface ScanConfigNvts {
+export interface ScanConfigNvts {
   count?: number;
   known?: number;
   max?: number;
