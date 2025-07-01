@@ -3,19 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE, YesNo} from 'gmp/parser';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import Spinner from 'web/components/form/Spinner';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const SeverityPart = ({defaultSeverity, dynamicSeverity, onChange}) => {
+interface SeverityPartProps {
+  defaultSeverity?: number;
+  dynamicSeverity?: YesNo;
+  onChange: (value: number, name?: string) => void;
+}
+
+const SeverityPart = ({
+  defaultSeverity,
+  dynamicSeverity,
+  onChange,
+}: SeverityPartProps) => {
   const [_] = useTranslation();
   return (
-    <React.Fragment>
-      <Checkbox
+    <>
+      <Checkbox<YesNo>
         checked={dynamicSeverity === YES_VALUE}
         checkedValue={YES_VALUE}
         name="dynamicSeverity"
@@ -25,24 +33,18 @@ const SeverityPart = ({defaultSeverity, dynamicSeverity, onChange}) => {
       />
       <FormGroup title={_('Default Severity')}>
         <Spinner
-          max="10"
-          min="0"
+          max={10}
+          min={0}
           name="defaultSeverity"
           precision={1}
-          step="0.1"
+          step={0.1}
           type="float"
           value={defaultSeverity}
           onChange={onChange}
         />
       </FormGroup>
-    </React.Fragment>
+    </>
   );
-};
-
-SeverityPart.propTypes = {
-  defaultSeverity: PropTypes.number,
-  dynamicSeverity: PropTypes.yesno,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default SeverityPart;
