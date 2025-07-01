@@ -22,22 +22,37 @@ const getValue = <TValue>(val?: {__text?: TValue} | TValue): TValue => {
   return isObject(val) ? val.__text : val;
 };
 
-class Param {
-  readonly default?: string | number | boolean | string[];
-  readonly default_labels?: Record<string, string | undefined>;
+type ParamValue = string | number | boolean | string[];
+interface ParamOption {
+  value: string;
+  name: string;
+}
+interface ParamLabels {
+  [key: string]: string | undefined;
+}
+type ParamType =
+  | 'report_format_list'
+  | 'multi_selection'
+  | 'integer'
+  | 'boolean'
+  | 'text';
+
+export class Param {
+  readonly default?: ParamValue;
+  readonly defaultLabels?: ParamLabels;
   readonly max?: number;
   readonly min?: number;
   readonly name?: string;
-  readonly options: {value: string; name: string}[];
-  readonly type?: string;
-  readonly value?: string | number | boolean | string[];
-  readonly value_labels?: Record<string, string | undefined>;
+  readonly options: ParamOption[];
+  readonly type?: ParamType;
+  readonly value?: ParamValue;
+  readonly valueLabels?: ParamLabels;
 
   constructor({name, type, value, options, ...other}: ParamElement) {
     this.name = name;
     this.max = isObject(type) ? type?.max : undefined;
     this.min = isObject(type) ? type?.min : undefined;
-    this.type = getValue(type);
+    this.type = getValue(type) as ParamType;
 
     if (isObject(options)) {
       this.options = map(options.option, opt => {
@@ -67,7 +82,7 @@ class Param {
       this.value = map(reportFormats, format => format._id as string);
       this.default = map(defaultReportFormats, format => format._id as string);
 
-      this.value_labels = reportFormats.reduce<
+      this.valueLabels = reportFormats.reduce<
         Record<string, string | undefined>
       >(
         (acc, format) => ({
@@ -76,7 +91,7 @@ class Param {
         }),
         {},
       );
-      this.default_labels = defaultReportFormats.reduce<
+      this.defaultLabels = defaultReportFormats.reduce<
         Record<string, string | undefined>
       >(
         (acc, format) => ({
