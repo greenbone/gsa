@@ -5,11 +5,11 @@
 
 import {_l} from 'gmp/locale/lang';
 
-const VALID_ROWSPERPAGE_ERROR_MESSAGE = _l(
+export const VALID_ROWS_PER_PAGE_ERROR_MESSAGE = _l(
   '"Rows per page" requires a value of 1 or greater.',
 );
 
 export const userSettingsRules = {
-  rowsPerPage: value =>
-    value > 0 ? undefined : VALID_ROWSPERPAGE_ERROR_MESSAGE,
+  rowsPerPage: (value: number) =>
+    value > 0 ? undefined : VALID_ROWS_PER_PAGE_ERROR_MESSAGE,
 };
