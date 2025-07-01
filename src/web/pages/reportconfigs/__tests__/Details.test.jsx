@@ -60,7 +60,11 @@ describe('Report Config Details tests', () => {
       _id: '123',
       name: 'foo',
       comment: 'bar',
-      orphan: '1',
+      orphan: 1,
+      report_format: {
+        id: '123456',
+        name: 'foo',
+      },
     });
 
     const caps = new Capabilities(['everything']);
