@@ -18,8 +18,8 @@ describe('Scan Config Details tests', () => {
       scanner: {name: 'scanner1', id: '42', type: OPENVAS_SCANNER_TYPE},
       tasks: {
         task: [
-          {id: '1234', name: 'task1'},
-          {id: '5678', name: 'task2'},
+          {_id: '1234', name: 'task1'},
+          {_id: '5678', name: 'task2'},
         ],
       },
     });
@@ -46,12 +46,12 @@ describe('Scan Config Details tests', () => {
     const config = ScanConfig.fromElement({
       name: 'foo',
       comment: 'bar',
-      deprecated: '1',
-      scanner: {name: 'scanner1', id: '42', type: OPENVAS_SCANNER_TYPE},
+      deprecated: 1,
+      scanner: {name: 'scanner1', _id: '42', type: OPENVAS_SCANNER_TYPE},
       tasks: {
         task: [
-          {id: '1234', name: 'task1'},
-          {id: '5678', name: 'task2'},
+          {_id: '1234', name: 'task1'},
+          {_id: '5678', name: 'task2'},
         ],
       },
     });
