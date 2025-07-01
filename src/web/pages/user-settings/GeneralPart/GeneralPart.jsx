@@ -4,7 +4,6 @@
  */
 
 import {useState} from 'react';
-import styled from 'styled-components';
 import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -15,55 +14,18 @@ import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
 import useTranslation from 'web/hooks/useTranslation';
+import Notification from 'web/pages/user-settings/GeneralPart/Notification';
 import Languages from 'web/utils/Languages';
 import PropTypes from 'web/utils/PropTypes';
-import Theme from 'web/utils/Theme';
 
-const renderLanguageItems = () =>
+const TIME = 'time';
+const LONG_DATE = 'longDate';
+
+export const renderLanguageItems = () =>
   Object.entries(Languages).map(([code, {name, native_name}]) => ({
     value: code,
     label: isDefined(native_name) ? `${name} | ${native_name}` : `${name}`,
   }));
-
-const NotificationDiv = styled.div`
-  color: ${props => props.color};
-`;
-
-const Notification = ({newPassword, oldPassword, confPassword}) => {
-  const [_] = useTranslation();
-  let color;
-  let text;
-
-  if (oldPassword === '' && newPassword === '' && confPassword === '') {
-    text = null;
-  } else if (oldPassword !== '' && newPassword === '' && confPassword === '') {
-    color = Theme.warningRed;
-    text = _('Please enter a new password!');
-  } else if (
-    oldPassword === '' &&
-    (newPassword !== '' || confPassword !== '')
-  ) {
-    color = Theme.warningRed;
-    text = _('Please enter your old password!');
-  } else if (oldPassword !== '' && newPassword !== confPassword) {
-    color = Theme.warningRed;
-    text = _('Confirmation does not match new password!');
-  } else if (oldPassword !== '' && newPassword === confPassword) {
-    color = Theme.darkGreen;
-    text = _('Confirmation matches new password!');
-  }
-
-  return <NotificationDiv color={color}>{text}</NotificationDiv>;
-};
-
-Notification.propTypes = {
-  confPassword: PropTypes.string,
-  newPassword: PropTypes.string,
-  oldPassword: PropTypes.string,
-};
-
-const TIME = 'time';
-const LONG_DATE = 'longDate';
 
 const GeneralPart = ({
   timezone,
