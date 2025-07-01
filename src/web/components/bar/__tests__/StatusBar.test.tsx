@@ -61,4 +61,16 @@ describe('StatusBar tests', () => {
       `linear-gradient(90deg, ${Theme.severityWarnYellow} 0%, ${Theme.severityWarnYellow} 100%)`,
     );
   });
+
+  test('should render error background for interrupted status', () => {
+    render(<StatusBar progress="50" status={TASK_STATUS.interrupted} />);
+    const progress = screen.getByTestId('progress');
+    expect(progress).toHaveStyleRule(
+      'background',
+      `linear-gradient(90deg, ${Theme.errorRed} 0%, ${Theme.errorRed} 100%)`,
+    );
+    expect(progress).toHaveStyleRule('width', '50%');
+    const text = screen.getByTestId('statusbar-text');
+    expect(text).toHaveTextContent('Interrupted at 50 %');
+  });
 });

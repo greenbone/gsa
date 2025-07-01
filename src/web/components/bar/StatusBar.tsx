@@ -3,18 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
+import {BACKGROUND_STATES} from 'web/components/bar/definitions';
 import ProgressBar, {adjustProgress} from 'web/components/bar/ProgressBar';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface StatusBarProps {
+  progress?: string | number;
+  status?: string;
+}
 
 const Span = styled.span`
   white-space: nowrap;
 `;
 
-const StatusBar = ({status = 'Unknown', progress = '0'}) => {
+const StatusBar = ({status = 'Unknown', progress = '0'}: StatusBarProps) => {
   const [_] = useTranslation();
   progress = adjustProgress(progress);
 
@@ -50,22 +54,22 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     status === TASK_STATUS.requested ||
     status === TASK_STATUS.queued
   ) {
-    background = 'warn';
+    background = BACKGROUND_STATES.WARN;
   } else if (status === TASK_STATUS.interrupted) {
-    background = 'error';
+    background = BACKGROUND_STATES.ERROR;
   } else if (
     status === TASK_STATUS.uploading ||
     status === TASK_STATUS.container ||
     status === TASK_STATUS.done
   ) {
-    background = 'low';
+    background = BACKGROUND_STATES.LOW;
   } else if (status === TASK_STATUS.new) {
-    background = 'new';
+    background = BACKGROUND_STATES.NEW;
   } else if (
     status === TASK_STATUS.processing ||
     status === TASK_STATUS.running
   ) {
-    background = 'run';
+    background = BACKGROUND_STATES.RUN;
   }
 
   const title =
@@ -83,11 +87,6 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
       <Span data-testid="statusbar-text">{text}</Span>
     </ProgressBar>
   );
-};
-
-StatusBar.propTypes = {
-  progress: PropTypes.numberOrNumberString,
-  status: PropTypes.string,
 };
 
 export default StatusBar;
