@@ -6,10 +6,14 @@
 import React from 'react';
 import Col from 'web/components/table/Col';
 import InfoTable from 'web/components/table/InfoTable';
-import PropTypes from 'web/utils/PropTypes';
 
-const DetailsTable = ({children, size = 'full', ...props}) => (
-  <InfoTable {...props} size={size}>
+interface DetailsTableProps {
+  children?: React.ReactNode;
+  size?: string;
+}
+
+const DetailsTable = ({children, size = 'full'}: DetailsTableProps) => (
+  <InfoTable size={size}>
     <colgroup>
       <Col width="10%" />
       <Col width="90%" />
@@ -17,9 +21,5 @@ const DetailsTable = ({children, size = 'full', ...props}) => (
     {children}
   </InfoTable>
 );
-
-DetailsTable.propTypes = {
-  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
 
 export default DetailsTable;

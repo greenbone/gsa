@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 import SeverityClassLabel from 'web/components/label/SeverityClass';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';
 import ReportRow from 'web/pages/reports/Row';

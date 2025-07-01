@@ -15,7 +15,7 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import DetailsTable from 'web/components/table/DetailsTable';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import {compareAlerts} from 'web/pages/tasks/Details';
 import {

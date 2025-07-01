@@ -12,9 +12,6 @@ const Table = styled(SimpleTable)`
   }
   & tr td:first-child {
     padding-right: 5px;
-     {
-      /* keep space between columns with low table width */
-    }
   }
 `;
 

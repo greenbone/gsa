@@ -11,7 +11,7 @@ import ExternalLink from 'web/components/link/ExternalLink';
 import TableBody from 'web/components/table/Body';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';

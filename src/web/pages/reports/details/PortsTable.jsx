@@ -9,7 +9,7 @@ import SeverityBar from 'web/components/bar/SeverityBar';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import {createEntitiesTable} from 'web/entities/Table';
 import PropTypes from 'web/utils/PropTypes';
 

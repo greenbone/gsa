@@ -13,12 +13,7 @@ interface TableProps {
   header?: React.ReactNode;
 }
 
-const Table: React.FC<TableProps> = ({
-  children,
-  className,
-  footer,
-  header,
-}: TableProps) => {
+const Table = ({children, className, footer, header}: TableProps) => {
   return (
     <table className={className}>
       {header}

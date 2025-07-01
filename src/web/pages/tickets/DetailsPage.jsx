@@ -28,7 +28,7 @@ import TableBody from 'web/components/table/Body';
 import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import EntityPage from 'web/entity/EntityPage';
 import EntityCloneIcon from 'web/entity/icon/CloneIcon';
 import EntityEditIcon from 'web/entity/icon/EditIcon';

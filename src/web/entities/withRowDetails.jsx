@@ -10,7 +10,7 @@ import {DetailsIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/Data';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';

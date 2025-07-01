@@ -7,7 +7,7 @@ import React from 'react';
 import Comment from 'web/components/comment/Comment';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/Data';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import EditIcon from 'web/entity/icon/EditIcon';

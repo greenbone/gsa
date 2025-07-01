@@ -5,6 +5,8 @@
 
 import React from 'react';
 
-const TableFooter = props => <tfoot {...props} />;
+type TableFooterProps = React.HTMLAttributes<HTMLTableSectionElement>;
+
+const TableFooter = (props: TableFooterProps) => <tfoot {...props} />;
 
 export default TableFooter;

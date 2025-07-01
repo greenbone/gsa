@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {NewIcon} from 'web/components/icon';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import EntitiesFooter, {withEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
