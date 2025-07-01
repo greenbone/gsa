@@ -155,10 +155,10 @@ const Row = ({
         <>
           <TableData>
             {isNumber(epssScore)
-              ? `${(epssScore * 100).toFixed(3)}%` : _('N/A')}
+              ? `${(epssScore * 100).toFixed(3)}%`
+              : _('N/A')}
           </TableData>
           <TableData>
-            {console.info ("HALLO: ", entity.information.epss)}
             {printPercentile(epssPercentile)}
           </TableData>
         </>

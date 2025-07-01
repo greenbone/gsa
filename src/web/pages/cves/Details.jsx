@@ -96,9 +96,7 @@ const CveDetails = ({entity}) => {
               </TableRow>
               <TableRow>
                 <TableData>{_('Percentile')}</TableData>
-                <TableData>
-                  {printPercentile(epss.percentile)}
-                </TableData>
+                <TableData>{printPercentile(epss.percentile)}</TableData>
               </TableRow>
             </TableBody>
           </InfoTable>

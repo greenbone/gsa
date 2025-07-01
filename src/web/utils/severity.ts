@@ -221,19 +221,19 @@ export const getSeverityLevelBoundaries = (
   rating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ): SeverityLevelBoundaries => SEVERITY_LEVEL_BOUNDARIES[rating];
 
-export const printPercentile = (
-  percentile: number,
-): string => {
+export const printPercentile = (percentile: number): string => {
   if (isNumber(percentile)) {
-    if (parseInt(percentile.toFixed(0)) % 10 > 3 ||
-        parseInt(percentile.toFixed(0)) % 10 === 0 )
-      return (`${percentile.toFixed(0)}th`);
+    if (
+      parseInt(percentile.toFixed(0)) % 10 > 3 ||
+      parseInt(percentile.toFixed(0)) % 10 === 0
+    )
+      return `${percentile.toFixed(0)}th`;
     if (parseInt(percentile.toFixed(0)) % 10 === 1)
-      return (`${percentile.toFixed(0)}st`);
+      return `${percentile.toFixed(0)}st`;
     if (parseInt(percentile.toFixed(0)) % 10 === 2)
-      return (`${percentile.toFixed(0)}nd`);
+      return `${percentile.toFixed(0)}nd`;
     if (parseInt(percentile.toFixed(0)) % 10 === 3)
-      return (`${percentile.toFixed(0)}rd`);
+      return `${percentile.toFixed(0)}rd`;
   }
-  return ('N/A');
- }
+  return 'N/A';
+};

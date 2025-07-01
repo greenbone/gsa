@@ -53,11 +53,11 @@ const Row = ({
       {gmp.settings.enableEPSS && (
         <>
           <TableData>
-            {isNumber(epssScore) ? `${(epssScore * 100).toFixed(3)}%` : _('N/A')}
+            {isNumber(epssScore)
+              ? `${(epssScore * 100).toFixed(3)}%`
+              : _('N/A')}
           </TableData>
-          <TableData>
-            {printPercentile(epssPercentile)}
-          </TableData>
+          <TableData>{printPercentile(epssPercentile)}</TableData>
         </>
       )}
       <ActionsComponent {...props} entity={entity} />

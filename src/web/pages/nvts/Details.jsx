@@ -149,7 +149,7 @@ const NvtDetails = ({entity, links = true}) => {
                   <TableData>
                     {printPercentile(epss.maxEpss.percentile)}
                   </TableData>
-            </TableRow>
+                </TableRow>
                 <TableRow>
                   <TableData>{_('CVE')}</TableData>
                   <TableData>
