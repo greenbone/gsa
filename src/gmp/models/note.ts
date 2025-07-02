@@ -11,23 +11,23 @@ import {
   parseTextElement,
   parseToString,
   parseYesNo,
+  TextElement,
   YES_VALUE,
   YesNo,
 } from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 
 export const NOTE_ACTIVE_UNLIMITED_VALUE = -2;
 export const NOTE_INACTIVE_VALUE = -1;
 
-interface NoteElement extends ModelElement {
+export interface NoteElement extends ModelElement {
   hosts?: string;
   nvt?: ModelElement;
   port?: string;
   result?: ModelElement;
   severity?: number;
   task?: ModelElement;
-  text?: string | object;
+  text?: string | TextElement;
   text_excerpt?: string;
 }
 
@@ -89,13 +89,14 @@ class Note extends Model {
       ret.name = ret.nvt.name;
     }
 
-    if (isDefined(element.text)) {
-      const textElement = parseTextElement(element.text);
-      ret.text = parseToString(textElement.text);
+    const {text, textExcerpt} = parseTextElement(element.text);
+    ret.text = text;
+    ret.textExcerpt = textExcerpt;
+
+    if (isDefined(element.text_excerpt)) {
+      ret.textExcerpt = parseYesNo(element.text_excerpt);
     }
-    ret.textExcerpt = isDefined(element.text_excerpt)
-      ? parseYesNo(element.text_excerpt)
-      : undefined;
+
     ret.severity = parseSeverity(ret.severity);
 
     ret.task = isModelElement(element.task)
@@ -106,7 +107,7 @@ class Note extends Model {
       : undefined;
 
     ret.hosts = parseCsv(element.hosts);
-    ret.port = isEmpty(element.port) ? undefined : String(element.port);
+    ret.port = parseToString(element.port);
 
     return ret;
   }

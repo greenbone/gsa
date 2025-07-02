@@ -131,21 +131,43 @@ describe('parseFloat tests', () => {
 
 describe('parseTextElement tests', () => {
   test('should convert text elements', () => {
+    expect(parseTextElement({__text: 'foo'})).toEqual({
+      text: 'foo',
+    });
     expect(
       parseTextElement({
         __text: 'foo',
-        __excerpt: '1',
+        _excerpt: '1',
       }),
     ).toEqual({
       text: 'foo',
-      textExcerpt: '1',
+      textExcerpt: 1,
     });
+  });
+
+  test('should parse empty text', () => {
+    expect(parseTextElement({__text: ''})).toEqual({});
+    expect(parseTextElement('')).toEqual({});
+  });
+
+  test('should parse undefined text', () => {
+    expect(parseTextElement()).toEqual({});
+    expect(parseTextElement(undefined)).toEqual({});
+    expect(parseTextElement({__text: undefined})).toEqual({});
   });
 
   test('should convert plain text elements', () => {
     expect(parseTextElement('foo')).toEqual({
       text: 'foo',
-      textExcerpt: '0',
+    });
+  });
+
+  test('should convert non strings', () => {
+    expect(parseTextElement(123)).toEqual({
+      text: '123',
+    });
+    expect(parseTextElement({__text: 123})).toEqual({
+      text: '123',
     });
   });
 });
