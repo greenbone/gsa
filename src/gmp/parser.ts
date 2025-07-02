@@ -131,7 +131,7 @@ export const parseCsv = (value: string | number = ''): string[] => {
 };
 
 export const parseQod = ({value, type}: QoDParams): QoD => ({
-  type: isEmpty(type) ? undefined : type,
+  type: parseToString(type),
   value: parseFloat(value),
 });
 
@@ -228,7 +228,7 @@ export const parseBoolean = (value?: BooleanValue): boolean => {
  */
 export const parseToString = (value?: unknown): string | undefined => {
   if (isDefined(value)) {
-    return String(value);
+    return isEmpty(value as string) ? undefined : String(value);
   }
   return undefined;
 };

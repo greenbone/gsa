@@ -455,4 +455,13 @@ describe('parseToString tests', () => {
   test('should return string for numbers', () => {
     expect(parseToString(1)).toEqual('1');
   });
+
+  test('should return string for boolean', () => {
+    expect(parseToString(true)).toEqual('true');
+    expect(parseToString(false)).toEqual('false');
+  });
+
+  test('should parse empty string as undefined', () => {
+    expect(parseToString('')).toBeUndefined();
+  });
 });
