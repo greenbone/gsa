@@ -447,6 +447,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.unknown]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -469,6 +470,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.unknown]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -491,6 +493,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.unknown]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -513,6 +516,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.unknown]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -535,6 +539,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.unknown]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
