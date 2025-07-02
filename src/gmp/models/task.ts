@@ -520,10 +520,6 @@ class Task extends Model {
   isContainer() {
     return !isDefined(this.target);
   }
-
-  getTranslatableStatus() {
-    return getTranslatableTaskStatus(this.status as TaskStatus);
-  }
 }
 
 export default Task;
