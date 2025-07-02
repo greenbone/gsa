@@ -14,7 +14,7 @@ export interface BaseModelElement {
   _id?: string;
   creation_time?: string;
   modification_time?: string;
-  type?: string;
+  type?: string | number;
 }
 
 /**
@@ -54,7 +54,7 @@ export const parseBaseModelProperties = (
 
   if (isDefined(element.type)) {
     // type should not be used directly
-    copy._type = element.type;
+    copy._type = String(element.type);
     // @ts-expect-error
     delete copy.type;
   }
