@@ -251,6 +251,12 @@ describe('parseQod tests', () => {
       type: 'remote_vul',
     });
   });
+
+  test('should return undefined for empty values', () => {
+    expect(parseQod({})).toEqual({});
+    expect(parseQod({value: '', type: ''})).toEqual({});
+    expect(parseQod({value: undefined, type: undefined})).toEqual({});
+  });
 });
 
 describe('setProperties tests', () => {

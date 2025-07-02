@@ -12,14 +12,14 @@ export interface Text {
   __excerpt?: string;
 }
 
-interface QoDParam {
-  type: string;
-  value: string;
+export interface QoDParams {
+  type?: string;
+  value?: string | number;
 }
 
-interface QoD {
-  type: string;
-  value: number | undefined;
+export interface QoD {
+  type?: string;
+  value?: number;
 }
 
 export type Properties = Record<string, unknown>;
@@ -130,9 +130,9 @@ export const parseCsv = (value: string | number = ''): string[] => {
   return isEmpty(value.trim()) ? [] : value.split(',').map(val => val.trim());
 };
 
-export const parseQod = (qod: QoDParam): QoD => ({
-  type: qod.type,
-  value: parseFloat(qod.value),
+export const parseQod = ({value, type}: QoDParams): QoD => ({
+  type: isEmpty(type) ? undefined : type,
+  value: parseFloat(value),
 });
 
 const esc2xml = {
