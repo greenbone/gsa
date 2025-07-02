@@ -167,7 +167,7 @@ describe('Nvt model tests', () => {
     expect(nvt2.severityOrigin).toEqual('Greenbone');
     expect(nvt2.severityDate).toEqual(date('2020-03-10T06:40:13Z'));
     expect(nvt3.severity).toEqual(1.0);
-    expect(nvt3.severityOrigin).toEqual('');
+    expect(nvt3.severityOrigin).toBeUndefined();
     expect(nvt3.severityDate).toBeUndefined();
   });
 
