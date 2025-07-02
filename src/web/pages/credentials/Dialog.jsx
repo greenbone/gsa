@@ -28,10 +28,10 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import Checkbox from 'web/components/form/Checkbox';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
+import MultiValueTextField from 'web/components/form/MultiValueTextField';
 import PasswordField from 'web/components/form/PasswordField';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
-import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import useGmp from 'web/hooks/useGmp';
@@ -119,6 +119,14 @@ const CredentialsDialog = props => {
     setError(e.message);
   };
 
+  const validateKdc = (val) => {
+     let invalid = !val.includes(' ')
+      if (!invalid){
+          setError(_("Invalid kdc value(s)"));
+      }
+      return invalid;
+    };
+
   const gmp = useGmp();
   const enabledTypes = types.filter(type => {
     return !(type === KRB5_CREDENTIAL_TYPE && !gmp.settings.enableKrb5);
@@ -155,7 +163,7 @@ const CredentialsDialog = props => {
     privacy_algorithm,
     privacy_password,
     id: isDefined(credential) ? credential.id : undefined,
-    kdc: credential?.kdc,
+    kdcs: credential?.kdcs,
     realm: credential?.realm,
   };
 
@@ -422,15 +430,14 @@ const CredentialsDialog = props => {
                   value={state.realm}
                   onChange={onValueChange}
                 />
-                <TextArea
-                  name="kdc"
-                  placeholder={_(
-                    'Comma separated list of Key Distribution Center',
-                  )}
-                  title={_('Key Distribution Center')}
-                  value={state.kdc}
-                  onChange={onValueChange}
-                />
+                  <MultiValueTextField
+                      name="kdcs"
+                      placeholder={_('Enter hostname or IP address, then press Enter or comma to add KDC')}
+                      title={_('Key Distribution Center')}
+                      validate={validateKdc}
+                      value={state.kdcs}
+                      onChange={onValueChange}
+                  />
               </>
             )}
           </>

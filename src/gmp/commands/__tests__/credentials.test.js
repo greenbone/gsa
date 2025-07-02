@@ -73,7 +73,7 @@ describe('CredentialCommand tests', () => {
       private_key: 'private_key',
       public_key: 'public_key',
       realm: 'kerberos_realm',
-      kdc: 'kerberos_kdc',
+      kdcs: ['kerberos_kdc'],
     });
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -99,7 +99,7 @@ describe('CredentialCommand tests', () => {
         private_key: 'private_key',
         public_key: 'public_key',
         realm: 'kerberos_realm',
-        kdc: 'kerberos_kdc',
+        "kdcs:": ['kerberos_kdc'],
       },
     });
 
@@ -144,5 +144,58 @@ describe('CredentialCommand tests', () => {
     const element = cmd.getElementFromRoot(root);
 
     expect(element).toEqual({id: '1', name: 'test-credential'});
+  });
+
+  test('should normalize single and multiple KDCs in getElementFromRoot', () => {
+    const root = {
+      // eslint-disable-next-line camelcase
+      get_credential: {
+        // eslint-disable-next-line camelcase
+        get_credentials_response: {
+          credential: [
+            {
+              id: '1',
+              name: 'test-credential',
+              kdcs: {
+                kdc: ['kdc.example.com'],
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const cmd = new CredentialCommand();
+
+    const result = cmd.getElementFromRoot(root);
+
+    expect(result[0].kdcs).toContain('kdc.example.com');
+
+    // test with array form too
+    const rootMultiple = {
+      // eslint-disable-next-line camelcase
+      get_credential: {
+        // eslint-disable-next-line camelcase
+        get_credentials_response: {
+          credential: [
+            {
+              id: '2',
+              name: 'multi-kdc',
+              kdcs: {
+                kdc: ['kdc1', 'kdc2'],
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const resultMultiple = cmd.getElementFromRoot(rootMultiple);
+
+    expect(resultMultiple).toContainEqual({
+      id: '2',
+      name: 'multi-kdc',
+      kdcs: ['kdc1', 'kdc2'],
+    });
   });
 });

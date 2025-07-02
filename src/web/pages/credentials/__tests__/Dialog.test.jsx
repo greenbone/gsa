@@ -414,8 +414,8 @@ describe('CredentialsDialog component tests', () => {
     const realm = screen.getByName('realm');
     expect(realm).toHaveValue('');
 
-    const kdc = screen.getByName('kdc');
-    expect(kdc).toHaveValue('');
+    const kdcs = screen.getByName('kdcs');
+    expect(kdcs).toHaveValue('');
   });
 
   test('should render CredentialsDialog and handle replace password interactions correctly', () => {
@@ -470,5 +470,29 @@ describe('CredentialsDialog component tests', () => {
     expect(checkbox).toBeChecked();
 
     expect(passwordField).not.toBeDisabled();
+  });
+
+  test('should render MultiValueTextField for KRB5 KDCs', () => {
+    gmp.settings.enableKrb5 = true;
+
+    const {render} = rendererWith({gmp});
+
+    render(
+      <CredentialsDialog
+        credential_type="krb5"
+        types={ALL_CREDENTIAL_TYPES}
+        onClose={handleClose}
+        onErrorClose={handleErrorClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const kdcInput = screen.getByPlaceholderText(
+      'Enter hostname or IP address, then press Enter or comma to add KDC',
+    );
+    expect(kdcInput).toBeVisible();
+
+    const label = screen.getByText('Key Distribution Centers');
+    expect(label).toBeVisible();
   });
 });

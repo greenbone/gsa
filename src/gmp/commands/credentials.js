@@ -35,7 +35,7 @@ export class CredentialCommand extends EntityCommand {
       private_key,
       public_key,
       realm,
-      kdc,
+      kdcs = [],
     } = args;
     log.debug('Creating new credential', args);
     return this.action({
@@ -56,7 +56,7 @@ export class CredentialCommand extends EntityCommand {
       public_key,
       certificate,
       realm,
-      kdc,
+      'kdcs:': kdcs.length > 0 ? kdcs : undefined,
     });
   }
 
@@ -81,7 +81,7 @@ export class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
-      kdc,
+      kdcs = [],
       realm,
     } = args;
     log.debug('Saving credential', args);
@@ -106,7 +106,7 @@ export class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
-      kdc,
+      'kdcs:': kdcs.length > 0 ? kdcs : undefined,
       realm,
     });
   }
@@ -123,7 +123,7 @@ export class CredentialCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return root.get_credential.get_credentials_response.credential;
+    return normalizeCredentialKdcsArray(root.get_credential.get_credentials_response).credential;
   }
 }
 
@@ -133,8 +133,24 @@ class CredentialsCommand extends EntitiesCommand {
   }
 
   getEntitiesResponse(root) {
-    return root.get_credentials.get_credentials_response;
+    return normalizeCredentialKdcsArray(root.get_credentials.get_credentials_response);
   }
+}
+
+function normalizeCredentialKdcsArray(credentialResponse) {
+  if (Array.isArray(credentialResponse.credential)) {
+    credentialResponse.credential = credentialResponse.credential.map(cred => {
+      if (cred.kdcs && cred.kdcs.kdc) {
+        cred.kdcs = Array.isArray(cred.kdcs.kdc)
+          ? cred.kdcs.kdc
+          : [cred.kdcs.kdc];
+      } else {
+        cred.kdcs = [];
+      }
+      return cred;
+    });
+  }
+  return credentialResponse;
 }
 
 registerCommand('credential', CredentialCommand);
