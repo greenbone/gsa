@@ -16,7 +16,7 @@ import {SelectItem} from 'web/components/form/Select';
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
 
-interface RenderSelectItem {
+export interface RenderSelectItemProps {
   name: string;
   id: string;
   deprecated?: string;
@@ -32,7 +32,7 @@ interface RenderSelectItem {
  * @returns An array to be used as items for a Select component or undefined
  */
 export const renderSelectItems = (
-  list: RenderSelectItem[] | undefined,
+  list: RenderSelectItemProps[] | undefined,
   defaultItemValue?: string,
   defaultItemLabel: string = UNSET_LABEL,
 ): SelectItem[] => {
