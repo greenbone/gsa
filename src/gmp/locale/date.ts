@@ -14,35 +14,63 @@ import {isDefined, isString, isJsDate} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.locale.date');
 
-export const SYSTEM_DEFAULT = 'system_default';
-const LONG_DATE = 'longDate';
-const SHORT_DATE = 'shortDate';
-const TIME = 'time';
+export const DATE_TIME_FORMAT_OPTIONS = {
+  WMDY: 'wmdy',
+  WDMY: 'wdmy',
+  TIME_12: '12',
+  TIME_24: '24',
+} as const;
 
-type DateTimeFormat = typeof LONG_DATE | typeof SHORT_DATE | typeof TIME;
-type DateTimeFormatOptions = 12 | 24 | 'wmdy' | 'wdmy';
+export const DATE_TIME_CATEGORY = {
+  TIME: 'time',
+  SHORT_DATE: 'shortDate',
+  LONG_DATE: 'longDate',
+} as const;
+
+export const SYSTEM_DEFAULT = 'system_default';
+
+export type DateTimeCategory =
+  (typeof DATE_TIME_CATEGORY)[keyof typeof DATE_TIME_CATEGORY];
+
+export type DateTimeFormatOptions =
+  (typeof DATE_TIME_FORMAT_OPTIONS)[keyof typeof DATE_TIME_FORMAT_OPTIONS];
+
 type DateInput = undefined | Date | GmpDate | string;
 
-export const dateTimeFormatOptions = {
-  [TIME]: {
+export type DateTimeKey = DateTimeFormatOptions | typeof SYSTEM_DEFAULT;
+
+export const dateTimeFormatOptions: {
+  [category in DateTimeCategory]: {
+    options: Partial<
+      Record<DateTimeFormatOptions, {format: string; label?: string}>
+    >;
+  };
+} = {
+  [DATE_TIME_CATEGORY.TIME]: {
     options: {
-      12: {format: 'h:mm A', label: '12h'},
-      24: {format: 'H:mm', label: '24h'},
+      [DATE_TIME_FORMAT_OPTIONS.TIME_12]: {format: 'h:mm A', label: '12h'},
+      [DATE_TIME_FORMAT_OPTIONS.TIME_24]: {format: 'H:mm', label: '24h'},
     },
   },
-  [SHORT_DATE]: {
+  [DATE_TIME_CATEGORY.SHORT_DATE]: {
     options: {
-      wmdy: {format: 'MM/DD/YYYY'},
-      wdmy: {format: 'DD/MM/YYYY'},
+      [DATE_TIME_FORMAT_OPTIONS.WMDY]: {format: 'MM/DD/YYYY'},
+      [DATE_TIME_FORMAT_OPTIONS.WDMY]: {format: 'DD/MM/YYYY'},
     },
   },
-  [LONG_DATE]: {
+  [DATE_TIME_CATEGORY.LONG_DATE]: {
     options: {
-      wmdy: {format: 'ddd, MMM D, YYYY', label: 'Weekday, Month, Day, Year'},
-      wdmy: {format: 'ddd, D MMM YYYY', label: 'Weekday, Day, Month, Year'},
+      [DATE_TIME_FORMAT_OPTIONS.WMDY]: {
+        format: 'ddd, MMM D, YYYY',
+        label: 'Weekday, Month, Day, Year',
+      },
+      [DATE_TIME_FORMAT_OPTIONS.WDMY]: {
+        format: 'ddd, D MMM YYYY',
+        label: 'Weekday, Day, Month, Year',
+      },
     },
   },
-} as const;
+};
 
 export const setDateLocale = (lang: string): void => {
   log.debug('Setting date locale to', lang);
@@ -94,11 +122,10 @@ export const getFormattedDate = (
  * @returns The format string if found, otherwise undefined.
  */
 export const getFormatString = (
-  category: DateTimeFormat,
-  key: DateTimeFormatOptions | string,
-): string | undefined => {
-  return dateTimeFormatOptions[category].options[key]?.format;
-};
+  category: DateTimeCategory,
+  key: DateTimeKey,
+): string | undefined =>
+  dateTimeFormatOptions[category].options[key as DateTimeFormatOptions]?.format;
 
 /**
  * Formats a date with a given time zone and user setting date format.
@@ -111,9 +138,12 @@ export const getFormatString = (
 export const shortDate = (
   date?: DateInput,
   tz?: string,
-  userInterfaceDateFormat: string = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: DateTimeKey = SYSTEM_DEFAULT,
 ): string | undefined => {
-  const dateFormatString = getFormatString(SHORT_DATE, userInterfaceDateFormat);
+  const dateFormatString = getFormatString(
+    'shortDate',
+    userInterfaceDateFormat,
+  );
 
   const formatString =
     isDefined(dateFormatString) && userInterfaceDateFormat !== SYSTEM_DEFAULT
@@ -136,11 +166,11 @@ export const shortDate = (
 export const longDate = (
   date?: DateInput,
   tz?: string,
-  userInterfaceTimeFormat: DateTimeFormatOptions | string = SYSTEM_DEFAULT,
-  userInterfaceDateFormat: DateTimeFormatOptions | string = SYSTEM_DEFAULT,
+  userInterfaceTimeFormat: DateTimeKey = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: DateTimeKey = SYSTEM_DEFAULT,
 ): string | undefined => {
-  const dateFormatString = getFormatString(LONG_DATE, userInterfaceDateFormat);
-  const timeFormatString = getFormatString(TIME, userInterfaceTimeFormat);
+  const dateFormatString = getFormatString('longDate', userInterfaceDateFormat);
+  const timeFormatString = getFormatString('time', userInterfaceTimeFormat);
 
   const useDefaultFormat =
     userInterfaceTimeFormat === SYSTEM_DEFAULT ||
@@ -166,16 +196,16 @@ export const longDate = (
 export const processDateWithTimeZone = (
   date?: DateInput,
   tz?: string,
-  userInterfaceTimeFormat: DateTimeFormatOptions | string = SYSTEM_DEFAULT,
-  userInterfaceDateFormat: DateTimeFormatOptions | string = SYSTEM_DEFAULT,
+  userInterfaceTimeFormat: DateTimeKey = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: DateTimeKey = SYSTEM_DEFAULT,
 ): {formattedDate: string; tzDisplay: string | undefined} | undefined => {
   const dateObj = ensureDate(date);
   if (!isDefined(dateObj)) {
     return undefined;
   }
 
-  const dateFormatString = getFormatString(LONG_DATE, userInterfaceDateFormat);
-  const timeFormatString = getFormatString(TIME, userInterfaceTimeFormat);
+  const dateFormatString = getFormatString('longDate', userInterfaceDateFormat);
+  const timeFormatString = getFormatString('time', userInterfaceTimeFormat);
 
   const useDefaultFormat =
     userInterfaceTimeFormat === SYSTEM_DEFAULT ||
@@ -223,8 +253,8 @@ export const processDateWithTimeZone = (
 export const dateTimeWithTimeZone = (
   date?: DateInput,
   tz?: string,
-  userInterfaceTimeFormat: DateTimeFormatOptions | string = SYSTEM_DEFAULT,
-  userInterfaceDateFormat: DateTimeFormatOptions | string = SYSTEM_DEFAULT,
+  userInterfaceTimeFormat: DateTimeKey = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: DateTimeKey = SYSTEM_DEFAULT,
 ): string | undefined => {
   const result = processDateWithTimeZone(
     date,
@@ -252,8 +282,8 @@ export const dateTimeWithTimeZone = (
 export const dateTimeWithTimeZoneObject = (
   date?: DateInput,
   tz?: string,
-  userInterfaceTimeFormat: DateTimeFormatOptions | string = SYSTEM_DEFAULT,
-  userInterfaceDateFormat: DateTimeFormatOptions | string = SYSTEM_DEFAULT,
+  userInterfaceTimeFormat: DateTimeKey = SYSTEM_DEFAULT,
+  userInterfaceDateFormat: DateTimeKey = SYSTEM_DEFAULT,
 ): {datetime: string; timezone: string} | undefined => {
   const result = processDateWithTimeZone(
     date,
