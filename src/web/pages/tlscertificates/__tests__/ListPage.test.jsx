@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, wait} from 'web/testing';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
-import TlsCertificate from 'gmp/models/task';
+import TlsCertificate from 'gmp/models/tlscertificate';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 import TlsCertificatePage from 'web/pages/tlscertificates/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
