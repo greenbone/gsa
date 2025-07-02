@@ -76,7 +76,9 @@ describe('Wizard Command', () => {
                 {
                   _id: 'task1',
                   name: 'Task',
-                  isContainer: () => false,
+                  target: {
+                    _id: 'target1',
+                  },
                 },
               ],
             },
