@@ -28,7 +28,7 @@ import TabsContainer from 'web/components/tab/TabsContainer';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';

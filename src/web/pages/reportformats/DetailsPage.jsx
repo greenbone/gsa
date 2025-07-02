@@ -26,8 +26,8 @@ import TableBody from 'web/components/table/Body';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
-import TableRow from 'web/components/table/Row';
 import Table from 'web/components/table/StripedTable';
+import TableRow from 'web/components/table/TableRow';
 import EntityPage from 'web/entity/EntityPage';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
@@ -108,21 +108,22 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };
+
 const ReportFormatParamValue = ({
   param,
   value = param.value,
-  value_labels = param.value_labels,
+  valueLabels = param.valueLabels,
   links = true,
 }) => {
   if (param.type === 'report_format_list') {
-    return map(value, report_format_id => {
-      const label = isDefined(value_labels[report_format_id])
-        ? value_labels[report_format_id]
-        : report_format_id;
+    return map(value, reportFormatId => {
+      const label = isDefined(valueLabels[reportFormatId])
+        ? valueLabels[reportFormatId]
+        : reportFormatId;
       return (
         <DetailsLink
-          key={param.name + '_' + report_format_id}
-          id={report_format_id}
+          key={param.name + '_' + reportFormatId}
+          id={reportFormatId}
           textOnly={!links}
           type="reportformat"
         >
@@ -155,7 +156,7 @@ ReportFormatParamValue.propTypes = {
   links: PropTypes.bool,
   param: PropTypes.any.isRequired,
   value: PropTypes.any,
-  value_labels: PropTypes.object,
+  valueLabels: PropTypes.object,
 };
 
 const Parameters = ({entity}) => {

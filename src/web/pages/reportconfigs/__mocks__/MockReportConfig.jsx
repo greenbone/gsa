@@ -10,8 +10,8 @@ export const mockReportConfig = {
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   owner: {name: 'admin'},
-  writable: '1',
-  in_use: '0',
+  writable: 1,
+  in_use: 0,
   report_format: {
     _id: '123456',
     name: 'example-configurable-1',
@@ -26,8 +26,8 @@ export const mockReportConfig = {
       default: 'StringValue',
       type: {
         __text: 'string',
-        min: '0',
-        max: '100',
+        min: 0,
+        max: 100,
       },
     },
     {
@@ -39,8 +39,8 @@ export const mockReportConfig = {
       default: 'TextDefault',
       type: {
         __text: 'text',
-        min: '0',
-        max: '1000',
+        min: 0,
+        max: 1000,
       },
     },
     {

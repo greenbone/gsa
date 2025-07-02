@@ -5,7 +5,7 @@
 
 import registerCommand from 'gmp/command';
 import GMPCommand from 'gmp/commands/gmp';
-import {License} from 'gmp/models/license';
+import License from 'gmp/models/license';
 
 export class LicenseCommand extends GMPCommand {
   constructor(http) {

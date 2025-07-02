@@ -12,7 +12,7 @@ import TableBody from 'web/components/table/Body';
 import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import {
   loadEntity as loadTlsCertificate,
@@ -26,7 +26,11 @@ import withGmp from 'web/utils/withGmp';
 const TlsCertificateDetails = ({entity}) => {
   const [_] = useTranslation();
   return (
-    <Layout flex="column" grow="1">
+    <Layout
+      data-testid={`tls-certificate-details-${entity.id}`}
+      flex="column"
+      grow="1"
+    >
       <InfoTable>
         <colgroup>
           <Col width="10%" />

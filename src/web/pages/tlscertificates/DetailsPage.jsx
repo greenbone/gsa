@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import DateTime from 'web/components/date/DateTime';
 import {DownloadIcon, TlsCertificateIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import ListIcon from 'web/components/icon/ListIcon';
@@ -25,7 +26,7 @@ import TableBody from 'web/components/table/Body';
 import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import EntityPage from 'web/entity/EntityPage';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
@@ -45,6 +46,7 @@ import {
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/tlscertificates';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = ({
   entity,
   onTlsCertificateDeleteClick,
@@ -125,7 +127,7 @@ const Details = ({entity, ...props}) => {
                             id={report.id}
                             type="report"
                           >
-                            {report.timestamp}
+                            <DateTime date={report.timestamp} />
                           </DetailsLink>
                         );
                       })}

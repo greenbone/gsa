@@ -7,7 +7,7 @@ import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
@@ -17,7 +17,7 @@ import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({sort = true, currentSortBy, currentSortDir, onSortChange}) => {
   return (
-    <TableHeader>
+    <TableHeader data-testid="tls-certificates-table-header">
       <TableRow>
         <TableHead
           currentSortBy={currentSortBy}

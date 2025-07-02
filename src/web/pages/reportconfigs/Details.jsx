@@ -13,7 +13,7 @@ import TableBody from 'web/components/table/Body';
 import Col from 'web/components/table/Col';
 import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
-import TableRow from 'web/components/table/Row';
+import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
@@ -73,7 +73,7 @@ const ReportConfigDetails = ({entity, links = true}) => {
   const {orphan, reportFormat, params, alerts = []} = entity;
 
   const reportFormatLink = orphan ? (
-    reportFormat.id
+    reportFormat?.id
   ) : (
     <DetailsLink id={reportFormat.id} textOnly={!links} type="reportformat">
       {reportFormat.name}

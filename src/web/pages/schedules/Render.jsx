@@ -5,7 +5,7 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import {_localeData} from 'gmp/models/date';
-import {ReccurenceFrequency} from 'gmp/models/event';
+import {RecurrenceFrequency} from 'gmp/models/event';
 import {isDefined} from 'gmp/utils/identity';
 
 const WEEKDAY = {
@@ -25,13 +25,13 @@ export const renderRecurrence = ({
   monthdays,
 } = {}) => {
   switch (freq) {
-    case ReccurenceFrequency.YEARLY:
+    case RecurrenceFrequency.YEARLY:
       if (interval === 1) {
         return _('Every year');
       }
       return _('Every {{interval}} years', {interval});
 
-    case ReccurenceFrequency.MONTHLY:
+    case RecurrenceFrequency.MONTHLY:
       if (isDefined(monthdays)) {
         if (interval === 1) {
           return _('Every month at days {{days}}', {
@@ -74,7 +74,7 @@ export const renderRecurrence = ({
       }
       return _('Every {{interval}} months', {interval});
 
-    case ReccurenceFrequency.WEEKLY:
+    case RecurrenceFrequency.WEEKLY:
       if (isDefined(weekdays)) {
         const days = weekdays
           .entries()
@@ -94,25 +94,25 @@ export const renderRecurrence = ({
       }
       return _('Every {{interval}} weeks', {interval});
 
-    case ReccurenceFrequency.DAILY:
+    case RecurrenceFrequency.DAILY:
       if (interval === 1) {
         return _('Every day');
       }
       return _('Every {{interval}} days', {interval});
 
-    case ReccurenceFrequency.HOURLY:
+    case RecurrenceFrequency.HOURLY:
       if (interval === 1) {
         return _('Every hour');
       }
       return _('Every {{interval}} hours', {interval});
 
-    case ReccurenceFrequency.MINUTELY:
+    case RecurrenceFrequency.MINUTELY:
       if (interval === 1) {
         return _('Every minute');
       }
       return _('Every {{interval}} minutes', {interval});
 
-    case ReccurenceFrequency.SECONDLY:
+    case RecurrenceFrequency.SECONDLY:
       if (interval === 1) {
         return _('Every second');
       }
