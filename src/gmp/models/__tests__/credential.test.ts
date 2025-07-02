@@ -229,7 +229,7 @@ describe('Credential model function tests', () => {
   test('should set empty kdcs array when no kdc field present in kerberos credentials', () => {
     const credential = Credential.fromElement({
       type: KRB5_CREDENTIAL_TYPE,
-      kdcs: {},
+      kdcs: {kdc: []},
     });
 
     expect(credential.kdcs).toEqual([]);

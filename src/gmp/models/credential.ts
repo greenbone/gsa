@@ -118,7 +118,9 @@ interface CredentialElement extends ModelElement {
   };
   credential_type?: CredentialType;
   allow_insecure?: number;
-  kdcs?: string[];
+  kdcs?: {
+    kdc: string | string[];
+  };
   targets?: {
     target?: ModelElement | ModelElement[];
   };
