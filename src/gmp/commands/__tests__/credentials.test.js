@@ -99,7 +99,7 @@ describe('CredentialCommand tests', () => {
         private_key: 'private_key',
         public_key: 'public_key',
         realm: 'kerberos_realm',
-        "kdcs:": ['kerberos_kdc'],
+        'kdcs:': ['kerberos_kdc'],
       },
     });
 

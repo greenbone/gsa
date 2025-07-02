@@ -119,13 +119,13 @@ const CredentialsDialog = props => {
     setError(e.message);
   };
 
-  const validateKdc = (val) => {
-     let invalid = !val.includes(' ')
-      if (!invalid){
-          setError(_("Invalid kdc value(s)"));
-      }
-      return invalid;
-    };
+  const validateKdc = val => {
+    let invalid = !val.includes(' ');
+    if (!invalid) {
+      setError(_('Invalid kdc value(s)'));
+    }
+    return invalid;
+  };
 
   const gmp = useGmp();
   const enabledTypes = types.filter(type => {
@@ -430,14 +430,16 @@ const CredentialsDialog = props => {
                   value={state.realm}
                   onChange={onValueChange}
                 />
-                  <MultiValueTextField
-                      name="kdcs"
-                      placeholder={_('Enter hostname or IP address, then press Enter or comma to add KDC')}
-                      title={_('Key Distribution Center')}
-                      validate={validateKdc}
-                      value={state.kdcs}
-                      onChange={onValueChange}
-                  />
+                <MultiValueTextField
+                  name="kdcs"
+                  placeholder={_(
+                    'Enter hostname or IP address, then press Enter or comma to add KDC',
+                  )}
+                  title={_('Key Distribution Center')}
+                  validate={validateKdc}
+                  value={state.kdcs}
+                  onChange={onValueChange}
+                />
               </>
             )}
           </>

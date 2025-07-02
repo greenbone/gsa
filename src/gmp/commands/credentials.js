@@ -123,7 +123,9 @@ export class CredentialCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return normalizeCredentialKdcsArray(root.get_credential.get_credentials_response).credential;
+    return normalizeCredentialKdcsArray(
+      root.get_credential.get_credentials_response,
+    ).credential;
   }
 }
 
@@ -133,7 +135,9 @@ class CredentialsCommand extends EntitiesCommand {
   }
 
   getEntitiesResponse(root) {
-    return normalizeCredentialKdcsArray(root.get_credentials.get_credentials_response);
+    return normalizeCredentialKdcsArray(
+      root.get_credentials.get_credentials_response,
+    );
   }
 }
 
