@@ -78,6 +78,7 @@ describe('shortDate tests', () => {
     ])(
       'should format date %p with tz %p and userInterfaceDateFormat %p to %p',
       (input, tz, userInterfaceDateFormat, expected) => {
+        // @ts-expect-error
         expect(shortDate(input, tz, userInterfaceDateFormat)).toEqual(expected);
       },
     );

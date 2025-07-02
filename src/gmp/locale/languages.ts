@@ -7,7 +7,16 @@ export const BROWSER_LANGUAGE = 'Browser Language';
 
 export const getLanguageCodes = () => Object.keys(Languages);
 
-const Languages = {
+export type Language = {
+  readonly name: string;
+  readonly native_name: string;
+};
+
+export type LanguagesType = {
+  readonly [code: string]: Language;
+};
+
+const Languages: LanguagesType = {
   de: {
     name: 'German',
     native_name: 'Deutsch',

@@ -7,32 +7,30 @@ import styled from 'styled-components';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
-interface NotificationDivProps {
+interface UserSettingsPasswordNotificationDivProps {
   color?: string;
 }
 
-interface NotificationProps {
+interface UserSettingsPasswordNotificationProps {
   newPassword: string;
   oldPassword: string;
   confPassword: string;
 }
 
-const NotificationDiv = styled.div<NotificationDivProps>`
+const UserSettingsPasswordNotificationDiv = styled.div<UserSettingsPasswordNotificationDivProps>`
   color: ${props => props.color};
 `;
 
-const Notification = ({
+const UserSettingsPasswordNotification = ({
   newPassword,
   oldPassword,
   confPassword,
-}: NotificationProps) => {
+}: UserSettingsPasswordNotificationProps) => {
   const [_] = useTranslation();
-  let color;
-  let text;
+  let color: string | undefined = undefined;
+  let text: string | null = null;
 
-  if (oldPassword === '' && newPassword === '' && confPassword === '') {
-    text = null;
-  } else if (oldPassword !== '' && newPassword === '' && confPassword === '') {
+  if (oldPassword !== '' && newPassword === '' && confPassword === '') {
     color = Theme.warningRed;
     text = _('Please enter a new password!');
   } else if (
@@ -49,7 +47,11 @@ const Notification = ({
     text = _('Confirmation matches new password!');
   }
 
-  return <NotificationDiv color={color}>{text}</NotificationDiv>;
+  return (
+    <UserSettingsPasswordNotificationDiv color={color}>
+      {text}
+    </UserSettingsPasswordNotificationDiv>
+  );
 };
 
-export default Notification;
+export default UserSettingsPasswordNotification;

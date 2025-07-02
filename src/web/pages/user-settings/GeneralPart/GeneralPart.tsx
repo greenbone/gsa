@@ -4,28 +4,87 @@
  */
 
 import {useState} from 'react';
-import {SYSTEM_DEFAULT} from 'gmp/locale/date';
+import {
+  SYSTEM_DEFAULT,
+  DATE_TIME_CATEGORY,
+  DATE_TIME_FORMAT_OPTIONS,
+  type DateTimeCategory as DateTimeCategoryType,
+  type DateTimeFormatOptions,
+  type DateTimeKey,
+} from 'gmp/locale/date';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
-import Select from 'web/components/form/Select';
+import Select, {SelectItem} from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
 import useTranslation from 'web/hooks/useTranslation';
-import Notification from 'web/pages/user-settings/GeneralPart/Notification';
+import UserSettingsPasswordNotification from 'web/pages/user-settings/GeneralPart/UserSettingsPasswordNotification';
 import Languages from 'web/utils/Languages';
-import PropTypes from 'web/utils/PropTypes';
 
-const TIME = 'time';
-const LONG_DATE = 'longDate';
+export const renderLanguageItems = (): SelectItem[] =>
+  Object.entries(Languages).map(([code, language]) => {
+    const {name, native_name: nativeName} = language;
+    return {
+      value: code,
+      label:
+        isDefined(nativeName) && nativeName !== ''
+          ? `${name} | ${nativeName}`
+          : `${name}`,
+    };
+  });
 
-export const renderLanguageItems = () =>
-  Object.entries(Languages).map(([code, {name, native_name}]) => ({
-    value: code,
-    label: isDefined(native_name) ? `${name} | ${native_name}` : `${name}`,
-  }));
+export const getSelectItems = (
+  category: DateTimeCategoryType,
+  _: (key: string) => string,
+): SelectItem[] => {
+  if (category === DATE_TIME_CATEGORY.TIME) {
+    return [
+      {
+        value: DATE_TIME_FORMAT_OPTIONS.TIME_12,
+        label: _('12h'),
+      },
+      {
+        value: DATE_TIME_FORMAT_OPTIONS.TIME_24,
+        label: _('24h'),
+      },
+    ];
+  }
+  if (category === DATE_TIME_CATEGORY.LONG_DATE) {
+    return [
+      {
+        value: DATE_TIME_FORMAT_OPTIONS.WMDY,
+        label: _('Weekday, Month, Day, Year'),
+      },
+      {
+        value: DATE_TIME_FORMAT_OPTIONS.WDMY,
+        label: _('Weekday, Day, Month, Year'),
+      },
+    ];
+  }
+  return [];
+};
+
+interface GeneralPartProps {
+  timezone: string;
+  userInterfaceDateFormat: DateTimeKey;
+  userInterfaceTimeFormat: DateTimeKey;
+  isUserInterfaceTimeDateDefault: number;
+  oldPassword: string;
+  newPassword: string;
+  confPassword: string;
+  userInterfaceLanguage: string;
+  rowsPerPage: number;
+  detailsExportFileName: string;
+  listExportFileName: string;
+  reportExportFileName: string;
+  autoCacheRebuild: number;
+  shouldWarn: boolean;
+  errors: Record<string, string>;
+  onChange: (value: string | number, name?: string) => void;
+}
 
 const GeneralPart = ({
   timezone,
@@ -44,50 +103,33 @@ const GeneralPart = ({
   shouldWarn,
   errors,
   onChange,
-}) => {
+}: GeneralPartProps) => {
   const [_] = useTranslation();
   const [prevUserInterfaceTimeFormat, setPrevUserInterfaceTimeFormat] =
-    useState(undefined);
+    useState<DateTimeKey | undefined>(undefined);
   const [prevUserInterfaceDateFormat, setPrevUserInterfaceDateFormat] =
-    useState(undefined);
-
-  const getSelectItems = category => {
-    const dateTimeFormatOptions = {
-      [TIME]: {
-        12: _('12h'),
-        24: _('24h'),
-      },
-      [LONG_DATE]: {
-        wmdy: _('Weekday, Month, Day, Year'),
-        wdmy: _('Weekday, Day, Month, Year'),
-      },
-    };
-    return Object.entries(dateTimeFormatOptions[category]).map(
-      ([value, label]) => ({
-        value: isNaN(value) ? value : Number(value),
-        label,
-      }),
-    );
-  };
+    useState<DateTimeKey | undefined>(undefined);
 
   const handleSysDefaultChange = event => {
     const isSystemDefault = parseYesNo(event);
 
-    const defaultTimeFormat = 24;
-    const defaultDateFormat = 'wdmy';
+    const defaultTimeFormat: DateTimeFormatOptions =
+      DATE_TIME_FORMAT_OPTIONS.TIME_24;
+    const defaultDateFormat: DateTimeFormatOptions =
+      DATE_TIME_FORMAT_OPTIONS.WMDY;
 
     const currentUserInterfaceTimeFormat =
-      userInterfaceTimeFormat || defaultTimeFormat;
+      userInterfaceTimeFormat ?? defaultTimeFormat;
     const currentUserInterfaceDateFormat =
-      userInterfaceDateFormat || defaultDateFormat;
+      userInterfaceDateFormat ?? defaultDateFormat;
 
     if (!isSystemDefault) {
       onChange(
-        prevUserInterfaceTimeFormat || defaultTimeFormat,
+        prevUserInterfaceTimeFormat ?? defaultTimeFormat,
         'userInterfaceTimeFormat',
       );
       onChange(
-        prevUserInterfaceDateFormat || defaultDateFormat,
+        prevUserInterfaceDateFormat ?? defaultDateFormat,
         'userInterfaceDateFormat',
       );
     } else {
@@ -117,16 +159,16 @@ const GeneralPart = ({
       />
 
       <Select
-        disabled={isUserInterfaceTimeDateDefault}
-        items={getSelectItems(TIME)}
+        disabled={parseYesNo(isUserInterfaceTimeDateDefault) === YES_VALUE}
+        items={getSelectItems(DATE_TIME_CATEGORY.TIME, _)}
         label={_('Time Format')}
         name="userInterfaceTimeFormat"
         value={userInterfaceTimeFormat}
         onChange={onChange}
       />
       <Select
-        disabled={isUserInterfaceTimeDateDefault}
-        items={getSelectItems(LONG_DATE)}
+        disabled={parseYesNo(isUserInterfaceTimeDateDefault) === YES_VALUE}
+        items={getSelectItems(DATE_TIME_CATEGORY.LONG_DATE, _)}
         label={_('Date Format')}
         name="userInterfaceDateFormat"
         value={userInterfaceDateFormat}
@@ -158,7 +200,7 @@ const GeneralPart = ({
         />
       </FormGroup>
       <FormGroup title=" ">
-        <Notification
+        <UserSettingsPasswordNotification
           confPassword={confPassword}
           newPassword={newPassword}
           oldPassword={oldPassword}
@@ -174,11 +216,12 @@ const GeneralPart = ({
       </FormGroup>
       <FormGroup title={_('Rows Per Page')}>
         <TextField
-          errorContent={errors.rowsPerPage}
-          hasError={shouldWarn && !!errors.rowsPerPage}
           name="rowsPerPage"
           value={rowsPerPage}
           onChange={onChange}
+          {...(shouldWarn && !!errors.rowsPerPage
+            ? {className: 'has-error'}
+            : {})}
         />
       </FormGroup>
       <FormGroup title={_('Details Export File Name')}>
@@ -212,25 +255,6 @@ const GeneralPart = ({
       />
     </>
   );
-};
-
-GeneralPart.propTypes = {
-  autoCacheRebuild: PropTypes.number,
-  confPassword: PropTypes.string,
-  detailsExportFileName: PropTypes.string,
-  errors: PropTypes.object.isRequired,
-  listExportFileName: PropTypes.string,
-  newPassword: PropTypes.string,
-  oldPassword: PropTypes.string,
-  reportExportFileName: PropTypes.string,
-  rowsPerPage: PropTypes.number,
-  shouldWarn: PropTypes.bool.isRequired,
-  timezone: PropTypes.string,
-  userInterfaceTimeFormat: PropTypes.oneOf([12, 24, SYSTEM_DEFAULT]),
-  userInterfaceDateFormat: PropTypes.oneOf(['wmdy', 'wdmy', SYSTEM_DEFAULT]),
-  isUserInterfaceTimeDateDefault: PropTypes.oneOf([YES_VALUE, NO_VALUE]),
-  userInterfaceLanguage: PropTypes.string,
-  onChange: PropTypes.func,
 };
 
 export default GeneralPart;

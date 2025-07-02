@@ -4,14 +4,18 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import GmpLanguages, {BROWSER_LANGUAGE} from 'gmp/locale/languages';
+import GmpLanguages, {
+  BROWSER_LANGUAGE,
+  type Language,
+} from 'gmp/locale/languages';
 
 export {BROWSER_LANGUAGE};
 
-const Languages = {
+const Languages: Record<string, Language> = {
   ...GmpLanguages,
   [BROWSER_LANGUAGE]: {
-    name: _l('Browser Language'),
+    name: String(_l('Browser Language')),
+    native_name: '',
   },
 };
 
