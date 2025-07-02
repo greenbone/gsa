@@ -52,6 +52,7 @@ export const TASK_STATUS = {
   uploadinginterrupted: 'Uploading Interrupted',
   processing: 'Processing',
   done: 'Done',
+  unknown: 'Unknown',
 } as const;
 
 export type TaskHostsOrdering =
@@ -79,6 +80,7 @@ const TASK_STATUS_TRANSLATIONS = {
   Queued: _l('Queued'),
   Processing: _l('Processing'),
   'Uploading Interrupted': _l('Interrupted'),
+  Unknown: _l('Unknown'),
 } as const;
 
 export const getTranslatableTaskStatus = (status: TaskStatus) =>
