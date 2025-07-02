@@ -492,7 +492,7 @@ describe('CredentialsDialog component tests', () => {
     );
     expect(kdcInput).toBeVisible();
 
-    const label = screen.getByText('Key Distribution Centers');
+    const label = screen.getByText('Key Distribution Center');
     expect(label).toBeVisible();
   });
 });
