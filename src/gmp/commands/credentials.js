@@ -123,9 +123,7 @@ export class CredentialCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return normalizeCredentialKdcsArray(
-      root.get_credential.get_credentials_response,
-    ).credential;
+    return root.get_credential.get_credentials_response.credential;
   }
 }
 
@@ -135,26 +133,8 @@ class CredentialsCommand extends EntitiesCommand {
   }
 
   getEntitiesResponse(root) {
-    return normalizeCredentialKdcsArray(
-      root.get_credentials.get_credentials_response,
-    );
+    return root.get_credentials.get_credentials_response;
   }
-}
-
-function normalizeCredentialKdcsArray(credentialResponse) {
-  if (Array.isArray(credentialResponse.credential)) {
-    credentialResponse.credential = credentialResponse.credential.map(cred => {
-      if (cred.kdcs && cred.kdcs.kdc) {
-        cred.kdcs = Array.isArray(cred.kdcs.kdc)
-          ? cred.kdcs.kdc
-          : [cred.kdcs.kdc];
-      } else {
-        cred.kdcs = [];
-      }
-      return cred;
-    });
-  }
-  return credentialResponse;
 }
 
 registerCommand('credential', CredentialCommand);

@@ -670,7 +670,7 @@
   "End Date": "Enddatum",
   "End date is same or before start date. Please adjust you start and/or end date.": "Endzeit ist mit Startzeit identisch oder liegt davor. Bitte passen die Start- oder Endzeit an.",
   "End Time": "Endzeit",
-  "Enter hostname or IP address, then press Enter or comma to add KDC": "Hostname oder IP eingeben, dann Enter oder Komma drücken, um KDC hinzuzufügen.",
+  "Enter hostname or IP address, then press Enter to add KDC": "Hostname oder IP eingeben, dann Enter, um KDC hinzuzufügen.",
   "Entire Operation": "Gesamte Ausführung",
   "Entity": "Objekt",
   "Environmental (Modified Base Metrics)": "Umgebungs-(Modifizierte Basis-Metriken)",

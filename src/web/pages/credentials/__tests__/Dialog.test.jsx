@@ -488,7 +488,7 @@ describe('CredentialsDialog component tests', () => {
     );
 
     const kdcInput = screen.getByPlaceholderText(
-      'Enter hostname or IP address, then press Enter or comma to add KDC',
+      'Enter hostname or IP address, then press Enter to add KDC',
     );
     expect(kdcInput).toBeVisible();
 

@@ -54,6 +54,7 @@ describe('Credential Model tests', () => {
     expect(credential.credential_type).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
+    expect(credential.kdcs).toBeUndefined();
   });
 
   test('should parse empty element', () => {
@@ -63,6 +64,7 @@ describe('Credential Model tests', () => {
     expect(credential.credential_type).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
+    expect(credential.kdcs).toBeUndefined();
   });
 
   test('should parse certificate_info', () => {
@@ -205,6 +207,49 @@ describe('Credential model function tests', () => {
     expect(allCredentials.filter(krb5CredentialFilter)).toEqual([
       KRB5_CREDENTIAL,
     ]);
+  });
+  test('should parse kdcs array for kerberos credentials', () => {
+    const credential = Credential.fromElement({
+      type: KRB5_CREDENTIAL_TYPE,
+      kdcs: {kdc: ['kdc1.example.com', 'kdc2.example.com']},
+    });
+
+    expect(credential.kdcs).toEqual(['kdc1.example.com', 'kdc2.example.com']);
+  });
+
+  test('should parse single kdc as array for kerberos credentials', () => {
+    const credential = Credential.fromElement({
+      type: KRB5_CREDENTIAL_TYPE,
+      kdcs: {kdc: 'kdc1.example.com'},
+    });
+
+    expect(credential.kdcs).toEqual(['kdc1.example.com']);
+  });
+
+  test('should set empty kdcs array when no kdc field present in kerberos credentials', () => {
+    const credential = Credential.fromElement({
+      type: KRB5_CREDENTIAL_TYPE,
+      kdcs: {},
+    });
+
+    expect(credential.kdcs).toEqual([]);
+  });
+
+  test('should not parse kdcs for non-kerberos credentials', () => {
+    const credential = Credential.fromElement({
+      type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+      kdcs: {kdc: 'shouldBeIgnored.example.com'},
+    });
+
+    expect(credential.kdcs).toBeUndefined();
+  });
+
+  test('should not set kdcs if missing entirely', () => {
+    const credential = Credential.fromElement({
+      type: KRB5_CREDENTIAL_TYPE,
+    });
+
+    expect(credential.kdcs).toEqual([]);
   });
 });
 

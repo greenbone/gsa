@@ -3,82 +3,67 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
-import {Group, Pill, Stack} from '@mantine/core';
-
-import {Input} from '@greenbone/opensight-ui-components-mantinev7';
-import {isDefined} from 'gmp/utils/identity';
+import {TagsInput} from '@mantine/core';
 
 interface MultiValueTextFieldProps {
+  color?: string;
   name?: string;
   title?: string;
   placeholder?: string;
   value?: string[];
   disabled?: boolean;
-  errorContent?: string;
   onChange?: (value: string[], name?: string) => void;
   validate?: (value: string) => boolean;
 }
 
+const tagStyles: Record<string, {bg: string; color: string}> = {
+  green: {bg: '#e6f4ea', color: '#276749'},
+  red: {bg: '#ffe0e0', color: '#a4161a'},
+  blue: {bg: '#e0f0ff', color: '#1a4fa4'},
+  gray: {bg: '#f1f3f5', color: '#495057'},
+};
+
 const MultiValueTextField = ({
+  color = 'green',
   name,
   title,
   placeholder,
   value = [],
   disabled,
-  errorContent,
   onChange,
   validate,
 }: MultiValueTextFieldProps) => {
-  const [inputValue, setInputValue] = useState('');
-
-  const handleAdd = () => {
-    const trimmed = inputValue.trim();
-    if (!trimmed || value.includes(trimmed)) return;
-    if (validate && !validate(trimmed)) return;
-    const updated = [...value, trimmed];
-    onChange?.(updated, name);
-    setInputValue('');
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      handleAdd();
-    }
-  };
-
-  const handleRemove = (index: number) => {
-    const updated = value.filter((_, i) => i !== index);
-    onChange?.(updated, name);
-  };
+  const resolvedColor = tagStyles[color] ?? tagStyles.green;
 
   return (
-    <Stack>
-      <Input
-        data-testid="form-multi-input"
-        disabled={disabled}
-        error={isDefined(errorContent) && String(errorContent)}
-        label={title}
-        name={name}
-        placeholder={placeholder}
-        value={inputValue}
-        onChange={e => setInputValue(e.currentTarget.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <Group wrap="wrap">
-        {value.map((val, index) => (
-          <Pill
-            key={`${val}-${index}`}
-            data-testid={`pill-${val}`}
-            withRemoveButton={true}
-            onRemove={() => handleRemove(index)}
-          >
-            {val}
-          </Pill>
-        ))}
-      </Group>
-    </Stack>
+    <TagsInput
+      data-testid="form-multi-input"
+      disabled={disabled}
+      label={title}
+      name={name}
+      placeholder={placeholder}
+      styles={{
+        input: {
+          backgroundColor: 'white',
+          border: '1px solid #ced4da',
+          borderRadius: 4,
+        },
+        pill: {
+          backgroundColor: resolvedColor.bg,
+          color: resolvedColor.color,
+          borderRadius: '12px',
+          fontWeight: 500,
+        },
+      }}
+      value={value}
+      variant="filled"
+      onChange={newValue => {
+        const validated = validate
+          ? newValue.filter(v => validate(v))
+          : newValue;
+        onChange?.(validated, name);
+      }}
+    />
   );
 };
 

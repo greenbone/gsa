@@ -120,7 +120,7 @@ const CredentialsDialog = props => {
   };
 
   const validateKdc = val => {
-    let invalid = !val.includes(' ');
+    const invalid = !val.includes(' ');
     if (!invalid) {
       setError(_('Invalid kdc value(s)'));
     }
@@ -433,7 +433,7 @@ const CredentialsDialog = props => {
                 <MultiValueTextField
                   name="kdcs"
                   placeholder={_(
-                    'Enter hostname or IP address, then press Enter or comma to add KDC',
+                    'Enter hostname or IP address, then press Enter to add KDC',
                   )}
                   title={_('Key Distribution Center')}
                   validate={validateKdc}

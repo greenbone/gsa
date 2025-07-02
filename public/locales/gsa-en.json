@@ -670,7 +670,7 @@
   "End Date": "End Date",
   "End date is same or before start date. Please adjust you start and/or end date.": "End date is same or before start date. Please adjust you start and/or end date.",
   "End Time": "End Time",
-  "Enter hostname or IP address, then press Enter or comma to add KDC": "Enter hostname or IP address, then press Enter or comma to add KDC",
+  "Enter hostname or IP address, then press Enter to add KDC": "Enter hostname or IP address, then press Enter to add KDC",
   "Entire Operation": "Entire Operation",
   "Entity": "Entity",
   "Environmental (Modified Base Metrics)": "Environmental (Modified Base Metrics)",
