@@ -8,10 +8,13 @@ import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {
   parseDate,
   parseFloat,
+  parseQod,
   parseSeverity,
   parseText,
   parseToString,
   parseYesNo,
+  QoD,
+  QoDParams,
   YES_VALUE,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
@@ -156,15 +159,12 @@ interface NvtElement extends ModelElement {
       timeout?: string;
       preference?: PreferenceElement | PreferenceElement[];
     };
-    qod?: {
-      type?: string;
-      value?: string | number;
-    };
+    qod?: QoDParams;
     refs?: {
       ref?: RefElement | RefElement[];
     };
     severities?: {
-      _score?: number;
+      _score?: number | string;
       severity?: SeverityElement;
     };
     solution?: {
@@ -200,11 +200,6 @@ interface Solution {
   type?: string;
   description?: string;
   method?: string;
-}
-
-interface QoD {
-  type?: string;
-  value?: number;
 }
 
 interface EpssValue {
@@ -382,12 +377,7 @@ class Nvt extends Model {
     }
 
     if (isDefined(nvtElement?.qod)) {
-      ret.qod = {
-        type: isEmpty(nvtElement.qod.type) ? undefined : nvtElement.qod.type,
-        value: isEmpty(nvtElement.qod.value as string)
-          ? undefined
-          : parseFloat(nvtElement.qod.value),
-      };
+      ret.qod = parseQod(nvtElement.qod);
     }
 
     ret.defaultTimeout = isEmpty(nvtElement?.default_timeout as string)
