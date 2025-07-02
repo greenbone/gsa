@@ -7,9 +7,9 @@ import createDate, {Date as GmpDate, duration} from 'gmp/models/date';
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export interface Text {
+export interface TextElement {
   __text?: string | number;
-  __excerpt?: string;
+  _excerpt?: string | number;
 }
 
 export interface QoDParams {
@@ -28,11 +28,11 @@ type NumberValue = string | number | undefined;
 type NumberReturn = undefined | number;
 type BooleanValue = NumberValue | boolean;
 
-const isText = (value: unknown): value is Text =>
+const isText = (value: unknown): value is TextElement =>
   typeof value === 'object' && value !== null && '__text' in value;
 
 export const parseProgressElement = (
-  value?: string | number | undefined | Text,
+  value?: string | number | undefined | TextElement,
 ) => {
   if (!isDefined(value)) {
     return 0;
@@ -47,25 +47,26 @@ export const parseProgressElement = (
 };
 
 export const parseText = (
-  text?: Text | string | undefined,
+  text?: TextElement | string | number | undefined,
 ): string | undefined => {
   if (isText(text)) {
-    text = String(text.__text);
+    text = text.__text;
   }
-  return text;
+  return parseToString(text);
 };
 
-export const parseTextElement = (text: string | object = {}) => {
+export const parseTextElement = (text?: string | number | TextElement) => {
   if (isText(text)) {
     return {
-      text: text.__text,
-      textExcerpt: text.__excerpt,
+      text: parseToString(text.__text),
+      textExcerpt: isDefined(text._excerpt)
+        ? parseYesNo(text._excerpt)
+        : undefined,
     };
   }
 
   return {
-    text,
-    textExcerpt: '0',
+    text: parseToString(text),
   };
 };
 
