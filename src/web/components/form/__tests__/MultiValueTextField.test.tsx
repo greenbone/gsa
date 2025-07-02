@@ -92,9 +92,7 @@ describe('MultiValueTextField', () => {
     );
 
     // Find the tag with the label 'two'
-    const tag =
-      screen.getByText('two').closest('[data-disabled="false"]') ??
-      screen.getByText('two').parentElement;
+    const tag = screen.getByText('two').parentElement;
     expect(tag).toBeTruthy();
 
     const removeButton = tag?.querySelector('button');

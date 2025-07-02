@@ -58,7 +58,7 @@ const MultiValueTextField = ({
       styles={{
         input: {
           backgroundColor: 'white',
-          border: '1px solid #ced4da',
+          border: `1px solid ${Theme.inputBorderGray}`,
           borderRadius: 4,
         },
         pill: {

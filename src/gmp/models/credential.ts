@@ -193,14 +193,14 @@ class Credential extends Model {
     ret.allow_insecure = parseYesNo(element.allow_insecure);
 
     if (element.type === KRB5_CREDENTIAL_TYPE) {
-      const kdcsRaw = (element as CredentialElement).kdcs;
+      const kdcsRaw = element.kdcs;
       if (kdcsRaw && 'kdc' in kdcsRaw) {
         ret.kdcs = Array.isArray(kdcsRaw.kdc) ? kdcsRaw.kdc : [kdcsRaw.kdc];
       } else {
         ret.kdcs = [];
       }
     } else {
-      delete (ret as CredentialProperties).kdcs;
+      delete ret.kdcs;
     }
 
     ret.targets = map(element.targets?.target, target =>
