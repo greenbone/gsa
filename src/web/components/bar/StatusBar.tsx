@@ -4,27 +4,34 @@
  */
 
 import styled from 'styled-components';
-import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
+import {
+  getTranslatableTaskStatus,
+  TASK_STATUS,
+  TaskStatus,
+} from 'gmp/models/task';
 import {BACKGROUND_STATES} from 'web/components/bar/definitions';
 import ProgressBar, {adjustProgress} from 'web/components/bar/ProgressBar';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface StatusBarProps {
   progress?: string | number;
-  status?: string;
+  status?: TaskStatus;
 }
 
 const Span = styled.span`
   white-space: nowrap;
 `;
 
-const StatusBar = ({status = 'Unknown', progress = '0'}: StatusBarProps) => {
+const StatusBar = ({
+  status = TASK_STATUS.unknown,
+  progress = '0',
+}: StatusBarProps) => {
   const [_] = useTranslation();
   progress = adjustProgress(progress);
 
   let text = getTranslatableTaskStatus(status);
   if (
-    status === 'Unknown' ||
+    status === TASK_STATUS.unknown ||
     status === TASK_STATUS.new ||
     status === TASK_STATUS.done ||
     status === TASK_STATUS.container ||

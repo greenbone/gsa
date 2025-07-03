@@ -131,21 +131,43 @@ describe('parseFloat tests', () => {
 
 describe('parseTextElement tests', () => {
   test('should convert text elements', () => {
+    expect(parseTextElement({__text: 'foo'})).toEqual({
+      text: 'foo',
+    });
     expect(
       parseTextElement({
         __text: 'foo',
-        __excerpt: '1',
+        _excerpt: '1',
       }),
     ).toEqual({
       text: 'foo',
-      textExcerpt: '1',
+      textExcerpt: 1,
     });
+  });
+
+  test('should parse empty text', () => {
+    expect(parseTextElement({__text: ''})).toEqual({});
+    expect(parseTextElement('')).toEqual({});
+  });
+
+  test('should parse undefined text', () => {
+    expect(parseTextElement()).toEqual({});
+    expect(parseTextElement(undefined)).toEqual({});
+    expect(parseTextElement({__text: undefined})).toEqual({});
   });
 
   test('should convert plain text elements', () => {
     expect(parseTextElement('foo')).toEqual({
       text: 'foo',
-      textExcerpt: '0',
+    });
+  });
+
+  test('should convert non strings', () => {
+    expect(parseTextElement(123)).toEqual({
+      text: '123',
+    });
+    expect(parseTextElement({__text: 123})).toEqual({
+      text: '123',
     });
   });
 });
@@ -250,6 +272,12 @@ describe('parseQod tests', () => {
       value: 55,
       type: 'remote_vul',
     });
+  });
+
+  test('should return undefined for empty values', () => {
+    expect(parseQod({})).toEqual({});
+    expect(parseQod({value: '', type: ''})).toEqual({});
+    expect(parseQod({value: undefined, type: undefined})).toEqual({});
   });
 });
 
@@ -448,5 +476,14 @@ describe('parseToString tests', () => {
 
   test('should return string for numbers', () => {
     expect(parseToString(1)).toEqual('1');
+  });
+
+  test('should return string for boolean', () => {
+    expect(parseToString(true)).toEqual('true');
+    expect(parseToString(false)).toEqual('false');
+  });
+
+  test('should parse empty string as undefined', () => {
+    expect(parseToString('')).toBeUndefined();
   });
 });

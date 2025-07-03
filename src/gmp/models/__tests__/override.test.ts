@@ -56,7 +56,7 @@ describe('Override model tests', () => {
     const override1 = Override.fromElement({text: 'foo bar'});
     const override2 = Override.fromElement({text: ''});
     expect(override1.text).toEqual('foo bar');
-    expect(override2.text).toEqual('');
+    expect(override2.text).toBeUndefined();
   });
 
   test('should parse text excerpt', () => {
