@@ -118,6 +118,9 @@ interface CredentialElement extends ModelElement {
   };
   credential_type?: CredentialType;
   allow_insecure?: number;
+  kdcs?: {
+    kdc: string | string[];
+  };
   targets?: {
     target?: ModelElement | ModelElement[];
   };
@@ -135,6 +138,7 @@ interface CredentialProperties extends ModelProperties {
   allow_insecure?: YesNo;
   certificate_info?: CertificateInfo;
   credential_type?: CredentialType;
+  kdcs?: string[];
   targets?: Model[];
   scanners?: Model[];
 }
@@ -145,6 +149,7 @@ class Credential extends Model {
   readonly allow_insecure?: YesNo;
   readonly certificate_info?: CertificateInfo;
   readonly credential_type?: CredentialType;
+  readonly kdcs: string[];
   readonly targets: Model[];
   readonly scanners: Model[];
 
@@ -155,6 +160,7 @@ class Credential extends Model {
     certificate_info,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     credential_type,
+    kdcs = [],
     targets = [],
     scanners = [],
     ...properties
@@ -163,6 +169,7 @@ class Credential extends Model {
     this.allow_insecure = allow_insecure;
     this.certificate_info = certificate_info;
     this.credential_type = credential_type;
+    this.kdcs = kdcs;
     this.targets = targets;
     this.scanners = scanners;
   }
@@ -184,6 +191,12 @@ class Credential extends Model {
     ret.credential_type = element.type as CredentialType;
 
     ret.allow_insecure = parseYesNo(element.allow_insecure);
+
+    if (isDefined(element.kdcs?.kdc)) {
+      ret.kdcs = Array.isArray(element.kdcs.kdc)
+        ? element.kdcs.kdc
+        : [element.kdcs.kdc];
+    }
 
     ret.targets = map(element.targets?.target, target =>
       Model.fromElement(target, 'target'),

@@ -213,6 +213,8 @@ const allowedSnakeCase = [
   'get_capabilities',
   'get_config_family_response',
   'get_config_nvt_response',
+  'get_credential',
+  'get_credentials_response',
   'get_features_response',
   'get_feeds',
   'get_feeds_response',
