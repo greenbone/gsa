@@ -11,9 +11,8 @@ import UserTag from 'gmp/models/usertag';
 import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
 
 describe('EntityModel tests', () => {
-  test('should create an instance of EntityModel', () => {
+  test('should use defaults', () => {
     const model = new EntityModel();
-
     expect(model._type).toBeUndefined();
     expect(model.active).toBeUndefined();
     expect(model.comment).toBeUndefined();
@@ -42,12 +41,11 @@ describe('EntityModel tests', () => {
 
   test('should allow to override entityType', () => {
     const model = new EntityModel({}, 'customType');
-
     expect(model.entityType).toEqual('customType');
   });
 
   test('should create an instance of EntityModel with properties', () => {
-    const properties = {
+    const model = new EntityModel({
       _type: 'testType',
       active: YES_VALUE as YesNo,
       comment: 'Test comment',
@@ -67,10 +65,7 @@ describe('EntityModel tests', () => {
         new UserTag({id: 'tag1', name: 'Tag Name', value: 'Tag Value'}),
       ],
       writable: YES_VALUE as YesNo,
-    };
-
-    const model = new EntityModel(properties);
-
+    });
     expect(model._type).toEqual('testType');
     expect(model.active).toEqual(YES_VALUE);
     expect(model.comment).toEqual('Test comment');
@@ -98,9 +93,9 @@ describe('EntityModel tests', () => {
   });
 
   test('should create an instance of EntityModel from element', () => {
-    const element = {
+    const model = EntityModel.fromElement({
       _id: '456',
-      _type: 'testType',
+      type: 'testType',
       active: YES_VALUE,
       comment: 'Element comment',
       creation_time: '2024-01-05T00:00:00Z',
@@ -118,10 +113,7 @@ describe('EntityModel tests', () => {
         tag: [{_id: 'tag2', name: 'Element Tag', value: 'Tag Value'}],
       },
       writable: YES_VALUE,
-    };
-
-    const model = EntityModel.fromElement(element);
-
+    });
     expect(model.id).toEqual('456');
     expect(model._type).toEqual('testType');
     expect(model.active).toEqual(YES_VALUE);
@@ -156,7 +148,6 @@ describe('EntityModel tests', () => {
       trash: YES_VALUE as YesNo,
       writable: NO_VALUE as YesNo,
     });
-
     expect(model.isActive()).toEqual(true);
     expect(model.isInTrash()).toEqual(true);
     expect(model.isInUse()).toEqual(true);
@@ -168,7 +159,6 @@ describe('EntityModel tests', () => {
 describe('parseEntityModelFromElement tests', () => {
   test('should parse empty properties from element', () => {
     const props = parseEntityModelProperties();
-
     expect(props.id).toBeUndefined();
     expect(props._type).toBeUndefined();
     expect(props.active).toBeUndefined();
@@ -189,9 +179,9 @@ describe('parseEntityModelFromElement tests', () => {
   });
 
   test('should parse properties from element', () => {
-    const element = {
+    const props = parseEntityModelProperties({
       _id: '789',
-      _type: 'testType',
+      type: 'testType',
       active: YES_VALUE,
       comment: 'Parsed comment',
       creation_time: '2024-01-09T00:00:00Z',
@@ -209,10 +199,7 @@ describe('parseEntityModelFromElement tests', () => {
         tag: [{_id: 'tag3', name: 'Parsed Tag', value: 'Tag Value'}],
       },
       writable: YES_VALUE,
-    };
-
-    const props = parseEntityModelProperties(element);
-
+    });
     expect(props.id).toEqual('789');
     expect(props._type).toEqual('testType');
     expect(props.active).toEqual(YES_VALUE);
@@ -228,9 +215,8 @@ describe('parseEntityModelFromElement tests', () => {
     expect(props.timestamp).toEqual(date('2024-01-12T00:00:00.000Z'));
     expect(props.trash).toEqual(NO_VALUE);
     expect(props.userCapabilities?.mayAccess('task')).toEqual(true);
-    const {userTags = []} = props;
-    expect(userTags.length).toEqual(1);
-    expect(userTags[0].id).toEqual('tag3');
+    expect(props.userTags?.length).toEqual(1);
+    expect(props.userTags?.[0].id).toEqual('tag3');
     expect(props.writable).toEqual(YES_VALUE);
   });
 });
