@@ -54,7 +54,7 @@ describe('Credential Model tests', () => {
     expect(credential.credential_type).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
-    expect(credential.kdcs).toBeUndefined();
+    expect(credential.kdcs).toEqual([]);
   });
 
   test('should parse empty element', () => {
@@ -64,7 +64,7 @@ describe('Credential Model tests', () => {
     expect(credential.credential_type).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
-    expect(credential.kdcs).toBeUndefined();
+    expect(credential.kdcs).toEqual([]);
   });
 
   test('should parse certificate_info', () => {
@@ -241,15 +241,7 @@ describe('Credential model function tests', () => {
       kdcs: {kdc: 'shouldBeIgnored.example.com'},
     });
 
-    expect(credential.kdcs).toBeUndefined();
-  });
-
-  test('should not set kdcs if missing entirely', () => {
-    const credential = Credential.fromElement({
-      type: KRB5_CREDENTIAL_TYPE,
-    });
-
-    expect(credential.kdcs).toEqual([]);
+    expect(credential.kdcs).toEqual(['shouldBeIgnored.example.com']);
   });
 });
 

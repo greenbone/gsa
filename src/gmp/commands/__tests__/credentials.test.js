@@ -36,7 +36,7 @@ describe('CredentialCommand tests', () => {
         public_key: undefined,
         certificate: undefined,
         realm: undefined,
-        kdc: undefined,
+        'kdcs:': [],
         credential_type: undefined,
       },
     });

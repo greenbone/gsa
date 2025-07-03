@@ -56,7 +56,7 @@ export class CredentialCommand extends EntityCommand {
       public_key,
       certificate,
       realm,
-      'kdcs:': kdcs.length > 0 ? kdcs : undefined,
+      'kdcs:': kdcs,
     });
   }
 
@@ -106,7 +106,7 @@ export class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
-      'kdcs:': kdcs.length > 0 ? kdcs : undefined,
+      'kdcs:': kdcs,
       realm,
     });
   }

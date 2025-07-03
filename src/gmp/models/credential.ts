@@ -149,7 +149,7 @@ class Credential extends Model {
   readonly allow_insecure?: YesNo;
   readonly certificate_info?: CertificateInfo;
   readonly credential_type?: CredentialType;
-  readonly kdcs?: string[];
+  readonly kdcs: string[];
   readonly targets: Model[];
   readonly scanners: Model[];
 
@@ -160,7 +160,7 @@ class Credential extends Model {
     certificate_info,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     credential_type,
-    kdcs,
+    kdcs = [],
     targets = [],
     scanners = [],
     ...properties
@@ -192,15 +192,10 @@ class Credential extends Model {
 
     ret.allow_insecure = parseYesNo(element.allow_insecure);
 
-    if (element.type === KRB5_CREDENTIAL_TYPE) {
-      const kdcsRaw = element.kdcs;
-      if (kdcsRaw && 'kdc' in kdcsRaw) {
-        ret.kdcs = Array.isArray(kdcsRaw.kdc) ? kdcsRaw.kdc : [kdcsRaw.kdc];
-      } else {
-        ret.kdcs = [];
-      }
-    } else {
-      delete ret.kdcs;
+    if (isDefined(element.kdcs?.kdc)) {
+      ret.kdcs = Array.isArray(element.kdcs.kdc)
+        ? element.kdcs.kdc
+        : [element.kdcs.kdc];
     }
 
     ret.targets = map(element.targets?.target, target =>
