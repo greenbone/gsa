@@ -48,13 +48,14 @@ const errors = (state = {}, action) => {
 
 const entities = (state = {}, action) => {
   switch (action.type) {
-    case types.ENTITIES_LOADING_SUCCESS:
+    case types.ENTITIES_LOADING_SUCCESS: {
       const {data = [], counts, loadedFilter} = action;
       return {
         ids: data.map(entity => entity.id),
         counts,
         loadedFilter,
       };
+    }
     default:
       return state;
   }
@@ -62,13 +63,14 @@ const entities = (state = {}, action) => {
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case types.ENTITIES_LOADING_SUCCESS:
+    case types.ENTITIES_LOADING_SUCCESS: {
       const {data = []} = action;
       const nextState = {
         ...state,
       };
       data.forEach(d => (nextState[d.id] = d));
       return nextState;
+    }
     default:
       return state;
   }
@@ -82,7 +84,7 @@ export const reportsReducer = (state = {}, action) => {
   switch (action.type) {
     case types.ENTITIES_LOADING_REQUEST:
     case types.ENTITIES_LOADING_SUCCESS:
-    case types.ENTITIES_LOADING_ERROR:
+    case types.ENTITIES_LOADING_ERROR: {
       const filterString = filterIdentifier(action.filter);
       return {
         ...state,
@@ -91,6 +93,7 @@ export const reportsReducer = (state = {}, action) => {
         errors: errors(state.errors, action),
         [filterString]: entities(state[filterString], action),
       };
+    }
     default:
       return state;
   }
