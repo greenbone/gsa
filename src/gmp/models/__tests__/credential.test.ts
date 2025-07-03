@@ -208,9 +208,9 @@ describe('Credential model function tests', () => {
       KRB5_CREDENTIAL,
     ]);
   });
+
   test('should parse kdcs array for kerberos credentials', () => {
     const credential = Credential.fromElement({
-      type: KRB5_CREDENTIAL_TYPE,
       kdcs: {kdc: ['kdc1.example.com', 'kdc2.example.com']},
     });
 
@@ -219,7 +219,6 @@ describe('Credential model function tests', () => {
 
   test('should parse single kdc as array for kerberos credentials', () => {
     const credential = Credential.fromElement({
-      type: KRB5_CREDENTIAL_TYPE,
       kdcs: {kdc: 'kdc1.example.com'},
     });
 
@@ -228,20 +227,10 @@ describe('Credential model function tests', () => {
 
   test('should set empty kdcs array when no kdc field present in kerberos credentials', () => {
     const credential = Credential.fromElement({
-      type: KRB5_CREDENTIAL_TYPE,
       kdcs: {kdc: []},
     });
 
     expect(credential.kdcs).toEqual([]);
-  });
-
-  test('should not parse kdcs for non-kerberos credentials', () => {
-    const credential = Credential.fromElement({
-      type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
-      kdcs: {kdc: 'shouldBeIgnored.example.com'},
-    });
-
-    expect(credential.kdcs).toEqual(['shouldBeIgnored.example.com']);
   });
 });
 
