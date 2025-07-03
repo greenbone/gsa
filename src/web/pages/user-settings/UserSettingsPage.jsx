@@ -11,12 +11,9 @@ import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
 import {openVasScannersFilter} from 'gmp/models/scanner';
 import {YES_VALUE, NO_VALUE, parseYesNo} from 'gmp/parser';
 import {hasValue, isDefined} from 'gmp/utils/identity';
-import {EditIcon, MySettingsIcon} from 'web/components/icon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import IconDivider from 'web/components/layout/IconDivider';
+import {MySettingsIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
-import DetailsLink from 'web/components/link/DetailsLink';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
 import Tab from 'web/components/tab/Tab';
@@ -30,10 +27,14 @@ import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import Table from 'web/components/table/Table';
 import TableRow from 'web/components/table/TableRow';
-import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
 import withLanguage from 'web/hooks/withLanguage';
 import SettingsDialog from 'web/pages/user-settings/Dialog';
+import {
+  getLangNameByCode,
+  SettingTableRow,
+  SimpleSettingRow,
+  ToolBarIcons,
+} from 'web/pages/user-settings/UserSettingsPageHelpers';
 import {
   loadEntities as loadAlerts,
   loadEntity as loadAlert,
@@ -77,75 +78,13 @@ import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
-import Languages, {BROWSER_LANGUAGE} from 'web/utils/Languages';
+import {BROWSER_LANGUAGE} from 'web/utils/Languages';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
+
 const FIRST_COL_WIDTH = '250px';
-
-const getLangNameByCode = code => {
-  const language = Languages[code];
-  return isDefined(language) ? `${language.name}` : null;
-};
-
-const SettingTableRow = ({setting, title, type}) => {
-  const {comment, id, name} = setting;
-  return (
-    <TableRow title={comment}>
-      <TableData>{title}</TableData>
-      <TableData>
-        <Layout>
-          {isDefined(id) && (
-            <DetailsLink id={id} type={type}>
-              {name}
-            </DetailsLink>
-          )}
-        </Layout>
-      </TableData>
-    </TableRow>
-  );
-};
-
-SettingTableRow.propTypes = {
-  setting: PropTypes.object,
-  title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-};
-
-const ToolBarIcons = ({disableEditIcon, onEditSettingsClick}) => {
-  const capabilities = useCapabilities();
-
-  const [_] = useTranslation();
-  const mayEdit = capabilities.mayEdit('setting');
-  const editIconTitle = mayEdit
-    ? _('Edit My Settings')
-    : _('Permission to edit settings denied');
-
-  return (
-    <Layout>
-      <IconDivider>
-        <ManualIcon
-          anchor="changing-the-user-settings"
-          page="web-interface"
-          size="small"
-          title={_('Help: My Settings')}
-        />
-        <EditIcon
-          disabled={disableEditIcon || !mayEdit}
-          size="small"
-          title={editIconTitle}
-          onClick={onEditSettingsClick}
-        />
-      </IconDivider>
-    </Layout>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  disableEditIcon: PropTypes.bool.isRequired,
-  onEditSettingsClick: PropTypes.func.isRequired,
-};
 
 class UserSettings extends React.Component {
   constructor(...args) {
@@ -397,69 +336,75 @@ class UserSettings extends React.Component {
                 <TabPanels>
                   <TabPanel>
                     <Table>
-                      <colgroup width={FIRST_COL_WIDTH} />
                       <TableBody>
-                        <TableRow>
-                          <TableData>{_('Timezone')}</TableData>
-                          <TableData>{timezone}</TableData>
-                        </TableRow>
-                        <TableRow title={userInterfaceTimeFormat.comment}>
-                          <TableData>{_('Time Format')}</TableData>
-                          <TableData>
-                            {userInterfaceTimeFormat.value === SYSTEM_DEFAULT
+                        <SimpleSettingRow
+                          label={_('Timezone')}
+                          value={timezone}
+                        />
+                        <SimpleSettingRow
+                          label={_('Time Format')}
+                          title={userInterfaceTimeFormat.comment}
+                          value={
+                            userInterfaceTimeFormat.value === SYSTEM_DEFAULT
                               ? _('System Default')
-                              : `${Number(userInterfaceTimeFormat.value)}h`}
-                          </TableData>
-                        </TableRow>
-                        <TableRow title={userInterfaceDateFormat.comment}>
-                          <TableData>{_('Date Format')}</TableData>
-                          <TableData>
-                            {userInterfaceDateFormat.value === SYSTEM_DEFAULT
+                              : `${Number(userInterfaceTimeFormat.value)}h`
+                          }
+                        />
+                        <SimpleSettingRow
+                          label={_('Date Format')}
+                          title={userInterfaceDateFormat.comment}
+                          value={
+                            userInterfaceDateFormat.value === SYSTEM_DEFAULT
                               ? _('System Default')
-                              : userInterfaceDateFormat.value}
-                          </TableData>
-                        </TableRow>
-                        <TableRow></TableRow>
-                        <TableRow>
-                          <TableData>{_('Password')}</TableData>
-                          <TableData>********</TableData>
-                        </TableRow>
-                        <TableRow title={userInterfaceLanguage.comment}>
-                          <TableData>{_('User Interface Language')}</TableData>
-                          <TableData>{getLangNameByCode(language)}</TableData>
-                        </TableRow>
-                        <TableRow title={rowsPerPage.comment}>
-                          <TableData>{_('Rows Per Page')}</TableData>
-                          <TableData>{rowsPerPage.value}</TableData>
-                        </TableRow>
-                        <TableRow title={detailsExportFileName.comment}>
-                          <TableData>{_('Details Export File Name')}</TableData>
-                          <TableData>{detailsExportFileName.value}</TableData>
-                        </TableRow>
-                        <TableRow title={listExportFileName.comment}>
-                          <TableData>{_('List Export File Name')}</TableData>
-                          <TableData>{listExportFileName.value}</TableData>
-                        </TableRow>
-                        <TableRow title={reportExportFileName.comment}>
-                          <TableData>{_('Report Export File Name')}</TableData>
-                          <TableData>{reportExportFileName.value}</TableData>
-                        </TableRow>
-                        <TableRow title={maxRowsPerPage.comment}>
-                          <TableData>
-                            {_('Max Rows Per Page (immutable)')}
-                          </TableData>
-                          <TableData>{maxRowsPerPage.value}</TableData>
-                        </TableRow>
-                        <TableRow title={autoCacheRebuild.comment}>
-                          <TableData>{_('Auto Cache Rebuild')}</TableData>
-                          <TableData>
-                            {isDefined(autoCacheRebuild.value)
+                              : userInterfaceDateFormat.value
+                          }
+                        />
+                        <TableRow />
+                        <SimpleSettingRow
+                          label={_('Password')}
+                          value="********"
+                        />
+                        <SimpleSettingRow
+                          label={_('User Interface Language')}
+                          title={userInterfaceLanguage.comment}
+                          value={getLangNameByCode(language)}
+                        />
+                        <SimpleSettingRow
+                          label={_('Rows Per Page')}
+                          title={rowsPerPage.comment}
+                          value={rowsPerPage.value}
+                        />
+                        <SimpleSettingRow
+                          label={_('Details Export File Name')}
+                          title={detailsExportFileName.comment}
+                          value={detailsExportFileName.value}
+                        />
+                        <SimpleSettingRow
+                          label={_('List Export File Name')}
+                          title={listExportFileName.comment}
+                          value={listExportFileName.value}
+                        />
+                        <SimpleSettingRow
+                          label={_('Report Export File Name')}
+                          title={reportExportFileName.comment}
+                          value={reportExportFileName.value}
+                        />
+                        <SimpleSettingRow
+                          label={_('Max Rows Per Page (immutable)')}
+                          title={maxRowsPerPage.comment}
+                          value={maxRowsPerPage.value}
+                        />
+                        <SimpleSettingRow
+                          label={_('Auto Cache Rebuild')}
+                          title={autoCacheRebuild.comment}
+                          value={
+                            isDefined(autoCacheRebuild.value)
                               ? parseYesNo(autoCacheRebuild.value) === YES_VALUE
                                 ? _('Yes')
                                 : _('No')
-                              : ''}
-                          </TableData>
-                        </TableRow>
+                              : ''
+                          }
+                        />
                       </TableBody>
                     </Table>
                   </TabPanel>
