@@ -194,13 +194,14 @@ class Audit extends Model {
                 ? AUTO_DELETE_KEEP
                 : AUTO_DELETE_NO;
             break;
-          case 'auto_delete_data':
+          case 'auto_delete_data': {
             const value = parseInt(pref.value);
             copy.auto_delete_data =
               value === 0
                 ? AUTO_DELETE_KEEP_DEFAULT_VALUE
                 : parseInt(pref.value);
             break;
+          }
           case 'max_hosts':
           case 'max_checks':
             copy[pref.scanner_name] = parseInt(pref.value);
