@@ -222,13 +222,12 @@ export const parseEntityModelProperties = (
     delete copy.in_use;
   }
 
-  // currently the owner is already added by parseDefaultProperties but in
-  // the future this will change. therefore we need to add it here
-  copy.owner = element.owner;
-
-  if (isDefined(element.owner) && isEmpty(element.owner.name)) {
-    delete copy.owner;
-  }
+  copy.owner =
+    isDefined(element.owner) && !isEmpty(element.owner.name)
+      ? {
+          name: parseToString(element.owner.name) as string,
+        }
+      : undefined;
 
   copy.summary = parseText(element.summary);
 
