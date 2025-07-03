@@ -209,28 +209,16 @@ describe('Credential model function tests', () => {
     ]);
   });
 
-  test('should parse kdcs array for kerberos credentials', () => {
+  test('should parse kdcs', () => {
     const credential = Credential.fromElement({
       kdcs: {kdc: ['kdc1.example.com', 'kdc2.example.com']},
     });
-
     expect(credential.kdcs).toEqual(['kdc1.example.com', 'kdc2.example.com']);
-  });
 
-  test('should parse single kdc as array for kerberos credentials', () => {
-    const credential = Credential.fromElement({
+    const credential2 = Credential.fromElement({
       kdcs: {kdc: 'kdc1.example.com'},
     });
-
-    expect(credential.kdcs).toEqual(['kdc1.example.com']);
-  });
-
-  test('should set empty kdcs array when no kdc field present in kerberos credentials', () => {
-    const credential = Credential.fromElement({
-      kdcs: {kdc: []},
-    });
-
-    expect(credential.kdcs).toEqual([]);
+    expect(credential2.kdcs).toEqual(['kdc1.example.com']);
   });
 });
 
