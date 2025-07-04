@@ -4,6 +4,7 @@
  */
 
 import {TagsInput} from '@mantine/core';
+import tagStyles from 'web/components/form/tagStyles';
 import Theme from 'web/utils/Theme';
 
 interface MultiValueTextFieldProps {
@@ -16,25 +17,6 @@ interface MultiValueTextFieldProps {
   onChange?: (value: string[], name?: string) => void;
   validate?: (value: string) => boolean;
 }
-
-const tagStyles: Record<string, {bg: string; color: string}> = {
-  green: {
-    bg: Theme.lightGreen,
-    color: Theme.darkGreen,
-  },
-  red: {
-    bg: Theme.lightRed,
-    color: Theme.darkRed,
-  },
-  blue: {
-    bg: Theme.lightBlue,
-    color: Theme.blue,
-  },
-  gray: {
-    bg: Theme.dialogGray,
-    color: Theme.mediumGray,
-  },
-};
 
 const MultiValueTextField = ({
   color = 'green',

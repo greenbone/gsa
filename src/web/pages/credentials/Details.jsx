@@ -5,11 +5,13 @@
 
 import React from 'react';
 import {
+  getCredentialTypeName,
+  KRB5_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   SNMP_PRIVACY_ALGORITHM_NONE,
-  getCredentialTypeName,
 } from 'gmp/models/credential';
 import Footnote from 'web/components/footnote/Footnote';
+import TagListDisplay from 'web/components/form/TagListDisplay.js';
 import Divider from 'web/components/layout/Divider';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
@@ -27,6 +29,8 @@ const CredentialDetails = ({entity}) => {
   const {
     comment,
     credential_type,
+    kdcs = [],
+    realm,
     login,
     auth_algorithm,
     privacy = {
@@ -73,6 +77,20 @@ const CredentialDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Auth Algorithm')}</TableData>
               <TableData>{auth_algorithm}</TableData>
+            </TableRow>
+          )}
+          {credential_type === KRB5_CREDENTIAL_TYPE && (
+            <TableRow>
+              <TableData>{_('Realm')}</TableData>
+              <TableData>{realm}</TableData>
+            </TableRow>
+          )}
+          {credential_type === KRB5_CREDENTIAL_TYPE && (
+            <TableRow>
+              <TableData>{_('Key Distribution Center')}</TableData>
+              <TableData>
+                <TagListDisplay values={kdcs} />
+              </TableData>
             </TableRow>
           )}
           {credential_type === SNMP_CREDENTIAL_TYPE && (
