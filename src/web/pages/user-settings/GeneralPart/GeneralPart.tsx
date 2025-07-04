@@ -13,7 +13,7 @@ import {
   type DateTimeKey,
 } from 'gmp/locale/date';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 import Checkbox from 'web/components/form/Checkbox';
 import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
@@ -29,10 +29,7 @@ export const renderLanguageItems = (): SelectItem[] =>
     const {name, native_name: nativeName} = language;
     return {
       value: code,
-      label:
-        isDefined(nativeName) && nativeName !== ''
-          ? `${name} | ${nativeName}`
-          : `${name}`,
+      label: !isEmpty(nativeName) ? `${name} | ${nativeName}` : `${name}`,
     };
   });
 

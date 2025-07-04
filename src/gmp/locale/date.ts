@@ -141,7 +141,7 @@ export const shortDate = (
   userInterfaceDateFormat: DateTimeKey = SYSTEM_DEFAULT,
 ): string | undefined => {
   const dateFormatString = getFormatString(
-    'shortDate',
+    DATE_TIME_CATEGORY.SHORT_DATE,
     userInterfaceDateFormat,
   );
 
@@ -169,8 +169,14 @@ export const longDate = (
   userInterfaceTimeFormat: DateTimeKey = SYSTEM_DEFAULT,
   userInterfaceDateFormat: DateTimeKey = SYSTEM_DEFAULT,
 ): string | undefined => {
-  const dateFormatString = getFormatString('longDate', userInterfaceDateFormat);
-  const timeFormatString = getFormatString('time', userInterfaceTimeFormat);
+  const dateFormatString = getFormatString(
+    DATE_TIME_CATEGORY.LONG_DATE,
+    userInterfaceDateFormat,
+  );
+  const timeFormatString = getFormatString(
+    DATE_TIME_CATEGORY.TIME,
+    userInterfaceTimeFormat,
+  );
 
   const useDefaultFormat =
     userInterfaceTimeFormat === SYSTEM_DEFAULT ||
@@ -204,8 +210,14 @@ export const processDateWithTimeZone = (
     return undefined;
   }
 
-  const dateFormatString = getFormatString('longDate', userInterfaceDateFormat);
-  const timeFormatString = getFormatString('time', userInterfaceTimeFormat);
+  const dateFormatString = getFormatString(
+    DATE_TIME_CATEGORY.LONG_DATE,
+    userInterfaceDateFormat,
+  );
+  const timeFormatString = getFormatString(
+    DATE_TIME_CATEGORY.TIME,
+    userInterfaceTimeFormat,
+  );
 
   const useDefaultFormat =
     userInterfaceTimeFormat === SYSTEM_DEFAULT ||

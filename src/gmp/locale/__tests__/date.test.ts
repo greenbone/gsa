@@ -12,6 +12,7 @@ import {
   dateTimeWithTimeZone,
   dateTimeWithTimeZoneObject,
   processDateWithTimeZone,
+  DateTimeKey,
 } from 'gmp/locale/date';
 import date, {setLocaleDayjs} from 'gmp/models/date';
 
@@ -78,8 +79,9 @@ describe('shortDate tests', () => {
     ])(
       'should format date %p with tz %p and userInterfaceDateFormat %p to %p',
       (input, tz, userInterfaceDateFormat, expected) => {
-        // @ts-expect-error
-        expect(shortDate(input, tz, userInterfaceDateFormat)).toEqual(expected);
+        expect(
+          shortDate(input, tz, userInterfaceDateFormat as DateTimeKey),
+        ).toEqual(expected);
       },
     );
   });

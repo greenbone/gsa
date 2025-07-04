@@ -299,7 +299,7 @@ const FilterPart = ({
       {defaultFields.map(field => (
         <DefaultSettingField
           key={field.name}
-          // @ts-expect-error Filter type is currently returning undefined but it's always defined
+          // @ts-expect-error Filter id and name are currently returning undefined but both are always defined here
           items={field.items}
           name={field.name}
           title={field.title}
