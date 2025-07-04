@@ -55,6 +55,8 @@ describe('Credential Model tests', () => {
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
     expect(credential.kdcs).toEqual([]);
+    expect(credential.login).toBeUndefined();
+    expect(credential.realm).toBeUndefined();
   });
 
   test('should parse empty element', () => {
@@ -65,6 +67,8 @@ describe('Credential Model tests', () => {
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
     expect(credential.kdcs).toEqual([]);
+    expect(credential.login).toBeUndefined();
+    expect(credential.realm).toBeUndefined();
   });
 
   test('should parse certificate_info', () => {
@@ -214,11 +218,20 @@ describe('Credential model function tests', () => {
       kdcs: {kdc: ['kdc1.example.com', 'kdc2.example.com']},
     });
     expect(credential.kdcs).toEqual(['kdc1.example.com', 'kdc2.example.com']);
+  });
 
-    const credential2 = Credential.fromElement({
-      kdcs: {kdc: 'kdc1.example.com'},
+  test('should parse login', () => {
+    const credential = Credential.fromElement({
+      login: 'test-user',
     });
-    expect(credential2.kdcs).toEqual(['kdc1.example.com']);
+    expect(credential.login).toEqual('test-user');
+  });
+
+  test('should parse realm', () => {
+    const credential = Credential.fromElement({
+      realm: 'test-realm',
+    });
+    expect(credential.realm).toEqual('test-realm');
   });
 });
 
