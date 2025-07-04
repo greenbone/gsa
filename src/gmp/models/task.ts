@@ -55,12 +55,16 @@ export const TASK_STATUS = {
   unknown: 'Unknown',
 } as const;
 
+export const USAGE_TYPE = {
+  scan: 'scan',
+  audit: 'audit',
+} as const;
+
 export type TaskHostsOrdering =
   | typeof HOSTS_ORDERING_SEQUENTIAL
   | typeof HOSTS_ORDERING_RANDOM
   | typeof HOSTS_ORDERING_REVERSE;
 export type TaskStatus = (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
-export type TaskUsageType = 'scan' | 'audit';
 export type TaskTrend = 'up' | 'down' | 'more' | 'less' | 'same';
 export type TaskAutoDelete = typeof AUTO_DELETE_KEEP | typeof AUTO_DELETE_NO;
 
@@ -107,7 +111,7 @@ interface TaskAlertElement {
   name?: string;
 }
 
-interface TaskElement extends ModelElement {
+export interface TaskElement extends ModelElement {
   alert?: TaskAlertElement | TaskAlertElement[];
   alterable?: YesNo;
   average_duration?: number;
@@ -193,32 +197,32 @@ interface TaskElement extends ModelElement {
     trash?: YesNo;
   };
   trend?: TaskTrend;
-  usage_type?: TaskUsageType;
+  usage_type?: string;
 }
 
-interface ReportCount {
+export interface ReportCount {
   total?: number;
   finished?: number;
 }
 
-interface TaskPreferences {
+export interface TaskPreferences {
   [key: string]: {
     value: string | number;
     name?: string;
   };
 }
 
-interface TaskSlave {
+export interface TaskSlave {
   id?: string;
 }
 
-interface TaskObservers {
+export interface TaskObservers {
   user?: string | string[];
   role?: string | string[];
   group?: string | string[];
 }
 
-interface TaskProperties extends ModelProperties {
+export interface TaskProperties extends ModelProperties {
   alerts?: Model[];
   alterable?: YesNo;
   average_duration?: Duration;
@@ -238,7 +242,6 @@ interface TaskProperties extends ModelProperties {
   status?: TaskStatus;
   target?: Model;
   trend?: TaskTrend;
-  usageType?: TaskUsageType;
   // from preferences
   apply_overrides?: YesNo;
   auto_delete_data?: number;
@@ -278,7 +281,7 @@ class Task extends Model {
   readonly status: TaskStatus;
   readonly target?: Model;
   readonly trend?: TaskTrend;
-  readonly usageType?: TaskUsageType;
+  readonly usageType = USAGE_TYPE.scan;
 
   constructor({
     alerts = [],
@@ -321,7 +324,6 @@ class Task extends Model {
     status = TASK_STATUS.unknown,
     target,
     trend,
-    usageType,
     ...properties
   }: TaskProperties = {}) {
     super(properties);
@@ -352,10 +354,15 @@ class Task extends Model {
     this.status = status;
     this.target = target;
     this.trend = trend;
-    this.usageType = usageType;
   }
 
   static fromElement(element?: TaskElement): Task {
+    if (
+      isDefined(element?.usage_type) &&
+      element.usage_type !== USAGE_TYPE.scan
+    ) {
+      throw new Error("Task.parseElement: usage_type must be 'scan'");
+    }
     return new Task(this.parseElement(element));
   }
 
@@ -482,8 +489,6 @@ class Task extends Model {
     } else {
       delete copy.hosts_ordering;
     }
-
-    copy.usageType = element.usage_type;
 
     return copy;
   }
