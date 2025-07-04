@@ -17,7 +17,7 @@ import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
-import {printPercentile} from 'web/utils/severity';
+import {renderPercentile, renderScore} from 'web/utils/severity';
 
 const CVSS_PROPS = {
   cvssAccessVector: _l('Access Vector'),
@@ -92,11 +92,11 @@ const CveDetails = ({entity}) => {
             <TableBody>
               <TableRow>
                 <TableData>{_('Score')}</TableData>
-                <TableData>{(epss.score * 100).toFixed(3)}%</TableData>
+                <TableData>{renderScore(epss.score)}</TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('Percentile')}</TableData>
-                <TableData>{printPercentile(epss.percentile)}</TableData>
+                <TableData>{renderPercentile(epss.percentile)}</TableData>
               </TableRow>
             </TableBody>
           </InfoTable>
