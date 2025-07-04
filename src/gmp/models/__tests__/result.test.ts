@@ -115,6 +115,52 @@ describe('Result model tests', () => {
     expect(result.name).toEqual('CVE-1234');
   });
 
+  test('should parse EPSS cve', () => {
+    const result = Result.fromElement({
+      nvt: {
+        name: 'CVE-1234',
+        type: 'cve',
+        epss: {
+          max_epss: {
+            percentile: 90,
+            score: 90,
+            cve: {
+              id: 90,
+              severity: 100,
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.information.epss.maxEpss.percentile).toEqual(90);
+    expect(result.information.epss.maxEpss.score).toEqual(90);
+    expect(result.information.epss.maxEpss.cve.severity).toEqual(100);
+  });
+
+  test('should parse EPSS nvt', () => {
+    const result = Result.fromElement({
+      nvt: {
+        name: 'CVE-1234',
+        type: 'nvt',
+        epss: {
+          max_epss: {
+            percentile: 90,
+            score: 90,
+            cve: {
+              id: 90,
+              severity: 100,
+            },
+          },
+        },
+      },
+    });
+
+    expect(result.information.epss.maxEpss.percentile).toEqual(90);
+    expect(result.information.epss.maxEpss.score).toEqual(90);
+    expect(result.information.epss.maxEpss.cve.severity).toEqual(100);
+  });
+
   test('should parse severity', () => {
     const result = Result.fromElement({severity: 4.2});
     expect(result.severity).toEqual(4.2);

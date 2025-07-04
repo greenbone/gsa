@@ -4,8 +4,6 @@
  */
 
 import React from 'react';
-import {_} from 'gmp/locale/lang';
-import {isNumber} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
@@ -17,6 +15,7 @@ import EntitiesActions from 'web/entities/Actions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
+import {renderPercentile, renderScore} from 'web/utils/severity';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -51,14 +50,8 @@ const Row = ({
       </TableData>
       {gmp.settings.enableEPSS && (
         <>
-          <TableData>
-            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
-          </TableData>
-          <TableData>
-            {isNumber(epssPercentile)
-              ? `${(epssPercentile * 1).toFixed(3)}%`
-              : _('N/A')}
-          </TableData>
+          <TableData>{renderScore(epssScore)}</TableData>
+          <TableData>{renderPercentile(epssPercentile)}</TableData>
         </>
       )}
       <ActionsComponent {...props} entity={entity} />

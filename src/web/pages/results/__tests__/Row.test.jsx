@@ -49,8 +49,8 @@ describe('Should render EPSS fields', () => {
 
     const {element} = render(<Row entity={entity} />);
 
-    expect(element).toHaveTextContent('0.87650');
-    expect(element).toHaveTextContent('80.000%');
+    expect(element).toHaveTextContent('87.650%');
+    expect(element).toHaveTextContent('80th');
   });
 });
 

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {isDefined, isNumber} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -28,6 +28,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ResultDelta from 'web/pages/results/Delta';
 import PropTypes from 'web/utils/PropTypes';
+import {renderPercentile, renderScore} from 'web/utils/severity';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -152,14 +153,8 @@ const Row = ({
       <TableData>{entity.port}</TableData>
       {gmp.settings.enableEPSS && !audit && (
         <>
-          <TableData>
-            {isNumber(epssScore) ? epssScore.toFixed(5) : _('N/A')}
-          </TableData>
-          <TableData>
-            {isNumber(epssPercentile)
-              ? `${(epssPercentile * 1).toFixed(3)}%`
-              : _('N/A')}
-          </TableData>
+          <TableData>{renderScore(epssScore)}</TableData>
+          <TableData>{renderPercentile(epssPercentile)}</TableData>
         </>
       )}
       <TableData>

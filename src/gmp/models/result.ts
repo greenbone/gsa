@@ -30,10 +30,37 @@ interface ResultCveElement {
 }
 
 const createCveResult = ({name, epss}: ResultCveElement): CveResult => {
+  const retEpss = {};
+
+  if (isDefined(epss?.max_epss)) {
+    retEpss.maxEpss = {
+      percentile: parseFloat(epss?.max_epss?.percentile),
+      score: parseFloat(epss?.max_epss?.score),
+    };
+    if (isDefined(epss?.max_epss?.cve)) {
+      retEpss.maxEpss.cve = {
+        id: epss?.max_epss?.cve?._id,
+        severity: parseFloat(epss?.max_epss?.cve?.severity),
+      };
+    }
+  }
+  if (isDefined(epss?.max_severity)) {
+    retEpss.maxSeverity = {
+      percentile: parseFloat(epss?.max_severity?.percentile),
+      score: parseFloat(epss?.max_severity?.score),
+    };
+    if (isDefined(epss?.max_severity?.cve)) {
+      retEpss.maxSeverity.cve = {
+        id: epss?.max_severity?.cve?._id,
+        severity: parseFloat(epss?.max_severity?.cve?.severity),
+      };
+    }
+  }
+
   return {
     name,
     id: name,
-    epss: epss,
+    epss: retEpss,
   };
 };
 

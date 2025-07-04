@@ -73,7 +73,7 @@ const CvesFilterDialog = ({
     },
     {
       name: 'epss_percentile',
-      displayName: _('EPSS Percentage'),
+      displayName: _('EPSS Percentile'),
     },
   ];
 
