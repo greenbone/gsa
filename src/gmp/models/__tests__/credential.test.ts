@@ -54,6 +54,7 @@ describe('Credential Model tests', () => {
     expect(credential.credential_type).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
+    expect(credential.kdcs).toEqual([]);
   });
 
   test('should parse empty element', () => {
@@ -63,6 +64,7 @@ describe('Credential Model tests', () => {
     expect(credential.credential_type).toBeUndefined();
     expect(credential.targets).toEqual([]);
     expect(credential.scanners).toEqual([]);
+    expect(credential.kdcs).toEqual([]);
   });
 
   test('should parse certificate_info', () => {
@@ -205,6 +207,18 @@ describe('Credential model function tests', () => {
     expect(allCredentials.filter(krb5CredentialFilter)).toEqual([
       KRB5_CREDENTIAL,
     ]);
+  });
+
+  test('should parse kdcs', () => {
+    const credential = Credential.fromElement({
+      kdcs: {kdc: ['kdc1.example.com', 'kdc2.example.com']},
+    });
+    expect(credential.kdcs).toEqual(['kdc1.example.com', 'kdc2.example.com']);
+
+    const credential2 = Credential.fromElement({
+      kdcs: {kdc: 'kdc1.example.com'},
+    });
+    expect(credential2.kdcs).toEqual(['kdc1.example.com']);
   });
 });
 

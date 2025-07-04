@@ -35,7 +35,7 @@ export class CredentialCommand extends EntityCommand {
       private_key,
       public_key,
       realm,
-      kdc,
+      kdcs = [],
     } = args;
     log.debug('Creating new credential', args);
     return this.action({
@@ -56,7 +56,7 @@ export class CredentialCommand extends EntityCommand {
       public_key,
       certificate,
       realm,
-      kdc,
+      'kdcs:': kdcs,
     });
   }
 
@@ -81,7 +81,7 @@ export class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
-      kdc,
+      kdcs = [],
       realm,
     } = args;
     log.debug('Saving credential', args);
@@ -106,7 +106,7 @@ export class CredentialCommand extends EntityCommand {
       privacy_password,
       private_key,
       public_key,
-      kdc,
+      'kdcs:': kdcs,
       realm,
     });
   }

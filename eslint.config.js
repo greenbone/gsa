@@ -32,7 +32,6 @@ const commonRules = {
   'react/display-name': 'off',
   'no-class-assign': 'off',
   'no-prototype-builtins': 'off',
-  'no-case-declarations': 'off',
   'no-duplicate-imports': 'warn',
   'react-hooks/exhaustive-deps': 'warn',
   eqeqeq: ['warn', 'always'],

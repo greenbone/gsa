@@ -94,6 +94,7 @@ interface TlsCertificateProperties extends ModelProperties {
   issuerDn?: string;
   lastSeen?: Date;
   md5Fingerprint?: string;
+  serial?: string;
   sha256Fingerprint?: string;
   sourceHosts?: SourceHost[];
   sourcePorts?: string[];
@@ -116,6 +117,7 @@ class TlsCertificate extends Model {
   readonly issuerDn?: string;
   readonly lastSeen?: Date;
   readonly md5Fingerprint?: string;
+  readonly serial?: string;
   readonly sha256Fingerprint?: string;
   readonly sourceHosts: SourceHost[];
   readonly sourcePorts: string[];
@@ -132,6 +134,7 @@ class TlsCertificate extends Model {
     issuerDn,
     lastSeen,
     md5Fingerprint,
+    serial,
     sha256Fingerprint,
     sourceHosts = [],
     sourcePorts = [],
@@ -150,6 +153,7 @@ class TlsCertificate extends Model {
     this.issuerDn = issuerDn;
     this.lastSeen = lastSeen;
     this.md5Fingerprint = md5Fingerprint;
+    this.serial = serial;
     this.sha256Fingerprint = sha256Fingerprint;
     this.sourceHosts = sourceHosts;
     this.sourcePorts = sourcePorts;
@@ -177,6 +181,7 @@ class TlsCertificate extends Model {
     ret.name = parseToString(element.subject_dn);
     ret.subjectDn = ret.name;
     ret.issuerDn = element.issuer_dn;
+    ret.serial = parseToString(element.serial);
 
     ret.activationTime =
       element.activation_time === 'undefined' ||

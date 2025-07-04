@@ -19,6 +19,7 @@ describe('TlsCertificate Model tests', () => {
     expect(tlsCertificate.issuerDn).toBeUndefined();
     expect(tlsCertificate.lastSeen).toBeUndefined();
     expect(tlsCertificate.md5Fingerprint).toBeUndefined();
+    expect(tlsCertificate.serial).toBeUndefined();
     expect(tlsCertificate.sha256Fingerprint).toBeUndefined();
     expect(tlsCertificate.sourceHosts).toEqual([]);
     expect(tlsCertificate.sourcePorts).toEqual([]);
@@ -37,6 +38,7 @@ describe('TlsCertificate Model tests', () => {
     expect(tlsCertificate.issuerDn).toBeUndefined();
     expect(tlsCertificate.lastSeen).toBeUndefined();
     expect(tlsCertificate.md5Fingerprint).toBeUndefined();
+    expect(tlsCertificate.serial).toBeUndefined();
     expect(tlsCertificate.sha256Fingerprint).toBeUndefined();
     expect(tlsCertificate.sourceHosts).toEqual([]);
     expect(tlsCertificate.sourcePorts).toEqual([]);
@@ -370,5 +372,12 @@ describe('TlsCertificate Model tests', () => {
       },
     });
     expect(tlsCertificate2.sourcePorts).toEqual(['1234']);
+  });
+
+  test('should parse serial', () => {
+    const tlsCertificate = TlsCertificate.fromElement({
+      serial: '1234567890',
+    });
+    expect(tlsCertificate.serial).toEqual('1234567890');
   });
 });

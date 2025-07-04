@@ -36,7 +36,7 @@ describe('CredentialCommand tests', () => {
         public_key: undefined,
         certificate: undefined,
         realm: undefined,
-        kdc: undefined,
+        'kdcs:': [],
         credential_type: undefined,
       },
     });
@@ -73,7 +73,7 @@ describe('CredentialCommand tests', () => {
       private_key: 'private_key',
       public_key: 'public_key',
       realm: 'kerberos_realm',
-      kdc: 'kerberos_kdc',
+      kdcs: ['kerberos_kdc'],
     });
 
     expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -99,7 +99,7 @@ describe('CredentialCommand tests', () => {
         private_key: 'private_key',
         public_key: 'public_key',
         realm: 'kerberos_realm',
-        kdc: 'kerberos_kdc',
+        'kdcs:': ['kerberos_kdc'],
       },
     });
 
@@ -131,9 +131,7 @@ describe('CredentialCommand tests', () => {
 
   test('should get element from root', () => {
     const root = {
-      // eslint-disable-next-line camelcase
       get_credential: {
-        // eslint-disable-next-line camelcase
         get_credentials_response: {
           credential: {id: '1', name: 'test-credential'},
         },

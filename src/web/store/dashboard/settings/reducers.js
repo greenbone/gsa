@@ -56,10 +56,11 @@ const errors = (state = {}, action) => {
   const {id} = action;
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_REQUEST:
-    case DASHBOARD_SETTINGS_LOADING_SUCCESS:
+    case DASHBOARD_SETTINGS_LOADING_SUCCESS: {
       const newState = {...state};
       delete newState[id];
       return newState;
+    }
     case DASHBOARD_SETTINGS_LOADING_ERROR:
       return {
         ...state,

@@ -8,13 +8,14 @@ import Nvt from 'gmp/models/nvt';
 import {
   parseCsv,
   parseSeverity,
+  parseTextElement,
   parseToString,
   parseYesNo,
+  TextElement,
   YES_VALUE,
   YesNo,
 } from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 
 export const MANUAL = '1';
 export const ANY = '0';
@@ -35,7 +36,7 @@ export const RESULT_UUID = '0';
 
 export const SEVERITY_FALSE_POSITIVE = -1;
 
-interface OverrideElement extends ModelElement {
+export interface OverrideElement extends ModelElement {
   hosts?: string;
   new_severity?: number;
   new_thread?: string;
@@ -44,7 +45,7 @@ interface OverrideElement extends ModelElement {
   result?: ModelElement;
   severity?: number;
   task?: ModelElement;
-  text?: string;
+  text?: string | TextElement;
   thread?: string;
   text_excerpt?: YesNo;
 }
@@ -114,10 +115,13 @@ class Override extends Model {
     ret.severity = parseSeverity(element.severity);
     ret.newSeverity = parseSeverity(element.new_severity);
 
-    ret.text = parseToString(element.text);
-    ret.textExcerpt = isDefined(element.text_excerpt)
-      ? parseYesNo(element.text_excerpt)
-      : undefined;
+    const {text, textExcerpt} = parseTextElement(element.text);
+    ret.text = text;
+    ret.textExcerpt = textExcerpt;
+
+    if (isDefined(element.text_excerpt)) {
+      ret.textExcerpt = parseYesNo(element.text_excerpt);
+    }
 
     ret.task = isModelElement(element.task)
       ? Model.fromElement(element.task, 'task')
@@ -127,7 +131,7 @@ class Override extends Model {
       : undefined;
 
     ret.hosts = parseCsv(element.hosts);
-    ret.port = isEmpty(element.port) ? undefined : String(element.port);
+    ret.port = parseToString(element.port);
 
     return ret;
   }

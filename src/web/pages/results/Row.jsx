@@ -136,7 +136,7 @@ const Row = ({
       </TableData>
       <TableData>
         <IconDivider>
-          {host.hostname.length > 0 && (
+          {isDefined(host.hostname) && (
             <span title={host.hostname}>{shorten(host.hostname, 40)}</span>
           )}
           {isDefined(deltaHostname) &&

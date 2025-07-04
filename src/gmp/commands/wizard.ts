@@ -135,12 +135,12 @@ class WizardCommand extends HttpCommand {
         value: setting.value,
       });
     });
-    const scanConfigs = map(resp.get_configs_response.config, config => {
-      return Model.fromElement(config, 'scanconfig');
-    });
-    const credentials = map(resp.get_credentials_response.credential, cred => {
-      return Credential.fromElement(cred) as Credential;
-    });
+    const scanConfigs = map(resp.get_configs_response.config, config =>
+      Model.fromElement(config, 'scanconfig'),
+    );
+    const credentials = map(resp.get_credentials_response.credential, cred =>
+      Credential.fromElement(cred),
+    );
     return response.setData<AdvancedTaskResponseData>({
       settings,
       clientAddress: data.client_address,
@@ -164,9 +164,8 @@ class WizardCommand extends HttpCommand {
         value: setting.value,
       });
     });
-    const tasks = map<ModelElement, Task>(
-      resp.get_tasks_response.task,
-      task => Task.fromElement(task) as Task,
+    const tasks = map<ModelElement, Task>(resp.get_tasks_response.task, task =>
+      Task.fromElement(task),
     ).filter(currentTask => !currentTask.isContainer());
     return response.setData<ModifyTaskResponseData>({settings, tasks});
   }

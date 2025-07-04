@@ -50,7 +50,7 @@ const createPrefValues = (preferences = []) => {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setValue':
+    case 'setValue': {
       const {newState} = action;
       const {name, value} = newState;
 
@@ -66,9 +66,11 @@ const reducer = (state, action) => {
       };
 
       return updatedState;
-    case 'setAll':
+    }
+    case 'setAll': {
       const {formValues} = action;
       return formValues;
+    }
     default:
       return state;
   }
