@@ -10,6 +10,7 @@ import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   TASK_STATUS,
   TaskStatus,
+  USAGE_TYPE,
 } from 'gmp/models/task';
 import {testModel} from 'gmp/models/testing';
 import {parseDuration} from 'gmp/parser';
@@ -45,7 +46,7 @@ describe('Task Model parse tests', () => {
     expect(task.status).toEqual(TASK_STATUS.unknown);
     expect(task.target).toBeUndefined();
     expect(task.trend).toBeUndefined();
-    expect(task.usageType).toBeUndefined();
+    expect(task.usageType).toEqual(USAGE_TYPE.scan);
   });
 
   test('should parse empty element', () => {
@@ -76,7 +77,7 @@ describe('Task Model parse tests', () => {
     expect(task.status).toEqual(TASK_STATUS.unknown);
     expect(task.target).toBeUndefined();
     expect(task.trend).toBeUndefined();
-    expect(task.usageType).toBeUndefined();
+    expect(task.usageType).toEqual(USAGE_TYPE.scan);
   });
 
   test('should parse hosts ordering', () => {
@@ -108,7 +109,7 @@ describe('Task Model parse tests', () => {
     expect(task.last_report?.entityType).toEqual('report');
   });
 
-  test('should parse current_report', () => {
+  test('should parse current report', () => {
     const task = Task.fromElement({
       _id: 't1',
       current_report: {
@@ -407,20 +408,13 @@ describe('Task Model parse tests', () => {
     expect(task2.trend).toEqual('down');
   });
 
-  test('should parse usageType', () => {
-    const task = Task.fromElement({
-      _id: 't1',
-      usage_type: 'scan',
-    });
-    expect(task.id).toEqual('t1');
-    expect(task.usageType).toEqual('scan');
-
-    const task2 = Task.fromElement({
-      _id: 't2',
-      usage_type: 'audit',
-    });
-    expect(task2.id).toEqual('t2');
-    expect(task2.usageType).toEqual('audit');
+  test('should throw error for invalid usage type', () => {
+    expect(() => {
+      Task.fromElement({
+        _id: 't1',
+        usage_type: 'invalid',
+      });
+    }).toThrow("Task.parseElement: usage_type must be 'scan'");
   });
 });
 
