@@ -6,7 +6,7 @@
 import {parseFilter} from 'gmp/collection/parser';
 import Model from 'gmp/models/model';
 import {
-  parse_errors,
+  parseErrors,
   parseHosts,
   parseOperatingSystems,
   parseResults,
@@ -90,7 +90,7 @@ class AuditReportReport extends Model {
 
     copy.operatingSystems = parseOperatingSystems(element, filter);
 
-    copy.errors = parse_errors(element, filter);
+    copy.errors = parseErrors(element, filter);
 
     copy.scan_start = parseDate(scan_start);
 
