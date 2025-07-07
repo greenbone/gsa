@@ -28,7 +28,7 @@ export class ResourceNamesCommand extends EntitiesCommand {
   getCollectionListFromRoot(root) {
     const response = this.getEntitiesResponse(root);
     const res = parseCollectionList(response, this.name, this.clazz, {
-      entities_parse_func: this.parseResourceNamesEntities,
+      entitiesParseFunc: this.parseResourceNamesEntities,
     });
     return res;
   }

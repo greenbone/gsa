@@ -37,8 +37,8 @@ class InfoEntitiesCommand extends EntitiesCommand {
     const response = this.getEntitiesResponse(root);
     return parseCollectionList(response, this.name, this.clazz, {
       meta,
-      entities_parse_func: this.parseInfoEntities,
-      collection_count_parse_func: parseInfoCounts,
+      entitiesParseFunc: this.parseInfoEntities,
+      collectionCountParseFunc: parseInfoCounts,
     });
   }
 }
