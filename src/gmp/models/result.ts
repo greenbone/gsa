@@ -20,17 +20,48 @@ import {isDefined, isString} from 'gmp/utils/identity';
 interface CveResult {
   name: string;
   id: string;
-  epss?: number;
+  epss?: Epss;
 }
 
 interface ResultCveElement {
   name: string;
-  epss?: number;
+  epss?: {
+    max_epss: {
+      percentile: string;
+      score: string;
+      cve: {
+        _id: string;
+        severity: string;
+      };
+    };
+    max_severity: {
+      percentile: string;
+      score: string;
+      cve: {
+        _id: string;
+        severity: string;
+      };
+    };
+  };
   type?: string;
 }
 
+interface EpssValue {
+  percentile?: number;
+  score?: number;
+  cve?: {
+    id?: string;
+    severity?: number;
+  };
+}
+
+interface Epss {
+  maxEpss?: EpssValue;
+  maxSeverity?: EpssValue;
+}
+
 const createCveResult = ({name, epss}: ResultCveElement): CveResult => {
-  const retEpss = {};
+  const retEpss: Epss = {};
 
   if (isDefined(epss?.max_epss)) {
     retEpss.maxEpss = {

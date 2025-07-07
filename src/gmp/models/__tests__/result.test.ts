@@ -122,20 +122,28 @@ describe('Result model tests', () => {
         type: 'cve',
         epss: {
           max_epss: {
-            percentile: 90,
-            score: 90,
+            percentile: '90',
+            score: '90',
             cve: {
-              id: 90,
-              severity: 100,
+              _id: '90',
+              severity: '100',
+            },
+          },
+          max_severity: {
+            percentile: '90',
+            score: '90',
+            cve: {
+              _id: '90',
+              severity: '100',
             },
           },
         },
       },
     });
 
-    expect(result.information.epss.maxEpss.percentile).toEqual(90);
-    expect(result.information.epss.maxEpss.score).toEqual(90);
-    expect(result.information.epss.maxEpss.cve.severity).toEqual(100);
+    expect(result.information?.epss?.maxEpss?.percentile).toEqual(90);
+    expect(result.information?.epss?.maxEpss?.score).toEqual(90);
+    expect(result.information?.epss?.maxEpss?.cve?.severity).toEqual(100);
   });
 
   test('should parse EPSS nvt', () => {
@@ -145,20 +153,28 @@ describe('Result model tests', () => {
         type: 'nvt',
         epss: {
           max_epss: {
-            percentile: 90,
-            score: 90,
+            percentile: '90',
+            score: '90',
             cve: {
-              id: 90,
-              severity: 100,
+              _id: '90',
+              severity: '100',
+            },
+          },
+          max_severity: {
+            percentile: '90',
+            score: '90',
+            cve: {
+              _id: '90',
+              severity: '100',
             },
           },
         },
       },
     });
 
-    expect(result.information.epss.maxEpss.percentile).toEqual(90);
-    expect(result.information.epss.maxEpss.score).toEqual(90);
-    expect(result.information.epss.maxEpss.cve.severity).toEqual(100);
+    expect(result.information?.epss?.maxEpss?.percentile).toEqual(90);
+    expect(result.information?.epss?.maxEpss?.score).toEqual(90);
+    expect(result.information?.epss?.maxEpss?.cve?.severity).toEqual(100);
   });
 
   test('should parse severity', () => {

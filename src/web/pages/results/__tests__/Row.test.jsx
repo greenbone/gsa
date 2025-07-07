@@ -29,7 +29,7 @@ describe('Should render EPSS fields', () => {
         epss: {
           max_severity: {
             score: 0.8765,
-            percentile: 80.0,
+            percentile: 80.123,
             cve: {
               _id: 'CVE-2019-1234',
               severity: 5.0,
