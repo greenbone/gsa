@@ -10,48 +10,48 @@ import logger from 'gmp/log';
 import Filter from 'gmp/models/filter';
 import Model, {Element} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
-import {isArray, isDefined} from 'gmp/utils/identity';
+import {hasValue, isArray, isDefined} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.collection.parser');
 
-export interface ModelClass<TModel extends Model> {
+export interface ModelClass<TModel> {
   fromElement(element: unknown, type?: string): TModel;
 }
 
-export interface CollectionList<TModel extends Model> {
+export interface CollectionList<TModel> {
   entities: TModel[];
   filter: Filter;
   counts: CollectionCounts;
 }
 
-interface ParseCollectionListOptions<TModel extends Model> {
+interface ParseCollectionListOptions<TModel extends Model, TElement = Element> {
   plural_name?: string;
   entities_parse_func?: (
-    response: Element,
+    element: TElement,
     name: string,
     modelClass: ModelClass<TModel>,
   ) => TModel[];
   collection_count_parse_func?: (
-    response: Element,
+    element: TElement,
     name: string,
     pluralName?: string,
   ) => CollectionCounts;
-  filter_parse_func?: (element: Element) => Filter;
+  filter_parse_func?: (element: FilterElement) => Filter;
 }
 
-interface InfoElement extends Element {
+interface InfoElement {
   info?: Element[];
 }
 
-interface ResourceElement extends Element {
+interface ResourceElement {
   type?: string;
 }
 
-interface ResultsElement extends Element {
-  results: Element;
+interface ResultsElement {
+  results: unknown;
 }
 
-interface FilterElement extends Element {
+interface FilterElement {
   filters?: Element;
 }
 
@@ -90,7 +90,7 @@ export function parseResourceNamesEntities<TModel extends Model>(
   modelClass: ModelClass<TModel>,
 ) {
   const type = isDefined(response.type) ? response.type : '';
-  return map(parseElements(response, name), element =>
+  return map(parseElements(response as Element, name), element =>
     modelClass.fromElement(element, type),
   );
 }
@@ -146,8 +146,8 @@ export function parseFilter(element: FilterElement): Filter {
   return Filter.fromElement(element.filters) as Filter;
 }
 
-export function parseCounts(
-  element: Element,
+export function parseCounts<TElement = Element>(
+  element: TElement,
   name: string,
   pluralName?: string,
 ): CollectionCountsOptions {
@@ -159,8 +159,12 @@ export function parseCounts(
     pluralName = name + 's';
   }
 
-  const es = element[pluralName] as ElementStart;
-  const ec = element[name + '_count'] as ElementCounts;
+  const es = hasValue(element)
+    ? (element[pluralName] as ElementStart)
+    : undefined;
+  const ec = hasValue(element)
+    ? (element[name + '_count'] as ElementCounts)
+    : undefined;
 
   if (isDefined(es) && isDefined(ec)) {
     return {
@@ -174,40 +178,48 @@ export function parseCounts(
   return {};
 }
 
-const parseElements = (
-  response: Element | undefined,
+const parseElements = <TElement = Element>(
+  response: TElement | undefined,
   name: string,
-): Element | Element[] | undefined =>
-  isDefined(response)
-    ? (response[name] as Element | Element[] | undefined)
+): TElement | TElement[] | undefined =>
+  hasValue(response)
+    ? (response[name] as TElement | TElement[] | undefined)
     : undefined;
 
-const parseEntities = <TModel extends Model = Model>(
-  response: Element,
+const parseEntities = <TModel extends Model = Model, TElement = Element>(
+  element: TElement,
   name: string,
   modelClass: ModelClass<TModel> = Model as unknown as ModelClass<TModel>,
 ) => {
-  return map(parseElements(response, name), (element: Element) =>
+  return map(parseElements(element, name), (element: TElement) =>
     modelClass.fromElement(element),
   );
 };
 
-export const parseReportResultEntities = <TModel extends Model>(
-  response: ResultsElement,
+export const parseReportResultEntities = <
+  TModel extends Model,
+  TElement extends ResultsElement = ResultsElement,
+>(
+  response: TElement,
   name: string,
   modelClass: ModelClass<TModel>,
-) => parseEntities(response.results, name, modelClass);
+) =>
+  parseEntities<TModel, TElement>(
+    response.results as TElement,
+    name,
+    modelClass,
+  );
 
-const parseCollectionCounts = (
-  response: Element,
+const parseCollectionCounts = <TElement = Element>(
+  element: TElement,
   name: string,
   pluralName?: string,
-) => new CollectionCounts(parseCounts(response, name, pluralName));
+) => new CollectionCounts(parseCounts(element, name, pluralName));
 
 /**
  * Parse a CollectionList from a response object
  *
- * @param response       A response object e.g envelope.get_tasks_response
+ * @param element       A response object e.g envelope.get_tasks_response
  * @param name           The name of the property containing the entities
  * @param modelClass     A Model class to use for creating the entities
  *
@@ -240,24 +252,24 @@ const parseCollectionCounts = (
  *
  * @return A new object containing the parsed entities, filter and counts.
  */
-export const parseCollectionList = <TModel extends Model>(
-  response: Element,
+export const parseCollectionList = <TModel extends Model, TElement = Element>(
+  element: TElement,
   name: string,
   modelClass: ModelClass<TModel>,
   {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     plural_name,
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    entities_parse_func = parseEntities<TModel>,
+    entities_parse_func = parseEntities<TModel, TElement>,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     collection_count_parse_func = parseCollectionCounts,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     filter_parse_func = parseFilter,
-  }: ParseCollectionListOptions<TModel> = {},
+  }: ParseCollectionListOptions<TModel, TElement> = {},
 ): CollectionList<TModel> => {
   return {
-    entities: entities_parse_func(response, name, modelClass),
-    filter: filter_parse_func(response),
-    counts: collection_count_parse_func(response, name, plural_name),
+    entities: entities_parse_func(element, name, modelClass),
+    filter: filter_parse_func(element as FilterElement),
+    counts: collection_count_parse_func(element, name, plural_name),
   };
 };
