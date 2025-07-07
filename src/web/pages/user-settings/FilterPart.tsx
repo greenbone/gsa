@@ -56,12 +56,7 @@ interface DefaultSettingFieldProps {
 }
 
 const filterFilters = (filters: Filter[], type: string) =>
-  filters
-    .filter(filter => filter.filter_type === type)
-    .map(filter => ({
-      id: filter.id as string,
-      name: filter.name as string,
-    }));
+  filters.filter(filter => filter.filter_type === type);
 
 const DefaultSettingField = ({
   title,
@@ -304,6 +299,7 @@ const FilterPart = ({
       {defaultFields.map(field => (
         <DefaultSettingField
           key={field.name}
+          // @ts-expect-error Filter id and name are currently returning undefined but both are always defined here
           items={field.items}
           name={field.name}
           title={field.title}
