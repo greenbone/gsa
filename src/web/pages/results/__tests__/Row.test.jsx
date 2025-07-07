@@ -10,7 +10,7 @@ import Row from 'web/pages/results/Row';
 
 const gmp = {settings: {enableEPSS: true}};
 
-describe('Should render EPSS fields', () => {
+describe('Should render EPSS fields 1', () => {
   const {render} = rendererWithTable({gmp, store: true});
 
   test('should render EPSS columns', () => {
@@ -51,6 +51,50 @@ describe('Should render EPSS fields', () => {
 
     expect(element).toHaveTextContent('87.650%');
     expect(element).toHaveTextContent('80th');
+  });
+});
+
+describe('Should render EPSS fields 2', () => {
+  const {render} = rendererWithTable({gmp, store: true});
+
+  test('should render EPSS columns', () => {
+    const entity = Result.fromElement({
+      _id: '101',
+      name: 'Result 1',
+      host: {__text: '123.456.78.910', hostname: 'foo'},
+      port: '80/tcp',
+      severity: 10.0,
+      qod: {value: 80},
+      notes: [],
+      overrides: [],
+      tickets: [],
+      nvt: {
+        type: 'cve',
+        epss: {
+          max_severity: {
+            score: 0.8765,
+            percentile: 83.123,
+            cve: {
+              _id: 'CVE-2019-1234',
+              severity: 5.0,
+            },
+          },
+          max_epss: {
+            score: 0.9876,
+            percentile: 90.0,
+            cve: {
+              _id: 'CVE-2020-5678',
+              severity: 2.0,
+            },
+          },
+        },
+      },
+    });
+
+    const {element} = render(<Row entity={entity} />);
+
+    expect(element).toHaveTextContent('87.650%');
+    expect(element).toHaveTextContent('83rd');
   });
 });
 
