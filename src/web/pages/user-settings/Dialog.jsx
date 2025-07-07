@@ -18,7 +18,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import DefaultsPart from 'web/pages/user-settings/DefaultsPart';
 import FilterPart from 'web/pages/user-settings/FilterPart';
-import GeneralPart from 'web/pages/user-settings/GeneralPart';
+import GeneralPart from 'web/pages/user-settings/GeneralPart/GeneralPart';
 import SeverityPart from 'web/pages/user-settings/SeverityPart';
 import {userSettingsRules} from 'web/pages/user-settings/validationRules';
 import PropTypes from 'web/utils/PropTypes';
