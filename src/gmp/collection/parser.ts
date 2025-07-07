@@ -25,18 +25,18 @@ export interface CollectionList<TModel> {
 }
 
 interface ParseCollectionListOptions<TModel extends Model, TElement = Element> {
-  plural_name?: string;
-  entities_parse_func?: (
+  pluralName?: string;
+  entitiesParseFunc?: (
     element: TElement,
     name: string,
     modelClass: ModelClass<TModel>,
   ) => TModel[];
-  collection_count_parse_func?: (
+  collectionCountParseFunc?: (
     element: TElement,
     name: string,
     pluralName?: string,
   ) => CollectionCounts;
-  filter_parse_func?: (element: FilterElement) => Filter;
+  filterParseFunc?: (element: FilterElement) => Filter;
 }
 
 interface InfoElement {
@@ -257,19 +257,15 @@ export const parseCollectionList = <TModel extends Model, TElement = Element>(
   name: string,
   modelClass: ModelClass<TModel>,
   {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    plural_name,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    entities_parse_func = parseEntities<TModel, TElement>,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    collection_count_parse_func = parseCollectionCounts,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    filter_parse_func = parseFilter,
+    pluralName,
+    entitiesParseFunc = parseEntities<TModel, TElement>,
+    collectionCountParseFunc = parseCollectionCounts,
+    filterParseFunc = parseFilter,
   }: ParseCollectionListOptions<TModel, TElement> = {},
 ): CollectionList<TModel> => {
   return {
-    entities: entities_parse_func(element, name, modelClass),
-    filter: filter_parse_func(element as FilterElement),
-    counts: collection_count_parse_func(element, name, plural_name),
+    entities: entitiesParseFunc(element, name, modelClass),
+    filter: filterParseFunc(element as FilterElement),
+    counts: collectionCountParseFunc(element, name, pluralName),
   };
 };
