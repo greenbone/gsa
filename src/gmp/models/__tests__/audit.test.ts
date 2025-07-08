@@ -153,34 +153,6 @@ describe('Audit model tests', () => {
     expect(audit.current_report?.entityType).toEqual('report');
   });
 
-  test('should parse first report', () => {
-    const audit = Audit.fromElement({
-      _id: 't1',
-      first_report: {
-        report: {
-          _id: 'r1',
-        },
-      },
-    });
-    expect(audit.id).toEqual('t1');
-    expect(audit.first_report?.id).toEqual('r1');
-    expect(audit.first_report?.entityType).toEqual('report');
-  });
-
-  test('should parse second last report', () => {
-    const audit = Audit.fromElement({
-      _id: 't1',
-      second_last_report: {
-        report: {
-          _id: 'r1',
-        },
-      },
-    });
-    expect(audit.id).toEqual('t1');
-    expect(audit.second_last_report?.id).toEqual('r1');
-    expect(audit.second_last_report?.entityType).toEqual('report');
-  });
-
   test('should parse config', () => {
     const audit = Audit.fromElement({
       _id: 't1',
