@@ -353,9 +353,18 @@ describe('Task Model parse tests', () => {
     const task3 = Task.fromElement({
       observers: '',
     });
-    expect(task3.observers?.user).toEqual([]);
+    expect(task3.observers?.user).toBeUndefined();
     expect(task3.observers?.role).toBeUndefined();
     expect(task3.observers?.group).toBeUndefined();
+
+    const task4 = Task.fromElement({
+      observers: {
+        __text: '',
+      },
+    });
+    expect(task4.observers?.user).toBeUndefined();
+    expect(task4.observers?.role).toBeUndefined();
+    expect(task4.observers?.group).toBeUndefined();
   });
 
   test('should parse alterable', () => {
