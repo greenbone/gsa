@@ -31,6 +31,7 @@ import Task, {
   TaskHostsOrdering,
   TaskAutoDelete,
   USAGE_TYPE,
+  TaskReport,
 } from 'gmp/models/task';
 import {NO_VALUE, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -88,11 +89,11 @@ class Audit extends Model {
   readonly auto_delete?: TaskAutoDelete;
   readonly average_duration?: Duration;
   readonly config?: Model;
-  readonly current_report?: Report;
+  readonly current_report?: TaskReport;
   readonly first_report?: Report;
   readonly hosts_ordering?: TaskHostsOrdering;
   readonly in_assets?: YesNo;
-  readonly last_report?: Report;
+  readonly last_report?: TaskReport;
   readonly max_checks?: number;
   readonly max_hosts?: number;
   readonly min_qod?: number;

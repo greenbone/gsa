@@ -13,7 +13,7 @@ import Audit, {
   AuditStatus,
 } from 'gmp/models/audit';
 import {testModel} from 'gmp/models/testing';
-import {parseDuration} from 'gmp/parser';
+import {parseDate, parseDuration} from 'gmp/parser';
 
 describe('Audit model tests', () => {
   testModel(Audit, 'audit', {testIsActive: false});
@@ -107,12 +107,36 @@ describe('Audit model tests', () => {
       last_report: {
         report: {
           _id: 'r1',
+          scan_start: '2023-10-01T12:00:00Z',
+          scan_end: '2023-10-01T12:05:00Z',
+          timestamp: '2023-10-01T12:06:00Z',
+          severity: 5.5,
+          compliance_count: {
+            yes: 1,
+            no: 2,
+            undefined: 3,
+            incomplete: 4,
+          },
         },
       },
     });
     expect(audit.id).toEqual('t1');
     expect(audit.last_report?.id).toEqual('r1');
     expect(audit.last_report?.entityType).toEqual('report');
+    expect(audit.last_report?.timestamp).toEqual(
+      parseDate('2023-10-01T12:06:00Z'),
+    );
+    expect(audit.last_report?.scan_start).toEqual(
+      parseDate('2023-10-01T12:00:00Z'),
+    );
+    expect(audit.last_report?.scan_end).toEqual(
+      parseDate('2023-10-01T12:05:00Z'),
+    );
+    expect(audit.last_report?.severity).toEqual(5.5);
+    expect(audit.last_report?.compliance_count?.yes).toEqual(1);
+    expect(audit.last_report?.compliance_count?.no).toEqual(2);
+    expect(audit.last_report?.compliance_count?.undefined).toEqual(3);
+    expect(audit.last_report?.compliance_count?.incomplete).toEqual(4);
   });
 
   test('should parse current report', () => {
