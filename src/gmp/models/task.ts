@@ -4,9 +4,8 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import {Duration} from 'gmp/models/date';
+import {Date, Duration} from 'gmp/models/date';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import Report from 'gmp/models/report';
 import Scanner, {ScannerType} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
 import {
@@ -19,6 +18,8 @@ import {
   NO_VALUE,
   YesNo,
   parseToString,
+  parseDate,
+  parseSeverity,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
@@ -121,6 +122,7 @@ export interface TaskElement extends ModelElement {
     trash?: YesNo;
   };
   current_report?: {
+    // only available for a running task
     report?: {
       _id?: string;
       timestamp?: string;
@@ -130,8 +132,17 @@ export interface TaskElement extends ModelElement {
   };
   hosts_ordering?: TaskHostsOrdering;
   last_report?: {
+    // Only available for tasks with finished scans
     report?: {
       _id?: string;
+      compliance_count?: {
+        // only available for audits
+        incomplete?: number;
+        yes?: number;
+        no?: number;
+        undefined?: number;
+      };
+      // get_tasks result_counts are different then compared to get_reports
       result_count?: {
         false_positive?: number;
         hole?: {
@@ -143,6 +154,7 @@ export interface TaskElement extends ModelElement {
           _deprecated: '1';
         };
         high?: number;
+        log?: number;
         low?: number;
         medium?: number;
         warning?: {
@@ -222,14 +234,37 @@ export interface TaskObservers {
   group?: string | string[];
 }
 
+export interface TaskReport {
+  compliance_count?: {
+    // only available for audits
+    incomplete?: number;
+    yes?: number;
+    no?: number;
+    undefined?: number;
+  };
+  entityType: 'report';
+  id: string;
+  result_count?: {
+    high?: number;
+    medium?: number;
+    low?: number;
+    log?: number;
+    false_positive?: number;
+  };
+  scan_end?: Date;
+  scan_start?: Date;
+  severity?: number;
+  timestamp?: Date;
+}
+
 export interface TaskProperties extends ModelProperties {
   alerts?: Model[];
   alterable?: YesNo;
   average_duration?: Duration;
   config?: Model;
-  current_report?: Report;
+  current_report?: TaskReport;
   hosts_ordering?: TaskHostsOrdering;
-  last_report?: Report;
+  last_report?: TaskReport;
   observers?: TaskObservers;
   preferences?: TaskPreferences;
   progress?: number;
@@ -262,10 +297,10 @@ class Task extends Model {
   readonly auto_delete?: TaskAutoDelete;
   readonly average_duration?: Duration;
   readonly config?: Model;
-  readonly current_report?: Report;
+  readonly current_report?: TaskReport;
   readonly hosts_ordering?: TaskHostsOrdering;
   readonly in_assets?: YesNo;
-  readonly last_report?: Report;
+  readonly last_report?: TaskReport;
   readonly max_checks?: number;
   readonly max_hosts?: number;
   readonly min_qod?: number;
@@ -403,14 +438,51 @@ class Task extends Model {
       ? parseYesNo(element.alterable)
       : undefined;
     copy.result_count = parseInt(element.result_count);
-    copy.trend = parseToString(element.trend) as TaskTrend;
+    copy.trend = parseToString(element.trend) as TaskTrend | undefined;
 
-    copy.last_report = isEmpty(element.last_report?.report?._id)
-      ? undefined
-      : Report.fromElement(element.last_report?.report);
+    if (!isEmpty(element.last_report?.report?._id)) {
+      const lastReport: TaskReport = {
+        entityType: 'report',
+        id: element.last_report?.report?._id as string,
+        timestamp: parseDate(element.last_report?.report?.timestamp),
+        scan_start: parseDate(element.last_report?.report?.scan_start),
+        scan_end: parseDate(element.last_report?.report?.scan_end),
+        severity: parseSeverity(element.last_report?.report?.severity),
+      };
+      if (isDefined(element.last_report?.report?.result_count)) {
+        lastReport.result_count = {
+          high: parseInt(element.last_report?.report?.result_count?.high),
+          medium: parseInt(element.last_report?.report?.result_count?.medium),
+          low: parseInt(element.last_report?.report?.result_count?.low),
+          log: parseInt(element.last_report?.report?.result_count?.log),
+          false_positive: parseInt(
+            element.last_report?.report?.result_count?.false_positive,
+          ),
+        };
+      }
+      if (isDefined(element.last_report?.report?.compliance_count)) {
+        lastReport.compliance_count = {
+          incomplete: parseInt(
+            element.last_report?.report?.compliance_count?.incomplete,
+          ),
+          yes: parseInt(element.last_report?.report?.compliance_count?.yes),
+          no: parseInt(element.last_report?.report?.compliance_count?.no),
+          undefined: parseInt(
+            element.last_report?.report?.compliance_count?.undefined,
+          ),
+        };
+      }
+      copy.last_report = lastReport;
+    }
     copy.current_report = isEmpty(element.current_report?.report?._id)
       ? undefined
-      : Report.fromElement(element.current_report?.report);
+      : {
+          id: element.current_report?.report?._id as string,
+          entityType: 'report',
+          timestamp: parseDate(element.current_report?.report?.timestamp),
+          scan_start: parseDate(element.current_report?.report?.scan_start),
+          scan_end: parseDate(element.current_report?.report?.scan_end),
+        };
 
     copy.config = isEmpty(element.config?._id)
       ? undefined
