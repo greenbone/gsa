@@ -22,6 +22,7 @@ import useUserName from 'web/hooks/useUserName';
 import Actions from 'web/pages/audits/Actions';
 import AuditStatus from 'web/pages/tasks/Status';
 import PropTypes from 'web/utils/PropTypes';
+
 const renderAuditReport = (report, links) => {
   if (!isDefined(report)) {
     return null;
@@ -68,16 +69,20 @@ const Row = ({
   const [username] = useUserName();
   const {scanner, observers} = entity;
   const obs = [];
+  let hasObservers = false;
 
   if (isDefined(observers)) {
     if (isDefined(observers.user)) {
+      hasObservers = true;
       obs.user = _('Users {{user}}', {user: observers.user.join(', ')});
     }
     if (isDefined(observers.role)) {
+      hasObservers = true;
       const role = observers.role.map(r => r.name);
       obs.role = _('Roles {{role}}', {role: role.join(', ')});
     }
     if (isDefined(observers.group)) {
+      hasObservers = true;
       const group = observers.group.map(g => g.name);
       obs.group = _('Groups {{group}}', {group: group.join(', ')});
     }
@@ -108,7 +113,7 @@ const Row = ({
               entity={entity}
               userName={username}
             />
-            {isDefined(observers) && Object.keys(observers).length > 0 && (
+            {hasObservers && (
               <ProvideViewIcon
                 size="small"
                 title={_(
