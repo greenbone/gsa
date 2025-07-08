@@ -156,8 +156,12 @@ describe('longDate tests', () => {
         expected,
       ) => {
         expect(
-          // @ts-expect-error
-          longDate(input, tz, userInterfaceTimeFormat, userInterfaceDateFormat),
+          longDate(
+            input,
+            tz,
+            userInterfaceTimeFormat as DateTimeKey,
+            userInterfaceDateFormat as DateTimeKey,
+          ),
         ).toEqual(expected);
       },
     );

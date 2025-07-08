@@ -8,10 +8,10 @@ import {screen, within, rendererWith, wait, fireEvent} from 'web/testing';
 import {vi} from 'vitest';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Setting from 'gmp/models/setting';
-import UserSettingsPage from 'web/pages/user-settings/UserSettingsPage';
+import UserSettingsPage from 'web/pages/user-settings/user-setting-page/UserSettingsPage';
+import {setTimezone} from 'web/store/usersettings/actions';
 import {USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS} from 'web/store/usersettings/defaultfilters/actions';
 import {USER_SETTINGS_DEFAULTS_LOADING_SUCCESS} from 'web/store/usersettings/defaults/actions';
-import {setTimezone} from 'web/store/usersettings/actions';
 
 vi.mock('web/pages/user-settings/Dialog', () => {
   return {

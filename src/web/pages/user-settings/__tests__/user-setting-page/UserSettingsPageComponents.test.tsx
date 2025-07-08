@@ -6,28 +6,11 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, rendererWithTable} from 'web/testing';
 import {
-  getLangNameByCode,
   SettingTableRow,
   ToolBarIcons,
-} from 'web/pages/user-settings/UserSettingsPageHelpers';
+} from 'web/pages/user-settings/user-setting-page/UserSettingsPageComponents';
 
 describe('UserSettingsPageHelpers', () => {
-  describe('getLangNameByCode', () => {
-    test('returns the correct language name for a valid code', () => {
-      const langCode = 'en';
-      const expectedLangName = 'English';
-      const result = getLangNameByCode(langCode);
-      expect(result).toBe(expectedLangName);
-    });
-
-    test('returns "Unknown" for an invalid language code', () => {
-      const langCode = 'xx';
-      const expectedLangName = null;
-      const result = getLangNameByCode(langCode);
-      expect(result).toBe(expectedLangName);
-    });
-  });
-
   describe('SettingTableRow', () => {
     test('renders correctly with given props', () => {
       const setting = {
