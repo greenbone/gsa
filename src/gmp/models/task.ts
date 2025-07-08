@@ -382,13 +382,13 @@ class Task extends Model {
       copy.observers = {};
       if (isString(element.observers)) {
         copy.observers.user = isEmpty(element.observers)
-          ? []
+          ? undefined
           : element.observers.split(' ');
       } else {
         if (isDefined(element.observers?.__text)) {
-          copy.observers.user = (
-            parseToString(element.observers.__text) as string
-          ).split(' ');
+          copy.observers.user = isEmpty(element.observers.__text)
+            ? undefined
+            : (parseToString(element.observers.__text) as string).split(' ');
         }
         if (isDefined(element.observers.role)) {
           copy.observers.role = parseIntoArray(element.observers.role);

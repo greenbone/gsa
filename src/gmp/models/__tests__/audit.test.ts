@@ -367,12 +367,12 @@ describe('Audit model tests', () => {
   });
 
   test('should parse observers', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       observers: 'foo bar',
     });
-    expect(task.observers?.user).toEqual(['foo', 'bar']);
+    expect(audit.observers?.user).toEqual(['foo', 'bar']);
 
-    const task2 = Audit.fromElement({
+    const audit2 = Audit.fromElement({
       observers: {
         __text: 'anon nymous',
         role: ['lorem'],
@@ -380,66 +380,75 @@ describe('Audit model tests', () => {
       },
     });
 
-    expect(task2.observers?.user).toEqual(['anon', 'nymous']);
-    expect(task2.observers?.role).toEqual(['lorem']);
-    expect(task2.observers?.group).toEqual(['ipsum', 'dolor']);
+    expect(audit2.observers?.user).toEqual(['anon', 'nymous']);
+    expect(audit2.observers?.role).toEqual(['lorem']);
+    expect(audit2.observers?.group).toEqual(['ipsum', 'dolor']);
 
-    const task3 = Audit.fromElement({
+    const audit3 = Audit.fromElement({
       observers: '',
     });
-    expect(task3.observers?.user).toEqual([]);
-    expect(task3.observers?.role).toBeUndefined();
-    expect(task3.observers?.group).toBeUndefined();
+    expect(audit3.observers?.user).toBeUndefined();
+    expect(audit3.observers?.role).toBeUndefined();
+    expect(audit3.observers?.group).toBeUndefined();
+
+    const audit4 = Audit.fromElement({
+      observers: {
+        __text: '',
+      },
+    });
+    expect(audit4.observers?.user).toBeUndefined();
+    expect(audit4.observers?.role).toBeUndefined();
+    expect(audit4.observers?.group).toBeUndefined();
   });
 
   test('should parse alterable', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       _id: 't1',
       alterable: 1,
     });
-    expect(task.id).toEqual('t1');
-    expect(task.alterable).toEqual(1);
+    expect(audit.id).toEqual('t1');
+    expect(audit.alterable).toEqual(1);
 
-    const task2 = Audit.fromElement({
+    const audit2 = Audit.fromElement({
       _id: 't2',
       alterable: 0,
     });
-    expect(task2.id).toEqual('t2');
-    expect(task2.alterable).toEqual(0);
+    expect(audit2.id).toEqual('t2');
+    expect(audit2.alterable).toEqual(0);
   });
 
   test('should parse average duration', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       _id: 't1',
       average_duration: 123456,
     });
-    expect(task.id).toEqual('t1');
-    expect(task.average_duration).toEqual(parseDuration(123456));
+    expect(audit.id).toEqual('t1');
+    expect(audit.average_duration).toEqual(parseDuration(123456));
   });
 
   test('should parse status', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       _id: 't1',
       status: AUDIT_STATUS.running,
     });
-    expect(task.id).toEqual('t1');
-    expect(task.status).toEqual(AUDIT_STATUS.running);
+    expect(audit.id).toEqual('t1');
+    expect(audit.status).toEqual(AUDIT_STATUS.running);
   });
 
   test('should parse trend', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       _id: 't1',
       trend: 'up',
     });
-    expect(task.id).toEqual('t1');
-    expect(task.trend).toEqual('up');
+    expect(audit.id).toEqual('t1');
+    expect(audit.trend).toEqual('up');
 
-    const task2 = Audit.fromElement({
+    const audit2 = Audit.fromElement({
       _id: 't2',
       trend: 'down',
     });
-    expect(task2.id).toEqual('t2');
-    expect(task2.trend).toEqual('down');
+    expect(audit2.id).toEqual('t2');
+    expect(audit2.trend).toEqual('down');
   });
 
   test('should throw error for invalid usage type', () => {
