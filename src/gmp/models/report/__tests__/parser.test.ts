@@ -4,6 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import {
   parseHosts,
@@ -16,6 +17,8 @@ import {
   parseClosedCves,
 } from 'gmp/models/report/parser';
 import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+
+const emptyCollectionCounts = new CollectionCounts();
 
 describe('report parser tests', () => {
   test('should parse hosts', () => {
@@ -83,7 +86,7 @@ describe('report parser tests', () => {
     const hosts = parseHosts({}, filter);
 
     expect(hosts.entities.length).toEqual(0);
-    expect(hosts.counts).toBeUndefined();
+    expect(hosts.counts).toEqual(emptyCollectionCounts);
     expect(hosts.filter).toEqual(filter);
   });
 
@@ -144,7 +147,7 @@ describe('report parser tests', () => {
     const ports = parsePorts(report, filter);
 
     expect(ports.entities.length).toEqual(0);
-    expect(ports.counts).toBeUndefined();
+    expect(ports.counts).toEqual(emptyCollectionCounts);
     expect(ports.filter).toEqual(filter);
   });
 
@@ -297,7 +300,7 @@ describe('report parser tests', () => {
     const apps = parseApps(report, filter);
 
     expect(apps.entities.length).toEqual(0);
-    expect(apps.counts).toBeUndefined();
+    expect(apps.counts).toEqual(emptyCollectionCounts);
     expect(apps.filter).toEqual(filter);
   });
 
@@ -424,7 +427,7 @@ describe('report parser tests', () => {
     const operatingSystems = parseOperatingSystems(report, filter);
 
     expect(operatingSystems.entities.length).toEqual(0);
-    expect(operatingSystems.counts).toBeUndefined();
+    expect(operatingSystems.counts).toEqual(emptyCollectionCounts);
     expect(operatingSystems.filter).toEqual(filter);
   });
 
@@ -626,18 +629,8 @@ describe('report parser tests', () => {
     const tlsCerts = parseTlsCertificates(report, filter);
 
     expect(tlsCerts.entities.length).toEqual(0);
-    expect(tlsCerts.counts).toBeUndefined();
+    expect(tlsCerts.counts).toEqual(emptyCollectionCounts);
     expect(tlsCerts.filter).toEqual(filter);
-  });
-
-  test('should parse empty cves', () => {
-    const filter = Filter.fromString('foo=bar rows=5');
-    const report = {};
-    const cves = parseCves(report, filter);
-
-    expect(cves.entities.length).toEqual(0);
-    expect(cves.counts).toBeUndefined();
-    expect(cves.filter).toEqual(filter);
   });
 
   test('should parse cves', () => {
@@ -785,14 +778,14 @@ describe('report parser tests', () => {
     expect(cve3.occurrences).toEqual(1);
   });
 
-  test('should parse empty errors', () => {
+  test('should parse empty cves', () => {
     const filter = Filter.fromString('foo=bar rows=5');
     const report = {};
-    const errors = parseErrors(report, filter);
+    const cves = parseCves(report, filter);
 
-    expect(errors.entities.length).toEqual(0);
-    expect(errors.counts).toBeUndefined();
-    expect(errors.filter).toEqual(filter);
+    expect(cves.entities.length).toEqual(0);
+    expect(cves.counts).toEqual(emptyCollectionCounts);
+    expect(cves.filter).toEqual(filter);
   });
 
   test('should parse errors', () => {
@@ -901,14 +894,14 @@ describe('report parser tests', () => {
     expect(error2.port).toEqual('456/tcp');
   });
 
-  test('should parse empty closed CVEs', () => {
+  test('should parse empty errors', () => {
     const filter = Filter.fromString('foo=bar rows=5');
     const report = {};
-    const closedCves = parseErrors(report, filter);
+    const errors = parseErrors(report, filter);
 
-    expect(closedCves.entities.length).toEqual(0);
-    expect(closedCves.counts).toBeUndefined();
-    expect(closedCves.filter).toEqual(filter);
+    expect(errors.entities.length).toEqual(0);
+    expect(errors.counts).toEqual(emptyCollectionCounts);
+    expect(errors.filter).toEqual(filter);
   });
 
   test('should parse closed CVEs', () => {
@@ -1006,5 +999,15 @@ describe('report parser tests', () => {
     expect(closedCve2.host.id).toEqual(undefined);
     expect(closedCve2.source?.name).toEqual('202');
     expect(closedCve2.severity).toEqual(5);
+  });
+
+  test('should parse empty closed CVEs', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+    const report = {};
+    const closedCves = parseErrors(report, filter);
+
+    expect(closedCves.entities.length).toEqual(0);
+    expect(closedCves.counts).toEqual(emptyCollectionCounts);
+    expect(closedCves.filter).toEqual(filter);
   });
 });

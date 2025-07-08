@@ -30,6 +30,7 @@ import {
   ErrorsElement,
   ReportError,
   ReportClosedCve,
+  ReportComplianceCountElement,
 } from 'gmp/models/report/parser';
 import ReportPort from 'gmp/models/report/port';
 import ReportTask from 'gmp/models/report/task';
@@ -44,6 +45,7 @@ export interface ReportReportElement extends ModelElement {
   _type?: ReportType;
   apps?: CountElement;
   closed_cves?: CountElement;
+  compliance_count?: ReportComplianceCountElement;
   delta?: {
     report?: {
       _id?: string;
@@ -121,9 +123,56 @@ interface ReportReportSeverity {
   full?: number;
 }
 
+interface ReportResultCounts {
+  filtered?: number;
+  full?: number;
+  high?: {
+    filtered?: number;
+    full?: number;
+  };
+  medium?: {
+    filtered?: number;
+    full?: number;
+  };
+  low?: {
+    filtered?: number;
+    full?: number;
+  };
+  log?: {
+    filtered?: number;
+    full?: number;
+  };
+  false_positive?: {
+    filtered?: number;
+    full?: number;
+  };
+}
+
+interface ReportComplianceCounts {
+  full?: number;
+  filtered?: number;
+  yes?: {
+    full?: number;
+    filtered?: number;
+  };
+  no?: {
+    full?: number;
+    filtered?: number;
+  };
+  incomplete?: {
+    full?: number;
+    filtered?: number;
+  };
+  undefined?: {
+    full?: number;
+    filtered?: number;
+  };
+}
+
 interface ReportReportProperties extends ModelProperties {
   applications?: CollectionList<ReportApp>;
   closedCves?: CollectionList<ReportClosedCve>;
+  compliance_count?: ReportComplianceCounts;
   cves?: CollectionList<ReportCve>;
   delta_report?: DeltaReport;
   errors?: CollectionList<ReportError>;
@@ -133,10 +182,14 @@ interface ReportReportProperties extends ModelProperties {
   ports?: CollectionList<ReportPort>;
   report_type?: ReportType;
   results?: CollectionList<Result>;
+  result_count?: ReportResultCounts;
   scan_end?: Date;
+  scan_run_status?: string;
   scan_start?: Date;
   severity?: ReportReportSeverity;
   task?: ReportTask;
+  timezone?: string;
+  timezone_abbrev?: string;
   tlsCertificates?: CollectionList<ReportTLSCertificate>;
 }
 
@@ -145,6 +198,7 @@ class ReportReport extends Model {
 
   readonly applications?: CollectionList<ReportApp>;
   readonly closedCves?: CollectionList<ReportClosedCve>;
+  readonly compliance_count?: ReportComplianceCounts;
   readonly cves?: CollectionList<ReportCve>;
   readonly delta_report?: DeltaReport;
   readonly errors?: CollectionList<ReportError>;
@@ -153,16 +207,22 @@ class ReportReport extends Model {
   readonly operatingsystems?: CollectionList<ReportOperatingSystem>;
   readonly ports?: CollectionList<ReportPort>;
   readonly report_type?: ReportType;
+  readonly result_count?: ReportResultCounts;
   readonly results?: CollectionList<Result>;
   readonly scan_end?: Date;
+  readonly scan_run_status?: string;
   readonly scan_start?: Date;
   readonly severity?: ReportReportSeverity;
   readonly task?: ReportTask;
+  readonly timezone?: string;
+  readonly timezone_abbrev?: string;
   readonly tlsCertificates?: CollectionList<ReportTLSCertificate>;
 
   constructor({
     applications,
     closedCves,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    compliance_count,
     cves,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     delta_report,
@@ -173,13 +233,20 @@ class ReportReport extends Model {
     ports,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     report_type,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    result_count,
     results,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     scan_end,
     // eslint-disable-next-line @typescript-eslint/naming-convention
+    scan_run_status,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     scan_start,
     severity,
     task,
+    timezone,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    timezone_abbrev,
     tlsCertificates,
     ...properties
   }: ReportReportProperties = {}) {
@@ -187,6 +254,7 @@ class ReportReport extends Model {
 
     this.applications = applications;
     this.closedCves = closedCves;
+    this.compliance_count = compliance_count;
     this.cves = cves;
     this.delta_report = delta_report;
     this.errors = errors;
@@ -195,11 +263,15 @@ class ReportReport extends Model {
     this.operatingsystems = operatingsystems;
     this.ports = ports;
     this.report_type = report_type;
+    this.result_count = result_count;
     this.results = results;
     this.scan_end = scan_end;
+    this.scan_run_status = scan_run_status;
     this.scan_start = scan_start;
     this.severity = severity;
     this.task = task;
+    this.timezone = timezone;
+    this.timezone_abbrev = timezone_abbrev;
     this.tlsCertificates = tlsCertificates;
   }
 
@@ -242,6 +314,9 @@ class ReportReport extends Model {
 
     copy.scan_start = parseDate(scan_start);
     copy.scan_end = parseDate(scan_end);
+    copy.scan_run_status = element.scan_run_status;
+    copy.timezone = element.timezone;
+    copy.timezone_abbrev = element.timezone_abbrev;
 
     if (isDefined(delta?.report)) {
       copy.delta_report = {
@@ -250,6 +325,56 @@ class ReportReport extends Model {
         scan_end: parseDate(delta.report.scan_end),
         scan_start: parseDate(delta.report.scan_start),
         timestamp: parseDate(delta.report.timestamp),
+      };
+    }
+
+    if (isDefined(element.result_count)) {
+      copy.result_count = {
+        filtered: element.result_count.filtered,
+        full: element.result_count.full,
+        false_positive: {
+          filtered: element.result_count.false_positive?.filtered,
+          full: element.result_count.false_positive?.full,
+        },
+        high: {
+          filtered: element.result_count.high?.filtered,
+          full: element.result_count.high?.full,
+        },
+        log: {
+          filtered: element.result_count.log?.filtered,
+          full: element.result_count.log?.full,
+        },
+        low: {
+          filtered: element.result_count.low?.filtered,
+          full: element.result_count.low?.full,
+        },
+        medium: {
+          filtered: element.result_count.medium?.filtered,
+          full: element.result_count.medium?.full,
+        },
+      };
+    }
+
+    if (isDefined(element.compliance_count)) {
+      copy.compliance_count = {
+        full: element.compliance_count.full,
+        filtered: element.compliance_count.filtered,
+        yes: {
+          full: element.compliance_count.yes?.full,
+          filtered: element.compliance_count.yes?.filtered,
+        },
+        no: {
+          full: element.compliance_count.no?.full,
+          filtered: element.compliance_count.no?.filtered,
+        },
+        incomplete: {
+          full: element.compliance_count.incomplete?.full,
+          filtered: element.compliance_count.incomplete?.filtered,
+        },
+        undefined: {
+          full: element.compliance_count.undefined?.full,
+          filtered: element.compliance_count.undefined?.filtered,
+        },
       };
     }
 

@@ -132,7 +132,7 @@ export interface ReportResultsElement {
   result?: ReportResultElement | ReportResultElement[];
 }
 
-interface ReportComplianceCountElement {
+export interface ReportComplianceCountElement {
   __text?: number;
   full?: number;
   filtered?: number;
@@ -140,7 +140,7 @@ interface ReportComplianceCountElement {
     full?: number;
     filtered?: number;
   };
-  no: {
+  no?: {
     full?: number;
     filtered?: number;
   };
