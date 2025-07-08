@@ -14,7 +14,6 @@ import TableData from 'web/components/table/Data';
 import TableRow from 'web/components/table/TableRow';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import Languages from 'web/utils/Languages';
 
 /**
  * Component for displaying a simple setting row in the user settings table
@@ -35,17 +34,6 @@ export const SimpleSettingRow = ({
     <TableData>{value}</TableData>
   </TableRow>
 );
-
-/**
- * Get the language name by its code
- *
- * @param {string} code - The language code to look up
- * @returns {string|null} - The language name or null if not found
- */
-export const getLangNameByCode = (code: string): string | null => {
-  const language = Languages[code];
-  return isDefined(language) ? `${language.name}` : null;
-};
 
 // Also export as default for compatibility with tests
 // export default getLangNameByCode;
