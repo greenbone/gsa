@@ -502,42 +502,6 @@ describe('ReportReport tests', () => {
     expect(report.result_count?.false_positive?.filtered).toEqual(1);
   });
 
-  test('should parse compliance count', () => {
-    const report = ReportReport.fromElement({
-      compliance_count: {
-        full: 20,
-        filtered: 5,
-        yes: {
-          full: 15,
-          filtered: 3,
-        },
-        no: {
-          full: 5,
-          filtered: 2,
-        },
-        incomplete: {
-          full: 2,
-          filtered: 1,
-        },
-        undefined: {
-          full: 3,
-          filtered: 1,
-        },
-      },
-    });
-    expect(report.compliance_count).toBeDefined();
-    expect(report.compliance_count?.full).toEqual(20);
-    expect(report.compliance_count?.filtered).toEqual(5);
-    expect(report.compliance_count?.yes?.full).toEqual(15);
-    expect(report.compliance_count?.yes?.filtered).toEqual(3);
-    expect(report.compliance_count?.no?.full).toEqual(5);
-    expect(report.compliance_count?.no?.filtered).toEqual(2);
-    expect(report.compliance_count?.incomplete?.full).toEqual(2);
-    expect(report.compliance_count?.incomplete?.filtered).toEqual(1);
-    expect(report.compliance_count?.undefined?.full).toEqual(3);
-    expect(report.compliance_count?.undefined?.filtered).toEqual(1);
-  });
-
   test('should parse timezone', () => {
     const report = ReportReport.fromElement({
       timezone: 'Europe/Berlin',

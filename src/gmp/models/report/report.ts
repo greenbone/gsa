@@ -5,7 +5,7 @@
 
 import {CollectionList, parseFilter} from 'gmp/collection/parser';
 import {Date} from 'gmp/models/date';
-import Filter from 'gmp/models/filter';
+import Filter, {FilterKeyword} from 'gmp/models/filter';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import ReportApp from 'gmp/models/report/app';
 import ReportCve from 'gmp/models/report/cve';
@@ -30,7 +30,6 @@ import {
   ErrorsElement,
   ReportError,
   ReportClosedCve,
-  ReportComplianceCountElement,
 } from 'gmp/models/report/parser';
 import ReportPort from 'gmp/models/report/port';
 import ReportTask from 'gmp/models/report/task';
@@ -41,33 +40,45 @@ import {isDefined} from 'gmp/utils/identity';
 
 export type ReportType = 'scan' | 'assets' | 'delta';
 
+interface ReportFiltersElement {
+  _id?: string;
+  filter?: string[];
+  keywords?: {
+    keyword?: FilterKeyword | FilterKeyword[];
+  };
+  term?: string;
+}
+
+interface ReportDeltaElement {
+  report?: {
+    _id?: string;
+    scan_end?: string; // date
+    scan_run_status?: string;
+    scan_start?: string; // date
+    timestamp?: string; // date
+  };
+}
+
+interface ReportReportTaskElement {
+  _id?: string;
+  comment?: string;
+  name?: string;
+  progress?: number;
+  target?: {
+    _id?: string;
+    comment?: string;
+    name?: string;
+    trash?: YesNo;
+  };
+}
+
 export interface ReportReportElement extends ModelElement {
   _type?: ReportType;
   apps?: CountElement;
   closed_cves?: CountElement;
-  compliance_count?: ReportComplianceCountElement;
-  delta?: {
-    report?: {
-      _id?: string;
-      scan_end?: string; // date
-      scan_run_status?: string;
-      scan_start?: string; // date
-      timestamp?: string; // date
-    };
-  };
+  delta?: ReportDeltaElement;
   errors?: ErrorsElement;
-  filters?: {
-    _id?: string;
-    filter?: string[];
-    keywords?: {
-      keyword?: {
-        column?: string;
-        relation?: string;
-        value?: string | number;
-      };
-    };
-    term?: string;
-  };
+  filters?: ReportFiltersElement;
   gmp?: {
     version?: string;
   };
@@ -91,18 +102,7 @@ export interface ReportReportElement extends ModelElement {
     };
   };
   ssl_certs?: CountElement;
-  task?: {
-    _id?: string;
-    comment?: string;
-    name?: string;
-    progress?: number;
-    target?: {
-      _id?: string;
-      comment?: string;
-      name?: string;
-      trash?: YesNo;
-    };
-  };
+  task?: ReportReportTaskElement;
   timestamp?: string;
   timezone?: string;
   timezone_abbrev?: string;
@@ -110,7 +110,7 @@ export interface ReportReportElement extends ModelElement {
   vulns?: CountElement;
 }
 
-interface DeltaReport {
+export interface DeltaReport {
   id?: string;
   scan_run_status?: string;
   scan_start?: Date;
@@ -148,31 +148,9 @@ interface ReportResultCounts {
   };
 }
 
-interface ReportComplianceCounts {
-  full?: number;
-  filtered?: number;
-  yes?: {
-    full?: number;
-    filtered?: number;
-  };
-  no?: {
-    full?: number;
-    filtered?: number;
-  };
-  incomplete?: {
-    full?: number;
-    filtered?: number;
-  };
-  undefined?: {
-    full?: number;
-    filtered?: number;
-  };
-}
-
 interface ReportReportProperties extends ModelProperties {
   applications?: CollectionList<ReportApp>;
   closedCves?: CollectionList<ReportClosedCve>;
-  compliance_count?: ReportComplianceCounts;
   cves?: CollectionList<ReportCve>;
   delta_report?: DeltaReport;
   errors?: CollectionList<ReportError>;
@@ -198,7 +176,6 @@ class ReportReport extends Model {
 
   readonly applications?: CollectionList<ReportApp>;
   readonly closedCves?: CollectionList<ReportClosedCve>;
-  readonly compliance_count?: ReportComplianceCounts;
   readonly cves?: CollectionList<ReportCve>;
   readonly delta_report?: DeltaReport;
   readonly errors?: CollectionList<ReportError>;
@@ -221,8 +198,6 @@ class ReportReport extends Model {
   constructor({
     applications,
     closedCves,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    compliance_count,
     cves,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     delta_report,
@@ -254,7 +229,6 @@ class ReportReport extends Model {
 
     this.applications = applications;
     this.closedCves = closedCves;
-    this.compliance_count = compliance_count;
     this.cves = cves;
     this.delta_report = delta_report;
     this.errors = errors;
@@ -351,29 +325,6 @@ class ReportReport extends Model {
         medium: {
           filtered: element.result_count.medium?.filtered,
           full: element.result_count.medium?.full,
-        },
-      };
-    }
-
-    if (isDefined(element.compliance_count)) {
-      copy.compliance_count = {
-        full: element.compliance_count.full,
-        filtered: element.compliance_count.filtered,
-        yes: {
-          full: element.compliance_count.yes?.full,
-          filtered: element.compliance_count.yes?.filtered,
-        },
-        no: {
-          full: element.compliance_count.no?.full,
-          filtered: element.compliance_count.no?.filtered,
-        },
-        incomplete: {
-          full: element.compliance_count.incomplete?.full,
-          filtered: element.compliance_count.incomplete?.filtered,
-        },
-        undefined: {
-          full: element.compliance_count.undefined?.full,
-          filtered: element.compliance_count.undefined?.filtered,
         },
       };
     }
