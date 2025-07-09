@@ -7,7 +7,7 @@ import CollectionCounts, {
   CollectionCountsOptions,
 } from 'gmp/collection/CollectionCounts';
 import logger from 'gmp/log';
-import Filter from 'gmp/models/filter';
+import Filter, {FilterModelElement} from 'gmp/models/filter';
 import Model, {Element} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {hasValue, isArray, isDefined} from 'gmp/utils/identity';
@@ -52,7 +52,7 @@ interface ResultsElement {
 }
 
 interface FilterElement {
-  filters?: Element;
+  filters?: FilterModelElement;
 }
 
 interface ElementStart {
@@ -143,7 +143,7 @@ export function parseInfoCounts(response: InfoWithCounts) {
 }
 
 export function parseFilter(element: FilterElement): Filter {
-  return Filter.fromElement(element.filters) as Filter;
+  return Filter.fromElement(element.filters);
 }
 
 export function parseCounts<TElement = Element>(
