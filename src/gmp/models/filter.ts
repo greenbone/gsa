@@ -16,19 +16,19 @@ export const UNKNOWN_FILTER_ID = '0';
 const SORT_ORDER_ASC = 'sort';
 const SORT_ORDER_DESC = 'sort-reverse';
 
-interface FilterKeyword {
-  column: string;
-  relation: string;
-  value: string;
+export interface FilterKeyword {
+  column?: string;
+  relation?: string;
+  value?: string;
 }
 
-interface FilterModelElement extends ModelElement {
+export interface FilterModelElement extends ModelElement {
   alerts?: {
     alert: ModelElement[];
   };
   filter_type?: string;
   keywords?: {
-    keyword: FilterKeyword[];
+    keyword?: FilterKeyword | FilterKeyword[];
   };
   term?: string;
 }
