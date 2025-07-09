@@ -10,7 +10,7 @@ import ReportReport, {
 } from 'gmp/models/report/report';
 import {isDefined} from 'gmp/utils/identity';
 
-interface ReportElement extends ModelElement {
+export interface ReportElement extends ModelElement {
   _config_id?: string;
   _content_type?: string;
   _extension?: string;

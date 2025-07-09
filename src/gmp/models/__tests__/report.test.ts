@@ -5,8 +5,11 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import Report from 'gmp/models/report';
+import {testModel} from 'gmp/models/testing';
 
 describe('Report tests', () => {
+  testModel(Report, 'report');
+
   test('should use defaults', () => {
     const report = new Report();
     expect(report.content_type).toBeUndefined();
