@@ -221,7 +221,7 @@ export const getSeverityLevelBoundaries = (
   rating: SeverityRating = DEFAULT_SEVERITY_RATING,
 ): SeverityLevelBoundaries => SEVERITY_LEVEL_BOUNDARIES[rating];
 
-export const renderPercentile = (percentile: number): string => {
+export const renderPercentile = (percentile?: number): string => {
   if (isNumber(percentile)) {
     const value = percentile.toFixed(0);
     const rest1 = parseInt(value) % 10;
@@ -240,7 +240,7 @@ export const renderPercentile = (percentile: number): string => {
   return 'N/A';
 };
 
-export const renderScore = (score: number): string => {
+export const renderScore = (score?: number): string => {
   if (isNumber(score)) {
     return `${(score * 100).toFixed(3)}%`;
   }

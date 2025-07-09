@@ -17,6 +17,8 @@ import {
   translatedResultSeverityRiskFactor,
   getSeverityLevels,
   getSeverityLevelBoundaries,
+  renderPercentile,
+  renderScore,
   CRITICAL,
   HIGH,
   MEDIUM,
@@ -300,6 +302,31 @@ describe('Severity', () => {
         minLow: 0.1,
         maxLog: 0.0,
       });
+    });
+  });
+
+  describe('should render EPSS values', () => {
+    test('should render percentile', () => {
+      expect(renderPercentile(1.1)).toEqual('1st');
+      expect(renderPercentile(1.9)).toEqual('2nd');
+      expect(renderPercentile(3.3)).toEqual('3rd');
+      expect(renderPercentile(11)).toEqual('11th');
+      expect(renderPercentile(12)).toEqual('12th');
+      expect(renderPercentile(13)).toEqual('13th');
+      expect(renderPercentile(31)).toEqual('31st');
+      expect(renderPercentile(32)).toEqual('32nd');
+      expect(renderPercentile(33)).toEqual('33rd');
+      expect(renderPercentile(33.7)).toEqual('34th');
+      expect(renderPercentile(undefined)).toEqual('N/A');
+    });
+
+    test('should render score', () => {
+      expect(renderScore(0.0)).toEqual('0.000%');
+      expect(renderScore(0.00123)).toEqual('0.123%');
+      expect(renderScore(0.12345)).toEqual('12.345%');
+      expect(renderScore(0.99)).toEqual('99.000%');
+      expect(renderScore(1.0)).toEqual('100.000%');
+      expect(renderScore(undefined)).toEqual('N/A');
     });
   });
 });

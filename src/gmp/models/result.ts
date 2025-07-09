@@ -26,18 +26,18 @@ interface CveResult {
 interface ResultCveElement {
   name: string;
   epss?: {
-    max_epss: {
+    max_epss?: {
       percentile: string;
       score: string;
-      cve: {
+      cve?: {
         _id: string;
         severity: string;
       };
     };
-    max_severity: {
+    max_severity?: {
       percentile: string;
       score: string;
-      cve: {
+      cve?: {
         _id: string;
         severity: string;
       };

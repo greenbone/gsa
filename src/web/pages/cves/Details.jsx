@@ -92,11 +92,11 @@ const CveDetails = ({entity}) => {
             <TableBody>
               <TableRow>
                 <TableData>{_('Score')}</TableData>
-                <TableData>{renderScore(epss.score)}</TableData>
+                <TableData>{renderScore(epss?.score)}</TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('Percentile')}</TableData>
-                <TableData>{renderPercentile(epss.percentile)}</TableData>
+                <TableData>{renderPercentile(epss?.percentile)}</TableData>
               </TableRow>
             </TableBody>
           </InfoTable>

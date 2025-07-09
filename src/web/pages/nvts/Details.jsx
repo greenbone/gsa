@@ -97,12 +97,12 @@ const NvtDetails = ({entity, links = true}) => {
                 </TableData>
                 <TableRow>
                   <TableData>{_('EPSS Score')}</TableData>
-                  <TableData>{renderScore(epss.maxSeverity.score)}</TableData>
+                  <TableData>{renderScore(epss?.maxSeverity?.score)}</TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
-                    {renderPercentile(epss.maxSeverity.percentile)}
+                    {renderPercentile(epss?.maxSeverity?.percentile)}
                   </TableData>
                 </TableRow>
                 <TableRow>
@@ -134,12 +134,12 @@ const NvtDetails = ({entity, links = true}) => {
                 </TableData>
                 <TableRow>
                   <TableData>{_('EPSS Score')}</TableData>
-                  <TableData>{renderScore(epss.maxEpss.score)}</TableData>
+                  <TableData>{renderScore(epss?.maxEpss?.score)}</TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
-                    {renderPercentile(epss.maxEpss.percentile)}
+                    {renderPercentile(epss?.maxEpss?.percentile)}
                   </TableData>
                 </TableRow>
                 <TableRow>
