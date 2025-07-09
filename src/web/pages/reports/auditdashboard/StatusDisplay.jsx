@@ -4,7 +4,7 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import {getTranslatableReportCompliance} from 'gmp/models/auditreport';
+import {getTranslatableReportCompliance} from 'gmp/models/compliance';
 import {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTable from 'web/components/dashboard/display/DataTable';
