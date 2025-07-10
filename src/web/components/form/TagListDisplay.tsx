@@ -34,7 +34,10 @@ const TagListDisplay = ({values, color = 'green'}: TagListDisplayProps) => {
   return (
     <TagList>
       {values.map((val, idx) => (
-        <Layout key={idx + val} style={{display: 'flex', alignItems: 'center'}}>
+        <Layout
+          key={`${idx}-${val}`}
+          style={{display: 'flex', alignItems: 'center'}}
+        >
           <Tag bg={resolvedColor.bg} color={resolvedColor.color}>
             {val}
           </Tag>
