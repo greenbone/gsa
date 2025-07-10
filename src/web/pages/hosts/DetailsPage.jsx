@@ -29,13 +29,13 @@ import Col from 'web/components/table/Col';
 import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/TableRow';
+import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityPermissions from 'web/entity/Permissions';
-import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
