@@ -5,6 +5,7 @@
 
 import styled from 'styled-components';
 import tagStyles from 'web/components/form/tagStyles';
+import Layout from 'web/components/layout/Layout';
 
 interface TagListDisplayProps {
   values: string[];
@@ -18,7 +19,7 @@ const Tag = styled.span<{bg: string; color: string}>`
   border-radius: 12px;
   font-size: 0.85em;
   font-weight: 500;
-  margin-right: 6px;
+  margin-right: 3px;
 `;
 
 const TagList = styled.div`
@@ -33,11 +34,11 @@ const TagListDisplay = ({values, color = 'green'}: TagListDisplayProps) => {
   return (
     <TagList>
       {values.map((val, idx) => (
-        <span key={idx} style={{display: 'flex', alignItems: 'center'}}>
+        <Layout key={idx+val} style={{display: 'flex', alignItems: 'center'}}>
           <Tag bg={resolvedColor.bg} color={resolvedColor.color}>
             {val}
           </Tag>
-        </span>
+        </Layout>
       ))}
     </TagList>
   );
