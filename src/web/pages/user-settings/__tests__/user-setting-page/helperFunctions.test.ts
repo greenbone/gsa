@@ -16,8 +16,7 @@ describe('getLangNameByCode', () => {
 
   test('returns "Unknown" for an invalid language code', () => {
     const langCode = 'xx';
-    const expectedLangName = null;
     const result = getLangNameByCode(langCode);
-    expect(result).toBe(expectedLangName);
+    expect(result).toBeUndefined();
   });
 });

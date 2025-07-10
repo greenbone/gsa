@@ -39,45 +39,49 @@ describe('UserSettingsPageHelpers', () => {
 
       expect(screen.queryByText(setting.name)).not.toBeInTheDocument();
     });
-  });
-  describe('ToolBarIcons', () => {
-    test('should render and handle click', () => {
-      const handleEdit = testing.fn();
-      const {render} = rendererWith({
-        gmp: {settings: {manualUrl: 'test/'}},
-        capabilities: true,
-        router: true,
-      });
-      render(
-        <ToolBarIcons
-          disableEditIcon={false}
-          onEditSettingsClick={handleEdit}
-        />,
-      );
-      const helpIcon = screen.getByTitle('Help: My Settings').closest('a');
-      expect(helpIcon).toHaveAttribute(
-        'href',
-        'test/en/web-interface.html#changing-the-user-settings',
-      );
-      expect(screen.getByTitle('Help: My Settings')).toBeVisible();
-      const editIcon = screen.getByTitle('Edit My Settings');
-      expect(editIcon).toBeVisible();
-      editIcon.click();
-      expect(handleEdit).toHaveBeenCalled();
-    });
 
-    test('should render disabled edit icon if not allowed', () => {
-      const {render} = rendererWith({
-        gmp: {settings: {manualUrl: 'test/'}},
-        router: true,
+    describe('ToolBarIcons', () => {
+      test('should render and handle click', () => {
+        const handleEdit = testing.fn();
+        const {render} = rendererWith({
+          gmp: {settings: {manualUrl: 'test/'}},
+          capabilities: true,
+          router: true,
+        });
+        render(
+          <ToolBarIcons
+            disableEditIcon={false}
+            onEditSettingsClick={handleEdit}
+          />,
+        );
+        const helpIcon = screen.getByTitle('Help: My Settings').closest('a');
+        expect(helpIcon).toHaveAttribute(
+          'href',
+          'test/en/web-interface.html#changing-the-user-settings',
+        );
+        expect(screen.getByTitle('Help: My Settings')).toBeVisible();
+        const editIcon = screen.getByTitle('Edit My Settings');
+        expect(editIcon).toBeVisible();
+        editIcon.click();
+        expect(handleEdit).toHaveBeenCalled();
       });
-      render(
-        <ToolBarIcons disableEditIcon={true} onEditSettingsClick={() => {}} />,
-      );
-      const deniedIcon = screen.getByTitle(
-        'Permission to edit settings denied',
-      );
-      expect(deniedIcon).toBeDisabled();
+
+      test('should render disabled edit icon if not allowed', () => {
+        const {render} = rendererWith({
+          gmp: {settings: {manualUrl: 'test/'}},
+          router: true,
+        });
+        render(
+          <ToolBarIcons
+            disableEditIcon={true}
+            onEditSettingsClick={() => {}}
+          />,
+        );
+        const deniedIcon = screen.getByTitle(
+          'Permission to edit settings denied',
+        );
+        expect(deniedIcon).toBeDisabled();
+      });
     });
   });
 });
