@@ -6,19 +6,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
-import Tab from 'web/components/tab/Tab';
-import PropTypes from 'web/utils/PropTypes';
+import Tab, {TabProps} from 'web/components/tab/Tab';
 
 const TabTitleCounts = styled.span`
   font-size: 0.7em;
 `;
+
+interface EntitiesTabProps extends TabProps {
+  children: React.ReactNode;
+  entities?: Array<unknown>;
+  count?: number;
+}
 
 const EntitiesTab = ({
   children,
   entities = [],
   count = entities.length,
   ...props
-}) => (
+}: EntitiesTabProps) => (
   <Tab {...props}>
     <Layout align={['center', 'center']} flex="column">
       <span>{children}</span>
@@ -28,10 +33,5 @@ const EntitiesTab = ({
     </Layout>
   </Tab>
 );
-
-EntitiesTab.propTypes = {
-  count: PropTypes.number,
-  entities: PropTypes.array,
-};
 
 export default EntitiesTab;
