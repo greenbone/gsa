@@ -7,7 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 import BlankLink, {BlankLinkProps} from 'web/components/link/BlankLink';
 import useManualURL from 'web/hooks/useManualURL';
 
-interface ManualLinkProps extends Omit<BlankLinkProps, 'to'> {
+export interface ManualLinkProps extends Omit<BlankLinkProps, 'to'> {
   anchor?: string;
   highlight?: string;
   lang?: string;
