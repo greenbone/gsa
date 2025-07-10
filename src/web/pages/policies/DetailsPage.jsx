@@ -19,13 +19,13 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
+import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityPermissions from 'web/entity/Permissions';
-import EntitiesTab from 'web/entity/Tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';

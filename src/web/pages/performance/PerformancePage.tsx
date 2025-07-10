@@ -53,7 +53,6 @@ const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
   const [_] = useTranslation();
   return (
     <IconDivider>
-      {/* @ts-expect-error*/}
       <ManualIcon
         anchor="optimizing-the-appliance-performance"
         page="performance"
