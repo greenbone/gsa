@@ -4,15 +4,25 @@
  */
 
 import {useSelector} from 'react-redux';
+import Task from 'gmp/models/task';
 import {ResumeIcon, StartIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import TaskResumeIconBase from 'web/pages/tasks/icons/ResumeIcon';
-import TaskStartIconBase from 'web/pages/tasks/icons/StartIcon';
-import PropTypes from 'web/utils/PropTypes';
-const TaskIconWithSync = ({type, ...props}) => {
+import TaskResumeIconBase from 'web/pages/tasks/icons/TaskResumeIcon';
+import TaskStartIconBase from 'web/pages/tasks/icons/TaskStartIcon';
+
+interface TaskIconWithSyncProps {
+  type: 'start' | 'resume';
+  task: Task;
+  onClick?: (task: Task) => void | Promise<void>;
+}
+
+const TaskIconWithSync = ({type, ...props}: TaskIconWithSyncProps) => {
   const [_] = useTranslation();
 
-  const feedSyncingStatus = useSelector(state => state.feedStatus);
+  const feedSyncingStatus = useSelector<
+    {feedStatus: {isSyncing: boolean}},
+    {isSyncing: boolean}
+  >(state => state.feedStatus);
 
   if (feedSyncingStatus.isSyncing) {
     const SyncingIcon = type === 'start' ? StartIcon : ResumeIcon;
@@ -26,10 +36,6 @@ const TaskIconWithSync = ({type, ...props}) => {
 
   const BaseIcon = type === 'start' ? TaskStartIconBase : TaskResumeIconBase;
   return <BaseIcon {...props} />;
-};
-
-TaskIconWithSync.propTypes = {
-  type: PropTypes.string.isRequired,
 };
 
 export default TaskIconWithSync;

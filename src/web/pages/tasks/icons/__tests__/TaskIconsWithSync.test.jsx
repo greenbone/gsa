@@ -7,7 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
+import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconWithSync';
 import {setSyncStatus} from 'web/store/feedStatus/actions';
 
 describe('TaskIconWithSync component tests', () => {
