@@ -10,7 +10,7 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import GeneralPart, {
   renderLanguageItems,
   getSelectItems,
-} from 'web/pages/user-settings/GeneralPart/GeneralPart';
+} from 'web/pages/user-settings/Dialog/GeneralPart';
 
 describe('GeneralPart', () => {
   describe('renderLanguageItems', () => {

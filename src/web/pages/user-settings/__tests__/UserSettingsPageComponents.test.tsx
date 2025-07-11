@@ -10,7 +10,7 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import {
   SettingTableRow,
   ToolBarIcons,
-} from 'web/pages/user-settings/user-setting-page/UserSettingsPageComponents';
+} from 'web/pages/user-settings/UserSettingsPageComponents';
 
 describe('UserSettingsPageHelpers', () => {
   describe('SettingTableRow', () => {

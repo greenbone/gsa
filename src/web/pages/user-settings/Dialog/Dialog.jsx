@@ -16,10 +16,10 @@ import Column from 'web/components/layout/Column';
 import Section from 'web/components/section/Section';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import DefaultsPart from 'web/pages/user-settings/DefaultsPart';
-import FilterPart from 'web/pages/user-settings/FilterPart';
-import GeneralPart from 'web/pages/user-settings/GeneralPart/GeneralPart';
-import SeverityPart from 'web/pages/user-settings/SeverityPart';
+import DefaultsPart from 'web/pages/user-settings/Dialog/DefaultsPart';
+import FilterPart from 'web/pages/user-settings/Dialog/FilterPart';
+import GeneralPart from 'web/pages/user-settings/Dialog/GeneralPart';
+import SeverityPart from 'web/pages/user-settings/Dialog/SeverityPart';
 import {userSettingsRules} from 'web/pages/user-settings/validationRules';
 import PropTypes from 'web/utils/PropTypes';
 

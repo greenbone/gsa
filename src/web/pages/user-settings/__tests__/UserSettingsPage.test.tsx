@@ -8,7 +8,7 @@ import {screen, within, rendererWith, wait, fireEvent} from 'web/testing';
 import {vi} from 'vitest';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Setting from 'gmp/models/setting';
-import UserSettingsPage from 'web/pages/user-settings/user-setting-page/UserSettingsPage';
+import UserSettingsPage from 'web/pages/user-settings/UserSettingsPage';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS} from 'web/store/usersettings/defaultfilters/actions';
 import {USER_SETTINGS_DEFAULTS_LOADING_SUCCESS} from 'web/store/usersettings/defaults/actions';
@@ -48,7 +48,7 @@ const createGmpMock = (userSettings = {}) => {
       getSetting: testing.fn().mockReturnValue(mockGetSettingPromise),
       currentSettings: testing.fn().mockResolvedValue(userSettings),
       saveSettings: testing.fn().mockResolvedValue({}),
-      renewSession: testing.fn().mockResolvedValue({}),
+      renewSession: testing.fn().mockResolvedValue({data: 123}),
     },
     alerts: {get: mockGet},
     credentials: {get: mockGet},
@@ -208,10 +208,21 @@ describe('UserSettingsPage', () => {
       expect(screen.getByText('Timezone')).toBeVisible();
       expect(screen.getByText('UTC')).toBeVisible();
 
-      expect(screen.getByText('Time Format')).toBeVisible();
-      expect(screen.getByText(/NaNh/)).toBeVisible();
+      expect(screen.getByText('Date & Time Format')).toBeVisible();
 
-      expect(screen.getByText('Date Format')).toBeVisible();
+      // Using getByRole to find the row with the Date & Time Format
+      const dateTimeFormatRow = screen
+        .getByText('Date & Time Format')
+        .closest('tr');
+      expect(dateTimeFormatRow).not.toBeNull();
+
+      // Check for the time and date format text in the value cell (second cell)
+      const cells = dateTimeFormatRow
+        ? within(dateTimeFormatRow).getAllByRole('cell')
+        : [];
+      expect(cells.length).toBeGreaterThan(1);
+      expect(cells[1]).toHaveTextContent(/Time Format/);
+      expect(cells[1]).toHaveTextContent(/Date Format/);
 
       expect(screen.getByText('Password')).toBeVisible();
       expect(screen.getByText('********')).toBeVisible();
@@ -384,6 +395,7 @@ describe('UserSettingsPage', () => {
           }),
           currentSettings: testing.fn().mockResolvedValue({}),
           saveSettings: testing.fn().mockResolvedValue({}),
+          renewSession: testing.fn().mockResolvedValue({data: 123}),
         },
         alerts: {get: mockAlertGet},
 
@@ -721,7 +733,8 @@ describe('UserSettingsPage', () => {
       await wait();
 
       const filterRows = screen.getAllByRole('row');
-      expect(filterRows.length).toBe(entityTypes.length);
+      const header = 1;
+      expect(filterRows.length - header).toBe(entityTypes.length);
 
       entityTypes.forEach(entityType => {
         const displayName = entityTypeToDisplayName[entityType];

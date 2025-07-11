@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, screen, fireEvent} from 'web/testing';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-import SeverityPart from 'web/pages/user-settings/SeverityPart';
+import SeverityPart from 'web/pages/user-settings/Dialog/SeverityPart';
 
 describe('SeverityPart', () => {
   describe('Checkbox Dynamic Severity', () => {

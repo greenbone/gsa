@@ -60,6 +60,7 @@ import {
   ShieldX,
   Glasses,
   X,
+  Save,
 } from 'lucide-react';
 import {
   createIconComponents,
@@ -508,6 +509,13 @@ export const icons: IconDefinition[] = [
     component: X,
     dataTestId: 'X-icon',
     ariaLabel: 'Close Icon',
+    isLucide: true,
+  },
+  {
+    name: 'Save',
+    component: Save,
+    dataTestId: 'save-icon',
+    ariaLabel: 'Save Icon',
     isLucide: true,
   },
 
@@ -1034,6 +1042,7 @@ export const {
   Vulnerability: VulnerabilityIcon,
   Wizard: WizardIcon,
   X: XIcon,
+  Save: SaveIcon,
   ScanConfig: ScanConfigIcon,
   DeltaSecond: DeltaSecondIcon,
   Trash2: TrashcanIcon,

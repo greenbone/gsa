@@ -21,7 +21,7 @@ import Select, {SelectItem} from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
 import useTranslation from 'web/hooks/useTranslation';
-import UserSettingsPasswordNotification from 'web/pages/user-settings/GeneralPart/UserSettingsPasswordNotification';
+import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
 import Languages from 'web/utils/Languages';
 
 export const renderLanguageItems = (): SelectItem[] =>
