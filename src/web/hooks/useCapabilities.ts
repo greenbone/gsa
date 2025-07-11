@@ -6,6 +6,14 @@
 import {useContext} from 'react';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 
-const useCapabilities = () => useContext(CapabilitiesContext);
+const useCapabilities = () => {
+  const capabilities = useContext(CapabilitiesContext);
+  if (!capabilities) {
+    throw new Error(
+      'useCapabilities must be used within a CapabilitiesProvider',
+    );
+  }
+  return capabilities;
+};
 
 export default useCapabilities;
