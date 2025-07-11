@@ -13,11 +13,12 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import ResumeIcon from 'web/pages/tasks/icons/ResumeIcon';
-import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
-import StartIcon from 'web/pages/tasks/icons/StartIcon';
-import StopIcon from 'web/pages/tasks/icons/StopIcon';
+import TaskResumeIcon from 'web/pages/tasks/icons/TaskResumeIcon';
+import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
+import TaskStartIcon from 'web/pages/tasks/icons/TaskStartIcon';
+import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 import PropTypes from 'web/utils/PropTypes';
+
 const Actions = ({
   entity,
   links,
@@ -36,20 +37,20 @@ const Actions = ({
   return (
     <IconDivider grow align={['center', 'center']}>
       {isDefined(entity.schedule) ? (
-        <ScheduleIcon links={links} schedule={entity.schedule} />
+        <TaskScheduleIcon links={links} schedule={entity.schedule} />
       ) : (
-        <StartIcon
+        <TaskStartIcon
           task={entity}
           usageType={_('audit')}
           onClick={onAuditStartClick}
         />
       )}
-      <StopIcon
+      <TaskStopIcon
         task={entity}
         usageType={_('audit')}
         onClick={onAuditStopClick}
       />
-      <ResumeIcon
+      <TaskResumeIcon
         task={entity}
         usageType={_('audit')}
         onClick={onAuditResumeClick}
