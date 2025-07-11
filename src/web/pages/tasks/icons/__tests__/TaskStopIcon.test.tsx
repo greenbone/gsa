@@ -8,7 +8,7 @@ import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import StopIcon from 'web/pages/tasks/icons/StopIcon';
+import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 
 describe('Task StopIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
@@ -22,7 +22,9 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
+    const {element} = render(
+      <TaskStopIcon task={task} onClick={clickHandler} />,
+    );
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
@@ -46,7 +48,9 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
+    const {element} = render(
+      <TaskStopIcon task={task} onClick={clickHandler} />,
+    );
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
@@ -70,7 +74,9 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
+    const {element} = render(
+      <TaskStopIcon task={task} onClick={clickHandler} />,
+    );
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(false);
@@ -94,7 +100,7 @@ describe('Task StopIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <StopIcon task={audit} usageType="audit" onClick={clickHandler} />,
+      <TaskStopIcon task={audit} onClick={clickHandler} />,
     );
 
     expect(caps.mayOp('stop_task')).toEqual(true);
@@ -118,7 +124,7 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    render(<StopIcon task={task} onClick={clickHandler} />);
+    render(<TaskStopIcon task={task} onClick={clickHandler} />);
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
@@ -135,7 +141,7 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    render(<StopIcon task={task} onClick={clickHandler} />);
+    render(<TaskStopIcon task={task} onClick={clickHandler} />);
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);

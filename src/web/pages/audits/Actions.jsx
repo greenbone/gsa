@@ -13,11 +13,12 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import ResumeIcon from 'web/pages/tasks/icons/ResumeIcon';
-import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
-import StartIcon from 'web/pages/tasks/icons/StartIcon';
-import StopIcon from 'web/pages/tasks/icons/StopIcon';
+import ResumeIcon from 'web/pages/tasks/icons/TaskResumeIcon';
+import ScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
+import StartIcon from 'web/pages/tasks/icons/TaskStartIcon';
+import StopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 import PropTypes from 'web/utils/PropTypes';
+
 const Actions = ({
   entity,
   links,

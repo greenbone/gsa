@@ -3,17 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Audit from 'gmp/models/audit';
+import Task, {USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import {ResumeIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const TaskResumeIcon = ({task, usageType, onClick}) => {
+interface TaskResumeIconProps<TTask extends Audit | Task> {
+  task: TTask;
+  onClick?: (task: TTask) => void | Promise<void>;
+}
+
+const TaskResumeIcon = <TTask extends Audit | Task>({
+  task,
+  onClick,
+}: TaskResumeIconProps<TTask>) => {
   const [_] = useTranslation();
-  usageType = usageType ?? _('task');
+  const type = task.usageType === USAGE_TYPE.audit ? _('audit') : _('task');
   const capabilities = useCapabilities();
 
   if (task.isQueued()) {
@@ -24,9 +32,8 @@ const TaskResumeIcon = ({task, usageType, onClick}) => {
     return (
       <ResumeIcon
         active={false}
-        alt={_('Resume')}
-        title={_('{{usageType}} is a container', {
-          usageType: capitalizeFirstLetter(usageType),
+        title={_('{{type}} is a container', {
+          type: capitalizeFirstLetter(type),
         })}
       />
     );
@@ -36,9 +43,8 @@ const TaskResumeIcon = ({task, usageType, onClick}) => {
     return (
       <ResumeIcon
         active={false}
-        alt={_('Resume')}
-        title={_('{{usageType}} is scheduled', {
-          usageType: capitalizeFirstLetter(usageType),
+        title={_('{{type}} is scheduled', {
+          type: capitalizeFirstLetter(type),
         })}
       />
     );
@@ -49,13 +55,18 @@ const TaskResumeIcon = ({task, usageType, onClick}) => {
       capabilities.mayOp('start_task') &&
       task.userCapabilities.mayOp('start_task')
     ) {
-      return <ResumeIcon title={_('Resume')} value={task} onClick={onClick} />;
+      return (
+        <ResumeIcon
+          title={_('Resume')}
+          value={task}
+          onClick={onClick as (task?: TTask) => void | Promise<void>}
+        />
+      );
     }
     return (
       <ResumeIcon
         active={false}
-        alt={_('Resume')}
-        title={_('Permission to resume {{usageType}} denied', {usageType})}
+        title={_('Permission to resume {{type}} denied', {type})}
       />
     );
   }
@@ -63,18 +74,11 @@ const TaskResumeIcon = ({task, usageType, onClick}) => {
   return (
     <ResumeIcon
       active={false}
-      alt={_('Resume')}
-      title={_('{{usageType}} is not stopped', {
-        usageType: capitalizeFirstLetter(usageType),
+      title={_('{{type}} is not stopped', {
+        type: capitalizeFirstLetter(type),
       })}
     />
   );
-};
-
-TaskResumeIcon.propTypes = {
-  task: PropTypes.model.isRequired,
-  usageType: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default TaskResumeIcon;

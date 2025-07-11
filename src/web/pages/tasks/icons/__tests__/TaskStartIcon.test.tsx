@@ -7,9 +7,8 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import Event from 'gmp/models/event';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import StartIcon from 'web/pages/tasks/icons/StartIcon';
+import TaskStartIcon from 'web/pages/tasks/icons/TaskStartIcon';
 
 describe('Task StartIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
@@ -23,7 +22,9 @@ describe('Task StartIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StartIcon task={task} onClick={clickHandler} />);
+    const {element} = render(
+      <TaskStartIcon task={task} onClick={clickHandler} />,
+    );
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
@@ -47,7 +48,7 @@ describe('Task StartIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StartIcon task={task} />);
+    const {element} = render(<TaskStartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(false);
@@ -72,7 +73,7 @@ describe('Task StartIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StartIcon task={audit} usageType="audit" />);
+    const {element} = render(<TaskStartIcon task={audit} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(audit.userCapabilities.mayOp('start_task')).toEqual(false);
@@ -108,14 +109,15 @@ END:VCALENDAR
       permissions: {permission: [{name: 'everything'}]},
       schedule: {
         _id: 'schedule1',
-        event: Event.fromIcal(icalendar, 'UTC'),
+        icalendar,
+        timezone: 'UTC',
       },
     });
     const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StartIcon task={task} />);
+    const {element} = render(<TaskStartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
@@ -142,7 +144,7 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StartIcon task={task} />);
+    const {element} = render(<TaskStartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
@@ -166,7 +168,7 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<StartIcon task={task} />);
+    const {element} = render(<TaskStartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
@@ -189,7 +191,7 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    render(<StartIcon task={task} />);
+    render(<TaskStartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
@@ -205,7 +207,7 @@ END:VCALENDAR
 
     const {render} = rendererWith({capabilities: caps});
 
-    render(<StartIcon task={task} />);
+    render(<TaskStartIcon task={task} />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
