@@ -3,14 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
 import {openVasScannersFilter} from 'gmp/models/scanner';
-import {YES_VALUE, NO_VALUE, parseYesNo} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {MySettingsIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -23,22 +22,17 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
-import TableBody from 'web/components/table/Body';
-import TableData from 'web/components/table/Data';
-import Table from 'web/components/table/Table';
-import TableRow from 'web/components/table/TableRow';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import SettingsDialog from 'web/pages/user-settings/Dialog';
-import {getLangNameByCode} from 'web/pages/user-settings/user-setting-page/helperFunctions';
-import {
-  SettingTableRow,
-  SimpleSettingRow,
-  ToolBarIcons,
-} from 'web/pages/user-settings/user-setting-page/UserSettingsPageComponents';
+import DefaultSettings from 'web/pages/user-settings/DefaultsSettings';
+import SettingsDialog from 'web/pages/user-settings/Dialog/Dialog';
+import FilterSettings from 'web/pages/user-settings/FilterSettings';
+import GeneralSettings from 'web/pages/user-settings/GeneralSettings';
+import SeveritySettings from 'web/pages/user-settings/SeveritySettings';
+import {ToolBarIcons} from 'web/pages/user-settings/UserSettingsPageComponents';
 import {
   loadEntities as loadAlertsAction,
   loadEntity as loadAlertAction,
@@ -82,8 +76,6 @@ import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import {BROWSER_LANGUAGE} from 'web/utils/Languages';
-
-const FIRST_COL_WIDTH = '250px';
 
 const useUserSettingsActions = () => {
   const dispatch = useDispatch();
@@ -221,8 +213,7 @@ const UserSettings = () => {
     getUserSettingsDefaults(state).isLoading(),
   );
 
-  const userInterfaceLanguage =
-    userDefaultsSelector.getByName('userinterfacelanguage') || {};
+  // Removed unused `userInterfaceLanguage` as GeneralSettings handles it
 
   const userInterfaceTimeFormat =
     userDefaultsSelector.getByName('userinterfacetimeformat') || {};
@@ -245,10 +236,14 @@ const UserSettings = () => {
   const autoCacheRebuild =
     userDefaultsSelector.getByName('autocacherebuild') || {};
 
-  const defaultSeverity =
-    userDefaultsSelector.getByName('defaultseverity') || {};
-  const dynamicSeverity =
-    userDefaultsSelector.getByName('dynamicseverity') || {};
+  const defaultSeverity = useMemo(
+    () => userDefaultsSelector.getByName('defaultseverity') || {},
+    [userDefaultsSelector],
+  );
+  const dynamicSeverity = useMemo(
+    () => userDefaultsSelector.getByName('dynamicseverity') || {},
+    [userDefaultsSelector],
+  );
 
   const defaultAlertId = userDefaultsSelector.getValueByName('defaultalert');
   const defaultEsxiCredentialId = userDefaultsSelector.getValueByName(
@@ -429,6 +424,8 @@ const UserSettings = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Severity settings now managed in SeveritySettings component
+
   const openDialog = () => {
     setDialogVisible(true);
     handleInteraction();
@@ -482,15 +479,7 @@ const UserSettings = () => {
     if (name === 'disableEditIcon') setDisableEditIcon(value);
   };
 
-  const getYesNoValue = setting => {
-    if (!isDefined(setting)) {
-      return '';
-    }
-    return parseYesNo(setting) === YES_VALUE ? _('Yes') : _('No');
-  };
-
-  const autoCacheRebuildValue = getYesNoValue(autoCacheRebuild.value);
-  const dynamicSeverityValue = getYesNoValue(dynamicSeverity.value);
+  // `autoCacheRebuildValue` is now handled by GeneralSettings
 
   return (
     <>
@@ -521,325 +510,19 @@ const UserSettings = () => {
             <Tabs>
               <TabPanels>
                 <TabPanel>
-                  <Table>
-                    <colgroup width={FIRST_COL_WIDTH} />
-                    <TableBody>
-                      <SimpleSettingRow
-                        label={_('Timezone')}
-                        value={timezone}
-                      />
-                      <SimpleSettingRow
-                        label={_('Time Format')}
-                        title={userInterfaceTimeFormat.comment}
-                        value={
-                          userInterfaceTimeFormat.value === SYSTEM_DEFAULT
-                            ? _('System Default')
-                            : `${Number(userInterfaceTimeFormat.value)}h`
-                        }
-                      />
-                      <SimpleSettingRow
-                        label={_('Date Format')}
-                        title={userInterfaceDateFormat.comment}
-                        value={
-                          userInterfaceDateFormat.value === SYSTEM_DEFAULT
-                            ? _('System Default')
-                            : userInterfaceDateFormat.value
-                        }
-                      />
-                      <TableRow />
-                      <SimpleSettingRow
-                        label={_('Password')}
-                        value="********"
-                      />
-                      <SimpleSettingRow
-                        label={_('User Interface Language')}
-                        title={userInterfaceLanguage.comment}
-                        value={getLangNameByCode(language)}
-                      />
-                      <SimpleSettingRow
-                        label={_('Rows Per Page')}
-                        title={rowsPerPage.comment}
-                        value={rowsPerPage.value}
-                      />
-                      <SimpleSettingRow
-                        label={_('Details Export File Name')}
-                        title={detailsExportFileName.comment}
-                        value={detailsExportFileName.value}
-                      />
-                      <SimpleSettingRow
-                        label={_('List Export File Name')}
-                        title={listExportFileName.comment}
-                        value={listExportFileName.value}
-                      />
-                      <SimpleSettingRow
-                        label={_('Report Export File Name')}
-                        title={reportExportFileName.comment}
-                        value={reportExportFileName.value}
-                      />
-                      <SimpleSettingRow
-                        label={_('Max Rows Per Page (immutable)')}
-                        title={maxRowsPerPage.comment}
-                        value={maxRowsPerPage.value}
-                      />
-                      <SimpleSettingRow
-                        label={_('Auto Cache Rebuild')}
-                        title={autoCacheRebuild.comment}
-                        value={autoCacheRebuildValue}
-                      />
-                    </TableBody>
-                  </Table>
+                  <GeneralSettings disableEditIcon={disableEditIcon} />
                 </TabPanel>
                 <TabPanel>
-                  <Table>
-                    <colgroup width={FIRST_COL_WIDTH} />
-                    <TableBody>
-                      <TableRow title={dynamicSeverity.comment}>
-                        <TableData>{_('Dynamic Severity')}</TableData>
-                        <TableData>{dynamicSeverityValue}</TableData>
-                      </TableRow>
-                      <TableRow title={defaultSeverity.comment}>
-                        <TableData>{_('Default Severity')}</TableData>
-                        <TableData>{defaultSeverity.value}</TableData>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  <SeveritySettings disableEditIcon={disableEditIcon} />
                 </TabPanel>
 
                 <TabPanel>
-                  <Table>
-                    <colgroup width={FIRST_COL_WIDTH} />
-                    <TableBody>
-                      {capabilities.mayAccess('alert') && (
-                        <SettingTableRow
-                          setting={defaultAlert}
-                          title={_('Default Alert')}
-                          type="alert"
-                        />
-                      )}
-                      {capabilities.mayAccess('credential') && (
-                        <SettingTableRow
-                          setting={defaultEsxiCredential}
-                          title={_('Default ESXi Credential')}
-                          type="credential"
-                        />
-                      )}
-                      {capabilities.mayAccess('scanconfig') && (
-                        <SettingTableRow
-                          setting={defaultOpenvasScanConfig}
-                          title={_('Default OpenVAS Scan Config')}
-                          type="scanconfig"
-                        />
-                      )}
-                      {capabilities.mayAccess('scanner') && (
-                        <SettingTableRow
-                          setting={defaultOpenvasScanner}
-                          title={_('Default OpenVAS Scanner')}
-                          type="scanner"
-                        />
-                      )}
-                      {capabilities.mayAccess('portlist') && (
-                        <SettingTableRow
-                          setting={defaultPortList}
-                          title={_('Default Port List')}
-                          type="portlist"
-                        />
-                      )}
-                      {capabilities.mayAccess('credential') && (
-                        <SettingTableRow
-                          setting={defaultSmbCredential}
-                          title={_('Default SMB Credential')}
-                          type="credential"
-                        />
-                      )}
-                      {capabilities.mayAccess('credential') && (
-                        <SettingTableRow
-                          setting={defaultSnmpCredential}
-                          title={_('Default SNMP Credential')}
-                          type="credential"
-                        />
-                      )}
-                      {capabilities.mayAccess('credential') && (
-                        <SettingTableRow
-                          setting={defaultSshCredential}
-                          title={_('Default SSH Credential')}
-                          type="credential"
-                        />
-                      )}
-                      {capabilities.mayAccess('schedule') && (
-                        <SettingTableRow
-                          setting={defaultSchedule}
-                          title={_('Default Schedule')}
-                          type="schedule"
-                        />
-                      )}
-                      {capabilities.mayAccess('target') && (
-                        <SettingTableRow
-                          setting={defaultTarget}
-                          title={_('Default Target')}
-                          type="target"
-                        />
-                      )}
-                    </TableBody>
-                  </Table>
+                  <DefaultSettings disableEditIcon={disableEditIcon} />
                 </TabPanel>
 
                 {capabilities.mayAccess('filter') && (
                   <TabPanel>
-                    <Table>
-                      <colgroup width={FIRST_COL_WIDTH} />
-                      <TableBody>
-                        <SettingTableRow
-                          setting={alertsFilter}
-                          title={_('Alerts Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={auditReportsFilter}
-                          title={_('Audit Reports Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={configsFilter}
-                          title={_('Configs Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={credentialsFilter}
-                          title={_('Credentials Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={filtersFilter}
-                          title={_('Filters Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={groupsFilter}
-                          title={_('Groups Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={hostsFilter}
-                          title={_('Hosts Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={notesFilter}
-                          title={_('Notes Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={operatingSystemsFilter}
-                          title={_('Operating Systems Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={overridesFilter}
-                          title={_('Overrides Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={permissionsFilter}
-                          title={_('Permissions Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={portListsFilter}
-                          title={_('Port Lists Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={reportsFilter}
-                          title={_('Reports Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={reportFormatsFilter}
-                          title={_('Report Formats Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={resultsFilter}
-                          title={_('Results Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={rolesFilter}
-                          title={_('Roles Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={scannersFilter}
-                          title={_('Scanners Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={schedulesFilter}
-                          title={_('Schedules Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={tagsFilter}
-                          title={_('Tags Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={targetsFilter}
-                          title={_('Targets Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={tasksFilter}
-                          title={_('Tasks Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={ticketsFilter}
-                          title={_('Tickets Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={tlsCertificatesFilter}
-                          title={_('TLS Certificates Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={usersFilter}
-                          title={_('Users Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={vulnerabilitiesFilter}
-                          title={_('Vulnerabilities Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={cpeFilter}
-                          title={_('CPE Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={cveFilter}
-                          title={_('CVE Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={nvtFilter}
-                          title={_('NVT Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={certBundFilter}
-                          title={_('CERT-Bund Advisories Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={dfnCertFilter}
-                          title={_('DFN-CERT Advisories Filter')}
-                          type="filter"
-                        />
-                      </TableBody>
-                    </Table>
+                    <FilterSettings disableEditIcon={disableEditIcon} />
                   </TabPanel>
                 )}
               </TabPanels>

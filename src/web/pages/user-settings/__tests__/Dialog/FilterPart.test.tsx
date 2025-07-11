@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render, screen} from 'web/testing';
-import FilterPart from 'web/pages/user-settings/FilterPart';
+import FilterPart from 'web/pages/user-settings/Dialog/FilterPart';
 
 describe('FilterPart', () => {
   const props = {

@@ -8,7 +8,7 @@ import {screen, rendererWith, rendererWithTable} from 'web/testing';
 import {
   SettingTableRow,
   ToolBarIcons,
-} from 'web/pages/user-settings/user-setting-page/UserSettingsPageComponents';
+} from 'web/pages/user-settings/UserSettingsPageComponents';
 
 describe('UserSettingsPageHelpers', () => {
   describe('SettingTableRow', () => {

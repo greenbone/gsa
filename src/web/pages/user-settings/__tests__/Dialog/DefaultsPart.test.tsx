@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import DefaultsPart from 'web/pages/user-settings/DefaultsPart';
+import DefaultsPart from 'web/pages/user-settings/Dialog/DefaultsPart';
 
 describe('DefaultsPart', () => {
   test('renders correctly with all capabilities', () => {
