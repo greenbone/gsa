@@ -12,10 +12,10 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import useTranslation from 'web/hooks/useTranslation';
-import ImportReportIcon from 'web/pages/tasks/icons/ImportReportIcon';
-import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
-import StopIcon from 'web/pages/tasks/icons/StopIcon';
-import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
+import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconWithSync';
+import TaskImportReportIcon from 'web/pages/tasks/icons/TaskImportReportIcon';
+import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
+import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 import PropTypes from 'web/utils/PropTypes';
 
 const Actions = ({
@@ -35,11 +35,11 @@ const Actions = ({
   return (
     <IconDivider grow align={['center', 'center']}>
       {isDefined(entity.schedule) && (
-        <ScheduleIcon links={links} schedule={entity.schedule} />
+        <TaskScheduleIcon links={links} schedule={entity.schedule} />
       )}
       <TaskIconWithSync task={entity} type="start" onClick={onTaskStartClick} />
-      <ImportReportIcon task={entity} onClick={onReportImportClick} />
-      <StopIcon task={entity} onClick={onTaskStopClick} />
+      <TaskImportReportIcon task={entity} onClick={onReportImportClick} />
+      <TaskStopIcon task={entity} onClick={onTaskStopClick} />
       <TaskIconWithSync
         task={entity}
         type="resume"

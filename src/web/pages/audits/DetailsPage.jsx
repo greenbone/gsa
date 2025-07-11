@@ -48,10 +48,10 @@ import {
   TaskPermissions as AuditPermissions,
   reloadInterval,
 } from 'web/pages/tasks/DetailsPage';
-import ResumeIcon from 'web/pages/tasks/icons/ResumeIcon';
-import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
-import StartIcon from 'web/pages/tasks/icons/StartIcon';
-import StopIcon from 'web/pages/tasks/icons/StopIcon';
+import ResumeIcon from 'web/pages/tasks/icons/TaskResumeIcon';
+import ScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
+import StartIcon from 'web/pages/tasks/icons/TaskStartIcon';
+import StopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 import AuditStatus from 'web/pages/tasks/Status';
 import {
   selector as auditSelector,
@@ -64,6 +64,7 @@ import {
 import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+
 export const ToolBarIcons = ({
   entity,
   links,
@@ -129,11 +130,7 @@ export const ToolBarIcons = ({
             schedulePeriods={entity.schedule_periods}
           />
         )}
-        <StartIcon
-          task={entity}
-          usageType={_('audit')}
-          onClick={onAuditStartClick}
-        />
+        <StartIcon task={entity} onClick={onAuditStartClick} />
 
         <StopIcon
           task={entity}

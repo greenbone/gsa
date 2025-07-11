@@ -3,16 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Audit from 'gmp/models/audit';
+import Task, {USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import {StartIcon} from 'web/components/icon';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-const TaskStartIcon = ({task, usageType, onClick}) => {
+
+interface TaskStartIconProps<TTask extends Audit | Task> {
+  task: TTask;
+  onClick?: (task: TTask) => void | Promise<void>;
+}
+
+const TaskStartIcon = <TTask extends Audit | Task>({
+  task,
+  onClick,
+}: TaskStartIconProps<TTask>) => {
   const [_] = useTranslation();
-  usageType = usageType ?? _('task');
+  const type = task.usageType === USAGE_TYPE.audit ? _('audit') : _('task');
 
   const capabilities = useCapabilities();
 
@@ -27,23 +36,23 @@ const TaskStartIcon = ({task, usageType, onClick}) => {
     return (
       <StartIcon
         active={false}
-        title={_('Permission to start {{usageType}} denied', {usageType})}
+        title={_('Permission to start {{type}} denied', {type})}
       />
     );
   }
 
   if (
-    isDefined(task.schedule) &&
-    task.schedule?.event?.event?.duration?.toSeconds() > 0
+    isDefined(task.schedule?.event?.duration) &&
+    task.schedule.event.event.duration.toSeconds() > 0
   ) {
     return (
       <StartIcon
         active={false}
         title={_(
-          '{{usageType}} cannot be started manually' +
+          '{{type}} cannot be started manually' +
             ' because the assigned schedule has a duration limit',
           {
-            usageType: capitalizeFirstLetter(usageType),
+            type: capitalizeFirstLetter(type),
           },
         )}
       />
@@ -51,22 +60,22 @@ const TaskStartIcon = ({task, usageType, onClick}) => {
   }
 
   if (!task.isActive()) {
-    return <StartIcon title={_('Start')} value={task} onClick={onClick} />;
+    return (
+      <StartIcon
+        title={_('Start')}
+        value={task}
+        onClick={onClick as (tasks?: TTask) => void | Promise<void>}
+      />
+    );
   }
   return (
     <StartIcon
       active={false}
-      title={_('{{usageType}} is already active', {
-        usageType: capitalizeFirstLetter(usageType),
+      title={_('{{type}} is already active', {
+        type: capitalizeFirstLetter(type),
       })}
     />
   );
-};
-
-TaskStartIcon.propTypes = {
-  task: PropTypes.model.isRequired,
-  usageType: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default TaskStartIcon;

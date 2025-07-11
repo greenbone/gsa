@@ -55,11 +55,11 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskDetails from 'web/pages/tasks/Details';
-import ImportReportIcon from 'web/pages/tasks/icons/ImportReportIcon';
 import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
-import ScheduleIcon from 'web/pages/tasks/icons/ScheduleIcon';
-import StopIcon from 'web/pages/tasks/icons/StopIcon';
-import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconsWithSync';
+import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconWithSync';
+import TaskImportReportIcon from 'web/pages/tasks/icons/TaskImportReportIcon';
+import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
+import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 import TaskStatus from 'web/pages/tasks/Status';
 import TaskComponent from 'web/pages/tasks/TaskComponentComponent';
 import {
@@ -137,11 +137,7 @@ export const ToolBarIcons = ({
 
       <IconDivider>
         {isDefined(entity.schedule) && (
-          <ScheduleIcon
-            links={links}
-            schedule={entity.schedule}
-            schedulePeriods={entity.schedule_periods}
-          />
+          <TaskScheduleIcon links={links} schedule={entity.schedule} />
         )}
         <TaskIconWithSync
           task={entity}
@@ -149,9 +145,9 @@ export const ToolBarIcons = ({
           onClick={onTaskStartClick}
         />
 
-        <ImportReportIcon task={entity} onClick={onReportImportClick} />
+        <TaskImportReportIcon task={entity} onClick={onReportImportClick} />
 
-        <StopIcon task={entity} onClick={onTaskStopClick} />
+        <TaskStopIcon task={entity} onClick={onTaskStopClick} />
 
         {!entity.isContainer() && (
           <TaskIconWithSync
