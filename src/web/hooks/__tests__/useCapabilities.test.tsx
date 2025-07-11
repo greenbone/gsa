@@ -34,4 +34,12 @@ describe('useCapabilities tests', () => {
 
     expect(element).toHaveTextContent(/^Not allowed to create a task$/);
   });
+
+  test('should throw an error if used outside CapabilitiesProvider', () => {
+    const {render} = rendererWith();
+
+    expect(() => render(<TestUseCapabilities />)).toThrow(
+      'useCapabilities must be used within a CapabilitiesProvider',
+    );
+  });
 });
