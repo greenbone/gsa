@@ -17,6 +17,7 @@ import TableRow from 'web/components/table/TableRow';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
+
 const Actions = withEntitiesActions(
   ({entity, selectedDeltaReport, onReportDeleteClick, onReportDeltaSelect}) => {
     const [_] = useTranslation();
@@ -111,12 +112,12 @@ const Row = ({
       <TableData>
         <SeverityBar severity={entity.report.severity.filtered} />
       </TableData>
-      <TableData align="end">{report.result_count.hole.filtered}</TableData>
-      <TableData align="end">{report.result_count.warning.filtered}</TableData>
-      <TableData align="end">{report.result_count.info.filtered}</TableData>
-      <TableData align="end">{report.result_count.log.filtered}</TableData>
+      <TableData align="end">{report.result_count?.high?.filtered}</TableData>
+      <TableData align="end">{report.result_count?.medium?.filtered}</TableData>
+      <TableData align="end">{report.result_count?.low?.filtered}</TableData>
+      <TableData align="end">{report.result_count?.log?.filtered}</TableData>
       <TableData align="end">
-        {report.result_count.false_positive.filtered}
+        {report.result_count?.false_positive?.filtered}
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

@@ -5,18 +5,19 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {render, screen} from 'web/testing';
-import ComplianceBar, {ComplianceState} from 'web/components/bar/ComplianceBar';
+import {COMPLIANCE} from 'gmp/models/compliance';
+import ComplianceBar from 'web/components/bar/ComplianceBar';
 
 describe('ComplianceBar tests', () => {
   test.each([
-    ['no', 'No'],
-    ['incomplete', 'Incomplete'],
-    ['yes', 'Yes'],
-    ['undefined', 'Undefined'],
+    [COMPLIANCE.NO, 'No'],
+    [COMPLIANCE.INCOMPLETE, 'Incomplete'],
+    [COMPLIANCE.YES, 'Yes'],
+    [COMPLIANCE.UNDEFINED, 'Undefined'],
   ])(
     'should render %s compliance state with text %s',
     (compliance, expectedText) => {
-      render(<ComplianceBar compliance={compliance as ComplianceState} />);
+      render(<ComplianceBar compliance={compliance} />);
       const progressBar = screen.getByTestId('progressbar-box');
       expect(progressBar).toBeInTheDocument();
       expect(progressBar.textContent).toBe(expectedText);

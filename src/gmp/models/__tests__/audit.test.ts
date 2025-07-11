@@ -13,7 +13,7 @@ import Audit, {
   AuditStatus,
 } from 'gmp/models/audit';
 import {testModel} from 'gmp/models/testing';
-import {parseDuration} from 'gmp/parser';
+import {parseDate, parseDuration} from 'gmp/parser';
 
 describe('Audit model tests', () => {
   testModel(Audit, 'audit', {testIsActive: false});
@@ -107,12 +107,36 @@ describe('Audit model tests', () => {
       last_report: {
         report: {
           _id: 'r1',
+          scan_start: '2023-10-01T12:00:00Z',
+          scan_end: '2023-10-01T12:05:00Z',
+          timestamp: '2023-10-01T12:06:00Z',
+          severity: 5.5,
+          compliance_count: {
+            yes: 1,
+            no: 2,
+            undefined: 3,
+            incomplete: 4,
+          },
         },
       },
     });
     expect(audit.id).toEqual('t1');
     expect(audit.last_report?.id).toEqual('r1');
     expect(audit.last_report?.entityType).toEqual('report');
+    expect(audit.last_report?.timestamp).toEqual(
+      parseDate('2023-10-01T12:06:00Z'),
+    );
+    expect(audit.last_report?.scan_start).toEqual(
+      parseDate('2023-10-01T12:00:00Z'),
+    );
+    expect(audit.last_report?.scan_end).toEqual(
+      parseDate('2023-10-01T12:05:00Z'),
+    );
+    expect(audit.last_report?.severity).toEqual(5.5);
+    expect(audit.last_report?.compliance_count?.yes).toEqual(1);
+    expect(audit.last_report?.compliance_count?.no).toEqual(2);
+    expect(audit.last_report?.compliance_count?.undefined).toEqual(3);
+    expect(audit.last_report?.compliance_count?.incomplete).toEqual(4);
   });
 
   test('should parse current report', () => {
@@ -127,34 +151,6 @@ describe('Audit model tests', () => {
     expect(audit.id).toEqual('t1');
     expect(audit.current_report?.id).toEqual('r1');
     expect(audit.current_report?.entityType).toEqual('report');
-  });
-
-  test('should parse first report', () => {
-    const audit = Audit.fromElement({
-      _id: 't1',
-      first_report: {
-        report: {
-          _id: 'r1',
-        },
-      },
-    });
-    expect(audit.id).toEqual('t1');
-    expect(audit.first_report?.id).toEqual('r1');
-    expect(audit.first_report?.entityType).toEqual('report');
-  });
-
-  test('should parse second last report', () => {
-    const audit = Audit.fromElement({
-      _id: 't1',
-      second_last_report: {
-        report: {
-          _id: 'r1',
-        },
-      },
-    });
-    expect(audit.id).toEqual('t1');
-    expect(audit.second_last_report?.id).toEqual('r1');
-    expect(audit.second_last_report?.entityType).toEqual('report');
   });
 
   test('should parse config', () => {
@@ -367,12 +363,12 @@ describe('Audit model tests', () => {
   });
 
   test('should parse observers', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       observers: 'foo bar',
     });
-    expect(task.observers?.user).toEqual(['foo', 'bar']);
+    expect(audit.observers?.user).toEqual(['foo', 'bar']);
 
-    const task2 = Audit.fromElement({
+    const audit2 = Audit.fromElement({
       observers: {
         __text: 'anon nymous',
         role: ['lorem'],
@@ -380,66 +376,75 @@ describe('Audit model tests', () => {
       },
     });
 
-    expect(task2.observers?.user).toEqual(['anon', 'nymous']);
-    expect(task2.observers?.role).toEqual(['lorem']);
-    expect(task2.observers?.group).toEqual(['ipsum', 'dolor']);
+    expect(audit2.observers?.user).toEqual(['anon', 'nymous']);
+    expect(audit2.observers?.role).toEqual(['lorem']);
+    expect(audit2.observers?.group).toEqual(['ipsum', 'dolor']);
 
-    const task3 = Audit.fromElement({
+    const audit3 = Audit.fromElement({
       observers: '',
     });
-    expect(task3.observers?.user).toEqual([]);
-    expect(task3.observers?.role).toBeUndefined();
-    expect(task3.observers?.group).toBeUndefined();
+    expect(audit3.observers?.user).toBeUndefined();
+    expect(audit3.observers?.role).toBeUndefined();
+    expect(audit3.observers?.group).toBeUndefined();
+
+    const audit4 = Audit.fromElement({
+      observers: {
+        __text: '',
+      },
+    });
+    expect(audit4.observers?.user).toBeUndefined();
+    expect(audit4.observers?.role).toBeUndefined();
+    expect(audit4.observers?.group).toBeUndefined();
   });
 
   test('should parse alterable', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       _id: 't1',
       alterable: 1,
     });
-    expect(task.id).toEqual('t1');
-    expect(task.alterable).toEqual(1);
+    expect(audit.id).toEqual('t1');
+    expect(audit.alterable).toEqual(1);
 
-    const task2 = Audit.fromElement({
+    const audit2 = Audit.fromElement({
       _id: 't2',
       alterable: 0,
     });
-    expect(task2.id).toEqual('t2');
-    expect(task2.alterable).toEqual(0);
+    expect(audit2.id).toEqual('t2');
+    expect(audit2.alterable).toEqual(0);
   });
 
   test('should parse average duration', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       _id: 't1',
       average_duration: 123456,
     });
-    expect(task.id).toEqual('t1');
-    expect(task.average_duration).toEqual(parseDuration(123456));
+    expect(audit.id).toEqual('t1');
+    expect(audit.average_duration).toEqual(parseDuration(123456));
   });
 
   test('should parse status', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       _id: 't1',
       status: AUDIT_STATUS.running,
     });
-    expect(task.id).toEqual('t1');
-    expect(task.status).toEqual(AUDIT_STATUS.running);
+    expect(audit.id).toEqual('t1');
+    expect(audit.status).toEqual(AUDIT_STATUS.running);
   });
 
   test('should parse trend', () => {
-    const task = Audit.fromElement({
+    const audit = Audit.fromElement({
       _id: 't1',
       trend: 'up',
     });
-    expect(task.id).toEqual('t1');
-    expect(task.trend).toEqual('up');
+    expect(audit.id).toEqual('t1');
+    expect(audit.trend).toEqual('up');
 
-    const task2 = Audit.fromElement({
+    const audit2 = Audit.fromElement({
       _id: 't2',
       trend: 'down',
     });
-    expect(task2.id).toEqual('t2');
-    expect(task2.trend).toEqual('down');
+    expect(audit2.id).toEqual('t2');
+    expect(audit2.trend).toEqual('down');
   });
 
   test('should throw error for invalid usage type', () => {

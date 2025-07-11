@@ -4,6 +4,8 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
+import Filter from 'gmp/models/filter';
 import {
   parseHosts,
   parsePorts,
@@ -11,29 +13,33 @@ import {
   parseOperatingSystems,
   parseTlsCertificates,
   parseCves,
-  parse_errors,
+  parseErrors,
   parseClosedCves,
 } from 'gmp/models/report/parser';
+import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
+
+const emptyCollectionCounts = new CollectionCounts();
 
 describe('report parser tests', () => {
   test('should parse hosts', () => {
+    const filter = Filter.fromString('foo=bar');
     const hosts = {
       host: [
         {
           ip: '1.1.1.1',
           port_count: {
-            page: '42',
+            page: 42,
           },
         },
         {
           ip: '2.2.2.2',
           port_count: {
-            page: '21',
+            page: 21,
           },
         },
       ],
       hosts: {
-        count: '2',
+        count: 2,
       },
       results: {
         result: [
@@ -42,14 +48,14 @@ describe('report parser tests', () => {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '7',
+            severity: 7,
           },
           {
             _id: '456',
             host: {
               __text: '2.2.2.2',
             },
-            severity: '5.5',
+            severity: 5.5,
           },
         ],
       },
@@ -62,30 +68,30 @@ describe('report parser tests', () => {
       rows: 2,
       last: 2,
     };
-    const parsedHosts = parseHosts(hosts, 'foo=bar');
+    const parsedHosts = parseHosts(hosts, filter);
 
     expect(parsedHosts.entities.length).toEqual(2);
     expect(parsedHosts.entities[0].id).toEqual('1.1.1.1');
-    expect(parsedHosts.entities[0].portsCount).toEqual('42');
+    expect(parsedHosts.entities[0].portsCount).toEqual(42);
     expect(parsedHosts.entities[0].severity).toEqual(7);
     expect(parsedHosts.entities[1].id).toEqual('2.2.2.2');
-    expect(parsedHosts.entities[1].portsCount).toEqual('21');
+    expect(parsedHosts.entities[1].portsCount).toEqual(21);
     expect(parsedHosts.entities[1].severity).toEqual(5.5);
     expect(parsedHosts.counts).toEqual(countsResult);
-    expect(parsedHosts.filter).toEqual('foo=bar');
+    expect(parsedHosts.filter).toEqual(filter);
   });
 
   test('should parse empty hosts', () => {
-    const filterString = 'foo=bar';
-    const hosts = parseHosts({}, filterString);
+    const filter = Filter.fromString('foo=bar');
+    const hosts = parseHosts({}, filter);
 
     expect(hosts.entities.length).toEqual(0);
-    expect(hosts.counts).toBeUndefined();
-    expect(hosts.filter).toEqual('foo=bar');
+    expect(hosts.counts).toEqual(emptyCollectionCounts);
+    expect(hosts.filter).toEqual(filter);
   });
 
   test('should parse ports', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {
       ports: {
         count: 123,
@@ -112,11 +118,11 @@ describe('report parser tests', () => {
       rows: 2,
       last: 2,
     };
-    const ports = parsePorts(report, filterString);
+    const ports = parsePorts(report, filter);
 
     expect(ports.entities.length).toEqual(2);
     expect(ports.counts).toEqual(counts);
-    expect(ports.filter).toEqual('foo=bar rows=5');
+    expect(ports.filter).toEqual(filter);
 
     const [port1, port2] = ports.entities;
 
@@ -136,17 +142,17 @@ describe('report parser tests', () => {
   });
 
   test('should parse empty ports', () => {
-    const filterString = 'foo=bar';
+    const filter = Filter.fromString('foo=bar');
     const report = {};
-    const ports = parsePorts(report, filterString);
+    const ports = parsePorts(report, filter);
 
     expect(ports.entities.length).toEqual(0);
-    expect(ports.counts).toBeUndefined();
-    expect(ports.filter).toEqual('foo=bar');
+    expect(ports.counts).toEqual(emptyCollectionCounts);
+    expect(ports.filter).toEqual(filter);
   });
 
   test('should parse apps', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {
       // apps are gathered from the host details
       host: [
@@ -183,13 +189,13 @@ describe('report parser tests', () => {
         },
       ],
       apps: {
-        count: '123',
+        count: 123,
       },
       // results are used to get the app severity
       results: {
         result: [
           {
-            severity: '5.5',
+            severity: 5.5,
             detection: {
               result: {
                 details: {
@@ -208,7 +214,7 @@ describe('report parser tests', () => {
             },
           },
           {
-            severity: '7.5',
+            severity: 7.5,
             detection: {
               result: {
                 details: {
@@ -223,7 +229,7 @@ describe('report parser tests', () => {
             },
           },
           {
-            severity: '4.5',
+            severity: 4.5,
             detection: {
               result: {
                 details: {
@@ -238,7 +244,7 @@ describe('report parser tests', () => {
             },
           },
           {
-            severity: '5.5',
+            severity: 5.5,
             detection: {
               result: {
                 details: {
@@ -263,11 +269,11 @@ describe('report parser tests', () => {
       rows: 2,
       last: 2,
     };
-    const apps = parseApps(report, filterString);
+    const apps = parseApps(report, filter);
 
     expect(apps.entities.length).toEqual(2);
     expect(apps.counts).toEqual(counts);
-    expect(apps.filter).toEqual('foo=bar rows=5');
+    expect(apps.filter).toEqual(filter);
 
     const [app1, app2] = apps.entities;
 
@@ -289,20 +295,20 @@ describe('report parser tests', () => {
   });
 
   test('should parse empty apps', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {};
-    const apps = parseApps(report, filterString);
+    const apps = parseApps(report, filter);
 
     expect(apps.entities.length).toEqual(0);
-    expect(apps.counts).toBeUndefined();
-    expect(apps.filter).toEqual('foo=bar rows=5');
+    expect(apps.counts).toEqual(emptyCollectionCounts);
+    expect(apps.filter).toEqual(filter);
   });
 
   test('should parse operating systems', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {
       os: {
-        count: '123',
+        count: 123,
       },
       // os severities are parsed from the results of a host
       results: {
@@ -311,31 +317,31 @@ describe('report parser tests', () => {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '5.5',
+            severity: 5.5,
           },
           {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '9.5',
+            severity: 9.5,
           },
           {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '3.5',
+            severity: 3.5,
           },
           {
             host: {
               __text: '2.2.2.2',
             },
-            severity: '5.5',
+            severity: 5.5,
           },
           {
             host: {
               __text: '3.3.3.3',
             },
-            severity: '6.5',
+            severity: 6.5,
           },
         ],
       },
@@ -394,11 +400,11 @@ describe('report parser tests', () => {
       rows: 2,
       last: 2,
     };
-    const operatingSystems = parseOperatingSystems(report, filterString);
+    const operatingSystems = parseOperatingSystems(report, filter);
 
     expect(operatingSystems.entities.length).toEqual(2);
     expect(operatingSystems.counts).toEqual(counts);
-    expect(operatingSystems.filter).toEqual('foo=bar rows=5');
+    expect(operatingSystems.filter).toEqual(filter);
 
     const [os1, os2] = operatingSystems.entities;
 
@@ -416,17 +422,17 @@ describe('report parser tests', () => {
   });
 
   test('should parse empty operating systems', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {};
-    const operatingSystems = parseOperatingSystems(report, filterString);
+    const operatingSystems = parseOperatingSystems(report, filter);
 
     expect(operatingSystems.entities.length).toEqual(0);
-    expect(operatingSystems.counts).toBeUndefined();
-    expect(operatingSystems.filter).toEqual('foo=bar rows=5');
+    expect(operatingSystems.counts).toEqual(emptyCollectionCounts);
+    expect(operatingSystems.filter).toEqual(filter);
   });
 
   test('should parse tls certificates', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {
       results: {
         result: [
@@ -434,13 +440,13 @@ describe('report parser tests', () => {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '5.5',
+            severity: 5.5,
           },
           {
             host: {
               __text: '2.2.2.2',
             },
-            severity: '9.5',
+            severity: 9.5,
           },
         ],
       },
@@ -486,7 +492,7 @@ describe('report parser tests', () => {
           ],
         },
       ],
-      ssl_certs: {count: '123'},
+      ssl_certs: {count: 123},
       tls_certificates: {
         tls_certificate: [
           {
@@ -499,12 +505,12 @@ describe('report parser tests', () => {
             md5_fingerprint: 'fa:a9:9d:f2:28:cc:2c:c0:80:16',
             activation_time: '2019-08-10T12:51:27Z',
             expiration_time: '2019-09-10T12:51:27Z',
-            valid: true,
+            valid: YES_VALUE as YesNo,
             subject_dn: 'CN=LoremIpsumSubject C=Dolor',
             issuer_dn: 'CN=LoremIpsumIssuer C=Dolor',
             serial: '00B49C541FF5A8E1D9',
             host: {ip: '192.168.9.90', hostname: 'foo.bar'},
-            ports: {port: ['4021', '4023']},
+            ports: {port: [4021, 4023]},
           },
           {
             name: 'C137E9D559CC95ED130011FE4012DE56CAE2F8',
@@ -516,12 +522,12 @@ describe('report parser tests', () => {
             md5_fingerprint: '63:70:d6:65:17:32:01:66:9e:7d:c4',
             activation_time: 'unlimited',
             expiration_time: 'undefined',
-            valid: false,
+            valid: NO_VALUE as YesNo,
             subject_dn: 'CN=LoremIpsumSubject2 C=Dolor',
             issuer_dn: 'CN=LoremIpsumIssuer2 C=Dolor',
             serial: '00C387C32CBB861F5C',
             host: {ip: '191.164.9.93', hostname: ''},
-            ports: {port: ['8445', '5061']},
+            ports: {port: [8445, 5061]},
           },
           {
             name: 'C137E9D559CC95ED130011FE4012DE56CAE2F8',
@@ -530,12 +536,12 @@ describe('report parser tests', () => {
             md5_fingerprint: '63:70:d6:65:17:32:01:66:9e:7d:c4',
             activation_time: 'unlimited',
             expiration_time: 'undefined',
-            valid: false,
+            valid: NO_VALUE as YesNo,
             subject_dn: 'CN=LoremIpsumSubject3 C=Dolor',
             issuer_dn: 'CN=LoremIpsumIssuer3 C=Dolor',
             serial: '00C387C32CBB861F5C',
             host: {},
-            ports: {port: ['8441']},
+            ports: {port: [8441]},
           },
         ],
       },
@@ -548,11 +554,11 @@ describe('report parser tests', () => {
       rows: 5,
       last: 5,
     };
-    const tlsCerts = parseTlsCertificates(report, filterString);
+    const tlsCerts = parseTlsCertificates(report, filter);
 
     expect(tlsCerts.entities.length).toEqual(5);
     expect(tlsCerts.counts).toEqual(counts);
-    expect(tlsCerts.filter).toEqual('foo=bar rows=5');
+    expect(tlsCerts.filter).toEqual(filter);
 
     const [cert1, cert2, cert3, cert4, cert5] = tlsCerts.entities;
 
@@ -563,8 +569,8 @@ describe('report parser tests', () => {
     expect(cert1.ip).toEqual('192.168.9.90');
     expect(cert1.data).toEqual('66870678E638C7825743145B247554E0D92C94');
     expect(cert1.valid).toEqual(true);
-    expect(cert1.ports).toBeUndefined();
-    expect(cert1.port).toEqual(4021);
+    expect(cert1.ports).toEqual(['4021']);
+    expect(cert1.port).toEqual('4021');
     expect(cert1.issuerDn).toEqual('CN=LoremIpsumIssuer C=Dolor');
     expect(cert1.subjectDn).toEqual('CN=LoremIpsumSubject C=Dolor');
 
@@ -575,8 +581,8 @@ describe('report parser tests', () => {
     expect(cert2.ip).toEqual('192.168.9.90');
     expect(cert2.data).toEqual('66870678E638C7825743145B247554E0D92C94');
     expect(cert2.valid).toEqual(true);
-    expect(cert2.ports).toBeUndefined();
-    expect(cert2.port).toEqual(4023);
+    expect(cert2.ports).toEqual(['4023']);
+    expect(cert2.port).toEqual('4023');
     expect(cert2.issuerDn).toEqual('CN=LoremIpsumIssuer C=Dolor');
     expect(cert2.subjectDn).toEqual('CN=LoremIpsumSubject C=Dolor');
 
@@ -587,8 +593,8 @@ describe('report parser tests', () => {
     expect(cert3.valid).toEqual(false);
     expect(cert3.activationTime).toBeUndefined();
     expect(cert3.expirationTime).toBeUndefined();
-    expect(cert3.ports).toBeUndefined();
-    expect(cert3.port).toEqual(8445);
+    expect(cert3.ports).toEqual(['8445']);
+    expect(cert3.port).toEqual('8445');
     expect(cert3.issuerDn).toEqual('CN=LoremIpsumIssuer2 C=Dolor');
     expect(cert3.subjectDn).toEqual('CN=LoremIpsumSubject2 C=Dolor');
 
@@ -599,8 +605,8 @@ describe('report parser tests', () => {
     expect(cert4.valid).toEqual(false);
     expect(cert4.activationTime).toBeUndefined();
     expect(cert4.expirationTime).toBeUndefined();
-    expect(cert4.ports).toBeUndefined();
-    expect(cert4.port).toEqual(5061);
+    expect(cert4.ports).toEqual(['5061']);
+    expect(cert4.port).toEqual('5061');
     expect(cert4.issuerDn).toEqual('CN=LoremIpsumIssuer2 C=Dolor');
     expect(cert4.subjectDn).toEqual('CN=LoremIpsumSubject2 C=Dolor');
 
@@ -611,41 +617,31 @@ describe('report parser tests', () => {
     expect(cert5.valid).toEqual(false);
     expect(cert5.activationTime).toBeUndefined();
     expect(cert5.expirationTime).toBeUndefined();
-    expect(cert5.ports).toBeUndefined();
-    expect(cert5.port).toEqual(8441);
+    expect(cert5.ports).toEqual(['8441']);
+    expect(cert5.port).toEqual('8441');
     expect(cert5.issuerDn).toEqual('CN=LoremIpsumIssuer3 C=Dolor');
     expect(cert5.subjectDn).toEqual('CN=LoremIpsumSubject3 C=Dolor');
   });
 
   test('should parse empty tls certificates', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {};
-    const tlsCerts = parseTlsCertificates(report, filterString);
+    const tlsCerts = parseTlsCertificates(report, filter);
 
     expect(tlsCerts.entities.length).toEqual(0);
-    expect(tlsCerts.counts).toBeUndefined();
-    expect(tlsCerts.filter).toEqual('foo=bar rows=5');
-  });
-
-  test('should parse empty cves', () => {
-    const filterString = 'foo=bar rows=5';
-    const report = {};
-    const cves = parseCves(report, filterString);
-
-    expect(cves.entities.length).toEqual(0);
-    expect(cves.counts).toBeUndefined();
-    expect(cves.filter).toEqual('foo=bar rows=5');
+    expect(tlsCerts.counts).toEqual(emptyCollectionCounts);
+    expect(tlsCerts.filter).toEqual(filter);
   });
 
   test('should parse cves', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {
       results: {
         result: [
           {
             nvt: {
               refs: {
-                ref: [{}],
+                ref: [],
               },
             },
           },
@@ -655,6 +651,7 @@ describe('report parser tests', () => {
                 ref: [
                   {
                     _type: '',
+                    _id: '',
                   },
                 ],
               },
@@ -676,7 +673,7 @@ describe('report parser tests', () => {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '4.5',
+            severity: 4.5,
           },
           {
             nvt: {
@@ -698,7 +695,7 @@ describe('report parser tests', () => {
             host: {
               __text: '2.2.2.2',
             },
-            severity: '9.5',
+            severity: 9.5,
           },
           {
             nvt: {
@@ -716,7 +713,7 @@ describe('report parser tests', () => {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '5.5',
+            severity: 5.5,
           },
           {
             nvt: {
@@ -738,7 +735,7 @@ describe('report parser tests', () => {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '6.5',
+            severity: 6.5,
           },
         ],
       },
@@ -751,11 +748,11 @@ describe('report parser tests', () => {
       rows: 3,
       last: 3,
     };
-    const cves = parseCves(report, filterString);
+    const cves = parseCves(report, filter);
 
     expect(cves.entities.length).toEqual(3);
     expect(cves.counts).toEqual(counts);
-    expect(cves.filter).toEqual('foo=bar rows=5');
+    expect(cves.filter).toEqual(filter);
 
     const [cve1, cve2, cve3] = cves.entities;
 
@@ -781,18 +778,18 @@ describe('report parser tests', () => {
     expect(cve3.occurrences).toEqual(1);
   });
 
-  test('should parse empty errors', () => {
-    const filterString = 'foo=bar rows=5';
+  test('should parse empty cves', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {};
-    const errors = parse_errors(report, filterString);
+    const cves = parseCves(report, filter);
 
-    expect(errors.entities.length).toEqual(0);
-    expect(errors.counts).toBeUndefined();
-    expect(errors.filter).toEqual('foo=bar rows=5');
+    expect(cves.entities.length).toEqual(0);
+    expect(cves.counts).toEqual(emptyCollectionCounts);
+    expect(cves.filter).toEqual(filter);
   });
 
   test('should parse errors', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {
       results: {
         result: [
@@ -800,13 +797,13 @@ describe('report parser tests', () => {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '5.5',
+            severity: 5.5,
           },
           {
             host: {
               __text: '2.2.2.2',
             },
-            severity: '9.5',
+            severity: 9.5,
           },
         ],
       },
@@ -832,7 +829,7 @@ describe('report parser tests', () => {
         },
       ],
       errors: {
-        count: '2',
+        count: 2,
         error: [
           {
             host: {
@@ -870,45 +867,45 @@ describe('report parser tests', () => {
       last: 2,
     };
 
-    const errors = parse_errors(report, filterString);
+    const errors = parseErrors(report, filter);
 
     expect(errors.entities.length).toEqual(2);
     expect(errors.counts).toEqual(counts);
-    expect(errors.filter).toEqual('foo=bar rows=5');
+    expect(errors.filter).toEqual(filter);
 
     const [error1, error2] = errors.entities;
 
-    expect(error1.id).toEqual('1.1.1.1314');
+    expect(error1.id).toEqual('1.1.1.1:314');
     expect(error1.description).toEqual('This is an error.');
-    expect(error1.host.ip).toEqual('1.1.1.1');
-    expect(error1.host.name).toEqual('foo.bar');
-    expect(error1.host.id).toEqual('123');
+    expect(error1.host?.ip).toEqual('1.1.1.1');
+    expect(error1.host?.name).toEqual('foo.bar');
+    expect(error1.host?.id).toEqual('123');
     expect(error1.nvt.id).toEqual('314');
     expect(error1.nvt.name).toEqual('NVT1');
     expect(error1.port).toEqual('123/tcp');
 
-    expect(error2.id).toEqual('2.2.2.2159');
+    expect(error2.id).toEqual('2.2.2.2:159');
     expect(error2.description).toEqual('This is another error.');
-    expect(error2.host.ip).toEqual('2.2.2.2');
-    expect(error2.host.name).toEqual('lorem.ipsum');
-    expect(error2.host.id).toEqual(undefined);
+    expect(error2.host?.ip).toEqual('2.2.2.2');
+    expect(error2.host?.name).toEqual('lorem.ipsum');
+    expect(error2.host?.id).toEqual(undefined);
     expect(error2.nvt.id).toEqual('159');
     expect(error2.nvt.name).toEqual('NVT2');
     expect(error2.port).toEqual('456/tcp');
   });
 
-  test('should parse empty closed CVEs', () => {
-    const filterString = 'foo=bar rows=5';
+  test('should parse empty errors', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {};
-    const closedCves = parse_errors(report, filterString);
+    const errors = parseErrors(report, filter);
 
-    expect(closedCves.entities.length).toEqual(0);
-    expect(closedCves.counts).toBeUndefined();
-    expect(closedCves.filter).toEqual('foo=bar rows=5');
+    expect(errors.entities.length).toEqual(0);
+    expect(errors.counts).toEqual(emptyCollectionCounts);
+    expect(errors.filter).toEqual(filter);
   });
 
   test('should parse closed CVEs', () => {
-    const filterString = 'foo=bar rows=5';
+    const filter = Filter.fromString('foo=bar rows=5');
     const report = {
       results: {
         result: [
@@ -916,13 +913,13 @@ describe('report parser tests', () => {
             host: {
               __text: '1.1.1.1',
             },
-            severity: '5.5',
+            severity: 5.5,
           },
           {
             host: {
               __text: '2.2.2.2',
             },
-            severity: '9.5',
+            severity: 9.5,
           },
         ],
       },
@@ -942,7 +939,7 @@ describe('report parser tests', () => {
                 name: '201',
                 description: 'This is a description',
               },
-              extra: '10.0',
+              extra: 10.0,
             },
           ],
         },
@@ -962,13 +959,13 @@ describe('report parser tests', () => {
                 name: '202',
                 description: 'This is another description',
               },
-              extra: '5.0',
+              extra: 5.0,
             },
           ],
         },
       ],
       closed_cves: {
-        count: '2',
+        count: 2,
       },
     };
 
@@ -981,20 +978,18 @@ describe('report parser tests', () => {
       last: 2,
     };
 
-    const closedCves = parseClosedCves(report, filterString);
-
+    const closedCves = parseClosedCves(report, filter);
     expect(closedCves.entities.length).toEqual(2);
     expect(closedCves.counts).toEqual(counts);
-    expect(closedCves.filter).toEqual('foo=bar rows=5');
+    expect(closedCves.filter).toEqual(filter);
 
     const [closedCve1, closedCve2] = closedCves.entities;
-
     expect(closedCve1.id).toEqual('CVE-2000-1234-1.1.1.1-201');
     expect(closedCve1.cveId).toEqual('CVE-2000-1234');
     expect(closedCve1.host.ip).toEqual('1.1.1.1');
     expect(closedCve1.host.name).toEqual('foo.bar');
     expect(closedCve1.host.id).toEqual(undefined);
-    expect(closedCve1.source.name).toEqual('201');
+    expect(closedCve1.source?.name).toEqual('201');
     expect(closedCve1.severity).toEqual(10);
 
     expect(closedCve2.id).toEqual('CVE-2000-5678-2.2.2.2-202');
@@ -1002,7 +997,17 @@ describe('report parser tests', () => {
     expect(closedCve2.host.ip).toEqual('2.2.2.2');
     expect(closedCve2.host.name).toEqual('lorem.ipsum');
     expect(closedCve2.host.id).toEqual(undefined);
-    expect(closedCve2.source.name).toEqual('202');
+    expect(closedCve2.source?.name).toEqual('202');
     expect(closedCve2.severity).toEqual(5);
+  });
+
+  test('should parse empty closed CVEs', () => {
+    const filter = Filter.fromString('foo=bar rows=5');
+    const report = {};
+    const closedCves = parseErrors(report, filter);
+
+    expect(closedCves.entities.length).toEqual(0);
+    expect(closedCves.counts).toEqual(emptyCollectionCounts);
+    expect(closedCves.filter).toEqual(filter);
   });
 });

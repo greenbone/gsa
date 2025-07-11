@@ -5,7 +5,7 @@
 
 import {scaleOrdinal, scaleLinear} from 'd3-scale';
 import {_l} from 'gmp/locale/lang';
-import {COMPLIANCE_STATES} from 'gmp/models/auditreport';
+import {COMPLIANCE} from 'gmp/models/compliance';
 import {parseInt} from 'gmp/parser';
 import {
   ERROR,
@@ -169,5 +169,5 @@ export const secInfoTypeColorScale = scaleOrdinal()
   ]);
 
 export const complianceColorScale = scaleOrdinal()
-  .domain(Object.keys(COMPLIANCE_STATES))
+  .domain(Object.values(COMPLIANCE))
   .range(['#4cb045', '#D80000', 'orange', 'silver']);
