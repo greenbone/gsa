@@ -3,13 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {transformSettingName} from 'gmp/commands/users';
 import {SYSTEM_DEFAULT} from 'gmp/locale/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
 import {openVasScannersFilter} from 'gmp/models/scanner';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {MySettingsIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -32,19 +33,18 @@ import SettingsDialog from 'web/pages/user-settings/Dialog/Dialog';
 import FilterSettings from 'web/pages/user-settings/FilterSettings';
 import GeneralSettings from 'web/pages/user-settings/GeneralSettings';
 import SeveritySettings from 'web/pages/user-settings/SeveritySettings';
-import {ToolBarIcons} from 'web/pages/user-settings/UserSettingsPageComponents';
 import {
-  loadEntities as loadAlertsAction,
-  loadEntity as loadAlertAction,
   selector as alertsSelector,
+  loadEntity as loadAlertAction,
+  loadEntities as loadAlertsAction,
 } from 'web/store/entities/alerts';
 import {
-  loadEntities as loadCredentialsAction,
   selector as credentialsSelector,
+  loadEntities as loadCredentialsAction,
 } from 'web/store/entities/credentials';
 import {
-  loadEntities as loadFiltersAction,
   selector as filtersSelector,
+  loadEntities as loadFiltersAction,
 } from 'web/store/entities/filters';
 import {
   loadEntities as loadPortListsAction,
@@ -67,15 +67,19 @@ import {
   selector as targetsSelector,
 } from 'web/store/entities/targets';
 import {
-  updateTimezone,
   renewSessionTimeout,
+  updateTimezone,
 } from 'web/store/usersettings/actions';
 import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {
+  loadUserSettingDefaults,
+  loadingActions,
+} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import {BROWSER_LANGUAGE} from 'web/utils/Languages';
+import {ToolBarIcons} from './UserSettingsPageHelpers';
 
 const useUserSettingsActions = () => {
   const dispatch = useDispatch();
@@ -187,6 +191,7 @@ const UserSettings = () => {
   const [_] = useTranslation();
   const [language, setLanguage] = useLanguage();
   const gmp = useGmp();
+  const dispatch = useDispatch();
   const {
     loadAlerts,
     loadCredentials,
@@ -212,8 +217,6 @@ const UserSettings = () => {
   const isLoading = useShallowEqualSelector(state =>
     getUserSettingsDefaults(state).isLoading(),
   );
-
-  // Removed unused `userInterfaceLanguage` as GeneralSettings handles it
 
   const userInterfaceTimeFormat =
     userDefaultsSelector.getByName('userinterfacetimeformat') || {};
@@ -424,8 +427,6 @@ const UserSettings = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Severity settings now managed in SeveritySettings component
-
   const openDialog = () => {
     setDialogVisible(true);
     handleInteraction();
@@ -447,7 +448,17 @@ const UserSettings = () => {
   const handleSaveSettings = async data => {
     try {
       const {userInterfaceLanguage = BROWSER_LANGUAGE, timezone: tz} = data;
-      await gmp.user.saveSettings(data);
+
+      Object.entries(data).forEach(([key, value]) => {
+        dispatch(
+          loadingActions.optimisticUpdate(
+            undefined, // We don't have the setting ID here
+            transformSettingName(key),
+            value,
+          ),
+        );
+      });
+
       setDialogVisible(false);
       setLanguage(
         userInterfaceLanguage === BROWSER_LANGUAGE
@@ -465,21 +476,21 @@ const UserSettings = () => {
         data.userInterfaceDateFormat,
       );
 
+      await gmp.user.saveSettings(data);
+
       loadSettings();
     } catch (error) {
       console.error(error);
 
+      loadSettings();
       throw error;
     }
   };
 
   const handleValueChange = (value, name) => {
-    // dynamic state update
     if (name === 'dialogVisible') setDialogVisible(value);
     if (name === 'disableEditIcon') setDisableEditIcon(value);
   };
-
-  // `autoCacheRebuildValue` is now handled by GeneralSettings
 
   return (
     <>

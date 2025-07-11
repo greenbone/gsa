@@ -86,7 +86,6 @@ describe('FilterPart', () => {
     render(<FilterPart {...props} />);
     const selects = screen.getAllByTestId('form-select');
 
-    // Check each label and corresponding select in a single render
     labels.forEach((label, idx) => {
       expect(screen.getByText(label)).toBeVisible();
       expect(selects[idx]).toBeVisible();

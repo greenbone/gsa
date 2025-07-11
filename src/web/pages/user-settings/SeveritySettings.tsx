@@ -20,7 +20,7 @@ import TableRow from 'web/components/table/TableRow';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
-import useSettingsSave from 'web/pages/user-settings/useSettingsSave';
+import useSettingSave from 'web/pages/user-settings/useSettingSave';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 interface SeveritySettingsProps {
@@ -36,7 +36,7 @@ const SeveritySettings = ({disableEditIcon = false}: SeveritySettingsProps) => {
     onInteraction,
     clearErrorMessage,
     setErrorMessage,
-  } = useSettingsSave();
+  } = useSettingSave();
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
 

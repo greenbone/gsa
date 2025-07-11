@@ -7,6 +7,7 @@ import {
   USER_SETTINGS_DEFAULT_FILTER_LOADING_ERROR,
   USER_SETTINGS_DEFAULT_FILTER_LOADING_REQUEST,
   USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS,
+  USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE,
 } from 'web/store/usersettings/defaultfilters/actions';
 import {combineReducers} from 'web/store/utils';
 
@@ -16,6 +17,7 @@ const isLoading = (state = false, action) => {
       return true;
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS:
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_ERROR:
+    case USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE:
       return false;
     default:
       return state;
@@ -27,6 +29,7 @@ const error = (state, action) => {
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_ERROR:
       return action.error;
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS:
+    case USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE:
       return undefined;
     default:
       return state;
@@ -37,6 +40,15 @@ const filter = (state, action) => {
   switch (action.type) {
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS:
       return action.filter;
+    case USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE: {
+      if (state && typeof state === 'object') {
+        return {
+          ...state,
+          id: action.filterId,
+        };
+      }
+      return action.filterId ? {id: action.filterId} : null;
+    }
     default:
       return state;
   }
@@ -53,6 +65,7 @@ const reducer = (state = {}, action) => {
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS:
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_ERROR:
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_REQUEST:
+    case USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE:
       return {
         ...state,
         [action.entityType]: combined(state[action.entityType], action),

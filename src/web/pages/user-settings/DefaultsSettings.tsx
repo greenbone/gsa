@@ -19,7 +19,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
-import useSettingsSave from 'web/pages/user-settings/useSettingsSave';
+import useSettingSave from 'web/pages/user-settings/useSettingSave';
 
 import {selector as alertsSelector} from 'web/store/entities/alerts';
 import {selector as credentialsSelector} from 'web/store/entities/credentials';
@@ -75,7 +75,7 @@ export const DefaultSettings = () => {
     onInteraction,
     clearErrorMessage,
     setErrorMessage,
-  } = useSettingsSave();
+  } = useSettingSave();
 
   const alerts = useShallowEqualSelector(state =>
     alertsSelector(state).getEntities(ALL_FILTER),
@@ -103,16 +103,16 @@ export const DefaultSettings = () => {
     (typeof FIELD_NAMES)[number],
     {id: string; name: string; deprecated?: string}[]
   > = {
-    defaultalert: alerts,
-    defaultesxicredential: creds,
-    defaultopenvasscanconfig: scanconfs,
-    defaultopenvasscanner: scanners,
-    defaultportlist: ports,
-    defaultsmbcredential: creds,
-    defaultsnmpcredential: creds,
-    defaultsshcredential: creds,
-    defaultschedule: scheds,
-    defaulttarget: targets,
+    defaultalert: alerts ?? [],
+    defaultesxicredential: creds ?? [],
+    defaultopenvasscanconfig: scanconfs ?? [],
+    defaultopenvasscanner: scanners ?? [],
+    defaultportlist: ports ?? [],
+    defaultsmbcredential: creds ?? [],
+    defaultsnmpcredential: creds ?? [],
+    defaultsshcredential: creds ?? [],
+    defaultschedule: scheds ?? [],
+    defaulttarget: targets ?? [],
   };
 
   const LABELS: Record<(typeof FIELD_NAMES)[number], string> = {
@@ -191,7 +191,7 @@ export const DefaultSettings = () => {
       <TableBody>
         {FIELD_NAMES.map(key => {
           const setting: Setting<string> = defaultsSel.getByName(key) ?? {};
-          const rawItems = ITEMS_MAP[key];
+          const rawItems = ITEMS_MAP[key] ?? [];
           const formattedItems = rawItems.map(item => ({
             name: item.name || item.id,
             id: item.id,

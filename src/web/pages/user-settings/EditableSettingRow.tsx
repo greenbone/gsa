@@ -5,7 +5,6 @@
 
 import {ReactNode} from 'react';
 import styled from 'styled-components';
-
 import {EditIcon, SaveIcon, XIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import TableData from 'web/components/table/Data';

@@ -13,6 +13,8 @@ export const USER_SETTINGS_DEFAULT_FILTER_LOADING_REQUEST =
   'USER_SETTINGS_DEFAULT_FILTER_LOADING_REQUEST';
 export const USER_SETTINGS_DEFAULT_FILTER_LOADING_ERROR =
   'USER_SETTINGS_DEFAULT_FILTER_LOADING_ERROR';
+export const USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE =
+  'USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE';
 
 export const defaultFilterLoadingActions = {
   request: entityType => ({
@@ -28,6 +30,11 @@ export const defaultFilterLoadingActions = {
     type: USER_SETTINGS_DEFAULT_FILTER_LOADING_ERROR,
     entityType,
     error,
+  }),
+  optimisticUpdate: (entityType, filterId) => ({
+    type: USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE,
+    entityType,
+    filterId,
   }),
 };
 

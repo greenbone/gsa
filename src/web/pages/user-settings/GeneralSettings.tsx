@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState, useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {
-  SYSTEM_DEFAULT,
   DATE_TIME_CATEGORY,
   DATE_TIME_FORMAT_OPTIONS,
+  SYSTEM_DEFAULT,
 } from 'gmp/locale/date';
-import {parseYesNo, YES_VALUE, NO_VALUE, YesNo} from 'gmp/parser';
+import {NO_VALUE, parseYesNo, YES_VALUE, YesNo} from 'gmp/parser';
 import {isEmpty} from 'gmp/utils/string';
 
 import Checkbox from 'web/components/form/Checkbox';
@@ -36,7 +36,7 @@ import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 
 import {getLangNameByCode} from 'web/pages/user-settings/helperFunctions';
 import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
-import useSettingsSave from 'web/pages/user-settings/useSettingsSave';
+import useSettingSave from 'web/pages/user-settings/useSettingSave';
 import {updateTimezone} from 'web/store/usersettings/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getTimezone} from 'web/store/usersettings/selectors';
@@ -92,18 +92,15 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
 
-  // Use the new settings hook
   const {
     getErrorMessage,
     saveSetting,
-    loadSettings,
     onInteraction,
     setErrorMessage,
     clearErrorMessage,
-  } = useSettingsSave();
+  } = useSettingSave();
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-  // Read current timezone from store
   const storeTimezone = useShallowEqualSelector(getTimezone) ?? '';
 
   const timezone = useMemo(
@@ -139,7 +136,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     [userDefaultsSelector],
   );
 
-  const maxRowsPerPage = userDefaultsSelector.getByName('maxrowsperpage') || {};
+  const maxRowsPerPage = userDefaultsSelector.getByName('maxrowsperpage') ?? {};
 
   const autoCacheRebuild = useMemo(
     () => userDefaultsSelector.getByName('autocacherebuild') ?? {},
@@ -235,7 +232,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     dispatch(updateTimezone(gmp)(timezoneState as string));
 
     await saveSetting(
-      timezone.id,
+      'Timezone',
       'timezone',
       timezoneState as string,
       setTimezoneEditMode,
@@ -270,21 +267,34 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
       }
 
       if (isUserInterfaceTimeDateDefaultState === YES_VALUE) {
-        await gmp.user.saveSetting(userInterfaceTimeFormat.id, SYSTEM_DEFAULT);
-        await gmp.user.saveSetting(userInterfaceDateFormat.id, SYSTEM_DEFAULT);
-      } else {
-        await gmp.user.saveSetting(
+        await saveSetting(
           userInterfaceTimeFormat.id,
-          timeFormatState as string,
+          'userInterfaceTimeFormat',
+          SYSTEM_DEFAULT,
+          () => {},
         );
-        await gmp.user.saveSetting(
+        await saveSetting(
           userInterfaceDateFormat.id,
+          'userInterfaceDateFormat',
+          SYSTEM_DEFAULT,
+          () => {},
+        );
+      } else {
+        await saveSetting(
+          userInterfaceTimeFormat.id,
+          'userInterfaceTimeFormat',
+          timeFormatState as string,
+          () => {},
+        );
+        await saveSetting(
+          userInterfaceDateFormat.id,
+          'userInterfaceDateFormat',
           dateFormatState as string,
+          () => {},
         );
       }
 
       setDateTimeFormatEditMode(false);
-      loadSettings();
       onInteraction();
     } catch (error) {
       setErrorMessage(

@@ -119,4 +119,26 @@ describe('UserSetting Defaults reducer tests', () => {
       isLoading: false,
     });
   });
+
+  test('should optimistically update a user setting', () => {
+    const action = {
+      type: 'USER_SETTINGS_DEFAULTS_OPTIMISTIC_UPDATE',
+      name: 'theme',
+      value: 'dark',
+    };
+    const state = {
+      byName: {
+        theme: {value: 'light', other: 'meta'},
+        foo: {value: 'bar'},
+      },
+      isLoading: false,
+    };
+    expect(reducer(state, action)).toEqual({
+      byName: {
+        theme: {value: 'dark', other: 'meta'},
+        foo: {value: 'bar'},
+      },
+      isLoading: false,
+    });
+  });
 });

@@ -3,23 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState, useCallback} from 'react';
+import {useCallback, useState} from 'react';
+import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {useDispatch} from 'react-redux';
+import {transformSettingName} from 'gmp/commands/users';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+
+import {
+  loadUserSettingDefault,
+  loadUserSettingDefaults,
+  loadingActions,
+} from 'web/store/usersettings/defaults/actions';
 
 /**
  * Custom hook for managing user settings
  * Provides functions for saving settings and managing error messages
  */
-const useSettingsSave = () => {
+const useSettingSave = () => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [_] = useTranslation();
 
-  // Map of field-specific error messages, keyed by setting ID or name
   const [errorMessages, setErrorMessages] = useState<Record<string, string>>(
     {},
   );
@@ -28,6 +34,14 @@ const useSettingsSave = () => {
     // @ts-expect-error
     dispatch(loadUserSettingDefaults(gmp)());
   }, [dispatch, gmp]);
+
+  const loadSingleSetting = useCallback(
+    (settingId: string, silent = false) => {
+      // @ts-expect-error
+      dispatch(loadUserSettingDefault(gmp)(settingId, silent));
+    },
+    [dispatch, gmp],
+  );
 
   const onInteraction = useCallback(() => {
     // @ts-expect-error
@@ -52,30 +66,63 @@ const useSettingsSave = () => {
     ): Promise<void> => {
       try {
         if (settingId) {
+          const transformedName = transformSettingName(settingName);
+          dispatch(
+            loadingActions.optimisticUpdate(
+              settingId,
+              transformedName,
+              String(value),
+            ),
+          );
+        }
+
+        setEditMode(false);
+
+        if (settingId) {
           await gmp.user.saveSetting(settingId, String(value));
         }
-        setEditMode(false);
-        loadSettings();
+
         onInteraction();
-        // Clear error message for this specific setting
+
         setErrorMessages(prev => ({
           ...prev,
           [settingName]: '',
         }));
+        showSuccessNotification(
+          _('Setting saved successfully'),
+          _('Your changes have been saved.'),
+        );
       } catch (error) {
-        // Preserve the original error message from the backend
         const message =
           // @ts-expect-error
           error.message ?? _('An error occurred');
-        // Set error for this specific setting
         setErrorMessages(prev => ({
           ...prev,
           [settingName]: message,
         }));
+
+        if (settingId) {
+          loadSingleSetting(settingId, true);
+        }
+
+        setEditMode(true);
+
         console.error(error);
       }
     },
-    [_, gmp.user, loadSettings, onInteraction],
+    [_, dispatch, gmp.user, loadSingleSetting, onInteraction],
+  );
+
+  /**
+   * Get error message for a specific setting
+   *
+   * @param settingName - The name of the setting to get error for
+   */
+  const getErrorMessage = useCallback(
+    (settingName: string) => {
+      return errorMessages[settingName] || '';
+    },
+    [errorMessages],
   );
 
   /**
@@ -113,23 +160,12 @@ const useSettingsSave = () => {
     [],
   );
 
-  /**
-   * Get error message for a specific setting
-   *
-   * @param settingName - The name of the setting to get error for
-   */
-  const getErrorMessage = useCallback(
-    (settingName: string) => {
-      return errorMessages[settingName] || '';
-    },
-    [errorMessages],
-  );
-
   return {
     errorMessages,
     getErrorMessage,
     saveSetting,
     loadSettings,
+    loadSingleSetting,
     onInteraction,
     clearErrorMessage,
     clearAllErrorMessages,
@@ -137,4 +173,4 @@ const useSettingsSave = () => {
   };
 };
 
-export default useSettingsSave;
+export default useSettingSave;

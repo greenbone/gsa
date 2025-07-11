@@ -210,13 +210,11 @@ describe('UserSettingsPage', () => {
 
       expect(screen.getByText('Date & Time Format')).toBeVisible();
 
-      // Using getByRole to find the row with the Date & Time Format
       const dateTimeFormatRow = screen
         .getByText('Date & Time Format')
         .closest('tr');
       expect(dateTimeFormatRow).not.toBeNull();
 
-      // Check for the time and date format text in the value cell (second cell)
       const cells = dateTimeFormatRow
         ? within(dateTimeFormatRow).getAllByRole('cell')
         : [];

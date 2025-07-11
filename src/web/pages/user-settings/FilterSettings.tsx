@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState, useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/users';
@@ -20,9 +20,12 @@ import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
-import useSettingsSave from 'web/pages/user-settings/useSettingsSave';
+import useSettingSave from 'web/pages/user-settings/useSettingSave';
 import {selector as filtersSelector} from 'web/store/entities/filters';
-import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
+import {
+  defaultFilterLoadingActions,
+  loadUserSettingsDefaultFilter,
+} from 'web/store/usersettings/defaultfilters/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
@@ -202,7 +205,7 @@ export const FilterSettings = () => {
     onInteraction,
     setErrorMessage,
     clearErrorMessage,
-  } = useSettingsSave();
+  } = useSettingSave();
 
   const filters =
     useShallowEqualSelector(state =>
@@ -244,22 +247,35 @@ export const FilterSettings = () => {
         return;
       }
 
+      if (entityType) {
+        dispatch(
+          defaultFilterLoadingActions.optimisticUpdate(entityType, values[key]),
+        );
+      }
+
       await saveSetting(settingId, key, values[key], value =>
         setIsEditing(editState => ({...editState, [key]: value})),
       );
 
       if (entityType) {
-        // @ts-expect-error
-        dispatch(loadUserSettingsDefaultFilter(gmp)(entityType));
+        setValues(prevValues => ({
+          ...prevValues,
+          [key]: values[key],
+        }));
       }
     } catch (error) {
       console.error(`Failed to save ${key}:`, error);
       // @ts-expect-error
       const message = error.message ?? _('Failed to save filter setting');
       setErrorMessage(key, message);
+
+      const entityType = FILTER_NAME_TO_ENTITY_TYPE[key];
+      if (entityType) {
+        // @ts-expect-error
+        dispatch(loadUserSettingsDefaultFilter(gmp)(entityType));
+      }
     }
   };
-
   const cancelField = (key: (typeof FILTER_NAMES)[number]) => {
     const entityType = FILTER_NAME_TO_ENTITY_TYPE[key];
     const filter = filtersDefaultSelector?.getFilter(entityType);
