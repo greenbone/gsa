@@ -5,6 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, rendererWithTable} from 'web/testing';
+import Capabilities from 'gmp/capabilities/capabilities';
+import EverythingCapabilities from 'gmp/capabilities/everything';
 import {
   SettingTableRow,
   ToolBarIcons,
@@ -21,7 +23,9 @@ describe('UserSettingsPageHelpers', () => {
       const title = 'Test Title';
       const type = 'testType';
 
-      const {render} = rendererWithTable({});
+      const {render} = rendererWithTable({
+        capabilities: new EverythingCapabilities(),
+      });
       render(<SettingTableRow setting={setting} title={title} type={type} />);
 
       expect(screen.getByText(title)).toBeVisible();
@@ -70,6 +74,7 @@ describe('UserSettingsPageHelpers', () => {
         const {render} = rendererWith({
           gmp: {settings: {manualUrl: 'test/'}},
           router: true,
+          capabilities: new Capabilities(),
         });
         render(
           <ToolBarIcons
