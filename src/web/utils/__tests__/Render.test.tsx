@@ -5,7 +5,11 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import date from 'gmp/models/date';
-import {generateFilename, renderSelectItems} from 'web/utils/Render';
+import {
+  generateFilename,
+  renderSelectItems,
+  renderYesNo,
+} from 'web/utils/Render';
 
 describe('renderSelectItems test', () => {
   test('should convert entities list', () => {
@@ -172,5 +176,26 @@ describe('generateFilename tests', () => {
   test('should return fall back filename, if no filename was generated', () => {
     const filename = generateFilename({});
     expect(filename).toEqual('unnamed.unknown');
+  });
+});
+
+describe('renderYesNo tests', () => {
+  test.each([
+    {value: true, expected: 'Yes'},
+    {value: 1, expected: 'Yes'},
+    {value: '1', expected: 'Yes'},
+    {value: 'Yes', expected: 'Yes'},
+    {value: 'yes', expected: 'Yes'},
+    {value: false, expected: 'No'},
+    {value: 0, expected: 'No'},
+    {value: '0', expected: 'No'},
+    {value: 'No', expected: 'No'},
+    {value: 'no', expected: 'No'},
+    {value: undefined, expected: 'Unknown'},
+    {value: null, expected: 'Unknown'},
+    {value: '', expected: 'Unknown'},
+    {value: 'foo', expected: 'Unknown'},
+  ])('should return $expected for for $value', ({value, expected}) => {
+    expect(renderYesNo(value)).toBe(expected);
   });
 });

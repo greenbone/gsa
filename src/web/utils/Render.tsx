@@ -8,6 +8,7 @@ import {format} from 'd3-format';
 import {getFormattedDate} from 'gmp/locale/date';
 import {_} from 'gmp/locale/lang';
 import date, {Date} from 'gmp/models/date';
+import {YesNo} from 'gmp/parser';
 import {typeName, getEntityType, EntityType} from 'gmp/utils/entitytype';
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
@@ -92,7 +93,9 @@ export const na = (value: string) => {
   return isEmpty(value) ? _('N/A') : value;
 };
 
-export const renderYesNo = (value: string | number | boolean) => {
+export const renderYesNo = (
+  value?: YesNo | string | number | boolean | null,
+) => {
   switch (value) {
     case true:
     case 1:
