@@ -48,6 +48,7 @@ const createGmpMock = (userSettings = {}) => {
       getSetting: testing.fn().mockReturnValue(mockGetSettingPromise),
       currentSettings: testing.fn().mockResolvedValue(userSettings),
       saveSettings: testing.fn().mockResolvedValue({}),
+      renewSession: testing.fn().mockResolvedValue({}),
     },
     alerts: {get: mockGet},
     credentials: {get: mockGet},
