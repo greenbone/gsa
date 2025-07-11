@@ -4,10 +4,12 @@
  */
 
 import {describe, expect, test} from '@gsa/testing';
-import {render, screen} from 'web/testing';
+import {rendererWith, screen} from 'web/testing';
+import EverythingCapabilities from 'gmp/capabilities/everything';
 import Credential, {SNMP_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import CredentialDetails from 'web/pages/credentials/Details';
 
+const capabilities = new EverythingCapabilities();
 const defaultEntity = Credential.fromElement({
   _id: 'c1',
   name: 'test-cred',
@@ -36,6 +38,7 @@ const defaultEntity = Credential.fromElement({
 
 describe('CredentialDetails', () => {
   test('should render basic credential details', () => {
+    const {render} = rendererWith({capabilities});
     render(<CredentialDetails entity={defaultEntity} />);
     expect(screen.getByText('Test credential comment')).toBeVisible();
     expect(screen.getByText('Yes')).toBeVisible();
@@ -43,6 +46,7 @@ describe('CredentialDetails', () => {
   });
 
   test('should render realm and kdcs when credential type is KRB5', () => {
+    const {render} = rendererWith({capabilities});
     render(<CredentialDetails entity={defaultEntity} />);
     expect(screen.getByText('EXAMPLE.REALM')).toBeVisible();
     expect(screen.getByText('kdc1.example.com')).toBeVisible();
@@ -63,12 +67,14 @@ describe('CredentialDetails', () => {
     // @ts-expect-error: test override
     entity.privacy = {algorithm: ''};
 
+    const {render} = rendererWith({capabilities});
     render(<CredentialDetails entity={entity} />);
     expect(screen.getByText('sha1')).toBeVisible();
     expect(screen.getByText('None')).toBeVisible();
   });
 
   test('should render targets and scanners as links', () => {
+    const {render} = rendererWith({capabilities});
     render(<CredentialDetails entity={defaultEntity} />);
     expect(screen.getByText('Target One')).toBeVisible();
     expect(screen.getByText('Target Two')).toBeVisible();
@@ -85,6 +91,7 @@ describe('CredentialDetails', () => {
       realm: undefined,
       kdcs: undefined,
     });
+    const {render} = rendererWith({capabilities});
     render(<CredentialDetails entity={entity} />);
     expect(screen.queryByText('Key Distribution Center')).not.toBeNull();
   });
