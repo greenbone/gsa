@@ -411,6 +411,9 @@ export class UserCommand extends EntityCommand<User, PortListElement> {
     return this.httpPost(data);
   }
 
+  /**
+   * @deprecated Use saveSetting instead.
+   */
   saveSettings(data: SaveSettingsArguments) {
     log.debug('Saving settings', data);
 
@@ -487,16 +490,17 @@ export class UserCommand extends EntityCommand<User, PortListElement> {
     });
   }
 
-  saveSetting(settingId: string, settingValue: string | number) {
+  async saveSetting(settingId: string, settingValue: string | number) {
     log.debug(`Saving setting ${settingId} with value ${settingValue}`);
     try {
-      return this.httpPost({
+      return await this.httpPost({
         cmd: 'save_setting',
         setting_id: settingId,
         setting_value: settingValue,
       });
     } catch (error) {
       log.warn(`Failed to save setting ${settingId}: ${error}`);
+      throw error; // Re-throw the error so calling code can handle it
     }
   }
 

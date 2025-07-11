@@ -28,6 +28,7 @@ interface TableHeadProps {
   sortBy?: ByType;
   title?: string;
   width?: string;
+  withBorder?: boolean;
   onSortChange?: (sortBy: ByType) => void;
 }
 
@@ -41,6 +42,7 @@ const TableHead = ({
   sort = true,
   sortBy,
   title,
+  withBorder = true,
   onSortChange,
   ...other
 }: TableHeadProps) => {
@@ -90,7 +92,8 @@ const TableHead = ({
 export default styled(TableHead)`
   background-color: ${Theme.white};
   color: ${Theme.black};
-  border-top: 1px solid ${Theme.lightGray};
+  border-top: ${props =>
+    props.withBorder ? `1px solid ${Theme.lightGray}` : 'none'};
   font-weight: bold;
   width: ${props => props.width};
 
