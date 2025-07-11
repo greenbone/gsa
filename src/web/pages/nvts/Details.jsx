@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {TAG_NA} from 'gmp/models/nvt';
-import {isDefined, isNumber} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import Severitybar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
@@ -23,6 +23,7 @@ import References from 'web/pages/nvts/References';
 import Solution from 'web/pages/nvts/Solution';
 import PropTypes from 'web/utils/PropTypes';
 import {na, getTranslatableSeverityOrigin} from 'web/utils/Render';
+import {renderPercentile, renderScore} from 'web/utils/severity';
 
 const NvtDetails = ({entity, links = true}) => {
   const [_] = useTranslation();
@@ -96,18 +97,12 @@ const NvtDetails = ({entity, links = true}) => {
                 </TableData>
                 <TableRow>
                   <TableData>{_('EPSS Score')}</TableData>
-                  <TableData>
-                    {isNumber(epss?.maxSeverity?.score)
-                      ? epss?.maxSeverity?.score.toFixed(5)
-                      : _('N/A')}
-                  </TableData>
+                  <TableData>{renderScore(epss?.maxSeverity?.score)}</TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>{_('EPSS Percentage')}</TableData>
+                  <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
-                    {isNumber(epss?.maxSeverity?.percentile)
-                      ? `${(epss.maxSeverity.percentile * 1).toFixed(3)}%`
-                      : _('N/A')}
+                    {renderPercentile(epss?.maxSeverity?.percentile)}
                   </TableData>
                 </TableRow>
                 <TableRow>
@@ -139,18 +134,12 @@ const NvtDetails = ({entity, links = true}) => {
                 </TableData>
                 <TableRow>
                   <TableData>{_('EPSS Score')}</TableData>
-                  <TableData>
-                    {isNumber(epss?.maxEpss?.score)
-                      ? epss?.maxEpss?.score.toFixed(5)
-                      : _('N/A')}
-                  </TableData>
+                  <TableData>{renderScore(epss?.maxEpss?.score)}</TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>{_('EPSS Percentage')}</TableData>
+                  <TableData>{_('EPSS Percentile')}</TableData>
                   <TableData>
-                    {isNumber(epss?.maxEpss?.percentile)
-                      ? `${(epss?.maxEpss?.percentile * 1).toFixed(3)}%`
-                      : _('N/A')}
+                    {renderPercentile(epss?.maxEpss?.percentile)}
                   </TableData>
                 </TableRow>
                 <TableRow>
