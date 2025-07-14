@@ -7,13 +7,13 @@ import React from 'react';
 import EntitiesActions from 'web/entities/Actions';
 
 const withEntitiesActions = Component => {
-  const EnitiesActionsWrapper = props => (
+  const EntitiesActionsWrapper = props => (
     <EntitiesActions {...props}>
-      {actionprops => <Component {...actionprops} />}
+      {actionProps => <Component {...actionProps} />}
     </EntitiesActions>
   );
 
-  return EnitiesActionsWrapper;
+  return EntitiesActionsWrapper;
 };
 
 export default withEntitiesActions;
