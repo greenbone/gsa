@@ -3,45 +3,41 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {parseInt} from 'gmp/parser';
+import Filter from 'gmp/models/filter';
+import {YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface ApplyOverridesGroupProps {
+  filter?: Filter;
+  name?: string;
+  overrides?: YesNo;
+  onChange: (value: YesNo, name?: string) => void;
+}
 
 const ApplyOverridesGroup = ({
   filter,
   name = 'apply_overrides',
   overrides,
   onChange,
-}) => {
+}: ApplyOverridesGroupProps) => {
   const [_] = useTranslation();
 
   if (isDefined(filter)) {
-    overrides = filter.get('apply_overrides');
+    overrides = filter.get('apply_overrides') as YesNo | undefined;
   }
   return (
     <FormGroup title={_('Apply Overrides')}>
       <YesNoRadio
-        convert={parseInt}
         data-testid="apply-overrides-yesnoradio"
         name={name}
-        noValue={0}
         value={overrides}
-        yesValue={1}
         onChange={onChange}
       />
     </FormGroup>
   );
-};
-
-ApplyOverridesGroup.propTypes = {
-  filter: PropTypes.filter,
-  name: PropTypes.string,
-  overrides: PropTypes.number,
-  onChange: PropTypes.func,
 };
 
 export default ApplyOverridesGroup;
