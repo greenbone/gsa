@@ -17,13 +17,13 @@ const SortButton = styled.button`
 export const ASC = 'asc';
 export const DESC = 'desc';
 
-export type ByType = typeof ASC | typeof DESC;
+export type SortDirectionType = typeof ASC | typeof DESC;
 
 interface SortByProps {
-  by: ByType;
+  by: string;
   children?: React.ReactNode;
   className?: string;
-  onClick?: (by: ByType) => void;
+  onClick?: (by: string) => void;
 }
 
 const SortBy = ({by, children, className, onClick}: SortByProps) => {
