@@ -27,8 +27,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = screen.getRadioInputs();
-    fireEvent.click(radio[1]);
+    fireEvent.click(screen.getByName('Workaround'));
 
     expect(handleChange).toHaveBeenCalled();
     expect(handleChange.mock.calls[0][0].toFilterString()).toEqual(
@@ -44,8 +43,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = screen.getRadioInputs();
-    expect(radio[1].checked).toEqual(true);
+    expect(screen.getByName('Workaround')).toBeChecked();
   });
 
   test('should uncheck radio of previous choice', () => {
@@ -57,17 +55,15 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter1} onChange={handleChange} />,
     );
 
-    const radio = screen.getRadioInputs();
-
-    expect(radio[1].checked).toEqual(true);
-    expect(radio[2].checked).toEqual(false);
+    expect(screen.getByName('Workaround')).toBeChecked();
+    expect(screen.getByName('Mitigation')).not.toBeChecked();
 
     rerender(
       <SolutionTypesFilterGroup filter={filter2} onChange={handleChange} />,
     );
 
-    expect(radio[1].checked).toEqual(false);
-    expect(radio[2].checked).toEqual(true);
+    expect(screen.getByName('Workaround')).not.toBeChecked();
+    expect(screen.getByName('Mitigation')).toBeChecked();
   });
 
   test('should check "All" by default', () => {
@@ -78,7 +74,7 @@ describe('SolutionTypesFilterGroup tests', () => {
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
 
-    const radio = screen.getRadioInputs();
-    expect(radio[0].checked).toEqual(true);
+    const radio = screen.getByName('All');
+    expect(radio).toBeChecked();
   });
 });

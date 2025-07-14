@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
@@ -16,14 +16,23 @@ import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
 const StyledLayout = styled(Layout)`
   flex-grow: 0;
 `;
 
-const SolutionTypesFilterGroup = ({filter, onChange}) => {
+interface SolutionTypesFilterGroupProps {
+  filter: Filter;
+  onChange: (filter: Filter) => void;
+}
+
+const SolutionTypesFilterGroup = ({
+  filter,
+  onChange,
+}: SolutionTypesFilterGroupProps) => {
   const [_] = useTranslation();
-  const handleSolutionTypeChange = (value, solutionType) => {
+
+  const handleSolutionTypeChange = (solutionType: string) => {
     const filteredSolutionType = filter.get('solution_type');
 
     if (!isDefined(solutionType) || solutionType === 'All') {
@@ -33,7 +42,7 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
     }
   };
 
-  const solutionType = filter.get('solution_type');
+  const solutionType = filter.get('solution_type') as string | undefined;
 
   return (
     <FormGroup title={_('Solution Type')}>
@@ -48,6 +57,7 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     data-testid="filter-solution-all"
                     name="All"
                     title={_('All')}
+                    value="All"
                     onChange={handleSolutionTypeChange}
                   />
                 </Row>
@@ -59,6 +69,7 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     data-testid="filter-solution-workaround"
                     name="Workaround"
                     title={_('Workaround')}
+                    value="Workaround"
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="Workaround" />
@@ -71,6 +82,7 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     data-testid="filter-solution-mitigation"
                     name="Mitigation"
                     title={_('Mitigation')}
+                    value="Mitigation"
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="Mitigation" />
@@ -85,6 +97,7 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     data-testid="filter-solution-vendor-fix"
                     name="VendorFix"
                     title={_('Vendor Fix')}
+                    value="VendorFix"
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="VendorFix" />
@@ -97,6 +110,7 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     data-testid="filter-solution-none-available"
                     name="NoneAvailable"
                     title={_('None available')}
+                    value="NoneAvailable"
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="NoneAvailable" />
@@ -109,6 +123,7 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
                     data-testid="filter-solution-will-not-fix"
                     name="WillNotFix"
                     title={_('Will not fix')}
+                    value="WillNotFix"
                     onChange={handleSolutionTypeChange}
                   />
                   <SolutionTypeIcon type="WillNotFix" />
@@ -120,11 +135,6 @@ const SolutionTypesFilterGroup = ({filter, onChange}) => {
       </StyledLayout>
     </FormGroup>
   );
-};
-
-SolutionTypesFilterGroup.propTypes = {
-  filter: PropTypes.filter.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default SolutionTypesFilterGroup;
