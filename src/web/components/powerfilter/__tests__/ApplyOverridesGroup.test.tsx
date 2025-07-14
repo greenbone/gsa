@@ -39,7 +39,6 @@ describe('ApplyOverridesGroup tests', () => {
 
     const radio = screen.getRadioInputs();
     fireEvent.click(radio[1]);
-
     expect(handleChange).toHaveBeenCalledWith(0, 'applyOverrides');
   });
 
@@ -57,8 +56,7 @@ describe('ApplyOverridesGroup tests', () => {
     );
 
     const radio = screen.getRadioInputs();
-
-    expect(radio[0].checked).toEqual(true);
+    expect(radio[0]).toBeChecked();
   });
 
   test('should uncheck radio of previous choice', () => {
@@ -77,8 +75,8 @@ describe('ApplyOverridesGroup tests', () => {
 
     const radio = screen.getRadioInputs();
 
-    expect(radio[0].checked).toEqual(true);
-    expect(radio[1].checked).toEqual(false);
+    expect(radio[0]).toBeChecked();
+    expect(radio[1]).not.toBeChecked();
 
     rerender(
       <ApplyOverridesGroup
@@ -89,8 +87,8 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    expect(radio[0].checked).toEqual(false);
-    expect(radio[1].checked).toEqual(true);
+    expect(radio[0]).not.toBeChecked();
+    expect(radio[1]).toBeChecked();
   });
 
   test('should use filter value by default', () => {
@@ -107,8 +105,8 @@ describe('ApplyOverridesGroup tests', () => {
     );
 
     const radio = screen.getRadioInputs();
-    expect(radio[0].checked).toEqual(true);
-    expect(radio[1].checked).toEqual(false);
+    expect(radio[0]).toBeChecked();
+    expect(radio[1]).not.toBeChecked();
   });
 
   test('should use overrides', () => {
@@ -123,6 +121,6 @@ describe('ApplyOverridesGroup tests', () => {
     );
 
     const radio = screen.getRadioInputs();
-    expect(radio[0].checked).toEqual(true);
+    expect(radio[0]).toBeChecked();
   });
 });
