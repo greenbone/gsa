@@ -4,7 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {openSelectElement, screen, render, fireEvent} from 'web/testing';
+import {
+  openSelectElement,
+  screen,
+  render,
+  fireEvent,
+  changeInputValue,
+} from 'web/testing';
 import RelationSelector from 'web/components/powerfilter/RelationSelector';
 
 describe('Relation Selector Tests', () => {
@@ -21,13 +27,11 @@ describe('Relation Selector Tests', () => {
     const onChange = testing.fn();
     render(<RelationSelector relation="<" onChange={onChange} />);
 
-    let domItems = screen.getSelectItemElements();
-    expect(screen.queryByRole('option')).not.toBeInTheDocument();
+    expect(screen.getSelectItemElements().length).toEqual(4);
+    const select = screen.getByTestId<HTMLSelectElement>('relation-selector');
+    await openSelectElement(select);
 
-    await openSelectElement();
-
-    domItems = screen.getSelectItemElements();
-
+    const domItems = screen.getSelectItemElements();
     expect(domItems.length).toEqual(4);
     expect(domItems[0]).toHaveTextContent('--');
     expect(domItems[1]).toHaveTextContent('is equal to');
@@ -40,12 +44,11 @@ describe('Relation Selector Tests', () => {
 
     render(<RelationSelector relation="<" onChange={onChange} />);
 
-    await openSelectElement();
+    const select = screen.getByTestId<HTMLSelectElement>('relation-selector');
+    await openSelectElement(select);
 
     const domItems = screen.getSelectItemElements();
-
     fireEvent.click(domItems[1]);
-
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('=', undefined);
   });
@@ -55,15 +58,13 @@ describe('Relation Selector Tests', () => {
 
     render(<RelationSelector relation="=" onChange={onChange} />);
 
-    const displayedValue = screen.getSelectElement();
-    expect(displayedValue).toHaveValue('is equal to');
+    const select = screen.getByTestId<HTMLSelectElement>('relation-selector');
+    expect(select).toHaveValue('is equal to');
 
-    await openSelectElement();
+    await openSelectElement(select);
 
     const domItems = screen.getSelectItemElements();
-
     fireEvent.click(domItems[3]);
-
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('<', undefined);
   });
@@ -74,15 +75,12 @@ describe('Relation Selector Tests', () => {
 
     fireEvent.click(screen.getByRole('textbox'));
 
-    let domItems = screen.getAllByRole('option');
-    expect(domItems.length).toEqual(4);
+    expect(screen.getAllByRole('option').length).toEqual(4);
 
-    fireEvent.change(screen.getByRole('textbox'), {target: {value: 'than'}});
-    domItems = screen.getAllByRole('option');
-    expect(domItems.length).toEqual(2);
+    changeInputValue(screen.getByRole('textbox'), 'than');
+    expect(screen.getAllByRole('option').length).toEqual(2);
 
-    fireEvent.change(screen.getByRole('textbox'), {target: {value: 'to'}});
-    domItems = screen.getAllByRole('option');
-    expect(domItems.length).toEqual(1);
+    changeInputValue(screen.getByRole('textbox'), 'to');
+    expect(screen.getAllByRole('option').length).toEqual(1);
   });
 });
