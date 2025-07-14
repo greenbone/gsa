@@ -29,7 +29,7 @@ export interface Owner {
   name: string;
 }
 
-interface Permission {
+export interface EntityModelPermissionElement {
   name: string;
 }
 
@@ -38,7 +38,7 @@ export interface EntityModelElement extends BaseModelElement {
   end_time?: string;
   timestamp?: string;
   permissions?: {
-    permission: Permission[];
+    permission: EntityModelPermissionElement | EntityModelPermissionElement[];
   };
   user_tags?: {
     tag: UserTagElement[];
