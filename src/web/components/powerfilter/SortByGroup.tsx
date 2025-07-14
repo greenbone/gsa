@@ -3,13 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter, {FilterSortOrder} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+export interface SortByField {
+  name: string;
+  displayName: string;
+}
+
+interface SortByGroupProps {
+  by?: string;
+  fields?: SortByField[];
+  filter?: Filter;
+  order?: FilterSortOrder;
+  onSortByChange?: (value: string) => void;
+  onSortOrderChange?: (value: FilterSortOrder) => void;
+}
 
 const SortByGroup = ({
   by,
@@ -18,7 +31,7 @@ const SortByGroup = ({
   order,
   onSortByChange,
   onSortOrderChange,
-}) => {
+}: SortByGroupProps) => {
   const [_] = useTranslation();
   const renderSortFieldItems = () => {
     return fields.map(({name: value, displayName: label}) => ({
@@ -58,20 +71,6 @@ const SortByGroup = ({
       />
     </FormGroup>
   );
-};
-
-SortByGroup.propTypes = {
-  by: PropTypes.string,
-  fields: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      displayName: PropTypes.toString,
-    }),
-  ),
-  filter: PropTypes.filter,
-  order: PropTypes.oneOf(['sort', 'sort-reverse']),
-  onSortByChange: PropTypes.func,
-  onSortOrderChange: PropTypes.func,
 };
 
 export default SortByGroup;
