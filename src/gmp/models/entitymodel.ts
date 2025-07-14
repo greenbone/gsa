@@ -41,7 +41,7 @@ export interface EntityModelElement extends BaseModelElement {
     permission: EntityModelPermissionElement | EntityModelPermissionElement[];
   };
   user_tags?: {
-    tag: UserTagElement[];
+    tag: UserTagElement | UserTagElement[];
   };
   writable?: number;
   orphan?: number;
