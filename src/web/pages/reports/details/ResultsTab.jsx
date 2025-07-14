@@ -14,7 +14,6 @@ import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
   NO_RELOAD,
 } from 'web/components/loading/Reload';
-import SortBy from 'web/components/sortby/SortBy';
 import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
 import ResultsTable from 'web/pages/results/Table';
@@ -26,6 +25,7 @@ import {pageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
+import SortDirection from 'web/utils/SortDirection';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
@@ -174,7 +174,7 @@ class ResultsTab extends React.Component {
       reverse || !isDefined(resultsFilter)
         ? reverseField
         : resultsFilter.get('sort');
-    const sortDir = reverse ? SortBy.DESC : SortBy.ASC;
+    const sortDir = reverse ? SortDirection.DESC : SortDirection.ASC;
 
     if (!isDefined(sortBy)) {
       // sort by severity by default

@@ -19,7 +19,6 @@ import {
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import SortBy from 'web/components/sortby/SortBy';
 import TagsDialog from 'web/entities/TagsDialog';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import TagDialog from 'web/pages/tags/Dialog';
@@ -32,6 +31,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
+import SortDirection from 'web/utils/SortDirection';
 import {withRouter} from 'web/utils/withRouter';
 import withTranslation from 'web/utils/withTranslation';
 
@@ -520,7 +520,7 @@ class EntitiesContainer extends React.Component {
       reverse || !isDefined(loadedFilter)
         ? reverseField
         : loadedFilter.get('sort');
-    const sortDir = reverse ? SortBy.DESC : SortBy.ASC;
+    const sortDir = reverse ? SortDirection.DESC : SortDirection.ASC;
     return (
       <React.Fragment>
         {children({

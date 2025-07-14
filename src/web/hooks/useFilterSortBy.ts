@@ -6,13 +6,10 @@
 import {useCallback} from 'react';
 import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-
-const ASC = 'asc';
-const DESC = 'desc';
+import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
 
 type ChangeFilterFunc = (filter: Filter) => void;
 type SortChangeFunc = (field: string) => void;
-type SortDirection = typeof ASC | typeof DESC;
 
 /**
  * Hook to get the sort by field and direction from a filter
@@ -24,7 +21,7 @@ type SortDirection = typeof ASC | typeof DESC;
 const useFilterSortBy = (
   filter: Filter,
   changeFilter: ChangeFilterFunc,
-): [string | undefined, SortDirection, SortChangeFunc] => {
+): [string | undefined, SortDirectionType, SortChangeFunc] => {
   const reverseField = isDefined(filter)
     ? (filter.get('sort-reverse') as string)
     : undefined;
@@ -33,7 +30,7 @@ const useFilterSortBy = (
     reverse || !isDefined(filter)
       ? reverseField
       : (filter.get('sort') as string);
-  const sortDir = reverse ? DESC : ASC;
+  const sortDir = reverse ? SortDirection.DESC : SortDirection.ASC;
 
   const sortChange = useCallback(
     (field: string) => {

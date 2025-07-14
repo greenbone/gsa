@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
-import Sort, {ByType, DESC} from 'web/components/sortby/SortBy';
+import SortBy from 'web/components/sortby/SortBy';
 import useTranslation from 'web/hooks/useTranslation';
+import SortDirection from 'web/utils/SortDirection';
 import Theme from 'web/utils/Theme';
 
 const SortSymbol = styled.span`
@@ -21,14 +21,14 @@ interface TableHeadProps {
   children?: React.ReactNode;
   className?: string;
   colSpan?: number;
-  currentSortBy?: ByType;
+  currentSortBy?: string;
   currentSortDir?: string;
   rowSpan?: number;
   sort?: boolean;
-  sortBy?: ByType;
+  sortBy?: string;
   title?: string;
   width?: string;
-  onSortChange?: (sortBy: ByType) => void;
+  onSortChange?: (sortBy: string) => void;
 }
 
 const TableHead = ({
@@ -55,10 +55,11 @@ const TableHead = ({
       );
     }
     const titleText =
-      currentSortDir === DESC
-        ? _('Sorted In Descending Order By {{sortBy}}', {sortBy: `${title}`})
-        : _('Sorted In Ascending Order By {{sortBy}}', {sortBy: `${title}`});
-    const Icon = currentSortDir === DESC ? ArrowDownIcon : ArrowUpIcon;
+      currentSortDir === SortDirection.DESC
+        ? _('Sorted In Descending Order By {{sortBy}}', {sortBy: String(title)})
+        : _('Sorted In Ascending Order By {{sortBy}}', {sortBy: String(title)});
+    const Icon =
+      currentSortDir === SortDirection.DESC ? ArrowDownIcon : ArrowUpIcon;
     return (
       <SortSymbol title={titleText}>
         &nbsp;
@@ -74,12 +75,12 @@ const TableHead = ({
   return (
     <th className={className} colSpan={colSpan} rowSpan={rowSpan}>
       {sort && sortBy && isDefined(onSortChange) ? (
-        <Sort by={sortBy} onClick={onSortChange}>
+        <SortBy by={sortBy} onClick={onSortChange}>
           <Layout {...other}>
             {children}
             {getSortSymbol()}
           </Layout>
-        </Sort>
+        </SortBy>
       ) : (
         <Layout {...other}>{children}</Layout>
       )}
