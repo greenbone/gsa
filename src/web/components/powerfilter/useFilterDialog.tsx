@@ -4,8 +4,13 @@
  */
 
 import {useCallback, useState} from 'react';
-import Filter from 'gmp/models/filter';
+import Filter, {FilterSortOrder} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
+
+export interface FilterDialogState {
+  filterName?: string;
+  saveNamedFilter?: boolean;
+}
 
 /**
  * React hook for handling filter dialog state
@@ -13,42 +18,51 @@ import {isDefined} from 'gmp/utils/identity';
  * @param {Filter} initialFilter
  * @returns Object
  */
-const useFilterDialog = initialFilter => {
+const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
+  initialFilter?: Filter,
+) => {
   const [originalFilter] = useState(initialFilter);
-  const [filter, setFilter] = useState(() =>
+  const [filter, setFilter] = useState<Filter>(() =>
     isDefined(initialFilter) ? initialFilter.copy() : new Filter(),
   );
-  const [filterDialogState, setFilterDialogState] = useState({});
+  const [filterDialogState, setFilterDialogState] =
+    useState<TFilterDialogState>({} as TFilterDialogState);
 
   const [filterString, setFilterString] = useState(() =>
     isDefined(initialFilter) ? initialFilter.toFilterCriteriaString() : '',
   );
 
-  const handleFilterChange = useCallback(filter => {
+  const handleFilterChange = useCallback((filter: Filter) => {
     setFilter(filter);
   }, []);
 
-  const handleFilterValueChange = useCallback((value, name, relation = '=') => {
-    setFilter(filter => filter.copy().set(name, value, relation));
-  }, []);
+  const handleFilterValueChange = useCallback(
+    (value: string, name: string, relation: string = '=') => {
+      setFilter(filter => filter.copy().set(name, value, relation));
+    },
+    [],
+  );
 
-  const handleSearchTermChange = useCallback((value, name, relation = '~') => {
-    setFilter(filter => filter.copy().set(name, `"${value}"`, relation));
-  }, []);
+  const handleSearchTermChange = useCallback(
+    (value: string, name: string, relation: string = '~') => {
+      setFilter(filter => filter.copy().set(name, `"${value}"`, relation));
+    },
+    [],
+  );
 
-  const handleFilterStringChange = useCallback(value => {
+  const handleFilterStringChange = useCallback((value: string) => {
     setFilterString(value);
   }, []);
 
-  const handleSortByChange = useCallback(value => {
+  const handleSortByChange = useCallback((value: string) => {
     setFilter(filter => filter.copy().setSortBy(value));
   }, []);
 
-  const handleSortOrderChange = useCallback(value => {
+  const handleSortOrderChange = useCallback((value: FilterSortOrder) => {
     setFilter(filter => filter.copy().setSortOrder(value));
   }, []);
 
-  const handleChange = useCallback((value, name) => {
+  const handleChange = useCallback((value: unknown, name: string) => {
     setFilterDialogState(state => ({...state, [name]: value}));
   }, []);
 
