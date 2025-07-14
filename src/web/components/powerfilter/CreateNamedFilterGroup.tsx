@@ -3,18 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface CreateNamedFilterGroupProps {
+  filterName?: string;
+  saveNamedFilter?: boolean;
+  onValueChange?: (value: string | boolean, name?: string) => void;
+}
 
 const CreateNamedFilterGroup = ({
   filterName = '',
   saveNamedFilter = false,
   onValueChange,
-}) => {
+}: CreateNamedFilterGroupProps) => {
   const [_] = useTranslation();
   return (
     <Row>
@@ -38,12 +42,6 @@ const CreateNamedFilterGroup = ({
       />
     </Row>
   );
-};
-
-CreateNamedFilterGroup.propTypes = {
-  filterName: PropTypes.string,
-  saveNamedFilter: PropTypes.bool,
-  onValueChange: PropTypes.func.isRequired,
 };
 
 export default CreateNamedFilterGroup;
