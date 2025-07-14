@@ -46,7 +46,7 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    await openSelectElement();
+    await openSelectElement(screen.getByName('sort_by') as HTMLSelectElement);
 
     const selectElements = screen.getSelectItemElements();
     expect(selectElements.length).toEqual(2);
@@ -76,12 +76,9 @@ describe('SortByGroup tests', () => {
     );
 
     const radio = screen.getRadioInputs();
-
-    expect(radio[0].checked).toEqual(true);
-    expect(radio[1].checked).toEqual(false);
-
-    const selectedValue = screen.getSelectElement();
-    expect(selectedValue).toHaveValue('Severity');
+    expect(radio[0]).toBeChecked;
+    expect(radio[1]).not.toBeChecked();
+    expect(screen.getByName('sort_by')).toHaveValue('severity');
 
     rerender(
       <SortByGroup
@@ -97,10 +94,9 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    expect(radio[0].checked).toEqual(false);
-    expect(radio[1].checked).toEqual(true);
-
-    expect(selectedValue).toHaveValue('Severity');
+    expect(radio[0]).not.toBeChecked();
+    expect(radio[1]).toBeChecked();
+    expect(screen.getByName('sort_by')).toHaveValue('severity');
   });
 
   test('should use by and order', () => {
@@ -121,12 +117,9 @@ describe('SortByGroup tests', () => {
 
     const radio = screen.getRadioInputs();
 
-    expect(radio[0].checked).toEqual(false);
-    expect(radio[1].checked).toEqual(true);
-
-    const selectedValue = screen.getSelectElement();
-
-    expect(selectedValue).toHaveValue('Solution Type');
+    expect(radio[0]).not.toBeChecked();
+    expect(radio[1]).toBeChecked();
+    expect(screen.getByName('sort_by')).toHaveValue('solution_type');
   });
 
   test('should call change handler of select', async () => {
@@ -148,7 +141,7 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    await openSelectElement();
+    await openSelectElement(screen.getByName('sort_by') as HTMLSelectElement);
 
     const selectElements = screen.getSelectItemElements();
     expect(selectElements.length).toEqual(2);
