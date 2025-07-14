@@ -15,7 +15,6 @@ describe('Task Trend Selector Tests', () => {
     const {element} = render(
       <TaskTrendGroup filter={filter} onChange={onChange} />,
     );
-
     expect(element).toBeVisible();
   });
 
@@ -25,14 +24,11 @@ describe('Task Trend Selector Tests', () => {
 
     render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
-    let domItems = screen.getSelectItemElements();
+    expect(screen.getSelectItemElements().length).toEqual(5);
 
-    expect(screen.queryByRole('option')).not.toBeInTheDocument();
+    await openSelectElement(screen.getByName('trend') as HTMLSelectElement);
 
-    await openSelectElement();
-
-    domItems = screen.getSelectItemElements();
-
+    const domItems = screen.getSelectItemElements();
     expect(domItems.length).toEqual(5);
     expect(domItems[0]).toHaveTextContent('Severity increased');
     expect(domItems[1]).toHaveTextContent('Severity decreased');
@@ -45,8 +41,8 @@ describe('Task Trend Selector Tests', () => {
 
     render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
-    const select = screen.getSelectElement();
-    expect(select).toHaveValue('Vulnerabilities did not change');
+    const select = screen.getByName('trend');
+    expect(select).toHaveValue('same');
   });
 
   test('should call onChange handler', async () => {
@@ -55,7 +51,7 @@ describe('Task Trend Selector Tests', () => {
 
     render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
-    await openSelectElement();
+    await openSelectElement(screen.getByName('trend') as HTMLSelectElement);
 
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[0]);
@@ -70,15 +66,19 @@ describe('Task Trend Selector Tests', () => {
 
     render(<TaskTrendGroup filter={filter} trend="up" onChange={onChange} />);
 
-    const select = screen.getSelectElement();
-    expect(select).toHaveValue('Severity increased');
+    const select = screen.getByName('trend') as HTMLSelectElement;
+    expect(select).toHaveValue('up');
 
-    await openSelectElement();
-
+    await openSelectElement(select);
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[2]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('more', 'trend');
+  });
+
+  test('should use title', () => {
+    render(<TaskTrendGroup />);
+    expect(screen.getByText('Trend')).toBeVisible();
   });
 });

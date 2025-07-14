@@ -3,17 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
+import {TaskTrend} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
+interface TaskTrendGroupProps {
+  trend?: TaskTrend;
+  name?: string;
+  filter?: Filter;
+  onChange?: (value: TaskTrend, name?: string) => void;
+}
+
+const TaskTrendGroup = ({
+  trend,
+  name = 'trend',
+  filter,
+  onChange,
+}: TaskTrendGroupProps) => {
   const [_] = useTranslation();
   if (!isDefined(trend) && isDefined(filter)) {
-    trend = filter.get('trend');
+    trend = filter.get('trend') as TaskTrend;
   }
   return (
     <FormGroup title={_('Trend')}>
@@ -28,17 +40,10 @@ const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
         ]}
         name={name}
         value={trend}
-        onChange={onChange}
+        onChange={onChange as (value: string) => void}
       />
     </FormGroup>
   );
-};
-
-TaskTrendGroup.propTypes = {
-  filter: PropTypes.filter.isRequired,
-  name: PropTypes.string,
-  trend: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default TaskTrendGroup;
