@@ -43,11 +43,11 @@ export interface EntityModelElement extends BaseModelElement {
   user_tags?: {
     tag: UserTagElement | UserTagElement[];
   };
-  writable?: number;
-  orphan?: number;
-  active?: number;
-  trash?: number;
-  in_use?: number;
+  writable?: YesNo;
+  orphan?: YesNo;
+  active?: YesNo;
+  trash?: YesNo;
+  in_use?: YesNo;
   owner?: Owner;
   summary?: string;
   comment?: string;
