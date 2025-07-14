@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
-import Sort, {ByType, DESC} from 'web/components/sortby/SortBy';
+import Sort, {DESC} from 'web/components/sortby/SortBy';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
@@ -21,14 +21,14 @@ interface TableHeadProps {
   children?: React.ReactNode;
   className?: string;
   colSpan?: number;
-  currentSortBy?: ByType;
+  currentSortBy?: string;
   currentSortDir?: string;
   rowSpan?: number;
   sort?: boolean;
-  sortBy?: ByType;
+  sortBy?: string;
   title?: string;
   width?: string;
-  onSortChange?: (sortBy: ByType) => void;
+  onSortChange?: (sortBy: string) => void;
 }
 
 const TableHead = ({
