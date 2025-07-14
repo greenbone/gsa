@@ -35,7 +35,7 @@ interface SaveDialogProps<TValues, TDefaultValues> {
   onClose: () => void; // function to call when dialog is closed
   onError?: (error: Error) => void; // function to call when an error occurs
   onErrorClose?: () => void; // function to call when error dialog is closed
-  onSave: (state: TValues & TDefaultValues) => Promise<void> | void; // function to call when save button is clicked
+  onSave?: (state: TValues & TDefaultValues) => Promise<void> | void; // function to call when save button is clicked
 }
 
 const SaveDialog = <TValues, TDefaultValues = {}>({
