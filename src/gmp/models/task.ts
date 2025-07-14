@@ -233,9 +233,9 @@ export interface TaskSlave {
 }
 
 export interface TaskObservers {
-  user?: string | string[];
-  role?: string | string[];
-  group?: string | string[];
+  user?: string[];
+  role?: string[];
+  group?: string[];
 }
 
 export interface TaskReport {
