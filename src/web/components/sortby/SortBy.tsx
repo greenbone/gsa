@@ -14,11 +14,6 @@ const SortButton = styled.button`
   font: inherit;
 `;
 
-export const ASC = 'asc';
-export const DESC = 'desc';
-
-export type SortDirectionType = typeof ASC | typeof DESC;
-
 interface SortByProps {
   by: string;
   children?: React.ReactNode;
@@ -39,8 +34,5 @@ const SortBy = ({by, children, className, onClick}: SortByProps) => {
     </SortButton>
   );
 };
-
-SortBy.ASC = ASC;
-SortBy.DESC = DESC;
 
 export default SortBy;
