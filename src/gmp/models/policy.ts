@@ -12,7 +12,7 @@ import {
   ScanConfigFamilyElement,
   ScanConfigNvts,
   ScanConfigPreferenceElement,
-  ScannerElement,
+  ScanConfigScannerElement,
 } from 'gmp/models/scanconfig';
 import {parseBoolean, YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
@@ -40,7 +40,7 @@ interface PolicyElement extends ModelElement {
   preferences?: {
     preference: PolicyPreferenceElement | PolicyPreferenceElement[];
   };
-  scanner?: ScannerElement;
+  scanner?: ScanConfigScannerElement;
   tasks?: {
     task: ModelElement | ModelElement[];
   };
