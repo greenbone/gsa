@@ -48,8 +48,8 @@ export interface ScanConfigPreferenceElement {
   value?: ScanConfigPreferenceValue;
 }
 
-export interface ScannerElement extends ModelElement {
-  __text: string;
+export interface ScanConfigScannerElement extends ModelElement {
+  __text?: string;
 }
 
 interface ScanConfigElement extends ModelElement {
@@ -71,7 +71,7 @@ interface ScanConfigElement extends ModelElement {
   preferences?: {
     preference?: ScanConfigPreferenceElement | ScanConfigPreferenceElement[];
   };
-  scanner?: ScannerElement;
+  scanner?: ScanConfigScannerElement;
   tasks?: {
     task: ModelElement | ModelElement[];
   };
