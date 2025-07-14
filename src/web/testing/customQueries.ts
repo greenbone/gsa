@@ -74,7 +74,7 @@ export const getSelectElement = (element?: HTMLElement) => {
  */
 export const queryAllSelectElements = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return queryAllByTestId(element, 'form-select');
+  return queryAllByTestId(element, 'form-select') as HTMLSelectElement[];
 };
 
 /**
