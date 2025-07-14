@@ -10,16 +10,46 @@ import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
+export type OnFilterCreatedFunc = (filter: Filter) => void;
+export type OnFilterChangedFunc = (filter: Filter) => void;
+
+interface UseFilterDialogSaveProps {
+  onClose?: () => void;
+  onFilterChanged?: OnFilterChangedFunc;
+  onFilterCreated?: OnFilterCreatedFunc;
+}
+
+export interface UseFilterDialogStateProps {
+  filterName?: string;
+  saveNamedFilter?: boolean;
+  filter: Filter;
+  filterString: string;
+  originalFilter: Filter;
+}
+
+interface UseFilterDialogReturn {
+  handleSave: () => Promise<void>;
+}
+
+export type UseFilterDialogSave = [() => Promise<void>] & UseFilterDialogReturn;
+
 const useFilterDialogSave = (
-  createFilterType,
-  {onClose, onFilterChanged, onFilterCreated},
-  {filterName, filter, filterString, originalFilter, saveNamedFilter},
-) => {
+  createFilterType: string,
+  {onClose, onFilterChanged, onFilterCreated}: UseFilterDialogSaveProps,
+  {
+    filterName,
+    filter,
+    filterString,
+    originalFilter,
+    saveNamedFilter,
+  }: UseFilterDialogStateProps,
+): UseFilterDialogSave => {
   const [_] = useTranslation();
   const gmp = useGmp();
 
   const createFilter = useCallback(
-    newFilter => {
+    (newFilter: Filter) => {
+      // @ts-expect-error
       return gmp.filter
         .create({
           term: newFilter.toFilterString(),
@@ -29,6 +59,7 @@ const useFilterDialogSave = (
         .then(response => {
           const {data} = response;
           // load new filter
+          // @ts-expect-error
           return gmp.filter.get(data);
         })
         .then(response => {
@@ -42,7 +73,7 @@ const useFilterDialogSave = (
     [gmp, createFilterType, filterName, onFilterCreated],
   );
 
-  const handleSave = useCallback(() => {
+  const handleSave: () => Promise<void> = useCallback(() => {
     const newFilter = filter
       .copy()
       .mergeKeywords(Filter.fromString(filterString));
@@ -76,7 +107,7 @@ const useFilterDialogSave = (
     _,
   ]);
 
-  const ret = [handleSave];
+  const ret: UseFilterDialogSave = [handleSave] as UseFilterDialogSave;
   ret.handleSave = handleSave;
   return ret;
 };
