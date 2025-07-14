@@ -40,7 +40,7 @@ interface FilterModelProperties extends ModelProperties {
   terms?: FilterTerm[];
 }
 
-type SortOrder = typeof SORT_ORDER_ASC | typeof SORT_ORDER_DESC;
+export type FilterSortOrder = typeof SORT_ORDER_ASC | typeof SORT_ORDER_DESC;
 
 type FilterForEachFunc = (
   value: FilterTerm,
@@ -688,7 +688,7 @@ class Filter extends EntityModel {
    *
    * @return The sort order. 'sort' or 'sort-reverse'.
    */
-  getSortOrder(): SortOrder {
+  getSortOrder(): FilterSortOrder {
     return this.has(SORT_ORDER_DESC) ? SORT_ORDER_DESC : SORT_ORDER_ASC;
   }
 
@@ -709,7 +709,7 @@ class Filter extends EntityModel {
    *
    * @return This filter.
    */
-  setSortOrder(value: SortOrder) {
+  setSortOrder(value: FilterSortOrder) {
     const sortby = this.getSortBy();
     value = value === SORT_ORDER_DESC ? SORT_ORDER_DESC : SORT_ORDER_ASC;
     this.set(value, sortby);
