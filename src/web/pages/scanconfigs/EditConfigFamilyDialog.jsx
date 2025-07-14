@@ -13,7 +13,6 @@ import Checkbox from 'web/components/form/Checkbox';
 import {EditIcon} from 'web/components/icon';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
-import SortBy from 'web/components/sortby/SortBy';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
 import TableHead from 'web/components/table/Head';
@@ -23,6 +22,8 @@ import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 import {makeCompareSeverity, makeCompareString} from 'web/utils/Sort';
+import SortDirection from 'web/utils/SortDirection';
+
 const EDIT_CONFIG_COLUMNS_SORT = {
   name: 'name',
   oid: 'oid',
@@ -178,7 +179,7 @@ const EditScanConfigFamilyDialog = ({
     selected: selectedNvts,
   };
 
-  const sortDir = sortReverse ? SortBy.DESC : SortBy.ASC;
+  const sortDir = sortReverse ? SortDirection.DESC : SortDirection.ASC;
 
   const sortedNvts = sortNvts(sortBy, sortReverse, selectedNvts, nvts);
 
