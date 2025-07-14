@@ -5,6 +5,7 @@
 
 import {_l} from 'gmp/locale/lang';
 import {Date, Duration} from 'gmp/models/date';
+import {EntityModelPermissionElement} from 'gmp/models/entitymodel';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import Scanner, {ScannerType} from 'gmp/models/scanner';
 import Schedule from 'gmp/models/schedule';
@@ -197,6 +198,9 @@ export interface TaskElement extends ModelElement {
     name?: string;
     timezone?: string;
     trash?: YesNo;
+    permissions?: {
+      permission: EntityModelPermissionElement | EntityModelPermissionElement[];
+    };
   };
   schedule_periods?: number;
   slave?: {
