@@ -124,6 +124,20 @@ interface PreferenceElement {
   value?: string | number;
 }
 
+interface EpssElement {
+  cve?: {
+    _id?: string;
+    severity?: number;
+  };
+  percentile?: number;
+  score?: number;
+}
+
+export interface NvtEpssElement {
+  max_epss?: EpssElement;
+  max_severity?: EpssElement;
+}
+
 interface NvtElement extends ModelElement {
   update_time?: string;
   nvt?: {
@@ -132,24 +146,7 @@ interface NvtElement extends ModelElement {
     creation_time?: string;
     cvss_base?: number;
     default_timeout?: string | number;
-    epss?: {
-      max_epss?: {
-        cve?: {
-          _id?: string;
-          severity?: number;
-        };
-        percentile?: number;
-        score?: number;
-      };
-      max_severity?: {
-        cve?: {
-          _id?: string;
-          severity?: number;
-        };
-        percentile?: number;
-        score?: number;
-      };
-    };
+    epss?: NvtEpssElement;
     family?: string;
     modification_time?: string;
     name?: string;

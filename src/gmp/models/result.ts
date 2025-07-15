@@ -5,7 +5,7 @@
 
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import Note, {NoteElement} from 'gmp/models/note';
-import Nvt from 'gmp/models/nvt';
+import Nvt, {NvtEpssElement} from 'gmp/models/nvt';
 import Override, {OverrideElement} from 'gmp/models/override';
 import {
   parseSeverity,
@@ -13,6 +13,7 @@ import {
   QoD,
   parseToString,
   QoDParams,
+  parseFloat,
 } from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -23,28 +24,13 @@ interface CveResult {
   epss?: Epss;
 }
 
-interface ResultCveElement {
-  name: string;
-  epss?: {
-    max_epss?: {
-      percentile: string;
-      score: string;
-      cve?: {
-        _id: string;
-        severity: string;
-      };
-    };
-    max_severity?: {
-      percentile: string;
-      score: string;
-      cve?: {
-        _id: string;
-        severity: string;
-      };
-    };
-  };
+interface ResultInformationElement {
+  epss?: NvtEpssElement;
+  name?: string;
   type?: string;
 }
+
+type ResultCveElement = ResultInformationElement;
 
 interface EpssValue {
   percentile?: number;
@@ -89,8 +75,8 @@ const createCveResult = ({name, epss}: ResultCveElement): CveResult => {
   }
 
   return {
-    name,
-    id: name,
+    name: name as string,
+    id: name as string,
     epss: retEpss,
   };
 };
@@ -170,11 +156,10 @@ interface SeverityElement {
   value?: string;
 }
 
-interface ResultNvtElement {
+interface ResultNvtElement extends ResultInformationElement {
   _oid?: string;
   cvss_base?: number;
   family?: string;
-  name?: string;
   severities?: {
     _score?: number | string;
     severity?: SeverityElement;
@@ -184,7 +169,6 @@ interface ResultNvtElement {
     _type?: string;
   };
   tags?: string;
-  type?: string;
 }
 
 interface ResultElement extends ModelElement {

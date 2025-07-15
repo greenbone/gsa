@@ -122,19 +122,19 @@ describe('Result model tests', () => {
         type: 'cve',
         epss: {
           max_epss: {
-            percentile: '90',
-            score: '90',
+            percentile: 90,
+            score: 90,
             cve: {
               _id: '90',
-              severity: '100',
+              severity: 100,
             },
           },
           max_severity: {
-            percentile: '90',
-            score: '90',
+            percentile: 90,
+            score: 90,
             cve: {
               _id: '90',
-              severity: '100',
+              severity: 100,
             },
           },
         },
@@ -153,19 +153,19 @@ describe('Result model tests', () => {
         type: 'nvt',
         epss: {
           max_epss: {
-            percentile: '90',
-            score: '90',
+            percentile: 90,
+            score: 90,
             cve: {
               _id: '90',
-              severity: '100',
+              severity: 100,
             },
           },
           max_severity: {
-            percentile: '90',
-            score: '90',
+            percentile: 90,
+            score: 90,
             cve: {
               _id: '90',
-              severity: '100',
+              severity: 100,
             },
           },
         },
