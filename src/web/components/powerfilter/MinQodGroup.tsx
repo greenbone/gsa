@@ -3,28 +3,39 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Spinner from 'web/components/form/Spinner';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
+interface MinQodGroupProps {
+  qod?: number;
+  filter?: Filter;
+  name?: string;
+  onChange?: (value: number, name?: string) => void;
+}
+
+const MinQodGroup = ({
+  qod,
+  onChange,
+  filter,
+  name = 'min_qod',
+}: MinQodGroupProps) => {
   const [_] = useTranslation();
 
   if (!isDefined(qod) && isDefined(filter)) {
-    qod = filter.get('min_qod');
+    qod = filter.get('min_qod') as number | undefined;
   }
   return (
     <FormGroup direction="row" title={_('QoD')}>
       <span>{_('must be at least')}</span>
       <Spinner
         data-testid="min-qod"
-        max="100"
-        min="0"
+        max={100}
+        min={0}
         name={name}
-        step="1"
+        step={1}
         type="int"
         value={qod}
         onChange={onChange}
@@ -32,13 +43,6 @@ const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
       <span>%</span>
     </FormGroup>
   );
-};
-
-MinQodGroup.propTypes = {
-  filter: PropTypes.filter,
-  name: PropTypes.string,
-  qod: PropTypes.number,
-  onChange: PropTypes.func,
 };
 
 export default MinQodGroup;
