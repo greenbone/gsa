@@ -103,10 +103,6 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
   const storeTimezone = useShallowEqualSelector(getTimezone) ?? '';
 
-  const timezone = useMemo(
-    () => userDefaultsSelector.getByName('timezone') ?? {},
-    [userDefaultsSelector],
-  );
   const userInterfaceTimeFormat = useMemo(
     () => userDefaultsSelector.getByName('userinterfacetimeformat') ?? {},
     [userDefaultsSelector],
@@ -711,6 +707,56 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
         <EditableSettingRow
           disableEditIcon={disableEditIcon}
           editComponent={
+            <div>
+              <FormGroup title={_('Change Password')}>
+                <PasswordField
+                  autoComplete="off"
+                  grow="1"
+                  name="oldPassword"
+                  title={_('Old')}
+                  value={oldPasswordState}
+                  onChange={value => handlePasswordChange(value, 'oldPassword')}
+                />
+                <PasswordField
+                  autoComplete="off"
+                  grow="1"
+                  name="newPassword"
+                  title={_('New')}
+                  value={newPasswordState}
+                  onChange={value => handlePasswordChange(value, 'newPassword')}
+                />
+                <PasswordField
+                  autoComplete="off"
+                  name="confPassword"
+                  title={_('Confirm')}
+                  value={confPasswordState}
+                  onChange={value =>
+                    handlePasswordChange(value, 'confPassword')
+                  }
+                />
+              </FormGroup>
+              <FormGroup title=" ">
+                <UserSettingsPasswordNotification
+                  confPassword={confPasswordState}
+                  newPassword={newPasswordState}
+                  oldPassword={oldPasswordState}
+                />
+              </FormGroup>
+            </div>
+          }
+          errorMessage={getErrorMessage('password')}
+          isEditMode={passwordEditMode}
+          label={_('Password')}
+          title={_('Change your password')}
+          viewComponent={<span>********</span>}
+          onCancel={cancelPasswordEdit}
+          onEdit={togglePasswordEditMode}
+          onSave={savePassword}
+        />
+
+        <EditableSettingRow
+          disableEditIcon={disableEditIcon}
+          editComponent={
             <Select
               items={renderLanguageItems()}
               name="userInterfaceLanguage"
@@ -832,56 +878,6 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           onCancel={cancelAutoCacheRebuildEdit}
           onEdit={toggleAutoCacheRebuildEditMode}
           onSave={saveAutoCacheRebuild}
-        />
-
-        <EditableSettingRow
-          disableEditIcon={disableEditIcon}
-          editComponent={
-            <div>
-              <FormGroup title={_('Change Password')}>
-                <PasswordField
-                  autoComplete="off"
-                  grow="1"
-                  name="oldPassword"
-                  title={_('Old')}
-                  value={oldPasswordState}
-                  onChange={value => handlePasswordChange(value, 'oldPassword')}
-                />
-                <PasswordField
-                  autoComplete="off"
-                  grow="1"
-                  name="newPassword"
-                  title={_('New')}
-                  value={newPasswordState}
-                  onChange={value => handlePasswordChange(value, 'newPassword')}
-                />
-                <PasswordField
-                  autoComplete="off"
-                  name="confPassword"
-                  title={_('Confirm')}
-                  value={confPasswordState}
-                  onChange={value =>
-                    handlePasswordChange(value, 'confPassword')
-                  }
-                />
-              </FormGroup>
-              <FormGroup title=" ">
-                <UserSettingsPasswordNotification
-                  confPassword={confPasswordState}
-                  newPassword={newPasswordState}
-                  oldPassword={oldPasswordState}
-                />
-              </FormGroup>
-            </div>
-          }
-          errorMessage={getErrorMessage('password')}
-          isEditMode={passwordEditMode}
-          label={_('Password')}
-          title={_('Change your password')}
-          viewComponent={<span>********</span>}
-          onCancel={cancelPasswordEdit}
-          onEdit={togglePasswordEditMode}
-          onSave={savePassword}
         />
       </TableBody>
     </StripedTable>

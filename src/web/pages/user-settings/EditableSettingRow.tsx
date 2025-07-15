@@ -19,6 +19,11 @@ const ErrorMessage = styled.div`
   font-size: 0.9em;
 `;
 
+const StyledIconsRow = styled(Layout)`
+  gap: 8px;
+  align-items: center;
+`;
+
 const StyledTableRow = styled(TableRow)`
   height: 90px;
 `;
@@ -62,10 +67,10 @@ const EditableSettingRow = ({
       <TableData>
         <Layout>
           {isEditMode ? (
-            <>
+            <StyledIconsRow>
               <SaveIcon title={_('Save')} onClick={onSave} />
               <XIcon title={_('Cancel')} onClick={onCancel} />
-            </>
+            </StyledIconsRow>
           ) : (
             !disableEditIcon && <EditIcon title={label} onClick={onEdit} />
           )}

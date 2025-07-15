@@ -28,6 +28,7 @@ interface TableHeadProps {
   sortBy?: string;
   title?: string;
   width?: string;
+  withBorder?: boolean;
   onSortChange?: (sortBy: string) => void;
 }
 

@@ -38,6 +38,10 @@ interface Setting<T> {
   comment?: string;
 }
 
+interface DefaultSettingsProps {
+  disableEditIcon?: boolean;
+}
+
 const FIELD_NAMES = [
   'defaultalert',
   'defaultesxicredential',
@@ -51,7 +55,9 @@ const FIELD_NAMES = [
   'defaulttarget',
 ] as const;
 
-const ENTITY_TYPE_MAP: Record<(typeof FIELD_NAMES)[number], string> = {
+type FieldName = (typeof FIELD_NAMES)[number];
+
+const ENTITY_TYPE_MAP: Record<FieldName, string> = {
   defaultalert: 'alert',
   defaultesxicredential: 'credential',
   defaultopenvasscanconfig: 'scanconfig',
@@ -64,7 +70,9 @@ const ENTITY_TYPE_MAP: Record<(typeof FIELD_NAMES)[number], string> = {
   defaulttarget: 'target',
 };
 
-export const DefaultSettings = () => {
+export const DefaultSettings = ({
+  disableEditIcon = false,
+}: DefaultSettingsProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const defaultsSel = useShallowEqualSelector(getUserSettingsDefaults);
@@ -100,7 +108,7 @@ export const DefaultSettings = () => {
   );
 
   const ITEMS_MAP: Record<
-    (typeof FIELD_NAMES)[number],
+    FieldName,
     {id: string; name: string; deprecated?: string}[]
   > = {
     defaultalert: alerts ?? [],
@@ -115,7 +123,7 @@ export const DefaultSettings = () => {
     defaulttarget: targets ?? [],
   };
 
-  const LABELS: Record<(typeof FIELD_NAMES)[number], string> = {
+  const LABELS: Record<FieldName, string> = {
     defaultalert: _('Default Alert'),
     defaultesxicredential: _('Default ESXi Credential'),
     defaultopenvasscanconfig: _('Default OpenVAS Scan Config'),
@@ -152,7 +160,7 @@ export const DefaultSettings = () => {
     });
   }, [defaultsSel]);
 
-  const saveField = async (key: (typeof FIELD_NAMES)[number]) => {
+  const saveField = async (key: FieldName) => {
     const setting = defaultsSel.getByName(key) as Setting<string>;
     if (!setting?.id) {
       setErrorMessage(key, _('Cannot save setting: missing setting ID.'));
@@ -163,7 +171,7 @@ export const DefaultSettings = () => {
     );
   };
 
-  const cancelField = (key: (typeof FIELD_NAMES)[number]) => {
+  const cancelField = (key: FieldName) => {
     const setting: Setting<string> = defaultsSel.getByName(key) ?? {};
     setValues(value => ({
       ...value,
@@ -212,7 +220,7 @@ export const DefaultSettings = () => {
           return (
             <EditableSettingRow
               key={key}
-              disableEditIcon={false}
+              disableEditIcon={disableEditIcon}
               editComponent={
                 <Select
                   items={selectItems}

@@ -4,22 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, within, rendererWith, wait, fireEvent} from 'web/testing';
-import {vi} from 'vitest';
+import {screen, within, rendererWith, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Setting from 'gmp/models/setting';
-import UserSettingsPage from 'web/pages/user-settings/UserSettingsPage';
+import UserSettingsPage, {
+  ToolBarIcons,
+} from 'web/pages/user-settings/UserSettingsPage';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS} from 'web/store/usersettings/defaultfilters/actions';
 import {USER_SETTINGS_DEFAULTS_LOADING_SUCCESS} from 'web/store/usersettings/defaults/actions';
-
-vi.mock('web/pages/user-settings/Dialog', () => {
-  return {
-    default: vi.fn().mockImplementation(() => {
-      return <div data-testid="settings-dialog">Settings Dialog</div>;
-    }),
-  };
-});
 
 const createFilterString = (id, name) => `${id}=${name}`;
 
@@ -103,6 +96,24 @@ describe('UserSettingsPage', () => {
     expect(screen.getByText('Defaults')).toBeVisible();
     expect(screen.getByText('Filters')).toBeVisible();
   });
+
+  describe('ToolBarIcons', () => {
+    test('should render and handle click', () => {
+      const {render} = rendererWith({
+        gmp: {settings: {manualUrl: 'test/'}},
+        capabilities: true,
+        router: true,
+      });
+      render(<ToolBarIcons />);
+      const helpIcon = screen.getByTitle('Help: My Settings').closest('a');
+      expect(helpIcon).toHaveAttribute(
+        'href',
+        'test/en/web-interface.html#changing-the-user-settings',
+      );
+      expect(screen.getByTitle('Help: My Settings')).toBeVisible();
+    });
+  });
+
   describe('General tab', () => {
     test('displays user settings in the General tab', async () => {
       const dateFormatSetting = Setting.fromElement({
@@ -775,47 +786,5 @@ describe('UserSettingsPage', () => {
         }),
       ).toHaveAttribute('href', '/filter/dfncert-filter-uuid');
     });
-  });
-
-  test('opens settings dialog when edit button is clicked', async () => {
-    const gmp = createGmpMock({
-      userInterfaceDateFormat: {value: 'MM/DD/YYYY'},
-      userInterfaceTimeFormat: {value: 'hh:mm:ss a'},
-      timezone: 'UTC',
-    });
-
-    const {render, store} = rendererWith({
-      capabilities: true,
-      router: true,
-      gmp,
-      store: true,
-    });
-
-    const settingsData = {
-      defaultalert: Setting.fromElement({
-        _id: 'alert-uuid',
-        name: 'defaultalert',
-        value: 'alert-123',
-        comment: 'Default alert comment',
-      }),
-    };
-
-    store.dispatch({
-      type: USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
-      data: settingsData,
-    });
-
-    render(<UserSettingsPage />);
-
-    await wait();
-
-    const editButton = await screen.findByTitle('Edit My Settings');
-    expect(editButton).toBeVisible();
-
-    fireEvent.click(editButton);
-
-    const dialog = await screen.findByTestId('settings-dialog');
-    expect(dialog).toBeVisible();
-    expect(dialog).toHaveTextContent('Settings Dialog');
   });
 });

@@ -30,6 +30,10 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/Render';
 
+interface FilterSettingsProps {
+  disableEditIcon?: boolean;
+}
+
 const FILTER_NAMES = [
   'alertsFilter',
   'auditReportsFilter',
@@ -190,7 +194,9 @@ const getFilterTitle = (key: string, _: (text: string) => string): string => {
   return titleMap[key] || key;
 };
 
-export const FilterSettings = () => {
+export const FilterSettings = ({
+  disableEditIcon = false,
+}: FilterSettingsProps) => {
   const [_] = useTranslation();
   const gmp = useGmp();
   const dispatch = useDispatch();
@@ -339,7 +345,7 @@ export const FilterSettings = () => {
           return (
             <EditableSettingRow
               key={key}
-              disableEditIcon={false}
+              disableEditIcon={disableEditIcon}
               editComponent={
                 <Select
                   items={selectItems}
