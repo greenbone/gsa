@@ -6,17 +6,28 @@
 /* this is experimental. trying to consolidate all filter terms whose
  * method should be ~'value' into one. */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
-import PropTypes from 'web/utils/PropTypes';
 
-const FilterSearchGroup = ({name, filter, title, onChange}) => {
-  let filterVal;
+interface FilterSearchGroupProps {
+  filter?: Filter;
+  name: string;
+  title?: string;
+  onChange?: (value: string, name?: string) => void;
+}
+
+const FilterSearchGroup = ({
+  name,
+  filter,
+  title,
+  onChange,
+}: FilterSearchGroupProps) => {
+  let filterVal: string | undefined;
 
   if (!isDefined(filterVal) && isDefined(filter)) {
-    filterVal = filter.get(name);
+    filterVal = filter.get(name) as string | undefined;
     if (isDefined(filterVal)) {
       if (filterVal.startsWith('"')) {
         filterVal = filterVal.slice(1);
@@ -32,13 +43,6 @@ const FilterSearchGroup = ({name, filter, title, onChange}) => {
       <TextField name={name} value={filterVal} onChange={onChange} />
     </FormGroup>
   );
-};
-
-FilterSearchGroup.propTypes = {
-  filter: PropTypes.filter,
-  name: PropTypes.string,
-  title: PropTypes.string,
-  onChange: PropTypes.func,
 };
 
 export default FilterSearchGroup;
