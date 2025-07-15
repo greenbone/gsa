@@ -14,7 +14,7 @@ interface SaveDialogFooterProps {
   buttonTitle: string;
   currentStep: number;
   setCurrentStep: (step: number) => void;
-  onClose: () => void;
+  onClose?: () => void;
   handleSaveClick: () => void;
 }
 

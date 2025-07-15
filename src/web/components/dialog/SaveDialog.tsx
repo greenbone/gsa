@@ -32,7 +32,7 @@ interface SaveDialogProps<TValues, TDefaultValues> {
   title: string;
   values?: TValues; // should be used for controlled values
   width?: string; // width of the dialog, default is '40vw'
-  onClose: () => void; // function to call when dialog is closed
+  onClose?: () => void; // function to call when dialog is closed
   onError?: (error: Error) => void; // function to call when an error occurs
   onErrorClose?: () => void; // function to call when error dialog is closed
   onSave?: (state: TValues & TDefaultValues) => Promise<void> | void; // function to call when save button is clicked
