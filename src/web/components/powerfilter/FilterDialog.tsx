@@ -6,9 +6,14 @@
 import React from 'react';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const FilterDialog = ({children, onClose, onSave}) => {
+interface FilterDialogProps {
+  children?: React.ReactNode;
+  onClose?: () => void;
+  onSave?: () => void;
+}
+
+const FilterDialog = ({children, onClose, onSave}: FilterDialogProps) => {
   const [_] = useTranslation();
   return (
     <SaveDialog
@@ -21,11 +26,6 @@ const FilterDialog = ({children, onClose, onSave}) => {
       {children}
     </SaveDialog>
   );
-};
-
-FilterDialog.propTypes = {
-  onClose: PropTypes.func,
-  onSave: PropTypes.func,
 };
 
 export default FilterDialog;
