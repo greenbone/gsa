@@ -103,4 +103,9 @@ describe('CheckBox component tests', () => {
     const checkbox = screen.getByTestId<HTMLInputElement>('checkbox');
     expect(checkbox.checked).toBe(false);
   });
+
+  test('should allow to set custom name', () => {
+    render(<CheckBox checked={true} name="customName" />);
+    expect(screen.getByName('customName')).toBeChecked();
+  });
 });

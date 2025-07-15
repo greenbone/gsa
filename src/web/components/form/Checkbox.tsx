@@ -49,6 +49,7 @@ const Checkbox = <TCheck = boolean,>({
       checked={checked}
       disabled={disabled}
       label={title}
+      name={name}
       title={toolTipTitle}
       onChange={handleChange}
     />
