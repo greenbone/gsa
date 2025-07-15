@@ -538,6 +538,14 @@ export class UserCommand extends EntityCommand<User, PortListElement> {
     );
   }
 
+  changePassword(oldPassword: string, newPassword: string) {
+    return this.action({
+      cmd: 'change_password',
+      old_password: oldPassword,
+      password: newPassword,
+    });
+  }
+
   ping() {
     return this.httpGet({
       cmd: 'ping',
