@@ -5,8 +5,11 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import Capabilities from 'gmp/capabilities/capabilities';
+import Gmp from 'gmp/gmp';
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
-import {KeyCode} from 'gmp/utils/event';
+import {isFilter} from 'gmp/models/filter/utils';
+import {KeyEvent} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
@@ -17,11 +20,11 @@ import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import compose from 'web/utils/Compose';
-import PropTypes from 'web/utils/PropTypes';
-import {renderSelectItems} from 'web/utils/Render';
+import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
+
 const DEFAULT_FILTER_ID = '0';
 
 const Label = styled.label`
@@ -32,12 +35,12 @@ const LeftDivider = styled(Divider)`
   margin-right: 5px;
 `;
 
-const PowerFilterTextField = styled(TextField)`
+const PowerFilterTextField = styled(TextField<string>)`
   width: 30vw;
 `;
 
-const getUserFilterString = filter => {
-  if (isDefined(filter) && isDefined(filter.toFilterCriteriaString)) {
+const getUserFilterString = (filter?: Filter | string) => {
+  if (isFilter(filter)) {
     return filter.toFilterCriteriaString();
   }
   if (isString(filter)) {
@@ -46,14 +49,34 @@ const getUserFilterString = filter => {
   return '';
 };
 
-class PowerFilter extends React.Component {
-  constructor(...args) {
-    super(...args);
+interface PowerFilterState {
+  userFilterString: string;
+  prevFilter?: Filter;
+}
+
+interface PowerFilterProps {
+  capabilities: Capabilities;
+  createFilterType?: string;
+  filter?: Filter;
+  filters?: Filter[];
+  isLoading?: boolean;
+  isLoadingFilters?: boolean;
+  resetFilter?: Filter;
+  gmp: Gmp;
+  _: (key: string) => string;
+  onEditClick?: () => void;
+  onUpdate?: (filter: Filter) => void;
+  onRemoveClick?: () => void;
+  onResetClick?: () => void;
+}
+
+class PowerFilter extends React.Component<PowerFilterProps, PowerFilterState> {
+  constructor(props: PowerFilterProps) {
+    super(props);
 
     const {filter} = this.props;
 
     this.state = {
-      filtername: '',
       userFilterString: getUserFilterString(filter),
     };
 
@@ -65,14 +88,17 @@ class PowerFilter extends React.Component {
     this.handleResetClick = this.handleResetClick.bind(this);
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(
+    props: PowerFilterProps,
+    state: PowerFilterState,
+  ) {
     const {filter} = props;
     const {prevFilter} = state;
     if (filter !== prevFilter) {
       if (
         !isDefined(filter) ||
         (isDefined(filter) && !isDefined(prevFilter)) ||
-        (isDefined(filter) && filter.id !== prevFilter.id) ||
+        (isDefined(filter) && filter.id !== prevFilter?.id) ||
         (isDefined(filter) && !filter.equals(prevFilter))
       ) {
         return {
@@ -84,7 +110,7 @@ class PowerFilter extends React.Component {
     return null;
   }
 
-  updateFilter(filter) {
+  updateFilter(filter: Filter) {
     const {onUpdate} = this.props;
 
     if (onUpdate) {
@@ -107,7 +133,8 @@ class PowerFilter extends React.Component {
     });
   }
 
-  handleValueChange(value, name) {
+  handleValueChange(value: string, name?: string) {
+    // @ts-expect-error
     this.setState({[name]: value});
   }
 
@@ -115,14 +142,14 @@ class PowerFilter extends React.Component {
     this.updateFromUserFilter();
   }
 
-  handleUserFilterKeyPress(event) {
-    if (event.keyCode === KeyCode.ENTER) {
+  handleUserFilterKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === KeyEvent.ENTER) {
       this.updateFromUserFilter();
     }
   }
 
-  handleNamedFilterChange(value) {
-    const {filters, resetFilter = RESET_FILTER} = this.props;
+  handleNamedFilterChange(value: string) {
+    const {filters = [], resetFilter = RESET_FILTER} = this.props;
 
     let filter = filters.find(f => f.id === value);
     if (!isDefined(filter)) {
@@ -179,7 +206,7 @@ class PowerFilter extends React.Component {
               </Label>
               <PowerFilterTextField
                 data-testid="powerfilter-text"
-                maxLength="1000"
+                maxLength={1000}
                 name="userFilterString"
                 value={userFilterString}
                 onChange={this.handleValueChange}
@@ -235,7 +262,10 @@ class PowerFilter extends React.Component {
             <Select
               data-testid="powefilter-select"
               isLoading={isLoadingFilters}
-              items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
+              items={renderSelectItems(
+                filters as RenderSelectItemProps[],
+                DEFAULT_FILTER_ID,
+              )}
               toolTipTitle={_('Loaded filter')}
               value={
                 isDefined(filter) && isDefined(filter.id)
@@ -250,23 +280,5 @@ class PowerFilter extends React.Component {
     );
   }
 }
-
-PowerFilter.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  createFilterType: PropTypes.string,
-  filter: PropTypes.filter,
-  filters: PropTypes.array,
-  gmp: PropTypes.gmp.isRequired,
-  isLoading: PropTypes.bool,
-  isLoadingFilters: PropTypes.bool,
-  resetFilter: PropTypes.filter,
-  onEditClick: PropTypes.func,
-  onError: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-  onRemoveClick: PropTypes.func,
-  onResetClick: PropTypes.func,
-  onUpdate: PropTypes.func,
-  _: PropTypes.func.isRequired,
-};
 
 export default compose(withTranslation, withCapabilities, withGmp)(PowerFilter);
