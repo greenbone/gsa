@@ -159,8 +159,8 @@ describe('CVE DetailsPage tests', () => {
 
     const {baseElement} = render(<CvePage id="CVE-2020-9997" />);
 
-    expect(baseElement).toHaveTextContent('Score0.50000');
-    expect(baseElement).toHaveTextContent('Percentage75.000%');
+    expect(baseElement).toHaveTextContent('Score50.000%');
+    expect(baseElement).toHaveTextContent('Percentile75th');
 
     const links = baseElement.querySelectorAll('a');
     expect(screen.getByTestId('help-icon')).toHaveAttribute(

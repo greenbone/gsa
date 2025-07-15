@@ -5,7 +5,7 @@
 
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import Note, {NoteElement} from 'gmp/models/note';
-import Nvt from 'gmp/models/nvt';
+import Nvt, {NvtEpssElement} from 'gmp/models/nvt';
 import Override, {OverrideElement} from 'gmp/models/override';
 import {
   parseSeverity,
@@ -13,6 +13,7 @@ import {
   QoD,
   parseToString,
   QoDParams,
+  parseFloat,
 } from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -20,20 +21,63 @@ import {isDefined, isString} from 'gmp/utils/identity';
 interface CveResult {
   name: string;
   id: string;
-  epss?: number;
+  epss?: Epss;
 }
 
-interface ResultCveElement {
-  name: string;
-  epss?: number;
+interface ResultInformationElement {
+  epss?: NvtEpssElement;
+  name?: string;
   type?: string;
 }
 
+type ResultCveElement = ResultInformationElement;
+
+interface EpssValue {
+  percentile?: number;
+  score?: number;
+  cve?: {
+    id?: string;
+    severity?: number;
+  };
+}
+
+interface Epss {
+  maxEpss?: EpssValue;
+  maxSeverity?: EpssValue;
+}
+
 const createCveResult = ({name, epss}: ResultCveElement): CveResult => {
+  const retEpss: Epss = {};
+
+  if (isDefined(epss?.max_epss)) {
+    retEpss.maxEpss = {
+      percentile: parseFloat(epss?.max_epss?.percentile),
+      score: parseFloat(epss?.max_epss?.score),
+    };
+    if (isDefined(epss?.max_epss?.cve)) {
+      retEpss.maxEpss.cve = {
+        id: epss?.max_epss?.cve?._id,
+        severity: parseFloat(epss?.max_epss?.cve?.severity),
+      };
+    }
+  }
+  if (isDefined(epss?.max_severity)) {
+    retEpss.maxSeverity = {
+      percentile: parseFloat(epss?.max_severity?.percentile),
+      score: parseFloat(epss?.max_severity?.score),
+    };
+    if (isDefined(epss?.max_severity?.cve)) {
+      retEpss.maxSeverity.cve = {
+        id: epss?.max_severity?.cve?._id,
+        severity: parseFloat(epss?.max_severity?.cve?.severity),
+      };
+    }
+  }
+
   return {
-    name,
-    id: name,
-    epss: epss,
+    name: name as string,
+    id: name as string,
+    epss: retEpss,
   };
 };
 
@@ -112,11 +156,10 @@ interface SeverityElement {
   value?: string;
 }
 
-interface ResultNvtElement {
+interface ResultNvtElement extends ResultInformationElement {
   _oid?: string;
   cvss_base?: number;
   family?: string;
-  name?: string;
   severities?: {
     _score?: number | string;
     severity?: SeverityElement;
@@ -126,7 +169,6 @@ interface ResultNvtElement {
     _type?: string;
   };
   tags?: string;
-  type?: string;
 }
 
 interface ResultElement extends ModelElement {
