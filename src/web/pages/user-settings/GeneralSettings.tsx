@@ -233,16 +233,19 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
 
     await saveSetting(
       'Timezone',
-      'timezone',
+      'Timezone',
       timezoneState as string,
-      setTimezoneEditMode,
+      (value: boolean) => {
+        if (value === false) setTimezoneEditMode(false);
+      },
+      value => gmp.user.saveTimezone(value),
     );
   };
 
   const cancelTimezoneEdit = (): void => {
     setTimezoneState(storeTimezone);
     setTimezoneEditMode(false);
-    clearErrorMessage('timezone');
+    clearErrorMessage('Timezone');
     onInteraction();
   };
 
@@ -549,24 +552,25 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const savePassword = async (): Promise<void> => {
     if (newPasswordState === confPasswordState && oldPasswordState) {
       try {
-        // TODO: Replace with the appropriate API method instead of the deprecated saveSettings
-
-        setErrorMessage(
-          'password',
-          _(
-            'Password change functionality needs to be reimplemented without using deprecated methods.',
-          ),
-        );
-
+        await gmp.user.savePassword(oldPasswordState, newPasswordState);
         setPasswordEditMode(false);
         setOldPasswordState('');
         setNewPasswordState('');
         setConfPasswordState('');
+        setErrorMessage('password', '');
+        onInteraction();
       } catch (error) {
-        // @ts-expect-error
-        setErrorMessage('password', error.message ?? _('An error occurred'));
+        const errorMsg =
+          (error instanceof Error ? error.message : String(error)) ??
+          _('An error occurred');
+        setErrorMessage('password', errorMsg);
         console.error(error);
       }
+    } else {
+      setErrorMessage(
+        'password',
+        _('Passwords do not match or old password is missing.'),
+      );
     }
   };
 
@@ -639,7 +643,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
               onChange={handleTimezoneChange}
             />
           }
-          errorMessage={getErrorMessage('timezone')}
+          errorMessage={getErrorMessage('Timezone')}
           isEditMode={timezoneEditMode}
           label={_('Timezone')}
           title={_('Timezone')}

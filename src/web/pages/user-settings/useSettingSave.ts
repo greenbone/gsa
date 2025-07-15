@@ -63,25 +63,33 @@ const useSettingSave = () => {
       settingName: string,
       value: string | number,
       setEditMode: (value: boolean) => void,
+      customSaveFn?: (
+        value: string | number,
+        ...args: unknown[]
+      ) => Promise<unknown>,
     ): Promise<void> => {
       try {
-        if (settingId) {
-          const transformedName = transformSettingName(settingName);
-          dispatch(
-            loadingActions.optimisticUpdate(
-              settingId,
-              transformedName,
-              String(value),
-            ),
-          );
+        if (!settingId) {
+          // No settingId, nothing to save
+          return;
         }
 
-        setEditMode(false);
+        const transformedName = transformSettingName(settingName);
+        dispatch(
+          loadingActions.optimisticUpdate(
+            settingId,
+            transformedName,
+            String(value),
+          ),
+        );
 
-        if (settingId) {
+        if (customSaveFn) {
+          await customSaveFn(value);
+        } else {
           await gmp.user.saveSetting(settingId, String(value));
         }
 
+        setEditMode(false);
         onInteraction();
 
         setErrorMessages(prev => ({

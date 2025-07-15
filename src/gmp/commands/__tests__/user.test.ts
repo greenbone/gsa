@@ -196,3 +196,36 @@ describe('UserCommand capabilities tests', () => {
     expect(caps.featureEnabled('TEST_FEATURE_3')).toBe(false);
   });
 });
+
+describe('UserCommand saveTimezone() tests', () => {
+  test('should call httpPost with correct args and handle success', async () => {
+    const response = createResponse({success: true});
+    const fakeHttp = createHttp(response);
+    const cmd = new UserCommand(fakeHttp);
+
+    expect.hasAssertions();
+
+    const settingValue = 'Europe/Berlin';
+    const resp = await cmd.saveTimezone(settingValue);
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'save_setting',
+        setting_name: 'Timezone',
+        setting_value: settingValue,
+      },
+    });
+    expect(resp).toBe(response);
+  });
+
+  test('should throw and log on httpPost error', async () => {
+    const error = new Error('fail');
+    const fakeHttp = createHttp({});
+    fakeHttp.request = () => {
+      throw error;
+    };
+    const cmd = new UserCommand(fakeHttp);
+    const settingValue = 'Europe/Berlin';
+    expect.hasAssertions();
+    await expect(cmd.saveTimezone(settingValue)).rejects.toThrow('fail');
+  });
+});
