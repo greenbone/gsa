@@ -548,25 +548,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
 
   const savePassword = async (): Promise<void> => {
     if (newPasswordState === confPasswordState && oldPasswordState) {
-      try {
-        await gmp.user.savePassword(oldPasswordState, newPasswordState);
-        setPasswordEditMode(false);
-        setOldPasswordState('');
-        setNewPasswordState('');
-        setConfPasswordState('');
-        setErrorMessage('password', '');
-        onInteraction();
-      } catch (error) {
-        const errorMsg =
-          (error instanceof Error ? error.message : String(error)) ??
-          _('An error occurred while saving the setting, please try again.');
-        setErrorMessage('password', errorMsg);
-        console.error(error);
-      }
-    } else {
-      setErrorMessage(
-        'password',
-        _('Passwords do not match or old password is missing.'),
+      await saveSetting(
+        'Password',
+        'Password',
+        newPasswordState,
+        (value: boolean) => {
+          if (value === false) setPasswordEditMode(false);
+        },
+        () => gmp.user.changePassword(oldPasswordState, newPasswordState),
       );
     }
   };
@@ -576,7 +565,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setNewPasswordState('');
     setConfPasswordState('');
     setPasswordEditMode(false);
-    clearErrorMessage('password');
+    clearErrorMessage('Password');
     onInteraction();
   };
 
@@ -745,7 +734,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
               </FormGroup>
             </div>
           }
-          errorMessage={getErrorMessage('password')}
+          errorMessage={getErrorMessage('Password')}
           isEditMode={passwordEditMode}
           label={_('Password')}
           title={_('Change your password')}

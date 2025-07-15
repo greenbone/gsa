@@ -491,48 +491,19 @@ export class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   async saveSetting(settingId: string, settingValue: string | number) {
-    log.debug(`Saving setting ${settingId} with value ${settingValue}`);
-    try {
-      return await this.httpPost({
-        cmd: 'save_setting',
-        setting_id: settingId,
-        setting_value: settingValue,
-      });
-    } catch (error) {
-      log.warn(`Failed to save setting ${settingId}: ${error}`);
-      throw error; // Re-throw the error so calling code can handle it
-    }
+    return this.httpPost({
+      cmd: 'save_setting',
+      setting_id: settingId,
+      setting_value: settingValue,
+    });
   }
 
   async saveTimezone(settingValue: string | number) {
-    log.debug(`Saving timezone setting 'Timezone' with value ${settingValue}`);
-    try {
-      return await this.httpPost({
-        cmd: 'save_setting',
-        setting_name: 'Timezone',
-        setting_value: settingValue,
-      });
-    } catch (error) {
-      log.warn(`Failed to save timezone setting 'Timezone': ${error}`);
-      throw error; // Re-throw the error so calling code can handle it
-    }
-  }
-
-  async savePassword(
-    oldPassword: string,
-    newPassword: string,
-  ): Promise<Response<XmlResponseData, XmlMeta>> {
-    log.debug('Saving user password');
-    try {
-      return await this.httpPost({
-        cmd: 'save_setting',
-        setting_name: 'Password',
-        setting_value: newPassword,
-      });
-    } catch (error) {
-      log.warn(`Failed to save user password: ${error}`);
-      throw error;
-    }
+    return this.httpPost({
+      cmd: 'save_setting',
+      setting_name: 'Timezone',
+      setting_value: settingValue,
+    });
   }
 
   async getReportComposerDefaults() {

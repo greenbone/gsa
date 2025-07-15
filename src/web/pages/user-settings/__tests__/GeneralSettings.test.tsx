@@ -218,8 +218,7 @@ describe('General tab', () => {
         }),
       },
     });
-    const rppInput = await screen.findByTestId('form-input');
-    expect((rppInput as HTMLInputElement).value).toBe('75');
+    await screen.findByDisplayValue('75');
   });
 
   test('can edit and save Details Export File Name', async () => {
@@ -262,8 +261,7 @@ describe('General tab', () => {
         }),
       },
     });
-    const detailsInput = await screen.findByTestId('form-input');
-    expect((detailsInput as HTMLInputElement).value).toBe('details-new.xml');
+    await screen.findByDisplayValue('details-new.xml');
   });
 
   test('can edit and save List Export File Name', async () => {
@@ -304,8 +302,7 @@ describe('General tab', () => {
         }),
       },
     });
-    const listInput = await screen.findByTestId('form-input');
-    expect((listInput as HTMLInputElement).value).toBe('list-new.csv');
+    await screen.findByDisplayValue('list-new.csv');
   });
 
   test('can edit and save Report Export File Name', async () => {
@@ -348,8 +345,7 @@ describe('General tab', () => {
         }),
       },
     });
-    const reportInput = await screen.findByTestId('form-input');
-    expect((reportInput as HTMLInputElement).value).toBe('report-new.pdf');
+    await screen.findByDisplayValue('report-new.pdf');
   });
 
   test('can edit and save User Interface Language', async () => {
