@@ -24,7 +24,7 @@ export const TICKET_STATUS_TRANSLATIONS = {
   [TICKET_STATUS.closed]: _l('Closed'),
 } as const;
 
-type TicketStatus = keyof typeof TICKET_STATUS;
+export type TicketStatus = keyof typeof TICKET_STATUS;
 
 export const getTranslatableTicketStatus = (status: TicketStatus) =>
   `${TICKET_STATUS_TRANSLATIONS[status]}`;

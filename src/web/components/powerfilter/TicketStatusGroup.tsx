@@ -3,23 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
+import {TICKET_STATUS, TicketStatus} from 'gmp/models/ticket';
 import {isDefined} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface TicketStatusFilterGroupProps {
+  status?: TicketStatus;
+  filter?: Filter;
+  name?: string;
+  onChange: (value: TicketStatus, name?: string) => void;
+}
 
 const TicketStatusFilterGroup = ({
   status,
   filter,
   name = 'status',
   onChange,
-}) => {
+}: TicketStatusFilterGroupProps) => {
   const [_] = useTranslation();
 
   if (isDefined(filter)) {
-    status = filter.get('status');
+    status = filter.get('status') as TicketStatus | undefined;
   }
 
   return (
@@ -27,24 +34,17 @@ const TicketStatusFilterGroup = ({
       <Select
         data-testid="filter-status"
         items={[
-          {label: _('Open'), value: 'Open'},
-          {label: _('Fixed'), value: 'Fixed'},
-          {label: _('Fix Verified'), value: '"Fix Verified"'}, // this is the way I found that has the filter returned as status="Fix Verified". All the single word terms are fine.
-          {label: _('Closed'), value: 'Closed'},
+          {label: _('Open'), value: TICKET_STATUS.open},
+          {label: _('Fixed'), value: TICKET_STATUS.fixed},
+          {label: _('Fix Verified'), value: `"${TICKET_STATUS.verified}"`},
+          {label: _('Closed'), value: TICKET_STATUS.closed},
         ]}
         name={name}
         value={status}
-        onChange={onChange}
+        onChange={onChange as (value: string) => void}
       />
     </FormGroup>
   );
-};
-
-TicketStatusFilterGroup.propTypes = {
-  filter: PropTypes.filter.isRequired,
-  name: PropTypes.string,
-  status: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default TicketStatusFilterGroup;
