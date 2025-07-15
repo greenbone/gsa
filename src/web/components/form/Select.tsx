@@ -22,6 +22,7 @@ export interface SelectProps
     'onChange'
   > {
   allowDeselect?: boolean;
+  'data-testid'?: string;
   disabled?: boolean;
   dropdownPosition?: 'top' | 'bottom';
   errorContent?: string;
@@ -52,6 +53,7 @@ const renderSelectOption = ({
 
 const Select = ({
   allowDeselect = false,
+  'data-testid': dataTestId = 'form-select',
   disabled,
   dropdownPosition,
   errorContent,
@@ -102,7 +104,7 @@ const Select = ({
       allowDeselect={allowDeselect}
       comboboxProps={{position: dropdownPosition}}
       data={selectableItems}
-      data-testid={'form-select'}
+      data-testid={dataTestId}
       disabled={disabled || !items?.length}
       error={isDefined(errorContent) && `${errorContent}`}
       label={label}
