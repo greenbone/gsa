@@ -4,7 +4,11 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {createResponse, createHttp} from 'gmp/commands/testing';
+import {
+  createResponse,
+  createHttp,
+  createActionResultResponse,
+} from 'gmp/commands/testing';
 import {
   CertificateInfo,
   UserCommand,
@@ -105,6 +109,24 @@ describe('UserCommand tests', () => {
     expect(data?.id).toEqual('123');
     expect(data?.name).toEqual('Rows Per Page');
     expect(data?.value).toEqual('42');
+  });
+
+  test('should allow to change password', async () => {
+    const response = createActionResultResponse({
+      action: 'Change Password',
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new UserCommand(fakeHttp);
+
+    expect.hasAssertions();
+    await cmd.changePassword('oldPassword', 'newPassword');
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'change_password',
+        old_password: 'oldPassword',
+        password: 'newPassword',
+      },
+    });
   });
 });
 
