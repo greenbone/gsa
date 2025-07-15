@@ -299,7 +299,8 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
       setErrorMessage(
         'dateTimeFormat',
         // @ts-expect-error
-        error.message ?? _('An error occurred'),
+        error.message ??
+          _('An error occurred while saving the setting, please try again.'),
       );
       console.error(error);
     }
@@ -558,7 +559,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
       } catch (error) {
         const errorMsg =
           (error instanceof Error ? error.message : String(error)) ??
-          _('An error occurred');
+          _('An error occurred while saving the setting, please try again.');
         setErrorMessage('password', errorMsg);
         console.error(error);
       }

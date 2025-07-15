@@ -96,14 +96,12 @@ const useSettingSave = () => {
           ...prev,
           [settingName]: '',
         }));
-        showSuccessNotification(
-          _('Setting saved successfully'),
-          _('Your changes have been saved.'),
-        );
+        showSuccessNotification('', _('Your changes have been saved.'));
       } catch (error) {
         const message =
           // @ts-expect-error
-          error.message ?? _('An error occurred');
+          error.message ??
+          _('An error occurred while saving the setting, please try again.');
         setErrorMessages(prev => ({
           ...prev,
           [settingName]: message,
