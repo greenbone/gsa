@@ -13,6 +13,8 @@ export const USER_SETTINGS_DEFAULTS_LOADING_SUCCESS =
   'USER_SETTINGS_DEFAULTS_LOADING_SUCCESS';
 export const USER_SETTINGS_DEFAULTS_LOADING_ERROR =
   'USER_SETTINGS_DEFAULTS_LOADING_ERROR';
+export const USER_SETTINGS_DEFAULTS_OPTIMISTIC_UPDATE =
+  'USER_SETTINGS_DEFAULTS_OPTIMISTIC_UPDATE';
 
 export const loadingActions = {
   request: () => ({
@@ -25,6 +27,12 @@ export const loadingActions = {
   error: err => ({
     type: USER_SETTINGS_DEFAULTS_LOADING_ERROR,
     error: err,
+  }),
+  optimisticUpdate: (settingId, name, value) => ({
+    type: USER_SETTINGS_DEFAULTS_OPTIMISTIC_UPDATE,
+    settingId,
+    name,
+    value,
   }),
 };
 
@@ -45,28 +53,33 @@ export const loadUserSettingDefaults = gmp => () => (dispatch, getState) => {
   );
 };
 
-export const loadUserSettingDefault = gmp => id => (dispatch, getState) => {
-  const rootState = getState();
-  const selector = getUserSettingsDefaults(rootState);
+export const loadUserSettingDefault =
+  gmp =>
+  (id, silent = false) =>
+  (dispatch, getState) => {
+    const rootState = getState();
+    const selector = getUserSettingsDefaults(rootState);
 
-  if (selector.isLoading()) {
-    // we are already loading data
-    return Promise.resolve();
-  }
+    if (selector.isLoading()) {
+      // we are already loading data
+      return Promise.resolve();
+    }
 
-  dispatch(loadingActions.request());
+    if (!silent) {
+      dispatch(loadingActions.request());
+    }
 
-  return gmp.user
-    .getSetting(id)
-    .then(response => (isDefined(response) ? response.data : null))
-    .then(setting => {
-      const settings = {};
-      settings[transformSettingName(setting.name)] = setting;
-      dispatch(loadingActions.success(settings));
-    })
-    .catch(err => {
-      if (isDefined(err)) {
-        dispatch(loadingActions.error(err));
-      }
-    });
-};
+    return gmp.user
+      .getSetting(id)
+      .then(response => (isDefined(response) ? response.data : null))
+      .then(setting => {
+        const settings = {};
+        settings[transformSettingName(setting.name)] = setting;
+        dispatch(loadingActions.success(settings));
+      })
+      .catch(err => {
+        if (isDefined(err)) {
+          dispatch(loadingActions.error(err));
+        }
+      });
+  };

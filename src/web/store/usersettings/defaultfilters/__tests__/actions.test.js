@@ -47,6 +47,18 @@ describe('defaultFilterLoadingActions tests', () => {
       error: 'An error occurred',
     });
   });
+
+  test('should create an optimistic update action', () => {
+    const action = defaultFilterLoadingActions.optimisticUpdate(
+      'foo',
+      'filterId123',
+    );
+    expect(action).toEqual({
+      type: 'USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE',
+      entityType: 'foo',
+      filterId: 'filterId123',
+    });
+  });
 });
 
 const createState = (type, state) => ({

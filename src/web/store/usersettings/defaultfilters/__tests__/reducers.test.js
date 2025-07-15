@@ -109,4 +109,41 @@ describe('default filters reducers tests', () => {
       },
     });
   });
+
+  test('should reduce an optimistic update action with previous filter object', () => {
+    const prevState = {
+      foo: {
+        isLoading: true,
+        filter: {id: 'oldId', name: 'oldFilter'},
+        error: 'old error',
+      },
+    };
+    const action = defaultFilterLoadingActions.optimisticUpdate('foo', 'newId');
+    const state = reducer(prevState, action);
+    expect(state).toEqual({
+      foo: {
+        isLoading: false,
+        filter: {id: 'newId', name: 'oldFilter'},
+        error: undefined,
+      },
+    });
+  });
+
+  test('should reduce an optimistic update action with no previous filter', () => {
+    const prevState = {
+      foo: {
+        isLoading: true,
+        error: 'old error',
+      },
+    };
+    const action = defaultFilterLoadingActions.optimisticUpdate('foo', 'newId');
+    const state = reducer(prevState, action);
+    expect(state).toEqual({
+      foo: {
+        isLoading: false,
+        filter: {id: 'newId'},
+        error: undefined,
+      },
+    });
+  });
 });

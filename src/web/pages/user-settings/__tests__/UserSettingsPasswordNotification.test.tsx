@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {render, screen} from 'web/testing';
-import UserSettingsPasswordNotification from 'web/pages/user-settings/GeneralPart/UserSettingsPasswordNotification';
+import UserSettingsPasswordNotification from 'web/pages/user-settings/UserSettingsPasswordNotification';
 import Theme from 'web/utils/Theme';
 
 describe('UserSettingsPasswordNotification', () => {

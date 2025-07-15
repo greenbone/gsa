@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {getLangNameByCode} from 'web/pages/user-settings/user-setting-page/helperFunctions';
+import {getLangNameByCode} from 'web/pages/user-settings/helperFunctions';
 
 describe('getLangNameByCode', () => {
   test('returns the correct language name for a valid code', () => {
