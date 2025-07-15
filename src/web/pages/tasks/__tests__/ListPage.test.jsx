@@ -164,7 +164,7 @@ describe('TaskDetailsPage tests', () => {
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tbody tr')[0];
     const powerFilter = within(screen.queryPowerFilter());
-    const select = powerFilter.getSelectElement();
+    const select = powerFilter.getByTestId('powerfilter-select');
 
     // Toolbar Icons
     const helpIcon = screen.getByTestId('help-icon');

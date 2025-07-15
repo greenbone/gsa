@@ -144,8 +144,8 @@ describe('TlsCertificatePage tests', () => {
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
     const powerFilter = within(screen.queryPowerFilter());
-    const select = powerFilter.getSelectElement();
     const inputs = powerFilter.queryTextInputs();
+    const select = powerFilter.getByTestId('powerfilter-select');
 
     // Toolbar Icon
     expect(screen.getByTestId('help-icon')).toHaveAttribute(

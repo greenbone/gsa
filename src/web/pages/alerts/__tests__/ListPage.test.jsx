@@ -138,7 +138,7 @@ describe('Alert ListPage tests', () => {
 
     await wait();
 
-    const selects = screen.queryAllSelectElements();
+    const select = screen.getByTestId('powerfilter-select');
     const inputs = screen.queryTextInputs();
 
     // Toolbar Icons
@@ -149,8 +149,8 @@ describe('Alert ListPage tests', () => {
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveValue('--');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
+    expect(select).toHaveValue('--');
 
     // Table
     const header = baseElement.querySelectorAll('th');

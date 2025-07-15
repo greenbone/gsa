@@ -156,7 +156,7 @@ describe('CvesPage tests', () => {
     const display = screen.getAllByTestId('grid-item');
     const powerFilter = within(screen.queryPowerFilter());
     const inputs = powerFilter.queryTextInputs();
-    const select = powerFilter.getSelectElement();
+    const select = powerFilter.getByTestId('powerfilter-select');
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: CVEs')[0]).toBeInTheDocument();

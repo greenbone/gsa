@@ -125,7 +125,7 @@ describe('Delta Report Details Content tests', () => {
     const tableData = baseElement.querySelectorAll('td');
     const bars = screen.getAllByTestId('progressbar-box');
     const powerFilter = within(screen.queryPowerFilter());
-    const select = powerFilter.getSelectElement();
+    const select = powerFilter.getByTestId('powerfilter-select');
     const inputs = powerFilter.queryTextInputs();
 
     // Powerfilter
@@ -299,7 +299,7 @@ describe('Delta Report Details Content tests', () => {
     const rows = baseElement.querySelectorAll('tr');
     const bars = screen.getAllByTestId('progressbar-box');
     const powerFilter = within(screen.queryPowerFilter());
-    const select = powerFilter.getSelectElement();
+    const select = powerFilter.getByTestId('powerfilter-select');
     const inputs = powerFilter.queryTextInputs();
 
     // Powerfilter

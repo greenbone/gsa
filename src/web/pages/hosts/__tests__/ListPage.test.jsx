@@ -182,7 +182,7 @@ describe('Host ListPage tests', () => {
     await wait();
 
     const powerFilter = within(screen.queryPowerFilter());
-    const select = powerFilter.getSelectElement();
+    const select = powerFilter.getByTestId('powerfilter-select');
     const inputs = powerFilter.queryTextInputs();
 
     // Toolbar Icons
