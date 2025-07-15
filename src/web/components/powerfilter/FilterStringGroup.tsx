@@ -3,16 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import {isString} from 'gmp/utils/identity';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
+interface FilterStringGroupProps {
+  filter: string | Filter;
+  name?: string;
+  onChange?: (value: string, name?: string) => void;
+}
+
+const FilterStringGroup = ({
+  filter,
+  onChange,
+  name = 'filter',
+}: FilterStringGroupProps) => {
   const [_] = useTranslation();
-  const filterstring = isString(filter)
+  const filterString = isString(filter)
     ? filter
     : filter.toFilterCriteriaString();
   return (
@@ -21,17 +30,11 @@ const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
         grow="1"
         name={name}
         size="30"
-        value={filterstring}
+        value={filterString}
         onChange={onChange}
       />
     </FormGroup>
   );
-};
-
-FilterStringGroup.propTypes = {
-  filter: PropTypes.oneOfType([PropTypes.string, PropTypes.filter]).isRequired,
-  name: PropTypes.string,
-  onChange: PropTypes.func,
 };
 
 export default FilterStringGroup;
