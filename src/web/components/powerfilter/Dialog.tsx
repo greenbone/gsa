@@ -3,16 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import DefaultFilterDialogPropTypes from 'web/components/powerfilter/DialogPropTypes';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
 import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
-import SortByGroup from 'web/components/powerfilter/SortByGroup';
+import SortByGroup, {SortByField} from 'web/components/powerfilter/SortByGroup';
 import useCapabilities from 'web/hooks/useCapabilities';
 
-export const DefaultFilterDialog = ({
+interface DefaultFilterDialogProps {
+  filter?: Filter;
+  filterName?: string;
+  filterstring: string;
+  saveNamedFilter?: boolean;
+  sortFields?: SortByField[];
+  onFilterStringChange?: (value: string) => void;
+  onFilterValueChange?: (value: string | number, name?: string) => void;
+  onSortByChange?: (value: string) => void;
+  onSortOrderChange?: (value: string) => void;
+  onValueChange?: (value: string | boolean, name?: string) => void;
+}
+
+const DefaultFilterDialog = ({
   filter,
   filterName,
   filterstring,
@@ -23,7 +36,7 @@ export const DefaultFilterDialog = ({
   onSortByChange,
   onSortOrderChange,
   onValueChange,
-}) => {
+}: DefaultFilterDialogProps) => {
   const capabilities = useCapabilities();
   return (
     <>
@@ -41,7 +54,6 @@ export const DefaultFilterDialog = ({
       />
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
@@ -50,8 +62,6 @@ export const DefaultFilterDialog = ({
     </>
   );
 };
-
-DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
 
 export {DefaultFilterDialogPropTypes};
 
