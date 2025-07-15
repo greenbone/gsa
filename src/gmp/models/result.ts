@@ -351,8 +351,8 @@ class Result extends Model {
     if (isDefined(information)) {
       if (information.type === 'nvt') {
         copy.information = Nvt.fromElement({
-          nvt: information as ResultNvtElement,
-        });
+          nvt: information,
+        } as ResultNvtElement);
       } else {
         copy.information = createCveResult(information as ResultCveElement);
         copy.name = name ?? information.name;

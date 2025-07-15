@@ -57,21 +57,16 @@ export const render = (ui: React.ReactNode) => {
   };
 };
 
-export const rendererWith = (
-  {
-    capabilities,
-    gmp,
-    license,
-    store = true,
-    router,
-    route = '/',
-    showLocation = false,
-    language = 'en',
-  }: RendererOptions = {
-    store: true,
-    router: true,
-  },
-) => {
+export const rendererWith = ({
+  capabilities,
+  gmp,
+  license,
+  store = true,
+  router = true,
+  route = '/',
+  showLocation = false,
+  language = 'en',
+}: RendererOptions = {}) => {
   if (store === true) {
     store = configureStore({testing: true});
   }

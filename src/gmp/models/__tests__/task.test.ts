@@ -13,7 +13,7 @@ import Task, {
   USAGE_TYPE,
 } from 'gmp/models/task';
 import {testModel} from 'gmp/models/testing';
-import {parseDuration} from 'gmp/parser';
+import {parseDate, parseDuration} from 'gmp/parser';
 
 describe('Task Model parse tests', () => {
   testModel(Task, 'task', {testIsActive: false});
@@ -101,12 +101,38 @@ describe('Task Model parse tests', () => {
       last_report: {
         report: {
           _id: 'r1',
+          scan_start: '2023-10-01T12:00:00Z',
+          scan_end: '2023-10-01T12:05:00Z',
+          timestamp: '2023-10-01T12:06:00Z',
+          severity: 5.5,
+          result_count: {
+            false_positive: 1,
+            high: 2,
+            log: 3,
+            low: 4,
+            medium: 5,
+          },
         },
       },
     });
     expect(task.id).toEqual('t1');
     expect(task.last_report?.id).toEqual('r1');
     expect(task.last_report?.entityType).toEqual('report');
+    expect(task.last_report?.timestamp).toEqual(
+      parseDate('2023-10-01T12:06:00Z'),
+    );
+    expect(task.last_report?.scan_start).toEqual(
+      parseDate('2023-10-01T12:00:00Z'),
+    );
+    expect(task.last_report?.scan_end).toEqual(
+      parseDate('2023-10-01T12:05:00Z'),
+    );
+    expect(task.last_report?.severity).toEqual(5.5);
+    expect(task.last_report?.result_count?.false_positive).toEqual(1);
+    expect(task.last_report?.result_count?.high).toEqual(2);
+    expect(task.last_report?.result_count?.log).toEqual(3);
+    expect(task.last_report?.result_count?.low).toEqual(4);
+    expect(task.last_report?.result_count?.medium).toEqual(5);
   });
 
   test('should parse current report', () => {
@@ -115,12 +141,25 @@ describe('Task Model parse tests', () => {
       current_report: {
         report: {
           _id: 'r1',
+          timestamp: '2023-10-01T12:00:00Z',
+          scan_start: '2023-10-01T12:01:00Z',
+          scan_end: '2023-10-01T12:02:00Z',
         },
       },
     });
     expect(task.id).toEqual('t1');
     expect(task.current_report?.id).toEqual('r1');
     expect(task.current_report?.entityType).toEqual('report');
+    expect(task.current_report?.timestamp).toEqual(
+      parseDate('2023-10-01T12:00:00Z'),
+    );
+    expect(task.current_report?.scan_start).toEqual(
+      parseDate('2023-10-01T12:01:00Z'),
+    );
+    expect(task.current_report?.scan_end).toEqual(
+      parseDate('2023-10-01T12:02:00Z'),
+    );
+    expect(task.current_report?.severity).toBeUndefined();
   });
 
   test('should parse config', () => {
@@ -353,9 +392,18 @@ describe('Task Model parse tests', () => {
     const task3 = Task.fromElement({
       observers: '',
     });
-    expect(task3.observers?.user).toEqual([]);
+    expect(task3.observers?.user).toBeUndefined();
     expect(task3.observers?.role).toBeUndefined();
     expect(task3.observers?.group).toBeUndefined();
+
+    const task4 = Task.fromElement({
+      observers: {
+        __text: '',
+      },
+    });
+    expect(task4.observers?.user).toBeUndefined();
+    expect(task4.observers?.role).toBeUndefined();
+    expect(task4.observers?.group).toBeUndefined();
   });
 
   test('should parse alterable', () => {

@@ -31,6 +31,7 @@ import Task, {
   TaskHostsOrdering,
   TaskAutoDelete,
   USAGE_TYPE,
+  TaskReport,
 } from 'gmp/models/task';
 import {NO_VALUE, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -53,28 +54,9 @@ export {
 
 export type AuditStatus = (typeof AUDIT_STATUS)[keyof typeof AUDIT_STATUS];
 
-interface AuditElement extends TaskElement {
-  first_report?: {
-    report?: {
-      _id?: string;
-      timestamp?: string;
-      scan_start?: string;
-      scan_end?: string;
-    };
-  };
-  second_last_report?: {
-    report?: {
-      _id?: string;
-      timestamp?: string;
-      scan_start?: string;
-      scan_end?: string;
-    };
-  };
-}
+type AuditElement = TaskElement;
 
 interface AuditProperties extends Omit<TaskProperties, 'status'> {
-  first_report?: Report;
-  second_last_report?: Report;
   status?: AuditStatus;
 }
 
@@ -88,11 +70,11 @@ class Audit extends Model {
   readonly auto_delete?: TaskAutoDelete;
   readonly average_duration?: Duration;
   readonly config?: Model;
-  readonly current_report?: Report;
+  readonly current_report?: TaskReport;
   readonly first_report?: Report;
   readonly hosts_ordering?: TaskHostsOrdering;
   readonly in_assets?: YesNo;
-  readonly last_report?: Report;
+  readonly last_report?: TaskReport;
   readonly max_checks?: number;
   readonly max_hosts?: number;
   readonly min_qod?: number;
@@ -126,8 +108,6 @@ class Audit extends Model {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     current_report,
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    first_report,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     hosts_ordering,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     in_assets,
@@ -150,8 +130,6 @@ class Audit extends Model {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     schedule_periods,
     schedule,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    second_last_report,
     slave,
     status = AUDIT_STATUS.unknown,
     target,
@@ -168,7 +146,6 @@ class Audit extends Model {
     this.average_duration = average_duration;
     this.config = config;
     this.current_report = current_report;
-    this.first_report = first_report;
     this.hosts_ordering = hosts_ordering;
     this.in_assets = in_assets;
     this.last_report = last_report;
@@ -183,7 +160,6 @@ class Audit extends Model {
     this.scanner = scanner;
     this.schedule_periods = schedule_periods;
     this.schedule = schedule;
-    this.second_last_report = second_last_report;
     this.slave = slave;
     this.status = status;
     this.target = target;
@@ -201,16 +177,7 @@ class Audit extends Model {
   }
 
   static parseElement(element: AuditElement = {}): AuditProperties {
-    const copy = Task.parseElement(element) as AuditProperties;
-
-    copy.first_report = isDefined(element.first_report)
-      ? Report.fromElement(element.first_report.report)
-      : undefined;
-    copy.second_last_report = isDefined(element.second_last_report)
-      ? Report.fromElement(element.second_last_report.report)
-      : undefined;
-
-    return copy;
+    return Task.parseElement(element) as AuditProperties;
   }
 
   isActive() {

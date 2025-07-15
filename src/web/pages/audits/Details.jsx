@@ -91,7 +91,7 @@ class AuditDetails extends React.Component {
           </DetailsBlock>
         )}
 
-        {isDefined(alerts) && (
+        {isDefined(alerts) && alerts.length > 0 && (
           <DetailsBlock title={_('Alerts')}>
             <HorizontalSep>
               {alerts.sort(compareAlerts).map(alert => (

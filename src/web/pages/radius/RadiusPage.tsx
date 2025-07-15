@@ -37,7 +37,6 @@ const ToolBarIcons = ({onOpenDialogClick}: ToolBarIconsProps) => {
   const [_] = useTranslation();
   return (
     <IconDivider>
-      {/* @ts-expect-error */}
       <ManualIcon
         anchor="radius"
         page="web-interface-access"

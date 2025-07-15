@@ -6,8 +6,8 @@
 import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/Loading';
-import SortBy from 'web/components/sortby/SortBy';
 import PropTypes from 'web/utils/PropTypes';
+import SortDirection from 'web/utils/SortDirection';
 
 const sortEntities = ({
   entities,
@@ -159,7 +159,7 @@ class ReportEntitiesContainer extends React.Component {
       entities: pagedEntities,
       entitiesCounts: pagedCounts,
       sortBy: sortField,
-      sortDir: sortReverse ? SortBy.DESC : SortBy.ASC,
+      sortDir: sortReverse ? SortDirection.DESC : SortDirection.ASC,
       onFirstClick: this.handleFirst,
       onLastClick: this.handleLast,
       onNextClick: this.handleNext,

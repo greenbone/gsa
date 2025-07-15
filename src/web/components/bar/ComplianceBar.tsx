@@ -3,35 +3,32 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {getTranslatableReportCompliance} from 'gmp/models/auditreport';
+import {
+  COMPLIANCE,
+  ComplianceType,
+  getTranslatableReportCompliance,
+} from 'gmp/models/compliance';
 import {isDefined} from 'gmp/utils/identity';
 import ProgressBar from 'web/components/bar/ProgressBar';
 import Theme from 'web/utils/Theme';
 
-const COMPLIANCE_STATE = {
-  NO: 'no',
-  INCOMPLETE: 'incomplete',
-  YES: 'yes',
-  UNDEFINED: 'undefined',
-} as const;
-
-export type ComplianceState =
-  (typeof COMPLIANCE_STATE)[keyof typeof COMPLIANCE_STATE];
-
 interface ComplianceBarProps {
-  compliance?: ComplianceState;
+  compliance?: ComplianceType;
   toolTip?: string;
 }
 
-const ComplianceBar = ({compliance, toolTip}: ComplianceBarProps) => {
+const ComplianceBar = ({
+  compliance = COMPLIANCE.UNDEFINED,
+  toolTip,
+}: ComplianceBarProps) => {
   const title = getTranslatableReportCompliance(compliance);
 
   let background: string;
-  if (compliance === COMPLIANCE_STATE.NO) {
+  if (compliance === COMPLIANCE.NO) {
     background = Theme.complianceNo;
-  } else if (compliance === COMPLIANCE_STATE.INCOMPLETE) {
+  } else if (compliance === COMPLIANCE.INCOMPLETE) {
     background = Theme.complianceIncomplete;
-  } else if (compliance === COMPLIANCE_STATE.YES) {
+  } else if (compliance === COMPLIANCE.YES) {
     background = Theme.complianceYes;
   } else {
     background = Theme.complianceUndefined;

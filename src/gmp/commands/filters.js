@@ -97,8 +97,8 @@ class FiltersCommand extends EntitiesCommand {
     const response = this.getEntitiesResponse(root);
     return parseCollectionList(response, this.name, this.clazz, {
       meta,
-      filter_parse_func: parseFilter,
-      collection_count_parse_func: parse_collection_counts,
+      filterParseFunc: parseFilter,
+      collectionCountParseFunc: parse_collection_counts,
     });
   }
 }

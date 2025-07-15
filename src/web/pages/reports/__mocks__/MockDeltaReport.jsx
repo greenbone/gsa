@@ -15,6 +15,7 @@ const task1 = {
   name: 'foo',
   comment: 'bar',
   target: {_id: '159'},
+  progress: 0,
 };
 
 // Results

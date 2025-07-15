@@ -92,7 +92,7 @@ import TicketDetailsPage from 'web/pages/tickets/DetailsPage';
 import TicketsPage from 'web/pages/tickets/ListPage';
 import TlsCertificateDetailsPage from 'web/pages/tlscertificates/DetailsPage';
 import TlsCertificatesPage from 'web/pages/tlscertificates/ListPage';
-import UserSettingsPage from 'web/pages/user-settings/UserSettingsPage';
+import UserSettingsPage from 'web/pages/user-settings/user-setting-page/UserSettingsPage';
 import UserDetailsPage from 'web/pages/users/DetailsPage';
 import UsersPage from 'web/pages/users/ListPage';
 import VulnerabilitiesPage from 'web/pages/vulns/ListPage';

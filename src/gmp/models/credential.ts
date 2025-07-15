@@ -121,6 +121,8 @@ interface CredentialElement extends ModelElement {
   kdcs?: {
     kdc: string | string[];
   };
+  login?: string;
+  realm?: string;
   targets?: {
     target?: ModelElement | ModelElement[];
   };
@@ -139,6 +141,8 @@ interface CredentialProperties extends ModelProperties {
   certificate_info?: CertificateInfo;
   credential_type?: CredentialType;
   kdcs?: string[];
+  login?: string;
+  realm?: string;
   targets?: Model[];
   scanners?: Model[];
 }
@@ -150,6 +154,8 @@ class Credential extends Model {
   readonly certificate_info?: CertificateInfo;
   readonly credential_type?: CredentialType;
   readonly kdcs: string[];
+  readonly login: string | undefined;
+  readonly realm: string | undefined;
   readonly targets: Model[];
   readonly scanners: Model[];
 
@@ -161,6 +167,8 @@ class Credential extends Model {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     credential_type,
     kdcs = [],
+    login,
+    realm,
     targets = [],
     scanners = [],
     ...properties
@@ -170,6 +178,8 @@ class Credential extends Model {
     this.certificate_info = certificate_info;
     this.credential_type = credential_type;
     this.kdcs = kdcs;
+    this.login = login;
+    this.realm = realm;
     this.targets = targets;
     this.scanners = scanners;
   }
@@ -196,6 +206,14 @@ class Credential extends Model {
       ret.kdcs = Array.isArray(element.kdcs.kdc)
         ? element.kdcs.kdc
         : [element.kdcs.kdc];
+    }
+
+    if (isDefined(element.login)) {
+      ret.login = element.login;
+    }
+
+    if (isDefined(element.realm)) {
+      ret.realm = element.realm;
     }
 
     ret.targets = map(element.targets?.target, target =>

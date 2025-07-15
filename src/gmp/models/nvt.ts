@@ -18,7 +18,7 @@ import {
   YES_VALUE,
 } from 'gmp/parser';
 import {map} from 'gmp/utils/array';
-import {isDefined, isString} from 'gmp/utils/identity';
+import {isArray, isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 
 export const TAG_NA = 'N/A';
@@ -42,17 +42,17 @@ const parseTags = (tags?: string): Tags => {
 
 export const getRefs = (element?: {
   refs?: {
-    ref?: RefElement | RefElement[];
+    ref?: NvtRefElement | NvtRefElement[];
   };
 }) => map(element?.refs?.ref, ref => ref);
 
-export const hasRefType = (refType: string) => (ref?: Partial<RefElement>) =>
+export const hasRefType = (refType: string) => (ref?: Partial<NvtRefElement>) =>
   isString(ref?._type) && ref._type.toLowerCase() === refType;
 
-export const getFilteredRefIds = (refs: RefElement[] = [], type: string) =>
+export const getFilteredRefIds = (refs: NvtRefElement[] = [], type: string) =>
   refs.filter(hasRefType(type)).map(ref => ref._id);
 
-const getFilteredUrlRefs = (refs: RefElement[]) => {
+const getFilteredUrlRefs = (refs: NvtRefElement[]) => {
   return refs.filter(hasRefType('url')).map(ref => {
     let id = ref._id;
     if (
@@ -70,13 +70,13 @@ const getFilteredUrlRefs = (refs: RefElement[]) => {
   });
 };
 
-const getFilteredRefs = (refs: RefElement[], type: string) =>
+const getFilteredRefs = (refs: NvtRefElement[], type: string) =>
   refs.filter(hasRefType(type)).map(ref => ({
     id: ref._id,
     type,
   }));
 
-const getOtherRefs = (refs: RefElement[]) => {
+const getOtherRefs = (refs: NvtRefElement[]) => {
   const filteredRefs = refs.filter(ref => {
     const referenceType = isString(ref._type)
       ? ref._type.toLowerCase()
@@ -98,7 +98,7 @@ const getOtherRefs = (refs: RefElement[]) => {
   return returnRefs;
 };
 
-interface RefElement {
+export interface NvtRefElement {
   _id: string;
   _type?: string;
 }
@@ -138,7 +138,12 @@ export interface NvtEpssElement {
   max_severity?: EpssElement;
 }
 
-interface NvtElement extends ModelElement {
+export interface NvtSeveritiesElement {
+  _score?: string;
+  severity?: SeverityElement | SeverityElement[];
+}
+
+export interface NvtElement extends ModelElement {
   update_time?: string;
   nvt?: {
     _oid?: string;
@@ -158,12 +163,9 @@ interface NvtElement extends ModelElement {
     };
     qod?: QoDParams;
     refs?: {
-      ref?: RefElement | RefElement[];
+      ref?: NvtRefElement | NvtRefElement[];
     };
-    severities?: {
-      _score?: number | string;
-      severity?: SeverityElement;
-    };
+    severities?: NvtSeveritiesElement;
     solution?: {
       __text?: string;
       _method?: string;
@@ -344,7 +346,9 @@ class Nvt extends Model {
     ret.xrefs = getFilteredUrlRefs(refs).concat(getOtherRefs(refs));
 
     if (isDefined(nvtElement?.severities?.severity)) {
-      const {severity} = nvtElement.severities;
+      const severity = isArray(nvtElement.severities.severity)
+        ? nvtElement.severities.severity[0]
+        : nvtElement.severities.severity;
       ret.severity = parseSeverity(severity.score);
       ret.severityOrigin = parseText(severity.origin);
       ret.severityDate = parseDate(severity.date);

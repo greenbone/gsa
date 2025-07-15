@@ -28,11 +28,11 @@ import TableData, {TableDataAlignTop} from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
+import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import {goToList} from 'web/entity/navigation';
 import EntityPermissions from 'web/entity/Permissions';
-import EntitiesTab from 'web/entity/Tab';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
