@@ -18,7 +18,7 @@ import TrashIcon from 'web/components/icon/TrashIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
-import TableFooter from 'web/components/table/Footer';
+import TableFooter from 'web/components/table/TableFooter';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
