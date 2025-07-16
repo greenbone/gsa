@@ -14,7 +14,7 @@ export {BROWSER_LANGUAGE};
 const Languages: Record<string, Language> = {
   ...GmpLanguages,
   [BROWSER_LANGUAGE]: {
-    name: String(_l('Browser Language')),
+    name: _l('Browser Language') as string,
     native_name: '',
   },
 };

@@ -14,5 +14,5 @@ import Languages from 'web/utils/Languages';
  */
 export const getLangNameByCode = (code: string): string | undefined => {
   const language = Languages[code];
-  return isDefined(language) ? `${language.name}` : undefined;
+  return isDefined(language) ? String(language.name) : undefined;
 };

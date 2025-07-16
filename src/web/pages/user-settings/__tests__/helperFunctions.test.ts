@@ -5,6 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {getLangNameByCode} from 'web/pages/user-settings/helperFunctions';
+import {BROWSER_LANGUAGE} from 'web/utils/Languages';
 
 describe('getLangNameByCode', () => {
   test('returns the correct language name for a valid code', () => {
@@ -14,9 +15,14 @@ describe('getLangNameByCode', () => {
     expect(result).toBe(expectedLangName);
   });
 
-  test('returns "Unknown" for an invalid language code', () => {
+  test('returns undefined for an invalid language code', () => {
     const langCode = 'xx';
     const result = getLangNameByCode(langCode);
     expect(result).toBeUndefined();
+  });
+
+  test('returns correct name for browser language', () => {
+    const result = getLangNameByCode(BROWSER_LANGUAGE);
+    expect(result).toBe('Browser Language');
   });
 });
