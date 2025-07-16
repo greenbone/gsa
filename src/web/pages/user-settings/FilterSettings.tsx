@@ -7,7 +7,7 @@ import {useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/users';
-import {ALL_FILTER} from 'gmp/models/filter';
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import Select from 'web/components/form/Select';
 import Layout from 'web/components/layout/Layout';
@@ -254,9 +254,29 @@ export const FilterSettings = ({
       }
 
       if (entityType) {
-        dispatch(
-          defaultFilterLoadingActions.optimisticUpdate(entityType, values[key]),
-        );
+        const filterId = values[key];
+
+        const selectedFilter = filters.find(filter => filter.id === filterId);
+
+        if (selectedFilter) {
+          dispatch(
+            defaultFilterLoadingActions.optimisticUpdate(
+              entityType,
+              selectedFilter,
+            ),
+          );
+        } else if (filterId) {
+          const filter = new Filter();
+          // @ts-expect-error
+          filter.id = filterId;
+          dispatch(
+            defaultFilterLoadingActions.optimisticUpdate(entityType, filter),
+          );
+        } else {
+          dispatch(
+            defaultFilterLoadingActions.optimisticUpdate(entityType, null),
+          );
+        }
       }
 
       await saveSetting(settingId, key, values[key], value =>
