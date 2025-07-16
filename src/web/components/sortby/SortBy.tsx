@@ -18,10 +18,17 @@ interface SortByProps {
   by: string;
   children?: React.ReactNode;
   className?: string;
+  'data-testid'?: string;
   onClick?: (by: string) => void;
 }
 
-const SortBy = ({by, children, className, onClick}: SortByProps) => {
+const SortBy = ({
+  by,
+  children,
+  className,
+  'data-testid': dataTestId,
+  onClick,
+}: SortByProps) => {
   const handleClick = () => {
     if (onClick) {
       onClick(by);
@@ -29,7 +36,11 @@ const SortBy = ({by, children, className, onClick}: SortByProps) => {
   };
 
   return (
-    <SortButton className={className} onClick={handleClick}>
+    <SortButton
+      className={className}
+      data-testid={dataTestId}
+      onClick={handleClick}
+    >
       {children}
     </SortButton>
   );
