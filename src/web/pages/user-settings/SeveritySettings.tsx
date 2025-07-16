@@ -5,7 +5,7 @@
 
 import {useEffect, useState, useMemo} from 'react';
 
-import {YES_VALUE, NO_VALUE, parseYesNo, YesNo} from 'gmp/parser';
+import {NO_VALUE, parseYesNo, YES_VALUE, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 import Checkbox from 'web/components/form/Checkbox';
@@ -59,7 +59,8 @@ const SeveritySettings = ({disableEditIcon = false}: SeveritySettingsProps) => {
 
   useEffect(() => {
     if (dynamicSeverity?.value) {
-      setDynamicSeverityState(dynamicSeverity.value as YesNo);
+      const value = parseYesNo(String(dynamicSeverity.value));
+      setDynamicSeverityState(value);
     }
   }, [dynamicSeverity]);
 
@@ -100,7 +101,8 @@ const SeveritySettings = ({disableEditIcon = false}: SeveritySettingsProps) => {
   };
 
   const cancelDynamicSeverityEdit = (): void => {
-    setDynamicSeverityState((dynamicSeverity.value as YesNo) ?? NO_VALUE);
+    const value = parseYesNo(String(dynamicSeverity.value));
+    setDynamicSeverityState(value);
     setDynamicSeverityEditMode(false);
     clearErrorMessage('dynamicSeverity');
     onInteraction();
