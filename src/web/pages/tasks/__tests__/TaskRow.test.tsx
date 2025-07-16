@@ -8,7 +8,7 @@ import {rendererWithTable, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import Row from 'web/pages/tasks/Row';
+import TaskRow from 'web/pages/tasks/TaskRow';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const gmp = {settings: {}};
@@ -18,7 +18,7 @@ const lastReport = {
   report: {
     _id: '1234',
     timestamp: '2019-07-10T12:51:27Z',
-    severity: '5.0',
+    severity: 5.0,
   },
 };
 
@@ -37,8 +37,8 @@ describe('Task Row tests', () => {
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.done,
-      alterable: '0',
-      report_count: {__text: '3', finished: '3'},
+      alterable: 0,
+      report_count: {__text: 3, finished: 3},
       last_report: lastReport,
       trend: 'up',
       permissions: {permission: [{name: 'everything'}]},
@@ -66,7 +66,7 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
-      <Row
+      <TaskRow
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -142,8 +142,8 @@ describe('Task Row tests', () => {
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.done,
-      alterable: '1',
-      report_count: {__text: '1', finished: '1'},
+      alterable: 1,
+      report_count: {__text: 1, finished: 1},
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
@@ -180,7 +180,7 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     render(
-      <Row
+      <TaskRow
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -218,8 +218,8 @@ describe('Task Row tests', () => {
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.new,
-      report_count: {__text: '0', finished: '0'},
-      alterable: '0',
+      report_count: {__text: 0, finished: 0},
+      alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
     });
@@ -245,7 +245,7 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     render(
-      <Row
+      <TaskRow
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -311,10 +311,10 @@ describe('Task Row tests', () => {
       owner: {name: 'username'},
       name: 'foo',
       comment: 'bar',
-      in_use: true,
+      in_use: 1,
       status: TASK_STATUS.running,
-      alterable: '0',
-      report_count: {__text: '1', finished: '0'},
+      alterable: 0,
+      report_count: {__text: 1, finished: 0},
       current_report: currentReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
@@ -341,7 +341,7 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
-      <Row
+      <TaskRow
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -426,8 +426,8 @@ describe('Task Row tests', () => {
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.stopped,
-      alterable: '0',
-      report_count: {__text: '2', finished: '1'},
+      alterable: 0,
+      report_count: {__text: 2, finished: 1},
       current_report: currentReport,
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
@@ -455,7 +455,7 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
-      <Row
+      <TaskRow
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -544,8 +544,8 @@ describe('Task Row tests', () => {
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.done,
-      alterable: '0',
-      report_count: {__text: '1', finished: '1'},
+      alterable: 0,
+      report_count: {__text: 1, finished: 1},
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
@@ -572,7 +572,7 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
-      <Row
+      <TaskRow
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -661,8 +661,8 @@ describe('Task Row tests', () => {
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.done,
-      alterable: '0',
-      report_count: {__text: '1', finished: '1'},
+      alterable: 0,
+      report_count: {__text: 1, finished: 1},
       last_report: lastReport,
       permissions: {permission: [{name: 'get_tasks'}]},
       target: {_id: 'id', name: 'target'},
@@ -689,7 +689,7 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
-      <Row
+      <TaskRow
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -787,7 +787,7 @@ describe('Task Row tests', () => {
       owner: {name: 'username'},
       name: 'foo',
       comment: 'bar',
-      report_count: {__text: '1', finished: '1'},
+      report_count: {__text: 1, finished: 1},
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
     });
@@ -813,7 +813,7 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement} = render(
-      <Row
+      <TaskRow
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
