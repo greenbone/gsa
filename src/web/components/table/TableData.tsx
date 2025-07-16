@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import Layout, {LayoutProps} from 'web/components/layout/Layout';
 
@@ -16,11 +15,17 @@ interface TableDataProps extends LayoutProps {
 const TableData = ({
   children,
   className,
+  'data-testid': dataTestId,
   colSpan,
   rowSpan,
   ...other
 }: TableDataProps) => (
-  <td className={className} colSpan={colSpan} rowSpan={rowSpan}>
+  <td
+    className={className}
+    colSpan={colSpan}
+    data-testid={dataTestId}
+    rowSpan={rowSpan}
+  >
     <StyledLayout flex="column" {...other}>
       {children}
     </StyledLayout>
