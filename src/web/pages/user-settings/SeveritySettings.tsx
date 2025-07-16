@@ -12,9 +12,9 @@ import Checkbox from 'web/components/form/Checkbox';
 import Spinner from 'web/components/form/Spinner';
 
 import TableBody from 'web/components/table/Body';
-import TableHeader from 'web/components/table/Header';
 import StripedTable from 'web/components/table/StripedTable';
 import TableHead from 'web/components/table/TableHead';
+import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
