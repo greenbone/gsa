@@ -118,12 +118,18 @@ describe('default filters reducers tests', () => {
         error: 'old error',
       },
     };
-    const action = defaultFilterLoadingActions.optimisticUpdate('foo', 'newId');
+
+    const newFilter = {id: 'newId', name: 'newFilter'};
+    const action = defaultFilterLoadingActions.optimisticUpdate(
+      'foo',
+      newFilter,
+    );
+
     const state = reducer(prevState, action);
     expect(state).toEqual({
       foo: {
         isLoading: false,
-        filter: {id: 'newId', name: 'oldFilter'},
+        filter: newFilter,
         error: undefined,
       },
     });
@@ -136,12 +142,18 @@ describe('default filters reducers tests', () => {
         error: 'old error',
       },
     };
-    const action = defaultFilterLoadingActions.optimisticUpdate('foo', 'newId');
+
+    const newFilter = {id: 'newId', name: 'newFilter'};
+    const action = defaultFilterLoadingActions.optimisticUpdate(
+      'foo',
+      newFilter,
+    );
+
     const state = reducer(prevState, action);
     expect(state).toEqual({
       foo: {
         isLoading: false,
-        filter: {id: 'newId'},
+        filter: newFilter,
         error: undefined,
       },
     });

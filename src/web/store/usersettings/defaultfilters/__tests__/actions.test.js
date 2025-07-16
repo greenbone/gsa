@@ -49,14 +49,13 @@ describe('defaultFilterLoadingActions tests', () => {
   });
 
   test('should create an optimistic update action', () => {
-    const action = defaultFilterLoadingActions.optimisticUpdate(
-      'foo',
-      'filterId123',
-    );
+    const filter = {id: 'filterId123'};
+    const action = defaultFilterLoadingActions.optimisticUpdate('foo', filter);
+
     expect(action).toEqual({
       type: 'USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE',
       entityType: 'foo',
-      filterId: 'filterId123',
+      filter,
     });
   });
 });

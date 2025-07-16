@@ -31,10 +31,10 @@ export const defaultFilterLoadingActions = {
     entityType,
     error,
   }),
-  optimisticUpdate: (entityType, filterId) => ({
+  optimisticUpdate: (entityType, filter) => ({
     type: USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE,
     entityType,
-    filterId,
+    filter,
   }),
 };
 

@@ -41,13 +41,7 @@ const filter = (state, action) => {
     case USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS:
       return action.filter;
     case USER_SETTINGS_DEFAULT_FILTER_OPTIMISTIC_UPDATE: {
-      if (state && typeof state === 'object') {
-        return {
-          ...state,
-          id: action.filterId,
-        };
-      }
-      return action.filterId ? {id: action.filterId} : null;
+      return action.filter;
     }
     default:
       return state;
