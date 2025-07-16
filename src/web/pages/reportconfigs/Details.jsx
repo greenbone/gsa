@@ -9,9 +9,9 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
-import Col from 'web/components/table/Col';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
@@ -102,8 +102,8 @@ const ReportConfigDetails = ({entity, links = true}) => {
     <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%" />
-          <Col width="90%" />
+          <TableCol width="10%" />
+          <TableCol width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>

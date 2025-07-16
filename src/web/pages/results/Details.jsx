@@ -11,9 +11,9 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
-import Col from 'web/components/table/Col';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
@@ -262,8 +262,8 @@ const ResultDetails = ({className, links = true, entity}) => {
           <P>{tags.vuldetect}</P>
           <InfoTable>
             <colgroup>
-              <Col width="10%" />
-              <Col width="90%" />
+              <TableCol width="10%" />
+              <TableCol width="90%" />
             </colgroup>
             <TableBody>
               <TableRow>

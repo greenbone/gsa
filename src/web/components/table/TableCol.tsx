@@ -5,8 +5,8 @@
 
 import styled from 'styled-components';
 
-const Col = styled.col`
+const TableCol = styled.col`
   width: ${props => props.width};
 `;
 
-export default Col;
+export default TableCol;

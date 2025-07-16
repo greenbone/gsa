@@ -7,9 +7,9 @@ import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
-import Col from 'web/components/table/Col';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
@@ -30,8 +30,8 @@ const NoteDetails = ({entity}) => {
       <DetailsBlock title={_('Application')}>
         <InfoTable size="full">
           <colgroup>
-            <Col width="10%" />
-            <Col width="90%" />
+            <TableCol width="10%" />
+            <TableCol width="90%" />
           </colgroup>
           <TableBody>
             <TableRow>

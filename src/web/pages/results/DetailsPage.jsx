@@ -37,9 +37,9 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
-import Col from 'web/components/table/Col';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
@@ -178,8 +178,8 @@ const Details = ({entity, ...props}) => {
           <Layout flex="column">
             <InfoTable>
               <colgroup>
-                <Col width="10%" />
-                <Col width="90%" />
+                <TableCol width="10%" />
+                <TableCol width="90%" />
               </colgroup>
               <TableBody>
                 <TableRow>

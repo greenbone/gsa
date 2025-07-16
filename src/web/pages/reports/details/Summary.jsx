@@ -12,9 +12,9 @@ import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
-import Col from 'web/components/table/Col';
 import Table from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
@@ -112,8 +112,8 @@ const Summary = ({
       )}
       <UpdatingTable $isUpdating={isUpdating}>
         <colgroup>
-          <Col width="10%" />
-          <Col width="90%" />
+          <TableCol width="10%" />
+          <TableCol width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
