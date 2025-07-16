@@ -380,8 +380,8 @@ describe('Task Model parse tests', () => {
     const task2 = Task.fromElement({
       observers: {
         __text: 'anon nymous',
-        role: ['lorem'],
-        group: ['ipsum', 'dolor'],
+        role: [{name: 'lorem'}],
+        group: [{name: 'ipsum'}, {name: 'dolor'}],
       },
     });
 

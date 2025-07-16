@@ -371,8 +371,8 @@ describe('Audit model tests', () => {
     const audit2 = Audit.fromElement({
       observers: {
         __text: 'anon nymous',
-        role: ['lorem'],
-        group: ['ipsum', 'dolor'],
+        role: [{name: 'lorem'}],
+        group: [{name: 'ipsum'}, {name: 'dolor'}],
       },
     });
 
