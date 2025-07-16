@@ -9,7 +9,7 @@ import {_, _l} from 'gmp/locale/lang';
 import DateTime from 'web/components/date/DateTime';
 import {DownloadIcon} from 'web/components/icon';
 import Link from 'web/components/link/Link';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import EntitySelection from 'web/entities/EntitySelection';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';

@@ -12,7 +12,7 @@ import DateTime from 'web/components/date/DateTime';
 import SolutionType from 'web/components/icon/SolutionTypeIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import {createEntitiesFooter} from 'web/entities/Footer';

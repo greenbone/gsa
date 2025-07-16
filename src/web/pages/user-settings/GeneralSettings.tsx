@@ -22,8 +22,8 @@ import TextField from 'web/components/form/TextField';
 import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
 
 import TableBody from 'web/components/table/Body';
-import TableData from 'web/components/table/Data';
 import StripedTable from 'web/components/table/StripedTable';
+import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';

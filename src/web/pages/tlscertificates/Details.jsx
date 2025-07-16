@@ -10,8 +10,8 @@ import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';
 import TableBody from 'web/components/table/Body';
 import Col from 'web/components/table/Col';
-import TableData from 'web/components/table/Data';
 import InfoTable from 'web/components/table/InfoTable';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import {

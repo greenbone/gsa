@@ -9,7 +9,7 @@ import SeverityBar from 'web/components/bar/SeverityBar';
 import CpeIcon from 'web/components/icon/CpeIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';

@@ -7,7 +7,7 @@ import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import DetailsLink from 'web/components/link/DetailsLink';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
