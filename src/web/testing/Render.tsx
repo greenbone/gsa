@@ -29,7 +29,7 @@ export {renderHook} from '@testing-library/react/pure';
 
 afterEach(cleanup);
 
-interface RendererOptions {
+export interface RendererOptions {
   capabilities?: Capabilities | true;
   gmp?: Record<string, unknown>;
   store?: Store | boolean;
@@ -118,7 +118,7 @@ export const rendererWith = ({
   };
 };
 
-export const rendererWithTable = (options: RendererOptions) => {
+export const rendererWithTable = (options: RendererOptions = {}) => {
   const {render, ...other} = rendererWith(options);
   return {
     ...other,
@@ -131,7 +131,7 @@ export const rendererWithTable = (options: RendererOptions) => {
   };
 };
 
-export const rendererWithTableRow = (options: RendererOptions) => {
+export const rendererWithTableRow = (options: RendererOptions = {}) => {
   const {render, ...other} = rendererWith(options);
   return {
     ...other,
@@ -146,7 +146,7 @@ export const rendererWithTableRow = (options: RendererOptions) => {
   };
 };
 
-export const rendererWithTableFooter = (options: RendererOptions) => {
+export const rendererWithTableFooter = (options: RendererOptions = {}) => {
   const {render, ...other} = rendererWith(options);
   return {
     ...other,
