@@ -13,7 +13,7 @@ import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
 import TaskDetails from 'web/pages/tasks/Details';
-import Row from 'web/pages/tasks/Row';
+import TaskRow from 'web/pages/tasks/TaskRow';
 import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({
@@ -84,7 +84,7 @@ const actionsColumn = (
 
 export default createEntitiesTable({
   emptyTitle: _l('No Tasks available'),
-  row: Row,
+  row: TaskRow,
   rowDetails: withRowDetails('task', 10)(TaskDetails),
   header: withEntitiesHeader(actionsColumn)(Header),
   footer: createEntitiesFooter({

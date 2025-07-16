@@ -4,7 +4,9 @@
  */
 
 import React from 'react';
+import {Date} from 'gmp/models/date';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+import Task, {TaskTrend as TaskTrendType} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
@@ -21,56 +23,76 @@ import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import TaskStatus from 'web/pages/tasks/Status';
-import TaskActions from 'web/pages/tasks/TaskActions';
-import Trend from 'web/pages/tasks/Trend';
-import PropTypes from 'web/utils/PropTypes';
+import TaskActions, {TaskActionsProps} from 'web/pages/tasks/TaskActions';
+import TaskTrend from 'web/pages/tasks/Trend';
 
-export const renderReport = (report, links) => {
+interface TaskReportProps {
+  report?: {id?: string; timestamp?: Date};
+  links?: boolean;
+}
+
+const TaskReport = ({report, links}: TaskReportProps) => {
   if (!isDefined(report)) {
     return null;
   }
   return (
     <span>
-      <DetailsLink id={report.id} textOnly={!links} type="report">
+      <DetailsLink id={report.id as string} textOnly={!links} type="report">
         <DateTime date={report.timestamp} />
       </DetailsLink>
     </span>
   );
 };
 
-const Row = ({
+interface TaskReportTotalProps {
+  task: Task;
+  links?: boolean;
+}
+
+const TaskReportTotal = ({task, links = true}: TaskReportTotalProps) => {
+  const {report_count: reportCount} = task;
+  const [_] = useTranslation();
+  if (!isDefined(reportCount?.total) || reportCount.total <= 0) {
+    return null;
+  }
+  return (
+    <Layout>
+      <Link
+        filter={`task_id=${task.id} sort-reverse=date`}
+        textOnly={!links || reportCount.total === 0}
+        title={_(
+          'View list of all reports for Task {{name}},' +
+            ' including unfinished ones',
+          {name: task.name as string},
+        )}
+        to={'reports'}
+      >
+        {reportCount.total}
+      </Link>
+    </Layout>
+  );
+};
+
+interface TaskRowProps extends TaskActionsProps {
+  actionsComponent?: React.ComponentType<TaskActionsProps>;
+  onToggleDetailsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const TaskRow = ({
   actionsComponent: ActionsComponent = TaskActions,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}) => {
+}: TaskRowProps) => {
   const [_] = useTranslation();
   const [username] = useUserName();
-  const {scanner, observers} = entity;
+  const {scanner, observers, last_report: lastReport} = entity;
 
-  const obs = [];
-
-  const renderReportTotal = (entity, links) => {
-    if (entity.report_count.total <= 0) {
-      return null;
-    }
-    return (
-      <Layout>
-        <Link
-          filter={'task_id=' + entity.id + ' sort-reverse=date'}
-          textOnly={!links || entity.report_count.total === 0}
-          title={_(
-            'View list of all reports for Task {{name}},' +
-              ' including unfinished ones',
-            {name: entity.name},
-          )}
-          to={'reports'}
-        >
-          {entity.report_count.total}
-        </Link>
-      </Layout>
-    );
+  const obs: {role: string; user: string; group: string} = {
+    user: '',
+    role: '',
+    group: '',
   };
 
   let hasObservers = false;
@@ -93,7 +115,7 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <Layout align={'space-between'} columns={2}>
+        <Layout align="space-between">
           <div>
             <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
               {entity.name}
@@ -109,7 +131,7 @@ const Row = ({
                 <SensorIcon
                   size="small"
                   title={_('Task is configured to run on sensor {{name}}', {
-                    name: scanner.name,
+                    name: scanner.name as string,
                   })}
                 />
               )}
@@ -137,26 +159,25 @@ const Row = ({
       <TableData>
         <TaskStatus links={links} task={entity} />
       </TableData>
-      <TableData>{renderReportTotal(entity, links)}</TableData>
-      <TableData>{renderReport(entity.last_report, links)}</TableData>
       <TableData>
-        {!entity.isContainer() && isDefined(entity.last_report) && (
-          <SeverityBar severity={entity.last_report.severity} />
+        <TaskReportTotal links={links} task={entity} />
+      </TableData>
+      <TableData>
+        <TaskReport links={links} report={lastReport} />
+      </TableData>
+      <TableData>
+        {!entity.isContainer() && isDefined(lastReport) && (
+          <SeverityBar severity={lastReport.severity} />
         )}
       </TableData>
       <TableData align="center">
-        {!entity.isContainer() && <Trend name={entity.trend} />}
+        {!entity.isContainer() && (
+          <TaskTrend name={entity.trend as TaskTrendType} />
+        )}
       </TableData>
       <ActionsComponent {...props} entity={entity} links={links} />
     </TableRow>
   );
 };
 
-Row.propTypes = {
-  actionsComponent: PropTypes.component,
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
-};
-
-export default Row;
+export default TaskRow;
