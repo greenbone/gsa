@@ -6,8 +6,8 @@
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
-import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
+import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import {createEntitiesFooter} from 'web/entities/Footer';
 import {createEntitiesTable} from 'web/entities/Table';

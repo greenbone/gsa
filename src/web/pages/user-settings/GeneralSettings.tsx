@@ -23,9 +23,9 @@ import TimeZoneSelect from 'web/components/form/TimeZoneSelect';
 
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
-import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import StripedTable from 'web/components/table/StripedTable';
+import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';
 import useLanguage from 'web/hooks/useLanguage';

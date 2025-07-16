@@ -22,9 +22,9 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import Section from 'web/components/section/Section';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
-import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
 import Table from 'web/components/table/StripedTable';
+import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
