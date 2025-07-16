@@ -14,8 +14,8 @@ import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableBody from 'web/components/table/Body';
-import TableData from 'web/components/table/Data';
 import DetailsTable from 'web/components/table/DetailsTable';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import {

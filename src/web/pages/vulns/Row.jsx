@@ -9,7 +9,7 @@ import DateTime from 'web/components/date/DateTime';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import Qod from 'web/components/qod/Qod';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/Actions';
 import PropTypes from 'web/utils/PropTypes';

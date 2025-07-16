@@ -36,8 +36,8 @@ import Reload, {
 } from 'web/components/loading/Reload';
 import Section from 'web/components/section/Section';
 import TableBody from 'web/components/table/Body';
-import TableData from 'web/components/table/Data';
 import Table from 'web/components/table/StripedTable';
+import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';

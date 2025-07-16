@@ -7,7 +7,7 @@ import {ReactNode} from 'react';
 import styled from 'styled-components';
 import {EditIcon, SaveIcon, XIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 
 import useTranslation from 'web/hooks/useTranslation';

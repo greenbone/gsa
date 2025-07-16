@@ -9,7 +9,7 @@ import ExportIcon from 'web/components/icon/ExportIcon';
 import HorizontalSeparator from 'web/components/layout/HorizontalSep';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import withEntitiesActions from 'web/entities/withEntitiesActions';

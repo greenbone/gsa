@@ -11,7 +11,7 @@ import {shorten} from 'gmp/utils/string';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withEntitiesActions from 'web/entities/withEntitiesActions';

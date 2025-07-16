@@ -13,7 +13,7 @@ import Divider from 'web/components/layout/Divider';
 import CveLink from 'web/components/link/CveLink';
 import Link from 'web/components/link/Link';
 import Qod from 'web/components/qod/Qod';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/Actions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';

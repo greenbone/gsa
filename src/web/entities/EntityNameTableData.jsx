@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Comment from 'web/components/comment/Comment';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';

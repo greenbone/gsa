@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
-import TableData from 'web/components/table/Data';
+import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
