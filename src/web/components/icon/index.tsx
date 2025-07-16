@@ -178,14 +178,14 @@ export const icons: IconDefinition[] = [
   {
     name: 'ArrowUpDown',
     component: ArrowUpDown,
-    dataTestId: 'arrowUpDown-icon',
+    dataTestId: 'arrow-up-down-icon',
     ariaLabel: 'Arrow Up Down Icon',
     isLucide: true,
   },
   {
     name: 'ArrowUp',
     component: ArrowUp,
-    dataTestId: 'arrowUp-icon',
+    dataTestId: 'arrow-up-icon',
     ariaLabel: 'Arrow Up Icon',
     isLucide: true,
   },
