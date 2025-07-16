@@ -11,7 +11,7 @@ import Link from 'web/components/link/Link';
 import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import EntitiesActions from 'web/entities/Actions';
+import EntitiesActions from 'web/entities/EntitiesActions';
 import PropTypes from 'web/utils/PropTypes';
 
 const Row = ({

@@ -9,7 +9,7 @@ import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import EntitiesActions from 'web/entities/Actions';
+import EntitiesActions from 'web/entities/EntitiesActions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import PropTypes from 'web/utils/PropTypes';
 import {na} from 'web/utils/Render';

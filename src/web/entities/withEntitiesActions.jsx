@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import EntitiesActions from 'web/entities/Actions';
+import EntitiesActions from 'web/entities/EntitiesActions';
 
 const withEntitiesActions = Component => {
   const EntitiesActionsWrapper = props => (
