@@ -14,7 +14,6 @@ import {
   parseProgressElement,
   parseYesNo,
   parseYes,
-  parseIntoArray,
   parseDuration,
   NO_VALUE,
   YesNo,
@@ -174,8 +173,8 @@ export interface TaskElement extends ModelElement {
     | {
         __text?: string;
         user?: string | string[];
-        role?: string | string[];
-        group?: string | string[];
+        role?: {_id?: string; name: string}[];
+        group?: {_id?: string; name: string}[];
       };
   preferences?: {
     preference?: TaskPreferenceElement | TaskPreferenceElement[];
@@ -430,10 +429,13 @@ class Task extends Model {
             : (parseToString(element.observers.__text) as string).split(' ');
         }
         if (isDefined(element.observers.role)) {
-          copy.observers.role = parseIntoArray(element.observers.role);
+          copy.observers.role = map(element.observers.role, role => role.name);
         }
         if (isDefined(element.observers.group)) {
-          copy.observers.group = parseIntoArray(element.observers.group);
+          copy.observers.group = map(
+            element.observers.group,
+            group => group.name,
+          );
         }
       }
     }
