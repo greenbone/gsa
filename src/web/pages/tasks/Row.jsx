@@ -20,8 +20,8 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import Actions from 'web/pages/tasks/Actions';
 import TaskStatus from 'web/pages/tasks/Status';
+import TaskActions from 'web/pages/tasks/TaskActions';
 import Trend from 'web/pages/tasks/Trend';
 import PropTypes from 'web/utils/PropTypes';
 
@@ -39,7 +39,7 @@ export const renderReport = (report, links) => {
 };
 
 const Row = ({
-  actionsComponent: ActionsComponent = Actions,
+  actionsComponent: ActionsComponent = TaskActions,
   entity,
   links = true,
   onToggleDetailsClick,

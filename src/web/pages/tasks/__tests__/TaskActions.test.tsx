@@ -7,16 +7,15 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableRow, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import Actions from 'web/pages/tasks/Actions';
+import TaskActions from 'web/pages/tasks/TaskActions';
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_task']);
 
 describe('Task Actions tests', () => {
   test('should render', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.new,
-      alterable: '0',
+      alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
     });
@@ -30,9 +29,9 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    const {render} = rendererWithTableRow({capabilities: true, store: true});
     const {element} = render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -52,7 +51,7 @@ describe('Task Actions tests', () => {
   test('should call click handlers', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.done,
-      alterable: '0',
+      alterable: 0,
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
@@ -67,9 +66,9 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    const {render} = rendererWithTableRow({capabilities: true, store: true});
     render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -117,7 +116,7 @@ describe('Task Actions tests', () => {
   test('should not call click handlers without permissions', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.done,
-      alterable: '0',
+      alterable: 0,
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'get_tasks'}]},
       target: {_id: 'id', name: 'target'},
@@ -137,7 +136,7 @@ describe('Task Actions tests', () => {
       store: true,
     });
     render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -194,7 +193,7 @@ describe('Task Actions tests', () => {
   test('should not call click handlers for stopped task without permissions', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.stopped,
-      alterable: '0',
+      alterable: 0,
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'get_tasks'}]},
       target: {_id: 'id', name: 'target'},
@@ -214,7 +213,7 @@ describe('Task Actions tests', () => {
       store: true,
     });
     render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -274,7 +273,7 @@ describe('Task Actions tests', () => {
   test('should not call click handlers for running task without permissions', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.running,
-      alterable: '0',
+      alterable: 0,
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'get_tasks'}]},
       target: {_id: 'id', name: 'target'},
@@ -294,7 +293,7 @@ describe('Task Actions tests', () => {
       store: true,
     });
     render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -348,8 +347,8 @@ describe('Task Actions tests', () => {
   test('should call click handlers for running task', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.running,
-      alterable: '0',
-      in_use: true,
+      alterable: 0,
+      in_use: 1,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
     });
@@ -363,9 +362,9 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    const {render} = rendererWithTableRow({capabilities: true, store: true});
     render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -413,7 +412,7 @@ describe('Task Actions tests', () => {
   test('should call click handlers for stopped task', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.stopped,
-      alterable: '0',
+      alterable: 0,
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
@@ -428,9 +427,9 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    const {render} = rendererWithTableRow({capabilities: true, store: true});
     render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -478,7 +477,7 @@ describe('Task Actions tests', () => {
   test('should render schedule icon if task is scheduled', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.stopped,
-      alterable: '0',
+      alterable: 0,
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
@@ -499,12 +498,12 @@ describe('Task Actions tests', () => {
     const handleTaskStop = testing.fn();
 
     const {render} = rendererWithTableRow({
-      capabilities: caps,
+      capabilities: true,
       store: true,
       router: true,
     });
     render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
@@ -570,9 +569,9 @@ describe('Task Actions tests', () => {
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
 
-    const {render} = rendererWithTableRow({capabilities: caps, store: true});
+    const {render} = rendererWithTableRow({capabilities: true, store: true});
     render(
-      <Actions
+      <TaskActions
         entity={task}
         links={true}
         onReportImportClick={handleReportImport}
