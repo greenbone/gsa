@@ -33,6 +33,21 @@ const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
 
 export const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
 
+export const DEFAULT_SETTINGS = {
+  defaultalert: 'f9f5a546-8018-48d0-bef5-5ad4926ea899',
+  defaultesxicredential: '83545bcf-0c49-4b4c-abbf-63baf82cc2a7',
+  defaultopenvasscanconfig: 'fe7ea321-e3e3-4cc6-9952-da836aae83ce',
+  defaultospscanconfig: 'fb19ac4b-614c-424c-b046-0bc32bf1be73',
+  defaultsmbcredential: 'a25c0cfe-f977-417b-b1da-47da370c03e8',
+  defaultsnmpcredential: '024550b8-868e-4b3c-98bf-99bb732f6a0d',
+  defaultsshcredential: 'a25c0cfe-f977-417b-b1da-47da370c03e8',
+  defaultportlist: 'd74a9ee8-7d35-4879-9485-ab23f1bd45bc',
+  defaultopenvasscanner: 'f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d',
+  defaultospscanner: 'b20697c9-be0a-4cd4-8b4d-5fe7841ebb03',
+  defaultschedule: '778eedad-5550-4de0-abb6-1320d13b5e18',
+  defaulttarget: '23409203-940a-4b4a-b70c-447475f18323',
+};
+
 export const DEFAULT_FILTER_SETTINGS = {
   alert: 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092',
   asset: '0f040d06-abf9-43a2-8f94-9de178b0e978',
@@ -431,27 +446,26 @@ export class UserCommand extends EntityCommand<User, PortListElement> {
       report_fname: data.reportExportFileName,
       dynamic_severity: data.dynamicSeverity,
       default_severity: severityValue(data.defaultSeverity),
-      'settings_default:f9f5a546-8018-48d0-bef5-5ad4926ea899':
-        data.defaultAlert,
-      'settings_default:83545bcf-0c49-4b4c-abbf-63baf82cc2a7':
+      [`settings_default:${DEFAULT_SETTINGS.defaultalert}`]: data.defaultAlert,
+      [`settings_default:${DEFAULT_SETTINGS.defaultesxicredential}`]:
         data.defaultEsxiCredential,
-      'settings_default:fe7ea321-e3e3-4cc6-9952-da836aae83ce':
+      [`settings_default:${DEFAULT_SETTINGS.defaultopenvasscanconfig}`]:
         data.defaultOpenvasScanConfig,
-      'settings_default:fb19ac4b-614c-424c-b046-0bc32bf1be73':
+      [`settings_default:${DEFAULT_SETTINGS.defaultospscanconfig}`]:
         data.defaultOspScanConfig,
-      'settings_default:a25c0cfe-f977-417b-b1da-47da370c03e8':
+      [`settings_default:${DEFAULT_SETTINGS.defaultsmbcredential}`]:
         data.defaultSmbCredential,
-      'settings_default:024550b8-868e-4b3c-98bf-99bb732f6a0d':
+      [`settings_default:${DEFAULT_SETTINGS.defaultsnmpcredential}`]:
         data.defaultSnmpCredential,
-      'settings_default:d74a9ee8-7d35-4879-9485-ab23f1bd45bc':
+      [`settings_default:${DEFAULT_SETTINGS.defaultportlist}`]:
         data.defaultPortList,
-      'settings_default:f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d':
+      [`settings_default:${DEFAULT_SETTINGS.defaultopenvasscanner}`]:
         data.defaultOpenvasScanner,
-      'settings_default:b20697c9-be0a-4cd4-8b4d-5fe7841ebb03':
+      [`settings_default:${DEFAULT_SETTINGS.defaultospscanner}`]:
         data.defaultOspScanner,
-      'settings_default:778eedad-5550-4de0-abb6-1320d13b5e18':
+      [`settings_default:${DEFAULT_SETTINGS.defaultschedule}`]:
         data.defaultSchedule,
-      'settings_default:23409203-940a-4b4a-b70c-447475f18323':
+      [`settings_default:${DEFAULT_SETTINGS.defaulttarget}`]:
         data.defaultTarget,
       [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
       [saveDefaultFilterSettingId('asset')]: data.assetsFilter,

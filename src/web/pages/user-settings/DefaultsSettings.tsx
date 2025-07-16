@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState, useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
+import {DEFAULT_SETTINGS} from 'gmp/commands/users';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import Select from 'web/components/form/Select';
@@ -163,12 +164,19 @@ export const DefaultSettings = ({
   const saveField = async (key: FieldName) => {
     const setting = defaultsSel.getByName(key) as Setting<string>;
     if (!setting?.id) {
-      setErrorMessage(key, _('Cannot save setting: missing setting ID.'));
-      return;
+      const settingId = DEFAULT_SETTINGS[key];
+      if (!settingId) {
+        setErrorMessage(key, _('Cannot save setting: missing setting ID.'));
+        return;
+      }
+      await saveSetting(settingId, key, values[key], value =>
+        setIsEditing(editState => ({...editState, [key]: value})),
+      );
+    } else {
+      await saveSetting(setting.id, key, values[key], value =>
+        setIsEditing(editState => ({...editState, [key]: value})),
+      );
     }
-    await saveSetting(setting.id, key, values[key], value =>
-      setIsEditing(editState => ({...editState, [key]: value})),
-    );
   };
 
   const cancelField = (key: FieldName) => {
