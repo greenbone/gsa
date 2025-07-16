@@ -256,7 +256,9 @@ export const FilterSettings = ({
       if (entityType) {
         const filterId = values[key];
 
-        const selectedFilter = filters.find(filter => filter.id === filterId);
+        const selectedFilter: Filter | undefined = filters.find(
+          (filter: Filter) => filter.id === filterId,
+        );
 
         if (selectedFilter) {
           dispatch(
@@ -264,13 +266,6 @@ export const FilterSettings = ({
               entityType,
               selectedFilter,
             ),
-          );
-        } else if (filterId) {
-          const filter = new Filter();
-          // @ts-expect-error
-          filter.id = filterId;
-          dispatch(
-            defaultFilterLoadingActions.optimisticUpdate(entityType, filter),
           );
         } else {
           dispatch(
