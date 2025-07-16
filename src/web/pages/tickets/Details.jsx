@@ -8,9 +8,9 @@ import {isDefined} from 'gmp/utils/identity';
 import Comment from 'web/components/comment/Comment';
 import DateTime from 'web/components/date/DateTime';
 import DetailsLink from 'web/components/link/DetailsLink';
-import Col from 'web/components/table/Col';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
@@ -28,8 +28,8 @@ const TicketDetails = ({entity, links = true}) => {
         <DetailsBlock title={_('References')}>
           <InfoTable size="full">
             <colgroup>
-              <Col width="10%" />
-              <Col width="90%" />
+              <TableCol width="10%" />
+              <TableCol width="90%" />
             </colgroup>
             <TableBody>
               {isDefined(entity.task) && (
@@ -81,8 +81,8 @@ const TicketDetails = ({entity, links = true}) => {
       <DetailsBlock title={_('Status Details')}>
         <InfoTable size="full">
           <colgroup>
-            <Col width="10%" />
-            <Col width="90%" />
+            <TableCol width="10%" />
+            <TableCol width="90%" />
           </colgroup>
           <TableBody>
             {isDefined(entity.openTime) && (

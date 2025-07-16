@@ -25,9 +25,9 @@ import {isDefined} from 'gmp/utils/identity';
 import CertInfo from 'web/components/certinfo/CertInfo';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import DetailsLink from 'web/components/link/DetailsLink';
-import Col from 'web/components/table/Col';
 import SimpleTable from 'web/components/table/SimpleTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
@@ -81,8 +81,8 @@ const Method = ({
           <div>{_('Alemba vFire')}</div>
           <Table>
             <colgroup>
-              <Col width="12%" />
-              <Col width="88%" />
+              <TableCol width="12%" />
+              <TableCol width="88%" />
             </colgroup>
             <TableBody>
               {isDefined(data.vfire_base_url?.value) && (
@@ -191,8 +191,8 @@ const Method = ({
           <div>{_('SCP')}</div>
           <Table>
             <colgroup>
-              <Col width="12%" />
-              <Col width="88%" />
+              <TableCol width="12%" />
+              <TableCol width="88%" />
             </colgroup>
             <TableBody>
               {isDefined(data.scp_host?.value) && (
@@ -292,8 +292,8 @@ const Method = ({
           <div>{_('SMB')}</div>
           <Table>
             <colgroup>
-              <Col width="12%" />
-              <Col width="88%" />
+              <TableCol width="12%" />
+              <TableCol width="88%" />
             </colgroup>
             <TableBody>
               {isDefined(data.smb_credential?.value) && (
@@ -363,8 +363,8 @@ const Method = ({
         <div>{_('Send to {{- url}}', {url})}</div>
         <Table>
           <colgroup>
-            <Col width="12%" />
-            <Col width="88%" />
+            <TableCol width="12%" />
+            <TableCol width="88%" />
           </colgroup>
           <TableBody>
             {details &&
@@ -409,8 +409,8 @@ const Method = ({
           <div>{_('SNMP')}</div>
           <Table>
             <colgroup>
-              <Col width="12%" />
-              <Col width="88%" />
+              <TableCol width="12%" />
+              <TableCol width="88%" />
             </colgroup>
             <TableBody>
               <TableRow>
@@ -449,8 +449,8 @@ const Method = ({
           <div>{_('Email')}</div>
           <Table>
             <colgroup>
-              <Col width="12%" />
-              <Col width="88%" />
+              <TableCol width="12%" />
+              <TableCol width="88%" />
             </colgroup>
             <TableBody>
               <TableRow>
@@ -586,8 +586,8 @@ const Method = ({
           <div>{_('Sourcefire Connector')}</div>
           <Table>
             <colgroup>
-              <Col width="12%" />
-              <Col width="88%" />
+              <TableCol width="12%" />
+              <TableCol width="88%" />
             </colgroup>
             <TableBody>
               {isDefined(data.defense_center_ip?.value) && (
@@ -621,8 +621,8 @@ const Method = ({
           <div>{_('verinice Connector')}</div>
           <Table>
             <colgroup>
-              <Col width="12%" />
-              <Col width="88%" />
+              <TableCol width="12%" />
+              <TableCol width="88%" />
             </colgroup>
             <TableBody>
               {isDefined(data.verinice_server_url?.value) && (
@@ -692,8 +692,8 @@ const Method = ({
           <div>{_('TippingPoint SMS')}</div>
           <Table>
             <colgroup>
-              <Col width="12%" />
-              <Col width="88%" />
+              <TableCol width="12%" />
+              <TableCol width="88%" />
             </colgroup>
             <TableBody>
               {isDefined(data.tp_sms_hostname?.value) && (

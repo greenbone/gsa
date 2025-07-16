@@ -9,9 +9,9 @@ import {isDefined} from 'gmp/utils/identity';
 import CertInfo from 'web/components/certinfo/CertInfo';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
-import Col from 'web/components/table/Col';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
+import TableCol from 'web/components/table/TableCol';
 import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
@@ -33,8 +33,8 @@ const ScannerDetails = ({entity}) => {
     <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%" />
-          <Col width="90%" />
+          <TableCol width="10%" />
+          <TableCol width="90%" />
         </colgroup>
         <TableBody>
           {isDefined(comment) && (
