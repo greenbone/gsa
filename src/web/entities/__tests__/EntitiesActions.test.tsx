@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWithTableRow, fireEvent} from 'web/testing';
-import EntitiesActions from 'web/entities/Actions';
+import EntitiesActions from 'web/entities/EntitiesActions';
 import SelectionType from 'web/utils/SelectionType';
 
 describe('EntitiesActions tests', () => {

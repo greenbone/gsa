@@ -11,7 +11,7 @@ import DateTime from 'web/components/date/DateTime';
 import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import EntitiesActions from 'web/entities/Actions';
+import EntitiesActions from 'web/entities/EntitiesActions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
 import PropTypes from 'web/utils/PropTypes';
