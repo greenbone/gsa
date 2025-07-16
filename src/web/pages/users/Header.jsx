@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import TableHead from 'web/components/table/Head';
 import TableHeader from 'web/components/table/Header';
+import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import {withEntitiesHeader} from 'web/entities/Header';
 import useTranslation from 'web/hooks/useTranslation';
