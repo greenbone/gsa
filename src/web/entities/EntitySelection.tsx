@@ -6,8 +6,9 @@
 import {useState} from 'react';
 import Checkbox from 'web/components/form/Checkbox';
 
-interface Entity {
-  id: string;
+export interface Entity {
+  // id should be required in future, but for now we keep it optional to match the Model class
+  id?: string;
 }
 
 interface EntitySelectionProps {
