@@ -11,8 +11,8 @@ import {isDefined} from 'gmp/utils/identity';
 import Checkbox from 'web/components/form/Checkbox';
 import Spinner from 'web/components/form/Spinner';
 
-import TableBody from 'web/components/table/Body';
 import StripedTable from 'web/components/table/StripedTable';
+import TableBody from 'web/components/table/TableBody';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';

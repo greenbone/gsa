@@ -5,8 +5,8 @@
 
 import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
-import TableBody from 'web/components/table/Body';
 import Table from 'web/components/table/StripedTable';
+import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';

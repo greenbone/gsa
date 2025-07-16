@@ -35,8 +35,8 @@ import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
 import Section from 'web/components/section/Section';
-import TableBody from 'web/components/table/Body';
 import Table from 'web/components/table/StripedTable';
+import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';

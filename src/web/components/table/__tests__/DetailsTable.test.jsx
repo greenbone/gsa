@@ -5,8 +5,8 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {render} from 'web/testing';
-import TableBody from 'web/components/table/Body';
 import DetailsTable from 'web/components/table/DetailsTable';
+import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 
