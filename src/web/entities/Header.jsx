@@ -5,8 +5,8 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
-import TableHeader from 'web/components/table/Header';
 import TableHead from 'web/components/table/TableHead';
+import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';

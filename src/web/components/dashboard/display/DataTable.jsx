@@ -8,9 +8,9 @@ import styled from 'styled-components';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/Constants';
 import TableBody from 'web/components/table/Body';
 import TableData from 'web/components/table/Data';
-import TableHeader from 'web/components/table/Header';
 import Table from 'web/components/table/StripedTable';
 import TableHead from 'web/components/table/TableHead';
+import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import PropTypes from 'web/utils/PropTypes';
 
