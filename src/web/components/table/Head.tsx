@@ -6,10 +6,10 @@
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon} from 'web/components/icon';
-import Layout from 'web/components/layout/Layout';
+import Layout, {LayoutProps} from 'web/components/layout/Layout';
 import SortBy from 'web/components/sortby/SortBy';
 import useTranslation from 'web/hooks/useTranslation';
-import SortDirection from 'web/utils/SortDirection';
+import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
 import Theme from 'web/utils/Theme';
 
 const SortSymbol = styled.span`
@@ -17,16 +17,19 @@ const SortSymbol = styled.span`
   align-items: center;
 `;
 
-interface TableHeadProps {
-  children?: React.ReactNode;
+interface ToString {
+  toString: () => string;
+}
+
+interface TableHeadProps extends Omit<LayoutProps, 'title'> {
   className?: string;
   colSpan?: number;
   currentSortBy?: string;
-  currentSortDir?: string;
+  currentSortDir?: SortDirectionType;
   rowSpan?: number;
   sort?: boolean;
   sortBy?: string;
-  title?: string;
+  title?: ToString;
   width?: string;
   withBorder?: boolean;
   onSortChange?: (sortBy: string) => void;
@@ -48,7 +51,7 @@ const TableHead = ({
 }: TableHeadProps) => {
   const [_] = useTranslation();
   const getSortSymbol = () => {
-    if (!isDefined(sortBy) || currentSortBy !== sortBy) {
+    if (sort && currentSortBy !== sortBy) {
       return (
         <SortSymbol title={_('Not Sorted')}>
           &nbsp;
@@ -71,13 +74,17 @@ const TableHead = ({
   };
 
   if (isDefined(title) && !isDefined(children)) {
-    children = `${title}`;
+    children = String(title);
   }
 
   return (
     <th className={className} colSpan={colSpan} rowSpan={rowSpan}>
-      {sort && sortBy && isDefined(onSortChange) ? (
-        <SortBy by={sortBy} onClick={onSortChange}>
+      {sort && isDefined(sortBy) ? (
+        <SortBy
+          by={sortBy}
+          data-testid={`table-header-sort-by-${sortBy}`}
+          onClick={onSortChange}
+        >
           <Layout {...other}>
             {children}
             {getSortSymbol()}
