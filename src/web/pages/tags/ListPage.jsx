@@ -76,12 +76,12 @@ const TagsPage = ({
         enable,
         disable,
       }) => (
-        <React.Fragment>
+        <>
           <PageTitle title={_('Tags')} />
           <EntitiesPage
             {...props}
             filterEditDialog={TagsFilterDialog}
-            filterFilter={TAGS_FILTER_FILTER}
+            filtersFilter={TAGS_FILTER_FILTER}
             sectionIcon={<TagIcon size="large" />}
             table={TagsTable}
             tags={false}
@@ -100,7 +100,7 @@ const TagsPage = ({
             onTagEnableClick={enable}
             onTagSaveClick={save}
           />
-        </React.Fragment>
+        </>
       )}
     </TagComponent>
   );
@@ -117,5 +117,3 @@ export default withEntitiesContainer('tag', {
   entitiesSelector,
   loadEntities,
 })(TagsPage);
-
-// vim: set ts=2 sw=2 tw=80:
