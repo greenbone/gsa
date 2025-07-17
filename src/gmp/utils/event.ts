@@ -24,6 +24,27 @@ export const KeyCode = {
   MINUS: 173,
 } as const;
 
+export const KeyEvent = {
+  ESC: 'Escape',
+  BACKSPACE: 'Backspace',
+  COMMA: ',',
+  DELETE: 'Delete',
+  DOWN: 'ArrowDown',
+  END: 'End',
+  ENTER: 'Enter',
+  HOME: 'Home',
+  LEFT: 'ArrowLeft',
+  PAGE_DOWN: 'PageDown',
+  PAGE_UP: 'PageUp',
+  PERIOD: '.',
+  RIGHT: 'ArrowRight',
+  SPACE: ' ',
+  TAB: 'Tab',
+  UP: 'ArrowUp',
+  SUBTRACT: '-',
+  MINUS: '-',
+} as const;
+
 /**
  * Group multiple sequential calls in a single one
  *
