@@ -4,7 +4,7 @@
  */
 
 import {MantineSpacing, StyleProp} from '@mantine/core';
-import {LabelWithIcon as Label} from '@greenbone/opensight-ui-components-mantinev7';
+import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
@@ -17,6 +17,20 @@ interface FormGroupProps {
   title?: string;
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+`;
+
+const StyledLabel = styled.label`
+  font-weight: 500;
+  font-size: var(--mantine-font-size-md);
+  color: var(--label-color);
+  margin-bottom: 0;
+  display: block;
+`;
+
 const FormGroup = ({
   children,
   title,
@@ -26,15 +40,10 @@ const FormGroup = ({
 }: FormGroupProps) => {
   const Layout = direction === 'column' ? Column : Row;
   return (
-    <Column
-      align="stretch"
-      data-testid={dataTestId}
-      gap="8"
-      justify="flex-start"
-    >
-      {isDefined(title) && <Label>{title}</Label>}
+    <Wrapper data-testid={dataTestId}>
+      {isDefined(title) && <StyledLabel>{title}</StyledLabel>}
       <Layout gap={gap}>{children}</Layout>
-    </Column>
+    </Wrapper>
   );
 };
 
