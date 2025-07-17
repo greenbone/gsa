@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {TaskTrend as TaskTrendType} from 'gmp/models/task';
 import {
   TrendDownIcon,
   TrendLessIcon,
@@ -11,12 +11,17 @@ import {
   TrendUpIcon,
   TrendNoChangeIcon,
 } from 'web/components/icon';
+import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-const Trend = ({name}) => {
+
+interface TaskTrendProps {
+  name: TaskTrendType;
+}
+
+const TaskTrend = ({name}: TaskTrendProps) => {
   const [_] = useTranslation();
-  let title;
-  let IconComponent;
+  let title: string | undefined;
+  let IconComponent: React.ComponentType<ExtendedDynamicIconProps>;
 
   if (name === 'up') {
     title = _('Severity increased');
@@ -37,18 +42,7 @@ const Trend = ({name}) => {
     return <span />;
   }
 
-  return (
-    <IconComponent
-      alt={title}
-      data-testid="trend-icon"
-      size="small"
-      title={title}
-    />
-  );
+  return <IconComponent data-testid="trend-icon" size="small" title={title} />;
 };
 
-Trend.propTypes = {
-  name: PropTypes.string,
-};
-
-export default Trend;
+export default TaskTrend;
