@@ -15,6 +15,15 @@ import withRowDetails from 'web/entities/withRowDetails';
 import TaskDetails from 'web/pages/tasks/Details';
 import TaskRow from 'web/pages/tasks/TaskRow';
 import PropTypes from 'web/utils/PropTypes';
+import {SortDirectionType} from 'web/utils/SortDirection';
+
+interface HeaderProps {
+  actionsColumn?: React.ReactNode;
+  sort?: boolean;
+  currentSortBy?: string;
+  currentSortDir?: SortDirectionType;
+  onSortChange?: (sortBy: string) => void;
+}
 
 const Header = ({
   actionsColumn,
@@ -22,10 +31,10 @@ const Header = ({
   currentSortBy,
   currentSortDir,
   onSortChange,
-}) => {
+}: HeaderProps) => {
   const sortProps = {
     currentSortBy,
-    currentSortDir,
+    currentSortDir: currentSortDir as SortDirectionType,
     sort,
     onSortChange,
   };
@@ -85,7 +94,8 @@ const actionsColumn = (
 export default createEntitiesTable({
   emptyTitle: _l('No Tasks available'),
   row: TaskRow,
-  rowDetails: withRowDetails('task', 10)(TaskDetails),
+  rowDetails: withRowDetails('task', '10')(TaskDetails),
+  // @ts-expect-error
   header: withEntitiesHeader(actionsColumn)(Header),
   footer: createEntitiesFooter({
     span: 10,

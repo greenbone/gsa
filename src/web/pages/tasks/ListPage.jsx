@@ -23,13 +23,14 @@ import useTranslation from 'web/hooks/useTranslation';
 import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';
 import TaskFilterDialog from 'web/pages/tasks/FilterDialog';
 import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
-import Table from 'web/pages/tasks/Table';
 import TaskComponent from 'web/pages/tasks/TaskComponentComponent';
+import TaskTable from 'web/pages/tasks/TaskTable';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tasks';
 import PropTypes from 'web/utils/PropTypes';
+
 export const ToolBarIcons = ({
   onAdvancedTaskWizardClick,
   onModifyTaskWizardClick,
@@ -161,7 +162,7 @@ const Page = ({
             filterEditDialog={TaskFilterDialog}
             filtersFilter={TASKS_FILTER_FILTER}
             sectionIcon={<TaskIcon size="large" />}
-            table={Table}
+            table={TaskTable}
             title={_('Tasks')}
             toolBarIcons={ToolBarIcons}
             onAdvancedTaskWizardClick={advancedtaskwizard}
