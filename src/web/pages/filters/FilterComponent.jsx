@@ -40,7 +40,7 @@ const FILTER_OPTIONS = [
   ['ticket', _l('Ticket')],
   ['tls_certificate', _l('TLS Certificate')],
   ['user', _l('User')],
-  ['vulnerability', _l('Vulnerability')],
+  ['vuln', _l('Vulnerability')],
 ];
 
 const hasAccessToFilter = (caps, name) => {
