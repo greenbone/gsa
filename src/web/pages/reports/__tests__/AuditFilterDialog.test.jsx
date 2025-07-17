@@ -33,7 +33,7 @@ describe('Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {baseElement} = render(
+    render(
       <AuditReportFilter
         createFilterType="result"
         delta={false}
@@ -44,40 +44,34 @@ describe('Filter Dialog for Audit report', () => {
       />,
     );
 
-    const formGroups = baseElement.querySelectorAll(
-      '[class*="mantine-Text-root"]',
-    );
-
-    expect(formGroups[0]).toHaveTextContent('Filter');
-    expect(formGroups[1]).toHaveTextContent('Compliance');
+    expect(screen.getByText('Filter')).toBeVisible();
+    expect(screen.getByText('Compliance')).toBeVisible();
 
     const filterGroup = screen.getByTestId('compliance-levels-filter-group');
-    const {queryByTestId, queryAllByRole} = within(filterGroup);
+    const {getByTestId, getAllByRole} = within(filterGroup);
 
-    const yesCheckbox = queryByTestId('compliance-state-yes');
-    const noCheckbox = queryByTestId('compliance-state-no');
-    const incompleteCheckbox = queryByTestId('compliance-state-incomplete');
-    const undefinedCheckbox = queryByTestId('compliance-state-undefined');
+    expect(getByTestId('compliance-state-yes')).toHaveTextContent('Yes');
+    expect(getByTestId('compliance-state-no')).toHaveTextContent('No');
+    expect(getByTestId('compliance-state-incomplete')).toHaveTextContent(
+      'Incomplete',
+    );
+    expect(getByTestId('compliance-state-undefined')).toHaveTextContent(
+      'Undefined',
+    );
 
-    expect(yesCheckbox).toHaveTextContent('Yes');
-    expect(noCheckbox).toHaveTextContent('No');
-    expect(incompleteCheckbox).toHaveTextContent('Incomplete');
-    expect(undefinedCheckbox).toHaveTextContent('Undefined');
+    expect(getAllByRole('checkbox')).toHaveLength(4);
 
-    const checkboxes = queryAllByRole('checkbox');
-    expect(checkboxes).toHaveLength(4);
-
-    expect(formGroups[2]).toHaveTextContent('QoD');
-    expect(formGroups[3]).toHaveTextContent('From Task (name)');
-    expect(formGroups[4]).toHaveTextContent('First result');
-    expect(formGroups[5]).toHaveTextContent('Results per page');
-    expect(formGroups[6]).toHaveTextContent('Sort by');
+    expect(screen.getByText('QoD')).toBeVisible();
+    expect(screen.getByText('From Task (name)')).toBeVisible();
+    expect(screen.getByText('First result')).toBeVisible();
+    expect(screen.getByText('Results per page')).toBeVisible();
+    expect(screen.getByText('Sort by')).toBeVisible();
 
     const ascendingRadio = screen.getByLabelText('Ascending');
     const descendingRadio = screen.getByLabelText('Descending');
 
-    expect(ascendingRadio).toBeInTheDocument();
-    expect(descendingRadio).toBeInTheDocument();
+    expect(ascendingRadio).toBeVisible();
+    expect(descendingRadio).toBeVisible();
 
     expect(ascendingRadio).toBeChecked();
     expect(descendingRadio).not.toBeChecked();
