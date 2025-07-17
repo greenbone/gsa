@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import Table from 'web/pages/tasks/Table';
+import Table from 'web/pages/tasks/TaskTable';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 const caps = new Capabilities(['everything']);
@@ -18,7 +18,7 @@ const lastReport = {
   report: {
     _id: '1234',
     timestamp: '2019-08-10T12:51:27Z',
-    severity: '5.0',
+    severity: 5.0,
   },
 };
 
@@ -26,7 +26,7 @@ const lastReport2 = {
   report: {
     _id: '1234',
     timestamp: '2019-07-10T12:51:27Z',
-    severity: '10.0',
+    severity: 10.0,
   },
 };
 
@@ -43,8 +43,8 @@ const task = Task.fromElement({
   name: 'foo',
   comment: 'bar',
   status: TASK_STATUS.done,
-  alterable: '0',
-  report_count: {__text: '1', finished: '1'},
+  alterable: 0,
+  report_count: {__text: 1, finished: 1},
   last_report: lastReport,
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: 'id1', name: 'target1'},
@@ -56,8 +56,8 @@ const task2 = Task.fromElement({
   name: 'lorem',
   comment: 'ipsum',
   status: TASK_STATUS.new,
-  alterable: '0',
-  report_count: {__text: '0', finished: '0'},
+  alterable: 0,
+  report_count: {__text: 0, finished: 0},
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: 'id2', name: 'target2'},
 });
@@ -68,10 +68,10 @@ const task3 = Task.fromElement({
   name: 'hello',
   comment: 'world',
   status: TASK_STATUS.running,
-  alterable: '0',
+  alterable: 0,
   current_report: currentReport,
   last_report: lastReport2,
-  report_count: {__text: '2', finished: '1'},
+  report_count: {__text: 2, finished: 1},
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: 'id2', name: 'target2'},
 });
