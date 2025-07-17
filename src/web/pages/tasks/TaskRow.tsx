@@ -24,7 +24,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import TaskStatus from 'web/pages/tasks/Status';
 import TaskActions, {TaskActionsProps} from 'web/pages/tasks/TaskActions';
-import TaskTrend from 'web/pages/tasks/Trend';
+import TaskTrend from 'web/pages/tasks/TaskTrend';
 
 interface TaskReportProps {
   report?: {id?: string; timestamp?: Date};
