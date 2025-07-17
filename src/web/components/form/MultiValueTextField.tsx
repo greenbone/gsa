@@ -38,6 +38,11 @@ const MultiValueTextField = ({
       name={name}
       placeholder={placeholder}
       styles={{
+        label: {
+          fontWeight: 500,
+          fontSize: 'var(--mantine-font-size-md)',
+          color: 'var(--label-color)',
+        },
         input: {
           backgroundColor: 'white',
           border: `1px solid ${Theme.inputBorderGray}`,
