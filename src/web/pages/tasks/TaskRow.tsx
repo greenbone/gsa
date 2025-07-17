@@ -22,8 +22,8 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import TaskStatus from 'web/pages/tasks/Status';
 import TaskActions, {TaskActionsProps} from 'web/pages/tasks/TaskActions';
+import TaskStatus from 'web/pages/tasks/TaskStatus';
 import TaskTrend from 'web/pages/tasks/TaskTrend';
 
 interface TaskReportProps {
