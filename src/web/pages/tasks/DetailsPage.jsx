@@ -60,8 +60,8 @@ import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconWithSync';
 import TaskImportReportIcon from 'web/pages/tasks/icons/TaskImportReportIcon';
 import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
-import TaskStatus from 'web/pages/tasks/Status';
 import TaskComponent from 'web/pages/tasks/TaskComponentComponent';
+import TaskStatus from 'web/pages/tasks/TaskStatus';
 import {
   selector as notesSelector,
   loadEntities as loadNotes,
