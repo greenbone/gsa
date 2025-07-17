@@ -36,12 +36,14 @@ const FormGroup = ({
   title,
   gap = 'md',
   direction = 'column',
-  'data-testid': dataTestId,
+  'data-testid': dataTestId = 'form-group',
 }: FormGroupProps) => {
   const Layout = direction === 'column' ? Column : Row;
   return (
     <Wrapper data-testid={dataTestId}>
-      {isDefined(title) && <StyledLabel>{title}</StyledLabel>}
+      {isDefined(title) && (
+        <StyledLabel data-testid={`${dataTestId}-label`}>{title}</StyledLabel>
+      )}
       <Layout gap={gap}>{children}</Layout>
     </Wrapper>
   );

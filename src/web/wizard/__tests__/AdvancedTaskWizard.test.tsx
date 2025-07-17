@@ -60,7 +60,7 @@ const startHour = 12;
 const startTimezone = 'UTC';
 
 const getFormGroupTitles = () => {
-  return document.body.querySelectorAll('.mantine-Text-root');
+  return screen.getAllByTestId('form-group-label');
 };
 
 const getRadioTitles = () => {

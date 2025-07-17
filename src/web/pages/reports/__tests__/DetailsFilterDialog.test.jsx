@@ -33,7 +33,7 @@ describe('Details Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {baseElement} = render(
+    render(
       <FilterDialog
         audit={true}
         createFilterType="result"
@@ -47,13 +47,9 @@ describe('Details Filter Dialog for Audit report', () => {
     const dialogTitle = screen.getByText('Update Filter');
     expect(dialogTitle).toBeInTheDocument();
 
-    const formGroups = baseElement.querySelectorAll(
-      '[class*="mantine-Text-root"]',
-    );
-
-    expect(formGroups[0]).toHaveTextContent('Filter');
-    expect(formGroups[1]).toHaveTextContent('QoD');
-    expect(formGroups[2]).toHaveTextContent('Compliance');
+    expect(screen.getByText('Filter')).toBeInTheDocument();
+    expect(screen.getByText('QoD')).toBeInTheDocument();
+    expect(screen.getByText('Compliance')).toBeInTheDocument();
 
     const filterGroup = screen.getByTestId('compliance-levels-filter-group');
     const {queryAllByRole} = within(filterGroup);
@@ -72,12 +68,14 @@ describe('Details Filter Dialog for Audit report', () => {
 
     const checkboxes = queryAllByRole('checkbox');
     expect(checkboxes).toHaveLength(4);
-    expect(formGroups[3]).toHaveTextContent('Solution Type');
-    expect(formGroups[4]).toHaveTextContent('Vulnerability');
-    expect(formGroups[5]).toHaveTextContent('Host (IP)');
-    expect(formGroups[6]).toHaveTextContent('Location (eg. port/protocol)');
-    expect(formGroups[7]).toHaveTextContent('First result');
-    expect(formGroups[8]).toHaveTextContent('Results per page');
+    expect(screen.getByText('Solution Type')).toBeInTheDocument();
+    expect(screen.getByText('Vulnerability')).toBeInTheDocument();
+    expect(screen.getByText('Host (IP)')).toBeInTheDocument();
+    expect(
+      screen.getByText('Location (eg. port/protocol)'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('First result')).toBeInTheDocument();
+    expect(screen.getByText('Results per page')).toBeInTheDocument();
 
     const onlyShowHostsCheckbox = screen.getByLabelText(
       'Only show hosts that have results',
@@ -108,7 +106,7 @@ describe('Details Filter Dialog for Audit report', () => {
       capabilities: caps,
     });
 
-    const {baseElement} = render(
+    render(
       <FilterDialog
         audit={false}
         createFilterType="result"
@@ -123,14 +121,10 @@ describe('Details Filter Dialog for Audit report', () => {
     const dialogTitle = screen.getByText('Update Filter');
     expect(dialogTitle).toBeInTheDocument();
 
-    const formGroups = baseElement.querySelectorAll(
-      '[class*="mantine-Text-root"]',
-    );
-
-    expect(formGroups[0]).toHaveTextContent('Filter');
-    expect(formGroups[1]).toHaveTextContent('Apply Overrides');
-    expect(formGroups[2]).toHaveTextContent('QoD');
-    expect(formGroups[3]).toHaveTextContent('Severity (Class)');
+    expect(screen.getByText('Filter')).toBeInTheDocument();
+    expect(screen.getByText('Apply Overrides')).toBeInTheDocument();
+    expect(screen.getByText('QoD')).toBeInTheDocument();
+    expect(screen.getByText('Severity (Class)')).toBeInTheDocument();
 
     const filterGroup = screen.getByTestId('severity-levels-filter-group');
 
@@ -153,13 +147,15 @@ describe('Details Filter Dialog for Audit report', () => {
     const checkboxes = queryAllByRole('checkbox');
     expect(checkboxes).toHaveLength(5);
 
-    expect(formGroups[4]).toHaveTextContent('Severity');
-    expect(formGroups[5]).toHaveTextContent('Solution Type');
-    expect(formGroups[6]).toHaveTextContent('Vulnerability');
-    expect(formGroups[7]).toHaveTextContent('Host (IP)');
-    expect(formGroups[8]).toHaveTextContent('Location (eg. port/protocol)');
-    expect(formGroups[9]).toHaveTextContent('First result');
-    expect(formGroups[10]).toHaveTextContent('Results per page');
+    expect(screen.getByText('Severity')).toBeInTheDocument();
+    expect(screen.getByText('Solution Type')).toBeInTheDocument();
+    expect(screen.getByText('Vulnerability')).toBeInTheDocument();
+    expect(screen.getByText('Host (IP)')).toBeInTheDocument();
+    expect(
+      screen.getByText('Location (eg. port/protocol)'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('First result')).toBeInTheDocument();
+    expect(screen.getByText('Results per page')).toBeInTheDocument();
 
     const onlyShowHostsCheckbox = screen.getByLabelText(
       'Only show hosts that have results',
