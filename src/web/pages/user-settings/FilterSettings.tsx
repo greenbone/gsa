@@ -67,7 +67,9 @@ const FILTER_NAMES = [
   'dfnCertFilter',
 ] as const;
 
-const FILTER_NAME_TO_ENTITY_TYPE: Record<string, string> = {
+type FilterName = (typeof FILTER_NAMES)[number];
+
+const FILTER_NAME_TO_ENTITY_TYPE: Record<FilterName, string> = {
   alertsFilter: 'alert',
   auditReportsFilter: 'auditreport',
   configsFilter: 'scanconfig',
@@ -100,7 +102,7 @@ const FILTER_NAME_TO_ENTITY_TYPE: Record<string, string> = {
   dfnCertFilter: 'dfncert',
 };
 
-const getFilterSettingId = (filterName: string): string => {
+const getFilterSettingId = (filterName: FilterName): string => {
   const entityType = FILTER_NAME_TO_ENTITY_TYPE[filterName];
   if (!entityType) {
     throw new Error(`Unknown filter name: ${filterName}`);
@@ -214,7 +216,7 @@ export const FilterSettings = ({
   } = useSettingSave();
 
   const filters =
-    useShallowEqualSelector(state =>
+    useShallowEqualSelector<unknown, Filter[]>(state =>
       filtersSelector(state).getEntities(ALL_FILTER),
     ) ?? [];
 
@@ -225,7 +227,7 @@ export const FilterSettings = ({
           acc[name] = false;
           return acc;
         },
-        {} as Record<string, boolean>,
+        {} as Record<FilterName, boolean>,
       ),
     [],
   );
@@ -236,14 +238,14 @@ export const FilterSettings = ({
     FILTER_NAMES.forEach(name => {
       const entityType = FILTER_NAME_TO_ENTITY_TYPE[name];
       if (entityType) {
-        const filter = filtersDefaultSelector?.getFilter(entityType);
+        const filter = filtersDefaultSelector?.getFilter(entityType) as Filter;
         const filterId = filter?.id || '';
         setValues(values => ({...values, [name]: filterId}));
       }
     });
   }, [filtersDefaultSelector]);
 
-  const saveField = async (key: (typeof FILTER_NAMES)[number]) => {
+  const saveField = async (key: FilterName) => {
     try {
       const settingId = getFilterSettingId(key);
       const entityType = FILTER_NAME_TO_ENTITY_TYPE[key];
@@ -266,9 +268,7 @@ export const FilterSettings = ({
             ),
           );
         } else if (filterId) {
-          const filter = new Filter();
-          // @ts-expect-error
-          filter.id = filterId;
+          const filter = new Filter({id: filterId});
           dispatch(
             defaultFilterLoadingActions.optimisticUpdate(entityType, filter),
           );
@@ -302,7 +302,7 @@ export const FilterSettings = ({
       }
     }
   };
-  const cancelField = (key: (typeof FILTER_NAMES)[number]) => {
+  const cancelField = (key: FilterName) => {
     const entityType = FILTER_NAME_TO_ENTITY_TYPE[key];
     const filter = filtersDefaultSelector?.getFilter(entityType);
     setValues(previousValues => ({...previousValues, [key]: filter?.id || ''}));
@@ -341,9 +341,8 @@ export const FilterSettings = ({
 
           const selectItems = renderSelectItems(
             filterItems.map(filter => ({
-              name: filter.name ?? filter.id,
-              id: filter.id,
-              deprecated: filter.deprecated,
+              name: (filter.name ?? filter.id) as string,
+              id: filter.id as string,
             })),
             UNSET_VALUE,
             _('None'),
@@ -352,7 +351,7 @@ export const FilterSettings = ({
           const selectedFilter = filters.find(f => f.id === currentVal);
           let viewValue = _('None');
           if (selectedFilter) {
-            viewValue = selectedFilter.name ?? selectedFilter.id;
+            viewValue = (selectedFilter.name ?? selectedFilter.id) as string;
           } else if (currentVal) {
             const entityType = FILTER_NAME_TO_ENTITY_TYPE[key];
             if (entityType) {
