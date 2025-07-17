@@ -78,13 +78,11 @@ const Row = ({
     }
     if (isDefined(observers.role)) {
       hasObservers = true;
-      const role = observers.role.map(r => r.name);
-      obs.role = _('Roles {{role}}', {role: role.join(', ')});
+      obs.role = _('Roles {{role}}', {role: observers.role.join(', ')});
     }
     if (isDefined(observers.group)) {
       hasObservers = true;
-      const group = observers.group.map(g => g.name);
-      obs.group = _('Groups {{group}}', {group: group.join(', ')});
+      obs.group = _('Groups {{group}}', {group: observers.group.join(', ')});
     }
   }
 
