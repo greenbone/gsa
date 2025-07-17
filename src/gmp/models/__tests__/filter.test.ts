@@ -416,7 +416,7 @@ describe('Filter parse from keywords', () => {
 
 describe('Filter set', () => {
   test('should allow to set a filter term', () => {
-    const filter = Filter.fromElement();
+    const filter = new Filter();
     expect(filter.set('abc', '1', '=').toFilterString()).toEqual('abc=1');
   });
 
@@ -426,7 +426,7 @@ describe('Filter set', () => {
   });
 
   test('should remove sort-reverse when adding sort filter term', () => {
-    const filter = Filter.fromElement();
+    const filter = new Filter();
 
     filter.set('sort-reverse', 'foo', '=');
     expect(filter.has('sort-reverse')).toEqual(true);
@@ -438,7 +438,7 @@ describe('Filter set', () => {
   });
 
   test('should remove sort when adding sort-reverse filter term', () => {
-    const filter = Filter.fromElement();
+    const filter = new Filter();
 
     filter.set('sort', 'foo', '=');
     expect(filter.has('sort')).toEqual(true);
@@ -449,8 +449,11 @@ describe('Filter set', () => {
     expect(filter.has('sort-reverse')).toEqual(true);
   });
 
-  test('should convert 0 or negative values for first to 1', () => {
-    const filter = Filter.fromElement();
+  test('should allow to set first keyword', () => {
+    const filter = new Filter();
+    filter.set('first', 123);
+    expect(filter.get('first')).toEqual(123);
+
     filter.set('first', '0');
     expect(filter.get('first')).toEqual(1);
 
@@ -459,7 +462,7 @@ describe('Filter set', () => {
   });
 
   test('should reset filter id', () => {
-    const filter = Filter.fromElement({_id: 'foo'});
+    const filter = new Filter({id: 'foo'});
 
     expect(filter.id).toEqual('foo');
 
@@ -468,7 +471,7 @@ describe('Filter set', () => {
   });
 
   test('should allow to set a filter term with underscore', () => {
-    const filter = Filter.fromElement();
+    const filter = new Filter();
     expect(filter.set('_foo', '1', '=').toFilterString()).toEqual('_foo=1');
   });
 });
