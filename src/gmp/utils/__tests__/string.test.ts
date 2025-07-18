@@ -68,7 +68,7 @@ describe('isEmpty function test', () => {
   });
 
   test('should return false for numbers', () => {
-    // @ts-expect-error
     expect(isEmpty(123)).toBe(false);
+    expect(isEmpty(0)).toBe(false);
   });
 });
