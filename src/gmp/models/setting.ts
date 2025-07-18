@@ -23,7 +23,6 @@ class Setting {
     this.comment = element.comment === '(null)' ? undefined : element.comment;
     this.name = element.name;
     this.value =
-      // @ts-expect-error
       !isEmpty(element.value) && element.value !== '0'
         ? element.value
         : undefined;
