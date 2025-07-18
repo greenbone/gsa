@@ -17,7 +17,7 @@ import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
-import {compareAlerts} from 'web/pages/tasks/Details';
+import {compareAlerts} from 'web/pages/tasks/TaskDetails';
 import {
   loadEntity as loadPolicy,
   selector as policySelector,
