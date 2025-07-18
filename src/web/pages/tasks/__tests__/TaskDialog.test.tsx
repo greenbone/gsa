@@ -13,18 +13,19 @@ import {
   screen,
 } from 'web/testing';
 import ScanConfig from 'gmp/models/scanconfig';
-import {
+import Scanner, {
   CVE_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
   OPENVASD_SENSOR_SCANNER_TYPE,
+  ScannerType,
 } from 'gmp/models/scanner';
-import TaskDialog from 'web/pages/tasks/Dialog';
+import TaskDialog from 'web/pages/tasks/TaskDialog';
 
 describe('TaskDialog component tests', () => {
   const gmp = {settings: {}};
-  const scanConfig = ScanConfig.fromElement({
+  const scanConfig = new ScanConfig({
     id: 'config-1',
     name: 'Test Config',
   });
@@ -51,7 +52,7 @@ describe('TaskDialog component tests', () => {
     onSshElevateCredentialChange: testing.fn(),
   });
 
-  const renderDialog = scannerType =>
+  const renderDialog = (scannerType: ScannerType) =>
     rendererWith({gmp, capabilities: true}).render(
       <TaskDialog
         alerts={[]}
@@ -60,7 +61,9 @@ describe('TaskDialog component tests', () => {
         name="target"
         scan_configs={[scanConfig]}
         scanner_id="scanner-id"
-        scanners={[{id: 'scanner-id', scannerType, name: 'Test Scanner'}]}
+        scanners={[
+          new Scanner({id: 'scanner-id', scannerType, name: 'Test Scanner'}),
+        ]}
         schedules={[]}
         tags={[]}
         targets={[]}
@@ -121,7 +124,10 @@ describe('TaskDialog component tests', () => {
         scan_configs={[scanConfig]}
         scanner_id={OPENVAS_DEFAULT_SCANNER_ID}
         scanners={[
-          {id: OPENVAS_DEFAULT_SCANNER_ID, scanner_type: OPENVAS_SCANNER_TYPE},
+          new Scanner({
+            id: OPENVAS_DEFAULT_SCANNER_ID,
+            scannerType: OPENVAS_SCANNER_TYPE,
+          }),
         ]}
         schedules={[]}
         tags={[]}
@@ -139,6 +145,21 @@ describe('TaskDialog component tests', () => {
 
   test('should close dialog on close button click', () => {
     const onClose = testing.fn();
+    const defaultProps = {
+      scan_configs: [scanConfig],
+      scanners: [
+        new Scanner({
+          id: OPENVAS_DEFAULT_SCANNER_ID,
+          scannerType: OPENVAS_SCANNER_TYPE,
+        }),
+      ],
+      scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
+      targets: [],
+      alerts: [],
+      schedules: [],
+      tags: [],
+      ...commonHandlers(),
+    };
     rendererWith({gmp, capabilities: true}).render(
       <TaskDialog {...defaultProps} onClose={onClose} />,
     );
@@ -146,17 +167,4 @@ describe('TaskDialog component tests', () => {
     fireEvent.click(screen.getDialogCloseButton());
     expect(onClose).toHaveBeenCalled();
   });
-
-  const defaultProps = {
-    scan_configs: [scanConfig],
-    scanners: [
-      {id: OPENVAS_DEFAULT_SCANNER_ID, scanner_type: OPENVAS_SCANNER_TYPE},
-    ],
-    scanner_id: OPENVAS_DEFAULT_SCANNER_ID,
-    targets: [],
-    alerts: [],
-    schedules: [],
-    tags: [],
-    ...commonHandlers(),
-  };
 });
