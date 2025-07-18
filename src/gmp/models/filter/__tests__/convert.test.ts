@@ -168,6 +168,24 @@ describe('convert tests', () => {
     });
   });
 
+  test('should convert name keyword', () => {
+    expect(convert('name', 'Test Task', '=')).toEqual({
+      keyword: 'name',
+      relation: '=',
+      value: 'Test Task',
+    });
+    expect(convert('name', '', '=')).toEqual({
+      keyword: 'name',
+      relation: '=',
+      value: undefined,
+    });
+    expect(convert('name', 1, '~')).toEqual({
+      keyword: 'name',
+      relation: '~',
+      value: '1',
+    });
+  });
+
   test('should convert empty keyword', () => {
     expect(convert('', 'foo', '=')).toEqual({
       relation: '=',

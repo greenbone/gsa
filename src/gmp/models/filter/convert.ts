@@ -63,6 +63,16 @@ const convertRows = (
   value: ConvertValue,
 ): FilterTermObject => convertInt(keyword, value, '=');
 
+const convertString = (
+  keyword: ConvertKeyword,
+  value: ConvertValue,
+  relation: ConvertRelation,
+): FilterTermObject => ({
+  keyword,
+  value: !isEmpty(value) ? String(value) : undefined,
+  relation,
+});
+
 const convertNoRelation = (
   keyword: ConvertKeyword,
   value: ConvertValue,
@@ -86,6 +96,7 @@ const KEYWORD_CONVERTERS: Record<string, ConvertFunc> = {
   overrides: convertBooleanInt,
   result_hosts_only: convertBooleanInt,
   rows: convertRows,
+  name: convertString,
 };
 
 const VALUE_CONVERTERS = {
