@@ -44,14 +44,14 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import AuditComponent from 'web/pages/audits/AuditComponent';
 import AuditDetails from 'web/pages/audits/Details';
-import {
-  TaskPermissions as AuditPermissions,
-  reloadInterval,
-} from 'web/pages/tasks/DetailsPage';
 import TaskResumeIcon from 'web/pages/tasks/icons/TaskResumeIcon';
 import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStartIcon from 'web/pages/tasks/icons/TaskStartIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
+import {
+  TaskPermissions as AuditPermissions,
+  reloadInterval,
+} from 'web/pages/tasks/TaskDetailsPage';
 import AuditStatus from 'web/pages/tasks/TaskStatus';
 import {
   selector as auditSelector,

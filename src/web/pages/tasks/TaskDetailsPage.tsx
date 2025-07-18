@@ -3,9 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useNavigate} from 'react-router';
+import Gmp from 'gmp/gmp';
 import Filter from 'gmp/models/filter';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
+import Task, {USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Badge from 'web/components/badge/Badge';
 import {
@@ -44,6 +47,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
@@ -78,12 +82,26 @@ import {
   selector as taskSelector,
   loadEntity as loadTask,
 } from 'web/store/entities/tasks';
-import compose from 'web/utils/Compose';
-import PropTypes from 'web/utils/PropTypes';
 import {renderYesNo} from 'web/utils/Render';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
-import withTranslation from 'web/utils/withTranslation';
+
+interface ToolBarIconsProps {
+  entity: Task;
+  links?: boolean;
+  notes?: Array<unknown>;
+  overrides?: Array<unknown>;
+  onContainerTaskCreateClick?: () => void | Promise<void>;
+  onReportImportClick?: (value: Task) => void | Promise<void>;
+  onTaskCloneClick?: (value: Task) => void | Promise<void>;
+  onTaskCreateClick?: () => void | Promise<void>;
+  onTaskDeleteClick?: (value: Task) => void | Promise<void>;
+  onTaskDownloadClick?: () => void | Promise<void>;
+  onTaskEditClick?: (value: Task) => void | Promise<void>;
+  onTaskResumeClick?: (value: Task) => void | Promise<void>;
+  onTaskStartClick?: (value: Task) => void | Promise<void>;
+  onTaskStopClick?: (value: Task) => void | Promise<void>;
+}
 
 export const ToolBarIcons = ({
   entity,
@@ -100,8 +118,14 @@ export const ToolBarIcons = ({
   onTaskStartClick,
   onTaskStopClick,
   onTaskResumeClick,
-}) => {
+}: ToolBarIconsProps) => {
   const [_] = useTranslation();
+  const {
+    current_report: currentReport,
+    last_report: lastReport,
+    report_count: reportCount,
+    result_count: resultCount,
+  } = entity;
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
@@ -161,14 +185,14 @@ export const ToolBarIcons = ({
 
       <Divider margin="10px">
         <IconDivider>
-          {isDefined(entity.current_report) && (
+          {isDefined(currentReport) && (
             <DetailsLink
-              id={entity.current_report.id}
+              id={currentReport.id}
               title={_('Current Report for Task {{- name}} from {{- date}}', {
-                name: entity.name,
+                name: entity.name as string,
                 date: formattedUserSettingShortDate(
-                  entity.current_report.scan_start,
-                ),
+                  currentReport.scan_start,
+                ) as string,
               })}
               type="report"
             >
@@ -176,28 +200,29 @@ export const ToolBarIcons = ({
             </DetailsLink>
           )}
 
-          {!isDefined(entity.current_report) &&
-            isDefined(entity.last_report) && (
-              <DetailsLink
-                id={entity.last_report.id}
-                title={_('Last Report for Task {{- name}} from {{- date}}', {
-                  name: entity.name,
-                  date: formattedUserSettingShortDate(
-                    entity.last_report.scan_start,
-                  ),
-                })}
-                type="report"
-              >
-                <ReportIcon />
-              </DetailsLink>
-            )}
+          {!isDefined(currentReport) && isDefined(lastReport) && (
+            <DetailsLink
+              id={lastReport.id}
+              title={_('Last Report for Task {{- name}} from {{- date}}', {
+                name: entity.name as string,
+                date: formattedUserSettingShortDate(
+                  lastReport.scan_start,
+                ) as string,
+              })}
+              type="report"
+            >
+              <ReportIcon />
+            </DetailsLink>
+          )}
 
           <Link
             filter={'task_id=' + entity.id}
-            title={_('Total Reports for Task {{- name}}', entity)}
+            title={_('Total Reports for Task {{- name}}', {
+              name: entity.name as string,
+            })}
             to="reports"
           >
-            <Badge content={entity.report_count.total}>
+            <Badge content={reportCount?.total ?? 0}>
               <ReportIcon />
             </Badge>
           </Link>
@@ -205,10 +230,12 @@ export const ToolBarIcons = ({
 
         <Link
           filter={'task_id=' + entity.id}
-          title={_('Results for Task {{- name}}', entity)}
+          title={_('Results for Task {{- name}}', {
+            name: entity.name as string,
+          })}
           to="results"
         >
-          <Badge content={entity.result_count}>
+          <Badge content={resultCount}>
             <ResultIcon />
           </Badge>
         </Link>
@@ -216,7 +243,9 @@ export const ToolBarIcons = ({
         <IconDivider>
           <Link
             filter={'task_id=' + entity.id}
-            title={_('Notes for Task {{- name}}', entity)}
+            title={_('Notes for Task {{- name}}', {
+              name: entity.name as string,
+            })}
             to="notes"
           >
             <Badge content={notes.length}>
@@ -226,7 +255,9 @@ export const ToolBarIcons = ({
 
           <Link
             filter={'task_id=' + entity.id}
-            title={_('Overrides for Task {{- name}}', entity)}
+            title={_('Overrides for Task {{- name}}', {
+              name: entity.name as string,
+            })}
             to="overrides"
           >
             <Badge content={overrides.length}>
@@ -239,24 +270,11 @@ export const ToolBarIcons = ({
   );
 };
 
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-  notes: PropTypes.array,
-  overrides: PropTypes.array,
-  onContainerTaskCreateClick: PropTypes.func.isRequired,
-  onReportImportClick: PropTypes.func.isRequired,
-  onTaskCloneClick: PropTypes.func.isRequired,
-  onTaskCreateClick: PropTypes.func.isRequired,
-  onTaskDeleteClick: PropTypes.func.isRequired,
-  onTaskDownloadClick: PropTypes.func.isRequired,
-  onTaskEditClick: PropTypes.func.isRequired,
-  onTaskResumeClick: PropTypes.func.isRequired,
-  onTaskStartClick: PropTypes.func.isRequired,
-  onTaskStopClick: PropTypes.func.isRequired,
-};
+interface DetailsProps {
+  entity: Task;
+}
 
-const Details = ({entity, ...props}) => {
+const Details = ({entity, ...props}: DetailsProps) => {
   const [_] = useTranslation();
   return (
     <Layout flex="column">
@@ -295,166 +313,160 @@ const Details = ({entity, ...props}) => {
   );
 };
 
-Details.propTypes = {
-  entity: PropTypes.model.isRequired,
-};
-
-class Page extends React.Component {
-  componentDidUpdate() {
-    const {entity, navigate} = this.props;
-    if (isDefined(entity) && entity.usageType === 'audit') {
-      return navigate('/audit/' + entity.id, {replace: true});
-    }
-  }
-
-  render() {
-    const {_} = this.props;
-
-    const {
-      entity,
-      permissions = [],
-      onChanged,
-      onDownloaded,
-      onError,
-      onInteraction,
-      ...props
-    } = this.props;
-    return (
-      <TaskComponent
-        onCloneError={onError}
-        onCloned={goToDetails('task', props)}
-        onContainerCreated={goToDetails('task', props)}
-        onContainerSaved={onChanged}
-        onCreated={goToDetails('task', props)}
-        onDeleteError={onError}
-        onDeleted={goToList('tasks', props)}
-        onDownloadError={onError}
-        onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
-        onReportImported={onChanged}
-        onResumeError={onError}
-        onResumed={onChanged}
-        onSaved={onChanged}
-        onStartError={onError}
-        onStarted={onChanged}
-        onStopError={onError}
-        onStopped={onChanged}
-      >
-        {({
-          clone,
-          create,
-          createcontainer,
-          delete: delete_func,
-          download,
-          edit,
-          start,
-          stop,
-          resume,
-          reportimport,
-        }) => (
-          <EntityPage
-            {...props}
-            entity={entity}
-            sectionIcon={<TaskIcon size="large" />}
-            title={_('Task')}
-            toolBarIcons={ToolBarIcons}
-            onChanged={onChanged}
-            onContainerTaskCreateClick={createcontainer}
-            onError={onError}
-            onInteraction={onInteraction}
-            onReportImportClick={reportimport}
-            onTaskCloneClick={clone}
-            onTaskCreateClick={create}
-            onTaskDeleteClick={delete_func}
-            onTaskDownloadClick={download}
-            onTaskEditClick={edit}
-            onTaskResumeClick={resume}
-            onTaskStartClick={start}
-            onTaskStopClick={stop}
-          >
-            {() => {
-              return (
-                <React.Fragment>
-                  <PageTitle title={_('Task: {{name}}', {name: entity.name})} />
-                  <TabsContainer flex="column" grow="1">
-                    <TabLayout align={['start', 'end']} grow="1">
-                      <TabList align={['start', 'stretch']}>
-                        <Tab>{_('Information')}</Tab>
-                        <EntitiesTab entities={entity.userTags}>
-                          {_('User Tags')}
-                        </EntitiesTab>
-                        <EntitiesTab entities={permissions}>
-                          {_('Permissions')}
-                        </EntitiesTab>
-                      </TabList>
-                    </TabLayout>
-
-                    <Tabs>
-                      <TabPanels>
-                        <TabPanel>
-                          <Details entity={entity} />
-                        </TabPanel>
-                        <TabPanel>
-                          <EntityTags
-                            entity={entity}
-                            onChanged={onChanged}
-                            onError={onError}
-                            onInteraction={onInteraction}
-                          />
-                        </TabPanel>
-                        <TabPanel>
-                          <TaskPermissions
-                            entity={entity}
-                            permissions={permissions}
-                            onChanged={onChanged}
-                            onDownloaded={onDownloaded}
-                            onError={onError}
-                            onInteraction={onInteraction}
-                          />
-                        </TabPanel>
-                      </TabPanels>
-                    </Tabs>
-                  </TabsContainer>
-                </React.Fragment>
-              );
-            }}
-          </EntityPage>
-        )}
-      </TaskComponent>
-    );
-  }
+interface TaskDetailsPageProps {
+  entity: Task;
+  permissions: Array<unknown>;
+  onChanged?: () => void;
+  onDownloaded?: OnDownloadedFunc;
+  onError?: (error: unknown) => void;
+  onInteraction?: () => void;
 }
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  navigate: PropTypes.func.isRequired,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-  _: PropTypes.func.isRequired,
+const TaskDetailsPage = ({
+  entity,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}: TaskDetailsPageProps) => {
+  const navigate = useNavigate();
+  const [_] = useTranslation();
+
+  useEffect(() => {
+    if (isDefined(entity) && entity.usageType !== USAGE_TYPE.scan) {
+      void navigate('/audit/' + entity.id, {replace: true});
+    }
+  }, [entity, navigate]);
+
+  return (
+    <TaskComponent
+      onCloneError={onError}
+      onCloned={goToDetails('task', navigate)}
+      onContainerCreated={goToDetails('task', navigate)}
+      onContainerSaved={onChanged}
+      onCreated={goToDetails('task', navigate)}
+      onDeleteError={onError}
+      onDeleted={goToList('tasks', navigate)}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      // @ts-expect-error
+      onInteraction={onInteraction}
+      onReportImported={onChanged}
+      onResumeError={onError}
+      onResumed={onChanged}
+      onSaved={onChanged}
+      onStartError={onError}
+      onStarted={onChanged}
+      onStopError={onError}
+      onStopped={onChanged}
+    >
+      {({
+        clone,
+        create,
+        createcontainer: createContainer,
+        delete: deleteFunc,
+        download,
+        edit,
+        start,
+        stop,
+        resume,
+        reportimport: reportImport,
+      }) => (
+        <EntityPage
+          {...props}
+          // @ts-expect-error
+          entity={entity}
+          sectionIcon={<TaskIcon size="large" />}
+          title={_('Task')}
+          // @ts-expect-error
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onContainerTaskCreateClick={createContainer}
+          onError={onError}
+          // @ts-expect-error
+          onInteraction={onInteraction}
+          onReportImportClick={reportImport}
+          onTaskCloneClick={clone}
+          onTaskCreateClick={create}
+          onTaskDeleteClick={deleteFunc}
+          onTaskDownloadClick={download}
+          onTaskEditClick={edit}
+          onTaskResumeClick={resume}
+          onTaskStartClick={start}
+          onTaskStopClick={stop}
+        >
+          {() => {
+            return (
+              <React.Fragment>
+                <PageTitle
+                  title={_('Task: {{name}}', {name: entity.name as string})}
+                />
+                <TabsContainer flex="column" grow="1">
+                  <TabLayout align={['start', 'end']} grow="1">
+                    <TabList align={['start', 'stretch']}>
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          // @ts-expect-error
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <TaskPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </TabsContainer>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </TaskComponent>
+  );
 };
 
 export const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
-    ({entity}) =>
+    ({entity}: {entity: Task}) =>
       isDefined(entity.alerts)
         ? Promise.resolve([...entity.alerts])
         : Promise.resolve([]),
-    ({entity}) => {
-      const resources = [];
-      const names = ['config', 'scanner', 'schedule'];
-
-      for (const name of names) {
-        if (isDefined(entity[name])) {
-          resources.push(entity[name]);
-        }
-      }
+    ({entity}: {entity: Task}) => {
+      const resources = [entity.config, entity.scanner, entity.schedule].filter(
+        isDefined,
+      );
       return Promise.resolve(resources);
     },
-    ({entity, gmp}) => {
+    ({entity, gmp}: {entity: Task; gmp: Gmp}) => {
       if (isDefined(entity.target)) {
+        // @ts-expect-error
         return gmp.target.get(entity.target).then(response => {
           const target = response.data;
           const resources = [target];
@@ -473,9 +485,9 @@ export const TaskPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const taskIdFilter = id => Filter.fromString('task_id=' + id).all();
+const taskIdFilter = (id: string) => Filter.fromString('task_id=' + id).all();
 
-const mapStateToProps = (rootState, {id}) => {
+const mapStateToProps = (rootState: unknown, {id}: {id: string}) => {
   const permSel = permissionsSelector(rootState);
   const notesSel = notesSelector(rootState);
   const overridesSel = overridesSelector(rootState);
@@ -486,12 +498,12 @@ const mapStateToProps = (rootState, {id}) => {
   };
 };
 
-const load = gmp => {
+const load = (gmp: Gmp) => {
   const loadTaskFunc = loadTask(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
-  return id => dispatch =>
+  return (id: string) => dispatch =>
     Promise.all([
       dispatch(loadTaskFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
@@ -500,7 +512,7 @@ const load = gmp => {
     ]);
 };
 
-export const reloadInterval = ({entity}) => {
+export const reloadInterval = ({entity}: {entity: Task}) => {
   if (!isDefined(entity) || entity.isContainer()) {
     return NO_RELOAD;
   }
@@ -513,5 +525,6 @@ export default withEntityContainer('task', {
   load,
   entitySelector: taskSelector,
   mapStateToProps,
+  // @ts-expect-error
   reloadInterval,
-})(compose(withTranslation)(Page));
+})(TaskDetailsPage);
