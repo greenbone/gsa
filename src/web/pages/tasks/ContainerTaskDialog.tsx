@@ -3,31 +3,48 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {YES_VALUE} from 'gmp/parser';
+import Task from 'gmp/models/task';
+import {YES_VALUE, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import TextField from 'web/components/form/TextField';
 import useTranslation from 'web/hooks/useTranslation';
 import AddResultsToAssetsGroup from 'web/pages/tasks/AddResultsToAssetsGroup';
-import PropTypes from 'web/utils/PropTypes';
+
+interface ContainerTaskDialogState {
+  comment: string;
+  in_assets: YesNo;
+  name: string;
+  id?: string;
+}
+
+interface ContainerTaskDialogProps {
+  comment?: string;
+  in_assets?: YesNo;
+  name?: string;
+  task?: Task;
+  title?: string;
+  onClose: () => void | Promise<void>;
+  onSave: (data: ContainerTaskDialogState) => void | Promise<void>;
+}
 
 const ContainerTaskDialog = ({
   comment = '',
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   in_assets = YES_VALUE,
   name = '',
   task,
   title,
   onClose,
   onSave,
-}) => {
+}: ContainerTaskDialogProps) => {
   const [_] = useTranslation();
   const isEdit = isDefined(task);
 
   title = title || _('New Container Task');
 
-  const data = {
+  const data: ContainerTaskDialogState = {
     comment,
     in_assets,
     name,
@@ -35,7 +52,7 @@ const ContainerTaskDialog = ({
   };
 
   return (
-    <SaveDialog
+    <SaveDialog<{}, ContainerTaskDialogState>
       defaultValues={data}
       title={title}
       onClose={onClose}
@@ -70,18 +87,6 @@ const ContainerTaskDialog = ({
       }}
     </SaveDialog>
   );
-};
-
-ContainerTaskDialog.propTypes = {
-  auto_delete: PropTypes.oneOf(['keep', 'no']),
-  auto_delete_data: PropTypes.number,
-  comment: PropTypes.string,
-  in_assets: PropTypes.yesno,
-  name: PropTypes.string,
-  task: PropTypes.model,
-  title: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default ContainerTaskDialog;

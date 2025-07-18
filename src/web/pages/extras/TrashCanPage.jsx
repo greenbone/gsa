@@ -48,7 +48,7 @@ import ScannersTable from 'web/pages/scanners/Table';
 import SchedulesTable from 'web/pages/schedules/Table';
 import TagsTable from 'web/pages/tags/Table';
 import TargetsTable from 'web/pages/targets/Table';
-import TasksTable from 'web/pages/tasks/Table';
+import TasksTable from 'web/pages/tasks/TaskTable';
 import TicketsTable from 'web/pages/tickets/Table';
 import PropTypes from 'web/utils/PropTypes';
 const Col = styled.col`

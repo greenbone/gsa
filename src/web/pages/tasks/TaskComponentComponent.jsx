@@ -22,8 +22,8 @@ import AlertComponent from 'web/pages/alerts/AlertComponent';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/Component';
-import ContainerTaskDialog from 'web/pages/tasks/ContainerDialog';
-import TaskDialog from 'web/pages/tasks/Dialog';
+import ContainerTaskDialog from 'web/pages/tasks/ContainerTaskDialog';
+import TaskDialog from 'web/pages/tasks/TaskDialog';
 import {
   loadEntities as loadAlerts,
   selector as alertSelector,
