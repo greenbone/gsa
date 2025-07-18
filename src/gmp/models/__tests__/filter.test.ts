@@ -461,6 +461,18 @@ describe('Filter set', () => {
     expect(filter.get('first')).toEqual(1);
   });
 
+  test('should allow to set name keyword', () => {
+    const filter = new Filter();
+    filter.set('name', 'Test Task');
+    expect(filter.get('name')).toEqual('Test Task');
+
+    filter.set('name', '');
+    expect(filter.get('name')).toBeUndefined();
+
+    filter.set('name', 123);
+    expect(filter.get('name')).toEqual('123');
+  });
+
   test('should reset filter id', () => {
     const filter = new Filter({id: 'foo'});
 
