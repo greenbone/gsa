@@ -6,14 +6,14 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {changeInputValue, screen, render, fireEvent} from 'web/testing';
 import Task from 'gmp/models/task';
-import ContainerDialog from 'web/pages/tasks/ContainerDialog';
+import ContainerTaskDialog from 'web/pages/tasks/ContainerTaskDialog';
 
 describe('ContainerTaskDialog tests', () => {
   test('should render create dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    render(<ContainerDialog onClose={handleClose} onSave={handleSave} />);
+    render(<ContainerTaskDialog onClose={handleClose} onSave={handleSave} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
     expect(screen.queryByName('in_assets')).not.toBeInTheDocument();
@@ -25,7 +25,11 @@ describe('ContainerTaskDialog tests', () => {
     const handleSave = testing.fn();
 
     render(
-      <ContainerDialog task={task} onClose={handleClose} onSave={handleSave} />,
+      <ContainerTaskDialog
+        task={task}
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
     );
 
     expect(screen.getDialog()).toBeInTheDocument();
@@ -37,7 +41,7 @@ describe('ContainerTaskDialog tests', () => {
     const handleSave = testing.fn();
 
     render(
-      <ContainerDialog
+      <ContainerTaskDialog
         comment="bar"
         name="foo"
         onClose={handleClose}
@@ -68,7 +72,7 @@ describe('ContainerTaskDialog tests', () => {
     const handleSave = testing.fn();
 
     render(
-      <ContainerDialog
+      <ContainerTaskDialog
         comment="bar"
         name="foo"
         task={task}
@@ -102,7 +106,7 @@ describe('ContainerTaskDialog tests', () => {
     const handleSave = testing.fn();
 
     render(
-      <ContainerDialog
+      <ContainerTaskDialog
         comment="bar"
         name="foo"
         onClose={handleClose}

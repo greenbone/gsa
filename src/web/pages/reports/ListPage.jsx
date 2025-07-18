@@ -26,7 +26,7 @@ import ReportsDashboard, {
 import ReportFilterDialog from 'web/pages/reports/FilterDialog';
 import ImportReportDialog from 'web/pages/reports/ImportDialog';
 import ReportsTable from 'web/pages/reports/Table';
-import ContainerTaskDialog from 'web/pages/tasks/ContainerDialog';
+import ContainerTaskDialog from 'web/pages/tasks/ContainerTaskDialog';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -39,6 +39,7 @@ import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
+
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 
 const ToolBarIcons = ({onUploadReportClick}) => {
