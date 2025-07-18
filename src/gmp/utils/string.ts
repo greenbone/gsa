@@ -64,12 +64,13 @@ export const split = (
 };
 
 /**
- * Checks if a given string is empty.
+ * Checks if a given value is empty.
  *
- * A string is considered empty if it is either undefined or has a length of 0.
+ * A value is considered empty if it is either undefined or it is a string and
+ * has a length of 0.
  *
- * @param value - The string to check.
- * @returns - Returns true if the string is empty, otherwise false.
+ * @param value - The value to check.
+ * @returns - Returns true if the value is empty, otherwise false.
  */
-export const isEmpty = (value?: string): boolean =>
-  !isDefined(value) || value.length === 0;
+export const isEmpty = (value?: string | number): boolean =>
+  !isDefined(value) || (isString(value) && value.length === 0);
