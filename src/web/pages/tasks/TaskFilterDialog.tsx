@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
@@ -16,10 +16,19 @@ import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup'
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import TaskTrendGroup from 'web/components/powerfilter/TaskTrendGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface TaskFilterDialogProps {
+  filter: Filter;
+  onClose?: () => void;
+  onCloseClick?: () => void; // should be removed in future
+  onFilterChanged?: (filter: Filter) => void;
+  onFilterCreated?: (filter: Filter) => void;
+}
 
 const TaskFilterDialog = ({
   filter: initialFilter,
@@ -27,10 +36,11 @@ const TaskFilterDialog = ({
   onClose = onCloseClick,
   onFilterChanged,
   onFilterCreated,
-}) => {
+}: TaskFilterDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
-  const filterDialogProps = useFilterDialog(initialFilter);
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
   const [handleSave] = useFilterDialogSave(
     'task',
     {
@@ -40,6 +50,18 @@ const TaskFilterDialog = ({
     },
     filterDialogProps,
   );
+  const {
+    filter,
+    filterString,
+    filterName,
+    saveNamedFilter,
+    handleFilterStringChange,
+    handleFilterValueChange,
+    handleSearchTermChange,
+    handleSortByChange,
+    handleSortOrderChange,
+    handleChange,
+  } = filterDialogProps;
 
   const SORT_FIELDS = [
     {
@@ -76,98 +98,77 @@ const TaskFilterDialog = ({
     },
   ];
 
-  const {
-    filter,
-    filterString,
-    filterName,
-    saveNamedFilter,
-    onFilterStringChange,
-    onFilterValueChange,
-    onSearchTermChange,
-    onSortByChange,
-    onSortOrderChange,
-    onValueChange,
-  } = filterDialogProps;
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
         filter={filterString}
-        name="filterstring"
-        onChange={onFilterStringChange}
+        name="filter_string"
+        onChange={handleFilterStringChange}
       />
 
       <BooleanFilterGroup
         filter={filter}
         name="apply_overrides"
         title={_('Apply Overrides')}
-        onChange={onFilterValueChange}
+        onChange={handleFilterValueChange}
       />
 
       <FilterSearchGroup
         filter={filter}
         name="name"
         title={_('Task Name')}
-        onChange={onSearchTermChange}
+        onChange={handleSearchTermChange}
       />
 
       <SeverityValuesGroup
         filter={filter}
         name="severity"
         title={_('Severity of Last Report')}
-        onChange={onFilterValueChange}
+        onChange={handleFilterValueChange}
       />
 
       <MinQodGroup
         filter={filter}
         name="min_qod"
-        onChange={onFilterValueChange}
+        onChange={handleFilterValueChange}
       />
 
-      <TaskTrendGroup filter={filter} onChange={onFilterValueChange} />
+      <TaskTrendGroup filter={filter} onChange={handleFilterValueChange} />
 
       <FilterSearchGroup
         filter={filter}
         name="schedule"
         title={_('Schedule')}
-        onChange={onSearchTermChange}
+        onChange={handleSearchTermChange}
       />
 
       <FilterSearchGroup
         filter={filter}
         name="comment"
         title={_('Comment')}
-        onChange={onSearchTermChange}
+        onChange={handleSearchTermChange}
       />
 
-      <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
+      <FirstResultGroup filter={filter} onChange={handleFilterValueChange} />
 
-      <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
+      <ResultsPerPageGroup filter={filter} onChange={handleFilterValueChange} />
 
       <SortByGroup
         fields={SORT_FIELDS}
         filter={filter}
-        onSortByChange={onSortByChange}
-        onSortOrderChange={onSortOrderChange}
+        onSortByChange={handleSortByChange}
+        onSortOrderChange={handleSortOrderChange}
       />
 
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
-          onValueChange={onValueChange}
+          onValueChange={handleChange}
         />
       )}
     </FilterDialog>
   );
-};
-
-TaskFilterDialog.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onCloseClick: PropTypes.func, // should be removed in future
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
 };
 
 export default TaskFilterDialog;
