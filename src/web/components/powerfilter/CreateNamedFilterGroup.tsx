@@ -11,7 +11,7 @@ import useTranslation from 'web/hooks/useTranslation';
 interface CreateNamedFilterGroupProps {
   filterName?: string;
   saveNamedFilter?: boolean;
-  onValueChange?: (value: string | boolean, name?: string) => void;
+  onValueChange?: (value: string | boolean, name: string) => void;
 }
 
 const CreateNamedFilterGroup = ({
@@ -29,7 +29,7 @@ const CreateNamedFilterGroup = ({
         name="saveNamedFilter"
         title={_('Store filter as: ')}
         unCheckedValue={false}
-        onChange={onValueChange}
+        onChange={onValueChange as (value: boolean, name?: string) => void}
       />
       <TextField
         data-testid="createnamedfiltergroup-textfield"
@@ -38,7 +38,9 @@ const CreateNamedFilterGroup = ({
         name="filterName"
         placeholder={_('Filter Name')}
         value={filterName}
-        onChange={onValueChange}
+        onChange={
+          onValueChange as ((value: string, name?: string) => void) | undefined
+        }
       />
     </Row>
   );

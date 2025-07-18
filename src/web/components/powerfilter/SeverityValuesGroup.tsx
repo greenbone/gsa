@@ -14,9 +14,9 @@ import {UNSET_VALUE} from 'web/utils/Render';
 
 interface SeverityValuesGroupProps {
   filter: Filter;
-  name?: string;
+  name: string;
   title?: string;
-  onChange?: (value: number, name?: string, relation?: string) => void;
+  onChange?: (value: number, name: string, relation?: string) => void;
 }
 
 const SeverityValuesGroup = ({

@@ -13,7 +13,7 @@ interface MinQodGroupProps {
   qod?: number;
   filter?: Filter;
   name?: string;
-  onChange?: (value: number, name?: string) => void;
+  onChange?: (value: number, name: string) => void;
 }
 
 const MinQodGroup = ({
@@ -38,7 +38,9 @@ const MinQodGroup = ({
         step={1}
         type="int"
         value={qod}
-        onChange={onChange}
+        onChange={
+          onChange as ((value: number, name?: string) => void) | undefined
+        }
       />
       <span>%</span>
     </FormGroup>

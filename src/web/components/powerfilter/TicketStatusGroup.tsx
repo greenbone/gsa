@@ -14,7 +14,7 @@ interface TicketStatusFilterGroupProps {
   status?: TicketStatus;
   filter?: Filter;
   name?: string;
-  onChange: (value: TicketStatus, name?: string) => void;
+  onChange: (value: TicketStatus, name: string) => void;
 }
 
 const TicketStatusFilterGroup = ({
@@ -41,7 +41,9 @@ const TicketStatusFilterGroup = ({
         ]}
         name={name}
         value={status}
-        onChange={onChange as (value: string) => void}
+        onChange={
+          onChange as ((value: string, name?: string) => void) | undefined
+        }
       />
     </FormGroup>
   );

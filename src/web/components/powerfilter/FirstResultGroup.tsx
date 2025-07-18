@@ -13,7 +13,7 @@ interface FirstResultGroupProps {
   first?: number;
   filter?: Filter;
   name?: string;
-  onChange?: (value: number, name?: string) => void;
+  onChange?: (value: number, name: string) => void;
 }
 
 const FirstResultGroup = ({
@@ -34,7 +34,9 @@ const FirstResultGroup = ({
         name={name}
         type="int"
         value={first}
-        onChange={onChange}
+        onChange={
+          onChange as ((value: number, name?: string) => void) | undefined
+        }
       />
     </FormGroup>
   );

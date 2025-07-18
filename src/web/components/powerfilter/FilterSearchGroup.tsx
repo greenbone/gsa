@@ -15,7 +15,7 @@ interface FilterSearchGroupProps {
   filter?: Filter;
   name: string;
   title?: string;
-  onChange?: (value: string, name?: string) => void;
+  onChange?: (value: string, name: string) => void;
 }
 
 const FilterSearchGroup = ({
@@ -40,7 +40,13 @@ const FilterSearchGroup = ({
 
   return (
     <FormGroup title={title}>
-      <TextField name={name} value={filterVal} onChange={onChange} />
+      <TextField
+        name={name}
+        value={filterVal}
+        onChange={
+          onChange as ((value: string, name?: string) => void) | undefined
+        }
+      />
     </FormGroup>
   );
 };
