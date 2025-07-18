@@ -7,7 +7,7 @@ import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import Status from 'web/pages/tasks/Status';
+import Status from 'web/pages/tasks/TaskStatus';
 
 const caps = new Capabilities(['everything']);
 
@@ -15,7 +15,7 @@ describe('Task Status tests', () => {
   test('should render', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.new,
-      alterable: '0',
+      alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
     });
@@ -34,7 +34,7 @@ describe('Task Status tests', () => {
   test('should render with last report', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.done,
-      alterable: '0',
+      alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
       last_report: {report: {_id: '42'}},
@@ -55,7 +55,7 @@ describe('Task Status tests', () => {
   test('should render with current report', () => {
     const task = Task.fromElement({
       status: TASK_STATUS.running,
-      alterable: '0',
+      alterable: 0,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
       last_report: {report: {_id: '42'}},
