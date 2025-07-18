@@ -37,7 +37,7 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
   }, []);
 
   const handleFilterValueChange = useCallback(
-    (value: string, name: string, relation: string = '=') => {
+    (value: string | number, name: string, relation: string = '=') => {
       setFilter(filter => filter.copy().set(name, value, relation));
     },
     [],

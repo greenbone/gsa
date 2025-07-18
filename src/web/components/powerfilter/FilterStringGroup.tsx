@@ -12,7 +12,7 @@ import useTranslation from 'web/hooks/useTranslation';
 interface FilterStringGroupProps {
   filter: string | Filter;
   name?: string;
-  onChange?: (value: string, name?: string) => void;
+  onChange?: (value: string, name: string) => void;
 }
 
 const FilterStringGroup = ({
@@ -31,7 +31,9 @@ const FilterStringGroup = ({
         name={name}
         size="30"
         value={filterString}
-        onChange={onChange}
+        onChange={
+          onChange as ((value: string, name?: string) => void) | undefined
+        }
       />
     </FormGroup>
   );

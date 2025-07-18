@@ -13,7 +13,7 @@ interface ResultsPerPageGroupProps {
   rows?: number;
   filter?: Filter;
   name?: string;
-  onChange?: (value: number, name?: string) => void;
+  onChange?: (value: number, name: string) => void;
 }
 
 const ResultsPerPageGroup = ({
@@ -30,7 +30,14 @@ const ResultsPerPageGroup = ({
 
   return (
     <FormGroup data-testid="results-per-page" title={_('Results per page')}>
-      <Spinner name={name} type="int" value={rows} onChange={onChange} />
+      <Spinner
+        name={name}
+        type="int"
+        value={rows}
+        onChange={
+          onChange as ((value: number, name?: string) => void) | undefined
+        }
+      />
     </FormGroup>
   );
 };

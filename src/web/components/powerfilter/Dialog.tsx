@@ -19,7 +19,7 @@ interface DefaultFilterDialogProps {
   saveNamedFilter?: boolean;
   sortFields?: SortByField[];
   onFilterStringChange?: (value: string) => void;
-  onFilterValueChange?: (value: string | number, name?: string) => void;
+  onFilterValueChange?: (value: string | number, name: string) => void;
   onSortByChange?: (value: string) => void;
   onSortOrderChange?: (value: string) => void;
   onValueChange?: (value: string | boolean, name?: string) => void;
@@ -28,7 +28,7 @@ interface DefaultFilterDialogProps {
 const DefaultFilterDialog = ({
   filter,
   filterName,
-  filterstring,
+  filterstring: filterString,
   saveNamedFilter,
   sortFields,
   onFilterStringChange,
@@ -41,7 +41,7 @@ const DefaultFilterDialog = ({
   return (
     <>
       <FilterStringGroup
-        filter={filterstring}
+        filter={filterString}
         onChange={onFilterStringChange}
       />
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />

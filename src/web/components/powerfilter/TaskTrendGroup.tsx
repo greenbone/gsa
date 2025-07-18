@@ -14,7 +14,7 @@ interface TaskTrendGroupProps {
   trend?: TaskTrend;
   name?: string;
   filter?: Filter;
-  onChange?: (value: TaskTrend, name?: string) => void;
+  onChange?: (value: TaskTrend, name: string) => void;
 }
 
 const TaskTrendGroup = ({
@@ -40,7 +40,9 @@ const TaskTrendGroup = ({
         ]}
         name={name}
         value={trend}
-        onChange={onChange as (value: string) => void}
+        onChange={
+          onChange as ((value: string, name?: string) => void) | undefined
+        }
       />
     </FormGroup>
   );

@@ -14,7 +14,7 @@ interface ApplyOverridesGroupProps {
   filter?: Filter;
   name?: string;
   overrides?: YesNo;
-  onChange: (value: YesNo, name?: string) => void;
+  onChange?: (value: YesNo, name: string) => void;
 }
 
 const ApplyOverridesGroup = ({
@@ -34,7 +34,9 @@ const ApplyOverridesGroup = ({
         data-testid="apply-overrides-yesnoradio"
         name={name}
         value={overrides}
-        onChange={onChange}
+        onChange={
+          onChange as ((value: YesNo, name?: string) => void) | undefined
+        }
       />
     </FormGroup>
   );

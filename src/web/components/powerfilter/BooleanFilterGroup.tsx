@@ -13,7 +13,7 @@ interface BooleanFilterGroupProps {
   filter?: Filter;
   name: string;
   title?: string;
-  onChange?: (value: YesNo, name?: string) => void;
+  onChange?: (value: YesNo, name: string) => void;
 }
 
 const BooleanFilterGroup = ({
@@ -25,7 +25,7 @@ const BooleanFilterGroup = ({
   let filterVal: YesNo | undefined;
 
   if (isDefined(filter)) {
-    filterVal = parseYesNo(filter.get(name) as YesNo | undefined);
+    filterVal = parseYesNo(filter.get(name));
   }
 
   return (
@@ -35,7 +35,9 @@ const BooleanFilterGroup = ({
         data-testid="boolean-filter-yesnoradio"
         name={name}
         value={filterVal}
-        onChange={onChange}
+        onChange={
+          onChange as ((value: YesNo, name?: string) => void) | undefined
+        }
       />
     </FormGroup>
   );
