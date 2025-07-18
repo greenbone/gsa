@@ -70,7 +70,7 @@ describe('AutoDeleteReportsGroup tests', () => {
     );
 
     const autoDeleteKeepData = screen.getByName('auto_delete_data');
-    changeInputValue(autoDeleteKeepData, 10);
+    changeInputValue(autoDeleteKeepData, '10');
     expect(handleChange).toHaveBeenCalledWith(10, 'auto_delete_data');
   });
 
@@ -87,7 +87,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const autoDeleteKeepData = screen.getByName('auto_delete_data');
     expect(autoDeleteKeepData).toBeDisabled();
-    changeInputValue(autoDeleteKeepData, 10);
+    changeInputValue(autoDeleteKeepData, '10');
     expect(handleChange).not.toHaveBeenCalled();
   });
 });
