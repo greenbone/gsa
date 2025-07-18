@@ -52,7 +52,7 @@ import TaskResumeIcon from 'web/pages/tasks/icons/TaskResumeIcon';
 import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStartIcon from 'web/pages/tasks/icons/TaskStartIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
-import AuditStatus from 'web/pages/tasks/Status';
+import AuditStatus from 'web/pages/tasks/TaskStatus';
 import {
   selector as auditSelector,
   loadEntity as loadAudit,
