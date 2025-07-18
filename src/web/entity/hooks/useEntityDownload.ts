@@ -15,14 +15,17 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {getUsername} from 'web/store/usersettings/selectors';
 import {generateFilename} from 'web/utils/Render';
 
+export type OnDownloadedFunc = (data: EntityDownload) => void;
+export type OnDownloadErrorFunc = (error: unknown) => void;
+
 interface EntityDownload {
   filename: string;
   data: string;
 }
 
 interface DownloadCallbacks {
-  onDownloadError?: (error: unknown) => void;
-  onDownloaded?: (data: EntityDownload) => void;
+  onDownloadError?: OnDownloadErrorFunc;
+  onDownloaded?: OnDownloadedFunc;
   onInteraction?: () => void;
 }
 

@@ -12,7 +12,7 @@ import ScanConfig from 'gmp/models/scanconfig';
 import Schedule from 'gmp/models/schedule';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import DetailsPage, {ToolBarIcons} from 'web/pages/tasks/DetailsPage';
+import DetailsPage, {ToolBarIcons} from 'web/pages/tasks/TaskDetailsPage';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -23,8 +23,8 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner1', type: '0'},
   tasks: {
     task: [
-      {id: '12345', name: 'foo'},
-      {id: '678910', name: 'task2'},
+      {_id: '12345', name: 'foo'},
+      {_id: '678910', name: 'task2'},
     ],
   },
 });
@@ -90,14 +90,14 @@ const task = Task.fromElement({
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   status: TASK_STATUS.done,
-  alterable: '1',
+  alterable: 1,
   last_report: lastReport,
-  report_count: {__text: '1'},
-  result_count: '1',
+  report_count: {__text: 1},
+  result_count: 1,
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  scanner: {_id: '1516', name: 'scanner1', type: 2},
   config: config,
   preferences: preferences,
 });
@@ -110,14 +110,14 @@ const task2 = Task.fromElement({
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   status: TASK_STATUS.done,
-  alterable: '0',
+  alterable: 0,
   last_report: lastReport,
-  report_count: {__text: '1'},
-  result_count: '1',
+  report_count: {__text: 1},
+  result_count: 1,
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  scanner: {_id: '1516', name: 'scanner1', type: 2},
   config: config,
   preferences: preferences,
 });
@@ -130,13 +130,13 @@ const task3 = Task.fromElement({
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   status: TASK_STATUS.new,
-  alterable: '0',
-  report_count: {__text: '0'},
-  result_count: '0',
+  alterable: 0,
+  report_count: {__text: 0},
+  result_count: 0,
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  scanner: {_id: '1516', name: 'scanner1', type: 2},
   config: config,
   preferences: preferences,
 });
@@ -146,18 +146,18 @@ const task4 = Task.fromElement({
   owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  in_use: '1',
+  in_use: 1,
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   status: TASK_STATUS.running,
-  alterable: '0',
+  alterable: 0,
   current_report: currentReport,
-  report_count: {__text: '1'},
-  result_count: '0',
+  report_count: {__text: 1},
+  result_count: 0,
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  scanner: {_id: '1516', name: 'scanner1', type: 2},
   config: config,
   preferences: preferences,
 });
@@ -170,15 +170,15 @@ const task5 = Task.fromElement({
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   status: TASK_STATUS.stopped,
-  alterable: '0',
+  alterable: 0,
   current_report: currentReport,
   last_report: lastReport,
-  report_count: {__text: '2'},
-  result_count: '10',
+  report_count: {__text: 2},
+  result_count: 10,
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  scanner: {_id: '1516', name: 'scanner1', type: 2},
   config: config,
   preferences: preferences,
 });
@@ -195,14 +195,14 @@ const task6 = Task.fromElement({
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   status: TASK_STATUS.done,
-  alterable: '0',
+  alterable: 0,
   last_report: lastReport,
-  report_count: {__text: '1'},
-  result_count: '1',
+  report_count: {__text: 1},
+  result_count: 1,
   permissions: {permission: [{name: 'get_tasks'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  scanner: {_id: '1516', name: 'scanner1', type: 2},
   config: config,
   preferences: preferences,
 });
@@ -215,21 +215,21 @@ const task7 = Task.fromElement({
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   status: TASK_STATUS.done,
-  alterable: '0',
+  alterable: 0,
   last_report: lastReport,
-  report_count: {__text: '1'},
-  result_count: '1',
+  report_count: {__text: 1},
+  result_count: 1,
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: '5678', name: 'target1'},
   alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  scanner: {_id: '1516', name: 'scanner1', type: 2},
   config: config,
   schedule: {
     _id: '121314',
     name: 'schedule1',
     permissions: {permission: [{name: 'everything'}]},
   },
-  schedule_periods: '1',
+  schedule_periods: 1,
   preferences: preferences,
 });
 
@@ -240,8 +240,8 @@ const task8 = Task.fromElement({
   comment: 'bar',
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
-  report_count: {__text: '1'},
-  result_count: '1',
+  report_count: {__text: 1},
+  result_count: 1,
   last_report: lastReport,
   permissions: {permission: [{name: 'everything'}]},
 });
@@ -275,7 +275,7 @@ const getEntities = testing.fn().mockResolvedValue({
   },
 });
 
-describe('Task DetailsPage tests', () => {
+describe('TaskDetailsPage tests', () => {
   test('should render full DetailsPage', () => {
     const getTask = testing.fn().mockResolvedValue({
       data: task,
@@ -1251,7 +1251,7 @@ describe('Task ToolBarIcons tests', () => {
     const startIcon = screen.getByTestId('start-icon');
     expect(startIcon).toHaveAttribute('title', 'Start');
     fireEvent.click(startIcon);
-    expect(handleTaskStart).toHaveBeenCalled(task7);
+    expect(handleTaskStart).toHaveBeenCalledWith(task7);
 
     const resumeIcon = screen.getByTestId('resume-icon');
     expect(resumeIcon).toHaveAttribute('title', 'Task is scheduled');
