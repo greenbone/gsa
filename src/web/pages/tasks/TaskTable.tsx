@@ -12,7 +12,7 @@ import {createEntitiesFooter} from 'web/entities/Footer';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
-import TaskDetails from 'web/pages/tasks/Details';
+import TaskDetails from 'web/pages/tasks/TaskDetails';
 import TaskRow from 'web/pages/tasks/TaskRow';
 import PropTypes from 'web/utils/PropTypes';
 import {SortDirectionType} from 'web/utils/SortDirection';

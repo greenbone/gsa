@@ -9,7 +9,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig from 'gmp/models/scanconfig';
 import Schedule from 'gmp/models/schedule';
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import Details from 'web/pages/tasks/Details';
+import Details from 'web/pages/tasks/TaskDetails';
 import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
 
@@ -17,11 +17,11 @@ const config = ScanConfig.fromElement({
   _id: '314',
   name: 'foo',
   comment: 'bar',
-  scanner: {name: 'scanner1', type: '0'},
+  scanner: {name: 'scanner1', type: 0},
   tasks: {
     task: [
-      {id: '12345', name: 'foo'},
-      {id: '678910', name: 'task2'},
+      {_id: '12345', name: 'foo'},
+      {_id: '678910', name: 'task2'},
     ],
   },
 });
@@ -88,7 +88,7 @@ const gmp = {
   },
 };
 
-describe('Task Details tests', () => {
+describe('TaskDetails tests', () => {
   test('should render full task details', () => {
     const task = Task.fromElement({
       _id: '12345',
@@ -96,12 +96,12 @@ describe('Task Details tests', () => {
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.done,
-      alterable: '0',
+      alterable: 0,
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: '5678', name: 'target1'},
       alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: '2'},
+      scanner: {_id: '1516', name: 'scanner1', type: 2},
       preferences: preferences,
       schedule: schedule,
       config: config,
