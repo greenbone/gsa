@@ -260,6 +260,26 @@ export const queryPowerFilter = (element?: HTMLElement) => {
 };
 
 /**
+ * Retrieves the power filter element from the DOM. If the element is not found,
+ * an error is thrown indicating that the power filter could not be located.
+ *
+ * @param element - An optional HTMLElement to narrow the search scope. If not provided,
+ *                  the search will be performed globally within the DOM.
+ * @returns The power filter HTMLElement.
+ * @throws Will throw an error if the power filter element cannot be found.
+ */
+export const getPowerFilter = (element?: HTMLElement) => {
+  const powerFilter = queryPowerFilter(element);
+  if (!powerFilter) {
+    throw getElementError(
+      'Unable to find powerfilter.',
+      element ?? document.body,
+    );
+  }
+  return powerFilter;
+};
+
+/**
  * Get text inputs
  *
  * @param element - The element to search within. If not provided, the document will be used.
