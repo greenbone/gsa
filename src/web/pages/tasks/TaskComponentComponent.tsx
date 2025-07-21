@@ -79,7 +79,7 @@ const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
 interface TaskComponentRenderProps {
   create: (task: Task) => void;
-  createcontainer: (task: Task) => void;
+  createContainer: (task: Task) => void;
   clone: (task: Task) => void;
   delete: (task: Task) => void;
   download: (task: Task) => void;
@@ -88,10 +88,10 @@ interface TaskComponentRenderProps {
   start: (task: Task) => void;
   stop: (task: Task) => void;
   resume: (task: Task) => void;
-  reportimport: (task: Task) => void;
-  advancedtaskwizard: () => void;
-  modifytaskwizard: () => void;
-  taskwizard: () => void;
+  reportImport: (task: Task) => void;
+  advancedTaskWizard: () => void;
+  modifyTaskWizard: () => void;
+  taskWizard: () => void;
 }
 
 interface TaskComponentProps {
@@ -794,15 +794,15 @@ const TaskComponent = ({
               children({
                 ...other,
                 create: openTaskDialog,
-                createcontainer: openContainerTaskDialog,
+                createContainer: openContainerTaskDialog,
                 edit: openTaskDialog,
                 start: handleTaskStart,
                 stop: handleTaskStop,
                 resume: handleTaskResume,
-                reportimport: openReportImportDialog,
-                advancedtaskwizard: openAdvancedTaskWizard,
-                modifytaskwizard: openModifyTaskWizard,
-                taskwizard: openTaskWizard,
+                reportImport: openReportImportDialog,
+                advancedTaskWizard: openAdvancedTaskWizard,
+                modifyTaskWizard: openModifyTaskWizard,
+                taskWizard: openTaskWizard,
               })}
 
             {taskDialogVisible && (

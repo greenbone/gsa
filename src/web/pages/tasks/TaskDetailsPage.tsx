@@ -364,14 +364,14 @@ const TaskDetailsPage = ({
       {({
         clone,
         create,
-        createcontainer: createContainer,
+        createContainer,
         delete: deleteFunc,
         download,
         edit,
         start,
         stop,
         resume,
-        reportimport: reportImport,
+        reportImport,
       }) => (
         <EntityPage
           {...props}
