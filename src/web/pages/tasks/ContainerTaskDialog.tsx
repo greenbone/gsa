@@ -19,6 +19,8 @@ interface ContainerTaskDialogState {
   id?: string;
 }
 
+export type ContainerTaskDialogData = ContainerTaskDialogState;
+
 interface ContainerTaskDialogProps {
   comment?: string;
   in_assets?: YesNo;
@@ -26,7 +28,7 @@ interface ContainerTaskDialogProps {
   task?: Task;
   title?: string;
   onClose: () => void | Promise<void>;
-  onSave: (data: ContainerTaskDialogState) => void | Promise<void>;
+  onSave: (data: ContainerTaskDialogData) => void | Promise<void>;
 }
 
 const ContainerTaskDialog = ({
