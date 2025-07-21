@@ -96,6 +96,37 @@ const ScannerSelect = ({
   );
 };
 
+interface TaskDialogValues {
+  alert_ids: string[];
+  config_id?: string;
+  schedule_id?: string;
+  scanner_id?: string;
+  scanner_type?: ScannerType;
+  target_id?: string;
+}
+
+interface TaskDialogDefaultValues {
+  add_tag?: YesNo;
+  alterable?: YesNo;
+  apply_overrides?: YesNo;
+  auto_delete?: TaskAutoDelete;
+  auto_delete_data?: number;
+  comment?: string;
+  config_id?: string;
+  hosts_ordering?: TaskHostsOrdering;
+  in_assets?: YesNo;
+  max_checks?: number;
+  max_hosts?: number;
+  min_qod?: number;
+  name?: string;
+  schedule_periods?: YesNo;
+  tag_id?: string;
+  tags?: RenderSelectItemProps[];
+  task?: Task;
+}
+
+export type TaskDialogData = TaskDialogValues & TaskDialogDefaultValues;
+
 interface TaskDialogProps {
   add_tag?: YesNo;
   alert_ids?: string[];
@@ -134,44 +165,11 @@ interface TaskDialogProps {
   onNewAlertClick?: () => void;
   onNewScheduleClick?: () => void;
   onNewTargetClick?: () => void;
-  onSave?: (
-    data: TaskDialogDefaultValues & TaskDialogValues,
-  ) => void | Promise<void>;
+  onSave?: (data: TaskDialogData) => void | Promise<void>;
   onScanConfigChange?: (value: string) => void;
   onScannerChange?: (value: string) => void;
   onScheduleChange?: (value: string) => void;
   onTargetChange?: (value: string) => void;
-}
-
-interface TaskDialogValues {
-  alert_ids: string[];
-  config_id?: string;
-  schedule_id: string;
-  scanner_id: string;
-  scanner_type?: ScannerType;
-  target_id?: string;
-}
-
-interface TaskDialogDefaultValues {
-  add_tag?: YesNo;
-  alterable?: YesNo;
-  apply_overrides?: YesNo;
-  auto_delete?: TaskAutoDelete;
-  auto_delete_data?: number;
-  comment?: string;
-  config_id?: string;
-  hosts_ordering?: TaskHostsOrdering;
-  in_assets?: YesNo;
-  max_checks?: number;
-  max_hosts?: number;
-  min_qod?: number;
-  name?: string;
-  scanner_type?: ScannerType;
-  scanner_id?: string;
-  schedule_periods?: YesNo;
-  tag_id?: string;
-  tags?: RenderSelectItemProps[];
-  task?: Task;
 }
 
 const TaskDialog = ({
@@ -233,7 +231,6 @@ const TaskDialog = ({
   onScannerChange,
   onScheduleChange,
   onTargetChange,
-  ...data
 }: TaskDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -268,7 +265,6 @@ const TaskDialog = ({
     : undefined;
 
   const uncontrolledData: TaskDialogDefaultValues = {
-    ...data,
     add_tag,
     alterable,
     apply_overrides,
@@ -282,8 +278,6 @@ const TaskDialog = ({
     max_hosts,
     min_qod,
     name,
-    scanner_type: scannerType,
-    scanner_id,
     schedule_periods,
     tag_id: tagId,
     tags,
