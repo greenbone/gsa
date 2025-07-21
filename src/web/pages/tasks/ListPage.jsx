@@ -129,17 +129,17 @@ const Page = ({
       {({
         clone,
         create,
-        createcontainer,
-        delete: delete_func,
+        createContainer,
+        delete: deleteFunc,
         download,
         edit,
         start,
         stop,
         resume,
-        reportimport,
-        advancedtaskwizard,
-        modifytaskwizard,
-        taskwizard,
+        reportImport,
+        advancedTaskWizard,
+        modifyTaskWizard,
+        taskWizard,
       }) => (
         <React.Fragment>
           <PageTitle title={_('Tasks')} />
@@ -165,22 +165,22 @@ const Page = ({
             table={TaskTable}
             title={_('Tasks')}
             toolBarIcons={ToolBarIcons}
-            onAdvancedTaskWizardClick={advancedtaskwizard}
-            onContainerTaskCreateClick={createcontainer}
+            onAdvancedTaskWizardClick={advancedTaskWizard}
+            onContainerTaskCreateClick={createContainer}
             onError={onError}
             onFilterChanged={onFilterChanged}
             onInteraction={onInteraction}
-            onModifyTaskWizardClick={modifytaskwizard}
-            onReportImportClick={reportimport}
+            onModifyTaskWizardClick={modifyTaskWizard}
+            onReportImportClick={reportImport}
             onTaskCloneClick={clone}
             onTaskCreateClick={create}
-            onTaskDeleteClick={delete_func}
+            onTaskDeleteClick={deleteFunc}
             onTaskDownloadClick={download}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
             onTaskStartClick={start}
             onTaskStopClick={stop}
-            onTaskWizardClick={taskwizard}
+            onTaskWizardClick={taskWizard}
           />
         </React.Fragment>
       )}
