@@ -24,7 +24,7 @@ import ReportsDashboard, {
   REPORTS_DASHBOARD_ID,
 } from 'web/pages/reports/dashboard';
 import ReportFilterDialog from 'web/pages/reports/FilterDialog';
-import ImportReportDialog from 'web/pages/reports/ImportDialog';
+import ReportImportDialog from 'web/pages/reports/ReportImportDialog';
 import ReportsTable from 'web/pages/reports/Table';
 import ContainerTaskDialog from 'web/pages/tasks/ContainerTaskDialog';
 import {
@@ -218,7 +218,7 @@ class Page extends React.Component {
           onUploadReportClick={this.openImportDialog}
         />
         {importDialogVisible && (
-          <ImportReportDialog
+          <ReportImportDialog
             task_id={task_id}
             tasks={tasks}
             onClose={this.handleCloseImportDialog}
