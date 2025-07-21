@@ -6,6 +6,7 @@
 import {useState} from 'react';
 import {TimePicker} from '@greenbone/opensight-ui-components-mantinev7';
 import {Date} from 'gmp/models/date';
+import Task from 'gmp/models/task';
 import {parseYesNo, NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import DatePicker from 'web/components/form/DatePicker';
@@ -18,7 +19,7 @@ import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import {renderSelectItems} from 'web/utils/Render';
+import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 
@@ -29,30 +30,27 @@ interface ModifyTaskWizardState {
   startHour: number;
   startMinute: number;
   startTimezone: string;
-  taskId?: string;
+  taskId: string;
 }
 
-interface Task {
-  id: string;
-  name: string;
-}
+export type ModifyTaskWizardData = ModifyTaskWizardState;
 
 interface ModifyTaskWizardProps {
   alertEmail?: string;
-  reschedule: YesNo;
+  reschedule?: YesNo;
   startDate: Date;
   startHour: number;
   startMinute: number;
   startTimezone: string;
-  taskId?: string;
+  taskId: string;
   tasks?: Task[];
-  onClose: () => void;
-  onSave: (values: ModifyTaskWizardState) => void;
+  onClose?: () => void;
+  onSave?: (values: ModifyTaskWizardData) => void;
 }
 
 const ModifyTaskWizard = ({
   alertEmail = '',
-  reschedule,
+  reschedule = NO_VALUE,
   startDate,
   startHour,
   startMinute,
@@ -139,7 +137,7 @@ const ModifyTaskWizard = ({
           <Column>
             <FormGroup title={_('Task')}>
               <Select
-                items={renderSelectItems(tasks)}
+                items={renderSelectItems(tasks as RenderSelectItemProps[])}
                 name="taskId"
                 value={state.taskId}
                 onChange={onValueChange}

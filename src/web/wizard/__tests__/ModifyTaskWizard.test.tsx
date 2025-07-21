@@ -10,17 +10,13 @@ import date from 'gmp/models/date';
 import Task from 'gmp/models/task';
 import ModifyTaskWizard from 'web/wizard/ModifyTaskWizard';
 
-interface TestModel {
-  id: string;
-  name: string;
-}
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
 const scheduleCapabilities = new Capabilities([
   'create_schedule',
   'get_schedules',
 ]);
 
-const task1 = Task.fromElement({_id: '1234', name: 'task 1'}) as TestModel;
+const task1 = new Task({id: '1234', name: 'task 1'});
 const taskId = '1234';
 const tasks = [task1];
 
