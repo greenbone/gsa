@@ -84,7 +84,7 @@ const PortListsPage = () => {
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter, changeFilter, resetFilter, removeFilter] =
-    usePageFilter('portlist');
+    usePageFilter('portlist', 'portlist');
   const previousFilter = usePreviousValue(filter);
   const portListsSelector = useShallowEqualSelector(selector);
   const listExportFileName = useShallowEqualSelector(state =>
@@ -145,22 +145,23 @@ const PortListsPage = () => {
   );
 
   useEffect(() => {
-    // load initial data
-    if (
+    /*
+     * Check if the filters are changed in a way that matters for fetching:
+     * - Either the the previous filter wasn't defined yet
+     * - or the terms are different
+     * - or the normal equality check fails (for cases where both filters have IDs).
+     */
+
+    const shouldFetch =
       isDefined(filter) &&
       !isLoadingFilter &&
-      !filter.equals(previousFilter)
-    ) {
+      (!isDefined(previousFilter) ||
+        filter.toFilterString() !== previousFilter?.toFilterString() ||
+        !filter.equals(previousFilter));
+    if (shouldFetch) {
       fetch(filter);
     }
   }, [filter, isLoadingFilter, fetch, previousFilter]);
-
-  useEffect(() => {
-    // reload if filter has changed
-    if (!filter.equals(previousFilter)) {
-      fetch(filter);
-    }
-  }, [filter, previousFilter, fetch]);
 
   useEffect(() => {
     // start reloading if tasks are available and no timer is running yet
