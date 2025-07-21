@@ -3,15 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {NewIcon} from 'web/components/icon';
 import IconMenu from 'web/components/menu/IconMenu';
 import MenuEntry from 'web/components/menu/MenuEntry';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
+interface NewIconMenuProps {
+  onNewClick?: () => void;
+  onNewContainerClick?: () => void;
+}
+
+const NewIconMenu = ({onNewClick, onNewContainerClick}: NewIconMenuProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   if (capabilities.mayCreate('task')) {
@@ -31,11 +34,6 @@ const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
     );
   }
   return null;
-};
-
-NewIconMenu.propTypes = {
-  onNewClick: PropTypes.func,
-  onNewContainerClick: PropTypes.func,
 };
 
 export default NewIconMenu;
