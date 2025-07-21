@@ -17,6 +17,7 @@ export interface ManualLinkProps extends Omit<BlankLinkProps, 'to'> {
 
 const ManualLink = ({
   anchor,
+  'data-testid': dataTestId = 'manual-link',
   page,
   searchTerm,
   lang,
@@ -34,7 +35,7 @@ const ManualLink = ({
   } else if (isDefined(anchor)) {
     url += '#' + anchor;
   }
-  return <BlankLink {...props} to={url} />;
+  return <BlankLink {...props} data-testid={dataTestId} to={url} />;
 };
 
 export default ManualLink;
