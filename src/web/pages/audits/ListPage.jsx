@@ -15,7 +15,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import AuditComponent from 'web/pages/audits/AuditComponent';
 import Table from 'web/pages/audits/Table';
-import {taskReloadInterval} from 'web/pages/tasks/ListPage';
+import {taskReloadInterval} from 'web/pages/tasks/TaskListPage';
 import {
   loadEntities,
   selector as entitiesSelector,

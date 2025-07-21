@@ -4,7 +4,9 @@
  */
 
 import React from 'react';
-import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import Rejection from 'gmp/http/rejection';
+import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import Task from 'gmp/models/task';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {TaskIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -14,6 +16,7 @@ import {
 } from 'web/components/loading/Reload';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';
 import TaskToolBarIcons from 'web/pages/tasks/icons/TaskToolBarIcons';
@@ -24,9 +27,17 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tasks';
-import PropTypes from 'web/utils/PropTypes';
 
-const Page = ({
+interface TaskListPageProps {
+  filter: Filter;
+  onFilterChanged: (filter: Filter) => void;
+  onInteraction: () => void;
+  onChanged: () => void;
+  onDownloaded: OnDownloadedFunc;
+  onError: (error: Error | Rejection) => void;
+}
+
+const TaskListPage = ({
   filter,
   onFilterChanged,
   onInteraction,
@@ -34,7 +45,7 @@ const Page = ({
   onDownloaded,
   onError,
   ...props
-}) => {
+}: TaskListPageProps) => {
   const [_] = useTranslation();
   return (
     <TaskComponent
@@ -122,16 +133,7 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  filter: PropTypes.filter,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-export const taskReloadInterval = ({entities = []}) =>
+export const taskReloadInterval = ({entities = []}: {entities: Task[]}) =>
   entities.some(task => task.isActive())
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
@@ -139,5 +141,6 @@ export const taskReloadInterval = ({entities = []}) =>
 export default withEntitiesContainer('task', {
   entitiesSelector,
   loadEntities,
+  // @ts-expect-error
   reloadInterval: taskReloadInterval,
-})(Page);
+})(TaskListPage);
