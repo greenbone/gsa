@@ -12,12 +12,11 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import TaskPage, {ToolBarIcons} from 'web/pages/tasks/ListPage';
+import TaskPage from 'web/pages/tasks/ListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -43,9 +42,6 @@ const task = Task.fromElement({
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: 'id1', name: 'target1'},
 });
-
-const caps = new Capabilities(['everything']);
-const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
@@ -319,149 +315,5 @@ describe('TaskDetailsPage tests', () => {
     )[0];
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
-  });
-});
-
-describe('TaskPage ToolBarIcons test', () => {
-  test('should render', () => {
-    const handleAdvancedTaskWizardClick = testing.fn();
-    const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
-    const handleTaskCreateClick = testing.fn();
-    const handleTaskWizardClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
-    );
-    expect(element).toBeVisible();
-
-    const links = element.querySelectorAll('a');
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: Tasks',
-    );
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/scanning.html#managing-tasks',
-    );
-  });
-
-  test('should call click handlers', () => {
-    const handleAdvancedTaskWizardClick = testing.fn();
-    const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
-    const handleTaskCreateClick = testing.fn();
-    const handleTaskWizardClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
-    );
-
-    const taskWizardMenu = screen.getByTestId('task-wizard-menu');
-    expect(taskWizardMenu).toHaveTextContent('Task Wizard');
-    fireEvent.click(taskWizardMenu);
-    expect(handleTaskWizardClick).toHaveBeenCalled();
-
-    const advancedTaskWizardMenu = screen.getByTestId(
-      'advanced-task-wizard-menu',
-    );
-    expect(advancedTaskWizardMenu).toHaveTextContent('Advanced Task Wizard');
-    fireEvent.click(advancedTaskWizardMenu);
-    expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
-
-    const modifyTaskWizardMenu = screen.getByTestId('modify-task-wizard-menu');
-    expect(modifyTaskWizardMenu).toHaveTextContent('Modify Task Wizard');
-    fireEvent.click(modifyTaskWizardMenu);
-    expect(handleModifyTaskWizardClick).toHaveBeenCalled();
-
-    const newTaskMenu = screen.getByTestId('new-task-menu');
-    expect(newTaskMenu).toHaveTextContent('New Task');
-    fireEvent.click(newTaskMenu);
-    expect(handleTaskCreateClick).toHaveBeenCalled();
-
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
-    expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
-    fireEvent.click(newContainerTaskMenu);
-    expect(handleContainerTaskCreateClick).toHaveBeenCalled();
-  });
-
-  test('should not show icons if user does not have the right permissions', () => {
-    const handleAdvancedTaskWizardClick = testing.fn();
-    const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
-    const handleTaskCreateClick = testing.fn();
-    const handleTaskWizardClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: wrongCaps,
-      router: true,
-    });
-    render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
-    );
-
-    const taskWizardMenu = screen.queryByTestId('task-wizard-menu');
-    expect(taskWizardMenu).toBeNull();
-
-    const advancedTaskWizardMenu = screen.queryByTestId(
-      'advanced-task-wizard-menu',
-    );
-    expect(advancedTaskWizardMenu).toBeNull();
-
-    const modifyTaskWizardMenu = screen.queryByTestId(
-      'modify-task-wizard-menu',
-    );
-    expect(modifyTaskWizardMenu).toBeNull();
-
-    const newTaskMenu = screen.queryByTestId('new-task-menu');
-    expect(newTaskMenu).toBeNull();
-
-    const newContainerTaskMenu = screen.queryByTestId(
-      'new-container-task-menu',
-    );
-    expect(newContainerTaskMenu).toBeNull();
   });
 });
