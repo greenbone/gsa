@@ -19,7 +19,7 @@ import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
-import ImportReportDialog from 'web/pages/reports/ImportDialog';
+import ReportImportDialog from 'web/pages/reports/ReportImportDialog';
 import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 import TargetComponent from 'web/pages/targets/Component';
 import ContainerTaskDialog from 'web/pages/tasks/ContainerTaskDialog';
@@ -854,7 +854,7 @@ const TaskComponent = ({
       )}
 
       {reportImportDialogVisible && (
-        <ImportReportDialog
+        <ReportImportDialog
           newContainerTask={false}
           task_id={taskId}
           tasks={tasks}
