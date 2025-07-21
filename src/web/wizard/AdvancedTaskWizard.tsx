@@ -16,6 +16,7 @@ import {
   ssh_credential_filter,
 } from 'gmp/models/credential';
 import {Date} from 'gmp/models/date';
+import {first} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import DatePicker from 'web/components/form/DatePicker';
 import FormGroup from 'web/components/form/FormGroup';
@@ -55,6 +56,8 @@ interface AdvancedTaskWizardState {
   taskName: string;
 }
 
+export type AdvancedTaskWizardData = AdvancedTaskWizardState;
+
 interface Credential {
   id: string;
   name: string;
@@ -68,10 +71,10 @@ interface ScanConfig {
 interface AdvancedTaskWizardProps {
   alertEmail?: string;
   autoStart?: AutoStartType;
-  credentials: Credential[];
+  credentials?: Credential[];
   esxiCredential?: string;
-  scanConfigId: string;
-  scanConfigs: ScanConfig[];
+  scanConfigId?: string;
+  scanConfigs?: ScanConfig[];
   smbCredential?: string;
   sshCredential?: string;
   sshPort?: number;
@@ -80,9 +83,9 @@ interface AdvancedTaskWizardProps {
   startMinute: number;
   startTimezone: string;
   targetHosts?: string;
-  taskName: string;
-  onClose: () => void;
-  onSave: (values: AdvancedTaskWizardState) => void;
+  taskName?: string;
+  onClose?: () => void;
+  onSave?: (values: AdvancedTaskWizardData) => void;
 }
 
 const AdvancedTaskWizard = ({
@@ -91,7 +94,7 @@ const AdvancedTaskWizard = ({
   credentials = [],
   esxiCredential = '',
   scanConfigId,
-  scanConfigs,
+  scanConfigs = [],
   smbCredential = '',
   sshCredential = '',
   sshPort = DEFAULT_SSH_PORT,
@@ -127,7 +130,8 @@ const AdvancedTaskWizard = ({
   const data = {
     alertEmail,
     autoStart,
-    scanConfigId,
+    scanConfigId:
+      scanConfigId ?? first<ScanConfig, {id: string}>(scanConfigs).id,
     startDate,
     esxiCredential,
     smbCredential,
