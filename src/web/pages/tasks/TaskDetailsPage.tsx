@@ -351,7 +351,6 @@ const TaskDetailsPage = ({
       onDeleted={goToList('tasks', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      // @ts-expect-error
       onInteraction={onInteraction}
       onReportImported={onChanged}
       onResumeError={onError}
