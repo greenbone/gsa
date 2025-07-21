@@ -16,6 +16,7 @@ import Settings from 'gmp/models/settings';
 import Task from 'gmp/models/task';
 import {YesNo} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
 interface RunWizardResponseData extends XmlResponseData {
   client_address: string;
@@ -63,21 +64,20 @@ interface RunQuickFirstScanArguments {
 }
 
 interface RunQuickTaskArguments {
-  alertEmail: string;
+  alertEmail?: string;
   autoStart:
     | typeof IMMEDIATELY_START_VALUE
     | typeof SCHEDULE_START_VALUE
     | typeof DONT_START_VALUE;
-  esxiCredential: string;
-  scanConfigId: string;
-  scanConfigs: string[];
-  smbCredential: string;
-  sshCredential: string;
-  sshPort: number;
-  startDate: Date;
-  startHour: string;
-  startMinute: string;
-  startTimezone: string;
+  esxiCredential?: string;
+  scanConfigId?: string;
+  smbCredential?: string;
+  sshCredential?: string;
+  sshPort?: number;
+  startDate?: Date;
+  startHour?: number;
+  startMinute?: number;
+  startTimezone?: string;
   targetHosts: string;
   taskName: string;
 }
@@ -206,9 +206,11 @@ class WizardCommand extends HttpCommand {
         'event_data:smb_credential': smbCredential,
         'event_data:ssh_credential': sshCredential,
         'event_data:ssh_port': sshPort,
-        'event_data:start_day': startDate.date(),
-        'event_data:start_month': startDate.month() + 1,
-        'event_data:start_year': startDate.year(),
+        'event_data:start_day': startDate?.date(),
+        'event_data:start_month': isDefined(startDate)
+          ? startDate.month() + 1
+          : undefined,
+        'event_data:start_year': startDate?.year(),
         'event_data:start_hour': startHour,
         'event_data:start_minute': startMinute,
         'event_data:start_timezone': startTimezone,
