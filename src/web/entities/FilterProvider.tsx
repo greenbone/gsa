@@ -4,30 +4,33 @@
  */
 
 import React from 'react';
+import Filter from 'gmp/models/filter';
 import Loading from 'web/components/loading/Loading';
 import usePageFilter from 'web/hooks/usePageFilter';
-import PropTypes from 'web/utils/PropTypes';
+
+interface FilterProviderRenderProps {
+  filter: Filter;
+}
+
+interface FilterProviderProps {
+  fallbackFilter?: Filter;
+  gmpname: string;
+  pageName?: string;
+  children: (props: FilterProviderRenderProps) => React.ReactNode;
+}
 
 const FilterProvider = ({
   children,
   fallbackFilter,
   gmpname,
   pageName = gmpname,
-}) => {
+}: FilterProviderProps) => {
   const [returnedFilter, isLoadingFilter] = usePageFilter(pageName, gmpname, {
     fallbackFilter,
   });
   return (
-    <React.Fragment>
-      {isLoadingFilter ? <Loading /> : children({filter: returnedFilter})}
-    </React.Fragment>
+    <>{isLoadingFilter ? <Loading /> : children({filter: returnedFilter})}</>
   );
-};
-
-FilterProvider.propTypes = {
-  fallbackFilter: PropTypes.filter,
-  gmpname: PropTypes.string,
-  pageName: PropTypes.string,
 };
 
 export default FilterProvider;
