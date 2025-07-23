@@ -6,8 +6,18 @@
 import React from 'react';
 import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {connect} from 'react-redux';
+import {Location} from 'react-router';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
+import EntitiesCommand from 'gmp/commands/entities';
+import Gmp from 'gmp/gmp';
+import Rejection from 'gmp/http/rejection';
+import Response from 'gmp/http/response';
+import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
+import {TranslateOptions} from 'gmp/locale/lang';
 import logger from 'gmp/log';
-import {RESET_FILTER} from 'gmp/models/filter';
+import Filter, {RESET_FILTER} from 'gmp/models/filter';
+import Model from 'gmp/models/model';
+import Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {
@@ -18,7 +28,6 @@ import {
 } from 'gmp/utils/entitytype';
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-import {excludeObjectProps} from 'gmp/utils/object';
 import TagsDialog from 'web/entities/TagsDialog';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import TagDialog from 'web/pages/tags/Dialog';
@@ -28,37 +37,122 @@ import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/Compose';
-import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
-import SelectionType from 'web/utils/SelectionType';
-import SortDirection from 'web/utils/SortDirection';
+import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
+import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
 import {withRouter} from 'web/utils/withRouter';
 import withTranslation from 'web/utils/withTranslation';
 
 const log = logger.getLogger('web.entities.container');
 
-const exclude_props = [
-  // these props are consumed here and must not be passed to the children
-  'children',
-  'component',
-  'gmpname',
-  'onDownload',
-];
+type NavigateFunction = (args: {pathname: string; search?: string}) => void;
 
-class EntitiesContainer extends React.Component {
-  constructor(...args) {
-    super(...args);
+export interface EntitiesContainerRenderProps<TModel extends Model = Model> {
+  createFilterType: string;
+  entities?: TModel[];
+  entitiesCounts?: CollectionCounts;
+  entitiesError?: Error | Rejection;
+  entitiesSelected?: Set<TModel>;
+  filter?: Filter;
+  isLoading: boolean;
+  isUpdating: boolean;
+  selectionType: SelectionTypeType;
+  sortBy: string | undefined;
+  sortDir: SortDirectionType;
+  onChanged: () => void;
+  onDelete: (entity: TModel) => Promise<void>;
+  onDeleteBulk: () => Promise<void>;
+  onDownloadBulk: () => Promise<void>;
+  onDownloaded: (data: {filename: string; data: string}) => void;
+  onEntitySelected: (entity: TModel) => void;
+  onEntityDeselected: (entity: TModel) => void;
+  onError: (error: Error | Rejection) => void;
+  onFilterChanged: (filter: Filter) => void;
+  onFilterCreated: (filter: Filter) => void;
+  onFilterRemoved: () => void;
+  onFilterReset: () => void;
+  onFirstClick: () => void;
+  onInteraction: () => void;
+  onLastClick: () => void;
+  onNextClick: () => void;
+  onPreviousClick: () => void;
+  onSortChange: (field: string) => void;
+  onSelectionTypeChange: (selectionType: SelectionTypeType) => void;
+  onTagsBulk: () => void;
+  showError: (message: string) => void;
+  showSuccess: (message: string) => void;
+}
+
+interface EntitiesContainerState<TModel extends Model = Model> {
+  entities?: TModel[];
+  entitiesCounts?: CollectionCounts;
+  entitiesError?: Error | Rejection;
+  isUpdating: boolean;
+  loadedFilter?: Filter;
+  multiTagEntitiesCount?: number;
+  selected?: Set<TModel>;
+  selectionType: SelectionTypeType;
+  tagDialogVisible: boolean;
+  tag?: Tag;
+  tags: Tag[];
+  tagsDialogVisible: boolean;
+}
+
+interface EntitiesContainerProps<TModel extends Model = Model> {
+  children: (props: EntitiesContainerRenderProps<TModel>) => React.ReactNode;
+  entities?: TModel[];
+  entitiesCounts?: CollectionCounts;
+  entitiesError?: Error | Rejection;
+  filter: Filter;
+  gmp: Gmp;
+  gmpName: string;
+  isLoading?: boolean;
+  loadedFilter?: Filter;
+  notify: (message: string) => () => void;
+  reload: (filter?: Filter) => void;
+  showError: (error: Error | Rejection) => void;
+  showErrorMessage: (message: string) => void;
+  showSuccessMessage: (message: string) => void;
+  updateFilter: (filter?: Filter) => void;
+  onDownload: (data: {filename: string; data: string}) => void;
+}
+
+interface EntitiesContainerPropsWithHOCs<TModel extends Model = Model>
+  extends EntitiesContainerProps<TModel> {
+  deleteEntity: (id: string) => Promise<void>;
+  loadSettings: () => void;
+  location: Location;
+  listExportFileName: string;
+  navigate: NavigateFunction;
+  searchParams: URLSearchParams;
+  username: string;
+  _: (message: string, options?: TranslateOptions) => string;
+  onInteraction: () => void;
+}
+
+class EntitiesContainer<TModel extends Model> extends React.Component<
+  EntitiesContainerPropsWithHOCs<TModel>,
+  EntitiesContainerState<TModel>
+> {
+  isRunning: boolean = false;
+  notifyTimer: () => void;
+  notifyChanged: () => void;
+  entitiesCommand: EntitiesCommand<TModel>;
+
+  constructor(props: EntitiesContainerPropsWithHOCs<TModel>) {
+    super(props);
 
     this.state = {
+      isUpdating: false,
       selectionType: SelectionType.SELECTION_PAGE_CONTENTS,
       tags: [],
       tagDialogVisible: false,
       tagsDialogVisible: false,
     };
 
-    const {gmpname, gmp, notify} = this.props;
+    const {gmpName, gmp, notify} = this.props;
 
-    const entitiesCommandName = pluralizeType(gmpname);
+    const entitiesCommandName = pluralizeType(gmpName);
 
     this.entitiesCommand = gmp[entitiesCommandName];
 
@@ -94,13 +188,17 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction = debounce(this.handleInteraction.bind(this), 500);
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(
+    props: EntitiesContainerPropsWithHOCs,
+    state: EntitiesContainerState,
+  ) {
     if (isDefined(props.entities)) {
       // update only if new entities are available to avoid having no entities
       // when the filter changes
       return {
         entities: props.entities,
         entitiesCounts: props.entitiesCounts,
+        entitiesError: props.entitiesError,
         loadedFilter: props.loadedFilter,
         isUpdating: false,
       };
@@ -139,24 +237,21 @@ class EntitiesContainer extends React.Component {
     this.props.onInteraction();
   }
 
-  updateFilter(filter) {
-    const {updateFilter} = this.props;
-
-    updateFilter(filter);
-
+  updateFilter(filter?: Filter) {
+    this.props.updateFilter(filter);
     this.props.reload(filter);
   }
 
-  handleDelete(entity) {
+  handleDelete(entity: TModel) {
     const {_} = this.props;
 
     const {deleteEntity} = this.props;
 
     return actionFunction(
-      deleteEntity(entity.id),
+      deleteEntity(entity?.id as string),
       this.handleChanged,
       this.handleError,
-      _('{{name}} deleted successfully.', {name: entity.name}),
+      _('{{name}} deleted successfully.', {name: entity?.name as string}),
     );
   }
 
@@ -166,8 +261,8 @@ class EntitiesContainer extends React.Component {
     this.props.reload();
   }
 
-  handleSelectionTypeChange(selectionType) {
-    let selected;
+  handleSelectionTypeChange(selectionType: SelectionTypeType) {
+    let selected: Set<TModel> | undefined;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       selected = new Set();
@@ -179,73 +274,72 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction();
   }
 
-  handleDownloadBulk() {
+  async handleDownloadBulk() {
     const {_} = this.props;
 
     const {entitiesCommand} = this;
     const {entities = [], loadedFilter, selected, selectionType} = this.state;
     const {listExportFileName, username, onDownload} = this.props;
 
-    let promise;
+    let promise: Promise<Response<XmlResponseData, XmlMeta>>;
 
     if (selectionType === SelectionType.SELECTION_USER) {
-      promise = entitiesCommand.export(selected);
+      promise = entitiesCommand.export(Array.from(selected as Set<TModel>));
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entitiesCommand.exportByFilter(loadedFilter);
+      promise = entitiesCommand.exportByFilter(loadedFilter as Filter);
     } else {
-      promise = entitiesCommand.exportByFilter(loadedFilter.all());
+      promise = entitiesCommand.exportByFilter((loadedFilter as Filter).all());
     }
 
     this.handleInteraction();
     showSuccessNotification('', _('Bulk download started.'));
 
-    return promise
-      .then(response => {
-        const filename = generateFilename({
-          fileNameFormat: listExportFileName,
-          resourceType: pluralizeType(getEntityType(entities[0])),
-          username,
-        });
-        const {data} = response;
-        onDownload({filename, data});
-        showSuccessNotification('', _('Bulk download completed.'));
-      })
-      .catch(error => {
-        this.handleError(error);
+    try {
+      const response = await promise;
+      const filename = generateFilename({
+        fileNameFormat: listExportFileName,
+        resourceType: pluralizeType(getEntityType(entities[0])),
+        username,
       });
+      const {data} = response;
+      // @ts-expect-error
+      onDownload({filename, data});
+      showSuccessNotification('', _('Bulk download completed.'));
+    } catch (error) {
+      this.handleError(error as Error);
+    }
   }
 
-  handleDeleteBulk() {
+  async handleDeleteBulk() {
     const {entitiesCommand} = this;
     const {loadedFilter, selected, selectionType} = this.state;
-    let promise;
+    let promise: Promise<Response<TModel[], XmlMeta>>;
 
     if (selectionType === SelectionType.SELECTION_USER) {
-      promise = entitiesCommand.delete(selected);
+      promise = entitiesCommand.delete(Array.from(selected as Set<TModel>));
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entitiesCommand.deleteByFilter(loadedFilter);
+      promise = entitiesCommand.deleteByFilter(loadedFilter as Filter);
     } else {
-      promise = entitiesCommand.deleteByFilter(loadedFilter.all());
+      promise = entitiesCommand.deleteByFilter((loadedFilter as Filter).all());
     }
 
     this.handleInteraction();
 
-    return promise
-      .then(deleted => {
-        log.debug('successfully deleted entities', deleted);
-        this.handleChanged();
-        return Promise.resolve();
-      })
-      .catch(error => {
-        this.handleError(error);
-        return Promise.reject(
-          error instanceof Error ? error : new Error(String(error)),
-        );
-      });
+    try {
+      const deleted = await promise;
+      log.debug('successfully deleted entities', deleted);
+      this.handleChanged();
+      return await Promise.resolve();
+    } catch (error) {
+      this.handleError(error as Error);
+      return await Promise.reject(
+        error instanceof Error ? error : new Error(String(error)),
+      );
+    }
   }
 
-  handleSelected(entity) {
-    const {selected} = this.state;
+  handleSelected(entity: TModel) {
+    const {selected} = this.state as {selected: Set<TModel>};
 
     selected.add(entity);
 
@@ -254,8 +348,8 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction();
   }
 
-  handleDeselected(entity) {
-    const {selected} = this.state;
+  handleDeselected(entity: TModel) {
+    const {selected} = this.state as {selected: Set<TModel>};
 
     selected.delete(entity);
 
@@ -264,8 +358,8 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction();
   }
 
-  handleSortChange(field) {
-    const {loadedFilter} = this.state;
+  handleSortChange(field: string) {
+    const {loadedFilter} = this.state as {loadedFilter: Filter};
 
     let sort = 'sort';
     const sortField = loadedFilter.getSortBy();
@@ -281,37 +375,40 @@ class EntitiesContainer extends React.Component {
     this.changeFilter(filter);
   }
 
-  handleError(error) {
+  handleError(error: Error) {
     const {showError} = this.props;
     log.error(error);
     showError(error);
   }
 
-  changeFilter(filter) {
+  changeFilter(filter?: Filter) {
     this.updateFilter(filter);
     this.handleInteraction();
   }
 
   handleFirst() {
-    const {loadedFilter: filter} = this.state;
+    const {loadedFilter: filter} = this.state as {loadedFilter: Filter};
 
     this.changeFilter(filter.first());
   }
 
   handleNext() {
-    const {loadedFilter: filter} = this.state;
+    const {loadedFilter: filter} = this.state as {loadedFilter: Filter};
 
     this.changeFilter(filter.next());
   }
 
   handlePrevious() {
-    const {loadedFilter: filter} = this.state;
+    const {loadedFilter: filter} = this.state as {loadedFilter: Filter};
 
     this.changeFilter(filter.previous());
   }
 
   handleLast() {
-    const {loadedFilter: filter, entitiesCounts: counts} = this.state;
+    const {loadedFilter: filter, entitiesCounts: counts} = this.state as {
+      loadedFilter: Filter;
+      entitiesCounts: CollectionCounts;
+    };
 
     const last =
       Math.floor((counts.filtered - 1) / counts.rows) * counts.rows + 1;
@@ -319,11 +416,11 @@ class EntitiesContainer extends React.Component {
     this.changeFilter(filter.first(last));
   }
 
-  handleFilterCreated(filter) {
+  handleFilterCreated(filter: Filter) {
     this.changeFilter(filter);
   }
 
-  handleFilterChanged(filter) {
+  handleFilterChanged(filter: Filter) {
     this.changeFilter(filter);
   }
 
@@ -331,7 +428,7 @@ class EntitiesContainer extends React.Component {
     this.changeFilter(RESET_FILTER);
   }
 
-  handleFilterReset = () => {
+  handleFilterReset() {
     const {navigate, location, searchParams} = this.props;
 
     searchParams.delete('filter');
@@ -342,7 +439,7 @@ class EntitiesContainer extends React.Component {
     });
 
     this.changeFilter();
-  };
+  }
 
   openTagDialog() {
     this.setState({tagDialogVisible: true});
@@ -364,23 +461,28 @@ class EntitiesContainer extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.tag
-      .create(data)
-      .then(response => gmp.tag.get(response.data))
-      .then(response => {
-        this.closeTagDialog();
-        this.setState({
-          tag: response.data,
-          tags: [...tags, response.data],
-        });
-      });
+    return (
+      // @ts-expect-error
+      gmp.tag
+        .create(data)
+        // @ts-expect-error
+        .then(response => gmp.tag.get(response.data))
+        .then(response => {
+          this.closeTagDialog();
+          this.setState({
+            tag: response.data,
+            tags: [...tags, response.data],
+          });
+        })
+    );
   }
 
-  handleTagChange(id) {
+  handleTagChange(id: string) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
+    // @ts-expect-error
     gmp.tag.get({id}).then(response => {
       this.setState({
         tag: response.data,
@@ -394,21 +496,20 @@ class EntitiesContainer extends React.Component {
 
     const entitiesType = getEntityType(entities[0]);
 
-    let resourceIds;
-    let resourceIdsArray;
+    let resourceIds: string[] | undefined;
     let filter;
     if (selectionType === SelectionType.SELECTION_USER) {
-      resourceIds = map(selected, res => res.id);
-      resourceIdsArray = [...resourceIds];
+      resourceIds = map(selected, res => res.id as string);
       filter = undefined;
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       filter = loadedFilter;
     } else {
-      filter = loadedFilter.all();
+      filter = (loadedFilter as Filter).all();
     }
 
     this.handleInteraction();
 
+    // @ts-expect-error
     return gmp.tag
       .save({
         active: YES_VALUE,
@@ -416,7 +517,7 @@ class EntitiesContainer extends React.Component {
         filter,
         id,
         name,
-        resource_ids: resourceIdsArray,
+        resource_ids: resourceIds,
         resource_type: entitiesType,
         resources_action: 'add',
         value,
@@ -444,10 +545,11 @@ class EntitiesContainer extends React.Component {
 
   getTagsByType() {
     const {gmp} = this.props;
-    const {entities} = this.state;
+    const {entities} = this.state as {entities: TModel[]};
 
     if (entities.length > 0) {
       const filter = 'resource_type=' + apiType(getEntityType(entities[0]));
+      // @ts-expect-error
       gmp.tags.getAll({filter}).then(response => {
         const {data: tags} = response;
         this.setState({tags});
@@ -459,14 +561,14 @@ class EntitiesContainer extends React.Component {
     const {selectionType, selected, entities, entitiesCounts} = this.state;
 
     if (selectionType === SelectionType.SELECTION_USER) {
-      return selected.size;
+      return (selected as Set<TModel>).size;
     }
 
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      return entities.length;
+      return (entities as TModel[]).length;
     }
 
-    return entitiesCounts.filtered;
+    return (entitiesCounts as CollectionCounts).filtered;
   }
 
   render() {
@@ -475,27 +577,27 @@ class EntitiesContainer extends React.Component {
     const {
       entities,
       entitiesCounts,
+      entitiesError,
       isUpdating,
       loadedFilter,
       multiTagEntitiesCount,
       selected,
       selectionType,
-      tag = {},
+      tag,
       tags,
       tagDialogVisible,
       tagsDialogVisible,
     } = this.state;
     const {
       children,
-      isLoading,
+      isLoading = false,
       onDownload,
       showErrorMessage,
       showSuccessMessage,
-      ...props
     } = this.props;
 
-    let entitiesType;
-    let resourceTypes;
+    let entitiesType: string | undefined;
+    let resourceTypes: [string, string][] | undefined;
     if (isDefined(entities) && entities.length > 0) {
       entitiesType = getEntityType(entities[0]);
       resourceTypes = [[entitiesType, typeName(entitiesType)]];
@@ -510,24 +612,22 @@ class EntitiesContainer extends React.Component {
       title = _('Add Tag to All Filtered');
     }
 
-    const other = excludeObjectProps(props, exclude_props);
-
     const reverseField = isDefined(loadedFilter)
-      ? loadedFilter.get('sort-reverse')
+      ? (loadedFilter.get('sort-reverse') as string)
       : undefined;
     const reverse = isDefined(reverseField);
     const sortBy =
       reverse || !isDefined(loadedFilter)
         ? reverseField
-        : loadedFilter.get('sort');
+        : (loadedFilter.get('sort') as string);
     const sortDir = reverse ? SortDirection.DESC : SortDirection.ASC;
     return (
       <React.Fragment>
         {children({
-          ...other,
-          createFilterType: apiType(this.props.gmpname),
+          createFilterType: apiType(this.props.gmpName) as string,
           entities,
           entitiesCounts,
+          entitiesError,
           entitiesSelected: selected,
           filter: loadedFilter,
           isLoading,
@@ -560,14 +660,15 @@ class EntitiesContainer extends React.Component {
         })}
         {tagsDialogVisible && (
           <TagsDialog
-            comment={tag.comment}
+            comment={tag?.comment}
+            // @ts-expect-error
             entitiesCount={multiTagEntitiesCount}
             filter={loadedFilter}
-            name={tag.name}
-            tagId={tag.id}
+            name={tag?.name}
+            tagId={tag?.id}
             tags={tags}
             title={title}
-            value={tag.value}
+            value={tag?.value}
             onClose={this.handleCloseTagsDialog}
             onNewTagClick={this.openTagDialog}
             onSave={this.handleAddMultiTag}
@@ -589,34 +690,6 @@ class EntitiesContainer extends React.Component {
   }
 }
 
-EntitiesContainer.propTypes = {
-  children: PropTypes.func.isRequired,
-  deleteEntity: PropTypes.func,
-  entities: PropTypes.array,
-  entitiesCounts: PropTypes.counts,
-  entitiesError: PropTypes.error,
-  filter: PropTypes.filter,
-  searchParams: PropTypes.object,
-  location: PropTypes.object,
-  gmp: PropTypes.gmp.isRequired,
-  gmpname: PropTypes.string.isRequired,
-  navigate: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  listExportFileName: PropTypes.string,
-  loadSettings: PropTypes.func.isRequired,
-  loadedFilter: PropTypes.filter,
-  notify: PropTypes.func.isRequired,
-  reload: PropTypes.func.isRequired,
-  showError: PropTypes.func.isRequired,
-  showErrorMessage: PropTypes.func.isRequired,
-  showSuccessMessage: PropTypes.func.isRequired,
-  updateFilter: PropTypes.func.isRequired,
-  username: PropTypes.string,
-  onDownload: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-  _: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const username = getUsername(rootState);
@@ -628,10 +701,13 @@ const mapStateToProps = rootState => {
   };
 };
 
-const mapDispatchToProps = (dispatch, {gmpname, gmp}) => {
+const mapDispatchToProps = (
+  dispatch,
+  {gmpname, gmp}: {gmpname: string; gmp: Gmp},
+) => {
   const deleteEntity = createDeleteEntity({entityType: gmpname});
   return {
-    deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
+    deleteEntity: (id: string) => dispatch(deleteEntity(gmp)(id)),
     loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   };
@@ -641,4 +717,6 @@ export default compose(
   withTranslation,
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-)(EntitiesContainer);
+)(EntitiesContainer) as <TModel extends Model>(
+  props: EntitiesContainerProps<TModel>,
+) => React.ReactElement<EntitiesContainerPropsWithHOCs<TModel>>;
