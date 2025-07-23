@@ -21,7 +21,7 @@ import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
+import withDialogNotification from 'web/components/notification/withDialogNotification';
 import FilterProvider from 'web/entities/FilterProvider';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

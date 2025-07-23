@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {render, screen, fireEvent} from 'web/testing';
+import {render, screen, fireEvent, within} from 'web/testing';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
@@ -41,11 +41,6 @@ const TestComponent = () => {
   );
 };
 
-const queryDialog = () => screen.queryByRole('dialog');
-const getDialog = () => screen.getByRole('dialog');
-const getDialogTitleBar = () =>
-  getDialog().querySelector('.mantine-Modal-title');
-const getDialogContent = () => getDialog().querySelector('.mantine-Modal-body');
 const getDialogFooter = () => screen.getByTestId('dialog-notification-footer');
 
 const showMessage = () => {
@@ -74,37 +69,25 @@ describe('DialogNotification tests', () => {
   test('should display a message', () => {
     render(<TestComponent />);
 
-    expect(queryDialog()).not.toBeInTheDocument();
+    expect(screen.queryDialog()).not.toBeInTheDocument();
 
     showMessage();
 
-    expect(queryDialog()).toBeInTheDocument();
-
-    const dialogTitleBar = getDialogTitleBar();
-
-    expect(dialogTitleBar).toHaveTextContent('Message');
-
-    const dialogContent = getDialogContent();
-
-    expect(dialogContent).toHaveTextContent('foo');
+    expect(screen.queryDialog()).toBeInTheDocument();
+    expect(screen.getDialogTitle()).toHaveTextContent('Message');
+    expect(screen.getDialogContent()).toHaveTextContent('foo');
   });
 
   test('should display a message with subject', () => {
     render(<TestComponent />);
 
-    expect(queryDialog()).not.toBeInTheDocument();
+    expect(screen.queryDialog()).not.toBeInTheDocument();
 
     showMessageWithSubject();
 
-    expect(queryDialog()).toBeInTheDocument();
-
-    const dialogTitleBar = getDialogTitleBar();
-
-    expect(dialogTitleBar).toHaveTextContent('bar');
-
-    const dialogContent = getDialogContent();
-
-    expect(dialogContent).toHaveTextContent('foo');
+    expect(screen.queryDialog()).toBeInTheDocument();
+    expect(screen.getDialogTitle()).toHaveTextContent('bar');
+    expect(screen.getDialogContent()).toHaveTextContent('foo');
   });
 
   test('should allow to close dialog', () => {
@@ -112,72 +95,49 @@ describe('DialogNotification tests', () => {
 
     showMessage();
 
-    expect(queryDialog()).toBeInTheDocument();
-
-    const dialogTitleBar = getDialogTitleBar();
-
-    expect(dialogTitleBar).toHaveTextContent('Message');
-
-    const dialogContent = getDialogContent();
-
-    expect(dialogContent).toHaveTextContent('foo');
-
-    const dialogFooter = getDialogFooter();
-    const closeButton = dialogFooter.querySelector('button');
+    expect(screen.queryDialog()).toBeInTheDocument();
+    expect(screen.getDialogTitle()).toHaveTextContent('Message');
+    expect(screen.getDialogContent()).toHaveTextContent('foo');
+    const dialogFooter = within(getDialogFooter());
+    const closeButton = dialogFooter.getByRole('button', {
+      name: 'Close',
+    });
     fireEvent.click(closeButton);
-
-    expect(queryDialog()).not.toBeInTheDocument();
+    expect(screen.queryDialog()).not.toBeInTheDocument();
   });
 
   test('should display an error message', () => {
     render(<TestComponent />);
 
-    expect(queryDialog()).not.toBeInTheDocument();
+    expect(screen.queryDialog()).not.toBeInTheDocument();
 
     showErrorMessage();
 
-    expect(queryDialog()).toBeInTheDocument();
-
-    const dialogTitleBar = getDialogTitleBar();
-
-    expect(dialogTitleBar).toHaveTextContent('Error');
-
-    const dialogContent = getDialogContent();
-
-    expect(dialogContent).toHaveTextContent('foo');
+    expect(screen.queryDialog()).toBeInTheDocument();
+    expect(screen.getDialogTitle()).toHaveTextContent('Error');
+    expect(screen.getDialogContent()).toHaveTextContent('foo');
   });
 
   test('should display a success message', () => {
     render(<TestComponent />);
 
-    expect(queryDialog()).not.toBeInTheDocument();
+    expect(screen.queryDialog()).not.toBeInTheDocument();
 
     showSuccessMessage();
 
-    expect(queryDialog()).toBeInTheDocument();
-
-    const dialogTitleBar = getDialogTitleBar();
-
-    expect(dialogTitleBar).toHaveTextContent('Success');
-
-    const dialogContent = getDialogContent();
-
-    expect(dialogContent).toHaveTextContent('foo');
+    expect(screen.queryDialog()).toBeInTheDocument();
+    expect(screen.getDialogTitle()).toHaveTextContent('Success');
+    expect(screen.getDialogContent()).toHaveTextContent('foo');
   });
 
   test('should display an error', () => {
     render(<TestComponent />);
 
-    expect(queryDialog()).not.toBeInTheDocument();
+    expect(screen.queryDialog()).not.toBeInTheDocument();
 
     showError();
 
-    const dialogTitleBar = getDialogTitleBar();
-
-    expect(dialogTitleBar).toHaveTextContent('Error');
-
-    const dialogContent = getDialogContent();
-
-    expect(dialogContent).toHaveTextContent('foo');
+    expect(screen.getDialogTitle()).toHaveTextContent('Error');
+    expect(screen.getDialogContent()).toHaveTextContent('foo');
   });
 });
