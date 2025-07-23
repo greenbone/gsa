@@ -6,6 +6,7 @@
 import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
+import {updateDisplayName} from 'web/utils/displayName';
 
 const withCapabilities = Component => {
   const CapabilitiesWrapper = props => (
@@ -14,7 +15,10 @@ const withCapabilities = Component => {
     </CapabilitiesContext.Consumer>
   );
 
-  return hoistStatics(CapabilitiesWrapper, Component);
+  return hoistStatics(
+    updateDisplayName(CapabilitiesWrapper, Component, 'withCapabilities'),
+    Component,
+  );
 };
 
 export default withCapabilities;

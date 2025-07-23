@@ -8,7 +8,7 @@ import withLayout, {WithLayoutProps} from 'web/components/layout/withLayout';
 export type LayoutProps = WithLayoutProps &
   Omit<React.JSX.IntrinsicElements['div'], 'ref'>;
 
-const Layout: React.FC<LayoutProps> = withLayout()('div');
+const Layout = withLayout()('div') as React.FC<LayoutProps>;
 
 Layout.displayName = 'Layout';
 
