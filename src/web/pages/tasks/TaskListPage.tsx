@@ -14,7 +14,7 @@ import {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import EntitiesPage from 'web/entities/Page';
+import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useTranslation from 'web/hooks/useTranslation';
