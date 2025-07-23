@@ -6,6 +6,7 @@
 import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import FilterSelection from 'web/components/dashboard/display/FilterSelection';
+import {updateDisplayName} from 'web/utils/displayName';
 import PropTypes from 'web/utils/PropTypes';
 
 const withFilterSelection =
@@ -31,7 +32,14 @@ const withFilterSelection =
       showFilterSelection: PropTypes.bool,
     };
 
-    return hoistStatics(FilterSelectionWrapper, Component);
+    return hoistStatics(
+      updateDisplayName(
+        FilterSelectionWrapper,
+        Component,
+        'withFilterSelection',
+      ),
+      Component,
+    );
   };
 
 export default withFilterSelection;

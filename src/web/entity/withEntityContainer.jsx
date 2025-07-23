@@ -12,10 +12,11 @@ import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL,
 } from 'web/components/loading/Reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
+import withDialogNotification from 'web/components/notification/withDialogNotification';
 import EntityContainer from 'web/entity/Container';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
+import {updateDisplayName} from 'web/utils/displayName';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import {withRouter} from 'web/utils/withRouter';
@@ -59,6 +60,12 @@ const withEntityContainer =
           </EntityContainer>
         )}
       </Reload>
+    );
+
+    updateDisplayName(
+      EntityContainerWrapper,
+      Component,
+      `withEntityContainer(${entityType})`,
     );
 
     EntityContainerWrapper.propTypes = {

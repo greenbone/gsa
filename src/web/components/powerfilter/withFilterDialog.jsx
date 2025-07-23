@@ -7,6 +7,7 @@ import React from 'react';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import {updateDisplayName} from 'web/utils/displayName';
 import PropTypes from 'web/utils/PropTypes';
 
 const FilterDialogWithHandlers = ({
@@ -53,16 +54,22 @@ FilterDialogWithHandlers.propTypes = {
 
 const withFilterDialog =
   ({createFilterType, ...options} = {}) =>
-  FilterDialogComponent =>
-  (
-    {createFilterType: createFilterTypeProp = createFilterType, ...props}, // eslint-disable-line react/prop-types
-  ) => (
-    <FilterDialogWithHandlers
-      {...props}
-      createFilterType={createFilterTypeProp}
-    >
-      {dialogProps => <FilterDialogComponent {...options} {...dialogProps} />}
-    </FilterDialogWithHandlers>
-  );
+  FilterDialogComponent => {
+    const FilterDialogWrapper = (
+      {createFilterType: createFilterTypeProp = createFilterType, ...props}, // eslint-disable-line react/prop-types
+    ) => (
+      <FilterDialogWithHandlers
+        {...props}
+        createFilterType={createFilterTypeProp}
+      >
+        {dialogProps => <FilterDialogComponent {...options} {...dialogProps} />}
+      </FilterDialogWithHandlers>
+    );
+    return updateDisplayName(
+      FilterDialogWrapper,
+      FilterDialogComponent,
+      'withFilterDialog',
+    );
+  };
 
 export default withFilterDialog;

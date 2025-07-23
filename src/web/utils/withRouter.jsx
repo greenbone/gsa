@@ -9,6 +9,7 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router';
+import {updateDisplayName} from 'web/utils/displayName';
 
 export const withRouter = Component => {
   function ComponentWithRouterProp(props) {
@@ -28,5 +29,5 @@ export const withRouter = Component => {
     );
   }
 
-  return ComponentWithRouterProp;
+  return updateDisplayName(ComponentWithRouterProp, Component, 'withRouter');
 };

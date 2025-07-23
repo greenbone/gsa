@@ -8,6 +8,7 @@ import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification, {
   ErrorWithMessage,
 } from 'web/components/notification/useDialogNotification';
+import {updateDisplayName} from 'web/utils/displayName';
 
 export interface DialogNotificationProps {
   showError: (error: ErrorWithMessage) => void;
@@ -30,8 +31,11 @@ const withDialogNotification = <TProps extends {} = {}>(
     );
   };
 
-  WithDialogNotification.displayName = `withDialogNotification(${Component.displayName ?? Component.name ?? 'Component'})`;
-  return WithDialogNotification;
+  return updateDisplayName(
+    WithDialogNotification,
+    Component,
+    'withDialogNotification',
+  );
 };
 
 export default withDialogNotification;
