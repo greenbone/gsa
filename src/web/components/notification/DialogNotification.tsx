@@ -3,26 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {hasValue} from 'gmp/utils/identity';
 import Dialog from 'web/components/dialog/Dialog';
 import DialogFooter from 'web/components/dialog/DialogFooter';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface DialogNotificationProps {
+  title?: string;
+  message?: string;
+  onClose?: () => void;
+  onCloseClick?: () => void;
+}
 
 const DialogNotification = ({
   title,
   message,
   onCloseClick,
   onClose = onCloseClick,
-}) => {
+}: DialogNotificationProps) => {
   const [_] = useTranslation();
 
   if (!hasValue(message)) {
     return null;
   }
   return (
-    <Dialog opened={true} size="400px" title={title} onClose={onClose}>
+    <Dialog title={title} width="400px" onClose={onClose}>
       {message}
       <DialogFooter
         data-testid="dialog-notification-footer"
@@ -31,13 +36,6 @@ const DialogNotification = ({
       />
     </Dialog>
   );
-};
-
-DialogNotification.propTypes = {
-  message: PropTypes.string,
-  title: PropTypes.string,
-  onClose: PropTypes.func,
-  onCloseClick: PropTypes.func,
 };
 
 export default DialogNotification;

@@ -19,7 +19,7 @@ import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
+import withDialogNotification from 'web/components/notification/withDialogNotification';
 import Page from 'web/pages/reports/DeltaDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/DetailsFilterDialog';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';

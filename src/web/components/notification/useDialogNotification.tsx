@@ -6,6 +6,10 @@
 import {useCallback, useState} from 'react';
 import _ from 'gmp/locale';
 
+export interface ErrorWithMessage {
+  message: string;
+}
+
 /**
  * Hook to handle the state for showing different types of messages in a dialog
  *
@@ -26,33 +30,36 @@ import _ from 'gmp/locale';
  *      onCloseClick={closeDialog}
  *   />
  * );
- * @returns {Object} Object containing the dialog state and functions to show different types of messages
+ * @returns Object containing the dialog state and functions to show different types of messages
  */
 const useDialogNotification = () => {
   const [dialogState, setDialogState] = useState({});
-  const showMessage = useCallback((message, subject = _('Message')) => {
-    setDialogState(() => ({
-      message,
-      title: subject,
-    }));
-  }, []);
+  const showMessage = useCallback(
+    (message: string, subject: string = _('Message')) => {
+      setDialogState(() => ({
+        message,
+        title: subject,
+      }));
+    },
+    [],
+  );
 
   const showErrorMessage = useCallback(
-    message => {
+    (message: string) => {
       showMessage(message, _('Error'));
     },
     [showMessage],
   );
 
   const showError = useCallback(
-    error => {
+    (error: ErrorWithMessage) => {
       showErrorMessage(error.message);
     },
     [showErrorMessage],
   );
 
   const showSuccessMessage = useCallback(
-    message => {
+    (message: string) => {
       showMessage(message, _('Success'));
     },
     [showMessage],
