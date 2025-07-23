@@ -8,11 +8,14 @@ import i18next from 'i18next';
 import _ from 'gmp/locale';
 import useLanguage from 'web/hooks/useLanguage';
 
+export type TranslateFunc = typeof _;
+export type I18n = typeof i18next;
+
 type TranslationHook = {
-  t: typeof _;
-  i18n: typeof i18next;
+  t: TranslateFunc;
+  i18n: I18n;
   ready: boolean;
-} & [typeof _, typeof i18next, boolean];
+} & [TranslateFunc, I18n, boolean];
 
 /**
  * Hook to get the translation function, an i18next instance and a boolean
