@@ -45,7 +45,7 @@ const withEntitiesContainer =
           <EntitiesContainer
             {...props}
             filter={filter}
-            gmpname={gmpname}
+            gmpName={gmpname}
             notify={notify}
             reload={reload}
           >

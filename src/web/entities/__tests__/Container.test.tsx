@@ -4,7 +4,16 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor, userEvent} from 'web/testing';
+import {
+  rendererWith,
+  screen,
+  waitFor,
+  userEvent,
+  fireEvent,
+  wait,
+} from 'web/testing';
+import Filter from 'gmp/models/filter';
+import PortList from 'gmp/models/portlist';
 import EntitiesContainer from 'web/entities/Container';
 
 const currentSettingsResponse = {
@@ -17,30 +26,24 @@ const currentSettingsResponse = {
   },
 };
 
-const entity = {id: '123'};
-
 const onDownloaded = testing.fn();
-const onDownloadError = testing.fn();
-const onInteraction = testing.fn();
-const onDeleteError = testing.fn();
-const onChanged = testing.fn();
 const notify = testing.fn();
 const updateFilter = testing.fn();
 const reload = testing.fn();
 const showError = testing.fn();
 const showErrorMessage = testing.fn();
 const showSuccessMessage = testing.fn();
-const onDelete = testing.fn();
 const onDownload = testing.fn();
-const onError = testing.fn();
 
 const setup = gmp => {
   const {render} = rendererWith({gmp, store: true, router: true});
+  const initialFilter = new Filter();
   render(
     <EntitiesContainer
-      entities={[{entityType: 'port_list'}]}
+      entities={[new PortList()]}
+      filter={initialFilter}
       gmp={gmp}
-      gmpname="port_list"
+      gmpName="port_list"
       isLoading={false}
       notify={notify}
       reload={reload}
@@ -48,17 +51,10 @@ const setup = gmp => {
       showErrorMessage={showErrorMessage}
       showSuccessMessage={showSuccessMessage}
       updateFilter={updateFilter}
-      onChanged={onChanged}
-      onDelete={onDelete}
-      onDeleteError={onDeleteError}
       onDownload={onDownload}
-      onDownloadError={onDownloadError}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onInteraction={onInteraction}
     >
       {({onDownloadBulk}) => (
-        <button data-testid="button" onClick={() => onDownloadBulk(entity)}>
+        <button data-testid="button" onClick={() => onDownloadBulk()}>
           Download Bulk
         </button>
       )}
@@ -85,7 +81,7 @@ describe('EntitiesContainer', () => {
 
     await waitFor(() => expect(screen.getByText('Bulk download started.')));
     expect(onDownload).toHaveBeenCalledWith({
-      filename: 'port_lists-list.xml',
+      filename: 'portlists-list.xml',
       data: downloadedData,
     });
     await waitFor(() => expect(screen.getByText('Bulk download completed.')));
@@ -105,7 +101,9 @@ describe('EntitiesContainer', () => {
     console.error = testing.fn();
 
     const downloadButton = setup(gmp);
-    await userEvent.click(downloadButton);
+    fireEvent.click(downloadButton);
+
+    await wait();
 
     expect(showError).toHaveBeenCalledWith(error);
     expect(onDownloaded).not.toHaveBeenCalled();
