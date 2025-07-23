@@ -14,7 +14,7 @@ import {
 } from 'web/testing';
 import Filter from 'gmp/models/filter';
 import PortList from 'gmp/models/portlist';
-import EntitiesContainer from 'web/entities/Container';
+import EntitiesContainer from 'web/entities/EntitiesContainer';
 
 const currentSettingsResponse = {
   data: {

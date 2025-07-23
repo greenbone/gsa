@@ -9,7 +9,7 @@ import withDownload from 'web/components/form/withDownload';
 import Reload from 'web/components/loading/Reload';
 import withDialogNotification from 'web/components/notification/withDialogNotification';
 import SubscriptionProvider from 'web/components/provider/SubscriptionProvider';
-import EntitiesContainer from 'web/entities/Container';
+import EntitiesContainer from 'web/entities/EntitiesContainer';
 import FilterProvider from 'web/entities/FilterProvider';
 import {pageFilter} from 'web/store/pages/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
