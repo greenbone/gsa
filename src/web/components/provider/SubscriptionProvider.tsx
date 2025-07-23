@@ -6,15 +6,32 @@
 import React from 'react';
 import Logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
 
 const log = Logger.getLogger('web.components.provider.subscription');
 
-export const SubscriptionContext = React.createContext();
+export type Subscriber = (...args: unknown[]) => void;
 
-class SubscriptionProvider extends React.Component {
-  constructor(...args) {
-    super(...args);
+export type SubscribeFunc = (name: string, func: Subscriber) => () => void;
+
+export const SubscriptionContext = React.createContext<
+  SubscribeFunc | undefined
+>(undefined);
+
+export type NotifyFunc = (name: string) => Subscriber;
+
+interface SubscriptionRenderProps {
+  notify: NotifyFunc;
+}
+
+interface SubscriptionProviderProps {
+  children: (props: SubscriptionRenderProps) => React.ReactNode;
+}
+
+class SubscriptionProvider extends React.Component<SubscriptionProviderProps> {
+  subscriptions: Record<string, Subscriber[]>;
+
+  constructor(props: SubscriptionProviderProps) {
+    super(props);
 
     this.subscriptions = {};
 
@@ -22,7 +39,7 @@ class SubscriptionProvider extends React.Component {
     this.handleNotify = this.handleNotify.bind(this);
   }
 
-  getSubscribers(name) {
+  getSubscribers(name: string) {
     let subscribers = this.subscriptions[name];
 
     if (!isDefined(subscribers)) {
@@ -33,11 +50,11 @@ class SubscriptionProvider extends React.Component {
     return subscribers;
   }
 
-  setSubscribers(name, subscribers) {
+  setSubscribers(name: string, subscribers: Subscriber[]) {
     this.subscriptions[name] = subscribers;
   }
 
-  handleSubscribe(name, func) {
+  handleSubscribe(name: string, func: Subscriber) {
     const subscribers = this.getSubscribers(name);
     subscribers.push(func);
 
@@ -50,9 +67,9 @@ class SubscriptionProvider extends React.Component {
     };
   }
 
-  handleNotify(name) {
+  handleNotify(name: string) {
     log.debug('Subscription notifier created', name);
-    return (...args) => {
+    return (...args: unknown[]) => {
       log.debug('Notify subscribers for', name);
       const subscribers = this.getSubscribers(name);
 
@@ -71,9 +88,5 @@ class SubscriptionProvider extends React.Component {
     );
   }
 }
-
-SubscriptionProvider.propTypes = {
-  children: PropTypes.func.isRequired,
-};
 
 export default SubscriptionProvider;
