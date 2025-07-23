@@ -23,7 +23,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface TaskFilterDialogProps {
-  filter: Filter;
+  filter?: Filter;
   onClose?: () => void;
   onCloseClick?: () => void; // should be removed in future
   onFilterChanged?: (filter: Filter) => void;
