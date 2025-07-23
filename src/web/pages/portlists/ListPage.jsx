@@ -16,7 +16,7 @@ import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
-import EntitiesPage from 'web/entities/Page';
+import EntitiesPage from 'web/entities/EntitiesPage';
 import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';

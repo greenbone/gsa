@@ -5,6 +5,11 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
+import Gmp from 'gmp/gmp';
+import Rejection from 'gmp/http/rejection';
+import Filter from 'gmp/models/filter';
+import Model from 'gmp/models/model';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import Toolbar from 'web/components/bar/Toolbar';
@@ -13,13 +18,13 @@ import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import PowerFilter from 'web/components/powerfilter/PowerFilter';
 import Section from 'web/components/section/Section';
+import {TranslateFunc} from 'web/hooks/useTranslation';
 import {loadAllEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/Compose';
-import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
-const exclude_props = [
+const excludeProps = [
   'children',
   'dashboard',
   'dashboardControls',
@@ -33,9 +38,87 @@ const exclude_props = [
   'toolBarIcons',
 ];
 
-class EntitiesPage extends React.Component {
-  constructor(...args) {
-    super(...args);
+interface FilterDialogComponentProps {
+  createFilterType?: string;
+  filter?: Filter;
+  onCloseClick: () => void;
+  onFilterChanged: (filter: Filter) => void;
+  onFilterCreated: (filter: Filter) => void;
+}
+
+interface TableComponentProps<TModel extends Model = Model> {
+  entities: TModel[];
+  entitiesCounts?: CollectionCounts;
+  filter?: Filter;
+}
+
+interface PowerFilterComponentProps {
+  filter?: Filter;
+  filters?: Filter[];
+  isLoading?: boolean;
+  isLoadingFilters?: boolean;
+  onEditClick?: () => void;
+  onError?: (error: Error | Rejection) => void;
+  onRemoveClick?: () => void;
+  onResetClick?: () => void;
+  onUpdate?: (filter: Filter) => void;
+}
+
+interface SectionComponentProps {
+  className: string;
+  extra?: React.ReactNode;
+  img?: React.ReactNode;
+  title: string;
+  children?: React.ReactNode;
+}
+
+interface EntitiesPageState {
+  showFilterDialog: boolean;
+}
+
+export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
+  createFilterType: string;
+  dashboard?: () => React.ReactNode;
+  dashboardControls?: () => React.ReactNode;
+  entities?: TModel[];
+  entitiesCounts?: CollectionCounts;
+  entitiesError?: Error | Rejection;
+  filter?: Filter;
+  filterEditDialog: React.ComponentType<FilterDialogComponentProps>;
+  filtersFilter: Filter;
+  isLoading?: boolean;
+  powerfilter?: React.ComponentType<PowerFilterComponentProps>;
+  section?: false | React.ComponentType<SectionComponentProps>;
+  sectionIcon?: React.ReactNode;
+  table: React.ComponentType<TableComponentProps<TModel> & TProps>;
+  title: string;
+  toolBarIcons?: React.ComponentType<TProps> | React.ReactElement<TProps>;
+  onError: (error: Error | Rejection) => void;
+  onFilterChanged: (newFilter: Filter) => void;
+  onFilterCreated: (newFilter: Filter) => void;
+  onFilterRemoved: () => void;
+  onFilterReset: () => void;
+  onInteraction: () => void;
+}
+
+interface EntitiesPagePropsWithHOCs<TModel extends Model = Model, TProps = {}>
+  extends EntitiesPageProps<TModel, TProps> {
+  filters: Filter[];
+  gmp: Gmp;
+  loadFilters: () => void;
+  isLoadingFilters?: boolean;
+  _: TranslateFunc;
+}
+
+class EntitiesPage<
+  TModel extends Model = Model,
+  TProps extends {} = {},
+> extends React.Component<
+  EntitiesPagePropsWithHOCs<TModel, TProps>,
+  EntitiesPageState
+> {
+  constructor(props: EntitiesPagePropsWithHOCs<TModel, TProps> & TProps) {
+    super(props);
 
     this.state = {
       showFilterDialog: false,
@@ -86,14 +169,10 @@ class EntitiesPage extends React.Component {
     const {entities, isLoading, sectionIcon, dashboard, dashboardControls} =
       this.props;
 
-    let {section: SectionComponent} = this.props;
+    let {section: SectionComponent = Section} = this.props;
 
     if (SectionComponent === false) {
       return null;
-    }
-
-    if (!isDefined(SectionComponent)) {
-      SectionComponent = Section;
     }
 
     const extra = isDefined(dashboardControls)
@@ -132,11 +211,11 @@ class EntitiesPage extends React.Component {
       return null;
     }
 
-    const other = excludeObjectProps(props, exclude_props);
+    const other = excludeObjectProps(props, excludeProps);
 
     return (
       <TableComponent
-        {...other}
+        {...(other as TProps)}
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}
@@ -186,17 +265,17 @@ class EntitiesPage extends React.Component {
   }
 
   renderToolbarIcons() {
-    let {toolBarIcons, ...other} = this.props;
+    let {toolBarIcons: ToolBarIconsComponent, ...other} = this.props;
 
-    if (!isDefined(toolBarIcons)) {
+    if (!isDefined(ToolBarIconsComponent)) {
       return null;
     }
 
-    if (React.isValidElement(toolBarIcons)) {
-      return toolBarIcons;
+    if (React.isValidElement(ToolBarIconsComponent)) {
+      return ToolBarIconsComponent;
     }
-    other = excludeObjectProps(other, exclude_props);
-    return React.createElement(toolBarIcons, other);
+    const otherProps = excludeObjectProps(other, excludeProps);
+    return <ToolBarIconsComponent {...(otherProps as TProps)} />;
   }
 
   renderToolbar() {
@@ -208,7 +287,7 @@ class EntitiesPage extends React.Component {
     );
   }
 
-  handleFilterCreated(filter) {
+  handleFilterCreated(filter: Filter) {
     this.props.loadFilters();
     this.props.onFilterCreated(filter);
   }
@@ -248,35 +327,6 @@ class EntitiesPage extends React.Component {
   }
 }
 
-EntitiesPage.propTypes = {
-  createFilterType: PropTypes.string,
-  dashboard: PropTypes.func,
-  dashboardControls: PropTypes.func,
-  entities: PropTypes.array,
-  entitiesCounts: PropTypes.counts,
-  entitiesError: PropTypes.error,
-  filter: PropTypes.filter,
-  filterEditDialog: PropTypes.component,
-  filters: PropTypes.array,
-  filtersFilter: PropTypes.filter,
-  isLoading: PropTypes.bool,
-  isLoadingFilters: PropTypes.bool,
-  loadFilters: PropTypes.func.isRequired,
-  powerfilter: PropTypes.componentOrFalse,
-  section: PropTypes.componentOrFalse,
-  sectionIcon: PropTypes.icon,
-  table: PropTypes.componentOrFalse,
-  title: PropTypes.string,
-  toolBarIcons: PropTypes.componentOrElement,
-  onError: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
-  onFilterCreated: PropTypes.func.isRequired,
-  onFilterRemoved: PropTypes.func.isRequired,
-  onFilterReset: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-  _: PropTypes.func.isRequired,
-};
-
 export const createEntitiesPage = (options = {}) => {
   const EntitiesPageWrapper = props => {
     return <EntitiesPage {...options} {...props} />;
@@ -284,7 +334,10 @@ export const createEntitiesPage = (options = {}) => {
   return EntitiesPageWrapper;
 };
 
-const mapStateToProps = (state, {filtersFilter}) => {
+const mapStateToProps = (
+  state: unknown,
+  {filtersFilter}: {filtersFilter: Filter},
+) => {
   if (!isDefined(filtersFilter)) {
     return {
       filters: [],
@@ -293,7 +346,9 @@ const mapStateToProps = (state, {filtersFilter}) => {
   }
 
   const filterSelector = selector(state);
-  const filters = filterSelector.getAllEntities(filtersFilter);
+  const filters = filterSelector.getAllEntities(filtersFilter) as
+    | Filter[]
+    | undefined;
 
   return {
     filters: hasValue(filters) ? filters : [],
@@ -301,7 +356,16 @@ const mapStateToProps = (state, {filtersFilter}) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
+const mapDispatchToProps = (
+  dispatch,
+  {
+    gmp,
+    filtersFilter,
+  }: {
+    gmp: Gmp;
+    filtersFilter: Filter;
+  },
+) => ({
   loadFilters: () => dispatch(loadAllEntities(gmp)(filtersFilter)),
 });
 
@@ -309,4 +373,6 @@ export default compose(
   withGmp,
   withTranslation,
   connect(mapStateToProps, mapDispatchToProps),
-)(EntitiesPage);
+)(EntitiesPage) as <TModel extends Model = Model, TProps = {}>(
+  props: EntitiesPageProps<TModel, TProps> & TProps,
+) => React.ReactElement<EntitiesPageProps<TModel, TProps> & TProps>;
