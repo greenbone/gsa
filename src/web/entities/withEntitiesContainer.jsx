@@ -91,7 +91,7 @@ const withEntitiesContainer =
       return (
         <SubscriptionProvider>
           {({notify}) => (
-            <FilterProvider fallbackFilter={fallbackFilter} gmpname={gmpname}>
+            <FilterProvider fallbackFilter={fallbackFilter} gmpName={gmpname}>
               {({filter}) => (
                 <EntitiesContainerWrapper
                   {...props}

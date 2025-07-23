@@ -39,7 +39,7 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
+    render(<FilterProvider gmpName="task">{renderFunc}</FilterProvider>);
 
     await screen.findByTestId('awaiting-span');
 
@@ -78,7 +78,7 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
+    render(<FilterProvider gmpName="task">{renderFunc}</FilterProvider>);
 
     await screen.findByTestId('awaiting-span');
 
@@ -121,7 +121,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider gmpname={gmpName} pageName={pageName}>
+      <FilterProvider gmpName={gmpName} pageName={pageName}>
         {renderFunc}
       </FilterProvider>,
     );
@@ -161,7 +161,7 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
+    render(<FilterProvider gmpName="task">{renderFunc}</FilterProvider>);
 
     await screen.findByTestId('awaiting-span');
 
@@ -199,7 +199,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
+      <FilterProvider fallbackFilter={fallbackFilter} gmpName="task">
         {renderFunc}
       </FilterProvider>,
     );
@@ -239,7 +239,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
+      <FilterProvider fallbackFilter={fallbackFilter} gmpName="task">
         {renderFunc}
       </FilterProvider>,
     );
@@ -274,7 +274,7 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
+    render(<FilterProvider gmpName="task">{renderFunc}</FilterProvider>);
 
     await screen.findByTestId('awaiting-span');
 
@@ -311,7 +311,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
+      <FilterProvider fallbackFilter={fallbackFilter} gmpName="task">
         {renderFunc}
       </FilterProvider>,
     );
@@ -345,7 +345,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
+      <FilterProvider fallbackFilter={fallbackFilter} gmpName="task">
         {renderFunc}
       </FilterProvider>,
     );

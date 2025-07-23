@@ -14,7 +14,7 @@ interface FilterProviderRenderProps {
 
 interface FilterProviderProps {
   fallbackFilter?: Filter;
-  gmpname: string;
+  gmpName: string;
   pageName?: string;
   children: (props: FilterProviderRenderProps) => React.ReactNode;
 }
@@ -22,10 +22,10 @@ interface FilterProviderProps {
 const FilterProvider = ({
   children,
   fallbackFilter,
-  gmpname,
-  pageName = gmpname,
+  gmpName,
+  pageName = gmpName,
 }: FilterProviderProps) => {
-  const [returnedFilter, isLoadingFilter] = usePageFilter(pageName, gmpname, {
+  const [returnedFilter, isLoadingFilter] = usePageFilter(pageName, gmpName, {
     fallbackFilter,
   });
   return (
