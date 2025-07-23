@@ -9,7 +9,7 @@ import {
   cleanup,
   renderHook as rtlRenderHook,
 } from '@testing-library/react/pure';
-import {MemoryRouter} from 'react-router';
+import {InitialEntry, MemoryRouter} from 'react-router';
 import {Store} from 'redux';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
@@ -35,7 +35,7 @@ export interface RendererOptions {
   store?: Store | boolean;
   license?: Record<string, unknown>;
   router?: boolean;
-  route?: string;
+  route?: InitialEntry;
   showLocation?: boolean;
   language?: string | Record<string, unknown>;
 }
