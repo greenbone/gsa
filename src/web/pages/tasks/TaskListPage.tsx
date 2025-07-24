@@ -4,24 +4,22 @@
  */
 
 import React from 'react';
-import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import Rejection from 'gmp/http/rejection';
+import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import Task from 'gmp/models/task';
 import DashboardControls from 'web/components/dashboard/Controls';
-import {TaskIcon, WizardIcon} from 'web/components/icon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import IconDivider from 'web/components/layout/IconDivider';
+import {TaskIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import IconMenu from 'web/components/menu/IconMenu';
-import MenuEntry from 'web/components/menu/MenuEntry';
 import EntitiesPage from 'web/entities/Page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-import useCapabilities from 'web/hooks/useCapabilities';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';
-import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
+import TaskToolBarIcons from 'web/pages/tasks/icons/TaskToolBarIcons';
 import TaskComponent from 'web/pages/tasks/TaskComponentComponent';
 import TaskFilterDialog from 'web/pages/tasks/TaskFilterDialog';
 import TaskTable from 'web/pages/tasks/TaskTable';
@@ -29,70 +27,17 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tasks';
-import PropTypes from 'web/utils/PropTypes';
 
-export const ToolBarIcons = ({
-  onAdvancedTaskWizardClick,
-  onModifyTaskWizardClick,
-  onContainerTaskCreateClick,
-  onTaskCreateClick,
-  onTaskWizardClick,
-}) => {
-  const capabilities = useCapabilities();
-  const [_] = useTranslation();
-  const mayUseModifyTaskWizard =
-    capabilities.mayEdit('task') &&
-    (capabilities.mayCreate('alert') || capabilities.mayCreate('schedule'));
-  return (
-    <IconDivider>
-      <ManualIcon
-        anchor="managing-tasks"
-        page="scanning"
-        title={_('Help: Tasks')}
-      />
-      {capabilities.mayOp('run_wizard') && (
-        <IconMenu icon={<WizardIcon />}>
-          {capabilities.mayCreate('task') && (
-            <MenuEntry
-              data-testid="task-wizard-menu"
-              title={_('Task Wizard')}
-              onClick={onTaskWizardClick}
-            />
-          )}
-          {capabilities.mayCreate('task') && (
-            <MenuEntry
-              data-testid="advanced-task-wizard-menu"
-              title={_('Advanced Task Wizard')}
-              onClick={onAdvancedTaskWizardClick}
-            />
-          )}
-          {mayUseModifyTaskWizard && (
-            <MenuEntry
-              data-testid="modify-task-wizard-menu"
-              title={_('Modify Task Wizard')}
-              onClick={onModifyTaskWizardClick}
-            />
-          )}
-        </IconMenu>
-      )}
+interface TaskListPageProps {
+  filter: Filter;
+  onFilterChanged: (filter: Filter) => void;
+  onInteraction: () => void;
+  onChanged: () => void;
+  onDownloaded: OnDownloadedFunc;
+  onError: (error: Error | Rejection) => void;
+}
 
-      <NewIconMenu
-        onNewClick={onTaskCreateClick}
-        onNewContainerClick={onContainerTaskCreateClick}
-      />
-    </IconDivider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  onAdvancedTaskWizardClick: PropTypes.func.isRequired,
-  onContainerTaskCreateClick: PropTypes.func.isRequired,
-  onModifyTaskWizardClick: PropTypes.func.isRequired,
-  onTaskCreateClick: PropTypes.func.isRequired,
-  onTaskWizardClick: PropTypes.func.isRequired,
-};
-
-const Page = ({
+const TaskListPage = ({
   filter,
   onFilterChanged,
   onInteraction,
@@ -100,7 +45,7 @@ const Page = ({
   onDownloaded,
   onError,
   ...props
-}) => {
+}: TaskListPageProps) => {
   const [_] = useTranslation();
   return (
     <TaskComponent
@@ -164,7 +109,7 @@ const Page = ({
             sectionIcon={<TaskIcon size="large" />}
             table={TaskTable}
             title={_('Tasks')}
-            toolBarIcons={ToolBarIcons}
+            toolBarIcons={TaskToolBarIcons}
             onAdvancedTaskWizardClick={advancedTaskWizard}
             onContainerTaskCreateClick={createContainer}
             onError={onError}
@@ -188,16 +133,7 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  filter: PropTypes.filter,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-export const taskReloadInterval = ({entities = []}) =>
+export const taskReloadInterval = ({entities = []}: {entities: Task[]}) =>
   entities.some(task => task.isActive())
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
@@ -205,5 +141,6 @@ export const taskReloadInterval = ({entities = []}) =>
 export default withEntitiesContainer('task', {
   entitiesSelector,
   loadEntities,
+  // @ts-expect-error
   reloadInterval: taskReloadInterval,
-})(Page);
+})(TaskListPage);

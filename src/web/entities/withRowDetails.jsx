@@ -12,8 +12,10 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
+import {updateDisplayName} from 'web/utils/displayName';
 import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
+
 const Indent = styled.div`
   display: flex;
   width: 3em;
@@ -68,7 +70,7 @@ const withRowDetails =
       entity: PropTypes.model.isRequired,
       links: PropTypes.bool,
     };
-    return RowDetailsWrapper;
+    return updateDisplayName(RowDetailsWrapper, Component, 'withRowDetails');
   };
 
 export default withRowDetails;

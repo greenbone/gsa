@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
+import Gmp from 'gmp/gmp';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 
 const log = logger.getLogger('web.components.reload');
@@ -17,9 +17,32 @@ export const USE_DEFAULT_RELOAD_INTERVAL_ACTIVE = -2;
 export const USE_DEFAULT_RELOAD_INTERVAL_INACTIVE = -3;
 export const LOAD_TIME_FACTOR = 1.2;
 
-class Reload extends React.Component {
-  constructor(...args) {
-    super(...args);
+interface ReloadRenderProps<TLoadOptions> {
+  reload: (options?: TLoadOptions) => Promise<void>;
+}
+
+interface ReloadProps<TLoadOptions = {}> {
+  children: (props: ReloadRenderProps<TLoadOptions>) => React.ReactNode;
+  defaultReloadInterval?: number;
+  defaultReloadIntervalActive?: number;
+  defaultReloadIntervalInactive?: number;
+  gmp: Gmp;
+  load?: (options?: TLoadOptions) => Promise<void>;
+  name: string;
+  reload: (options?: TLoadOptions) => Promise<void>;
+  reloadInterval?: () => number | void;
+}
+
+class Reload<TLoadOptions = {}> extends React.Component<
+  ReloadProps<TLoadOptions>
+> {
+  isVisible: boolean;
+  isRunning: boolean = false;
+  startTimeStamp?: number;
+  timer?: ReturnType<typeof setTimeout>;
+
+  constructor(props: ReloadProps<TLoadOptions>) {
+    super(props);
 
     this.isVisible = !document.hidden; // the browser window is active and visible to the user
 
@@ -44,7 +67,7 @@ class Reload extends React.Component {
     log.debug('Initial loading for', name);
 
     this.activateVisibilityListener();
-    this.internalLoad(loadFunc); // initial loading
+    void this.internalLoad(loadFunc); // initial loading
   }
 
   startMeasurement() {
@@ -166,7 +189,7 @@ class Reload extends React.Component {
 
     this.resetTimer();
 
-    this.internalLoad();
+    void this.internalLoad();
   }
 
   activateVisibilityListener() {
@@ -192,7 +215,7 @@ class Reload extends React.Component {
     }
   }
 
-  reload(options) {
+  reload(options?: TLoadOptions) {
     if (!this.isRunning) {
       // don't allow calling reload before initial rendering
       return Promise.resolve();
@@ -202,7 +225,7 @@ class Reload extends React.Component {
     return this.internalLoad(this.props.reload, options);
   }
 
-  internalLoad(loadFunc = this.props.reload, options) {
+  async internalLoad(loadFunc = this.props.reload, options?: TLoadOptions) {
     this.clearTimer();
 
     if (!isDefined(loadFunc)) {
@@ -213,20 +236,19 @@ class Reload extends React.Component {
 
     this.startMeasurement();
 
-    return loadFunc(options)
-      .then(() => {
-        log.debug('Loading for', this.props.name, 'finished.');
-        this.startTimer();
-      })
-      .catch(error => {
-        /* don't restart timer to avoid raising several errors */
-        log.debug(
-          'Loading Promise for',
-          this.props.name,
-          'has been rejected. Not starting new timer.',
-          error,
-        );
-      });
+    try {
+      await loadFunc(options);
+      log.debug('Loading for', this.props.name, 'finished.');
+      this.startTimer();
+    } catch (error) {
+      /* don't restart timer to avoid raising several errors */
+      log.debug(
+        'Loading Promise for',
+        this.props.name,
+        'has been rejected. Not starting new timer.',
+        error,
+      );
+    }
   }
 
   render() {
@@ -236,17 +258,5 @@ class Reload extends React.Component {
     });
   }
 }
-
-Reload.propTypes = {
-  children: PropTypes.func.isRequired,
-  defaultReloadInterval: PropTypes.number,
-  defaultReloadIntervalActive: PropTypes.number,
-  defaultReloadIntervalInactive: PropTypes.number,
-  gmp: PropTypes.gmp.isRequired,
-  load: PropTypes.func,
-  name: PropTypes.string.isRequired,
-  reload: PropTypes.func.isRequired,
-  reloadInterval: PropTypes.func,
-};
 
 export default withGmp(Reload);

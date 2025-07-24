@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, wait, rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Filter from 'gmp/models/filter';
 import FilterSettings from 'web/pages/user-settings/FilterSettings';
 
 const USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS =
@@ -20,10 +21,6 @@ function createGmpMock() {
       renewSession: testing.fn().mockResolvedValue({data: 123}),
     },
   };
-}
-
-function createFilterString(id, name) {
-  return `${name} (${id})`;
 }
 
 describe('FilterSettings', () => {
@@ -81,20 +78,11 @@ describe('FilterSettings', () => {
 
     const entityTypes = Object.keys(entityTypeToDisplayName);
 
-    const createMockFilter = (id, name) => ({
-      id,
-      name,
-      toFilterString: testing
-        .fn()
-        .mockReturnValue(createFilterString(id, name)),
-      _id: id,
-    });
-
     entityTypes.forEach(entityType => {
-      const mockFilter = createMockFilter(
-        `${entityType}-filter-uuid`,
-        `${entityType} Filter`,
-      );
+      const mockFilter = new Filter({
+        id: `${entityType}-filter-uuid`,
+        name: `${entityType} Filter`,
+      });
       store.dispatch({
         type: USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS,
         entityType,
@@ -143,6 +131,7 @@ describe('FilterSettings', () => {
       }),
     ).toHaveAttribute('href', '/filter/dfncert-filter-uuid');
   });
+
   test('handles filter selection changes and saves correctly', async () => {
     const gmp = createGmpMock();
     const {render, store} = rendererWith({
@@ -157,25 +146,25 @@ describe('FilterSettings', () => {
         id: 'alert-filter-uuid',
         name: 'Alert Filter',
         filter_type: 'alert',
-        toFilterString: () => 'Alert Filter (alert-filter-uuid)',
+        identifier: () => 'Alert Filter (alert-filter-uuid)',
       },
       {
         id: 'alert-filter-uuid-2',
         name: 'Alert Filter 2',
         filter_type: 'alert',
-        toFilterString: () => 'Alert Filter 2 (alert-filter-uuid-2)',
+        identifier: () => 'Alert Filter 2 (alert-filter-uuid-2)',
       },
       {
         id: 'credential-filter-uuid',
         name: 'Credential Filter',
         filter_type: 'credential',
-        toFilterString: () => 'Credential Filter (credential-filter-uuid)',
+        identifier: () => 'Credential Filter (credential-filter-uuid)',
       },
       {
         id: 'credential-filter-uuid-2',
         name: 'Credential Filter 2',
         filter_type: 'credential',
-        toFilterString: () => 'Credential Filter 2 (credential-filter-uuid-2)',
+        identifier: () => 'Credential Filter 2 (credential-filter-uuid-2)',
       },
     ];
 

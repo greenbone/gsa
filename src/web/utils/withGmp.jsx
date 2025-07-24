@@ -6,16 +6,18 @@
 import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import GmpContext from 'web/components/provider/GmpProvider';
+import {updateDisplayName} from 'web/utils/displayName';
 
 const withGmp = Component => {
-  const GmpWrapper = props => (
+  const WithGmp = props => (
     <GmpContext.Consumer>
       {gmp => <Component {...props} gmp={gmp} />}
     </GmpContext.Consumer>
   );
-  return hoistStatics(GmpWrapper, Component);
+  return hoistStatics(
+    updateDisplayName(WithGmp, Component, 'withGmp'),
+    Component,
+  );
 };
 
 export default withGmp;
-
-// vim: set ts=4 sw=4 tw=80:

@@ -133,6 +133,7 @@ class EntitiesTable extends React.Component {
     const {details, allToggled} = this.state;
     const {
       doubleRow = false,
+      'data-testid': dataTestId = 'entities-table',
       entities,
       entitiesCounts,
       filter,
@@ -231,7 +232,12 @@ class EntitiesTable extends React.Component {
     );
 
     return (
-      <TableBox className="entities-table" flex="column" grow="1">
+      <TableBox
+        className="entities-table"
+        data-testid={dataTestId}
+        flex="column"
+        grow="1"
+      >
         {toggleDetailsIcon ? (
           <Layout align="space-between" grow="1">
             {detailsIcon}
@@ -265,6 +271,7 @@ class EntitiesTable extends React.Component {
 EntitiesTable.propTypes = {
   body: PropTypes.componentOrFalse,
   doubleRow: PropTypes.bool,
+  'data-testid': PropTypes.string,
   emptyTitle: PropTypes.toString,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,

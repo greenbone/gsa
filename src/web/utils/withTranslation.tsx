@@ -4,7 +4,13 @@
  */
 
 import useLanguage from 'web/hooks/useLanguage';
-import useTranslation from 'web/hooks/useTranslation';
+import useTranslation, {I18n, TranslateFunc} from 'web/hooks/useTranslation';
+import {updateDisplayName} from 'web/utils/displayName';
+
+interface TranslationProps {
+  _: TranslateFunc;
+  i18n: I18n;
+}
 
 /**
  * Higher-Order Component that provides translation capabilities to class components
@@ -13,8 +19,10 @@ import useTranslation from 'web/hooks/useTranslation';
  * @param WrappedComponent - The component to wrap with translation capabilities
  * @returns A new component with translation props injected
  */
-const withTranslation = WrappedComponent => {
-  const WithTranslation = props => {
+const withTranslation = <TProps extends {} = {}>(
+  WrappedComponent: React.ComponentType<TProps & TranslationProps>,
+) => {
+  const WithTranslation = (props: TProps) => {
     const [_, i18n] = useTranslation();
     const [language] = useLanguage();
 
@@ -28,10 +36,11 @@ const withTranslation = WrappedComponent => {
       />
     );
   };
-
-  WithTranslation.displayName = `withTranslation(${WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'})`;
-
-  return WithTranslation;
+  return updateDisplayName(
+    WithTranslation,
+    WrappedComponent,
+    'withTranslation',
+  );
 };
 
 export default withTranslation;

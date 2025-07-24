@@ -20,7 +20,7 @@ import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
+import withDialogNotification from 'web/components/notification/withDialogNotification';
 import FilterProvider from 'web/entities/FilterProvider';
 import Page from 'web/pages/reports/DetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/DetailsFilterDialog';
@@ -727,7 +727,7 @@ const TranslatedReportDetails = withTranslation(ReportDetails);
 const ReportDetailsWrapper = ({reportFilter, ...props}) => (
   <FilterProvider
     fallbackFilter={DEFAULT_FILTER}
-    gmpname="result"
+    gmpName="result"
     pageName={`report-${props.reportId}`}
   >
     {({filter}) => (

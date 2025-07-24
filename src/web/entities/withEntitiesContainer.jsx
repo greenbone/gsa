@@ -7,7 +7,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import withDownload from 'web/components/form/withDownload';
 import Reload from 'web/components/loading/Reload';
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction';
+import withDialogNotification from 'web/components/notification/withDialogNotification';
 import SubscriptionProvider from 'web/components/provider/SubscriptionProvider';
 import EntitiesContainer from 'web/entities/Container';
 import FilterProvider from 'web/entities/FilterProvider';
@@ -91,7 +91,7 @@ const withEntitiesContainer =
       return (
         <SubscriptionProvider>
           {({notify}) => (
-            <FilterProvider fallbackFilter={fallbackFilter} gmpname={gmpname}>
+            <FilterProvider fallbackFilter={fallbackFilter} gmpName={gmpname}>
               {({filter}) => (
                 <EntitiesContainerWrapper
                   {...props}

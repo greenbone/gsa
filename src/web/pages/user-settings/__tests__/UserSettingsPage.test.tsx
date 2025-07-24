@@ -6,6 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Filter from 'gmp/models/filter';
 import Setting from 'gmp/models/setting';
 import UserSettingsPage, {
   ToolBarIcons,
@@ -13,8 +14,6 @@ import UserSettingsPage, {
 import {setTimezone} from 'web/store/usersettings/actions';
 import {USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS} from 'web/store/usersettings/defaultfilters/actions';
 import {USER_SETTINGS_DEFAULTS_LOADING_SUCCESS} from 'web/store/usersettings/defaults/actions';
-
-const createFilterString = (id, name) => `${id}=${name}`;
 
 const manualUrl = 'test/';
 
@@ -675,15 +674,6 @@ describe('UserSettingsPage', () => {
         store: true,
       });
 
-      const createMockFilter = (id, name) => ({
-        id,
-        name,
-        toFilterString: testing
-          .fn()
-          .mockReturnValue(createFilterString(id, name)),
-        _id: id,
-      });
-
       const entityTypeToDisplayName = {
         alert: 'Alerts',
         auditreport: 'Audit Reports',
@@ -720,15 +710,15 @@ describe('UserSettingsPage', () => {
       const entityTypes = Object.keys(entityTypeToDisplayName);
 
       entityTypes.forEach(entityType => {
-        const mockFilter = createMockFilter(
-          `${entityType}-filter-uuid`,
-          `${entityType} Filter`,
-        );
+        const filter = new Filter({
+          id: `${entityType}-filter-uuid`,
+          name: `${entityType} Filter`,
+        });
 
         store.dispatch({
           type: USER_SETTINGS_DEFAULT_FILTER_LOADING_SUCCESS,
           entityType,
-          filter: mockFilter,
+          filter,
         });
       });
 
