@@ -28,7 +28,7 @@ const CvesTab = ({
   isUpdating,
   sortField,
   sortReverse,
-  onInteraction,
+
   onSortChange,
 }) => (
   <ReportEntitiesContainer
@@ -38,7 +38,6 @@ const CvesTab = ({
     sortField={sortField}
     sortFunctions={cvesSortFunctions}
     sortReverse={sortReverse}
-    onInteraction={onInteraction}
   >
     {({
       entities,
@@ -75,7 +74,6 @@ CvesTab.propTypes = {
   isUpdating: PropTypes.bool,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
 

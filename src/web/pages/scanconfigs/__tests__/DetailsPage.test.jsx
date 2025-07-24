@@ -198,10 +198,6 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 const getPermissions = testing.fn().mockResolvedValue({
   data: [],
   meta: {
@@ -301,7 +297,6 @@ describe('Scan Config DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -381,7 +376,6 @@ describe('Scan Config DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -447,7 +441,6 @@ describe('Scan Config DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -487,7 +480,6 @@ describe('Scan Config DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -551,7 +543,6 @@ describe('Scan Config DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -655,7 +646,6 @@ describe('Scan Config DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -762,7 +752,6 @@ describe('Scan Config DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -861,7 +850,6 @@ describe('Scan Config DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

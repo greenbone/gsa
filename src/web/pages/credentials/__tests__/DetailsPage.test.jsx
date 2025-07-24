@@ -17,7 +17,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 let getCredential;
 let getEntities;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getCredential = testing.fn().mockResolvedValue({
@@ -33,9 +32,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 const caps = new Capabilities(['everything']);
@@ -167,7 +163,6 @@ describe('Credential Detailspage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -204,7 +199,6 @@ describe('Credential Detailspage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -256,7 +250,6 @@ describe('Credential Detailspage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

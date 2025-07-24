@@ -210,7 +210,7 @@ export const FilterSettings = ({
   const {
     getErrorMessage,
     saveSetting,
-    onInteraction,
+
     setErrorMessage,
     clearErrorMessage,
   } = useSettingSave();
@@ -311,7 +311,6 @@ export const FilterSettings = ({
       [key]: false,
     }));
     clearErrorMessage(key);
-    onInteraction();
   };
 
   return (
@@ -375,7 +374,6 @@ export const FilterSettings = ({
                       ...updatedValues,
                       [key]: newValues === UNSET_VALUE ? '' : newValues,
                     }));
-                    onInteraction();
                   }}
                 />
               }
@@ -397,7 +395,6 @@ export const FilterSettings = ({
               onCancel={() => cancelField(key)}
               onEdit={() => {
                 setIsEditing(editState => ({...editState, [key]: true}));
-                onInteraction();
               }}
               onSave={() => saveField(key)}
             />

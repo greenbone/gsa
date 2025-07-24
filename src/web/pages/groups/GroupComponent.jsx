@@ -21,7 +21,7 @@ const GroupComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-  onInteraction,
+
   onSaved,
   onSaveError,
 }) => {
@@ -33,24 +33,15 @@ const GroupComponent = ({
   const [group, setGroup] = useState(undefined);
   const [title, setTitle] = useState(undefined);
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const closeGroupDialog = () => {
     setDialogVisible(false);
   };
 
   const handleCloseGroupDialog = () => {
     closeGroupDialog();
-    handleInteraction();
   };
 
   const openGroupDialog = group => {
-    handleInteraction();
-
     let usersList = [];
     gmp.users.getAll().then(response => {
       usersList = response.data;
@@ -83,7 +74,6 @@ const GroupComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -101,7 +91,6 @@ const GroupComponent = ({
               title={title}
               onClose={handleCloseGroupDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeGroupDialog());
               }}
             />
@@ -122,7 +111,6 @@ GroupComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

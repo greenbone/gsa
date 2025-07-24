@@ -27,7 +27,7 @@ const ApplicationsTab = ({
   isUpdating,
   sortField,
   sortReverse,
-  onInteraction,
+
   onSortChange,
 }) => (
   <ReportEntitiesContainer
@@ -37,7 +37,6 @@ const ApplicationsTab = ({
     sortField={sortField}
     sortFunctions={appsSortFunctions}
     sortReverse={sortReverse}
-    onInteraction={onInteraction}
   >
     {({
       entities,
@@ -74,7 +73,6 @@ ApplicationsTab.propTypes = {
   isUpdating: PropTypes.bool,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
 

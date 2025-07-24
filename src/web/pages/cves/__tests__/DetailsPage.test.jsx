@@ -117,10 +117,6 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
@@ -141,7 +137,6 @@ describe('CVE DetailsPage tests', () => {
       },
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

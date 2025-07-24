@@ -235,10 +235,6 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 const getPolicy = testing.fn().mockResolvedValue({
   data: policy,
 });
@@ -385,7 +381,6 @@ describe('Audit DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -458,7 +453,6 @@ describe('Audit DetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

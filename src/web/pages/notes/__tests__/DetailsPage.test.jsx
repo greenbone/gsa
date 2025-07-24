@@ -100,10 +100,6 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 describe('Note DetailsPage tests', () => {
   test('should render full /DetailsPage', () => {
     const gmp = {
@@ -210,7 +206,6 @@ describe('Note DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -253,7 +248,6 @@ describe('Note DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -311,7 +305,6 @@ describe('Note DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

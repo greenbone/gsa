@@ -13,7 +13,7 @@ import PropTypes from 'web/utils/PropTypes';
 const EntityComponent = ({
   children,
   name,
-  onInteraction,
+
   onDownloaded,
   onDownloadError,
   onSaved,
@@ -28,31 +28,26 @@ const EntityComponent = ({
   const handleEntityDownload = useEntityDownload(name, {
     onDownloadError,
     onDownloaded,
-    onInteraction,
   });
 
   const handleEntitySave = useEntitySave(name, {
     onSaveError,
     onSaved,
-    onInteraction,
   });
 
   const handleEntityCreate = useEntityCreate(name, {
     onCreated,
     onCreateError,
-    onInteraction,
   });
 
   const handleEntityDelete = useEntityDelete(name, {
     onDeleteError,
     onDeleted,
-    onInteraction,
   });
 
   const handleEntityClone = useEntityClone(name, {
     onCloneError,
     onCloned,
-    onInteraction,
   });
 
   return children({
@@ -75,7 +70,6 @@ EntityComponent.propTypes = {
   onDeleteError: PropTypes.func,
   onDownloaded: PropTypes.func,
   onDownloadError: PropTypes.func,
-  onInteraction: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

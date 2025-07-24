@@ -4,7 +4,6 @@
  */
 
 import {useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -14,7 +13,6 @@ import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
 import ScannerDialog from 'web/pages/scanners/Dialog';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
@@ -41,7 +39,6 @@ const ScannerComponent = ({
 }) => {
   const gmp = useGmp();
   const [_] = useTranslation();
-  const dispatch = useDispatch();
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
   const username = useShallowEqualSelector(getUsername);
@@ -64,19 +61,7 @@ const ScannerComponent = ({
   const [type, setType] = useState(undefined);
   const [whichCert, setWhichCert] = useState(undefined);
 
-  const onInteraction = () => {
-    dispatch(renewSessionTimeout(gmp)());
-  };
-
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const openScannerDialog = scanner => {
-    handleInteraction();
-
     const credPromise = gmp.credentials.getAll().then(response => {
       return response.data;
     });
@@ -134,12 +119,10 @@ const ScannerComponent = ({
 
   const handleCloseScannerDialog = () => {
     closeScannerDialog();
-    handleInteraction();
   };
 
   const openCredentialsDialog = () => {
     setCredentialDialogVisible(true);
-    handleInteraction();
   };
 
   const closeCredentialsDialog = () => {
@@ -148,7 +131,6 @@ const ScannerComponent = ({
 
   const handleCloseCredentialsDialog = () => {
     closeCredentialsDialog();
-    handleInteraction();
   };
 
   const handleVerifyFailure = response => {
@@ -165,15 +147,12 @@ const ScannerComponent = ({
   };
 
   const handleVerifyScanner = scanner => {
-    handleInteraction();
-
     return gmp.scanner
       .verify(scanner)
       .then(onVerified, response => handleVerifyFailure(response));
   };
 
   const handleCreateCredential = data => {
-    handleInteraction();
     let credential;
 
     return gmp.credential
@@ -212,8 +191,6 @@ const ScannerComponent = ({
   const handleDownloadCredential = scanner => {
     const {credential} = scanner;
     const {creationTime, entityType, id, modificationTime, name} = credential;
-
-    handleInteraction();
 
     return gmp.credential
       .download(credential, 'pem')
@@ -263,7 +240,6 @@ const ScannerComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -295,7 +271,6 @@ const ScannerComponent = ({
               onCredentialChange={handleCredentialChange}
               onNewCredentialClick={openCredentialsDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeScannerDialog());
               }}
               onScannerCaPubChange={handleScannerCaPubChange}

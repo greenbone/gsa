@@ -33,7 +33,7 @@ describe('useSettingSave hook', () => {
     const gmp = {
       user: {
         saveSetting: saveSettingMock,
-        renewSession: testing.fn().mockResolvedValue({data: 123}),
+
         getSetting: testing.fn().mockResolvedValue({}),
       },
     };

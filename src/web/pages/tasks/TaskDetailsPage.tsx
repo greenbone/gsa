@@ -319,7 +319,6 @@ interface TaskDetailsPageProps {
   onChanged?: () => void;
   onDownloaded?: OnDownloadedFunc;
   onError?: (error: unknown) => void;
-  onInteraction?: () => void;
 }
 
 const TaskDetailsPage = ({
@@ -328,7 +327,7 @@ const TaskDetailsPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }: TaskDetailsPageProps) => {
   const navigate = useNavigate();
@@ -351,7 +350,6 @@ const TaskDetailsPage = ({
       onDeleted={goToList('tasks', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onReportImported={onChanged}
       onResumeError={onError}
       onResumed={onChanged}
@@ -384,8 +382,6 @@ const TaskDetailsPage = ({
           onChanged={onChanged}
           onContainerTaskCreateClick={createContainer}
           onError={onError}
-          // @ts-expect-error
-          onInteraction={onInteraction}
           onReportImportClick={reportImport}
           onTaskCloneClick={clone}
           onTaskCreateClick={create}
@@ -425,8 +421,6 @@ const TaskDetailsPage = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          // @ts-expect-error
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -436,7 +430,6 @@ const TaskDetailsPage = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>

@@ -144,8 +144,6 @@ describe('ScanConfigsPage tests', () => {
       foo: 'bar',
     });
 
-    const renewSession = testing.fn().mockResolvedValue({data: {}});
-
     const gmp = {
       scanconfigs: {
         get: getConfigs,
@@ -157,7 +155,7 @@ describe('ScanConfigsPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {currentSettings, getSetting, renewSession},
+      user: {currentSettings, getSetting},
     };
 
     const {render, store} = rendererWith({

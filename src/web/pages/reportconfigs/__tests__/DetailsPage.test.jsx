@@ -23,10 +23,6 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 const getPermissions = testing.fn().mockResolvedValue({
   data: [],
   meta: {
@@ -53,7 +49,6 @@ describe('Report Config Details Page tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

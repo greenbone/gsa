@@ -5,7 +5,6 @@
 
 import {useDispatch} from 'react-redux';
 import Rejection from 'gmp/http/rejection';
-import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -21,7 +20,6 @@ interface EntityDelete {
 interface EntityDeleteCallbacks<TDeleteError = unknown> {
   onDeleteError?: (error: TDeleteError) => void;
   onDeleted?: () => void;
-  onInteraction?: () => void;
 }
 
 /**
@@ -36,11 +34,7 @@ const useEntityDelete = <
   TDeleteError = Rejection,
 >(
   name: string,
-  {
-    onDeleteError,
-    onDeleted,
-    onInteraction,
-  }: EntityDeleteCallbacks<TDeleteError> = {},
+  {onDeleteError, onDeleted}: EntityDeleteCallbacks<TDeleteError> = {},
 ) => {
   const [_] = useTranslation();
   const gmp = useGmp();
@@ -49,15 +43,7 @@ const useEntityDelete = <
     // @ts-expect-error
     dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id as string));
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleEntityDelete = async (entity: TEntity) => {
-    handleInteraction();
-
     return actionFunction(
       // @ts-expect-error
       deleteEntity(entity),

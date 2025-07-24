@@ -87,7 +87,7 @@ const AlertComponent = ({
   onDeleteError = onError,
   onDownloaded,
   onDownloadError = onError,
-  onInteraction,
+
   onSaved,
   onSaveError = onError,
   onTestSuccess,
@@ -283,15 +283,7 @@ const AlertComponent = ({
 
   const credentialTypeRef = useRef(null);
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleCreateCredential = credentialData => {
-    handleInteraction();
-
     let credentialId;
     gmp.credential
       .create(credentialData)
@@ -329,7 +321,6 @@ const AlertComponent = ({
     setCredentialDialogVisible(true);
     setCredentialDialogTitle(_('New Credential'));
     setCredentialTypes(types);
-    handleInteraction();
   };
 
   const closeCredentialDialog = () => {
@@ -338,7 +329,6 @@ const AlertComponent = ({
 
   const handleCloseCredentialDialog = () => {
     closeCredentialDialog();
-    handleInteraction();
   };
 
   const openContentComposerDialog = () => {
@@ -347,7 +337,6 @@ const AlertComponent = ({
 
   const handleOpenContentComposerDialog = () => {
     openContentComposerDialog();
-    handleInteraction();
   };
 
   const closeContentComposerDialog = () => {
@@ -383,7 +372,6 @@ const AlertComponent = ({
     setMethodDataComposerIncludeOverrides(includeOverrides);
     setComposerStoreAsDefault(NO_VALUE);
     setContentComposerDialogVisible(false);
-    handleInteraction();
   };
 
   const openScpCredentialDialog = types => {
@@ -415,8 +403,6 @@ const AlertComponent = ({
   };
 
   const openAlertDialog = alertObj => {
-    handleInteraction();
-
     const credentialPromise = gmp.credentials.getAll().then(r => r.data);
     loadDefaults();
 
@@ -917,12 +903,9 @@ const AlertComponent = ({
     setComposerFilterId(undefined);
     setComposerStoreAsDefault(NO_VALUE);
     closeAlertDialog();
-    handleInteraction();
   };
 
   const handleTestAlert = alertObj => {
-    handleInteraction();
-
     return gmp.alert
       .test(alertObj)
       .then(() => {
@@ -1008,7 +991,6 @@ const AlertComponent = ({
   };
 
   const handleValueChange = (value, name) => {
-    handleInteraction();
     name = capitalizeFirstLetter(name);
 
     if (name === 'IgnorePagination') {
@@ -1024,7 +1006,6 @@ const AlertComponent = ({
 
   const handleFilterIdChange = value => {
     setComposerFilterId(value === UNSET_VALUE ? undefined : value);
-    handleInteraction();
   };
 
   return (
@@ -1038,7 +1019,6 @@ const AlertComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -1181,7 +1161,6 @@ const AlertComponent = ({
               onReportConfigsChange={handleReportConfigsChange}
               onReportFormatsChange={handleReportFormatsChange}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeAlertDialog());
               }}
               onScpCredentialChange={handleScpCredentialChange}
@@ -1235,7 +1214,6 @@ AlertComponent.propTypes = {
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
   onError: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
   onTestError: PropTypes.func,

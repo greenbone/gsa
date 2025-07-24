@@ -255,10 +255,6 @@ const currentSettings = testing
   .fn()
   .mockResolvedValue(currentSettingsDefaultResponse);
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 const getConfig = testing.fn().mockResolvedValue({
   data: config,
 });
@@ -423,7 +419,6 @@ describe('TaskDetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -477,7 +472,6 @@ describe('TaskDetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -556,7 +550,6 @@ describe('TaskDetailsPage tests', () => {
       settings: {manualUrl},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

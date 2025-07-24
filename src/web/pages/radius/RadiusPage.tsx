@@ -4,7 +4,6 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {EditIcon, RadiusIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -20,7 +19,6 @@ import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import RadiusDialog from 'web/pages/radius/RadiusDialog';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {renderYesNo} from 'web/utils/Render';
 
 interface RadiusSettings {
@@ -54,16 +52,13 @@ const ToolBarIcons = ({onOpenDialogClick}: ToolBarIconsProps) => {
 const RadiusAuthentication = () => {
   const gmp = useGmp();
   const [_] = useTranslation();
-  const dispatch = useDispatch();
+
   const [dialogVisible, setDialogVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hasRadiusSupport, setHasRadiusSupport] = useState(true);
   const [radiusEnabled, setRadiusEnabled] = useState(false);
   const [radiusHost, setRadiusHost] = useState('');
   const [radiusKey, setRadiusKey] = useState('');
-
-  // @ts-expect-error
-  const handleInteraction = () => dispatch(renewSessionTimeout(gmp)());
 
   const loadRadiusAuthSettings = useCallback(async () => {
     const response = await gmp.user.currentAuthSettings();
@@ -81,8 +76,6 @@ const RadiusAuthentication = () => {
   }, [gmp.user]);
 
   const handleSaveSettings = async ({radiusEnabled, radiusHost, radiusKey}) => {
-    handleInteraction();
-
     await gmp.auth.saveRadius({
       radiusEnabled,
       radiusHost,
@@ -93,7 +86,6 @@ const RadiusAuthentication = () => {
   };
 
   const openDialog = () => {
-    handleInteraction();
     setDialogVisible(true);
   };
 

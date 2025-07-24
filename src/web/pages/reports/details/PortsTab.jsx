@@ -26,7 +26,7 @@ const PortsTab = ({
   ports,
   sortField,
   sortReverse,
-  onInteraction,
+
   onSortChange,
 }) => (
   <ReportEntitiesContainer
@@ -36,7 +36,6 @@ const PortsTab = ({
     sortField={sortField}
     sortFunctions={portsSortFunctions}
     sortReverse={sortReverse}
-    onInteraction={onInteraction}
   >
     {({
       entities,
@@ -73,7 +72,6 @@ PortsTab.propTypes = {
   ports: PropTypes.array,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
 

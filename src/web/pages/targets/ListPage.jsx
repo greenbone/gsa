@@ -46,7 +46,7 @@ const TargetsPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -59,7 +59,6 @@ const TargetsPage = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
@@ -76,7 +75,6 @@ const TargetsPage = ({
             onChanged={onChanged}
             onDownloaded={onDownloaded}
             onError={onError}
-            onInteraction={onInteraction}
             onTargetCloneClick={clone}
             onTargetCreateClick={create}
             onTargetDeleteClick={delete_func}
@@ -94,7 +92,6 @@ TargetsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('target', {

@@ -96,10 +96,6 @@ const getReportFormats = testing.fn().mockResolvedValue({
   },
 });
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 describe('TaskListPage tests', () => {
   test('should render full page', async () => {
     const gmp = {
@@ -270,7 +266,7 @@ describe('TaskListPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {renewSession, currentSettings, getSetting: getUserSetting},
+      user: {currentSettings, getSetting: getUserSetting},
     };
 
     const {render, store} = rendererWith({

@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
+import {describe, test, expect, beforeEach} from '@gsa/testing';
 import {screen, fireEvent, rendererWith, wait} from 'web/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 
 const gmp = {
-  user: {
-    renewSession: testing.fn().mockResolvedValue({data: 123}),
-  },
   settings: {
     severityRating: SEVERITY_RATING_CVSS_3,
   },

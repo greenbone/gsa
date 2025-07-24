@@ -22,7 +22,6 @@ const manualUrl = 'test/';
 let getTarget;
 let getEntities;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getTarget = testing.fn().mockResolvedValue({
@@ -40,10 +39,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 const target = Target.fromElement({
@@ -298,7 +293,6 @@ describe('Target DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -335,7 +329,6 @@ describe('Target DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -387,7 +380,6 @@ describe('Target DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

@@ -63,7 +63,6 @@ const UsersPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
 }) => {
   const [_] = useTranslation();
   const gmp = useGmp();
@@ -76,12 +75,6 @@ const UsersPage = ({
   const [title, setTitle] = useState();
   const [deleteDialogError, setDeleteDialogError] = useState();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const closeConfirmDeleteDialog = () => {
     setConfirmDeleteDialogVisible(false);
   };
@@ -90,7 +83,6 @@ const UsersPage = ({
     closeConfirmDeleteDialog();
     setDeleteUsers([]);
     setDeleteDialogError(undefined);
-    handleInteraction();
   };
 
   const handleDeleteUser = ({deleteUsers, inheritorId}) => {
@@ -98,7 +90,7 @@ const UsersPage = ({
     if (inheritor === '--') {
       inheritor = undefined;
     }
-    handleInteraction();
+
     if (deleteUsers.length === 1) {
       const {id} = deleteUsers[0];
       return gmp.user.delete({id, inheritorId: inheritor}).then(onChanged);
@@ -111,7 +103,7 @@ const UsersPage = ({
   const openConfirmDeleteDialog = async user => {
     setDeleteDialogError(undefined);
     loadAll();
-    handleInteraction();
+
     if (isDefined(user)) {
       setConfirmDeleteDialogVisible(true);
       setDeleteUsers([user]);
@@ -179,7 +171,6 @@ const UsersPage = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, download, edit, save}) => (
@@ -222,7 +213,6 @@ const UsersPage = ({
             onDeleteBulk={openConfirmDeleteDialog}
             onDownloaded={onDownloaded}
             onError={onError}
-            onInteraction={onInteraction}
             onUserCloneClick={clone}
             onUserCreateClick={create}
             onUserDeleteClick={openConfirmDeleteDialog}
@@ -246,7 +236,6 @@ UsersPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {

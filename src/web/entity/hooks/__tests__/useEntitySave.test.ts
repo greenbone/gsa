@@ -16,14 +16,12 @@ describe('useEntitySave', () => {
     };
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
-    const onInteraction = testing.fn();
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
       useEntitySave('foo', {
         onSaved,
         onSaveError,
-        onInteraction,
       }),
     );
     expect(result.current).toBeDefined();
@@ -31,7 +29,6 @@ describe('useEntitySave', () => {
     expect(saveEntity).toHaveBeenCalledWith(entity);
     expect(onSaved).toHaveBeenCalledWith(entity);
     expect(onSaveError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 
   test('should call onSaveError when saving an entity fails', async () => {
@@ -42,14 +39,12 @@ describe('useEntitySave', () => {
     };
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
-    const onInteraction = testing.fn();
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
       useEntitySave('foo', {
         onSaved,
         onSaveError,
-        onInteraction,
       }),
     );
     expect(result.current).toBeDefined();
@@ -57,6 +52,5 @@ describe('useEntitySave', () => {
     expect(saveEntity).toHaveBeenCalledWith(entity);
     expect(onSaved).not.toHaveBeenCalled();
     expect(onSaveError).toHaveBeenCalledOnce();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 });

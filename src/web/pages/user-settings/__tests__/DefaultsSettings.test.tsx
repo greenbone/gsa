@@ -84,7 +84,6 @@ describe('DefaultSettings', () => {
         user: {
           getSetting: testing.fn().mockResolvedValue({data: {value: 'a2'}}),
           saveSetting: testing.fn().mockResolvedValue({data: {value: 'a2'}}),
-          renewSession: testing.fn().mockResolvedValue({data: 123}),
         },
       },
       store: true,

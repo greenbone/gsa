@@ -16,14 +16,12 @@ describe('useEntityCreate', () => {
     };
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
-    const onInteraction = testing.fn();
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
       useEntityCreate('foo', {
         onCreated,
         onCreateError,
-        onInteraction,
       }),
     );
     expect(result.current).toBeDefined();
@@ -31,7 +29,6 @@ describe('useEntityCreate', () => {
     expect(createEntity).toHaveBeenCalledWith(entity);
     expect(onCreated).toHaveBeenCalledWith(entity);
     expect(onCreateError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 
   test('should call onCreateError when creating an entity fails', async () => {
@@ -42,14 +39,12 @@ describe('useEntityCreate', () => {
     };
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
-    const onInteraction = testing.fn();
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
       useEntityCreate('foo', {
         onCreated,
         onCreateError,
-        onInteraction,
       }),
     );
     expect(result.current).toBeDefined();
@@ -57,6 +52,5 @@ describe('useEntityCreate', () => {
     expect(createEntity).toHaveBeenCalledWith(entity);
     expect(onCreated).not.toHaveBeenCalled();
     expect(onCreateError).toHaveBeenCalledOnce();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 });

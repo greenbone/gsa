@@ -37,7 +37,7 @@ const ToolBarIcons = () => {
   );
 };
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
 
   return (
@@ -49,14 +49,10 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
           <VulnerabilitiesDashboard
             filter={filter}
             onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
           />
         )}
         dashboardControls={() => (
-          <DashboardControls
-            dashboardId={VULNS_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
+          <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={VulnsFilterDialog}
@@ -67,7 +63,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         title={_('Vulnerabilities')}
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
       />
     </React.Fragment>
   );
@@ -76,7 +71,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
 Page.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const FALLBACK_VULNS_LIST_FILTER = Filter.fromString(

@@ -103,7 +103,6 @@ let getDashboardSetting;
 let getFilters;
 let getResults;
 let getSetting;
-let renewSession;
 
 beforeEach(() => {
   // mock gmp commands
@@ -148,10 +147,6 @@ beforeEach(() => {
 
   getSetting = testing.fn().mockResolvedValue({
     filter: null,
-  });
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
   });
 });
 
@@ -313,7 +308,7 @@ describe('Results listpage tests', () => {
         getSetting: getDashboardSetting,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -372,7 +367,7 @@ describe('Results listpage tests', () => {
         getSetting: getDashboardSetting,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -444,7 +439,7 @@ describe('Results listpage tests', () => {
         getSetting: getDashboardSetting,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({

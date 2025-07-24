@@ -56,7 +56,6 @@ let currentSettings;
 let getSetting;
 let getFilters;
 let getCredentials;
-let renewSession;
 
 beforeEach(() => {
   currentSettings = testing
@@ -81,9 +80,6 @@ beforeEach(() => {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
   });
 });
 
@@ -184,7 +180,7 @@ describe('CredentialPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting},
+      user: {currentSettings, getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -240,7 +236,7 @@ describe('CredentialPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting},
+      user: {currentSettings, getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -306,7 +302,7 @@ describe('CredentialPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting},
+      user: {currentSettings, getSetting},
     };
 
     const {render, store} = rendererWith({

@@ -58,7 +58,6 @@ import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import ResultDetails from 'web/pages/results/Details';
 import TicketComponent from 'web/pages/tickets/TicketComponent';
 import {loadEntity, selector} from 'web/store/entities/results';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
@@ -403,19 +402,13 @@ class Page extends React.Component {
   render() {
     const {_} = this.props;
 
-    const {entity, onChanged, onError, onInteraction} = this.props;
+    const {entity, onChanged, onError} = this.props;
     return (
-      <NoteComponent onCreated={onChanged} onInteraction={onInteraction}>
+      <NoteComponent onCreated={onChanged}>
         {({create: createnote}) => (
-          <OverrideComponent
-            onCreated={onChanged}
-            onInteraction={onInteraction}
-          >
+          <OverrideComponent onCreated={onChanged}>
             {({create: createoverride}) => (
-              <TicketComponent
-                onCreated={goToDetails('ticket', this.props)}
-                onInteraction={onInteraction}
-              >
+              <TicketComponent onCreated={goToDetails('ticket', this.props)}>
                 {({createFromResult: createticket}) => (
                   <EntityPage
                     {...this.props}
@@ -423,7 +416,6 @@ class Page extends React.Component {
                     sectionIcon={<ResultIcon size="large" />}
                     title={_('Result')}
                     toolBarIcons={ToolBarIcons}
-                    onInteraction={onInteraction}
                     onNoteCreateClick={result =>
                       this.openDialog(result, createnote)
                     }
@@ -454,7 +446,6 @@ class Page extends React.Component {
                                 entity={entity}
                                 onChanged={onChanged}
                                 onError={onError}
-                                onInteraction={onInteraction}
                               />
                             </TabPanel>
                           </TabPanels>
@@ -480,7 +471,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func,
   _: PropTypes.func.isRequired,
 };
 
@@ -498,7 +488,6 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
 export default compose(

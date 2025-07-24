@@ -63,7 +63,6 @@ interface EntityPageProps {
   toolBarIcons:
     | React.ComponentType<ToolBarIconsComponentProps>
     | React.ReactElement;
-  onInteraction: () => void;
   [key: string]: unknown;
 }
 
@@ -90,7 +89,7 @@ const EntityPage: React.FC<EntityPageProps> = ({
   isLoading = true,
   title,
   toolBarIcons: ToolBarIconsComponent,
-  onInteraction,
+
   ...props
 }: EntityPageProps) => {
   const [_] = useTranslation();

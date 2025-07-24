@@ -34,7 +34,7 @@ const NoteComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-  onInteraction,
+
   onSaved,
   onSaveError,
   ...props
@@ -64,19 +64,12 @@ const NoteComponent = ({
   const [text, setText] = useState();
   const [title, setTitle] = useState();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const closeNoteDialog = () => {
     setDialogVisible(false);
   };
 
   const handleCloseNoteDialog = () => {
     closeNoteDialog();
-    handleInteraction();
   };
 
   const loadTasks = () => {
@@ -142,7 +135,6 @@ const NoteComponent = ({
       setTitle(initial.title);
     }
 
-    handleInteraction();
     loadTasks();
   };
 
@@ -161,7 +153,6 @@ const NoteComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -196,7 +187,6 @@ const NoteComponent = ({
               title={title}
               onClose={handleCloseNoteDialog}
               onSave={d => {
-                handleInteraction();
                 const promise = isDefined(d.id) ? save(d) : create(d);
                 return promise.then(() => closeNoteDialog());
               }}
@@ -218,7 +208,6 @@ NoteComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

@@ -18,7 +18,6 @@ function createGmpMock() {
     user: {
       getSetting: testing.fn().mockResolvedValue({data: {value: 'f1'}}),
       saveSetting: testing.fn().mockResolvedValue({data: {value: 'f1'}}),
-      renewSession: testing.fn().mockResolvedValue({data: 123}),
     },
   };
 }

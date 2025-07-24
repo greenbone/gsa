@@ -285,7 +285,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -299,7 +299,6 @@ const Page = ({
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onImported={goToDetails('scanconfig', props)}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -317,7 +316,6 @@ const Page = ({
           sectionIcon={<ScanConfigIcon size="large" />}
           title={_('Scan Config')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onScanConfigCloneClick={clone}
           onScanConfigCreateClick={create}
           onScanConfigDeleteClick={delete_func}
@@ -374,7 +372,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -384,7 +381,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -405,7 +401,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

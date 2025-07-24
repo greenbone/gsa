@@ -130,8 +130,6 @@ describe('PoliciesPage tests', () => {
       foo: 'bar',
     });
 
-    const renewSession = testing.fn().mockResolvedValue({data: {}});
-
     const gmp = {
       policies: {
         get: getPolicies,
@@ -143,7 +141,7 @@ describe('PoliciesPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting, renewSession},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -194,9 +192,8 @@ describe('PoliciesPage ToolBarIcons test', () => {
   test('should render', () => {
     const handlePolicyCreateClick = testing.fn();
     const handlePolicyImportClick = testing.fn();
-    const renewSession = testing.fn().mockResolvedValue({data: {}});
 
-    const gmp = {settings: {manualUrl}, user: {renewSession}};
+    const gmp = {settings: {manualUrl}};
 
     const {render} = rendererWith({
       gmp,
@@ -226,9 +223,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
     const handlePolicyCreateClick = testing.fn();
     const handlePolicyImportClick = testing.fn();
 
-    const renewSession = testing.fn().mockResolvedValue({data: {}});
-
-    const gmp = {settings: {manualUrl}, user: {renewSession}};
+    const gmp = {settings: {manualUrl}};
 
     const {render} = rendererWith({
       gmp,

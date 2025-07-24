@@ -24,7 +24,7 @@ describe('useEntityDownload', () => {
     const downloadedData = {id: '123'};
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
-    const onInteraction = testing.fn();
+
     const gmp = {
       foo: {
         export: testing.fn().mockResolvedValue({data: downloadedData}),
@@ -36,7 +36,6 @@ describe('useEntityDownload', () => {
       useEntityDownload('foo', {
         onDownloaded,
         onDownloadError,
-        onInteraction,
       }),
     );
     await wait(); // wait for currentSettings to be resolved and put into the store
@@ -48,7 +47,6 @@ describe('useEntityDownload', () => {
       data: downloadedData,
     });
     expect(onDownloadError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 
   test('should call onDownloadError when downloading an entity fails', async () => {
@@ -59,7 +57,7 @@ describe('useEntityDownload', () => {
     const entity = new Model({id: '123'});
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
-    const onInteraction = testing.fn();
+
     const gmp = {
       foo: {export: testing.fn().mockRejectedValue(error)},
       user: {currentSettings},
@@ -69,7 +67,6 @@ describe('useEntityDownload', () => {
       useEntityDownload('foo', {
         onDownloaded,
         onDownloadError,
-        onInteraction,
       }),
     );
 
@@ -78,6 +75,5 @@ describe('useEntityDownload', () => {
     await result.current(entity);
     expect(onDownloadError).toHaveBeenCalledWith(error);
     expect(onDownloaded).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 });

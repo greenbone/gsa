@@ -54,7 +54,7 @@ const Page = ({
   onDownloaded,
   onError,
   onFilterChanged,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -67,7 +67,6 @@ const Page = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
       onTargetCreateError={onError}
       onTargetCreated={goToDetails('target', navigate)}
@@ -88,14 +87,10 @@ const Page = ({
               <HostsDashboard
                 filter={filter}
                 onFilterChanged={onFilterChanged}
-                onInteraction={onInteraction}
               />
             )}
             dashboardControls={() => (
-              <DashboardControls
-                dashboardId={HOSTS_DASHBOARD_ID}
-                onInteraction={onInteraction}
-              />
+              <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
             )}
             entitiesCounts={entitiesCounts}
             filter={filter}
@@ -111,7 +106,6 @@ const Page = ({
             onHostDeleteClick={delete_func}
             onHostDownloadClick={download}
             onHostEditClick={edit}
-            onInteraction={onInteraction}
             onTargetCreateFromHostClick={createtargetfromhost}
             onTargetCreateFromSelection={createtargetfromselection}
           />
@@ -128,7 +122,6 @@ Page.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const FALLBACK_HOSTS_LIST_FILTER = Filter.fromString(

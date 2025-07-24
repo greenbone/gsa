@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 
 interface EntitySaveCallbacks<TSaveResponse = unknown, TSaveError = unknown> {
   onSaveError?: (error: TSaveError) => void;
   onSaved?: (response: TSaveResponse) => void;
-  onInteraction?: () => void;
 }
 
 /**
@@ -23,24 +21,14 @@ const useEntitySave = <
   TSaveError = unknown,
 >(
   name: string,
-  {
-    onSaveError,
-    onSaved,
-    onInteraction,
-  }: EntitySaveCallbacks<TSaveResponse, TSaveError> = {},
+  {onSaveError, onSaved}: EntitySaveCallbacks<TSaveResponse, TSaveError> = {},
 ) => {
   const gmp = useGmp();
   const cmd = gmp[name] as {
     save: (data: TSaveData) => Promise<TSaveResponse>;
   };
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
 
   const handleEntitySave = async (data: TSaveData) => {
-    handleInteraction();
     return actionFunction(cmd.save(data as TSaveData), {
       onSuccess: onSaved,
       onError: onSaveError,

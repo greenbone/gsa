@@ -166,7 +166,7 @@ EntityTagsTable.propTypes = {
 };
 const TranslatedEntityTagsTable = withTranslation(EntityTagsTable);
 
-const EntityTags = ({entity, onChanged, onError, onInteraction}) => (
+const EntityTags = ({entity, onChanged, onError}) => (
   <TagComponent
     onAddError={onError}
     onAdded={onChanged}
@@ -178,7 +178,6 @@ const EntityTags = ({entity, onChanged, onError, onInteraction}) => (
     onDisabled={onChanged}
     onEnableError={onError}
     onEnabled={onChanged}
-    onInteraction={onInteraction}
     onRemoveError={onError}
     onRemoved={onChanged}
     onSaveError={onError}
@@ -200,7 +199,6 @@ EntityTags.propTypes = {
   entity: PropTypes.model,
   onChanged: PropTypes.func,
   onError: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default EntityTags;

@@ -29,7 +29,6 @@ describe('SeveritySettings', () => {
     gmp: {
       settings: {manualUrl: 'test/'},
       user: {
-        renewSession: testing.fn().mockResolvedValue({data: 123}),
         getSetting: testing.fn().mockResolvedValue({data: {value: '1'}}),
         saveSetting: testing.fn().mockResolvedValue({data: {value: '0'}}),
       },

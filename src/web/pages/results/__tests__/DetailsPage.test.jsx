@@ -105,7 +105,6 @@ export const result = Result.fromElement({
 let getResult;
 let getPermissions;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getResult = testing.fn().mockResolvedValue({
@@ -123,10 +122,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 describe('Result DetailsPage tests', () => {
@@ -139,7 +134,7 @@ describe('Result DetailsPage tests', () => {
         get: getPermissions,
       },
       settings: {manualUrl, reloadInterval, enableEPSS},
-      user: {currentSettings, renewSession},
+      user: {currentSettings},
     };
 
     const {render, store} = rendererWith({
@@ -273,7 +268,7 @@ describe('Result DetailsPage tests', () => {
         get: getPermissions,
       },
       settings: {manualUrl, reloadInterval, enableEPSS},
-      user: {currentSettings, renewSession},
+      user: {currentSettings},
     };
 
     const {render, store} = rendererWith({
@@ -322,7 +317,7 @@ describe('Result DetailsPage tests', () => {
         get: getUsers,
       },
       settings: {manualUrl, reloadInterval, enableEPSS},
-      user: {currentSettings, renewSession},
+      user: {currentSettings},
     };
 
     const {render, store} = rendererWith({

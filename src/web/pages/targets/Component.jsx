@@ -23,7 +23,7 @@ const getIdOrDefault = value => (isDefined(value) ? value.id : UNSET_VALUE);
 function TargetComponent(props) {
   const {
     children,
-    onInteraction,
+
     onCloned,
     onCloneError,
     onCreated,
@@ -47,12 +47,6 @@ function TargetComponent(props) {
   });
 
   const updateState = upd => setState(prev => ({...prev, ...upd}));
-
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
 
   const loadCredentials = async () => {
     const response = await gmp.credentials.getAll();
@@ -79,7 +73,6 @@ function TargetComponent(props) {
       credentialTypes: types,
       credentialsTitle: title,
     });
-    handleInteraction();
   };
 
   const closeCredentialsDialog = () =>
@@ -87,7 +80,6 @@ function TargetComponent(props) {
 
   const handleCloseCredentialsDialog = () => {
     closeCredentialsDialog();
-    handleInteraction();
   };
 
   const openPortListDialog = () => {
@@ -95,14 +87,12 @@ function TargetComponent(props) {
       portListDialogVisible: true,
       portListsTitle: _('New Port List'),
     });
-    handleInteraction();
   };
 
   const closePortListDialog = () => updateState({portListDialogVisible: false});
 
   const handleClosePortListDialog = () => {
     closePortListDialog();
-    handleInteraction();
   };
 
   const openTargetDialog = async (entity, initial = {}) => {
@@ -165,7 +155,6 @@ function TargetComponent(props) {
         ...initial,
       });
     }
-    handleInteraction();
   };
 
   const openCreateTargetDialog = (initial = {}) =>
@@ -175,11 +164,9 @@ function TargetComponent(props) {
 
   const handleCloseTargetDialog = () => {
     closeTargetDialog();
-    handleInteraction();
   };
 
   const handleCreateCredential = async data => {
-    handleInteraction();
     const response = await gmp.credential.create(data);
     const {data: credential} = response;
     const credentialId = credential.id;
@@ -189,7 +176,6 @@ function TargetComponent(props) {
   };
 
   const handleCreatePortList = async data => {
-    handleInteraction();
     const response = await gmp.portlist.create(data);
     const {data: portlist} = response;
     const portListId = portlist.id;
@@ -239,7 +225,6 @@ function TargetComponent(props) {
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -285,7 +270,6 @@ function TargetComponent(props) {
               onNewPortListClick={openPortListDialog}
               onPortListChange={handlePortListChange}
               onSave={async d => {
-                handleInteraction();
                 await save(d);
                 closeTargetDialog();
               }}
@@ -328,7 +312,6 @@ TargetComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

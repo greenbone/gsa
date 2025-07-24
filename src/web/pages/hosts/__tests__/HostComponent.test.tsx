@@ -142,7 +142,6 @@ describe('HostWithTargetComponent tests', () => {
   const currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-  const renewSession = testing.fn().mockResolvedValue({foo: 'bar'});
 
   const gmp = {
     host: {get: getHost},
@@ -153,7 +152,7 @@ describe('HostWithTargetComponent tests', () => {
     portlists: {
       getAll: testing.fn().mockResolvedValue({data: []}),
     },
-    user: {currentSettings, renewSession},
+    user: {currentSettings},
     settings: {
       manualUrl: 'test/',
       reloadInterval: -1,
@@ -162,7 +161,6 @@ describe('HostWithTargetComponent tests', () => {
   };
 
   test('should call onInteraction and display HostDialog when edit is triggered', () => {
-    const onInteraction = testing.fn();
     const onTargetCreated = testing.fn();
     const onTargetCreateError = testing.fn();
     const handleClose = testing.fn();
@@ -172,7 +170,6 @@ describe('HostWithTargetComponent tests', () => {
 
     rendererWith({gmp, capabilities: true}).render(
       <HostWithTargetComponent
-        onInteraction={onInteraction}
         onTargetCreateError={onTargetCreateError}
         onTargetCreated={onTargetCreated}
       >
@@ -185,7 +182,6 @@ describe('HostWithTargetComponent tests', () => {
 
     editFn({id: 'host-123', name: 'Test Host'});
 
-    expect(onInteraction).toHaveBeenCalled();
     expect(screen.getDialog()).toBeInTheDocument();
   });
 
@@ -196,7 +192,6 @@ describe('HostWithTargetComponent tests', () => {
 
     rendererWith({gmp, capabilities: true}).render(
       <HostWithTargetComponent
-        onInteraction={testing.fn()}
         onTargetCreateError={testing.fn()}
         onTargetCreated={testing.fn()}
       >
@@ -225,13 +220,10 @@ describe('HostWithTargetComponent tests', () => {
   });
 
   test('openCreateTargetSelectionDialog handles SELECTION_PAGE_CONTENTS correctly', () => {
-    const onInteraction = testing.fn();
-
     let triggerSelectionDialog: (data: SelectionDialogData) => void = () => {};
 
     rendererWith({gmp, capabilities: true}).render(
       <HostWithTargetComponent
-        onInteraction={onInteraction}
         onTargetCreateError={testing.fn()}
         onTargetCreated={testing.fn()}
       >
@@ -253,13 +245,10 @@ describe('HostWithTargetComponent tests', () => {
   });
 
   test('openCreateTargetSelectionDialog handles SELECTION_USER correctly', () => {
-    const onInteraction = testing.fn();
-
     let triggerSelectionDialog: (data: SelectionDialogData) => void = () => {};
 
     rendererWith({gmp, capabilities: true}).render(
       <HostWithTargetComponent
-        onInteraction={onInteraction}
         onTargetCreateError={testing.fn()}
         onTargetCreated={testing.fn()}
       >

@@ -154,7 +154,7 @@ const CpePage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -164,7 +164,6 @@ const CpePage = ({
       name="cpe"
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
     >
       {({download}) => (
         <EntityPage
@@ -175,7 +174,6 @@ const CpePage = ({
           title={_('CPE')}
           toolBarIcons={ToolBarIcons}
           onCpeDownloadClick={download}
-          onInteraction={onInteraction}
         >
           {() => {
             return (
@@ -201,7 +199,6 @@ const CpePage = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -221,7 +218,6 @@ CpePage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntityContainer('cpe', {
