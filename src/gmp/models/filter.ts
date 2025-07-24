@@ -493,6 +493,15 @@ class Filter extends EntityModel {
   }
 
   /**
+   * Provides a unique identifier string for the filter
+   *
+   * @returns A string representation of this filter to be used as an identifier
+   */
+  identifier() {
+    return this.toFilterString();
+  }
+
+  /**
    * Compare this filter with another filter
    *
    * @param {Filter|undefined|null} filter  Other filter to compare to.

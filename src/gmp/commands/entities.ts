@@ -182,7 +182,7 @@ abstract class EntitiesCommand<
     } as HttpCommandOptions);
   }
 
-  async delete(entities: Model[], extraParams?: HttpCommandParams) {
+  async delete(entities: TModel[], extraParams?: HttpCommandParams) {
     const response = await this.deleteByIds(
       map(entities, (entity: Model) => entity.id as string),
       extraParams,
@@ -206,7 +206,7 @@ abstract class EntitiesCommand<
     return response.setData(ids);
   }
 
-  async deleteByFilter(filter: Filter, extraParams: HttpCommandParams) {
+  async deleteByFilter(filter: Filter, extraParams?: HttpCommandParams) {
     // FIXME change gmp to allow deletion by filter
     const response = await this.get({filter});
     const deleted = response.data;
