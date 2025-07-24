@@ -28,7 +28,6 @@ describe('Report Applications Tab tests', () => {
     const {applications} = getMockReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -48,7 +47,6 @@ describe('Report Applications Tab tests', () => {
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
-        onInteraction={onInteraction}
         onSortChange={onSortChange}
       />,
     );

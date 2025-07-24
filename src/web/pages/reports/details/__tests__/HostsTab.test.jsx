@@ -28,7 +28,6 @@ describe('Report Hosts Tab tests', () => {
     const {hosts} = getMockReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -48,7 +47,6 @@ describe('Report Hosts Tab tests', () => {
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
-        onInteraction={onInteraction}
         onSortChange={sortField => onSortChange('hosts', sortField)}
       />,
     );
@@ -129,7 +127,6 @@ describe('Audit Report Hosts Tab tests', () => {
     const {hosts} = getMockAuditReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -150,7 +147,6 @@ describe('Audit Report Hosts Tab tests', () => {
         isUpdating={false}
         sortField={'compliant'}
         sortReverse={false}
-        onInteraction={onInteraction}
         onSortChange={sortField => onSortChange('hosts', sortField)}
       />,
     );

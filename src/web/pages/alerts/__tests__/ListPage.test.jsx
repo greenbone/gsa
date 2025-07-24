@@ -58,7 +58,6 @@ let getAlerts;
 let getFilters;
 let getSetting;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getAlerts = testing.fn().mockResolvedValue({
@@ -86,10 +85,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 describe('Alert ListPage tests', () => {
@@ -193,7 +188,7 @@ describe('Alert ListPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -267,7 +262,7 @@ describe('Alert ListPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -349,7 +344,7 @@ describe('Alert ListPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({

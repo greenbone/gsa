@@ -18,15 +18,10 @@ const filter = '';
 const selectedEntities = [];
 const onClose = testing.fn();
 const onTrashClick = testing.fn();
-const gmp = {
-  user: {
-    renewSession: testing.fn().mockResolvedValue({data: 123}),
-  },
-};
 
 describe('Footer', () => {
   test('should render the Footer component', async () => {
-    const {render} = rendererWithTableFooter({gmp});
+    const {render} = rendererWithTableFooter();
 
     render(
       <Footer
@@ -62,7 +57,7 @@ describe('Footer', () => {
   });
 
   test('should show ConfirmationDialog when DeleteIcon is clicked and notification', async () => {
-    const {render} = rendererWithTableFooter({gmp});
+    const {render} = rendererWithTableFooter();
 
     render(
       <Footer
@@ -108,7 +103,7 @@ describe('Footer', () => {
   });
 
   test('should show ConfirmationDialog when TrashIcon is clicked and notification', async () => {
-    const {render} = rendererWithTableFooter({gmp});
+    const {render} = rendererWithTableFooter();
 
     render(
       <Footer

@@ -34,7 +34,7 @@ const ToolBarIcons = () => {
   );
 };
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
 
   return (
@@ -46,14 +46,10 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
           <CertBundDashboard
             filter={filter}
             onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
           />
         )}
         dashboardControls={() => (
-          <DashboardControls
-            dashboardId={CERTBUND_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
+          <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={CertBundFilterDialog}
@@ -63,7 +59,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         title={_('CERT-Bund Advisories')}
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
       />
     </React.Fragment>
   );
@@ -72,7 +67,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
 Page.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const fallbackFilter = Filter.fromString('sort-reverse=created');

@@ -9,7 +9,6 @@ import {useDispatch} from 'react-redux';
 import {transformSettingName} from 'gmp/commands/users';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import {
   loadUserSettingDefault,
@@ -42,11 +41,6 @@ const useSettingSave = () => {
     },
     [dispatch, gmp],
   );
-
-  const onInteraction = useCallback(() => {
-    // @ts-expect-error
-    dispatch(renewSessionTimeout(gmp)());
-  }, [dispatch, gmp]);
 
   /**
    * Save a setting to the user's profile
@@ -90,7 +84,6 @@ const useSettingSave = () => {
         }
 
         setEditMode(false);
-        onInteraction();
 
         setErrorMessages(prev => ({
           ...prev,
@@ -116,7 +109,7 @@ const useSettingSave = () => {
         console.error(error);
       }
     },
-    [_, dispatch, gmp.user, loadSingleSetting, onInteraction],
+    [_, dispatch, gmp.user, loadSingleSetting],
   );
 
   /**
@@ -172,7 +165,6 @@ const useSettingSave = () => {
     saveSetting,
     loadSettings,
     loadSingleSetting,
-    onInteraction,
     clearErrorMessage,
     clearAllErrorMessages,
     setErrorMessage,

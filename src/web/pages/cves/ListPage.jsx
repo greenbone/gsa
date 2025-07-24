@@ -27,7 +27,7 @@ export const ToolBarIcons = () => {
   );
 };
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
 
   return (
@@ -37,17 +37,10 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         {...props}
         createFilterType="info"
         dashboard={() => (
-          <CvesDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
+          <CvesDashboard filter={filter} onFilterChanged={onFilterChanged} />
         )}
         dashboardControls={() => (
-          <DashboardControls
-            dashboardId={CVES_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
+          <DashboardControls dashboardId={CVES_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={CveFilterDialog}
@@ -57,7 +50,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         title={_('CVEs')}
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
       />
     </React.Fragment>
   );
@@ -66,7 +58,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
 Page.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const fallbackFilter = Filter.fromString('sort-reverse=name');

@@ -71,10 +71,6 @@ const getSchedules = testing.fn().mockResolvedValue({
   },
 });
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 describe('SchedulePage tests', () => {
   test('should render full SchedulePage', async () => {
     const gmp = {
@@ -188,7 +184,7 @@ describe('SchedulePage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -256,7 +252,7 @@ describe('SchedulePage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -334,7 +330,7 @@ describe('SchedulePage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({

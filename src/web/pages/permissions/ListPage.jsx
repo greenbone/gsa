@@ -45,7 +45,7 @@ ToolBarIcons.propTypes = {
   onPermissionCreateClick: PropTypes.func,
 };
 
-const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => {
+const Page = ({onChanged, onDownloaded, onError, ...props}) => {
   const [_] = useTranslation();
   return (
     <PermissionComponent
@@ -55,7 +55,6 @@ const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => {
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onError}
       onSaved={onChanged}
     >
@@ -71,7 +70,6 @@ const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => {
             title={_('Permissions')}
             toolBarIcons={ToolBarIcons}
             onError={onError}
-            onInteraction={onInteraction}
             onPermissionCloneClick={clone}
             onPermissionCreateClick={create}
             onPermissionDeleteClick={delete_func}
@@ -88,7 +86,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('permission', {

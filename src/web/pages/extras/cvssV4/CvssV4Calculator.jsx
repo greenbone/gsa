@@ -19,7 +19,6 @@ import {CvssIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import {createCvssConfigData} from 'web/pages/extras/cvssV4/cvssConfig';
 import MetricsGroups from 'web/pages/extras/cvssV4/MetricsGroups';
 const StyledTextField = styled(TextField)`
@@ -47,8 +46,6 @@ const CvssV4Calculator = () => {
     `${cvssV4Prefix}${removeUnusedMetrics(selectedOptions)}`,
   );
 
-  const [, renewSession] = useUserSessionTimeout();
-
   const cvssVector = `${cvssV4Prefix}${removeUnusedMetrics(selectedOptions)}`;
 
   useEffect(() => {
@@ -66,8 +63,6 @@ const CvssV4Calculator = () => {
 
     const newOptions = processVector(value);
     setSelectedOptions({...initialState, ...newOptions});
-
-    renewSession();
   };
 
   const handleOptionChange = (value, name) => {
@@ -75,8 +70,6 @@ const CvssV4Calculator = () => {
 
     setInputCVSSVector(`${cvssV4Prefix}${removeUnusedMetrics(newOptions)}`);
     setSelectedOptions(newOptions);
-
-    renewSession();
   };
 
   const cvssScore = calculateScoreSafely(cvssVector);

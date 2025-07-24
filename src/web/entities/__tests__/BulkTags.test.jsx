@@ -24,9 +24,6 @@ describe('BulkTags', () => {
       .fn()
       .mockResolvedValue({data: [Tag.fromElement({id: 1})]});
     const gmp = {
-      user: {
-        renewSession: testing.fn().mockResolvedValue({data: 123}),
-      },
       tags: {getAll: getAllTags},
     };
     const timeout = date('2019-10-10');
@@ -59,9 +56,6 @@ describe('BulkTags', () => {
       .fn()
       .mockResolvedValue({data: [Tag.fromElement({id: 1})]});
     const gmp = {
-      user: {
-        renewSession: testing.fn().mockResolvedValue({data: 123}),
-      },
       tags: {getAll: getAllTags},
     };
     const timeout = date('2019-10-10');
@@ -106,9 +100,6 @@ describe('BulkTags', () => {
         create: createTag,
         get: getTag,
         save: saveTag,
-      },
-      user: {
-        renewSession: testing.fn().mockResolvedValue({data: 123}),
       },
     };
     const timeout = date('2019-10-10');

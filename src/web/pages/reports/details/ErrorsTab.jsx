@@ -24,7 +24,7 @@ const ErrorsTab = ({
   isUpdating,
   sortField,
   sortReverse,
-  onInteraction,
+
   onSortChange,
 }) => (
   <ReportEntitiesContainer
@@ -34,7 +34,6 @@ const ErrorsTab = ({
     sortField={sortField}
     sortFunctions={errorsSortFunctions}
     sortReverse={sortReverse}
-    onInteraction={onInteraction}
   >
     {({
       entities,
@@ -71,7 +70,6 @@ ErrorsTab.propTypes = {
   isUpdating: PropTypes.bool,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
 

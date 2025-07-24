@@ -45,14 +45,13 @@ ToolBarIcons.propTypes = {
   onReportFormatImportClick: PropTypes.func.isRequired,
 };
 
-const ReportFormatsPage = ({onChanged, onError, onInteraction, ...props}) => {
+const ReportFormatsPage = ({onChanged, onError, ...props}) => {
   const [_] = useTranslation();
   return (
     <ReportFormatComponent
       onDeleteError={onError}
       onDeleted={onChanged}
       onImported={onChanged}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({delete: delete_func, edit, import: import_func}) => (
@@ -68,7 +67,6 @@ const ReportFormatsPage = ({onChanged, onError, onInteraction, ...props}) => {
             toolBarIcons={ToolBarIcons}
             onChanged={onChanged}
             onError={onError}
-            onInteraction={onInteraction}
             onReportFormatDeleteClick={delete_func}
             onReportFormatEditClick={edit}
             onReportFormatImportClick={import_func}
@@ -83,7 +81,6 @@ ReportFormatsPage.propTypes = {
   showSuccess: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('reportformat', {

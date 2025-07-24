@@ -43,16 +43,11 @@ const reloadInterval = -1;
 const manualUrl = 'test/';
 
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 describe('CPE DetailsPage tests', () => {
@@ -162,7 +157,6 @@ describe('CPE DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -204,7 +198,6 @@ describe('CPE DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

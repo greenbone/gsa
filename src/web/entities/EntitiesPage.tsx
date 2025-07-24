@@ -98,7 +98,6 @@ export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
   onFilterCreated: (newFilter: Filter) => void;
   onFilterRemoved: () => void;
   onFilterReset: () => void;
-  onInteraction: () => void;
 }
 
 interface EntitiesPagePropsWithHOCs<TModel extends Model = Model, TProps = {}>
@@ -150,19 +149,10 @@ class EntitiesPage<
 
   handleFilterEditClick() {
     this.setState({showFilterDialog: true});
-    this.handleInteraction();
   }
 
   handleFilterDialogCloseClick() {
     this.setState({showFilterDialog: false});
-    this.handleInteraction();
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   }
 
   renderSection() {

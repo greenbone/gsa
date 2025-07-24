@@ -167,7 +167,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -180,7 +180,6 @@ const Page = ({
       onDeleted={goToList('tickets', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, close, delete: deleteFunc, download, edit, solve}) => (
@@ -192,7 +191,6 @@ const Page = ({
           toolBarIcons={ToolBarIcons}
           onChanged={onChanged}
           onError={onError}
-          onInteraction={onInteraction}
           onTicketCloneClick={clone}
           onTicketCloseClick={close}
           onTicketDeleteClick={deleteFunc}
@@ -223,7 +221,6 @@ const Page = ({
                         entity={entity}
                         onChanged={onChanged}
                         onError={onError}
-                        onInteraction={onInteraction}
                       />
                     </TabPanel>
                   </TabPanels>
@@ -242,7 +239,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntityContainer('ticket', {

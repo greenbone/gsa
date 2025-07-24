@@ -16,13 +16,12 @@ describe('useEntityDelete', () => {
     };
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-    const onInteraction = testing.fn();
+
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
       useEntityDelete('foo', {
         onDeleted,
         onDeleteError,
-        onInteraction,
       }),
     );
     expect(result.current).toBeDefined();
@@ -30,7 +29,6 @@ describe('useEntityDelete', () => {
     expect(deleteEntity).toHaveBeenCalledWith(entity);
     expect(onDeleted).toHaveBeenCalledOnce();
     expect(onDeleteError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 
   test('should call onDeleteError when deleting an entity fails', async () => {
@@ -41,13 +39,12 @@ describe('useEntityDelete', () => {
     };
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-    const onInteraction = testing.fn();
+
     const {renderHook} = rendererWith({gmp, store: true});
     const {result} = renderHook(() =>
       useEntityDelete('foo', {
         onDeleted,
         onDeleteError,
-        onInteraction,
       }),
     );
     expect(result.current).toBeDefined();
@@ -55,6 +52,5 @@ describe('useEntityDelete', () => {
     expect(deleteEntity).toHaveBeenCalledWith(entity);
     expect(onDeleted).not.toHaveBeenCalled();
     expect(onDeleteError).toHaveBeenCalledOnce();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 });

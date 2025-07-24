@@ -25,7 +25,6 @@ describe('Report Ports Tab tests', () => {
     const {ports} = getMockReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -44,7 +43,6 @@ describe('Report Ports Tab tests', () => {
         ports={ports.entities}
         sortField={'severity'}
         sortReverse={true}
-        onInteraction={onInteraction}
         onSortChange={sortField => onSortChange('ports', sortField)}
       />,
     );

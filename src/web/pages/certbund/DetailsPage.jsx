@@ -169,7 +169,7 @@ const CertBundAdvPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -179,7 +179,6 @@ const CertBundAdvPage = ({
       name="certbund"
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
     >
       {({download}) => (
         <EntityPage
@@ -189,7 +188,6 @@ const CertBundAdvPage = ({
           title={_('CERT-Bund Advisory')}
           toolBarIcons={ToolBarIcons}
           onCertBundAdvDownloadClick={download}
-          onInteraction={onInteraction}
         >
           {() => {
             return (
@@ -219,7 +217,6 @@ const CertBundAdvPage = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -239,7 +236,6 @@ CertBundAdvPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntityContainer('certbund', {

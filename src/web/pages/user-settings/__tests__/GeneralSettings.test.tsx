@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith, within, fireEvent} from 'web/testing';
 import GeneralSettings from 'web/pages/user-settings/GeneralSettings';
 
@@ -160,9 +160,6 @@ describe('General tab', () => {
   const setTimezone = tz => ({type: 'SET_TIMEZONE', timezone: tz});
   const createGmpMock = () => ({
     settings: {manualUrl: 'test/'},
-    user: {
-      renewSession: testing.fn().mockResolvedValue({data: 123}),
-    },
   });
   const UserSettingsPage = GeneralSettings;
 

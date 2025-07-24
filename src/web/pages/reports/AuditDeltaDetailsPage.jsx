@@ -43,7 +43,6 @@ import {
 } from 'web/store/entities/reportformats';
 import {
   loadReportComposerDefaults,
-  renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
@@ -204,7 +203,6 @@ const DeltaAuditReportDetails = props => {
   };
 
   const handleFilterChange = filter => {
-    handleInteraction();
     load(filter);
   };
 
@@ -223,8 +221,6 @@ const DeltaAuditReportDetails = props => {
   const handleAddToAssets = () => {
     const {showSuccessMessage, reportFilter: filter} = props;
 
-    handleInteraction();
-
     gmp.auditreport.addAssets(entity, {filter}).then(() => {
       showSuccessMessage(
         _(
@@ -238,8 +234,6 @@ const DeltaAuditReportDetails = props => {
   const handleRemoveFromAssets = () => {
     const {showSuccessMessage, reportFilter: filter} = props;
 
-    handleInteraction();
-
     gmp.auditreport.removeAssets(entity, {filter}).then(() => {
       showSuccessMessage(_('Report content removed from Assets.'));
       reload();
@@ -247,13 +241,10 @@ const DeltaAuditReportDetails = props => {
   };
 
   const handleFilterEditClick = () => {
-    handleInteraction();
-
     setShowFilterDialog(true);
   };
 
   const handleFilterDialogClose = () => {
-    handleInteraction();
     setShowFilterDialog(false);
   };
 
@@ -293,8 +284,6 @@ const DeltaAuditReportDetails = props => {
       ? report_format.extension
       : 'unknown'; // unknown should never happen but we should be save here
 
-    handleInteraction();
-
     return gmp.auditreport
       .download(entity, {
         reportFormatId,
@@ -321,15 +310,12 @@ const DeltaAuditReportDetails = props => {
   };
 
   const handleFilterCreated = filter => {
-    handleInteraction();
     load(filter);
     dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER));
   };
 
   const handleFilterDecreaseMinQoD = () => {
     const {reportFilter} = props;
-
-    handleInteraction();
 
     if (reportFilter.has('min_qod')) {
       const lfilter = reportFilter.copy();
@@ -339,8 +325,6 @@ const DeltaAuditReportDetails = props => {
   };
 
   const handleSortChange = (name, sortField) => {
-    handleInteraction();
-
     const prev = sorting[name];
 
     const sortReverse =
@@ -356,8 +340,6 @@ const DeltaAuditReportDetails = props => {
     setSorting(newSorting);
   };
 
-  const handleInteraction = () => dispatch(renewSessionTimeout(gmp)());
-
   const loadTarget = () => {
     const target = getTarget(entity);
     return gmp.target.get({id: target.id});
@@ -369,7 +351,7 @@ const DeltaAuditReportDetails = props => {
 
   return (
     <React.Fragment>
-      <TargetComponent onError={handleError} onInteraction={handleInteraction}>
+      <TargetComponent onError={handleError}>
         {({edit}) => (
           <Page
             audit={true}
@@ -393,7 +375,6 @@ const DeltaAuditReportDetails = props => {
             onFilterEditClick={handleFilterEditClick}
             onFilterRemoveClick={handleFilterRemoveClick}
             onFilterResetClick={handleFilterResetClick}
-            onInteraction={handleInteraction}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
             onSortChange={handleSortChange}

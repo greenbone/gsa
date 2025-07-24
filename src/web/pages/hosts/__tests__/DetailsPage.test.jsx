@@ -146,7 +146,6 @@ const hostWithoutPermission = Host.fromElement({
 let getHost;
 let getPermissions;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getHost = testing.fn().mockResolvedValue({
@@ -164,10 +163,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 describe('Host DetailsPage tests', () => {
@@ -184,7 +179,7 @@ describe('Host DetailsPage tests', () => {
         reloadInterval,
         severityRating: SEVERITY_RATING_CVSS_3,
       },
-      user: {currentSettings, renewSession},
+      user: {currentSettings},
     };
 
     const {render, store} = rendererWith({
@@ -314,7 +309,6 @@ describe('Host DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -351,7 +345,6 @@ describe('Host DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -401,7 +394,6 @@ describe('Host DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

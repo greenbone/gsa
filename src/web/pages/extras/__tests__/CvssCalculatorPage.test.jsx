@@ -27,13 +27,6 @@ const gmp = {
   settings: {
     manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
   },
-  user: {
-    renewSession: testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: 'foo',
-      }),
-    ),
-  },
 };
 
 const location = {

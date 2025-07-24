@@ -4,7 +4,6 @@
  */
 
 import Rejection from 'gmp/http/rejection';
-import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -22,7 +21,6 @@ interface EntityCloneCallbacks<
 > {
   onCloneError?: (error: TCloneError) => void;
   onCloned?: (response: TCloneResponse) => void;
-  onInteraction?: () => void;
 }
 
 /**
@@ -32,7 +30,6 @@ interface EntityCloneCallbacks<
  * @param {Object} [callbacks] - Optional callbacks for handling clone events.
  * @param {Function} [callbacks.onCloneError] - Callback function to be called when cloning fails.
  * @param {Function} [callbacks.onCloned] - Callback function to be called when cloning is successful.
- * @param {Function} [callbacks.onInteraction] - Callback function to be called on interaction.
  * @returns {Function} - A function that takes an entity and handles its cloning.
  */
 const useEntityClone = <
@@ -44,7 +41,6 @@ const useEntityClone = <
   {
     onCloneError,
     onCloned,
-    onInteraction,
   }: EntityCloneCallbacks<TCloneResponse, TCloneError> = {},
 ): ((entity: TEntity) => Promise<TCloneResponse | void>) => {
   const gmp = useGmp();
@@ -53,15 +49,7 @@ const useEntityClone = <
   };
   const [_] = useTranslation();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleEntityClone = async (entity: TEntity) => {
-    handleInteraction();
-
     return actionFunction(cmd.clone(entity), {
       onSuccess: onCloned,
       onError: onCloneError,

@@ -4,7 +4,6 @@
  */
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {CertificateInfo} from 'gmp/commands/users';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
@@ -23,7 +22,6 @@ import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import LdapDialog, {SaveLdapArguments} from 'web/pages/ldap/LdapDialog';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {renderYesNo} from 'web/utils/Render';
 
 interface ToolBarIconsProps {
@@ -70,10 +68,6 @@ const LdapAuthentication = () => {
   const [ldapEnabled, setLdapEnabled] = useState(false);
   const [ldapHost, setLdapHost] = useState('');
   const [ldapsOnly, setLdapsOnly] = useState(false);
-  const dispatch = useDispatch();
-
-  // @ts-expect-error
-  const handleInteraction = () => dispatch(renewSessionTimeout(gmp)());
 
   const loadLdapAuthSettings = useCallback(async () => {
     setLoading(true);
@@ -103,8 +97,6 @@ const LdapAuthentication = () => {
     ldapHost,
     ldapsOnly,
   }: SaveLdapArguments) => {
-    handleInteraction();
-
     await gmp.auth.saveLdap({
       authdn,
       certificate,

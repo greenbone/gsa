@@ -123,7 +123,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -136,7 +136,6 @@ const Page = ({
       onDeleted={goToList('targets', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
@@ -146,7 +145,6 @@ const Page = ({
           sectionIcon={<TargetIcon size="large" />}
           title={_('Target')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onTargetCloneClick={clone}
           onTargetCreateClick={create}
           onTargetDeleteClick={delete_func}
@@ -181,7 +179,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -191,7 +188,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -212,7 +208,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const TargetPermissions = withComponentDefaults({

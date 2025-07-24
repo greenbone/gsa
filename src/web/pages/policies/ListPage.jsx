@@ -49,7 +49,7 @@ const PoliciesPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -63,7 +63,6 @@ const PoliciesPage = ({
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onImported={onChanged}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -86,7 +85,6 @@ const PoliciesPage = ({
             toolBarIcons={ToolBarIcons}
             onCreateAuditClick={createAudit}
             onError={onError}
-            onInteraction={onInteraction}
             onPolicyCloneClick={clone}
             onPolicyCreateClick={create}
             onPolicyDeleteClick={deleteFunc}
@@ -104,7 +102,6 @@ PoliciesPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('policy', {

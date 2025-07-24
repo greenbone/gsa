@@ -91,10 +91,6 @@ const getNotes = testing.fn().mockResolvedValue({
   },
 });
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 describe('NotesPage tests', () => {
   test('should render full NotesPage', async () => {
     const gmp = {
@@ -228,7 +224,7 @@ describe('NotesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -302,7 +298,7 @@ describe('NotesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -386,7 +382,7 @@ describe('NotesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({

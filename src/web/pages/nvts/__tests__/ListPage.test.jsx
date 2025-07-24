@@ -107,10 +107,6 @@ const getNvts = testing.fn().mockResolvedValue({
   },
 });
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 describe('NvtsPage tests', () => {
   test('should render full NvtsPage', async () => {
     const gmp = {
@@ -248,7 +244,7 @@ describe('NvtsPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval, enableEPSS: true},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -315,7 +311,7 @@ describe('NvtsPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -394,7 +390,7 @@ describe('NvtsPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({

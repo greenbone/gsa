@@ -33,7 +33,7 @@ const SeveritySettings = ({disableEditIcon = false}: SeveritySettingsProps) => {
   const {
     getErrorMessage,
     saveSetting,
-    onInteraction,
+
     clearErrorMessage,
     setErrorMessage,
   } = useSettingSave();
@@ -81,7 +81,6 @@ const SeveritySettings = ({disableEditIcon = false}: SeveritySettingsProps) => {
 
   const toggleDynamicSeverityEditMode = (): void => {
     setDynamicSeverityEditMode(!dynamicSeverityEditMode);
-    onInteraction();
   };
 
   const saveDynamicSeverity = async (): Promise<void> => {
@@ -105,17 +104,14 @@ const SeveritySettings = ({disableEditIcon = false}: SeveritySettingsProps) => {
     setDynamicSeverityState(value);
     setDynamicSeverityEditMode(false);
     clearErrorMessage('dynamicSeverity');
-    onInteraction();
   };
 
   const handleDynamicSeverityChange = (value: YesNo): void => {
     setDynamicSeverityState(value);
-    onInteraction();
   };
 
   const toggleDefaultSeverityEditMode = (): void => {
     setDefaultSeverityEditMode(!defaultSeverityEditMode);
-    onInteraction();
   };
 
   const saveDefaultSeverity = async (): Promise<void> => {
@@ -138,12 +134,10 @@ const SeveritySettings = ({disableEditIcon = false}: SeveritySettingsProps) => {
     setDefaultSeverityState(defaultSeverity.value ?? '');
     setDefaultSeverityEditMode(false);
     clearErrorMessage('defaultSeverity');
-    onInteraction();
   };
 
   const handleDefaultSeverityChange = (value: string | number): void => {
     setDefaultSeverityState(value);
-    onInteraction();
   };
 
   return (

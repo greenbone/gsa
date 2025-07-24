@@ -48,7 +48,7 @@ const ScanConfigComponent = ({
   onDownloadError,
   onSaved,
   onSaveError,
-  onInteraction,
+
   onImported,
   onImportError,
 }) => {
@@ -87,12 +87,6 @@ const ScanConfigComponent = ({
   const [editConfigFamilyDialogTitle, setEditConfigFamilyDialogTitle] =
     useState();
   const [editNvtDetailsDialogTitle, setEditNvtDetailsDialogTitle] = useState();
-
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
 
   const loadScanners = () => {
     setIsLoadingScanners(true);
@@ -210,8 +204,6 @@ const ScanConfigComponent = ({
 
     loadEditScanConfigSettings(configData.id);
     loadScanners();
-
-    handleInteraction();
   };
 
   const closeEditConfigDialog = () => {
@@ -222,11 +214,9 @@ const ScanConfigComponent = ({
 
   const handleCloseEditConfigDialog = () => {
     closeEditConfigDialog();
-    handleInteraction();
   };
 
   const handleSaveScanConfig = data => {
-    handleInteraction();
     const {name, comment, id} = data;
     let saveData = data;
     if (config.isInUse()) {
@@ -239,7 +229,6 @@ const ScanConfigComponent = ({
   const openCreateConfigDialog = () => {
     loadScanners();
     setCreateConfigDialogVisible(true);
-    handleInteraction();
   };
 
   const closeCreateConfigDialog = () => {
@@ -248,12 +237,10 @@ const ScanConfigComponent = ({
 
   const handleCloseCreateConfigDialog = () => {
     closeCreateConfigDialog();
-    handleInteraction();
   };
 
   const openImportDialog = () => {
     setImportDialogVisible(true);
-    handleInteraction();
   };
 
   const closeImportDialog = () => {
@@ -262,7 +249,6 @@ const ScanConfigComponent = ({
 
   const handleCloseImportDialog = () => {
     closeImportDialog();
-    handleInteraction();
   };
 
   const openEditConfigFamilyDialog = familyNameValue => {
@@ -275,7 +261,6 @@ const ScanConfigComponent = ({
     );
     setFamilyName(familyNameValue);
 
-    handleInteraction();
     return loadFamily(familyNameValue);
   };
 
@@ -287,7 +272,6 @@ const ScanConfigComponent = ({
 
   const handleCloseEditConfigFamilyDialog = () => {
     closeEditConfigFamilyDialog();
-    handleInteraction();
   };
 
   const openEditNvtDetailsDialog = nvtOid => {
@@ -296,7 +280,6 @@ const ScanConfigComponent = ({
       _('Edit Scan Config NVT {{nvtOid}}', {nvtOid}),
     );
 
-    handleInteraction();
     loadNvt(nvtOid);
   };
 
@@ -307,12 +290,9 @@ const ScanConfigComponent = ({
 
   const handleCloseEditNvtDetailsDialog = () => {
     closeEditNvtDetailsDialog();
-    handleInteraction();
   };
 
   const handleImportConfig = data => {
-    handleInteraction();
-
     return gmp.scanconfig
       .import(data)
       .then(onImported, onImportError)
@@ -324,8 +304,6 @@ const ScanConfigComponent = ({
     configId,
     selected,
   }) => {
-    handleInteraction();
-
     return gmp.scanconfig
       .saveScanConfigFamily({
         id: configId,
@@ -345,8 +323,6 @@ const ScanConfigComponent = ({
     nvtOid,
     preferenceValues,
   }) => {
-    handleInteraction();
-
     return gmp.scanconfig
       .saveScanConfigNvt({
         id: configId,
@@ -377,7 +353,6 @@ const ScanConfigComponent = ({
 
     await loadEditScanConfigSettings(configData.id);
 
-    handleInteraction();
     openEditConfigFamilyDialog('Settings');
   };
 
@@ -393,7 +368,6 @@ const ScanConfigComponent = ({
         onDeleted={onDeleted}
         onDownloadError={onDownloadError}
         onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
         onSaveError={onSaveError}
         onSaved={onSaved}
       >
@@ -414,7 +388,6 @@ const ScanConfigComponent = ({
                   scanners={scanners}
                   onClose={handleCloseCreateConfigDialog}
                   onSave={d => {
-                    handleInteraction();
                     return save(d).then(() => closeCreateConfigDialog());
                   }}
                 />
@@ -509,7 +482,6 @@ ScanConfigComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onImportError: PropTypes.func,
   onImported: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

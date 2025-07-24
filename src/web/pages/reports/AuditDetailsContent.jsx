@@ -73,7 +73,7 @@ const PageContent = ({
   onFilterEditClick,
   onFilterRemoveClick,
   onFilterResetClick,
-  onInteraction,
+
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onSortChange,
@@ -164,7 +164,6 @@ const PageContent = ({
           task={task}
           threshold={threshold}
           onAddToAssetsClick={onAddToAssetsClick}
-          onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
           onReportDownloadClick={onReportDownloadClick}
         />
@@ -251,7 +250,6 @@ const PageContent = ({
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                       onFilterEditClick={onFilterEditClick}
                       onFilterRemoveClick={onFilterRemoveClick}
-                      onInteraction={onInteraction}
                       onSortChange={sortField =>
                         onSortChange('results', sortField)
                       }
@@ -279,7 +277,6 @@ const PageContent = ({
                         isUpdating={isUpdating}
                         sortField={sorting.hosts.sortField}
                         sortReverse={sorting.hosts.sortReverse}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('hosts', sortField)
                         }
@@ -307,7 +304,6 @@ const PageContent = ({
                         operatingsystems={operatingSystems.entities}
                         sortField={sorting.os.sortField}
                         sortReverse={sorting.os.sortReverse}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('os', sortField)
                         }
@@ -334,7 +330,6 @@ const PageContent = ({
                         sortField={sorting.tlscerts.sortField}
                         sortReverse={sorting.tlscerts.sortReverse}
                         tlsCertificates={tlsCertificates.entities}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('tlscerts', sortField)
                         }
@@ -352,7 +347,6 @@ const PageContent = ({
                       isUpdating={isUpdating}
                       sortField={sorting.errors.sortField}
                       sortReverse={sorting.errors.sortReverse}
-                      onInteraction={onInteraction}
                       onSortChange={sortField =>
                         onSortChange('errors', sortField)
                       }
@@ -363,7 +357,6 @@ const PageContent = ({
                       entity={report}
                       onChanged={onTagSuccess}
                       onError={onError}
-                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -411,7 +404,6 @@ PageContent.propTypes = {
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterResetClick: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,

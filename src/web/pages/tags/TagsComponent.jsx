@@ -64,7 +64,7 @@ const TagComponent = ({
   onDownloadError,
   onSaved,
   onSaveError,
-  onInteraction,
+
   onRemoved,
   onRemoveError,
   onEnabled,
@@ -101,18 +101,14 @@ const TagComponent = ({
   };
 
   const handleEnableTag = tag => {
-    handleInteraction();
     gmp.tag.enable(tag).then(onEnabled, onEnableError);
   };
 
   const handleDisableTag = tag => {
-    handleInteraction();
     gmp.tag.disable(tag).then(onDisabled, onDisableError);
   };
 
   const handleAddTag = ({name, value, entity}) => {
-    handleInteraction();
-
     return gmp.tag
       .create({
         name,
@@ -168,8 +164,6 @@ const TagComponent = ({
       setValue(undefined);
       setInitialOptions(options);
     }
-
-    handleInteraction();
   };
 
   const closeTagDialog = () => {
@@ -178,7 +172,6 @@ const TagComponent = ({
 
   const handleCloseTagDialog = () => {
     closeTagDialog();
-    handleInteraction();
   };
 
   const openCreateTagDialog = (options = {}) => {
@@ -186,8 +179,6 @@ const TagComponent = ({
   };
 
   const handleRemove = (tagId, entity) => {
-    handleInteraction();
-
     return gmp.tag
       .get({id: tagId})
       .then(response => response.data)
@@ -202,12 +193,6 @@ const TagComponent = ({
       .then(onRemoved, onRemoveError);
   };
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   return (
     <EntityComponent
       name="tag"
@@ -219,7 +204,6 @@ const TagComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -248,7 +232,6 @@ const TagComponent = ({
               value={value}
               onClose={handleCloseTagDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeTagDialog());
               }}
               {...initialOptions}
@@ -276,7 +259,6 @@ TagComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onEnableError: PropTypes.func,
   onEnabled: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onRemoveError: PropTypes.func,
   onRemoved: PropTypes.func,
   onSaveError: PropTypes.func,

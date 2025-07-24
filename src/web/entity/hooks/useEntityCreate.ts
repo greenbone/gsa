@@ -4,7 +4,6 @@
  */
 
 import Rejection from 'gmp/http/rejection';
-import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 
@@ -14,7 +13,6 @@ interface EntityCreateCallbacks<
 > {
   onCreated?: (entity: TCreateResponse) => void;
   onCreateError?: (error: TCreateError) => void;
-  onInteraction?: () => void;
 }
 
 /**
@@ -30,7 +28,6 @@ const useEntityCreate = <
   {
     onCreated,
     onCreateError,
-    onInteraction,
   }: EntityCreateCallbacks<TCreateResponse, TCreateError> = {},
 ) => {
   const gmp = useGmp();
@@ -38,15 +35,7 @@ const useEntityCreate = <
     create: (data: TCreateData) => Promise<TCreateResponse>;
   };
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleEntitySave = async (data: TCreateData) => {
-    handleInteraction();
-
     return actionFunction(cmd.create(data as TCreateData), {
       onSuccess: onCreated,
       onError: onCreateError,

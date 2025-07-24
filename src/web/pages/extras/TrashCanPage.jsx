@@ -29,7 +29,6 @@ import TableRow from 'web/components/table/TableRow';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import AlertsTable from 'web/pages/alerts/Table';
 import CredentialsTable from 'web/pages/credentials/Table';
 import TrashActions from 'web/pages/extras/TrashActions';
@@ -302,14 +301,11 @@ const TrashCan = () => {
   const [isEmptyingTrash, setIsEmptyingTrash] = useState(false);
   let [trash, setTrash] = useState();
   const [_] = useTranslation();
-  const [, renewSession] = useUserSessionTimeout();
   const {
     dialogState: notificationDialogState,
     closeDialog: closeNotificationDialog,
     showError,
   } = useDialogNotification();
-
-  const handleInteraction = renewSession;
 
   const loadTrash = useCallback(() => {
     setIsLoading(true);
@@ -327,8 +323,6 @@ const TrashCan = () => {
   }, [gmp, showError]);
 
   const handleRestore = async entity => {
-    handleInteraction();
-
     try {
       await gmp.trashcan.restore(entity);
       loadTrash();
@@ -341,8 +335,6 @@ const TrashCan = () => {
   };
 
   const handleDelete = async entity => {
-    handleInteraction();
-
     try {
       await gmp.trashcan.delete(entity);
       loadTrash();
@@ -354,8 +346,6 @@ const TrashCan = () => {
     }
   };
   const handleEmpty = async () => {
-    handleInteraction();
-
     setIsEmptyingTrash(true);
     let localIsErrorEmptyingTrash = false;
 

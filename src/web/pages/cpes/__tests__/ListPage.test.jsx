@@ -53,7 +53,6 @@ let getDashboardSetting;
 let getAggregates;
 let getSetting;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getCpes = testing.fn().mockResolvedValue({
@@ -97,10 +96,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 describe('CpesPage tests', () => {
@@ -233,7 +228,7 @@ describe('CpesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -301,7 +296,7 @@ describe('CpesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -381,7 +376,7 @@ describe('CpesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({

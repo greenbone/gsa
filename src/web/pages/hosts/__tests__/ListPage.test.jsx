@@ -80,7 +80,6 @@ let getDashboardSetting;
 let getAggregates;
 let getSetting;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getHosts = testing.fn().mockResolvedValue({
@@ -124,10 +123,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 describe('Host ListPage tests', () => {
@@ -282,7 +277,7 @@ describe('Host ListPage tests', () => {
         getSetting: getDashboardSetting,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -353,7 +348,7 @@ describe('Host ListPage tests', () => {
         getSetting: getDashboardSetting,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -428,7 +423,7 @@ describe('Host ListPage tests', () => {
         getSetting: getDashboardSetting,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({

@@ -17,7 +17,7 @@ const ReportFormatComponent = ({
   onDeleted,
   onImportError,
   onImported,
-  onInteraction,
+
   onSaveError,
   onSaved,
 }) => {
@@ -29,24 +29,15 @@ const ReportFormatComponent = ({
   const [title, setTitle] = useState('');
   const [idLists, setIdLists] = useState({});
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const closeReportFormatDialog = () => {
     setDialogVisible(false);
   };
 
   const handleCloseReportFormatDialog = () => {
     closeReportFormatDialog();
-    handleInteraction();
   };
 
   const openReportFormatDialog = async reportFormatParam => {
-    handleInteraction();
-
     if (isDefined(reportFormatParam)) {
       try {
         // (re-)load report format to get params
@@ -88,8 +79,6 @@ const ReportFormatComponent = ({
   };
 
   const handleSave = async data => {
-    handleInteraction();
-
     try {
       if (isDefined(data.id)) {
         const response = await gmp.reportformat.save(data);
@@ -117,7 +106,6 @@ const ReportFormatComponent = ({
       name="reportformat"
       onDeleteError={onDeleteError}
       onDeleted={onDeleted}
-      onInteraction={onInteraction}
     >
       {other => (
         <>
@@ -148,7 +136,6 @@ ReportFormatComponent.propTypes = {
   onDeleted: PropTypes.func,
   onImportError: PropTypes.func,
   onImported: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

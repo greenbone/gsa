@@ -65,7 +65,6 @@ const alertInUse = Alert.fromElement({
 let getAlert;
 let getEntities;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getAlert = testing.fn().mockResolvedValue({
@@ -83,10 +82,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 describe('Alert DetailsPage tests', () => {
@@ -182,7 +177,6 @@ describe('Alert DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -225,7 +219,6 @@ describe('Alert DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -283,7 +276,6 @@ describe('Alert DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

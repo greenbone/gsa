@@ -50,7 +50,6 @@ import {
 import getDashboardSettings, {
   DashboardSetting,
 } from 'web/store/dashboard/settings/selectors';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
@@ -439,7 +438,6 @@ class StartPage extends React.Component {
                               saveSettings={this.handleSaveDashboardSettings}
                               setDefaultSettings={this.handleSetDefaultSettings}
                               settings={settings}
-                              onInteraction={this.props.renewSessionTimeout}
                               onNewDisplay={this.handleAddNewDisplay}
                               onResetDashboard={this.handleResetDashboard}
                             />
@@ -486,10 +484,8 @@ class StartPage extends React.Component {
 }
 
 StartPage.propTypes = {
-  error: PropTypes.toString,
   isLoading: PropTypes.bool,
   loadSettings: PropTypes.func.isRequired,
-  renewSessionTimeout: PropTypes.func.isRequired,
   saveSettings: PropTypes.func.isRequired,
   settings: PropTypes.shape({
     byId: PropTypes.object.isRequired,
@@ -515,7 +511,6 @@ const mapStateToProps = rootState => {
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
   saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
-  renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
   setDefaultSettings: (id, settings) =>
     dispatch(setDashboardSettingDefaults(id, settings)),
 });

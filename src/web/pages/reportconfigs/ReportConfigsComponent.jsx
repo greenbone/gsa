@@ -23,7 +23,6 @@ const ReportConfigComponent = ({
   onDownloaded,
   onSaved,
   onSaveError,
-  onInteraction,
 }) => {
   const gmp = useGmp();
   const [_] = useTranslation();
@@ -35,24 +34,15 @@ const ReportConfigComponent = ({
   const [preferences, setPreferences] = useState();
   const [title, setTitle] = useState();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const closeReportConfigDialog = () => {
     setDialogVisible(false);
   };
 
   const handleCloseReportConfigDialog = () => {
     closeReportConfigDialog();
-    handleInteraction();
   };
 
   const openReportConfigDialog = reportConfigData => {
-    handleInteraction();
-
     if (isDefined(reportConfigData)) {
       // (re-)load report config to get params
       gmp.reportconfig.get(reportConfigData).then(response => {
@@ -87,8 +77,6 @@ const ReportConfigComponent = ({
   };
 
   const handleSave = data => {
-    handleInteraction();
-
     if (isDefined(data.id)) {
       return gmp.reportconfig
         .save(data)
@@ -113,7 +101,6 @@ const ReportConfigComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -150,7 +137,6 @@ ReportConfigComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

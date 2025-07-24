@@ -33,7 +33,7 @@ const RoleComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-  onInteraction,
+
   onSaved,
   onSaveError,
 }) => {
@@ -61,8 +61,6 @@ const RoleComponent = ({
   const [title, setTitle] = useState('');
 
   const openRoleDialog = role => {
-    handleInteraction();
-
     dispatchLoadAllUsers();
 
     if (isDefined(role)) {
@@ -88,12 +86,9 @@ const RoleComponent = ({
 
   const handleCloseRoleDialog = () => {
     closeRoleDialog();
-    handleInteraction();
   };
 
   const handleCreateSuperPermission = ({roleId, groupId}) => {
-    handleInteraction();
-
     setIsCreatingSuperPermission(true);
 
     return gmp.permission
@@ -112,8 +107,6 @@ const RoleComponent = ({
   };
 
   const handleCreatePermission = ({roleId, name}) => {
-    handleInteraction();
-
     setIsCreatingPermission(true);
 
     return gmp.permission
@@ -130,8 +123,6 @@ const RoleComponent = ({
   };
 
   const handleDeletePermission = ({roleId, permissionId}) => {
-    handleInteraction();
-
     return actionFunction(gmp.permission.delete({id: permissionId}), {
       onSuccess: () => loadSettings(roleId),
       onError: error => setError(error.message),
@@ -181,12 +172,6 @@ const RoleComponent = ({
     }
   };
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   return (
     <EntityComponent
       name="role"
@@ -198,7 +183,6 @@ const RoleComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -228,7 +212,6 @@ const RoleComponent = ({
               onDeletePermission={handleDeletePermission}
               onErrorClose={handleErrorClose}
               onSave={d => {
-                handleInteraction();
                 return save(d)
                   .then(() => closeRoleDialog())
                   .catch(e => setError(e.message));
@@ -251,7 +234,6 @@ RoleComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

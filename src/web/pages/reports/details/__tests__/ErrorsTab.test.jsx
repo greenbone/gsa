@@ -22,7 +22,6 @@ describe('Report Errors Tab tests', () => {
     const {errors} = getMockReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -41,7 +40,6 @@ describe('Report Errors Tab tests', () => {
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
-        onInteraction={onInteraction}
         onSortChange={sortField => onSortChange('errors', sortField)}
       />,
     );

@@ -93,10 +93,6 @@ const getOverrides = testing.fn().mockResolvedValue({
   },
 });
 
-const renewSession = testing.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 describe('OverridesPage tests', () => {
   test('should render full OverridesPage', async () => {
     const gmp = {
@@ -234,7 +230,7 @@ describe('OverridesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -308,7 +304,7 @@ describe('OverridesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({
@@ -392,7 +388,7 @@ describe('OverridesPage tests', () => {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {renewSession, currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting},
     };
 
     const {render, store} = rendererWith({

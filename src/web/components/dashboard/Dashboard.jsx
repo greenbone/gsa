@@ -141,14 +141,6 @@ class Dashboard extends React.Component {
     this.updateRows(newRows);
   }
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
-
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  }
-
   handleSetDisplayState(id, stateFunc) {
     const currentState = this.getDisplayState(id);
     const newState = stateFunc(currentState);
@@ -213,8 +205,6 @@ class Dashboard extends React.Component {
     const {id} = this.props;
 
     this.props.saveSettings(id, settings);
-
-    this.handleInteraction();
   }
 
   render() {
@@ -288,7 +278,6 @@ class Dashboard extends React.Component {
                 onFilterIdChanged={filterId =>
                   this.handleUpdateDisplay(id, {filterId})
                 }
-                onInteractive={this.props.onInteraction}
                 onRemoveClick={() => this.handleRemoveDisplay(id)}
               />
             );
@@ -328,7 +317,6 @@ Dashboard.propTypes = {
     rows: PropTypes.arrayOf(rowPropType),
   }),
   onFilterChanged: PropTypes.func,
-  onInteraction: PropTypes.func,
   _: PropTypes.func.isRequired,
 };
 

@@ -46,7 +46,7 @@ const FiltersPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -59,7 +59,6 @@ const FiltersPage = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
@@ -83,7 +82,6 @@ const FiltersPage = ({
             onFilterDownloadClick={download}
             onFilterEditClick={edit}
             onFilterSaveClick={save}
-            onInteraction={onInteraction}
           />
         </React.Fragment>
       )}
@@ -95,7 +93,6 @@ FiltersPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('filter', {

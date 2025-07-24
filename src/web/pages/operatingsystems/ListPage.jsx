@@ -44,7 +44,7 @@ const Page = ({
   onDownloaded,
   onError,
   onFilterChanged,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -58,7 +58,6 @@ const Page = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit}) => (
@@ -68,17 +67,10 @@ const Page = ({
             {...props}
             createFilterType="os"
             dashboard={() => (
-              <OsDashboard
-                filter={filter}
-                onFilterChanged={onFilterChanged}
-                onInteraction={onInteraction}
-              />
+              <OsDashboard filter={filter} onFilterChanged={onFilterChanged} />
             )}
             dashboardControls={() => (
-              <DashboardControls
-                dashboardId={OS_DASHBOARD_ID}
-                onInteraction={onInteraction}
-              />
+              <DashboardControls dashboardId={OS_DASHBOARD_ID} />
             )}
             filter={filter}
             filterEditDialog={OsFilterDialog}
@@ -89,7 +81,6 @@ const Page = ({
             toolBarIcons={ToolBarIcons}
             onError={onError}
             onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
             onOsCloneClick={clone}
             onOsCreateClick={create}
             onOsDeleteClick={delete_func}
@@ -108,7 +99,6 @@ Page.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const FALLBACK_OS_LIST_FILTER = Filter.fromString(

@@ -27,7 +27,6 @@ interface EntityDownload {
 interface EntityDownloadCallbacks<TDownloadError = unknown> {
   onDownloadError?: (error: TDownloadError) => void;
   onDownloaded?: OnDownloadedFunc;
-  onInteraction?: () => void;
 }
 
 /**
@@ -39,11 +38,7 @@ interface EntityDownloadCallbacks<TDownloadError = unknown> {
  */
 const useEntityDownload = <TEntity extends Model, TDownloadError = Rejection>(
   name: string,
-  {
-    onDownloadError,
-    onDownloaded,
-    onInteraction,
-  }: EntityDownloadCallbacks<TDownloadError> = {},
+  {onDownloadError, onDownloaded}: EntityDownloadCallbacks<TDownloadError> = {},
 ) => {
   const [_] = useTranslation();
   const username = useSelector(getUsername);
@@ -73,10 +68,6 @@ const useEntityDownload = <TEntity extends Model, TDownloadError = Rejection>(
     const detailsExportFileName = userDefaultsSelector.getValueByName(
       'detailsexportfilename',
     );
-
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
 
     const filename = generateFilename({
       creationTime: entity.creationTime,

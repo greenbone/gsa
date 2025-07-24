@@ -71,8 +71,6 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   handleFirst() {
-    this.handleInteraction();
-
     this.setState({page: 0});
   }
 
@@ -84,8 +82,6 @@ class ReportEntitiesContainer extends React.Component {
 
     const last = Math.floor((filtered - 1) / rows);
 
-    this.handleInteraction();
-
     this.setState({
       page: last,
     });
@@ -93,8 +89,6 @@ class ReportEntitiesContainer extends React.Component {
 
   handleNext() {
     const {page} = this.state;
-
-    this.handleInteraction();
 
     this.setState({
       page: page + 1,
@@ -104,18 +98,9 @@ class ReportEntitiesContainer extends React.Component {
   handlePrevious() {
     const {page} = this.state;
 
-    this.handleInteraction();
-
     this.setState({
       page: page - 1,
     });
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   }
 
   render() {
@@ -176,7 +161,6 @@ ReportEntitiesContainer.propTypes = {
   sortField: PropTypes.string.isRequired,
   sortFunctions: PropTypes.object,
   sortReverse: PropTypes.bool.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default ReportEntitiesContainer;

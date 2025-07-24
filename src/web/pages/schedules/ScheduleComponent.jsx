@@ -24,7 +24,6 @@ const ScheduleComponent = ({
   onDownloadError,
   onSaved,
   onSaveError,
-  onInteraction,
 }) => {
   const [_] = useTranslation();
   const timezone = useSelector(getTimezone);
@@ -86,8 +85,6 @@ const ScheduleComponent = ({
       setTitle(undefined);
       setWeekdays(undefined);
     }
-
-    handleInteraction();
   };
 
   const closeScheduleDialog = () => {
@@ -96,13 +93,6 @@ const ScheduleComponent = ({
 
   const handleCloseScheduleDialog = () => {
     closeScheduleDialog();
-    handleInteraction();
-  };
-
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   };
 
   return (
@@ -116,7 +106,6 @@ const ScheduleComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -142,7 +131,6 @@ const ScheduleComponent = ({
               weekdays={weekdays}
               onClose={handleCloseScheduleDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeScheduleDialog());
               }}
             />
@@ -163,7 +151,6 @@ ScheduleComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

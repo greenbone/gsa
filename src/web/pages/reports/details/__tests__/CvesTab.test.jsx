@@ -26,7 +26,6 @@ describe('Report CVEs Tab tests', () => {
   test('should render Report CVEs Tab', () => {
     const {cves} = getMockReport();
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -46,7 +45,6 @@ describe('Report CVEs Tab tests', () => {
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
-        onInteraction={onInteraction}
         onSortChange={sortField => onSortChange('cves', sortField)}
       />,
     );

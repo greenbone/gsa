@@ -50,7 +50,7 @@ const ScannersPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   showSuccess,
   ...props
 }) => {
@@ -68,7 +68,6 @@ const ScannersPage = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
       onVerified={() => {
         onChanged();
@@ -100,7 +99,6 @@ const ScannersPage = ({
             onChanged={onChanged}
             onDownloaded={onDownloaded}
             onError={onError}
-            onInteraction={onInteraction}
             onScannerCertificateDownloadClick={downloadcertificate}
             onScannerCloneClick={clone}
             onScannerCreateClick={create}
@@ -122,7 +120,6 @@ ScannersPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('scanner', {

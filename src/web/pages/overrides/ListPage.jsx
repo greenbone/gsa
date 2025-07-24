@@ -54,7 +54,7 @@ const Page = ({
   onDownloaded,
   onError,
   onFilterChanged,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -68,7 +68,6 @@ const Page = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
@@ -80,14 +79,10 @@ const Page = ({
               <OverridesDashboard
                 filter={filter}
                 onFilterChanged={onFilterChanged}
-                onInteraction={onInteraction}
               />
             )}
             dashboardControls={() => (
-              <DashboardControls
-                dashboardId={OVERRIDES_DASHBOARD_ID}
-                onInteraction={onInteraction}
-              />
+              <DashboardControls dashboardId={OVERRIDES_DASHBOARD_ID} />
             )}
             filter={filter}
             filterEditDialog={FilterDialog}
@@ -100,7 +95,6 @@ const Page = ({
             onDownloaded={onDownloaded}
             onError={onError}
             onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
             onOverrideCloneClick={clone}
             onOverrideCreateClick={create}
             onOverrideDeleteClick={delete_func}
@@ -120,7 +114,6 @@ Page.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('override', {

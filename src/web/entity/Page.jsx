@@ -179,7 +179,6 @@ EntityPage.propTypes = {
   sectionIcon: PropTypes.icon,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
-  onInteraction: PropTypes.func.isRequired,
   _: PropTypes.func.isRequired,
 };
 

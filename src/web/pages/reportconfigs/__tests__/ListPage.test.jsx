@@ -127,8 +127,6 @@ describe('ReportConfigsPage tests', () => {
       foo: 'bar',
     });
 
-    const renewSession = testing.fn().mockResolvedValue({data: {}});
-
     const gmp = {
       reportconfigs: {
         get: getReportConfigs,
@@ -140,7 +138,7 @@ describe('ReportConfigsPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {currentSettings, getSetting, renewSession},
+      user: {currentSettings, getSetting},
     };
 
     const {render, store} = rendererWith({

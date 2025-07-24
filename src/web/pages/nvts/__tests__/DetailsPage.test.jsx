@@ -201,7 +201,6 @@ let getNotes;
 let getOverrides;
 let getEntities;
 let currentSettings;
-let renewSession;
 
 beforeEach(() => {
   getNvt = testing.fn().mockResolvedValue({
@@ -235,10 +234,6 @@ beforeEach(() => {
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse);
-
-  renewSession = testing.fn().mockResolvedValue({
-    foo: 'bar',
-  });
 });
 
 describe('Nvt DetailsPage tests', () => {
@@ -390,7 +385,6 @@ describe('Nvt DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
@@ -434,7 +428,6 @@ describe('Nvt DetailsPage tests', () => {
       settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 

@@ -92,13 +92,8 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
 
-  const {
-    getErrorMessage,
-    saveSetting,
-    onInteraction,
-    setErrorMessage,
-    clearErrorMessage,
-  } = useSettingSave();
+  const {getErrorMessage, saveSetting, setErrorMessage, clearErrorMessage} =
+    useSettingSave();
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
   const storeTimezone = useShallowEqualSelector(getTimezone) ?? '';
@@ -220,7 +215,6 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
 
   const toggleTimezoneEditMode = (): void => {
     setTimezoneEditMode(!timezoneEditMode);
-    onInteraction();
   };
 
   const saveTimezone = async (): Promise<void> => {
@@ -242,17 +236,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setTimezoneState(storeTimezone);
     setTimezoneEditMode(false);
     clearErrorMessage('Timezone');
-    onInteraction();
   };
 
   const handleTimezoneChange = (value: string): void => {
     setTimezoneState(value);
-    onInteraction();
   };
 
   const toggleDateTimeFormatEditMode = (): void => {
     setDateTimeFormatEditMode(!dateTimeFormatEditMode);
-    onInteraction();
   };
 
   const saveDateTimeFormat = async (): Promise<void> => {
@@ -294,7 +285,6 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
       }
 
       setDateTimeFormatEditMode(false);
-      onInteraction();
     } catch (error) {
       setErrorMessage(
         'dateTimeFormat',
@@ -317,17 +307,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     );
     setDateTimeFormatEditMode(false);
     clearErrorMessage('dateTimeFormat');
-    onInteraction();
   };
 
   const handleTimeFormatChange = (value: string): void => {
     setTimeFormatState(value);
-    onInteraction();
   };
 
   const handleDateFormatChange = (value: string): void => {
     setDateFormatState(value);
-    onInteraction();
   };
 
   const handleSysDefaultChange = (value: string): void => {
@@ -338,13 +325,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
       setTimeFormatState(SYSTEM_DEFAULT);
       setDateFormatState(SYSTEM_DEFAULT);
     }
-
-    onInteraction();
   };
 
   const toggleLanguageEditMode = (): void => {
     setLanguageEditMode(!languageEditMode);
-    onInteraction();
   };
 
   const saveLanguage = async (): Promise<void> => {
@@ -368,17 +352,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setLanguageState(userInterfaceLanguage.value);
     setLanguageEditMode(false);
     clearErrorMessage('userInterfaceLanguage');
-    onInteraction();
   };
 
   const handleLanguageChange = (value: string): void => {
     setLanguageState(value);
-    onInteraction();
   };
 
   const toggleRowsPerPageEditMode = (): void => {
     setRowsPerPageEditMode(!rowsPerPageEditMode);
-    onInteraction();
   };
 
   const saveRowsPerPage = async (): Promise<void> => {
@@ -401,17 +382,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setRowsPerPageState(rowsPerPage.value);
     setRowsPerPageEditMode(false);
     clearErrorMessage('rowsPerPage');
-    onInteraction();
   };
 
   const handleRowsPerPageChange = (value: string | number): void => {
     setRowsPerPageState(value);
-    onInteraction();
   };
 
   const toggleDetailsExportFileNameEditMode = (): void => {
     setDetailsExportFileNameEditMode(!detailsExportFileNameEditMode);
-    onInteraction();
   };
 
   const saveDetailsExportFileName = async (): Promise<void> => {
@@ -434,17 +412,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setDetailsExportFileNameState(detailsExportFileName.value);
     setDetailsExportFileNameEditMode(false);
     clearErrorMessage('detailsExportFileName');
-    onInteraction();
   };
 
   const handleDetailsExportFileNameChange = (value: string): void => {
     setDetailsExportFileNameState(value);
-    onInteraction();
   };
 
   const toggleListExportFileNameEditMode = (): void => {
     setListExportFileNameEditMode(!listExportFileNameEditMode);
-    onInteraction();
   };
 
   const saveListExportFileName = async (): Promise<void> => {
@@ -467,17 +442,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setListExportFileNameState(listExportFileName.value);
     setListExportFileNameEditMode(false);
     clearErrorMessage('listExportFileName');
-    onInteraction();
   };
 
   const handleListExportFileNameChange = (value: string): void => {
     setListExportFileNameState(value);
-    onInteraction();
   };
 
   const toggleReportExportFileNameEditMode = (): void => {
     setReportExportFileNameEditMode(!reportExportFileNameEditMode);
-    onInteraction();
   };
 
   const saveReportExportFileName = async (): Promise<void> => {
@@ -500,17 +472,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setReportExportFileNameState(reportExportFileName.value);
     setReportExportFileNameEditMode(false);
     clearErrorMessage('reportExportFileName');
-    onInteraction();
   };
 
   const handleReportExportFileNameChange = (value: string): void => {
     setReportExportFileNameState(value);
-    onInteraction();
   };
 
   const toggleAutoCacheRebuildEditMode = (): void => {
     setAutoCacheRebuildEditMode(!autoCacheRebuildEditMode);
-    onInteraction();
   };
 
   const saveAutoCacheRebuild = async (): Promise<void> => {
@@ -533,17 +502,14 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setAutoCacheRebuildState(autoCacheRebuild.value);
     setAutoCacheRebuildEditMode(false);
     clearErrorMessage('autoCacheRebuild');
-    onInteraction();
   };
 
   const handleAutoCacheRebuildChange = (value: string): void => {
     setAutoCacheRebuildState(value);
-    onInteraction();
   };
 
   const togglePasswordEditMode = (): void => {
     setPasswordEditMode(!passwordEditMode);
-    onInteraction();
   };
 
   const savePassword = async (): Promise<void> => {
@@ -566,7 +532,6 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setConfPasswordState('');
     setPasswordEditMode(false);
     clearErrorMessage('Password');
-    onInteraction();
   };
 
   const handlePasswordChange = (value: string, name?: string): void => {
@@ -577,7 +542,6 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     } else if (name === 'confPassword') {
       setConfPasswordState(value);
     }
-    onInteraction();
   };
 
   const getYesNoValue = (setting?: string | number): string => {

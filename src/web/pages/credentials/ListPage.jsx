@@ -49,7 +49,7 @@ const CredentialsPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -64,7 +64,6 @@ const CredentialsPage = ({
       onDownloaded={onDownloaded}
       onInstallerDownloadError={onError}
       onInstallerDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -96,7 +95,6 @@ const CredentialsPage = ({
             onCredentialSaveClick={save}
             onDownloaded={onDownloaded}
             onError={onError}
-            onInteraction={onInteraction}
           />
         </React.Fragment>
       )}
@@ -108,7 +106,6 @@ CredentialsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('credential', {
