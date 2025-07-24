@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {useNavigate} from 'react-router';
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import DashboardControls from 'web/components/dashboard/Controls';
 import {HostIcon, NewIcon} from 'web/components/icon';
@@ -24,6 +25,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/hosts';
 import PropTypes from 'web/utils/PropTypes';
+
 export const ToolBarIcons = ({onHostCreateClick}) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -56,6 +58,7 @@ const Page = ({
   ...props
 }) => {
   const [_] = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <HostComponent
@@ -67,7 +70,7 @@ const Page = ({
       onInteraction={onInteraction}
       onSaved={onChanged}
       onTargetCreateError={onError}
-      onTargetCreated={goToDetails('target', props)}
+      onTargetCreated={goToDetails('target', navigate)}
     >
       {({
         create,
