@@ -5,6 +5,7 @@
 
 import React from 'react';
 import useClickHandler, {ClickEvent} from 'web/components/form/useClickHandler';
+import {updateDisplayName} from 'web/utils/displayName';
 
 type WrappedComponent<TEvent> = React.ComponentType<{
   onClick?: (event: TEvent) => void;
@@ -26,8 +27,11 @@ function withClickHandler<TProps, TValue, TEvent = ClickEvent>({
   valueFunc,
   nameFunc,
 }: WithClickHandlerParams<TProps, TValue, TEvent>) {
-  return (Component: WrappedComponent<TEvent>) =>
-    ({onClick, ...props}: WithClickHandlerProps<TValue> & TProps) => {
+  return (Component: WrappedComponent<TEvent>) => {
+    const WithClickHandler = ({
+      onClick,
+      ...props
+    }: WithClickHandlerProps<TValue> & TProps) => {
       const handleClick = useClickHandler<TProps, TValue, TEvent>({
         onClick,
         valueFunc,
@@ -36,6 +40,8 @@ function withClickHandler<TProps, TValue, TEvent = ClickEvent>({
       });
       return <Component {...props} onClick={handleClick} />;
     };
+    return updateDisplayName(WithClickHandler, Component, 'withClickHandler');
+  };
 }
 
 export default withClickHandler;

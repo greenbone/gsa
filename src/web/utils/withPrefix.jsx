@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
+import {updateDisplayName} from 'web/utils/displayName';
 import PropTypes from 'web/utils/PropTypes';
 
 export const withPrefix = Component => {
@@ -21,7 +22,7 @@ export const withPrefix = Component => {
     prefix: PropTypes.string,
   };
 
-  return ComponentPrefixWrapper;
+  return updateDisplayName(ComponentPrefixWrapper, Component, 'withPrefix');
 };
 
 export default withPrefix;

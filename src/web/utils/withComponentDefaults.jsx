@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {updateDisplayName} from 'web/utils/displayName';
 
 export const withComponentDefaults =
   (options = {}) =>
@@ -11,7 +12,11 @@ export const withComponentDefaults =
     const ComponentDefaultsWrapper = props => (
       <Component {...options} {...props} />
     );
-    return ComponentDefaultsWrapper;
+    return updateDisplayName(
+      ComponentDefaultsWrapper,
+      Component,
+      'withComponentDefaults',
+    );
   };
 
 export default withComponentDefaults;

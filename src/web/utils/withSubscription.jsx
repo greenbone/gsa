@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {SubscriptionContext} from 'web/components/provider/SubscriptionProvider';
+import {updateDisplayName} from 'web/utils/displayName';
 
 const withSubscription = Component => {
   const SubscriptionWrapper = props => (
@@ -13,7 +14,7 @@ const withSubscription = Component => {
     </SubscriptionContext.Consumer>
   );
 
-  return SubscriptionWrapper;
+  return updateDisplayName(SubscriptionWrapper, Component, 'withSubscription');
 };
 
 export default withSubscription;

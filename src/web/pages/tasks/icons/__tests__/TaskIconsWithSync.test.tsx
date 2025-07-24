@@ -15,7 +15,7 @@ describe('TaskIconWithSync component tests', () => {
     {
       description:
         'should render StartIcon when type is "start" and not syncing',
-      type: 'start',
+      type: 'start' as const,
       taskStatus: TASK_STATUS.new,
       expectedTitle: 'Start',
       expectedFill: false,
@@ -23,14 +23,14 @@ describe('TaskIconWithSync component tests', () => {
     {
       description:
         'should render ResumeIcon when type is "resume" and not syncing',
-      type: 'resume',
+      type: 'resume' as const,
       taskStatus: TASK_STATUS.stopped,
       expectedTitle: 'Resume',
       expectedFill: false,
     },
     {
       description: 'should render syncing message when feed is syncing',
-      type: 'start',
+      type: 'start' as const,
       taskStatus: TASK_STATUS.new,
       expectedTitle: 'Feed is currently syncing. Please try again later.',
       expectedFill: true,
