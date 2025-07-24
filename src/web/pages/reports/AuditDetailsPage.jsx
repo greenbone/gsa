@@ -627,7 +627,7 @@ const ReportDetailsWrapper = props => {
   return (
     <FilterProvider
       fallbackFilter={DEFAULT_FILTER}
-      gmpname="result"
+      gmpName="result"
       pageName={`report-${reportId}`}
     >
       {({filter}) => (

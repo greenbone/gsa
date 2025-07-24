@@ -727,7 +727,7 @@ const TranslatedReportDetails = withTranslation(ReportDetails);
 const ReportDetailsWrapper = ({reportFilter, ...props}) => (
   <FilterProvider
     fallbackFilter={DEFAULT_FILTER}
-    gmpname="result"
+    gmpName="result"
     pageName={`report-${props.reportId}`}
   >
     {({filter}) => (
