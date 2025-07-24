@@ -61,7 +61,7 @@ const PageContent = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onFilterResetClick,
-  onInteraction,
+
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onSortChange,
@@ -131,7 +131,6 @@ const PageContent = ({
           showSuccessMessage={showSuccessMessage}
           task={task}
           onAddToAssetsClick={onAddToAssetsClick}
-          onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
           onReportDownloadClick={onReportDownloadClick}
         />
@@ -197,7 +196,6 @@ const PageContent = ({
                       onFilterEditClick={onFilterEditClick}
                       onFilterRemoveClick={onFilterRemoveClick}
                       onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-                      onInteraction={onInteraction}
                       onSortChange={sortField =>
                         onSortChange('results', sortField)
                       }
@@ -209,7 +207,6 @@ const PageContent = ({
                       entity={report}
                       onChanged={onTagSuccess}
                       onError={onError}
-                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -248,7 +245,6 @@ PageContent.propTypes = {
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func,
   onFilterResetClick: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,

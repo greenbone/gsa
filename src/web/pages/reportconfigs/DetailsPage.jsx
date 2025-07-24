@@ -167,7 +167,7 @@ const Page = ({
   permissions = [],
   onChanged,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -180,7 +180,6 @@ const Page = ({
       onCreated={goToDetails('reportconfig', props)}
       onDeleteError={onError}
       onDeleted={goToList('reportconfigs', props)}
-      onInteraction={onInteraction}
       onSaveError={onError}
       onSaved={onChanged}
     >
@@ -191,7 +190,6 @@ const Page = ({
           sectionIcon={<ReportConfigIcon size="large" />}
           title={_('Report Config')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onReportConfigCloneClick={clone}
           onReportConfigCreateClick={create_func}
           onReportConfigDeleteClick={delete_func}
@@ -233,7 +231,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -242,7 +239,6 @@ const Page = ({
                           permissions={permissions}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -263,7 +259,6 @@ Page.propTypes = {
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

@@ -27,7 +27,7 @@ const HostComponent = ({
   onDeleted,
   onDownloadError,
   onDownloaded,
-  onInteraction,
+
   onSaveError,
   onSaved,
   ...props
@@ -40,8 +40,6 @@ const HostComponent = ({
   const [title, setTitle] = useState();
 
   const handleIdentifierDelete = identifier => {
-    handleInteraction();
-
     return gmp.host
       .deleteIdentifier(identifier)
       .then(onIdentifierDeleted, onIdentifierDeleteError);
@@ -57,8 +55,6 @@ const HostComponent = ({
     setDialogVisible(true);
     setHost(host);
     setTitle(dialogTitle);
-
-    handleInteraction();
   };
 
   const closeHostDialog = () => {
@@ -67,13 +63,6 @@ const HostComponent = ({
 
   const handleCloseHostDialog = () => {
     closeHostDialog();
-    handleInteraction();
-  };
-
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   };
 
   const openCreateTargetDialog = host => {
@@ -117,7 +106,6 @@ const HostComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -137,7 +125,6 @@ const HostComponent = ({
               title={title}
               onClose={handleCloseHostDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeHostDialog());
               }}
             />
@@ -160,7 +147,6 @@ HostComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onIdentifierDeleteError: PropTypes.func,
   onIdentifierDeleted: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
@@ -168,7 +154,6 @@ HostComponent.propTypes = {
 const HostComponentWrapper = HostComponent;
 
 const HostWithTargetComponent = ({
-  onInteraction,
   onTargetCreated,
   onTargetCreateError,
   ...props
@@ -177,21 +162,13 @@ const HostWithTargetComponent = ({
     <TargetComponent
       onCreateError={onTargetCreateError}
       onCreated={onTargetCreated}
-      onInteraction={onInteraction}
     >
-      {({create}) => (
-        <HostComponentWrapper
-          {...props}
-          createtarget={create}
-          onInteraction={onInteraction}
-        />
-      )}
+      {({create}) => <HostComponentWrapper {...props} createtarget={create} />}
     </TargetComponent>
   );
 };
 
 HostWithTargetComponent.propTypes = {
-  onInteraction: PropTypes.func.isRequired,
   onTargetCreateError: PropTypes.func.isRequired,
   onTargetCreated: PropTypes.func.isRequired,
 };

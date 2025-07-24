@@ -47,7 +47,7 @@ const ResultsTab = ({
   onFilterEditClick,
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
-  onInteraction,
+
   onSortChange,
   onTargetEditClick,
 }) => {
@@ -83,7 +83,6 @@ const ResultsTab = ({
       sortField={sortField}
       sortFunctions={resultsSortFunctions}
       sortReverse={sortReverse}
-      onInteraction={onInteraction}
     >
       {({
         entities,
@@ -135,7 +134,6 @@ ResultsTab.propTypes = {
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
 };

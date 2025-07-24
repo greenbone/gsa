@@ -266,7 +266,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -280,7 +280,6 @@ const Page = ({
       onDeleted={goToList('audits', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onResumeError={onError}
       onResumed={onChanged}
       onSaved={onChanged}
@@ -305,7 +304,6 @@ const Page = ({
           onAuditStopClick={stop}
           onChanged={onChanged}
           onError={onError}
-          onInteraction={onInteraction}
         >
           {() => {
             return (
@@ -333,7 +331,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -354,7 +351,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (rootState, {id}) => {

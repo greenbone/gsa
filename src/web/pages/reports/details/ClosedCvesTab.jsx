@@ -27,7 +27,7 @@ const ClosedCvesTab = ({
   isUpdating,
   sortField,
   sortReverse,
-  onInteraction,
+
   onSortChange,
 }) => (
   <ReportEntitiesContainer
@@ -37,7 +37,6 @@ const ClosedCvesTab = ({
     sortField={sortField}
     sortFunctions={closedCvesSortFunctions}
     sortReverse={sortReverse}
-    onInteraction={onInteraction}
   >
     {({
       entities,
@@ -74,7 +73,6 @@ ClosedCvesTab.propTypes = {
   isUpdating: PropTypes.bool,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
 

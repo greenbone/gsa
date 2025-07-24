@@ -40,7 +40,6 @@ import {
 } from 'web/store/entities/reportformats';
 import {
   loadReportComposerDefaults,
-  renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
@@ -212,8 +211,6 @@ class DeltaReportDetails extends React.Component {
   }
 
   handleFilterChange(filter) {
-    this.handleInteraction();
-
     this.load(filter);
   }
 
@@ -230,8 +227,6 @@ class DeltaReportDetails extends React.Component {
 
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
-    this.handleInteraction();
-
     gmp.report.addAssets(entity, {filter}).then(() => {
       showSuccessMessage(
         _(
@@ -247,8 +242,6 @@ class DeltaReportDetails extends React.Component {
 
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
-    this.handleInteraction();
-
     gmp.report.removeAssets(entity, {filter}).then(() => {
       showSuccessMessage(_('Report content removed from Assets.'));
       this.reload();
@@ -256,14 +249,10 @@ class DeltaReportDetails extends React.Component {
   }
 
   handleFilterEditClick() {
-    this.handleInteraction();
-
     this.setState({showFilterDialog: true});
   }
 
   handleFilterDialogClose() {
-    this.handleInteraction();
-
     this.setState({showFilterDialog: false});
   }
 
@@ -320,8 +309,6 @@ class DeltaReportDetails extends React.Component {
       ? report_format.extension
       : 'unknown'; // unknown should never happen but we should be save here
 
-    this.handleInteraction();
-
     return gmp.report
       .download(entity, {
         reportConfigId,
@@ -349,7 +336,6 @@ class DeltaReportDetails extends React.Component {
   }
 
   handleFilterCreated(filter) {
-    this.handleInteraction();
     this.load(filter);
     this.props.loadFilters();
   }
@@ -357,8 +343,6 @@ class DeltaReportDetails extends React.Component {
   handleFilterAddLogLevel() {
     const {reportFilter} = this.props;
     let levels = reportFilter.get('levels', '');
-
-    this.handleInteraction();
 
     if (!levels.includes('g')) {
       levels += 'g';
@@ -371,8 +355,6 @@ class DeltaReportDetails extends React.Component {
   handleFilterRemoveSeverity() {
     const {reportFilter} = this.props;
 
-    this.handleInteraction();
-
     if (reportFilter.has('severity')) {
       const lfilter = reportFilter.copy();
       lfilter.delete('severity');
@@ -383,8 +365,6 @@ class DeltaReportDetails extends React.Component {
   handleFilterDecreaseMinQoD() {
     const {reportFilter} = this.props;
 
-    this.handleInteraction();
-
     if (reportFilter.has('min_qod')) {
       const lfilter = reportFilter.copy();
       lfilter.set('min_qod', 30);
@@ -393,8 +373,6 @@ class DeltaReportDetails extends React.Component {
   }
 
   handleSortChange(name, sortField) {
-    this.handleInteraction();
-
     const prev = this.state.sorting[name];
 
     const sortReverse =
@@ -409,13 +387,6 @@ class DeltaReportDetails extends React.Component {
         },
       },
     });
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   }
 
   loadTarget() {
@@ -435,7 +406,7 @@ class DeltaReportDetails extends React.Component {
       reportFormats,
       reportConfigs,
       reportId,
-      onInteraction,
+
       reportComposerDefaults,
       showError,
       showErrorMessage,
@@ -452,10 +423,7 @@ class DeltaReportDetails extends React.Component {
     const {report} = entity || {};
     return (
       <React.Fragment>
-        <TargetComponent
-          onError={this.handleError}
-          onInteraction={onInteraction}
-        >
+        <TargetComponent onError={this.handleError}>
           {({edit}) => (
             <Page
               entity={entity}
@@ -480,7 +448,6 @@ class DeltaReportDetails extends React.Component {
               onFilterRemoveClick={this.handleFilterRemoveClick}
               onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
               onFilterResetClick={this.handleFilterResetClick}
-              onInteraction={onInteraction}
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
               onReportDownloadClick={this.handleOpenDownloadReportDialog}
               onSortChange={this.handleSortChange}
@@ -552,13 +519,11 @@ DeltaReportDetails.propTypes = {
   target: PropTypes.model,
   username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   _: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
     loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
     loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
     loadTarget: targetId => gmp.target.get({id: targetId}),

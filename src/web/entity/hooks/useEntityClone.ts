@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -22,7 +21,6 @@ interface EntityClone {
  * @param {Object} [callbacks] - Optional callbacks for handling clone events.
  * @param {Function} [callbacks.onCloneError] - Callback function to be called when cloning fails.
  * @param {Function} [callbacks.onCloned] - Callback function to be called when cloning is successful.
- * @param {Function} [callbacks.onInteraction] - Callback function to be called on interaction.
  * @returns {Function} - A function that takes an entity and handles its cloning.
  */
 const useEntityClone = <
@@ -34,11 +32,9 @@ const useEntityClone = <
   {
     onCloneError,
     onCloned,
-    onInteraction,
   }: {
     onCloneError?: (error: TCloneError) => void;
     onCloned?: (newEntity: TCloneResponse) => void;
-    onInteraction?: () => void;
   } = {},
 ): ((entity: TEntity) => Promise<TCloneResponse | void>) => {
   const gmp = useGmp();
@@ -47,15 +43,7 @@ const useEntityClone = <
   };
   const [_] = useTranslation();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleEntityClone = async (entity: TEntity) => {
-    handleInteraction();
-
     return actionFunction(
       cmd.clone(entity),
       onCloned,

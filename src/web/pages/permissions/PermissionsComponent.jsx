@@ -27,7 +27,6 @@ const PermissionsComponent = ({
   onDownloadError,
   onSaved,
   onSaveError,
-  onInteraction,
 }) => {
   const capabilities = useCapabilities();
   const gmp = useGmp();
@@ -56,19 +55,12 @@ const PermissionsComponent = ({
 
   const [title, setTitle] = useState();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const closePermissionDialog = () => {
     setDialogVisible(false);
   };
 
   const handleClosePermissionDialog = () => {
     closePermissionDialog();
-    handleInteraction();
   };
 
   const openPermissionDialog = (permissionEntity, fixed = false) => {
@@ -192,8 +184,6 @@ const PermissionsComponent = ({
         setGroups(groupsData);
       });
     }
-
-    handleInteraction();
   };
 
   return (
@@ -207,7 +197,6 @@ const PermissionsComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -238,7 +227,6 @@ const PermissionsComponent = ({
               users={users}
               onClose={handleClosePermissionDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closePermissionDialog());
               }}
             />
@@ -259,7 +247,6 @@ PermissionsComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

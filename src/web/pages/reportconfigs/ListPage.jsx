@@ -49,7 +49,6 @@ const ReportConfigsPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
 
   ...props
 }) => {
@@ -64,7 +63,6 @@ const ReportConfigsPage = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onError}
       onSaved={onChanged}
     >
@@ -82,7 +80,6 @@ const ReportConfigsPage = ({
               toolBarIcons={ToolBarIcons}
               onChanged={onChanged}
               onError={onError}
-              onInteraction={onInteraction}
               onReportConfigCloneClick={clone}
               onReportConfigCreateClick={create_func}
               onReportConfigDeleteClick={delete_func}
@@ -100,7 +97,6 @@ ReportConfigsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('reportconfig', {

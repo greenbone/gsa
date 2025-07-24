@@ -60,7 +60,7 @@ const PolicyComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-  onInteraction,
+
   onSaved,
   onSaveError,
   onImported,
@@ -226,12 +226,6 @@ const PolicyComponent = ({
     }
   };
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleAlertCreated = ({data}) => {
     fetchAlerts();
     setAlertIds(prevAlertIds => [data.id, ...prevAlertIds]);
@@ -342,8 +336,6 @@ const PolicyComponent = ({
 
     loadEditPolicySettings(policy.id);
     loadComponentScanners();
-
-    handleInteraction();
   };
 
   const closeEditPolicyDialog = () => {
@@ -354,11 +346,9 @@ const PolicyComponent = ({
 
   const handleCloseEditPolicyDialog = () => {
     closeEditPolicyDialog();
-    handleInteraction();
   };
 
   const handleSavePolicy = async data => {
-    handleInteraction();
     const {name, comment, id} = data;
     let saveData = data;
 
@@ -373,7 +363,6 @@ const PolicyComponent = ({
   const openCreatePolicyDialog = () => {
     loadComponentScanners();
     setCreatePolicyDialogVisible(true);
-    handleInteraction();
   };
 
   const closeCreatePolicyDialog = () => {
@@ -382,12 +371,10 @@ const PolicyComponent = ({
 
   const handleCloseCreatePolicyDialog = () => {
     closeCreatePolicyDialog();
-    handleInteraction();
   };
 
   const openImportDialog = () => {
     setImportDialogVisible(true);
-    handleInteraction();
   };
 
   const closeImportDialog = () => {
@@ -396,7 +383,6 @@ const PolicyComponent = ({
 
   const handleCloseImportDialog = () => {
     closeImportDialog();
-    handleInteraction();
   };
 
   const openCreateAuditDialog = policy => {
@@ -425,8 +411,6 @@ const PolicyComponent = ({
     setSchedulePeriods(undefined);
     setTargetId(defaultTargetId);
     setTitle(_('New Audit'));
-
-    handleInteraction();
   };
 
   const closeCreateAuditDialog = () => {
@@ -435,7 +419,6 @@ const PolicyComponent = ({
 
   const handleCloseCreateAuditDialog = () => {
     closeCreateAuditDialog();
-    handleInteraction();
   };
 
   const handleSaveAudit = async ({
@@ -459,8 +442,6 @@ const PolicyComponent = ({
     const addTag = NO_VALUE;
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
-
-    handleInteraction();
 
     try {
       await gmp.audit.create({
@@ -494,7 +475,6 @@ const PolicyComponent = ({
   };
 
   const openEditPolicyFamilyDialog = familyName => {
-    handleInteraction();
     setEditPolicyFamilyDialogVisible(true);
     setEditPolicyFamilyDialogTitle(
       _('Edit Policy Family {{name}}', {
@@ -514,11 +494,9 @@ const PolicyComponent = ({
 
   const handleCloseEditPolicyFamilyDialog = () => {
     closeEditPolicyFamilyDialog();
-    handleInteraction();
   };
 
   const openEditNvtDetailsDialog = nvtOid => {
-    handleInteraction();
     setEditNvtDetailsDialogVisible(true);
     setEditNvtDetailsDialogTitle(_('Edit Policy NVT {{nvtOid}}', {nvtOid}));
     loadNvt(nvtOid);
@@ -531,12 +509,9 @@ const PolicyComponent = ({
 
   const handleCloseEditNvtDetailsDialog = () => {
     closeEditNvtDetailsDialog();
-    handleInteraction();
   };
 
   const handleImportPolicy = async data => {
-    handleInteraction();
-
     try {
       await gmp.policy.import(data);
       onImported();
@@ -547,8 +522,6 @@ const PolicyComponent = ({
   };
 
   const handleSavePolicyFamily = async ({familyName, configId, selected}) => {
-    handleInteraction();
-
     await gmp.policy.savePolicyFamily({
       id: configId,
       familyName,
@@ -566,8 +539,6 @@ const PolicyComponent = ({
     nvtOid,
     preferenceValues,
   }) => {
-    handleInteraction();
-
     await gmp.policy.savePolicyNvt({
       id: configId,
       timeout: useDefaultTimeout === '1' ? undefined : timeout,
@@ -596,7 +567,6 @@ const PolicyComponent = ({
         onDeleted={onDeleted}
         onDownloadError={onDownloadError}
         onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
         onSaveError={onSaveError}
         onSaved={onSaved}
       >
@@ -610,20 +580,11 @@ const PolicyComponent = ({
               import: openImportDialog,
             })}
             {createAuditDialogVisible && (
-              <TargetComponent
-                onCreated={handleTargetCreated}
-                onInteraction={onInteraction}
-              >
+              <TargetComponent onCreated={handleTargetCreated}>
                 {({create: createTarget}) => (
-                  <AlertComponent
-                    onCreated={handleAlertCreated}
-                    onInteraction={onInteraction}
-                  >
+                  <AlertComponent onCreated={handleAlertCreated}>
                     {({create: createAlert}) => (
-                      <ScheduleComponent
-                        onCreated={handleScheduleCreated}
-                        onInteraction={onInteraction}
-                      >
+                      <ScheduleComponent onCreated={handleScheduleCreated}>
                         {({create: createSchedule}) => (
                           <AuditDialog
                             alertIds={alertIds}
@@ -669,7 +630,6 @@ const PolicyComponent = ({
               <PolicyDialog
                 onClose={handleCloseCreatePolicyDialog}
                 onSave={d => {
-                  handleInteraction();
                   return save(d).then(() => closeCreatePolicyDialog());
                 }}
               />
@@ -763,7 +723,6 @@ PolicyComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onImportError: PropTypes.func,
   onImported: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

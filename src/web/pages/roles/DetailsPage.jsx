@@ -156,7 +156,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -170,7 +170,6 @@ const Page = ({
       onDeleted={goToList('roles', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
@@ -180,7 +179,6 @@ const Page = ({
           sectionIcon={<RoleIcon size="large" />}
           title={_('Role')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onRoleCloneClick={clone}
           onRoleCreateClick={create}
           onRoleDeleteClick={delete_func}
@@ -221,7 +219,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -231,7 +228,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -254,7 +250,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const generalPermissionsFilter = id =>

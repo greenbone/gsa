@@ -169,7 +169,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -183,7 +183,6 @@ const Page = ({
       onChanged={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
     >
       {({notecreate, overridecreate, download}) => (
         <EntityPage
@@ -193,7 +192,6 @@ const Page = ({
           title={_('NVT')}
           toolBarIcons={ToolBarIcons}
           onChanged={onChanged}
-          onInteraction={onInteraction}
           onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
           onNvtDownloadClick={download}
           onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
@@ -235,7 +233,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -257,7 +254,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const nvtIdFilter = id => Filter.fromString('nvt_id=' + id).all();

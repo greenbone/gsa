@@ -26,7 +26,6 @@ interface EntityDownload {
 interface DownloadCallbacks {
   onDownloadError?: OnDownloadErrorFunc;
   onDownloaded?: OnDownloadedFunc;
-  onInteraction?: () => void;
 }
 
 /**
@@ -38,7 +37,7 @@ interface DownloadCallbacks {
  */
 const useEntityDownload = (
   name: string,
-  {onDownloadError, onDownloaded, onInteraction}: DownloadCallbacks = {},
+  {onDownloadError, onDownloaded}: DownloadCallbacks = {},
 ) => {
   const [_] = useTranslation();
   const username = useSelector(getUsername);
@@ -68,10 +67,6 @@ const useEntityDownload = (
     const detailsExportFileName = userDefaultsSelector.getValueByName(
       'detailsexportfilename',
     );
-
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
 
     const filename = generateFilename({
       creationTime: entity.creationTime,

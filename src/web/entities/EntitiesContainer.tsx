@@ -26,13 +26,11 @@ import {
   typeName,
   pluralizeType,
 } from 'gmp/utils/entitytype';
-import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import TagsDialog from 'web/entities/TagsDialog';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import TagDialog from 'web/pages/tags/Dialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
@@ -72,7 +70,6 @@ export interface EntitiesContainerRenderProps<TModel extends Model = Model> {
   onFilterRemoved: () => void;
   onFilterReset: () => void;
   onFirstClick: () => void;
-  onInteraction: () => void;
   onLastClick: () => void;
   onNextClick: () => void;
   onPreviousClick: () => void;
@@ -127,7 +124,6 @@ interface EntitiesContainerPropsWithHOCs<TModel extends Model = Model>
   searchParams: URLSearchParams;
   username: string;
   _: (message: string, options?: TranslateOptions) => string;
-  onInteraction: () => void;
 }
 
 class EntitiesContainer<TModel extends Model> extends React.Component<
@@ -183,9 +179,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     this.handleCloseTagDialog = this.handleCloseTagDialog.bind(this);
     this.openTagsDialog = this.openTagsDialog.bind(this);
     this.handleCloseTagsDialog = this.handleCloseTagsDialog.bind(this);
-    this.handleInteraction = this.handleInteraction.bind(this);
-
-    this.handleInteraction = debounce(this.handleInteraction.bind(this), 500);
   }
 
   static getDerivedStateFromProps(
@@ -233,10 +226,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     }
   }
 
-  handleInteraction() {
-    this.props.onInteraction();
-  }
-
   updateFilter(filter?: Filter) {
     this.props.updateFilter(filter);
     this.props.reload(filter);
@@ -271,7 +260,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     }
 
     this.setState({selectionType, selected});
-    this.handleInteraction();
   }
 
   async handleDownloadBulk() {
@@ -291,7 +279,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
       promise = entitiesCommand.exportByFilter((loadedFilter as Filter).all());
     }
 
-    this.handleInteraction();
     showSuccessNotification('', _('Bulk download started.'));
 
     try {
@@ -323,8 +310,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
       promise = entitiesCommand.deleteByFilter((loadedFilter as Filter).all());
     }
 
-    this.handleInteraction();
-
     try {
       const deleted = await promise;
       log.debug('successfully deleted entities', deleted);
@@ -344,8 +329,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     selected.add(entity);
 
     this.setState({selected});
-
-    this.handleInteraction();
   }
 
   handleDeselected(entity: TModel) {
@@ -354,8 +337,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     selected.delete(entity);
 
     this.setState({selected});
-
-    this.handleInteraction();
   }
 
   handleSortChange(field: string) {
@@ -383,7 +364,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
 
   changeFilter(filter?: Filter) {
     this.updateFilter(filter);
-    this.handleInteraction();
   }
 
   handleFirst() {
@@ -443,7 +423,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
 
   openTagDialog() {
     this.setState({tagDialogVisible: true});
-    this.handleInteraction();
   }
 
   closeTagDialog() {
@@ -452,14 +431,11 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
 
   handleCloseTagDialog() {
     this.closeTagDialog();
-    this.handleInteraction();
   }
 
   handleCreateTag(data) {
     const {gmp} = this.props;
     const {tags} = this.state;
-
-    this.handleInteraction();
 
     return (
       // @ts-expect-error
@@ -479,8 +455,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
 
   handleTagChange(id: string) {
     const {gmp} = this.props;
-
-    this.handleInteraction();
 
     // @ts-expect-error
     gmp.tag.get({id}).then(response => {
@@ -507,8 +481,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
       filter = (loadedFilter as Filter).all();
     }
 
-    this.handleInteraction();
-
     // @ts-expect-error
     return gmp.tag
       .save({
@@ -531,7 +503,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
       tagsDialogVisible: true,
       multiTagEntitiesCount: this.getMultiTagEntitiesCount(),
     });
-    this.handleInteraction();
   }
 
   closeTagsDialog() {
@@ -540,7 +511,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
 
   handleCloseTagsDialog() {
     this.closeTagsDialog();
-    this.handleInteraction();
   }
 
   getTagsByType() {
@@ -648,7 +618,6 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
           onFilterRemoved: this.handleFilterRemoved,
           onFilterReset: this.handleFilterReset,
           onFirstClick: this.handleFirst,
-          onInteraction: this.handleInteraction,
           onLastClick: this.handleLast,
           onNextClick: this.handleNext,
           onPreviousClick: this.handlePrevious,
@@ -709,7 +678,6 @@ const mapDispatchToProps = (
   return {
     deleteEntity: (id: string) => dispatch(deleteEntity(gmp)(id)),
     loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   };
 };
 

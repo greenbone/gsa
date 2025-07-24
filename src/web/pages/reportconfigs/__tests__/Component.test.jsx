@@ -56,7 +56,6 @@ describe('Report Config Component tests', () => {
       editClick = edit;
     });
 
-    const handleInteraction = testing.fn();
     const getReportConfig = testing.fn().mockResolvedValue({
       data: mockReportConfig,
     });
@@ -88,11 +87,7 @@ describe('Report Config Component tests', () => {
       store: true,
     });
 
-    render(
-      <ReportFormatComponent onInteraction={handleInteraction}>
-        {children}
-      </ReportFormatComponent>,
-    );
+    render(<ReportFormatComponent>{children}</ReportFormatComponent>);
     editClick({id: 'rc123'});
 
     await wait();
@@ -137,7 +132,7 @@ describe('Report Config Component tests', () => {
     const children = testing.fn(({create}) => {
       createClick = create;
     });
-    const handleInteraction = testing.fn();
+
     const getAllReportFormats = testing.fn().mockResolvedValue({
       data: [mockReportFormat],
     });
@@ -171,11 +166,7 @@ describe('Report Config Component tests', () => {
       store: true,
     });
 
-    render(
-      <ReportFormatComponent onInteraction={handleInteraction}>
-        {children}
-      </ReportFormatComponent>,
-    );
+    render(<ReportFormatComponent>{children}</ReportFormatComponent>);
     createClick();
 
     await wait();
@@ -220,7 +211,6 @@ describe('Report Config Component tests', () => {
     const children = testing.fn(({create}) => {
       createClick = create;
     });
-    const handleInteraction = testing.fn();
     const getAllReportFormats = testing.fn().mockResolvedValue({
       data: [mockReportFormat],
     });
@@ -243,9 +233,7 @@ describe('Report Config Component tests', () => {
     });
 
     const {baseElement} = render(
-      <ReportFormatComponent onInteraction={handleInteraction}>
-        {children}
-      </ReportFormatComponent>,
+      <ReportFormatComponent>{children}</ReportFormatComponent>,
     );
     createClick();
     await wait();

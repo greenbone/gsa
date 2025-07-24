@@ -202,7 +202,7 @@ const Page = ({
   permissions = [],
   onChanged,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -212,7 +212,6 @@ const Page = ({
       onDeleteError={onError}
       onDeleted={goToList('reportformats', props)}
       onImported={goToDetails('reportformat', props)}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({delete: delete_func, edit, import: import_func, save}) => (
@@ -222,7 +221,6 @@ const Page = ({
           sectionIcon={<ReportFormatIcon size="large" />}
           title={_('Report Format')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onReportFormatDeleteClick={delete_func}
           onReportFormatEditClick={edit}
           onReportFormatImportClick={import_func}
@@ -263,7 +261,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -272,7 +269,6 @@ const Page = ({
                           permissions={permissions}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -293,7 +289,6 @@ Page.propTypes = {
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

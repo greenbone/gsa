@@ -125,7 +125,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   showSuccess,
   ...props
 }) => {
@@ -144,7 +144,6 @@ const Page = ({
       onDeleted={goToList('scanners', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
       onVerified={() => {
         onChanged();
@@ -169,7 +168,6 @@ const Page = ({
           sectionIcon={<ScannerIcon size="large" />}
           title={_('Scanner')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onScannerCertificateDownloadClick={downloadcertificate}
           onScannerCloneClick={clone}
           onScannerCreateClick={create}
@@ -209,7 +207,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -219,7 +216,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -241,7 +237,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

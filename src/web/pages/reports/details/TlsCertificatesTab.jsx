@@ -31,7 +31,7 @@ const TLSCertificatesTab = ({
   sortField,
   sortReverse,
   tlsCertificates,
-  onInteraction,
+
   onSortChange,
   onTlsCertificateDownloadClick,
 }) => (
@@ -42,7 +42,6 @@ const TLSCertificatesTab = ({
     sortField={sortField}
     sortFunctions={tlsCertificatesSortFunctions}
     sortReverse={sortReverse}
-    onInteraction={onInteraction}
   >
     {({
       entities,
@@ -80,7 +79,6 @@ TLSCertificatesTab.propTypes = {
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
   tlsCertificates: PropTypes.array,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };

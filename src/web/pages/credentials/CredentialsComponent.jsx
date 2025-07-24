@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -13,7 +13,6 @@ import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 import PropTypes from 'web/utils/PropTypes';
@@ -31,13 +30,12 @@ const CredentialsComponent = ({
   onDownloaded,
   onInstallerDownloadError,
   onInstallerDownloaded,
-  onInteraction,
+
   onSaveError,
   onSaved,
 }) => {
   const gmp = useGmp();
   const [_] = useTranslation();
-  const dispatch = useDispatch();
 
   const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
   const username = useSelector(getUsername);
@@ -57,13 +55,6 @@ const CredentialsComponent = ({
   const [privacyAlgorithm, setPrivacyAlgorithm] = useState();
   const [types, setTypes] = useState(ALL_CREDENTIAL_TYPES);
   const [title, setTitle] = useState('');
-
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-      dispatch(renewSessionTimeout(gmp)());
-    }
-  };
 
   const openCredentialsDialog = credential => {
     if (isDefined(credential)) {
@@ -100,7 +91,6 @@ const CredentialsComponent = ({
     }
 
     setDialogVisible(true);
-    handleInteraction();
   };
 
   const closeCredentialDialog = () => {
@@ -109,12 +99,9 @@ const CredentialsComponent = ({
 
   const handleCloseCredentialDialog = () => {
     closeCredentialDialog();
-    handleInteraction();
   };
 
   const handleDownloadInstaller = (cred, format) => {
-    handleInteraction();
-
     return gmp.credential
       .download(cred, format)
       .then(response => {
@@ -158,7 +145,6 @@ const CredentialsComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -176,7 +162,6 @@ const CredentialsComponent = ({
               {...dialogProps}
               onClose={handleCloseCredentialDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeCredentialDialog());
               }}
             />
@@ -199,7 +184,6 @@ CredentialsComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onInstallerDownloadError: PropTypes.func,
   onInstallerDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

@@ -37,7 +37,6 @@ import {
   loadEntities as loadScanners,
   selector as scannerSelector,
 } from 'web/store/entities/scanners';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {getTimezone} from 'web/store/usersettings/selectors';
 import {renderSelectItems} from 'web/utils/Render';
 
@@ -131,8 +130,7 @@ const PerformancePage = () => {
   });
   const timezone = useShallowEqualSelector(getTimezone);
   const dispatch = useDispatch();
-  // @ts-expect-error
-  const handleInteraction = () => dispatch(renewSessionTimeout(gmp)());
+
   const fetchScanners = useCallback(
     // @ts-expect-error
     () => dispatch(loadScanners(gmp)(SENSOR_SCANNER_FILTER)),
@@ -195,8 +193,6 @@ const PerformancePage = () => {
       setDuration(duration);
       setStartDate(start);
       setEndDate(end);
-
-      handleInteraction();
     }
   };
 
@@ -210,13 +206,10 @@ const PerformancePage = () => {
     setEndDate(endDate);
     setStartDate(startDate);
     setDuration(undefined);
-
-    handleInteraction();
   };
 
   const handleScannerChange = (value: string) => {
     setSensorId(value);
-    handleInteraction();
   };
 
   return (

@@ -42,7 +42,7 @@ ToolBarIcons.propTypes = {
   onAuditCreateClick: PropTypes.func.isRequired,
 };
 
-const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => {
+const Page = ({onChanged, onDownloaded, onError, ...props}) => {
   const [_] = useTranslation();
 
   return (
@@ -54,7 +54,6 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => {
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onResumeError={onError}
       onResumed={onChanged}
       onSaved={onChanged}
@@ -94,7 +93,6 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => {
             onAuditStartClick={start}
             onAuditStopClick={stop}
             onError={onError}
-            onInteraction={onInteraction}
             onReportDownloadClick={reportDownload}
           />
         </React.Fragment>
@@ -107,7 +105,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('audit', {

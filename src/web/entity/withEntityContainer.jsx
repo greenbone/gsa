@@ -14,7 +14,6 @@ import Reload, {
 } from 'web/components/loading/Reload';
 import withDialogNotification from 'web/components/notification/withDialogNotification';
 import EntityContainer from 'web/entity/Container';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import {updateDisplayName} from 'web/utils/displayName';
 import PropTypes from 'web/utils/PropTypes';
@@ -74,7 +73,6 @@ const withEntityContainer =
     };
 
     const mapDispatchToProps = (dispatch, {gmp}) => ({
-      onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
       load: id => dispatch(load(gmp)(id)),
     });
 

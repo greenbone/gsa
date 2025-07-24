@@ -110,7 +110,6 @@ interface TaskComponentProps {
   onDeleteError?: (error: Rejection) => void;
   onDownloaded?: OnDownloadedFunc;
   onDownloadError?: (error: Rejection) => void;
-  onInteraction?: () => void;
   onModifyTaskWizardError?: (error: Rejection) => void;
   onModifyTaskWizardSaved?: () => void;
   onReportImported?: () => void;
@@ -143,7 +142,7 @@ const TaskComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-  onInteraction,
+
   onModifyTaskWizardError,
   onModifyTaskWizardSaved,
   onReportImported,
@@ -337,12 +336,6 @@ const TaskComponent = ({
     fetchUserSettingsDefaults();
   }, [fetchUserSettingsDefaults]);
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleTargetChange = (targetId?: string) => {
     setTargetId(targetId);
   };
@@ -356,8 +349,6 @@ const TaskComponent = ({
   };
 
   const handleTaskStart = (task: Task) => {
-    handleInteraction();
-
     return actionFunction<void, void, Rejection>(
       // @ts-expect-error
       gmp.task.start(task),
@@ -368,8 +359,6 @@ const TaskComponent = ({
   };
 
   const handleTaskStop = (task: Task) => {
-    handleInteraction();
-
     return actionFunction<void, void, Rejection>(
       // @ts-expect-error
       gmp.task.stop(task),
@@ -380,8 +369,6 @@ const TaskComponent = ({
   };
 
   const handleTaskResume = (task: Task) => {
-    handleInteraction();
-
     return actionFunction<Response<Task, XmlMeta>, void, Rejection>(
       // @ts-expect-error
       gmp.task.resume(task),
@@ -433,7 +420,6 @@ const TaskComponent = ({
         ? _('Edit Container Task {{name}}', {name: task.name as string})
         : _('New Container Task'),
     );
-    handleInteraction();
   };
 
   const closeContainerTaskDialog = () => {
@@ -442,12 +428,9 @@ const TaskComponent = ({
 
   const handleCloseContainerTaskDialog = () => {
     closeContainerTaskDialog();
-    handleInteraction();
   };
 
   const handleSaveContainerTask = (data: ContainerTaskDialogData) => {
-    handleInteraction();
-
     if (isDefined(data.id)) {
       // @ts-expect-error
       return gmp.task
@@ -488,8 +471,6 @@ const TaskComponent = ({
     target_id: targetId,
     task,
   }: TaskDialogData) => {
-    handleInteraction();
-
     if (isDefined(task)) {
       // save edit part
       if (!task.isChangeable()) {
@@ -627,7 +608,6 @@ const TaskComponent = ({
     }
 
     setTaskDialogVisible(true);
-    handleInteraction();
   };
 
   const openTaskWizard = () => {
@@ -637,7 +617,6 @@ const TaskComponent = ({
       setTaskWizardVisible(true);
       setHosts(data.clientAddress);
     });
-    handleInteraction();
   };
 
   const closeTaskWizard = () => {
@@ -645,8 +624,6 @@ const TaskComponent = ({
   };
 
   const handleSaveTaskWizard = (data: {hosts: string}) => {
-    handleInteraction();
-
     return gmp.wizard
       .runQuickFirstScan(data)
       .then(onTaskWizardSaved, onTaskWizardError)
@@ -674,7 +651,6 @@ const TaskComponent = ({
       setTargetHosts(data.clientAddress);
       setTaskName(_('New Quick Task'));
     });
-    handleInteraction();
   };
 
   const closeAdvancedTaskWizard = () => {
@@ -682,8 +658,6 @@ const TaskComponent = ({
   };
 
   const handleSaveAdvancedTaskWizard = (data: AdvancedTaskWizardData) => {
-    handleInteraction();
-
     return gmp.wizard
       .runQuickTask(data)
       .then(onAdvancedTaskWizardSaved, onAdvancedTaskWizardError)
@@ -704,7 +678,6 @@ const TaskComponent = ({
       setTaskId(selectSaveId(data.tasks));
       setTasks(data.tasks);
     });
-    handleInteraction();
   };
 
   const closeModifyTaskWizard = () => {
@@ -712,8 +685,6 @@ const TaskComponent = ({
   };
 
   const handleSaveModifyTaskWizard = (data: ModifyTaskWizardData) => {
-    handleInteraction();
-
     return gmp.wizard
       .runModifyTask(data)
       .then(onModifyTaskWizardSaved, onModifyTaskWizardError)
@@ -724,7 +695,6 @@ const TaskComponent = ({
     setReportImportDialogVisible(true);
     setTaskId(task.id);
     setTasks([task]);
-    handleInteraction();
   };
 
   const closeReportImportDialog = () => {
@@ -732,8 +702,6 @@ const TaskComponent = ({
   };
 
   const handleReportImport = (data: ReportImportDialogData) => {
-    handleInteraction();
-
     // @ts-expect-error
     return gmp.report
       .import(data)
@@ -751,27 +719,22 @@ const TaskComponent = ({
 
   const handleCloseTaskDialog = () => {
     closeTaskDialog();
-    handleInteraction();
   };
 
   const handleCloseTaskWizard = () => {
     closeTaskWizard();
-    handleInteraction();
   };
 
   const handleCloseAdvancedTaskWizard = () => {
     closeAdvancedTaskWizard();
-    handleInteraction();
   };
 
   const handleCloseModifyTaskWizard = () => {
     closeModifyTaskWizard();
-    handleInteraction();
   };
 
   const handleCloseReportImportDialog = () => {
     closeReportImportDialog();
-    handleInteraction();
   };
 
   return (
@@ -786,7 +749,6 @@ const TaskComponent = ({
         onDeleted={onDeleted}
         onDownloadError={onDownloadError}
         onDownloaded={onDownloaded}
-        onInteraction={onInteraction}
       >
         {other => (
           <>
@@ -809,19 +771,14 @@ const TaskComponent = ({
               <TargetComponent
                 onCreated={handleTargetCreated}
                 // @ts-expect-error
-                onInteraction={onInteraction}
               >
                 {({create: createTarget}) => (
                   // @ts-expect-error
-                  <AlertComponent
-                    onCreated={handleAlertCreated}
-                    onInteraction={onInteraction}
-                  >
+                  <AlertComponent onCreated={handleAlertCreated}>
                     {({create: createAlert}) => (
                       <ScheduleComponent
                         onCreated={handleScheduleCreated}
                         // @ts-expect-error
-                        onInteraction={onInteraction}
                       >
                         {({create: createSchedule}) => (
                           <TaskDialog

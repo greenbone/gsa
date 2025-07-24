@@ -38,7 +38,7 @@ const ToolBarIcons = () => {
 const Page = ({
   filter,
   onFilterChanged,
-  onInteraction,
+
   onChanged,
   onDownloaded,
   onError,
@@ -57,7 +57,6 @@ const Page = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
       onSolveError={onError}
       onSolved={onChanged}
@@ -71,14 +70,10 @@ const Page = ({
               <TicketsDashboard
                 filter={filter}
                 onFilterChanged={onFilterChanged}
-                onInteraction={onInteraction}
               />
             )}
             dashboardControls={() => (
-              <DashboardControls
-                dashboardId={TICKETS_DASHBOARD_ID}
-                onInteraction={onInteraction}
-              />
+              <DashboardControls dashboardId={TICKETS_DASHBOARD_ID} />
             )}
             filter={filter}
             filterEditDialog={TicketsFilterDialogComponent}
@@ -90,7 +85,6 @@ const Page = ({
             onChanged={onChanged}
             onError={onError}
             onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
             onTicketClone={clone}
             onTicketClose={close}
             onTicketDelete={deleteTicket}
@@ -109,7 +103,6 @@ Page.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('ticket', {

@@ -183,7 +183,7 @@ class Page extends React.Component {
   render() {
     const {_} = this.props;
 
-    const {filter, onFilterChanged, onInteraction, tasks} = this.props;
+    const {filter, onFilterChanged, tasks} = this.props;
     const {containerTaskDialogVisible, importDialogVisible, task_id} =
       this.state;
 
@@ -197,14 +197,10 @@ class Page extends React.Component {
             <ReportsDashboard
               filter={filter}
               onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
             />
           )}
           dashboardControls={() => (
-            <DashboardControls
-              dashboardId={REPORTS_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
+            <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
           )}
           filterEditDialog={ReportFilterDialog}
           filtersFilter={REPORTS_FILTER_FILTER}
@@ -212,7 +208,6 @@ class Page extends React.Component {
           table={ReportsTable}
           title={_('Reports')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onReportDeleteClick={this.handleReportDeleteClick}
           onReportDeltaSelect={this.handleReportDeltaSelect}
           onUploadReportClick={this.openImportDialog}
@@ -248,7 +243,6 @@ Page.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   _: PropTypes.func.isRequired,
 };
 

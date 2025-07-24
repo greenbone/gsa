@@ -25,7 +25,7 @@ const OperatingSystemsTab = ({
   isUpdating,
   sortField,
   sortReverse,
-  onInteraction,
+
   onSortChange,
 }) => (
   <ReportEntitiesContainer
@@ -35,7 +35,6 @@ const OperatingSystemsTab = ({
     sortField={sortField}
     sortFunctions={operatingssystemsSortFunctions}
     sortReverse={sortReverse}
-    onInteraction={onInteraction}
   >
     {({
       entities,
@@ -74,7 +73,6 @@ OperatingSystemsTab.propTypes = {
   operatingsystems: PropTypes.array,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
 

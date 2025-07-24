@@ -44,7 +44,7 @@ const Page = ({
   onDownloaded,
   onError,
   onFilterChanged,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -54,7 +54,6 @@ const Page = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
     >
       {({delete: delete_func, download, exportFunc}) => (
         <React.Fragment>
@@ -65,14 +64,10 @@ const Page = ({
               <TlsCertificatesDashboard
                 filter={filter}
                 onFilterChanged={onFilterChanged}
-                onInteraction={onInteraction}
               />
             )}
             dashboardControls={() => (
-              <DashboardControls
-                dashboardId={TLS_CERTIFICATES_DASHBOARD_ID}
-                onInteraction={onInteraction}
-              />
+              <DashboardControls dashboardId={TLS_CERTIFICATES_DASHBOARD_ID} />
             )}
             filter={filter}
             filterEditDialog={TlsCertificatesFilterDialog}
@@ -83,7 +78,6 @@ const Page = ({
             toolBarIcons={ToolBarIcons}
             onError={onError}
             onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
             onTlsCertificateDeleteClick={delete_func}
             onTlsCertificateDownloadClick={download}
             onTlsCertificateExportClick={exportFunc}
@@ -100,7 +94,6 @@ Page.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('tlscertificate', {

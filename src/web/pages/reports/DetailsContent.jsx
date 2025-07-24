@@ -94,7 +94,7 @@ const PageContent = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onFilterResetClick,
-  onInteraction,
+
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onSortChange,
@@ -191,7 +191,6 @@ const PageContent = ({
           task={task}
           threshold={threshold}
           onAddToAssetsClick={onAddToAssetsClick}
-          onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
           onReportDownloadClick={onReportDownloadClick}
         />
@@ -297,7 +296,6 @@ const PageContent = ({
                       onFilterEditClick={onFilterEditClick}
                       onFilterRemoveClick={onFilterRemoveClick}
                       onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-                      onInteraction={onInteraction}
                       onSortChange={sortField =>
                         onSortChange('results', sortField)
                       }
@@ -324,7 +322,6 @@ const PageContent = ({
                         isUpdating={isUpdating}
                         sortField={sorting.hosts.sortField}
                         sortReverse={sorting.hosts.sortReverse}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('hosts', sortField)
                         }
@@ -351,7 +348,6 @@ const PageContent = ({
                         ports={ports.entities}
                         sortField={sorting.ports.sortField}
                         sortReverse={sorting.ports.sortReverse}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('ports', sortField)
                         }
@@ -378,7 +374,6 @@ const PageContent = ({
                         isUpdating={isUpdating}
                         sortField={sorting.apps.sortField}
                         sortReverse={sorting.apps.sortReverse}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('apps', sortField)
                         }
@@ -405,7 +400,6 @@ const PageContent = ({
                         operatingsystems={operatingsystems.entities}
                         sortField={sorting.os.sortField}
                         sortReverse={sorting.os.sortReverse}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('os', sortField)
                         }
@@ -432,7 +426,6 @@ const PageContent = ({
                         isUpdating={isUpdating}
                         sortField={sorting.cves.sortField}
                         sortReverse={sorting.cves.sortReverse}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('cves', sortField)
                         }
@@ -459,7 +452,6 @@ const PageContent = ({
                         isUpdating={isUpdating}
                         sortField={sorting.closedcves.sortField}
                         sortReverse={sorting.closedcves.sortReverse}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('closedcves', sortField)
                         }
@@ -486,7 +478,6 @@ const PageContent = ({
                         sortField={sorting.tlscerts.sortField}
                         sortReverse={sorting.tlscerts.sortReverse}
                         tlsCertificates={tlsCertificates.entities}
-                        onInteraction={onInteraction}
                         onSortChange={sortField =>
                           onSortChange('tlscerts', sortField)
                         }
@@ -504,7 +495,6 @@ const PageContent = ({
                       isUpdating={isUpdating}
                       sortField={sorting.errors.sortField}
                       sortReverse={sorting.errors.sortReverse}
-                      onInteraction={onInteraction}
                       onSortChange={sortField =>
                         onSortChange('errors', sortField)
                       }
@@ -515,7 +505,6 @@ const PageContent = ({
                       entity={report}
                       onChanged={onTagSuccess}
                       onError={onError}
-                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -566,7 +555,6 @@ PageContent.propTypes = {
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onFilterResetClick: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,

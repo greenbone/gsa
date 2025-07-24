@@ -43,7 +43,6 @@ interface TaskListPageProps {
   onFilterCreated: (filter: Filter) => void;
   onFilterRemoved: () => void;
   onFilterReset: () => void;
-  onInteraction: () => void;
 }
 
 interface TaskEntitiesPageProps {
@@ -65,7 +64,7 @@ interface TaskEntitiesPageProps {
 const TaskListPage = ({
   filter,
   onFilterChanged,
-  onInteraction,
+
   onChanged,
   onDownloaded,
   onError,
@@ -84,7 +83,6 @@ const TaskListPage = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onModifyTaskWizardSaved={onChanged}
       onReportImported={onChanged}
       onResumeError={onError}
@@ -119,14 +117,10 @@ const TaskListPage = ({
               <TaskDashboard
                 filter={filter}
                 onFilterChanged={onFilterChanged}
-                onInteraction={onInteraction}
               />
             )}
             dashboardControls={() => (
-              <DashboardControls
-                dashboardId={TASK_DASHBOARD_ID}
-                onInteraction={onInteraction}
-              />
+              <DashboardControls dashboardId={TASK_DASHBOARD_ID} />
             )}
             filter={filter}
             filterEditDialog={TaskFilterDialog}
@@ -139,7 +133,6 @@ const TaskListPage = ({
             onContainerTaskCreateClick={createContainer}
             onError={onError}
             onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
             onModifyTaskWizardClick={modifyTaskWizard}
             onReportImportClick={reportImport}
             onTaskCloneClick={clone}

@@ -10,7 +10,6 @@ import {isDefined} from 'gmp/utils/identity';
 import TagsDialog from 'web/entities/TagsDialog';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import TagDialog from 'web/pages/tags/Dialog';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
@@ -47,7 +46,6 @@ const BulkTags = ({
 }) => {
   const [_] = useTranslation();
   const gmp = useGmp();
-  const [, renewSession] = useUserSessionTimeout();
   const [tag, setTag] = useState({});
   const [tagDialogVisible, setTagDialogVisible] = useState(false);
   const [tags, setTags] = useState([]);
@@ -83,14 +81,11 @@ const BulkTags = ({
   }, []);
 
   const openTagDialog = useCallback(() => {
-    renewSession();
     setTagDialogVisible(true);
-  }, [renewSession]);
+  }, []);
 
   const handleCreateTag = useCallback(
     data => {
-      renewSession();
-
       return gmp.tag
         .create(data)
         .then(response => gmp.tag.get(response.data))
@@ -102,17 +97,15 @@ const BulkTags = ({
         .then(closeTagDialog)
         .catch(setError);
     },
-    [closeTagDialog, gmp.tag, renewSession, tags],
+    [closeTagDialog, gmp.tag, tags],
   );
 
   const handleCloseTagDialog = useCallback(() => {
     closeTagDialog();
-    renewSession();
-  }, [closeTagDialog, renewSession]);
+  }, [closeTagDialog]);
 
   const handleTagChange = useCallback(
     id => {
-      renewSession();
       return gmp.tag
         .get({id})
         .then(resp => {
@@ -120,7 +113,7 @@ const BulkTags = ({
         })
         .catch(setError);
     },
-    [renewSession, gmp.tag],
+    [gmp.tag],
   );
 
   const handleCloseTagsDialog = useCallback(() => {

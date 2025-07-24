@@ -29,7 +29,7 @@ describe('Delta Results Tab tests', () => {
     const onFilterEditClick = testing.fn();
     const onFilterRemoveClick = testing.fn();
     const onFilterRemoveSeverityClick = testing.fn();
-    const onInteraction = testing.fn();
+
     const onSortChange = testing.fn();
     const onTargetEditClick = testing.fn();
 
@@ -62,7 +62,6 @@ describe('Delta Results Tab tests', () => {
         onFilterEditClick={onFilterEditClick}
         onFilterRemoveClick={onFilterRemoveClick}
         onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-        onInteraction={onInteraction}
         onSortChange={onSortChange}
         onTargetEditClick={onTargetEditClick}
       />,

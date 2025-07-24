@@ -129,8 +129,6 @@ class PermissionsBase extends React.Component {
         userId: selectSaveId(users),
       });
     });
-
-    this.handleInteraction();
   }
 
   closeMultiplePermissionDialog() {
@@ -143,25 +141,15 @@ class PermissionsBase extends React.Component {
 
   handleCloseMultiplePermissionDialog() {
     this.closeMultiplePermissionDialog();
-    this.handleInteraction();
   }
 
   handleMultipleSave(data) {
     const {gmp, onChanged} = this.props;
 
-    this.handleInteraction();
-
     return gmp.permissions
       .create(data)
       .then(onChanged)
       .then(() => this.closeMultiplePermissionDialog());
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   }
 
   render() {
@@ -239,7 +227,6 @@ PermissionsBase.propTypes = {
   permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onPermissionCloneClick: PropTypes.func.isRequired,
   onPermissionDeleteClick: PropTypes.func.isRequired,
   onPermissionDownloadClick: PropTypes.func.isRequired,
@@ -255,7 +242,6 @@ const EntityPermissions = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
 }) => (
   <PermissionComponent
     onCloneError={onError}
@@ -265,7 +251,6 @@ const EntityPermissions = ({
     onDeleted={onChanged}
     onDownloadError={onError}
     onDownloaded={onDownloaded}
-    onInteraction={onInteraction}
     onSaved={onChanged}
   >
     {({clone, create, delete: delete_func, download, edit}) => (
@@ -275,7 +260,6 @@ const EntityPermissions = ({
         relatedResourcesLoaders={relatedResourcesLoaders}
         toggleDetailsIcon={false}
         onChanged={onChanged}
-        onInteraction={onInteraction}
         onPermissionCloneClick={clone}
         onPermissionCreateClick={create}
         onPermissionDeleteClick={delete_func}
@@ -293,7 +277,6 @@ EntityPermissions.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default EntityPermissions;

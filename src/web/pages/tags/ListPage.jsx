@@ -46,7 +46,7 @@ const TagsPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -63,7 +63,6 @@ const TagsPage = ({
       onDownloaded={onDownloaded}
       onEnableError={onError}
       onEnabled={onChanged}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -90,7 +89,6 @@ const TagsPage = ({
             onChanged={onChanged}
             onDownloaded={onDownloaded}
             onError={onError}
-            onInteraction={onInteraction}
             onTagCloneClick={clone}
             onTagCreateClick={create}
             onTagDeleteClick={delete_func}
@@ -110,7 +108,6 @@ TagsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('tag', {

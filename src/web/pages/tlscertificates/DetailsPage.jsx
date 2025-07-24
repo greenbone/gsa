@@ -197,7 +197,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -207,7 +207,6 @@ const Page = ({
       onDeleted={goToList('tlscertificates', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
     >
       {({delete: delete_func, download, exportFunc}) => (
         <EntityPage
@@ -216,7 +215,6 @@ const Page = ({
           sectionIcon={<TlsCertificateIcon size="large" />}
           title={_('TLS Certificate')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onTlsCertificateDeleteClick={delete_func}
           onTlsCertificateDownloadClick={download}
           onTlsCertificateExportClick={exportFunc}
@@ -250,7 +248,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -260,7 +257,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -281,7 +277,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

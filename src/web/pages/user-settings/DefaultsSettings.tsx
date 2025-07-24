@@ -81,7 +81,7 @@ export const DefaultSettings = ({
   const {
     getErrorMessage,
     saveSetting,
-    onInteraction,
+
     clearErrorMessage,
     setErrorMessage,
   } = useSettingSave();
@@ -187,7 +187,6 @@ export const DefaultSettings = ({
     }));
     setIsEditing(editState => ({...editState, [key]: false}));
     clearErrorMessage(key);
-    onInteraction();
   };
 
   return (
@@ -239,7 +238,6 @@ export const DefaultSettings = ({
                       ...updatedValues,
                       [key]: newValue,
                     }));
-                    onInteraction();
                   }}
                 />
               }
