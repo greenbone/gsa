@@ -12,9 +12,8 @@ import {hasValue} from 'gmp/utils/identity';
  *
  * @returns {String} A filter identifier to be used in the store
  */
-
 export const filterIdentifier = filter =>
-  hasValue(filter) ? `filter:${filter.toFilterString()}` : 'default';
+  hasValue(filter) ? `filter:${filter.identifier()}` : 'default';
 
 /**
  * A combineReducers version to allow to return undefined for a state.

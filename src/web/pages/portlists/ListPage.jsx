@@ -146,18 +146,17 @@ const PortListsPage = () => {
 
   useEffect(() => {
     /*
-     * Check if the filters are changed in a way that matters for fetching:
+     * Check if the filters are changed in a way that matters for fetching and
+     *  loading data from the store:
      * - Either the the previous filter wasn't defined yet
-     * - or the terms are different
-     * - or the normal equality check fails (for cases where both filters have IDs).
+     * - the filter is defined and loaded
+     * - the filter identifier is different from the previous one
      */
-
     const shouldFetch =
       isDefined(filter) &&
       !isLoadingFilter &&
-      (!isDefined(previousFilter) ||
-        filter.toFilterString() !== previousFilter?.toFilterString() ||
-        !filter.equals(previousFilter));
+      filter.identifier() !== previousFilter?.identifier();
+
     if (shouldFetch) {
       fetch(filter);
     }

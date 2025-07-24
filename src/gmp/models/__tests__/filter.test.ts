@@ -1464,3 +1464,23 @@ describe('Filter merge', () => {
     expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
   });
 });
+
+describe('Filter identifier', () => {
+  test('should return identifier', () => {
+    const filter = Filter.fromString('foo=bar');
+    expect(filter.identifier()).toEqual('foo=bar');
+  });
+
+  test('should use filter terms for identifier', () => {
+    const filter = Filter.fromString('foo=bar first=1 rows=10');
+    expect(filter.identifier()).toEqual('foo=bar first=1 rows=10');
+  });
+
+  test('should use different identifiers for different filter term order', () => {
+    const filter1 = Filter.fromString('foo=bar first=1 rows=10');
+    const filter2 = Filter.fromString('rows=10 first=1 foo=bar');
+    expect(filter1.identifier()).toEqual('foo=bar first=1 rows=10');
+    expect(filter2.identifier()).toEqual('rows=10 first=1 foo=bar');
+    expect(filter1.identifier()).not.toEqual(filter2.identifier());
+  });
+});
