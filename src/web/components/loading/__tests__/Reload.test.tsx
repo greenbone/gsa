@@ -12,8 +12,8 @@ import Reload, {
   USE_DEFAULT_RELOAD_INTERVAL_INACTIVE,
 } from 'web/components/loading/Reload';
 
-const TestComponent = ({reload, id, reloadOptions}) => (
-  <button data-testid={id} onClick={() => reload(reloadOptions)} />
+const TestComponent = ({reload, id}: {id: string; reload: () => void}) => (
+  <button data-testid={id} onClick={() => reload()} />
 );
 
 const runTimers = async () => {
@@ -33,8 +33,8 @@ describe('Reload component tests', () => {
     const {render} = rendererWith({gmp});
 
     const renderFunc = testing.fn().mockReturnValue(<div data-testid="foo" />);
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
@@ -58,7 +58,7 @@ describe('Reload component tests', () => {
     const {render} = rendererWith({gmp});
 
     const renderFunc = testing.fn().mockReturnValue(<div data-testid="foo" />);
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     render(
       <Reload name="foo" reload={reloadFunc}>
@@ -86,8 +86,8 @@ describe('Reload component tests', () => {
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
@@ -128,8 +128,8 @@ describe('Reload component tests', () => {
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = testing.fn().mockRejectedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockRejectedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
@@ -170,8 +170,8 @@ describe('Reload component tests', () => {
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockRejectedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockRejectedValue({});
 
     render(
       <Reload load={loadFunc} name="foo" reload={reloadFunc}>
@@ -213,8 +213,8 @@ describe('Reload component tests', () => {
       .mockImplementationOnce(({reload}) => (
         <TestComponent id="one" reload={reload} />
       ));
-    const loadFunc = testing.fn().mockRejectedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockRejectedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     const gmp = {
       settings: {
@@ -237,7 +237,7 @@ describe('Reload component tests', () => {
     loadFunc.mockClear();
     renderFunc.mockClear();
 
-    const button = screen.queryByTestId('one');
+    const button = screen.getByTestId('one');
     fireEvent.click(button);
 
     expect(loadFunc).not.toHaveBeenCalled();
@@ -254,8 +254,8 @@ describe('Reload component tests', () => {
       .mockImplementationOnce(({reload}) => (
         <TestComponent id="one" reload={reload} />
       ));
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     const gmp = {
       settings: {
@@ -289,7 +289,7 @@ describe('Reload component tests', () => {
 
     reloadFunc.mockClear();
 
-    const button = screen.queryByTestId('one');
+    const button = screen.getByTestId('one');
     fireEvent.click(button);
 
     expect(loadFunc).not.toHaveBeenCalled();
@@ -304,8 +304,8 @@ describe('Reload component tests', () => {
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     const reloadInterval = testing.fn().mockReturnValue(1000);
 
@@ -355,8 +355,8 @@ describe('Reload component tests', () => {
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     const reloadInterval = testing.fn().mockReturnValue(0);
 
@@ -409,8 +409,8 @@ describe('Reload component tests', () => {
         .fn()
         .mockReturnValueOnce(<div data-testid="one" />)
         .mockReturnValueOnce(<div data-testid="two" />);
-      const loadFunc = testing.fn().mockResolvedValue();
-      const reloadFunc = testing.fn().mockResolvedValue();
+      const loadFunc = testing.fn().mockResolvedValue({});
+      const reloadFunc = testing.fn().mockResolvedValue({});
 
       const reloadInterval = testing
         .fn()
@@ -467,8 +467,8 @@ describe('Reload component tests', () => {
         .fn()
         .mockReturnValueOnce(<div data-testid="one" />)
         .mockReturnValueOnce(<div data-testid="two" />);
-      const loadFunc = testing.fn().mockResolvedValue();
-      const reloadFunc = testing.fn().mockResolvedValue();
+      const loadFunc = testing.fn().mockResolvedValue({});
+      const reloadFunc = testing.fn().mockResolvedValue({});
 
       const reloadInterval = testing
         .fn()
@@ -525,8 +525,8 @@ describe('Reload component tests', () => {
         .fn()
         .mockReturnValueOnce(<div data-testid="one" />)
         .mockReturnValueOnce(<div data-testid="two" />);
-      const loadFunc = testing.fn().mockResolvedValue();
-      const reloadFunc = testing.fn().mockResolvedValue();
+      const loadFunc = testing.fn().mockResolvedValue({});
+      const reloadFunc = testing.fn().mockResolvedValue({});
 
       const reloadInterval = testing
         .fn()
@@ -579,8 +579,8 @@ describe('Reload component tests', () => {
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
 
     const gmp = {
       settings: {
@@ -620,8 +620,8 @@ describe('Reload component tests', () => {
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
     const reloadIntervalFunc = testing
       .fn()
       .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_ACTIVE);
@@ -671,8 +671,8 @@ describe('Reload component tests', () => {
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = testing.fn().mockResolvedValue();
-    const reloadFunc = testing.fn().mockResolvedValue();
+    const loadFunc = testing.fn().mockResolvedValue({});
+    const reloadFunc = testing.fn().mockResolvedValue({});
     const reloadIntervalFunc = testing
       .fn()
       .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_INACTIVE);
