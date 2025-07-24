@@ -5,6 +5,7 @@
 
 import React from 'react';
 import EntitiesActions from 'web/entities/EntitiesActions';
+import {updateDisplayName} from 'web/utils/displayName';
 
 const withEntitiesActions = Component => {
   const EntitiesActionsWrapper = props => (
@@ -13,7 +14,11 @@ const withEntitiesActions = Component => {
     </EntitiesActions>
   );
 
-  return EntitiesActionsWrapper;
+  return updateDisplayName(
+    EntitiesActionsWrapper,
+    Component,
+    'withEntitiesActions',
+  );
 };
 
 export default withEntitiesActions;

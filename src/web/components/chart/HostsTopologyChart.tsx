@@ -22,6 +22,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, SeverityRating} from 'gmp/utils/severity';
 import Group from 'web/components/chart/Group';
 import Layout from 'web/components/layout/Layout';
+import {I18n, TranslateFunc} from 'web/hooks/useTranslation';
 import {setRef} from 'web/utils/Render';
 import {
   getSeverityLevelBoundaries,
@@ -91,7 +92,8 @@ interface HostsTopologyChartProps {
   width: number;
   data: HostsTopologyChartData;
   svgRef: React.Ref<SVGSVGElement>;
-  _: (text: string, ...args: unknown[]) => string;
+  _: TranslateFunc;
+  i18n: I18n;
 }
 
 const Svg = styled.svg<SvgProps>`

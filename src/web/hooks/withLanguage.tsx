@@ -5,6 +5,7 @@
 
 import React from 'react';
 import useLanguage from 'web/hooks/useLanguage';
+import {updateDisplayName} from 'web/utils/displayName';
 
 type LanguageProps = {
   language: string;
@@ -32,9 +33,7 @@ const withLanguage = <P extends {}>(
     );
   };
 
-  WithLanguage.displayName = `withLanguage(${WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'})`;
-
-  return WithLanguage;
+  return updateDisplayName(WithLanguage, WrappedComponent, 'withLanguage');
 };
 
 export default withLanguage;

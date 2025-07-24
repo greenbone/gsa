@@ -5,6 +5,7 @@
 
 import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
+import {updateDisplayName} from 'web/utils/displayName';
 import PropTypes from 'web/utils/PropTypes';
 
 /**
@@ -90,7 +91,7 @@ export const withFolding = Component => {
     onFoldToggle: PropTypes.func,
   };
 
-  return FoldingWrapper;
+  return updateDisplayName(FoldingWrapper, Component, 'withFolding');
 };
 
 /**

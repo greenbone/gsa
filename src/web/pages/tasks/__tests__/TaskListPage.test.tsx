@@ -12,12 +12,11 @@ import {
   fireEvent,
   wait,
 } from 'web/testing';
-import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
-import TaskPage, {ToolBarIcons} from 'web/pages/tasks/ListPage';
+import TaskListPage from 'web/pages/tasks/TaskListPage';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -27,7 +26,7 @@ const lastReport = {
   report: {
     _id: '1234',
     timestamp: '2019-08-10T12:51:27Z',
-    severity: '5.0',
+    severity: 5.0,
   },
 };
 
@@ -37,15 +36,12 @@ const task = Task.fromElement({
   name: 'foo',
   comment: 'bar',
   status: TASK_STATUS.done,
-  alterable: '0',
+  alterable: 0,
   last_report: lastReport,
-  report_count: {__text: '1'},
+  report_count: {__text: 1},
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: 'id1', name: 'target1'},
 });
-
-const caps = new Capabilities(['everything']);
-const wrongCaps = new Capabilities(['get_config']);
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
@@ -104,8 +100,8 @@ const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe('TaskDetailsPage tests', () => {
-  test('should render full TaskPage', async () => {
+describe('TaskListPage tests', () => {
+  test('should render full page', async () => {
     const gmp = {
       tasks: {
         get: getTasks,
@@ -156,14 +152,11 @@ describe('TaskDetailsPage tests', () => {
       entitiesLoadingActions.success([task], filter, loadedFilter, counts),
     );
 
-    const {baseElement} = render(<TaskPage />);
+    render(<TaskListPage />);
 
     await wait();
 
-    const display = screen.getAllByTestId('grid-item');
-    const header = baseElement.querySelectorAll('th');
-    const row = baseElement.querySelectorAll('tbody tr')[0];
-    const powerFilter = within(screen.queryPowerFilter());
+    const powerFilter = within(screen.getPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
 
     // Toolbar Icons
@@ -207,13 +200,16 @@ describe('TaskDetailsPage tests', () => {
       'title',
       'Reset to Defaults',
     );
-    expect(display[0]).toHaveTextContent('Tasks by Severity Class (Total: 0)');
-    expect(display[1]).toHaveTextContent(
+    const displays = screen.getAllByTestId('grid-item');
+    expect(displays[0]).toHaveTextContent('Tasks by Severity Class (Total: 0)');
+    expect(displays[1]).toHaveTextContent(
       'Tasks with most High Results per Host',
     );
-    expect(display[2]).toHaveTextContent('Tasks by Status (Total: 0)');
+    expect(displays[2]).toHaveTextContent('Tasks by Status (Total: 0)');
 
     // Table
+    const table = screen.getByTestId('entities-table');
+    const header = within(table).getAllByRole('columnheader');
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Status');
     expect(header[2]).toHaveTextContent('Reports');
@@ -222,6 +218,8 @@ describe('TaskDetailsPage tests', () => {
     expect(header[5]).toHaveTextContent('Trend');
     expect(header[6]).toHaveTextContent('Actions');
 
+    const rows = table.querySelectorAll<HTMLElement>('tbody tr');
+    const row = rows[0];
     expect(row).toHaveTextContent('foo');
     expect(row).toHaveTextContent('(bar)');
     expect(row).toHaveTextContent('Done');
@@ -304,164 +302,18 @@ describe('TaskDetailsPage tests', () => {
       entitiesLoadingActions.success([task], filter, loadedFilter, counts),
     );
 
-    render(<TaskPage />);
+    render(<TaskListPage />);
 
     await wait();
 
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    const exportIcon = screen.getByTitle('Export page contents');
     fireEvent.click(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    const deleteIcon = screen.getAllByTitle(
-      'Move page contents to trashcan',
-    )[0];
+    const deleteIcon = screen.getByTitle('Move page contents to trashcan');
     fireEvent.click(deleteIcon);
     testBulkTrashcanDialog(screen, deleteByFilter);
-  });
-});
-
-describe('TaskPage ToolBarIcons test', () => {
-  test('should render', () => {
-    const handleAdvancedTaskWizardClick = testing.fn();
-    const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
-    const handleTaskCreateClick = testing.fn();
-    const handleTaskWizardClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    const {element} = render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
-    );
-    expect(element).toBeVisible();
-
-    const links = element.querySelectorAll('a');
-    expect(screen.getByTestId('help-icon')).toHaveAttribute(
-      'title',
-      'Help: Tasks',
-    );
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/scanning.html#managing-tasks',
-    );
-  });
-
-  test('should call click handlers', () => {
-    const handleAdvancedTaskWizardClick = testing.fn();
-    const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
-    const handleTaskCreateClick = testing.fn();
-    const handleTaskWizardClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: caps,
-      router: true,
-    });
-
-    render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
-    );
-
-    const taskWizardMenu = screen.getByTestId('task-wizard-menu');
-    expect(taskWizardMenu).toHaveTextContent('Task Wizard');
-    fireEvent.click(taskWizardMenu);
-    expect(handleTaskWizardClick).toHaveBeenCalled();
-
-    const advancedTaskWizardMenu = screen.getByTestId(
-      'advanced-task-wizard-menu',
-    );
-    expect(advancedTaskWizardMenu).toHaveTextContent('Advanced Task Wizard');
-    fireEvent.click(advancedTaskWizardMenu);
-    expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
-
-    const modifyTaskWizardMenu = screen.getByTestId('modify-task-wizard-menu');
-    expect(modifyTaskWizardMenu).toHaveTextContent('Modify Task Wizard');
-    fireEvent.click(modifyTaskWizardMenu);
-    expect(handleModifyTaskWizardClick).toHaveBeenCalled();
-
-    const newTaskMenu = screen.getByTestId('new-task-menu');
-    expect(newTaskMenu).toHaveTextContent('New Task');
-    fireEvent.click(newTaskMenu);
-    expect(handleTaskCreateClick).toHaveBeenCalled();
-
-    const newContainerTaskMenu = screen.getByTestId('new-container-task-menu');
-    expect(newContainerTaskMenu).toHaveTextContent('New Container Task');
-    fireEvent.click(newContainerTaskMenu);
-    expect(handleContainerTaskCreateClick).toHaveBeenCalled();
-  });
-
-  test('should not show icons if user does not have the right permissions', () => {
-    const handleAdvancedTaskWizardClick = testing.fn();
-    const handleModifyTaskWizardClick = testing.fn();
-    const handleContainerTaskCreateClick = testing.fn();
-    const handleTaskCreateClick = testing.fn();
-    const handleTaskWizardClick = testing.fn();
-
-    const gmp = {
-      settings: {manualUrl},
-    };
-
-    const {render} = rendererWith({
-      gmp,
-      capabilities: wrongCaps,
-      router: true,
-    });
-    render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
-    );
-
-    const taskWizardMenu = screen.queryByTestId('task-wizard-menu');
-    expect(taskWizardMenu).toBeNull();
-
-    const advancedTaskWizardMenu = screen.queryByTestId(
-      'advanced-task-wizard-menu',
-    );
-    expect(advancedTaskWizardMenu).toBeNull();
-
-    const modifyTaskWizardMenu = screen.queryByTestId(
-      'modify-task-wizard-menu',
-    );
-    expect(modifyTaskWizardMenu).toBeNull();
-
-    const newTaskMenu = screen.queryByTestId('new-task-menu');
-    expect(newTaskMenu).toBeNull();
-
-    const newContainerTaskMenu = screen.queryByTestId(
-      'new-container-task-menu',
-    );
-    expect(newContainerTaskMenu).toBeNull();
   });
 });

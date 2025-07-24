@@ -13,6 +13,7 @@ export interface BlankLinkProps
   > {
   to: string;
   children?: React.ReactNode;
+  'data-testid'?: string;
 }
 
 const BlankLink = ({to, children, ...props}: BlankLinkProps) => (
