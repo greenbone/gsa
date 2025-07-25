@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Rejection from 'gmp/http/rejection';
 import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import Task from 'gmp/models/task';
@@ -29,12 +30,36 @@ import {
 } from 'web/store/entities/tasks';
 
 interface TaskListPageProps {
+  createFilterType: string;
+  entities?: Task[];
+  entitiesCounts?: CollectionCounts;
+  entitiesError?: Error | Rejection;
   filter: Filter;
-  onFilterChanged: (filter: Filter) => void;
-  onInteraction: () => void;
+  isLoading?: boolean;
   onChanged: () => void;
   onDownloaded: OnDownloadedFunc;
   onError: (error: Error | Rejection) => void;
+  onFilterChanged: (filter: Filter) => void;
+  onFilterCreated: (filter: Filter) => void;
+  onFilterRemoved: () => void;
+  onFilterReset: () => void;
+  onInteraction: () => void;
+}
+
+interface TaskEntitiesPageProps {
+  onAdvancedTaskWizardClick?: () => void;
+  onModifyTaskWizardClick?: () => void;
+  onContainerTaskCreateClick?: () => void;
+  onTaskCreateClick?: () => void;
+  onTaskWizardClick?: () => void;
+  onTaskCloneClick?: (task: Task) => void;
+  onTaskDeleteClick?: (task: Task) => void;
+  onTaskEditClick?: (task: Task) => void;
+  onTaskStartClick?: (task: Task) => void;
+  onTaskStopClick?: (task: Task) => void;
+  onTaskResumeClick?: (task: Task) => void;
+  onTaskDownloadClick?: (task: Task) => void;
+  onReportImportClick?: (task: Task) => void;
 }
 
 const TaskListPage = ({
@@ -88,7 +113,7 @@ const TaskListPage = ({
       }) => (
         <React.Fragment>
           <PageTitle title={_('Tasks')} />
-          <EntitiesPage
+          <EntitiesPage<Task, TaskEntitiesPageProps>
             {...props}
             dashboard={() => (
               <TaskDashboard
