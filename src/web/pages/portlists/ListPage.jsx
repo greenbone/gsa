@@ -5,7 +5,7 @@
 
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
+import {PORTLISTS_FILTER_FILTER, RESET_FILTER} from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
@@ -21,9 +21,9 @@ import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useGmp from 'web/hooks/useGmp';
+import useInstanceVariable from 'web/hooks/useInstanceVariable';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
-import usePreviousValue from 'web/hooks/usePreviousValue';
 import useReload from 'web/hooks/useReload';
 import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -83,9 +83,9 @@ const PortListsPage = () => {
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
-  const [filter, isLoadingFilter, changeFilter, resetFilter, removeFilter] =
+  const [filter, isLoadingFilter, {changeFilter, resetFilter, removeFilter}] =
     usePageFilter('portlist', 'portlist');
-  const previousFilter = usePreviousValue(filter);
+  const [requestedFilter, setRequestedFilter] = useInstanceVariable();
   const portListsSelector = useShallowEqualSelector(selector);
   const listExportFileName = useShallowEqualSelector(state =>
     getUserSettingsDefaults(state).getValueByName('listexportfilename'),
@@ -110,9 +110,10 @@ const PortListsPage = () => {
   // fetch port lists
   const fetch = useCallback(
     withFilter => {
+      setRequestedFilter(withFilter);
       dispatch(loadEntities(gmp)(withFilter));
     },
-    [dispatch, gmp],
+    [dispatch, gmp, setRequestedFilter],
   );
 
   // refetch port lists with the current filter
@@ -125,18 +126,26 @@ const PortListsPage = () => {
     portListsSelector,
   );
 
-  const paginationChanged = useCallback(
+  const handleFilterChanged = useCallback(
     newFilter => {
-      fetch(newFilter);
       changeFilter(newFilter);
+      fetch(newFilter);
     },
     [changeFilter, fetch],
   );
+  const handleFilterReset = () => {
+    resetFilter();
+    fetch();
+  };
+  const handleFilterRemoved = () => {
+    removeFilter();
+    fetch(RESET_FILTER);
+  };
 
   const [getFirst, getLast, getNext, getPrevious] = usePagination(
     filter,
     entitiesCounts,
-    paginationChanged,
+    handleFilterChanged,
   );
   const timeoutFunc = useEntitiesReloadInterval(entities);
   const [startReload, stopReload, hasRunningTimer] = useReload(
@@ -145,22 +154,15 @@ const PortListsPage = () => {
   );
 
   useEffect(() => {
-    /*
-     * Check if the filters are changed in a way that matters for fetching and
-     *  loading data from the store:
-     * - Either the the previous filter wasn't defined yet
-     * - the filter is defined and loaded
-     * - the filter identifier is different from the previous one
-     */
     const shouldFetch =
       isDefined(filter) &&
       !isLoadingFilter &&
-      filter.identifier() !== previousFilter?.identifier();
+      filter.identifier() !== requestedFilter?.identifier();
 
     if (shouldFetch) {
       fetch(filter);
     }
-  }, [filter, isLoadingFilter, fetch, previousFilter]);
+  }, [filter, isLoadingFilter, fetch, requestedFilter]);
 
   useEffect(() => {
     // start reloading if tasks are available and no timer is running yet
@@ -294,10 +296,10 @@ const PortListsPage = () => {
             onEntityDeselected={deselect}
             onEntitySelected={select}
             onError={showError}
-            onFilterChanged={changeFilter}
-            onFilterCreated={changeFilter}
-            onFilterRemoved={removeFilter}
-            onFilterReset={resetFilter}
+            onFilterChanged={handleFilterChanged}
+            onFilterCreated={handleFilterChanged}
+            onFilterRemoved={handleFilterRemoved}
+            onFilterReset={handleFilterReset}
             onFirstClick={getFirst}
             onInteraction={renewSession}
             onLastClick={getLast}
