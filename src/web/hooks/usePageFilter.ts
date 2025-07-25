@@ -38,22 +38,37 @@ interface UsePageFilterOptions {
   fallbackFilter?: Filter;
 }
 
-/**
- * Hook to get and update the filter of a page
- *
- * @param pageName Name of the page
- * @param options Options object
- * @param gmpName GMP name for filtering
- * @returns Array of the applied filter, boolean indicating if the filter is
- *          still loading, function to change the filter, function to remove the
- *          filter and function to reset the filter
- */
+interface UsePageFilterHandlers {
+  changeFilter: (filter?: Filter) => void;
+  removeFilter: () => void;
+  resetFilter: () => void;
+}
 
+type UsePageFilterReturn = [Filter, boolean, UsePageFilterHandlers];
+
+/**
+ * Custom hook to manage and retrieve filters for a specific page in the application.
+ * It integrates with global state, user settings, and URL query parameters to determine
+ * the appropriate filter to use for the page.
+ *
+ * @param pageName - The name of the page for which the filter is being managed.
+ * @param gmpName - The name of the GMP entity associated with the default filter.
+ * @param options - Configuration options for the hook.
+ * @param options.fallbackFilter - A fallback filter to use if no other filters are defined.
+ *
+ * @returns A tuple containing:
+ * - `Filter`: The resolved filter for the page.
+ * - `boolean`: A loading state indicating whether the filter is fully resolved.
+ * - An object with utility functions:
+ *   - `changeFilter(filter?: Filter): void` - Updates the filter for the page.
+ *   - `removeFilter(): void` - Removes the current filter and applies only first=1.
+ *   - `resetFilter(): void` - Resets the filter to the default settings filter and clears the filter query parameter from the URL.
+ */
 const usePageFilter = (
   pageName: string,
   gmpName: string,
   {fallbackFilter}: UsePageFilterOptions = {},
-): [Filter, boolean, (filter?: Filter) => void, () => void, () => void] => {
+): UsePageFilterReturn => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -155,25 +170,27 @@ const usePageFilter = (
   );
 
   const removeFilter = useCallback(() => {
-    // remove filter from store by setting it to the default filter with first=1 only
+    // remove all filter terms and just set first to 1
     changeFilter(RESET_FILTER);
   }, [changeFilter]);
 
   const resetFilter = useCallback(() => {
     const query = new URLSearchParams(searchParams);
     query.delete('filter');
-
     setSearchParams(query);
 
+    // reset to default settings filter
     changeFilter();
   }, [changeFilter, setSearchParams, searchParams]);
 
   return [
     returnedFilter as Filter,
     !finishedLoading,
-    changeFilter,
-    removeFilter,
-    resetFilter,
+    {
+      changeFilter,
+      removeFilter,
+      resetFilter,
+    },
   ];
 };
 

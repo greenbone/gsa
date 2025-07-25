@@ -3,43 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
-import {rendererWith, waitFor} from 'web/testing';
-import {vi} from 'vitest';
+import {describe, test, expect, testing} from '@gsa/testing';
+import {rendererWith, wait, waitFor} from 'web/testing';
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
 import usePageFilter from 'web/hooks/usePageFilter';
 import {pageFilter} from 'web/store/pages/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-let mockSearchParams = {};
-const mockUseNavigate = testing.fn();
-const mockUseSearchParams = testing
-  .fn()
-  .mockReturnValue([
-    {get: key => mockSearchParams[key]},
-    {set: (key, value) => (mockSearchParams[key] = value)},
-  ]);
-
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
-  return {
-    ...actual,
-    useLocation: () => ({pathname: '/'}),
-    useNavigate: () => mockUseNavigate(),
-    useSearchParams: () => mockUseSearchParams(),
-  };
-});
-
-beforeEach(() => {
-  mockSearchParams = {};
-});
-
 describe('usePageFilter tests', () => {
   test('should prefer search params filter over defaultSettingFilter', async () => {
     const defaultSettingFilter = Filter.fromString('foo=bar');
-    mockSearchParams['filter'] = 'location=query';
-
     const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
       user: {
@@ -51,6 +25,7 @@ describe('usePageFilter tests', () => {
       gmp,
       store: true,
       router: true,
+      route: '/?filter=location=query',
     });
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
@@ -59,9 +34,9 @@ describe('usePageFilter tests', () => {
     );
 
     const {result} = renderHook(() => usePageFilter('somePage', 'gmpName'));
-
-    expect(result.current[0]).toEqual(
-      Filter.fromString('location=query rows=42'),
+    const [filter] = result.current;
+    expect(filter.equals(Filter.fromString('location=query rows=42'))).toEqual(
+      true,
     );
   });
 
@@ -89,8 +64,8 @@ describe('usePageFilter tests', () => {
     store.dispatch(pageFilter('somePage2', pFilter));
 
     const {result} = renderHook(() => usePageFilter('somePage2', 'somePage'));
-
-    expect(result.current[0]).toEqual(pFilter.set('rows', '42'));
+    const [filter] = result.current;
+    expect(filter.equals(pFilter.copy().set('rows', '42'))).toEqual(true);
   });
 
   test('should use defaultSettingFilter', async () => {
@@ -147,12 +122,9 @@ describe('usePageFilter tests', () => {
     const {result} = renderHook(() =>
       usePageFilter('somePage2', 'somePage', {fallbackFilter}),
     );
-
+    const [filter] = result.current;
     const expectedFilter = Filter.fromString('fall=back rows=42');
-
-    await waitFor(() => {
-      expect(result.current[0].toString()).toEqual(expectedFilter.toString());
-    });
+    expect(filter.equals(expectedFilter)).toEqual(true);
   });
 
   test('should use fallbackFilter if defaultSettingFilter could not be loaded', async () => {
@@ -213,10 +185,8 @@ describe('usePageFilter tests', () => {
         fallbackFilter: DEFAULT_FALLBACK_FILTER,
       }),
     );
-
-    await waitFor(() => {
-      expect(result.current[0].toString()).toEqual(resultingFilter.toString());
-    });
+    const [filter] = result.current;
+    expect(filter.equals(resultingFilter)).toEqual(true);
   });
 
   test('should use default rows per page if rows per page setting could not be loaded', async () => {
@@ -242,10 +212,8 @@ describe('usePageFilter tests', () => {
     );
 
     const expectedFilter = Filter.fromString('fall=back rows=50');
-
-    await waitFor(() => {
-      expect(result.current[0].toString()).toEqual(expectedFilter.toString());
-    });
+    const [filter] = result.current;
+    expect(filter.equals(expectedFilter)).toEqual(true);
   });
 
   test('should prefer pageFilter rows over defaultSettingFilter and default rows', async () => {
@@ -306,11 +274,116 @@ describe('usePageFilter tests', () => {
       // @ts-expect-error
       usePageFilter(undefined, 'somePage', {fallbackFilter}),
     );
+    const [filter] = result.current;
+    const expectedFilter = defaultSettingFilter.copy().set('rows', '42');
+    expect(filter.equals(expectedFilter)).toEqual(true);
+  });
 
-    const expectedFilter = Filter.fromString('fall=back rows=42');
+  test('should allow to reset filter to the default settings filter', async () => {
+    const pageName = 'somePage';
+    const gmpName = 'foo';
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const getSetting = testing.fn().mockResolvedValue({});
+    const gmp = {
+      user: {
+        getSetting,
+      },
+    };
 
-    await waitFor(() => {
-      expect(result.current[0].toString()).toEqual(expectedFilter.toString());
+    const {store, renderHook} = rendererWith({
+      gmp,
+      store: true,
+      router: true,
+      route: '/?filter=location=query',
     });
+
+    store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success(gmpName, defaultSettingFilter),
+    );
+    const {result} = renderHook(() => usePageFilter(pageName, gmpName));
+    const [filter, , {resetFilter}] = result.current;
+    expect(filter.equals(Filter.fromString('location=query rows=42'))).toEqual(
+      true,
+    );
+    resetFilter();
+
+    await wait();
+
+    const [resetFilterResult] = result.current;
+    const expectedFilter = defaultSettingFilter.copy().set('rows', '42');
+    expect(resetFilterResult.equals(expectedFilter)).toEqual(true);
+  });
+
+  test('should allow to remove filter', async () => {
+    const pageName = 'somePage';
+    const gmpName = 'foo';
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const getSetting = testing.fn().mockResolvedValue({});
+    const gmp = {
+      user: {
+        getSetting,
+      },
+    };
+
+    const {store, renderHook} = rendererWith({
+      gmp,
+      store: true,
+      router: true,
+      route: '/?filter=location=query',
+    });
+
+    store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success(gmpName, defaultSettingFilter),
+    );
+    const {result} = renderHook(() => usePageFilter(pageName, gmpName));
+    const [filter, , {removeFilter}] = result.current;
+    expect(filter.equals(Filter.fromString('location=query rows=42'))).toEqual(
+      true,
+    );
+    removeFilter();
+
+    await wait();
+
+    const [resetFilterResult] = result.current;
+    const expectedFilter = Filter.fromString('first=1 rows=42');
+    expect(resetFilterResult.equals(expectedFilter)).toEqual(true);
+  });
+
+  test('should allow to change filter', async () => {
+    const pageName = 'somePage';
+    const gmpName = 'foo';
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+    const getSetting = testing.fn().mockResolvedValue({});
+    const gmp = {
+      user: {
+        getSetting,
+      },
+    };
+
+    const {store, renderHook} = rendererWith({
+      gmp,
+      store: true,
+      router: true,
+      route: '/?filter=location=query',
+    });
+
+    store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success(gmpName, defaultSettingFilter),
+    );
+    const {result} = renderHook(() => usePageFilter(pageName, gmpName));
+    const [filter, , {changeFilter}] = result.current;
+    expect(filter.equals(Filter.fromString('location=query rows=42'))).toEqual(
+      true,
+    );
+    const newFilter = Filter.fromString('new=filter first=32 rows=123');
+    changeFilter(newFilter);
+
+    await wait();
+
+    const [resetFilterResult] = result.current;
+    expect(resetFilterResult.equals(newFilter)).toEqual(true);
   });
 });
