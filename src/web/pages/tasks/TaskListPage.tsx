@@ -34,7 +34,7 @@ interface TaskListPageProps {
   entities?: Task[];
   entitiesCounts?: CollectionCounts;
   entitiesError?: Error | Rejection;
-  filter: Filter;
+  filter?: Filter;
   isLoading?: boolean;
   onChanged: () => void;
   onDownloaded: OnDownloadedFunc;
@@ -166,6 +166,5 @@ export const taskReloadInterval = ({entities = []}: {entities: Task[]}) =>
 export default withEntitiesContainer('task', {
   entitiesSelector,
   loadEntities,
-  // @ts-expect-error
   reloadInterval: taskReloadInterval,
 })(TaskListPage);
