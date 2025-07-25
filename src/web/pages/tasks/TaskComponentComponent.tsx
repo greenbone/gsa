@@ -78,8 +78,8 @@ import TaskWizard from 'web/wizard/TaskWizard';
 const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
 interface TaskComponentRenderProps {
-  create: (task: Task) => void;
-  createContainer: (task: Task) => void;
+  create: () => void;
+  createContainer: () => void;
   clone: (task: Task) => void;
   delete: (task: Task) => void;
   download: (task: Task) => void;
@@ -419,7 +419,7 @@ const TaskComponent = ({
     setTargetId(data.id);
   };
 
-  const openContainerTaskDialog = (task: Task) => {
+  const openContainerTaskDialog = (task?: Task) => {
     setContainerTaskDialogVisible(true);
     setTask(task);
     setName(task ? task.name : _('Unnamed'));
