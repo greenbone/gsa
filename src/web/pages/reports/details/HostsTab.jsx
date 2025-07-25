@@ -51,7 +51,6 @@ const HostsTab = ({
   sortField,
   sortReverse,
   onSortChange,
-  onInteraction,
 }) => (
   <ReportEntitiesContainer
     counts={counts}
@@ -60,7 +59,6 @@ const HostsTab = ({
     sortField={sortField}
     sortFunctions={hostsSortFunctions}
     sortReverse={sortReverse}
-    onInteraction={onInteraction}
   >
     {({
       entities,
@@ -99,7 +97,6 @@ HostsTab.propTypes = {
   isUpdating: PropTypes.bool,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
 

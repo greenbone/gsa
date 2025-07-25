@@ -118,7 +118,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -135,7 +135,6 @@ const Page = ({
       onDownloaded={onDownloaded}
       onEnableError={onError}
       onEnabled={onChanged}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -155,7 +154,6 @@ const Page = ({
           sectionIcon={<TagIcon size="large" />}
           title={_('Tag')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onTagCloneClick={clone}
           onTagCreateClick={create}
           onTagDeleteClick={delete_func}
@@ -198,7 +196,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -219,7 +216,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

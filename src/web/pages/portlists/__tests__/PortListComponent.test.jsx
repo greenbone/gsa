@@ -33,12 +33,10 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const {render} = rendererWith({gmp});
     const {element} = render(
-      <PortListComponent onInteraction={onInteraction}>
-        {() => null}
-      </PortListComponent>,
+      <PortListComponent>{() => null}</PortListComponent>,
     );
     expect(element).toBeInTheDocument();
   });
@@ -50,10 +48,10 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent onInteraction={onInteraction}>
+      <PortListComponent>
         {({create}) => <Button data-testid="open" onClick={create} />}
       </PortListComponent>,
     );
@@ -73,10 +71,10 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent onInteraction={onInteraction}>
+      <PortListComponent>
         {({import: openImport}) => (
           <Button data-testid="import" onClick={openImport} />
         )}
@@ -98,10 +96,10 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent onInteraction={onInteraction}>
+      <PortListComponent>
         {({edit}) => (
           <Button data-testid="edit" onClick={() => edit({id: 123})} />
         )}
@@ -134,16 +132,12 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onInteraction={onInteraction}
-      >
+      <PortListComponent onCreateError={onCreateError} onCreated={onCreated}>
         {({create}) => <Button data-testid="open" onClick={create} />}
       </PortListComponent>,
     );
@@ -158,7 +152,6 @@ describe('Port List Component tests', () => {
     expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
     expect(onCreated).toHaveBeenCalledWith(newPortList);
     expect(onCreateError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalled();
   });
 
   test('should call onCreateError if creating a new port list fails', async () => {
@@ -169,16 +162,12 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const onCreated = testing.fn();
     const onCreateError = testing.fn();
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onCreateError={onCreateError}
-        onCreated={onCreated}
-        onInteraction={onInteraction}
-      >
+      <PortListComponent onCreateError={onCreateError} onCreated={onCreated}>
         {({create}) => <Button data-testid="open" onClick={create} />}
       </PortListComponent>,
     );
@@ -193,7 +182,6 @@ describe('Port List Component tests', () => {
     expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
     expect(onCreated).not.toHaveBeenCalled();
     expect(onCreateError).toHaveBeenCalledWith(error);
-    expect(onInteraction).toHaveBeenCalled();
   });
 
   test('should show error in dialog if creating a new port list fails', async () => {
@@ -204,11 +192,11 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const onCreated = testing.fn();
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent onCreated={onCreated} onInteraction={onInteraction}>
+      <PortListComponent onCreated={onCreated}>
         {({create}) => <Button data-testid="open" onClick={create} />}
       </PortListComponent>,
     );
@@ -223,7 +211,6 @@ describe('Port List Component tests', () => {
     screen.getByText('New Port List');
     screen.getByText('some error');
     expect(onCreated).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalled();
   });
 
   test('should allow editing a port list', async () => {
@@ -236,16 +223,12 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
+      <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
         {({edit}) => (
           <Button data-testid="open" onClick={() => edit({id: 123})} />
         )}
@@ -262,7 +245,6 @@ describe('Port List Component tests', () => {
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
     expect(onSaved).toHaveBeenCalledWith(portList);
     expect(onSaveError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalled();
   });
 
   test('should allow editing a port list to add a port range', async () => {
@@ -278,16 +260,12 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
+      <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
         {({edit}) => (
           <Button data-testid="open" onClick={() => edit({id: 123})} />
         )}
@@ -345,7 +323,6 @@ describe('Port List Component tests', () => {
     });
     expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
     expect(onSaveError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalled();
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
   });
 
@@ -376,16 +353,12 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
+      <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
         {({edit}) => (
           <Button data-testid="open" onClick={() => edit({id: 123})} />
         )}
@@ -416,7 +389,6 @@ describe('Port List Component tests', () => {
       portRanges: [],
     });
     expect(onSaved).toHaveBeenCalledExactlyOnceWith(portList);
-    expect(onInteraction).toHaveBeenCalled();
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
   });
 
@@ -431,16 +403,12 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const onSaved = testing.fn();
     const onSaveError = testing.fn();
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onInteraction={onInteraction}
-        onSaveError={onSaveError}
-        onSaved={onSaved}
-      >
+      <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
         {({edit}) => (
           <Button data-testid="open" onClick={() => edit({id: 123})} />
         )}
@@ -458,7 +426,6 @@ describe('Port List Component tests', () => {
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
     expect(onSaved).not.toHaveBeenCalled();
     expect(onSaveError).toHaveBeenCalledExactlyOnceWith(error);
-    expect(onInteraction).toHaveBeenCalled();
   });
 
   test('should show error in dialog if saving a port list fails', async () => {
@@ -472,11 +439,11 @@ describe('Port List Component tests', () => {
       },
       user: {currentSettings},
     };
-    const onInteraction = testing.fn();
+
     const onSaved = testing.fn();
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent onInteraction={onInteraction} onSaved={onSaved}>
+      <PortListComponent onSaved={onSaved}>
         {({edit}) => (
           <Button data-testid="open" onClick={() => edit({id: 123})} />
         )}
@@ -494,7 +461,6 @@ describe('Port List Component tests', () => {
     screen.getByText('Edit Port List foo');
     screen.getByText('some error');
     expect(onSaved).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalled();
   });
 
   test('should allow cloning a port list', async () => {
@@ -507,14 +473,10 @@ describe('Port List Component tests', () => {
     };
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
-    const onInteraction = testing.fn();
+
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onCloneError={onCloneError}
-        onCloned={onCloned}
-        onInteraction={onInteraction}
-      >
+      <PortListComponent onCloneError={onCloneError} onCloned={onCloned}>
         {({clone}) => (
           <Button data-testid="button" onClick={() => clone({id: '123'})} />
         )}
@@ -525,14 +487,13 @@ describe('Port List Component tests', () => {
     await wait();
     expect(onCloned).toHaveBeenCalledExactlyOnceWith(cloned);
     expect(onCloneError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 
   test('should call onCloneError when cloning a port list fails', async () => {
     const error = new Error('error');
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
-    const onInteraction = testing.fn();
+
     const gmp = {
       portlist: {
         clone: testing.fn().mockRejectedValue(error),
@@ -541,11 +502,7 @@ describe('Port List Component tests', () => {
     };
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onCloneError={onCloneError}
-        onCloned={onCloned}
-        onInteraction={onInteraction}
-      >
+      <PortListComponent onCloneError={onCloneError} onCloned={onCloned}>
         {({clone}) => (
           <Button data-testid="button" onClick={() => clone({id: '123'})} />
         )}
@@ -556,14 +513,13 @@ describe('Port List Component tests', () => {
     await wait();
     expect(onCloneError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onCloned).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 
   test('should allow deleting a port list', async () => {
     const deleted = {id: '123'};
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-    const onInteraction = testing.fn();
+
     const gmp = {
       portlist: {
         delete: testing.fn().mockResolvedValue(deleted),
@@ -572,11 +528,7 @@ describe('Port List Component tests', () => {
     };
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onInteraction={onInteraction}
-      >
+      <PortListComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
         {({delete: del}) => (
           <Button data-testid="button" onClick={() => del({id: '123'})} />
         )}
@@ -587,25 +539,20 @@ describe('Port List Component tests', () => {
     await wait();
     expect(onDeleted).toHaveBeenCalledOnce();
     expect(onDeleteError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 
   test('should call onDeleteError when deleting a port list fails', async () => {
     const error = new Error('error');
     const onDeleted = testing.fn();
     const onDeleteError = testing.fn();
-    const onInteraction = testing.fn();
+
     const gmp = {
       portlist: {delete: testing.fn().mockRejectedValue(error)},
       user: {currentSettings},
     };
     const {render} = rendererWith({gmp});
     render(
-      <PortListComponent
-        onDeleteError={onDeleteError}
-        onDeleted={onDeleted}
-        onInteraction={onInteraction}
-      >
+      <PortListComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
         {({delete: del}) => (
           <Button data-testid="button" onClick={() => del({id: '123'})} />
         )}
@@ -616,6 +563,5 @@ describe('Port List Component tests', () => {
     await wait();
     expect(onDeleteError).toHaveBeenCalledExactlyOnceWith(error);
     expect(onDeleted).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 });

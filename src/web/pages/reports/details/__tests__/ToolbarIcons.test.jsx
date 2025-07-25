@@ -37,7 +37,7 @@ describe('Report Details ToolBarIcons tests', () => {
     const showSuccessMessage = testing.fn();
     const showErrorMessage = testing.fn();
     const onAddToAssetsClick = testing.fn();
-    const onInteraction = testing.fn();
+
     const onRemoveFromAssetsClick = testing.fn();
     const onReportDownloadClick = testing.fn();
 
@@ -63,7 +63,6 @@ describe('Report Details ToolBarIcons tests', () => {
         task={report.task}
         threshold={10}
         onAddToAssetsClick={onAddToAssetsClick}
-        onInteraction={onInteraction}
         onRemoveFromAssetsClick={onRemoveFromAssetsClick}
         onReportDownloadClick={onReportDownloadClick}
       />,
@@ -136,7 +135,7 @@ describe('Report Details ToolBarIcons tests', () => {
     const showSuccessMessage = testing.fn();
     const showErrorMessage = testing.fn();
     const onAddToAssetsClick = testing.fn();
-    const onInteraction = testing.fn();
+
     const onRemoveFromAssetsClick = testing.fn();
     const onReportDownloadClick = testing.fn();
 
@@ -162,7 +161,6 @@ describe('Report Details ToolBarIcons tests', () => {
         task={report.task}
         threshold={10}
         onAddToAssetsClick={onAddToAssetsClick}
-        onInteraction={onInteraction}
         onRemoveFromAssetsClick={onRemoveFromAssetsClick}
         onReportDownloadClick={onReportDownloadClick}
       />,

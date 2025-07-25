@@ -16,14 +16,13 @@ describe('useEntityClone', () => {
     };
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
-    const onInteraction = testing.fn();
+
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
       useEntityClone('foo', {
         onCloned,
         onCloneError,
-        onInteraction,
       }),
     );
     expect(result.current).toBeDefined();
@@ -32,7 +31,6 @@ describe('useEntityClone', () => {
     expect(cloneEntity).toHaveBeenCalledWith(entity);
     expect(onCloned).toHaveBeenCalledWith(entity);
     expect(onCloneError).not.toHaveBeenCalled();
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 
   test('should call onCloneError when cloning an entity fails', async () => {
@@ -43,14 +41,13 @@ describe('useEntityClone', () => {
     };
     const onCloned = testing.fn();
     const onCloneError = testing.fn();
-    const onInteraction = testing.fn();
+
     const {renderHook} = rendererWith({gmp, store: true});
 
     const {result} = renderHook(() =>
       useEntityClone('foo', {
         onCloned,
         onCloneError,
-        onInteraction,
       }),
     );
     expect(result.current).toBeDefined();
@@ -59,6 +56,5 @@ describe('useEntityClone', () => {
     expect(cloneEntity).toHaveBeenCalledWith(entity);
     expect(onCloned).not.toHaveBeenCalled();
     expect(onCloneError).toHaveBeenCalledWith(new Error('error'));
-    expect(onInteraction).toHaveBeenCalledOnce();
   });
 });

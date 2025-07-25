@@ -46,7 +46,7 @@ const GroupsPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -59,7 +59,6 @@ const GroupsPage = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
@@ -82,7 +81,6 @@ const GroupsPage = ({
             onGroupDownloadClick={download}
             onGroupEditClick={edit}
             onGroupSaveClick={save}
-            onInteraction={onInteraction}
           />
         </React.Fragment>
       )}
@@ -94,7 +92,6 @@ GroupsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('group', {

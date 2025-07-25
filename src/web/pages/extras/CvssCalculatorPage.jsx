@@ -24,7 +24,6 @@ import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 const StyledTextField = styled(TextField)`
   width: 180px;
@@ -47,7 +46,6 @@ const ToolBarIcons = () => {
 
 const CvssV2Calculator = () => {
   const [_] = useTranslation();
-  const [, renewSession] = useUserSessionTimeout();
   const [searchParams] = useSearchParams();
 
   const [state, setState] = useState({
@@ -111,8 +109,6 @@ const CvssV2Calculator = () => {
   };
 
   const handleMetricsChange = (value, name) => {
-    renewSession();
-
     calculateVector({[name]: value});
   };
 
@@ -122,8 +118,6 @@ const CvssV2Calculator = () => {
 
   const handleVectorChange = () => {
     const {userVector} = state;
-
-    renewSession();
 
     const {
       accessVector,
@@ -338,7 +332,6 @@ const CvssV2Calculator = () => {
 
 const CvssV3Calculator = () => {
   const [_] = useTranslation();
-  const [, renewSession] = useUserSessionTimeout();
   const [searchParams] = useSearchParams();
 
   const [state, setState] = useState({
@@ -404,8 +397,6 @@ const CvssV3Calculator = () => {
   };
 
   const handleMetricsChange = (value, name) => {
-    renewSession();
-
     calculateVector({[name]: value});
   };
 
@@ -415,8 +406,6 @@ const CvssV3Calculator = () => {
 
   const handleVectorChange = () => {
     const {userVector} = state;
-
-    renewSession();
 
     const {
       attackVector,

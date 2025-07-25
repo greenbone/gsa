@@ -50,7 +50,6 @@ interface PortListComponentProps {
   onDownloaded?: (response: unknown) => void;
   onImportError?: (error: unknown) => void;
   onImported?: (response: unknown) => void;
-  onInteraction?: () => void;
   onSaveError?: (error: unknown) => void;
   onSaved?: (response: unknown) => void;
 }
@@ -65,7 +64,7 @@ const PortListComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-  onInteraction,
+
   onSaved,
   onSaveError,
   onImported,
@@ -84,33 +83,23 @@ const PortListComponent = ({
   const [createdPortRanges, setCreatedPortRanges] = useState<PortRange[]>([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState<PortRange[]>([]);
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleSave = useEntitySave('portlist', {
     onCreateError,
     onCreated,
     onSaveError,
     onSaved,
-    onInteraction,
   });
   const handleClone = useEntityClone('portlist', {
     onCloned,
     onCloneError,
-    onInteraction,
   });
   const handleDownload = useEntityDownload('portlist', {
     onDownloadError,
     onDownloaded,
-    onInteraction,
   });
   const handleDelete = useEntityDelete('portlist', {
     onDeleteError,
     onDeleted,
-    onInteraction,
   });
 
   const openPortListDialog = async (entity?: PortList) => {
@@ -135,8 +124,6 @@ const PortListComponent = ({
       setPortListDialogTitle(_('New Port List'));
       setPortRanges([]);
     }
-
-    handleInteraction();
   };
 
   const closePortListDialog = () => {
@@ -145,12 +132,10 @@ const PortListComponent = ({
 
   const handleClosePortListDialog = () => {
     closePortListDialog();
-    handleInteraction();
   };
 
   const openImportDialog = () => {
     setImportDialogVisible(true);
-    handleInteraction();
   };
 
   const closeImportDialog = () => {
@@ -159,12 +144,10 @@ const PortListComponent = ({
 
   const handleCloseImportDialog = () => {
     closeImportDialog();
-    handleInteraction();
   };
 
   const openNewPortRangeDialog = () => {
     setPortRangeDialogVisible(true);
-    handleInteraction();
   };
 
   const closeNewPortRangeDialog = () => {
@@ -173,7 +156,6 @@ const PortListComponent = ({
 
   const handleCloseNewPortRangeDialog = () => {
     closeNewPortRangeDialog();
-    handleInteraction();
   };
 
   const handleDeletePortRange = async (range: PortRange) => {
@@ -194,7 +176,6 @@ const PortListComponent = ({
   };
 
   const handleImportPortList = async (data: {xmlFile: File}) => {
-    handleInteraction();
     try {
       const response = await gmp.portlist.import(data);
       if (isDefined(onImported)) {
@@ -209,8 +190,6 @@ const PortListComponent = ({
   };
 
   const handleSavePortList = async (data: SavePortListData<PortRange>) => {
-    handleInteraction();
-
     if (isDefined(data.id)) {
       // save existing port list
       try {
@@ -264,8 +243,6 @@ const PortListComponent = ({
     portRangeStart,
     portType,
   }: PortRangeDialogData) => {
-    handleInteraction();
-
     // reject port ranges with missing values
     if (!portRangeStart || !portRangeEnd) {
       throw new Error(
@@ -333,8 +310,6 @@ const PortListComponent = ({
     setPortRanges(portRanges =>
       portRanges.filter(range => range !== portRange),
     );
-
-    handleInteraction();
   };
 
   const {comment, id, name} = portList || {};

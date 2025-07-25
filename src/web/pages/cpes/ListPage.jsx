@@ -27,7 +27,7 @@ export const ToolBarIcons = () => {
   );
 };
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
 
   return (
@@ -36,17 +36,10 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
       <EntitiesPage
         {...props}
         dashboard={() => (
-          <CpesDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
+          <CpesDashboard filter={filter} onFilterChanged={onFilterChanged} />
         )}
         dashboardControls={() => (
-          <DashboardControls
-            dashboardId={CPES_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
+          <DashboardControls dashboardId={CPES_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={CpeFilterDialog}
@@ -56,7 +49,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         title={_('CPEs')}
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
       />
     </React.Fragment>
   );
@@ -65,7 +57,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
 Page.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const fallbackFilter = Filter.fromString('sort-reverse=modified');

@@ -6,7 +6,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Logger from 'gmp/log';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
@@ -41,14 +40,11 @@ class LocationObserver extends React.Component {
   componentDidMount() {
     // init session timeout in store
     // this is necessary for page reloads
-    this.props.renewSessionTimeout();
   }
 
   componentDidUpdate() {
     if (this.state.locationHasChanged) {
       log.debug('Location has changed. Renewing session.');
-
-      this.props.renewSessionTimeout();
     }
   }
 
@@ -60,13 +56,10 @@ class LocationObserver extends React.Component {
 LocationObserver.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   location: PropTypes.object.isRequired,
-  renewSessionTimeout: PropTypes.func.isRequired,
 };
 
 export default compose(
   withGmp,
   withRouter,
-  connect(undefined, (dispatch, {gmp}) => ({
-    renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
-  })),
+  connect(undefined, (dispatch, {gmp}) => ({})),
 )(LocationObserver);

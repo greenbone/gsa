@@ -44,7 +44,6 @@ import {pageFilter as setPageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';
 import {
   loadReportComposerDefaults,
-  renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
@@ -289,8 +288,6 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterChange(filter) {
-    this.handleInteraction();
-
     this.load(filter);
   }
 
@@ -311,8 +308,6 @@ class ReportDetails extends React.Component {
 
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
-    this.handleInteraction();
-
     gmp.report.addAssets(entity, {filter}).then(() => {
       showSuccessMessage(
         _(
@@ -328,8 +323,6 @@ class ReportDetails extends React.Component {
 
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
-    this.handleInteraction();
-
     gmp.report.removeAssets(entity, {filter}).then(() => {
       showSuccessMessage(_('Report content removed from Assets.'));
       this.reload();
@@ -337,14 +330,10 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterEditClick() {
-    this.handleInteraction();
-
     this.setState({showFilterDialog: true});
   }
 
   handleFilterDialogClose() {
-    this.handleInteraction();
-
     this.setState({showFilterDialog: false});
   }
 
@@ -400,8 +389,6 @@ class ReportDetails extends React.Component {
       ? report_format.extension
       : 'unknown'; // unknown should never happen but we should be save here
 
-    this.handleInteraction();
-
     return gmp.report
       .download(entity, {
         reportConfigId,
@@ -432,8 +419,6 @@ class ReportDetails extends React.Component {
 
     const {data, serial} = cert;
 
-    this.handleInteraction();
-
     onDownload({
       filename: 'tls-cert-' + serial + '.pem',
       mimetype: 'application/x-x509-ca-cert',
@@ -442,7 +427,6 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterCreated(filter) {
-    this.handleInteraction();
     this.load(filter);
     this.props.loadFilters();
   }
@@ -450,8 +434,6 @@ class ReportDetails extends React.Component {
   handleFilterAddLogLevel() {
     const {reportFilter} = this.props;
     let levels = reportFilter.get('levels', '');
-
-    this.handleInteraction();
 
     if (!levels.includes('g')) {
       levels += 'g';
@@ -464,8 +446,6 @@ class ReportDetails extends React.Component {
   handleFilterRemoveSeverity() {
     const {reportFilter} = this.props;
 
-    this.handleInteraction();
-
     if (reportFilter.has('severity')) {
       const lfilter = reportFilter.copy();
       lfilter.delete('severity');
@@ -476,8 +456,6 @@ class ReportDetails extends React.Component {
   handleFilterDecreaseMinQoD() {
     const {reportFilter} = this.props;
 
-    this.handleInteraction();
-
     if (reportFilter.has('min_qod')) {
       const lfilter = reportFilter.copy();
       lfilter.set('min_qod', 30);
@@ -486,8 +464,6 @@ class ReportDetails extends React.Component {
   }
 
   handleSortChange(name, sortField) {
-    this.handleInteraction();
-
     const prev = this.state.sorting[name];
 
     const sortReverse =
@@ -502,13 +478,6 @@ class ReportDetails extends React.Component {
         },
       },
     });
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   }
 
   loadTarget() {
@@ -531,7 +500,7 @@ class ReportDetails extends React.Component {
       reportError,
       reportFormats,
       reportId,
-      onInteraction,
+
       reportComposerDefaults,
       showError,
       showErrorMessage,
@@ -565,10 +534,7 @@ class ReportDetails extends React.Component {
     return (
       <React.Fragment>
         <PageTitle title={_('Report Details')} />
-        <TargetComponent
-          onError={this.handleError}
-          onInteraction={onInteraction}
-        >
+        <TargetComponent onError={this.handleError}>
           {({edit}) => (
             <Page
               applicationsCounts={applicationsCounts}
@@ -605,7 +571,6 @@ class ReportDetails extends React.Component {
               onFilterRemoveClick={this.handleFilterRemoveClick}
               onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
               onFilterResetClick={this.handleFilterResetClick}
-              onInteraction={onInteraction}
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
               onReportDownloadClick={this.handleOpenDownloadReportDialog}
               onSortChange={this.handleSortChange}
@@ -678,7 +643,6 @@ ReportDetails.propTypes = {
   target: PropTypes.model,
   username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
   _: PropTypes.func.isRequired,
 };
 
@@ -760,7 +724,6 @@ ReportDetailsWrapper.propTypes = {
 const getReportPageName = id => `report-${id}`;
 
 const mapDispatchToProps = (dispatch, {gmp, params}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   loadTarget: targetId => gmp.target.get({id: targetId}),

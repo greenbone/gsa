@@ -28,7 +28,6 @@ import useReload from 'web/hooks/useReload';
 import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import useUserSessionTimeout from 'web/hooks/useUserSessionTimeout';
 import PortListsFilterDialog from 'web/pages/portlists/FilterDialog';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
 import PortListsTable from 'web/pages/portlists/Table';
@@ -82,7 +81,6 @@ const PortListsPage = () => {
   const dispatch = useDispatch();
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const [downloadRef, handleDownload] = useDownload();
-  const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter, {changeFilter, resetFilter, removeFilter}] =
     usePageFilter('portlist', 'portlist');
   const [requestedFilter, setRequestedFilter] = useInstanceVariable();
@@ -175,14 +173,12 @@ const PortListsPage = () => {
   useEffect(() => stopReload, [stopReload]);
 
   const closeTagsDialog = useCallback(() => {
-    renewSession();
     setIsTagsDialogVisible(false);
-  }, [renewSession, setIsTagsDialogVisible]);
+  }, [setIsTagsDialogVisible]);
 
   const openTagsDialog = useCallback(() => {
-    renewSession();
     setIsTagsDialogVisible(true);
-  }, [renewSession, setIsTagsDialogVisible]);
+  }, [setIsTagsDialogVisible]);
 
   const handleBulkDelete = useCallback(async () => {
     const entitiesCommand = gmp.portlists;
@@ -194,8 +190,6 @@ const PortListsPage = () => {
     } else {
       promise = entitiesCommand.deleteByFilter(filter.all());
     }
-
-    renewSession();
 
     try {
       await promise;
@@ -210,7 +204,6 @@ const PortListsPage = () => {
     showError,
     gmp.portlists,
     refetch,
-    renewSession,
   ]);
 
   const handleBulkDownload = useCallback(async () => {
@@ -224,8 +217,6 @@ const PortListsPage = () => {
       promise = entitiesCommand.exportByFilter(filter.all());
     }
 
-    renewSession();
-
     try {
       const response = await promise;
       const filename = generateFilename({
@@ -238,7 +229,6 @@ const PortListsPage = () => {
       showError(error);
     }
   }, [
-    renewSession,
     handleDownload,
     showError,
     gmp.portlists,
@@ -260,7 +250,6 @@ const PortListsPage = () => {
       onDownloaded={handleDownload}
       onImportError={showError}
       onImported={refetch}
-      onInteraction={renewSession}
       onSaveError={showError}
       onSaved={refetch}
     >
@@ -301,7 +290,6 @@ const PortListsPage = () => {
             onFilterRemoved={handleFilterRemoved}
             onFilterReset={handleFilterReset}
             onFirstClick={getFirst}
-            onInteraction={renewSession}
             onLastClick={getLast}
             onNextClick={getNext}
             onPortListCloneClick={clone}

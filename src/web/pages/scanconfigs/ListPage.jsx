@@ -59,7 +59,7 @@ const ScanConfigsPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -74,7 +74,6 @@ const ScanConfigsPage = ({
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onImported={onChanged}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -97,7 +96,6 @@ const ScanConfigsPage = ({
             title={_('Scan Configs')}
             toolBarIcons={ToolBarIcons}
             onError={onError}
-            onInteraction={onInteraction}
             onScanConfigCloneClick={clone}
             onScanConfigCreateClick={create}
             onScanConfigDeleteClick={delete_func}
@@ -116,7 +114,6 @@ ScanConfigsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('scanconfig', {

@@ -32,7 +32,7 @@ export const ToolBarIcons = () => {
   );
 };
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
 
   return (
@@ -42,17 +42,10 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         {...props}
         createFilterType="info"
         dashboard={() => (
-          <NvtsDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
+          <NvtsDashboard filter={filter} onFilterChanged={onFilterChanged} />
         )}
         dashboardControls={() => (
-          <DashboardControls
-            dashboardId={NVTS_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
+          <DashboardControls dashboardId={NVTS_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={NvtsFilterDialog}
@@ -62,7 +55,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         title={_('NVTs')}
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
       />
     </React.Fragment>
   );
@@ -71,7 +63,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
 Page.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const fallbackFilter = Filter.fromString('sort-reverse=created');

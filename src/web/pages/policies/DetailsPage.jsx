@@ -118,7 +118,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -130,7 +130,6 @@ const Page = ({
       onDeleted={goToList('policies', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, delete: delete_func, download, edit, save}) => (
@@ -140,7 +139,6 @@ const Page = ({
           sectionIcon={<PolicyIcon size="large" />}
           title={_('Policy')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onPolicyCloneClick={clone}
           onPolicyDeleteClick={delete_func}
           onPolicyDownloadClick={download}
@@ -192,7 +190,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -213,7 +210,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

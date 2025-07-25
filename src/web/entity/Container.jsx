@@ -62,7 +62,6 @@ EntityContainer.propTypes = {
   showError: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default EntityContainer;

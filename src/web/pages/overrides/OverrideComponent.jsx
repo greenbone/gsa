@@ -52,7 +52,6 @@ const OverrideComponent = ({
   onDownloadError,
   onSaved,
   onSaveError,
-  onInteraction,
 }) => {
   const gmp = useGmp();
   const [_] = useTranslation();
@@ -90,12 +89,6 @@ const OverrideComponent = ({
 
   const [initialProps, setInitialProps] = useState({});
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const loadTasks = () => {
     gmp.tasks.getAll().then(response => setTasks(response.data));
   };
@@ -106,7 +99,6 @@ const OverrideComponent = ({
 
   const handleCloseOverrideDialog = () => {
     closeOverrideDialog();
-    handleInteraction();
   };
 
   const openOverrideDialog = (overrideEntity, initial = {}) => {
@@ -183,7 +175,7 @@ const OverrideComponent = ({
       setTitle(undefined);
       setInitialProps(initial);
     }
-    handleInteraction();
+
     loadTasks();
   };
 
@@ -202,7 +194,6 @@ const OverrideComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -238,7 +229,6 @@ const OverrideComponent = ({
               title={title}
               onClose={handleCloseOverrideDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeOverrideDialog());
               }}
               {...initialProps}
@@ -260,7 +250,6 @@ OverrideComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

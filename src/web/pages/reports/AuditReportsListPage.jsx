@@ -46,7 +46,7 @@ const ToolBarIcons = () => {
 const AuditReportsPage = ({
   filter,
   onFilterChanged,
-  onInteraction,
+
   onDelete,
   ...props
 }) => {
@@ -100,14 +100,10 @@ const AuditReportsPage = ({
           <AuditReportsDashboard
             filter={filter}
             onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
           />
         )}
         dashboardControls={() => (
-          <DashboardControls
-            dashboardId={AUDIT_REPORTS_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
+          <DashboardControls dashboardId={AUDIT_REPORTS_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={AuditFilterDialog}
@@ -118,7 +114,6 @@ const AuditReportsPage = ({
         title={_('Audit Reports')}
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
         onReportDeleteClick={handleReportDeleteClick}
         onReportDeltaSelect={handleReportDeltaSelect}
       />
@@ -133,7 +128,6 @@ AuditReportsPage.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const reportsReloadInterval = ({entities = []}) =>

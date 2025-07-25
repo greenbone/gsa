@@ -96,6 +96,7 @@ import UserSettingsPage from 'web/pages/user-settings/UserSettingsPage';
 import UserDetailsPage from 'web/pages/users/DetailsPage';
 import UsersPage from 'web/pages/users/ListPage';
 import VulnerabilitiesPage from 'web/pages/vulns/ListPage';
+import SessionTracker from 'web/SessionTracker';
 import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 
 const LoggedOutRoutes = () => {
@@ -115,6 +116,7 @@ const LoggedOutRoutes = () => {
 const LoggedInRoutes = () => {
   return (
     <Authorized>
+      <SessionTracker />
       <SessionObserver />
       <LocationObserver>
         <Page>

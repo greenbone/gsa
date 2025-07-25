@@ -48,13 +48,10 @@ class DashboardControls extends React.Component {
     if (isDefined(onResetClick)) {
       onResetClick(dashboardId);
     }
-
-    this.handleInteraction();
   }
 
   handleNewClick() {
     this.setState({showNewDialog: true});
-    this.handleInteraction();
   }
 
   closeNewDialog() {
@@ -63,7 +60,6 @@ class DashboardControls extends React.Component {
 
   handleNewDialogClose() {
     this.closeNewDialog();
-    this.handleInteraction();
   }
 
   handleNewDisplay({displayId}) {
@@ -73,16 +69,6 @@ class DashboardControls extends React.Component {
       this.closeNewDialog();
 
       onNewDisplay(settings, dashboardId, displayId);
-
-      this.handleInteraction();
-    }
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
-
-    if (isDefined(onInteraction)) {
-      onInteraction();
     }
   }
 
@@ -155,7 +141,6 @@ DashboardControls.propTypes = {
   dashboardId: PropTypes.id.isRequired,
   displayIds: PropTypes.arrayOf(PropTypes.string),
   settings: PropTypes.object,
-  onInteraction: PropTypes.func,
   onNewDisplay: PropTypes.func.isRequired,
   onResetClick: PropTypes.func.isRequired,
   _: PropTypes.func.isRequired,

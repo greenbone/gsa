@@ -26,7 +26,6 @@ describe('Report Operating Systems Tab tests', () => {
     const {operatingsystems} = getMockReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -45,7 +44,6 @@ describe('Report Operating Systems Tab tests', () => {
         operatingsystems={operatingsystems.entities}
         sortField={'severity'}
         sortReverse={true}
-        onInteraction={onInteraction}
         onSortChange={onSortChange}
       />,
     );
@@ -107,7 +105,6 @@ describe('Audit Report Operating Systems Tab tests', () => {
     const {operatingsystems} = getMockAuditReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       router: true,
@@ -126,7 +123,6 @@ describe('Audit Report Operating Systems Tab tests', () => {
         operatingsystems={operatingsystems.entities}
         sortField={'compliant'}
         sortReverse={true}
-        onInteraction={onInteraction}
         onSortChange={onSortChange}
       />,
     );

@@ -164,7 +164,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -179,7 +179,6 @@ const Page = ({
       onDownloaded={onDownloaded}
       onInstallerDownloadError={onError}
       onInstallerDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -204,7 +203,6 @@ const Page = ({
           onCredentialEditClick={edit}
           onCredentialInstallerDownloadClick={downloadinstaller}
           onCredentialSaveClick={save}
-          onInteraction={onInteraction}
         >
           {() => {
             return (
@@ -235,7 +233,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -245,7 +242,6 @@ const Page = ({
                           onChanged={onChanged}
                           onDownloaded={onDownloaded}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -266,7 +262,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

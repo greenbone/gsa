@@ -9,30 +9,15 @@ import NoteComponent from 'web/pages/notes/NoteComponent';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import PropTypes from 'web/utils/PropTypes';
 
-const NvtComponent = ({
-  children,
-  onChanged,
-  onDownloaded,
-  onDownloadError,
-  onInteraction,
-}) => (
-  <NoteComponent
-    onCreated={onChanged}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
+const NvtComponent = ({children, onChanged, onDownloaded, onDownloadError}) => (
+  <NoteComponent onCreated={onChanged} onSaved={onChanged}>
     {({create: notecreate}) => (
-      <OverrideComponent
-        onCreated={onChanged}
-        onInteraction={onInteraction}
-        onSaved={onChanged}
-      >
+      <OverrideComponent onCreated={onChanged} onSaved={onChanged}>
         {({create: overridecreate}) => (
           <EntityComponent
             name="nvt"
             onDownloadError={onDownloadError}
             onDownloaded={onDownloaded}
-            onInteraction={onInteraction}
           >
             {({download}) =>
               children({
@@ -53,7 +38,6 @@ NvtComponent.propTypes = {
   onChanged: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default NvtComponent;

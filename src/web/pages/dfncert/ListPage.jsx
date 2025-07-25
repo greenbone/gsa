@@ -36,7 +36,7 @@ const ToolBarIcons = () => {
   );
 };
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
+const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
 
   return (
@@ -46,17 +46,10 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         {...props}
         createFilterType="info"
         dashboard={() => (
-          <DfnCertDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
+          <DfnCertDashboard filter={filter} onFilterChanged={onFilterChanged} />
         )}
         dashboardControls={() => (
-          <DashboardControls
-            dashboardId={DFNCERT_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
+          <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID} />
         )}
         filter={filter}
         filterEditDialog={FilterDialog}
@@ -66,7 +59,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
         title={_('DFN-CERT Advisories')}
         toolBarIcons={ToolBarIcons}
         onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
       />
     </React.Fragment>
   );
@@ -75,7 +67,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => {
 Page.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const fallbackFilter = Filter.fromString('sort-reverse=created');

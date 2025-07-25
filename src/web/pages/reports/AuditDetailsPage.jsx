@@ -47,7 +47,6 @@ import {pageFilter as setPageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';
 import {
   loadReportComposerDefaults,
-  renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
@@ -287,7 +286,6 @@ const ReportDetails = props => {
   };
 
   const handleFilterChange = filter => {
-    handleInteraction();
     load(filter);
   };
 
@@ -306,8 +304,6 @@ const ReportDetails = props => {
   const handleAddToAssets = () => {
     const {showSuccessMessage, reportFilter: filter} = props;
 
-    handleInteraction();
-
     gmp.auditreport.addAssets(selectedEntity, {filter}).then(() => {
       showSuccessMessage(
         _(
@@ -321,8 +317,6 @@ const ReportDetails = props => {
   const handleRemoveFromAssets = () => {
     const {showSuccessMessage, reportFilter: filter} = props;
 
-    handleInteraction();
-
     gmp.auditreport.removeAssets(selectedEntity, {filter}).then(() => {
       showSuccessMessage(_('Report content removed from Assets.'));
       reload();
@@ -330,12 +324,10 @@ const ReportDetails = props => {
   };
 
   const handleFilterEditClick = () => {
-    handleInteraction();
     setShowFilterDialog(true);
   };
 
   const handleFilterDialogClose = () => {
-    handleInteraction();
     setShowFilterDialog(false);
   };
 
@@ -381,8 +373,6 @@ const ReportDetails = props => {
       ? report_format.extension
       : 'unknown'; // unknown should never happen but we should be save here
 
-    handleInteraction();
-
     return gmp.auditreport
       .download(selectedEntity, {
         reportFormatId,
@@ -412,8 +402,6 @@ const ReportDetails = props => {
 
     const {data, serial} = cert;
 
-    handleInteraction();
-
     onDownload({
       filename: 'tls-cert-' + serial + '.pem',
       mimetype: 'application/x-x509-ca-cert',
@@ -422,15 +410,12 @@ const ReportDetails = props => {
   };
 
   const handleFilterCreated = filter => {
-    handleInteraction();
     load(filter);
     dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER));
   };
 
   const handleFilterDecreaseMinQoD = () => {
     const {reportFilter: filter} = props;
-
-    handleInteraction();
 
     if (filter.has('min_qod')) {
       const lfilter = filter.copy();
@@ -440,8 +425,6 @@ const ReportDetails = props => {
   };
 
   const handleSortChange = (name, sortField) => {
-    handleInteraction();
-
     const prev = sorting[name];
 
     const sortReverse =
@@ -456,8 +439,6 @@ const ReportDetails = props => {
     };
     setSorting(newSort);
   };
-
-  const handleInteraction = () => dispatch(renewSessionTimeout(gmp)());
 
   const loadTarget = () => {
     const target = getTarget(selectedEntity);
@@ -484,7 +465,7 @@ const ReportDetails = props => {
   return (
     <React.Fragment>
       <PageTitle title={_('Report Details')} />
-      <TargetComponent onError={handleError} onInteraction={handleInteraction}>
+      <TargetComponent onError={handleError}>
         {({edit}) => (
           <Page
             audit={true}
@@ -516,7 +497,6 @@ const ReportDetails = props => {
             onFilterEditClick={handleFilterEditClick}
             onFilterRemoveClick={handleFilterRemoveClick}
             onFilterResetClick={handleFilterResetClick}
-            onInteraction={handleInteraction}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
             onSortChange={handleSortChange}

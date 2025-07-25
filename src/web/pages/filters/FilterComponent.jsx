@@ -66,7 +66,7 @@ const FilterComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-  onInteraction,
+
   onSaved,
   onSaveError,
 }) => {
@@ -80,19 +80,12 @@ const FilterComponent = ({
   const [title, setTitle] = useState();
   const [type, setType] = useState();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const closeFilterDialog = () => {
     setDialogVisible(false);
   };
 
   const handleCloseFilterDialog = () => {
     closeFilterDialog();
-    handleInteraction();
   };
 
   const openFilterDialog = filter => {
@@ -103,8 +96,6 @@ const FilterComponent = ({
     if (!isDefined(filterTypes)) {
       filterTypes = [];
     }
-
-    handleInteraction();
 
     if (isDefined(filter)) {
       let {filter_type} = filter;
@@ -148,7 +139,6 @@ const FilterComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -170,7 +160,6 @@ const FilterComponent = ({
               types={types}
               onClose={handleCloseFilterDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeFilterDialog());
               }}
             />
@@ -191,7 +180,6 @@ FilterComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

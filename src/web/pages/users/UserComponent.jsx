@@ -13,7 +13,6 @@ import PropTypes from 'web/utils/PropTypes';
 
 const UserComponent = props => {
   const {
-    onInteraction,
     children,
     onCloned,
     onCloneError,
@@ -43,24 +42,15 @@ const UserComponent = props => {
   const [title, setTitle] = useState();
   const [user, setUser] = useState();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const closeUserDialog = () => {
     setDialogVisible(false);
   };
 
   const handleCloseUserDialog = () => {
     closeUserDialog();
-    handleInteraction();
   };
 
   const openUserDialog = async user => {
-    handleInteraction();
-
     try {
       const [groupsResponse, rolesResponse, authSettingsResponse] =
         await Promise.all([
@@ -118,7 +108,6 @@ const UserComponent = props => {
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -145,7 +134,6 @@ const UserComponent = props => {
               user={user}
               onClose={handleCloseUserDialog}
               onSave={d => {
-                handleInteraction();
                 return save(d).then(() => closeUserDialog());
               }}
             />
@@ -166,7 +154,6 @@ UserComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

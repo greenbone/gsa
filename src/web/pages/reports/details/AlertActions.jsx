@@ -7,7 +7,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import logger from 'gmp/log';
 import {ALL_FILTER} from 'gmp/models/filter';
-import {isDefined} from 'gmp/utils/identity';
 import {StartIcon} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
@@ -18,7 +17,6 @@ import {
 } from 'web/store/entities/alerts';
 import {
   loadReportComposerDefaults,
-  renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
@@ -54,13 +52,6 @@ class AlertActions extends React.Component {
     this.setState({alertId});
   }
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  }
-
   handleTriggerAlert(state) {
     const {_} = this.props;
 
@@ -77,8 +68,6 @@ class AlertActions extends React.Component {
     const newFilter = filter.copy();
     newFilter.set('notes', includeNotes);
     newFilter.set('overrides', includeOverrides);
-
-    this.handleInteraction();
 
     if (storeAsDefault) {
       this.props.saveReportComposerDefaults({
@@ -143,16 +132,11 @@ class AlertActions extends React.Component {
       showError,
       showThresholdMessage,
       threshold,
-      onInteraction,
     } = this.props;
     const {alertId, showTriggerAlertDialog, storeAsDefault} = this.state;
     const mayAccessAlerts = capabilities.mayOp('get_alerts');
     return (
-      <AlertComponent
-        onCreated={this.onAlertCreated}
-        onError={showError}
-        onInteraction={onInteraction}
-      >
+      <AlertComponent onCreated={this.onAlertCreated} onError={showError}>
         {({create}) => (
           <React.Fragment>
             {mayAccessAlerts && (
@@ -204,13 +188,11 @@ AlertActions.propTypes = {
   showSuccessMessage: PropTypes.func.isRequired,
   showThresholdMessage: PropTypes.bool,
   threshold: PropTypes.number,
-  onInteraction: PropTypes.func.isRequired,
   _: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
     loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),

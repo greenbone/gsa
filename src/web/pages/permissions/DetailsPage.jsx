@@ -81,7 +81,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -94,7 +94,6 @@ const Page = ({
       onDeleted={goToList('permissions', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
@@ -104,7 +103,6 @@ const Page = ({
           sectionIcon={<PermissionIcon size="large" />}
           title={_('Permission')}
           toolBarIcons={ToolBarIcons}
-          onInteraction={onInteraction}
           onPermissionCloneClick={clone}
           onPermissionCreateClick={create}
           onPermissionDeleteClick={delete_func}
@@ -138,7 +136,6 @@ const Page = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -158,7 +155,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntityContainer('permission', {

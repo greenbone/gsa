@@ -50,7 +50,7 @@ const AlertsPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -64,7 +64,6 @@ const AlertsPage = ({
       onDeleted={onChanged}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaved={onChanged}
       onTestError={showError}
       onTestSuccess={showSuccess}
@@ -88,7 +87,6 @@ const AlertsPage = ({
             onAlertSaveClick={save}
             onAlertTestClick={test}
             onError={onError}
-            onInteraction={onInteraction}
             onPermissionChanged={onChanged}
             onPermissionDownloadError={onError}
             onPermissionDownloaded={onDownloaded}
@@ -105,7 +103,6 @@ AlertsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('alert', {

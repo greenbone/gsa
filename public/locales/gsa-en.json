@@ -2093,6 +2093,7 @@
   "You can choose, whether you want to run the scan immediately": "You can choose, whether you want to run the scan immediately",
   "you can create a new Task yourself.": "you can create a new Task yourself.",
   "You can find information about renewing your license on the": "You can find information about renewing your license on the",
+  "You have been inactive, your session will expire in 3 minutes": "You have been inactive, your session will expire in 3 minutes",
   "You should change the Alive Test Method of the target for the next scan. However, if the target hosts are indeed dead, the scan duration might increase significantly.": "You should change the Alive Test Method of the target for the next scan. However, if the target hosts are indeed dead, the scan duration might increase significantly.",
   "Your changes have been saved.": "Your changes have been saved.",
   "Your filter settings may be too refined.": "Your filter settings may be too refined.",

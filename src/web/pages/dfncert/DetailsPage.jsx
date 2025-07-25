@@ -111,7 +111,7 @@ const DfnCertAdvPage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -121,7 +121,6 @@ const DfnCertAdvPage = ({
       name="dfncert"
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
     >
       {({download}) => (
         <EntityPage
@@ -131,7 +130,6 @@ const DfnCertAdvPage = ({
           title={_('DFN-CERT Advisory')}
           toolBarIcons={ToolBarIcons}
           onDfnCertAdvDownloadClick={download}
-          onInteraction={onInteraction}
         >
           {() => {
             return (
@@ -161,7 +159,6 @@ const DfnCertAdvPage = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -181,7 +178,6 @@ DfnCertAdvPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntityContainer('dfncert', {

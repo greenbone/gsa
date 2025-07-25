@@ -185,7 +185,7 @@ const CvePage = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
+
   ...props
 }) => {
   const [_] = useTranslation();
@@ -195,7 +195,6 @@ const CvePage = ({
       name="cve"
       onDownloadError={onError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
     >
       {({download}) => (
         <EntityPage
@@ -206,7 +205,6 @@ const CvePage = ({
           title={_('CVE')}
           toolBarIcons={ToolBarIcons}
           onCveDownloadClick={download}
-          onInteraction={onInteraction}
         >
           {() => {
             return (
@@ -232,7 +230,6 @@ const CvePage = ({
                           entity={entity}
                           onChanged={onChanged}
                           onError={onError}
-                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
@@ -252,7 +249,6 @@ CvePage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntityContainer('cve', {

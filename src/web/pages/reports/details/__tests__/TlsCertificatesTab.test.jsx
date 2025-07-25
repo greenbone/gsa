@@ -19,7 +19,7 @@ describe('Report TLS Certificates Tab tests', () => {
     const {tlsCertificates} = getMockReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
+
     const onTlsCertificateDownloadClick = testing.fn();
 
     const {render, store} = rendererWith({
@@ -38,7 +38,6 @@ describe('Report TLS Certificates Tab tests', () => {
         sortField={'severity'}
         sortReverse={true}
         tlsCertificates={tlsCertificates.entities}
-        onInteraction={onInteraction}
         onSortChange={onSortChange}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,
@@ -117,7 +116,7 @@ describe('Report TLS Certificates Tab tests', () => {
     const {tlsCertificates} = getMockReport();
 
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
+
     const onTlsCertificateDownloadClick = testing.fn();
 
     const {render, store} = rendererWith({
@@ -136,7 +135,6 @@ describe('Report TLS Certificates Tab tests', () => {
         sortField={'severity'}
         sortReverse={true}
         tlsCertificates={tlsCertificates.entities}
-        onInteraction={onInteraction}
         onSortChange={onSortChange}
         onTlsCertificateDownloadClick={onTlsCertificateDownloadClick}
       />,

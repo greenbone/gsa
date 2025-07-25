@@ -26,7 +26,6 @@ describe('Report Closed CVEs Tab tests', () => {
   test('should render Report Closed CVEs Tab', () => {
     const {closedCves} = getMockReport();
     const onSortChange = testing.fn();
-    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -46,7 +45,6 @@ describe('Report Closed CVEs Tab tests', () => {
         isUpdating={false}
         sortField={'severity'}
         sortReverse={true}
-        onInteraction={onInteraction}
         onSortChange={sortField => onSortChange('cves', sortField)}
       />,
     );

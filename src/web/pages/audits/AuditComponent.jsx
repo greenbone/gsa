@@ -63,7 +63,7 @@ const REPORT_FORMATS_FILTER = Filter.fromString(
 
 const AuditComponent = ({
   children,
-  onInteraction,
+
   onStarted,
   onStartError,
   onStopped,
@@ -220,12 +220,6 @@ const AuditComponent = ({
     }
   }, [audit, _]);
 
-  const handleInteraction = () => {
-    if (onInteraction) {
-      onInteraction();
-    }
-  };
-
   const handleChange = (value, name) => {
     switch (name) {
       case 'alertIds':
@@ -279,24 +273,18 @@ const AuditComponent = ({
   };
 
   const handleAuditStart = audit => {
-    handleInteraction();
-
     if (isDefined(audit)) {
       gmp.audit.start(audit).then(onStarted, onStartError);
     }
   };
 
   const handleAuditStop = audit => {
-    handleInteraction();
-
     if (isDefined(audit)) {
       gmp.audit.stop(audit).then(onStopped, onStopError);
     }
   };
 
   const handleAuditResume = audit => {
-    handleInteraction();
-
     if (isDefined(audit)) {
       gmp.audit.resume(audit).then(onResumed, onResumeError);
     }
@@ -350,8 +338,6 @@ const AuditComponent = ({
     const addTag = NO_VALUE;
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
-
-    handleInteraction();
 
     if (isDefined(id)) {
       if (isDefined(audit) && !audit.isChangeable()) {
@@ -435,12 +421,9 @@ const AuditComponent = ({
 
   const handleCloseAuditDialog = () => {
     closeAuditDialog();
-    handleInteraction();
   };
 
   const openAuditDialog = audit => {
-    handleInteraction();
-
     fetchAlerts();
     fetchPolicies();
     fetchScanners();
@@ -519,8 +502,6 @@ const AuditComponent = ({
   const handleReportDownload = async audit => {
     setAudit(audit);
 
-    handleInteraction();
-
     if (!isDefined(audit.last_report) || !isDefined(audit.last_report.id)) {
       return;
     }
@@ -588,7 +569,6 @@ const AuditComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
     >
       {other => (
         <>
@@ -605,20 +585,11 @@ const AuditComponent = ({
           })}
 
           {auditDialogVisible && (
-            <TargetComponent
-              onCreated={handleTargetCreated}
-              onInteraction={onInteraction}
-            >
+            <TargetComponent onCreated={handleTargetCreated}>
               {({create: createtarget}) => (
-                <AlertComponent
-                  onCreated={handleAlertCreated}
-                  onInteraction={onInteraction}
-                >
+                <AlertComponent onCreated={handleAlertCreated}>
                   {({create: createalert}) => (
-                    <ScheduleComponent
-                      onCreated={handleScheduleCreated}
-                      onInteraction={onInteraction}
-                    >
+                    <ScheduleComponent onCreated={handleScheduleCreated}>
                       {({create: createschedule}) => (
                         <AuditDialog
                           alertIds={alertIds}
@@ -676,7 +647,6 @@ AuditComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onResumeError: PropTypes.func,
   onResumed: PropTypes.func,
   onSaveError: PropTypes.func,

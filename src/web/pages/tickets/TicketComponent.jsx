@@ -32,7 +32,6 @@ const TicketComponent = ({
   onDownloadError,
   onSaved,
   onSaveError,
-  onInteraction,
 }) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
@@ -49,26 +48,16 @@ const TicketComponent = ({
   const [ticket, setTicket] = useState();
   const [userId, setUserId] = useState();
 
-  const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  };
-
   const handleOpenCreateDialog = resultData => {
     dispatch(loadUsers(gmp)(ALL_FILTER));
 
     setResult(resultData);
     setCreateDialogVisible(true);
-
-    handleInteraction();
   };
 
   const handleCloseCreateDialog = () => {
     setUserId(undefined);
     setCreateDialogVisible(false);
-
-    handleInteraction();
   };
 
   const handleOpenEditDialog = ticketData => {
@@ -76,8 +65,6 @@ const TicketComponent = ({
 
     setTicket(ticketData);
     setEditDialogVisible(true);
-
-    handleInteraction();
   };
 
   const closeEditDialog = () => {
@@ -87,8 +74,6 @@ const TicketComponent = ({
 
   const handleCloseEditDialog = () => {
     closeEditDialog();
-
-    handleInteraction();
   };
 
   const handleOpenSolvedDialog = ticketData => {
@@ -99,8 +84,6 @@ const TicketComponent = ({
       status: TICKET_STATUS.fixed,
     });
     setEditDialogVisible(true);
-
-    handleInteraction();
   };
 
   const handleOpenClosedDialog = ticketData => {
@@ -111,8 +94,6 @@ const TicketComponent = ({
       status: TICKET_STATUS.closed,
     });
     setEditDialogVisible(true);
-
-    handleInteraction();
   };
 
   const handleUserIdChange = id => {
@@ -130,7 +111,6 @@ const TicketComponent = ({
       onDeleted={onDeleted}
       onDownloadError={onDownloadError}
       onDownloaded={onDownloaded}
-      onInteraction={onInteraction}
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
@@ -151,7 +131,6 @@ const TicketComponent = ({
               users={users}
               onClose={handleCloseCreateDialog}
               onSave={d => {
-                handleInteraction();
                 return create(d).then(handleCloseCreateDialog);
               }}
               onUserIdChange={handleUserIdChange}
@@ -180,7 +159,6 @@ const TicketComponent = ({
                 ticketId,
                 userId,
               }) => {
-                handleInteraction();
                 return save({
                   id: ticketId,
                   openNote,
@@ -208,7 +186,6 @@ TicketComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
