@@ -2093,6 +2093,7 @@
   "You can choose, whether you want to run the scan immediately": "Sie können wählen, ob der Scan automatisch gestartet",
   "you can create a new Task yourself.": "können Sie selbst eine neue Aufgabe erstellen.",
   "You can find information about renewing your license on the": "Informationen zur Erneuerung Ihrer Lizenz finden Sie unter",
+  "You have been inactive, your session will expire in 3 minutes": "Sie waren inaktiv, Ihre Sitzung wird in 3 Minuten ablaufen",
   "You should change the Alive Test Method of the target for the next scan. However, if the target hosts are indeed dead, the scan duration might increase significantly.": "Sie sollten die Methode des Erreichbarkeitstests des Ziels für den nächsten Scan ändern. Sollten die Ziel-Hosts tatsächlich unerreichbar sein, könnte sich die Scan-Dauer erheblich verlängern.",
   "Your changes have been saved.": "Ihre Änderungen wurden gespeichert.",
   "Your filter settings may be too refined.": "Ihre Filtereinstellungen könnten zu präzise sein.",
