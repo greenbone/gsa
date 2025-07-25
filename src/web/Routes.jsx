@@ -14,8 +14,8 @@ import {
 } from 'react-router';
 import Authorized from 'web/Authorized';
 import Loading from 'web/components/loading/Loading';
-import LocationObserver from 'web/components/observer/LocationObserver';
 import SessionObserver from 'web/components/observer/SessionObserver';
+import SessionTracker from 'web/components/observer/SessionTracker';
 import AlertDetailsPage from 'web/pages/alerts/DetailsPage';
 import AlertsPage from 'web/pages/alerts/ListPage';
 import AuditsDetailsPage from 'web/pages/audits/DetailsPage';
@@ -96,7 +96,6 @@ import UserSettingsPage from 'web/pages/user-settings/UserSettingsPage';
 import UserDetailsPage from 'web/pages/users/DetailsPage';
 import UsersPage from 'web/pages/users/ListPage';
 import VulnerabilitiesPage from 'web/pages/vulns/ListPage';
-import SessionTracker from 'web/SessionTracker';
 import {isLoggedIn as selectIsLoggedIn} from 'web/store/usersettings/selectors';
 
 const LoggedOutRoutes = () => {
@@ -116,124 +115,117 @@ const LoggedOutRoutes = () => {
 const LoggedInRoutes = () => {
   return (
     <Authorized>
+      <SessionTracker />
       <SessionObserver />
-      <LocationObserver>
-        <Page>
-          <Routes>
-            <Route element={<StartPage />} path="/dashboards" />
-            <Route element={<AboutPage />} path="/about" />
-            <Route element={<AlertsPage />} path="/alerts" />
-            <Route element={<AuditsPage />} path="/audits" />
-            <Route element={<CertBundsPage />} path="/certbunds" />
-            <Route element={<CpesPage />} path="/cpes" />
-            <Route element={<CredentialsPage />} path="/credentials" />
-            <Route element={<CvesPage />} path="/cves" />
-            <Route element={<DfnCertsPage />} path="/dfncerts" />
-            <Route element={<FeedStatusPage />} path="/feedstatus" />
-            <Route element={<FiltersPage />} path="/filters" />
-            <Route element={<GroupsPage />} path="/groups" />
-            <Route element={<HostsPage />} path="/hosts" />
-            <Route element={<LdapPage />} path="/ldap" />
-            <Route element={<NotesPage />} path="/notes" />
-            <Route
-              element={<OperatingSystemsPage />}
-              path="/operatingsystems"
-            />
-            <Route element={<NvtsPage />} path="/nvts" />
-            <Route element={<OverridesPage />} path="/overrides" />
-            <Route element={<PerformancePage />} path="/performance" />
-            <Route element={<PermissionsPage />} path="/permissions" />
-            <Route element={<PoliciesPage />} path="/policies" />
-            <Route element={<PortListsPage />} path="/portlists" />
-            <Route element={<RadiusPage />} path="/radius" />
-            <Route element={<ReportsPage />} path="/reports" />
-            <Route element={<ReportConfigsPage />} path="/reportconfigs" />
-            <Route element={<ReportFormatsPage />} path="/reportformats" />
-            <Route element={<ResultsPage />} path="/results" />
-            <Route element={<RolesPage />} path="/roles" />
-            <Route element={<TagsPage />} path="/tags" />
-            <Route element={<PermissionsPage />} path="/permissions" />
-            <Route element={<ScannersPage />} path="/scanners" />
-            <Route element={<ScanConfigsPage />} path="/scanconfigs" />
-            <Route element={<ScannersPage />} path="/scanners" />
-            <Route element={<SchedulesPage />} path="/schedules" />
-            <Route element={<TagsPage />} path="/tags" />
-            <Route element={<TargetsPage />} path="/targets" />
-            <Route element={<TasksPage />} path="/tasks" />
-            <Route element={<TicketsPage />} path="/tickets" />
-            <Route element={<TrashcanPage />} path="/trashcan" />
-            <Route element={<TlsCertificatesPage />} path="/tlscertificates" />
-            <Route element={<UsersPage />} path="/users" />
-            <Route element={<UserSettingsPage />} path="/usersettings" />
-            <Route element={<VulnerabilitiesPage />} path="/vulnerabilities" />
-            <Route element={<CvssCalculatorPage />} path="/cvsscalculator" />
-            <Route element={<AlertDetailsPage />} path="/alert/:id" />
-            <Route element={<AuditsDetailsPage />} path="/audit/:id" />
-            <Route element={<CertBundDetailsPage />} path="/certbund/:id" />
-            <Route element={<CpeDetailsPage />} path="/cpe/:id" />
-            <Route element={<CredentialDetailsPage />} path="/credential/:id" />
-            <Route element={<CveDetailsPage />} path="/cve/:id" />
-            <Route element={<DfnCertDetailsPage />} path="/dfncert/:id" />
-            <Route element={<FilterDetailsPage />} path="/filter/:id" />
-            <Route element={<GroupDetailsPage />} path="/group/:id" />
-            <Route element={<HostDetailsPage />} path="/host/:id" />
-            <Route element={<NoteDetailsPage />} path="/note/:id" />
-            <Route element={<NvtDetailsPage />} path="/nvt/:id" />
-            <Route element={<PortListDetailsPage />} path="/portlist/:id" />
-            <Route
-              element={<OperatingSystemDetailsPage />}
-              path="/operatingsystem/:id"
-            />
-            <Route element={<OverrideDetailsPage />} path="/override/:id" />
-            <Route element={<PermissionDetailsPage />} path="/permission/:id" />
-            <Route element={<PoliciesDetailsPage />} path="/policy/:id" />
-            <Route
-              element={<DeltaReportDetailsPage />}
-              path="/report/delta/:id/:deltaid"
-            />
-            <Route element={<ReportDetailsPage />} path="/report/:id" />
-            <Route
-              element={<ReportConfigDetailsPage />}
-              path="/reportconfig/:id"
-            />
-            <Route
-              element={<ReportFormatDetailsPage />}
-              path="/reportformat/:id"
-            />
-            <Route element={<ResultDetailsPage />} path="/result/:id" />
-            <Route element={<RoleDetailsPage />} path="/role/:id" />
-            <Route element={<FilterDetailsPage />} path="/filter/:id" />
-            <Route element={<TagDetailsPage />} path="/tag/:id" />
-            <Route element={<PermissionDetailsPage />} path="/permission/:id" />
-            <Route element={<ScanConfigDetailsPage />} path="/scanconfig/:id" />
-            <Route element={<ScannerDetailsPage />} path="/scanner/:id" />
-            <Route element={<ScheduleDetailsPage />} path="/schedule/:id" />
-            <Route element={<TagDetailsPage />} path="/tag/:id" />
-            <Route element={<TargetDetailsPage />} path="/target/:id" />
-            <Route element={<TaskDetailsPage />} path="/task/:id" />
-            <Route element={<TicketDetailsPage />} path="/ticket/:id" />
-            <Route
-              element={<TlsCertificateDetailsPage />}
-              path="/tlscertificate/:id"
-            />
-            <Route element={<UserDetailsPage />} path="/user/:id" />
+      <Page>
+        <Routes>
+          <Route element={<StartPage />} path="/dashboards" />
+          <Route element={<AboutPage />} path="/about" />
+          <Route element={<AlertsPage />} path="/alerts" />
+          <Route element={<AuditsPage />} path="/audits" />
+          <Route element={<CertBundsPage />} path="/certbunds" />
+          <Route element={<CpesPage />} path="/cpes" />
+          <Route element={<CredentialsPage />} path="/credentials" />
+          <Route element={<CvesPage />} path="/cves" />
+          <Route element={<DfnCertsPage />} path="/dfncerts" />
+          <Route element={<FeedStatusPage />} path="/feedstatus" />
+          <Route element={<FiltersPage />} path="/filters" />
+          <Route element={<GroupsPage />} path="/groups" />
+          <Route element={<HostsPage />} path="/hosts" />
+          <Route element={<LdapPage />} path="/ldap" />
+          <Route element={<NotesPage />} path="/notes" />
+          <Route element={<OperatingSystemsPage />} path="/operatingsystems" />
+          <Route element={<NvtsPage />} path="/nvts" />
+          <Route element={<OverridesPage />} path="/overrides" />
+          <Route element={<PerformancePage />} path="/performance" />
+          <Route element={<PermissionsPage />} path="/permissions" />
+          <Route element={<PoliciesPage />} path="/policies" />
+          <Route element={<PortListsPage />} path="/portlists" />
+          <Route element={<RadiusPage />} path="/radius" />
+          <Route element={<ReportsPage />} path="/reports" />
+          <Route element={<ReportConfigsPage />} path="/reportconfigs" />
+          <Route element={<ReportFormatsPage />} path="/reportformats" />
+          <Route element={<ResultsPage />} path="/results" />
+          <Route element={<RolesPage />} path="/roles" />
+          <Route element={<TagsPage />} path="/tags" />
+          <Route element={<PermissionsPage />} path="/permissions" />
+          <Route element={<ScannersPage />} path="/scanners" />
+          <Route element={<ScanConfigsPage />} path="/scanconfigs" />
+          <Route element={<ScannersPage />} path="/scanners" />
+          <Route element={<SchedulesPage />} path="/schedules" />
+          <Route element={<TagsPage />} path="/tags" />
+          <Route element={<TargetsPage />} path="/targets" />
+          <Route element={<TasksPage />} path="/tasks" />
+          <Route element={<TicketsPage />} path="/tickets" />
+          <Route element={<TrashcanPage />} path="/trashcan" />
+          <Route element={<TlsCertificatesPage />} path="/tlscertificates" />
+          <Route element={<UsersPage />} path="/users" />
+          <Route element={<UserSettingsPage />} path="/usersettings" />
+          <Route element={<VulnerabilitiesPage />} path="/vulnerabilities" />
+          <Route element={<CvssCalculatorPage />} path="/cvsscalculator" />
+          <Route element={<AlertDetailsPage />} path="/alert/:id" />
+          <Route element={<AuditsDetailsPage />} path="/audit/:id" />
+          <Route element={<CertBundDetailsPage />} path="/certbund/:id" />
+          <Route element={<CpeDetailsPage />} path="/cpe/:id" />
+          <Route element={<CredentialDetailsPage />} path="/credential/:id" />
+          <Route element={<CveDetailsPage />} path="/cve/:id" />
+          <Route element={<DfnCertDetailsPage />} path="/dfncert/:id" />
+          <Route element={<FilterDetailsPage />} path="/filter/:id" />
+          <Route element={<GroupDetailsPage />} path="/group/:id" />
+          <Route element={<HostDetailsPage />} path="/host/:id" />
+          <Route element={<NoteDetailsPage />} path="/note/:id" />
+          <Route element={<NvtDetailsPage />} path="/nvt/:id" />
+          <Route element={<PortListDetailsPage />} path="/portlist/:id" />
+          <Route
+            element={<OperatingSystemDetailsPage />}
+            path="/operatingsystem/:id"
+          />
+          <Route element={<OverrideDetailsPage />} path="/override/:id" />
+          <Route element={<PermissionDetailsPage />} path="/permission/:id" />
+          <Route element={<PoliciesDetailsPage />} path="/policy/:id" />
+          <Route
+            element={<DeltaReportDetailsPage />}
+            path="/report/delta/:id/:deltaid"
+          />
+          <Route element={<ReportDetailsPage />} path="/report/:id" />
+          <Route
+            element={<ReportConfigDetailsPage />}
+            path="/reportconfig/:id"
+          />
+          <Route
+            element={<ReportFormatDetailsPage />}
+            path="/reportformat/:id"
+          />
+          <Route element={<ResultDetailsPage />} path="/result/:id" />
+          <Route element={<RoleDetailsPage />} path="/role/:id" />
+          <Route element={<FilterDetailsPage />} path="/filter/:id" />
+          <Route element={<TagDetailsPage />} path="/tag/:id" />
+          <Route element={<PermissionDetailsPage />} path="/permission/:id" />
+          <Route element={<ScanConfigDetailsPage />} path="/scanconfig/:id" />
+          <Route element={<ScannerDetailsPage />} path="/scanner/:id" />
+          <Route element={<ScheduleDetailsPage />} path="/schedule/:id" />
+          <Route element={<TagDetailsPage />} path="/tag/:id" />
+          <Route element={<TargetDetailsPage />} path="/target/:id" />
+          <Route element={<TaskDetailsPage />} path="/task/:id" />
+          <Route element={<TicketDetailsPage />} path="/ticket/:id" />
+          <Route
+            element={<TlsCertificateDetailsPage />}
+            path="/tlscertificate/:id"
+          />
+          <Route element={<UserDetailsPage />} path="/user/:id" />
 
-            <Route element={<PageNotFound />} path="/notfound" />
-            <Route element={<AuditReportsPage />} path="/auditreports" />
-            <Route
-              element={<DeltaAuditReportDetailsPage />}
-              path="/auditreport/delta/:id/:deltaid"
-            />
-            <Route
-              element={<AuditReportDetailsPage />}
-              path="/auditreport/:id"
-            />
-            <Route element={<Navigate to="/dashboards" />} path="/" />
+          <Route element={<PageNotFound />} path="/notfound" />
+          <Route element={<AuditReportsPage />} path="/auditreports" />
+          <Route
+            element={<DeltaAuditReportDetailsPage />}
+            path="/auditreport/delta/:id/:deltaid"
+          />
+          <Route element={<AuditReportDetailsPage />} path="/auditreport/:id" />
+          <Route element={<Navigate to="/dashboards" />} path="/" />
 
-            <Route element={<PageNotFound />} path="*" />
-          </Routes>
-        </Page>
-      </LocationObserver>
+          <Route element={<PageNotFound />} path="*" />
+        </Routes>
+      </Page>
     </Authorized>
   );
 };
