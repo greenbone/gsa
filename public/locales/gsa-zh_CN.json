@@ -2093,6 +2093,7 @@
   "You can choose, whether you want to run the scan immediately": "您可以选择是否立即运行任务",
   "you can create a new Task yourself.": "您可以自己创建一个新的任务.",
   "You can find information about renewing your license on the": "您可以在下面找到有关续订许可证的信息",
+  "You have been inactive, your session will expire in 3 minutes": "",
   "You should change the Alive Test Method of the target for the next scan. However, if the target hosts are indeed dead, the scan duration might increase significantly.": "您应该为下一次扫描更改目标的\"存活检测\".但是,如果目标主机确实已关闭,则扫描持续时间可能会显著增加.",
   "Your changes have been saved.": "",
   "Your filter settings may be too refined.": "您的筛选器设置可能过于精细.",
