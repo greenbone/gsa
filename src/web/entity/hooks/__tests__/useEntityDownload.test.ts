@@ -5,6 +5,8 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, wait} from 'web/testing';
+import date from 'gmp/models/date';
+import Model from 'gmp/models/model';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import {currentSettingsDefaultResponse} from 'web/pages/__mocks__/CurrentSettings';
 
@@ -13,12 +15,12 @@ describe('useEntityDownload', () => {
     const currentSettings = testing
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse);
-    const entity = {
+    const entity = new Model({
       id: '123',
       name: 'foo',
-      creationTime: '2025-01-01T00:00:00Z',
-      modificationTime: '2025-01-01T00:00:00Z',
-    };
+      creationTime: date('2025-01-01T00:00:00Z'),
+      modificationTime: date('2025-01-01T00:00:00Z'),
+    });
     const downloadedData = {id: '123'};
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
@@ -40,8 +42,7 @@ describe('useEntityDownload', () => {
     await wait(); // wait for currentSettings to be resolved and put into the store
     expect(currentSettings).toHaveBeenCalledOnce();
     expect(result.current).toBeDefined();
-    result.current(entity);
-    await wait();
+    await result.current(entity);
     expect(onDownloaded).toHaveBeenCalledWith({
       filename: 'foo-123.xml',
       data: downloadedData,
@@ -55,7 +56,7 @@ describe('useEntityDownload', () => {
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse);
     const error = new Error('error');
-    const entity = {id: '123'};
+    const entity = new Model({id: '123'});
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
     const onInteraction = testing.fn();
@@ -74,8 +75,7 @@ describe('useEntityDownload', () => {
 
     await wait(); // wait for currentSettings to be resolved and put into the store
     expect(result.current).toBeDefined();
-    result.current(entity);
-    await wait();
+    await result.current(entity);
     expect(onDownloadError).toHaveBeenCalledWith(error);
     expect(onDownloaded).not.toHaveBeenCalled();
     expect(onInteraction).toHaveBeenCalledOnce();

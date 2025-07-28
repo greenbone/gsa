@@ -4,6 +4,7 @@
  */
 
 import {useDispatch} from 'react-redux';
+import Rejection from 'gmp/http/rejection';
 import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
@@ -11,12 +12,14 @@ import useTranslation from 'web/hooks/useTranslation';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 
 interface EntityDelete {
-  id: string;
-  name: string;
+  // allow for current model classes to be used
+  // id and name are currently optional but are always present in the model
+  id?: string;
+  name?: string;
 }
 
-interface DeleteCallbacks {
-  onDeleteError?: (error: unknown) => void;
+interface EntityDeleteCallbacks<TDeleteError = unknown> {
+  onDeleteError?: (error: TDeleteError) => void;
   onDeleted?: () => void;
   onInteraction?: () => void;
 }
@@ -25,19 +28,26 @@ interface DeleteCallbacks {
  * Custom hook to handle the deletion of an entity.
  *
  * @param {string} name - The name of the entity type to be deleted.
- * @param {DeleteCallbacks} [callbacks] - Optional callbacks for handling delete events.
- * @returns {Function} - A function to handle the deletion of an entity.
+ * @param {EntityDeleteCallbacks} [callbacks] - Optional callbacks for handling delete events.
+ * @returns A function to handle the deletion of an entity.
  */
-const useEntityDelete = (
+const useEntityDelete = <
+  TEntity extends EntityDelete = EntityDelete,
+  TDeleteError = Rejection,
+>(
   name: string,
-  {onDeleteError, onDeleted, onInteraction}: DeleteCallbacks = {},
+  {
+    onDeleteError,
+    onDeleted,
+    onInteraction,
+  }: EntityDeleteCallbacks<TDeleteError> = {},
 ) => {
   const [_] = useTranslation();
   const gmp = useGmp();
   const dispatch = useDispatch();
-  const deleteEntity = (entity: EntityDelete) =>
+  const deleteEntity = (entity: TEntity) =>
     // @ts-expect-error
-    dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id));
+    dispatch(createDeleteEntity({entityType: name})(gmp)(entity.id as string));
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -45,15 +55,19 @@ const useEntityDelete = (
     }
   };
 
-  const handleEntityDelete = async (entity: EntityDelete) => {
+  const handleEntityDelete = async (entity: TEntity) => {
     handleInteraction();
 
     return actionFunction(
       // @ts-expect-error
       deleteEntity(entity),
-      onDeleted,
-      onDeleteError,
-      _('{{name}} deleted successfully.', {name: entity.name}),
+      {
+        onSuccess: onDeleted,
+        onError: onDeleteError,
+        successMessage: _('{{name}} deleted successfully.', {
+          name: entity.name as string,
+        }),
+      },
     );
   };
   return handleEntityDelete;

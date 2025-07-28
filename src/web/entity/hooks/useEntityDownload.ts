@@ -6,6 +6,8 @@
 import {useEffect} from 'react';
 import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {useDispatch, useSelector} from 'react-redux';
+import Rejection from 'gmp/http/rejection';
+import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
@@ -16,15 +18,14 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import {generateFilename} from 'web/utils/Render';
 
 export type OnDownloadedFunc = (data: EntityDownload) => void;
-export type OnDownloadErrorFunc = (error: unknown) => void;
 
 interface EntityDownload {
   filename: string;
   data: string;
 }
 
-interface DownloadCallbacks {
-  onDownloadError?: OnDownloadErrorFunc;
+interface EntityDownloadCallbacks<TDownloadError = unknown> {
+  onDownloadError?: (error: TDownloadError) => void;
   onDownloaded?: OnDownloadedFunc;
   onInteraction?: () => void;
 }
@@ -33,12 +34,16 @@ interface DownloadCallbacks {
  * Custom hook to handle the download of an entity.
  *
  * @param {string} name - The name of the entity to download.
- * @param {DownloadCallbacks} options - Options for handling download events.
- * @returns {Function} - Function to handle the entity download.
+ * @param {EntityDownloadCallbacks} options - Options for handling download events.
+ * @returns Function to handle the entity download.
  */
-const useEntityDownload = (
+const useEntityDownload = <TEntity extends Model, TDownloadError = Rejection>(
   name: string,
-  {onDownloadError, onDownloaded, onInteraction}: DownloadCallbacks = {},
+  {
+    onDownloadError,
+    onDownloaded,
+    onInteraction,
+  }: EntityDownloadCallbacks<TDownloadError> = {},
 ) => {
   const [_] = useTranslation();
   const username = useSelector(getUsername);
@@ -64,7 +69,7 @@ const useEntityDownload = (
     }
   }, [name, dispatch, gmp, userDefaultsSelector]);
 
-  const handleEntityDownload = async entity => {
+  const handleEntityDownload = async (entity: TEntity) => {
     const detailsExportFileName = userDefaultsSelector.getValueByName(
       'detailsexportfilename',
     );
@@ -89,13 +94,13 @@ const useEntityDownload = (
       if (isDefined(onDownloaded)) {
         showSuccessNotification(
           '',
-          _('{{name}} downloaded successfully.', {name: entity.name}),
+          _('{{name}} downloaded successfully.', {name: entity.name as string}),
         );
         return onDownloaded({filename, data: response.data});
       }
     } catch (error) {
       if (isDefined(onDownloadError)) {
-        return onDownloadError(error);
+        return onDownloadError(error as TDownloadError);
       }
     }
   };

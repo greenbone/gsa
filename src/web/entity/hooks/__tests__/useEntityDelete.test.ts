@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, wait} from 'web/testing';
+import {rendererWith} from 'web/testing';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 
 describe('useEntityDelete', () => {
@@ -26,8 +26,7 @@ describe('useEntityDelete', () => {
       }),
     );
     expect(result.current).toBeDefined();
-    result.current(entity);
-    await wait();
+    await result.current(entity);
     expect(deleteEntity).toHaveBeenCalledWith(entity);
     expect(onDeleted).toHaveBeenCalledOnce();
     expect(onDeleteError).not.toHaveBeenCalled();
@@ -52,8 +51,7 @@ describe('useEntityDelete', () => {
       }),
     );
     expect(result.current).toBeDefined();
-    result.current(entity);
-    await wait();
+    await result.current(entity);
     expect(deleteEntity).toHaveBeenCalledWith(entity);
     expect(onDeleted).not.toHaveBeenCalled();
     expect(onDeleteError).toHaveBeenCalledOnce();
