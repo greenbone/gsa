@@ -358,36 +358,48 @@ const TaskComponent = ({
   const handleTaskStart = (task: Task) => {
     handleInteraction();
 
-    return actionFunction<void, void, Rejection>(
+    return actionFunction<void, Rejection>(
       // @ts-expect-error
       gmp.task.start(task),
-      onStarted,
-      onStartError,
-      _('Task {{name}} started successfully.', {name: task.name as string}),
+      {
+        onSuccess: onStarted,
+        onError: onStartError,
+        successMessage: _('Task {{name}} started successfully.', {
+          name: task.name as string,
+        }),
+      },
     );
   };
 
   const handleTaskStop = (task: Task) => {
     handleInteraction();
 
-    return actionFunction<void, void, Rejection>(
+    return actionFunction<void, Rejection>(
       // @ts-expect-error
       gmp.task.stop(task),
-      onStopped,
-      onStopError,
-      _('Task {{name}} stopped successfully.', {name: task.name as string}),
+      {
+        onSuccess: onStopped,
+        onError: onStopError,
+        successMessage: _('Task {{name}} stopped successfully.', {
+          name: task.name as string,
+        }),
+      },
     );
   };
 
   const handleTaskResume = (task: Task) => {
     handleInteraction();
 
-    return actionFunction<Response<Task, XmlMeta>, void, Rejection>(
+    return actionFunction<Response<Task, XmlMeta>, Rejection>(
       // @ts-expect-error
       gmp.task.resume(task),
-      onResumed,
-      onResumeError,
-      _('Task {{name}} resumed successfully.', {name: task.name as string}),
+      {
+        onSuccess: onResumed,
+        onError: onResumeError,
+        successMessage: _('Task {{name}} resumed successfully.', {
+          name: task.name as string,
+        }),
+      },
     );
   };
 

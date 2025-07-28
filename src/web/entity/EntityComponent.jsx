@@ -4,6 +4,7 @@
  */
 
 import useEntityClone from 'web/entity/hooks/useEntityClone';
+import useEntityCreate from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
@@ -33,6 +34,10 @@ const EntityComponent = ({
   const handleEntitySave = useEntitySave(name, {
     onSaveError,
     onSaved,
+    onInteraction,
+  });
+
+  const handleEntityCreate = useEntityCreate(name, {
     onCreated,
     onCreateError,
     onInteraction,
@@ -51,7 +56,7 @@ const EntityComponent = ({
   });
 
   return children({
-    create: handleEntitySave,
+    create: handleEntityCreate,
     clone: handleEntityClone,
     delete: handleEntityDelete,
     save: handleEntitySave,

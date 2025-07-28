@@ -247,12 +247,13 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
 
     const {deleteEntity} = this.props;
 
-    return actionFunction(
-      deleteEntity(entity?.id as string),
-      this.handleChanged,
-      this.handleError,
-      _('{{name}} deleted successfully.', {name: entity?.name as string}),
-    );
+    return actionFunction(deleteEntity(entity?.id as string), {
+      onSuccess: this.handleChanged,
+      onError: this.handleError,
+      successMessage: _('{{name}} deleted successfully.', {
+        name: entity?.name as string,
+      }),
+    });
   }
 
   handleChanged() {

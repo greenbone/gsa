@@ -5,12 +5,19 @@
 
 import React, {useState} from 'react';
 import {EntityCommandParams} from 'gmp/commands/entity';
+import Rejection from 'gmp/http/rejection';
+import Response from 'gmp/http/response';
+import {XmlMeta} from 'gmp/http/transform/fastxml';
+import ActionResult from 'gmp/models/actionresult';
 import PortList, {ProtocolType} from 'gmp/models/portlist';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
+import useEntityCreate from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
-import useEntityDownload from 'web/entity/hooks/useEntityDownload';
+import useEntityDownload, {
+  OnDownloadedFunc,
+} from 'web/entity/hooks/useEntityDownload';
 import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
@@ -40,19 +47,19 @@ interface PortListComponentProps {
     edit: (entity: PortList) => void;
     import: () => void;
   }) => React.ReactNode;
-  onCloneError?: (error: unknown) => void;
-  onCloned?: (newEntity: unknown) => void;
-  onCreateError?: (error: unknown) => void;
-  onCreated?: (response: unknown) => void;
-  onDeleteError?: (error: unknown) => void;
+  onCloneError?: (error: Rejection) => void;
+  onCloned?: (response: Response<ActionResult, XmlMeta>) => void;
+  onCreateError?: (error: Rejection) => void;
+  onCreated?: (response: Response<ActionResult, XmlMeta>) => void;
+  onDeleteError?: (error: Rejection) => void;
   onDeleted?: () => void;
-  onDownloadError?: (error: unknown) => void;
-  onDownloaded?: (response: unknown) => void;
-  onImportError?: (error: unknown) => void;
+  onDownloadError?: (error: Rejection) => void;
+  onDownloaded?: OnDownloadedFunc;
+  onImportError?: (error: Rejection) => void;
   onImported?: (response: unknown) => void;
   onInteraction?: () => void;
-  onSaveError?: (error: unknown) => void;
-  onSaved?: (response: unknown) => void;
+  onSaveError?: (error: Rejection) => void;
+  onSaved?: (response: Response<ActionResult, XmlMeta>) => void;
 }
 
 const PortListComponent = ({
@@ -91,23 +98,29 @@ const PortListComponent = ({
   };
 
   const handleSave = useEntitySave('portlist', {
-    onCreateError,
-    onCreated,
     onSaveError,
     onSaved,
     onInteraction,
   });
-  const handleClone = useEntityClone('portlist', {
-    onCloned,
-    onCloneError,
+  const handleCreate = useEntityCreate('portlist', {
+    onCreated,
+    onCreateError,
     onInteraction,
   });
-  const handleDownload = useEntityDownload('portlist', {
+  const handleClone = useEntityClone<PortList, Response<ActionResult, XmlMeta>>(
+    'portlist',
+    {
+      onCloned,
+      onCloneError,
+      onInteraction,
+    },
+  );
+  const handleDownload = useEntityDownload<PortList>('portlist', {
     onDownloadError,
     onDownloaded,
     onInteraction,
   });
-  const handleDelete = useEntityDelete('portlist', {
+  const handleDelete = useEntityDelete<PortList>('portlist', {
     onDeleteError,
     onDeleted,
     onInteraction,
@@ -203,7 +216,7 @@ const PortListComponent = ({
       closeImportDialog();
     } catch (error) {
       if (isDefined(onImportError)) {
-        onImportError(error);
+        onImportError(error as Rejection);
       }
     }
   };
@@ -246,15 +259,15 @@ const PortListComponent = ({
         const promises = [...createdPromises, ...deletedPromises];
         await Promise.all(promises);
       } catch (error) {
-        if (isDefined(data?.id) && isDefined(onSaveError)) {
-          return onSaveError(error);
-        } else if (!isDefined(data?.id) && isDefined(onCreateError)) {
-          return onCreateError(error);
+        if (isDefined(onSaveError)) {
+          return onSaveError(error as Rejection);
         }
         throw error;
       }
+      await handleSave(data);
+    } else {
+      await handleCreate(data);
     }
-    await handleSave(data);
     closePortListDialog();
   };
 
@@ -341,9 +354,9 @@ const PortListComponent = ({
   return (
     <>
       {children({
-        clone: handleClone as (entity: PortList) => void,
+        clone: handleClone,
         download: handleDownload,
-        delete: handleDelete as (entity: PortList) => void,
+        delete: handleDelete,
         create: openPortListDialog,
         edit: openPortListDialog,
         import: openImportDialog,
