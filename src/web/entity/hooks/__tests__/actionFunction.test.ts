@@ -4,24 +4,22 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import actionFunction from 'web/entity/hooks/actionFunction';
 
-vi.mock('@greenbone/opensight-ui-components-mantinev7', () => ({
-  showSuccessNotification: vi.fn(),
-}));
-
 describe('actionFunction', () => {
-  beforeEach(() => {
-    testing.resetAllMocks();
-  });
   test('should call onSuccess with response and show success notification if successMessage is defined', async () => {
     const promise = Promise.resolve('response');
     const onSuccess = testing.fn();
     const onError = testing.fn();
     const successMessage = 'Success!';
+    const showSuccessNotification = testing.fn();
 
-    await actionFunction(promise, onSuccess, onError, successMessage);
+    await actionFunction(promise, {
+      onSuccess,
+      onError,
+      successMessage,
+      showSuccessNotification,
+    });
 
     expect(onSuccess).toHaveBeenCalledWith('response');
     expect(showSuccessNotification).toHaveBeenCalledWith('', successMessage);
@@ -31,8 +29,13 @@ describe('actionFunction', () => {
     const promise = Promise.resolve('response');
     const onSuccess = testing.fn();
     const onError = testing.fn();
+    const showSuccessNotification = testing.fn();
 
-    await actionFunction(promise, onSuccess, onError);
+    await actionFunction(promise, {
+      onSuccess,
+      onError,
+      showSuccessNotification,
+    });
 
     expect(onSuccess).toHaveBeenCalledWith('response');
     expect(showSuccessNotification).not.toHaveBeenCalled();
@@ -43,7 +46,7 @@ describe('actionFunction', () => {
     const onSuccess = testing.fn();
     const onError = testing.fn();
 
-    await actionFunction(promise, onSuccess, onError);
+    await actionFunction(promise, {onSuccess, onError});
 
     expect(onError).toHaveBeenCalledWith('error');
   });
@@ -53,7 +56,7 @@ describe('actionFunction', () => {
     const onSuccess = testing.fn();
     const onError = undefined;
 
-    await expect(actionFunction(promise, onSuccess, onError)).rejects.toEqual(
+    await expect(actionFunction(promise, {onSuccess, onError})).rejects.toEqual(
       'error',
     );
   });
