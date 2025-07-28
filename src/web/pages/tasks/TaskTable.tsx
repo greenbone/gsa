@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
+import Task from 'gmp/models/task';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
@@ -94,7 +95,7 @@ const actionsColumn = (
 export default createEntitiesTable({
   emptyTitle: _l('No Tasks available'),
   row: TaskRow,
-  rowDetails: withRowDetails('task', '10')(TaskDetails),
+  rowDetails: withRowDetails<Task>('task', 10)(TaskDetails),
   // @ts-expect-error
   header: withEntitiesHeader(actionsColumn)(Header),
   footer: createEntitiesFooter({
