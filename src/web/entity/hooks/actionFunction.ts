@@ -3,8 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {showSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
+import {showSuccessNotification as mantineShowSuccessNotification} from '@greenbone/opensight-ui-components-mantinev7';
 import {isDefined} from 'gmp/utils/identity';
+
+interface ActionFunctionOptions<
+  ResponseType,
+  ErrorType = unknown,
+  ReturnType = void,
+> {
+  onSuccess?: (response: ResponseType) => ReturnType;
+  onError?: (error: ErrorType) => ReturnType;
+  successMessage?: string;
+  showSuccessNotification?: (message: string, title?: string) => void;
+}
 
 /**
  * Executes a promise and handles success and error callbacks.
@@ -18,12 +29,18 @@ import {isDefined} from 'gmp/utils/identity';
  *                         Otherwise the error from the rejected promise is thrown.
  * @throws {*} - The error from the rejected promise if onError callback is not provided.
  */
-
-const actionFunction = async <ResponseType, ReturnType, ErrorType = unknown>(
+const actionFunction = async <
+  ResponseType = unknown,
+  ErrorType = unknown,
+  ReturnType = void,
+>(
   promise: Promise<ResponseType>,
-  onSuccess?: (response: ResponseType) => ReturnType,
-  onError?: (error: ErrorType) => ReturnType,
-  successMessage?: string,
+  {
+    onSuccess,
+    onError,
+    successMessage,
+    showSuccessNotification = mantineShowSuccessNotification,
+  }: ActionFunctionOptions<ResponseType, ErrorType, ReturnType> = {},
 ): Promise<ReturnType | ResponseType> => {
   try {
     const response = await promise;
