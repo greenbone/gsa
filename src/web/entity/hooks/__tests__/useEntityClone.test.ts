@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, wait} from 'web/testing';
+import {rendererWith} from 'web/testing';
 import useEntityClone from 'web/entity/hooks/useEntityClone';
 
 describe('useEntityClone', () => {
@@ -27,8 +27,7 @@ describe('useEntityClone', () => {
       }),
     );
     expect(result.current).toBeDefined();
-    result.current(entity);
-    await wait();
+    await result.current(entity);
     expect(cloneEntity).toHaveBeenCalledWith(entity);
     expect(onCloned).toHaveBeenCalledWith(entity);
     expect(onCloneError).not.toHaveBeenCalled();
@@ -54,8 +53,7 @@ describe('useEntityClone', () => {
       }),
     );
     expect(result.current).toBeDefined();
-    result.current(entity);
-    await wait();
+    await result.current(entity);
     expect(cloneEntity).toHaveBeenCalledWith(entity);
     expect(onCloned).not.toHaveBeenCalled();
     expect(onCloneError).toHaveBeenCalledWith(new Error('error'));

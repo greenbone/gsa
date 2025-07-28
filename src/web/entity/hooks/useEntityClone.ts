@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Rejection from 'gmp/http/rejection';
 import {isDefined} from 'gmp/utils/identity';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import useGmp from 'web/hooks/useGmp';
@@ -13,6 +14,15 @@ interface EntityClone {
   // id and name are currently optional but are always present in the model
   id?: string;
   name?: string;
+}
+
+interface EntityCloneCallbacks<
+  TCloneResponse = unknown,
+  TCloneError = Rejection | Error,
+> {
+  onCloneError?: (error: TCloneError) => void;
+  onCloned?: (response: TCloneResponse) => void;
+  onInteraction?: () => void;
 }
 
 /**
@@ -28,18 +38,14 @@ interface EntityClone {
 const useEntityClone = <
   TEntity extends EntityClone = EntityClone,
   TCloneResponse = unknown,
-  TCloneError = unknown,
+  TCloneError = Rejection,
 >(
   name: string,
   {
     onCloneError,
     onCloned,
     onInteraction,
-  }: {
-    onCloneError?: (error: TCloneError) => void;
-    onCloned?: (newEntity: TCloneResponse) => void;
-    onInteraction?: () => void;
-  } = {},
+  }: EntityCloneCallbacks<TCloneResponse, TCloneError> = {},
 ): ((entity: TEntity) => Promise<TCloneResponse | void>) => {
   const gmp = useGmp();
   const cmd = gmp[name] as {
@@ -56,12 +62,13 @@ const useEntityClone = <
   const handleEntityClone = async (entity: TEntity) => {
     handleInteraction();
 
-    return actionFunction(
-      cmd.clone(entity),
-      onCloned,
-      onCloneError,
-      _('{{name}} cloned successfully.', {name: entity?.name as string}),
-    );
+    return actionFunction(cmd.clone(entity), {
+      onSuccess: onCloned,
+      onError: onCloneError,
+      successMessage: _('{{name}} cloned successfully.', {
+        name: entity?.name as string,
+      }),
+    });
   };
   return handleEntityClone;
 };
