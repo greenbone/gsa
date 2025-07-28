@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import Model from 'gmp/models/model';
 import {isFunction} from 'gmp/utils/identity';
 import {DetailsIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
@@ -13,7 +13,6 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import {updateDisplayName} from 'web/utils/displayName';
-import PropTypes from 'web/utils/PropTypes';
 import Theme from 'web/utils/Theme';
 
 const Indent = styled.div`
@@ -36,10 +35,28 @@ const StyledTableRow = styled(TableRow)`
   }
 `;
 
+interface RowDetailsWrapperProps<TEntity> {
+  entity: TEntity;
+  links?: boolean;
+}
+
 const withRowDetails =
-  (type, colSpan = '10', details = true) =>
-  Component => {
-    const RowDetailsWrapper = ({entity, links = true, ...props}) => {
+  <TEntity extends Model, TProps = {}>(
+    type: string,
+    colSpan: number = 10,
+    details: boolean = true,
+  ) =>
+  (
+    Component: React.ComponentType<
+      RowDetailsWrapperProps<TEntity> &
+        Omit<TProps, keyof RowDetailsWrapperProps<TEntity>>
+    >,
+  ) => {
+    const RowDetailsWrapper = ({
+      entity,
+      links = true,
+      ...props
+    }: RowDetailsWrapperProps<TEntity> & TProps) => {
       const [_] = useTranslation();
 
       return (
@@ -49,7 +66,7 @@ const withRowDetails =
               <Layout align={['start', 'start']}>
                 {details && (
                   <DetailsLink
-                    id={entity.id}
+                    id={entity.id as string}
                     type={isFunction(type) ? type(entity) : type}
                   >
                     <DetailsIcon size="small" title={_('Open all details')} />
@@ -59,17 +76,13 @@ const withRowDetails =
             )}
             <Indent />
             <Layout flex="column" grow="1">
-              <Component {...props} entity={entity} links={links} />
+              <Component {...(props as TProps)} entity={entity} links={links} />
             </Layout>
           </TableData>
         </StyledTableRow>
       );
     };
 
-    RowDetailsWrapper.propTypes = {
-      entity: PropTypes.model.isRequired,
-      links: PropTypes.bool,
-    };
     return updateDisplayName(RowDetailsWrapper, Component, 'withRowDetails');
   };
 
