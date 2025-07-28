@@ -165,7 +165,7 @@ const NoteComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -197,7 +197,8 @@ const NoteComponent = ({
               onClose={handleCloseNoteDialog}
               onSave={d => {
                 handleInteraction();
-                return save(d).then(() => closeNoteDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeNoteDialog());
               }}
             />
           )}

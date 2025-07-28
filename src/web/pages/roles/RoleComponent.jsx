@@ -132,12 +132,11 @@ const RoleComponent = ({
   const handleDeletePermission = ({roleId, permissionId}) => {
     handleInteraction();
 
-    return actionFunction(
-      gmp.permission.delete({id: permissionId}),
-      () => loadSettings(roleId),
-      error => setError(error.message),
-      _('Permission deleted successfully.'),
-    );
+    return actionFunction(gmp.permission.delete({id: permissionId}), {
+      onSuccess: () => loadSettings(roleId),
+      onError: error => setError(error.message),
+      successMessage: _('Permission deleted successfully.'),
+    });
   };
 
   const handleErrorClose = () => {
