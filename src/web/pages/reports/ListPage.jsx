@@ -37,7 +37,6 @@ import {
 } from 'web/store/entities/tasks';
 import compose from 'web/utils/Compose';
 import PropTypes from 'web/utils/PropTypes';
-import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
@@ -273,13 +272,12 @@ const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
 );
 
 export default compose(
-  withTranslation,
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
   withEntitiesContainer('report', {
     fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
     entitiesSelector,
     loadEntities,
     reloadInterval: reportsReloadInterval,
   }),
+  connect(mapStateToProps, mapDispatchToProps),
+  withTranslation,
 )(Page);
