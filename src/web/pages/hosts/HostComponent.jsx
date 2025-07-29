@@ -109,7 +109,7 @@ const HostComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -125,7 +125,8 @@ const HostComponent = ({
               title={title}
               onClose={handleCloseHostDialog}
               onSave={d => {
-                return save(d).then(() => closeHostDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeHostDialog());
               }}
             />
           )}

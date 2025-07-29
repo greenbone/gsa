@@ -243,7 +243,7 @@ const ScannerComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -271,7 +271,8 @@ const ScannerComponent = ({
               onCredentialChange={handleCredentialChange}
               onNewCredentialClick={openCredentialsDialog}
               onSave={d => {
-                return save(d).then(() => closeScannerDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeScannerDialog());
               }}
               onScannerCaPubChange={handleScannerCaPubChange}
               onScannerPortChange={handleScannerPortChange}

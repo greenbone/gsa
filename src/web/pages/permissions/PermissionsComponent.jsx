@@ -200,7 +200,7 @@ const PermissionsComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -227,7 +227,8 @@ const PermissionsComponent = ({
               users={users}
               onClose={handleClosePermissionDialog}
               onSave={d => {
-                return save(d).then(() => closePermissionDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closePermissionDialog());
               }}
             />
           )}

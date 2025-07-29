@@ -148,7 +148,7 @@ const CredentialsComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -162,7 +162,8 @@ const CredentialsComponent = ({
               {...dialogProps}
               onClose={handleCloseCredentialDialog}
               onSave={d => {
-                return save(d).then(() => closeCredentialDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeCredentialDialog());
               }}
             />
           )}

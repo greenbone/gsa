@@ -186,7 +186,7 @@ const RoleComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -212,9 +212,8 @@ const RoleComponent = ({
               onDeletePermission={handleDeletePermission}
               onErrorClose={handleErrorClose}
               onSave={d => {
-                return save(d)
-                  .then(() => closeRoleDialog())
-                  .catch(e => setError(e.message));
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeRoleDialog());
               }}
             />
           )}

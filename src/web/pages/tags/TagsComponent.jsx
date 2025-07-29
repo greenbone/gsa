@@ -207,7 +207,7 @@ const TagComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -232,7 +232,8 @@ const TagComponent = ({
               value={value}
               onClose={handleCloseTagDialog}
               onSave={d => {
-                return save(d).then(() => closeTagDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeTagDialog());
               }}
               {...initialOptions}
             />
