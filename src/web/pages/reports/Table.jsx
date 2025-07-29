@@ -10,7 +10,7 @@ import SeverityClassLabel from 'web/components/label/SeverityClass';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import {createEntitiesFooter} from 'web/entities/Footer';
+import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import {createEntitiesTable} from 'web/entities/Table';
 import ReportRow from 'web/pages/reports/Row';
 import PropTypes from 'web/utils/PropTypes';

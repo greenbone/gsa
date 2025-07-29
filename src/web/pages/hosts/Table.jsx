@@ -10,14 +10,16 @@ import {NewIcon} from 'web/components/icon';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import EntitiesFooter, {withEntitiesFooter} from 'web/entities/Footer';
+import EntitiesFooter from 'web/entities/EntitiesFooter';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
+import withEntitiesFooter from 'web/entities/withEntitiesFooter';
 import withRowDetails from 'web/entities/withRowDetails';
 import HostDetails from 'web/pages/hosts/Details';
 import HostRow from 'web/pages/hosts/Row';
 import PropTypes from 'web/utils/PropTypes';
 import SelectionType from 'web/utils/SelectionType';
+
 const Header = ({
   actionsColumn,
   sort = true,

@@ -10,7 +10,7 @@ import ComplianceState from 'web/components/label/ComplianceState';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import {createEntitiesFooter} from 'web/entities/Footer';
+import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import {createEntitiesTable} from 'web/entities/Table';
 import useTranslation from 'web/hooks/useTranslation';
 import AuditReportRow from 'web/pages/reports/AuditReportRow';
