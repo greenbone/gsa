@@ -109,7 +109,7 @@ const ScheduleComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -131,7 +131,8 @@ const ScheduleComponent = ({
               weekdays={weekdays}
               onClose={handleCloseScheduleDialog}
               onSave={d => {
-                return save(d).then(() => closeScheduleDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeScheduleDialog());
               }}
             />
           )}
