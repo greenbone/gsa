@@ -8,6 +8,7 @@ import {
   showInfoNotification,
   showSuccessNotification,
 } from '@greenbone/opensight-ui-components-mantinev7';
+import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import Select from 'web/components/form/Select';
@@ -20,16 +21,45 @@ import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import TableFooter from 'web/components/table/TableFooter';
 import TableRow from 'web/components/table/TableRow';
+import {WithEntitiesFooterComponentProps} from 'web/entities/withEntitiesFooter';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
 const DIALOG_TYPES = {
   TRASH: 'trash',
   DELETE: 'delete',
-};
+} as const;
 
-export const EntitiesFooter = ({
+type DialogType = (typeof DIALOG_TYPES)[keyof typeof DIALOG_TYPES];
+
+interface DialogConfig {
+  useCustomDialog: boolean;
+  customDialogElement?: React.ReactElement | null;
+  dialogProcessing?: boolean;
+}
+
+interface ConfigDialog {
+  dialogText: string;
+  dialogTitle: string;
+  dialogButtonTitle: string;
+  confirmFunction: () => Promise<void>;
+}
+
+export interface EntitiesFooterProps extends WithEntitiesFooterComponentProps {
+  actions?: boolean;
+  children?: React.ReactNode;
+  delete?: boolean;
+  dialogConfig?: DialogConfig;
+  download?: string;
+  selection?: boolean;
+  selectionType?: SelectionTypeType;
+  span?: number;
+  tags?: boolean;
+  trash?: boolean;
+  onSelectionTypeChange?: (selectionType: SelectionTypeType) => void;
+}
+
+const EntitiesFooter = ({
   actions = true,
   children,
   download,
@@ -45,16 +75,22 @@ export const EntitiesFooter = ({
   onTrashClick,
   dialogConfig = {useCustomDialog: false},
   delete: deleteEntities,
-  ...props
-}) => {
+}: EntitiesFooterProps) => {
   const [_] = useTranslation();
-  const [configDialog, setConfigDialog] = useState(undefined);
+  const [configDialog, setConfigDialog] = useState<ConfigDialog | undefined>(
+    undefined,
+  );
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [isInProgress, setIsInProgress] = useState(false);
 
-  const onIconClick = (type, propOnAction) => {
+  const onIconClick = (
+    type: DialogType,
+    propOnAction?: () => void | Promise<void>,
+  ) => {
     if (dialogConfig.useCustomDialog) {
-      propOnAction();
+      if (isDefined(propOnAction)) {
+        void propOnAction();
+      }
       return;
     }
 
@@ -69,7 +105,9 @@ export const EntitiesFooter = ({
           try {
             setIsInProgress(true);
             showInfoNotification('', _('Deletion started'));
-            await propOnAction();
+            if (isDefined(propOnAction)) {
+              await propOnAction();
+            }
             showSuccessNotification('', _('Deletion completed'));
           } finally {
             setIsInProgress(false);
@@ -86,14 +124,16 @@ export const EntitiesFooter = ({
           try {
             setIsInProgress(true);
             showInfoNotification('', _('Moving to trashcan'));
-            await propOnAction();
+            if (isDefined(propOnAction)) {
+              await propOnAction();
+            }
             showSuccessNotification('', _('Move to trashcan completed'));
           } finally {
             setIsInProgress(false);
           }
         },
       },
-    };
+    } as const;
     setConfigDialog(configMap[type]);
     setIsDialogVisible(true);
   };
@@ -129,7 +169,12 @@ export const EntitiesFooter = ({
                   <Select
                     items={selectItems}
                     value={selectionType}
-                    onChange={onSelectionTypeChange}
+                    onChange={
+                      onSelectionTypeChange as (
+                        value: string,
+                        name?: string,
+                      ) => void
+                    }
                   />
                 )}
                 <IconDivider>
@@ -161,7 +206,12 @@ export const EntitiesFooter = ({
                     <ExportIcon
                       selectionType={selectionType}
                       value={download}
-                      onClick={onDownloadClick}
+                      onClick={
+                        onDownloadClick as (
+                          value?: string,
+                          name?: string,
+                        ) => void
+                      }
                     />
                   )}
                   {children}
@@ -185,7 +235,7 @@ export const EntitiesFooter = ({
               width="500px"
               onClose={closeDialog}
               onResumeClick={() => {
-                configDialog.confirmFunction();
+                void configDialog.confirmFunction();
                 closeDialog();
               }}
             />
@@ -193,59 +243,5 @@ export const EntitiesFooter = ({
     </TableFooter>
   );
 };
-
-EntitiesFooter.propTypes = {
-  actions: PropTypes.bool,
-  delete: PropTypes.bool,
-  download: PropTypes.stringOrFalse,
-  selection: PropTypes.bool,
-  selectionType: PropTypes.string,
-  span: PropTypes.number.isRequired,
-  tags: PropTypes.bool,
-  trash: PropTypes.bool,
-  onDeleteClick: PropTypes.func,
-  onDownloadClick: PropTypes.func,
-  onSelectionTypeChange: PropTypes.func,
-  onTagsClick: PropTypes.func,
-  onTrashClick: PropTypes.func,
-  children: PropTypes.node,
-  dialogConfig: PropTypes.shape({
-    useCustomDialog: PropTypes.bool,
-    dialog: PropTypes.element,
-  }),
-};
-
-export const withEntitiesFooter =
-  (options = {}) =>
-  Component => {
-    const EntitiesFooterWrapper = ({
-      onDownloadBulk,
-      onDeleteBulk,
-      onTagsBulk,
-      ...props
-    }) => {
-      return (
-        <Component
-          {...options}
-          {...props}
-          onDeleteClick={onDeleteBulk}
-          onDownloadClick={onDownloadBulk}
-          onTagsClick={onTagsBulk}
-          onTrashClick={onDeleteBulk}
-        />
-      );
-    };
-
-    EntitiesFooterWrapper.propTypes = {
-      onDeleteBulk: PropTypes.func,
-      onDownloadBulk: PropTypes.func,
-      onTagsBulk: PropTypes.func,
-    };
-
-    return EntitiesFooterWrapper;
-  };
-
-export const createEntitiesFooter = options =>
-  withEntitiesFooter(options)(EntitiesFooter);
 
 export default EntitiesFooter;
