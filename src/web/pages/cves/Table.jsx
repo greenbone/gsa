@@ -9,7 +9,7 @@ import {isDefined} from 'gmp/utils/identity.js';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import {createEntitiesFooter} from 'web/entities/Footer';
+import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';

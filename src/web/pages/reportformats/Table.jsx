@@ -4,7 +4,7 @@
  */
 
 import {_l} from 'gmp/locale/lang';
-import {createEntitiesFooter} from 'web/entities/Footer';
+import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import {createEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
