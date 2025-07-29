@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {PORTLISTS_FILTER_FILTER, RESET_FILTER} from 'gmp/models/filter';
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {useCallback, useState} from 'react';
+
+import {usePortLists} from 'gmp/commands/portlists';
+import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {NewIcon, PortListIcon, UploadIcon} from 'web/components/icon';
@@ -17,21 +17,17 @@ import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useGmp from 'web/hooks/useGmp';
-import useInstanceVariable from 'web/hooks/useInstanceVariable';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
-import useReload from 'web/hooks/useReload';
 import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListsFilterDialog from 'web/pages/portlists/FilterDialog';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
 import PortListsTable from 'web/pages/portlists/Table';
-import {loadEntities, selector} from 'web/store/entities/portlists';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
@@ -63,28 +59,15 @@ ToolBarIcons.propTypes = {
   onPortListImportClick: PropTypes.func.isRequired,
 };
 
-const getData = (filter, eSelector) => {
-  const entities = eSelector.getEntities(filter);
-  return {
-    entities,
-    entitiesCounts: eSelector.getEntitiesCounts(filter),
-    entitiesError: eSelector.getEntitiesError(filter),
-    filter,
-    isLoading: eSelector.isLoadingEntities(filter),
-    loadedFilter: eSelector.getLoadedFilter(filter),
-  };
-};
-
 const PortListsPage = () => {
   const [_] = useTranslation();
   const gmp = useGmp();
-  const dispatch = useDispatch();
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const [downloadRef, handleDownload] = useDownload();
-  const [filter, isLoadingFilter, {changeFilter, resetFilter, removeFilter}] =
-    usePageFilter('portlist', 'portlist');
-  const [requestedFilter, setRequestedFilter] = useInstanceVariable();
-  const portListsSelector = useShallowEqualSelector(selector);
+  const [filter, , {changeFilter, resetFilter, removeFilter}] = usePageFilter(
+    'portlist',
+    'portlist',
+  );
   const listExportFileName = useShallowEqualSelector(state =>
     getUserSettingsDefaults(state).getValueByName('listexportfilename'),
   );
@@ -105,39 +88,32 @@ const PortListsPage = () => {
     showError,
   } = useDialogNotification();
 
-  // fetch port lists
-  const fetch = useCallback(
-    withFilter => {
-      setRequestedFilter(withFilter);
-      dispatch(loadEntities(gmp)(withFilter));
-    },
-    [dispatch, gmp, setRequestedFilter],
-  );
-
-  // refetch port lists with the current filter
-  const refetch = useCallback(() => {
-    fetch(filter);
-  }, [filter, fetch]);
-
-  const {entities, entitiesCounts, isLoading} = getData(
+  const {token} = gmp.settings;
+  const {
+    data: portListsData,
+    isLoading,
+    refetch,
+  } = usePortLists({
+    token,
     filter,
-    portListsSelector,
-  );
+  });
+  const entities = portListsData?.entities || [];
+  const entitiesCounts = portListsData?.entitiesCounts || {};
 
+  // handle filter changes
   const handleFilterChanged = useCallback(
     newFilter => {
       changeFilter(newFilter);
-      fetch(newFilter);
     },
-    [changeFilter, fetch],
+    [changeFilter],
   );
+
   const handleFilterReset = () => {
     resetFilter();
-    fetch();
   };
+
   const handleFilterRemoved = () => {
     removeFilter();
-    fetch(RESET_FILTER);
   };
 
   const [getFirst, getLast, getNext, getPrevious] = usePagination(
@@ -145,32 +121,6 @@ const PortListsPage = () => {
     entitiesCounts,
     handleFilterChanged,
   );
-  const timeoutFunc = useEntitiesReloadInterval(entities);
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetch,
-    timeoutFunc,
-  );
-
-  useEffect(() => {
-    const shouldFetch =
-      isDefined(filter) &&
-      !isLoadingFilter &&
-      filter.identifier() !== requestedFilter?.identifier();
-
-    if (shouldFetch) {
-      fetch(filter);
-    }
-  }, [filter, isLoadingFilter, fetch, requestedFilter]);
-
-  useEffect(() => {
-    // start reloading if tasks are available and no timer is running yet
-    if (hasValue(entities) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [entities, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
 
   const closeTagsDialog = useCallback(() => {
     setIsTagsDialogVisible(false);
@@ -193,7 +143,7 @@ const PortListsPage = () => {
 
     try {
       await promise;
-      refetch();
+      refetch(); // Use TanStack Query's refetch
     } catch (error) {
       showError(error);
     }

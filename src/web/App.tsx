@@ -23,8 +23,16 @@ import {
   setTimezone,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 
 void initLocale();
+const queryClient = new QueryClient();
 
 const settings = new GmpSettings(global.localStorage, global.config);
 const gmp = new Gmp(settings);
@@ -82,11 +90,13 @@ class App extends React.Component<{}> {
         <GlobalStyles />
         <ErrorBoundary message={_('An error occurred on this page')}>
           <GmpContext.Provider value={gmp}>
-            <StoreProvider store={store}>
-              <LanguageProvider>
-                <Routes />
-              </LanguageProvider>
-            </StoreProvider>
+            <QueryClientProvider client={queryClient}>
+              <StoreProvider store={store}>
+                <LanguageProvider>
+                  <Routes />
+                </LanguageProvider>
+              </StoreProvider>
+            </QueryClientProvider>
           </GmpContext.Provider>
         </ErrorBoundary>
       </ThemeProvider>
