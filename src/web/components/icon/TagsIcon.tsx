@@ -3,14 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import {TagsIcon as TagsSvgIcon} from 'web/components/icon';
+import {ExtendedDynamicIconProps} from 'web/components/icon/createIconComponents';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-const TagsIcon = ({active = true, selectionType, title, ...other}) => {
+interface TagsIconProps<TValue = string>
+  extends ExtendedDynamicIconProps<TValue> {
+  active?: boolean;
+  selectionType?: SelectionTypeType;
+  title?: string;
+}
+
+const TagsIcon = <TValue = string,>({
+  active = true,
+  selectionType,
+  title,
+  ...other
+}: TagsIconProps<TValue>) => {
   const [_] = useTranslation();
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -22,13 +33,6 @@ const TagsIcon = ({active = true, selectionType, title, ...other}) => {
     }
   }
   return <TagsSvgIcon {...other} active={active} title={title} />;
-};
-
-TagsIcon.propTypes = {
-  active: PropTypes.bool,
-  selectionType: PropTypes.string,
-  title: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default TagsIcon;
