@@ -197,7 +197,7 @@ const OverrideComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -229,7 +229,8 @@ const OverrideComponent = ({
               title={title}
               onClose={handleCloseOverrideDialog}
               onSave={d => {
-                return save(d).then(() => closeOverrideDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeOverrideDialog());
               }}
               {...initialProps}
             />

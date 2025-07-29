@@ -77,7 +77,7 @@ const GroupComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -91,7 +91,8 @@ const GroupComponent = ({
               title={title}
               onClose={handleCloseGroupDialog}
               onSave={d => {
-                return save(d).then(() => closeGroupDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeGroupDialog());
               }}
             />
           )}

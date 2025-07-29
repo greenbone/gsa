@@ -1022,7 +1022,7 @@ const AlertComponent = ({
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <Layout>
           {children({
             ...other,
@@ -1161,7 +1161,8 @@ const AlertComponent = ({
               onReportConfigsChange={handleReportConfigsChange}
               onReportFormatsChange={handleReportFormatsChange}
               onSave={d => {
-                return save(d).then(() => closeAlertDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeAlertDialog());
               }}
               onScpCredentialChange={handleScpCredentialChange}
               onSmbCredentialChange={handleSmbCredentialChange}

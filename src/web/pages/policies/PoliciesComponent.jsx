@@ -570,7 +570,7 @@ const PolicyComponent = ({
         onSaveError={onSaveError}
         onSaved={onSaved}
       >
-        {({save, ...other}) => (
+        {({save, create, ...other}) => (
           <>
             {children({
               ...other,
@@ -630,7 +630,8 @@ const PolicyComponent = ({
               <PolicyDialog
                 onClose={handleCloseCreatePolicyDialog}
                 onSave={d => {
-                  return save(d).then(() => closeCreatePolicyDialog());
+                  const promise = isDefined(d.id) ? save(d) : create(d);
+                  return promise.then(() => closeCreatePolicyDialog());
                 }}
               />
             )}

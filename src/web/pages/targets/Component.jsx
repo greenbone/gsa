@@ -228,7 +228,7 @@ function TargetComponent(props) {
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -269,9 +269,9 @@ function TargetComponent(props) {
               onNewCredentialsClick={openCredentialsDialog}
               onNewPortListClick={openPortListDialog}
               onPortListChange={handlePortListChange}
-              onSave={async d => {
-                await save(d);
-                closeTargetDialog();
+              onSave={d => {
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeTargetDialog());
               }}
               onSmbCredentialChange={handleSmbCredentialChange}
               onSnmpCredentialChange={handleSnmpCredentialChange}

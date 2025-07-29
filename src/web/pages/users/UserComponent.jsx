@@ -111,7 +111,7 @@ const UserComponent = props => {
       onSaveError={onSaveError}
       onSaved={onSaved}
     >
-      {({save, ...other}) => (
+      {({save, create, ...other}) => (
         <>
           {children({
             ...other,
@@ -134,7 +134,8 @@ const UserComponent = props => {
               user={user}
               onClose={handleCloseUserDialog}
               onSave={d => {
-                return save(d).then(() => closeUserDialog());
+                const promise = isDefined(d.id) ? save(d) : create(d);
+                return promise.then(() => closeUserDialog());
               }}
             />
           )}
