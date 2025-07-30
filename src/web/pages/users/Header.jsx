@@ -7,7 +7,7 @@ import React from 'react';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import {withEntitiesHeader} from 'web/entities/Header';
+import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/PropTypes';
 
