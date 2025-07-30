@@ -94,10 +94,7 @@ const PortListComponent = ({
     onSaveError,
     onSaved,
   });
-  const handleCreate = useEntityCreate('portlist', {
-    onCreated,
-    onCreateError,
-  });
+
   const handleClone = useEntityClone<PortList, Response<ActionResult, XmlMeta>>(
     'portlist',
     {
@@ -243,8 +240,6 @@ const PortListComponent = ({
         throw error;
       }
       await handleSave(data);
-    } else {
-      await handleCreate(data);
     }
     closePortListDialog();
   };

@@ -4,8 +4,6 @@
  */
 
 import {useCallback, useState} from 'react';
-
-import {usePortLists} from 'gmp/commands/portlists';
 import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
@@ -28,6 +26,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import PortListsFilterDialog from 'web/pages/portlists/FilterDialog';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
 import PortListsTable from 'web/pages/portlists/Table';
+import {useGetPortLists} from 'web/queries/portlists/useGetPortlists';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
@@ -88,15 +87,18 @@ const PortListsPage = () => {
     showError,
   } = useDialogNotification();
 
-  const {token} = gmp.settings;
   const {
     data: portListsData,
     isLoading,
     refetch,
-  } = usePortLists({
-    token,
+    error,
+    isError,
+  } = useGetPortLists({
     filter,
   });
+
+  if (isError) throw error;
+
   const entities = portListsData?.entities || [];
   const entitiesCounts = portListsData?.entitiesCounts || {};
 

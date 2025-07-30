@@ -17,6 +17,7 @@ import Row from 'web/components/layout/Row';
 import Section from 'web/components/section/Section';
 import useTranslation from 'web/hooks/useTranslation';
 import PortRangesTable, {PortRange} from 'web/pages/portlists/PortRangesTable';
+import {useCreatePortsList} from 'web/queries/portlists/useCreatePortslist';
 
 export interface SavePortListData<TPortRange extends PortRange> {
   id?: string;
@@ -75,6 +76,17 @@ const PortListsDialog = <TPortRange extends PortRange>({
   name = name || _('Unnamed');
   title = title || _('New Port List');
 
+  // Use mutation for create
+  const createPortListMutation = useCreatePortsList({
+    onSuccess: data => {
+      if (onSave) onSave(data as any); // Optionally call onSave for consistency
+      onClose();
+    },
+    onError: error => {
+      console.error('Failed to create port list', error);
+    },
+  });
+
   const newRangeIcon = (
     <div>
       <NewIcon
@@ -93,13 +105,39 @@ const PortListsDialog = <TPortRange extends PortRange>({
     portRange,
   };
 
+  // Extract a human-readable error message
+  const err = createPortListMutation.error;
+  let dialogError: string | undefined = undefined;
+  if (err instanceof Error) {
+    dialogError = err.message;
+  } else if (err && typeof err === 'object') {
+    dialogError =
+      (err as any)?.message ||
+      (err as any)?.error?.message ||
+      JSON.stringify(err);
+  } else if (err) {
+    dialogError = String(err);
+  }
+
   return (
     <SaveDialog<PortListDialogValues<TPortRange>, PortListsDialogDefaultValues>
       defaultValues={data}
+      error={dialogError}
       title={title}
       values={{portRanges}}
       onClose={onClose}
-      onSave={onSave}
+      onSave={formData => {
+        if (!isEdit) {
+          // Only use mutation for create
+          createPortListMutation.mutate({
+            name: formData.name,
+            comment: formData.comment,
+            fromFile: formData.fromFile,
+            portRange: formData.portRange,
+            file: formData.file ? formData.file.name : undefined,
+          });
+        }
+      }}
     >
       {({values: state, onValueChange}) => {
         return (

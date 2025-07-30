@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {ThemeProvider} from '@greenbone/opensight-ui-components-mantinev7';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp/gmp';
 import GmpSettings from 'gmp/gmpsettings';
@@ -23,13 +24,6 @@ import {
   setTimezone,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
 
 void initLocale();
 const queryClient = new QueryClient();
