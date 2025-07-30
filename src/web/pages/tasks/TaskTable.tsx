@@ -10,8 +10,8 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
-import {withEntitiesHeader} from 'web/entities/Header';
 import {createEntitiesTable} from 'web/entities/Table';
+import withEntitiesHeader from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
 import TaskRow from 'web/pages/tasks/TaskRow';
@@ -96,7 +96,6 @@ export default createEntitiesTable({
   emptyTitle: _l('No Tasks available'),
   row: TaskRow,
   rowDetails: withRowDetails<Task>('task', 10)(TaskDetails),
-  // @ts-expect-error
   header: withEntitiesHeader(actionsColumn)(Header),
   footer: createEntitiesFooter({
     span: 10,
