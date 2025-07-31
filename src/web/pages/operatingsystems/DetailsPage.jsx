@@ -31,8 +31,8 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
+import EntityPermissions from 'web/entity/EntityPermissions';
 import {goToList} from 'web/entity/navigation';
-import EntityPermissions from 'web/entity/Permissions';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,

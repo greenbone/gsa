@@ -30,9 +30,9 @@ import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/Block';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
+import EntityPermissions from 'web/entity/EntityPermissions';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import {goToList} from 'web/entity/navigation';
-import EntityPermissions from 'web/entity/Permissions';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,

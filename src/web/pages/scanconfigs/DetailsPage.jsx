@@ -30,12 +30,12 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
+import EntityPermissions from 'web/entity/EntityPermissions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import CreateIcon from 'web/entity/icon/CreateIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPermissions from 'web/entity/Permissions';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
