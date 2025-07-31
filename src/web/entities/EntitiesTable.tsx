@@ -23,36 +23,6 @@ import withTranslation, {
   WithTranslationComponentProps,
 } from 'web/utils/withTranslation';
 
-const excludeProps = [
-  'data-testid',
-  'key',
-  'ref',
-  'row',
-  'header',
-  'footer',
-  'pagination',
-  'emptyTitle',
-  'children',
-] as const;
-
-const UpdatingStripedTable = styled(StripedTable)<{$isUpdating: boolean}>`
-  opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
-`;
-
-const DetailsIcon = styled(FoldStateIcon)`
-  margin-top: 2px;
-  margin-left: 2px;
-`;
-
-const TableBox = styled(Layout)`
-  margin-top: 10px;
-`;
-
-const EmptyTitle = styled(Layout)`
-  margin-top: 10px;
-  margin-bottom: 20px;
-`;
-
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FooterComponentProps {}
 
@@ -149,6 +119,36 @@ interface EntitiesTablePropsWithTranslation<
       TPaginationProps
     >,
     WithTranslationComponentProps {}
+
+const excludeProps = [
+  'data-testid',
+  'key',
+  'ref',
+  'row',
+  'header',
+  'footer',
+  'pagination',
+  'emptyTitle',
+  'children',
+] as const;
+
+const UpdatingStripedTable = styled(StripedTable)<{$isUpdating: boolean}>`
+  opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
+`;
+
+const DetailsIcon = styled(FoldStateIcon)`
+  margin-top: 2px;
+  margin-left: 2px;
+`;
+
+const TableBox = styled(Layout)`
+  margin-top: 10px;
+`;
+
+const EmptyTitle = styled(Layout)`
+  margin-top: 10px;
+  margin-bottom: 20px;
+`;
 
 class EntitiesTable<
   TEntity extends Model = Model,
