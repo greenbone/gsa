@@ -10,7 +10,7 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
-import {createEntitiesTable} from 'web/entities/Table';
+import createEntitiesTable from 'web/entities/createEntitiesTable';
 import OsRow from 'web/pages/operatingsystems/Row';
 import PropTypes from 'web/utils/PropTypes';
 

@@ -73,9 +73,9 @@ const TaskReportTotal = ({task, links = true}: TaskReportTotalProps) => {
   );
 };
 
-interface TaskRowProps extends TaskActionsProps {
+export interface TaskRowProps extends TaskActionsProps {
   actionsComponent?: React.ComponentType<TaskActionsProps>;
-  onToggleDetailsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onToggleDetailsClick?: (value: unknown, name: string) => void;
 }
 
 const TaskRow = ({

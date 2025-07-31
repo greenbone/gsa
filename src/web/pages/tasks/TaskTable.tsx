@@ -3,23 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import Task from 'gmp/models/task';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
-import {createEntitiesTable} from 'web/entities/Table';
-import withEntitiesHeader from 'web/entities/withEntitiesHeader';
+import createEntitiesTable from 'web/entities/createEntitiesTable';
+import {EntitiesFooterProps} from 'web/entities/EntitiesFooter';
+import withEntitiesHeader, {
+  ActionsColumn,
+} from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
-import TaskRow from 'web/pages/tasks/TaskRow';
-import PropTypes from 'web/utils/PropTypes';
+import TaskRow, {TaskRowProps} from 'web/pages/tasks/TaskRow';
 import {SortDirectionType} from 'web/utils/SortDirection';
 
 interface HeaderProps {
-  actionsColumn?: React.ReactNode;
+  actionsColumn?: ActionsColumn;
   sort?: boolean;
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
@@ -80,26 +81,29 @@ const Header = ({
   );
 };
 
-Header.propTypes = {
-  actionsColumn: PropTypes.element,
-  currentSortBy: PropTypes.string,
-  currentSortDir: PropTypes.string,
-  sort: PropTypes.bool,
-  onSortChange: PropTypes.func,
-};
-
 const actionsColumn = (
   <TableHead align="center" title={_l('Actions')} width="10em" />
 );
 
-export default createEntitiesTable({
+const TableFooter = createEntitiesFooter({
+  span: 10,
+  trash: true,
+  download: 'tasks.xml',
+});
+
+const RowDetails = withRowDetails<Task>('task', 10)(TaskDetails);
+
+const TaskTableHeader = withEntitiesHeader<HeaderProps>(actionsColumn)(Header);
+
+export default createEntitiesTable<
+  Task,
+  EntitiesFooterProps,
+  HeaderProps,
+  TaskRowProps
+>({
   emptyTitle: _l('No Tasks available'),
   row: TaskRow,
-  rowDetails: withRowDetails<Task>('task', 10)(TaskDetails),
-  header: withEntitiesHeader(actionsColumn)(Header),
-  footer: createEntitiesFooter({
-    span: 10,
-    trash: true,
-    download: 'tasks.xml',
-  }),
+  rowDetails: RowDetails,
+  header: TaskTableHeader,
+  footer: TableFooter,
 });
