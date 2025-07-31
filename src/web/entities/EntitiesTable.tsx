@@ -3,14 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import CollectionCounts from 'gmp/collection/CollectionCounts';
 import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import {excludeObjectProps} from 'gmp/utils/object';
 import {FoldState} from 'web/components/folding/Folding';
 import FootNote from 'web/components/footnote/Footnote';
 import FoldStateIcon from 'web/components/icon/FoldStateIcon';
@@ -18,10 +17,8 @@ import Layout from 'web/components/layout/Layout';
 import Pagination from 'web/components/pagination/Pagination';
 import StripedTable from 'web/components/table/StripedTable';
 import TableBody from 'web/components/table/TableBody';
+import useTranslation from 'web/hooks/useTranslation';
 import {SortDirectionType} from 'web/utils/SortDirection';
-import withTranslation, {
-  WithTranslationComponentProps,
-} from 'web/utils/withTranslation';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FooterComponentProps {}
@@ -52,11 +49,6 @@ interface RowDetailsComponentProps<TEntity> {
 
 interface BodyComponentProps {
   children: React.ReactNode;
-}
-
-interface EntitiesTableState {
-  details: Record<string, boolean>;
-  allToggled: boolean;
 }
 
 export interface EntitiesTableComponentProps<
@@ -105,33 +97,6 @@ export interface EntitiesTableProps<
   onPreviousClick?: () => void;
 }
 
-interface EntitiesTablePropsWithTranslation<
-  TEntity,
-  TFooterProps extends FooterComponentProps,
-  THeaderProps extends HeaderComponentProps,
-  TRowProps extends RowComponentProps<TEntity>,
-  TPaginationProps extends PaginationComponentProps,
-> extends EntitiesTableProps<
-      TEntity,
-      TFooterProps,
-      THeaderProps,
-      TRowProps,
-      TPaginationProps
-    >,
-    WithTranslationComponentProps {}
-
-const excludeProps = [
-  'data-testid',
-  'key',
-  'ref',
-  'row',
-  'header',
-  'footer',
-  'pagination',
-  'emptyTitle',
-  'children',
-] as const;
-
 const UpdatingStripedTable = styled(StripedTable)<{$isUpdating: boolean}>`
   opacity: ${props => (props.$isUpdating ? '0.2' : '1.0')};
 `;
@@ -150,109 +115,100 @@ const EmptyTitle = styled(Layout)`
   margin-bottom: 20px;
 `;
 
-class EntitiesTable<
+function EntitiesTable<
   TEntity extends Model = Model,
   TFooterProps extends FooterComponentProps = FooterComponentProps,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
-> extends React.Component<
-  EntitiesTablePropsWithTranslation<
-    TEntity,
-    TFooterProps,
-    THeaderProps,
-    TRowProps,
-    TPaginationProps
-  >,
-  EntitiesTableState
-> {
-  constructor(
-    props: EntitiesTablePropsWithTranslation<
-      TEntity,
-      TFooterProps,
-      THeaderProps,
-      TRowProps,
-      TPaginationProps
-    >,
-  ) {
-    super(props);
+>({
+  'data-testid': dataTestId = 'entities-table',
+  body: BodyComponent = TableBody,
+  doubleRow = false,
+  emptyTitle,
+  entities,
+  entitiesCounts,
+  filter,
+  footer: FooterComponent,
+  footnote = true,
+  header: HeaderComponent,
+  isUpdating = false,
+  links,
+  onFirstClick,
+  onLastClick,
+  onNextClick,
+  onPreviousClick,
+  pagination: PaginationComponent = Pagination,
+  row: RowComponent,
+  rowDetails: RowDetailsComponent,
+  sortBy: currentSortBy,
+  sortDir: currentSortDir,
+  toggleDetailsIcon = isDefined(RowDetailsComponent),
+  ...props
+}: EntitiesTableProps<
+  TEntity,
+  TFooterProps,
+  THeaderProps,
+  TRowProps,
+  TPaginationProps
+>) {
+  const [details, setDetails] = useState<Record<string, boolean>>({});
+  const [allToggled, setAllToggled] = useState<boolean>(false);
+  const [_] = useTranslation();
 
-    this.state = {
-      details: {},
-      allToggled: false,
-    };
+  const handleToggleShowDetails = (_value: unknown, name: string) => {
+    setDetails(details => ({...details, [name]: !details[name]}));
+  };
 
-    this.handleToggleAllDetails = this.handleToggleAllDetails.bind(this);
-    this.handleFirst = this.handleFirst.bind(this);
-    this.handleLast = this.handleLast.bind(this);
-    this.handleNext = this.handleNext.bind(this);
-    this.handlePrevious = this.handlePrevious.bind(this);
-    this.handleToggleShowDetails = this.handleToggleShowDetails.bind(this);
-  }
+  const handleToggleAllDetails = (unToggle: boolean = false) => {
+    const newToggled = unToggle ? false : !allToggled;
+    setDetails(oldDetails => {
+      return entities.reduce(
+        (details, entity) => {
+          details[entity.id as string] = newToggled;
+          return details;
+        },
+        {...oldDetails},
+      );
+    });
+    setAllToggled(newToggled);
+  };
 
-  handleToggleShowDetails(value: unknown, name: string) {
-    const {details} = this.state;
-
-    details[name] = !details[name];
-
-    this.setState({details});
-  }
-
-  handleToggleAllDetails(unToggle: boolean = false) {
-    const {entities} = this.props;
-    let {details, allToggled} = this.state;
-
-    allToggled = !allToggled;
-
-    if (unToggle) {
-      allToggled = false;
-    }
-
-    if (allToggled) {
-      forEach(entities, entity => (details[entity.id as string] = true));
-    } else {
-      forEach(entities, entity => (details[entity.id as string] = false));
-    }
-    this.setState({details, allToggled});
-  }
-
-  handleFirst() {
-    const {onFirstClick} = this.props;
+  const handleFirst = () => {
     if (isDefined(onFirstClick)) {
       onFirstClick();
     }
-    this.handleToggleAllDetails(true);
-  }
+    handleToggleAllDetails(true);
+  };
 
-  handleLast() {
-    const {onLastClick} = this.props;
+  const handleLast = () => {
     if (isDefined(onLastClick)) {
       onLastClick();
     }
-    this.handleToggleAllDetails(true);
-  }
+    handleToggleAllDetails(true);
+  };
 
-  handleNext() {
-    const {onNextClick} = this.props;
+  const handleNext = () => {
     if (isDefined(onNextClick)) {
       onNextClick();
     }
-    this.handleToggleAllDetails(true);
-  }
+    handleToggleAllDetails(true);
+  };
 
-  handlePrevious() {
-    const {onPreviousClick} = this.props;
+  const handlePrevious = () => {
     if (isDefined(onPreviousClick)) {
       onPreviousClick();
     }
-    this.handleToggleAllDetails(true);
+    handleToggleAllDetails(true);
+  };
+
+  if (!isDefined(entities)) {
+    return null;
   }
 
-  renderEmpty() {
-    const {_} = this.props;
+  const filterString = isDefined(filter) ? filter.toFilterString() : '';
 
-    const {emptyTitle, filter, footnote = true} = this.props;
-    const filterString = isDefined(filter) ? filter.toFilterString() : '';
+  if (entities.length === 0) {
     return (
       <>
         <EmptyTitle>{emptyTitle}</EmptyTitle>
@@ -266,160 +222,104 @@ class EntitiesTable<
       </>
     );
   }
-
-  render() {
-    const {_} = this.props;
-
-    const {details, allToggled} = this.state;
-    const {
-      doubleRow = false,
-      'data-testid': dataTestId = 'entities-table',
-      entities,
-      entitiesCounts,
-      filter,
-      footnote = true,
-      toggleDetailsIcon = true,
-      isUpdating = false,
-      sortBy: currentSortBy,
-      sortDir: currentSortDir,
-      links,
-      row: RowComponent,
-      rowDetails: RowDetailsComponent,
-      header: HeaderComponent,
-      footer: FooterComponent,
-      pagination: PaginationComponent = Pagination,
-      body: BodyComponent = TableBody,
-    } = this.props;
-
-    if (!isDefined(entities)) {
-      return null;
-    }
-
-    const other = excludeObjectProps(this.props, excludeProps);
-    const filterString = isDefined(filter) ? filter.toFilterString() : '';
-
-    if (entities.length === 0) {
-      return this.renderEmpty();
-    }
-
-    const rows: React.ReactElement[] = [];
-    if (isDefined(RowComponent)) {
-      forEach(entities, entity => {
-        rows.push(
-          <RowComponent
-            {...(other as TRowProps)}
-            key={entity.id}
-            entity={entity}
-            onToggleDetailsClick={this.handleToggleShowDetails}
-          />,
-        );
-        if (isDefined(RowDetailsComponent) && details[entity.id as string]) {
-          if (doubleRow) {
-            rows.push(
-              <TableBody key={`details-${entity.id}`}>
-                <RowDetailsComponent entity={entity} links={links} />
-              </TableBody>,
-            );
-          } else {
-            rows.push(
-              <RowDetailsComponent
-                key={'details-' + entity.id}
-                entity={entity}
-                links={links}
-              />,
-            );
-          }
+  const rows: React.ReactElement[] = [];
+  if (isDefined(RowComponent)) {
+    forEach(entities, entity => {
+      rows.push(
+        <RowComponent
+          {...(props as unknown as TRowProps)}
+          key={entity.id}
+          entity={entity}
+          onToggleDetailsClick={handleToggleShowDetails}
+        />,
+      );
+      if (isDefined(RowDetailsComponent) && details[entity.id as string]) {
+        if (doubleRow) {
+          rows.push(
+            <TableBody key={`details-${entity.id}`}>
+              <RowDetailsComponent entity={entity} links={links} />
+            </TableBody>,
+          );
+        } else {
+          rows.push(
+            <RowDetailsComponent
+              key={'details-' + entity.id}
+              entity={entity}
+              links={links}
+            />,
+          );
         }
-      });
-    }
-
-    const pagination =
-      PaginationComponent === false ? undefined : (
-        <PaginationComponent
-          {...(other as TPaginationProps)}
-          counts={entitiesCounts}
-          onFirstClick={this.handleFirst}
-          onLastClick={this.handleLast}
-          onNextClick={this.handleNext}
-          onPreviousClick={this.handlePrevious}
-        />
-      );
-
-    const header =
-      !isDefined(HeaderComponent) || HeaderComponent === false ? undefined : (
-        <HeaderComponent
-          currentSortBy={currentSortBy}
-          currentSortDir={currentSortDir}
-          {...(other as THeaderProps)}
-        />
-      );
-
-    const footer =
-      !isDefined(FooterComponent) || FooterComponent === false ? undefined : (
-        <FooterComponent {...(other as TFooterProps)} />
-      );
-
-    const body =
-      BodyComponent === false ? rows : <BodyComponent>{rows}</BodyComponent>;
-
-    const detailsIcon = (
-      <DetailsIcon
-        // @ts-expect-error
-        foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
-        title={allToggled ? _('Fold all details') : _('Unfold all details')}
-        onClick={this.handleToggleAllDetails}
+      }
+    });
+  }
+  const pagination =
+    PaginationComponent === false ? undefined : (
+      <PaginationComponent
+        {...(props as unknown as TPaginationProps)}
+        counts={entitiesCounts}
+        onFirstClick={handleFirst}
+        onLastClick={handleLast}
+        onNextClick={handleNext}
+        onPreviousClick={handlePrevious}
       />
     );
 
-    return (
-      <TableBox
-        className="entities-table"
-        data-testid={dataTestId}
-        flex="column"
-        grow="1"
-      >
-        {toggleDetailsIcon ? (
-          <Layout align="space-between" grow="1">
-            {detailsIcon}
-            {pagination}
-          </Layout>
-        ) : (
-          pagination
-        )}
-        <UpdatingStripedTable
-          $isUpdating={isUpdating}
-          footer={footer}
-          header={header}
-        >
-          {body}
-        </UpdatingStripedTable>
-        {footnote ? (
-          <Layout align="space-between">
-            <FootNote>
-              {_('(Applied filter: {{- filter}})', {filter: filterString})}
-            </FootNote>
-            {pagination}
-          </Layout>
-        ) : (
-          pagination
-        )}
-      </TableBox>
+  const header =
+    !isDefined(HeaderComponent) || HeaderComponent === false ? undefined : (
+      <HeaderComponent
+        currentSortBy={currentSortBy}
+        currentSortDir={currentSortDir}
+        {...(props as unknown as THeaderProps)}
+      />
     );
-  }
+
+  const footer =
+    !isDefined(FooterComponent) || FooterComponent === false ? undefined : (
+      <FooterComponent {...(props as unknown as TFooterProps)} />
+    );
+
+  const body =
+    BodyComponent === false ? rows : <BodyComponent>{rows}</BodyComponent>;
+
+  return (
+    <TableBox
+      className="entities-table"
+      data-testid={dataTestId}
+      flex="column"
+      grow="1"
+    >
+      {toggleDetailsIcon ? (
+        <Layout align="space-between" grow="1">
+          <DetailsIcon
+            // @ts-expect-error
+            foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
+            title={allToggled ? _('Fold all details') : _('Unfold all details')}
+            onClick={handleToggleAllDetails}
+          />
+          {pagination}
+        </Layout>
+      ) : (
+        pagination
+      )}
+      <UpdatingStripedTable
+        $isUpdating={isUpdating}
+        footer={footer}
+        header={header}
+      >
+        {body}
+      </UpdatingStripedTable>
+      {footnote ? (
+        <Layout align="space-between">
+          <FootNote>
+            {_('(Applied filter: {{- filter}})', {filter: filterString})}
+          </FootNote>
+          {pagination}
+        </Layout>
+      ) : (
+        pagination
+      )}
+    </TableBox>
+  );
 }
 
-export default withTranslation(EntitiesTable) as <
-  TEntity extends Model,
-  TFooterProps extends FooterComponentProps = FooterComponentProps,
-  THeaderProps extends HeaderComponentProps = HeaderComponentProps,
-  TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
-  TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
->(
-  props: EntitiesTableProps<
-    TEntity,
-    TFooterProps,
-    THeaderProps,
-    TRowProps,
-    TPaginationProps
-  >,
-) => React.ReactElement;
+export default EntitiesTable;
