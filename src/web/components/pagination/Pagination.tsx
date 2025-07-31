@@ -11,6 +11,14 @@ import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
 
+interface PaginationProps {
+  counts?: CollectionCounts;
+  onFirstClick?: () => void;
+  onLastClick?: () => void;
+  onNextClick?: () => void;
+  onPreviousClick?: () => void;
+}
+
 const PaginationText = styled.span`
   margin: 0 3px;
 `;
@@ -25,14 +33,6 @@ const PaginationLayout = styled(Layout)`
     }
   }
 `;
-
-interface PaginationProps {
-  counts?: CollectionCounts;
-  onFirstClick?: () => void;
-  onLastClick?: () => void;
-  onNextClick?: () => void;
-  onPreviousClick?: () => void;
-}
 
 const Pagination = ({
   counts,
