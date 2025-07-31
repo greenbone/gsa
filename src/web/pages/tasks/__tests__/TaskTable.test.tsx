@@ -86,7 +86,7 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
-describe('Tasks table tests', () => {
+describe('TasksTable tests', () => {
   test('should render', () => {
     const handleReportImport = testing.fn();
     const handleTaskClone = testing.fn();
@@ -96,7 +96,6 @@ describe('Tasks table tests', () => {
     const handleTaskResume = testing.fn();
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
-    const handleToggleDetailsClick = testing.fn();
 
     const gmp = {
       settings: {},
@@ -125,7 +124,6 @@ describe('Tasks table tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -148,7 +146,6 @@ describe('Tasks table tests', () => {
     const handleTaskResume = testing.fn();
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
-    const handleToggleDetailsClick = testing.fn();
 
     const gmp = {
       settings: {},
@@ -176,7 +173,6 @@ describe('Tasks table tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -198,7 +194,6 @@ describe('Tasks table tests', () => {
     const handleTaskResume = testing.fn();
     const handleTaskStart = testing.fn();
     const handleTaskStop = testing.fn();
-    const handleToggleDetailsClick = testing.fn();
 
     const gmp = {
       settings: {},
@@ -226,7 +221,6 @@ describe('Tasks table tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 

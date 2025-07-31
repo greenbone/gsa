@@ -249,6 +249,7 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
         {count > 0 && (
           <PermissionsTable
             {...props}
+            // @ts-expect-error
             entities={permissions}
             footer={false}
             footnote={false}

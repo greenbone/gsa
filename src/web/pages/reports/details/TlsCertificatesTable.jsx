@@ -13,12 +13,13 @@ import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
+import createEntitiesTable from 'web/entities/createEntitiesTable';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
-import {createEntitiesTable} from 'web/entities/Table';
 import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
 import PropTypes from 'web/utils/PropTypes';
 import {formattedUserSettingShortDate} from 'web/utils/userSettingTimeDateFormatters';
+
 const Header = ({
   actions = true,
   currentSortDir,
