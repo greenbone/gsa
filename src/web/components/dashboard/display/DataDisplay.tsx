@@ -18,7 +18,9 @@ import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Theme from 'web/utils/Theme';
-import withTranslation from 'web/utils/withTranslation';
+import withTranslation, {
+  WithTranslationComponentProps,
+} from 'web/utils/withTranslation';
 
 export interface State {
   showLegend?: boolean;
@@ -69,7 +71,7 @@ export interface DataDisplayProps<
   TState extends State,
   TTransformedData = TData,
   TTransformProps = Record<string, unknown>,
-> {
+> extends WithTranslationComponentProps {
   data: TData;
   dataRow: (data: TTransformedData) => string[];
   dataTitles: string[];
@@ -94,7 +96,6 @@ export interface DataDisplayProps<
   state: TState;
   title: TitleFunc<TTransformedData>;
   width: number;
-  _: (text: string, ...args: string[]) => string;
 }
 
 interface DataDisplayState<TData, TTransformedData> {
