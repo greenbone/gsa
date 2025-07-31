@@ -14,7 +14,7 @@ interface DividerComponentProps {
   $margin: string;
 }
 
-interface DividerProps extends LayoutProps {
+export interface DividerProps extends LayoutProps {
   flex?: string;
   margin?: string;
 }
@@ -45,7 +45,7 @@ const DividerContainer = styled(Layout)`
 
 DividerContainer.displayName = 'DividerContainer';
 
-const Divider: React.FC<DividerProps> = ({
+const Divider = ({
   margin = DEFAULT_MARGIN,
   grow,
   flex,
