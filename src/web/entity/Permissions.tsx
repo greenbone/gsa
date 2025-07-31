@@ -5,6 +5,13 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import Gmp from 'gmp/gmp';
+import Rejection from 'gmp/http/rejection';
+import Group from 'gmp/models/group';
+import Model from 'gmp/models/model';
+import Permission from 'gmp/models/permission';
+import Role from 'gmp/models/role';
+import User from 'gmp/models/user';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
@@ -12,8 +19,9 @@ import {NewIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import useCapabilities from 'web/hooks/useCapabilities';
-import useTranslation from 'web/hooks/useTranslation';
+import useTranslation, {TranslateFunc} from 'web/hooks/useTranslation';
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,
   INCLUDE_RELATED_RESOURCES,
@@ -21,14 +29,18 @@ import MultiplePermissionDialog, {
 import PermissionComponent from 'web/pages/permissions/PermissionsComponent';
 import PermissionsTable from 'web/pages/permissions/Table';
 import compose from 'web/utils/Compose';
-import PropTypes from 'web/utils/PropTypes';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
+
 const SectionElementDivider = styled(IconDivider)`
   margin-bottom: 3px;
 `;
 
-const SectionElements = ({onPermissionCreateClick}) => {
+interface SectionElementsProps {
+  onPermissionCreateClick?: () => void;
+}
+
+const SectionElements = ({onPermissionCreateClick}: SectionElementsProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   return (
@@ -50,13 +62,48 @@ const SectionElements = ({onPermissionCreateClick}) => {
   );
 };
 
-SectionElements.propTypes = {
-  onPermissionCreateClick: PropTypes.func.isRequired,
-};
+type RelatedResourcesLoader<TEntity> = ({
+  entity,
+  gmp,
+}: {
+  entity: TEntity;
+  gmp: Gmp;
+}) => Promise<Model[]>;
 
-class PermissionsBase extends React.Component {
-  constructor(...args) {
-    super(...args);
+interface PermissionsBaseState {
+  entityType?: string;
+  entityName?: string;
+  groups?: Group[];
+  groupId?: string;
+  id?: string;
+  includeRelated?:
+    | typeof CURRENT_RESOURCE_ONLY
+    | typeof INCLUDE_RELATED_RESOURCES;
+  multiplePermissionDialogVisible: boolean;
+  related?: Model[];
+  roles?: Role[];
+  roleId?: string;
+  title?: string;
+  users?: User[];
+  userId?: string;
+}
+
+interface PermissionsBaseProps<TEntity> {
+  entity: TEntity;
+  gmp: Gmp;
+  permissions?: Permission[];
+  relatedResourcesLoaders?: RelatedResourcesLoader<TEntity>[];
+  _: TranslateFunc;
+  onChanged: () => void;
+  onPermissionEditClick: (permission: Permission, value: boolean) => void;
+}
+
+class PermissionsBase<TEntity extends Model> extends React.Component<
+  PermissionsBaseProps<TEntity>,
+  PermissionsBaseState
+> {
+  constructor(props: PermissionsBaseProps<TEntity>) {
+    super(props);
 
     this.state = {
       multiplePermissionDialogVisible: false,
@@ -71,7 +118,7 @@ class PermissionsBase extends React.Component {
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
 
-  openPermissionDialog(permission) {
+  openPermissionDialog(permission: Permission) {
     const {onPermissionEditClick} = this.props;
 
     if (isDefined(onPermissionEditClick)) {
@@ -94,20 +141,21 @@ class PermissionsBase extends React.Component {
       title: _('Create Multiple Permissions'),
     });
 
-    Promise.all(relatedResourcesLoaders.map(func => func({entity, gmp}))).then(
-      loaded => {
-        const related = loaded.reduce((sum, cur) => sum.concat(cur), []);
+    void Promise.all(
+      relatedResourcesLoaders.map(func => func({entity, gmp})),
+    ).then(loaded => {
+      const related = loaded.reduce((sum, cur) => sum.concat(cur), []);
 
-        this.setState({
-          related,
-          includeRelated:
-            loaded.length === 0
-              ? CURRENT_RESOURCE_ONLY
-              : INCLUDE_RELATED_RESOURCES,
-        });
-      },
-    );
+      this.setState({
+        related,
+        includeRelated:
+          loaded.length === 0
+            ? CURRENT_RESOURCE_ONLY
+            : INCLUDE_RELATED_RESOURCES,
+      });
+    });
 
+    // @ts-expect-error
     gmp.groups.getAll().then(response => {
       const {data: groups} = response;
       this.setState({
@@ -115,6 +163,7 @@ class PermissionsBase extends React.Component {
         groupId: selectSaveId(groups),
       });
     });
+    // @ts-expect-error
     gmp.roles.getAll().then(response => {
       const {data: roles} = response;
       this.setState({
@@ -122,7 +171,7 @@ class PermissionsBase extends React.Component {
         roleId: selectSaveId(roles),
       });
     });
-    gmp.users.getAll().then(response => {
+    void gmp.users.getAll().then(response => {
       const {data: users} = response;
       this.setState({
         users,
@@ -135,7 +184,8 @@ class PermissionsBase extends React.Component {
     this.setState({multiplePermissionDialogVisible: false});
   }
 
-  handleChange(value, name) {
+  handleChange(value: unknown, name: string) {
+    // @ts-expect-error
     this.setState({[name]: value});
   }
 
@@ -146,6 +196,7 @@ class PermissionsBase extends React.Component {
   handleMultipleSave(data) {
     const {gmp, onChanged} = this.props;
 
+    // @ts-expect-error
     return gmp.permissions
       .create(data)
       .then(onChanged)
@@ -175,7 +226,6 @@ class PermissionsBase extends React.Component {
 
     const extra = (
       <SectionElements
-        entity={entity}
         onPermissionCreateClick={this.openMultiplePermissionDialog}
       />
     );
@@ -202,14 +252,19 @@ class PermissionsBase extends React.Component {
             entityName={entityName}
             entityType={entityType}
             groupId={groupId}
+            // @ts-expect-error
             groups={groups}
+            // @ts-expect-error
             id={id}
             includeRelated={includeRelated}
+            // @ts-expect-error
             related={related}
             roleId={roleId}
+            // @ts-expect-error
             roles={roles}
             title={title}
             userId={userId}
+            // @ts-expect-error
             users={users}
             onChange={this.handleChange}
             onClose={this.handleCloseMultiplePermissionDialog}
@@ -221,62 +276,52 @@ class PermissionsBase extends React.Component {
   }
 }
 
-PermissionsBase.propTypes = {
-  entity: PropTypes.model.isRequired,
-  gmp: PropTypes.gmp.isRequired,
-  permissions: PropTypes.array,
-  relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
-  onChanged: PropTypes.func.isRequired,
-  onPermissionCloneClick: PropTypes.func.isRequired,
-  onPermissionDeleteClick: PropTypes.func.isRequired,
-  onPermissionDownloadClick: PropTypes.func.isRequired,
-  onPermissionEditClick: PropTypes.func.isRequired,
-  _: PropTypes.func.isRequired,
-};
 const Permissions = compose(withGmp, withTranslation)(PermissionsBase);
 
-const EntityPermissions = ({
+export interface EntityPermissionsProps<TEntity = Model> {
+  entity: TEntity;
+  permissions: Permission[];
+  relatedResourcesLoaders?: RelatedResourcesLoader<TEntity>[];
+  onChanged?: () => void;
+  onDownloaded?: OnDownloadedFunc;
+  onError?: (error: Error | Rejection) => void;
+}
+
+function EntityPermissions<TEntity = Model>({
   entity,
   permissions,
   relatedResourcesLoaders,
   onChanged,
   onDownloaded,
   onError,
-}) => (
-  <PermissionComponent
-    onCloneError={onError}
-    onCloned={onChanged}
-    onCreated={onChanged}
-    onDeleteError={onError}
-    onDeleted={onChanged}
-    onDownloadError={onError}
-    onDownloaded={onDownloaded}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit}) => (
-      <Permissions
-        entity={entity}
-        permissions={permissions}
-        relatedResourcesLoaders={relatedResourcesLoaders}
-        toggleDetailsIcon={false}
-        onChanged={onChanged}
-        onPermissionCloneClick={clone}
-        onPermissionCreateClick={create}
-        onPermissionDeleteClick={delete_func}
-        onPermissionDownloadClick={download}
-        onPermissionEditClick={edit}
-      />
-    )}
-  </PermissionComponent>
-);
-
-EntityPermissions.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func,
-  onError: PropTypes.func.isRequired,
-};
+}: EntityPermissionsProps<TEntity>) {
+  return (
+    <PermissionComponent
+      onCloneError={onError}
+      onCloned={onChanged}
+      onCreated={onChanged}
+      onDeleteError={onError}
+      onDeleted={onChanged}
+      onDownloadError={onError}
+      onDownloaded={onDownloaded}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: deleteFunc, download, edit}) => (
+        <Permissions
+          entity={entity}
+          permissions={permissions}
+          relatedResourcesLoaders={relatedResourcesLoaders}
+          toggleDetailsIcon={false}
+          onChanged={onChanged}
+          onPermissionCloneClick={clone}
+          onPermissionCreateClick={create}
+          onPermissionDeleteClick={deleteFunc}
+          onPermissionDownloadClick={download}
+          onPermissionEditClick={edit}
+        />
+      )}
+    </PermissionComponent>
+  );
+}
 
 export default EntityPermissions;
