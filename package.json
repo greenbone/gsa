@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop-react-beautiful-dnd-migration": "^2.0.4",
-    "@greenbone/opensight-ui-components-mantinev7": "^0.8.0",
+    "@greenbone/opensight-ui-components-mantinev7": "^0.8.1",
     "@mantine/core": "^7.17.8",
     "@mantine/dates": "^7.17.8",
     "@mantine/notifications": "^7.17.8",
@@ -68,7 +68,7 @@
     "react-i18next": "^15.6.1",
     "react-is": "^18.3.1",
     "react-redux": "^9.2.0",
-    "react-router": "^7.7.0",
+    "react-router": "^7.7.1",
     "redux": "^5.0.1",
     "redux-logger": "^3.0.6",
     "resize-observer-polyfill": "^1.5.1",
@@ -79,7 +79,7 @@
   "devDependencies": {
     "@eslint/js": "^9.31.0",
     "@pandatix/js-cvss": "^0.4.4",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/d3-force": "^3.0.10",
