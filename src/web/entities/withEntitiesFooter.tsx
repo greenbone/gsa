@@ -32,8 +32,7 @@ type WithEntitiesFooterProps<TProps> = EntitiesFooterWrapperProps &
 export function withEntitiesFooter<
   TProps extends
     WithEntitiesFooterComponentProps = WithEntitiesFooterComponentProps,
-  TOptions = {},
->(options: TOptions = {} as TOptions) {
+>(options: Partial<TProps> = {}) {
   return (Component: React.ComponentType<TProps>) => {
     const EntitiesFooterWrapper = ({
       onDownloadBulk,
@@ -43,7 +42,7 @@ export function withEntitiesFooter<
     }: WithEntitiesFooterProps<TProps>) => {
       return (
         <Component
-          {...(options as TOptions)}
+          {...options}
           {...(props as TProps)}
           onDeleteClick={onDeleteBulk}
           onDownloadClick={onDownloadBulk}

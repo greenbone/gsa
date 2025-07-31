@@ -6,12 +6,8 @@
 import EntitiesFooter, {EntitiesFooterProps} from 'web/entities/EntitiesFooter';
 import withEntitiesFooter from 'web/entities/withEntitiesFooter';
 
-function createEntitiesFooter<
-  TOptions extends EntitiesFooterProps = EntitiesFooterProps,
->(options: TOptions) {
-  return withEntitiesFooter<EntitiesFooterProps, EntitiesFooterProps>(options)(
-    EntitiesFooter,
-  );
+function createEntitiesFooter(options: Partial<EntitiesFooterProps>) {
+  return withEntitiesFooter<EntitiesFooterProps>(options)(EntitiesFooter);
 }
 
 export default createEntitiesFooter;

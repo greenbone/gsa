@@ -45,12 +45,9 @@ export interface WithEntitiesHeaderComponentProps {
  *
  * @return A new EntitiesHeader component.
  */
-function withEntitiesHeader<
-  TProps extends WithEntitiesHeaderComponentProps,
-  TOptions = {},
->(
+function withEntitiesHeader<TProps extends WithEntitiesHeaderComponentProps>(
   actionsColumn: React.ReactElement | null | true = defaultActions,
-  options: TOptions = {} as TOptions,
+  options: Partial<TProps> = {},
 ) {
   return (Component: React.ComponentType<TProps>) => {
     if (!actionsColumn) {
@@ -68,7 +65,7 @@ function withEntitiesHeader<
       }
       return (
         <Component
-          {...(options as TOptions)}
+          {...options}
           {...(props as TProps)}
           actionsColumn={column}
           selectionType={selectionType}
