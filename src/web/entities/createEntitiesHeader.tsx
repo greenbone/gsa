@@ -50,10 +50,10 @@ interface CreateEntitiesHeaderColumn {
  *
  * @return A new EntitiesHeader component.
  */
-export function createEntitiesHeader<TOptions = {}>(
+export function createEntitiesHeader(
   columns: CreateEntitiesHeaderColumn[],
-  actionsColumn: ActionsColumn,
-  options: TOptions = {} as TOptions,
+  actionsColumn?: ActionsColumn,
+  options: Partial<CreateEntitiesHeaderProps> = {},
 ) {
   const Header = ({
     actionsColumn,
@@ -85,7 +85,7 @@ export function createEntitiesHeader<TOptions = {}>(
     </TableHeader>
   );
 
-  return withEntitiesHeader<CreateEntitiesHeaderProps, TOptions>(
+  return withEntitiesHeader<CreateEntitiesHeaderProps>(
     actionsColumn,
     options,
   )(Header);
