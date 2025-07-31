@@ -13,5 +13,7 @@ export const exclude = (object: {}, func: ExcludeFunc) =>
       return obj;
     }, {});
 
-export const excludeObjectProps = (object: {}, excludeArray: string[]) =>
-  exclude(object, key => excludeArray.includes(key));
+export const excludeObjectProps = (
+  object: {},
+  excludeArray: readonly string[],
+) => exclude(object, key => excludeArray.includes(key));
