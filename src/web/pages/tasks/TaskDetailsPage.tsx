@@ -7,6 +7,7 @@ import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
 import Gmp from 'gmp/gmp';
 import Filter from 'gmp/models/filter';
+import Permission from 'gmp/models/permission';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 import Task, {USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
@@ -52,7 +53,9 @@ import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
-import EntityPermissions from 'web/entity/Permissions';
+import EntityPermissions, {
+  EntityPermissionsProps,
+} from 'web/entity/Permissions';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
@@ -272,9 +275,10 @@ export const ToolBarIcons = ({
 
 interface DetailsProps {
   entity: Task;
+  links?: boolean;
 }
 
-const Details = ({entity, ...props}: DetailsProps) => {
+const Details = ({entity, links}: DetailsProps) => {
   const [_] = useTranslation();
   return (
     <Layout flex="column">
@@ -308,14 +312,14 @@ const Details = ({entity, ...props}: DetailsProps) => {
         </TableBody>
       </InfoTable>
 
-      <TaskDetails entity={entity} {...props} />
+      <TaskDetails entity={entity} links={links} />
     </Layout>
   );
 };
 
 interface TaskDetailsPageProps {
   entity: Task;
-  permissions: Array<unknown>;
+  permissions: Permission[];
   onChanged?: () => void;
   onDownloaded?: OnDownloadedFunc;
   onError?: (error: unknown) => void;
@@ -327,7 +331,6 @@ const TaskDetailsPage = ({
   onChanged,
   onDownloaded,
   onError,
-
   ...props
 }: TaskDetailsPageProps) => {
   const navigate = useNavigate();
@@ -444,7 +447,9 @@ const TaskDetailsPage = ({
   );
 };
 
-export const TaskPermissions = withComponentDefaults({
+export const TaskPermissions = withComponentDefaults<
+  EntityPermissionsProps<Task>
+>({
   relatedResourcesLoaders: [
     ({entity}: {entity: Task}) =>
       isDefined(entity.alerts)
@@ -475,7 +480,7 @@ export const TaskPermissions = withComponentDefaults({
       return Promise.resolve([]);
     },
   ],
-})(EntityPermissions);
+})(EntityPermissions<Task>);
 
 const taskIdFilter = (id: string) => Filter.fromString('task_id=' + id).all();
 
