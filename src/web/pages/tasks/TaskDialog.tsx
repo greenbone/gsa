@@ -249,7 +249,7 @@ const TaskDialog = ({
   );
 
   const alertIds =
-    alert_ids.length === 1 && alert_ids[0] === '0' ? [] : alert_ids;
+    alert_ids.length === 1 && String(alert_ids[0]) === '0' ? [] : alert_ids;
 
   const alertItems = renderSelectItems(alerts);
 
