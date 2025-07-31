@@ -26,7 +26,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import PortListsFilterDialog from 'web/pages/portlists/FilterDialog';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
 import PortListsTable from 'web/pages/portlists/Table';
-import {useGetPortLists} from 'web/queries/portlists/useGetPortlists';
+import {useGetPortLists} from 'web/queries/portlists/useGetPortsLists';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
@@ -194,16 +194,12 @@ const PortListsPage = () => {
     <PortListComponent
       onCloneError={showError}
       onCloned={refetch}
-      onCreateError={showError}
-      onCreated={refetch}
       onDeleteError={showError}
       onDeleted={refetch}
       onDownloadError={showError}
       onDownloaded={handleDownload}
       onImportError={showError}
       onImported={refetch}
-      onSaveError={showError}
-      onSaved={refetch}
     >
       {({
         clone,

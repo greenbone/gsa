@@ -12,13 +12,12 @@ import ActionResult from 'gmp/models/actionresult';
 import PortList, {ProtocolType} from 'gmp/models/portlist';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
+
 import useEntityClone from 'web/entity/hooks/useEntityClone';
-import useEntityCreate from 'web/entity/hooks/useEntityCreate';
 import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
   OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
-import useEntitySave from 'web/entity/hooks/useEntitySave';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListsDialog, {
@@ -28,6 +27,8 @@ import ImportPortListDialog from 'web/pages/portlists/PortListImportDialog';
 import PortRangeDialog, {
   PortRangeDialogData,
 } from 'web/pages/portlists/PortRangeDialog';
+import {useCreatePortsList} from 'web/queries/portlists/useCreatePortsList';
+import {useSavePortList} from 'web/queries/portlists/useSavePortsList';
 
 interface PortRange {
   id?: string;
@@ -65,14 +66,10 @@ const PortListComponent = ({
   children,
   onCloned,
   onCloneError,
-  onCreated,
-  onCreateError,
   onDeleted,
   onDeleteError,
   onDownloaded,
   onDownloadError,
-
-  onSaved,
   onSaveError,
   onImported,
   onImportError,
@@ -89,11 +86,29 @@ const PortListComponent = ({
   const [portRanges, setPortRanges] = useState<PortRange[]>([]);
   const [createdPortRanges, setCreatedPortRanges] = useState<PortRange[]>([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState<PortRange[]>([]);
+  const [dialogError, setDialogError] = useState<string | undefined>(undefined);
 
-  const handleSave = useEntitySave('portlist', {
-    onSaveError,
-    onSaved,
+  const savePortListMutation = useSavePortList({
+    onSuccess: () => {
+      closePortListDialog();
+    },
+    onError: error => {
+      setDialogError(getErrorMessage(error));
+    },
   });
+
+  const handleSave = savePortListMutation.mutateAsync;
+
+  const createPortsList = useCreatePortsList({
+    onSuccess: () => {
+      closePortListDialog();
+    },
+    onError: err => {
+      setDialogError(getErrorMessage(err));
+    },
+  });
+
+  const handleCreate = createPortsList.mutateAsync;
 
   const handleClone = useEntityClone<PortList, Response<ActionResult, XmlMeta>>(
     'portlist',
@@ -137,6 +152,7 @@ const PortListComponent = ({
 
   const closePortListDialog = () => {
     setPortListDialogVisible(false);
+    setDialogError(undefined);
   };
 
   const handleClosePortListDialog = () => {
@@ -198,50 +214,106 @@ const PortListComponent = ({
     }
   };
 
+  const handleCreatePortList = async (data: SavePortListData<PortRange>) => {
+    try {
+      const createData = {
+        ...data,
+        file: data.file ? data.file.name : undefined,
+      };
+
+      await handleCreate(createData);
+      closePortListDialog();
+    } catch {
+      // Error is already handled by the onError callback in useCreatePortsList
+      // The dialog will stay open and show the error message
+    }
+  };
+
+  const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error) {
+      return error.message;
+    } else if (error && typeof error === 'object') {
+      const errorObj = error as Record<string, unknown>;
+      return (
+        (errorObj.message as string) ||
+        ((errorObj.error as Record<string, unknown>)?.message as string) ||
+        JSON.stringify(error)
+      );
+    } else if (error) {
+      return String(error);
+    } else {
+      return 'An unknown error occurred';
+    }
+  };
+
+  const handleUpdatePortRanges = async () => {
+    try {
+      const createdPromises = createdPortRanges.map(
+        async (range: PortRange) => {
+          // save temporary port ranges in the backend
+          const id = await handleSavePortRange({
+            portListId: range.portListId,
+            portRangeStart: range.start,
+            portRangeEnd: range.end,
+            portType: range.protocolType,
+          });
+          range.isTmp = false;
+          range.id = id;
+          // the range has been saved in the backend
+          // if something fails the state contains the still to be saved ranges
+          setCreatedPortRanges(createdPortRanges =>
+            createdPortRanges.filter(pRange => pRange !== range),
+          );
+        },
+      );
+      const deletedPromises = deletedPortRanges.map(
+        async (range: PortRange) => {
+          await handleDeletePortRange(range);
+          // the range has been deleted from the backend
+          // if something fails the state contains the still to be deleted ranges
+          setDeletedPortRanges(deletedPortRanges =>
+            deletedPortRanges.filter(pRange => pRange !== range),
+          );
+        },
+      );
+
+      const promises = [...createdPromises, ...deletedPromises];
+      await Promise.all(promises);
+      return true;
+    } catch (error) {
+      if (isDefined(onSaveError)) {
+        onSaveError(error as Rejection);
+      }
+
+      setDialogError(getErrorMessage(error));
+      return false;
+    }
+  };
+
+  const handleUpdatePortList = async (data: SavePortListData<PortRange>) => {
+    try {
+      await handleSave(data);
+      closePortListDialog();
+    } catch {
+      // Error is already handled by the onError callback in useSavePortList
+      // This just prevents the dialog from closing on error
+    }
+  };
+
   const handleSavePortList = async (data: SavePortListData<PortRange>) => {
+    setDialogError(undefined);
+
     if (isDefined(data.id)) {
       // save existing port list
-      try {
-        const createdPromises = createdPortRanges.map(
-          async (range: PortRange) => {
-            // save temporary port ranges in the backend
-            const id = await handleSavePortRange({
-              portListId: range.portListId,
-              portRangeStart: range.start,
-              portRangeEnd: range.end,
-              portType: range.protocolType,
-            });
-            range.isTmp = false;
-            range.id = id;
-            // the range has been saved in the backend
-            // if something fails the state contains the still to be saved ranges
-            setCreatedPortRanges(createdPortRanges =>
-              createdPortRanges.filter(pRange => pRange !== range),
-            );
-          },
-        );
-        const deletedPromises = deletedPortRanges.map(
-          async (range: PortRange) => {
-            await handleDeletePortRange(range);
-            // the range has been deleted from the backend
-            // if something fails the state contains the still to be deleted ranges
-            setDeletedPortRanges(deletedPortRanges =>
-              deletedPortRanges.filter(pRange => pRange !== range),
-            );
-          },
-        );
-
-        const promises = [...createdPromises, ...deletedPromises];
-        await Promise.all(promises);
-      } catch (error) {
-        if (isDefined(onSaveError)) {
-          return onSaveError(error as Rejection);
-        }
-        throw error;
+      const rangesUpdated = await handleUpdatePortRanges();
+      if (!rangesUpdated) {
+        return; // Stop here and don't close the dialog if port ranges update failed
       }
-      await handleSave(data);
+
+      await handleUpdatePortList(data);
+    } else {
+      await handleCreatePortList(data);
     }
-    closePortListDialog();
   };
 
   const handleTmpAddPortRange = async ({
@@ -333,6 +405,7 @@ const PortListComponent = ({
       {portListDialogVisible && (
         <PortListsDialog
           comment={comment}
+          error={dialogError}
           id={id}
           name={name}
           portList={portList}
