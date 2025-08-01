@@ -6,23 +6,19 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWithTableRow, screen} from 'web/testing';
 import Task from 'gmp/models/task';
-import withEntitiesActions, {
-  WithEntitiesActionsComponentProps,
-} from 'web/entities/withEntitiesActions';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
 import SelectionType from 'web/utils/SelectionType';
 
 describe('withEntitiesActions', () => {
   test('should render the wrapped component with EntitiesActions', () => {
     interface MockProps {
+      entity: Task;
       someProp: string;
     }
     const MockComponent = testing.fn((props: MockProps) => (
       <div>Mock Component</div>
     ));
-    const WrappedComponent = withEntitiesActions<
-      Task,
-      WithEntitiesActionsComponentProps<Task, MockProps>
-    >(MockComponent);
+    const WrappedComponent = withEntitiesActions(MockComponent);
     const entity = new Task({id: '1', name: 'Test Task'});
     const {render} = rendererWithTableRow();
 
@@ -34,15 +30,13 @@ describe('withEntitiesActions', () => {
 
   test("should render entity selection when selectionType is 'user'", () => {
     interface MockProps {
+      entity: Task;
       someProp: string;
     }
     const MockComponent = testing.fn((props: MockProps) => (
       <div>Mock Component</div>
     ));
-    const WrappedComponent = withEntitiesActions<
-      Task,
-      WithEntitiesActionsComponentProps<Task, MockProps>
-    >(MockComponent);
+    const WrappedComponent = withEntitiesActions(MockComponent);
     const entity = new Task({id: '1', name: 'Test Task'});
     const {render} = rendererWithTableRow();
 
