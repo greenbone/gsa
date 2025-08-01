@@ -13,6 +13,11 @@ interface ModelClass<T extends Model> {
   new (properties?: Record<string, unknown>): T;
 }
 
+interface TestOptions {
+  testIsActive?: boolean;
+  testName?: boolean;
+}
+
 const testId = <T extends Model>(modelClass: ModelClass<T>) => {
   test('should parse id', () => {
     const model1 = modelClass.fromElement({_id: '1337'});
@@ -216,11 +221,6 @@ export const testModelMethods = <T extends Model>(
     });
   }
 };
-
-interface TestOptions {
-  testIsActive?: boolean;
-  testName?: boolean;
-}
 
 export const testModel = <T extends Model>(
   modelClass: ModelClass<T>,

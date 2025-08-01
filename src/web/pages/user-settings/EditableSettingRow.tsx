@@ -13,6 +13,19 @@ import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
+interface EditableSettingRowProps {
+  title?: string;
+  label: string;
+  isEditMode: boolean;
+  disableEditIcon?: boolean;
+  editComponent: ReactNode;
+  viewComponent: ReactNode;
+  errorMessage?: string;
+  onSave: () => Promise<void>;
+  onCancel: () => void;
+  onEdit: () => void;
+}
+
 const ErrorMessage = styled.div`
   color: ${Theme.errorRed};
   margin-top: 5px;
@@ -27,19 +40,6 @@ const StyledIconsRow = styled(Layout)`
 const StyledTableRow = styled(TableRow)`
   height: 90px;
 `;
-
-interface EditableSettingRowProps {
-  title?: string;
-  label: string;
-  isEditMode: boolean;
-  disableEditIcon?: boolean;
-  editComponent: ReactNode;
-  viewComponent: ReactNode;
-  errorMessage?: string;
-  onSave: () => Promise<void>;
-  onCancel: () => void;
-  onEdit: () => void;
-}
 
 const EditableSettingRow = ({
   title,

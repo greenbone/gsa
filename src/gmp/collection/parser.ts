@@ -12,8 +12,6 @@ import Model, {Element} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {hasValue, isArray, isDefined} from 'gmp/utils/identity';
 
-const log = logger.getLogger('gmp.collection.parser');
-
 export interface ModelClass<TModel> {
   fromElement(element: unknown, type?: string): TModel;
 }
@@ -69,6 +67,8 @@ interface ElementCounts {
 interface InfoWithCounts extends InfoElement {
   info_count?: ElementCounts;
 }
+
+const log = logger.getLogger('gmp.collection.parser');
 
 export function parseInfoEntities<TModel extends Model>(
   response: InfoElement,

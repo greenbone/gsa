@@ -14,14 +14,18 @@ import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {SelectItem} from 'web/components/form/Select';
 
-export const UNSET_VALUE = '0';
-export const UNSET_LABEL = '--';
-
 export interface RenderSelectItemProps {
   name: string;
   id: string;
   deprecated?: string;
 }
+
+interface Resource extends EntityType {
+  name: string;
+}
+
+export const UNSET_VALUE = '0';
+export const UNSET_LABEL = '--';
 
 /**
  * Render a entities list as items array
@@ -213,10 +217,6 @@ const getPermissionTypeName = (type: string) => {
       return type;
   }
 };
-
-interface Resource extends EntityType {
-  name: string;
-}
 
 export const permissionDescription = (name, resource: Resource, subject) =>
   isDefined(subject)

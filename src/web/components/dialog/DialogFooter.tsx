@@ -7,12 +7,6 @@ import styled from 'styled-components';
 import Button from 'web/components/form/Button';
 import Layout from 'web/components/layout/Layout';
 
-export const DialogFooterLayout = styled(Layout)`
-  margin-top: 15px;
-  padding: 10px 0px 0px 0px;
-  gap: 10px;
-`;
-
 interface DialogFooterProps {
   title: string;
   onClick?: () => void;
@@ -20,6 +14,12 @@ interface DialogFooterProps {
   isLoading?: boolean;
   'data-testid'?: string;
 }
+
+export const DialogFooterLayout = styled(Layout)`
+  margin-top: 15px;
+  padding: 10px 0px 0px 0px;
+  gap: 10px;
+`;
 
 const DialogFooter = ({
   title,

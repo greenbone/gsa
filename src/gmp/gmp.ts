@@ -60,9 +60,9 @@ import logger, {RootLogger} from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-const log = logger.getLogger('gmp');
-
 type Listener = () => void;
+
+const log = logger.getLogger('gmp');
 
 class Gmp {
   readonly settings: GmpSettings;

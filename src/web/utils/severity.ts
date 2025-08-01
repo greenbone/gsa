@@ -12,6 +12,29 @@ import {
   SeverityRating,
 } from 'gmp/utils/severity';
 
+export type RiskFactor = keyof typeof severityRiskFactorValues;
+export type ExtraRiskFactor = keyof typeof extraRiskFactorValues;
+export type ResultSeverityRiskFactor = RiskFactor | ExtraRiskFactor;
+
+interface SeverityLevels {
+  critical?: number;
+  high: number;
+  medium: number;
+  low: number;
+}
+
+interface SeverityLevelBoundaries {
+  maxCritical?: number;
+  minCritical?: number;
+  maxHigh: number;
+  minHigh: number;
+  maxMedium: number;
+  minMedium: number;
+  maxLow: number;
+  minLow: number;
+  maxLog: number;
+}
+
 export const _LOG = _l('Log');
 export const _LOW = _l('Low');
 export const _MEDIUM = _l('Medium');
@@ -96,29 +119,6 @@ const SEVERITY_LEVEL_BOUNDARIES = {
     maxLog: 0.0,
   },
 };
-
-export type RiskFactor = keyof typeof severityRiskFactorValues;
-export type ExtraRiskFactor = keyof typeof extraRiskFactorValues;
-export type ResultSeverityRiskFactor = RiskFactor | ExtraRiskFactor;
-
-interface SeverityLevels {
-  critical?: number;
-  high: number;
-  medium: number;
-  low: number;
-}
-
-interface SeverityLevelBoundaries {
-  maxCritical?: number;
-  minCritical?: number;
-  maxHigh: number;
-  minHigh: number;
-  maxMedium: number;
-  minMedium: number;
-  maxLow: number;
-  minLow: number;
-  maxLog: number;
-}
 
 /**
  * Determines the severity risk factor based on the given value.

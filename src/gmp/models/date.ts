@@ -25,6 +25,9 @@ import 'dayjs/locale/ru';
 import 'dayjs/locale/tr';
 import 'dayjs/locale/zh-cn';
 
+export type Date = dayjs.Dayjs;
+export type Duration = durationPlugin.Duration;
+
 dayjs.extend(advancedFormat);
 dayjs.extend(customParseFormat);
 dayjs.extend(durationPlugin);
@@ -42,7 +45,5 @@ export const isDate = dayjs.isDayjs;
 export const setLocaleDayjs = dayjs.locale;
 export const _localeData = dayjs.localeData;
 export const duration = dayjs.duration;
-export type Date = dayjs.Dayjs;
-export type Duration = durationPlugin.Duration;
 
 export default dayjs;

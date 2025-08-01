@@ -9,75 +9,9 @@ import {ModelElement} from 'gmp/models/model';
 import {parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-const LICENSE_MODEL = {
-  trial: 'Greenbone Enterprise TRIAL',
-  '25v': 'Greenbone Enterprise 25V',
-  25: 'Greenbone Enterprise 25',
-  35: 'Greenbone Enterprise 35',
-  maven: 'Greenbone Enterprise MAVEN',
-  one: 'Greenbone Enterprise ONE',
-  100: 'Greenbone Enterprise 100',
-  150: 'Greenbone Enterprise 150',
-  ceno: 'Greenbone Enterprise CENO',
-  deca: 'Greenbone Enterprise DECA',
-  400: 'Greenbone Enterprise 400',
-  '400r2': 'Greenbone Enterprise 400',
-  450: 'Greenbone Enterprise 450',
-  '450r2': 'Greenbone Enterprise 450',
-  tera: 'Greenbone Enterprise TERA',
-  500: 'Greenbone Enterprise 500',
-  510: 'Greenbone Enterprise 510',
-  550: 'Greenbone Enterprise 550',
-  600: 'Greenbone Enterprise 600',
-  '600r2': 'Greenbone Enterprise 600',
-  peta: 'Greenbone Enterprise PETA',
-  650: 'Greenbone Enterprise 650',
-  '650r2': 'Greenbone Enterprise 650',
-  exa: 'Greenbone Enterprise EXA',
-  5300: 'Greenbone Enterprise 5300',
-  6400: 'Greenbone Enterprise 6400',
-  5400: 'Greenbone Enterprise 5400',
-  6500: 'Greenbone Enterprise 6500',
-  expo: 'Greenbone Enterprise EXPO',
-  '150c-siesta': 'Greenbone Enterprise 150C-SiESTA',
-} as const;
-
 type ApplianceModel = keyof typeof LICENSE_MODEL;
 type ApplianceModelType = 'virtual' | 'hardware';
 type LicenseStatus = 'active' | 'corrupt' | 'expired' | 'no_license';
-
-export const getLicenseApplianceModelName = (value: ApplianceModel) => {
-  const name = LICENSE_MODEL[value];
-  return isDefined(name) ? name : value;
-};
-
-export const getLicenseApplianceModelType = (value?: ApplianceModelType) => {
-  if (!isDefined(value)) {
-    return value;
-  }
-  if (value === 'virtual') {
-    return 'Virtual Appliance';
-  }
-  if (value === 'hardware') {
-    return 'Hardware Appliance';
-  }
-  return _('Unknown');
-};
-
-export const getTranslatableLicenseStatus = (value: LicenseStatus) => {
-  switch (value) {
-    case 'active':
-      return _('License is active');
-    case 'corrupt':
-      return _('License is corrupted');
-    case 'expired':
-      return _('License has expired');
-    case 'no_license':
-      return _('No license available');
-    default:
-      return _('N/A');
-  }
-};
 
 interface LicenseElement extends ModelElement {
   content: {
@@ -112,6 +46,72 @@ interface LicenseProperties {
   type?: string;
   version?: string;
 }
+
+const LICENSE_MODEL = {
+  trial: 'Greenbone Enterprise TRIAL',
+  '25v': 'Greenbone Enterprise 25V',
+  25: 'Greenbone Enterprise 25',
+  35: 'Greenbone Enterprise 35',
+  maven: 'Greenbone Enterprise MAVEN',
+  one: 'Greenbone Enterprise ONE',
+  100: 'Greenbone Enterprise 100',
+  150: 'Greenbone Enterprise 150',
+  ceno: 'Greenbone Enterprise CENO',
+  deca: 'Greenbone Enterprise DECA',
+  400: 'Greenbone Enterprise 400',
+  '400r2': 'Greenbone Enterprise 400',
+  450: 'Greenbone Enterprise 450',
+  '450r2': 'Greenbone Enterprise 450',
+  tera: 'Greenbone Enterprise TERA',
+  500: 'Greenbone Enterprise 500',
+  510: 'Greenbone Enterprise 510',
+  550: 'Greenbone Enterprise 550',
+  600: 'Greenbone Enterprise 600',
+  '600r2': 'Greenbone Enterprise 600',
+  peta: 'Greenbone Enterprise PETA',
+  650: 'Greenbone Enterprise 650',
+  '650r2': 'Greenbone Enterprise 650',
+  exa: 'Greenbone Enterprise EXA',
+  5300: 'Greenbone Enterprise 5300',
+  6400: 'Greenbone Enterprise 6400',
+  5400: 'Greenbone Enterprise 5400',
+  6500: 'Greenbone Enterprise 6500',
+  expo: 'Greenbone Enterprise EXPO',
+  '150c-siesta': 'Greenbone Enterprise 150C-SiESTA',
+} as const;
+
+export const getLicenseApplianceModelName = (value: ApplianceModel) => {
+  const name = LICENSE_MODEL[value];
+  return isDefined(name) ? name : value;
+};
+
+export const getLicenseApplianceModelType = (value?: ApplianceModelType) => {
+  if (!isDefined(value)) {
+    return value;
+  }
+  if (value === 'virtual') {
+    return 'Virtual Appliance';
+  }
+  if (value === 'hardware') {
+    return 'Hardware Appliance';
+  }
+  return _('Unknown');
+};
+
+export const getTranslatableLicenseStatus = (value: LicenseStatus) => {
+  switch (value) {
+    case 'active':
+      return _('License is active');
+    case 'corrupt':
+      return _('License is corrupted');
+    case 'expired':
+      return _('License has expired');
+    case 'no_license':
+      return _('No license available');
+    default:
+      return _('N/A');
+  }
+};
 
 class License {
   readonly applianceModel?: ApplianceModel;

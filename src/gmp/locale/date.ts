@@ -12,6 +12,16 @@ import createDate, {
 import {parseDate} from 'gmp/parser';
 import {isDefined, isString, isJsDate} from 'gmp/utils/identity';
 
+export type DateTimeCategory =
+  (typeof DATE_TIME_CATEGORY)[keyof typeof DATE_TIME_CATEGORY];
+
+export type DateTimeFormatOptions =
+  (typeof DATE_TIME_FORMAT_OPTIONS)[keyof typeof DATE_TIME_FORMAT_OPTIONS];
+
+type DateInput = undefined | Date | GmpDate | string;
+
+export type DateTimeKey = DateTimeFormatOptions | typeof SYSTEM_DEFAULT;
+
 const log = logger.getLogger('gmp.locale.date');
 
 export const DATE_TIME_FORMAT_OPTIONS = {
@@ -28,16 +38,6 @@ export const DATE_TIME_CATEGORY = {
 } as const;
 
 export const SYSTEM_DEFAULT = 'system_default';
-
-export type DateTimeCategory =
-  (typeof DATE_TIME_CATEGORY)[keyof typeof DATE_TIME_CATEGORY];
-
-export type DateTimeFormatOptions =
-  (typeof DATE_TIME_FORMAT_OPTIONS)[keyof typeof DATE_TIME_FORMAT_OPTIONS];
-
-type DateInput = undefined | Date | GmpDate | string;
-
-export type DateTimeKey = DateTimeFormatOptions | typeof SYSTEM_DEFAULT;
 
 export const dateTimeFormatOptions: {
   [category in DateTimeCategory]: {

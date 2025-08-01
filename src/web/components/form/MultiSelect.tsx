@@ -18,36 +18,10 @@ import useTranslation from 'web/hooks/useTranslation';
 
 type Size = MantineSize | undefined;
 
-const getSize = (size: Size) => (size === 'lg' ? '40px' : '32px');
-
-const getFontSize = (size: Size) =>
-  size === 'lg' ? 'var(--mantine-font-size-lg)' : 'var(--mantine-font-size-md)';
-
-const getBorderColor = (errorContent: string | undefined) =>
-  isDefined(errorContent)
-    ? 'var(--input-error-border-color)'
-    : 'var(--input-border-color)';
-
-const getColor = (errorContent: string | undefined) =>
-  isDefined(errorContent) ? 'var(--mantine-color-red-5)' : 'var(--input-color)';
-
 interface StyledMultiSelectProps extends MantineMultiSelectProps {
   $errorContent?: string;
   size?: Size;
 }
-
-const StyledMultiSelect = styled(MantineMultiSelect)<StyledMultiSelectProps>`
-  .mantine-MultiSelect-input,
-  .mantine-MultiSelect-item {
-    min-height: ${({size}) => getSize(size)};
-    font-size: ${({size}) => getFontSize(size)};
-    border-color: ${({$errorContent}) => getBorderColor($errorContent)};
-    color: ${({$errorContent}) => getColor($errorContent)};
-  }
-  .mantine-MultiSelect-item:hover {
-    background-color: var(--select-selected-background-color-hover);
-  }
-`;
 
 interface MultiSelectProps extends StyledMultiSelectProps {
   disabled?: boolean;
@@ -64,6 +38,32 @@ interface MultiSelectProps extends StyledMultiSelectProps {
   value?: string[];
   onChange?: (value: string[], name?: string) => void;
 }
+
+const getSize = (size: Size) => (size === 'lg' ? '40px' : '32px');
+
+const getFontSize = (size: Size) =>
+  size === 'lg' ? 'var(--mantine-font-size-lg)' : 'var(--mantine-font-size-md)';
+
+const getBorderColor = (errorContent: string | undefined) =>
+  isDefined(errorContent)
+    ? 'var(--input-error-border-color)'
+    : 'var(--input-border-color)';
+
+const getColor = (errorContent: string | undefined) =>
+  isDefined(errorContent) ? 'var(--mantine-color-red-5)' : 'var(--input-color)';
+
+const StyledMultiSelect = styled(MantineMultiSelect)<StyledMultiSelectProps>`
+  .mantine-MultiSelect-input,
+  .mantine-MultiSelect-item {
+    min-height: ${({size}) => getSize(size)};
+    font-size: ${({size}) => getFontSize(size)};
+    border-color: ${({$errorContent}) => getBorderColor($errorContent)};
+    color: ${({$errorContent}) => getColor($errorContent)};
+  }
+  .mantine-MultiSelect-item:hover {
+    background-color: var(--select-selected-background-color-hover);
+  }
+`;
 
 const MultiSelect = ({
   disabled,

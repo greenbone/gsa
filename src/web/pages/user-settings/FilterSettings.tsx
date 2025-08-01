@@ -34,6 +34,8 @@ interface FilterSettingsProps {
   disableEditIcon?: boolean;
 }
 
+type FilterName = (typeof FILTER_NAMES)[number];
+
 const FILTER_NAMES = [
   'alertsFilter',
   'auditReportsFilter',
@@ -66,8 +68,6 @@ const FILTER_NAMES = [
   'certBundFilter',
   'dfnCertFilter',
 ] as const;
-
-type FilterName = (typeof FILTER_NAMES)[number];
 
 const FILTER_NAME_TO_ENTITY_TYPE: Record<FilterName, string> = {
   alertsFilter: 'alert',

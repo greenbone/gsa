@@ -10,6 +10,11 @@ import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
+interface DialogErrorProps {
+  error?: string;
+  onCloseClick?: () => void;
+}
+
 const StyledLayout = styled(Layout)`
   padding: 15px;
   margin: 0px 15px 20px 15px;
@@ -27,11 +32,6 @@ const StyledDialogCloseButton = styled(DialogCloseButton)`
     border: 1px solid ${Theme.darkRed};
   }
 `;
-
-interface DialogErrorProps {
-  error?: string;
-  onCloseClick?: () => void;
-}
 
 const DialogError = ({error, onCloseClick}: DialogErrorProps) => {
   const [_] = useTranslation();

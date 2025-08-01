@@ -10,24 +10,7 @@ import {parseSeverity, parseDate, parseText, YesNo} from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export const TICKET_STATUS = {
-  open: 'Open',
-  fixed: 'Fixed',
-  verified: 'Fix Verified',
-  closed: 'Closed',
-} as const;
-
-export const TICKET_STATUS_TRANSLATIONS = {
-  [TICKET_STATUS.open]: _l('Open'),
-  [TICKET_STATUS.fixed]: _l('Fixed'),
-  [TICKET_STATUS.verified]: _l('Fix Verified'),
-  [TICKET_STATUS.closed]: _l('Closed'),
-} as const;
-
 export type TicketStatus = keyof typeof TICKET_STATUS;
-
-export const getTranslatableTicketStatus = (status: TicketStatus) =>
-  `${TICKET_STATUS_TRANSLATIONS[status]}`;
 
 interface TicketElement extends ModelElement {
   assigned_to?: {
@@ -85,6 +68,23 @@ interface TicketProperties extends ModelProperties {
   status?: TicketStatus;
   task?: Model;
 }
+
+export const TICKET_STATUS = {
+  open: 'Open',
+  fixed: 'Fixed',
+  verified: 'Fix Verified',
+  closed: 'Closed',
+} as const;
+
+export const TICKET_STATUS_TRANSLATIONS = {
+  [TICKET_STATUS.open]: _l('Open'),
+  [TICKET_STATUS.fixed]: _l('Fixed'),
+  [TICKET_STATUS.verified]: _l('Fix Verified'),
+  [TICKET_STATUS.closed]: _l('Closed'),
+} as const;
+
+export const getTranslatableTicketStatus = (status: TicketStatus) =>
+  `${TICKET_STATUS_TRANSLATIONS[status]}`;
 
 class Ticket extends Model {
   static entityType = 'ticket';

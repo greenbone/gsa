@@ -43,6 +43,8 @@ interface DefaultSettingsProps {
   disableEditIcon?: boolean;
 }
 
+type FieldName = (typeof FIELD_NAMES)[number];
+
 const FIELD_NAMES = [
   'defaultalert',
   'defaultesxicredential',
@@ -55,8 +57,6 @@ const FIELD_NAMES = [
   'defaultschedule',
   'defaulttarget',
 ] as const;
-
-type FieldName = (typeof FIELD_NAMES)[number];
 
 const ENTITY_TYPE_MAP: Record<FieldName, string> = {
   defaultalert: 'alert',

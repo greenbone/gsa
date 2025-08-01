@@ -11,11 +11,6 @@ import {Element} from 'gmp/models/model';
 import PortList, {PortListElement} from 'gmp/models/portlist';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-const log = logger.getLogger('gmp.commands.portlists');
-
-export const FROM_FILE = YES_VALUE;
-export const NOT_FROM_FILE = NO_VALUE;
-
 export type FromFile = typeof FROM_FILE | typeof NOT_FROM_FILE;
 
 interface PortListCommandCreateParams {
@@ -47,6 +42,11 @@ interface PortListCommandDeletePortRangeParams {
 interface PortListCommandImportParams {
   xmlFile: File;
 }
+
+const log = logger.getLogger('gmp.commands.portlists');
+
+export const FROM_FILE = YES_VALUE;
+export const NOT_FROM_FILE = NO_VALUE;
 
 export class PortListCommand extends EntityCommand<PortList, PortListElement> {
   constructor(http: GmpHttp) {

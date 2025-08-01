@@ -17,6 +17,16 @@ import HostsDialog from 'web/pages/hosts/Dialog';
 import HostWithTargetComponent from 'web/pages/hosts/HostComponent';
 import SelectionType from 'web/utils/SelectionType';
 
+interface SelectionDialogData {
+  entities: unknown[];
+  entitiesSelected: Set<{id: string}>;
+  selectionType: keyof typeof SelectionType | string;
+  filter: {
+    toFilterString: () => string;
+    all?: () => {toFilterString: () => string};
+  };
+}
+
 const host = Host.fromElement({
   _id: '12345',
   name: 'Foo',
@@ -119,16 +129,6 @@ const host = Host.fromElement({
     ],
   },
 } as ModelElement) as Host;
-
-interface SelectionDialogData {
-  entities: unknown[];
-  entitiesSelected: Set<{id: string}>;
-  selectionType: keyof typeof SelectionType | string;
-  filter: {
-    toFilterString: () => string;
-    all?: () => {toFilterString: () => string};
-  };
-}
 
 describe('HostWithTargetComponent tests', () => {
   const getHost = testing.fn().mockResolvedValue({data: host});

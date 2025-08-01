@@ -9,6 +9,12 @@ import Rejection from 'gmp/http/rejection';
 import Response, {Meta} from 'gmp/http/response';
 import {Element} from 'gmp/models/model';
 
+interface ActionResultResponse {
+  action?: string;
+  id?: string;
+  message?: string;
+}
+
 const entitiesRange = {
   _start: '1',
   _max: '1000',
@@ -42,12 +48,6 @@ export const createEntityResponse = (name: string, entity: Element) =>
       },
     },
   });
-
-interface ActionResultResponse {
-  action?: string;
-  id?: string;
-  message?: string;
-}
 
 export const createActionResultResponse = ({
   action = 'ipsum',

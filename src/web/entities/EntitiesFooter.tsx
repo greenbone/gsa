@@ -25,11 +25,6 @@ import {WithEntitiesFooterComponentProps} from 'web/entities/withEntitiesFooter'
 import useTranslation from 'web/hooks/useTranslation';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-const DIALOG_TYPES = {
-  TRASH: 'trash',
-  DELETE: 'delete',
-} as const;
-
 type DialogType = (typeof DIALOG_TYPES)[keyof typeof DIALOG_TYPES];
 
 interface DialogConfig {
@@ -58,6 +53,11 @@ export interface EntitiesFooterProps extends WithEntitiesFooterComponentProps {
   trash?: boolean;
   onSelectionTypeChange?: (selectionType: SelectionTypeType) => void;
 }
+
+const DIALOG_TYPES = {
+  TRASH: 'trash',
+  DELETE: 'delete',
+} as const;
 
 const EntitiesFooter = ({
   actions = true,

@@ -22,18 +22,6 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 import {loadUserSettingDefault} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
-/**
- * Hook to get the default filter of a page from the store
- *
- * @param pageName  Name of the page
- * @returns Array of the default filter and and error if the filter could not be loaded
- */
-const useDefaultFilter = (pageName: string) =>
-  useShallowEqualSelector(state => {
-    const defaultFilterSel = getUserSettingsDefaultFilter(state, pageName);
-    return [defaultFilterSel.getFilter(), defaultFilterSel.getError()];
-  });
-
 interface UsePageFilterOptions {
   fallbackFilter?: Filter;
 }
@@ -45,6 +33,18 @@ interface UsePageFilterHandlers {
 }
 
 type UsePageFilterReturn = [Filter, boolean, UsePageFilterHandlers];
+
+/**
+ * Hook to get the default filter of a page from the store
+ *
+ * @param pageName  Name of the page
+ * @returns Array of the default filter and and error if the filter could not be loaded
+ */
+const useDefaultFilter = (pageName: string) =>
+  useShallowEqualSelector(state => {
+    const defaultFilterSel = getUserSettingsDefaultFilter(state, pageName);
+    return [defaultFilterSel.getFilter(), defaultFilterSel.getError()];
+  });
 
 /**
  * Custom hook to manage and retrieve filters for a specific page in the application.

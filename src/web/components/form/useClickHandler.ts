@@ -14,12 +14,6 @@ interface UseClickEvent {
   };
 }
 
-export const valueFromEvent = (event: UseClickEvent): string =>
-  event.currentTarget.value;
-
-export const nameFromEvent = (event: UseClickEvent): string =>
-  event.currentTarget.name;
-
 export interface UseClickHandlerParams<
   TProps = {},
   TValue = string,
@@ -30,6 +24,12 @@ export interface UseClickHandlerParams<
   onClick?: (value: TValue, name?: string) => void;
   props?: TProps;
 }
+
+export const valueFromEvent = (event: UseClickEvent): string =>
+  event.currentTarget.value;
+
+export const nameFromEvent = (event: UseClickEvent): string =>
+  event.currentTarget.name;
 
 /**
  * Custom hook to create a click handler function.

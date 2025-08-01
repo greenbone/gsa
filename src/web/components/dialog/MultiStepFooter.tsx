@@ -9,10 +9,6 @@ import Button from 'web/components/form/Button';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
 
-const StyledLayout = styled(DialogFooterLayout)`
-  justify-content: space-between;
-`;
-
 interface MultiStepFooterProps {
   leftButtonTitle?: string;
   nextButtonTitle?: string;
@@ -26,6 +22,10 @@ interface MultiStepFooterProps {
   nextDisabled?: boolean;
   loading?: boolean;
 }
+
+const StyledLayout = styled(DialogFooterLayout)`
+  justify-content: space-between;
+`;
 
 const MultiStepFooter = ({
   leftButtonTitle,

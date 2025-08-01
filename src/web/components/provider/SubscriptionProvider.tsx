@@ -7,15 +7,9 @@ import React from 'react';
 import Logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 
-const log = Logger.getLogger('web.components.provider.subscription');
-
 export type Subscriber = (...args: unknown[]) => void;
 
 export type SubscribeFunc = (name: string, func: Subscriber) => () => void;
-
-export const SubscriptionContext = React.createContext<
-  SubscribeFunc | undefined
->(undefined);
 
 export type NotifyFunc = (name: string) => Subscriber;
 
@@ -26,6 +20,12 @@ interface SubscriptionRenderProps {
 interface SubscriptionProviderProps {
   children: (props: SubscriptionRenderProps) => React.ReactNode;
 }
+
+const log = Logger.getLogger('web.components.provider.subscription');
+
+export const SubscriptionContext = React.createContext<
+  SubscribeFunc | undefined
+>(undefined);
 
 class SubscriptionProvider extends React.Component<SubscriptionProviderProps> {
   subscriptions: Record<string, Subscriber[]>;

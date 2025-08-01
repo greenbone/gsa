@@ -5,14 +5,14 @@
 
 import React from 'react';
 
-export const IconSizeContext = React.createContext<string | undefined>(
-  undefined,
-);
-
 interface IconSizeProviderProps {
   size: string;
   children: React.ReactNode;
 }
+
+export const IconSizeContext = React.createContext<string | undefined>(
+  undefined,
+);
 
 const IconSizeProvider: React.FC<IconSizeProviderProps> = ({
   size,

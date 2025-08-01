@@ -12,51 +12,6 @@ import {map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export const OPENVAS_SCANNER_TYPE = 2;
-export const CVE_SCANNER_TYPE = 3;
-export const GREENBONE_SENSOR_SCANNER_TYPE = 5;
-export const OPENVASD_SCANNER_TYPE = 6;
-export const AGENT_CONTROLLER_SCANNER_TYPE = 7;
-export const OPENVASD_SENSOR_SCANNER_TYPE = 8;
-export const AGENT_CONTROLLER_SENSOR_SCANNER_TYPE = 9;
-
-export const OPENVAS_DEFAULT_SCANNER_ID =
-  '08b69003-5fc2-4037-a479-93b440211c73';
-
-export const openVasScannersFilter = (config: {scannerType: ScannerType}) =>
-  config.scannerType === OPENVAS_SCANNER_TYPE;
-
-export function scannerTypeName(
-  scannerType: number | string | undefined,
-): string {
-  scannerType = parseInt(scannerType);
-  if (scannerType === OPENVAS_SCANNER_TYPE) {
-    return _('OpenVAS Scanner');
-  } else if (scannerType === CVE_SCANNER_TYPE) {
-    return _('CVE Scanner');
-  } else if (scannerType === GREENBONE_SENSOR_SCANNER_TYPE) {
-    return _('Greenbone Sensor');
-  } else if (scannerType === OPENVASD_SCANNER_TYPE) {
-    return _('OpenVASD Scanner');
-  } else if (scannerType === OPENVASD_SENSOR_SCANNER_TYPE) {
-    return _('OpenVASD Sensor');
-  } else if (scannerType === AGENT_CONTROLLER_SCANNER_TYPE) {
-    return _('Agent Scanner');
-  } else if (scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) {
-    return _('Agent Sensor');
-  } else if (isDefined(scannerType)) {
-    return _('Unknown scanner type ({{type}})', {type: String(scannerType)});
-  }
-  return _('Unknown scanner type');
-}
-
-const parseScannerInfo = (info: InfoElement = {}): Info => {
-  return {
-    name: isEmpty(info.name) ? undefined : info.name,
-    version: isEmpty(info.version) ? undefined : info.version,
-  };
-};
-
 export type ScannerType =
   | typeof OPENVAS_SCANNER_TYPE
   | typeof CVE_SCANNER_TYPE
@@ -145,6 +100,51 @@ interface ScannerProperties extends ModelProperties {
   scannerType?: ScannerType;
   tasks?: Model[];
 }
+
+export const OPENVAS_SCANNER_TYPE = 2;
+export const CVE_SCANNER_TYPE = 3;
+export const GREENBONE_SENSOR_SCANNER_TYPE = 5;
+export const OPENVASD_SCANNER_TYPE = 6;
+export const AGENT_CONTROLLER_SCANNER_TYPE = 7;
+export const OPENVASD_SENSOR_SCANNER_TYPE = 8;
+export const AGENT_CONTROLLER_SENSOR_SCANNER_TYPE = 9;
+
+export const OPENVAS_DEFAULT_SCANNER_ID =
+  '08b69003-5fc2-4037-a479-93b440211c73';
+
+export const openVasScannersFilter = (config: {scannerType: ScannerType}) =>
+  config.scannerType === OPENVAS_SCANNER_TYPE;
+
+export function scannerTypeName(
+  scannerType: number | string | undefined,
+): string {
+  scannerType = parseInt(scannerType);
+  if (scannerType === OPENVAS_SCANNER_TYPE) {
+    return _('OpenVAS Scanner');
+  } else if (scannerType === CVE_SCANNER_TYPE) {
+    return _('CVE Scanner');
+  } else if (scannerType === GREENBONE_SENSOR_SCANNER_TYPE) {
+    return _('Greenbone Sensor');
+  } else if (scannerType === OPENVASD_SCANNER_TYPE) {
+    return _('OpenVASD Scanner');
+  } else if (scannerType === OPENVASD_SENSOR_SCANNER_TYPE) {
+    return _('OpenVASD Sensor');
+  } else if (scannerType === AGENT_CONTROLLER_SCANNER_TYPE) {
+    return _('Agent Scanner');
+  } else if (scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE) {
+    return _('Agent Sensor');
+  } else if (isDefined(scannerType)) {
+    return _('Unknown scanner type ({{type}})', {type: String(scannerType)});
+  }
+  return _('Unknown scanner type');
+}
+
+const parseScannerInfo = (info: InfoElement = {}): Info => {
+  return {
+    name: isEmpty(info.name) ? undefined : info.name,
+    version: isEmpty(info.version) ? undefined : info.version,
+  };
+};
 
 class Scanner extends Model {
   static entityType = 'scanner';

@@ -17,11 +17,6 @@ import {filter, map} from 'gmp/utils/array';
 import {isDefined, isObject} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-const getValue = <TValue>(val?: {__text?: TValue} | TValue): TValue => {
-  // @ts-expect-error
-  return isObject(val) ? val.__text : val;
-};
-
 interface ParamObjectValueElement {
   __text?: string | number | boolean;
   _using_default?: YesNo | '0' | '1';
@@ -69,6 +64,52 @@ type ParamType =
   | 'integer'
   | 'boolean'
   | 'text';
+
+interface ReportFormatElement extends ModelElement {
+  alerts?: {
+    alert: ModelElement | ModelElement[];
+  };
+  configurable?: YesNo;
+  content_type?: string;
+  extension?: string;
+  invisible_alerts?: number;
+  invisible_report_configs?: number;
+  param?: ParamElement | ParamElement[];
+  predefined?: YesNo;
+  report_configs?: {
+    report_config: ModelElement | ModelElement[];
+  };
+  report_type?: string;
+  signature?: string;
+  trust?: {
+    __text?: string;
+    time?: string;
+  };
+}
+
+interface Trust {
+  value?: string;
+  time?: Date;
+}
+
+interface ReportFormatProperties extends ModelProperties {
+  alerts?: Model[];
+  configurable?: boolean;
+  content_type?: string;
+  extension?: string;
+  invisible_alerts?: number;
+  invisible_report_configs?: number;
+  params?: Param[];
+  predefined?: boolean;
+  report_configs?: Model[];
+  report_type?: string;
+  trust?: Trust;
+}
+
+const getValue = <TValue>(val?: {__text?: TValue} | TValue): TValue => {
+  // @ts-expect-error
+  return isObject(val) ? val.__text : val;
+};
 
 export class Param {
   readonly default?: ParamValue;
@@ -153,47 +194,6 @@ export class Param {
       this.default = getValue(other.default as string);
     }
   }
-}
-
-interface ReportFormatElement extends ModelElement {
-  alerts?: {
-    alert: ModelElement | ModelElement[];
-  };
-  configurable?: YesNo;
-  content_type?: string;
-  extension?: string;
-  invisible_alerts?: number;
-  invisible_report_configs?: number;
-  param?: ParamElement | ParamElement[];
-  predefined?: YesNo;
-  report_configs?: {
-    report_config: ModelElement | ModelElement[];
-  };
-  report_type?: string;
-  signature?: string;
-  trust?: {
-    __text?: string;
-    time?: string;
-  };
-}
-
-interface Trust {
-  value?: string;
-  time?: Date;
-}
-
-interface ReportFormatProperties extends ModelProperties {
-  alerts?: Model[];
-  configurable?: boolean;
-  content_type?: string;
-  extension?: string;
-  invisible_alerts?: number;
-  invisible_report_configs?: number;
-  params?: Param[];
-  predefined?: boolean;
-  report_configs?: Model[];
-  report_type?: string;
-  trust?: Trust;
 }
 
 class ReportFormat extends Model {

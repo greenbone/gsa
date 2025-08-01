@@ -19,12 +19,6 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-const getIdentifier = (
-  identifiers: Identifier[],
-  name: string,
-): Identifier | undefined =>
-  identifiers.find(identifier => identifier.name === name);
-
 interface Source {
   data?: string;
   deleted?: boolean;
@@ -39,47 +33,6 @@ interface IdentifierProperties extends BaseModelProperties {
   };
   source?: Source;
   value?: string;
-}
-
-class Identifier extends BaseModel {
-  readonly name?: string;
-  readonly os?: {
-    id?: string;
-  };
-  readonly source?: Source;
-  readonly value?: string;
-
-  constructor({name, source, os, value, ...props}: IdentifierProperties) {
-    super(props);
-
-    this.name = name;
-    this.os = os;
-    this.source = source;
-    this.value = value;
-  }
-
-  static fromElement(element: IdentifierElement): Identifier {
-    const ret = parseBaseModelProperties(element) as IdentifierProperties;
-
-    ret.name = element.name;
-
-    if (isDefined(element.source)) {
-      ret.source = {
-        data: element.source.data,
-        id: element.source._id,
-        source_type: element.source.type,
-        deleted: isDefined(element.source.deleted)
-          ? parseBoolean(element.source.deleted)
-          : undefined,
-      };
-    }
-    if (isDefined(element.os)) {
-      ret.os = {
-        id: element.os.id,
-      };
-    }
-    return new Identifier(ret);
-  }
 }
 
 interface IdentifierElement extends ModelElement {
@@ -159,6 +112,53 @@ interface HostProperties extends ModelProperties {
   os?: string;
   routes?: Route[][];
   severity?: number;
+}
+
+const getIdentifier = (
+  identifiers: Identifier[],
+  name: string,
+): Identifier | undefined =>
+  identifiers.find(identifier => identifier.name === name);
+
+class Identifier extends BaseModel {
+  readonly name?: string;
+  readonly os?: {
+    id?: string;
+  };
+  readonly source?: Source;
+  readonly value?: string;
+
+  constructor({name, source, os, value, ...props}: IdentifierProperties) {
+    super(props);
+
+    this.name = name;
+    this.os = os;
+    this.source = source;
+    this.value = value;
+  }
+
+  static fromElement(element: IdentifierElement): Identifier {
+    const ret = parseBaseModelProperties(element) as IdentifierProperties;
+
+    ret.name = element.name;
+
+    if (isDefined(element.source)) {
+      ret.source = {
+        data: element.source.data,
+        id: element.source._id,
+        source_type: element.source.type,
+        deleted: isDefined(element.source.deleted)
+          ? parseBoolean(element.source.deleted)
+          : undefined,
+      };
+    }
+    if (isDefined(element.os)) {
+      ret.os = {
+        id: element.os.id,
+      };
+    }
+    return new Identifier(ret);
+  }
 }
 
 class Host extends Model {

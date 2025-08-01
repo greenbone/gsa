@@ -20,11 +20,11 @@ interface TabContextType {
   setTabCount: (count: number) => void;
 }
 
-const TabContext = createContext<TabContextType | undefined>(undefined);
-
 type TabProviderProps = {
   children: React.ReactNode;
 };
+
+const TabContext = createContext<TabContextType | undefined>(undefined);
 
 export const TabProvider = ({children}: TabProviderProps) => {
   const navigate = useNavigate();

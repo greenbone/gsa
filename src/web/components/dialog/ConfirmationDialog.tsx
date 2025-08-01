@@ -10,8 +10,6 @@ import DialogTwoButtonFooter, {
 } from 'web/components/dialog/DialogTwoButtonFooter';
 import useTranslation from 'web/hooks/useTranslation';
 
-const DEFAULT_DIALOG_WIDTH = '400px';
-
 interface ConfirmationDialogProps {
   content?: React.ReactNode;
   title: string;
@@ -22,6 +20,8 @@ interface ConfirmationDialogProps {
   onResumeClick?: () => void;
   loading?: boolean;
 }
+
+const DEFAULT_DIALOG_WIDTH = '400px';
 
 const ConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
