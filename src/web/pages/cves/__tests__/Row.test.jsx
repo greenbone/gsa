@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWithTable, fireEvent, screen} from 'web/testing';
+import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Cve from 'gmp/models/cve';
 import {parseDate} from 'gmp/parser';
@@ -30,7 +30,7 @@ describe('CVEv2 Row tests', () => {
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -76,7 +76,7 @@ describe('CVEv2 Row tests', () => {
   test('should call click handlers', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render} = rendererWithTable({
+    const {render} = rendererWithTableBody({
       gmp,
       capabilities: true,
       router: true,
@@ -114,7 +114,7 @@ describe('CVEv3 Row tests', () => {
   test('should render', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -162,7 +162,7 @@ describe('CVEv3 Row tests', () => {
   test('should call click handlers', () => {
     const handleToggleDetailsClick = testing.fn();
 
-    const {render} = rendererWithTable({
+    const {render} = rendererWithTableBody({
       gmp,
       capabilities: true,
       router: true,

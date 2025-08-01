@@ -4,7 +4,13 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, within, fireEvent, rendererWithTable, wait} from 'web/testing';
+import {
+  screen,
+  within,
+  fireEvent,
+  rendererWithTableBody,
+  wait,
+} from 'web/testing';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 
 describe('EditableSettingRow', () => {
@@ -25,7 +31,7 @@ describe('EditableSettingRow', () => {
 
   test('should render and handle edit click', async () => {
     const handleEdit = testing.fn();
-    const {render} = rendererWithTable(rendererOptions);
+    const {render} = rendererWithTableBody(rendererOptions);
     render(<EditableSettingRow {...defaultProps} onEdit={handleEdit} />);
 
     const row = screen.getByRole('row');
@@ -37,7 +43,7 @@ describe('EditableSettingRow', () => {
   });
 
   test('should not render edit icon when disableEditIcon is true', () => {
-    const {render} = rendererWithTable(rendererOptions);
+    const {render} = rendererWithTableBody(rendererOptions);
     render(<EditableSettingRow {...defaultProps} disableEditIcon={true} />);
     const row = screen.getByRole('row');
     expect(within(row).queryByTitle('Test Label')).toBeNull();
@@ -45,7 +51,7 @@ describe('EditableSettingRow', () => {
 
   test('should render editComponent and error message in edit mode', () => {
     const errorMessage = 'Something went wrong';
-    const {render} = rendererWithTable(rendererOptions);
+    const {render} = rendererWithTableBody(rendererOptions);
     render(
       <EditableSettingRow
         {...defaultProps}
@@ -60,7 +66,7 @@ describe('EditableSettingRow', () => {
   test('should call onSave and onCancel in edit mode', async () => {
     const handleSave = testing.fn(() => Promise.resolve());
     const handleCancel = testing.fn();
-    const {render} = rendererWithTable(rendererOptions);
+    const {render} = rendererWithTableBody(rendererOptions);
     render(
       <EditableSettingRow
         {...defaultProps}
@@ -82,7 +88,7 @@ describe('EditableSettingRow', () => {
   });
 
   test('should render viewComponent in view mode', () => {
-    const {render} = rendererWithTable(rendererOptions);
+    const {render} = rendererWithTableBody(rendererOptions);
     render(<EditableSettingRow {...defaultProps} isEditMode={false} />);
     expect(screen.getByTestId('view-span')).toBeInTheDocument();
   });
