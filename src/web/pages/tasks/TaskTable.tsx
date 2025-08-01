@@ -97,7 +97,7 @@ const TaskTableHeader = withEntitiesHeader<HeaderProps>(actionsColumn)(Header);
 
 export default createEntitiesTable<
   Task,
-  EntitiesFooterProps,
+  EntitiesFooterProps<Task>,
   HeaderProps,
   TaskRowProps
 >({

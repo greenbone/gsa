@@ -20,8 +20,11 @@ import TableBody from 'web/components/table/TableBody';
 import useTranslation from 'web/hooks/useTranslation';
 import {SortDirectionType} from 'web/utils/SortDirection';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FooterComponentProps {}
+export interface FooterComponentProps<TEntity> {
+  entities?: TEntity[];
+  entitiesCounts?: CollectionCounts;
+  filter?: Filter;
+}
 
 export interface HeaderComponentProps {
   currentSortBy?: string;
@@ -53,7 +56,7 @@ interface BodyComponentProps {
 
 export interface EntitiesTableComponentProps<
   TEntity,
-  TFooterProps extends FooterComponentProps,
+  TFooterProps extends FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps,
@@ -68,7 +71,8 @@ export interface EntitiesTableComponentProps<
 
 export interface EntitiesTableProps<
   TEntity = Model,
-  TFooterProps extends FooterComponentProps = FooterComponentProps,
+  TFooterProps extends
+    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
@@ -117,7 +121,8 @@ const EmptyTitle = styled(Layout)`
 
 function EntitiesTable<
   TEntity extends Model = Model,
-  TFooterProps extends FooterComponentProps = FooterComponentProps,
+  TFooterProps extends
+    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
@@ -275,7 +280,12 @@ function EntitiesTable<
 
   const footer =
     !isDefined(FooterComponent) || FooterComponent === false ? undefined : (
-      <FooterComponent {...(props as unknown as TFooterProps)} />
+      <FooterComponent
+        entities={entities}
+        entitiesCounts={entitiesCounts}
+        filter={filter}
+        {...(props as unknown as TFooterProps)}
+      />
     );
 
   const body =
