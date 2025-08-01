@@ -9,12 +9,6 @@ import {Modal} from '@greenbone/opensight-ui-components-mantinev7';
 import styled from 'styled-components';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 
-const INITIAL_POSITION_X = 0;
-const INITIAL_POSITION_Y = 70;
-const MODAL_Z_INDEX = 201;
-const MODAL_HEIGHT = '250px';
-const MODAL_WIDTH = '40vw';
-
 interface DialogTitleButtonProps {
   $isDragging: boolean;
 }
@@ -24,6 +18,26 @@ interface StyledModalProps {
   height: string;
   width: string;
 }
+
+interface DialogRenderProps {
+  close: () => void;
+}
+
+interface DialogProps {
+  children?: React.ReactNode | ((props: DialogRenderProps) => React.ReactNode);
+  title?: string;
+  footer?: React.ReactNode;
+  onClose?: () => void;
+  height?: string;
+  width?: string;
+  testId?: string;
+}
+
+const INITIAL_POSITION_X = 0;
+const INITIAL_POSITION_Y = 70;
+const MODAL_Z_INDEX = 201;
+const MODAL_HEIGHT = '250px';
+const MODAL_WIDTH = '40vw';
 
 const DialogTitleButton = styled.button<DialogTitleButtonProps>`
   background: none;
@@ -72,20 +86,6 @@ const StyledScrollArea = styled(ScrollArea)`
   overflow-y: auto;
   padding-right: 18px;
 `;
-
-interface DialogRenderProps {
-  close: () => void;
-}
-
-interface DialogProps {
-  children?: React.ReactNode | ((props: DialogRenderProps) => React.ReactNode);
-  title?: string;
-  footer?: React.ReactNode;
-  onClose?: () => void;
-  height?: string;
-  width?: string;
-  testId?: string;
-}
 
 const Dialog = ({
   children,

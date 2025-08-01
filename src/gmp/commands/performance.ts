@@ -10,8 +10,6 @@ import date, {Date} from 'gmp/models/date';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-export const DEFAULT_SENSOR_ID = '0';
-
 interface SystemReportDetailsData {
   _format: string;
   _start_time?: string;
@@ -57,6 +55,8 @@ interface PerformanceReportDetailsArguments {
   duration?: number;
   text: string;
 }
+
+export const DEFAULT_SENSOR_ID = '0';
 
 class PerformanceReportDetails {
   readonly format: string;

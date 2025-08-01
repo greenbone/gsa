@@ -31,6 +31,16 @@ interface TaskReportProps {
   links?: boolean;
 }
 
+interface TaskReportTotalProps {
+  task: Task;
+  links?: boolean;
+}
+
+interface TaskRowProps extends TaskActionsProps {
+  actionsComponent?: React.ComponentType<TaskActionsProps>;
+  onToggleDetailsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
 const TaskReport = ({report, links}: TaskReportProps) => {
   if (!isDefined(report)) {
     return null;
@@ -43,11 +53,6 @@ const TaskReport = ({report, links}: TaskReportProps) => {
     </span>
   );
 };
-
-interface TaskReportTotalProps {
-  task: Task;
-  links?: boolean;
-}
 
 const TaskReportTotal = ({task, links = true}: TaskReportTotalProps) => {
   const {report_count: reportCount} = task;
@@ -72,11 +77,6 @@ const TaskReportTotal = ({task, links = true}: TaskReportTotalProps) => {
     </Layout>
   );
 };
-
-interface TaskRowProps extends TaskActionsProps {
-  actionsComponent?: React.ComponentType<TaskActionsProps>;
-  onToggleDetailsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
 
 const TaskRow = ({
   actionsComponent: ActionsComponent = TaskActions,

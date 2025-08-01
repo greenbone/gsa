@@ -10,6 +10,15 @@ import FormGroup from 'web/components/form/FormGroup';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/Theme';
 
+interface ComposerContentProps {
+  audit: boolean;
+  filterFieldTitle?: string;
+  filterString: string;
+  includeNotes: YesNo;
+  includeOverrides: YesNo;
+  onValueChange?: (value: YesNo, name?: string) => void;
+}
+
 export const COMPOSER_CONTENT_DEFAULTS = {
   includeNotes: YES_VALUE,
   includeOverrides: YES_VALUE,
@@ -26,15 +35,6 @@ const FilterField = styled.div`
   background-color: ${Theme.dialogGray};
   width: 100%;
 `;
-
-interface ComposerContentProps {
-  audit: boolean;
-  filterFieldTitle?: string;
-  filterString: string;
-  includeNotes: YesNo;
-  includeOverrides: YesNo;
-  onValueChange?: (value: YesNo, name?: string) => void;
-}
 
 const ComposerContent = ({
   audit = false,

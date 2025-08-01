@@ -13,6 +13,11 @@ interface TableProps {
   header?: React.ReactNode;
 }
 
+interface StyledTableProps {
+  $fixed?: boolean;
+  $size?: string;
+}
+
 const Table = ({children, className, footer, header}: TableProps) => {
   return (
     <table className={className}>
@@ -22,11 +27,6 @@ const Table = ({children, className, footer, header}: TableProps) => {
     </table>
   );
 };
-
-interface StyledTableProps {
-  $fixed?: boolean;
-  $size?: string;
-}
 
 export default styled(Table)<StyledTableProps>`
   border: 0;

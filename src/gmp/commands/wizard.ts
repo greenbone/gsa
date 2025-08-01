@@ -55,10 +55,6 @@ interface ModifyTaskResponseData {
   tasks: Task[];
 }
 
-export const IMMEDIATELY_START_VALUE = '2';
-export const SCHEDULE_START_VALUE = '1';
-export const DONT_START_VALUE = '0';
-
 interface RunQuickFirstScanArguments {
   hosts: string;
 }
@@ -91,6 +87,10 @@ interface RunModifyTaskArguments {
   startMinute: number;
   startTimezone: string;
 }
+
+export const IMMEDIATELY_START_VALUE = '2';
+export const SCHEDULE_START_VALUE = '1';
+export const DONT_START_VALUE = '0';
 
 class WizardCommand extends HttpCommand {
   constructor(http: GmpHttp) {

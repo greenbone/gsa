@@ -10,10 +10,6 @@ import useClickHandler from 'web/components/form/useClickHandler';
 import Layout, {LayoutProps} from 'web/components/layout/Layout';
 import Link from 'web/components/link/Link';
 
-const StyledLink = styled(Link)`
-  height: 100%;
-`;
-
 interface NameValueProps<TValue> {
   name?: string;
   value?: TValue;
@@ -26,6 +22,10 @@ interface MenuEntryProps<TValue>
   to?: string;
   onClick?: (value: TValue, name?: string) => void;
 }
+
+const StyledLink = styled(Link)`
+  height: 100%;
+`;
 
 const MenuEntry = <TValue,>({
   children,

@@ -33,8 +33,6 @@ import {renderSelectItems} from 'web/utils/Render';
 import {formatSplitTime} from 'web/utils/timePickerHelpers';
 import {WizardContent, WizardIcon} from 'web/wizard/TaskWizard';
 
-const DEFAULT_SSH_PORT = 22;
-
 type AutoStartType =
   | typeof IMMEDIATELY_START_VALUE
   | typeof SCHEDULE_START_VALUE
@@ -87,6 +85,8 @@ interface AdvancedTaskWizardProps {
   onClose?: () => void;
   onSave?: (values: AdvancedTaskWizardData) => void;
 }
+
+const DEFAULT_SSH_PORT = 22;
 
 const AdvancedTaskWizard = ({
   alertEmail,

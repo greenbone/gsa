@@ -5,6 +5,8 @@
 
 import {isDefined, isString} from 'gmp/utils/identity';
 
+type LogLevel = keyof typeof LogLevels;
+
 export const DEFAULT_LOG_LEVEL = 'error';
 export const LOG_LEVEL_DEBUG = 'debug';
 
@@ -18,8 +20,6 @@ export const LogLevels = {
   error: 4,
   silent: 5,
 };
-
-type LogLevel = keyof typeof LogLevels;
 
 const isValidLogLevel = (level: string) =>
   isString(level) && level.toLowerCase() in LogLevels;

@@ -9,11 +9,11 @@ import withClickHandler, {
   WithClickHandlerProps,
 } from 'web/components/form/withClickHandler';
 
-const TestInput = ({...props}) => <input {...props} type="text" />;
-
 interface TestComponentProps extends WithClickHandlerProps<string> {
   onChange?: (value: string) => void;
 }
+
+const TestInput = ({...props}) => <input {...props} type="text" />;
 
 describe('withClickHandler tests', () => {
   test('should call click handler with value', () => {

@@ -10,8 +10,6 @@ import Filter from 'gmp/models/filter';
 import {isDefined, isString} from 'gmp/utils/identity';
 import Theme from 'web/utils/Theme';
 
-RLink.displayName = 'RouterLink';
-
 interface WithTextOnlyProps {
   textOnly?: boolean;
 }
@@ -22,6 +20,17 @@ interface WithTextOnlyComponentProps {
   title?: string;
   children?: React.ReactNode;
 }
+
+interface LinkComponentProps extends Omit<RLinkProps, 'to'> {
+  anchor?: string;
+  to?: string;
+  filter?: string | Filter;
+  query?: Record<string, string>;
+}
+
+export type LinkProps = LinkComponentProps & WithTextOnlyProps;
+
+RLink.displayName = 'RouterLink';
 
 export const withTextOnly = <TProps extends {}>(
   Component: React.ComponentType<TProps & WithTextOnlyComponentProps>,
@@ -51,15 +60,6 @@ export const withTextOnly = <TProps extends {}>(
 
   return TextOnly;
 };
-
-interface LinkComponentProps extends Omit<RLinkProps, 'to'> {
-  anchor?: string;
-  to?: string;
-  filter?: string | Filter;
-  query?: Record<string, string>;
-}
-
-export type LinkProps = LinkComponentProps & WithTextOnlyProps;
 
 const LinkComponent = ({
   anchor,

@@ -9,16 +9,6 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {updateDisplayName} from 'web/utils/displayName';
 
-const convertAlign = (align: string): string => {
-  switch (align) {
-    case 'end':
-    case 'start':
-      return 'flex-' + align;
-    default:
-      return align;
-  }
-};
-
 export interface WithLayoutProps {
   align?: string | [string, string];
   children?: React.ReactNode;
@@ -29,6 +19,16 @@ export interface WithLayoutProps {
   shrink?: true | string;
   'data-testid'?: string;
 }
+
+const convertAlign = (align: string): string => {
+  switch (align) {
+    case 'end':
+    case 'start':
+      return 'flex-' + align;
+    default:
+      return align;
+  }
+};
 
 const withLayout =
   (defaults: WithLayoutProps = {}) =>

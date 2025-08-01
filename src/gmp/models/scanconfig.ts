@@ -9,23 +9,6 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
-export const FULL_AND_FAST_SCAN_CONFIG_ID =
-  'daba56c8-73ec-11df-a475-002264764cea';
-export const BASE_SCAN_CONFIG_ID = 'd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663';
-
-export const SCANCONFIG_TREND_DYNAMIC = 1;
-export const SCANCONFIG_TREND_STATIC = 0;
-
-export const parseCount = (count: string | undefined) => {
-  return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
-};
-
-export const filterEmptyScanConfig = (config: {id: string}) =>
-  config.id !== EMPTY_SCAN_CONFIG_ID;
-
-export const parseTrend = parseInt;
-
 type ScanConfigPreferenceValue = string | number;
 
 export interface ScanConfigFamilyElement {
@@ -125,6 +108,23 @@ interface ScanConfigProperties extends ModelProperties {
   scanner?: Model;
   tasks?: Model[];
 }
+
+export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
+export const FULL_AND_FAST_SCAN_CONFIG_ID =
+  'daba56c8-73ec-11df-a475-002264764cea';
+export const BASE_SCAN_CONFIG_ID = 'd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663';
+
+export const SCANCONFIG_TREND_DYNAMIC = 1;
+export const SCANCONFIG_TREND_STATIC = 0;
+
+export const parseCount = (count: string | undefined) => {
+  return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
+};
+
+export const filterEmptyScanConfig = (config: {id: string}) =>
+  config.id !== EMPTY_SCAN_CONFIG_ID;
+
+export const parseTrend = parseInt;
 
 class ScanConfig extends Model {
   static readonly entityType = 'scanconfig';

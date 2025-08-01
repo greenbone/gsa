@@ -8,8 +8,6 @@ import logger from 'gmp/log';
 import {hasValue, isFunction} from 'gmp/utils/identity';
 import useInstanceVariable from 'web/hooks/useInstanceVariable';
 
-const log = logger.getLogger('web.hooks.useTiming');
-
 type DoFunc = () => void | Promise<void>;
 type Timeout = number | (() => number);
 type TimerId = ReturnType<typeof setTimeout>;
@@ -19,6 +17,8 @@ interface Timer {
   doFunc: DoFunc;
   startTimer?: () => void; // function to start the timer, will be set in useEffect
 }
+
+const log = logger.getLogger('web.hooks.useTiming');
 
 /**
  * Hook to start a timer that calls a function after a given timeout

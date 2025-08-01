@@ -12,8 +12,6 @@ import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {split} from 'gmp/utils/string';
 
-const log = logger.getLogger('gmp.locale.lang');
-
 export interface TranslateOptions {
   [key: string]: string | number;
 }
@@ -27,6 +25,8 @@ interface InitLocaleOptions {
   detector?: unknown;
   options?: InitOptions;
 }
+
+const log = logger.getLogger('gmp.locale.lang');
 
 declare module 'i18next' {
   interface InitOptions {

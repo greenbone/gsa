@@ -15,6 +15,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import {updateDisplayName} from 'web/utils/displayName';
 import Theme from 'web/utils/Theme';
 
+interface RowDetailsWrapperProps<TEntity> {
+  entity: TEntity;
+  links?: boolean;
+}
+
 const Indent = styled.div`
   display: flex;
   width: 3em;
@@ -34,11 +39,6 @@ const StyledTableRow = styled(TableRow)`
     border-bottom: none;
   }
 `;
-
-interface RowDetailsWrapperProps<TEntity> {
-  entity: TEntity;
-  links?: boolean;
-}
 
 const withRowDetails =
   <TEntity extends Model, TProps = {}>(

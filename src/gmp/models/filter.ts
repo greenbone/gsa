@@ -12,10 +12,6 @@ import {parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
 
-export const UNKNOWN_FILTER_ID = '0';
-const SORT_ORDER_ASC = 'sort';
-const SORT_ORDER_DESC = 'sort-reverse';
-
 export interface FilterKeyword {
   column?: string;
   relation?: string;
@@ -47,6 +43,10 @@ type FilterForEachFunc = (
   index: number,
   array: FilterTerm[],
 ) => void;
+
+export const UNKNOWN_FILTER_ID = '0';
+const SORT_ORDER_ASC = 'sort';
+const SORT_ORDER_DESC = 'sort-reverse';
 
 /**
  * Parses FilterTerms from filterString

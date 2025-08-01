@@ -11,6 +11,10 @@ interface StyledLabelProps {
   $textColor: string;
 }
 
+interface ToString {
+  toString(): string;
+}
+
 const Label = styled.div<StyledLabelProps>`
   box-sizing: border-box;
   position: relative;
@@ -46,10 +50,6 @@ const Label = styled.div<StyledLabelProps>`
  * @param {string} text - The text content of the label.
  * @returns {Function} A function that takes props and returns a Label component with the specified styles and properties.
  */
-
-interface ToString {
-  toString(): string;
-}
 
 const createLabel = (
   backgroundColor: string,

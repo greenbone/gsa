@@ -14,6 +14,13 @@ interface StyledProps extends React.HTMLAttributes<HTMLDivElement> {
   width?: string;
 }
 
+interface ToggleButtonProps extends StyledProps {
+  name?: string;
+  checked?: boolean;
+  disabled?: boolean;
+  onToggle?: (checked: boolean, name?: string) => void;
+}
+
 const Styled = styled.div<StyledProps>`
   border-radius: 2px;
   padding: 5px;
@@ -41,13 +48,6 @@ const Styled = styled.div<StyledProps>`
     };
   }}
 `;
-
-interface ToggleButtonProps extends StyledProps {
-  name?: string;
-  checked?: boolean;
-  disabled?: boolean;
-  onToggle?: (checked: boolean, name?: string) => void;
-}
 
 const ToggleButton = ({
   name,

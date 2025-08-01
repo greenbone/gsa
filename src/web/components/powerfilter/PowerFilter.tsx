@@ -25,6 +25,27 @@ import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
+interface PowerFilterState {
+  userFilterString: string;
+  prevFilter?: Filter;
+}
+
+interface PowerFilterProps {
+  capabilities: Capabilities;
+  createFilterType?: string;
+  filter?: Filter;
+  filters?: Filter[];
+  isLoading?: boolean;
+  isLoadingFilters?: boolean;
+  resetFilter?: Filter;
+  gmp: Gmp;
+  _: (key: string) => string;
+  onEditClick?: () => void;
+  onUpdate?: (filter: Filter) => void;
+  onRemoveClick?: () => void;
+  onResetClick?: () => void;
+}
+
 const DEFAULT_FILTER_ID = '0';
 
 const Label = styled.label`
@@ -48,27 +69,6 @@ const getUserFilterString = (filter?: Filter | string) => {
   }
   return '';
 };
-
-interface PowerFilterState {
-  userFilterString: string;
-  prevFilter?: Filter;
-}
-
-interface PowerFilterProps {
-  capabilities: Capabilities;
-  createFilterType?: string;
-  filter?: Filter;
-  filters?: Filter[];
-  isLoading?: boolean;
-  isLoadingFilters?: boolean;
-  resetFilter?: Filter;
-  gmp: Gmp;
-  _: (key: string) => string;
-  onEditClick?: () => void;
-  onUpdate?: (filter: Filter) => void;
-  onRemoveClick?: () => void;
-  onResetClick?: () => void;
-}
 
 class PowerFilter extends React.Component<PowerFilterProps, PowerFilterState> {
   constructor(props: PowerFilterProps) {

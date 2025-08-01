@@ -5,22 +5,6 @@
 
 import {isDefined} from 'gmp/utils/identity';
 
-/* CVSS v2 .... */
-
-/**
- * (from https://nvd.nist.gov/site-media/js/nvdApp/cvssV2/cvssV2.service.js)
- * Handles precision and rounding of numbers to one decimal place
- * @param value
- */
-const toFixed1 = (value: number) => {
-  if (isNaN(value)) {
-    return undefined;
-  }
-  const result = +(`${Math.round(+(`${value}e` + 1))}e` + -1);
-  // if no fractional part then add a .0 to the number
-  return result;
-};
-
 interface BaseScoreV2 {
   av: number;
   ac: number;
@@ -62,6 +46,22 @@ interface CvssV3BaseVector {
   availabilityImpact?: string;
   cvssScore?: number;
 }
+
+/* CVSS v2 .... */
+
+/**
+ * (from https://nvd.nist.gov/site-media/js/nvdApp/cvssV2/cvssV2.service.js)
+ * Handles precision and rounding of numbers to one decimal place
+ * @param value
+ */
+const toFixed1 = (value: number) => {
+  if (isNaN(value)) {
+    return undefined;
+  }
+  const result = +(`${Math.round(+(`${value}e` + 1))}e` + -1);
+  // if no fractional part then add a .0 to the number
+  return result;
+};
 
 /*
  * Calculating the CVSS v2 BaseScore

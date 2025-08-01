@@ -8,8 +8,6 @@ import logger from 'gmp/log';
 import {hasValue} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 
-const log = logger.getLogger('web.components.form.useDownload');
-
 type DownloadParams = {
   filename: string;
   data: string;
@@ -17,6 +15,8 @@ type DownloadParams = {
 };
 
 export type DownloadFunc = (params: DownloadParams) => void;
+
+const log = logger.getLogger('web.components.form.useDownload');
 
 /**
  * Hook to download a file

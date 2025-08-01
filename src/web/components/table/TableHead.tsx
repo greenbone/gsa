@@ -12,11 +12,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
 import Theme from 'web/utils/Theme';
 
-const SortSymbol = styled.span`
-  display: inline-flex;
-  align-items: center;
-`;
-
 interface ToString {
   toString: () => string;
 }
@@ -34,6 +29,11 @@ interface TableHeadProps extends Omit<LayoutProps, 'title'> {
   withBorder?: boolean;
   onSortChange?: (sortBy: string) => void;
 }
+
+const SortSymbol = styled.span`
+  display: inline-flex;
+  align-items: center;
+`;
 
 const TableHead = ({
   children,

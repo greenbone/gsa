@@ -25,10 +25,6 @@ import {
 } from 'web/testing/Components';
 import {userEvent, PointerEventsCheckLevel} from 'web/testing/event';
 
-export {renderHook} from '@testing-library/react/pure';
-
-afterEach(cleanup);
-
 export interface RendererOptions {
   capabilities?: Capabilities | true;
   gmp?: Record<string, unknown>;
@@ -39,6 +35,10 @@ export interface RendererOptions {
   showLocation?: boolean;
   language?: string | Record<string, unknown>;
 }
+
+export {renderHook} from '@testing-library/react/pure';
+
+afterEach(cleanup);
 
 export const render = (ui: React.ReactNode) => {
   const {container, baseElement, rerender} = reactTestingRender(

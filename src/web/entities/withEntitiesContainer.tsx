@@ -27,8 +27,6 @@ import compose from 'web/utils/Compose';
 import {updateDisplayName} from 'web/utils/displayName';
 import withGmp from 'web/utils/withGmp';
 
-const noop = () => {};
-
 interface ReduxMapProps {
   gmp: Gmp;
   filter: Filter;
@@ -79,6 +77,8 @@ interface WithEntitiesContainerProps<TModel extends Model = Model> {
   entitiesSelector: (state: unknown) => EntitiesSelector<TModel>;
   loadEntities: (gmp: Gmp) => (filter?: Filter) => void;
 }
+
+const noop = () => {};
 
 const withEntitiesContainer =
   <TModel extends Model = Model>(

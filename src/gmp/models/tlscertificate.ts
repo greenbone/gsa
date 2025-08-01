@@ -10,20 +10,6 @@ import {parseBoolean, parseDate, parseToString, YesNo} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-export const TIME_STATUS = {
-  inactive: 'inactive',
-  valid: 'valid',
-  expired: 'expired',
-  unknown: 'unknown',
-} as const;
-
-export const TIME_STATUS_TRANSLATIONS = {
-  [TIME_STATUS.expired]: _l('Expired'),
-  [TIME_STATUS.inactive]: _l('Inactive'),
-  [TIME_STATUS.unknown]: _l('Unknown'),
-  [TIME_STATUS.valid]: _l('Valid'),
-} as const;
-
 type TimeStatus = keyof typeof TIME_STATUS;
 
 interface SourceElement {
@@ -104,6 +90,20 @@ interface TlsCertificateProperties extends ModelProperties {
   trust?: boolean;
   valid?: boolean;
 }
+
+export const TIME_STATUS = {
+  inactive: 'inactive',
+  valid: 'valid',
+  expired: 'expired',
+  unknown: 'unknown',
+} as const;
+
+export const TIME_STATUS_TRANSLATIONS = {
+  [TIME_STATUS.expired]: _l('Expired'),
+  [TIME_STATUS.inactive]: _l('Inactive'),
+  [TIME_STATUS.unknown]: _l('Unknown'),
+  [TIME_STATUS.valid]: _l('Valid'),
+} as const;
 
 export const getTranslatableTimeStatus = (status: TimeStatus) =>
   `${TIME_STATUS_TRANSLATIONS[status]}`;

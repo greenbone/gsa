@@ -13,14 +13,6 @@ interface PageCountElement {
   page?: number;
 }
 
-const parseCount = (value?: number | string) => {
-  const parsed = parseInt(value);
-  return isDefined(parsed) ? parsed : 0;
-};
-
-const parsePageCount = (value?: {page?: number | string}) =>
-  parseCount(value?.page);
-
 interface HostDetails {
   best_os_cpe?: string;
   best_os_txt?: string;
@@ -118,6 +110,14 @@ interface HostProperties {
   severity?: number;
   start?: Date;
 }
+
+const parseCount = (value?: number | string) => {
+  const parsed = parseInt(value);
+  return isDefined(parsed) ? parsed : 0;
+};
+
+const parsePageCount = (value?: {page?: number | string}) =>
+  parseCount(value?.page);
 
 class ReportHost {
   readonly asset?: {

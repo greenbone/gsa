@@ -21,8 +21,6 @@ import _ from 'gmp/locale';
 import logger from 'gmp/log';
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-const log = logger.getLogger('gmp.http');
-
 export type ErrorHandler = (request: XMLHttpRequest) => void;
 type Resolve<TData, TMeta extends Meta> = (
   value: Response<TData, TMeta>,
@@ -85,6 +83,8 @@ interface RequestOptions<
   >;
   [key: string]: unknown;
 }
+
+const log = logger.getLogger('gmp.http');
 
 class Http<
   TSuccessDataIn,

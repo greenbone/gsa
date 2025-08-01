@@ -11,15 +11,6 @@ import {
   SeverityRating,
 } from 'gmp/utils/severity';
 
-export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
-export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
-export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
-export const DEFAULT_MANUAL_URL = `https://docs.greenbone.net/GSM-Manual/gos-24.10/`;
-export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-22.5.html`;
-export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
-export const DEFAULT_LOG_LEVEL = 'warn';
-export const DEFAULT_TIMEOUT = 300000; // 5 minutes
-
 interface GmpSettingsOptions {
   apiProtocol?: string;
   apiServer?: string;
@@ -58,6 +49,15 @@ interface GmpSettingsStorage {
 interface LanguageMapping {
   [key: string]: string;
 }
+
+export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
+export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
+export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
+export const DEFAULT_MANUAL_URL = `https://docs.greenbone.net/GSM-Manual/gos-24.10/`;
+export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-22.5.html`;
+export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
+export const DEFAULT_LOG_LEVEL = 'warn';
+export const DEFAULT_TIMEOUT = 300000; // 5 minutes
 
 const set = (
   storage: GmpSettingsStorage,

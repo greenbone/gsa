@@ -17,14 +17,14 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 
-const StyledLayout = styled(Layout)`
-  flex-grow: 0;
-`;
-
 interface SolutionTypesFilterGroupProps {
   filter: Filter;
   onChange: (filter: Filter) => void;
 }
+
+const StyledLayout = styled(Layout)`
+  flex-grow: 0;
+`;
 
 const SolutionTypesFilterGroup = ({
   filter,

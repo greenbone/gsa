@@ -25,42 +25,6 @@ import {map} from 'gmp/utils/array';
 import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export const AUTO_DELETE_KEEP = 'keep';
-export const AUTO_DELETE_NO = 'no';
-export const AUTO_DELETE_KEEP_DEFAULT_VALUE = 5;
-
-export const HOSTS_ORDERING_SEQUENTIAL = 'sequential';
-export const HOSTS_ORDERING_RANDOM = 'random';
-export const HOSTS_ORDERING_REVERSE = 'reverse';
-
-export const DEFAULT_MAX_CHECKS = 4;
-export const DEFAULT_MAX_HOSTS = 20;
-export const DEFAULT_MIN_QOD = 70;
-
-export const TASK_STATUS = {
-  queued: 'Queued',
-  running: 'Running',
-  stoprequested: 'Stop Requested',
-  deleterequested: 'Delete Requested',
-  ultimatedeleterequested: 'Ultimate Delete Requested',
-  resumerequested: 'Resume Requested',
-  requested: 'Requested',
-  stopped: 'Stopped',
-  new: 'New',
-  interrupted: 'Interrupted',
-  container: 'Container',
-  uploading: 'Uploading',
-  uploadinginterrupted: 'Uploading Interrupted',
-  processing: 'Processing',
-  done: 'Done',
-  unknown: 'Unknown',
-} as const;
-
-export const USAGE_TYPE = {
-  scan: 'scan',
-  audit: 'audit',
-} as const;
-
 export type TaskHostsOrdering =
   | typeof HOSTS_ORDERING_SEQUENTIAL
   | typeof HOSTS_ORDERING_RANDOM
@@ -68,38 +32,6 @@ export type TaskHostsOrdering =
 export type TaskStatus = (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
 export type TaskTrend = 'up' | 'down' | 'more' | 'less' | 'same';
 export type TaskAutoDelete = typeof AUTO_DELETE_KEEP | typeof AUTO_DELETE_NO;
-
-const TASK_STATUS_TRANSLATIONS = {
-  Running: _l('Running'),
-  'Stop Requested': _l('Stop Requested'),
-  'Delete Requested': _l('Delete Requested'),
-  'Ultimate Delete Requested': _l('Ultimate Delete Requested'),
-  'Resume Requested': _l('Resume Requested'),
-  Requested: _l('Requested'),
-  Stopped: _l('Stopped'),
-  New: _l('New'),
-  Interrupted: _l('Interrupted'),
-  Container: _l('Container'),
-  Uploading: _l('Uploading'),
-  Done: _l('Done'),
-  Queued: _l('Queued'),
-  Processing: _l('Processing'),
-  'Uploading Interrupted': _l('Interrupted'),
-  Unknown: _l('Unknown'),
-} as const;
-
-export const getTranslatableTaskStatus = (status: TaskStatus) =>
-  `${TASK_STATUS_TRANSLATIONS[status]}`;
-
-export const isActive = (status?: TaskStatus) =>
-  status === TASK_STATUS.running ||
-  status === TASK_STATUS.stoprequested ||
-  status === TASK_STATUS.deleterequested ||
-  status === TASK_STATUS.ultimatedeleterequested ||
-  status === TASK_STATUS.resumerequested ||
-  status === TASK_STATUS.requested ||
-  status === TASK_STATUS.queued ||
-  status === TASK_STATUS.processing;
 
 interface TaskPreferenceElement {
   name?: string;
@@ -289,6 +221,74 @@ export interface TaskProperties extends ModelProperties {
   max_hosts?: number;
   min_qod?: number;
 }
+
+export const AUTO_DELETE_KEEP = 'keep';
+export const AUTO_DELETE_NO = 'no';
+export const AUTO_DELETE_KEEP_DEFAULT_VALUE = 5;
+
+export const HOSTS_ORDERING_SEQUENTIAL = 'sequential';
+export const HOSTS_ORDERING_RANDOM = 'random';
+export const HOSTS_ORDERING_REVERSE = 'reverse';
+
+export const DEFAULT_MAX_CHECKS = 4;
+export const DEFAULT_MAX_HOSTS = 20;
+export const DEFAULT_MIN_QOD = 70;
+
+export const TASK_STATUS = {
+  queued: 'Queued',
+  running: 'Running',
+  stoprequested: 'Stop Requested',
+  deleterequested: 'Delete Requested',
+  ultimatedeleterequested: 'Ultimate Delete Requested',
+  resumerequested: 'Resume Requested',
+  requested: 'Requested',
+  stopped: 'Stopped',
+  new: 'New',
+  interrupted: 'Interrupted',
+  container: 'Container',
+  uploading: 'Uploading',
+  uploadinginterrupted: 'Uploading Interrupted',
+  processing: 'Processing',
+  done: 'Done',
+  unknown: 'Unknown',
+} as const;
+
+export const USAGE_TYPE = {
+  scan: 'scan',
+  audit: 'audit',
+} as const;
+
+const TASK_STATUS_TRANSLATIONS = {
+  Running: _l('Running'),
+  'Stop Requested': _l('Stop Requested'),
+  'Delete Requested': _l('Delete Requested'),
+  'Ultimate Delete Requested': _l('Ultimate Delete Requested'),
+  'Resume Requested': _l('Resume Requested'),
+  Requested: _l('Requested'),
+  Stopped: _l('Stopped'),
+  New: _l('New'),
+  Interrupted: _l('Interrupted'),
+  Container: _l('Container'),
+  Uploading: _l('Uploading'),
+  Done: _l('Done'),
+  Queued: _l('Queued'),
+  Processing: _l('Processing'),
+  'Uploading Interrupted': _l('Interrupted'),
+  Unknown: _l('Unknown'),
+} as const;
+
+export const getTranslatableTaskStatus = (status: TaskStatus) =>
+  `${TASK_STATUS_TRANSLATIONS[status]}`;
+
+export const isActive = (status?: TaskStatus) =>
+  status === TASK_STATUS.running ||
+  status === TASK_STATUS.stoprequested ||
+  status === TASK_STATUS.deleterequested ||
+  status === TASK_STATUS.ultimatedeleterequested ||
+  status === TASK_STATUS.resumerequested ||
+  status === TASK_STATUS.requested ||
+  status === TASK_STATUS.queued ||
+  status === TASK_STATUS.processing;
 
 class Task extends Model {
   static readonly entityType = 'task';

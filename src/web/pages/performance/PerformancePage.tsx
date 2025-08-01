@@ -40,13 +40,19 @@ import {
 import {getTimezone} from 'web/store/usersettings/selectors';
 import {renderSelectItems} from 'web/utils/Render';
 
-const SENSOR_SCANNER_FILTER = Filter.fromString(
-  `type=${GREENBONE_SENSOR_SCANNER_TYPE}`,
-);
-
 interface ToolBarProps {
   onDurationChangeClick: (duration: Duration) => void;
 }
+
+interface SelectorProps {
+  $duration: Duration | undefined;
+  value: Duration;
+  name?: string;
+}
+
+const SENSOR_SCANNER_FILTER = Filter.fromString(
+  `type=${GREENBONE_SENSOR_SCANNER_TYPE}`,
+);
 
 const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
   const [_] = useTranslation();
@@ -88,12 +94,6 @@ const ToolBar = ({onDurationChangeClick}: ToolBarProps) => {
     </IconDivider>
   );
 };
-
-interface SelectorProps {
-  $duration: Duration | undefined;
-  value: Duration;
-  name?: string;
-}
 
 const Selector = withClickHandler<SelectorProps, Duration | undefined>({
   valueFunc: (_event, props) => props.value,

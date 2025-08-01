@@ -26,6 +26,10 @@ interface IconProps<TValue> {
   active?: boolean;
 }
 
+interface StyledDivProps {
+  $active?: boolean;
+}
+
 const Anchor = styled.a`
   display: flex;
 `;
@@ -45,10 +49,6 @@ const StyledIcon = styled.span<StyledIconProps>`
     width: inherit;
   }
 `;
-
-interface StyledDivProps {
-  $active?: boolean;
-}
 
 const StyledDiv = styled.div<StyledDivProps>`
   & svg path {

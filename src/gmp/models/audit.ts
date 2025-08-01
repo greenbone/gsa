@@ -36,6 +36,14 @@ import Task, {
 import {NO_VALUE, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
+export type AuditStatus = (typeof AUDIT_STATUS)[keyof typeof AUDIT_STATUS];
+
+type AuditElement = TaskElement;
+
+interface AuditProperties extends Omit<TaskProperties, 'status'> {
+  status?: AuditStatus;
+}
+
 export {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_NO,
@@ -51,14 +59,6 @@ export {
   getTranslatableAuditStatus,
   isActive,
 };
-
-export type AuditStatus = (typeof AUDIT_STATUS)[keyof typeof AUDIT_STATUS];
-
-type AuditElement = TaskElement;
-
-interface AuditProperties extends Omit<TaskProperties, 'status'> {
-  status?: AuditStatus;
-}
 
 class Audit extends Model {
   static readonly entityType = 'audit';

@@ -18,6 +18,17 @@ interface StyledNumberInputProps {
   errorContent?: string;
 }
 
+export interface NumberFieldProps
+  extends Omit<MantineNumberInputProps, 'type' | 'onChange'> {
+  allowEmpty?: boolean;
+  errorContent?: string;
+  onChange?: (value: number, name?: string) => void;
+  precision?: number | string;
+  type?: 'int' | 'float';
+  size?: 'sm' | 'md' | 'lg';
+  value?: number;
+}
+
 const getSize = (size: string) => (size === 'lg' ? '40px' : '32px');
 
 const getFontSize = (size: string) =>
@@ -45,17 +56,6 @@ const StyledNumberInput = styled(NumberInput)<StyledNumberInputProps>`
     color: ${({errorContent}) => getColor(errorContent)};
   }
 `;
-
-export interface NumberFieldProps
-  extends Omit<MantineNumberInputProps, 'type' | 'onChange'> {
-  allowEmpty?: boolean;
-  errorContent?: string;
-  onChange?: (value: number, name?: string) => void;
-  precision?: number | string;
-  type?: 'int' | 'float';
-  size?: 'sm' | 'md' | 'lg';
-  value?: number;
-}
 
 const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
   (

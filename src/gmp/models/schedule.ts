@@ -9,8 +9,6 @@ import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-const log = logger.getLogger('gmp.models.schedule');
-
 interface ScheduleElement extends ModelElement {
   icalendar?: string;
   tasks?: {
@@ -26,6 +24,8 @@ interface ScheduleProperties extends ModelProperties {
   timezone?: string;
   timezone_abbrev?: string;
 }
+
+const log = logger.getLogger('gmp.models.schedule');
 
 class Schedule extends Model {
   static entityType = 'schedule';

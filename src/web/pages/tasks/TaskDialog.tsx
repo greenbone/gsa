@@ -47,25 +47,6 @@ import {
   UNSET_VALUE,
 } from 'web/utils/Render';
 
-const Title = styled.div`
-  flex-grow: 1;
-`;
-
-const DEFAULT_SCANNER = new Scanner({
-  id: OPENVAS_DEFAULT_SCANNER_ID,
-  scannerType: OPENVAS_SCANNER_TYPE,
-});
-
-const getScanner = (scanners: Scanner[] | undefined, scannerId: string) => {
-  if (!isDefined(scanners)) {
-    return undefined;
-  }
-
-  return scanners.find(scanner => {
-    return scanner.id === scannerId;
-  });
-};
-
 interface ScannerSelectProps {
   changeTask?: boolean;
   isLoading?: boolean;
@@ -73,28 +54,6 @@ interface ScannerSelectProps {
   scanners?: Scanner[];
   onChange?: (value: string) => void;
 }
-
-const ScannerSelect = ({
-  changeTask,
-  isLoading,
-  scannerId,
-  scanners,
-  onChange,
-}: ScannerSelectProps) => {
-  const [_] = useTranslation();
-  return (
-    <FormGroup title={_('Scanner')}>
-      <Select
-        disabled={!changeTask}
-        isLoading={isLoading}
-        items={renderSelectItems(scanners as RenderSelectItemProps[])}
-        name="scanner_id"
-        value={scannerId}
-        onChange={onChange}
-      />
-    </FormGroup>
-  );
-};
 
 interface TaskDialogValues {
   alert_ids: string[];
@@ -171,6 +130,47 @@ interface TaskDialogProps {
   onScheduleChange?: (value: string) => void;
   onTargetChange?: (value: string) => void;
 }
+
+const Title = styled.div`
+  flex-grow: 1;
+`;
+
+const DEFAULT_SCANNER = new Scanner({
+  id: OPENVAS_DEFAULT_SCANNER_ID,
+  scannerType: OPENVAS_SCANNER_TYPE,
+});
+
+const getScanner = (scanners: Scanner[] | undefined, scannerId: string) => {
+  if (!isDefined(scanners)) {
+    return undefined;
+  }
+
+  return scanners.find(scanner => {
+    return scanner.id === scannerId;
+  });
+};
+
+const ScannerSelect = ({
+  changeTask,
+  isLoading,
+  scannerId,
+  scanners,
+  onChange,
+}: ScannerSelectProps) => {
+  const [_] = useTranslation();
+  return (
+    <FormGroup title={_('Scanner')}>
+      <Select
+        disabled={!changeTask}
+        isLoading={isLoading}
+        items={renderSelectItems(scanners as RenderSelectItemProps[])}
+        name="scanner_id"
+        value={scannerId}
+        onChange={onChange}
+      />
+    </FormGroup>
+  );
+};
 
 const TaskDialog = ({
   // eslint-disable-next-line @typescript-eslint/naming-convention

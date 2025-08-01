@@ -10,15 +10,6 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export const TARGET_CREDENTIAL_NAMES = [
-  'smb_credential',
-  'snmp_credential',
-  'ssh_credential',
-  'esxi_credential',
-  'ssh_elevate_credential',
-  'krb5_credential',
-];
-
 interface TargetElement extends ModelElement {
   alive_tests?: string;
   allow_simultaneous_ips?: YesNo;
@@ -56,6 +47,15 @@ interface TargetProperties extends ModelProperties {
   ssh_elevate_credential?: Model;
   tasks?: Model[];
 }
+
+export const TARGET_CREDENTIAL_NAMES = [
+  'smb_credential',
+  'snmp_credential',
+  'ssh_credential',
+  'esxi_credential',
+  'ssh_elevate_credential',
+  'krb5_credential',
+];
 
 class Target extends Model {
   static entityType = 'target';

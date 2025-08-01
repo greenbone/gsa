@@ -341,6 +341,12 @@ export interface ReportError {
   port?: string;
 }
 
+interface HostsReportElement {
+  host?: ReportHostElement | ReportHostElement[];
+  results?: ReportResultsElement;
+  hosts?: CountElement;
+}
+
 // reports with details=1 always have a results element
 // (that can be empty) whereas reports with details=0
 // never have a results element
@@ -639,12 +645,6 @@ export const parseOperatingSystems = (
     counts,
   };
 };
-
-interface HostsReportElement {
-  host?: ReportHostElement | ReportHostElement[];
-  results?: ReportResultsElement;
-  hosts?: CountElement;
-}
 
 export const parseHosts = (
   report: HostsReportElement,

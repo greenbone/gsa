@@ -8,6 +8,11 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Theme from 'web/utils/Theme';
 
+interface IconMenuProps {
+  children: React.ReactNode | React.ReactNode[];
+  icon?: React.ReactNode;
+}
+
 const Span = styled.span`
   display: inline-flex;
   flex-direction: column;
@@ -64,11 +69,6 @@ const Entry = styled.li`
     cursor: pointer;
   }
 `;
-
-interface IconMenuProps {
-  children: React.ReactNode | React.ReactNode[];
-  icon?: React.ReactNode;
-}
 
 const IconMenu = ({children, icon}: IconMenuProps) => {
   const menuEntries = React.Children.map(children, child => (

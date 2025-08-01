@@ -9,14 +9,6 @@ import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import withGmp from 'web/utils/withGmp';
 
-const log = logger.getLogger('web.components.reload');
-
-export const NO_RELOAD = 0;
-export const USE_DEFAULT_RELOAD_INTERVAL = -1;
-export const USE_DEFAULT_RELOAD_INTERVAL_ACTIVE = -2;
-export const USE_DEFAULT_RELOAD_INTERVAL_INACTIVE = -3;
-export const LOAD_TIME_FACTOR = 1.2;
-
 interface ReloadRenderProps<TLoadOptions> {
   reload: (options?: TLoadOptions) => Promise<void>;
 }
@@ -32,6 +24,14 @@ interface ReloadProps<TLoadOptions = {}> {
   reload: (options?: TLoadOptions) => Promise<void>;
   reloadInterval?: () => number | void;
 }
+
+const log = logger.getLogger('web.components.reload');
+
+export const NO_RELOAD = 0;
+export const USE_DEFAULT_RELOAD_INTERVAL = -1;
+export const USE_DEFAULT_RELOAD_INTERVAL_ACTIVE = -2;
+export const USE_DEFAULT_RELOAD_INTERVAL_INACTIVE = -3;
+export const LOAD_TIME_FACTOR = 1.2;
 
 class Reload<TLoadOptions = {}> extends React.Component<
   ReloadProps<TLoadOptions>

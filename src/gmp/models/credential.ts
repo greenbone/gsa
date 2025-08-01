@@ -10,6 +10,52 @@ import {parseYesNo, NO_VALUE, parseDate, YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
+type CredentialType =
+  | typeof CERTIFICATE_CREDENTIAL_TYPE
+  | typeof KRB5_CREDENTIAL_TYPE
+  | typeof PASSWORD_ONLY_CREDENTIAL_TYPE
+  | typeof PGP_CREDENTIAL_TYPE
+  | typeof SMIME_CREDENTIAL_TYPE
+  | typeof SNMP_CREDENTIAL_TYPE
+  | typeof USERNAME_PASSWORD_CREDENTIAL_TYPE
+  | typeof USERNAME_SSH_KEY_CREDENTIAL_TYPE;
+
+interface CredentialElement extends ModelElement {
+  certificate_info?: {
+    activation_time?: string;
+    expiration_time?: string;
+  };
+  credential_type?: CredentialType;
+  allow_insecure?: number;
+  kdcs?: {
+    kdc: string | string[];
+  };
+  login?: string;
+  realm?: string;
+  targets?: {
+    target?: ModelElement | ModelElement[];
+  };
+  scanners?: {
+    scanner?: ModelElement | ModelElement[];
+  };
+}
+
+interface CertificateInfo {
+  activationTime?: Date;
+  expirationTime?: Date;
+}
+
+interface CredentialProperties extends ModelProperties {
+  allow_insecure?: YesNo;
+  certificate_info?: CertificateInfo;
+  credential_type?: CredentialType;
+  kdcs?: string[];
+  login?: string;
+  realm?: string;
+  targets?: Model[];
+  scanners?: Model[];
+}
+
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';
 export const SNMP_CREDENTIAL_TYPE = 'snmp';
@@ -100,52 +146,6 @@ const TYPE_NAMES = {
 
 export const getCredentialTypeName = (type: CredentialType) =>
   `${TYPE_NAMES[type]}`;
-
-type CredentialType =
-  | typeof CERTIFICATE_CREDENTIAL_TYPE
-  | typeof KRB5_CREDENTIAL_TYPE
-  | typeof PASSWORD_ONLY_CREDENTIAL_TYPE
-  | typeof PGP_CREDENTIAL_TYPE
-  | typeof SMIME_CREDENTIAL_TYPE
-  | typeof SNMP_CREDENTIAL_TYPE
-  | typeof USERNAME_PASSWORD_CREDENTIAL_TYPE
-  | typeof USERNAME_SSH_KEY_CREDENTIAL_TYPE;
-
-interface CredentialElement extends ModelElement {
-  certificate_info?: {
-    activation_time?: string;
-    expiration_time?: string;
-  };
-  credential_type?: CredentialType;
-  allow_insecure?: number;
-  kdcs?: {
-    kdc: string | string[];
-  };
-  login?: string;
-  realm?: string;
-  targets?: {
-    target?: ModelElement | ModelElement[];
-  };
-  scanners?: {
-    scanner?: ModelElement | ModelElement[];
-  };
-}
-
-interface CertificateInfo {
-  activationTime?: Date;
-  expirationTime?: Date;
-}
-
-interface CredentialProperties extends ModelProperties {
-  allow_insecure?: YesNo;
-  certificate_info?: CertificateInfo;
-  credential_type?: CredentialType;
-  kdcs?: string[];
-  login?: string;
-  realm?: string;
-  targets?: Model[];
-  scanners?: Model[];
-}
 
 class Credential extends Model {
   static entityType = 'credential';

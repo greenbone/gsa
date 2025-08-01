@@ -8,6 +8,11 @@ import {forEach, map} from 'gmp/utils/array';
 import {pluralizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
+interface Feature {
+  name: string;
+  _enabled: string | boolean | number;
+}
+
 const types = {
   auditreport: 'audit_report',
   auditreports: 'audit_reports',
@@ -58,11 +63,6 @@ const convertType = (type: string): string => {
   }
   return subtypes[type] || type;
 };
-
-interface Feature {
-  name: string;
-  _enabled: string | boolean | number;
-}
 
 class Capabilities {
   private readonly _hasCaps: boolean;

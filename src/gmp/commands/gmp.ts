@@ -16,9 +16,6 @@ import ActionResult from 'gmp/models/actionresult';
 import {filterString} from 'gmp/models/filter/utils';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-export const BULK_SELECT_BY_IDS = 1;
-export const BULK_SELECT_BY_FILTER = 0;
-
 interface Filter {
   id?: string;
 }
@@ -31,6 +28,9 @@ export interface GmpCommandParams extends HttpCommandParams {
   filter?: string;
   filter_id?: string;
 }
+
+export const BULK_SELECT_BY_IDS = 1;
+export const BULK_SELECT_BY_FILTER = 0;
 
 const isFilter = (filter: Filter | string): filter is Filter => {
   return isDefined((filter as Filter).id);

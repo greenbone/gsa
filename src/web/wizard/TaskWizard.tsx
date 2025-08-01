@@ -11,6 +11,18 @@ import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
 
+interface TaskWizardState {
+  hosts: string;
+}
+
+interface TaskWizardProps {
+  hosts?: string;
+  title?: string;
+  onClose: () => void;
+  onNewClick?: () => void;
+  onSave: (values: TaskWizardState) => void;
+}
+
 export const WizardContent = styled.div`
   margin: 0 20px;
 `;
@@ -26,18 +38,6 @@ export const WizardIcon = () => {
     </IconContainer>
   );
 };
-
-interface TaskWizardState {
-  hosts: string;
-}
-
-interface TaskWizardProps {
-  hosts?: string;
-  title?: string;
-  onClose: () => void;
-  onNewClick?: () => void;
-  onSave: (values: TaskWizardState) => void;
-}
 
 const TaskWizard = ({
   hosts = '',

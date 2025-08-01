@@ -46,41 +46,6 @@ interface Epss {
   maxSeverity?: EpssValue;
 }
 
-const createCveResult = ({name, epss}: ResultCveElement): CveResult => {
-  const retEpss: Epss = {};
-
-  if (isDefined(epss?.max_epss)) {
-    retEpss.maxEpss = {
-      percentile: parseFloat(epss?.max_epss?.percentile),
-      score: parseFloat(epss?.max_epss?.score),
-    };
-    if (isDefined(epss?.max_epss?.cve)) {
-      retEpss.maxEpss.cve = {
-        id: epss?.max_epss?.cve?._id,
-        severity: parseFloat(epss?.max_epss?.cve?.severity),
-      };
-    }
-  }
-  if (isDefined(epss?.max_severity)) {
-    retEpss.maxSeverity = {
-      percentile: parseFloat(epss?.max_severity?.percentile),
-      score: parseFloat(epss?.max_severity?.score),
-    };
-    if (isDefined(epss?.max_severity?.cve)) {
-      retEpss.maxSeverity.cve = {
-        id: epss?.max_severity?.cve?._id,
-        severity: parseFloat(epss?.max_severity?.cve?.severity),
-      };
-    }
-  }
-
-  return {
-    name: name as string,
-    id: name as string,
-    epss: retEpss,
-  };
-};
-
 interface DeltaElement {
   __text: string;
   diff?: string;
@@ -105,38 +70,6 @@ interface DeltaResult {
   id?: string;
   qod?: QoD;
   severity?: number;
-}
-
-export class Delta {
-  static readonly TYPE_NEW = 'new';
-  static readonly TYPE_SAME = 'same';
-  static readonly TYPE_CHANGED = 'changed';
-  static readonly TYPE_GONE = 'gone';
-
-  readonly delta_type: string;
-  readonly diff?: string;
-  readonly result?: DeltaResult;
-
-  constructor(elem: DeltaElement | string) {
-    if (isString(elem)) {
-      this.delta_type = elem;
-    } else {
-      this.delta_type = parseToString(elem.__text) as string;
-      this.diff = elem.diff;
-      this.result = {
-        id: parseToString(elem.result?._id),
-        description: parseToString(elem.result?.description),
-        host: {
-          hostname: parseToString(elem.result?.host?.hostname),
-        },
-        severity: parseSeverity(elem.result?.severity),
-        compliance: parseToString(elem.result?.compliance),
-        qod: isDefined(elem.result?.qod)
-          ? parseQod(elem.result.qod)
-          : undefined,
-      };
-    }
-  }
 }
 
 interface TicketElement {
@@ -249,6 +182,73 @@ interface ResultProperties extends ModelProperties {
   task?: Model;
   tickets?: Model[];
   vulnerability?: string;
+}
+
+const createCveResult = ({name, epss}: ResultCveElement): CveResult => {
+  const retEpss: Epss = {};
+
+  if (isDefined(epss?.max_epss)) {
+    retEpss.maxEpss = {
+      percentile: parseFloat(epss?.max_epss?.percentile),
+      score: parseFloat(epss?.max_epss?.score),
+    };
+    if (isDefined(epss?.max_epss?.cve)) {
+      retEpss.maxEpss.cve = {
+        id: epss?.max_epss?.cve?._id,
+        severity: parseFloat(epss?.max_epss?.cve?.severity),
+      };
+    }
+  }
+  if (isDefined(epss?.max_severity)) {
+    retEpss.maxSeverity = {
+      percentile: parseFloat(epss?.max_severity?.percentile),
+      score: parseFloat(epss?.max_severity?.score),
+    };
+    if (isDefined(epss?.max_severity?.cve)) {
+      retEpss.maxSeverity.cve = {
+        id: epss?.max_severity?.cve?._id,
+        severity: parseFloat(epss?.max_severity?.cve?.severity),
+      };
+    }
+  }
+
+  return {
+    name: name as string,
+    id: name as string,
+    epss: retEpss,
+  };
+};
+
+export class Delta {
+  static readonly TYPE_NEW = 'new';
+  static readonly TYPE_SAME = 'same';
+  static readonly TYPE_CHANGED = 'changed';
+  static readonly TYPE_GONE = 'gone';
+
+  readonly delta_type: string;
+  readonly diff?: string;
+  readonly result?: DeltaResult;
+
+  constructor(elem: DeltaElement | string) {
+    if (isString(elem)) {
+      this.delta_type = elem;
+    } else {
+      this.delta_type = parseToString(elem.__text) as string;
+      this.diff = elem.diff;
+      this.result = {
+        id: parseToString(elem.result?._id),
+        description: parseToString(elem.result?.description),
+        host: {
+          hostname: parseToString(elem.result?.host?.hostname),
+        },
+        severity: parseSeverity(elem.result?.severity),
+        compliance: parseToString(elem.result?.compliance),
+        qod: isDefined(elem.result?.qod)
+          ? parseQod(elem.result.qod)
+          : undefined,
+      };
+    }
+  }
 }
 
 class Result extends Model {

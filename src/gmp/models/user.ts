@@ -8,16 +8,6 @@ import {parseCsv} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-export const AUTH_METHOD_PASSWORD = 'password';
-export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';
-export const AUTH_METHOD_LDAP = 'ldap';
-export const AUTH_METHOD_RADIUS = 'radius';
-
-export const ACCESS_ALLOW_ALL = '0';
-export const ACCESS_DENY_ALL = '1';
-
-const SUPERADMIN_ROLE_ID = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5';
-
 export interface UserElement extends ModelElement {
   role?: ModelElement[] | ModelElement;
   groups?: {
@@ -43,6 +33,16 @@ interface UserProperties extends ModelProperties {
   hosts?: Hosts;
   authMethod?: string;
 }
+
+export const AUTH_METHOD_PASSWORD = 'password';
+export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';
+export const AUTH_METHOD_LDAP = 'ldap';
+export const AUTH_METHOD_RADIUS = 'radius';
+
+export const ACCESS_ALLOW_ALL = '0';
+export const ACCESS_DENY_ALL = '1';
+
+const SUPERADMIN_ROLE_ID = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5';
 
 class User extends Model {
   static entityType: string = 'user';

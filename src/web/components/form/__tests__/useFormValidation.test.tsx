@@ -13,6 +13,10 @@ import useFormValidation, {
 } from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
 
+interface FormValues {
+  foo: string;
+}
+
 /*
  * This suite only tests functions associated with useFormValidation.
  * The hook itself should be tested with whichever dialog
@@ -27,10 +31,6 @@ const validationRules = {
   },
 };
 const fieldsToValidate = ['foo'];
-
-interface FormValues {
-  foo: string;
-}
 
 const UseFormValidationTestComponent = ({onSave}) => {
   const [values, handleValueChange] = useFormValues<FormValues>({foo: ''});

@@ -11,17 +11,6 @@ import {success, rejection} from 'gmp/http/transform/xml';
 import {parseXmlEncodedString} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
-const PARSER_OPTIONS = {
-  attributeNamePrefix: '_',
-  ignoreAttributes: false,
-  removeNSPrefix: true,
-  textNodeName: '__text',
-  attributeValueProcessor: (_name: string, value: string) =>
-    parseXmlEncodedString(value),
-  tagValueProcessor: (_name: string, value: string) =>
-    parseXmlEncodedString(value),
-};
-
 export interface XmlMeta {
   version?: string;
   backendOperation?: string;
@@ -34,6 +23,19 @@ export interface XmlMeta {
 
 export type XmlResponseData = Record<string, unknown>;
 
+type Envelope = Record<string, string | undefined>;
+
+const PARSER_OPTIONS = {
+  attributeNamePrefix: '_',
+  ignoreAttributes: false,
+  removeNSPrefix: true,
+  textNodeName: '__text',
+  attributeValueProcessor: (_name: string, value: string) =>
+    parseXmlEncodedString(value),
+  tagValueProcessor: (_name: string, value: string) =>
+    parseXmlEncodedString(value),
+};
+
 const xmlParser = new XMLParser(PARSER_OPTIONS);
 
 const ENVELOPE_PROPS = [
@@ -44,8 +46,6 @@ const ENVELOPE_PROPS = [
   ['time', 'time'],
   ['timezone', 'timezone'],
 ] as const;
-
-type Envelope = Record<string, string | undefined>;
 
 const parseEnvelopeMeta = (envelope: Envelope): XmlMeta => {
   const meta: XmlMeta = {};

@@ -28,6 +28,8 @@ type NumberValue = string | number | undefined;
 type NumberReturn = undefined | number;
 type BooleanValue = NumberValue | boolean;
 
+export type YesNo = typeof YES_VALUE | typeof NO_VALUE;
+
 const isText = (value: unknown): value is TextElement =>
   typeof value === 'object' && value !== null && '__text' in value;
 
@@ -113,8 +115,6 @@ export const parseIntoArray = <T>(value: T | Array<T>): Array<T> =>
 
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
-
-export type YesNo = typeof YES_VALUE | typeof NO_VALUE;
 
 export const parseYesNo = (value?: string | number): YesNo =>
   value === '1' || value === 1 ? YES_VALUE : NO_VALUE;

@@ -10,16 +10,16 @@ import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/StatusBar';
 import DetailsLink from 'web/components/link/DetailsLink';
 
+interface TaskStatusProps {
+  task: Task | Audit;
+  links?: boolean;
+}
+
 const StyledDetailsLink = styled(DetailsLink)`
   &:hover {
     text-decoration: none;
   }
 `;
-
-interface TaskStatusProps {
-  task: Task | Audit;
-  links?: boolean;
-}
 
 const TaskStatus = ({task, links = true}: TaskStatusProps) => {
   let report_id: string | undefined;

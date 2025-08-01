@@ -21,82 +21,7 @@ import {map} from 'gmp/utils/array';
 import {isArray, isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 
-export const TAG_NA = 'N/A';
-
 type Tags = Record<string, string | undefined>;
-
-const parseTags = (tags?: string): Tags => {
-  const newTags = {};
-
-  if (tags) {
-    const splitted = tags.split('|');
-    for (const t of splitted) {
-      const [key, value] = split(t, '=', 1);
-      const newValue = isEmpty(value) ? undefined : value;
-      newTags[key] = newValue;
-    }
-  }
-
-  return newTags;
-};
-
-export const getRefs = (element?: {
-  refs?: {
-    ref?: NvtRefElement | NvtRefElement[];
-  };
-}) => map(element?.refs?.ref, ref => ref);
-
-export const hasRefType = (refType: string) => (ref?: Partial<NvtRefElement>) =>
-  isString(ref?._type) && ref._type.toLowerCase() === refType;
-
-export const getFilteredRefIds = (refs: NvtRefElement[] = [], type: string) =>
-  refs.filter(hasRefType(type)).map(ref => ref._id);
-
-const getFilteredUrlRefs = (refs: NvtRefElement[]) => {
-  return refs.filter(hasRefType('url')).map(ref => {
-    let id = ref._id;
-    if (
-      !id.startsWith('http://') &&
-      !id.startsWith('https://') &&
-      !id.startsWith('ftp://') &&
-      !id.startsWith('ftps://')
-    ) {
-      id = 'http://' + id;
-    }
-    return {
-      ref: id,
-      type: 'url',
-    };
-  });
-};
-
-const getFilteredRefs = (refs: NvtRefElement[], type: string) =>
-  refs.filter(hasRefType(type)).map(ref => ({
-    id: ref._id,
-    type,
-  }));
-
-const getOtherRefs = (refs: NvtRefElement[]) => {
-  const filteredRefs = refs.filter(ref => {
-    const referenceType = isString(ref._type)
-      ? ref._type.toLowerCase()
-      : undefined;
-    return (
-      referenceType !== 'url' &&
-      referenceType !== 'cve' &&
-      referenceType !== 'cve_id' &&
-      referenceType !== 'dfn-cert' &&
-      referenceType !== 'cert-bund'
-    );
-  });
-  const returnRefs = filteredRefs.map(ref => {
-    return {
-      ref: ref._id,
-      type: isString(ref._type) ? ref._type.toLowerCase() : 'other',
-    };
-  });
-  return returnRefs;
-};
 
 export interface NvtRefElement {
   _id: string;
@@ -232,6 +157,81 @@ interface NvtProperties extends ModelProperties {
   timeout?: number;
   xrefs?: Reference[];
 }
+
+export const TAG_NA = 'N/A';
+
+const parseTags = (tags?: string): Tags => {
+  const newTags = {};
+
+  if (tags) {
+    const splitted = tags.split('|');
+    for (const t of splitted) {
+      const [key, value] = split(t, '=', 1);
+      const newValue = isEmpty(value) ? undefined : value;
+      newTags[key] = newValue;
+    }
+  }
+
+  return newTags;
+};
+
+export const getRefs = (element?: {
+  refs?: {
+    ref?: NvtRefElement | NvtRefElement[];
+  };
+}) => map(element?.refs?.ref, ref => ref);
+
+export const hasRefType = (refType: string) => (ref?: Partial<NvtRefElement>) =>
+  isString(ref?._type) && ref._type.toLowerCase() === refType;
+
+export const getFilteredRefIds = (refs: NvtRefElement[] = [], type: string) =>
+  refs.filter(hasRefType(type)).map(ref => ref._id);
+
+const getFilteredUrlRefs = (refs: NvtRefElement[]) => {
+  return refs.filter(hasRefType('url')).map(ref => {
+    let id = ref._id;
+    if (
+      !id.startsWith('http://') &&
+      !id.startsWith('https://') &&
+      !id.startsWith('ftp://') &&
+      !id.startsWith('ftps://')
+    ) {
+      id = 'http://' + id;
+    }
+    return {
+      ref: id,
+      type: 'url',
+    };
+  });
+};
+
+const getFilteredRefs = (refs: NvtRefElement[], type: string) =>
+  refs.filter(hasRefType(type)).map(ref => ({
+    id: ref._id,
+    type,
+  }));
+
+const getOtherRefs = (refs: NvtRefElement[]) => {
+  const filteredRefs = refs.filter(ref => {
+    const referenceType = isString(ref._type)
+      ? ref._type.toLowerCase()
+      : undefined;
+    return (
+      referenceType !== 'url' &&
+      referenceType !== 'cve' &&
+      referenceType !== 'cve_id' &&
+      referenceType !== 'dfn-cert' &&
+      referenceType !== 'cert-bund'
+    );
+  });
+  const returnRefs = filteredRefs.map(ref => {
+    return {
+      ref: ref._id,
+      type: isString(ref._type) ? ref._type.toLowerCase() : 'other',
+    };
+  });
+  return returnRefs;
+};
 
 class Nvt extends Model {
   static entityType = 'nvt';
