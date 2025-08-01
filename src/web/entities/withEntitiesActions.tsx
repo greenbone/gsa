@@ -11,7 +11,7 @@ import EntitiesActions, {
 import {updateDisplayName} from 'web/utils/displayName';
 
 type WithEntitiesActionsProps<TEntity extends Model, TProps> = Omit<
-  EntitiesActionsProps<TEntity, TProps>,
+  EntitiesActionsProps<TEntity>,
   'children'
 > &
   TProps;

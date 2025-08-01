@@ -3,34 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isFunction} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import TableData from 'web/components/table/TableData';
 import EntitySelection, {Entity} from 'web/entities/EntitySelection';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-type EntitiesActionsForwardProps<TProps> = Omit<
-  TProps,
-  | 'children'
-  | 'data-testid'
-  | 'entity'
-  | 'selectionType'
-  | 'onEntityDeselected'
-  | 'onEntitySelected'
->;
-
-export type EntitiesActionsRenderProps<
-  TEntity extends Entity,
-  TProps,
-> = EntitiesActionsForwardProps<TProps> & {
-  entity: TEntity;
-};
-
-type EntitiesActionsRenderFunc<TEntity extends Entity, TProps> = (
-  props: EntitiesActionsRenderProps<TEntity, TProps>,
-) => React.ReactNode;
-
-export interface EntitiesActionsProps<TEntity extends Entity, TProps = {}> {
-  children?: React.ReactNode | EntitiesActionsRenderFunc<TEntity, TProps>;
+export interface EntitiesActionsProps<TEntity extends Entity> {
+  children?: React.ReactNode;
   'data-testid'?: string;
   entity: TEntity;
   selectionType?: SelectionTypeType;
@@ -38,12 +17,7 @@ export interface EntitiesActionsProps<TEntity extends Entity, TProps = {}> {
   onEntitySelected?: (entity: TEntity) => void;
 }
 
-type EntitiesActionsComponentProps<
-  TEntity extends Entity,
-  TProps,
-> = EntitiesActionsProps<TEntity, TProps> & EntitiesActionsForwardProps<TProps>;
-
-const EntitiesActions = <TEntity extends Entity, TProps = {}>({
+const EntitiesActions = <TEntity extends Entity>({
   children,
   'data-testid': dataTestId = 'entities-actions',
   entity,
@@ -51,7 +25,7 @@ const EntitiesActions = <TEntity extends Entity, TProps = {}>({
   onEntityDeselected,
   onEntitySelected,
   ...props
-}: EntitiesActionsComponentProps<TEntity, TProps>) => {
+}: EntitiesActionsProps<TEntity>) => {
   if (selectionType === SelectionType.SELECTION_USER) {
     return (
       <TableData align={['center', 'center']} data-testid={dataTestId}>
@@ -68,9 +42,7 @@ const EntitiesActions = <TEntity extends Entity, TProps = {}>({
   }
   return (
     <TableData grow data-testid={dataTestId}>
-      {isFunction(children)
-        ? children({...(props as EntitiesActionsForwardProps<TProps>), entity})
-        : children}
+      {children}
     </TableData>
   );
 };

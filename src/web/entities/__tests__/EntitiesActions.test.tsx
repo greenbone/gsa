@@ -63,31 +63,4 @@ describe('EntitiesActions tests', () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByTestId('entities-actions')).not.toBeInTheDocument();
   });
-
-  test('should call children function with entity', () => {
-    const entity = {id: 'entity-1'};
-    const {render} = rendererWithTableRow();
-    const childFn = testing.fn(() => <span>Child Function</span>);
-
-    render(<EntitiesActions entity={entity}>{childFn}</EntitiesActions>);
-
-    expect(childFn).toHaveBeenCalledWith({entity});
-    expect(screen.getByText('Child Function')).toBeInTheDocument();
-  });
-
-  test('should call children function with custom props', () => {
-    const entity = {id: 'entity-1'};
-    const {render} = rendererWithTableRow();
-    const childFn = testing.fn(() => <span>Child Function</span>);
-    const Actions = EntitiesActions<typeof entity, {customProp: string}>;
-
-    render(
-      <Actions customProp="foo" entity={entity}>
-        {childFn}
-      </Actions>,
-    );
-
-    expect(childFn).toHaveBeenCalledWith({customProp: 'foo', entity});
-    expect(screen.getByText('Child Function')).toBeInTheDocument();
-  });
 });
