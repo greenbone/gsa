@@ -176,7 +176,7 @@ describe('Host ListPage tests', () => {
 
     await wait();
 
-    const powerFilter = within(screen.queryPowerFilter());
+    const powerFilter = within(screen.getPowerFilter());
     const select = powerFilter.getByTestId('powerfilter-select');
     const inputs = powerFilter.queryTextInputs();
 

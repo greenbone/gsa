@@ -19,7 +19,8 @@ interface ToString {
 
 interface CreateEntitiesTableOptions<
   TEntity,
-  TFooterProps extends FooterComponentProps = FooterComponentProps,
+  TFooterProps extends
+    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
@@ -35,7 +36,7 @@ interface CreateEntitiesTableOptions<
 
 type CreateEntitiesTableProps<
   TEntity,
-  TFooterProps extends FooterComponentProps,
+  TFooterProps extends FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps,
@@ -46,7 +47,7 @@ type CreateEntitiesTableProps<
   TRowProps,
   TPaginationProps
 > &
-  Omit<TFooterProps, keyof FooterComponentProps> &
+  Omit<TFooterProps, keyof FooterComponentProps<TEntity>> &
   Omit<THeaderProps, keyof HeaderComponentProps> &
   Omit<
     TRowProps,
@@ -56,7 +57,8 @@ type CreateEntitiesTableProps<
 
 function createEntitiesTable<
   TEntity extends Model,
-  TFooterProps extends FooterComponentProps = FooterComponentProps,
+  TFooterProps extends
+    FooterComponentProps<TEntity> = FooterComponentProps<TEntity>,
   THeaderProps extends HeaderComponentProps = HeaderComponentProps,
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
