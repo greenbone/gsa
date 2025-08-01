@@ -123,7 +123,12 @@ export default [
   pluginJs.configs.recommended,
   pluginReact.configs.flat?.recommended,
   // Prettier formatting after ESLint fixes
-  eslintPluginPrettierRecommended,
+  {
+    ...eslintPluginPrettierRecommended,
+    rules: {
+      'prettier/prettier': 'warn',
+    },
+  },
   customPlugin,
   {
     ignores: [

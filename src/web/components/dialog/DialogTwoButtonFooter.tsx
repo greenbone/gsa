@@ -7,8 +7,6 @@ import {DialogFooterLayout} from 'web/components/dialog/DialogFooter';
 import Button from 'web/components/form/Button';
 import useTranslation from 'web/hooks/useTranslation';
 
-export const DELETE_ACTION = 'delete';
-
 interface DialogTwoButtonFooterProps {
   leftButtonTitle?: string;
   rightButtonTitle: string;
@@ -18,6 +16,8 @@ interface DialogTwoButtonFooterProps {
   isLoading?: boolean;
   rightButtonAction?: typeof DELETE_ACTION;
 }
+
+export const DELETE_ACTION = 'delete';
 
 const DialogTwoButtonFooter = ({
   leftButtonTitle,

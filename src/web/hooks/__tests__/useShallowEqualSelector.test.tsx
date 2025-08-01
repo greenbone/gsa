@@ -10,6 +10,14 @@ import {configureStore} from '@reduxjs/toolkit';
 import {useSelector, useDispatch} from 'react-redux';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 
+interface TestCounter {
+  value: number;
+}
+
+interface TestState {
+  counter: TestCounter;
+}
+
 const reducer = (state = {value: 0}, action) => {
   switch (action.type) {
     case 'increment':
@@ -20,14 +28,6 @@ const reducer = (state = {value: 0}, action) => {
 };
 
 const update = () => ({type: 'increment'});
-
-interface TestCounter {
-  value: number;
-}
-
-interface TestState {
-  counter: TestCounter;
-}
 
 const TestComponent1 = ({renderCallback}) => {
   const state = useSelector<TestState, TestCounter>(state => state.counter);

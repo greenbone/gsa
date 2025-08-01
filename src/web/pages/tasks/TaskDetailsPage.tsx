@@ -106,6 +106,19 @@ interface ToolBarIconsProps {
   onTaskStopClick?: (value: Task) => void | Promise<void>;
 }
 
+interface DetailsProps {
+  entity: Task;
+  links?: boolean;
+}
+
+interface TaskDetailsPageProps {
+  entity: Task;
+  permissions: Permission[];
+  onChanged?: () => void;
+  onDownloaded?: OnDownloadedFunc;
+  onError?: (error: unknown) => void;
+}
+
 export const ToolBarIcons = ({
   entity,
   links,
@@ -273,11 +286,6 @@ export const ToolBarIcons = ({
   );
 };
 
-interface DetailsProps {
-  entity: Task;
-  links?: boolean;
-}
-
 const Details = ({entity, links}: DetailsProps) => {
   const [_] = useTranslation();
   return (
@@ -316,14 +324,6 @@ const Details = ({entity, links}: DetailsProps) => {
     </Layout>
   );
 };
-
-interface TaskDetailsPageProps {
-  entity: Task;
-  permissions: Permission[];
-  onChanged?: () => void;
-  onDownloaded?: OnDownloadedFunc;
-  onError?: (error: unknown) => void;
-}
 
 const TaskDetailsPage = ({
   entity,

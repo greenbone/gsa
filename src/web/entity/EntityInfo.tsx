@@ -20,6 +20,17 @@ interface OwnerInfoProps {
   owner: Owner;
 }
 
+interface Entity {
+  id: string;
+  owner: Owner;
+  creationTime: Date;
+  modificationTime: Date;
+}
+
+interface EntityInfoProps {
+  entity: Entity;
+}
+
 const OwnerInfo: React.FC<OwnerInfoProps> = ({owner}: OwnerInfoProps) => {
   const [_] = useTranslation();
   return isDefined(owner) ? (
@@ -41,17 +52,6 @@ export const InfoLayout = styled(Layout)`
     margin-left: 30px;
   }
 `;
-
-interface Entity {
-  id: string;
-  owner: Owner;
-  creationTime: Date;
-  modificationTime: Date;
-}
-
-interface EntityInfoProps {
-  entity: Entity;
-}
 
 const EntityInfo: React.FC<EntityInfoProps> = ({entity}: EntityInfoProps) => {
   const [_] = useTranslation();

@@ -5,14 +5,14 @@
 
 import {_l} from 'gmp/locale/lang';
 
+export type ComplianceType = (typeof COMPLIANCE)[keyof typeof COMPLIANCE];
+
 export const COMPLIANCE = {
   YES: 'yes',
   NO: 'no',
   INCOMPLETE: 'incomplete',
   UNDEFINED: 'undefined',
 } as const;
-
-export type ComplianceType = (typeof COMPLIANCE)[keyof typeof COMPLIANCE];
 
 const COMPLIANCE_TRANSLATIONS = {
   yes: _l('Yes'),

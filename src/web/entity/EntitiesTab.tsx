@@ -8,15 +8,15 @@ import styled from 'styled-components';
 import Layout from 'web/components/layout/Layout';
 import Tab, {TabProps} from 'web/components/tab/Tab';
 
-const TabTitleCounts = styled.span`
-  font-size: 0.7em;
-`;
-
 interface EntitiesTabProps extends TabProps {
   children: React.ReactNode;
   entities?: Array<unknown>;
   count?: number;
 }
+
+const TabTitleCounts = styled.span`
+  font-size: 0.7em;
+`;
 
 const EntitiesTab = ({
   children,

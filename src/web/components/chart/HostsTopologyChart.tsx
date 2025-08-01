@@ -31,20 +31,6 @@ import {
 import Theme from 'web/utils/Theme';
 import withTranslation from 'web/utils/withTranslation';
 
-export const MAX_HOSTS = 1000;
-
-const SCANNER_RADIUS = 8;
-const HOST_RADIUS = 5;
-
-const SCROLL_STEP = 0.1;
-
-const MAX_SCALE = 2;
-const MIN_SCALE = 0.1;
-const TEXT_SCALE_THRESHOLD = 1;
-
-const DEFAULT_STROKE_WIDTH = 1;
-const SCANNER_STROKE_WIDTH = 2;
-
 interface SvgProps {
   $dragging: boolean;
 }
@@ -95,6 +81,20 @@ interface HostsTopologyChartProps {
   _: TranslateFunc;
   i18n: I18n;
 }
+
+export const MAX_HOSTS = 1000;
+
+const SCANNER_RADIUS = 8;
+const HOST_RADIUS = 5;
+
+const SCROLL_STEP = 0.1;
+
+const MAX_SCALE = 2;
+const MIN_SCALE = 0.1;
+const TEXT_SCALE_THRESHOLD = 1;
+
+const DEFAULT_STROKE_WIDTH = 1;
+const SCANNER_STROKE_WIDTH = 2;
 
 const Svg = styled.svg<SvgProps>`
   & text {

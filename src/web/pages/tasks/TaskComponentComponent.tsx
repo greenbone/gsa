@@ -75,8 +75,6 @@ import ModifyTaskWizard, {
 } from 'web/wizard/ModifyTaskWizard';
 import TaskWizard from 'web/wizard/TaskWizard';
 
-const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
-
 interface TaskComponentRenderProps {
   create: () => void;
   createContainer: () => void;
@@ -125,6 +123,8 @@ interface TaskComponentProps {
   onTaskWizardError?: (error: Rejection) => void;
   onTaskWizardSaved?: () => void;
 }
+
+const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
 const TaskComponent = ({
   children,

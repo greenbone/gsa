@@ -17,6 +17,49 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isObject} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
+interface DataElement {
+  name: string;
+  __text?: string | number;
+}
+
+interface AlertDataElement {
+  __text?: string;
+  data?: DataElement | DataElement[];
+}
+
+interface AlertElement extends ModelElement {
+  active?: YesNo;
+  condition?: string | AlertDataElement;
+  event?: string | AlertDataElement;
+  filter?: ModelElement;
+  method?: AlertDataElement;
+  tasks?: {
+    task: ModelElement | ModelElement[];
+  };
+}
+
+interface AlertData {
+  type?: string;
+  data?: Record<string, {value?: string | number}>;
+}
+
+interface MethodData extends AlertData {
+  type?: string;
+  data: Record<string, {value?: string | number}> & {
+    report_formats?: string[];
+    notice?: {value?: string};
+  };
+}
+
+interface AlertProperties extends ModelProperties {
+  active?: YesNo;
+  condition?: AlertData;
+  event?: AlertData;
+  filter?: Model;
+  method?: MethodData;
+  tasks?: Model[];
+}
+
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
 export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
@@ -62,49 +105,6 @@ export const isTicketEvent = (event?: string) =>
   event === EVENT_TYPE_TICKET_RECEIVED;
 export const isSecinfoEvent = (event?: string) =>
   event === EVENT_TYPE_NEW_SECINFO || event === EVENT_TYPE_UPDATED_SECINFO;
-
-interface DataElement {
-  name: string;
-  __text?: string | number;
-}
-
-interface AlertDataElement {
-  __text?: string;
-  data?: DataElement | DataElement[];
-}
-
-interface AlertElement extends ModelElement {
-  active?: YesNo;
-  condition?: string | AlertDataElement;
-  event?: string | AlertDataElement;
-  filter?: ModelElement;
-  method?: AlertDataElement;
-  tasks?: {
-    task: ModelElement | ModelElement[];
-  };
-}
-
-interface AlertData {
-  type?: string;
-  data?: Record<string, {value?: string | number}>;
-}
-
-interface MethodData extends AlertData {
-  type?: string;
-  data: Record<string, {value?: string | number}> & {
-    report_formats?: string[];
-    notice?: {value?: string};
-  };
-}
-
-interface AlertProperties extends ModelProperties {
-  active?: YesNo;
-  condition?: AlertData;
-  event?: AlertData;
-  filter?: Model;
-  method?: MethodData;
-  tasks?: Model[];
-}
 
 const createValues = (data: DataElement) => {
   const value = isEmpty(data.__text as string) ? undefined : data.__text;

@@ -6,6 +6,12 @@
 import {CVSS40} from '@pandatix/js-cvss';
 import {isDefined} from 'gmp/utils/identity';
 
+type CvssV4MetricsKey = keyof typeof cvss4MetricValueToLabels;
+
+type CvssV4Metrics = {
+  [Property in CvssV4MetricsKey]?: string;
+};
+
 export const expectedMetricOptionsOrdered = [
   ['AV', 'N', 'A', 'L', 'P'],
   ['AC', 'L', 'H'],
@@ -97,12 +103,6 @@ const cvss4MetricValueToLabels = {
     H: 'High',
   },
 } as const;
-
-type CvssV4MetricsKey = keyof typeof cvss4MetricValueToLabels;
-
-type CvssV4Metrics = {
-  [Property in CvssV4MetricsKey]?: string;
-};
 
 /**
  * This function calculates the CVSS vector from a set of metrics.

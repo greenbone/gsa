@@ -38,6 +38,11 @@ interface WithName {
   name?: string;
 }
 
+interface TaskDetailsProps {
+  entity: Task;
+  links?: boolean;
+}
+
 export const compareAlerts = (alertA: WithName, alertB: WithName) => {
   const nameA = alertA.name?.toLowerCase() ?? '';
   const nameB = alertB.name?.toLowerCase() ?? '';
@@ -49,11 +54,6 @@ export const compareAlerts = (alertA: WithName, alertB: WithName) => {
   }
   return 0;
 };
-
-interface TaskDetailsProps {
-  entity: Task;
-  links?: boolean;
-}
 
 const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
   const [_] = useTranslation();

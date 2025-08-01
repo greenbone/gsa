@@ -17,8 +17,6 @@ import logger from 'gmp/log';
 import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
-const log = logger.getLogger('gmp.commands.entity');
-
 interface ModelClass<TModel> {
   fromElement(element: unknown): TModel;
 }
@@ -34,6 +32,8 @@ interface EntityCommandGetParams {
 export interface EntityCommandParams {
   id: string;
 }
+
+const log = logger.getLogger('gmp.commands.entity');
 
 abstract class EntityCommand<
   TModel extends Model,

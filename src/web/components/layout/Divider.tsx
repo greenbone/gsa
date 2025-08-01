@@ -7,8 +7,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Layout, {LayoutProps} from 'web/components/layout/Layout';
 
-const DEFAULT_MARGIN = '5px';
-
 interface DividerComponentProps {
   flex?: string;
   $margin: string;
@@ -18,6 +16,8 @@ export interface DividerProps extends LayoutProps {
   flex?: string;
   margin?: string;
 }
+
+const DEFAULT_MARGIN = '5px';
 
 const DividerComponent = styled(Layout)<DividerComponentProps>`
   & > * {

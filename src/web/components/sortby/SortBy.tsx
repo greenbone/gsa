@@ -6,14 +6,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const SortButton = styled.button`
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-`;
-
 interface SortByProps {
   by: string;
   children?: React.ReactNode;
@@ -21,6 +13,14 @@ interface SortByProps {
   'data-testid'?: string;
   onClick?: (by: string) => void;
 }
+
+const SortButton = styled.button`
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+`;
 
 const SortBy = ({
   by,

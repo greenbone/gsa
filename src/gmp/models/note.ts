@@ -17,9 +17,6 @@ import {
 } from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 
-export const NOTE_ACTIVE_UNLIMITED_VALUE = -2;
-export const NOTE_INACTIVE_VALUE = -1;
-
 export interface NoteElement extends ModelElement {
   hosts?: string;
   nvt?: ModelElement;
@@ -41,6 +38,9 @@ interface NoteProperties extends ModelProperties {
   text?: string;
   textExcerpt?: YesNo;
 }
+
+export const NOTE_ACTIVE_UNLIMITED_VALUE = -2;
+export const NOTE_INACTIVE_VALUE = -1;
 
 class Note extends Model {
   static entityType = 'note';

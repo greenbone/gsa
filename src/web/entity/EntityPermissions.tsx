@@ -32,35 +32,9 @@ import compose from 'web/utils/Compose';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
-const SectionElementDivider = styled(IconDivider)`
-  margin-bottom: 3px;
-`;
-
 interface SectionElementsProps {
   onPermissionCreateClick?: () => void;
 }
-
-const SectionElements = ({onPermissionCreateClick}: SectionElementsProps) => {
-  const [_] = useTranslation();
-  const capabilities = useCapabilities();
-  return (
-    <Layout grow align="end">
-      <SectionElementDivider>
-        {capabilities.mayCreate('permission') && (
-          <NewIcon
-            title={_('New Permission')}
-            onClick={onPermissionCreateClick}
-          />
-        )}
-        <ManualIcon
-          anchor="permissions"
-          page="web-interface-access"
-          title={_('Help: Permissions')}
-        />
-      </SectionElementDivider>
-    </Layout>
-  );
-};
 
 type RelatedResourcesLoader<TEntity> = ({
   entity,
@@ -97,6 +71,41 @@ interface PermissionsBaseProps<TEntity> {
   onChanged: () => void;
   onPermissionEditClick: (permission: Permission, value: boolean) => void;
 }
+
+export interface EntityPermissionsProps<TEntity = Model> {
+  entity: TEntity;
+  permissions: Permission[];
+  relatedResourcesLoaders?: RelatedResourcesLoader<TEntity>[];
+  onChanged?: () => void;
+  onDownloaded?: OnDownloadedFunc;
+  onError?: (error: Error | Rejection) => void;
+}
+
+const SectionElementDivider = styled(IconDivider)`
+  margin-bottom: 3px;
+`;
+
+const SectionElements = ({onPermissionCreateClick}: SectionElementsProps) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  return (
+    <Layout grow align="end">
+      <SectionElementDivider>
+        {capabilities.mayCreate('permission') && (
+          <NewIcon
+            title={_('New Permission')}
+            onClick={onPermissionCreateClick}
+          />
+        )}
+        <ManualIcon
+          anchor="permissions"
+          page="web-interface-access"
+          title={_('Help: Permissions')}
+        />
+      </SectionElementDivider>
+    </Layout>
+  );
+};
 
 class PermissionsBase<TEntity extends Model> extends React.Component<
   PermissionsBaseProps<TEntity>,
@@ -277,15 +286,6 @@ class PermissionsBase<TEntity extends Model> extends React.Component<
 }
 
 const Permissions = compose(withGmp, withTranslation)(PermissionsBase);
-
-export interface EntityPermissionsProps<TEntity = Model> {
-  entity: TEntity;
-  permissions: Permission[];
-  relatedResourcesLoaders?: RelatedResourcesLoader<TEntity>[];
-  onChanged?: () => void;
-  onDownloaded?: OnDownloadedFunc;
-  onError?: (error: Error | Rejection) => void;
-}
 
 function EntityPermissions<TEntity = Model>({
   entity,

@@ -9,8 +9,6 @@ import {Checkbox as OpenSightCheckbox} from '@greenbone/opensight-ui-components-
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 
-const valueFunc = (event: ChangeEvent): boolean => event.target.checked;
-
 interface CheckboxProps<TCheck> extends Omit<MantineCheckboxProps, 'onChange'> {
   title?: string;
   name?: string;
@@ -21,6 +19,8 @@ interface CheckboxProps<TCheck> extends Omit<MantineCheckboxProps, 'onChange'> {
   toolTipTitle?: string;
   onChange?: (value: TCheck, name?: string) => void;
 }
+
+const valueFunc = (event: ChangeEvent): boolean => event.target.checked;
 
 const Checkbox = <TCheck = boolean,>({
   title,

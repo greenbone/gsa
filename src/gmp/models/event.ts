@@ -15,6 +15,22 @@ import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
+type RecurrenceFrequencyType = keyof typeof RecurrenceFrequency;
+
+type WeekDayValue = boolean | number;
+
+interface WeekDaysOptions {
+  monday?: WeekDayValue;
+  tuesday?: WeekDayValue;
+  wednesday?: WeekDayValue;
+  thursday?: WeekDayValue;
+  friday?: WeekDayValue;
+  saturday?: WeekDayValue;
+  sunday?: WeekDayValue;
+}
+
+type WeekDay = keyof WeekDaysOptions;
+
 const log = Logger.getLogger('gmp.models.event');
 
 const convertIcalDate = (iDate: ical.Time, timezone?: string) => {
@@ -55,8 +71,6 @@ export const RecurrenceFrequency = {
   SECONDLY: 'SECONDLY',
 } as const;
 
-type RecurrenceFrequencyType = keyof typeof RecurrenceFrequency;
-
 const ISO_WEEKDAY_TO_WEEKDAY: Record<number, WeekDay> = {
   1: 'monday',
   2: 'tuesday',
@@ -94,20 +108,6 @@ const getMonthDaysFromRRule = (recurrenceRule?: ical.Recur) => {
   const bymonthday = recurrenceRule.getComponent('bymonthday') as number[];
   return bymonthday.length > 0 ? bymonthday.sort((a, b) => a - b) : undefined;
 };
-
-type WeekDayValue = boolean | number;
-
-interface WeekDaysOptions {
-  monday?: WeekDayValue;
-  tuesday?: WeekDayValue;
-  wednesday?: WeekDayValue;
-  thursday?: WeekDayValue;
-  friday?: WeekDayValue;
-  saturday?: WeekDayValue;
-  sunday?: WeekDayValue;
-}
-
-type WeekDay = keyof WeekDaysOptions;
 
 export class WeekDays {
   private readonly _weekdays: WeekDaysOptions;

@@ -11,6 +11,14 @@ import Layout from 'web/components/layout/Layout';
 import withLayout from 'web/components/layout/withLayout';
 import Theme from 'web/utils/Theme';
 
+interface SectionHeaderProps {
+  align?: string | [string, string];
+  alignHeading?: string | [string, string];
+  children?: React.ReactNode;
+  img?: string | React.ReactNode;
+  title?: string | React.ReactNode;
+}
+
 const HeaderLayout = styled(Layout)`
   margin: 26px 0px 10px 0px;
   padding-bottom: 15px;
@@ -32,14 +40,6 @@ const WordBreakLayout = styled(Layout)`
   word-break: break-all;
   min-width: 100px;
 `;
-
-interface SectionHeaderProps {
-  align?: string | [string, string];
-  alignHeading?: string | [string, string];
-  children?: React.ReactNode;
-  img?: string | React.ReactNode;
-  title?: string | React.ReactNode;
-}
 
 const SectionHeader = ({
   children,

@@ -9,10 +9,6 @@ import TableHead from 'web/components/table/TableHead';
 import {updateDisplayName} from 'web/utils/displayName';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-const defaultActions = (
-  <TableHead align="center" title={_l('Actions')} width="8%" />
-);
-
 export type ActionsColumn = React.ReactElement | null;
 
 /**
@@ -22,6 +18,14 @@ export interface WithEntitiesHeaderComponentProps {
   selectionType?: SelectionTypeType;
   actionsColumn?: ActionsColumn;
 }
+
+const defaultActions = (
+  <TableHead align="center" title={_l('Actions')} width="8%" />
+);
+
+/**
+ * Props for the component passed to withEntitiesHeader gets provided.
+ */
 
 /**
  * A higher order component to create table headers which support entity

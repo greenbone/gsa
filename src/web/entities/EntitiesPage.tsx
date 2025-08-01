@@ -24,20 +24,6 @@ import compose from 'web/utils/Compose';
 import withGmp from 'web/utils/withGmp';
 import withTranslation from 'web/utils/withTranslation';
 
-const excludeProps = [
-  'children',
-  'dashboard',
-  'dashboardControls',
-  'filterEditDialog',
-  'filters',
-  'powerfilter',
-  'section',
-  'sectionIcon',
-  'table',
-  'title',
-  'toolBarIcons',
-];
-
 interface FilterDialogComponentProps {
   createFilterType?: string;
   filter?: Filter;
@@ -108,6 +94,20 @@ interface EntitiesPagePropsWithHOCs<TModel extends Model = Model, TProps = {}>
   isLoadingFilters?: boolean;
   _: TranslateFunc;
 }
+
+const excludeProps = [
+  'children',
+  'dashboard',
+  'dashboardControls',
+  'filterEditDialog',
+  'filters',
+  'powerfilter',
+  'section',
+  'sectionIcon',
+  'table',
+  'title',
+  'toolBarIcons',
+];
 
 class EntitiesPage<
   TModel extends Model = Model,

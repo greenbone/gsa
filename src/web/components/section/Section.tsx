@@ -15,13 +15,6 @@ import FoldStateIcon from 'web/components/icon/FoldStateIcon';
 import Layout from 'web/components/layout/Layout';
 import SectionHeader from 'web/components/section/Header';
 
-const FoldableLayout = withFolding(Layout);
-
-const FoldLayout = styled(Layout)`
-  margin-left: 3px;
-  margin-top: -2px;
-`;
-
 interface SectionProps {
   children?: React.ReactNode;
   className?: string;
@@ -38,6 +31,13 @@ interface SectionPropsWithFoldToggle extends SectionProps {
   onFoldToggle: () => void;
   onFoldStepEnd: () => void;
 }
+
+const FoldableLayout = withFolding(Layout);
+
+const FoldLayout = styled(Layout)`
+  margin-left: 3px;
+  margin-top: -2px;
+`;
 
 const Section = ({
   children,

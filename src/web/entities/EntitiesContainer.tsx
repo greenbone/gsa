@@ -41,8 +41,6 @@ import SortDirection, {SortDirectionType} from 'web/utils/SortDirection';
 import {withRouter} from 'web/utils/withRouter';
 import withTranslation from 'web/utils/withTranslation';
 
-const log = logger.getLogger('web.entities.container');
-
 type NavigateFunction = (args: {pathname: string; search?: string}) => void;
 
 export interface EntitiesContainerRenderProps<TModel extends Model = Model> {
@@ -125,6 +123,8 @@ interface EntitiesContainerPropsWithHOCs<TModel extends Model = Model>
   username: string;
   _: (message: string, options?: TranslateOptions) => string;
 }
+
+const log = logger.getLogger('web.entities.container');
 
 class EntitiesContainer<TModel extends Model> extends React.Component<
   EntitiesContainerPropsWithHOCs<TModel>,
