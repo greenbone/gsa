@@ -4,12 +4,12 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWithTableFooter, fireEvent, wait} from 'web/testing';
+import {screen, rendererWithTable, fireEvent, wait} from 'web/testing';
 import EntitiesFooter from 'web/entities/EntitiesFooter';
 
 describe('EntitiesFooter tests', () => {
   test('should render', async () => {
-    const {render} = rendererWithTableFooter();
+    const {render} = rendererWithTable();
 
     render(<EntitiesFooter>Some Content</EntitiesFooter>);
 
@@ -17,7 +17,7 @@ describe('EntitiesFooter tests', () => {
   });
 
   test('should show ConfirmationDialog when DeleteIcon is clicked and notification', async () => {
-    const {render} = rendererWithTableFooter();
+    const {render} = rendererWithTable();
 
     render(
       <EntitiesFooter delete={true} span={2} onDeleteClick={testing.fn()} />,
@@ -46,7 +46,7 @@ describe('EntitiesFooter tests', () => {
   });
 
   test('should show ConfirmationDialog when TrashIcon is clicked and notification', async () => {
-    const {render} = rendererWithTableFooter();
+    const {render} = rendererWithTable();
     const onTrashClick = testing.fn();
 
     render(

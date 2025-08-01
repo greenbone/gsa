@@ -135,6 +135,10 @@ export const rendererWithComponent =
     };
   };
 
+export const rendererWithTable = rendererWithComponent(({children}) => (
+  <table>{children}</table>
+));
+
 export const rendererWithTableBody = rendererWithComponent(({children}) => (
   <table>
     <tbody>{children}</tbody>
@@ -147,10 +151,6 @@ export const rendererWithTableRow = rendererWithComponent(({children}) => (
       <tr>{children}</tr>
     </tbody>
   </table>
-));
-
-export const rendererWithTableFooter = rendererWithComponent(({children}) => (
-  <table>{children}</table>
 ));
 
 export const rendererWithTableHeader = rendererWithComponent(({children}) => (
