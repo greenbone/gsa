@@ -2,16 +2,18 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: '/'
-    target-branch: "main"
+    target-branch: 'main'
     schedule:
       interval: monthly
       time: '04:00'
-    groups:
-      patch-updates:
-        patterns:
-          - "*"
-        update-types:
-          - "patch"
+    cooldown:
+      include:
+        - 'vite@^6.3.5..7.x'
+        - '@vitejs/plugin-legacy@6.1.1..7.x'
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 14
+      semver-patch-days: 14
     open-pull-requests-limit: 10
     versioning-strategy: increase
     ignore:
@@ -49,11 +51,11 @@ updates:
         versions:
           - '> 0.0.179'
     commit-message:
-      prefix: "Deps"
+      prefix: 'Deps'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
     commit-message:
-      prefix: "Deps"
+      prefix: 'Deps'
