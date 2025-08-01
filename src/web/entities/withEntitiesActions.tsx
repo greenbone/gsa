@@ -7,32 +7,61 @@ import React from 'react';
 import Model from 'gmp/models/model';
 import EntitiesActions, {
   EntitiesActionsProps,
-  EntitiesActionsRenderProps,
 } from 'web/entities/EntitiesActions';
 import {updateDisplayName} from 'web/utils/displayName';
 
-export type WithEntitiesActionsComponentProps<
-  TEntity extends Model,
-  TProps,
-> = EntitiesActionsProps<TEntity, TProps> & TProps;
+type WithEntitiesActionsProps<TEntity extends Model, TProps> = Omit<
+  EntitiesActionsProps<TEntity, TProps>,
+  'children'
+> &
+  TProps;
 
-const withEntitiesActions = <TEntity extends Model, TProps>(
+interface WithEntity<TEntity extends Model> {
+  entity: TEntity;
+}
+
+type WithEntitiesActionsComponentProps<TEntity extends Model, TProps> = TProps &
+  WithEntity<TEntity>;
+
+/**
+ * A higher-order component (HOC) that wraps a given component with additional
+ * functionality for handling entity actions, such as selection and deselection.
+ *
+ * @template TEntity - The type of the entity that extends the `Model` interface.
+ * @template TProps - The type of the props that extend `WithEntity<TEntity>`.
+ *
+ * @param Component - The React component to be wrapped. It must accept props
+ * of type `WithEntitiesActionsComponentProps<TEntity, TProps>`.
+ *
+ * @returns A new component that wraps the provided `Component` with the
+ * `EntitiesActions` component, passing down entity-related props and handling
+ * selection/deselection logic.
+ *
+ */
+const withEntitiesActions = <
+  TEntity extends Model,
+  TProps extends WithEntity<TEntity>,
+>(
   Component: React.ComponentType<
-    EntitiesActionsRenderProps<TEntity, TProps> & TProps
+    WithEntitiesActionsComponentProps<TEntity, TProps>
   >,
 ) => {
-  const EntitiesActionsWrapper = (
-    props: WithEntitiesActionsComponentProps<TEntity, TProps>,
-  ) => (
-    <EntitiesActions {...props}>
-      {actionProps => (
-        <Component
-          {...(actionProps as WithEntitiesActionsComponentProps<
-            TEntity,
-            TProps
-          >)}
-        />
-      )}
+  const EntitiesActionsWrapper = ({
+    'data-testid': dataTestId,
+    entity,
+    selectionType,
+    onEntityDeselected,
+    onEntitySelected,
+    ...props
+  }: WithEntitiesActionsProps<TEntity, TProps>) => (
+    <EntitiesActions
+      data-testid={dataTestId}
+      entity={entity}
+      selectionType={selectionType}
+      onEntityDeselected={onEntityDeselected}
+      onEntitySelected={onEntitySelected}
+    >
+      <Component {...(props as TProps)} entity={entity} />
     </EntitiesActions>
   );
 
