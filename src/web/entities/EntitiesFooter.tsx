@@ -8,6 +8,7 @@ import {
   showInfoNotification,
   showSuccessNotification,
 } from '@greenbone/opensight-ui-components-mantinev7';
+import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
@@ -40,9 +41,11 @@ interface ConfigDialog {
   confirmFunction: () => Promise<void>;
 }
 
-export interface EntitiesFooterProps extends WithEntitiesFooterComponentProps {
+export interface EntitiesFooterProps<TEntity>
+  extends WithEntitiesFooterComponentProps<TEntity> {
   actions?: boolean;
   children?: React.ReactNode;
+  'data-testid'?: string;
   delete?: boolean;
   dialogConfig?: DialogConfig;
   download?: string;
@@ -59,9 +62,10 @@ const DIALOG_TYPES = {
   DELETE: 'delete',
 } as const;
 
-const EntitiesFooter = ({
+const EntitiesFooter = <TEntity = Model,>({
   actions = true,
   children,
+  'data-testid': dataTestId = 'entities-footer',
   download,
   selection = true,
   selectionType,
@@ -75,7 +79,7 @@ const EntitiesFooter = ({
   onTrashClick,
   dialogConfig = {useCustomDialog: false},
   delete: deleteEntities,
-}: EntitiesFooterProps) => {
+}: EntitiesFooterProps<TEntity>) => {
   const [_] = useTranslation();
   const [configDialog, setConfigDialog] = useState<ConfigDialog | undefined>(
     undefined,
@@ -159,7 +163,7 @@ const EntitiesFooter = ({
   ];
 
   return (
-    <TableFooter>
+    <TableFooter data-testid={dataTestId}>
       <TableRow>
         <td colSpan={span}>
           {actions ? (
@@ -167,6 +171,7 @@ const EntitiesFooter = ({
               <Divider>
                 {selection && (
                   <Select
+                    data-testid={`${dataTestId}-select`}
                     items={selectItems}
                     value={selectionType}
                     onChange={
