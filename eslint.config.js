@@ -3,19 +3,22 @@ import typescript from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import vitest from '@vitest/eslint-plugin';
 import pluginHeader from 'eslint-plugin-header';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import * as importPlugin from 'eslint-plugin-import';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import allowedSnakeCase from './eslint-script/allowedSnakeCase.js';
 import noDynamicI18n from './eslint-script/no-dynamic-i18n.js';
+import tsDefinitionsTop from './eslint-script/ts-definitions-top.js';
 
-// Create a custom plugin for our no-dynamic-i18n rule
+// Create a custom plugin for our custom rules
 const customPlugin = {
   plugins: {
     custom: {
       rules: {
         'no-dynamic-i18n': noDynamicI18n,
+        'ts-definitions-top': tsDefinitionsTop,
       },
     },
   },
@@ -119,6 +122,8 @@ const commonRules = {
 export default [
   pluginJs.configs.recommended,
   pluginReact.configs.flat?.recommended,
+  // Prettier formatting after ESLint fixes
+  eslintPluginPrettierRecommended,
   customPlugin,
   {
     ignores: [
@@ -134,6 +139,7 @@ export default [
     rules: {
       ...commonRules,
       'custom/no-dynamic-i18n': 'warn',
+      'custom/ts-definitions-top': 'warn',
       'react/prop-types': [
         'warn',
         {
@@ -176,6 +182,7 @@ export default [
     rules: {
       ...commonRules,
       'custom/no-dynamic-i18n': 'error',
+      'custom/ts-definitions-top': 'warn',
       'react/prop-types': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
