@@ -11,12 +11,14 @@ import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
 export interface DeleteIconProps<TValue = string>
   extends Omit<DynamicIconProps<TValue>, 'icon'> {
+  'data-testid'?: string;
   selectionType?: SelectionTypeType;
   title?: string;
   loading?: boolean;
 }
 
 function DeleteIcon<TValue = string>({
+  'data-testid': dataTestId = 'delete-icon',
   selectionType,
   title,
   loading = false,
@@ -36,7 +38,7 @@ function DeleteIcon<TValue = string>({
   }
   return (
     <CircleXIcon
-      data-testid="delete-icon"
+      data-testid={dataTestId}
       loading={loading}
       title={title}
       {...props}

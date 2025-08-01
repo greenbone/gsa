@@ -18,6 +18,7 @@ interface TagsIconProps<TValue = string>
 
 const TagsIcon = <TValue = string,>({
   active = true,
+  'data-testid': dataTestId = 'tags-icon',
   selectionType,
   title,
   ...other
@@ -32,7 +33,14 @@ const TagsIcon = <TValue = string,>({
       title = _('Add tag to filtered');
     }
   }
-  return <TagsSvgIcon {...other} active={active} title={title} />;
+  return (
+    <TagsSvgIcon
+      {...other}
+      active={active}
+      data-testid={dataTestId}
+      title={title}
+    />
+  );
 };
 
 export default TagsIcon;
