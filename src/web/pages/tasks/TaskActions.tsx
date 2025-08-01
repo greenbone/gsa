@@ -22,19 +22,23 @@ import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 export interface TaskActionsProps
   extends Omit<EntitiesActionsProps<Task>, 'children'> {
   links?: boolean;
-  onReportImportClick: (task: Task) => void | Promise<void>;
-  onTaskCloneClick: (task: Task) => void | Promise<void>;
-  onTaskDeleteClick: (task: Task) => void | Promise<void>;
-  onTaskEditClick: (task: Task) => void | Promise<void>;
-  onTaskResumeClick: (task: Task) => void | Promise<void>;
-  onTaskStartClick: (task: Task) => void | Promise<void>;
-  onTaskStopClick: (task: Task) => void | Promise<void>;
-  onTaskDownloadClick: (task: Task) => void | Promise<void>;
+  onReportImportClick?: (task: Task) => void | Promise<void>;
+  onTaskCloneClick?: (task: Task) => void | Promise<void>;
+  onTaskDeleteClick?: (task: Task) => void | Promise<void>;
+  onTaskEditClick?: (task: Task) => void | Promise<void>;
+  onTaskResumeClick?: (task: Task) => void | Promise<void>;
+  onTaskStartClick?: (task: Task) => void | Promise<void>;
+  onTaskStopClick?: (task: Task) => void | Promise<void>;
+  onTaskDownloadClick?: (task: Task) => void | Promise<void>;
 }
 
 const TaskActions = ({
+  'data-testid': dataTestId,
   entity,
   links,
+  selectionType,
+  onEntityDeselected,
+  onEntitySelected,
   onReportImportClick,
   onTaskCloneClick,
   onTaskDeleteClick,
@@ -43,11 +47,16 @@ const TaskActions = ({
   onTaskResumeClick,
   onTaskStartClick,
   onTaskStopClick,
-  ...props
 }: TaskActionsProps) => {
   const [_] = useTranslation();
   return (
-    <EntitiesActions {...props} entity={entity}>
+    <EntitiesActions<Task>
+      data-testid={dataTestId}
+      entity={entity}
+      selectionType={selectionType}
+      onEntityDeselected={onEntityDeselected}
+      onEntitySelected={onEntitySelected}
+    >
       <IconDivider grow align={['center', 'center']}>
         {isDefined(entity.schedule) && (
           <TaskScheduleIcon links={links} schedule={entity.schedule} />

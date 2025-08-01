@@ -12,6 +12,7 @@ import {
   queryAllByRole,
   queryAllByTestId,
   queryByRole,
+  queryByTestId,
 } from '@testing-library/react';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -59,7 +60,7 @@ export const getSelectItemElements = (element?: HTMLElement) => {
  */
 export const getSelectElement = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  const select = getByTestId(element, 'form-select');
+  const select = queryByTestId(element, 'form-select');
   if (select) {
     return select as HTMLSelectElement;
   }

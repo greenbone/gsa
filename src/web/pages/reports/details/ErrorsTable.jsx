@@ -11,7 +11,7 @@ import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import {createEntitiesTable} from 'web/entities/Table';
+import createEntitiesTable from 'web/entities/createEntitiesTable';
 import PropTypes from 'web/utils/PropTypes';
 
 const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
