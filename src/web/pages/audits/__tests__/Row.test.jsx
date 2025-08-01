@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWithTable, fireEvent} from 'web/testing';
+import {screen, rendererWithTableBody, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
@@ -54,7 +54,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -169,7 +169,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -232,7 +232,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -341,7 +341,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -455,7 +455,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -570,7 +570,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -685,7 +685,7 @@ describe('Audit Row tests', () => {
     const handleReportDownload = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,

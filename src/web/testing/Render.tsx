@@ -135,7 +135,7 @@ export const rendererWithComponent =
     };
   };
 
-export const rendererWithTable = rendererWithComponent(({children}) => (
+export const rendererWithTableBody = rendererWithComponent(({children}) => (
   <table>
     <tbody>{children}</tbody>
   </table>

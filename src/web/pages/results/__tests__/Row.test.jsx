@@ -4,14 +4,14 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {rendererWithTable, screen} from 'web/testing';
+import {rendererWithTableBody, screen} from 'web/testing';
 import Result from 'gmp/models/result';
 import Row from 'web/pages/results/Row';
 
 const gmp = {settings: {enableEPSS: true}};
 
 describe('Should render EPSS fields 1', () => {
-  const {render} = rendererWithTable({gmp, store: true});
+  const {render} = rendererWithTableBody({gmp, store: true});
 
   test('should render EPSS columns', () => {
     const entity = Result.fromElement({
@@ -55,7 +55,7 @@ describe('Should render EPSS fields 1', () => {
 });
 
 describe('Should render EPSS fields 2', () => {
-  const {render} = rendererWithTable({gmp, store: true});
+  const {render} = rendererWithTableBody({gmp, store: true});
 
   test('should render EPSS columns', () => {
     const entity = Result.fromElement({
@@ -99,7 +99,7 @@ describe('Should render EPSS fields 2', () => {
 });
 
 describe('Delta reports V2 with changed severity, qod and hostname', () => {
-  const {render} = rendererWithTable({gmp, store: true});
+  const {render} = rendererWithTableBody({gmp, store: true});
 
   test('should render Delta Difference icon', () => {
     const entity = Result.fromElement({
@@ -142,7 +142,7 @@ describe('Delta reports V2 with changed severity, qod and hostname', () => {
 });
 
 describe('Delta reports V2 with same severity, qod and hostname', () => {
-  const {render} = rendererWithTable({gmp, store: true});
+  const {render} = rendererWithTableBody({gmp, store: true});
 
   test('should not render Delta Difference icon', () => {
     const entity = Result.fromElement({
@@ -175,7 +175,7 @@ describe('Delta reports V2 with same severity, qod and hostname', () => {
 });
 
 describe('Audit reports with compliance', () => {
-  const {render} = rendererWithTable({gmp, store: true});
+  const {render} = rendererWithTableBody({gmp, store: true});
 
   test('should render Audit report with compliance yes', () => {
     const entity = Result.fromElement({

@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWithTable, fireEvent, screen} from 'web/testing';
+import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Target from 'gmp/models/target';
 import Row from 'web/pages/targets/Row';
@@ -173,7 +173,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       router: true,
@@ -221,7 +221,7 @@ describe('Target row tests', () => {
 
     gmp.settings.enableKrb5 = true;
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       router: true,
@@ -254,7 +254,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       router: true,
@@ -302,7 +302,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       router: true,
@@ -338,7 +338,7 @@ describe('Target row tests', () => {
     const handleTargetDownloadClick = testing.fn();
     const handleTargetEditClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       store: true,
       capabilities: caps,
