@@ -118,38 +118,43 @@ export const rendererWith = ({
   };
 };
 
-export const rendererWithTable = (options: RendererOptions = {}) => {
-  const {render, ...other} = rendererWith(options);
-  return {
-    ...other,
-    render: (element: React.ReactNode) =>
-      render(
-        <table>
-          <tbody>{element}</tbody>
-        </table>,
-      ),
+export const rendererWithComponent =
+  (Component: React.ComponentType<{children: React.ReactNode}>) =>
+  (options: RendererOptions = {}) => {
+    const {render, ...other} = rendererWith(options);
+    return {
+      ...other,
+      render: (element: React.ReactNode) => {
+        const {rerender, ...rest} = render(<Component>{element}</Component>);
+        return {
+          rerender: (updatedElement: React.ReactNode) =>
+            rerender(<Component>{updatedElement}</Component>),
+          ...rest,
+        };
+      },
+    };
   };
-};
 
-export const rendererWithTableRow = (options: RendererOptions = {}) => {
-  const {render, ...other} = rendererWith(options);
-  return {
-    ...other,
-    render: (element: React.ReactNode) =>
-      render(
-        <table>
-          <tbody>
-            <tr>{element}</tr>
-          </tbody>
-        </table>,
-      ),
-  };
-};
+export const rendererWithTable = rendererWithComponent(({children}) => (
+  <table>{children}</table>
+));
 
-export const rendererWithTableFooter = (options: RendererOptions = {}) => {
-  const {render, ...other} = rendererWith(options);
-  return {
-    ...other,
-    render: (element: React.ReactNode) => render(<table>{element}</table>),
-  };
-};
+export const rendererWithTableBody = rendererWithComponent(({children}) => (
+  <table>
+    <tbody>{children}</tbody>
+  </table>
+));
+
+export const rendererWithTableRow = rendererWithComponent(({children}) => (
+  <table>
+    <tbody>
+      <tr>{children}</tr>
+    </tbody>
+  </table>
+));
+
+export const rendererWithTableHeader = rendererWithComponent(({children}) => (
+  <table>
+    <thead>{children}</thead>
+  </table>
+));

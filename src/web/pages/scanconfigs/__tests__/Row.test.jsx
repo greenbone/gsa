@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWithTable, screen, fireEvent} from 'web/testing';
+import {rendererWithTableBody, screen, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ScanConfig, {
   SCANCONFIG_TREND_STATIC,
@@ -42,7 +42,7 @@ describe('Scan Config row tests', () => {
     const handleScanConfigEdit = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -104,7 +104,7 @@ describe('Scan Config row tests', () => {
     const handleScanConfigEdit = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -154,7 +154,7 @@ describe('Scan Config row tests', () => {
     const handleScanConfigEdit = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -186,7 +186,7 @@ describe('Scan Config row tests', () => {
     const handleScanConfigSettings = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,
@@ -263,7 +263,7 @@ describe('Scan Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -349,7 +349,7 @@ describe('Scan Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,
@@ -427,7 +427,7 @@ describe('Scan Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,

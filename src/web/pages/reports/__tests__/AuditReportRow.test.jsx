@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWithTable, screen} from 'web/testing';
+import {rendererWithTableBody, screen} from 'web/testing';
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/MockAuditReport';
 import AuditRow from 'web/pages/reports/AuditReportRow';
 import {setTimezone} from 'web/store/usersettings/actions';
@@ -16,7 +16,7 @@ describe('Audit report row', () => {
     const onReportDeleteClick = testing.fn();
     const onReportDeltaSelect = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       capabilities: true,
       store: true,
       router: true,

@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWithTable, fireEvent, screen} from 'web/testing';
+import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import Task, {TASK_STATUS} from 'gmp/models/task';
@@ -55,7 +55,7 @@ describe('Task Row tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -169,7 +169,7 @@ describe('Task Row tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -234,7 +234,7 @@ describe('Task Row tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -330,7 +330,7 @@ describe('Task Row tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -444,7 +444,7 @@ describe('Task Row tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -561,7 +561,7 @@ describe('Task Row tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -678,7 +678,7 @@ describe('Task Row tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -802,7 +802,7 @@ describe('Task Row tests', () => {
     const handleTaskStop = testing.fn();
     const handleToggleDetailsClick = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,

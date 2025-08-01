@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWithTable, fireEvent, screen} from 'web/testing';
+import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Policy from 'gmp/models/policy';
 import Row from 'web/pages/policies/Row';
@@ -31,7 +31,7 @@ describe('Row tests', () => {
     const handlePolicyEdit = testing.fn();
     const handleCreateAudit = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -73,7 +73,7 @@ describe('Row tests', () => {
     const handlePolicyEdit = testing.fn();
     const handleCreateAudit = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -105,7 +105,7 @@ describe('Row tests', () => {
     const handlePolicyEdit = testing.fn();
     const handleCreateAudit = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,
@@ -171,7 +171,7 @@ describe('Row tests', () => {
 
     const wrongCaps = new Capabilities(['authenticate']);
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: wrongCaps,
       store: true,
@@ -244,7 +244,7 @@ describe('Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,
@@ -309,7 +309,7 @@ describe('Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,
