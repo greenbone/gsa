@@ -28,7 +28,7 @@ export interface CreateEntitiesHeaderProps
 interface CreateEntitiesHeaderColumn {
   name: string;
   displayName: ToString;
-  width: string;
+  width?: string;
   align?: 'left' | 'center' | 'right';
 }
 
