@@ -11,11 +11,13 @@ import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
 export interface ExportIconProps<TValue = string>
   extends Omit<DynamicIconProps<TValue>, 'icon'> {
+  'data-testid'?: string;
   selectionType?: SelectionTypeType;
   title?: string;
 }
 
 function ExportIcon<TValue = string>({
+  'data-testid': dataTestId = 'export-icon',
   selectionType,
   title,
   ...props
@@ -32,11 +34,7 @@ function ExportIcon<TValue = string>({
     }
   }
   return (
-    <FileOutputIcon
-      data-testid="export-icon"
-      title={downloadTitle}
-      {...props}
-    />
+    <FileOutputIcon data-testid={dataTestId} title={downloadTitle} {...props} />
   );
 }
 

@@ -10,6 +10,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
 export interface TrashIconProps {
+  'data-testid'?: string;
   selectionType?: SelectionTypeType;
   title?: string;
   loading?: boolean;
@@ -17,6 +18,7 @@ export interface TrashIconProps {
 }
 
 function TrashIcon({
+  'data-testid': dataTestId = 'trash-icon',
   selectionType,
   title,
   loading = false,
@@ -36,7 +38,7 @@ function TrashIcon({
   }
   return (
     <TrashcanIcon
-      data-testid="trash-icon"
+      data-testid={dataTestId}
       {...other}
       loading={loading}
       title={title}
