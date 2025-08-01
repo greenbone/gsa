@@ -152,3 +152,9 @@ export const rendererWithTableRow = rendererWithComponent(({children}) => (
 export const rendererWithTableFooter = rendererWithComponent(({children}) => (
   <table>{children}</table>
 ));
+
+export const rendererWithTableHeader = rendererWithComponent(({children}) => (
+  <table>
+    <thead>{children}</thead>
+  </table>
+));
