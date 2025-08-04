@@ -39,7 +39,6 @@ import 'gmp/commands/targets';
 import 'gmp/commands/tasks';
 import 'gmp/commands/tickets';
 import 'gmp/commands/tlscertificates';
-import 'gmp/commands/trashcan';
 import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
@@ -47,6 +46,7 @@ import AuthenticationCommand from 'gmp/commands/auth';
 import LoginCommand from 'gmp/commands/login';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
+import TrashCanCommand from 'gmp/commands/trashcan';
 import {UserCommand, UsersCommand} from 'gmp/commands/users';
 import WizardCommand from 'gmp/commands/wizard';
 import GmpSettings from 'gmp/gmpsettings';
@@ -75,6 +75,7 @@ class Gmp {
   readonly portlist: PortListCommand;
   readonly portlists: PortListsCommand;
   readonly performance: PerformanceCommand;
+  readonly trashcan: TrashCanCommand;
   readonly user: UserCommand;
   readonly users: UsersCommand;
   readonly wizard: WizardCommand;
@@ -98,6 +99,7 @@ class Gmp {
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
     this.performance = new PerformanceCommand(this.http);
+    this.trashcan = new TrashCanCommand(this.http);
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
     this.wizard = new WizardCommand(this.http);
