@@ -6,7 +6,7 @@
 import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, rendererWith, waitFor, fireEvent, wait} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
-import TrashcanPage from 'web/pages/extras/TrashCanPage';
+import TrashcanPage from 'web/pages/trashcan/TrashCanPage';
 
 /*
  * The following is a workaround for userEvent v14 and fake timers https://github.com/testing-library/react-testing-library/issues/1197
@@ -18,12 +18,10 @@ testing.useFakeTimers({
 
 const gmp = {
   trashcan: {
-    empty: testing.fn().mockResolvedValueOnce(),
-    get: testing.fn().mockReturnValue(
-      Promise.resolve({
-        data: {},
-      }),
-    ),
+    empty: testing.fn().mockResolvedValueOnce({}),
+    get: testing.fn().mockResolvedValue({
+      data: {},
+    }),
   },
   settings: {
     manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
@@ -32,7 +30,7 @@ const gmp = {
 
 const capabilities = new Capabilities(['everything']);
 
-describe('TrashCan page tests', () => {
+describe('TrashCanPage tests', () => {
   test('Should render with empty trashcan button and empty out trash', async () => {
     const {render} = rendererWith({
       gmp,
