@@ -4,7 +4,7 @@
  */
 
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import Nvt from 'gmp/models/nvt';
+import Nvt, {NvtNvtElement} from 'gmp/models/nvt';
 import {
   parseCsv,
   parseSeverity,
@@ -21,7 +21,7 @@ export interface OverrideElement extends ModelElement {
   hosts?: string;
   new_severity?: number;
   new_thread?: string;
-  nvt?: ModelElement;
+  nvt?: NvtNvtElement;
   port?: string;
   result?: ModelElement;
   severity?: number;
@@ -108,7 +108,7 @@ class Override extends Model {
     const ret = super.parseElement(element) as OverrideProperties;
 
     if (element.nvt) {
-      ret.nvt = Nvt.fromElement(element.nvt);
+      ret.nvt = Nvt.fromElement({nvt: element.nvt});
       ret.name = ret.nvt.name;
     }
 
