@@ -3,16 +3,40 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
+import Tag from 'gmp/models/tag';
+import {isDefined} from 'gmp/utils/identity';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import Select from 'web/components/form/Select';
 import {NewIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
-import {renderSelectItems} from 'web/utils/Render';
+import {RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
+
+export interface TagsDialogData {
+  comment?: string;
+  id?: string;
+  name?: string;
+  value?: string;
+}
+
+interface TagsDialogProps {
+  comment?: string;
+  entitiesCount?: number;
+  error?: string;
+  name?: string;
+  tagId?: string;
+  tags?: Tag[];
+  title?: string;
+  value?: string;
+  onClose?: () => void;
+  onErrorClose?: () => void;
+  onNewTagClick?: () => void;
+  onSave?: (data: TagsDialogData) => void;
+  onTagChanged?: (id: string) => void;
+}
+
 const ENTITIES_THRESHOLD = 50000;
 
 const Notification = styled(Layout)`
@@ -33,14 +57,14 @@ const TagsDialog = ({
   onNewTagClick,
   onTagChanged,
   onSave,
-}) => {
+}: TagsDialogProps) => {
   const [_] = useTranslation();
   title = title ?? _('Add Tag');
 
   return (
     <SaveDialog
       buttonTitle="Add Tag"
-      data-testid="dialog-title-bar"
+      data-testid="bulk-tags-dialog"
       error={error}
       title={title}
       values={{
@@ -57,7 +81,7 @@ const TagsDialog = ({
       <FormGroup direction="row" title={_('Choose Tag')}>
         <Select
           grow="1"
-          items={renderSelectItems(tags)}
+          items={renderSelectItems(tags as RenderSelectItemProps[])}
           name="name"
           value={id}
           onChange={onTagChanged}
@@ -70,7 +94,7 @@ const TagsDialog = ({
       </FormGroup>
       <FormGroup title={_('Value')}>{value}</FormGroup>
       <FormGroup title={_('Comment')}>{comment}</FormGroup>
-      {entitiesCount >= ENTITIES_THRESHOLD && (
+      {isDefined(entitiesCount) && entitiesCount >= ENTITIES_THRESHOLD && (
         <Notification>
           {_(
             'Please note that assigning a tag to {{count}} ' +
@@ -81,23 +105,6 @@ const TagsDialog = ({
       )}
     </SaveDialog>
   );
-};
-
-TagsDialog.propTypes = {
-  comment: PropTypes.string,
-  entitiesCount: PropTypes.number.isRequired,
-  error: PropTypes.string,
-  filter: PropTypes.filter,
-  name: PropTypes.string,
-  tagId: PropTypes.id,
-  tags: PropTypes.array,
-  title: PropTypes.string,
-  value: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  onErrorClose: PropTypes.func,
-  onNewTagClick: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onTagChanged: PropTypes.func.isRequired,
 };
 
 export default TagsDialog;
