@@ -11,10 +11,9 @@ interface Item {
   [key: string]: unknown;
 }
 
-interface TableRowProps {
+interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   items?: Item[] | ReactNode[];
   children?: ReactNode;
-  [key: string]: unknown;
 }
 
 const TableRow = ({items = [], children, ...other}: TableRowProps) => {
