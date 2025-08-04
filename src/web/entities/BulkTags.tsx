@@ -3,30 +3,43 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
+import CollectionCounts from 'gmp/collection/CollectionCounts';
+import Filter from 'gmp/models/filter';
+import Model from 'gmp/models/model';
+import Tag from 'gmp/models/tag';
 import {YES_VALUE} from 'gmp/parser';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import TagsDialog from 'web/entities/TagsDialog';
+import TagsDialog, {TagsDialogData} from 'web/entities/TagsDialog';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import TagDialog from 'web/pages/tags/Dialog';
-import PropTypes from 'web/utils/PropTypes';
-import SelectionType from 'web/utils/SelectionType';
+import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-const getEntityIds = (entityArray = []) => entityArray.map(entity => entity.id);
+interface BulkTagsProps<TEntity extends Model> {
+  entities: TEntity[];
+  selectedEntities: TEntity[];
+  filter: Filter;
+  selectionType: SelectionTypeType;
+  entitiesCounts: CollectionCounts;
+  onClose: () => void;
+}
 
-const getMultiTagEntitiesCount = (
-  pageEntities,
-  counts,
-  selectedEntities,
-  selectionType,
+const getEntityIds = <TEntity extends Model>(entityArray: TEntity[] = []) =>
+  entityArray.map(entity => entity.id as string);
+
+const getMultiTagEntitiesCount = <TEntity extends Model>(
+  pageEntities: TEntity[],
+  counts: CollectionCounts,
+  selectedEntities: TEntity[] | Set<TEntity>,
+  selectionType: SelectionTypeType,
 ) => {
   if (selectionType === SelectionType.SELECTION_USER) {
     // support set and array
-    return isDefined(selectedEntities?.size)
-      ? selectedEntities.size
-      : selectedEntities.length;
+    return isDefined((selectedEntities as Set<TEntity>)?.size)
+      ? (selectedEntities as Set<TEntity>).size
+      : (selectedEntities as TEntity[]).length;
   }
 
   if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -36,38 +49,40 @@ const getMultiTagEntitiesCount = (
   return counts.filtered;
 };
 
-const BulkTags = ({
+const BulkTags = <TEntity extends Model>({
   entities,
   selectedEntities,
   filter,
   selectionType,
   entitiesCounts,
   onClose,
-}) => {
+}: BulkTagsProps<TEntity>) => {
   const [_] = useTranslation();
   const gmp = useGmp();
-  const [tag, setTag] = useState({});
+  const [tag, setTag] = useState<Tag>(new Tag());
   const [tagDialogVisible, setTagDialogVisible] = useState(false);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [error, setError] = useState();
 
   const entitiesType = getEntityType(entities[0]);
   // if there are no entities, BulkTagComponent is not rendered.
 
-  const getTagsByType = useCallback(() => {
+  const fetchTagsByType = useCallback(() => {
     const tagFilter = `resource_type=${apiType(entitiesType)}`;
 
+    // @ts-expect-error
     return gmp.tags
       .getAll({filter: tagFilter})
       .then(resp => {
         setTags(resp.data);
       })
       .catch(setError);
+    // @ts-expect-error
   }, [gmp.tags, entitiesType]);
 
   useEffect(() => {
-    getTagsByType();
-  }, [getTagsByType]);
+    fetchTagsByType();
+  }, [fetchTagsByType]);
 
   const multiTagEntitiesCount = getMultiTagEntitiesCount(
     entities,
@@ -86,17 +101,22 @@ const BulkTags = ({
 
   const handleCreateTag = useCallback(
     data => {
-      return gmp.tag
-        .create(data)
-        .then(response => gmp.tag.get(response.data))
-        .then(response => {
-          const newTags = [...tags, response.data];
-          setTags(newTags);
-          setTag(response.data);
-        })
-        .then(closeTagDialog)
-        .catch(setError);
+      return (
+        // @ts-expect-error
+        gmp.tag
+          .create(data)
+          // @ts-expect-error
+          .then(response => gmp.tag.get(response.data))
+          .then(response => {
+            const newTags = [...tags, response.data];
+            setTags(newTags);
+            setTag(response.data);
+          })
+          .then(closeTagDialog)
+          .catch(setError)
+      );
     },
+    // @ts-expect-error
     [closeTagDialog, gmp.tag, tags],
   );
 
@@ -105,7 +125,8 @@ const BulkTags = ({
   }, [closeTagDialog]);
 
   const handleTagChange = useCallback(
-    id => {
+    (id: string) => {
+      // @ts-expect-error
       return gmp.tag
         .get({id})
         .then(resp => {
@@ -113,6 +134,7 @@ const BulkTags = ({
         })
         .catch(setError);
     },
+    // @ts-expect-error
     [gmp.tag],
   );
 
@@ -121,25 +143,23 @@ const BulkTags = ({
   }, [onClose]);
 
   const handleErrorClose = useCallback(() => {
-    setError();
+    setError(undefined);
   }, []);
 
   const handleAddMultiTag = useCallback(
-    ({comment, id, name, value = ''}) => {
-      let tagEntitiesIds;
-      let loadedFilter;
+    ({comment, id, name, value = ''}: TagsDialogData) => {
+      let tagEntitiesIds: string[] | undefined = undefined;
+      let loadedFilter: string | undefined = undefined;
 
       if (selectionType === SelectionType.SELECTION_USER) {
         tagEntitiesIds = getEntityIds(selectedEntities);
-        loadedFilter = null;
       } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
         tagEntitiesIds = getEntityIds(entities);
-        loadedFilter = null;
       } else {
         loadedFilter = filter.all().toFilterString();
-        tagEntitiesIds = null;
       }
 
+      // @ts-expect-error
       return gmp.tag
         .save({
           active: YES_VALUE,
@@ -159,6 +179,7 @@ const BulkTags = ({
       entities,
       entitiesType,
       filter,
+      // @ts-expect-error
       gmp.tag,
       onClose,
       selectedEntities,
@@ -168,7 +189,7 @@ const BulkTags = ({
 
   const resourceTypes = [[entitiesType, typeName(entitiesType)]];
 
-  let title;
+  let title: string;
   if (selectionType === SelectionType.SELECTION_USER) {
     title = _('Add Tag to Selection');
   } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -182,8 +203,7 @@ const BulkTags = ({
       <TagsDialog
         comment={tag.comment}
         entitiesCount={multiTagEntitiesCount}
-        errors={error}
-        filter={filter}
+        error={error}
         name={tag.name}
         tagId={tag.id}
         tags={tags}
@@ -207,19 +227,6 @@ const BulkTags = ({
       )}
     </>
   );
-};
-
-BulkTags.propTypes = {
-  entities: PropTypes.arrayOf(PropTypes.model).isRequired,
-  entitiesCounts: PropTypes.counts.isRequired,
-  filter: PropTypes.filter.isRequired,
-  selectedEntities: PropTypes.arrayOf(PropTypes.model).isRequired,
-  selectionType: PropTypes.oneOf([
-    SelectionType.SELECTION_PAGE_CONTENTS,
-    SelectionType.SELECTION_USER,
-    SelectionType.SELECTION_FILTER,
-  ]).isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default BulkTags;

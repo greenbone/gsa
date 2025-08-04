@@ -27,7 +27,7 @@ import {
   pluralizeType,
 } from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-import TagsDialog from 'web/entities/TagsDialog';
+import TagsDialog, {TagsDialogData} from 'web/entities/TagsDialog';
 import actionFunction from 'web/entity/hooks/actionFunction';
 import TagDialog from 'web/pages/tags/Dialog';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
@@ -465,7 +465,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
     });
   }
 
-  handleAddMultiTag({comment, id, name, value = ''}) {
+  handleAddMultiTag({comment, id, name, value = ''}: TagsDialogData) {
     const {gmp} = this.props;
     const {loadedFilter, selectionType, selected, entities = []} = this.state;
 
@@ -631,9 +631,7 @@ class EntitiesContainer<TModel extends Model> extends React.Component<
         {tagsDialogVisible && (
           <TagsDialog
             comment={tag?.comment}
-            // @ts-expect-error
             entitiesCount={multiTagEntitiesCount}
-            filter={loadedFilter}
             name={tag?.name}
             tagId={tag?.id}
             tags={tags}
