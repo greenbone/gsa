@@ -38,7 +38,7 @@ interface TaskReportTotalProps {
 
 export interface TaskRowProps extends TaskActionsProps {
   actionsComponent?: React.ComponentType<TaskActionsProps>;
-  onToggleDetailsClick: (value: unknown, name: string) => void;
+  onToggleDetailsClick: (value: undefined, name: string) => void;
 }
 
 const TaskReport = ({report, links}: TaskReportProps) => {
@@ -117,7 +117,15 @@ const TaskRow = ({
       <TableData>
         <Layout align="space-between">
           <div>
-            <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            <RowDetailsToggle
+              name={entity.id}
+              onClick={
+                onToggleDetailsClick as (
+                  value: undefined,
+                  name?: string,
+                ) => void
+              }
+            >
               {entity.name}
             </RowDetailsToggle>
             {entity.comment && <Comment>({entity.comment})</Comment>}
