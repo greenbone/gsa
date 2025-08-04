@@ -74,7 +74,8 @@
     "resize-observer-polyfill": "^1.5.1",
     "styled-components": "^6.1.19",
     "uuid": "^11.1.0",
-    "whatwg-fetch": "^3.6.20"
+    "whatwg-fetch": "^3.6.20",
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
