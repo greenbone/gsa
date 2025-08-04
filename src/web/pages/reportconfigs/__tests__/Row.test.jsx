@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWithTable, fireEvent, screen} from 'web/testing';
+import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import ReportConfig from 'gmp/models/reportconfig';
 import Row from 'web/pages/reportconfigs/Row';
@@ -45,7 +45,7 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -77,7 +77,7 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -126,7 +126,7 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -160,7 +160,7 @@ describe('Report Config row tests', () => {
     const handleReportConfigDownload = testing.fn();
     const handleReportConfigEdit = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,
@@ -225,7 +225,7 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       store: true,
@@ -297,7 +297,7 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,
@@ -363,7 +363,7 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: true,
       store: true,

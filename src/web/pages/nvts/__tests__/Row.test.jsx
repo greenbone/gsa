@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWithTable, fireEvent, screen} from 'web/testing';
+import {rendererWithTableBody, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter.js';
 import NVT from 'gmp/models/nvt';
@@ -59,7 +59,7 @@ describe('NVT row tests', () => {
     const handleToggleDetailsClick = testing.fn();
     const handleFilterChanged = testing.fn();
 
-    const {render, store} = rendererWithTable({
+    const {render, store} = rendererWithTableBody({
       gmp,
       capabilities: caps,
       router: true,
@@ -110,7 +110,7 @@ describe('NVT row tests', () => {
 
     const filter = Filter.fromString('family="bar"');
 
-    const {render} = rendererWithTable({
+    const {render} = rendererWithTableBody({
       gmp,
       capabilities: true,
       router: true,

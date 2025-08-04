@@ -3,15 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {isDefined, isFunction} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import TableData from 'web/components/table/TableData';
 import EntitySelection, {Entity} from 'web/entities/EntitySelection';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-export interface EntitiesActionsProps<TEntity extends Entity, TProps = {}> {
-  children?:
-    | React.ReactNode
-    | ((props: TProps & {entity: TEntity}) => React.ReactNode);
+export interface EntitiesActionsProps<TEntity extends Entity> {
+  children?: React.ReactNode;
   'data-testid'?: string;
   entity: TEntity;
   selectionType?: SelectionTypeType;
@@ -19,7 +17,7 @@ export interface EntitiesActionsProps<TEntity extends Entity, TProps = {}> {
   onEntitySelected?: (entity: TEntity) => void;
 }
 
-const EntitiesActions = <TEntity extends Entity, TProps = {}>({
+const EntitiesActions = <TEntity extends Entity>({
   children,
   'data-testid': dataTestId = 'entities-actions',
   entity,
@@ -27,7 +25,7 @@ const EntitiesActions = <TEntity extends Entity, TProps = {}>({
   onEntityDeselected,
   onEntitySelected,
   ...props
-}: EntitiesActionsProps<TEntity, TProps> & TProps) => {
+}: EntitiesActionsProps<TEntity>) => {
   if (selectionType === SelectionType.SELECTION_USER) {
     return (
       <TableData align={['center', 'center']} data-testid={dataTestId}>
@@ -44,9 +42,7 @@ const EntitiesActions = <TEntity extends Entity, TProps = {}>({
   }
   return (
     <TableData grow data-testid={dataTestId}>
-      {isFunction(children)
-        ? children({...(props as TProps), entity})
-        : children}
+      {children}
     </TableData>
   );
 };
