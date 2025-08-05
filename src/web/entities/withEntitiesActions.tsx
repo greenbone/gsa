@@ -10,18 +10,27 @@ import EntitiesActions, {
 } from 'web/entities/EntitiesActions';
 import {updateDisplayName} from 'web/utils/displayName';
 
-type WithEntitiesActionsProps<TEntity extends Model, TProps> = Omit<
+/**
+ * Props for component created by the `withEntitiesActions` higher-order component (HOC).
+ *
+ * @template TEntity - The type of the entity model.
+ * @template TProps - Additional properties to be merged with the base `EntitiesActionsProps`.
+ */
+export type WithEntitiesActionsProps<TEntity extends Model, TProps> = Omit<
   EntitiesActionsProps<TEntity>,
   'children'
 > &
   TProps;
 
-interface WithEntity<TEntity extends Model> {
+/**
+ * Props for the component passed to withEntitiesActions gets provided.
+ *
+ * @template TEntity - The type of the entity, which must extend the `Model` interface.
+ * @property entity - The entity instance that the component will act upon.
+ */
+export interface WithEntitiesActionsComponentProps<TEntity extends Model> {
   entity: TEntity;
 }
-
-type WithEntitiesActionsComponentProps<TEntity extends Model, TProps> = TProps &
-  WithEntity<TEntity>;
 
 /**
  * A higher-order component (HOC) that wraps a given component with additional
@@ -40,11 +49,9 @@ type WithEntitiesActionsComponentProps<TEntity extends Model, TProps> = TProps &
  */
 const withEntitiesActions = <
   TEntity extends Model,
-  TProps extends WithEntity<TEntity>,
+  TProps extends WithEntitiesActionsComponentProps<TEntity>,
 >(
-  Component: React.ComponentType<
-    WithEntitiesActionsComponentProps<TEntity, TProps>
-  >,
+  Component: React.ComponentType<TProps>,
 ) => {
   const EntitiesActionsWrapper = ({
     'data-testid': dataTestId,
