@@ -36,8 +36,8 @@ interface EntitiesReloadOptions {
   filter?: Filter;
 }
 
-interface EntitiesSelector<TModel extends Model = Model> {
-  getEntities: (filter?: Filter) => TModel[];
+interface EntitiesSelector<TEntity extends Model = Model> {
+  getEntities: (filter?: Filter) => TEntity[];
   getEntitiesCounts: (filter?: Filter) => CollectionCounts;
   getEntitiesError: (filter?: Filter) => Error | Rejection;
   isLoadingEntities: (filter?: Filter) => boolean;
@@ -50,10 +50,10 @@ interface EntitiesContainerWrapperProps {
   notify: NotifyFunc;
 }
 
-interface OtherProps<TModel extends Model = Model>
+interface OtherProps<TEntity extends Model = Model>
   extends DialogNotificationProps {
   gmp: Gmp;
-  entities: TModel[];
+  entities: TEntity[];
   entitiesCounts: CollectionCounts;
   entitiesError?: Error | Rejection;
   filter: Filter;
@@ -64,33 +64,83 @@ interface OtherProps<TModel extends Model = Model>
   onDownload: DownloadFunc;
 }
 
-interface ReloadIntervalProps<TModel extends Model = Model> {
+interface ReloadIntervalProps<TEntity extends Model = Model> {
   gmp: Gmp;
-  entities: TModel[];
+  entities: TEntity[];
   entitiesCounts: CollectionCounts;
   isLoading: boolean;
 }
 
-interface WithEntitiesContainerProps<TModel extends Model = Model> {
-  reloadInterval?: (props: ReloadIntervalProps<TModel>) => number | void;
+/**
+ * Represents the props provided for the component passed to `withEntitiesContainer`.
+ *
+ * @template TEntity - A type that extends the `Model` interface, representing the data model
+ *                    associated with the entities container.
+ */
+export type WithEntitiesContainerComponentProps<TEntity extends Model> =
+  EntitiesContainerRenderProps<TEntity>;
+
+interface WithEntitiesContainerOptions<TEntity extends Model = Model> {
+  reloadInterval?: (props: ReloadIntervalProps<TEntity>) => number | void;
   fallbackFilter?: Filter;
-  entitiesSelector: (state: unknown) => EntitiesSelector<TModel>;
+  entitiesSelector: (state: unknown) => EntitiesSelector<TEntity>;
   loadEntities: (gmp: Gmp) => (filter?: Filter) => void;
 }
 
 const noop = () => {};
 
+/**
+ * A higher-order component (HOC) that wraps a given React component to provide
+ * entity-related functionality, such as loading, filtering, and managing entities
+ * from a Redux store. This HOC is designed to work with entities managed by GMP (Greenbone Management Protocol).
+ *
+ * @template TEntity - The type of the entity being managed, extending the `Model` type.
+ *
+ * @param gmpName - The name of the GMP entity being managed.
+ * @param options - Configuration options for the HOC.
+ * @param options.entitiesSelector - A selector function to retrieve entities from the Redux state.
+ * @param options.loadEntities - A function to dispatch an action to load entities.
+ * @param options.reloadInterval - A function or value to determine the reload interval for entities.
+ * @param options.fallbackFilter - A fallback filter to use when no filter is provided.
+ *
+ * @returns A function that takes a React component and returns a new component wrapped with entity-related functionality.
+ *          The returned new component doesn't need or forwards any props.
+ *
+ * @example
+ * ```tsx
+ * const MyComponent = ({ entities }: WithEntitiesContainerComponentProps<MyEntity>) => {
+ *   return (
+ *     <div>
+ *       {entities.map(entity => (
+ *         <div key={entity.id}>{entity.name}</div>
+ *       ))}
+ *     </div>
+ *   );
+ * };
+ *
+ * const MyComponentWithEntities = withEntitiesContainer<MyEntity>('myGmpName', {
+ *   entitiesSelector: state => state.myEntities,
+ *   loadEntities: myLoadEntitiesAction,
+ *   reloadInterval: myReloadIntervalFunction,
+ *   fallbackFilter: myFallbackFilter,
+ * })(MyComponent);
+ * ```
+ */
 const withEntitiesContainer =
-  <TModel extends Model = Model>(
+  <TEntity extends Model = Model>(
     gmpName: string,
     {
       entitiesSelector,
       loadEntities: loadEntitiesFunc,
       reloadInterval = noop,
       fallbackFilter,
-    }: WithEntitiesContainerProps<TModel>,
+    }: WithEntitiesContainerOptions<TEntity>,
   ) =>
-  (Component: React.ComponentType<EntitiesContainerRenderProps<TModel>>) => {
+  (
+    Component: React.ComponentType<
+      WithEntitiesContainerComponentProps<TEntity>
+    >,
+  ) => {
     const mapStateToProps = (state: unknown, {filter}: ReduxMapProps) => {
       const eSelector = entitiesSelector(state);
       const entities = eSelector.getEntities(filter);
@@ -131,7 +181,7 @@ const withEntitiesContainer =
         showErrorMessage,
         showSuccessMessage,
         onDownload,
-      }: EntitiesContainerWrapperProps & OtherProps<TModel>) => (
+      }: EntitiesContainerWrapperProps & OtherProps<TEntity>) => (
         <Reload<EntitiesReloadOptions>
           name={gmpName}
           reload={(newFilter = filter) => loadEntities(newFilter)}
@@ -140,7 +190,7 @@ const withEntitiesContainer =
           }
         >
           {({reload}) => (
-            <EntitiesContainer<TModel>
+            <EntitiesContainer<TEntity>
               entities={entities}
               entitiesCounts={entitiesCounts}
               entitiesError={entitiesError}
@@ -157,7 +207,7 @@ const withEntitiesContainer =
               updateFilter={updateFilter}
               onDownload={onDownload}
             >
-              {(pageProps: EntitiesContainerRenderProps<TModel>) => (
+              {(pageProps: EntitiesContainerRenderProps<TEntity>) => (
                 <Component {...pageProps} />
               )}
             </EntitiesContainer>
