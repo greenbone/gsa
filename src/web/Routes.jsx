@@ -69,7 +69,7 @@ import AuditReportDetailsPage from 'web/pages/reports/AuditDetailsPage';
 import AuditReportsPage from 'web/pages/reports/AuditReportsListPage';
 import DeltaReportDetailsPage from 'web/pages/reports/DeltaDetailsPage';
 import ReportDetailsPage from 'web/pages/reports/DetailsPage';
-import ReportsPage from 'web/pages/reports/ListPage';
+import ReportsPage from 'web/pages/reports/ReportListPage';
 import ResultDetailsPage from 'web/pages/results/DetailsPage';
 import ResultsPage from 'web/pages/results/ListPage';
 import RoleDetailsPage from 'web/pages/roles/DetailsPage';
