@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import Report from 'gmp/models/report';
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -14,15 +15,35 @@ import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
+import withEntitiesActions, {
+  WithEntitiesActionsProps,
+  WithEntitiesActionsComponentProps,
+} from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const Actions = withEntitiesActions(
-  ({entity, selectedDeltaReport, onReportDeleteClick, onReportDeltaSelect}) => {
+interface ReportActionsProps extends WithEntitiesActionsComponentProps<Report> {
+  selectedDeltaReport?: Report;
+  onReportDeleteClick?: (report: Report) => Promise<void>;
+  onReportDeltaSelect?: (report: Report) => void;
+}
+
+export interface ReportTableRowProps
+  extends WithEntitiesActionsProps<Report, ReportActionsProps>,
+    ReportActionsProps {
+  actionsComponent?: React.ComponentType<ReportActionsProps>;
+  links?: boolean;
+}
+
+const ReportActions = withEntitiesActions(
+  ({
+    entity,
+    selectedDeltaReport,
+    onReportDeleteClick,
+    onReportDeltaSelect,
+  }: ReportActionsProps) => {
     const [_] = useTranslation();
     const {report} = entity;
-    const scanActive = isActive(report.scan_run_status);
+    const scanActive = isActive(report?.scan_run_status);
 
     const title = scanActive ? _('Scan is active') : _('Delete Report');
 
@@ -38,52 +59,52 @@ const Actions = withEntitiesActions(
             <DeltaSecondIcon
               title={_('Select Report for delta comparison')}
               value={entity}
-              onClick={onReportDeltaSelect}
+              onClick={
+                onReportDeltaSelect as (report?: Report) => Promise<void>
+              }
             />
           )
         ) : (
           <DeltaIcon
             title={_('Select Report for delta comparison')}
             value={entity}
-            onClick={onReportDeltaSelect}
+            onClick={onReportDeltaSelect as (report?: Report) => Promise<void>}
           />
         )}
         <DeleteIcon
           active={!scanActive}
           title={title}
           value={entity}
-          onClick={scanActive ? undefined : onReportDeleteClick}
+          onClick={
+            scanActive
+              ? undefined
+              : (onReportDeleteClick as (report?: Report) => Promise<void>)
+          }
         />
       </IconDivider>
     );
   },
 );
 
-Actions.propTypes = {
-  entity: PropTypes.model.isRequired,
-  selectedDeltaReport: PropTypes.model,
-  onReportDeleteClick: PropTypes.func.isRequired,
-  onReportDeltaSelect: PropTypes.func.isRequired,
-};
-
-const Row = ({
-  actionsComponent: ActionsComponent = Actions,
+const ReportTableRow = ({
+  actionsComponent: ActionsComponent = ReportActions,
   entity,
   links = true,
   ...props
-}) => {
+}: ReportTableRowProps) => {
   const {report} = entity;
-  const {scan_run_status, task} = report;
+  const scan_run_status = report?.scan_run_status;
+  const task = report?.task;
 
   let status = scan_run_status;
-  let progress;
+  let progress: number | undefined = undefined;
 
   if (isDefined(task)) {
     if (task.isContainer() && status !== TASK_STATUS.processing) {
       status =
         status === TASK_STATUS.interrupted
           ? TASK_STATUS.uploadinginterrupted
-          : status === TASK_STATUS.running || status === TASK_STATUS.processing
+          : status === TASK_STATUS.running
             ? TASK_STATUS.uploading
             : TASK_STATUS.container;
     }
@@ -94,8 +115,8 @@ const Row = ({
     <TableRow>
       <TableData>
         <span>
-          <DetailsLink id={entity.id} textOnly={!links} type="report">
-            <DateTime date={report.timestamp} />
+          <DetailsLink id={entity.id as string} textOnly={!links} type="report">
+            <DateTime date={report?.timestamp} />
           </DetailsLink>
         </span>
       </TableData>
@@ -104,31 +125,26 @@ const Row = ({
       </TableData>
       <TableData>
         <span>
-          <DetailsLink id={entity.task.id} textOnly={!links} type="task">
-            {entity.task.name}
+          <DetailsLink id={task?.id as string} textOnly={!links} type="task">
+            {task?.name}
           </DetailsLink>
         </span>
       </TableData>
       <TableData>
-        <SeverityBar severity={entity.report.severity.filtered} />
+        <SeverityBar severity={report?.severity?.filtered} />
       </TableData>
-      <TableData align="end">{report.result_count?.high?.filtered}</TableData>
-      <TableData align="end">{report.result_count?.medium?.filtered}</TableData>
-      <TableData align="end">{report.result_count?.low?.filtered}</TableData>
-      <TableData align="end">{report.result_count?.log?.filtered}</TableData>
+      <TableData align="end">{report?.result_count?.high?.filtered}</TableData>
       <TableData align="end">
-        {report.result_count?.false_positive?.filtered}
+        {report?.result_count?.medium?.filtered}
+      </TableData>
+      <TableData align="end">{report?.result_count?.low?.filtered}</TableData>
+      <TableData align="end">{report?.result_count?.log?.filtered}</TableData>
+      <TableData align="end">
+        {report?.result_count?.false_positive?.filtered}
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
 };
 
-Row.propTypes = {
-  actionsComponent: PropTypes.component,
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-  _: PropTypes.func.isRequired,
-};
-
-export default Row;
+export default ReportTableRow;
