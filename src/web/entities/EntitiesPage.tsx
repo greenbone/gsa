@@ -76,7 +76,9 @@ export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
   powerfilter?: React.ComponentType<PowerFilterComponentProps>;
   section?: false | React.ComponentType<SectionComponentProps>;
   sectionIcon?: React.ReactNode;
-  table: React.ComponentType<TableComponentProps<TModel> & TProps>;
+  table:
+    | React.ComponentType<TableComponentProps<TModel> & TProps>
+    | React.ReactElement<TableComponentProps<TModel> & TProps>;
   title: string;
   toolBarIcons?: React.ComponentType<TProps> | React.ReactElement<TProps>;
   onError: (error: Error | Rejection) => void;
@@ -199,6 +201,10 @@ class EntitiesPage<
 
     if (!isDefined(entities) || !isDefined(TableComponent)) {
       return null;
+    }
+
+    if (React.isValidElement(TableComponent)) {
+      return TableComponent;
     }
 
     const other = excludeObjectProps(props, excludeProps);
