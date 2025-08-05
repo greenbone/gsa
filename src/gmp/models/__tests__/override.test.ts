@@ -118,11 +118,12 @@ describe('Override model tests', () => {
   test('should parse NVT', () => {
     const override = Override.fromElement({
       nvt: {
-        _id: '123abc',
+        _oid: '1.2.3',
         name: 'foo',
       },
     });
     expect(override.nvt).toBeInstanceOf(Nvt);
+    expect(override.nvt?.oid).toEqual('1.2.3');
     expect(override.name).toEqual('foo');
   });
 
