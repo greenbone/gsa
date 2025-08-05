@@ -35,6 +35,7 @@ import ReportPort from 'gmp/models/report/port';
 import ReportTask from 'gmp/models/report/task';
 import ReportTLSCertificate from 'gmp/models/report/tlscertificate';
 import Result from 'gmp/models/result';
+import {TaskStatus} from 'gmp/models/task';
 import {parseSeverity, parseDate, YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -162,7 +163,7 @@ interface ReportReportProperties extends ModelProperties {
   results?: CollectionList<Result>;
   result_count?: ReportResultCounts;
   scan_end?: Date;
-  scan_run_status?: string;
+  scan_run_status?: TaskStatus;
   scan_start?: Date;
   severity?: ReportReportSeverity;
   task?: ReportTask;
@@ -187,7 +188,7 @@ class ReportReport extends Model {
   readonly result_count?: ReportResultCounts;
   readonly results?: CollectionList<Result>;
   readonly scan_end?: Date;
-  readonly scan_run_status?: string;
+  readonly scan_run_status?: TaskStatus;
   readonly scan_start?: Date;
   readonly severity?: ReportReportSeverity;
   readonly task?: ReportTask;
@@ -288,7 +289,7 @@ class ReportReport extends Model {
 
     copy.scan_start = parseDate(scan_start);
     copy.scan_end = parseDate(scan_end);
-    copy.scan_run_status = element.scan_run_status;
+    copy.scan_run_status = element.scan_run_status as TaskStatus;
     copy.timezone = element.timezone;
     copy.timezone_abbrev = element.timezone_abbrev;
 
