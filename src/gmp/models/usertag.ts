@@ -3,14 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {BaseModelElement} from 'gmp/models/basemodel';
+import {z} from 'zod';
+import {BaseModelElementSchema} from 'gmp/models/basemodel';
 
-export interface UserTagElement extends BaseModelElement {
-  _id: string;
-  comment?: string;
-  name: string;
-  value: string | number;
-}
+export const UserTagElementSchema = BaseModelElementSchema.extend({
+  _id: z.string(),
+  comment: z.string().optional(),
+  name: z.string(),
+  value: z.union([z.string(), z.number()]),
+});
+
+export type UserTagElement = z.infer<typeof UserTagElementSchema>;
 
 export interface UserTagProperties {
   id: string;
