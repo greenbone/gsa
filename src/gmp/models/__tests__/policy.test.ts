@@ -28,7 +28,10 @@ describe('Policy model tests', () => {
     expect(policy.family_list).toEqual([]);
     expect(policy.nvts).toBeUndefined();
     expect(policy.predefined).toBeUndefined();
-    expect(policy.preferences).toBeUndefined();
+    expect(policy.preferences).toEqual({
+      nvt: [],
+      scanner: [],
+    });
     expect(policy.scanner).toBeUndefined();
     expect(policy.audits).toEqual([]);
   });

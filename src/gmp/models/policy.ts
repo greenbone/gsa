@@ -170,11 +170,11 @@ class Policy extends Model {
           nvtPreferences.push(pref);
         }
       });
-      ret.preferences = {
-        scanner: scannerPreferences,
-        nvt: nvtPreferences,
-      };
     }
+    ret.preferences = {
+      scanner: scannerPreferences,
+      nvt: nvtPreferences,
+    };
 
     if (isDefined(element.scanner)) {
       const scanner = {
