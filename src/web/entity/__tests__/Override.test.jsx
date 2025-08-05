@@ -14,8 +14,8 @@ const caps = new Capabilities(['everything']);
 
 const override = Override.fromElement({
   _id: '123',
-  severity: '5.0',
-  new_severity: '10',
+  severity: 5.0,
+  new_severity: 10,
   text: 'foo',
   end_time: '2019-01-01T12:00:00Z',
   modification_time: '2019-02-02T12:00:00Z',

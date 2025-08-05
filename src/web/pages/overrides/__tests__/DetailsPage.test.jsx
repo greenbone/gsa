@@ -26,7 +26,7 @@ const override = Override.fromElement({
   hosts: '127.0.0.1',
   in_use: 0,
   modification_time: '2021-01-04T11:54:12Z',
-  new_severity: '-1', // false positive
+  new_severity: -1, // false positive
   nvt: {
     _oid: '123',
     name: 'foo nvt',
@@ -51,7 +51,7 @@ const overrideInUse = Override.fromElement({
   hosts: '127.0.0.1',
   in_use: 1,
   modification_time: '2021-01-04T11:54:12Z',
-  new_severity: '-1', // false positive
+  new_severity: -1, // false positive
   nvt: {
     _oid: '123',
     name: 'foo nvt',
@@ -72,7 +72,7 @@ const noPermOverride = Override.fromElement({
   hosts: '127.0.0.1',
   in_use: 0,
   modification_time: '2021-01-04T11:54:12Z',
-  new_severity: '-1', // false positive
+  new_severity: -1, // false positive
   nvt: {
     _oid: '123',
     name: 'foo nvt',

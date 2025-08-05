@@ -34,24 +34,33 @@ describe('Nvt model tests', () => {
   });
 
   test('should parse NVT from element', () => {
-    const nvt = Nvt.fromElement({});
+    const nvt = Nvt.fromElement({
+      nvt: {
+        _oid: '1.2.3',
+        cvss_base: 5.0,
+        tags: 'key=value',
+        refs: {
+          ref: [{_id: 'ref1', _type: 'URL'}],
+        },
+      },
+    });
 
     expect(nvt.certs).toEqual([]);
     expect(nvt.cves).toEqual([]);
     expect(nvt.defaultTimeout).toBeUndefined();
     expect(nvt.epss).toBeUndefined();
     expect(nvt.family).toBeUndefined();
-    expect(nvt.id).toBeUndefined();
-    expect(nvt.oid).toBeUndefined();
+    expect(nvt.id).toEqual('1.2.3');
+    expect(nvt.oid).toEqual('1.2.3');
     expect(nvt.preferences).toEqual([]);
     expect(nvt.qod).toBeUndefined();
-    expect(nvt.severity).toBeUndefined();
+    expect(nvt.severity).toEqual(5.0);
     expect(nvt.severityDate).toBeUndefined();
     expect(nvt.severityOrigin).toBeUndefined();
     expect(nvt.solution).toBeUndefined();
-    expect(nvt.tags).toEqual({});
+    expect(nvt.tags).toEqual({key: 'value'});
     expect(nvt.timeout).toBeUndefined();
-    expect(nvt.xrefs).toEqual([]);
+    expect(nvt.xrefs).toEqual([{ref: 'http://ref1', type: 'url'}]);
   });
 
   test('should parse NVT oid as id', () => {

@@ -13,9 +13,11 @@ import {
   parseYesNo,
   TextElement,
   YES_VALUE,
+  NO_VALUE,
   YesNo,
 } from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
+import {z} from 'gmp/validator';
 
 export const MANUAL = '1';
 export const ANY = '0';
@@ -62,6 +64,30 @@ interface OverrideProperties extends ModelProperties {
   textExcerpt?: YesNo;
 }
 
+const OverrideSchema = z.object({
+  hosts: z
+    .union([z.string(), z.array(z.string())])
+    .transform(value => (typeof value === 'string' ? [value] : value))
+    .optional(),
+  newSeverity: z.number().optional(),
+  newThread: z.string().optional(),
+  thread: z.string().optional(),
+  nvt: z.instanceof(Nvt).optional(),
+  port: z.string().optional(),
+  result: z.instanceof(Model).optional(),
+  severity: z.number().optional(),
+  task: z.instanceof(Model).optional(),
+  text: z.string().optional(),
+  textExcerpt: z
+    .union([z.literal(YES_VALUE), z.literal(NO_VALUE), z.literal(undefined)])
+    .optional(),
+  new_severity: z.number().optional(),
+  new_thread: z.string().optional(),
+  text_excerpt: z
+    .union([z.literal(YES_VALUE), z.literal(NO_VALUE), z.literal(undefined)])
+    .optional(),
+});
+
 class Override extends Model {
   static readonly entityType = 'override';
 
@@ -101,7 +127,17 @@ class Override extends Model {
   }
 
   static fromElement(element: OverrideElement = {}): Override {
-    return new Override(this.parseElement(element));
+    const parsedElement = this.parseElement(element);
+
+    const validationResult = OverrideSchema.safeParse(parsedElement);
+    if (!validationResult.success) {
+      console.error('Validation failed:', validationResult.error.issues);
+      throw new Error(
+        `Validation failed: ${JSON.stringify(validationResult.error.issues)}`,
+      );
+    }
+
+    return new Override(parsedElement);
   }
 
   static parseElement(element: OverrideElement = {}): OverrideProperties {

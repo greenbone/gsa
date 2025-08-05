@@ -20,6 +20,7 @@ import {
 import {map} from 'gmp/utils/array';
 import {isArray, isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
+import {z} from 'gmp/validator';
 
 export const TAG_NA = 'N/A';
 
@@ -233,8 +234,104 @@ interface NvtProperties extends ModelProperties {
   xrefs?: Reference[];
 }
 
+const NvtRefElementSchema = z.object({
+  _id: z.string(),
+  _type: z.string().optional(),
+});
+
+const SeverityElementSchema = z.object({
+  _type: z.string().optional(),
+  date: z.string().optional(),
+  origin: z.string().optional(),
+  score: z.number().optional(),
+  value: z.string().optional(),
+});
+
+const PreferenceElementSchema = z.object({
+  default: z.union([z.string(), z.number()]).optional(),
+  hr_name: z.string().optional(),
+  id: z.number().optional(),
+  name: z.string().optional(),
+  nvt: z
+    .object({
+      _oid: z.string().optional(),
+      name: z.string().optional(),
+    })
+    .optional(),
+  type: z.string().optional(),
+  value: z.union([z.string(), z.number()]).optional(),
+});
+
+const EpssElementSchema = z.object({
+  cve: z
+    .object({
+      _id: z.string().optional(),
+      severity: z.number().optional(),
+    })
+    .optional(),
+  percentile: z.number().optional(),
+  score: z.number().optional(),
+});
+
+const NvtEpssElementSchema = z.object({
+  max_epss: EpssElementSchema.optional(),
+  max_severity: EpssElementSchema.optional(),
+});
+
+const NvtSeveritiesElementSchema = z.object({
+  _score: z.string().optional(),
+  severity: z
+    .union([SeverityElementSchema, z.array(SeverityElementSchema)])
+    .optional(),
+});
+
+const SolutionSchema = z.object({
+  type: z.string().optional(),
+  description: z.string().optional(),
+  method: z.string().optional(),
+});
+
+const NvtElementSchema = z.object({
+  update_time: z.string().optional(),
+  nvt: z
+    .object({
+      _oid: z.string().optional(),
+      category: z.number().optional(),
+      creation_time: z.string().optional(),
+      cvss_base: z.number().optional(),
+      default_timeout: z.union([z.string(), z.number()]).optional(),
+      epss: NvtEpssElementSchema.optional(),
+      family: z.string().optional(),
+      modification_time: z.string().optional(),
+      name: z.string().optional(),
+      preference_count: z.number().optional(),
+      preferences: z
+        .object({
+          default_timeout: z.string().optional(),
+          timeout: z.string().optional(),
+          preference: z
+            .union([PreferenceElementSchema, z.array(PreferenceElementSchema)])
+            .optional(),
+        })
+        .optional(),
+      qod: z.any().optional(), // QoDParams is not defined, so using z.any()
+      refs: z
+        .object({
+          ref: z
+            .union([NvtRefElementSchema, z.array(NvtRefElementSchema)])
+            .optional(),
+        })
+        .optional(),
+      severities: NvtSeveritiesElementSchema.optional(),
+      solution: SolutionSchema.optional(),
+      tags: z.string().optional(),
+      timeout: z.union([z.string(), z.number()]).optional(),
+    })
+    .optional(),
+});
+
 class Nvt extends Model {
-  static entityType = 'nvt';
+  static readonly entityType = 'nvt';
 
   readonly certs: Cert[];
   readonly cves: string[];
@@ -290,7 +387,13 @@ class Nvt extends Model {
   }
 
   static fromElement(element: NvtElement = {}): Nvt {
-    return new Nvt(this.parseElement(element));
+    const validationResult = NvtElementSchema.safeParse(element);
+    if (!validationResult.success) {
+      console.error('Validation failed:', validationResult.error.issues);
+      throw new Error('Invalid NvtElement data');
+    }
+
+    return new Nvt(Nvt.parseElement(element));
   }
 
   static parseElement(element: NvtElement = {}): NvtProperties {
