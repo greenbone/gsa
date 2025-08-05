@@ -30,7 +30,10 @@ describe('ScanConfig model tests', () => {
     expect(scanConfig.families).toEqual({count: 0});
     expect(scanConfig.nvts).toBeUndefined();
     expect(scanConfig.predefined).toBeUndefined();
-    expect(scanConfig.preferences).toBeUndefined();
+    expect(scanConfig.preferences).toEqual({
+      nvt: [],
+      scanner: [],
+    });
     expect(scanConfig.scanner).toBeUndefined();
     expect(scanConfig.tasks).toEqual([]);
   });

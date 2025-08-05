@@ -26,6 +26,7 @@ export interface ScanConfigPreferenceElement {
   nvt?: {
     name?: string;
     _oid?: string;
+    oid?: string;
   };
   type?: string;
   value?: ScanConfigPreferenceValue;
@@ -242,11 +243,12 @@ class ScanConfig extends Model {
           nvtPreferences.push(pref);
         }
       });
-      ret.preferences = {
-        scanner: scannerPreferences,
-        nvt: nvtPreferences,
-      };
     }
+
+    ret.preferences = {
+      scanner: scannerPreferences,
+      nvt: nvtPreferences,
+    };
 
     if (isDefined(element.scanner)) {
       const scanner = {
