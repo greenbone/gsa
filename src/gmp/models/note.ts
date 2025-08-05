@@ -4,7 +4,7 @@
  */
 
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import Nvt from 'gmp/models/nvt';
+import Nvt, {NvtNvtElement} from 'gmp/models/nvt';
 import {
   parseCsv,
   parseSeverity,
@@ -19,7 +19,7 @@ import {isDefined, isModelElement} from 'gmp/utils/identity';
 
 export interface NoteElement extends ModelElement {
   hosts?: string;
-  nvt?: ModelElement;
+  nvt?: NvtNvtElement;
   port?: string;
   result?: ModelElement;
   severity?: number;

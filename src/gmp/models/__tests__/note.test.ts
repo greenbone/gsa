@@ -119,12 +119,13 @@ describe('Note model tests', () => {
   test('should parse NVT', () => {
     const note = Note.fromElement({
       nvt: {
-        _id: '123abc',
+        _oid: '1.2.3',
         name: 'foo',
       },
     });
 
     expect(note.nvt).toBeInstanceOf(Nvt);
+    expect(note.nvt?.oid).toEqual('1.2.3');
     expect(note.name).toEqual('foo');
   });
 });

@@ -68,37 +68,39 @@ export interface NvtSeveritiesElement {
   severity?: SeverityElement | SeverityElement[];
 }
 
+export interface NvtNvtElement {
+  _oid?: string;
+  category?: number;
+  creation_time?: string;
+  cvss_base?: number;
+  default_timeout?: string | number;
+  epss?: NvtEpssElement;
+  family?: string;
+  modification_time?: string;
+  name?: string;
+  preference_count?: number;
+  preferences?: {
+    default_timeout?: string;
+    timeout?: string;
+    preference?: PreferenceElement | PreferenceElement[];
+  };
+  qod?: QoDParams;
+  refs?: {
+    ref?: NvtRefElement | NvtRefElement[];
+  };
+  severities?: NvtSeveritiesElement;
+  solution?: {
+    __text?: string;
+    _method?: string;
+    _type?: string;
+  };
+  tags?: string;
+  timeout?: string | number;
+}
+
 export interface NvtElement extends ModelElement {
   update_time?: string;
-  nvt?: {
-    _oid?: string;
-    category?: number;
-    creation_time?: string;
-    cvss_base?: number;
-    default_timeout?: string | number;
-    epss?: NvtEpssElement;
-    family?: string;
-    modification_time?: string;
-    name?: string;
-    preference_count?: number;
-    preferences?: {
-      default_timeout?: string;
-      timeout?: string;
-      preference?: PreferenceElement | PreferenceElement[];
-    };
-    qod?: QoDParams;
-    refs?: {
-      ref?: NvtRefElement | NvtRefElement[];
-    };
-    severities?: NvtSeveritiesElement;
-    solution?: {
-      __text?: string;
-      _method?: string;
-      _type?: string;
-    };
-    tags?: string;
-    timeout?: string | number;
-  };
+  nvt?: NvtNvtElement;
 }
 
 interface Preference {
