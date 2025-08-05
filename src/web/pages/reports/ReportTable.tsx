@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
+import Report from 'gmp/models/report';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityClassLabel from 'web/components/label/SeverityClass';
 import TableHead from 'web/components/table/TableHead';
@@ -12,23 +13,34 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import ReportRow from 'web/pages/reports/Row';
-import PropTypes from 'web/utils/PropTypes';
+import {
+  FooterComponentProps,
+  HeaderComponentProps,
+} from 'web/entities/EntitiesTable';
+import ReportTableRow, {
+  ReportTableRowProps,
+} from 'web/pages/reports/ReportTableRow';
 
-const Header = ({
+interface ReportTableHeaderProps extends HeaderComponentProps {
+  actionsColumn?: React.ReactNode;
+  sort?: boolean;
+}
+
+const ReportTableHeader = ({
   actionsColumn,
   sort = true,
   currentSortBy,
   currentSortDir,
   onSortChange,
-}) => {
+}: ReportTableHeaderProps) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'date' : false}
+          sort={sort}
+          sortBy="date"
           title={_('Date')}
           width="25%"
           onSortChange={onSortChange}
@@ -36,7 +48,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'status' : false}
+          sort={sort}
+          sortBy="status"
           title={_('Status')}
           width="8%"
           onSortChange={onSortChange}
@@ -44,7 +57,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'task' : false}
+          sort={sort}
+          sortBy="task"
           title={_('Task')}
           width="39%"
           onSortChange={onSortChange}
@@ -52,7 +66,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'severity' : false}
+          sort={sort}
+          sortBy="severity"
           title={_('Severity')}
           width="8%"
           onSortChange={onSortChange}
@@ -60,7 +75,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'high' : false}
+          sort={sort}
+          sortBy="high"
           title={_('High')}
           width="3%"
           onSortChange={onSortChange}
@@ -70,7 +86,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'medium' : false}
+          sort={sort}
+          sortBy="medium"
           title={_('Medium')}
           width="3%"
           onSortChange={onSortChange}
@@ -80,7 +97,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'low' : false}
+          sort={sort}
+          sortBy="low"
           title={_('Low')}
           width="3%"
           onSortChange={onSortChange}
@@ -90,7 +108,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'log' : false}
+          sort={sort}
+          sortBy="log"
           title={_('Log')}
           width="3%"
           onSortChange={onSortChange}
@@ -100,7 +119,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'false_positive' : false}
+          sort={sort}
+          sortBy="false_positive"
           title={_('False Positive')}
           width="3%"
           onSortChange={onSortChange}
@@ -119,23 +139,19 @@ const Header = ({
   );
 };
 
-Header.propTypes = {
-  actionsColumn: PropTypes.element,
-  currentSortBy: PropTypes.string,
-  currentSortDir: PropTypes.string,
-  sort: PropTypes.bool,
-  onSortChange: PropTypes.func,
-};
-
-const Footer = createEntitiesFooter({
+const Footer = createEntitiesFooter<Report>({
   span: 10,
   delete: true,
 });
 
-export default createEntitiesTable({
+export default createEntitiesTable<
+  Report,
+  FooterComponentProps<Report>,
+  ReportTableHeaderProps,
+  ReportTableRowProps
+>({
   emptyTitle: _l('No reports available'),
-  header: Header,
+  header: ReportTableHeader,
   footer: Footer,
-  row: ReportRow,
-  toggleDetailsIcon: false,
+  row: ReportTableRow,
 });
