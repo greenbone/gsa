@@ -86,7 +86,7 @@ export interface EntitiesTableProps<
   'data-testid'?: string;
   doubleRow?: boolean;
   emptyTitle?: string;
-  entities: TEntity[];
+  entities?: TEntity[];
   entitiesCounts?: CollectionCounts;
   filter?: Filter;
   footnote?: boolean;
@@ -166,9 +166,10 @@ function EntitiesTable<
   };
 
   const handleToggleAllDetails = (unToggle: boolean = false) => {
+    const currentEntities = entities || [];
     const newToggled = unToggle ? false : !allToggled;
     setDetails(oldDetails => {
-      return entities.reduce(
+      return currentEntities.reduce(
         (details, entity) => {
           details[entity.id as string] = newToggled;
           return details;
