@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ComplianceType} from 'gmp/models/compliance';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import Note, {NoteElement} from 'gmp/models/note';
 import Nvt, {NvtEpssElement} from 'gmp/models/nvt';
@@ -165,7 +166,7 @@ interface ResultDetection {
 }
 
 interface ResultProperties extends ModelProperties {
-  compliance?: string;
+  compliance?: ComplianceType;
   delta?: Delta;
   detection?: ResultDetection;
   description?: string;
@@ -254,7 +255,7 @@ export class Delta {
 class Result extends Model {
   static readonly entityType = 'result';
 
-  readonly compliance?: string;
+  readonly compliance?: ComplianceType;
   readonly delta?: Delta;
   readonly detection?: ResultDetection;
   readonly description?: string;
@@ -360,7 +361,7 @@ class Result extends Model {
     }
 
     copy.description = parseToString(description);
-    copy.compliance = parseToString(compliance);
+    copy.compliance = parseToString(compliance) as ComplianceType;
     copy.port = parseToString(element.port);
     copy.scan_nvt_version = parseToString(element.scan_nvt_version);
     copy.severity = parseSeverity(severity);
