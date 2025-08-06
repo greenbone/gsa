@@ -643,7 +643,6 @@ DeltaReportDetailsWrapper.propTypes = {
   entity: PropTypes.model,
   gmp: PropTypes.gmp.isRequired,
   reportFilter: PropTypes.filter,
-  _: PropTypes.func.isRequired,
 };
 
 export default compose(
