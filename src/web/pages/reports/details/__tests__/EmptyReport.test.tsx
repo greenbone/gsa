@@ -4,11 +4,10 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent} from 'web/testing';
+import {rendererWith, fireEvent, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EmptyReport from 'web/pages/reports/details/EmptyReport';
 
-const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_reports']);
 
 describe('Empty Report tests', () => {
@@ -16,10 +15,10 @@ describe('Empty Report tests', () => {
     const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
     });
 
-    const {baseElement} = render(
+    render(
       <EmptyReport
         hasTarget={true}
         progress={0}
@@ -27,34 +26,34 @@ describe('Empty Report tests', () => {
         onTargetEditClick={onTargetEditClick}
       />,
     );
+    const emptyReport = screen.getByTestId('empty-report');
 
     // Should include
-    expect(baseElement).toHaveTextContent(
+    expect(emptyReport).toHaveTextContent(
       'The Report is empty. This can happen for the following reasons:',
     );
-
-    expect(baseElement).toHaveTextContent(
+    expect(emptyReport).toHaveTextContent(
       'The scan did not collect any results',
     );
-    expect(baseElement).toHaveTextContent(
+    expect(emptyReport).toHaveTextContent(
       'If the scan got interrupted you can try to re-start the task.',
     );
 
-    expect(baseElement).toHaveTextContent(
+    expect(emptyReport).toHaveTextContent(
       'The target hosts could be regarded dead',
     );
-    expect(baseElement).toHaveTextContent(
+    expect(emptyReport).toHaveTextContent(
       'You should change the Alive Test Method of the target for the next scan. However, if the target hosts are indeed dead, the scan duration might increase significantly.',
     );
 
     // Should not include
-    expect(baseElement).not.toHaveTextContent(
+    expect(emptyReport).not.toHaveTextContent(
       'The scan just started and no results have arrived yet',
     );
-    expect(baseElement).not.toHaveTextContent(
+    expect(emptyReport).not.toHaveTextContent(
       'The scan is still running and no results have arrived yet',
     );
-    expect(baseElement).not.toHaveTextContent(
+    expect(emptyReport).not.toHaveTextContent(
       'Just wait for results to arrive.',
     );
   });
@@ -63,10 +62,10 @@ describe('Empty Report tests', () => {
     const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
     });
 
-    const {baseElement} = render(
+    render(
       <EmptyReport
         hasTarget={true}
         progress={1}
@@ -75,23 +74,23 @@ describe('Empty Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
+    const emptyReport = screen.getByTestId('empty-report');
+    const icons = emptyReport.querySelectorAll('svg');
     expect(icons.length).toEqual(1);
-
-    expect(baseElement).toHaveTextContent(
+    expect(emptyReport).toHaveTextContent(
       'The scan just started and no results have arrived yet',
     );
-    expect(baseElement).toHaveTextContent('Just wait for results to arrive.');
+    expect(emptyReport).toHaveTextContent('Just wait for results to arrive.');
   });
 
   test('should render report for running task', () => {
     const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
     });
 
-    const {baseElement} = render(
+    render(
       <EmptyReport
         hasTarget={true}
         progress={50}
@@ -100,20 +99,21 @@ describe('Empty Report tests', () => {
       />,
     );
 
-    expect(baseElement).toHaveTextContent(
+    const emptyReport = screen.getByTestId('empty-report');
+    expect(emptyReport).toHaveTextContent(
       'The scan is still running and no results have arrived yet',
     );
-    expect(baseElement).toHaveTextContent('Just wait for results to arrive.');
+    expect(emptyReport).toHaveTextContent('Just wait for results to arrive.');
   });
 
-  test('should call click handler', () => {
+  test('should call target edit click handler', () => {
     const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
-      capabilities: caps,
+      capabilities: true,
     });
 
-    const {baseElement} = render(
+    render(
       <EmptyReport
         hasTarget={true}
         progress={0}
@@ -122,20 +122,20 @@ describe('Empty Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
+    const emptyReport = screen.getByTestId('empty-report');
+    const icons = emptyReport.querySelectorAll('svg');
     fireEvent.click(icons[1]);
     expect(onTargetEditClick).toHaveBeenCalled();
   });
 
-  test('should not call click handler with wrong capabilities', () => {
+  test('should not call click handler with missing capabilities', () => {
     const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
       capabilities: wrongCaps,
     });
 
-    const {baseElement} = render(
+    render(
       <EmptyReport
         hasTarget={true}
         progress={0}
@@ -144,8 +144,8 @@ describe('Empty Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
+    const emptyReport = screen.getByTestId('empty-report');
+    const icons = emptyReport.querySelectorAll('svg');
     fireEvent.click(icons[1]);
     expect(onTargetEditClick).not.toHaveBeenCalled();
   });

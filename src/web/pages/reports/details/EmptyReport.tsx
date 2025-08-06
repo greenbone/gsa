@@ -3,27 +3,41 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {isActive, TASK_STATUS} from 'gmp/models/task';
+import {isActive, TASK_STATUS, TaskStatus} from 'gmp/models/task';
 import {RefreshIcon, TargetIcon, TaskIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import InfoPanel from 'web/components/panel/InfoPanel';
+import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportPanel from 'web/pages/reports/details/ReportPanel';
-import PropTypes from 'web/utils/PropTypes';
-import withCapabilities from 'web/utils/withCapabilities';
+
+interface EmptyReportProps {
+  'data-test-id'?: string;
+  hasTarget?: boolean;
+  progress?: number;
+  status: TaskStatus;
+  onTargetEditClick: () => void;
+}
+
 const EmptyReport = ({
-  capabilities,
+  'data-test-id': dataTestId = 'empty-report',
   hasTarget = false,
-  progress,
+  progress = 0,
   status,
   onTargetEditClick,
-}) => {
+}: EmptyReportProps) => {
+  const capabilities = useCapabilities();
   const [_] = useTranslation();
-  const may_edit_target = capabilities.mayEdit('target');
+  const mayEditTarget = capabilities.mayEdit('target');
   const isActiveReport = hasTarget && isActive(status);
   return (
-    <Divider grow align={['start', 'stretch']} flex="column">
+    <Divider
+      grow
+      align={['start', 'stretch']}
+      data-testid={dataTestId}
+      flex="column"
+    >
+      {/* @ts-expect-error */}
       <InfoPanel
         heading={_(
           'The Report is empty. This can happen for the following ' +
@@ -32,7 +46,7 @@ const EmptyReport = ({
       />
       <Divider wrap>
         {!isActiveReport && (
-          <React.Fragment>
+          <>
             <ReportPanel
               icon={props => <TaskIcon {...props} />}
               title={_('The scan did not collect any results')}
@@ -44,7 +58,7 @@ const EmptyReport = ({
             <ReportPanel
               icon={props => <TargetIcon {...props} />}
               title={_('The target hosts could be regarded dead')}
-              onClick={may_edit_target ? onTargetEditClick : undefined}
+              onClick={mayEditTarget ? onTargetEditClick : undefined}
             >
               {_(
                 'You should change the Alive Test Method of the ' +
@@ -53,7 +67,7 @@ const EmptyReport = ({
                   'significantly.',
               )}
             </ReportPanel>
-          </React.Fragment>
+          </>
         )}
         {isActiveReport && progress === 1 && (
           <ReportPanel
@@ -77,7 +91,7 @@ const EmptyReport = ({
           <ReportPanel
             icon={props => <TargetIcon {...props} />}
             title={_('The target hosts could be regarded dead')}
-            onClick={may_edit_target ? onTargetEditClick : undefined}
+            onClick={mayEditTarget ? onTargetEditClick : undefined}
           >
             {_(
               'You should change the Alive Test Method of the ' +
@@ -92,12 +106,4 @@ const EmptyReport = ({
   );
 };
 
-EmptyReport.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  hasTarget: PropTypes.bool,
-  progress: PropTypes.numberOrNumberString,
-  status: PropTypes.string.isRequired,
-  onTargetEditClick: PropTypes.func.isRequired,
-};
-
-export default withCapabilities(EmptyReport);
+export default EmptyReport;
