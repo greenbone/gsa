@@ -16,7 +16,7 @@ import Reload, {
 } from 'web/components/loading/Reload';
 import EmptyReport from 'web/pages/reports/details/EmptyReport';
 import EmptyResultsReport from 'web/pages/reports/details/EmptyResultsReport';
-import ResultsTable from 'web/pages/results/Table';
+import ResultsTable from 'web/pages/results/ResultsTable';
 import {
   loadEntities as loadResults,
   selector as resultsSelector,
