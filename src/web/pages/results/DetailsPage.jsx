@@ -55,7 +55,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import NoteComponent from 'web/pages/notes/NoteComponent';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
-import ResultDetails from 'web/pages/results/Details';
+import ResultDetails from 'web/pages/results/ResultDetails';
 import TicketComponent from 'web/pages/tickets/TicketComponent';
 import {loadEntity, selector} from 'web/store/entities/results';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
