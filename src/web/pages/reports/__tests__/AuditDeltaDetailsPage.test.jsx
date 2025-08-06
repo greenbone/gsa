@@ -307,7 +307,7 @@ describe('Audit Delta Report Details Content tests', () => {
     const bars = screen.getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons.length).toEqual(33);
+    expect(icons.length).toEqual(34);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
