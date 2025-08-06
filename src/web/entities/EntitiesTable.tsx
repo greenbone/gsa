@@ -99,6 +99,7 @@ export interface EntitiesTableProps<
   onLastClick?: () => void;
   onNextClick?: () => void;
   onPreviousClick?: () => void;
+  onSortChange?: (sortBy: string) => void;
 }
 
 const UpdatingStripedTable = styled(StripedTable)<{$isUpdating: boolean}>`
@@ -149,6 +150,7 @@ function EntitiesTable<
   sortBy: currentSortBy,
   sortDir: currentSortDir,
   toggleDetailsIcon = isDefined(RowDetailsComponent),
+  onSortChange,
   ...props
 }: EntitiesTableProps<
   TEntity,
@@ -275,6 +277,7 @@ function EntitiesTable<
       <HeaderComponent
         currentSortBy={currentSortBy}
         currentSortDir={currentSortDir}
+        onSortChange={onSortChange}
         {...(props as unknown as THeaderProps)}
       />
     );
