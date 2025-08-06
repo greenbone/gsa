@@ -73,7 +73,7 @@ class Policy extends Model {
   readonly family_list: PolicyFamily[];
   readonly nvts?: PolicyNvts;
   readonly predefined?: boolean;
-  readonly preferences?: PolicyPreferences;
+  readonly preferences: PolicyPreferences;
   readonly scanner?: Model;
   readonly audits: Model[];
 
@@ -83,7 +83,7 @@ class Policy extends Model {
     family_list = [],
     nvts,
     predefined,
-    preferences,
+    preferences = {nvt: [], scanner: []},
     scanner,
     audits = [],
     ...properties
