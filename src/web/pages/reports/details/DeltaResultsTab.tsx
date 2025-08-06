@@ -54,6 +54,14 @@ const resultsSortFunctions = {
   ),
   vulnerability: makeCompareString('vulnerability'),
   compliant: makeCompareString('compliance'),
+  epss_score: makeCompareNumber(
+    (entity: Result) => entity?.information?.epss?.maxSeverity?.score,
+    0,
+  ),
+  epss_percentile: makeCompareNumber(
+    (entity: Result) => entity?.information?.epss?.maxSeverity?.percentile,
+    0,
+  ),
 };
 
 const DeltaResultsTab = ({
