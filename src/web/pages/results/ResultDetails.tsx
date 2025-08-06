@@ -5,8 +5,9 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import {TAG_NA} from 'gmp/models/nvt';
+import Nvt, {TAG_NA} from 'gmp/models/nvt';
 import {DEFAULT_OID_VALUE} from 'gmp/models/override';
+import Result from 'gmp/models/result';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import Layout from 'web/components/layout/Layout';
@@ -21,9 +22,20 @@ import useTranslation from 'web/hooks/useTranslation';
 import P from 'web/pages/nvts/Preformatted';
 import References from 'web/pages/nvts/References';
 import Solution from 'web/pages/nvts/Solution';
-import Diff, {Added, Removed} from 'web/pages/results/Diff';
-import PropTypes from 'web/utils/PropTypes';
+import ResultDiff, {Added, Removed} from 'web/pages/results/ResultDiff';
 import {renderNvtName} from 'web/utils/Render';
+
+interface DerivedDiffProps {
+  deltaType?: string;
+  firstDescription: string;
+  secondDescription: string;
+}
+
+export interface ResultDetailsProps {
+  className?: string;
+  entity: Result;
+  links?: boolean;
+}
 
 /*
  security and log messages from nvts are converted to results
@@ -39,14 +51,18 @@ const GrowDiv = styled.div`
   max-width: 1080px;
 `;
 
-const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
+const DerivedDiff = ({
+  deltaType,
+  firstDescription,
+  secondDescription,
+}: DerivedDiffProps) => {
   const [_] = useTranslation();
-  let Component;
-  let lines;
-  let prefix;
+  let Component: React.ComponentType<{children: React.ReactNode}>;
+  let lines: string[];
+  let prefix: string;
 
   if (deltaType === 'new') {
-    lines = secondDesription.split(/\r|\n|\r\n/);
+    lines = secondDescription.split(/\r|\n|\r\n/);
     Component = Added;
     prefix = '+';
   } else if (deltaType === 'gone') {
@@ -60,32 +76,30 @@ const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       {lines.map((line, i) => {
         const lineWithPrefix = prefix + line;
         return <Component key={i}>{lineWithPrefix}</Component>;
       })}
-    </React.Fragment>
+    </>
   );
 };
 
-DerivedDiff.propTypes = {
-  deltaType: PropTypes.string.isRequired,
-  firstDescription: PropTypes.string.isRequired,
-  secondDesription: PropTypes.string.isRequired,
-};
-
-const ResultDetails = ({className, links = true, entity}) => {
+const ResultDetails = ({
+  className,
+  links = true,
+  entity,
+}: ResultDetailsProps) => {
   const [_] = useTranslation();
   const result = entity;
 
   const {information} = result;
-  const {id: infoId, tags = {}, solution} = information;
+  const {id: infoId, tags = {}, solution} = information as Nvt;
 
-  const has_detection =
+  const hasDetection =
     isDefined(result.detection) && isDefined(result.detection.result);
 
-  const detection_details = has_detection
+  const detectionDetails = hasDetection
     ? result.detection.result.details
     : undefined;
 
@@ -96,10 +110,10 @@ const ResultDetails = ({className, links = true, entity}) => {
     ? result.delta.delta_type
     : undefined;
 
-  let result2Description;
-  let result1Description;
-  let result1Link;
-  let result2Link;
+  let result2Description: string | undefined;
+  let result1Description: string | undefined;
+  let result1Link: string | undefined;
+  let result2Link: string | undefined;
 
   if (deltaType === 'same') {
     result2Description = result.description;
@@ -108,7 +122,7 @@ const ResultDetails = ({className, links = true, entity}) => {
     result2Link = result.id;
   } else if (deltaType === 'changed') {
     result1Description = result.description;
-    result2Description = result2.description;
+    result2Description = result2?.description;
     result1Link = result.id;
     result2Link = result2Id;
   } else if (deltaType === 'new') {
@@ -163,15 +177,15 @@ const ResultDetails = ({className, links = true, entity}) => {
           </div>
           <div>
             <h3>{_('Different Lines')}</h3>
-            {isDefined(result.delta.diff) && result.delta.diff.length > 0 ? (
-              <Diff>{result.delta.diff}</Diff>
+            {isDefined(result.delta?.diff) && result.delta.diff.length > 0 ? (
+              <ResultDiff>{result.delta.diff}</ResultDiff>
             ) : (
               <DerivedDiff
                 deltaType={deltaType}
                 firstDescription={
                   isDefined(result1Description) ? result1Description : ''
                 }
-                secondDesription={
+                secondDescription={
                   isDefined(result2Description) ? result2Description : ''
                 }
               />
@@ -180,7 +194,8 @@ const ResultDetails = ({className, links = true, entity}) => {
         </DetailsBlock>
       ) : (
         <DetailsBlock title={_('Detection Result')}>
-          {!isEmpty(result.description) && result.description.length > 1 ? (
+          {!isEmpty(result.description) &&
+          (result.description?.length || 0) > 1 ? (
             <GrowDiv>
               <Pre>{result.description}</Pre>
             </GrowDiv>
@@ -193,7 +208,7 @@ const ResultDetails = ({className, links = true, entity}) => {
         </DetailsBlock>
       )}
 
-      {has_detection && (
+      {hasDetection && (
         <DetailsBlock title={_('Product Detection Result')}>
           <InfoTable>
             <TableBody>
@@ -202,11 +217,11 @@ const ResultDetails = ({className, links = true, entity}) => {
                 <TableData>
                   <span>
                     <DetailsLink
-                      id={detection_details.product}
+                      id={detectionDetails?.product as string}
                       textOnly={!links}
                       type="cpe"
                     >
-                      {detection_details.product}
+                      {detectionDetails?.product}
                     </DetailsLink>
                   </span>
                 </TableData>
@@ -216,17 +231,19 @@ const ResultDetails = ({className, links = true, entity}) => {
                 <TableData>
                   <span>
                     <DetailsLink
-                      id={detection_details.source_oid}
+                      id={detectionDetails?.source_oid as string}
                       textOnly={!links}
                       type={
-                        detection_details.source_oid.startsWith('CVE-')
+                        (detectionDetails?.source_oid as string).startsWith(
+                          'CVE-',
+                        )
                           ? 'cve'
                           : 'nvt'
                       }
                     >
-                      {detection_details.source_name +
+                      {detectionDetails?.source_name +
                         ' (OID: ' +
-                        detection_details.source_oid +
+                        detectionDetails?.source_oid +
                         ')'}
                     </DetailsLink>
                   </span>
@@ -237,7 +254,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                 <TableData>
                   <span>
                     <DetailsLink
-                      id={result.detection.result.id}
+                      id={result.detection.result.id as string}
                       textOnly={!links}
                       type="result"
                     >
@@ -273,7 +290,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                     infoId.startsWith(DEFAULT_OID_VALUE) && (
                       <span>
                         <DetailsLink id={infoId} textOnly={!links} type="nvt">
-                          {renderNvtName(infoId, information.name)}
+                          {renderNvtName(infoId, information?.name)}
                           {' OID: ' + infoId}
                         </DetailsLink>
                       </span>
@@ -281,7 +298,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                   {isDefined(infoId) && infoId.startsWith('CVE-') && (
                     <span>
                       <DetailsLink id={infoId} textOnly={!links} type="cve">
-                        {renderNvtName(infoId, information.name)}
+                        {renderNvtName(infoId, information?.name)}
                         {' (OID: ' + infoId + ')'}
                       </DetailsLink>
                     </span>
@@ -318,17 +335,11 @@ const ResultDetails = ({className, links = true, entity}) => {
         solutionType={solution?.type}
       />
 
-      {information.entityType === 'nvt' && (
-        <References links={links} nvt={information} />
+      {isDefined(information) && (information as Nvt)?.entityType === 'nvt' && (
+        <References links={links} nvt={information as Nvt} />
       )}
     </Layout>
   );
-};
-
-ResultDetails.propTypes = {
-  className: PropTypes.string,
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
 };
 
 export default ResultDetails;
