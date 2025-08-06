@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import Result from 'gmp/models/result';
 import {SolutionTypeSvgIcon} from 'web/components/icon';
-import Layout from 'web/components/layout/Layout';
-import Sort from 'web/components/sortby/SortBy';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
@@ -73,16 +70,17 @@ const ResultTableHeader = ({
           width="40%"
           onSortChange={onSortChange}
         />
-        <TableHead rowSpan={2} width="2%">
-          <Layout align="center">
-            {sort ? (
-              <Sort by="solution_type" onClick={onSortChange}>
-                <SolutionTypeSvgIcon title={_('Solution type')} />
-              </Sort>
-            ) : (
-              <SolutionTypeSvgIcon title={_('Solution type')} />
-            )}
-          </Layout>
+        <TableHead
+          align="center"
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          rowSpan={2}
+          sort={sort}
+          sortBy="solution_type"
+          width="2%"
+          onSortChange={onSortChange}
+        >
+          <SolutionTypeSvgIcon title={_('Solution type')} />
         </TableHead>
         {audit ? (
           <TableHead
