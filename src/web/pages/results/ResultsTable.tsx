@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
+import Result from 'gmp/models/result';
 import {SolutionTypeSvgIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import Sort from 'web/components/sortby/SortBy';
@@ -13,14 +14,30 @@ import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesFooter from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import withEntitiesHeader from 'web/entities/withEntitiesHeader';
+import {FooterComponentProps} from 'web/entities/EntitiesTable';
+import withEntitiesHeader, {
+  WithEntitiesHeaderComponentProps,
+} from 'web/entities/withEntitiesHeader';
 import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
-import ResultDetails from 'web/pages/results/Details';
-import ResultsRow from 'web/pages/results/Row';
-import PropTypes from 'web/utils/PropTypes';
+import ResultDetails, {
+  ResultDetailsProps,
+} from 'web/pages/results/ResultDetails';
+import ResultsRow, {
+  ResultTableRowProps,
+} from 'web/pages/results/ResultsTableRow';
+import {SortDirectionType} from 'web/utils/SortDirection';
 
-const Header = ({
+interface ResultTableHeaderProps extends WithEntitiesHeaderComponentProps {
+  audit?: boolean;
+  delta?: boolean;
+  sort?: boolean;
+  currentSortBy?: string;
+  currentSortDir?: SortDirectionType;
+  onSortChange?: (sortBy: string) => void;
+}
+
+const ResultTableHeader = ({
   actionsColumn,
   audit = false,
   delta = false,
@@ -28,8 +45,9 @@ const Header = ({
   currentSortBy,
   currentSortDir,
   onSortChange,
-}) => {
+}: ResultTableHeaderProps) => {
   const gmp = useGmp();
+  const enableEPSS = gmp.settings.enableEPSS;
   return (
     <TableHeader>
       <TableRow>
@@ -37,8 +55,9 @@ const Header = ({
           <TableHead
             currentSortBy={currentSortBy}
             currentSortDir={currentSortDir}
-            rowSpan="2"
-            sortBy={sort ? 'delta' : false}
+            rowSpan={2}
+            sort={sort}
+            sortBy="delta"
             title={_('Delta')}
             width="4%"
             onSortChange={onSortChange}
@@ -47,13 +66,14 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          rowSpan="2"
-          sortBy={sort ? 'vulnerability' : false}
+          rowSpan={2}
+          sort={sort}
+          sortBy="vulnerability"
           title={_('Vulnerability')}
           width="40%"
           onSortChange={onSortChange}
         />
-        <TableHead rowSpan="2" width="2%">
+        <TableHead rowSpan={2} width="2%">
           <Layout align="center">
             {sort ? (
               <Sort by="solution_type" onClick={onSortChange}>
@@ -68,8 +88,9 @@ const Header = ({
           <TableHead
             currentSortBy={currentSortBy}
             currentSortDir={currentSortDir}
-            rowSpan="2"
-            sortBy={sort ? 'compliant' : false}
+            rowSpan={2}
+            sort={sort}
+            sortBy="compliant"
             title={_('Compliant')}
             width="8%"
             onSortChange={onSortChange}
@@ -78,8 +99,9 @@ const Header = ({
           <TableHead
             currentSortBy={currentSortBy}
             currentSortDir={currentSortDir}
-            rowSpan="2"
-            sortBy={sort ? 'severity' : false}
+            rowSpan={2}
+            sort={sort}
+            sortBy="severity"
             title={_('Severity')}
             width="8%"
             onSortChange={onSortChange}
@@ -88,32 +110,34 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          rowSpan="2"
-          sortBy={sort ? 'qod' : false}
+          rowSpan={2}
+          sortBy="qod"
           title={_('QoD')}
           width="3%"
           onSortChange={onSortChange}
         />
-        <TableHead colSpan="2" width="23%">
+        <TableHead colSpan={2} width="23%">
           {_('Host')}
         </TableHead>
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          rowSpan="2"
-          sortBy={sort ? 'location' : false}
+          rowSpan={2}
+          sort={sort}
+          sortBy="location"
           title={_('Location')}
           width="9%"
           onSortChange={onSortChange}
         />
         {gmp.settings.enableEPSS && !audit && (
-          <TableHead colSpan="2">{_('EPSS')}</TableHead>
+          <TableHead colSpan={2}>{_('EPSS')}</TableHead>
         )}
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          rowSpan="2"
-          sortBy={sort ? 'created' : false}
+          rowSpan={2}
+          sort={sort}
+          sortBy="created"
           title={_('Created')}
           width="15%"
           onSortChange={onSortChange}
@@ -124,23 +148,26 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'host' : false}
+          sort={sort}
+          sortBy="host"
           title={_('IP')}
           onSortChange={onSortChange}
         />
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'hostname' : false}
+          sort={sort}
+          sortBy="hostname"
           title={_('Name')}
           onSortChange={onSortChange}
         />
-        {gmp.settings.enableEPSS && !audit && (
+        {enableEPSS && !audit && (
           <>
             <TableHead
               currentSortBy={currentSortBy}
               currentSortDir={currentSortDir}
-              sortBy={sort ? 'epss_score' : false}
+              sort={sort}
+              sortBy="epss_score"
               title={_('Score')}
               width="3%"
               onSortChange={onSortChange}
@@ -148,7 +175,8 @@ const Header = ({
             <TableHead
               currentSortBy={currentSortBy}
               currentSortDir={currentSortDir}
-              sortBy={sort ? 'epss_percentile' : false}
+              sort={sort}
+              sortBy="epss_percentile"
               title={_('Percentile')}
               width="3%"
               onSortChange={onSortChange}
@@ -160,23 +188,21 @@ const Header = ({
   );
 };
 
-Header.propTypes = {
-  actionsColumn: PropTypes.element,
-  audit: PropTypes.bool,
-  currentSortBy: PropTypes.string,
-  currentSortDir: PropTypes.string,
-  delta: PropTypes.bool,
-  sort: PropTypes.bool,
-  onSortChange: PropTypes.func,
-};
-
-export default createEntitiesTable({
+export default createEntitiesTable<
+  Result,
+  FooterComponentProps<Result>,
+  ResultTableHeaderProps,
+  ResultTableRowProps
+>({
   emptyTitle: _l('No results available'),
   footer: createEntitiesFooter({
     span: 10,
     download: 'results.xml',
   }),
-  header: withEntitiesHeader(true)(Header),
+  header: withEntitiesHeader<ResultTableHeaderProps>(true)(ResultTableHeader),
   row: ResultsRow,
-  rowDetails: withRowDetails('result', 7)(ResultDetails),
+  rowDetails: withRowDetails<Result, ResultDetailsProps>(
+    'result',
+    7,
+  )(ResultDetails),
 });

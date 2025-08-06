@@ -17,7 +17,7 @@ import ResultsDashboard, {
   RESULTS_DASHBOARD_ID,
 } from 'web/pages/results/dashboard';
 import ResultsFilterDialog from 'web/pages/results/FilterDialog';
-import ResultsTable from 'web/pages/results/Table';
+import ResultsTable from 'web/pages/results/ResultsTable';
 import {
   loadEntities,
   selector as entitiesSelector,
