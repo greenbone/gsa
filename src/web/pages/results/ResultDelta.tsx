@@ -3,14 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {Delta} from 'gmp/models/result';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const ResultDelta = ({delta}) => {
+interface ResultDeltaProps {
+  delta?: Delta;
+}
+
+const ResultDelta = ({delta}: ResultDeltaProps) => {
   const [_] = useTranslation();
-  switch (delta.delta_type) {
+  switch (delta?.delta_type) {
     case Delta.TYPE_NEW:
       return <span title={_('New')}>[ + ]</span>;
     case Delta.TYPE_CHANGED:
@@ -22,10 +24,6 @@ const ResultDelta = ({delta}) => {
     default:
       return null;
   }
-};
-
-ResultDelta.propTypes = {
-  delta: PropTypes.object.isRequired,
 };
 
 export default ResultDelta;
