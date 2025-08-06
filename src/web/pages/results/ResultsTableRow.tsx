@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import Nvt from 'gmp/models/nvt';
+import Result from 'gmp/models/result';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
@@ -22,32 +24,45 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import EntitiesActions from 'web/entities/EntitiesActions';
+import EntitiesActions, {
+  EntitiesActionsProps,
+} from 'web/entities/EntitiesActions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ResultDelta from 'web/pages/results/Delta';
-import PropTypes from 'web/utils/PropTypes';
+import ResultDelta from 'web/pages/results/ResultDelta';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 
-const Row = ({
+export interface ResultTableRowProps extends EntitiesActionsProps<Result> {
+  actionsComponent?: React.ComponentType<EntitiesActionsProps<Result>>;
+  audit?: boolean;
+  delta?: boolean;
+  entity: Result;
+  links?: boolean;
+  onToggleDetailsClick?: () => void;
+}
+
+const ResultTableRow = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   audit = false,
+  'data-testid': dataTestId = 'result-table-row',
   delta = false,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}) => {
+}: ResultTableRowProps) => {
   const [_] = useTranslation();
   const {host} = entity;
-  let shownName = isDefined(entity.name) ? entity.name : entity.information.id;
+  let shownName = isDefined(entity.name) ? entity.name : entity.information?.id;
   if (!isDefined(shownName)) {
     shownName = entity.id;
   }
   const hasActiveNotes =
+    isDefined(entity.notes) &&
     entity.notes.filter(note => note.isActive()).length > 0;
   const hasActiveOverrides =
+    isDefined(entity.overrides) &&
     entity.overrides.filter(override => override.isActive()).length > 0;
   const hasTickets = entity.tickets.length > 0;
   const deltaSeverity = entity.delta?.result?.severity;
@@ -57,8 +72,9 @@ const Row = ({
   const epssScore = entity?.information?.epss?.maxSeverity?.score;
   const epssPercentile = entity?.information?.epss?.maxSeverity?.percentile;
   const gmp = useGmp();
+  const enableEPSS = gmp.settings.enableEPSS;
   return (
-    <TableRow>
+    <TableRow data-testid={dataTestId}>
       {delta && (
         <TableData align={['center', 'center']}>
           {entity.hasDelta() && <ResultDelta delta={entity.delta} />}
@@ -83,8 +99,10 @@ const Row = ({
         </Layout>
       </TableData>
       <TableData>
-        {isDefined(entity?.information?.solution) && (
-          <SolutionTypeIcon type={entity.information.solution.type} />
+        {isDefined((entity?.information as Nvt | undefined)?.solution) && (
+          <SolutionTypeIcon
+            type={(entity?.information as Nvt | undefined)?.solution?.type}
+          />
         )}
       </TableData>
       <TableData>
@@ -115,8 +133,8 @@ const Row = ({
       </TableData>
       <TableData align="end">
         <IconDivider>
-          <Qod value={entity.qod.value} />
-          {isDefined(deltaQoD) && entity.qod.value !== deltaQoD && (
+          {isDefined(entity.qod?.value) && <Qod value={entity.qod.value} />}
+          {isDefined(deltaQoD) && entity.qod?.value !== deltaQoD && (
             <DeltaDifferenceIcon
               title={_('QoD is changed from {{deltaQoD}}.', {deltaQoD})}
             />
@@ -125,23 +143,23 @@ const Row = ({
       </TableData>
       <TableData>
         <span>
-          {isDefined(host.id) ? (
+          {isDefined(host?.id) ? (
             <DetailsLink id={host.id} textOnly={!links} type="host">
               {host.name}
             </DetailsLink>
           ) : (
-            host.name
+            host?.name
           )}
         </span>
       </TableData>
       <TableData>
         <IconDivider>
-          {isDefined(host.hostname) && (
+          {isDefined(host?.hostname) && (
             <span title={host.hostname}>{shorten(host.hostname, 40)}</span>
           )}
           {isDefined(deltaHostname) &&
             deltaHostname.length > 0 &&
-            host.hostname !== deltaHostname && (
+            host?.hostname !== deltaHostname && (
               <DeltaDifferenceIcon
                 title={_('Hostname is changed from {{deltaHostname}}.', {
                   deltaHostname,
@@ -151,7 +169,7 @@ const Row = ({
         </IconDivider>
       </TableData>
       <TableData>{entity.port}</TableData>
-      {gmp.settings.enableEPSS && !audit && (
+      {enableEPSS && !audit && (
         <>
           <TableData>{renderScore(epssScore)}</TableData>
           <TableData>{renderPercentile(epssPercentile)}</TableData>
@@ -165,13 +183,4 @@ const Row = ({
   );
 };
 
-Row.propTypes = {
-  actionsComponent: PropTypes.component,
-  audit: PropTypes.bool,
-  delta: PropTypes.bool,
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func,
-};
-
-export default Row;
+export default ResultTableRow;
