@@ -7,6 +7,18 @@ import React from 'react';
 import styled from 'styled-components';
 import {isString} from 'gmp/utils/identity';
 
+interface ResultDiffProps {
+  children?: string | null;
+}
+
+interface ResultDiffChildrenProps {
+  children?: React.ReactNode;
+}
+
+export const DIFF_COLOR_REMOVED = '#ffeef0';
+export const DIFF_COLOR_ADDED = '#e6ffedff';
+export const DIFF_COLOR_INFO = 'rgba(0, 0, 0, 0.3)';
+
 const Pre = styled.div`
   white-space: pre-wrap;
   word-wrap: normal;
@@ -14,27 +26,27 @@ const Pre = styled.div`
 `;
 
 export const Removed = styled(Pre)`
-  background-color: #ffeef0;
+  background-color: ${DIFF_COLOR_REMOVED};
 `;
 
 export const Added = styled(Pre)`
-  background-color: #e6ffed;
+  background-color: ${DIFF_COLOR_ADDED};
 `;
 
 const Info = styled(Pre)`
-  color: rgba(0, 0, 0, 0.3);
+  color: ${DIFF_COLOR_INFO};
 `;
 
-const Diff = ({children: diffString}) => {
+const ResultDiff = ({children: diffString}: ResultDiffProps) => {
   if (!isString(diffString)) {
     return null;
   }
 
-  const lines = diffString.split(/\r|\n|\r\n/);
+  const lines = diffString.trim().split(/\r|\n|\r\n/);
   return (
-    <React.Fragment>
+    <>
       {lines.map((line, i) => {
-        let Component;
+        let Component: React.ComponentType<ResultDiffChildrenProps>;
         if (line.startsWith('+')) {
           Component = Added;
         } else if (line.startsWith('-')) {
@@ -44,10 +56,14 @@ const Diff = ({children: diffString}) => {
         } else {
           Component = Pre;
         }
-        return <Component key={i}>{line}</Component>;
+        return (
+          <Component key={i} data-testid="result-diff-item">
+            {line}
+          </Component>
+        );
       })}
-    </React.Fragment>
+    </>
   );
 };
 
-export default Diff;
+export default ResultDiff;
