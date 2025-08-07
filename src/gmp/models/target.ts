@@ -31,7 +31,7 @@ interface TargetElement extends ModelElement {
 }
 
 interface TargetProperties extends ModelProperties {
-  alive_tests?: string;
+  alive_tests?: AliveTests;
   allowSimultaneousIPs?: YesNo;
   esxi_credential?: Model;
   exclude_hosts?: string[];
@@ -48,6 +48,8 @@ interface TargetProperties extends ModelProperties {
   tasks?: Model[];
 }
 
+export type AliveTests = (typeof ALIVE_TESTS)[keyof typeof ALIVE_TESTS];
+
 export const TARGET_CREDENTIAL_NAMES = [
   'smb_credential',
   'snmp_credential',
@@ -57,10 +59,23 @@ export const TARGET_CREDENTIAL_NAMES = [
   'krb5_credential',
 ];
 
+export const ALIVE_TESTS = {
+  SCAN_CONFIG_DEFAULT: 'Scan Config Default',
+  ICMP_PING: 'ICMP Ping',
+  TCP_ACK: 'TCP-ACK Service Ping',
+  TCP_SYN: 'TCP-SYN Service Ping',
+  ARP_PING: 'ARP Ping',
+  ICMP_TCP_ACK: 'ICMP & TCP-ACK Service Ping',
+  ICMP_ARP_PING: 'ICMP & ARP Ping',
+  TCP_ACK_ARP_PING: 'TCP-ACK Service & ARP Ping',
+  ICMP_TCP_ACK_ARP_PING: 'ICMP, TCP-ACK Service & ARP Ping',
+  CONSIDER_ALIVE: 'Consider Alive',
+} as const;
+
 class Target extends Model {
   static entityType = 'target';
 
-  readonly alive_tests?: string;
+  readonly alive_tests?: AliveTests;
   readonly allowSimultaneousIPs: YesNo;
   readonly esxi_credential?: Model;
   readonly exclude_hosts: string[];
@@ -135,6 +150,10 @@ class Target extends Model {
       ret.port_list = PortList.fromElement(element.port_list);
     } else {
       delete ret.port_list;
+    }
+
+    if (isDefined(element.alive_tests)) {
+      ret.alive_tests = element.alive_tests as AliveTests;
     }
 
     for (const name of TARGET_CREDENTIAL_NAMES) {
