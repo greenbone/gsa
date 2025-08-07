@@ -16,6 +16,7 @@ import Credential, {
   krb5CredentialFilter,
   ALL_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
+import Filter from 'gmp/models/filter';
 import PortList from 'gmp/models/portlist';
 import {AliveTests} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE, YesNo} from 'gmp/parser';
@@ -64,6 +65,7 @@ interface TargetDialogDefaultValues {
   excludeHosts: string;
   hosts: string;
   hostsCount?: number;
+  hostsFilter?: Filter;
   inUse: boolean;
   name: string;
   port: number | string;
@@ -84,6 +86,7 @@ interface TargetDialogProps {
   excludeHosts?: string;
   hosts?: string;
   hostsCount?: number;
+  hostsFilter?: Filter;
   inUse?: boolean;
   name?: string;
   port?: number | string;
@@ -147,6 +150,7 @@ const TargetDialog = ({
   excludeHosts = '',
   hosts = '',
   hostsCount,
+  hostsFilter,
   inUse = false,
   name,
   port = DEFAULT_PORT,
@@ -249,6 +253,7 @@ const TargetDialog = ({
     excludeHosts,
     hosts,
     hostsCount,
+    hostsFilter,
     inUse,
     reverseLookupOnly,
     reverseLookupUnify,

@@ -19,6 +19,7 @@ import Credential, {
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   KRB5_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
+import Filter from 'gmp/models/filter';
 import {ALIVE_TESTS} from 'gmp/models/target';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import TargetDialog, {
@@ -676,5 +677,55 @@ describe('TargetDialog tests', () => {
 
     expect(handleClose).toHaveBeenCalled();
     expect(handleSave).not.toHaveBeenCalled();
+  });
+
+  test('should allow to create a target from asset hosts', () => {
+    const handleSave = testing.fn();
+    const hostsFilter = new Filter({filter_type: 'asset'});
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetDialog
+        hostsCount={10}
+        hostsFilter={hostsFilter}
+        targetSource="asset_hosts"
+        onSave={handleSave}
+      />,
+    );
+
+    const targetSourceInputs = screen.getAllByName('targetSource');
+    expect(targetSourceInputs[0]).toHaveAttribute('value', 'manual');
+    expect(targetSourceInputs[0]).not.toBeChecked();
+    expect(targetSourceInputs[1]).toHaveAttribute('value', 'file');
+    expect(targetSourceInputs[1]).not.toBeChecked();
+    expect(targetSourceInputs[2]).toHaveAttribute('value', 'asset_hosts');
+    expect(targetSourceInputs[2]).toBeChecked();
+
+    const saveButton = screen.getDialogSaveButton();
+    fireEvent.click(saveButton);
+    expect(handleSave).toHaveBeenCalledWith({
+      aliveTests: ALIVE_TESTS.SCAN_CONFIG_DEFAULT,
+      allowSimultaneousIPs: YES_VALUE,
+      comment: '',
+      esxiCredentialId: UNSET_VALUE,
+      excludeHosts: '',
+      hosts: '',
+      hostsCount: 10,
+      hostsFilter,
+      inUse: false,
+      name: 'Unnamed',
+      port: 22,
+      portListId: 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5',
+      reverseLookupOnly: 0,
+      reverseLookupUnify: 0,
+      smbCredentialId: UNSET_VALUE,
+      snmpCredentialId: UNSET_VALUE,
+      sshCredentialId: UNSET_VALUE,
+      sshElevateCredentialId: UNSET_VALUE,
+      krb5CredentialId: UNSET_VALUE,
+      targetExcludeSource: 'manual',
+      targetSource: 'asset_hosts',
+    });
   });
 });
