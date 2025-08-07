@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import logger from 'gmp/log';
 import Filter, {
@@ -65,259 +65,162 @@ const DEFAULT_FILTER = Filter.fromString(
 
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
 
-const getTarget = (entity = {}) => {
-  const {report = {}} = entity;
-  const {task = {}} = report;
-  return task.target;
-};
-
 const getFilter = (entity = {}) => {
   const {report = {}} = entity;
   return report.filter;
 };
 
-class DeltaReportDetails extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      showFilterDialog: false,
-      showDownloadReportDialog: false,
-      sorting: {
-        results: {
-          sortField: 'severity',
-          sortReverse: true,
-        },
-        apps: {
-          sortField: 'severity',
-          sortReverse: true,
-        },
-        ports: {
-          sortField: 'severity',
-          sortReverse: true,
-        },
-        hosts: {
-          sortField: 'severity',
-          sortReverse: true,
-        },
-        os: {
-          sortField: 'severity',
-          sortReverse: true,
-        },
-        cves: {
-          sortField: 'severity',
-          sortReverse: true,
-        },
-        closedcves: {
-          sortField: 'severity',
-          sortReverse: true,
-        },
-        tlscerts: {
-          sortField: 'dn',
-          sortReverse: false,
-        },
-        errors: {
-          sortField: 'error',
-          sortReverse: false,
-        },
-      },
-    };
+const DeltaReportDetails = props => {
+  const {
+    deltaReportId,
+    entity,
+    entityError,
+    filters = [],
+    gmp,
+    isLoading,
+    loadFilters,
 
-    this.handleAddToAssets = this.handleAddToAssets.bind(this);
-    this.handleChanged = this.handleChanged.bind(this);
-    this.handleError = this.handleError.bind(this);
-    this.handleFilterAddLogLevel = this.handleFilterAddLogLevel.bind(this);
-    this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.handleFilterDecreaseMinQoD =
-      this.handleFilterDecreaseMinQoD.bind(this);
-    this.handleFilterCreated = this.handleFilterCreated.bind(this);
-    this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleFilterRemoveSeverity =
-      this.handleFilterRemoveSeverity.bind(this);
-    this.handleFilterRemoveClick = this.handleFilterRemoveClick.bind(this);
-    this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
-    this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
-    this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleFilterDialogClose = this.handleFilterDialogClose.bind(this);
-    this.handleSortChange = this.handleSortChange.bind(this);
+    loadReportComposerDefaults,
+    loadReportConfigs,
+    loadReportFormats,
+    loadSettings,
+    loadTarget,
 
-    this.loadTarget = this.loadTarget.bind(this);
-    this.handleOpenDownloadReportDialog =
-      this.handleOpenDownloadReportDialog.bind(this);
-    this.handleCloseDownloadReportDialog =
-      this.handleCloseDownloadReportDialog.bind(this);
-  }
+    reload,
+    reportComposerDefaults = {},
+    reportExportFileName,
+    reportFilter,
+    reportFormats = [],
+    reportConfigs = [],
+    reportId,
+    resultDefaultFilter,
+    saveReportComposerDefaults,
+    showError,
+    showErrorMessage,
+    showSuccessMessage,
+    username,
+    onDownload,
+    _,
+  } = props;
 
-  componentDidMount() {
-    this.props.loadSettings();
-    this.props.loadFilters();
-    this.props.loadReportConfigs();
-    this.props.loadReportFormats();
-    this.props.loadReportComposerDefaults();
-  }
+  // State
+  const [showFilterDialog, setShowFilterDialog] = useState(false);
+  const [showDownloadReportDialog, setShowDownloadReportDialog] =
+    useState(false);
+  const [sorting, setSorting] = useState({
+    results: {sortField: 'severity', sortReverse: true},
+    apps: {sortField: 'severity', sortReverse: true},
+    ports: {sortField: 'severity', sortReverse: true},
+    hosts: {sortField: 'severity', sortReverse: true},
+    os: {sortField: 'severity', sortReverse: true},
+    cves: {sortField: 'severity', sortReverse: true},
+    closedcves: {sortField: 'severity', sortReverse: true},
+    tlscerts: {sortField: 'dn', sortReverse: false},
+    errors: {sortField: 'error', sortReverse: false},
+  });
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [lastFilter, setLastFilter] = useState();
+  const [storeAsDefault, setStoreAsDefault] = useState(false);
+  const [reportFormatId, setReportFormatId] = useState();
 
-  componentDidUpdate(prevProps) {
-    const {reportFormats} = this.props;
-    if (
-      !isDefined(this.state.reportFormatId) &&
-      isDefined(reportFormats) &&
-      reportFormats.length > 0
-    ) {
-      // set initial report format id if available
-      const reportFormatId = first(reportFormats).id;
-      if (isDefined(reportFormatId)) {
-        // ensure the report format id is only set if we really have one
-        // if no report format id is available we would create an infinite
-        // render loop here
-        this.setState({reportFormatId});
-      }
+  // Initial load
+  useEffect(() => {
+    loadSettings();
+    loadFilters();
+    loadReportConfigs();
+    loadReportFormats();
+    loadReportComposerDefaults();
+  }, []);
+
+  // Set initial reportFormatId if available
+  useEffect(() => {
+    if (!reportFormatId && reportFormats && reportFormats.length > 0) {
+      const id = first(reportFormats).id;
+      if (isDefined(id)) setReportFormatId(id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportFormats]);
 
-    if (
-      prevProps.reportId !== this.props.reportId ||
-      prevProps.deltaReportId !== this.props.deltaReportId
-    ) {
-      this.load();
-    }
-  }
+  // Reload on id change
+  useEffect(() => {
+    setIsUpdating(false);
+    setLastFilter(undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportId, deltaReportId]);
 
-  load(filter) {
-    log.debug('Loading deleta report', {
-      filter,
-    });
+  // Load function
+  const load = filter => {
+    log.debug('Loading deleta report', {filter});
+    setIsUpdating(isDefined(lastFilter) && !lastFilter?.equals?.(filter));
+    setLastFilter(filter);
+    return reload(filter).then(() => setIsUpdating(false));
+  };
 
-    this.setState(({lastFilter}) => ({
-      isUpdating: isDefined(lastFilter) && !lastFilter.equals(filter), // show update indicator if filter has changed
-      lastFilter: filter,
-    }));
-
-    this.props.reload(filter).then(() => {
-      this.setState({isUpdating: false});
-    });
-  }
-
-  reload() {
-    // reload data from backend
-    this.load(this.state.lastFilter);
-  }
-
-  handleChanged() {
-    this.reload();
-  }
-
-  handleError(error) {
-    const {showError} = this.props;
+  // Handlers
+  const handleChanged = () => load(lastFilter);
+  const handleError = error => {
     log.error(error);
     showError(error);
-  }
-
-  handleFilterChange(filter) {
-    this.load(filter);
-  }
-
-  handleFilterRemoveClick() {
-    this.handleFilterChange(RESET_FILTER);
-  }
-
-  handleFilterResetClick() {
-    this.handleFilterChange(this.props.resultDefaultFilter);
-  }
-
-  handleAddToAssets() {
-    const {_} = this.props;
-
-    const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
-
-    gmp.report.addAssets(entity, {filter}).then(() => {
+  };
+  const handleFilterChange = filter => load(filter);
+  const handleFilterRemoveClick = () => handleFilterChange(RESET_FILTER);
+  const handleFilterResetClick = () => handleFilterChange(resultDefaultFilter);
+  const handleAddToAssets = () => {
+    gmp.report.addAssets(entity, {filter: reportFilter}).then(() => {
       showSuccessMessage(
         _(
           'Report content added to Assets with QoD>=70% and Overrides enabled.',
         ),
       );
-      this.reload();
-    }, this.handleError);
-  }
-
-  handleRemoveFromAssets() {
-    const {_} = this.props;
-
-    const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
-
-    gmp.report.removeAssets(entity, {filter}).then(() => {
+      handleChanged();
+    }, handleError);
+  };
+  const handleRemoveFromAssets = () => {
+    gmp.report.removeAssets(entity, {filter: reportFilter}).then(() => {
       showSuccessMessage(_('Report content removed from Assets.'));
-      this.reload();
-    }, this.handleError);
-  }
-
-  handleFilterEditClick() {
-    this.setState({showFilterDialog: true});
-  }
-
-  handleFilterDialogClose() {
-    this.setState({showFilterDialog: false});
-  }
-
-  handleOpenDownloadReportDialog() {
-    this.setState({
-      showDownloadReportDialog: true,
-    });
-  }
-
-  handleCloseDownloadReportDialog() {
-    this.setState({showDownloadReportDialog: false});
-  }
-
-  handleReportDownload(state) {
-    const {
-      deltaReportId,
-      entity,
-      gmp,
-      reportComposerDefaults,
-      reportExportFileName,
-      reportFilter,
-      reportFormats = [],
-      username,
-      onDownload,
-    } = this.props;
+      handleChanged();
+    }, handleError);
+  };
+  const handleFilterEditClick = () => setShowFilterDialog(true);
+  const handleFilterDialogClose = () => setShowFilterDialog(false);
+  const handleOpenDownloadReportDialog = () =>
+    setShowDownloadReportDialog(true);
+  const handleCloseDownloadReportDialog = () =>
+    setShowDownloadReportDialog(false);
+  const handleReportDownload = state => {
     const {
       includeNotes,
       includeOverrides,
       reportConfigId,
-      reportFormatId,
-      storeAsDefault,
+      reportFormatId: chosenFormatId,
+      storeAsDefault: storeDefault,
     } = state;
-
     const newFilter = reportFilter.copy();
     newFilter.set('notes', includeNotes);
     newFilter.set('overrides', includeOverrides);
-
-    if (storeAsDefault) {
+    if (storeDefault) {
       const defaults = {
         ...reportComposerDefaults,
         defaultReportConfigId: reportConfigId,
-        defaultReportFormatId: reportFormatId,
+        defaultReportFormatId: chosenFormatId,
         includeNotes,
         includeOverrides,
       };
-      this.props.saveReportComposerDefaults(defaults);
+      saveReportComposerDefaults(defaults);
     }
-
-    const report_format = reportFormats.find(
-      format => reportFormatId === format.id,
-    );
-
+    const report_format = reportFormats.find(f => chosenFormatId === f.id);
     const extension = isDefined(report_format)
       ? report_format.extension
-      : 'unknown'; // unknown should never happen but we should be save here
-
+      : 'unknown';
     return gmp.report
       .download(entity, {
         reportConfigId,
-        reportFormatId,
+        reportFormatId: chosenFormatId,
         deltaReportId,
         filter: newFilter,
       })
       .then(response => {
-        this.setState({showDownloadReportDialog: false});
+        setShowDownloadReportDialog(false);
         const {data} = response;
         const filename = generateFilename({
           creationTime: entity.creationTime,
@@ -325,170 +228,119 @@ class DeltaReportDetails extends React.Component {
           fileNameFormat: reportExportFileName,
           id: entity.id,
           modificationTime: entity.modificationTime,
-          reportFormat: report_format.name,
-          resourceName: entity.task.name,
+          reportFormat: report_format?.name,
+          resourceName: entity.task?.name,
           resourceType: 'report',
           username,
         });
-
         onDownload({filename, data});
-      }, this.handleError);
-  }
-
-  handleFilterCreated(filter) {
-    this.load(filter);
-    this.props.loadFilters();
-  }
-
-  handleFilterAddLogLevel() {
-    const {reportFilter} = this.props;
+      }, handleError);
+  };
+  const handleFilterCreated = filter => {
+    load(filter);
+    loadFilters();
+  };
+  const handleFilterAddLogLevel = () => {
     let levels = reportFilter.get('levels', '');
-
     if (!levels.includes('g')) {
       levels += 'g';
       const lfilter = reportFilter.copy();
       lfilter.set('levels', levels);
-      this.load(lfilter);
+      load(lfilter);
     }
-  }
-
-  handleFilterRemoveSeverity() {
-    const {reportFilter} = this.props;
-
+  };
+  const handleFilterRemoveSeverity = () => {
     if (reportFilter.has('severity')) {
       const lfilter = reportFilter.copy();
       lfilter.delete('severity');
-      this.load(lfilter);
+      load(lfilter);
     }
-  }
-
-  handleFilterDecreaseMinQoD() {
-    const {reportFilter} = this.props;
-
+  };
+  const handleFilterDecreaseMinQoD = () => {
     if (reportFilter.has('min_qod')) {
       const lfilter = reportFilter.copy();
       lfilter.set('min_qod', 30);
-      this.load(lfilter);
+      load(lfilter);
     }
-  }
-
-  handleSortChange(name, sortField) {
-    const prev = this.state.sorting[name];
-
+  };
+  const handleSortChange = (name, sortField) => {
+    const prev = sorting[name];
     const sortReverse =
       sortField === prev.sortField ? !prev.sortReverse : false;
-
-    this.setState({
-      sorting: {
-        ...this.state.sorting,
-        [name]: {
-          sortField,
-          sortReverse,
-        },
-      },
+    setSorting({
+      ...sorting,
+      [name]: {sortField, sortReverse},
     });
-  }
+  };
 
-  loadTarget() {
-    const {entity} = this.props;
-    const target = getTarget(entity);
+  const {report} = entity || {};
 
-    return this.props.loadTarget(target.id);
-  }
-
-  render() {
-    const {
-      entity,
-      entityError,
-      filters = [],
-      isLoading,
-      reportFilter,
-      reportFormats,
-      reportConfigs,
-      reportId,
-
-      reportComposerDefaults,
-      showError,
-      showErrorMessage,
-      showSuccessMessage,
-    } = this.props;
-    const {
-      isUpdating = false,
-      showFilterDialog,
-      showDownloadReportDialog,
-      sorting,
-      storeAsDefault,
-    } = this.state;
-
-    const {report} = entity || {};
-    return (
-      <React.Fragment>
-        <TargetComponent onError={this.handleError}>
-          {({edit}) => (
-            <Page
-              entity={entity}
-              entityError={entityError}
-              filter={reportFilter}
-              filters={filters}
-              isLoading={isLoading}
-              isUpdating={isUpdating}
-              reportId={reportId}
-              showError={showError}
-              showErrorMessage={showErrorMessage}
-              showSuccessMessage={showSuccessMessage}
-              sorting={sorting}
-              task={isDefined(report) ? report.task : undefined}
-              onAddToAssetsClick={this.handleAddToAssets}
-              onError={this.handleError}
-              onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
-              onFilterChanged={this.handleFilterChange}
-              onFilterCreated={this.handleFilterCreated}
-              onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
-              onFilterEditClick={this.handleFilterEditClick}
-              onFilterRemoveClick={this.handleFilterRemoveClick}
-              onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
-              onFilterResetClick={this.handleFilterResetClick}
-              onRemoveFromAssetsClick={this.handleRemoveFromAssets}
-              onReportDownloadClick={this.handleOpenDownloadReportDialog}
-              onSortChange={this.handleSortChange}
-              onTagSuccess={this.handleChanged}
-              onTargetEditClick={() =>
-                this.loadTarget().then(response => edit(response.data))
-              }
-            />
-          )}
-        </TargetComponent>
-        {showFilterDialog && (
-          <ReportDetailsFilterDialog
-            createFilterType="result"
-            delta={true}
+  return (
+    <>
+      <TargetComponent onError={handleError}>
+        {({edit}) => (
+          <Page
+            entity={entity}
+            entityError={entityError}
             filter={reportFilter}
-            onCloseClick={this.handleFilterDialogClose}
-            onFilterChanged={this.handleFilterChange}
-            onFilterCreated={this.handleFilterCreated}
+            filters={filters}
+            isLoading={isLoading}
+            isUpdating={isUpdating}
+            reportId={reportId}
+            showError={showError}
+            showErrorMessage={showErrorMessage}
+            showSuccessMessage={showSuccessMessage}
+            sorting={sorting}
+            task={isDefined(report) ? report.task : undefined}
+            onAddToAssetsClick={handleAddToAssets}
+            onError={handleError}
+            onFilterAddLogLevelClick={handleFilterAddLogLevel}
+            onFilterChanged={handleFilterChange}
+            onFilterCreated={handleFilterCreated}
+            onFilterDecreaseMinQoDClick={handleFilterDecreaseMinQoD}
+            onFilterEditClick={handleFilterEditClick}
+            onFilterRemoveClick={handleFilterRemoveClick}
+            onFilterRemoveSeverityClick={handleFilterRemoveSeverity}
+            onFilterResetClick={handleFilterResetClick}
+            onRemoveFromAssetsClick={handleRemoveFromAssets}
+            onReportDownloadClick={handleOpenDownloadReportDialog}
+            onSortChange={handleSortChange}
+            onTagSuccess={handleChanged}
+            onTargetEditClick={() =>
+              loadTarget().then(response => edit(response.data))
+            }
           />
         )}
-        {showDownloadReportDialog && (
-          <DownloadReportDialog
-            defaultReportConfigId={reportComposerDefaults.defaultReportConfigId}
-            defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
-            filter={reportFilter}
-            includeNotes={reportComposerDefaults.includeNotes}
-            includeOverrides={reportComposerDefaults.includeOverrides}
-            reportConfigs={reportConfigs}
-            reportFormats={reportFormats}
-            storeAsDefault={storeAsDefault}
-            onClose={this.handleCloseDownloadReportDialog}
-            onSave={this.handleReportDownload}
-          />
-        )}
-      </React.Fragment>
-    );
-  }
-}
+      </TargetComponent>
+      {showFilterDialog && (
+        <ReportDetailsFilterDialog
+          createFilterType="result"
+          delta={true}
+          filter={reportFilter}
+          onCloseClick={handleFilterDialogClose}
+          onFilterChanged={handleFilterChange}
+          onFilterCreated={handleFilterCreated}
+        />
+      )}
+      {showDownloadReportDialog && (
+        <DownloadReportDialog
+          defaultReportConfigId={reportComposerDefaults.defaultReportConfigId}
+          defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
+          filter={reportFilter}
+          includeNotes={reportComposerDefaults.includeNotes}
+          includeOverrides={reportComposerDefaults.includeOverrides}
+          reportConfigs={reportConfigs}
+          reportFormats={reportFormats}
+          storeAsDefault={storeAsDefault}
+          onClose={handleCloseDownloadReportDialog}
+          onSave={handleReportDownload}
+        />
+      )}
+    </>
+  );
+};
 
 DeltaReportDetails.propTypes = {
-  defaultFilter: PropTypes.filter,
   deltaReportId: PropTypes.id,
   entity: PropTypes.model,
   entityError: PropTypes.object,
@@ -496,14 +348,11 @@ DeltaReportDetails.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool.isRequired,
   loadFilters: PropTypes.func.isRequired,
-  loadReport: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportConfigs: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
-  loadReportIfNeeded: PropTypes.func.isRequired,
   loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
-  location: PropTypes.object.isRequired,
   reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
   reportExportFileName: PropTypes.string,
@@ -516,7 +365,6 @@ DeltaReportDetails.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
-  target: PropTypes.model,
   username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
   _: PropTypes.func.isRequired,
