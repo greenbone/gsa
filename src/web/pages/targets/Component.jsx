@@ -12,7 +12,7 @@ import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialsDialog from 'web/pages/credentials/Dialog';
 import PortListDialog from 'web/pages/portlists/PortListDialog';
-import TargetDialog from 'web/pages/targets/Dialog';
+import TargetDialog from 'web/pages/targets/TargetDialog';
 import PropTypes from 'web/utils/PropTypes';
 import {UNSET_VALUE} from 'web/utils/Render';
 
