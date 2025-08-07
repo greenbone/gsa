@@ -134,7 +134,7 @@ class ScanConfig extends Model {
   readonly families?: ScanConfigFamilies;
   readonly nvts?: ScanConfigNvts;
   readonly predefined?: boolean;
-  readonly preferences?: {
+  readonly preferences: {
     nvt: ScanConfigPreference[];
     scanner: ScanConfigPreference[];
   };
@@ -148,7 +148,7 @@ class ScanConfig extends Model {
     families,
     nvts,
     predefined,
-    preferences,
+    preferences = {nvt: [], scanner: []},
     scanner,
     tasks = [],
     ...properties
@@ -242,11 +242,12 @@ class ScanConfig extends Model {
           nvtPreferences.push(pref);
         }
       });
-      ret.preferences = {
-        scanner: scannerPreferences,
-        nvt: nvtPreferences,
-      };
     }
+
+    ret.preferences = {
+      scanner: scannerPreferences,
+      nvt: nvtPreferences,
+    };
 
     if (isDefined(element.scanner)) {
       const scanner = {
