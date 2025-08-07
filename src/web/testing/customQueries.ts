@@ -10,7 +10,6 @@ import {
   getElementError,
   queryAllByAttribute,
   queryAllByRole,
-  queryAllByTestId,
   queryByRole,
   queryByTestId,
 } from '@testing-library/react';
@@ -75,7 +74,9 @@ export const getSelectElement = (element?: HTMLElement) => {
  */
 export const queryAllSelectElements = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return queryAllByTestId(element, 'form-select') as HTMLSelectElement[];
+  return Array.from(
+    element.querySelectorAll<HTMLSelectElement>('.mantine-Select-input'),
+  );
 };
 
 /**
