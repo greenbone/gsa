@@ -177,6 +177,8 @@ const TargetDialog = ({
   onKrb5CredentialChange,
   onSnmpCredentialChange,
   onSshElevateCredentialChange,
+  // initial should be removed when all users of the TargetDialog are converted
+  // to typescript and all additional props are known
   ...initial
 }: TargetDialogProps) => {
   const [_] = useTranslation();
