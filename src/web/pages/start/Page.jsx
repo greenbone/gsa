@@ -16,7 +16,7 @@ import {
 } from 'web/components/dashboard/Utils';
 import {
   DashboardIcon,
-  DeleteIcon,
+  TrashcanIcon,
   EditIcon,
   NewIcon,
 } from 'web/components/icon';
@@ -390,7 +390,7 @@ class StartPage extends React.Component {
                                   this.handleOpenEditDashboardDialog(id)
                                 }
                               />
-                              <DeleteIcon
+                              <TrashcanIcon
                                 size="tiny"
                                 title={_('Remove Dashboard')}
                                 onClick={() =>

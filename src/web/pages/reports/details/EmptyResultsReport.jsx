@@ -6,7 +6,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
-import {DeleteIcon, EditIcon, FilterIcon} from 'web/components/icon';
+import {CircleXDeleteIcon, EditIcon, FilterIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import InfoPanel from 'web/components/panel/InfoPanel';
@@ -95,7 +95,7 @@ const EmptyResultsReport = ({
         </ReportPanel>
 
         <ReportPanel
-          icon={props => <DeleteIcon {...props} />}
+          icon={props => <CircleXDeleteIcon {...props} />}
           title={_('Your last filter change may be too restrictive.')}
           onClick={onFilterRemoveClick}
         >

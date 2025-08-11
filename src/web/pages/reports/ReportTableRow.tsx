@@ -10,7 +10,11 @@ import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import StatusBar from 'web/components/bar/StatusBar';
 import DateTime from 'web/components/date/DateTime';
-import {DeleteIcon, DeltaIcon, DeltaSecondIcon} from 'web/components/icon';
+import {
+  CircleXDeleteIcon,
+  DeltaIcon,
+  DeltaSecondIcon,
+} from 'web/components/icon';
 import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
@@ -71,7 +75,7 @@ const ReportActions = withEntitiesActions(
             onClick={onReportDeltaSelect as (report?: Report) => Promise<void>}
           />
         )}
-        <DeleteIcon
+        <CircleXDeleteIcon
           active={!scanActive}
           title={title}
           value={entity}
