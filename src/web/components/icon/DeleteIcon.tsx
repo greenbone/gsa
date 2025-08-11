@@ -4,7 +4,7 @@
  */
 
 import {isDefined} from 'gmp/utils/identity';
-import {CircleXIcon} from 'web/components/icon';
+import {CircleXDeleteIcon} from 'web/components/icon';
 import {DynamicIconProps} from 'web/components/icon/DynamicIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
@@ -37,7 +37,7 @@ function DeleteIcon<TValue = string>({
     }
   }
   return (
-    <CircleXIcon
+    <CircleXDeleteIcon
       data-testid={dataTestId}
       loading={loading}
       title={title}

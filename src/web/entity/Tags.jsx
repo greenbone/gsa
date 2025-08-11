@@ -6,7 +6,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
-import {DeleteIcon, DisableIcon, EditIcon, NewIcon} from 'web/components/icon';
+import {
+  TrashcanIcon,
+  DisableIcon,
+  EditIcon,
+  NewIcon,
+} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
@@ -131,7 +136,7 @@ class EntityTagsTable extends React.Component {
                           value={tag}
                           onClick={onTagDisableClick}
                         />
-                        <DeleteIcon
+                        <TrashcanIcon
                           title={_('Remove Tag from {{type}}', {
                             type: typeName(entityType),
                           })}
