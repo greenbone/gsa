@@ -28,7 +28,6 @@ import 'gmp/commands/permissions';
 import 'gmp/commands/policies';
 import 'gmp/commands/reportconfigs';
 import 'gmp/commands/reportformats';
-import 'gmp/commands/reports';
 import 'gmp/commands/results';
 import 'gmp/commands/roles';
 import 'gmp/commands/scanconfigs';
@@ -46,6 +45,7 @@ import AuthenticationCommand from 'gmp/commands/auth';
 import LoginCommand from 'gmp/commands/login';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
+import {ReportCommand, ReportsCommand} from 'gmp/commands/reports';
 import TrashCanCommand from 'gmp/commands/trashcan';
 import {UserCommand, UsersCommand} from 'gmp/commands/users';
 import WizardCommand from 'gmp/commands/wizard';
@@ -79,6 +79,8 @@ class Gmp {
   readonly user: UserCommand;
   readonly users: UsersCommand;
   readonly wizard: WizardCommand;
+  readonly report: ReportCommand;
+  readonly reports: ReportsCommand;
 
   constructor(settings: GmpSettings, http?: GmpHttp) {
     this.settings = settings;
@@ -103,6 +105,8 @@ class Gmp {
     this.user = new UserCommand(this.http);
     this.users = new UsersCommand(this.http);
     this.wizard = new WizardCommand(this.http);
+    this.report = new ReportCommand(this.http);
+    this.reports = new ReportsCommand(this.http);
 
     this._initCommands();
   }
