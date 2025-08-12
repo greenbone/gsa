@@ -13,7 +13,7 @@ const getMajorMinorVersion = () => {
   return `${major}.${minor}`;
 };
 
-export const VERSION = '25.2.0';
+export const VERSION = '25.2.1-dev1';
 
 export const RELEASE_VERSION = getMajorMinorVersion();
 
