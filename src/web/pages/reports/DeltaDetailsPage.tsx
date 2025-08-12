@@ -233,7 +233,13 @@ const DeltaReportDetails = ({
   const handleFilterResetClick = () => handleFilterChange(resultDefaultFilter);
 
   const handleAddToAssets = async () => {
-    await gmp.report.addAssets(entity, {filter: reportFilter});
+    if (!entity.id) {
+      throw new Error('Entity ID is undefined');
+    }
+
+    const filterString = reportFilter?.toFilterString();
+
+    await gmp.report.addAssets({id: entity.id, filter: filterString});
     showSuccessMessage(
       _('Report content added to Assets with QoD>=70% and Overrides enabled.'),
     );
@@ -241,7 +247,13 @@ const DeltaReportDetails = ({
   };
 
   const handleRemoveFromAssets = async () => {
-    await gmp.report.removeAssets(entity, {filter: reportFilter});
+    if (!entity.id) {
+      throw new Error('Entity ID is undefined');
+    }
+
+    const filterString = reportFilter?.toFilterString();
+
+    await gmp.report.removeAssets({id: entity.id, filter: filterString});
     showSuccessMessage(_('Report content removed from Assets.'));
     await handleChanged();
   };
@@ -256,7 +268,7 @@ const DeltaReportDetails = ({
   const handleCloseDownloadReportDialog = () =>
     setShowDownloadReportDialog(false);
 
-  const handleReportDownload = state => {
+  const handleReportDownload = async state => {
     const {
       includeNotes,
       includeOverrides,
@@ -270,6 +282,7 @@ const DeltaReportDetails = ({
 
     newFilter.set('notes', includeNotes);
     newFilter.set('overrides', includeOverrides);
+
     if (storeDefault) {
       const defaults = {
         ...reportComposerDefaults,
@@ -283,34 +296,46 @@ const DeltaReportDetails = ({
 
     const report_format = reportFormats.find(f => chosenFormatId === f.id);
 
-    const extension = isDefined(report_format)
-      ? report_format.extension
-      : 'unknown';
-    return gmp.report
-      .download(entity, {
-        reportConfigId,
-        reportFormatId: chosenFormatId,
-        deltaReportId,
-        filter: newFilter,
-      })
-      .then(response => {
-        setShowDownloadReportDialog(false);
+    const extension = report_format?.extension || 'unknown';
 
-        const {data} = response;
+    if (!entity.id) {
+      throw new Error('Entity ID is undefined');
+    }
 
-        const filename = generateFilename({
-          creationTime: entity.creationTime,
-          extension,
-          fileNameFormat: reportExportFileName,
-          id: entity.id,
-          modificationTime: entity.modificationTime,
-          reportFormat: report_format?.name,
-          resourceName: entity.task?.name,
-          resourceType: 'report',
-          username,
-        });
-        onDownload({filename, data});
-      }, handleError);
+    try {
+      const response = await gmp.report.download(
+        {id: entity.id},
+        {
+          reportConfigId,
+          reportFormatId: chosenFormatId,
+          deltaReportId,
+          filter: newFilter,
+        },
+      );
+
+      setShowDownloadReportDialog(false);
+
+      const {data} = response;
+
+      const stringifiedData =
+        typeof data === 'string' ? data : JSON.stringify(data);
+
+      const filename = generateFilename({
+        creationTime: entity.creationTime,
+        extension,
+        fileNameFormat: reportExportFileName,
+        id: entity.id,
+        modificationTime: entity.modificationTime,
+        reportFormat: report_format?.name,
+        resourceName: entity.task?.name,
+        resourceType: 'report',
+        username,
+      });
+
+      onDownload({filename, data: stringifiedData});
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   const handleFilterCreated = filter => {
@@ -368,7 +393,7 @@ const DeltaReportDetails = ({
         {({edit}) => (
           <DeltaDetailsContent
             entity={entity}
-            entityError={entityError as object | null | undefined}
+            entityError={entityError as Record<string, unknown> | undefined}
             filter={reportFilter}
             filters={filters}
             isLoading={isLoading}
@@ -395,10 +420,10 @@ const DeltaReportDetails = ({
             onSortChange={handleSortChange}
             onTagSuccess={handleChanged}
             onTargetEditClick={async () => {
-              const targetId = entity?.task?.id; // Assuming entity.task.id contains the targetId
+              const targetId = entity?.task?.id;
               if (targetId) {
                 const response = await loadTarget(targetId);
-                edit(response); // Directly pass the response object
+                edit(response);
               } else {
                 console.error('Target ID is missing');
               }
