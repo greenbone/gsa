@@ -80,7 +80,7 @@ import ScannerDetailsPage from 'web/pages/scanners/DetailsPage';
 import ScannersPage from 'web/pages/scanners/ListPage';
 import ScheduleDetailsPage from 'web/pages/schedules/DetailsPage';
 import SchedulesPage from 'web/pages/schedules/ListPage';
-import StartPage from 'web/pages/start/Page';
+import StartPage from 'web/pages/start/StartPage';
 import TagDetailsPage from 'web/pages/tags/DetailsPage';
 import TagsPage from 'web/pages/tags/ListPage';
 import TargetDetailsPage from 'web/pages/targets/DetailsPage';
