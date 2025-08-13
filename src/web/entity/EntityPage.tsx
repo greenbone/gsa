@@ -6,7 +6,8 @@
 import React from 'react';
 import * as ReactIs from 'react-is';
 import styled from 'styled-components';
-import {typeName} from 'gmp/utils/entitytype';
+import Model from 'gmp/models/model';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import Toolbar from 'web/components/bar/Toolbar';
@@ -18,20 +19,12 @@ import Section from 'web/components/section/Section';
 import EntityInfo from 'web/entity/EntityInfo';
 import useTranslation from 'web/hooks/useTranslation';
 
-export interface Entity {
-  id: string;
-  name: string;
-  [key: string]: unknown;
+interface InfoComponentProps<TEntity> {
+  entity: TEntity;
 }
 
-interface InfoComponentProps {
-  entity: Entity;
-  [key: string]: unknown;
-}
-
-interface ToolBarIconsComponentProps {
-  entity: Entity;
-  [key: string]: unknown;
+interface ToolBarIconsComponentProps<TEntity> {
+  entity: TEntity;
 }
 
 interface SectionComponentProps {
@@ -47,13 +40,13 @@ interface EntityError {
   message: string;
 }
 
-interface EntityPageProps {
+interface EntityPageProps<TEntity extends Model> {
   children: () => React.ReactNode;
-  entity: Entity;
+  entity: TEntity;
   entityError?: EntityError;
-  entityType: string;
+  entityType?: string;
   infoComponent?:
-    | React.ComponentType<InfoComponentProps>
+    | React.ComponentType<InfoComponentProps<TEntity>>
     | React.ReactElement
     | false;
   isLoading: boolean;
@@ -61,9 +54,8 @@ interface EntityPageProps {
   sectionIcon: React.ReactElement;
   title: string;
   toolBarIcons:
-    | React.ComponentType<ToolBarIconsComponentProps>
+    | React.ComponentType<ToolBarIconsComponentProps<TEntity>>
     | React.ReactElement;
-  [key: string]: unknown;
 }
 
 export const Col = styled.col`
@@ -78,20 +70,19 @@ const MessageContent = styled.div`
   white-space: pre;
 `;
 
-const EntityPage: React.FC<EntityPageProps> = ({
+const EntityPage = <TEntity extends Model>({
   children,
   infoComponent: InfoComponent,
   sectionIcon,
   sectionComponent: SectionComponent,
   entity,
   entityError,
-  entityType,
+  entityType = getEntityType(entity),
   isLoading = true,
   title,
   toolBarIcons: ToolBarIconsComponent,
-
   ...props
-}: EntityPageProps) => {
+}: EntityPageProps<TEntity>) => {
   const [_] = useTranslation();
 
   const renderToolbarIcons = () => {
