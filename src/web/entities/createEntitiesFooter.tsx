@@ -4,7 +4,14 @@
  */
 
 import EntitiesFooter, {EntitiesFooterProps} from 'web/entities/EntitiesFooter';
-import withEntitiesFooter from 'web/entities/withEntitiesFooter';
+import withEntitiesFooter, {
+  WithEntitiesFooterProps,
+} from 'web/entities/withEntitiesFooter';
+
+export type CreateEntitiesFooterProps<TEntity> = WithEntitiesFooterProps<
+  TEntity,
+  EntitiesFooterProps<TEntity>
+>;
 
 function createEntitiesFooter<TEntity>(
   options: Partial<EntitiesFooterProps<TEntity>> = {},
