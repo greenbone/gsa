@@ -8,7 +8,7 @@ import TableData from 'web/components/table/TableData';
 import EntitySelection, {Entity} from 'web/entities/EntitySelection';
 import SelectionType, {SelectionTypeType} from 'web/utils/SelectionType';
 
-export interface EntitiesActionsProps<TEntity extends Entity> {
+export interface EntitiesActionsProps<TEntity> {
   children?: React.ReactNode;
   'data-testid'?: string;
   entity: TEntity;
@@ -31,8 +31,8 @@ const EntitiesActions = <TEntity extends Entity>({
       <TableData align={['center', 'center']} data-testid={dataTestId}>
         <EntitySelection
           entity={entity}
-          onDeselected={onEntityDeselected as (entity: Entity) => void}
-          onSelected={onEntitySelected as (entity: Entity) => void}
+          onDeselected={onEntityDeselected}
+          onSelected={onEntitySelected}
         />
       </TableData>
     );
