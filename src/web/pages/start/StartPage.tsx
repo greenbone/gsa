@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {v4 as uuid} from 'uuid';
@@ -42,6 +42,7 @@ import EditDashboardDialog from 'web/pages/start/EditDashboardDialog';
 import NewDashboardDialog, {
   DEFAULT_DISPLAYS,
 } from 'web/pages/start/NewDashboardDialog';
+import {DashboardData, DashboardSettings} from 'web/pages/start/types';
 import {loadSettings, saveSettings} from 'web/store/dashboard/settings/actions';
 import getDashboardSettingsSelector, {
   DashboardSetting,
@@ -93,14 +94,16 @@ const StartPage = () => {
   const dispatch = useDispatch();
 
   const loadSettingsAction = useCallback(
-    (id, defaults) => {
+    (id: string, defaults: Record<string, unknown>) => {
+      // @ts-expect-error
       dispatch(loadSettings(gmp)(id, defaults));
     },
     [dispatch, gmp],
   );
 
   const saveDashboardSettings = useCallback(
-    (id, defaults) => {
+    (id: string, defaults: Record<string, unknown>) => {
+      // @ts-expect-error
       dispatch(saveSettings(gmp)(id, defaults));
     },
     [dispatch, gmp],
@@ -110,7 +113,7 @@ const StartPage = () => {
   const settings = settingsSelector.getById(DASHBOARD_ID);
   const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
 
-  const getDashboardSettings = dashboardId => {
+  const getDashboardSettings = (dashboardId: string): DashboardSettings => {
     if (!dashboardSelector) {
       return {};
     }
@@ -120,31 +123,27 @@ const StartPage = () => {
   const [showConfirmRemoveDialog, setShowConfirmRemoveDialog] = useState(false);
   const [showNewDashboardDialog, setShowNewDashboardDialog] = useState(false);
   const [showEditDashboardDialog, setShowEditDashboardDialog] = useState(false);
-  const [removeDashboardId, setRemoveDashboardId] = useState(null);
-  const [editDashboardId, setEditDashboardId] = useState(null);
+  const [removeDashboardId, setRemoveDashboardId] = useState('');
+  const [editDashboardId, setEditDashboardId] = useState('');
 
-  const dashboardSelector = React.useMemo(
-    () => (settings ? new DashboardSetting(settings) : null),
+  const dashboardSelector = useMemo(
+    () => (settings ? new DashboardSetting(settings) : undefined),
     [settings],
   );
 
   useEffect(() => {
     const DEFAULTS = getDefaults(_);
-    loadSettingsAction(DASHBOARD_ID, DEFAULTS, gmp);
+    loadSettingsAction(DASHBOARD_ID, DEFAULTS);
   }, [loadSettingsAction, _, gmp]);
 
-  const updateSettings = newSettings => {
-    saveDashboardSettings(
-      DASHBOARD_ID,
-      {
-        ...(settings || {}),
-        ...newSettings,
-      },
-      gmp,
-    );
+  const updateSettings = (newSettings: Record<string, unknown>) => {
+    saveDashboardSettings(DASHBOARD_ID, {
+      ...(settings || {}),
+      ...newSettings,
+    });
   };
 
-  const handleRemoveDashboard = dashboardId => {
+  const handleRemoveDashboard = (dashboardId: string) => {
     const dashboards = getDashboards();
 
     if (dashboards.length <= 1) {
@@ -162,12 +161,12 @@ const StartPage = () => {
 
     updateSettings({
       byId: byIdCopy,
-      dashboards: dashboards.filter(id => id !== dashboardId),
+      dashboards: dashboards.filter((id: string) => id !== dashboardId),
       defaults: defaultsCopy,
     });
   };
 
-  const handleOpenConfirmRemoveDashboardDialog = id => {
+  const handleOpenConfirmRemoveDashboardDialog = (id: string) => {
     setShowConfirmRemoveDialog(true);
     setRemoveDashboardId(id);
   };
@@ -188,7 +187,7 @@ const StartPage = () => {
     closeNewDashboardDialog();
   };
 
-  const handleOpenEditDashboardDialog = id => {
+  const handleOpenEditDashboardDialog = (id: string) => {
     setEditDashboardId(id);
     setShowEditDashboardDialog(true);
   };
@@ -197,20 +196,30 @@ const StartPage = () => {
     setShowEditDashboardDialog(false);
   };
 
-  const handleSaveDashboardSettings = (dashboardId, dashboardSettings) => {
+  const handleSaveDashboardSettings = (
+    dashboardId: string,
+    dashboardSettings: DashboardData,
+  ) => {
     updateDashboardSettings(dashboardId, dashboardSettings);
   };
 
-  const handleSetDefaultSettings = (dashboardId, defaultSettings) => {
+  const handleSetDefaultSettings = (
+    dashboardId: string,
+    defaultSettings: Record<string, unknown>,
+  ) => {
     updateDashboardDefaults(dashboardId, defaultSettings);
   };
 
-  const handleResetDashboard = dashboardId => {
+  const handleResetDashboard = (dashboardId: string) => {
     const defaults = getDashboardDefaults(dashboardId);
     updateDashboardSettings(dashboardId, defaults);
   };
 
-  const handleAddNewDisplay = (oldSettings, dashboardId, displayId) => {
+  const handleAddNewDisplay = (
+    oldSettings: DashboardSettings,
+    dashboardId: string,
+    displayId: string,
+  ) => {
     if (!isDefined(displayId) || !isDefined(dashboardId)) {
       return;
     }
@@ -226,13 +235,16 @@ const StartPage = () => {
   const handleAddNewDashboard = ({
     title,
     defaultDisplays = DEFAULT_DISPLAYS,
-  }) => {
+  }: {
+    title: string;
+    defaultDisplays?: string[][];
+  }): void => {
     const {byId = {}} = settings || {};
     const dashboards = getDashboards();
 
     const id = uuid();
 
-    const newDashboardSetting = {
+    const newDashboardSetting: unknown = {
       ...convertDefaultDisplays(defaultDisplays),
       title,
     };
@@ -249,12 +261,21 @@ const StartPage = () => {
     closeNewDashboardDialog();
   };
 
-  const handleSaveEditDashboard = ({dashboardId, dashboardTitle}) => {
+  const handleSaveEditDashboard = ({
+    dashboardId,
+    dashboardTitle,
+  }: {
+    dashboardId: string;
+    dashboardTitle: string;
+  }): void => {
     updateDashboardSettings(dashboardId, {title: dashboardTitle});
     setShowEditDashboardDialog(false);
   };
 
-  const updateDashboardSettings = (dashboardId, newSettings) => {
+  const updateDashboardSettings = (
+    dashboardId: string,
+    newSettings: DashboardData,
+  ) => {
     const {byId = {}} = settings || {};
     const oldSettings = getDashboardSettings(dashboardId);
 
@@ -269,7 +290,10 @@ const StartPage = () => {
     });
   };
 
-  const updateDashboardDefaults = (dashboardId, newDefaults) => {
+  const updateDashboardDefaults = (
+    dashboardId: string,
+    newDefaults: Record<string, unknown>,
+  ) => {
     const {defaults = {}} = settings || {};
 
     updateSettings({
@@ -280,24 +304,26 @@ const StartPage = () => {
     });
   };
 
-  const getDashboards = () => {
+  const getDashboards = (): string[] => {
     const {dashboards = [], byId = {}} = settings || {};
-    return dashboards.filter(id => isDefined(byId[id]));
+    return dashboards.filter((id: string) => isDefined(byId[id]));
   };
 
-  const getDashboardDefaults = dashboardId => {
+  const getDashboardDefaults = (
+    dashboardId: string,
+  ): Record<string, unknown> => {
     if (!dashboardSelector) {
       return {};
     }
     return dashboardSelector.getDefaultsById(dashboardId);
   };
 
-  const getDashboardTitle = dashboardId => {
+  const getDashboardTitle = (dashboardId: string): string => {
     const dashboardSettings = getDashboardSettings(dashboardId);
-    return dashboardSettings.title;
+    return dashboardSettings.title || '';
   };
 
-  const getDashboardDisplayIds = dashboardId => {
+  const getDashboardDisplayIds = (dashboardId: string): string[][] => {
     const dashboardSettings = getDashboardSettings(dashboardId);
     const {rows = []} = dashboardSettings;
     return rows.map(row => {
@@ -368,7 +394,7 @@ const StartPage = () => {
 
             <Tabs>
               <TabPanels>
-                {dashboards.map(id => {
+                {dashboards.map((id: string) => {
                   const dashboardSettings = getDashboardSettings(id);
                   return (
                     <TabPanel key={id}>
@@ -403,7 +429,7 @@ const StartPage = () => {
       )}
       {showNewDashboardDialog && (
         <NewDashboardDialog
-          additionalDisplayChoices={dashboards.map(id => ({
+          additionalDisplayChoices={dashboards.map((id: string) => ({
             label: getDashboardTitle(id),
             key: id,
             value: getDashboardDisplayIds(id),

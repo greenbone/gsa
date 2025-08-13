@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {TranslatedDashboardControls as DashboardControls} from 'web/components/dashboard/Controls';
 import {TranslatedDashboard as Dashboard} from 'web/components/dashboard/Dashboard';
 import {canAddDisplay} from 'web/components/dashboard/Utils';
@@ -21,10 +20,10 @@ import {AUDIT_REPORTS_DISPLAYS} from 'web/pages/reports/auditdashboard';
 import {REPORTS_DISPLAYS} from 'web/pages/reports/dashboard';
 import {RESULTS_DISPLAYS} from 'web/pages/results/dashboard';
 import {DEFAULT_DISPLAYS} from 'web/pages/start/NewDashboardDialog';
+import {StartDashboardProps} from 'web/pages/start/types';
 import {TASKS_DISPLAYS} from 'web/pages/tasks/dashboard';
 import {TICKETS_DISPLAYS} from 'web/pages/tickets/dashboard';
 import {VULNS_DISPLAYS} from 'web/pages/vulns/dashboard';
-import PropTypes from 'web/utils/PropTypes';
 
 const ALL_DISPLAYS = [
   ...TASKS_DISPLAYS,
@@ -46,18 +45,19 @@ const ALL_DISPLAYS = [
 
 const StartDashboard = ({
   id,
-  loadSettings = () => Promise.resolve({}),
+  loadSettings = () => {},
   saveSettings,
   settings,
   onNewDisplay,
   onResetDashboard,
-  ...props
-}) => {
+  setDefaultSettings,
+  notify,
+}: StartDashboardProps) => {
   return (
     <Layout grow flex="column">
       <Layout align="end">
         <DashboardControls
-          canAdd={canAddDisplay(props)}
+          canAdd={canAddDisplay(settings)}
           dashboardId={id}
           displayIds={ALL_DISPLAYS}
           settings={settings}
@@ -66,28 +66,20 @@ const StartDashboard = ({
         />
       </Layout>
       <Dashboard
-        {...props}
         showFilterSelection
         showFilterString
         defaultDisplays={DEFAULT_DISPLAYS}
         id={id}
         isLoading={false}
         loadSettings={loadSettings}
+        notify={notify}
         permittedDisplays={ALL_DISPLAYS}
         saveSettings={saveSettings}
+        setDefaultSettings={setDefaultSettings}
         settings={settings}
       />
     </Layout>
   );
-};
-
-StartDashboard.propTypes = {
-  id: PropTypes.id.isRequired,
-  loadSettings: PropTypes.func.isRequired,
-  saveSettings: PropTypes.func.isRequired,
-  settings: PropTypes.object,
-  onNewDisplay: PropTypes.func.isRequired,
-  onResetDashboard: PropTypes.func.isRequired,
 };
 
 export default StartDashboard;

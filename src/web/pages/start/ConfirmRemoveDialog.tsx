@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import Dialog from 'web/components/dialog/Dialog';
 import DialogContent from 'web/components/dialog/DialogContent';
@@ -11,7 +10,13 @@ import DialogTwoButtonFooter, {
   DELETE_ACTION,
 } from 'web/components/dialog/DialogTwoButtonFooter';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface ConfirmRemoveDialogProps {
+  dashboardTitle: string;
+  dashboardId: string;
+  onConfirm: (dashboardId: string) => void;
+  onDeny: () => void;
+}
 
 const Content = styled.div`
   padding: 5px 15px;
@@ -22,7 +27,7 @@ const ConfirmRemoveDialog = ({
   dashboardId,
   onConfirm,
   onDeny,
-}) => {
+}: ConfirmRemoveDialogProps) => {
   const [_] = useTranslation();
   return (
     <Dialog
@@ -46,13 +51,6 @@ const ConfirmRemoveDialog = ({
       </DialogContent>
     </Dialog>
   );
-};
-
-ConfirmRemoveDialog.propTypes = {
-  dashboardId: PropTypes.string.isRequired,
-  dashboardTitle: PropTypes.string.isRequired,
-  onConfirm: PropTypes.func.isRequired,
-  onDeny: PropTypes.func.isRequired,
 };
 
 export default ConfirmRemoveDialog;

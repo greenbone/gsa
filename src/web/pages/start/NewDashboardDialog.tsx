@@ -23,7 +23,21 @@ import {ReportsSeverityDisplay} from 'web/pages/reports/dashboard/SeverityClassD
 import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/SeverityClassDisplay';
 import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/SeverityClassDisplay';
 import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/StatusDisplay';
-import PropTypes from 'web/utils/PropTypes';
+
+interface NewDashboardDialogProps {
+  additionalDisplayChoices: Array<{
+    label: string;
+    value: Array<unknown>;
+  }>;
+  onClose: () => void;
+  onSave: ({
+    title,
+    defaultDisplays,
+  }: {
+    title: string;
+    defaultDisplays?: string[][];
+  }) => void;
+}
 
 export const MAX_TITLE_LENGTH = 50;
 
@@ -61,7 +75,11 @@ const SECINFO_DEFAULT_DISPLAYS = [
 
 const EMPTY_DISPLAYS = [];
 
-const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
+const NewDashboardDialog = ({
+  additionalDisplayChoices,
+  onClose,
+  onSave,
+}: NewDashboardDialogProps) => {
   const [_] = useTranslation();
 
   const uniqueDisplayChoices = [
@@ -98,14 +116,17 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
       defaultValues={{title: _('Unnamed'), defaultDisplays: 'default'}}
       title={_('Add new Dashboard')}
       onClose={onClose}
-      onSave={values =>
+      onSave={values => {
+        const selectedChoice = uniqueDisplayChoices.find(
+          choice => choice.key === values.defaultDisplays,
+        );
+        const defaultDisplaysValue =
+          (selectedChoice?.value as string[][]) || EMPTY_DISPLAYS;
         onSave({
-          ...values,
-          defaultDisplays: uniqueDisplayChoices.find(
-            choice => choice.key === values.defaultDisplays,
-          )?.value,
-        })
-      }
+          title: values.title,
+          defaultDisplays: defaultDisplaysValue,
+        });
+      }}
     >
       {({values, onValueChange}) => (
         <>
@@ -132,17 +153,6 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
       )}
     </SaveDialog>
   );
-};
-
-NewDashboardDialog.propTypes = {
-  additionalDisplayChoices: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.array.isRequired,
-    }),
-  ).isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default NewDashboardDialog;
