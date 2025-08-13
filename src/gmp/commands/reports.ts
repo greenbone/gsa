@@ -12,12 +12,13 @@ import {XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import Report, {ReportElement} from 'gmp/models/report';
+import {YesNo} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 interface ReportCommandImportParams {
   task_id: string;
-  in_assets?: number;
-  xml_file: string;
+  in_assets?: YesNo;
+  xml_file?: string;
 }
 
 interface ReportCommandAddAssetsParams {
@@ -34,14 +35,6 @@ interface ReportCommandAlertParams {
   alert_id: string;
   report_id: string;
   filter: string;
-}
-
-interface ReportCommandGetDeltaParams {
-  id: string;
-  delta_report_id: string;
-  filter?: string;
-  details?: boolean;
-  options?: Record<string, unknown>;
 }
 
 interface ReportCommandGetParams {
