@@ -13,7 +13,9 @@ export interface ExtendedDynamicIconProps<TValue = string>
 
 export interface IconComponentsType {
   [key: string]: {
-    <TValue = string>(props: ExtendedDynamicIconProps<TValue>): React.ReactNode;
+    <TValue = string | undefined>(
+      props: ExtendedDynamicIconProps<TValue>,
+    ): React.ReactNode;
     displayName?: string;
   };
 }

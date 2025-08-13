@@ -68,12 +68,11 @@ const EntityDeleteIcon = <TEntity extends EntityDelete>({
     }
   }
   return (
-    <DeleteIcon
+    <DeleteIcon<TEntity>
       {...props}
       active={active}
       title={title}
       value={entity}
-      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );
