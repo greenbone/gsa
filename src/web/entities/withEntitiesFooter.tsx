@@ -32,13 +32,15 @@ export interface WithEntitiesFooterComponentProps<TEntity> {
 /**
  * Props for the wrapper component created by withEntitiesFooter.
  */
-type WithEntitiesFooterProps<TEntity, TProps> =
-  EntitiesFooterWrapperProps<TEntity> &
-    Omit<
-      TProps,
-      | keyof EntitiesFooterWrapperProps<TEntity>
-      | keyof WithEntitiesFooterComponentProps<TEntity>
-    >;
+export type WithEntitiesFooterProps<
+  TEntity,
+  TProps = {},
+> = EntitiesFooterWrapperProps<TEntity> &
+  Omit<
+    TProps,
+    | keyof EntitiesFooterWrapperProps<TEntity>
+    | keyof WithEntitiesFooterComponentProps<TEntity>
+  >;
 
 export function withEntitiesFooter<
   TEntity,
