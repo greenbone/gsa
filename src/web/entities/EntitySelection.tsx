@@ -11,17 +11,17 @@ export interface Entity {
   id?: string;
 }
 
-interface EntitySelectionProps {
-  entity: Entity;
-  onDeselected?: (entity: Entity) => void;
-  onSelected?: (entity: Entity) => void;
+interface EntitySelectionProps<TEntity> {
+  entity: TEntity;
+  onDeselected?: (entity: TEntity) => void;
+  onSelected?: (entity: TEntity) => void;
 }
 
-const EntitySelection = ({
+const EntitySelection = <TEntity extends Entity>({
   entity,
   onDeselected,
   onSelected,
-}: EntitySelectionProps) => {
+}: EntitySelectionProps<TEntity>) => {
   const [selected, setSelected] = useState(false);
 
   const handleSelection = (value: boolean) => {
