@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import memoize from 'memoize-one';
-import {connect} from 'react-redux';
+import React, {useState, useEffect, useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {v4 as uuid} from 'uuid';
 import {isDefined} from 'gmp/utils/identity';
@@ -35,6 +34,7 @@ import TabPanel from 'web/components/tab/TabPanel';
 import TabPanels from 'web/components/tab/TabPanels';
 import Tabs from 'web/components/tab/Tabs';
 import TabsContainer from 'web/components/tab/TabsContainer';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ConfirmRemoveDialog from 'web/pages/start/ConfirmRemoveDialog';
 import Dashboard from 'web/pages/start/Dashboard';
@@ -42,18 +42,11 @@ import EditDashboardDialog from 'web/pages/start/EditDashboardDialog';
 import NewDashboardDialog, {
   DEFAULT_DISPLAYS,
 } from 'web/pages/start/NewDashboardDialog';
-import {
-  loadSettings,
-  saveSettings,
-  setDashboardSettingDefaults,
-} from 'web/store/dashboard/settings/actions';
-import getDashboardSettings, {
+import {loadSettings, saveSettings} from 'web/store/dashboard/settings/actions';
+import getDashboardSettingsSelector, {
   DashboardSetting,
 } from 'web/store/dashboard/settings/selectors';
-import compose from 'web/utils/Compose';
-import PropTypes from 'web/utils/PropTypes';
-import withGmp from 'web/utils/withGmp';
-import withTranslation from 'web/utils/withTranslation';
+
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
 const DEFAULT_OVERVIEW_DISPLAYS = convertDefaultDisplays(DEFAULT_DISPLAYS);
@@ -94,141 +87,130 @@ const ToolBarIcons = () => {
   );
 };
 
-class StartPage extends React.Component {
-  constructor(...args) {
-    super(...args);
+const StartPage = () => {
+  const gmp = useGmp();
+  const [_] = useTranslation();
+  const dispatch = useDispatch();
 
-    this.state = {
-      showConfirmRemoveDialog: false,
-      showNewDashboardDialog: false,
-    };
+  const loadSettingsAction = useCallback(
+    (id, defaults) => {
+      dispatch(loadSettings(gmp)(id, defaults));
+    },
+    [dispatch, gmp],
+  );
 
-    this.handleOpenConfirmRemoveDashboardDialog =
-      this.handleOpenConfirmRemoveDashboardDialog.bind(this);
-    this.handleCloseConfirmRemoveDashboardDialog =
-      this.handleCloseConfirmRemoveDashboardDialog.bind(this);
+  const saveDashboardSettings = useCallback(
+    (id, defaults) => {
+      dispatch(saveSettings(gmp)(id, defaults));
+    },
+    [dispatch, gmp],
+  );
 
-    this.handleRemoveDashboard = this.handleRemoveDashboard.bind(this);
+  const settingsSelector = useSelector(getDashboardSettingsSelector);
+  const settings = settingsSelector.getById(DASHBOARD_ID);
+  const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
 
-    this.handleLoadDashboardSettings =
-      this.handleLoadDashboardSettings.bind(this);
-    this.handleSaveDashboardSettings =
-      this.handleSaveDashboardSettings.bind(this);
+  const getDashboardSettings = dashboardId => {
+    if (!dashboardSelector) {
+      return {};
+    }
+    return dashboardSelector.getById(dashboardId);
+  };
 
-    this.handleResetDashboard = this.handleResetDashboard.bind(this);
-    this.handleAddNewDisplay = this.handleAddNewDisplay.bind(this);
+  const [showConfirmRemoveDialog, setShowConfirmRemoveDialog] = useState(false);
+  const [showNewDashboardDialog, setShowNewDashboardDialog] = useState(false);
+  const [showEditDashboardDialog, setShowEditDashboardDialog] = useState(false);
+  const [removeDashboardId, setRemoveDashboardId] = useState(null);
+  const [editDashboardId, setEditDashboardId] = useState(null);
 
-    this.handleOpenNewDashboardDialog =
-      this.handleOpenNewDashboardDialog.bind(this);
-    this.handleCloseNewDashboardDialog =
-      this.handleCloseNewDashboardDialog.bind(this);
+  const dashboardSelector = React.useMemo(
+    () => (settings ? new DashboardSetting(settings) : null),
+    [settings],
+  );
 
-    this.handleAddNewDashboard = this.handleAddNewDashboard.bind(this);
-
-    this.handleResetDashboards = this.handleResetDashboards.bind(this);
-    this.handleSetDefaultSettings = this.handleSetDefaultSettings.bind(this);
-
-    this.handleCloseEditDashboardDialog =
-      this.handleCloseEditDashboardDialog.bind(this);
-    this.handleSaveEditDashboard = this.handleSaveEditDashboard.bind(this);
-
-    this.getDashboardSelector = memoize(
-      settings => new DashboardSetting(settings),
-    );
-  }
-
-  componentDidMount() {
-    const {_} = this.props;
+  useEffect(() => {
     const DEFAULTS = getDefaults(_);
-    this.props.loadSettings(DASHBOARD_ID, DEFAULTS);
-  }
+    loadSettingsAction(DASHBOARD_ID, DEFAULTS, gmp);
+  }, [loadSettingsAction, _, gmp]);
 
-  saveSettings(newSettings) {
-    this.props.saveSettings(DASHBOARD_ID, {
-      ...this.props.settings,
-      ...newSettings,
-    });
-  }
+  const updateSettings = newSettings => {
+    saveDashboardSettings(
+      DASHBOARD_ID,
+      {
+        ...(settings || {}),
+        ...newSettings,
+      },
+      gmp,
+    );
+  };
 
-  handleRemoveDashboard(dashboardId) {
-    const dashboards = this.getDashboards();
+  const handleRemoveDashboard = dashboardId => {
+    const dashboards = getDashboards();
 
     if (dashboards.length <= 1) {
       return;
     }
 
-    const {settings = {}} = this.props;
-    const {byId = {}, defaults = {}} = settings;
+    const {byId = {}, defaults = {}} = settings || {};
 
     const byIdCopy = {...byId};
     delete byIdCopy[dashboardId];
     const defaultsCopy = {...defaults};
     delete defaultsCopy[dashboardId];
 
-    this.setState({
-      showConfirmRemoveDialog: false,
-    });
+    setShowConfirmRemoveDialog(false);
 
-    this.saveSettings({
+    updateSettings({
       byId: byIdCopy,
       dashboards: dashboards.filter(id => id !== dashboardId),
       defaults: defaultsCopy,
     });
-  }
+  };
 
-  handleOpenConfirmRemoveDashboardDialog(id) {
-    this.setState({
-      showConfirmRemoveDialog: true,
-      removeDashboardId: id,
-    });
-  }
+  const handleOpenConfirmRemoveDashboardDialog = id => {
+    setShowConfirmRemoveDialog(true);
+    setRemoveDashboardId(id);
+  };
 
-  handleCloseConfirmRemoveDashboardDialog() {
-    this.setState({showConfirmRemoveDialog: false});
-  }
+  const handleCloseConfirmRemoveDashboardDialog = () => {
+    setShowConfirmRemoveDialog(false);
+  };
 
-  closeNewDashboardDialog() {
-    this.setState({showNewDashboardDialog: false});
-  }
+  const closeNewDashboardDialog = () => {
+    setShowNewDashboardDialog(false);
+  };
 
-  handleOpenNewDashboardDialog() {
-    this.setState({showNewDashboardDialog: true});
-  }
+  const handleOpenNewDashboardDialog = () => {
+    setShowNewDashboardDialog(true);
+  };
 
-  handleCloseNewDashboardDialog() {
-    this.closeNewDashboardDialog();
-  }
+  const handleCloseNewDashboardDialog = () => {
+    closeNewDashboardDialog();
+  };
 
-  handleOpenEditDashboardDialog(id) {
-    this.setState({
-      editDashboardId: id,
-      showEditDashboardDialog: true,
-    });
-  }
+  const handleOpenEditDashboardDialog = id => {
+    setEditDashboardId(id);
+    setShowEditDashboardDialog(true);
+  };
 
-  handleCloseEditDashboardDialog() {
-    this.setState({showEditDashboardDialog: false});
-  }
+  const handleCloseEditDashboardDialog = () => {
+    setShowEditDashboardDialog(false);
+  };
 
-  handleSaveDashboardSettings(dashboardId, settings) {
-    this.updateDashboardSettings(dashboardId, settings);
-  }
+  const handleSaveDashboardSettings = (dashboardId, dashboardSettings) => {
+    updateDashboardSettings(dashboardId, dashboardSettings);
+  };
 
-  handleLoadDashboardSettings() {
-    // do nothing
-    // all defaults and settings are already provided
-  }
+  const handleSetDefaultSettings = (dashboardId, defaultSettings) => {
+    updateDashboardDefaults(dashboardId, defaultSettings);
+  };
 
-  handleSetDefaultSettings(dashboardId, defaultSettings) {
-    this.updateDashboardDefaults(dashboardId, defaultSettings);
-  }
+  const handleResetDashboard = dashboardId => {
+    const defaults = getDashboardDefaults(dashboardId);
+    updateDashboardSettings(dashboardId, defaults);
+  };
 
-  handleResetDashboard(dashboardId) {
-    const settings = this.getDashboardDefaults(dashboardId);
-    this.updateDashboardSettings(dashboardId, settings);
-  }
-
-  handleAddNewDisplay(oldSettings, dashboardId, displayId) {
+  const handleAddNewDisplay = (oldSettings, dashboardId, displayId) => {
     if (!isDefined(displayId) || !isDefined(dashboardId)) {
       return;
     }
@@ -238,13 +220,15 @@ class StartPage extends React.Component {
     }
 
     const newSettings = addDisplayToSettings(oldSettings, displayId);
-    this.updateDashboardSettings(dashboardId, newSettings);
-  }
+    updateDashboardSettings(dashboardId, newSettings);
+  };
 
-  handleAddNewDashboard({title, defaultDisplays = DEFAULT_DISPLAYS}) {
-    const {settings = {}} = this.props;
-    const {byId = {}} = settings;
-    const dashboards = this.getDashboards();
+  const handleAddNewDashboard = ({
+    title,
+    defaultDisplays = DEFAULT_DISPLAYS,
+  }) => {
+    const {byId = {}} = settings || {};
+    const dashboards = getDashboards();
 
     const id = uuid();
 
@@ -261,38 +245,20 @@ class StartPage extends React.Component {
       },
     };
 
-    this.saveSettings(newSettings);
+    updateSettings(newSettings);
+    closeNewDashboardDialog();
+  };
 
-    this.closeNewDashboardDialog();
-  }
+  const handleSaveEditDashboard = ({dashboardId, dashboardTitle}) => {
+    updateDashboardSettings(dashboardId, {title: dashboardTitle});
+    setShowEditDashboardDialog(false);
+  };
 
-  handleSaveEditDashboard({dashboardId, dashboardTitle}) {
-    this.updateDashboardSettings(dashboardId, {title: dashboardTitle});
-    this.setState({showEditDashboardDialog: false});
-  }
+  const updateDashboardSettings = (dashboardId, newSettings) => {
+    const {byId = {}} = settings || {};
+    const oldSettings = getDashboardSettings(dashboardId);
 
-  handleResetDashboards() {
-    // reset all dashboards
-    // currently not assigned to a handler
-    // const {byId, defaults} = this.props;
-    // const DEFAULTS = getDefaults();
-    // this.saveSettings({
-    //   ...DEFAULTS,
-    //   byId: {
-    //     ...byId,
-    //     [OVERVIEW_DASHBOARD_ID]: {
-    //       ...DEFAULTS.byId[OVERVIEW_DASHBOARD_ID],
-    //       ...defaults[OVERVIEW_DASHBOARD_ID],
-    //     },
-    //   },
-    // });
-  }
-
-  updateDashboardSettings(dashboardId, newSettings) {
-    const {byId = {}} = this.props.settings;
-    const oldSettings = this.getDashboardSettings(dashboardId);
-
-    this.saveSettings({
+    updateSettings({
       byId: {
         ...byId,
         [dashboardId]: {
@@ -301,229 +267,161 @@ class StartPage extends React.Component {
         },
       },
     });
-  }
+  };
 
-  updateDashboardDefaults(dashboardId, newDefaults) {
-    const {defaults = {}} = this.props.settings;
-    this.saveSettings({
+  const updateDashboardDefaults = (dashboardId, newDefaults) => {
+    const {defaults = {}} = settings || {};
+
+    updateSettings({
       defaults: {
         ...defaults,
         [dashboardId]: newDefaults,
       },
     });
-  }
+  };
 
-  getDashboards() {
-    const {settings = {}} = this.props;
-    const {dashboards = [], byId = {}} = settings;
+  const getDashboards = () => {
+    const {dashboards = [], byId = {}} = settings || {};
     return dashboards.filter(id => isDefined(byId[id]));
-  }
+  };
 
-  getDashboardSettings(dashboardId) {
-    const {settings = {}} = this.props;
-    const selector = this.getDashboardSelector(settings);
-    return selector.getById(dashboardId);
-  }
+  const getDashboardDefaults = dashboardId => {
+    if (!dashboardSelector) {
+      return {};
+    }
+    return dashboardSelector.getDefaultsById(dashboardId);
+  };
 
-  getDashboardDefaults(dashboardId) {
-    const {settings = {}} = this.props;
-    const selector = this.getDashboardSelector(settings);
-    return selector.getDefaultsById(dashboardId);
-  }
-
-  getDashboardTitle(dashboardId) {
-    const dashboardSettings = this.getDashboardSettings(dashboardId);
+  const getDashboardTitle = dashboardId => {
+    const dashboardSettings = getDashboardSettings(dashboardId);
     return dashboardSettings.title;
-  }
+  };
 
-  getDashboardDisplayIds(dashboardId) {
-    const dashboardSettings = this.getDashboardSettings(dashboardId);
+  const getDashboardDisplayIds = dashboardId => {
+    const dashboardSettings = getDashboardSettings(dashboardId);
     const {rows = []} = dashboardSettings;
     return rows.map(row => {
       const {items = []} = row;
       return items.map(item => item.displayId);
     });
-  }
-
-  render() {
-    const {_} = this.props;
-
-    const {isLoading} = this.props;
-    const {
-      editDashboardId,
-      removeDashboardId,
-      showEditDashboardDialog,
-      showNewDashboardDialog,
-      showConfirmRemoveDialog,
-    } = this.state;
-
-    const dashboards = this.getDashboards();
-
-    const canAdd = dashboards.length < MAX_DASHBOARDS;
-    return (
-      <>
-        <PageTitle title={_('Dashboards')} />
-        <span>
-          {' '}
-          {/* span prevents Toolbar from growing */}
-          <ToolBarIcons />
-        </span>
-        <Section img={<DashboardIcon size="large" />} title={_('Dashboards')}>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <TabsContainer flex="column" grow="1">
-              <TabLayout align={['start', 'end']} grow="1">
-                <TabList align={['start', 'stretch']}>
-                  {dashboards.map(id => {
-                    const title = this.getDashboardTitle(id);
-                    return (
-                      <StyledTab key={id}>
-                        <Divider margin="13px">
-                          <span>{title}</span>{' '}
-                          <EditIcon
-                            size="tiny"
-                            title={_('Edit Dashboard Title')}
-                            onClick={() =>
-                              this.handleOpenEditDashboardDialog(id)
-                            }
-                          />
-                          <EditIcon
-                            size="tiny"
-                            title={_('Edit Dashboard Title')}
-                            onClick={() =>
-                              this.handleOpenEditDashboardDialog(id)
-                            }
-                          />
-                          {dashboards.length > 1 && (
-                            <IconDivider margin="3px">
-                              <TrashcanIcon
-                                size="tiny"
-                                title={_('Remove Dashboard')}
-                                onClick={() =>
-                                  this.handleOpenConfirmRemoveDashboardDialog(
-                                    id,
-                                  )
-                                }
-                              />
-                            </IconDivider>
-                          )}
-                        </Divider>
-                      </StyledTab>
-                    );
-                  })}
-
-                  <Layout grow align={['center', 'center']}>
-                    <StyledNewIcon
-                      active={canAdd}
-                      data-testid="add-dashboard"
-                      title={
-                        canAdd
-                          ? _('Add new Dashboard')
-                          : _('Dashboards limit reached')
-                      }
-                      onClick={
-                        canAdd ? this.handleOpenNewDashboardDialog : undefined
-                      }
-                    />
-                  </Layout>
-                </TabList>
-              </TabLayout>
-
-              <Tabs>
-                <TabPanels>
-                  {dashboards.map(id => {
-                    const settings = this.getDashboardSettings(id);
-                    return (
-                      <TabPanel key={id}>
-                        <SubscriptionProvider>
-                          {({notify}) => (
-                            <Dashboard
-                              id={id}
-                              loadSettings={this.handleLoadDashboardSettings}
-                              notify={notify}
-                              saveSettings={this.handleSaveDashboardSettings}
-                              setDefaultSettings={this.handleSetDefaultSettings}
-                              settings={settings}
-                              onNewDisplay={this.handleAddNewDisplay}
-                              onResetDashboard={this.handleResetDashboard}
-                            />
-                          )}
-                        </SubscriptionProvider>
-                      </TabPanel>
-                    );
-                  })}
-                </TabPanels>
-              </Tabs>
-            </TabsContainer>
-          )}
-        </Section>
-        {showConfirmRemoveDialog && (
-          <ConfirmRemoveDialog
-            dashboardId={removeDashboardId}
-            dashboardTitle={this.getDashboardTitle(removeDashboardId)}
-            onConfirm={this.handleRemoveDashboard}
-            onDeny={this.handleCloseConfirmRemoveDashboardDialog}
-          />
-        )}
-        {showNewDashboardDialog && (
-          <NewDashboardDialog
-            additionalDisplayChoices={dashboards.map(id => ({
-              label: this.getDashboardTitle(id),
-              key: id,
-              value: this.getDashboardDisplayIds(id),
-            }))}
-            onClose={this.handleCloseNewDashboardDialog}
-            onSave={this.handleAddNewDashboard}
-          />
-        )}
-        {showEditDashboardDialog && (
-          <EditDashboardDialog
-            dashboardId={editDashboardId}
-            dashboardTitle={this.getDashboardTitle(editDashboardId)}
-            onClose={this.handleCloseEditDashboardDialog}
-            onSave={this.handleSaveEditDashboard}
-          />
-        )}
-      </>
-    );
-  }
-}
-
-StartPage.propTypes = {
-  isLoading: PropTypes.bool,
-  loadSettings: PropTypes.func.isRequired,
-  saveSettings: PropTypes.func.isRequired,
-  settings: PropTypes.shape({
-    byId: PropTypes.object.isRequired,
-    dashboards: PropTypes.arrayOf(PropTypes.string).isRequired,
-    defaults: PropTypes.object.isRequired,
-  }),
-  _: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = rootState => {
-  const settingsSelector = getDashboardSettings(rootState);
-  const settings = settingsSelector.getById(DASHBOARD_ID);
-  const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
-  const error = settingsSelector.getError(DASHBOARD_ID);
-
-  return {
-    error,
-    isLoading,
-    settings,
   };
+
+  const dashboards = getDashboards();
+  const canAdd = dashboards.length < MAX_DASHBOARDS;
+
+  return (
+    <>
+      <PageTitle title={_('Dashboards')} />
+      <span>
+        {' '}
+        {/* span prevents Toolbar from growing */}
+        <ToolBarIcons />
+      </span>
+      <Section img={<DashboardIcon size="large" />} title={_('Dashboards')}>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <TabsContainer flex="column" grow="1">
+            <TabLayout align={['start', 'end']} grow="1">
+              <TabList align={['start', 'stretch']}>
+                {dashboards.map(id => {
+                  const title = getDashboardTitle(id);
+                  return (
+                    <StyledTab key={id}>
+                      <Divider margin="13px">
+                        <span>{title}</span>{' '}
+                        <EditIcon
+                          size="tiny"
+                          title={_('Edit Dashboard Title')}
+                          onClick={() => handleOpenEditDashboardDialog(id)}
+                        />
+                        {dashboards.length > 1 && (
+                          <IconDivider margin="3px">
+                            <TrashcanIcon
+                              size="tiny"
+                              title={_('Remove Dashboard')}
+                              onClick={() => {
+                                handleOpenConfirmRemoveDashboardDialog(id);
+                              }}
+                            />
+                          </IconDivider>
+                        )}
+                      </Divider>
+                    </StyledTab>
+                  );
+                })}
+
+                <Layout grow align={['center', 'center']}>
+                  <StyledNewIcon
+                    active={canAdd}
+                    data-testid="add-dashboard"
+                    title={
+                      canAdd
+                        ? _('Add new Dashboard')
+                        : _('Dashboards limit reached')
+                    }
+                    onClick={canAdd ? handleOpenNewDashboardDialog : undefined}
+                  />
+                </Layout>
+              </TabList>
+            </TabLayout>
+
+            <Tabs>
+              <TabPanels>
+                {dashboards.map(id => {
+                  const dashboardSettings = getDashboardSettings(id);
+                  return (
+                    <TabPanel key={id}>
+                      <SubscriptionProvider>
+                        {({notify}) => (
+                          <Dashboard
+                            id={id}
+                            notify={notify}
+                            saveSettings={handleSaveDashboardSettings}
+                            setDefaultSettings={handleSetDefaultSettings}
+                            settings={dashboardSettings}
+                            onNewDisplay={handleAddNewDisplay}
+                            onResetDashboard={handleResetDashboard}
+                          />
+                        )}
+                      </SubscriptionProvider>
+                    </TabPanel>
+                  );
+                })}
+              </TabPanels>
+            </Tabs>
+          </TabsContainer>
+        )}
+      </Section>
+      {showConfirmRemoveDialog && (
+        <ConfirmRemoveDialog
+          dashboardId={removeDashboardId}
+          dashboardTitle={getDashboardTitle(removeDashboardId)}
+          onConfirm={handleRemoveDashboard}
+          onDeny={handleCloseConfirmRemoveDashboardDialog}
+        />
+      )}
+      {showNewDashboardDialog && (
+        <NewDashboardDialog
+          additionalDisplayChoices={dashboards.map(id => ({
+            label: getDashboardTitle(id),
+            key: id,
+            value: getDashboardDisplayIds(id),
+          }))}
+          onClose={handleCloseNewDashboardDialog}
+          onSave={handleAddNewDashboard}
+        />
+      )}
+      {showEditDashboardDialog && (
+        <EditDashboardDialog
+          dashboardId={editDashboardId}
+          dashboardTitle={getDashboardTitle(editDashboardId)}
+          onClose={handleCloseEditDashboardDialog}
+          onSave={handleSaveEditDashboard}
+        />
+      )}
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
-  saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
-  setDefaultSettings: (id, settings) =>
-    dispatch(setDashboardSettingDefaults(id, settings)),
-});
-
-export default compose(
-  withTranslation,
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(StartPage);
+export default StartPage;

@@ -46,10 +46,9 @@ const ALL_DISPLAYS = [
 
 const StartDashboard = ({
   id,
-  loadSettings,
+  loadSettings = () => Promise.resolve({}),
   saveSettings,
   settings,
-
   onNewDisplay,
   onResetDashboard,
   ...props
