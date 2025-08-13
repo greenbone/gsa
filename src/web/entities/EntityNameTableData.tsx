@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import Model from 'gmp/models/model';
 import {getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import Comment from 'web/components/comment/Comment';
@@ -14,21 +15,29 @@ import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import PropTypes from 'web/utils/PropTypes';
 
-const EntityNameTableData = ({
+interface EntityNameTableDataProps<TEntity extends Model> {
+  entity: TEntity;
+  links?: boolean;
+  displayName: string;
+  type?: string;
+  children?: React.ReactNode;
+  onToggleDetailsClick?: (entity: TEntity) => void;
+}
+
+const EntityNameTableData = <TEntity extends Model>({
   entity,
   links = true,
   displayName,
   type = getEntityType(entity),
   children,
   onToggleDetailsClick,
-}) => {
+}: EntityNameTableDataProps<TEntity>) => {
   const [_] = useTranslation();
   const [username] = useUserName();
   return (
     <TableData>
-      <Layout align={'space-between'} columns={2}>
+      <Layout align="space-between">
         <div>
           {entity.isOrphan() && <b>{_('Orphan')}</b>}
           {isDefined(onToggleDetailsClick) ? (
@@ -36,14 +45,20 @@ const EntityNameTableData = ({
               <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
                 {entity.name}
               </RowDetailsToggle>
-              {entity.deprecated && <b> ({_('Deprecated')})</b>}
+              {/* @ts-expect-error */}
+              {entity?.deprecated && <b> ({_('Deprecated')})</b>}
             </span>
           ) : (
             <span>
-              <DetailsLink id={entity.id} textOnly={!links} type={type}>
+              <DetailsLink
+                id={entity.id as string}
+                textOnly={!links}
+                type={type}
+              >
                 {entity.name}
               </DetailsLink>
-              {entity.deprecated && <b> ({_('Deprecated')})</b>}
+              {/* @ts-expect-error */}
+              {entity?.deprecated && <b> ({_('Deprecated')})</b>}
             </span>
           )}
           {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
@@ -59,15 +74,6 @@ const EntityNameTableData = ({
       </Layout>
     </TableData>
   );
-};
-
-EntityNameTableData.propTypes = {
-  children: PropTypes.node,
-  displayName: PropTypes.string.isRequired,
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-  type: PropTypes.string,
-  onToggleDetailsClick: PropTypes.func,
 };
 
 export default EntityNameTableData;
