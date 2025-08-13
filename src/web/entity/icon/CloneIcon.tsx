@@ -71,7 +71,6 @@ const EntityCloneIcon = <TEntity extends EntityClone>({
       active={active}
       title={title}
       value={entity}
-      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );

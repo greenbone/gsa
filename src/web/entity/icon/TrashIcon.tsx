@@ -68,12 +68,11 @@ const EntityTrashIcon = <TEntity extends EntityTrash>({
     }
   }
   return (
-    <TrashcanIcon
+    <TrashcanIcon<TEntity>
       {...props}
       active={active}
       title={title}
       value={entity}
-      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );
