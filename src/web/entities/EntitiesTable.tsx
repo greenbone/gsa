@@ -42,7 +42,7 @@ export interface PaginationComponentProps {
 
 export interface RowComponentProps<TEntity> {
   entity: TEntity;
-  onToggleDetailsClick?: (value: undefined, name: string) => void;
+  onToggleDetailsClick?: (value: TEntity, name: string) => void;
 }
 
 interface RowDetailsComponentProps<TEntity> {
