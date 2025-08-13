@@ -380,16 +380,23 @@ class StartPage extends React.Component {
                     return (
                       <StyledTab key={id}>
                         <Divider margin="13px">
-                          <span>{title}</span>
+                          <span>{title}</span>{' '}
+                          <EditIcon
+                            size="tiny"
+                            title={_('Edit Dashboard Title')}
+                            onClick={() =>
+                              this.handleOpenEditDashboardDialog(id)
+                            }
+                          />
+                          <EditIcon
+                            size="tiny"
+                            title={_('Edit Dashboard Title')}
+                            onClick={() =>
+                              this.handleOpenEditDashboardDialog(id)
+                            }
+                          />
                           {dashboards.length > 1 && (
                             <IconDivider margin="3px">
-                              <EditIcon
-                                size="tiny"
-                                title={_('Edit Dashboard Title')}
-                                onClick={() =>
-                                  this.handleOpenEditDashboardDialog(id)
-                                }
-                              />
                               <TrashcanIcon
                                 size="tiny"
                                 title={_('Remove Dashboard')}
