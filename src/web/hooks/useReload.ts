@@ -6,17 +6,13 @@
 import {useCallback, useEffect} from 'react';
 import useTiming from 'web/hooks/useTiming';
 
-interface ReloadFunc {
-  (): void;
-}
+type ReloadFunc = () => void;
 
 interface TimeoutFuncParams {
   isVisible: boolean;
 }
 
-interface TimeoutFunc {
-  (params: TimeoutFuncParams): number;
-}
+type TimeoutFunc = (params: TimeoutFuncParams) => number;
 
 /**
  * A hook to reload data considering the visibility change of the browser tab.
