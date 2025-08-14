@@ -42,7 +42,7 @@ export interface PaginationComponentProps {
 
 export interface RowComponentProps<TEntity> {
   entity: TEntity;
-  onToggleDetailsClick?: (value: TEntity, name: string) => void;
+  onToggleDetailsClick?: (entity: TEntity, id: string) => void;
 }
 
 interface RowDetailsComponentProps<TEntity> {
@@ -163,8 +163,9 @@ function EntitiesTable<
   const [allToggled, setAllToggled] = useState<boolean>(false);
   const [_] = useTranslation();
 
-  const handleToggleShowDetails = (_value: unknown, name: string) => {
-    setDetails(details => ({...details, [name]: !details[name]}));
+  const handleToggleShowDetails = (entity: TEntity, entityId: string) => {
+    const rowId = entity.id ?? entityId;
+    setDetails(details => ({...details, [rowId]: !details[rowId]}));
   };
 
   const handleToggleAllDetails = (unToggle: boolean = false) => {

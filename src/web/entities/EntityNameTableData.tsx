@@ -22,7 +22,7 @@ interface EntityNameTableDataProps<TEntity extends Model> {
   displayName: string;
   type?: string;
   children?: React.ReactNode;
-  onToggleDetailsClick?: (entity: TEntity) => void;
+  onToggleDetailsClick?: (entity: TEntity, id: string) => void;
 }
 
 const EntityNameTableData = <TEntity extends Model>({
@@ -42,7 +42,16 @@ const EntityNameTableData = <TEntity extends Model>({
           {entity.isOrphan() && <b>{_('Orphan')}</b>}
           {isDefined(onToggleDetailsClick) ? (
             <span>
-              <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+              <RowDetailsToggle<TEntity>
+                name={entity.id}
+                value={entity}
+                onClick={
+                  onToggleDetailsClick as (
+                    entity: TEntity,
+                    name?: string,
+                  ) => void
+                }
+              >
                 {entity.name}
               </RowDetailsToggle>
               {/* @ts-expect-error */}

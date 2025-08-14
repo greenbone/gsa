@@ -361,7 +361,10 @@ describe('Target row tests', () => {
 
     // Name
     fireEvent.click(screen.getByText('target'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, 'foo');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(
+      target_no_elevate,
+      'foo',
+    );
 
     // Actions
     fireEvent.click(screen.getAllByTitle('Clone Target')[0]);
