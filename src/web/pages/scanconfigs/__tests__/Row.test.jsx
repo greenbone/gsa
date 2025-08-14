@@ -207,7 +207,7 @@ describe('Scan Config row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(entity, '1234');
 
     const settingsIcon = screen.getByTestId('settings-2-icon');
     fireEvent.click(settingsIcon);
@@ -284,7 +284,7 @@ describe('Scan Config row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
 
     const settingsIcon = screen.getByTestId('settings-2-icon');
     fireEvent.click(settingsIcon);
@@ -370,7 +370,7 @@ describe('Scan Config row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
 
     const settingsIcon = screen.getByTestId('settings-2-icon');
     fireEvent.click(settingsIcon);
@@ -447,7 +447,7 @@ describe('Scan Config row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
 
     const settingsIcon = screen.getByTestId('settings-2-icon');
     fireEvent.click(settingsIcon);
