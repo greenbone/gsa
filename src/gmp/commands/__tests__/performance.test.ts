@@ -135,4 +135,53 @@ describe('PerformanceCommand', () => {
     expect(report.details?.duration).toEqual(3600);
     expect(report.details?.text).toEqual('Report content');
   });
+
+  test('should fetch a specific performance report with start and end date', async () => {
+    const startDate = date('2024-01-01T01:00:00Z').tz('Europe/Berlin');
+    const endDate = date('2024-01-01T02:00:00Z').tz('Europe/Berlin');
+    const response = createResponse({
+      get_system_report: {
+        get_system_reports_response: {
+          system_report: {
+            name: 'Report1',
+            title: 'Title1',
+            report: {
+              _format: 'txt',
+              _start_time: '2024-01-01T00:00:00Z',
+              _end_time: '2024-01-01T01:00:00Z',
+              _duration: 3600,
+              __text: 'Report content',
+            },
+          },
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+    const performanceCommand = new PerformanceCommand(fakeHttp);
+
+    const result = await performanceCommand.get({
+      name: 'Report1',
+      startDate,
+      endDate,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_system_report',
+        slave_id: DEFAULT_SENSOR_ID,
+        name: 'Report1',
+        start_time: '2024-01-01T02:00:00+01:00',
+        end_time: '2024-01-01T03:00:00+01:00',
+      },
+    });
+    const report = result.data;
+    expect(report.name).toEqual('Report1');
+    expect(report.title).toEqual('Title1');
+    expect(report.details).toBeDefined();
+    expect(report.details?.format).toEqual('txt');
+    expect(report.details?.startTime).toEqual(date('2024-01-01T00:00:00.000Z'));
+    expect(report.details?.endTime).toEqual(date('2024-01-01T01:00:00.000Z'));
+    expect(report.details?.duration).toEqual(3600);
+    expect(report.details?.text).toEqual('Report content');
+  });
 });

@@ -128,7 +128,7 @@ const PerformancePage = () => {
     const scannerEntitiesSelector = scannerSelector(state);
     return scannerEntitiesSelector.getEntities(SENSOR_SCANNER_FILTER);
   });
-  const timezone = useShallowEqualSelector(getTimezone);
+  const timezone = useShallowEqualSelector<unknown, string>(getTimezone);
   const dispatch = useDispatch();
 
   const fetchScanners = useCallback(
