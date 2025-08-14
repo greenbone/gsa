@@ -25,7 +25,7 @@ const currentSettings = testing
   .mockResolvedValue(currentSettingsDefaultResponse);
 const getPortList = testing.fn().mockResolvedValue(getPortListResponse);
 
-describe('Port List Component tests', () => {
+describe('PortListComponent tests', () => {
   test('should render without crashing', () => {
     const gmp = {
       portlist: {
@@ -101,7 +101,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent>
         {({edit}) => (
-          <Button data-testid="edit" onClick={() => edit({id: 123})} />
+          <Button
+            data-testid="edit"
+            onClick={() => edit(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -230,7 +233,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
         {({edit}) => (
-          <Button data-testid="open" onClick={() => edit({id: 123})} />
+          <Button
+            data-testid="open"
+            onClick={() => edit(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -267,7 +273,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
         {({edit}) => (
-          <Button data-testid="open" onClick={() => edit({id: 123})} />
+          <Button
+            data-testid="open"
+            onClick={() => edit(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -334,8 +343,8 @@ describe('Port List Component tests', () => {
         port_range: [
           {
             id: '123',
-            start: '1',
-            end: '2',
+            start: 1,
+            end: 2,
             type: 'tcp',
             comment: 'foo',
           },
@@ -360,7 +369,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
         {({edit}) => (
-          <Button data-testid="open" onClick={() => edit({id: 123})} />
+          <Button
+            data-testid="open"
+            onClick={() => edit(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -410,7 +422,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
         {({edit}) => (
-          <Button data-testid="open" onClick={() => edit({id: 123})} />
+          <Button
+            data-testid="open"
+            onClick={() => edit(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -445,7 +460,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onSaved={onSaved}>
         {({edit}) => (
-          <Button data-testid="open" onClick={() => edit({id: 123})} />
+          <Button
+            data-testid="open"
+            onClick={() => edit(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -478,7 +496,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onCloneError={onCloneError} onCloned={onCloned}>
         {({clone}) => (
-          <Button data-testid="button" onClick={() => clone({id: '123'})} />
+          <Button
+            data-testid="button"
+            onClick={() => clone(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -504,7 +525,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onCloneError={onCloneError} onCloned={onCloned}>
         {({clone}) => (
-          <Button data-testid="button" onClick={() => clone({id: '123'})} />
+          <Button
+            data-testid="button"
+            onClick={() => clone(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -530,7 +554,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
         {({delete: del}) => (
-          <Button data-testid="button" onClick={() => del({id: '123'})} />
+          <Button
+            data-testid="button"
+            onClick={() => del(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
@@ -554,7 +581,10 @@ describe('Port List Component tests', () => {
     render(
       <PortListComponent onDeleteError={onDeleteError} onDeleted={onDeleted}>
         {({delete: del}) => (
-          <Button data-testid="button" onClick={() => del({id: '123'})} />
+          <Button
+            data-testid="button"
+            onClick={() => del(new PortList({id: '123'}))}
+          />
         )}
       </PortListComponent>,
     );
