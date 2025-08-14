@@ -98,10 +98,18 @@ describe('PortList model tests', () => {
   });
 
   test('should parse predefined as boolean correctly', () => {
-    const portList = PortList.fromElement({predefined: '0'});
-    const portList2 = PortList.fromElement({predefined: '1'});
+    const portList = PortList.fromElement({predefined: 0});
+    const portList2 = PortList.fromElement({predefined: 1});
 
     expect(portList.predefined).toEqual(false);
     expect(portList2.predefined).toEqual(true);
+  });
+
+  test('should parse deprecated as boolean correctly', () => {
+    const portList = PortList.fromElement({deprecated: 0});
+    const portList2 = PortList.fromElement({deprecated: 1});
+
+    expect(portList.deprecated).toEqual(false);
+    expect(portList2.deprecated).toEqual(true);
   });
 });

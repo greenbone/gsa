@@ -4,7 +4,7 @@
  */
 
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
-import {parseInt, parseBoolean} from 'gmp/parser';
+import {parseInt, parseBoolean, YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -38,7 +38,8 @@ export interface PortListElement extends ModelElement {
   targets?: {
     target: ModelElement[];
   };
-  predefined?: string;
+  predefined?: YesNo;
+  deprecated?: YesNo;
 }
 
 interface PortCount {
@@ -48,6 +49,7 @@ interface PortCount {
 }
 
 interface PortListProperties extends ModelProperties {
+  deprecated?: boolean;
   portRanges?: PortRange[];
   portCount?: {
     all: number;
@@ -85,12 +87,14 @@ const DEFAULT_PORT_COUNT = {all: 0, tcp: 0, udp: 0};
 class PortList extends Model {
   static entityType: string = 'portlist';
 
+  readonly deprecated: boolean;
   readonly portCount: PortCount;
   readonly portRanges: PortRange[];
   readonly predefined: boolean;
   readonly targets: Model[];
 
   constructor({
+    deprecated = false,
     portCount = DEFAULT_PORT_COUNT,
     portRanges = [],
     predefined = false,
@@ -99,6 +103,7 @@ class PortList extends Model {
   }: PortListProperties = {}) {
     super(properties);
 
+    this.deprecated = deprecated;
     this.portCount = portCount;
     this.portRanges = portRanges;
     this.predefined = predefined;
@@ -133,6 +138,7 @@ class PortList extends Model {
     );
 
     ret.predefined = parseBoolean(element.predefined);
+    ret.deprecated = parseBoolean(element.deprecated);
 
     return ret;
   }
