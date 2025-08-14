@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import PortList from 'gmp/models/portlist';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import InfoTable from 'web/components/table/InfoTable';
@@ -12,24 +13,9 @@ import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface Target {
-  id: string;
-  name: string;
-}
-
-interface PortListDetailsEntity {
-  comment: string;
-  deprecated: boolean;
-  portCount: {
-    all: number;
-    tcp: number;
-    udp: number;
-  };
-  targets: Target[];
-}
-
 interface PortListDetailsProps {
-  entity: PortListDetailsEntity;
+  entity: PortList;
+  links?: boolean;
 }
 
 const PortListDetails = ({entity}: PortListDetailsProps) => {
@@ -88,7 +74,7 @@ const PortListDetails = ({entity}: PortListDetailsProps) => {
                 {targets.map(target => {
                   return (
                     <span key={target.id}>
-                      <DetailsLink id={target.id} type="target">
+                      <DetailsLink id={target.id as string} type="target">
                         {target.name}
                       </DetailsLink>
                     </span>
