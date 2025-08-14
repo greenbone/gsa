@@ -136,8 +136,8 @@ class PerformanceCommand extends HttpCommand {
     if (isDefined(duration)) {
       params.duration = String(duration);
     } else if (isDefined(startDate) && isDefined(endDate)) {
-      params.start_time = startDate.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-      params.end_time = endDate.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+      params.start_time = startDate.format('YYYY-MM-DDTHH:mm:ssZ');
+      params.end_time = endDate.format('YYYY-MM-DDTHH:mm:ssZ');
     }
     const response = await this.httpGet(params);
     const data = response.data as GetSystemReportResponseData;
