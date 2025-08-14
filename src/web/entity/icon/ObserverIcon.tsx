@@ -7,7 +7,6 @@ import {EntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {ViewOtherIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
 interface ObserverEntity extends EntityType {
   owner?: {
@@ -44,13 +43,6 @@ const ObserverIcon = <TEntity extends ObserverEntity>({
     title = _('Global {{type}}', {type: displayName});
   }
   return <ViewOtherIcon data-testid={dataTestId} title={title} />;
-};
-
-ObserverIcon.propTypes = {
-  displayName: PropTypes.string,
-  entity: PropTypes.model.isRequired,
-  userName: PropTypes.string.isRequired,
-  'data-testid': PropTypes.string,
 };
 
 export default ObserverIcon;
