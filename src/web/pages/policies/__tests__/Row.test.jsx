@@ -125,7 +125,7 @@ describe('Row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(entity, '1234');
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Move Policy to trashcan');
@@ -191,7 +191,7 @@ describe('Row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(policy, '1234');
 
     // because the icon for "create audit from policy" is not rendered
     const newIcon = screen.queryByTestId('new-icon');
@@ -264,7 +264,7 @@ describe('Row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(policy, '1234');
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Policy is still in use');
@@ -329,7 +329,7 @@ describe('Row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(policy, '1234');
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute('title', 'Policy is not writable');
