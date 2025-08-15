@@ -71,7 +71,6 @@ const PortListComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-
   onSaved,
   onSaveError,
   onImported,
