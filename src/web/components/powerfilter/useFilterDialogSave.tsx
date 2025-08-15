@@ -13,7 +13,7 @@ import useTranslation from 'web/hooks/useTranslation';
 export type OnFilterCreatedFunc = (filter: Filter) => void;
 export type OnFilterChangedFunc = (filter: Filter) => void;
 
-interface UseFilterDialogSaveProps {
+export interface UseFilterDialogSaveProps {
   onClose?: () => void;
   onFilterChanged?: OnFilterChangedFunc;
   onFilterCreated?: OnFilterCreatedFunc;
@@ -60,7 +60,7 @@ const useFilterDialogSave = (
           const {data} = response;
           // load new filter
           // @ts-expect-error
-          return gmp.filter.get(data);
+          return gmp.filter.get({id: data.id});
         })
         .then(response => {
           const {data: f} = response;
