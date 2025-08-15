@@ -13,7 +13,7 @@ import useTranslation from 'web/hooks/useTranslation';
 export interface SelectItem {
   label: string;
   value: string;
-  deprecated?: string;
+  deprecated?: boolean;
 }
 
 export interface SelectProps
@@ -44,7 +44,7 @@ const renderSelectOption = ({
 }: {
   option: SelectItem;
 }) => {
-  if (deprecated === '1') {
+  if (deprecated === true) {
     return <s>{`${label} (${_('Deprecated')})`}</s>;
   }
 
