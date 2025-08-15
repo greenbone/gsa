@@ -35,10 +35,10 @@ describe('Port List Component tests', () => {
     };
 
     const {render} = rendererWith({gmp});
-    const {element} = render(
-      <PortListComponent>{() => null}</PortListComponent>,
+    render(
+      <PortListComponent>{() => <div>Some Content</div>}</PortListComponent>,
     );
-    expect(element).toBeInTheDocument();
+    expect(screen.getByText('Some Content')).toBeInTheDocument();
   });
 
   test('should open and close PortListDialog', () => {
