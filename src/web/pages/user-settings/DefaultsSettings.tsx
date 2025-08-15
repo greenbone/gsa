@@ -110,7 +110,7 @@ export const DefaultSettings = ({
 
   const ITEMS_MAP: Record<
     FieldName,
-    {id: string; name: string; deprecated?: string}[]
+    {id: string; name: string; deprecated?: boolean}[]
   > = {
     defaultalert: alerts ?? [],
     defaultesxicredential: creds ?? [],

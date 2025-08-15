@@ -3,22 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {PORTLISTS_FILTER_FILTER, RESET_FILTER} from 'gmp/models/filter';
+import Filter, {PORTLISTS_FILTER_FILTER, RESET_FILTER} from 'gmp/models/filter';
+import PortList from 'gmp/models/portlist';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
-import {NewIcon, PortListIcon, UploadIcon} from 'web/components/icon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import IconDivider from 'web/components/layout/IconDivider';
+import {PortListIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
 import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
-import useCapabilities from 'web/hooks/useCapabilities';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useGmp from 'web/hooks/useGmp';
 import useInstanceVariable from 'web/hooks/useInstanceVariable';
@@ -28,42 +26,17 @@ import useReload from 'web/hooks/useReload';
 import useSelection from 'web/hooks/useSelection';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
-import PortListsFilterDialog from 'web/pages/portlists/FilterDialog';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
-import PortListsTable from 'web/pages/portlists/Table';
+import PortListsFilterDialog from 'web/pages/portlists/PortListFilterDialog';
+import PortListListPageToolBarIcons from 'web/pages/portlists/PortListListPageToolBarIcons';
+import PortListsTable from 'web/pages/portlists/PortListTable';
 import {loadEntities, selector} from 'web/store/entities/portlists';
+import {EntitiesSelector} from 'web/store/entities/utils/selectors';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import PropTypes from 'web/utils/PropTypes';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/SelectionType';
 
-const ToolBarIcons = ({onPortListCreateClick, onPortListImportClick}) => {
-  const capabilities = useCapabilities();
-  const [_] = useTranslation();
-  return (
-    <IconDivider>
-      <ManualIcon
-        anchor="creating-and-managing-port-lists"
-        page="scanning"
-        title={_('Help: Port Lists')}
-      />
-      {capabilities.mayCreate('port_list') && (
-        <NewIcon title={_('New Port List')} onClick={onPortListCreateClick} />
-      )}
-      <UploadIcon
-        title={_('Import Port List')}
-        onClick={onPortListImportClick}
-      />
-    </IconDivider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  onPortListCreateClick: PropTypes.func.isRequired,
-  onPortListImportClick: PropTypes.func.isRequired,
-};
-
-const getData = (filter, eSelector) => {
+const getData = (filter: Filter, eSelector: EntitiesSelector) => {
   const entities = eSelector.getEntities(filter);
   return {
     entities,
@@ -83,7 +56,9 @@ const PortListsPage = () => {
   const [downloadRef, handleDownload] = useDownload();
   const [filter, isLoadingFilter, {changeFilter, resetFilter, removeFilter}] =
     usePageFilter('portlist', 'portlist');
-  const [requestedFilter, setRequestedFilter] = useInstanceVariable();
+  const [requestedFilter, setRequestedFilter] = useInstanceVariable<
+    Filter | undefined
+  >(undefined);
   const portListsSelector = useShallowEqualSelector(selector);
   const listExportFileName = useShallowEqualSelector(state =>
     getUserSettingsDefaults(state).getValueByName('listexportfilename'),
@@ -94,7 +69,7 @@ const PortListsPage = () => {
     changeSelectionType,
     select,
     deselect,
-  } = useSelection();
+  } = useSelection<PortList>();
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     filter,
     changeFilter,
@@ -107,8 +82,9 @@ const PortListsPage = () => {
 
   // fetch port lists
   const fetch = useCallback(
-    withFilter => {
+    (withFilter?: Filter) => {
       setRequestedFilter(withFilter);
+      // @ts-expect-error
       dispatch(loadEntities(gmp)(withFilter));
     },
     [dispatch, gmp, setRequestedFilter],
@@ -121,11 +97,12 @@ const PortListsPage = () => {
 
   const {entities, entitiesCounts, isLoading} = getData(
     filter,
+    // @ts-expect-error
     portListsSelector,
   );
 
   const handleFilterChanged = useCallback(
-    newFilter => {
+    (newFilter?: Filter) => {
       changeFilter(newFilter);
       fetch(newFilter);
     },
@@ -195,7 +172,7 @@ const PortListsPage = () => {
       await promise;
       refetch();
     } catch (error) {
-      showError(error);
+      showError(error as Error);
     }
   }, [
     selectionType,
@@ -226,7 +203,7 @@ const PortListsPage = () => {
       const {data: downloadData} = response;
       handleDownload({filename, data: downloadData});
     } catch (error) {
-      showError(error);
+      showError(error as Error);
     }
   }, [
     handleDownload,
@@ -256,53 +233,59 @@ const PortListsPage = () => {
       {({
         clone,
         create,
-        delete: delete_func,
+        delete: deleteFunc,
         download,
         edit,
-        save,
-        import: import_func,
+        import: importFunc,
       }) => (
         <>
           <PageTitle title={_('Portlists')} />
-          <EntitiesPage
+          <EntitiesPage<PortList>
+            createFilterType="portlist"
             entities={entities}
             entitiesCounts={entitiesCounts}
-            entitiesSelected={selectedEntities}
             filter={filter}
             filterEditDialog={PortListsFilterDialog}
             filtersFilter={PORTLISTS_FILTER_FILTER}
             isLoading={isLoading}
             sectionIcon={<PortListIcon size="large" />}
-            selectionType={selectionType}
-            sortBy={sortBy}
-            sortDir={sortDir}
-            table={PortListsTable}
+            table={
+              <PortListsTable
+                entities={entities}
+                entitiesCounts={entitiesCounts}
+                filter={filter}
+                selectionType={selectionType}
+                sortBy={sortBy}
+                sortDir={sortDir}
+                onDeleteBulk={handleBulkDelete}
+                onDownloadBulk={handleBulkDownload}
+                onEntityDeselected={deselect}
+                onEntitySelected={select}
+                onFirstClick={getFirst}
+                onLastClick={getLast}
+                onNextClick={getNext}
+                onPortListCloneClick={clone}
+                onPortListDeleteClick={deleteFunc}
+                onPortListDownloadClick={download}
+                onPortListEditClick={edit}
+                onPreviousClick={getPrevious}
+                onSelectionTypeChange={changeSelectionType}
+                onSortChange={handleSortChange}
+                onTagsBulk={openTagsDialog}
+              />
+            }
             title={_('Portlists')}
-            toolBarIcons={ToolBarIcons}
-            onDeleteBulk={handleBulkDelete}
-            onDeleteError={showError}
-            onDownloadBulk={handleBulkDownload}
-            onEntityDeselected={deselect}
-            onEntitySelected={select}
+            toolBarIcons={
+              <PortListListPageToolBarIcons
+                onPortListCreateClick={create}
+                onPortListImportClick={importFunc}
+              />
+            }
             onError={showError}
             onFilterChanged={handleFilterChanged}
             onFilterCreated={handleFilterChanged}
             onFilterRemoved={handleFilterRemoved}
             onFilterReset={handleFilterReset}
-            onFirstClick={getFirst}
-            onLastClick={getLast}
-            onNextClick={getNext}
-            onPortListCloneClick={clone}
-            onPortListCreateClick={create}
-            onPortListDeleteClick={delete_func}
-            onPortListDownloadClick={download}
-            onPortListEditClick={edit}
-            onPortListImportClick={import_func}
-            onPortListSaveClick={save}
-            onPreviousClick={getPrevious}
-            onSelectionTypeChange={changeSelectionType}
-            onSortChange={handleSortChange}
-            onTagsBulk={openTagsDialog}
           />
           <Download ref={downloadRef} />
           <DialogNotification

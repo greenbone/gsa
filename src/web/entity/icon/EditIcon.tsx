@@ -66,12 +66,11 @@ const EntityEditIcon = <TEntity extends EntityEdit>({
     }
   }
   return (
-    <EditIcon
+    <EditIcon<TEntity>
       {...props}
       active={active}
       title={title}
       value={entity}
-      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );

@@ -23,7 +23,7 @@ describe('DefaultFilterDialog tests', () => {
       <DefaultFilterDialog
         filter={filter}
         filterName="foo"
-        filterstring="foo=bar"
+        filterString="foo=bar"
         saveNamedFilter={true}
         sortFields={[{name: 'name', displayName: 'Name'}]}
       />,
@@ -44,7 +44,7 @@ describe('DefaultFilterDialog tests', () => {
       <DefaultFilterDialog
         filter={filter}
         filterName="foo"
-        filterstring="foo=bar"
+        filterString="foo=bar"
         saveNamedFilter={true}
         sortFields={[{name: 'name', displayName: 'Name'}]}
       />,
@@ -66,7 +66,7 @@ describe('DefaultFilterDialog tests', () => {
       <DefaultFilterDialog
         filter={filter}
         filterName="foo"
-        filterstring="foo=bar"
+        filterString="foo=bar"
         saveNamedFilter={true}
         sortFields={[{name: 'name', displayName: 'Name'}]}
         onValueChange={handleValueChange}
@@ -87,7 +87,7 @@ describe('DefaultFilterDialog tests', () => {
       <DefaultFilterDialog
         filter={filter}
         filterName="foo"
-        filterstring="foo=bar"
+        filterString="foo=bar"
         saveNamedFilter={true}
         sortFields={[{name: 'name', displayName: 'Name'}]}
         onFilterStringChange={handleFilterStringChange}
@@ -110,7 +110,7 @@ describe('DefaultFilterDialog tests', () => {
       <DefaultFilterDialog
         filter={filter}
         filterName="foo"
-        filterstring="foo=bar"
+        filterString="foo=bar"
         saveNamedFilter={true}
         sortFields={[{name: 'name', displayName: 'Name'}]}
         onFilterValueChange={handleValueChange}
@@ -133,7 +133,7 @@ describe('DefaultFilterDialog tests', () => {
       <DefaultFilterDialog
         filter={filter}
         filterName="foo"
-        filterstring="foo=bar"
+        filterString="foo=bar"
         saveNamedFilter={true}
         sortFields={[
           {name: 'name', displayName: 'Name'},

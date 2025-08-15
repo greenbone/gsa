@@ -67,12 +67,11 @@ const EntityVerifyIcon = <TEntity extends EntityVerify>({
     }
   }
   return (
-    <VerifyIcon
+    <VerifyIcon<TEntity>
       {...props}
       active={active}
       title={title}
       value={entity}
-      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );

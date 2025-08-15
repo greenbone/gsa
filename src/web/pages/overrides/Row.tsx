@@ -80,7 +80,6 @@ const Actions = withEntitiesActions(
         <ExportIcon<Override>
           title={_('Export Override')}
           value={entity}
-          /* @ts-expect-error */
           onClick={onOverrideDownloadClick}
         />
       </IconDivider>

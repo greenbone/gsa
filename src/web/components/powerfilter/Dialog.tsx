@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Filter from 'gmp/models/filter';
+import Filter, {FilterSortOrder} from 'gmp/models/filter';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import DefaultFilterDialogPropTypes from 'web/components/powerfilter/DialogPropTypes';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
@@ -15,20 +15,22 @@ import useCapabilities from 'web/hooks/useCapabilities';
 interface DefaultFilterDialogProps {
   filter?: Filter;
   filterName?: string;
-  filterstring: string;
+  filterstring?: string;
+  filterString: string;
   saveNamedFilter?: boolean;
   sortFields?: SortByField[];
   onFilterStringChange?: (value: string) => void;
   onFilterValueChange?: (value: string | number, name: string) => void;
   onSortByChange?: (value: string) => void;
-  onSortOrderChange?: (value: string) => void;
+  onSortOrderChange?: (value: FilterSortOrder) => void;
   onValueChange?: (value: string | boolean, name?: string) => void;
 }
 
 const DefaultFilterDialog = ({
   filter,
   filterName,
-  filterstring: filterString,
+  filterString,
+  filterstring = filterString,
   saveNamedFilter,
   sortFields,
   onFilterStringChange,
@@ -41,7 +43,7 @@ const DefaultFilterDialog = ({
   return (
     <>
       <FilterStringGroup
-        filter={filterString}
+        filter={filterstring}
         onChange={onFilterStringChange}
       />
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />

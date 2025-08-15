@@ -376,7 +376,6 @@ const TaskDetailsPage = ({
       }) => (
         <EntityPage
           {...props}
-          // @ts-expect-error
           entity={entity}
           sectionIcon={<TaskIcon size="large" />}
           title={_('Task')}

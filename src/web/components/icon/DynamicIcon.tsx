@@ -13,7 +13,7 @@ import Theme from 'web/utils/Theme';
 
 export type ExtendedIconSize = IconSizeType | [string, string];
 
-export interface DynamicIconProps<TValue = string>
+export interface DynamicIconProps<TValue = string | undefined>
   extends Omit<ActionIconProps, 'size' | 'children'> {
   icon: LucideIcon | React.ComponentType<React.SVGProps<SVGSVGElement>>;
   ariaLabel?: string;
@@ -27,12 +27,12 @@ export interface DynamicIconProps<TValue = string>
   dataTestId?: string;
   forceStatic?: boolean;
   isLucide?: boolean;
-  onClick?: (value?: TValue) => void | Promise<void>;
+  onClick?: (value: TValue) => void | Promise<void>;
 }
 
 const inheritColor = undefined;
 
-export function DynamicIcon<TValue = string>({
+export function DynamicIcon<TValue = string | undefined>({
   icon: Icon,
   ariaLabel,
   size = 'small',
@@ -65,7 +65,7 @@ export function DynamicIcon<TValue = string>({
       return;
     }
 
-    const result = onClick(value);
+    const result = onClick(value as TValue);
 
     if (isDefined(result?.then)) {
       try {

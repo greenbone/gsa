@@ -180,7 +180,7 @@ describe('Report Config row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(entity, '1234');
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute(
@@ -245,7 +245,7 @@ describe('Report Config row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute(
@@ -317,7 +317,7 @@ describe('Report Config row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute(
@@ -383,7 +383,7 @@ describe('Report Config row tests', () => {
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute(

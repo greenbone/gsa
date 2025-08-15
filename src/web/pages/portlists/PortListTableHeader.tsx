@@ -3,45 +3,50 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import createEntitiesFooter from 'web/entities/createEntitiesFooter';
-import createEntitiesTable from 'web/entities/createEntitiesTable';
-import withRowDetails from 'web/entities/withRowDetails';
-import PortListDetails from 'web/pages/portlists/Details';
-import Row from 'web/pages/portlists/Row';
-import PropTypes from 'web/utils/PropTypes';
+import {ActionsColumn} from 'web/entities/withEntitiesHeader';
+import useTranslation from 'web/hooks/useTranslation';
+import {SortDirectionType} from 'web/utils/SortDirection';
 
-const Header = ({
+export interface PortListTableHeaderProps {
+  actionsColumn?: ActionsColumn;
+  sort?: boolean;
+  currentSortBy?: string;
+  currentSortDir?: SortDirectionType;
+  onSortChange?: (sortBy: string) => void;
+}
+
+const PortListTableHeader = ({
   actionsColumn,
   sort = true,
   currentSortBy,
   currentSortDir,
   onSortChange,
-}) => {
+}: PortListTableHeaderProps) => {
+  const [_] = useTranslation();
   return (
     <TableHeader>
       <TableRow>
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          rowSpan="2"
-          sortBy={sort ? 'name' : false}
+          rowSpan={2}
+          sort={sort}
+          sortBy={'name'}
           title={_('Name')}
           width="59%"
           onSortChange={onSortChange}
         />
-        <TableHead colSpan="3" width="33%">
+        <TableHead colSpan={3} width="33%">
           {_('Port Counts')}
         </TableHead>
         {isDefined(actionsColumn) ? (
           actionsColumn
         ) : (
-          <TableHead align="center" rowSpan="2" width="6em">
+          <TableHead align="center" rowSpan={2} width="6em">
             {_('Actions')}
           </TableHead>
         )}
@@ -50,7 +55,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'total' : false}
+          sort={sort}
+          sortBy={'total'}
           title={_('Total')}
           width="11%"
           onSortChange={onSortChange}
@@ -58,7 +64,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'tcp' : false}
+          sort={sort}
+          sortBy={'tcp'}
           title={_('TCP')}
           width="11%"
           onSortChange={onSortChange}
@@ -66,7 +73,8 @@ const Header = ({
         <TableHead
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
-          sortBy={sort ? 'udp' : false}
+          sort={sort}
+          sortBy={'udp'}
           title={_('UDP')}
           width="11%"
           onSortChange={onSortChange}
@@ -76,22 +84,4 @@ const Header = ({
   );
 };
 
-Header.propTypes = {
-  actionsColumn: PropTypes.element,
-  currentSortBy: PropTypes.string,
-  currentSortDir: PropTypes.string,
-  sort: PropTypes.bool,
-  onSortChange: PropTypes.func,
-};
-
-export default createEntitiesTable({
-  emptyTitle: _l('No port lists available'),
-  row: Row,
-  rowDetails: withRowDetails('portlist', 10)(PortListDetails),
-  header: Header,
-  footer: createEntitiesFooter({
-    download: 'portlists.xml',
-    span: 6,
-    trash: true,
-  }),
-});
+export default PortListTableHeader;

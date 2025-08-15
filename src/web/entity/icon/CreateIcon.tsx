@@ -61,11 +61,10 @@ const EntityCreateIcon = <TEntity extends EntityType>({
     }
   }
   return (
-    <NewIcon
+    <NewIcon<TEntity>
       {...props}
       active={active}
       title={title}
-      /* @ts-expect-error */
       onClick={active ? onClick : undefined}
     />
   );

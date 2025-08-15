@@ -8,7 +8,7 @@ import {format} from 'd3-format';
 import {getFormattedDate} from 'gmp/locale/date';
 import {_} from 'gmp/locale/lang';
 import date, {Date} from 'gmp/models/date';
-import {YesNo} from 'gmp/parser';
+import {parseBoolean, YesNo} from 'gmp/parser';
 import {typeName, getEntityType, EntityType} from 'gmp/utils/entitytype';
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
@@ -17,7 +17,7 @@ import {SelectItem} from 'web/components/form/Select';
 export interface RenderSelectItemProps {
   name: string;
   id: string;
-  deprecated?: string;
+  deprecated?: boolean | YesNo;
 }
 
 interface Resource extends EntityType {
@@ -45,7 +45,9 @@ export const renderSelectItems = (
     ? list.map(item => ({
         label: String(item.name),
         value: item.id,
-        deprecated: item.deprecated,
+        deprecated: isDefined(item.deprecated)
+          ? parseBoolean(item.deprecated)
+          : undefined,
       }))
     : [];
 
