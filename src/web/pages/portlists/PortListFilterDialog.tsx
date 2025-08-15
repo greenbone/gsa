@@ -3,23 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Filter from 'gmp/models/filter';
 import DefaultFilterDialog from 'web/components/powerfilter/Dialog';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
+
+interface PortListsFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+  onCloseClick?: () => void; // should be removed in future
+}
 
 const PortListsFilterDialog = ({
-  filter,
+  filter: initialFilter,
   onCloseClick,
   onClose = onCloseClick,
   onFilterChanged,
   onFilterCreated,
-  ...props
-}) => {
+}: PortListsFilterDialogProps) => {
   const [_] = useTranslation();
-  const filterDialogProps = useFilterDialog(filter);
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
   const [handleSave] = useFilterDialogSave(
     'portlist',
     {
@@ -51,20 +59,24 @@ const PortListsFilterDialog = ({
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <DefaultFilterDialog
-        {...props}
-        {...filterDialogProps}
+        filter={filterDialogProps.filter}
+        filterName={filterDialogProps.filterName}
+        filterString={filterDialogProps.filterString}
+        saveNamedFilter={filterDialogProps.saveNamedFilter}
         sortFields={SORT_FIELDS}
+        onFilterStringChange={filterDialogProps.handleFilterStringChange}
+        onFilterValueChange={filterDialogProps.handleFilterValueChange}
+        onSortByChange={filterDialogProps.handleSortByChange}
+        onSortOrderChange={filterDialogProps.handleSortOrderChange}
+        onValueChange={
+          filterDialogProps.handleChange as (
+            value: string | boolean,
+            name?: string,
+          ) => void
+        }
       />
     </FilterDialog>
   );
-};
-
-PortListsFilterDialog.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onCloseClick: PropTypes.func, // should be removed in future
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
 };
 
 export default PortListsFilterDialog;
