@@ -227,12 +227,12 @@ describe('Select component tests', () => {
     test.each([
       {
         label: 'Test Item',
-        deprecated: '1',
+        deprecated: true,
         expectedText: 'Test Item (Deprecated)',
       },
       {
         label: 'Non-deprecated Item',
-        deprecated: '0',
+        deprecated: false,
         expectedText: 'Non-deprecated Item',
       },
       {
