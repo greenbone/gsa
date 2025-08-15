@@ -3,13 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useNavigate} from 'react-router';
+import Gmp from 'gmp/gmp';
+import Permission from 'gmp/models/permission';
+import PortList from 'gmp/models/portlist';
 import {PortListIcon} from 'web/components/icon';
-import ExportIcon from 'web/components/icon/ExportIcon';
-import ListIcon from 'web/components/icon/ListIcon';
-import ManualIcon from 'web/components/icon/ManualIcon';
-import Divider from 'web/components/layout/Divider';
-import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Tab from 'web/components/tab/Tab';
@@ -22,88 +20,34 @@ import TabsContainer from 'web/components/tab/TabsContainer';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
-import CloneIcon from 'web/entity/icon/CloneIcon';
-import CreateIcon from 'web/entity/icon/CreateIcon';
-import EditIcon from 'web/entity/icon/EditIcon';
-import TrashIcon from 'web/entity/icon/TrashIcon';
+import {OnDownloadedFunc} from 'web/entity/hooks/useEntityDownload';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import PortListDetails from 'web/pages/portlists/Details';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
+import PortListDetails from 'web/pages/portlists/PortListDetails';
+import PortListDetailsPageToolBarIcons from 'web/pages/portlists/PortListDetailsPageToolBarIcons';
 import PortRangesTable from 'web/pages/portlists/PortRangesTable';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {selector, loadEntity} from 'web/store/entities/portlists';
-import PropTypes from 'web/utils/PropTypes';
 
-const ToolBarIcons = ({
-  entity,
-  onPortListCloneClick,
-  onPortListCreateClick,
-  onPortListDeleteClick,
-  onPortListDownloadClick,
-  onPortListEditClick,
-}) => {
-  const [_] = useTranslation();
+interface PortListDetailsPageProps {
+  entity: PortList;
+  isLoading?: boolean;
+  links?: boolean;
+  permissions?: Permission[];
+  onError: (error: Error) => void;
+  onChanged: () => void;
+  onDownloaded?: OnDownloadedFunc;
+}
 
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          anchor="creating-and-managing-port-lists"
-          page="scanning"
-          title={_('Help: Port Lists')}
-        />
-        <ListIcon page="portlists" title={_('PortList List')} />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon entity={entity} onClick={onPortListCreateClick} />
-        <CloneIcon entity={entity} onClick={onPortListCloneClick} />
-        <EditIcon
-          disabled={entity.predefined}
-          entity={entity}
-          onClick={onPortListEditClick}
-        />
-        <TrashIcon entity={entity} onClick={onPortListDeleteClick} />
-        <ExportIcon
-          title={_('Export PortList as XML')}
-          value={entity}
-          onClick={onPortListDownloadClick}
-        />
-      </IconDivider>
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onPortListCloneClick: PropTypes.func.isRequired,
-  onPortListCreateClick: PropTypes.func.isRequired,
-  onPortListDeleteClick: PropTypes.func.isRequired,
-  onPortListDownloadClick: PropTypes.func.isRequired,
-  onPortListEditClick: PropTypes.func.isRequired,
-};
-
-const Details = ({entity, links = true}) => {
-  return (
-    <Layout flex="column">
-      <PortListDetails entity={entity} links={links} />
-    </Layout>
-  );
-};
-
-Details.propTypes = {
-  entity: PropTypes.model.isRequired,
-  links: PropTypes.bool,
-};
-
-const PortRanges = ({entity}) => {
+const PortRanges = ({entity}: {entity: PortList}) => {
   const [_] = useTranslation();
   const {portRanges = []} = entity;
 
@@ -117,55 +61,53 @@ const PortRanges = ({entity}) => {
   );
 };
 
-PortRanges.propTypes = {
-  entity: PropTypes.model.isRequired,
-};
-
-const Page = ({
+const PortListDetailsPage = ({
   entity,
+  isLoading = true,
   links = true,
   permissions = [],
   onError,
   onChanged,
   onDownloaded,
-
-  ...props
-}) => {
+}: PortListDetailsPageProps) => {
   const [_] = useTranslation();
-
+  const navigate = useNavigate();
   return (
     <PortListComponent
       onCloneError={onError}
-      onCloned={goToDetails('portlist', props)}
-      onCreated={goToDetails('portlist', props)}
+      onCloned={goToDetails('portlist', navigate)}
+      onCreated={goToDetails('portlist', navigate)}
       onDeleteError={onError}
-      onDeleted={goToList('portlists', props)}
+      onDeleted={goToList('portlists', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onSaved={onChanged}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
-        <EntityPage
-          {...props}
+      {({clone, create, delete: deleteFunc, download, edit}) => (
+        <EntityPage<PortList>
           entity={entity}
+          entityType="portlist"
+          isLoading={isLoading}
           sectionIcon={<PortListIcon size="large" />}
           title={_('Port List')}
-          toolBarIcons={ToolBarIcons}
-          onChanged={onChanged}
-          onDownloaded={onDownloaded}
-          onError={onError}
-          onPortListCloneClick={clone}
-          onPortListCreateClick={create}
-          onPortListDeleteClick={delete_func}
-          onPortListDownloadClick={download}
-          onPortListEditClick={edit}
-          onPortListSaveClick={save}
+          toolBarIcons={
+            <PortListDetailsPageToolBarIcons
+              entity={entity}
+              onPortListCloneClick={clone}
+              onPortListCreateClick={create}
+              onPortListDeleteClick={deleteFunc}
+              onPortListDownloadClick={download}
+              onPortListEditClick={edit}
+            />
+          }
         >
           {() => {
             return (
-              <React.Fragment>
+              <>
                 <PageTitle
-                  title={_('Port List: {{name}}', {name: entity.name})}
+                  title={_('Port List: {{name}}', {
+                    name: entity.name as string,
+                  })}
                 />
                 <TabsContainer flex="column" grow="1">
                   <TabLayout align={['start', 'end']} grow="1">
@@ -199,7 +141,7 @@ const Page = ({
                         />
                       </TabPanel>
                       <TabPanel>
-                        <EntityPermissions
+                        <EntityPermissions<PortList>
                           entity={entity}
                           permissions={permissions}
                           onChanged={onChanged}
@@ -210,7 +152,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </TabsContainer>
-              </React.Fragment>
+              </>
             );
           }}
         </EntityPage>
@@ -219,26 +161,17 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  links: PropTypes.bool,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-};
-
-const load = gmp => {
+const load = (gmp: Gmp) => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
+  return (id: string) => dispatch =>
     Promise.all([
       dispatch(loadEntityFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
     ]);
 };
 
-const mapStateToProps = (rootState, {id}) => {
+const mapStateToProps = (rootState: unknown, {id}: {id: string}) => {
   const permissionsSel = permissionsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
@@ -249,4 +182,4 @@ export default withEntityContainer('portlist', {
   entitySelector: selector,
   load,
   mapStateToProps,
-})(Page);
+})(PortListDetailsPage);
