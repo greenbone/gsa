@@ -82,7 +82,7 @@ describe('TaskFilterDialog tests', () => {
       type: 'task',
       name: 'New Task Filter',
     });
-    expect(gmp.filter.get).toHaveBeenCalledWith(newFilter);
+    expect(gmp.filter.get).toHaveBeenCalledWith({id: newFilter.id});
     expect(handleFilterChanged).not.toHaveBeenCalledWith();
     expect(handleClose).toHaveBeenCalled();
     expect(handleFilterCreated).toHaveBeenCalledWith(newFilterWithDetails);
