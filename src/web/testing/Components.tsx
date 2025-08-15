@@ -17,7 +17,9 @@ import LicenseProvider from 'web/components/provider/LicenseProvider';
 export const Main = ({children}: {children: React.ReactNode}) => {
   return (
     <ThemeProvider defaultColorScheme="light">
-      <StyleSheetManager enableVendorPrefixes>{children}</StyleSheetManager>
+      <StyleSheetManager enableVendorPrefixes>
+        <div data-testid="main-container">{children}</div>
+      </StyleSheetManager>
     </ThemeProvider>
   );
 };
