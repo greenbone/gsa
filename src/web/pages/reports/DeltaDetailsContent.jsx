@@ -46,7 +46,8 @@ const PageContent = ({
   isLoading = true,
   isUpdating = false,
   reportId,
-  sorting,
+  sortField,
+  sortReverse,
   showError,
   showErrorMessage,
   showSuccessMessage,
@@ -61,7 +62,6 @@ const PageContent = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onFilterResetClick,
-
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onSortChange,
@@ -188,8 +188,8 @@ const PageContent = ({
                       isUpdating={isUpdating}
                       progress={progress}
                       results={isDefined(results) ? results.entities : {}}
-                      sortField={sorting.results.sortField}
-                      sortReverse={sorting.results.sortReverse}
+                      sortField={sortField}
+                      sortReverse={sortReverse}
                       status={status}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -233,7 +233,8 @@ PageContent.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
-  sorting: PropTypes.object,
+  sortField: PropTypes.string.isRequired,
+  sortReverse: PropTypes.bool.isRequired,
   task: PropTypes.model,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

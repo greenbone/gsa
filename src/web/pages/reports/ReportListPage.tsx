@@ -124,7 +124,6 @@ const ReportListPage = ({
   };
 
   const handleImportReport = data => {
-    // @ts-expect-error
     return gmp.report
       .import(data)
       .then(onChanged, onError)
