@@ -86,7 +86,7 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
-describe('TasksTable tests', () => {
+describe('TaskTable tests', () => {
   test('should render', () => {
     const handleReportImport = testing.fn();
     const handleTaskClone = testing.fn();
@@ -111,7 +111,7 @@ describe('TasksTable tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(
+    render(
       <Table
         entities={[task, task2, task3]}
         entitiesCounts={counts}
@@ -127,7 +127,7 @@ describe('TasksTable tests', () => {
       />,
     );
 
-    const header = baseElement.querySelectorAll('th');
+    const header = screen.queryAllByRole('columnheader');
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Status');
     expect(header[2]).toHaveTextContent('Reports');
