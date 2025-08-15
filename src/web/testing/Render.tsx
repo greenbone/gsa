@@ -41,17 +41,23 @@ export {renderHook} from '@testing-library/react/pure';
 afterEach(cleanup);
 
 export const render = (ui: React.ReactNode) => {
-  const {container, baseElement, rerender} = reactTestingRender(
-    <Main>{ui}</Main>,
-  );
+  const {
+    container: rtlContainer,
+    baseElement,
+    rerender,
+  } = reactTestingRender(<Main>{ui}</Main>);
 
+  const container = rtlContainer.querySelector<HTMLElement>(
+    '[data-testid="main-container"]',
+  ) as HTMLElement;
   return {
     userEvent: userEvent.setup({
       pointerEventsCheck: PointerEventsCheckLevel.Never,
     }),
     baseElement,
+    baseContainer: rtlContainer,
     container,
-    element: container.lastChild as HTMLElement,
+    element: container?.firstChild as HTMLElement,
     rerender: (component: React.ReactNode) =>
       rerender(<Main>{component}</Main>),
   };
