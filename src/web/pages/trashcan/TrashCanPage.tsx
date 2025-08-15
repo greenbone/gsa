@@ -36,7 +36,7 @@ import NotesTable from 'web/pages/notes/Table';
 import OverridesTable from 'web/pages/overrides/Table';
 import PermissionsTable from 'web/pages/permissions/Table';
 import PoliciesTable from 'web/pages/policies/Table';
-import PortListsTable from 'web/pages/portlists/Table';
+import PortListTable from 'web/pages/portlists/PortListTable';
 import ReportConfigsTable from 'web/pages/reportconfigs/Table';
 import ReportFormatsTable from 'web/pages/reportformats/Table';
 import RolesTable from 'web/pages/roles/Table';
@@ -291,7 +291,7 @@ const TrashCan = () => {
             <LinkTarget id="port_list" />
             <h1>{_('Port Lists')}</h1>
             {/* @ts-expect-error */}
-            <PortListsTable entities={trash.portLists} {...tableProps} />
+            <PortListTable entities={trash.portLists} {...tableProps} />
           </span>
         )}
         {hasEntities(trash?.reportConfigs) && (
