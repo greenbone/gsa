@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import dayjs, {Dayjs} from 'dayjs';
+import {z} from 'zod';
 import {Date as GmpDate} from 'gmp/models/date';
 import {parseDate} from 'gmp/parser';
 import {isDefined, isString} from 'gmp/utils/identity';
@@ -10,22 +12,28 @@ import {isDefined, isString} from 'gmp/utils/identity';
 /**
  * Represents the data returned by the backend
  */
-export interface BaseModelElement {
-  _id?: string;
-  creation_time?: string;
-  modification_time?: string;
-  type?: string | number;
-}
+
+export const BaseModelElementSchema = z.object({
+  _id: z.string().optional(),
+  creation_time: z.string().optional(),
+  modification_time: z.string().optional(),
+  type: z.union([z.string(), z.number()]).optional(),
+});
+
+export type BaseModelElement = z.infer<typeof BaseModelElementSchema>;
 
 /**
  * Represents the properties to create a BaseModel instance.
  */
-export interface BaseModelProperties {
-  _type?: string;
-  creationTime?: GmpDate;
-  id?: string;
-  modificationTime?: GmpDate;
-}
+
+export const BaseModelPropertiesSchema = z.object({
+  _type: z.string().optional(),
+  creationTime: z.instanceof(dayjs as unknown as typeof Dayjs).optional(),
+  id: z.string().optional(),
+  modificationTime: z.instanceof(dayjs as unknown as typeof Dayjs).optional(),
+});
+
+export type BaseModelProperties = z.infer<typeof BaseModelPropertiesSchema>;
 
 export const parseBaseModelProperties = (
   element: BaseModelElement = {},
