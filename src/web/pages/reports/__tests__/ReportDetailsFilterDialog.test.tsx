@@ -8,7 +8,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, screen, within} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import FilterDialog from 'web/pages/reports/DetailsFilterDialog';
+import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 
 const caps = new Capabilities(['everything']);
 
@@ -34,9 +34,8 @@ describe('Details Filter Dialog for Audit report', () => {
     });
 
     render(
-      <FilterDialog
+      <ReportDetailsFilterDialog
         audit={true}
-        createFilterType="result"
         delta={false}
         filter={filter}
         onClose={onClose}
@@ -107,9 +106,8 @@ describe('Details Filter Dialog for Audit report', () => {
     });
 
     render(
-      <FilterDialog
+      <ReportDetailsFilterDialog
         audit={false}
-        createFilterType="result"
         delta={false}
         filter={filter}
         onClose={onClose}

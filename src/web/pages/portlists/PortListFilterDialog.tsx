@@ -4,7 +4,7 @@
  */
 
 import Filter from 'gmp/models/filter';
-import DefaultFilterDialog from 'web/components/powerfilter/Dialog';
+import DefaultFilterDialog from 'web/components/powerfilter/DefaultFilterDialog';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave, {

@@ -17,8 +17,8 @@ import {goToDetails} from 'web/entity/navigation';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from 'web/pages/hosts/dashboard';
-import HostsFilterDialog from 'web/pages/hosts/FilterDialog';
 import HostComponent from 'web/pages/hosts/HostComponent';
+import HostFilterDialog from 'web/pages/hosts/HostFilterDialog';
 import HostsTable from 'web/pages/hosts/Table';
 import {
   loadEntities,
@@ -94,7 +94,7 @@ const Page = ({
             )}
             entitiesCounts={entitiesCounts}
             filter={filter}
-            filterEditDialog={HostsFilterDialog}
+            filterEditDialog={HostFilterDialog}
             filtersFilter={HOSTS_FILTER_FILTER}
             sectionIcon={<HostIcon size="large" />}
             table={HostsTable}

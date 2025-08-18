@@ -3,32 +3,41 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import FilterSearchGroup from 'web/components/powerfilter/FilterSearchGroup';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
 import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
+import MinQodGroup from 'web/components/powerfilter/MinQodGroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
+import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const OverridesFilterDialogComponent = ({
+interface ReportFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const ReportFilterDialog = ({
   filter: initialFilter,
   onClose,
   onFilterChanged,
   onFilterCreated,
-}) => {
-  const [_] = useTranslation();
+}: ReportFilterDialogProps) => {
   const capabilities = useCapabilities();
-  const filterDialogProps = useFilterDialog(initialFilter);
+  const [_] = useTranslation();
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
   const [handleSave] = useFilterDialogSave(
-    'override',
+    'report',
     {
       onClose,
       onFilterChanged,
@@ -39,39 +48,47 @@ const OverridesFilterDialogComponent = ({
 
   const SORT_FIELDS = [
     {
-      name: 'text',
-      displayName: _('Text'),
+      name: 'date',
+      displayName: _('Date'),
     },
     {
-      name: 'nvt',
-      displayName: _('Nvt'),
+      name: 'status',
+      displayName: _('Status'),
     },
     {
-      name: 'hosts',
-      displayName: _('Hosts'),
-    },
-    {
-      name: 'port',
-      displayName: _('Location'),
+      name: 'task',
+      displayName: _('Task'),
     },
     {
       name: 'severity',
-      displayName: _('From'),
+      displayName: _('Severity'),
     },
     {
-      name: 'newSeverity',
-      displayName: _('To'),
+      name: 'high',
+      displayName: _('Scan Results: High'),
     },
     {
-      name: 'active',
-      displayName: _('Active'),
+      name: 'medium',
+      displayName: _('Scan Results: Medium'),
+    },
+    {
+      name: 'low',
+      displayName: _('Scan Results: Low'),
+    },
+    {
+      name: 'log',
+      displayName: _('Scan Results: Log'),
+    },
+    {
+      name: 'false_positive',
+      displayName: _('Scan Results: False Positive'),
     },
   ];
 
   const {
-    filterString,
     filter,
     filterName,
+    filterString,
     saveNamedFilter,
     onFilterStringChange,
     onFilterValueChange,
@@ -80,7 +97,6 @@ const OverridesFilterDialogComponent = ({
     onSortOrderChange,
     onValueChange,
   } = filterDialogProps;
-
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
@@ -91,22 +107,28 @@ const OverridesFilterDialogComponent = ({
 
       <BooleanFilterGroup
         filter={filter}
-        name="active"
-        title={_('Active')}
+        name="apply_overrides"
+        title={_('Apply Overrides')}
+        onChange={onFilterValueChange}
+      />
+
+      <SeverityValuesGroup
+        filter={filter}
+        name="severity"
+        title={_('Highest Severity from Results')}
+        onChange={onFilterValueChange}
+      />
+
+      <MinQodGroup
+        filter={filter}
+        name="min_qod"
         onChange={onFilterValueChange}
       />
 
       <FilterSearchGroup
         filter={filter}
-        name="text"
-        title={_('Override Text')}
-        onChange={onSearchTermChange}
-      />
-
-      <FilterSearchGroup
-        filter={filter}
-        name="task_name"
-        title={_('Task Name')}
+        name="task"
+        title={_('From Task (name)')}
         onChange={onSearchTermChange}
       />
 
@@ -123,7 +145,6 @@ const OverridesFilterDialogComponent = ({
 
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
@@ -133,11 +154,4 @@ const OverridesFilterDialogComponent = ({
   );
 };
 
-OverridesFilterDialogComponent.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-};
-
-export default OverridesFilterDialogComponent;
+export default ReportFilterDialog;

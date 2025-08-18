@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import NvtsDashboard, {NVTS_DASHBOARD_ID} from 'web/pages/nvts/dashboard';
-import NvtsFilterDialog from 'web/pages/nvts/FilterDialog';
+import NvtFilterDialog from 'web/pages/nvts/NvtFilterDialog';
 import NvtsTable from 'web/pages/nvts/Table';
 import {
   loadEntities,
@@ -48,7 +48,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
           <DashboardControls dashboardId={NVTS_DASHBOARD_ID} />
         )}
         filter={filter}
-        filterEditDialog={NvtsFilterDialog}
+        filterEditDialog={NvtFilterDialog}
         filtersFilter={NVTS_FILTER_FILTER}
         sectionIcon={<NvtIcon size="large" />}
         table={NvtsTable}

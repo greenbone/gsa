@@ -12,8 +12,8 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import CveFilterDialog from 'web/pages/cves/CveFilterDialog';
 import CvesDashboard, {CVES_DASHBOARD_ID} from 'web/pages/cves/dashboard';
-import CveFilterDialog from 'web/pages/cves/FilterDialog';
 import CvesTable from 'web/pages/cves/Table';
 import {
   loadEntities,

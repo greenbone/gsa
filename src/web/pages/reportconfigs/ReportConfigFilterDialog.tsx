@@ -3,22 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import DefaultFilterDialog from 'web/components/powerfilter/Dialog';
+import Filter from 'gmp/models/filter';
+import DefaultFilterDialog from 'web/components/powerfilter/DefaultFilterDialog';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const ReportConfigsFilterDialog = ({
+interface ReportConfigsFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const ReportConfigFilterDialog = ({
   filter,
   onClose,
   onFilterChanged,
   onFilterCreated,
-  ...props
-}) => {
+}: ReportConfigsFilterDialogProps) => {
   const [_] = useTranslation();
-  const filterDialogProps = useFilterDialog(filter);
+  const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(filter);
   const [handleSave] = useFilterDialogSave(
     'report_config',
     {
@@ -42,20 +48,9 @@ const ReportConfigsFilterDialog = ({
 
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
-      <DefaultFilterDialog
-        {...props}
-        {...filterDialogProps}
-        sortFields={SORT_FIELDS}
-      />
+      <DefaultFilterDialog {...filterDialogProps} sortFields={SORT_FIELDS} />
     </FilterDialog>
   );
 };
 
-ReportConfigsFilterDialog.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-};
-
-export default ReportConfigsFilterDialog;
+export default ReportConfigFilterDialog;

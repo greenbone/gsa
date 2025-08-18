@@ -13,7 +13,7 @@ import {
 } from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import DefaultFilterDialog from 'web/components/powerfilter/Dialog';
+import DefaultFilterDialog from 'web/components/powerfilter/DefaultFilterDialog';
 
 describe('DefaultFilterDialog tests', () => {
   test('should render with children', () => {

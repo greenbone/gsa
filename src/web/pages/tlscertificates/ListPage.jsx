@@ -16,9 +16,9 @@ import useTranslation from 'web/hooks/useTranslation';
 import TlsCertificatesDashboard, {
   TLS_CERTIFICATES_DASHBOARD_ID,
 } from 'web/pages/tlscertificates/dashboard';
-import TlsCertificatesFilterDialog from 'web/pages/tlscertificates/FilterDialog';
 import TlsCertificateTable from 'web/pages/tlscertificates/Table';
 import TlsCertificateComponent from 'web/pages/tlscertificates/TlsCertificateComponent';
+import TlsCertificateFilterDialog from 'web/pages/tlscertificates/TlsCertificateFilterDialog';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -70,7 +70,7 @@ const Page = ({
               <DashboardControls dashboardId={TLS_CERTIFICATES_DASHBOARD_ID} />
             )}
             filter={filter}
-            filterEditDialog={TlsCertificatesFilterDialog}
+            filterEditDialog={TlsCertificateFilterDialog}
             filtersFilter={TLS_CERTIFICATES_FILTER_FILTER}
             sectionIcon={<TlsCertificateIcon size="large" />}
             table={TlsCertificateTable}

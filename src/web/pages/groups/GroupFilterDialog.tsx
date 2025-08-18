@@ -3,24 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import DefaultFilterDialog from 'web/components/powerfilter/Dialog';
+import Filter from 'gmp/models/filter';
+import DefaultFilterDialog from 'web/components/powerfilter/DefaultFilterDialog';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const RolesFilterDialog = ({
+interface GroupFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const GroupFilterDialog = ({
   filter,
   onClose,
   onFilterChanged,
   onFilterCreated,
-  ...props
-}) => {
+}: GroupFilterDialogProps) => {
   const [_] = useTranslation();
-  const filterDialogProps = useFilterDialog(filter);
+  const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(filter);
   const [handleSave] = useFilterDialogSave(
-    'role',
+    'group',
     {
       onClose,
       onFilterChanged,
@@ -35,22 +41,12 @@ const RolesFilterDialog = ({
       displayName: _('Name'),
     },
   ];
+
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
-      <DefaultFilterDialog
-        {...props}
-        {...filterDialogProps}
-        sortFields={SORT_FIELDS}
-      />
+      <DefaultFilterDialog {...filterDialogProps} sortFields={SORT_FIELDS} />
     </FilterDialog>
   );
 };
 
-RolesFilterDialog.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-};
-
-export default RolesFilterDialog;
+export default GroupFilterDialog;

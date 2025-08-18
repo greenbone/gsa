@@ -28,8 +28,8 @@ import useGmp from 'web/hooks/useGmp';
 import useReload from 'web/hooks/useReload';
 import useTranslation from 'web/hooks/useTranslation';
 import DeltaDetailsContent from 'web/pages/reports/DeltaDetailsContent';
-import ReportDetailsFilterDialog from 'web/pages/reports/DetailsFilterDialog';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/Component';
 import {
   loadAllEntities as loadFilters,

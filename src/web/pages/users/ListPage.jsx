@@ -20,9 +20,9 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ConfirmDeleteDialog from 'web/pages/users/ConfirmDeleteDialog';
-import UsersFilterDialog from 'web/pages/users/FilterDialog';
 import UsersTable from 'web/pages/users/Table';
 import UserComponent from 'web/pages/users/UserComponent';
+import UserFilterDialog from 'web/pages/users/UserFilterDialog';
 import {
   loadEntities,
   loadAllEntities,
@@ -202,7 +202,7 @@ const UsersPage = ({
             entities={entities}
             entitiesSelected={entitiesSelected}
             filter={filter}
-            filterEditDialog={UsersFilterDialog}
+            filterEditDialog={UserFilterDialog}
             filtersFilter={USERS_FILTER_FILTER}
             sectionIcon={<UserIcon size="large" />}
             selectionType={selectionType}

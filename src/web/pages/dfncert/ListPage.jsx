@@ -12,7 +12,7 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import FilterDialog from 'web/pages/certbund/FilterDialog';
+import CertBundFilterDialog from 'web/pages/certbund/CertBundFilterDialog';
 import DfnCertDashboard, {
   DFNCERT_DASHBOARD_ID,
 } from 'web/pages/dfncert/dashboard';
@@ -52,7 +52,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
           <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID} />
         )}
         filter={filter}
-        filterEditDialog={FilterDialog}
+        filterEditDialog={CertBundFilterDialog}
         filtersFilter={DFNCERT_FILTER_FILTER}
         sectionIcon={<DfnCertAdvIcon size="large" />}
         table={DfnCertTable}

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import Checkbox from 'web/components/form/Checkbox';
 import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 import ComplianceLevelsFilterGroup from 'web/components/powerfilter/ComplianceLevelsGroup';
@@ -18,11 +18,19 @@ import SeverityLevelsGroup from 'web/components/powerfilter/SeverityLevelsGroup'
 import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
 import SolutionTypeGroup from 'web/components/powerfilter/SolutionTypeGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import DeltaResultsFilterGroup from 'web/pages/reports/DeltaResultsFilterGroup';
-import PropTypes from 'web/utils/PropTypes';
+
+interface ReportDetailsFilterDialogProps extends UseFilterDialogSaveProps {
+  audit?: boolean;
+  delta?: boolean;
+  filter?: Filter;
+}
 
 const ReportDetailsFilterDialog = ({
   audit = false,
@@ -31,10 +39,11 @@ const ReportDetailsFilterDialog = ({
   onClose,
   onFilterChanged,
   onFilterCreated,
-}) => {
+}: ReportDetailsFilterDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
-  const filterDialogProps = useFilterDialog(initialFilter);
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
   const [handleSave] = useFilterDialogSave(
     'result',
     {
@@ -90,7 +99,7 @@ const ReportDetailsFilterDialog = ({
         name="result_hosts_only"
         title={_('Only show hosts that have results')}
         unCheckedValue={0}
-        onChange={onFilterValueChange}
+        onChange={onFilterValueChange as (value: number, name?: string) => void}
       />
 
       <MinQodGroup
@@ -155,7 +164,6 @@ const ReportDetailsFilterDialog = ({
 
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
@@ -163,15 +171,6 @@ const ReportDetailsFilterDialog = ({
       )}
     </FilterDialog>
   );
-};
-
-ReportDetailsFilterDialog.propTypes = {
-  audit: PropTypes.bool,
-  delta: PropTypes.bool,
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
 };
 
 export default ReportDetailsFilterDialog;

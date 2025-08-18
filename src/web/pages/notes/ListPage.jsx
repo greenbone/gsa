@@ -14,8 +14,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import NotesDashboard, {NOTES_DASHBOARD_ID} from 'web/pages/notes/dashboard';
-import FilterDialog from 'web/pages/notes/FilterDialog';
 import NoteComponent from 'web/pages/notes/NoteComponent';
+import FilterDialog from 'web/pages/notes/NoteFilterDialog';
 import NotesTable from 'web/pages/notes/Table';
 import {
   loadEntities,

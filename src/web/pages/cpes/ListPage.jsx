@@ -12,8 +12,8 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import CpeFilterDialog from 'web/pages/cpes/CpeFilterDialog';
 import CpesDashboard, {CPES_DASHBOARD_ID} from 'web/pages/cpes/dashboard';
-import CpeFilterDialog from 'web/pages/cpes/FilterDialog';
 import CpesTable from 'web/pages/cpes/Table';
 import {
   loadEntities,

@@ -3,33 +3,39 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
+import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import FilterSearchGroup from 'web/components/powerfilter/FilterSearchGroup';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
 import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
-import MinQodGroup from 'web/components/powerfilter/MinQodGroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
-import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const VulnsFilterDialogComponent = ({
+interface OverrideFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const OverrideFilterDialog = ({
   filter: initialFilter,
   onClose,
   onFilterChanged,
   onFilterCreated,
-}) => {
-  const capabilities = useCapabilities();
+}: OverrideFilterDialogProps) => {
   const [_] = useTranslation();
-  const filterDialogProps = useFilterDialog(initialFilter);
+  const capabilities = useCapabilities();
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
   const [handleSave] = useFilterDialogSave(
-    'vulnerability',
+    'override',
     {
       onClose,
       onFilterChanged,
@@ -40,46 +46,48 @@ const VulnsFilterDialogComponent = ({
 
   const SORT_FIELDS = [
     {
-      name: 'name',
-      displayName: _('Name'),
+      name: 'text',
+      displayName: _('Text'),
     },
     {
-      name: 'oldest',
-      displayName: _('Oldest Result'),
-    },
-    {
-      name: 'newest',
-      displayName: _('Newest Result'),
-    },
-    {
-      name: 'severity',
-      displayName: _('Severity'),
-    },
-    {
-      name: 'qod',
-      displayName: _('QoD'),
-    },
-    {
-      name: 'results',
-      displayName: _('Results'),
+      name: 'nvt',
+      displayName: _('Nvt'),
     },
     {
       name: 'hosts',
       displayName: _('Hosts'),
     },
+    {
+      name: 'port',
+      displayName: _('Location'),
+    },
+    {
+      name: 'severity',
+      displayName: _('From'),
+    },
+    {
+      name: 'newSeverity',
+      displayName: _('To'),
+    },
+    {
+      name: 'active',
+      displayName: _('Active'),
+    },
   ];
+
   const {
+    filterString,
     filter,
     filterName,
-    filterString,
     saveNamedFilter,
-    onFilterValueChange,
     onFilterStringChange,
+    onFilterValueChange,
     onSearchTermChange,
     onSortByChange,
     onSortOrderChange,
     onValueChange,
   } = filterDialogProps;
+
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
@@ -88,23 +96,24 @@ const VulnsFilterDialogComponent = ({
         onChange={onFilterStringChange}
       />
 
-      <SeverityValuesGroup
+      <BooleanFilterGroup
         filter={filter}
-        name="severity"
-        title={_('Severity')}
-        onChange={onFilterValueChange}
-      />
-
-      <MinQodGroup
-        filter={filter}
-        name="min_qod"
+        name="active"
+        title={_('Active')}
         onChange={onFilterValueChange}
       />
 
       <FilterSearchGroup
         filter={filter}
-        name="name"
-        title={_('Name')}
+        name="text"
+        title={_('Override Text')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        filter={filter}
+        name="task_name"
+        title={_('Task Name')}
         onChange={onSearchTermChange}
       />
 
@@ -121,7 +130,6 @@ const VulnsFilterDialogComponent = ({
 
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
@@ -131,11 +139,4 @@ const VulnsFilterDialogComponent = ({
   );
 };
 
-VulnsFilterDialogComponent.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-};
-
-export default VulnsFilterDialogComponent;
+export default OverrideFilterDialog;

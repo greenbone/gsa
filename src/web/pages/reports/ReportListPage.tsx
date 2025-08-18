@@ -29,7 +29,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import ReportsDashboard, {
   REPORTS_DASHBOARD_ID,
 } from 'web/pages/reports/dashboard';
-import ReportFilterDialog from 'web/pages/reports/FilterDialog';
+import ReportFilterDialog from 'web/pages/reports/ReportFilterDialog';
 import ReportImportDialog from 'web/pages/reports/ReportImportDialog';
 import ReportsTable from 'web/pages/reports/ReportTable';
 import ContainerTaskDialog from 'web/pages/tasks/ContainerTaskDialog';
@@ -194,11 +194,9 @@ const ReportListPage = ({
         )}
         entities={entities}
         filter={filter}
-        // @ts-expect-error
         filterEditDialog={ReportFilterDialog}
         filtersFilter={REPORTS_FILTER_FILTER}
         sectionIcon={<ReportIcon size="large" />}
-        selectedDeltaReport={selectedDeltaReport}
         table={
           <ReportsTable
             {...props}
@@ -210,6 +208,8 @@ const ReportListPage = ({
         }
         title={_('Reports')}
         toolBarIcons={<ToolBarIcons onUploadReportClick={openImportDialog} />}
+        onError={onError}
+        onFilterChanged={onFilterChanged}
       />
       {importDialogVisible && (
         <ReportImportDialog
