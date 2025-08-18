@@ -7,7 +7,7 @@ import PropTypes from 'web/utils/PropTypes';
 
 const dialogPropType = {
   filter: PropTypes.filter,
-  filterstring: PropTypes.string,
+  filterString: PropTypes.string,
   sortFields: PropTypes.array,
   onFilterStringChange: PropTypes.func,
   onFilterValueChange: PropTypes.func,

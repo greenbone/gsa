@@ -15,7 +15,6 @@ import useCapabilities from 'web/hooks/useCapabilities';
 interface DefaultFilterDialogProps {
   filter?: Filter;
   filterName?: string;
-  filterstring?: string;
   filterString: string;
   saveNamedFilter?: boolean;
   sortFields?: SortByField[];
@@ -30,7 +29,6 @@ const DefaultFilterDialog = ({
   filter,
   filterName,
   filterString,
-  filterstring = filterString,
   saveNamedFilter,
   sortFields,
   onFilterStringChange,
@@ -43,7 +41,7 @@ const DefaultFilterDialog = ({
   return (
     <>
       <FilterStringGroup
-        filter={filterstring}
+        filter={filterString}
         onChange={onFilterStringChange}
       />
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />

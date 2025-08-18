@@ -83,7 +83,6 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
     handleSortOrderChange,
     handleChange,
     // provide old names
-    filterstring: filterString,
     onFilterChange: handleFilterChange,
     onFilterValueChange: handleFilterValueChange,
     onSearchTermChange: handleSearchTermChange,
