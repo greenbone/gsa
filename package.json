@@ -1,6 +1,6 @@
 {
   "name": "gsa",
-  "version": "25.3.0",
+  "version": "25.3.1-dev1",
   "description": "Greenbone Security Assistant",
   "keywords": [
     "openvas",
