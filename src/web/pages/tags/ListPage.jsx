@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import TagsFilterDialog from 'web/pages/tags/FilterDialog';
 import TagsTable from 'web/pages/tags/Table';
+import TagFilterDialog from 'web/pages/tags/TagFilterDialog';
 import TagComponent from 'web/pages/tags/TagsComponent';
 import {
   loadEntities,
@@ -79,7 +79,7 @@ const TagsPage = ({
           <PageTitle title={_('Tags')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={TagsFilterDialog}
+            filterEditDialog={TagFilterDialog}
             filtersFilter={TAGS_FILTER_FILTER}
             sectionIcon={<TagIcon size="large" />}
             table={TagsTable}

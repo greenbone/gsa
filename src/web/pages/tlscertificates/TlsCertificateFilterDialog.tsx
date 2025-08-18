@@ -3,22 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import DefaultFilterDialog from 'web/components/powerfilter/Dialog';
+import Filter from 'gmp/models/filter';
+import DefaultFilterDialog from 'web/components/powerfilter/DefaultFilterDialog';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const TlsCertificatesFilterDialog = ({
+interface TlsCertificateFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const TlsCertificateFilterDialog = ({
   filter,
   onClose,
   onFilterChanged,
   onFilterCreated,
-  ...props
-}) => {
+}: TlsCertificateFilterDialogProps) => {
   const [_] = useTranslation();
-  const filterDialogProps = useFilterDialog(filter);
+  const filterDialogProps = useFilterDialog<UseFilterDialogStateProps>(filter);
   const [handleSave] = useFilterDialogSave(
     'tlscertificate',
     {
@@ -57,20 +63,9 @@ const TlsCertificatesFilterDialog = ({
 
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
-      <DefaultFilterDialog
-        {...props}
-        {...filterDialogProps}
-        sortFields={SORT_FIELDS}
-      />
+      <DefaultFilterDialog {...filterDialogProps} sortFields={SORT_FIELDS} />
     </FilterDialog>
   );
 };
 
-TlsCertificatesFilterDialog.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-};
-
-export default TlsCertificatesFilterDialog;
+export default TlsCertificateFilterDialog;

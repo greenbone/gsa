@@ -24,8 +24,8 @@ import withDialogNotification from 'web/components/notification/withDialogNotifi
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import Page from 'web/pages/reports/DeltaDetailsContent';
-import FilterDialog from 'web/pages/reports/DetailsFilterDialog';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/Component';
 import {
   loadAllEntities as loadFilters,
@@ -386,7 +386,7 @@ const DeltaAuditReportDetails = props => {
         )}
       </TargetComponent>
       {showFilterDialog && (
-        <FilterDialog
+        <ReportDetailsFilterDialog
           audit={true}
           createFilterType="result"
           delta={true}

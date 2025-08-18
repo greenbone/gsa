@@ -16,16 +16,16 @@ import useTranslation from 'web/hooks/useTranslation';
 import VulnerabilitiesDashboard, {
   VULNS_DASHBOARD_ID,
 } from 'web/pages/vulns/dashboard';
-import VulnsFilterDialog from 'web/pages/vulns/FilterDialog';
 import VulnsTable from 'web/pages/vulns/Table';
+import VulnerabilityFilterDialog from 'web/pages/vulns/VulnerabilityFilterDialog';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/vulns';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = () => {
   const [_] = useTranslation();
-
   return (
     <Layout>
       <ManualIcon
@@ -39,7 +39,6 @@ const ToolBarIcons = () => {
 
 const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
-
   return (
     <React.Fragment>
       <PageTitle title={_('Vulnerabilities')} />
@@ -55,7 +54,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
           <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
         )}
         filter={filter}
-        filterEditDialog={VulnsFilterDialog}
+        filterEditDialog={VulnerabilityFilterDialog}
         filtersFilter={VULNS_FILTER_FILTER}
         sectionIcon={<VulnerabilityIcon size="large" />}
         table={VulnsTable}

@@ -14,7 +14,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import FilterComponent from 'web/pages/filters/FilterComponent';
-import FiltersFilterDialog from 'web/pages/filters/FilterDialog';
+import FilterFilterDialog from 'web/pages/filters/FilterFilterDialog';
 import FiltersTable from 'web/pages/filters/Table';
 import {
   loadEntities,
@@ -42,13 +42,7 @@ ToolBarIcons.propTypes = {
   onFilterCreateClick: PropTypes.func.isRequired,
 };
 
-const FiltersPage = ({
-  onChanged,
-  onDownloaded,
-  onError,
-
-  ...props
-}) => {
+const FiltersPage = ({onChanged, onDownloaded, onError, ...props}) => {
   const [_] = useTranslation();
   return (
     <FilterComponent
@@ -67,7 +61,7 @@ const FiltersPage = ({
 
           <EntitiesPage
             {...props}
-            filterEditDialog={FiltersFilterDialog}
+            filterEditDialog={FilterFilterDialog}
             filtersFilter={FILTERS_FILTER_FILTER}
             sectionIcon={<FilterIcon size="large" />}
             table={FiltersTable}

@@ -17,7 +17,7 @@ import OsComponent from 'web/pages/operatingsystems/Component';
 import OsDashboard, {
   OS_DASHBOARD_ID,
 } from 'web/pages/operatingsystems/dashboard';
-import OsFilterDialog from 'web/pages/operatingsystems/FilterDialog';
+import OperatingSystemFilterDialog from 'web/pages/operatingsystems/OperatingSystemFilterDialog';
 import OsTable from 'web/pages/operatingsystems/Table';
 import {
   loadEntities,
@@ -73,7 +73,7 @@ const Page = ({
               <DashboardControls dashboardId={OS_DASHBOARD_ID} />
             )}
             filter={filter}
-            filterEditDialog={OsFilterDialog}
+            filterEditDialog={OperatingSystemFilterDialog}
             filtersFilter={OS_FILTER_FILTER}
             sectionIcon={<OsSvgIcon size="large" />}
             table={OsTable}

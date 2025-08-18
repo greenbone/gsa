@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
 import AlertComponent from 'web/pages/alerts/AlertComponent';
-import AlertsFilterDialog from 'web/pages/alerts/FilterDialog';
+import AlertFilterDialog from 'web/pages/alerts/AlertFilterDialog';
 import AlertTable from 'web/pages/alerts/Table';
 import {
   loadEntities,
@@ -73,7 +73,7 @@ const AlertsPage = ({
           <PageTitle title={_('Alerts')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={AlertsFilterDialog}
+            filterEditDialog={AlertFilterDialog}
             filtersFilter={ALERTS_FILTER_FILTER}
             sectionIcon={<AlertIcon size="large" />}
             table={AlertTable}

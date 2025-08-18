@@ -12,10 +12,10 @@ import PageTitle from 'web/components/layout/PageTitle';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useTranslation from 'web/hooks/useTranslation';
+import CertBundFilterDialog from 'web/pages/certbund/CertBundFilterDialog';
 import CertBundDashboard, {
   CERTBUND_DASHBOARD_ID,
 } from 'web/pages/certbund/dashboard';
-import CertBundFilterDialog from 'web/pages/certbund/FilterDialog';
 import CertBundTable from 'web/pages/certbund/Table';
 import {
   loadEntities,

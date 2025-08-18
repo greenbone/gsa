@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
@@ -13,20 +13,27 @@ import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const NotesFilterDialogComponent = ({
+interface NoteFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const NoteFilterDialogComponent = ({
   filter: initialFilter,
   onClose,
   onFilterChanged,
   onFilterCreated,
-}) => {
+}: NoteFilterDialogProps) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
-  const filterDialogProps = useFilterDialog(initialFilter);
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
   const [handleSave] = useFilterDialogSave(
     'note',
     {
@@ -121,7 +128,6 @@ const NotesFilterDialogComponent = ({
 
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
@@ -131,11 +137,4 @@ const NotesFilterDialogComponent = ({
   );
 };
 
-NotesFilterDialogComponent.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-};
-
-export default NotesFilterDialogComponent;
+export default NoteFilterDialogComponent;

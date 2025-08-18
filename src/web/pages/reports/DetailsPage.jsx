@@ -23,8 +23,8 @@ import Reload, {
 import withDialogNotification from 'web/components/notification/withDialogNotification';
 import FilterProvider from 'web/entities/FilterProvider';
 import Page from 'web/pages/reports/DetailsContent';
-import ReportDetailsFilterDialog from 'web/pages/reports/DetailsFilterDialog';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/Component';
 import {
   loadAllEntities as loadFilters,

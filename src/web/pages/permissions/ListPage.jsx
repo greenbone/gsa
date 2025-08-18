@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import FilterDialog from 'web/pages/permissions/FilterDialog';
+import PermissionFilterDialog from 'web/pages/permissions/PermissionFilterDialog';
 import PermissionComponent from 'web/pages/permissions/PermissionsComponent';
 import Table from 'web/pages/permissions/Table';
 import {
@@ -21,6 +21,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/permissions';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = ({onPermissionCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
@@ -63,7 +64,7 @@ const Page = ({onChanged, onDownloaded, onError, ...props}) => {
           <PageTitle title={_('Permissions')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={FilterDialog}
+            filterEditDialog={PermissionFilterDialog}
             filtersFilter={PERMISSIONS_FILTER_FILTER}
             sectionIcon={<PermissionIcon size="large" />}
             table={Table}

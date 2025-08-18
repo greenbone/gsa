@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import CredentialFilterDialog from 'web/pages/credentials/CredentialFilterDialog';
 import CredentialComponent from 'web/pages/credentials/CredentialsComponent';
-import CredentialsFilterDialog from 'web/pages/credentials/FilterDialog';
 import CredentialsTable from 'web/pages/credentials/Table';
 import {
   loadEntities,
@@ -79,7 +79,7 @@ const CredentialsPage = ({
           <PageTitle title={_('Credentials')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={CredentialsFilterDialog}
+            filterEditDialog={CredentialFilterDialog}
             filtersFilter={CREDENTIALS_FILTER_FILTER}
             sectionIcon={<CredentialIcon size="large" />}
             table={CredentialsTable}

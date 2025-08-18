@@ -3,34 +3,40 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
+import Filter from 'gmp/models/filter';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
-import FilterSearchGroup from 'web/components/powerfilter/FilterSearchGroup';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
 import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
-import MinQodGroup from 'web/components/powerfilter/MinQodGroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
 import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup';
+import SolutionTypeGroup from 'web/components/powerfilter/SolutionTypeGroup';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
+import TicketStatusFilterGroup from 'web/components/powerfilter/TicketStatusGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const ReportFilterDialogComponent = ({
+interface TicketFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const TicketFilterDialog = ({
   filter: initialFilter,
   onClose,
   onFilterChanged,
   onFilterCreated,
-}) => {
+}: TicketFilterDialogProps) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
-  const filterDialogProps = useFilterDialog(initialFilter);
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
   const [handleSave] = useFilterDialogSave(
-    'report',
+    'ticket',
     {
       onClose,
       onFilterChanged,
@@ -38,54 +44,45 @@ const ReportFilterDialogComponent = ({
     },
     filterDialogProps,
   );
-
   const SORT_FIELDS = [
     {
-      name: 'date',
-      displayName: _('Date'),
-    },
-    {
-      name: 'status',
-      displayName: _('Status'),
-    },
-    {
-      name: 'task',
-      displayName: _('Task'),
+      name: 'name',
+      displayName: _('Vulnerability'),
     },
     {
       name: 'severity',
       displayName: _('Severity'),
     },
     {
-      name: 'high',
-      displayName: _('Scan Results: High'),
+      name: 'host',
+      displayName: _('Host'),
     },
     {
-      name: 'medium',
-      displayName: _('Scan Results: Medium'),
+      name: 'solution_type',
+      displayName: _('Solution Type'),
     },
     {
-      name: 'low',
-      displayName: _('Scan Results: Low'),
+      name: 'username',
+      displayName: _('Assigned User'),
     },
     {
-      name: 'log',
-      displayName: _('Scan Results: Log'),
+      name: 'modified',
+      displayName: _('Modification Time'),
     },
     {
-      name: 'false_positive',
-      displayName: _('Scan Results: False Positive'),
+      name: 'status',
+      displayName: _('Status'),
     },
   ];
 
   const {
     filter,
-    filterName,
     filterString,
+    filterName,
     saveNamedFilter,
     onFilterStringChange,
     onFilterValueChange,
-    onSearchTermChange,
+    onFilterChange,
     onSortByChange,
     onSortOrderChange,
     onValueChange,
@@ -98,32 +95,16 @@ const ReportFilterDialogComponent = ({
         onChange={onFilterStringChange}
       />
 
-      <BooleanFilterGroup
-        filter={filter}
-        name="apply_overrides"
-        title={_('Apply Overrides')}
-        onChange={onFilterValueChange}
-      />
+      <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
       <SeverityValuesGroup
         filter={filter}
         name="severity"
-        title={_('Highest Severity from Results')}
+        title={_('Severity')}
         onChange={onFilterValueChange}
       />
 
-      <MinQodGroup
-        filter={filter}
-        name="min_qod"
-        onChange={onFilterValueChange}
-      />
-
-      <FilterSearchGroup
-        filter={filter}
-        name="task"
-        title={_('From Task (name)')}
-        onChange={onSearchTermChange}
-      />
+      <TicketStatusFilterGroup filter={filter} onChange={onFilterValueChange} />
 
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
@@ -138,7 +119,6 @@ const ReportFilterDialogComponent = ({
 
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
@@ -148,11 +128,4 @@ const ReportFilterDialogComponent = ({
   );
 };
 
-ReportFilterDialogComponent.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-};
-
-export default ReportFilterDialogComponent;
+export default TicketFilterDialog;

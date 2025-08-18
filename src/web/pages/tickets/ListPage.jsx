@@ -15,9 +15,9 @@ import useTranslation from 'web/hooks/useTranslation';
 import TicketsDashboard, {
   TICKETS_DASHBOARD_ID,
 } from 'web/pages/tickets/dashboard';
-import TicketsFilterDialogComponent from 'web/pages/tickets/FilterDialog';
 import Table from 'web/pages/tickets/Table';
 import TicketComponent from 'web/pages/tickets/TicketComponent';
+import TicketFilterDialog from 'web/pages/tickets/TicketFilterDialog';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -76,7 +76,7 @@ const Page = ({
               <DashboardControls dashboardId={TICKETS_DASHBOARD_ID} />
             )}
             filter={filter}
-            filterEditDialog={TicketsFilterDialogComponent}
+            filterEditDialog={TicketFilterDialog}
             filtersFilter={TICKETS_FILTER_FILTER}
             sectionIcon={<TicketIcon size="large" />}
             table={Table}

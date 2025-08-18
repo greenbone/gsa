@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Filter from 'gmp/models/filter';
 import BooleanFilterGroup from 'web/components/powerfilter/BooleanFilterGroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
 import FilterDialog from 'web/components/powerfilter/FilterDialog';
@@ -17,20 +17,27 @@ import SeverityValuesGroup from 'web/components/powerfilter/SeverityValuesGroup'
 import SolutionTypeGroup from 'web/components/powerfilter/SolutionTypeGroup';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
-import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const ResultsFilterDialog = ({
+interface ResultFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const ResultFilterDialog = ({
   filter: initialFilter,
   onClose,
   onFilterChanged,
   onFilterCreated,
-}) => {
+}: ResultFilterDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
-  const filterDialogProps = useFilterDialog(initialFilter);
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
   const [handleSave] = useFilterDialogSave(
     'result',
     {
@@ -181,7 +188,6 @@ const ResultsFilterDialog = ({
 
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
@@ -191,11 +197,4 @@ const ResultsFilterDialog = ({
   );
 };
 
-ResultsFilterDialog.propTypes = {
-  filter: PropTypes.filter,
-  onClose: PropTypes.func,
-  onFilterChanged: PropTypes.func,
-  onFilterCreated: PropTypes.func,
-};
-
-export default ResultsFilterDialog;
+export default ResultFilterDialog;

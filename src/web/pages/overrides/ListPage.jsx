@@ -16,8 +16,8 @@ import useTranslation from 'web/hooks/useTranslation';
 import OverridesDashboard, {
   OVERRIDES_DASHBOARD_ID,
 } from 'web/pages/overrides/dashboard';
-import FilterDialog from 'web/pages/overrides/FilterDialog';
 import OverrideComponent from 'web/pages/overrides/OverrideComponent';
+import OverrideFilterDialog from 'web/pages/overrides/OverrideFilterDialog';
 import OverridesTable from 'web/pages/overrides/Table';
 import {
   loadEntities,
@@ -25,6 +25,7 @@ import {
 } from 'web/store/entities/overrides';
 import PropTypes from 'web/utils/PropTypes';
 import withCapabilities from 'web/utils/withCapabilities';
+
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onOverrideCreateClick}) => {
     const [_] = useTranslation();
@@ -85,7 +86,7 @@ const Page = ({
               <DashboardControls dashboardId={OVERRIDES_DASHBOARD_ID} />
             )}
             filter={filter}
-            filterEditDialog={FilterDialog}
+            filterEditDialog={OverrideFilterDialog}
             filtersFilter={OVERRIDES_FILTER_FILTER}
             sectionIcon={<OverrideIcon size="large" />}
             table={OverridesTable}

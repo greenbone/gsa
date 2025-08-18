@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import RolesFilterDialog from 'web/pages/roles/FilterDialog';
 import RoleComponent from 'web/pages/roles/RoleComponent';
+import RoleFilterDialog from 'web/pages/roles/RoleFilterDialog';
 import Table from 'web/pages/roles/Table';
 import {
   loadEntities,
@@ -66,7 +66,7 @@ const RolesPage = ({
           <PageTitle title={_('Roles')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={RolesFilterDialog}
+            filterEditDialog={RoleFilterDialog}
             filtersFilter={ROLES_FILTER_FILTER}
             sectionIcon={<RoleIcon size="large" />}
             table={Table}

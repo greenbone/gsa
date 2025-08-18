@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import ReportFormatsFilterDialog from 'web/pages/reportformats/FilterDialog';
 import ReportFormatComponent from 'web/pages/reportformats/ReportFormatComponent';
+import ReportFormatFilterDialog from 'web/pages/reportformats/ReportFormatFilterDialog';
 import ReportFormatsTable from 'web/pages/reportformats/Table';
 import {
   loadEntities,
@@ -59,7 +59,7 @@ const ReportFormatsPage = ({onChanged, onError, ...props}) => {
           <PageTitle title={_('Report Formats')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={ReportFormatsFilterDialog}
+            filterEditDialog={ReportFormatFilterDialog}
             filtersFilter={REPORT_FORMATS_FILTER_FILTER}
             sectionIcon={<ReportFormatIcon size="large" />}
             table={ReportFormatsTable}

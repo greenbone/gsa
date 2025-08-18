@@ -14,8 +14,8 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ScannersFilterDialog from 'web/pages/scanners/FilterDialog';
 import ScannerComponent from 'web/pages/scanners/ScannerComponent';
+import ScannerFilterDialog from 'web/pages/scanners/ScannerFilterDialog';
 import ScannersTable from 'web/pages/scanners/Table';
 import {
   loadEntities,
@@ -90,7 +90,7 @@ const ScannersPage = ({
           <PageTitle title={_('Scanners')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={ScannersFilterDialog}
+            filterEditDialog={ScannerFilterDialog}
             filtersFilter={SCANNERS_FILTER_FILTER}
             sectionIcon={<ScannerIcon size="large" />}
             table={ScannersTable}

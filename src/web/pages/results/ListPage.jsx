@@ -16,16 +16,16 @@ import useTranslation from 'web/hooks/useTranslation';
 import ResultsDashboard, {
   RESULTS_DASHBOARD_ID,
 } from 'web/pages/results/dashboard';
-import ResultsFilterDialog from 'web/pages/results/FilterDialog';
+import ResultFilterDialog from 'web/pages/results/ResultFilterDialog';
 import ResultsTable from 'web/pages/results/ResultsTable';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/results';
 import PropTypes from 'web/utils/PropTypes';
+
 export const ToolBarIcons = () => {
   const [_] = useTranslation();
-
   return (
     <Layout>
       <ManualIcon
@@ -39,7 +39,6 @@ export const ToolBarIcons = () => {
 
 const Page = ({filter, onFilterChanged, ...props}) => {
   const [_] = useTranslation();
-
   return (
     <React.Fragment>
       <PageTitle title={_('Results')} />
@@ -52,7 +51,7 @@ const Page = ({filter, onFilterChanged, ...props}) => {
           <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />
         )}
         filter={filter}
-        filterEditDialog={ResultsFilterDialog}
+        filterEditDialog={ResultFilterDialog}
         filtersFilter={RESULTS_FILTER_FILTER}
         sectionIcon={<ResultIcon size="large" />}
         table={ResultsTable}

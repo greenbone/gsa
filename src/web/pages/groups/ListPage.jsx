@@ -13,8 +13,8 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import GroupsFilterDialog from 'web/pages/groups/FilterDialog';
 import GroupComponent from 'web/pages/groups/GroupComponent';
+import GroupFilterDialog from 'web/pages/groups/GroupFilterDialog';
 import Table from 'web/pages/groups/Table';
 import {
   loadEntities,
@@ -66,7 +66,7 @@ const GroupsPage = ({
           <PageTitle title={_('Groups')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={GroupsFilterDialog}
+            filterEditDialog={GroupFilterDialog}
             filtersFilter={GROUPS_FILTER_FILTER}
             sectionIcon={<GroupIcon size="large" />}
             table={Table}

@@ -14,8 +14,8 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import TargetComponent from 'web/pages/targets/Component';
-import TargetsFilterDialog from 'web/pages/targets/FilterDialog';
 import TargetsTable from 'web/pages/targets/Table';
+import TargetFilterDialog from 'web/pages/targets/TargetFilterDialog';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -66,7 +66,7 @@ const TargetsPage = ({
           <PageTitle title={_('Targets')} />
           <EntitiesPage
             {...props}
-            filterEditDialog={TargetsFilterDialog}
+            filterEditDialog={TargetFilterDialog}
             filtersFilter={TARGETS_FILTER_FILTER}
             sectionIcon={<TargetIcon size="large" />}
             table={TargetsTable}

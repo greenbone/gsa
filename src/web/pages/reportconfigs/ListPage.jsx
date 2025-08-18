@@ -13,7 +13,7 @@ import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
-import ReportConfigsFilterDialog from 'web/pages/reportconfigs/FilterDialog';
+import ReportConfigFilterDialog from 'web/pages/reportconfigs/ReportConfigFilterDialog';
 import ReportConfigComponent from 'web/pages/reportconfigs/ReportConfigsComponent';
 import ReportConfigsTable from 'web/pages/reportconfigs/Table';
 import {
@@ -21,6 +21,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/reportconfigs';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = ({onReportConfigCreateClick}) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
@@ -45,13 +46,7 @@ ToolBarIcons.propTypes = {
   onReportConfigCreateClick: PropTypes.func.isRequired,
 };
 
-const ReportConfigsPage = ({
-  onChanged,
-  onDownloaded,
-  onError,
-
-  ...props
-}) => {
+const ReportConfigsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   const [_] = useTranslation();
   return (
     <ReportConfigComponent
@@ -72,7 +67,7 @@ const ReportConfigsPage = ({
             <PageTitle title={_('Report Configs')} />
             <EntitiesPage
               {...props}
-              filterEditDialog={ReportConfigsFilterDialog}
+              filterEditDialog={ReportConfigFilterDialog}
               filtersFilter={REPORT_CONFIGS_FILTER_FILTER}
               sectionIcon={<ReportConfigIcon size="large" />}
               table={ReportConfigsTable}
