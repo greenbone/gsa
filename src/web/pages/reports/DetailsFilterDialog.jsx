@@ -28,8 +28,7 @@ const ReportDetailsFilterDialog = ({
   audit = false,
   delta = false,
   filter: initialFilter,
-  onCloseClick,
-  onClose = onCloseClick,
+  onClose,
   onFilterChanged,
   onFilterCreated,
 }) => {
@@ -171,7 +170,6 @@ ReportDetailsFilterDialog.propTypes = {
   delta: PropTypes.bool,
   filter: PropTypes.filter,
   onClose: PropTypes.func,
-  onCloseClick: PropTypes.func, // should be removed in future
   onFilterChanged: PropTypes.func,
   onFilterCreated: PropTypes.func,
 };

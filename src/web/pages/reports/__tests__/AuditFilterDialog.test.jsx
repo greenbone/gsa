@@ -8,7 +8,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import AuditReportFilter from 'web/pages/reports/AuditFilterDialog';
+import AuditReportFilterDialog from 'web/pages/reports/AuditFilterDialog';
 
 const caps = new Capabilities(['everything']);
 
@@ -18,7 +18,7 @@ describe('Filter Dialog for Audit report', () => {
   test('should render filter with compliance level group', () => {
     const onFilterChanged = testing.fn();
     const onFilterCreated = testing.fn();
-    const onCloseClick = testing.fn();
+    const onClose = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=compliant',
@@ -34,11 +34,11 @@ describe('Filter Dialog for Audit report', () => {
     });
 
     render(
-      <AuditReportFilter
+      <AuditReportFilterDialog
         createFilterType="result"
         delta={false}
         filter={filter}
-        onCloseClick={onCloseClick}
+        onClose={onClose}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
       />,

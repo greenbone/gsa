@@ -18,7 +18,7 @@ describe('Details Filter Dialog for Audit report', () => {
   test('should render compliance levels filter group', () => {
     const onFilterChanged = testing.fn();
     const onFilterCreated = testing.fn();
-    const onCloseClick = testing.fn();
+    const onClose = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=compliant',
@@ -39,7 +39,7 @@ describe('Details Filter Dialog for Audit report', () => {
         createFilterType="result"
         delta={false}
         filter={filter}
-        onCloseClick={onCloseClick}
+        onClose={onClose}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
       />,
@@ -91,7 +91,7 @@ describe('Details Filter Dialog for Audit report', () => {
   test('should render severity levels filter group', () => {
     const onFilterChanged = testing.fn();
     const onFilterCreated = testing.fn();
-    const onCloseClick = testing.fn();
+    const onClose = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=severity',
@@ -112,7 +112,7 @@ describe('Details Filter Dialog for Audit report', () => {
         createFilterType="result"
         delta={false}
         filter={filter}
-        onCloseClick={onCloseClick}
+        onClose={onClose}
         onFilterChanged={onFilterChanged}
         onFilterCreated={onFilterCreated}
       />,

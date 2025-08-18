@@ -14,8 +14,7 @@ const FilterDialogWithHandlers = ({
   children,
   createFilterType,
   filter: initialFilter,
-  onCloseClick,
-  onClose = onCloseClick,
+  onClose,
   onFilterCreated,
   onFilterChanged,
   ...props
@@ -47,7 +46,6 @@ FilterDialogWithHandlers.propTypes = {
   createFilterType: PropTypes.string.isRequired,
   filter: PropTypes.filter,
   onClose: PropTypes.func,
-  onCloseClick: PropTypes.func, // should be removed in future
   onFilterChanged: PropTypes.func.isRequired,
   onFilterCreated: PropTypes.func.isRequired,
 };

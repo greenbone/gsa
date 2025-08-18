@@ -20,8 +20,7 @@ import PropTypes from 'web/utils/PropTypes';
 
 const NotesFilterDialogComponent = ({
   filter: initialFilter,
-  onCloseClick,
-  onClose = onCloseClick,
+  onClose,
   onFilterChanged,
   onFilterCreated,
 }) => {
@@ -135,7 +134,6 @@ const NotesFilterDialogComponent = ({
 NotesFilterDialogComponent.propTypes = {
   filter: PropTypes.filter,
   onClose: PropTypes.func,
-  onCloseClick: PropTypes.func, // should be removed in future
   onFilterChanged: PropTypes.func,
   onFilterCreated: PropTypes.func,
 };

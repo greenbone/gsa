@@ -13,8 +13,7 @@ import PropTypes from 'web/utils/PropTypes';
 
 const TargetsFilterDialog = ({
   filter,
-  onCloseClick,
-  onClose = onCloseClick,
+  onClose,
   onFilterChanged,
   onFilterCreated,
   ...props
@@ -91,7 +90,6 @@ const TargetsFilterDialog = ({
 TargetsFilterDialog.propTypes = {
   filter: PropTypes.filter,
   onClose: PropTypes.func,
-  onCloseClick: PropTypes.func, // should be removed in future
   onFilterChanged: PropTypes.func,
   onFilterCreated: PropTypes.func,
 };
