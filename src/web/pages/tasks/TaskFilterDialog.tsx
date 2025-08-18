@@ -17,16 +17,14 @@ import SortByGroup from 'web/components/powerfilter/SortByGroup';
 import TaskTrendGroup from 'web/components/powerfilter/TaskTrendGroup';
 import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
 import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
   UseFilterDialogStateProps,
 } from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface TaskFilterDialogProps {
+interface TaskFilterDialogProps extends UseFilterDialogSaveProps {
   filter?: Filter;
-  onClose?: () => void;
-  onFilterChanged?: (filter: Filter) => void;
-  onFilterCreated?: (filter: Filter) => void;
 }
 
 const TaskFilterDialog = ({
