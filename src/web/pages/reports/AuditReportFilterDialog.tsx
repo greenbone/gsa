@@ -3,38 +3,63 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import Layout from 'web/components/layout/Layout';
+import Filter from 'gmp/models/filter';
 import ComplianceLevelFilterGroup from 'web/components/powerfilter/ComplianceLevelsGroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/CreateNamedFilterGroup';
-import FilterDialogPropTypes from 'web/components/powerfilter/DialogPropTypes';
+import FilterDialog from 'web/components/powerfilter/FilterDialog';
 import FilterSearchGroup from 'web/components/powerfilter/FilterSearchGroup';
 import FilterStringGroup from 'web/components/powerfilter/FilterStringGroup';
 import FirstResultGroup from 'web/components/powerfilter/FirstResultGroup';
 import MinQodGroup from 'web/components/powerfilter/MinQodGroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/ResultsPerPageGroup';
 import SortByGroup from 'web/components/powerfilter/SortByGroup';
-import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave, {
+  UseFilterDialogSaveProps,
+  UseFilterDialogStateProps,
+} from 'web/components/powerfilter/useFilterDialogSave';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 
-const AuditReportFilterDialogComponent = ({
-  filter,
-  filterName,
-  filterString,
-  onFilterChange,
-  saveNamedFilter,
-  onFilterStringChange,
-  onFilterValueChange,
-  onSearchTermChange,
-  onSortByChange,
-  onSortOrderChange,
-  onValueChange,
-}) => {
+interface AuditReportFilterDialogProps extends UseFilterDialogSaveProps {
+  filter?: Filter;
+}
+
+const AuditReportFilterDialog = ({
+  filter: initialFilter,
+  onClose,
+  onFilterChanged,
+  onFilterCreated,
+}: AuditReportFilterDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
+  const filterDialogProps =
+    useFilterDialog<UseFilterDialogStateProps>(initialFilter);
+  const [handleSave] = useFilterDialogSave(
+    'report',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+
+  const {
+    filterName,
+    filter,
+    filterString,
+    saveNamedFilter,
+    onFilterValueChange,
+    onSearchTermChange,
+    onSortByChange,
+    onSortOrderChange,
+    onFilterStringChange,
+    onValueChange,
+  } = filterDialogProps;
   const handleRemoveCompliance = () =>
-    onFilterChange(filter.delete('report_compliance_levels'));
+    onFilterChanged &&
+    onFilterChanged(filter.delete('report_compliance_levels'));
   const SORT_FIELDS = [
     {
       name: 'date',
@@ -66,12 +91,8 @@ const AuditReportFilterDialogComponent = ({
     },
   ];
 
-  if (!filter) {
-    return null;
-  }
-
   return (
-    <Layout flex="column">
+    <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
         filter={filterString}
         name="filterString"
@@ -80,7 +101,6 @@ const AuditReportFilterDialogComponent = ({
 
       <ComplianceLevelFilterGroup
         filter={filter}
-        name="compliant"
         onChange={onFilterValueChange}
         onRemove={handleRemoveCompliance}
       />
@@ -111,16 +131,13 @@ const AuditReportFilterDialogComponent = ({
 
       {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
-          filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
         />
       )}
-    </Layout>
+    </FilterDialog>
   );
 };
 
-AuditReportFilterDialogComponent.propTypes = FilterDialogPropTypes;
-
-export default withFilterDialog()(AuditReportFilterDialogComponent);
+export default AuditReportFilterDialog;
