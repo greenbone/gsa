@@ -21,7 +21,7 @@ import useTranslation from 'web/hooks/useTranslation';
 const AuditReportFilterDialogComponent = ({
   filter,
   filterName,
-  filterstring,
+  filterString,
   onFilterChange,
   saveNamedFilter,
   onFilterStringChange,
@@ -73,8 +73,8 @@ const AuditReportFilterDialogComponent = ({
   return (
     <Layout flex="column">
       <FilterStringGroup
-        filter={filterstring}
-        name="filterstring"
+        filter={filterString}
+        name="filterString"
         onChange={onFilterStringChange}
       />
 

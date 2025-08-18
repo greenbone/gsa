@@ -86,7 +86,7 @@ const OverridesFilterDialogComponent = ({
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
         filter={filterString}
-        name="filterstring"
+        name="filterString"
         onChange={onFilterStringChange}
       />
 
