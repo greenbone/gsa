@@ -15,13 +15,11 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface PortListsFilterDialogProps extends UseFilterDialogSaveProps {
   filter?: Filter;
-  onCloseClick?: () => void; // should be removed in future
 }
 
 const PortListsFilterDialog = ({
   filter: initialFilter,
-  onCloseClick,
-  onClose = onCloseClick,
+  onClose,
   onFilterChanged,
   onFilterCreated,
 }: PortListsFilterDialogProps) => {

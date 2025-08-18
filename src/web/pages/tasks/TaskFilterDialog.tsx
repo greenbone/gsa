@@ -25,15 +25,13 @@ import useTranslation from 'web/hooks/useTranslation';
 interface TaskFilterDialogProps {
   filter?: Filter;
   onClose?: () => void;
-  onCloseClick?: () => void; // should be removed in future
   onFilterChanged?: (filter: Filter) => void;
   onFilterCreated?: (filter: Filter) => void;
 }
 
 const TaskFilterDialog = ({
   filter: initialFilter,
-  onCloseClick,
-  onClose = onCloseClick,
+  onClose,
   onFilterChanged,
   onFilterCreated,
 }: TaskFilterDialogProps) => {

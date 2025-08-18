@@ -12,8 +12,7 @@ import PropTypes from 'web/utils/PropTypes';
 
 const AlertsFilterDialog = ({
   filter,
-  onCloseClick,
-  onClose = onCloseClick,
+  onClose,
   onFilterChanged,
   onFilterCreated,
   ...props
@@ -76,7 +75,6 @@ const AlertsFilterDialog = ({
 AlertsFilterDialog.propTypes = {
   filter: PropTypes.filter,
   onClose: PropTypes.func,
-  onCloseClick: PropTypes.func, // should be removed in future
   onFilterChanged: PropTypes.func,
   onFilterCreated: PropTypes.func,
 };

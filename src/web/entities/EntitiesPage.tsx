@@ -27,7 +27,7 @@ import withTranslation from 'web/utils/withTranslation';
 interface FilterDialogComponentProps {
   createFilterType?: string;
   filter?: Filter;
-  onCloseClick: () => void;
+  onClose: () => void;
   onFilterChanged: (filter: Filter) => void;
   onFilterCreated: (filter: Filter) => void;
 }
@@ -305,7 +305,7 @@ class EntitiesPage<
       <FilterDialogComponent
         createFilterType={createFilterType}
         filter={filter}
-        onCloseClick={this.handleFilterDialogCloseClick}
+        onClose={this.handleFilterDialogCloseClick}
         onFilterChanged={onFilterChanged}
         onFilterCreated={this.handleFilterCreated}
       />

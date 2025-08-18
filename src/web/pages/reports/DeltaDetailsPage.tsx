@@ -568,7 +568,7 @@ const DeltaReportDetails = () => {
         <ReportDetailsFilterDialog
           delta={true}
           filter={reportFilter}
-          onCloseClick={handleFilterDialogClose}
+          onClose={handleFilterDialogClose}
           onFilterChanged={handleFilterChange}
           onFilterCreated={handleFilterCreated}
         />

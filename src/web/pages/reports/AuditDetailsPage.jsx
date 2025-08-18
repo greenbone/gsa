@@ -514,7 +514,7 @@ const ReportDetails = props => {
           createFilterType="result"
           delta={false}
           filter={reportFilter}
-          onCloseClick={handleFilterDialogClose}
+          onClose={handleFilterDialogClose}
           onFilterChanged={handleFilterChange}
           onFilterCreated={handleFilterCreated}
         />

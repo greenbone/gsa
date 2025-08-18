@@ -12,8 +12,7 @@ import PropTypes from 'web/utils/PropTypes';
 
 const NvtsFilterDialog = ({
   filter,
-  onCloseClick,
-  onClose = onCloseClick,
+  onClose,
   onFilterChanged,
   onFilterCreated,
   ...props
@@ -91,7 +90,6 @@ const NvtsFilterDialog = ({
 NvtsFilterDialog.propTypes = {
   filter: PropTypes.filter,
   onClose: PropTypes.func,
-  onCloseClick: PropTypes.func, // should be removed in future
   onFilterChanged: PropTypes.func,
   onFilterCreated: PropTypes.func,
 };
