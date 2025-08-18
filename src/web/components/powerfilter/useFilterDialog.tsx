@@ -62,9 +62,12 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
     setFilter(filter => filter.copy().setSortOrder(value));
   }, []);
 
-  const handleChange = useCallback((value: unknown, name: string) => {
-    setFilterDialogState(state => ({...state, [name]: value}));
-  }, []);
+  const handleChange = useCallback(
+    (value: TFilterDialogState[keyof TFilterDialogState], name: string) => {
+      setFilterDialogState(state => ({...state, [name]: value}));
+    },
+    [],
+  );
 
   const {filterName, saveNamedFilter, ...other} = filterDialogState;
 
@@ -82,7 +85,7 @@ const useFilterDialog = <TFilterDialogState extends FilterDialogState>(
     handleSortByChange,
     handleSortOrderChange,
     handleChange,
-    // provide old names
+    // provide handlers for DefaultFilterDialog
     onFilterChange: handleFilterChange,
     onFilterValueChange: handleFilterValueChange,
     onSearchTermChange: handleSearchTermChange,

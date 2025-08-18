@@ -56,23 +56,7 @@ const PortListsFilterDialog = ({
   ];
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
-      <DefaultFilterDialog
-        filter={filterDialogProps.filter}
-        filterName={filterDialogProps.filterName}
-        filterString={filterDialogProps.filterString}
-        saveNamedFilter={filterDialogProps.saveNamedFilter}
-        sortFields={SORT_FIELDS}
-        onFilterStringChange={filterDialogProps.handleFilterStringChange}
-        onFilterValueChange={filterDialogProps.handleFilterValueChange}
-        onSortByChange={filterDialogProps.handleSortByChange}
-        onSortOrderChange={filterDialogProps.handleSortOrderChange}
-        onValueChange={
-          filterDialogProps.handleChange as (
-            value: string | boolean,
-            name?: string,
-          ) => void
-        }
-      />
+      <DefaultFilterDialog {...filterDialogProps} sortFields={SORT_FIELDS} />
     </FilterDialog>
   );
 };

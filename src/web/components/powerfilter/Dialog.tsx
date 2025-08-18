@@ -22,7 +22,7 @@ interface DefaultFilterDialogProps {
   onFilterValueChange?: (value: string | number, name: string) => void;
   onSortByChange?: (value: string) => void;
   onSortOrderChange?: (value: FilterSortOrder) => void;
-  onValueChange?: (value: string | boolean, name?: string) => void;
+  onValueChange?: (value: string | boolean, name: string) => void;
 }
 
 const DefaultFilterDialog = ({
