@@ -18,7 +18,7 @@ interface PortListDetailsProps {
   links?: boolean;
 }
 
-const PortListDetails = ({entity}: PortListDetailsProps) => {
+const PortListDetails = ({entity, links = true}: PortListDetailsProps) => {
   const [_] = useTranslation();
   const {
     comment,
@@ -74,7 +74,11 @@ const PortListDetails = ({entity}: PortListDetailsProps) => {
                 {targets.map(target => {
                   return (
                     <span key={target.id}>
-                      <DetailsLink id={target.id as string} type="target">
+                      <DetailsLink
+                        id={target.id as string}
+                        textOnly={!links}
+                        type="target"
+                      >
                         {target.name}
                       </DetailsLink>
                     </span>
