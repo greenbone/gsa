@@ -23,13 +23,14 @@ import useTranslation from 'web/hooks/useTranslation';
 import AuditReportsDashboard, {
   AUDIT_REPORTS_DASHBOARD_ID,
 } from 'web/pages/reports/auditdashboard';
-import AuditFilterDialog from 'web/pages/reports/AuditFilterDialog';
+import AuditReportFilterDialog from 'web/pages/reports/AuditReportFilterDialog';
 import AuditReportsTable from 'web/pages/reports/AuditReportsTable';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/auditreports';
 import PropTypes from 'web/utils/PropTypes';
+
 const ToolBarIcons = () => {
   const [_] = useTranslation();
   return (
@@ -106,7 +107,7 @@ const AuditReportsPage = ({
           <DashboardControls dashboardId={AUDIT_REPORTS_DASHBOARD_ID} />
         )}
         filter={filter}
-        filterEditDialog={AuditFilterDialog}
+        filterEditDialog={AuditReportFilterDialog}
         filtersFilter={AUDIT_REPORTS_FILTER_FILTER}
         sectionIcon={<ReportIcon size="large" />}
         selectedDeltaReport={selectedDeltaReport}

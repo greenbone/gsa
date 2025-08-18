@@ -8,13 +8,13 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, within, rendererWith} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
-import AuditReportFilterDialog from 'web/pages/reports/AuditFilterDialog';
+import AuditReportFilterDialog from 'web/pages/reports/AuditReportFilterDialog';
 
 const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-describe('Filter Dialog for Audit report', () => {
+describe('AuditReportFilterDialog tests', () => {
   test('should render filter with compliance level group', () => {
     const onFilterChanged = testing.fn();
     const onFilterCreated = testing.fn();
@@ -35,8 +35,6 @@ describe('Filter Dialog for Audit report', () => {
 
     render(
       <AuditReportFilterDialog
-        createFilterType="result"
-        delta={false}
         filter={filter}
         onClose={onClose}
         onFilterChanged={onFilterChanged}
