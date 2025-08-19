@@ -9,11 +9,12 @@ import GmpCommand, {
 } from 'gmp/commands/gmp';
 import {HttpCommandOptions, HttpCommandParamsOptions} from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
-import Response from 'gmp/http/response';
+import Response, {Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
 import {UrlParams as Params} from 'gmp/http/utils';
 import logger from 'gmp/log';
+import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -26,7 +27,7 @@ interface EntityCommandInputParams extends GmpCommandInputParams {
 }
 
 interface EntityCommandGetParams {
-  filter?: string;
+  filter?: Filter | string;
 }
 
 export interface EntityCommandParams {
@@ -40,9 +41,9 @@ abstract class EntityCommand<
   TElement = XmlResponseData,
   TRoot extends XmlResponseData = XmlResponseData,
 > extends GmpCommand {
-  clazz: ModelClass<Model>;
-  name: string;
-  id_name: string;
+  readonly clazz: ModelClass<Model>;
+  readonly name: string;
+  readonly id_name: string;
 
   constructor(http: GmpHttp, name: string, clazz: ModelClass<Model>) {
     super(http, {cmd: 'get_' + name});
@@ -101,7 +102,7 @@ abstract class EntityCommand<
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
     try {
-      const response = await this.action(
+      let response = await this.action(
         {
           cmd: 'clone',
           resource_type: this.name,
@@ -111,33 +112,33 @@ abstract class EntityCommand<
         },
       );
       log.debug('Cloned', this.name, id);
-      return response;
+      return response.setData({id: response.data.id});
     } catch (err) {
       log.error('An error occurred while cloning', this.name, id, err);
       throw err;
     }
   }
 
-  delete({id}: EntityCommandParams) {
+  async delete({id}: EntityCommandParams) {
     log.debug('Deleting', this.name, id);
 
-    const params = {
+    await this.httpPost({
       cmd: 'delete_' + this.name,
       id,
-    };
-    return this.httpPost(params);
+    });
   }
 
-  export({id}: EntityCommandParams) {
+  async export({id}: EntityCommandParams) {
     const params = {
       cmd: 'bulk_export',
       resource_type: this.name,
       bulk_select: BULK_SELECT_BY_IDS,
       ['bulk_selected:' + id]: 1,
     };
-    return this.httpPost(params, {
+    const response = await this.httpPost(params, {
       transform: DefaultTransform,
     } as HttpCommandOptions);
+    return response as unknown as Response<string, Meta>;
   }
 }
 
