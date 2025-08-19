@@ -12,7 +12,7 @@ import actionFunction from 'web/entity/hooks/actionFunction';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import RoleDialog from 'web/pages/roles/Dialog';
+import RoleDialog from 'web/pages/roles/RoleDialog';
 import {
   loadAllEntities as loadAllGroups,
   selector as groupSelector,
@@ -33,7 +33,6 @@ const RoleComponent = ({
   onDeleteError,
   onDownloaded,
   onDownloadError,
-
   onSaved,
   onSaveError,
 }) => {

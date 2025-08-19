@@ -39,7 +39,7 @@ import PoliciesTable from 'web/pages/policies/Table';
 import PortListTable from 'web/pages/portlists/PortListTable';
 import ReportConfigsTable from 'web/pages/reportconfigs/Table';
 import ReportFormatsTable from 'web/pages/reportformats/Table';
-import RolesTable from 'web/pages/roles/Table';
+import RolesTable from 'web/pages/roles/RoleTable';
 import ScanConfigsTable from 'web/pages/scanconfigs/Table';
 import ScannersTable from 'web/pages/scanners/Table';
 import SchedulesTable from 'web/pages/schedules/Table';
