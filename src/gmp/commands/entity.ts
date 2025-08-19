@@ -7,7 +7,11 @@ import GmpCommand, {
   BULK_SELECT_BY_IDS,
   GmpCommandInputParams,
 } from 'gmp/commands/gmp';
-import {HttpCommandOptions, HttpCommandParamsOptions} from 'gmp/commands/http';
+import {
+  HttpCommandOptions,
+  HttpCommandParamsOptions,
+  HttpCommandPostParams,
+} from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
 import Response, {Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
@@ -31,6 +35,10 @@ interface EntityCommandGetParams {
 }
 
 export interface EntityCommandParams {
+  id: string;
+}
+
+export interface EntityActionData {
   id: string;
 }
 
@@ -139,6 +147,19 @@ abstract class EntityCommand<
       transform: DefaultTransform,
     } as HttpCommandOptions);
     return response as unknown as Response<string, Meta>;
+  }
+
+  /**
+   * Creates a HTTP POST Request returning EntityActionData
+   *
+   * @returns A Promise returning a Response with EntityActionData as data
+   */
+  async entityAction(
+    params: HttpCommandPostParams,
+    options?: HttpCommandOptions,
+  ) {
+    const response = await this.action(params, options);
+    return response.setData<EntityActionData>({id: response.data.id});
   }
 }
 

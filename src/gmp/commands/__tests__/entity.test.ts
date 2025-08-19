@@ -183,4 +183,31 @@ describe('EntityCommand tests', () => {
     expect(cmdResponse).toBeInstanceOf(Response);
     expect(cmdResponse.data).toEqual(content);
   });
+
+  test('should create an entity action request', async () => {
+    const response = createActionResultResponse({
+      action: 'create_foo',
+      id: '123',
+      message: 'Foo created successfully',
+    });
+    const fakeHttp = createHttp(response);
+
+    const cmd = new TestEntityCommand(fakeHttp);
+    const cmdResponse = await cmd.entityAction(
+      {cmd: 'create_foo', resource_type: 'foo'},
+      {extraParams: {name: 'Test Foo'}},
+    );
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'create_foo',
+        resource_type: 'foo',
+        name: 'Test Foo',
+      },
+    });
+    expect(cmdResponse).toBeInstanceOf(Response);
+    expect(cmdResponse.data).toEqual({
+      id: '123',
+    });
+  });
 });
