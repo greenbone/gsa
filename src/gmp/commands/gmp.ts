@@ -6,8 +6,9 @@
 import HttpCommand, {
   HttpCommandInputParams,
   HttpCommandOptions,
-  HttpCommandParams,
+  HttpCommandGetParams,
   HttpCommandParamsOptions,
+  HttpCommandPostParams,
 } from 'gmp/commands/http';
 import Response from 'gmp/http/response';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
@@ -24,7 +25,7 @@ export interface GmpCommandInputParams extends HttpCommandInputParams {
   filter?: Filter | string;
 }
 
-export interface GmpCommandParams extends HttpCommandParams {
+export interface GmpCommandParams extends HttpCommandGetParams {
   filter?: string;
   filter_id?: string;
 }
@@ -67,7 +68,7 @@ class GmpCommand extends HttpCommand {
    *
    * @returns A Promise returning a Response with an ActionResult model as data
    */
-  async action(params: HttpCommandParams, options?: HttpCommandOptions) {
+  async action(params: HttpCommandPostParams, options?: HttpCommandOptions) {
     const response = await this.httpPost(params, options);
     return this.transformActionResult(response);
   }
