@@ -40,7 +40,7 @@ import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
 import useTranslation from 'web/hooks/useTranslation';
-import RoleDetails from 'web/pages/roles/Details';
+import RoleDetails from 'web/pages/roles/RoleDetails';
 import RoleComponent from 'web/pages/roles/RoleComponent';
 import {
   selector as permissionsSelector,

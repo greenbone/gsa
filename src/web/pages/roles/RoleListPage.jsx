@@ -15,7 +15,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import RoleComponent from 'web/pages/roles/RoleComponent';
 import RoleFilterDialog from 'web/pages/roles/RoleFilterDialog';
-import Table from 'web/pages/roles/Table';
+import Table from 'web/pages/roles/RoleTable';
 import {
   loadEntities,
   selector as entitiesSelector,
