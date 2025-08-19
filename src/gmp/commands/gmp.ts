@@ -5,9 +5,6 @@
 
 import HttpCommand from 'gmp/commands/http';
 
-export const BULK_SELECT_BY_IDS = 1;
-export const BULK_SELECT_BY_FILTER = 0;
-
 class GmpCommand extends HttpCommand {}
 
 export default GmpCommand;

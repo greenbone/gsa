@@ -9,11 +9,10 @@ import {
   ModelClass,
   parseCollectionList,
 } from 'gmp/collection/parser';
-import GmpCommand, {
-  BULK_SELECT_BY_IDS,
-  BULK_SELECT_BY_FILTER,
-} from 'gmp/commands/gmp';
+import GmpCommand from 'gmp/commands/gmp';
 import {
+  BULK_SELECT_BY_FILTER,
+  BULK_SELECT_BY_IDS,
   HttpCommandInputParams,
   HttpCommandOptions,
   HttpCommandPostParams,
