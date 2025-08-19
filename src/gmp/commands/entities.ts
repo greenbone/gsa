@@ -9,8 +9,7 @@ import {
   ModelClass,
   parseCollectionList,
 } from 'gmp/collection/parser';
-import GmpCommand from 'gmp/commands/gmp';
-import {
+import HttpCommand, {
   BULK_SELECT_BY_FILTER,
   BULK_SELECT_BY_IDS,
   HttpCommandInputParams,
@@ -110,7 +109,7 @@ abstract class EntitiesCommand<
   TModel extends Model,
   TEntitiesResponse extends Element = Element,
   TRoot extends Element = Element,
-> extends GmpCommand {
+> extends HttpCommand {
   readonly clazz: ModelClass<Model>;
   readonly name: string;
 

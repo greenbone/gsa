@@ -4,11 +4,11 @@
  */
 
 import registerCommand from 'gmp/command';
-import GmpCommand from 'gmp/commands/gmp';
+import HttpCommand from 'gmp/commands/http';
 import {parseInt} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 
-export class NvtFamiliesCommand extends GmpCommand {
+export class NvtFamiliesCommand extends HttpCommand {
   constructor(http) {
     super(http, {cmd: 'get_nvt_families'});
   }

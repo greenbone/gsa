@@ -5,7 +5,7 @@
 
 import {v4 as uuid} from 'uuid';
 import registerCommand from 'gmp/command';
-import GmpCommand from 'gmp/commands/gmp';
+import HttpCommand from 'gmp/commands/http';
 import logger from 'gmp/log';
 import {isArray, isDefined} from 'gmp/utils/identity';
 
@@ -57,7 +57,7 @@ const convertLoadedSettings = (settings = {}, name) => {
   };
 };
 
-class DashboardCommand extends GmpCommand {
+class DashboardCommand extends HttpCommand {
   getSetting(id) {
     return this.httpGet({
       cmd: 'get_setting',

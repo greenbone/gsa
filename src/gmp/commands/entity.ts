@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import GmpCommand from 'gmp/commands/gmp';
-import {
+import HttpCommand, {
   BULK_SELECT_BY_IDS,
   HttpCommandGetParams,
   HttpCommandInputParams,
@@ -48,7 +47,7 @@ abstract class EntityCommand<
   TModel extends Model,
   TElement = XmlResponseData,
   TRoot extends XmlResponseData = XmlResponseData,
-> extends GmpCommand {
+> extends HttpCommand {
   readonly clazz: ModelClass<Model>;
   readonly name: string;
   readonly id_name: string;
