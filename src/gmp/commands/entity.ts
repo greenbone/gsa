@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import GmpCommand, {
-  BULK_SELECT_BY_IDS,
-  GmpCommandInputParams,
-} from 'gmp/commands/gmp';
+import GmpCommand, {BULK_SELECT_BY_IDS} from 'gmp/commands/gmp';
 import {
+  HttpCommandGetParams,
+  HttpCommandInputParams,
   HttpCommandOptions,
   HttpCommandParamsOptions,
   HttpCommandPostParams,
@@ -16,7 +15,6 @@ import GmpHttp from 'gmp/http/gmp';
 import Response, {Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
-import {UrlParams as Params} from 'gmp/http/utils';
 import logger from 'gmp/log';
 import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';
@@ -26,7 +24,7 @@ interface ModelClass<TModel> {
   fromElement(element: unknown): TModel;
 }
 
-interface EntityCommandInputParams extends GmpCommandInputParams {
+interface EntityCommandInputParams extends HttpCommandInputParams {
   id?: string;
 }
 
@@ -65,11 +63,25 @@ abstract class EntityCommand<
 
   abstract getElementFromRoot(root: TRoot): TElement;
 
-  getParams(
-    params: EntityCommandInputParams,
-    extraParams?: Params,
+  postParams(
+    params: EntityCommandInputParams = {},
+    extraParams?: HttpCommandPostParams,
     options?: HttpCommandParamsOptions,
   ) {
+    const {id, ...other} = params;
+    const rParams = super.postParams(other, extraParams, options);
+
+    if (isDefined(id)) {
+      rParams[this.id_name] = id;
+    }
+    return rParams;
+  }
+
+  getParams(
+    params: EntityCommandInputParams = {},
+    extraParams?: HttpCommandGetParams,
+    options?: HttpCommandParamsOptions,
+  ): HttpCommandGetParams {
     const {id, ...other} = params;
     const rParams = super.getParams(other, extraParams, options);
 
