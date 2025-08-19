@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import GmpCommand, {BULK_SELECT_BY_IDS} from 'gmp/commands/gmp';
+import GmpCommand from 'gmp/commands/gmp';
 import {
+  BULK_SELECT_BY_IDS,
   HttpCommandGetParams,
   HttpCommandInputParams,
   HttpCommandOptions,

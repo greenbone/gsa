@@ -40,6 +40,9 @@ export interface HttpCommandParamsOptions {
   includeDefaultParams?: boolean;
 }
 
+export const BULK_SELECT_BY_IDS = 1;
+export const BULK_SELECT_BY_FILTER = 0;
+
 class HttpCommand {
   http: GmpHttp;
   _params: HttpCommandGetParams;
