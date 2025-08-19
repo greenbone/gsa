@@ -27,19 +27,23 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-export const ownerSchema = z.object({
-  name: z.string(),
-});
-
 export type Owner = z.infer<typeof ownerSchema>;
-
-export const EntityModelPermissionElementSchema = z.object({
-  name: z.string(),
-});
 
 export type EntityModelPermissionElement = z.infer<
   typeof EntityModelPermissionElementSchema
 >;
+
+export type EntityModelElement = z.infer<typeof EntityModelElementSchema>;
+
+export type EntityModelProperties = z.infer<typeof EntityModelPropertiesSchema>;
+
+export const ownerSchema = z.object({
+  name: z.string(),
+});
+
+export const EntityModelPermissionElementSchema = z.object({
+  name: z.string(),
+});
 
 export const EntityModelElementSchema = BaseModelElementSchema.extend({
   name: z.string().optional(),
@@ -68,8 +72,6 @@ export const EntityModelElementSchema = BaseModelElementSchema.extend({
   comment: z.string().optional(),
 });
 
-export type EntityModelElement = z.infer<typeof EntityModelElementSchema>;
-
 export const EntityModelPropertiesSchema = BaseModelPropertiesSchema.extend({
   active: z.union([z.literal(YES_VALUE), z.literal(NO_VALUE)]).optional(),
   creationTime: z.instanceof(dayjs as unknown as typeof Dayjs).optional(),
@@ -86,8 +88,6 @@ export const EntityModelPropertiesSchema = BaseModelPropertiesSchema.extend({
   userTags: z.array(z.instanceof(UserTag)).optional(),
   writable: z.union([z.literal(YES_VALUE), z.literal(NO_VALUE)]).optional(),
 });
-
-export type EntityModelProperties = z.infer<typeof EntityModelPropertiesSchema>;
 
 /**
  * A model representing an entity

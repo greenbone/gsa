@@ -12,6 +12,7 @@ import {isDefined, isString} from 'gmp/utils/identity';
 /**
  * Represents the data returned by the backend
  */
+export type BaseModelElement = z.infer<typeof BaseModelElementSchema>;
 
 export const BaseModelElementSchema = z.object({
   _id: z.string().optional(),
@@ -19,8 +20,6 @@ export const BaseModelElementSchema = z.object({
   modification_time: z.string().optional(),
   type: z.union([z.string(), z.number()]).optional(),
 });
-
-export type BaseModelElement = z.infer<typeof BaseModelElementSchema>;
 
 /**
  * Represents the properties to create a BaseModel instance.

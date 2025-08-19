@@ -3,72 +3,105 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {z} from 'zod';
 import {Date} from 'gmp/models/date';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {parseSeverity, parseDate, parseBoolean, YesNo} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
+import {validateAndCreate} from 'gmp/utils/zodModelValidation';
 
-interface CpeElement extends ModelElement {
-  cpe?: {
-    cpe_name_id?: string;
-    cve_refs?: number;
-    cves?: {
-      cve: Array<{
-        entry: {
-          _id: string;
-          cvss: {
-            base_metrics: {
-              score: number;
-            };
-          };
-        };
-      }>;
-    };
-    deprecated?: YesNo;
-    deprecated_by?: {
-      _cpe_id: string;
-    };
-    nvd_id?: string;
-    raw_data?: {
-      'cpe-item'?: {
-        _deprecated_by?: string;
-      };
-    };
-    references?: {
-      reference: Array<{
-        __text: string;
-        _href: string;
-      }>;
-    };
-    severity?: number;
-    title?: string;
-  };
-  update_time?: string;
-}
+type CpeProperties = z.infer<typeof CpePropertiesSchema> & ModelProperties;
 
-interface Cve {
-  id: string;
-  severity: number | undefined;
-}
+type CpeElement = z.infer<typeof CpeElementSchema> & ModelElement;
 
-interface CpeProperties extends ModelProperties {
-  cpeNameId?: string;
-  cveRefs?: number;
-  cves?: Cve[];
-  deprecated?: boolean;
-  deprecatedBy?: string;
-  severity?: number;
-  title?: string;
-  updateTime?: Date;
-}
+const CveSchema = z.object({
+  id: z.string(),
+  severity: z.number().optional(),
+});
+
+export const CpePropertiesSchema = z.object({
+  cpeNameId: z.string().optional(),
+  cveRefs: z.number().optional(),
+  cves: z.array(CveSchema).optional(),
+  deprecated: z.boolean().optional(),
+  deprecatedBy: z.string().optional(),
+  severity: z.number().optional(),
+  title: z.string().optional(),
+  updateTime: z.custom<Date>().optional(),
+});
+
+export const CpeElementSchema = z.object({
+  cpe: z
+    .object({
+      cpe_name_id: z.string().optional(),
+      cve_refs: z.number().optional(),
+      cves: z
+        .object({
+          cve: z.array(
+            z.object({
+              entry: z.object({
+                _id: z.string(),
+                cvss: z.object({
+                  base_metrics: z.object({
+                    score: z.number(),
+                  }),
+                }),
+              }),
+            }),
+          ),
+        })
+        .optional(),
+      deprecated: z.custom<YesNo>().optional(),
+      deprecated_by: z
+        .object({
+          _cpe_id: z.string(),
+        })
+        .optional(),
+      nvd_id: z.string().optional(),
+      raw_data: z
+        .object({
+          'cpe-item': z
+            .object({
+              _deprecated_by: z.string().optional(),
+            })
+            .optional(),
+        })
+        .optional(),
+      references: z
+        .object({
+          reference: z.array(
+            z.object({
+              __text: z.string(),
+              _href: z.string(),
+            }),
+          ),
+        })
+        .optional(),
+      severity: z.number().optional(),
+      title: z.string().optional(),
+    })
+    .optional(),
+  update_time: z.string().optional(),
+});
+
+const CpeSchema = z.object({
+  cpeNameId: z.string().optional(),
+  cveRefs: z.number().optional(),
+  cves: z.array(CveSchema).optional(),
+  deprecated: z.boolean().optional(),
+  deprecatedBy: z.string().optional(),
+  severity: z.number().optional(),
+  title: z.string().optional(),
+  updateTime: z.custom<Date>().optional(),
+});
 
 class Cpe extends Model {
-  static entityType = 'cpe';
+  static readonly entityType = 'cpe';
 
   readonly cpeNameId?: string;
   readonly cveRefs: number;
-  readonly cves: Cve[];
+  readonly cves: z.infer<typeof CveSchema>[];
   readonly deprecated: boolean;
   readonly deprecatedBy?: string;
   readonly severity?: number;
@@ -99,7 +132,15 @@ class Cpe extends Model {
   }
 
   static fromElement(element: CpeElement = {}): Cpe {
-    return new Cpe(this.parseElement(element));
+    const parsedElement = this.parseElement(element);
+
+    return validateAndCreate({
+      schema: CpeSchema,
+      parsedElement,
+      originalElement: element,
+      modelName: 'cpe',
+      ModelClass: Cpe,
+    });
   }
 
   static parseElement(element: CpeElement): CpeProperties {

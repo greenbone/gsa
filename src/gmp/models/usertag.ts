@@ -3,21 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {z} from 'zod';
 import {BaseModelElement} from 'gmp/models/basemodel';
+import {validateAndCreate} from 'gmp/utils/zodModelValidation';
 
-export interface UserTagElement extends BaseModelElement {
-  _id: string;
-  comment?: string;
-  name: string;
-  value: string | number;
-}
+export type UserTagElement = z.infer<typeof UserTagElementSchema> &
+  BaseModelElement;
 
-export interface UserTagProperties {
-  id: string;
-  comment?: string;
-  name: string;
-  value: string;
-}
+export type UserTagProperties = z.infer<typeof UserTagSchema>;
+
+export const UserTagElementSchema = z.object({
+  _id: z.string(),
+  comment: z.string().optional(),
+  name: z.string(),
+  value: z.union([z.string(), z.number()]),
+});
+
+const UserTagSchema = z.object({
+  id: z.string(),
+  comment: z.string().optional(),
+  name: z.string(),
+  value: z.string(),
+});
 
 /**
  * A condensed representation of a tags connected to an entity.
@@ -36,12 +43,20 @@ class UserTag {
     this.value = value;
   }
 
-  static fromElement({_id, comment, name, value}: UserTagElement): UserTag {
-    return new UserTag({
-      id: _id,
-      comment,
-      name,
-      value: String(value),
+  static fromElement(element: UserTagElement): UserTag {
+    const parsedElement = {
+      id: element._id,
+      comment: element.comment,
+      name: element.name,
+      value: String(element.value),
+    };
+
+    return validateAndCreate({
+      schema: UserTagSchema,
+      parsedElement,
+      originalElement: element,
+      modelName: 'usertag',
+      ModelClass: UserTag,
     });
   }
 }

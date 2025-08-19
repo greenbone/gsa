@@ -3,112 +3,173 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {z} from 'zod';
 import {Date} from 'gmp/models/date';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {parseSeverity, parseDate, parseInt} from 'gmp/parser';
 import {forEach, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
+import {validateAndCreate} from 'gmp/utils/zodModelValidation';
 
-interface InfoElement {
-  _Info_Issuer?: string;
-  _Info_URL?: string;
-}
+type CertBundAdvProperties = z.infer<typeof CertBundAdvPropertiesSchema> &
+  ModelProperties;
 
-interface DescriptionElement {
-  TextBlock?: string;
-  Infos?: {
-    Info?: InfoElement | InfoElement[];
-  };
-}
+type CertBundAdvElement = z.infer<typeof CertBundAdvElementSchema> &
+  ModelElement;
 
-interface RevisionElement {
-  Number?: number;
-  Description?: string;
-  Date?: string;
-}
+const InfoElementSchema = z.object({
+  _Info_Issuer: z.string().optional(),
+  _Info_URL: z.string().optional(),
+});
 
-interface CertBundAdvElement extends ModelElement {
-  cert_bund_adv?: {
-    severity?: number;
-    cve_refs?: number;
-    summary?: string;
-    title?: string;
-    raw_data?: {
-      Advisory?: {
-        AggregatedCVSSScoreSet?: {
-          ScoreSet?: {
-            BaseScore?: number;
-            TemporalScore?: number;
-            Vector?: string;
-          };
-        };
-        CVEList?: {
-          CVE?: string | string[];
-        };
-        CategoryTree?: string | string[];
-        Date?: string;
-        Description?: {
-          Element?: DescriptionElement | DescriptionElement[];
-        };
-        Effect?: string;
-        MetaTag?: {
-          id?: string;
-        };
-        Platform?: string;
-        Ref_Num?: {
-          __text?: string;
-          _update?: string;
-        };
-        Reference_Source?: string;
-        Reference_URL?: string;
-        RemoteAttack?: string;
-        RevisionHistory?: {
-          Revision?: RevisionElement | RevisionElement[];
-        };
-        Risk?: string;
-        Software?: string;
-        Title?: string;
-        Version?: string; // may be not available anymore
-      };
-    };
-  };
-  update_time?: string;
-}
+const DescriptionElementSchema = z.object({
+  TextBlock: z.string().optional(),
+  Infos: z
+    .object({
+      Info: z.union([InfoElementSchema, z.array(InfoElementSchema)]).optional(),
+    })
+    .optional(),
+});
 
-interface AdditionalInformation {
-  issuer?: string;
-  url?: string;
-}
+const RevisionElementSchema = z.object({
+  Number: z.number().optional(),
+  Description: z.string().optional(),
+  Date: z.string().optional(),
+});
 
-interface RevisionHistory {
-  revision?: number;
-  description?: string;
-  date?: Date;
-}
+const AdditionalInformationSchema = z.object({
+  issuer: z.string().optional(),
+  url: z.string().optional(),
+});
 
-interface CertBundAdvProperties extends ModelProperties {
-  additionalInformation?: AdditionalInformation[];
-  categories?: string[];
-  cves?: string[];
-  description?: string[];
-  effect?: string;
-  platform?: string;
-  referenceSource?: string;
-  referenceUrl?: string;
-  remoteAttack?: string;
-  revisionHistory?: RevisionHistory[];
-  risk?: string;
-  severity?: number;
-  software?: string;
-  summary?: string;
-  title?: string;
-  version?: string;
-}
+const RevisionHistorySchema = z.object({
+  revision: z.number().optional(),
+  description: z.string().optional(),
+  date: z.custom<Date>().optional(),
+});
+
+export const CertBundAdvPropertiesSchema = z.object({
+  additionalInformation: z.array(AdditionalInformationSchema).optional(),
+  categories: z.array(z.string()).optional(),
+  cves: z.array(z.string()).optional(),
+  description: z.array(z.string()).optional(),
+  effect: z.string().optional(),
+  platform: z.string().optional(),
+  referenceSource: z.string().optional(),
+  referenceUrl: z.string().optional(),
+  remoteAttack: z.string().optional(),
+  revisionHistory: z.array(RevisionHistorySchema).optional(),
+  risk: z.string().optional(),
+  severity: z.number().optional(),
+  software: z.string().optional(),
+  summary: z.string().optional(),
+  title: z.string().optional(),
+  version: z.string().optional(),
+});
+
+export const CertBundAdvElementSchema = z.object({
+  cert_bund_adv: z
+    .object({
+      severity: z.number().optional(),
+      cve_refs: z.number().optional(),
+      summary: z.string().optional(),
+      title: z.string().optional(),
+      raw_data: z
+        .object({
+          Advisory: z
+            .object({
+              AggregatedCVSSScoreSet: z
+                .object({
+                  ScoreSet: z
+                    .object({
+                      BaseScore: z.number().optional(),
+                      TemporalScore: z.number().optional(),
+                      Vector: z.string().optional(),
+                    })
+                    .optional(),
+                })
+                .optional(),
+              CVEList: z
+                .object({
+                  CVE: z.union([z.string(), z.array(z.string())]).optional(),
+                })
+                .optional(),
+              CategoryTree: z
+                .union([z.string(), z.array(z.string())])
+                .optional(),
+              Date: z.string().optional(),
+              Description: z
+                .object({
+                  Element: z
+                    .union([
+                      DescriptionElementSchema,
+                      z.array(DescriptionElementSchema),
+                    ])
+                    .optional(),
+                })
+                .optional(),
+              Effect: z.string().optional(),
+              MetaTag: z
+                .object({
+                  id: z.string().optional(),
+                })
+                .optional(),
+              Platform: z.string().optional(),
+              Ref_Num: z
+                .object({
+                  __text: z.string().optional(),
+                  _update: z.string().optional(),
+                })
+                .optional(),
+              Reference_Source: z.string().optional(),
+              Reference_URL: z.string().optional(),
+              RemoteAttack: z.string().optional(),
+              RevisionHistory: z
+                .object({
+                  Revision: z
+                    .union([
+                      RevisionElementSchema,
+                      z.array(RevisionElementSchema),
+                    ])
+                    .optional(),
+                })
+                .optional(),
+              Risk: z.string().optional(),
+              Software: z.string().optional(),
+              Title: z.string().optional(),
+              Version: z.string().optional(),
+            })
+            .optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+  update_time: z.string().optional(),
+});
+
+const CertBundAdvSchema = z.object({
+  additionalInformation: z.array(AdditionalInformationSchema).optional(),
+  categories: z.array(z.string()).optional(),
+  cves: z.array(z.string()).optional(),
+  description: z.array(z.string()).optional(),
+  effect: z.string().optional(),
+  platform: z.string().optional(),
+  referenceSource: z.string().optional(),
+  referenceUrl: z.string().optional(),
+  remoteAttack: z.string().optional(),
+  revisionHistory: z.array(RevisionHistorySchema).optional(),
+  risk: z.string().optional(),
+  severity: z.number().optional(),
+  software: z.string().optional(),
+  summary: z.string().optional(),
+  title: z.string().optional(),
+  version: z.string().optional(),
+});
 
 class CertBundAdv extends Model {
-  static entityType = 'certbund';
+  static readonly entityType = 'certbund';
 
-  readonly additionalInformation: AdditionalInformation[];
+  readonly additionalInformation: z.infer<typeof AdditionalInformationSchema>[];
   readonly categories: string[];
   readonly cves: string[];
   readonly description: string[];
@@ -117,7 +178,7 @@ class CertBundAdv extends Model {
   readonly referenceSource?: string;
   readonly referenceUrl?: string;
   readonly remoteAttack?: string;
-  readonly revisionHistory: RevisionHistory[];
+  readonly revisionHistory: z.infer<typeof RevisionHistorySchema>[];
   readonly risk?: string;
   readonly severity?: number;
   readonly software?: string;
@@ -165,7 +226,15 @@ class CertBundAdv extends Model {
   }
 
   static fromElement(element?: CertBundAdvElement): CertBundAdv {
-    return new CertBundAdv(this.parseElement(element));
+    const parsedElement = this.parseElement(element);
+
+    return validateAndCreate({
+      schema: CertBundAdvSchema,
+      parsedElement,
+      originalElement: element,
+      modelName: 'certbund',
+      ModelClass: CertBundAdv,
+    });
   }
 
   static parseElement(element: CertBundAdvElement = {}): CertBundAdvProperties {
@@ -174,9 +243,10 @@ class CertBundAdv extends Model {
 
     ret.severity = parseSeverity(certBundAdv?.severity);
 
-    const additionalInformation: AdditionalInformation[] = [];
+    const additionalInformation: z.infer<typeof AdditionalInformationSchema>[] =
+      [];
     const description: string[] = [];
-    let revisionHistory: RevisionHistory[] = [];
+    let revisionHistory: z.infer<typeof RevisionHistorySchema>[] = [];
 
     ret.categories = [];
     ret.cves = [];

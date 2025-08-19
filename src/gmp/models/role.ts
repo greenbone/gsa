@@ -3,30 +3,46 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {z} from 'zod';
 import Model, {ModelElement, ModelProperties} from 'gmp/models/model';
 import {parseCsv} from 'gmp/parser';
+import {validateAndCreate} from 'gmp/utils/zodModelValidation';
 
-interface RoleElement extends ModelElement {
-  users?: string;
-}
+type RoleElement = z.infer<typeof RoleElementSchema> & ModelElement;
 
-interface RoleProperties extends ModelProperties {
-  users?: string[];
-}
+type RoleProperties = z.infer<typeof RoleSchema> & ModelProperties;
+
+export const RoleElementSchema = z.object({
+  users: z.string().optional(),
+});
+
+const RoleSchema = z.object({
+  users: z.array(z.string()).optional(),
+});
 
 class Role extends Model {
-  static entityType = 'role';
+  static readonly entityType = 'role';
 
   readonly users: string[];
 
-  constructor({users = [], ...properties}: RoleProperties = {}) {
+  constructor(
+    {users = [], ...properties}: RoleProperties = {} as RoleProperties,
+  ) {
     super(properties);
 
     this.users = users;
   }
 
-  static fromElement(element?: RoleElement): Role {
-    return new Role(this.parseElement(element));
+  static fromElement(element: RoleElement = {}): Role {
+    const parsedElement = this.parseElement(element);
+
+    return validateAndCreate({
+      schema: RoleSchema,
+      parsedElement,
+      originalElement: element,
+      modelName: 'role',
+      ModelClass: Role,
+    });
   }
 
   static parseElement(element: RoleElement = {}): RoleProperties {
