@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import Role from 'gmp/models/role';
 import HorizontalSep from 'web/components/layout/HorizontalSep';
 import Layout from 'web/components/layout/Layout';
 import InfoTable from 'web/components/table/InfoTable';
@@ -12,11 +12,13 @@ import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
-import PropTypes from 'web/utils/PropTypes';
 
-const RoleDetails = ({entity}) => {
+interface RoleDetailsProps {
+  entity: Role;
+}
+
+const RoleDetails = ({entity: {users = [], comment}}: RoleDetailsProps) => {
   const [_] = useTranslation();
-  const {users = [], comment} = entity;
   return (
     <Layout grow flex="column">
       <InfoTable>
@@ -44,10 +46,6 @@ const RoleDetails = ({entity}) => {
       </InfoTable>
     </Layout>
   );
-};
-
-RoleDetails.propTypes = {
-  entity: PropTypes.model.isRequired,
 };
 
 export default RoleDetails;
