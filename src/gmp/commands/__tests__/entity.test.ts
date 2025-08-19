@@ -61,12 +61,12 @@ describe('EntityCommand tests', () => {
   });
 
   test('should get entity with filter parameter', async () => {
-    const filterString = Filter.fromString('foo=bar');
+    const filter = Filter.fromString('foo=bar');
     const response = createEntityResponse('foo', {id: '123'});
     const fakeHttp = createHttp(response);
 
     const cmd = new TestEntityCommand(fakeHttp);
-    const cmdResponse = await cmd.get({id: '123'}, {filter: filterString});
+    const cmdResponse = await cmd.get({id: '123'}, {filter: filter});
     expect(fakeHttp.request).toHaveBeenCalledWith('get', {
       args: {
         cmd: 'get_foo',
