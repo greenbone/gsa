@@ -26,8 +26,8 @@ const createEntitiesCounts = (entities: Element[]) => ({
   _page: entities.length,
 });
 
-export const createResponse = (data: Element) =>
-  new Response({} as XMLHttpRequest, data);
+export const createResponse = <TData = Element>(data: TData) =>
+  new Response<TData>({} as XMLHttpRequest, data);
 
 export const createEntitiesResponse = (name: string, entities: Element[]) =>
   createResponse({
@@ -71,11 +71,8 @@ export const createAggregatesResponse = (data = {}) =>
     },
   });
 
-export const createHttp = <
-  TData extends Element = Element,
-  TMeta extends Meta = Meta,
->(
-  response?: Element | Response<TData, TMeta>,
+export const createHttp = <TData = Element, TMeta extends Meta = Meta>(
+  response?: TData | Response<TData, TMeta>,
 ) =>
   ({
     request: testing.fn().mockResolvedValue(response),
