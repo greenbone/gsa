@@ -416,14 +416,14 @@ export class UserCommand extends EntityCommand<User, PortListElement> {
     return this.action(data);
   }
 
-  delete({id, inheritorId}: DeleteArguments) {
+  async delete({id, inheritorId}: DeleteArguments) {
     const data = {
       cmd: 'delete_user',
       id,
       inheritor_id: inheritorId,
     };
     log.debug('Deleting user', data);
-    return this.httpPost(data);
+    await this.httpPost(data);
   }
 
   /**
