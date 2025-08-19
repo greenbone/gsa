@@ -16,6 +16,7 @@ import Response, {Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
 import {XmlMeta, XmlResponseData} from 'gmp/http/transform/fastxml';
 import logger from 'gmp/log';
+import ActionResult from 'gmp/models/actionresult';
 import Filter from 'gmp/models/filter';
 import Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
@@ -159,6 +160,22 @@ abstract class EntityCommand<
       transform: DefaultTransform,
     } as HttpCommandOptions);
     return response as unknown as Response<string, Meta>;
+  }
+
+  transformActionResult(
+    response: Response<XmlResponseData, XmlMeta>,
+  ): Response<ActionResult, XmlMeta> {
+    return response.setData(new ActionResult(response.data));
+  }
+
+  /**
+   * Creates a HTTP POST Request returning an ActionResult
+   *
+   * @returns A Promise returning a Response with an ActionResult model as data
+   */
+  async action(params: HttpCommandPostParams, options?: HttpCommandOptions) {
+    const response = await this.httpPost(params, options);
+    return this.transformActionResult(response);
   }
 
   /**
