@@ -4,14 +4,22 @@
  */
 
 import GmpHttp from 'gmp/http/gmp';
-import {UrlParams as Params, UrlParamValue as ParamValue} from 'gmp/http/utils';
+import {
+  Data,
+  UrlParams as Params,
+  UrlParamValue as ParamValue,
+} from 'gmp/http/utils';
 
 export interface HttpCommandOptions {
   extraParams?: Params;
   includeDefaultParams?: boolean;
 }
 
-export interface HttpCommandParams extends Params {
+export interface HttpCommandGetParams extends Params {
+  cmd?: string;
+}
+
+export interface HttpCommandPostParams extends Data {
   cmd?: string;
 }
 
@@ -26,9 +34,9 @@ export interface HttpCommandParamsOptions {
 
 class HttpCommand {
   http: GmpHttp;
-  _params: HttpCommandParams;
+  _params: HttpCommandGetParams;
 
-  constructor(http: GmpHttp, params: HttpCommandParams = {}) {
+  constructor(http: GmpHttp, params: HttpCommandGetParams = {}) {
     this.http = http;
     this._params = params;
   }
@@ -44,13 +52,26 @@ class HttpCommand {
 
   getParams(
     params: HttpCommandInputParams,
-    extraParams: HttpCommandParams = {},
+    extraParams: HttpCommandGetParams = {},
     {includeDefaultParams = true}: HttpCommandParamsOptions = {},
-  ): HttpCommandParams {
+  ): HttpCommandGetParams {
     const defaultParams = includeDefaultParams ? this._params : undefined;
     return {
       ...defaultParams,
-      ...(params as HttpCommandParams),
+      ...(params as HttpCommandGetParams),
+      ...extraParams,
+    };
+  }
+
+  postParams(
+    params: HttpCommandInputParams,
+    extraParams: HttpCommandPostParams = {},
+    {includeDefaultParams = true}: HttpCommandParamsOptions = {},
+  ): HttpCommandPostParams {
+    const defaultParams = includeDefaultParams ? this._params : undefined;
+    return {
+      ...defaultParams,
+      ...(params as HttpCommandPostParams),
       ...extraParams,
     };
   }
@@ -66,7 +87,7 @@ class HttpCommand {
   httpPost(params: HttpCommandInputParams, options: HttpCommandOptions = {}) {
     const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('post', {
-      data: this.getParams(params, extraParams, {includeDefaultParams}),
+      data: this.postParams(params, extraParams, {includeDefaultParams}),
       ...other,
     });
   }

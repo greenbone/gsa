@@ -14,7 +14,7 @@ import GmpCommand, {
   BULK_SELECT_BY_FILTER,
   GmpCommandInputParams,
 } from 'gmp/commands/gmp';
-import {HttpCommandOptions, HttpCommandParams} from 'gmp/commands/http';
+import {HttpCommandOptions, HttpCommandPostParams} from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
 import Response, {Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
@@ -182,7 +182,7 @@ abstract class EntitiesCommand<
     } as HttpCommandOptions);
   }
 
-  async delete(entities: TModel[], extraParams?: HttpCommandParams) {
+  async delete(entities: TModel[], extraParams?: HttpCommandPostParams) {
     const response = await this.deleteByIds(
       map(entities, (entity: Model) => entity.id as string),
       extraParams,
@@ -192,7 +192,7 @@ abstract class EntitiesCommand<
 
   async deleteByIds(
     ids: string[],
-    extraParams: HttpCommandParams = {},
+    extraParams: HttpCommandPostParams = {},
   ): Promise<Response<string[], XmlMeta>> {
     const params = {
       ...extraParams,
@@ -206,7 +206,7 @@ abstract class EntitiesCommand<
     return response.setData(ids);
   }
 
-  async deleteByFilter(filter: Filter, extraParams?: HttpCommandParams) {
+  async deleteByFilter(filter: Filter, extraParams?: HttpCommandPostParams) {
     // FIXME change gmp to allow deletion by filter
     const response = await this.get({filter});
     const deleted = response.data;
