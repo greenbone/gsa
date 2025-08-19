@@ -9,6 +9,9 @@ import {
   UrlParams as Params,
   UrlParamValue as ParamValue,
 } from 'gmp/http/utils';
+import Filter from 'gmp/models/filter';
+import {filterString, isFilter} from 'gmp/models/filter/utils';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 export interface HttpCommandOptions {
   extraParams?: Params;
@@ -17,14 +20,19 @@ export interface HttpCommandOptions {
 
 export interface HttpCommandGetParams extends Params {
   cmd?: string;
+  filter?: string;
+  filter_id?: string;
 }
 
 export interface HttpCommandPostParams extends Data {
   cmd?: string;
+  filter?: string;
+  filter_id?: string;
 }
 
 export interface HttpCommandInputParams {
   cmd?: string;
+  filter?: Filter | string;
   [key: string]: unknown;
 }
 
@@ -51,27 +59,53 @@ class HttpCommand {
   }
 
   getParams(
-    params: HttpCommandInputParams,
+    params: HttpCommandInputParams = {},
     extraParams: HttpCommandGetParams = {},
     {includeDefaultParams = true}: HttpCommandParamsOptions = {},
   ): HttpCommandGetParams {
+    const {filter, ...other} = params;
+    const filterParams: {
+      filter_id?: string;
+      filter?: string;
+    } = {};
+    if (hasValue(filter)) {
+      if (isFilter(filter) && isDefined(filter.id)) {
+        filterParams.filter_id = filter.id;
+      } else {
+        filterParams.filter = filterString(filter);
+      }
+    }
     const defaultParams = includeDefaultParams ? this._params : undefined;
     return {
       ...defaultParams,
-      ...(params as HttpCommandGetParams),
+      ...(other as HttpCommandGetParams),
+      ...filterParams,
       ...extraParams,
     };
   }
 
   postParams(
-    params: HttpCommandInputParams,
+    params: HttpCommandInputParams = {},
     extraParams: HttpCommandPostParams = {},
     {includeDefaultParams = true}: HttpCommandParamsOptions = {},
   ): HttpCommandPostParams {
+    const {filter, ...other} = params;
+    const filterParams: {
+      filter_id?: string;
+      filter?: string;
+    } = {};
+    if (hasValue(filter)) {
+      if (isFilter(filter) && isDefined(filter.id)) {
+        filterParams.filter_id = filter.id;
+      } else {
+        filterParams.filter = filterString(filter);
+      }
+    }
     const defaultParams = includeDefaultParams ? this._params : undefined;
     return {
       ...defaultParams,
-      ...(params as HttpCommandPostParams),
+      ...(other as HttpCommandPostParams),
+      ...filterParams,
       ...extraParams,
     };
   }

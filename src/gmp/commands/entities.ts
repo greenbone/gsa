@@ -12,9 +12,12 @@ import {
 import GmpCommand, {
   BULK_SELECT_BY_IDS,
   BULK_SELECT_BY_FILTER,
-  GmpCommandInputParams,
 } from 'gmp/commands/gmp';
-import {HttpCommandOptions, HttpCommandPostParams} from 'gmp/commands/http';
+import {
+  HttpCommandInputParams,
+  HttpCommandOptions,
+  HttpCommandPostParams,
+} from 'gmp/commands/http';
 import GmpHttp from 'gmp/http/gmp';
 import Response, {Meta} from 'gmp/http/response';
 import DefaultTransform from 'gmp/http/transform/default';
@@ -130,7 +133,7 @@ abstract class EntitiesCommand<
     );
   }
 
-  async get(params: GmpCommandInputParams, options?: HttpCommandOptions) {
+  async get(params: HttpCommandInputParams, options?: HttpCommandOptions) {
     const response = await this.httpGet(params, options);
     const {entities, filter, counts} = this.getCollectionListFromRoot(
       response.data as TRoot,
@@ -138,7 +141,7 @@ abstract class EntitiesCommand<
     return response.set<TModel[], EntitiesMeta>(entities, {filter, counts});
   }
 
-  getAll(params: GmpCommandInputParams = {}, options?: HttpCommandOptions) {
+  getAll(params: HttpCommandInputParams = {}, options?: HttpCommandOptions) {
     const {filter} = params;
     if (!isDefined(filter)) {
       params.filter = ALL_FILTER;
