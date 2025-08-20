@@ -14,7 +14,7 @@ import withEntitiesContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import RoleComponent from 'web/pages/roles/RoleComponent';
 import RoleFilterDialog from 'web/pages/roles/RoleFilterDialog';
-import ToolBarIcons from 'web/pages/roles/RoleListPageToolBarIcons';
+import RoleListPageToolBarIcons from 'web/pages/roles/RoleListPageToolBarIcons';
 import Table from 'web/pages/roles/RoleTable';
 import {
   loadEntities,
@@ -29,7 +29,7 @@ interface RoleEntitiesPageProps {
   onRoleEditClick?: (role: Role) => void;
 }
 
-const RolesPage = ({
+const RoleListPage = ({
   onChanged,
   onDownloaded,
   onError,
@@ -58,7 +58,9 @@ const RolesPage = ({
             sectionIcon={<RoleIcon size="large" />}
             table={Table}
             title={_('Roles')}
-            toolBarIcons={<ToolBarIcons onRoleCreateClick={create} />}
+            toolBarIcons={
+              <RoleListPageToolBarIcons onRoleCreateClick={create} />
+            }
             onError={onError}
             onRoleCloneClick={clone}
             onRoleCreateClick={create}
@@ -75,4 +77,4 @@ const RolesPage = ({
 export default withEntitiesContainer<Role>('role', {
   entitiesSelector,
   loadEntities,
-})(RolesPage);
+})(RoleListPage);
