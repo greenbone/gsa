@@ -11,7 +11,7 @@ import {
   afterAll,
   testing,
 } from '@gsa/testing';
-import {FeedStatus} from 'gmp/commands/feedstatus';
+import {FeedStatusCommand} from 'gmp/commands/feedstatus';
 import {TaskCommand} from 'gmp/commands/tasks';
 import {
   createActionResultResponse,
@@ -456,7 +456,7 @@ describe('TaskCommand tests', () => {
 
     const taskCmd = new TaskCommand(fakeHttp);
 
-    const feedCmd = new FeedStatus(fakeHttp);
+    const feedCmd = new FeedStatusCommand(fakeHttp);
 
     const result = await feedCmd.checkFeedSync();
     expect(result.isSyncing).toBe(true);

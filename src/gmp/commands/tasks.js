@@ -6,7 +6,7 @@
 import registerCommand from 'gmp/command';
 import EntitiesCommand from 'gmp/commands/entities';
 import EntityCommand from 'gmp/commands/entity';
-import {FeedStatus, feedStatusRejection} from 'gmp/commands/feedstatus';
+import {FeedStatusCommand, feedStatusRejection} from 'gmp/commands/feedstatus';
 import logger from 'gmp/log';
 import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
@@ -25,7 +25,7 @@ export class TaskCommand extends EntityCommand {
     log.debug('Starting task...');
 
     try {
-      const feeds = new FeedStatus(this.http);
+      const feeds = new FeedStatusCommand(this.http);
 
       const status = await feeds.checkFeedSync();
 

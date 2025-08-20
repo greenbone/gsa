@@ -14,24 +14,28 @@ testing.setSystemTime(new Date('2020-07-25T07:00:00Z'));
 const nvtFeed = createFeed({
   name: 'Greenbone Community Feed',
   type: 'NVT',
+  description: 'Community Feed',
   version: 202007241005,
 });
 
 const scapFeed = createFeed({
   name: 'Greenbone Community SCAP Feed',
   type: 'SCAP',
+  description: 'Community SCAP Feed',
   version: 202007230130,
 });
 
 const certFeed = createFeed({
   name: 'Greenbone Community CERT Feed',
   type: 'CERT',
+  description: 'Community CERT Feed',
   version: 202005231003,
 });
 
 const gvmdDataFeed = createFeed({
   name: 'Greenbone Community gvmd Data Feed',
   type: 'GVMD_DATA',
+  description: 'Community gvmd Data Feed',
   version: 202006221009,
   currently_syncing: {timestamp: 'foo'},
 });
@@ -42,7 +46,7 @@ const xhr = {
   response: 'foo',
   responseText: 'bar',
   responseXML: 'ipsum',
-};
+} as unknown as XMLHttpRequest;
 
 const response = new Response(xhr, data);
 

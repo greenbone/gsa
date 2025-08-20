@@ -13,7 +13,6 @@ import 'gmp/commands/cves';
 import 'gmp/commands/cvsscalculator';
 import 'gmp/commands/dashboards';
 import 'gmp/commands/dfncert';
-import 'gmp/commands/feedstatus';
 import 'gmp/commands/filters';
 import 'gmp/commands/groups';
 import 'gmp/commands/hosts';
@@ -42,6 +41,7 @@ import 'gmp/commands/vulns';
 
 import {getCommands} from 'gmp/command';
 import AuthenticationCommand from 'gmp/commands/auth';
+import {FeedStatusCommand} from 'gmp/commands/feedstatus';
 import LoginCommand from 'gmp/commands/login';
 import PerformanceCommand from 'gmp/commands/performance';
 import {PortListCommand, PortListsCommand} from 'gmp/commands/portlists';
@@ -72,6 +72,7 @@ class Gmp {
   _logoutListeners: Listener[];
 
   readonly auth: AuthenticationCommand;
+  readonly feedstatus: FeedStatusCommand;
   readonly portlist: PortListCommand;
   readonly portlists: PortListsCommand;
   readonly performance: PerformanceCommand;
@@ -98,6 +99,7 @@ class Gmp {
     this._logoutListeners = [];
 
     this.auth = new AuthenticationCommand(this.http);
+    this.feedstatus = new FeedStatusCommand(this.http);
     this.portlist = new PortListCommand(this.http);
     this.portlists = new PortListsCommand(this.http);
     this.performance = new PerformanceCommand(this.http);
